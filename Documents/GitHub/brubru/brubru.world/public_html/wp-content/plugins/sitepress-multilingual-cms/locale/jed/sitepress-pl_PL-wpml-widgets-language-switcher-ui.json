@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "pl"
+         },
+         "To display this Custom HTML block in a specific language, first place it inside a Group block.": [
+            "Aby wyświetlić ten blok Niestandardowego HTML w określonym języku, najpierw umieść go wewnątrz bloku Grupy."
+         ],
+         "Place inside Group block": [
+            "Umieść wewnątrz bloku Grupy"
+         ],
+         "All": [
+            "Wszystkie"
+         ],
+         "Display on language": [
+            "Wyświetlaj w języku"
+         ]
+      }
+   }
+}

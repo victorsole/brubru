@@ -1,0 +1,87 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);",
+            "lang": "ar"
+         },
+         "Could not fetch engines data": [
+            "تعذر جلب بيانات المحركات"
+         ],
+         "Could not save settings": [
+            "تعذر حفظ الإعدادات"
+         ],
+         "Automatic translation": [
+            "ترجمة تلقائية"
+         ],
+         "Saving...": [
+            "جارٍ الحفظ..."
+         ],
+         "Save settings": [
+            "حفظ الإعدادات"
+         ],
+         "Settings saved": [
+            "تم حفظ الإعدادات"
+         ],
+         "Some error occurred": [
+            "حدث خطأ ما"
+         ],
+         "AI Translation": [
+            "الترجمة الآلية"
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "لا تترجم المسودات. قم بالترجمة فقط عند نشر المحتوى."
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "ترجمة المسودات أثناء حفظها (يستهلك المزيد من رصيد الترجمة)."
+         ],
+         "Do you want to translate drafts automatically?": [
+            "هل تريد ترجمة المسودات تلقائيًا؟?"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "هذه الميزة متاحة فقط عند تفعيل ”ترجمة كل شيء تلقائيًا“ من %sلوحة التحكم بالترجمة%s."
+         ],
+         "What would you like to do after WPML finishes translating your content automatically?": [
+            "ماذا تريد أن تفعل بعد أن ينتهي WPML من ترجمة محتواك تلقائيًا؟?"
+         ],
+         "Publish without review": [
+            "النشر بدون مراجعة"
+         ],
+         "Recommended with PTC": [
+            "موصى به مع PTC"
+         ],
+         "PTC provides Better Than Human Translations that rarely need improvements, so you can confidently skip the review process. For other translation engines, a human review is recommended to confirm accuracy.": [
+            "توفر PTC ترجمات أفضل من البشر نادرًا ما تحتاج إلى تحسينات، لذا يمكنك تخطي عملية المراجعة بثقة. بالنسبة لمحركات الترجمة الأخرى، يوصى بمراجعة بشرية للتأكد من الدقة."
+         ],
+         "WPML publishes translations immediately, skipping the review process.": [
+            "ينشر WPML الترجمات على الفور، متخطيًا عملية المراجعة."
+         ],
+         "Wait for review": [
+            "انتظار المراجعة"
+         ],
+         "Recommended with DeepL, Google and Microsoft": [
+            "موصى به مع DeepL وGoogle وMicrosoft"
+         ],
+         "DeepL, Google, and Microsoft deliver great translations, but we recommend a human review to confirm they are correct. PTC provides Better Than Human Translations that understand context, so you can confidently skip the review process.": [
+            "تقدم DeepL وGoogle وMicrosoft ترجمات رائعة، لكننا نوصي بمراجعة بشرية للتأكد من صحتها. توفر PTC ترجمات أفضل من البشر تفهم السياق، لذا يمكنك تخطي عملية المراجعة بثقة."
+         ],
+         "WPML keeps translations unpublished, so you can review them first.": [
+            "يحتفظ WPML بالترجمات غير منشورة، حتى تتمكن من مراجعتها أولاً."
+         ],
+         "Your translators review and approve translations before publishing.": [
+            "يقوم المترجمون لديك بمراجعة واعتماد الترجمات قبل النشر."
+         ],
+         "Publish and mark for review": [
+            "النشر والتمييز للمراجعة"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "ينشر WPML الترجمات على الفور ولكنه يضع علامات عليها لتتحقق منها في وقت لاحق."
+         ],
+         "WPML publishes translations immediately but flags them for translators to review later.": [
+            "ينشر WPML الترجمات على الفور ولكنه يضع علامات عليها ليراجعها المترجمون لاحقًا."
+         ]
+      }
+   }
+}

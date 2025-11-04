@@ -1,0 +1,174 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "ru"
+         },
+         "Sending for translation": [
+            "Отправка на перевод"
+         ],
+         "This content is being automatically translated. If you want to do something different with it cancel translation jobs first.": [
+            "Этот контент переводится автоматически. Если вы хотите сделать с ним что-то другое, сначала отмените задания на перевод."
+         ],
+         "Connecting to WPML’s Advanced Translation Editor": [
+            "Подключение к Расширенному редактору перевода WPML"
+         ],
+         "Try again": [
+            "Повторить попытку"
+         ],
+         "You don't have the rights to review this language": [
+            "У вас нет прав для проверки на этом языке."
+         ],
+         "translations": [
+            "Переводы"
+         ],
+         "left in the queue": [
+            "осталось в очереди"
+         ],
+         "Translation on hold": [
+            "Перевод приостановлен"
+         ],
+         "No translations in the queue": [
+            "Нет переводов в очереди"
+         ],
+         "%d translations left": [
+            "Осталось переводов: %d"
+         ],
+         "%d min remaining": [
+            "Осталось %d мин."
+         ],
+         "less than 1 min remaining": [
+            "осталось менее 1 мин."
+         ],
+         "Automatic translation status": [
+            "Состояние автоматического перевода"
+         ],
+         "Translate Everything Automatically": [
+            "Переводить все автоматически"
+         ],
+         "Translate Everything Automatically is active": [
+            "Переводить все автоматически - активно"
+         ],
+         "Translate Everything Automatically is paused": [
+            "Переводить все автоматически - приостановлено"
+         ],
+         "Translate Everything Automatically is stopped": [
+            "Автоматический перевод всего остановлен"
+         ],
+         "Out of Credits for Automatic Translation": [
+            "Закончились кредиты для автоматического перевода"
+         ],
+         "You have <b>1</b> prepaid translation credit in your wpml.org account. Assign these credits to your site to start using automatic translation": [
+            "У вас есть <b>1</b> предоплаченный кредит на перевод на вашем аккаунте wpml.org. Назначьте этот кредит вашему сайту, чтобы начать использовать автоматический перевод",
+            "У вас есть <b>%s</b> предоплаченных кредитов на перевод на вашем аккаунте wpml.org. Назначьте эти кредиты вашему сайту, чтобы начать использовать автоматический перевод"
+         ],
+         "Preparing content for translation": [
+            "Подготовка контента к переводу"
+         ],
+         "Preparing more content for translation": [
+            "Подготовка дополнительного контента к переводу"
+         ],
+         "An error occured, fix it to continue.": [
+            "Произошла ошибка, исправьте ее, чтобы продолжить."
+         ],
+         "There is an issue with automatic translation that needs your attention. Fix it to continue.": [
+            "Произошла ошибка автоматического перевода, которая требует внимания. Исправьте ее, чтобы продолжить."
+         ],
+         "Your default language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "Для использования автоматического перевода ваш язык по умолчанию (%s) необходимо сопоставить с поддерживаемым языком."
+         ],
+         "Your language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "Ваш язык, %s, должен быть сопоставлен с поддерживаемым языком для использования автоматического перевода.",
+            "Следующие языки на вашем сайте должны быть сопоставлены с поддерживаемым языком для использования автоматического перевода: %s"
+         ],
+         "Content in those languages: %s, cannot be automatically translated unless you map them to a language that's different from the default.": [
+            "Контент на этих языках: %s нельзя перевести автоматически, если их не сопоставить с языком, отличным от языка по умолчанию."
+         ],
+         "%d translation waiting for review": [
+            "%d перевод ожидает проверки",
+            "%d переводов ожидают проверки"
+         ],
+         "Account credits used": [
+            "Использованные кредиты учетной записи"
+         ],
+         "Once you’ve used all your prepaid credits, we’ll invoice you for any additional credits you use after the end of the month": [
+            "Как только вы израсходуете все предоплаченные кредиты, мы выставим вам счет за все использованные дополнительные кредиты по окончании месяца."
+         ],
+         "Payment limit:": [
+            "Лимит оплаты:"
+         ],
+         "%s credits": [
+            "%s кредитов"
+         ],
+         "Credits used:": [
+            "Использовано кредитов:"
+         ],
+         "Credits left:": [
+            "Осталось кредитов:"
+         ],
+         "The number of credit you will receive an invoice for at the end of the month. View your pay-as-you-go details in your site’s automatic translation settings.": [
+            "Количество кредитов, по которым вы получите счет в конце месяца. Просмотрите сведения о плате по мере использования в настройках автоматического перевода вашего сайта."
+         ],
+         "Calculating": [
+            "Подсчет"
+         ],
+         "Remaining prepaid credits that are assigned to this site on WPML.org.": [
+            "Оставшиеся предоплаченные кредиты, назначенные этому сайту на WPML.org."
+         ],
+         "Prepaid credits left": [
+            "Осталось предоплаченных кредитов"
+         ],
+         "Pay-as-you-go credits used": [
+            "Использованы кредиты с оплатой по мере использования"
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Ваш сайт не соответствует минимальным требованиям WPML"
+         ],
+         "Fix it": [
+            "Исправить"
+         ],
+         "Stop": [
+            "Остановить"
+         ],
+         "Assign credits now": [
+            "Назначить кредиты сейчас"
+         ],
+         "Resume": [
+            "Продолжить"
+         ],
+         "Refreshing translation status": [
+            "Обновление статуса перевода"
+         ],
+         "Read more about how to translate your content in the <a>Getting Started Guide</a>": [
+            "Подробнее о переводе контента читайте в <a>Руководстве по началу работы</a>."
+         ],
+         "Let's Start Translating!": [
+            "Начнем переводить!"
+         ],
+         "Choose your content from the Translation Dashboard below and create your first translation job!": [
+            "Выберите контент в Консоли перевода ниже и создайте свой первый заказ на перевод!"
+         ],
+         "Change your <a>automatic translation settings</a> (in-progress translation jobs will be completed with the current settings).": [
+            "Измените <a>настройки автоматического перевода</a> (текущие заказы на перевод будут выполнены с текущими настройками)."
+         ],
+         "Read more about translating your site automatically.": [
+            "Подробнее об автоматическом переводе сайта."
+         ],
+         "Your site is being automatically translated!": [
+            "Ваш сайт переводится автоматически!"
+         ],
+         "Calculating...": [
+            "Подсчет..."
+         ],
+         "Do not close WP admin!": [
+            "Не закрывайте консоль администратора WP!"
+         ],
+         "The number of translations": [
+            "Количество переводов"
+         ]
+      }
+   }
+}

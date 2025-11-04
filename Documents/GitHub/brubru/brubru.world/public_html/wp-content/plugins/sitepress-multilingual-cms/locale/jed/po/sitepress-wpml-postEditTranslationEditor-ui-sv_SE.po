@@ -1,0 +1,93 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:116
+msgid "WPML Translation Editor"
+msgstr "WPML Översättningsredigerare"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:123
+#: src/js/postEditTranslationEditor/components/SaveModal.js:22
+msgid "WordPress Editor"
+msgstr "WordPress-redigerare"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:99
+#: src/js/postEditTranslationEditor/components/SaveModal.js:24
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:10
+msgid "Translation Dashboard"
+msgstr "Översättningspanel"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:100
+msgid ""
+"Also, switching back to WPML's Translation Editor later will require "
+"re-translating content that you translated with the WordPress editor."
+msgstr "Tänk också på att om du senare byter tillbaka till WPML:s översättningsredigerare kommer du behöva översätta om innehåll som du översatt med WordPress-redigeraren."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:107
+msgid ""
+"This will overwrite content you translated with the WordPress Editor. If "
+"you switch now, you'll have to translate selected content again."
+msgstr "Detta kommer att skriva över innehåll som du har översatt med WordPress-redigeraren. Om du byter nu måste du översätta det valda innehållet igen."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:35
+msgid "You are about to translate with the %s"
+msgstr "Du är på väg att översätta med %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:41
+msgid ""
+"Translate with the WordPress Editor if you need different designs per "
+"language or if the content isn't compatible with WPML's Translation Editor."
+msgstr "Översätt med WordPress-redigeraren om du behöver olika design för olika språk eller om innehållet inte är kompatibelt med WPML:s översättningsredigerare."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:51
+msgid "What do you want to translate?"
+msgstr "Vad vill du översätta?"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:7
+msgid "I understand, switch to the WordPress Editor"
+msgstr "Jag förstår, byt till WordPress-redigeraren"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:75
+msgid "Apply"
+msgstr "Tillämpa"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:76
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:8
+msgid "I understand, switch to %s"
+msgstr "Jag förstår, byt till %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Only this %s"
+msgstr "Endast detta %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Recommended"
+msgstr "Rekommenderad"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:86
+msgid "All %s"
+msgstr "Alla %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:87
+msgid "All the site's content"
+msgstr "Allt innehåll på webbplatsen"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:9
+msgid "I understand, switch to Translation Dashboard"
+msgstr "Jag förstår, byt till översättningspanelen"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:97
+msgid ""
+"The WordPress Editor doesn't offer Automatic Translation, Translation "
+"Memory and other features that make translation easier."
+msgstr "WordPress-redigeraren erbjuder inte automatisk översättning, översättningsminne och andra funktioner som underlättar översättning."
+
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:9
+msgid "Translate items in batch after reviewing the cost of AI translation"
+msgstr "Översätt objekt i grupp efter att ha granskat kostnaden för AI-översättning"

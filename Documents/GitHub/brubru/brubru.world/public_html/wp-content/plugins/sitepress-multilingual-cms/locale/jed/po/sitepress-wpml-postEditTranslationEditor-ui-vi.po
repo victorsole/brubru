@@ -1,0 +1,93 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:116
+msgid "WPML Translation Editor"
+msgstr "Trình biên dịch Wpml"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:123
+#: src/js/postEditTranslationEditor/components/SaveModal.js:22
+msgid "WordPress Editor"
+msgstr "Trình biên tập Wordpress"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:99
+#: src/js/postEditTranslationEditor/components/SaveModal.js:24
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:10
+msgid "Translation Dashboard"
+msgstr "Bảng điều khiển dịch thuật"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:100
+msgid ""
+"Also, switching back to WPML's Translation Editor later will require "
+"re-translating content that you translated with the WordPress editor."
+msgstr "Ngoài ra, việc chuyển lại sang Trình soạn thảo dịch của WPML sau này sẽ yêu cầu dịch lại nội dung mà bạn đã dịch bằng trình soạn thảo WordPress."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:107
+msgid ""
+"This will overwrite content you translated with the WordPress Editor. If "
+"you switch now, you'll have to translate selected content again."
+msgstr "Điều này sẽ ghi đè lên nội dung bạn đã dịch bằng Trình soạn thảo WordPress. Nếu bạn chuyển ngay bây giờ, bạn sẽ phải dịch lại nội dung đã chọn."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:35
+msgid "You are about to translate with the %s"
+msgstr "Bạn sắp dịch với %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:41
+msgid ""
+"Translate with the WordPress Editor if you need different designs per "
+"language or if the content isn't compatible with WPML's Translation Editor."
+msgstr "Dịch bằng Trình soạn thảo WordPress nếu bạn cần các thiết kế khác nhau cho từng ngôn ngữ hoặc nếu nội dung không tương thích với Trình soạn thảo dịch của WPML."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:51
+msgid "What do you want to translate?"
+msgstr "Bạn muốn dịch gì?"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:7
+msgid "I understand, switch to the WordPress Editor"
+msgstr "Tôi hiểu, chuyển sang Trình soạn thảo WordPress"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:75
+msgid "Apply"
+msgstr "Áp dụng"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:76
+msgid "Cancel"
+msgstr "Hủy"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:8
+msgid "I understand, switch to %s"
+msgstr "Tôi hiểu, chuyển sang %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Only this %s"
+msgstr "Chỉ %s này"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Recommended"
+msgstr "Được đề xuất"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:86
+msgid "All %s"
+msgstr "Tất cả%s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:87
+msgid "All the site's content"
+msgstr "Tất cả nội dung của trang web"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:9
+msgid "I understand, switch to Translation Dashboard"
+msgstr "Tôi hiểu rồi, chuyển sang Bảng điều khiển dịch thuật nhé"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:97
+msgid ""
+"The WordPress Editor doesn't offer Automatic Translation, Translation "
+"Memory and other features that make translation easier."
+msgstr "Trình soạn thảo WordPress không cung cấp tính năng Dịch tự động, Bộ nhớ Dịch thuật và các tính năng khác giúp việc dịch thuật dễ dàng hơn."
+
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:9
+msgid "Translate items in batch after reviewing the cost of AI translation"
+msgstr "Dịch các mục theo lô sau khi xem xét chi phí dịch thuật bằng AI"

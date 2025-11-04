@@ -1,0 +1,93 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:116
+msgid "WPML Translation Editor"
+msgstr "WPML Translation Editor"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:123
+#: src/js/postEditTranslationEditor/components/SaveModal.js:22
+msgid "WordPress Editor"
+msgstr "WordPress 편집기"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:99
+#: src/js/postEditTranslationEditor/components/SaveModal.js:24
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:10
+msgid "Translation Dashboard"
+msgstr "번역 대시보드"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:100
+msgid ""
+"Also, switching back to WPML's Translation Editor later will require "
+"re-translating content that you translated with the WordPress editor."
+msgstr "또한, 나중에 WPML의 번역 편집기로 다시 전환하면 WordPress 편집기로 번역한 콘텐츠를 재번역해야 합니다."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:107
+msgid ""
+"This will overwrite content you translated with the WordPress Editor. If "
+"you switch now, you'll have to translate selected content again."
+msgstr "이는 WordPress 편집기로 번역한 콘텐츠를 덮어쓰게 됩니다. 지금 전환하면 선택한 콘텐츠를 다시 번역해야 합니다."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:35
+msgid "You are about to translate with the %s"
+msgstr "당신은 %s로 번역하려고 합니다"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:41
+msgid ""
+"Translate with the WordPress Editor if you need different designs per "
+"language or if the content isn't compatible with WPML's Translation Editor."
+msgstr "언어별로 다른 디자인이 필요하거나 콘텐츠가 WPML의 번역 편집기와 호환되지 않는 경우 WordPress 편집기로 번역하세요."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:51
+msgid "What do you want to translate?"
+msgstr "무엇을 번역하시겠습니까?"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:7
+msgid "I understand, switch to the WordPress Editor"
+msgstr "이해했습니다. WordPress 에디터로 전환하겠습니다"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:75
+msgid "Apply"
+msgstr "적용"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:76
+msgid "Cancel"
+msgstr "취소"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:8
+msgid "I understand, switch to %s"
+msgstr "이해했습니다. %s로 전환하겠습니다"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Only this %s"
+msgstr "이 %s만"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Recommended"
+msgstr "권장"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:86
+msgid "All %s"
+msgstr "모든 %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:87
+msgid "All the site's content"
+msgstr "사이트의 모든 컨텐츠"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:9
+msgid "I understand, switch to Translation Dashboard"
+msgstr "알겠어, 번역 대시보드로 전환할게"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:97
+msgid ""
+"The WordPress Editor doesn't offer Automatic Translation, Translation "
+"Memory and other features that make translation easier."
+msgstr "WordPress 에디터는 자동 번역, 번역 메모리 및 번역을 더 쉽게 만드는 다른 기능들을 제공하지 않습니다."
+
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:9
+msgid "Translate items in batch after reviewing the cost of AI translation"
+msgstr "AI 번역 비용을 검토한 후 항목을 일괄 번역해"

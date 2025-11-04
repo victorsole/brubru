@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/notices-site-key/components/HelpLink.js:18
+msgid "Get a key for this site"
+msgstr "이 사이트의 키 받기"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:30
+msgid "Site key:"
+msgstr "사이트 키:"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:41
+msgid "Enter your site key here"
+msgstr "여기에 사이트 키를 입력하세요"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Registering..."
+msgstr "등록 중..."
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Register"
+msgstr "등록"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:29
+msgid "A New Site Key Is Required"
+msgstr "새로운 사이트 키가 필요합니다"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:34
+msgid ""
+"To continue using WPML features like automatic translation and plugin "
+"updates, please register your site again. Don’t worry, your existing "
+"content and translations are safe."
+msgstr "자동 번역 및 플러그인 업데이트와 같은 WPML 기능을 계속 사용하려면 사이트를 다시 등록해 주세요. 기존 콘텐츠와 번역은 안전하게 보관됩니다."
+
+#: src/js/notices-site-key/components/SuccessMessage.js:30
+msgid "Site key registered successfully!"
+msgstr "사이트 키가 성공적으로 등록되었습니다!"
+
+#: src/js/notices-site-key/components/SuccessMessage.js:31
+msgid "Page will reload in %d seconds..."
+msgstr "%d초 후 페이지가 새로고침됩니다..."
+
+#: src/js/notices-site-key/hooks/useRegisterSiteKey.js:54
+msgid "Registration failed. Please try again."
+msgstr "등록에 실패했습니다. 다시 시도해 주세요."

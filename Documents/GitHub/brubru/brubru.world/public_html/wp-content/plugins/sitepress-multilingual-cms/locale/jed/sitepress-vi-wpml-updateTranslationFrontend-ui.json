@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "vi"
+         },
+         "Please wait, applying translation..": [
+            "Vui lòng đợi, đang áp dụng bản dịch..."
+         ],
+         "There was an error in applying translation.": [
+            "Đã xảy ra lỗi khi áp dụng bản dịch."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "Đã có người đang xem xét bản dịch này. Vui lòng thử lại sau."
+         ]
+      }
+   }
+}

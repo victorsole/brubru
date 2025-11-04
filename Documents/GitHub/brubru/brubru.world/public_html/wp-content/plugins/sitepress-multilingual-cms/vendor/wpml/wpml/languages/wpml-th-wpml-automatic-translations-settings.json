@@ -1,0 +1,87 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "Could not fetch engines data": [
+            "ไม่สามารถดึงข้อมูลเครื่องมือแปลได้"
+         ],
+         "Could not save settings": [
+            "ไม่สามารถบันทึกการตั้งค่าได้"
+         ],
+         "Automatic translation": [
+            "การแปลอัตโนมัติ"
+         ],
+         "Saving...": [
+            "กำลังบันทึก..."
+         ],
+         "Save settings": [
+            "บันทึกการตั้งค่า"
+         ],
+         "Settings saved": [
+            "บันทึกการตั้งค่าแล้ว"
+         ],
+         "Some error occurred": [
+            "เกิดข้อผิดพลาดบางอย่าง"
+         ],
+         "AI Translation": [
+            "การแปลด้วย AI"
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "อย่าแปลฉบับร่าง แปลเฉพาะเมื่อฉันเผยแพร่เนื้อหา."
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "แปลฉบับร่างเมื่อฉันบันทึก (ใช้เครดิตการแปลมากขึ้นเล็กน้อย)."
+         ],
+         "Do you want to translate drafts automatically?": [
+            "คุณต้องการแปลฉบับร่างโดยอัตโนมัติหรือไม่?"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "คุณสมบัตินี้มีให้ใช้เฉพาะเมื่อคุณเปิดใช้งาน “ฯแปลทุกอย่างโดยอัตโนมัติฯ” จาก %sแดชบอร์ดการแปล%s."
+         ],
+         "What would you like to do after WPML finishes translating your content automatically?": [
+            "คุณต้องการทำอะไรหลังจาก WPML แปลเนื้อหาของคุณโดยอัตโนมัติเสร็จสิ้น?"
+         ],
+         "Publish without review": [
+            "เผยแพร่โดยไม่ต้องตรวจสอบ"
+         ],
+         "Recommended with PTC": [
+            "แนะนำด้วย PTC"
+         ],
+         "PTC provides Better Than Human Translations that rarely need improvements, so you can confidently skip the review process. For other translation engines, a human review is recommended to confirm accuracy.": [
+            "PTC ให้คำแปลที่ดีกว่ามนุษย์ซึ่งแทบไม่ต้องปรับปรุง คุณจึงสามารถข้ามขั้นตอนการตรวจสอบได้อย่างมั่นใจ สำหรับเครื่องมือแปลภาษาอัตโนมัติอื่นๆ แนะนำให้มีการตรวจสอบโดยมนุษย์เพื่อยืนยันความถูกต้อง."
+         ],
+         "WPML publishes translations immediately, skipping the review process.": [
+            "WPML จะเผยแพร่การแปลทันทีโดยข้ามขั้นตอนการตรวจสอบ."
+         ],
+         "Wait for review": [
+            "รอการตรวจสอบ"
+         ],
+         "Recommended with DeepL, Google and Microsoft": [
+            "แนะนำให้ใช้กับ DeepL, Google และ Microsoft"
+         ],
+         "DeepL, Google, and Microsoft deliver great translations, but we recommend a human review to confirm they are correct. PTC provides Better Than Human Translations that understand context, so you can confidently skip the review process.": [
+            "DeepL, Google และ Microsoft ให้คำแปลที่ยอดเยี่ยม แต่เราแนะนำให้มีการตรวจสอบโดยมนุษย์เพื่อยืนยันว่าถูกต้อง PTC ให้คำแปลที่ดีกว่ามนุษย์ซึ่งเข้าใจบริบท คุณจึงสามารถข้ามขั้นตอนการตรวจสอบได้อย่างมั่นใจ."
+         ],
+         "WPML keeps translations unpublished, so you can review them first.": [
+            "WPML จะเก็บการแปลไว้โดยไม่เผยแพร่ เพื่อให้คุณสามารถตรวจสอบก่อน."
+         ],
+         "Your translators review and approve translations before publishing.": [
+            "นักแปลของคุณจะตรวจสอบและอนุมัติการแปลก่อนเผยแพร่."
+         ],
+         "Publish and mark for review": [
+            "เผยแพร่และทำเครื่องหมายเพื่อตรวจสอบ"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "WPML จะเผยแพร่การแปลทันที แต่จะทำเครื่องหมายเพื่อให้คุณตรวจสอบเมื่อสะดวก."
+         ],
+         "WPML publishes translations immediately but flags them for translators to review later.": [
+            "WPML จะเผยแพร่การแปลทันที แต่จะทำเครื่องหมายเพื่อให้นักแปลตรวจสอบในภายหลัง."
+         ]
+      }
+   }
+}

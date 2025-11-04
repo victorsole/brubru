@@ -1,0 +1,61 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "WPML Translation Editor": [
+            "Wpml 翻译编辑器"
+         ],
+         "WordPress Editor": [
+            "Wordpress 编辑器"
+         ],
+         "Translate with the WordPress Editor when you want to create different designs for translations, or if you're translating content that's incompatible with WPML's Translation Editor.": [
+            "当您想为翻译创建不同的设计，或者正在翻译与WPML的翻译编辑器不兼容的内容时，请使用WordPress编辑器进行翻译。"
+         ],
+         "What do you want to translate with the WordPress Editor?": [
+            "您想用WordPress编辑器翻译什么？"
+         ],
+         "I understand, switch to the WordPress Editor": [
+            "我明白了，切换到WordPress编辑器"
+         ],
+         "What do you want to translate with WPML Translation Editor?": [
+            "您想用WPML翻译编辑器翻译什么？"
+         ],
+         "I understand, switch to WPML's Translation Editor": [
+            "我明白了，切换到WPML的翻译编辑器"
+         ],
+         "Apply": [
+            "应用"
+         ],
+         "Cancel": [
+            "取消"
+         ],
+         "Only this %s": [
+            "仅此%s"
+         ],
+         "Recommended": [
+            "推荐"
+         ],
+         "All %s": [
+            "全部%s"
+         ],
+         "All the site's content": [
+            "网站的所有内容"
+         ],
+         "Are you sure?": [
+            "您确定吗？"
+         ],
+         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
+            "WordPress编辑器不提供自动翻译、翻译记忆库和其他使翻译更容易的功能。"
+         ],
+         "And, if you switch back to WPML's Translation Editor, you will need to translate from scratch what you translated with the WordPress editor.": [
+            "而且，如果您切换回WPML的翻译编辑器，您将需要从头开始翻译您用WordPress编辑器翻译的内容。"
+         ],
+         "When you update content that you previously translated with the WordPress Editor, you will need to translate from scratch.": [
+            "当您更新之前使用WordPress编辑器翻译的内容时，您将需要从头开始翻译。"
+         ]
+      }
+   }
+}

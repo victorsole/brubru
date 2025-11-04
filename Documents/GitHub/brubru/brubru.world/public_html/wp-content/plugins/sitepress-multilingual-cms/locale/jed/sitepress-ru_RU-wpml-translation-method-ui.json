@@ -1,0 +1,109 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "What should happen with your automatically translated content?": [
+            "Что должно произойти с вашим автоматически переведенным контентом?"
+         ],
+         "Wait for review": [
+            "Ожидание проверки"
+         ],
+         "You check and approve translations before publishing.": [
+            "Вы проверяете и одобряете переводы перед публикацией."
+         ],
+         "Your translators check and approve translations before publishing.": [
+            "Ваши переводчики проверяют и одобряют переводы перед публикацией."
+         ],
+         "Publish and mark for review": [
+            "Опубликовать и отметить для проверки"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "WPML публикует переводы немедленно, но отмечает их для вашей проверки в удобное для вас время."
+         ],
+         "WPML publishes translations immediately but flags them for your translators to check at their convenience.": [
+            "WPML публикует переводы немедленно, но отмечает их для проверки вашими переводчиками в удобное для них время."
+         ],
+         "Publish without review": [
+            "Опубликовать без проверки"
+         ],
+         "The system publishes translations straight away, skipping the review process.": [
+            "Система публикует переводы сразу, пропуская процесс проверки."
+         ],
+         "Automatic translation": [
+            "Автоматический перевод"
+         ],
+         "What should happen with your automatically translated content": [
+            "Что должно произойти с вашим автоматически переведенным контентом"
+         ],
+         "Save settings": [
+            "Сохранить настройки"
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "Переводить черновики по мере их сохранения (расходует немного больше кредитов на перевод)."
+         ],
+         "Do you want to translate drafts automatically?": [
+            "Хотите ли вы переводить черновики автоматически?"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "Эта функция доступна только при включении “Переводить все автоматически” в %sПанели управления переводами%s."
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "Не переводить черновики. Переводить только при публикации контента."
+         ],
+         "%d credits/word": [
+            "%d кредитов/слово"
+         ],
+         "Informal": [
+            "Неформальный"
+         ],
+         "Automatic": [
+            "Автоматический"
+         ],
+         "Formal": [
+            "Формальный"
+         ],
+         "Which translation engines do you want to use?": [
+            "Какие механизмы перевода вы хотите использовать?"
+         ],
+         "Automatic translation engines differ in translation style and supported language pairs.\nIf your preferred translation engine does not support a language pair that you want to use, we fall back to your next preferred engine that does support it.\n": [
+            "Системы автоматического перевода различаются по стилю перевода и поддерживаемым языковым парам.\nЕсли предпочитаемая Вами система перевода не поддерживает языковую пару, которую Вы хотите использовать, мы переходим к следующей предпочитаемой системе, которая ее поддерживает.\n"
+         ],
+         "Drag & drop to sort from the most to the least preferred engine.": [
+            "Перетащите, чтобы отсортировать от наиболее предпочтительного к наименее предпочтительному механизму."
+         ],
+         "Choose the tone of your automatic translations.": [
+            "Выберите тон ваших автоматических переводов."
+         ],
+         "Read more": [
+            "Подробнее"
+         ],
+         "Learn more": [
+            "Узнать больше"
+         ],
+         "On": [
+            "Вкл"
+         ],
+         "Off": [
+            "Выкл"
+         ],
+         "Could not load translation engines": [
+            "Не удалось загрузить механизмы перевода"
+         ],
+         "Could not update engine": [
+            "Не удалось обновить механизм"
+         ],
+         "Could not save review mode": [
+            "Не удалось сохранить режим проверки"
+         ],
+         "Could not save translate everything drafts": [
+            "Не удалось сохранить черновики для перевода всего"
+         ],
+         "Settings saved successfully": [
+            "Настройки успешно сохранены"
+         ]
+      }
+   }
+}

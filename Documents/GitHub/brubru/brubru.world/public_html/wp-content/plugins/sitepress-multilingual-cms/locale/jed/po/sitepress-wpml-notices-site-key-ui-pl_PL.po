@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/js/notices-site-key/components/HelpLink.js:18
+msgid "Get a key for this site"
+msgstr "Uzyskaj klucz dla tej witryny"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:30
+msgid "Site key:"
+msgstr "Klucz witryny:"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:41
+msgid "Enter your site key here"
+msgstr "Wprowadź tutaj klucz swojej witryny"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Registering..."
+msgstr "Rejestrowanie..."
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Register"
+msgstr "Zarejestruj"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:29
+msgid "A New Site Key Is Required"
+msgstr "Wymagany jest nowy klucz witryny"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:34
+msgid ""
+"To continue using WPML features like automatic translation and plugin "
+"updates, please register your site again. Don’t worry, your existing "
+"content and translations are safe."
+msgstr "Aby kontynuować korzystanie z funkcji WPML, takich jak automatyczne tłumaczenie i aktualizacje wtyczek, zarejestruj swoją witrynę ponownie. Nie martw się, Twoje istniejące treści i tłumaczenia są bezpieczne."
+
+#: src/js/notices-site-key/components/SuccessMessage.js:30
+msgid "Site key registered successfully!"
+msgstr "Klucz witryny zarejestrowany pomyślnie!"
+
+#: src/js/notices-site-key/components/SuccessMessage.js:31
+msgid "Page will reload in %d seconds..."
+msgstr "Strona zostanie przeładowana za %d sekund..."
+
+#: src/js/notices-site-key/hooks/useRegisterSiteKey.js:54
+msgid "Registration failed. Please try again."
+msgstr "Rejestracja nie powiodła się. Spróbuj ponownie."

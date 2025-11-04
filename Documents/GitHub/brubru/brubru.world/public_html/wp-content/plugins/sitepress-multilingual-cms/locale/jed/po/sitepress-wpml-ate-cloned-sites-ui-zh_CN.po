@@ -1,0 +1,342 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: zh@Hans\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/ate-cloned-sites/components/CloseButton.js:15
+msgid "Close"
+msgstr ""
+
+#: src/js/ate-cloned-sites/components/ContactSupport.js:9
+msgid ""
+"Please take a screenshot of this message and report this issue to <a>WPML "
+"support</a>."
+msgstr ""
+
+#: src/js/ate-cloned-sites/components/UnregistrationInfo.js:7
+msgid ""
+"WPML has automatically unregistered your site as part of this wizard. After "
+"you close it, you’ll see a prompt to register the site again. This is "
+"expected, your content and translations are safe."
+msgstr "WPML 已在此向导中自动取消注册您的网站。关闭向导后，您将看到提示再次注册该网站。这是预期的，您的内容和翻译是安全的。"
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:10
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsCompleted.js:9
+#: src/js/ate-cloned-sites/steps/MoveCompleted.js:10
+msgid "You’re all set"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:23
+msgid ""
+"This site is a copy of the original site %s and it doesn’t currently have "
+"any automatic translation credits."
+msgstr "此网站是原始网站 %s 的副本，目前没有任何自动翻译额度。"
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:33
+msgid ""
+"If you’d like to use automatic translation here in the future, you can "
+"either <a1>add credits</a1> or <a2>share them from the original site</a2>."
+msgstr "如果您将来想在此处使用自动翻译，可以<a1>添加额度</a1>或<a2>从原始网站共享额度</a2>。"
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:52
+msgid ""
+"There was an error checking for credits to share. Please take a screenshot "
+"of this message and report it in <a>WPML support</a>."
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:36
+msgid ""
+"To link %s and %s so they share automatic translation credits, follow these "
+"steps:"
+msgstr "要链接 %s 和 %s 以共享自动翻译额度，请按以下步骤操作："
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:47
+msgid ""
+"Open <a>this link</a> to access the original site’s admin area. (You can’t "
+"access this screen by visiting %s directly.)"
+msgstr "打开<a>此链接</a>以访问原始网站的管理区域。（您无法通过直接访问 %s 来访问此页面。）"
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:59
+msgid "Click <b>Copy migration code</b> on that page."
+msgstr "在该页面上点击<b>复制迁移代码</b>。"
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:68
+msgid "Paste the code below to complete the connection."
+msgstr "将代码粘贴到下方以完成连接。"
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:77
+msgid "Migration code"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:79
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:84
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:75
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:76
+msgid "Continue"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:82
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:95
+msgid "Go back"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:9
+msgid "Connect Automatic Translation Credits"
+msgstr "连接自动翻译额度"
+
+#: src/js/ate-cloned-sites/steps/CopyError.js:15
+msgid ""
+"WPML was unable to copy your site's translations, translation memory, and "
+"glossary to this new URL."
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyError.js:7
+msgid "Error with copying translation information to new URL"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsCompleted.js:12
+msgid "This site and its copy on %s are now sharing automatic translation credits."
+msgstr "此网站和其在 %s 上的副本现在正在共享自动翻译额度。"
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsCompleted.js:30
+msgid ""
+"Any credits you add to one site will be available on both. If you stop "
+"using this site, your credits will remain safe."
+msgstr "您添加到一个网站的任何额度都将在两个网站上可用。如果您停止使用此网站，您的额度将保持安全。"
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsError.js:15
+msgid ""
+"WPML was unable to connect your old and new URLs to share automatic "
+"translation credits."
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsError.js:7
+msgid "Error with sharing automatic translation credits"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:12
+msgid ""
+"The site on %s has %d credits for automatic translation. Do you want to "
+"share these credits with this new site %s?"
+msgstr "%s 上的网站有 %d 自动翻译额度。您想与这个新网站 %s 共享这些额度吗？"
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:19
+msgid ""
+"The site on %s has a pay-as-you-go subscription for automatic translation. "
+"Do you want to share these credits between %s and this new location (%s)?"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:66
+msgid "Yes (recommended)"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:68
+msgid "In the next step, you’ll approve the use of same credits on both sites."
+msgstr "在下一步中，您将批准在两个网站上使用相同的额度。"
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:71
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:61
+msgid "No"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:73
+msgid "You’ll need to assign new credits or set up pay-as-you-go."
+msgstr "您需要分配新的额度或设置按使用付费。"
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:87
+msgid "What happens when you share credits between sites?"
+msgstr "在网站之间共享额度会发生什么？"
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:9
+msgid "Translation credits for this site"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/Initial.js:10
+msgid "WPML detected a change in your site’s URL"
+msgstr "WPML 检测到您的网站 URL 发生了变化"
+
+#: src/js/ate-cloned-sites/steps/MoveCompleted.js:21
+msgid "You can now continue translating content on this site as usual."
+msgstr "您现在可以继续像往常一样在此网站上翻译内容。"
+
+#: src/js/ate-cloned-sites/steps/MoveCompleted.js:32
+msgid ""
+"Just a reminder: there shouldn’t be another copy of this site running at "
+"%s. If there is, automatic translation won’t work correctly on that site."
+msgstr "只是提醒一下：在 %s 上不应该有此网站的另一个副本在运行。如果有，自动翻译在那个网站上将无法正常工作。"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:33
+msgid "You indicated that the original site at %s is no longer active. This means:"
+msgstr "您表示原始网站 %s 已不再活跃。这意味着："
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:37
+msgid "Automatic translation will no longer work on the old site"
+msgstr "自动翻译将不再在旧网站上工作"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:40
+msgid "Accessing the old site may trigger warnings on this site"
+msgstr "访问旧网站可能会在此网站上触发警告"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:50
+msgid "Please confirm:"
+msgstr "请确认："
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:61
+msgid "I understand and confirm that <b>%s</b> is no longer in use."
+msgstr "我理解并确认<b>%s</b>不再使用。"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:78
+msgid "Back"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:9
+msgid "Please Confirm"
+msgstr "请确认"
+
+#: src/js/ate-cloned-sites/steps/MoveError.js:16
+msgid "WPML was unable to update our records with your new URL."
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/MoveError.js:7
+msgid "Error with moving translation information to new URL"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:34
+msgid "It looks like this site was previously at %s and is now running on %s."
+msgstr "看起来这个网站之前位于 %s，现在运行在 %s 上。"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:42
+msgid "Is the original site still available at %s?"
+msgstr "原始网站在 %s 上是否仍然可用？"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:54
+msgid "Yes"
+msgstr "是"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:57
+msgid ""
+"The original site is still running and this is just a copy of the original "
+"site"
+msgstr "原始网站仍在运行，这只是原始网站的副本"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:64
+msgid "I moved the site to this new address and this is now the main site"
+msgstr "我将网站移到了这个新地址，这现在是主要网站"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:8
+msgid "WPML Detected a New Site Address"
+msgstr "WPML 检测到新的网站地址"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:80
+msgid "How to manage translations when migrating from development to production"
+msgstr "从开发环境迁移到生产环境时如何管理翻译"
+
+#: src/js/ate-cloned-sites/steps/NoAdmin.js:11
+msgid ""
+"Looks like this site is a copy of a different site, or moved to a different "
+"URL. Please contact your translation manager to update Translation "
+"Management plugin configuration."
+msgstr "看起来这个网站是另一个网站的副本，或者已移动到不同的 URL。请联系您的翻译管理员更新翻译管理插件配置。"
+
+#: src/js/ate-cloned-sites/steps/NoAdmin.js:5
+msgid "Site Moved or Copied - Action Required"
+msgstr "网站已移动或复制 - 需要采取行动"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:36
+msgid "You or someone else moved this site to %s. Please keep in mind that:"
+msgstr "您或其他人已将此网站移动到 %s。请记住："
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:50
+msgid "Translations that you do at %s will not appear on this site."
+msgstr "您在 %s 上进行的翻译不会出现在此网站上。"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:56
+msgid "You cannot edit translations on this site."
+msgstr "您无法在此网站上编辑翻译。"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:67
+msgid ""
+"The site at %s is using the same credits for automatic translation as this "
+"site."
+msgstr "%s 上的网站正在使用与此网站相同的自动翻译额度。"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:76
+msgid ""
+"If you didn't intend to move this site to %s, you can <a>indicate that this "
+"site should be at %s</a>."
+msgstr "如果您不打算将此网站移动到 %s，您可以<a>指明此网站应该位于 %s</a>。"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:9
+msgid "This site has moved to a new location"
+msgstr "此网站已移动到新位置"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:96
+msgid ""
+"If you prefer not to move this site, you can <a>mark it as a copy</a> and "
+"enable automatic translation for it."
+msgstr "如果您不想移动此网站，您可以<a>将其标记为副本</a>并为其启用自动翻译。"
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:38
+msgid ""
+"Moving the site back here will mean that you will be able to translate on "
+"this domain again, but you will not be able to update translations at %s."
+msgstr "将网站移回此处意味着您将能够再次在此域名上进行翻译，但您将无法在 %s 上更新翻译。"
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:50
+msgid "Yes - move back here"
+msgstr "是 - 移回此处"
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:56
+msgid "No - keep the site on %s"
+msgstr "否 - 保持网站在 %s"
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:9
+msgid "Are you sure that this site should run on %s and not %s?"
+msgstr "您确定此网站应该在 %s 而不是 %s 上运行吗？"
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:16
+msgid ""
+"WPML noticed that your site is being accessed from a different domain or "
+"URL."
+msgstr "WPML 注意到您的网站正从不同的域名或 URL 访问。"
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:21
+msgid ""
+"To make sure everything continues working correctly, including automatic "
+"translation and site registration, we need to verify and update your site "
+"settings."
+msgstr "为确保一切继续正常工作，包括自动翻译和网站注册，我们需要验证并更新您的网站设置。"
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:26
+msgid "This will only take a moment."
+msgstr "这只需要一小会儿。"
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:36
+msgid "Start Migration"
+msgstr "开始迁移"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:17
+msgid ""
+"If you didn't change your main domain and only logged in through a "
+"secondary domain, select this option."
+msgstr "如果您没有更改主域名，只是通过次要域名登录，请选择此选项。"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:23
+msgid "Something went wrong"
+msgstr "出现了问题"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:39
+msgid "I just logged in from a secondary domain"
+msgstr "我只是从次要域名登录"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:48
+msgid "You're all set!"
+msgstr "一切就绪！"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:53
+msgid ""
+"This domain is now registered as a secondary domain and WPML will recognize "
+"it correctly."
+msgstr "此域名现已注册为次要域名，WPML 将正确识别它。"

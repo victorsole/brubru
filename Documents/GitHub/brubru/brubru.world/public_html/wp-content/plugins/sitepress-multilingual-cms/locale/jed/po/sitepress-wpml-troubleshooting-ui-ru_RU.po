@@ -1,0 +1,145 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:17
+msgid "Preparing..."
+msgstr "Подготовка..."
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:77
+msgid "All jobs have been cancelled"
+msgstr "Все задания отменены"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:79
+msgid "There is no more jobs to cancel"
+msgstr "Больше нет заданий для отмены"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:82
+msgid "The jobs cancellation has failed"
+msgstr "Отмена заданий не удалась"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:88
+msgid "Cancel in-progress automatic jobs"
+msgstr "Отменить выполняемые автоматические задания"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:31
+msgid "Domain name has been updated"
+msgstr "Доменное имя изменилось"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:33
+msgid "Domain name update has been failed"
+msgstr "Изменение доменного имени не выполнено"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:41
+msgid "Update domain name in language switcher settings"
+msgstr "Измените доменное имя в настройках переключателя языков"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:7
+msgid "Disclaimer: MySQL Disk Space"
+msgstr "Отказ от ответственности: Дисковое пространство MySQL"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:8
+msgid ""
+"Cleaning and compressing the wp_icl_translate and wp_icl_translation_status "
+"tables reduces its data size, but does not automatically free up disk space "
+"in MySQL. To reclaim disk space, a table rebuild is required—a risky "
+"operation not performed automatically by this tool."
+msgstr "Очистка и сжатие таблиц wp_icl_translate и wp_icl_translation_status уменьшает размер их данных, но не освобождает автоматически дисковое пространство в MySQL. Для восстановления дискового пространства требуется перестройка таблицы — рискованная операция, которая не выполняется автоматически этим инструментом."
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:38
+msgid "Optimize translation tables"
+msgstr "Оптимизировать таблицы переводов"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:47
+msgid "Previous State Migration"
+msgstr "Миграция предыдущего состояния"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:58
+msgid "Translation Elements Migration"
+msgstr "Миграция элементов перевода"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:64
+msgid "Processed"
+msgstr "Обработано"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:72
+msgid "Error"
+msgstr "Ошибка"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:82
+msgid "Success"
+msgstr "Успешно"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:83
+msgid "Database tables optimization completed successfully."
+msgstr "Оптимизация таблиц базы данных успешно завершена."
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:7
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:8
+msgid ""
+"This process is resource-intensive and may take a significant amount of "
+"time. It is recommended to run this optimization during periods of low "
+"traffic."
+msgstr "Этот процесс требует значительных ресурсов и может занять много времени. Рекомендуется выполнять эту оптимизацию в периоды низкой нагрузки."
+
+#: src/js/troubleshooting/optimizeDbTables/index.js:16
+msgid "Database Tables Optimization"
+msgstr "Оптимизация таблиц базы данных"
+
+#: src/js/troubleshooting/refreshLicense/RefreshLicense.js:14
+msgid "Refresh license data to recognise license update"
+msgstr "Обновите данные лицензии, чтобы распознать обновление лицензии"
+
+#: src/js/troubleshooting/refreshLicense/useRefreshLicense.js:36
+msgid "WPML License has been refreshed"
+msgstr "Лицензия WPML обновлена"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:11
+msgid "Translate Everything Automatically is not active."
+msgstr "Автоматический перевод всего неактивен."
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:49
+msgid "Retry stuck automatic translations"
+msgstr "Повторить застрявшие автоматические переводы"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:54
+msgid ""
+"Resends translation jobs that couldn't be processed due to a temporary "
+"issue while Translate Everything Automatically was active."
+msgstr "Повторно отправляет задания на перевод, которые не удалось обработать из-за временной проблемы, когда был активен режим автоматического перевода всего."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:10
+msgid "Checking for stuck translation jobs..."
+msgstr "Проверка застрявших заданий на перевод..."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:13
+msgid "Processing... %s stuck translation found so far"
+msgid_plural "Processing... %s stuck translations found so far"
+msgstr[0] "Обработка... Найден %s застрявший перевод"
+msgstr[1] "Processing... %s stuck translations found so far"
+msgstr[2] "Processing... %s stuck translations found so far"
+msgstr[3] "Обработка... Найдено %s застрявших переводов"
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:25
+msgid ""
+"Something went wrong while checking for stuck translation jobs. Please "
+"<a>contact WPML support</a>."
+msgstr "Что-то пошло не так при проверке застрявших заданий на перевод. Пожалуйста, <a>свяжитесь со службой поддержки WPML</a>."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:37
+msgid "No stuck translation jobs found."
+msgstr "Застрявших заданий на перевод не найдено."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:41
+msgid "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard."
+msgid_plural "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[0] "Найдено %s застрявшее задание на перевод. WPML переведет его автоматически в фоновом режиме.\nВы можете отслеживать прогресс в панели переводов."
+msgstr[1] "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[2] "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[3] "Найдено %s застрявших заданий на перевод. WPML переведет их автоматически в фоновом режиме.\nВы можете отслеживать их прогресс в панели переводов."

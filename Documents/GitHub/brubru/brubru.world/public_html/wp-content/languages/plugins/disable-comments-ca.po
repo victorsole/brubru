@@ -1,0 +1,102 @@
+# Translation of Plugins - Disable Comments &#8211; Remove Comments &amp; Stop Spam [Multi-Site Support] - Stable (latest release) in Catalan
+# This file is distributed under the same license as the Plugins - Disable Comments &#8211; Remove Comments &amp; Stop Spam [Multi-Site Support] - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-03-05 12:57:47+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.0\n"
+"Language: ca\n"
+"Project-Id-Version: Plugins - Disable Comments &#8211; Remove Comments &amp; Stop Spam [Multi-Site Support] - Stable (latest release)\n"
+
+#: disable-comments.php:845
+msgid "Default (no type)"
+msgstr "Per defecte (sense tipus)"
+
+#. Description of the plugin
+#: disable-comments.php
+msgid "Allows administrators to globally disable comments on their site. Comments can be disabled according to post type. You could bulk delete comments using Tools."
+msgstr "Permet als administradors desactivar globalment els comentaris al seu lloc. Els comentaris es poden desactivar segons el tipus de contingut. Podeu suprimir en massa els comentaris mitjançant les eines."
+
+#: views/partials/_delete.php:59
+msgid "Deleting comments by comment type will remove existing comment entries of the selected comment type(s) in the database and cannot be reverted without a database backup."
+msgstr "Si suprimiu els comentaris per tipus de comentari, s'eliminaran les entrades de comentari existents dels tipus de comentari seleccionats a la base de dades i no es podran revertir sense una còpia de seguretat de la base de dades."
+
+#: disable-comments.php:770
+msgctxt "settings menu title"
+msgid "Disable Comments"
+msgstr "Desactiva els comentaris"
+
+#: views/partials/_delete.php:66
+msgid "Total Comments:"
+msgstr "Total de comentaris:"
+
+#: disable-comments.php:1131 disable-comments.php:1135
+msgid "Internal error occured. Please try again later."
+msgstr "S'ha produït un error intern. Proveu-ho de nou més tard."
+
+#: views/partials/_delete.php:43 views/partials/_disable.php:61
+msgid "Custom post types:"
+msgstr "Tipus d'entrades personalitzades:"
+
+#: disable-comments.php:780 views/partials/_delete.php:72
+#: assets/js/disable-comments-settings-scripts.js:339
+msgid "Delete Comments"
+msgstr "Suprimeix els comentaris"
+
+#: disable-comments.php:761
+msgid "Tools"
+msgstr "Eines"
+
+#. Plugin URI of the plugin
+#: disable-comments.php
+msgid "https://wordpress.org/plugins/disable-comments/"
+msgstr "https://wordpress.org/plugins/disable-comments/"
+
+#: views/partials/_disable.php:167
+msgid "Save Changes"
+msgstr "Desa els canvis"
+
+#: views/partials/_delete.php:42 views/partials/_disable.php:60
+msgid "Only the built-in post types appear above. If you want to disable comments on other custom post types on the entire network, you can supply a comma-separated list of post types below (use the slug that identifies the post type)."
+msgstr "Només apareixen els tipus d'entrades integrats. Si voleu desactivar els comentaris d'altres tipus d'entrades personalitzades a tota la xarxa, podeu subministrar una llista separada per comes de tipus de publicacions a continuació (utilitzeu l'àlies que identifica el tipus de publicació)."
+
+#. Plugin Name of the plugin
+#: disable-comments.php disable-comments.php:369
+msgid "Disable Comments"
+msgstr "Disable Comments"
+
+#: disable-comments.php:760 views/partials/_disable.php:3
+msgid "Settings"
+msgstr "Configuració"
+
+#. translators: %s: disabled post types.
+#: disable-comments.php:635
+msgid ", "
+msgstr ", "
+
+#. translators: %s: disabled post types.
+#: disable-comments.php:635
+msgid "Note: The <em>Disable Comments</em> plugin is currently active, and comments are completely disabled on: %s. Many of the settings below will not be applicable for those post types."
+msgstr "Nota: l'extensió <em>Disable Comments</em> està actualment activa i els comentaris estan completament desactivats: %s. Molts dels paràmetres següents no seran aplicables a aquests tipus d'entrades."
+
+#: disable-comments.php:520 disable-comments.php:680 disable-comments.php:687
+msgid "Comments are closed."
+msgstr "Els comentaris estan tancats."
+
+#. translators: %s: WordPress version no.
+#: disable-comments.php:173
+msgid "Disable Comments requires WordPress version %s or greater."
+msgstr "Disable Comments necessita la versió %s de WordPress o superior."
+
+#. Author URI of the plugin
+#: disable-comments.php
+msgid "https://wpdeveloper.com"
+msgstr "https://wpdeveloper.net"
+
+#. Author of the plugin
+#: disable-comments.php
+msgid "WPDeveloper"
+msgstr "WPDeveloper"

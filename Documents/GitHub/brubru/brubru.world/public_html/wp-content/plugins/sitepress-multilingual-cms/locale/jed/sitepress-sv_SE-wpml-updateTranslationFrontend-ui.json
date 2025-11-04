@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "Please wait, applying translation..": [
+            "Vänligen vänta, tillämpar översättning..."
+         ],
+         "There was an error in applying translation.": [
+            "Det uppstod ett fel vid tillämpning av översättningen."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "Någon granskar redan denna översättning. Vänligen försök igen senare."
+         ]
+      }
+   }
+}

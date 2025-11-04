@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "To display this Custom HTML block in a specific language, first place it inside a Group block.": [
+            "För att visa detta anpassade HTML-block på ett specifikt språk, placera det först i ett gruppblock."
+         ],
+         "Place inside Group block": [
+            "Placera i gruppblock"
+         ],
+         "All": [
+            "Alla"
+         ],
+         "Display on language": [
+            "Visa på språk"
+         ]
+      }
+   }
+}

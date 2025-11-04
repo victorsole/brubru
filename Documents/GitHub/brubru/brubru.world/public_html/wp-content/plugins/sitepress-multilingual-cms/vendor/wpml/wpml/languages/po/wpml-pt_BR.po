@@ -1,0 +1,193 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:45+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/config-admin-pages.php:126
+msgid "Translation Dashboard"
+msgstr "Painel de Tradução"
+
+#: src/config-admin-pages.php:311
+msgid "Automatic translation settings"
+msgstr "Configurações de tradução automática"
+
+#: src/config-admin-pages.php:353
+msgid "WPML Setup"
+msgstr "Configuração do WPML"
+
+#: src/config-admin-pages.php:382
+msgid "WPML Support"
+msgstr "Suporte WPML"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:27
+msgid "Database Version"
+msgstr "Versão do banco de dados"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:36
+msgid "Your %sMySQL%s version must be at least %s. Alternatively, you can use %sMariaDb%s version %s or higher."
+msgstr "Sua versão do %sMySQL%s deve ser pelo menos %s. Alternativamente, você pode usar o %sMariaDb%s versão %s ou superior."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:53
+msgid "Contact your hosting provider to upgrade MySQL %s or higher."
+msgstr "Entre em contato com seu provedor de hospedagem para atualizar o MySQL para a versão %s ou superior."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:31
+msgid "PHP eval() Function"
+msgstr "Função PHP eval()"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:39
+msgid "The PHP eval() function is disabled by the Suhosin extension. WPML requires this function when Suhosin is enabled."
+msgstr "A função PHP eval() está desativada pela extensão Suhosin. O WPML requer essa função quando o Suhosin está ativado."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:47
+msgid "Contact your hosting provider to enable the eval() function in the Suhosin configuration or disable the Suhosin extension."
+msgstr "Entre em contato com seu provedor de hospedagem para ativar a função eval() na configuração do Suhosin ou desativar a extensão Suhosin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:31
+msgid "libxml PHP Module"
+msgstr "Módulo PHP libxml"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:40
+msgid "WPML requires libxml PHP Module version %s or higher to process XML correctly using SimpleXML."
+msgstr "O WPML requer o módulo PHP libxml versão %s ou superior para processar XML corretamente usando SimpleXML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:49
+msgid "Contact your hosting provider to upgrade the libxml PHP Module."
+msgstr "Entre em contato com seu provedor de hospedagem para atualizar o módulo PHP libxml."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:30
+msgid "Multibyte String Extension"
+msgstr "Extensão de string multibyte"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:39
+msgid "The %sMultibyte String extension%s is required to handle non-Latin character sets in WPML."
+msgstr "A %sextensão Multibyte String%s é necessária para lidar com conjuntos de caracteres não latinos no WPML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:49
+msgid "Contact your hosting provider to install the Multibyte String (mbstring) PHP extension."
+msgstr "Entre em contato com seu provedor de hospedagem para instalar a extensão PHP Multibyte String (mbstring)."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:55
+msgid "Memory limit"
+msgstr "Limite de memória"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:65
+msgid "Your PHP memory limit is currently %s.  WPML requires at least %s to function properly."
+msgstr "Seu limite de memória PHP atual é %s. O WPML requer pelo menos %s para funcionar corretamente."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:80
+msgid "To increase the memory limit, add this to the top of your %swp-config.php%s file:"
+msgstr "Para aumentar o limite de memória, adicione isto no topo do seu arquivo %swp-config.php%s:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:25
+msgid "PHP Version"
+msgstr "Versão do PHP"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:34
+msgid "Your PHP version is outdated. WPML requires at least %s."
+msgstr "Sua versão do PHP está desatualizada. O WPML requer pelo menos %s."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:44
+msgid "Contact your hosting provider to upgrade PHP to version %s or higher."
+msgstr "Entre em contato com seu provedor de hospedagem para atualizar o PHP para a versão %s ou superior."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:31
+msgid "WordPress REST API"
+msgstr "WordPress REST API"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:41
+msgid "The WordPress REST API must be enabled for WPML to work correctly."
+msgstr "A API REST do WordPress deve estar ativada para que o WPML funcione corretamente."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:49
+msgid "Ensure the REST API endpoint %s is reachable and that the WordPress REST API is enabled."
+msgstr "Certifique-se de que o endpoint da API REST %s esteja acessível e que a API REST do WordPress esteja ativada."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:31
+msgid "SimpleXML Extension"
+msgstr "Extensão SimpleXML"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:40
+msgid "The %sSimpleXML extension%s is required to use %sXLIFF files%s in WPML. The libxml PHP Module must also be version 2.7.8 or higher."
+msgstr "A %sextensão SimpleXML%s é necessária para usar %sarquivos XLIFF%s no WPML. O módulo PHP libxml também deve ser da versão 2.7.8 ou superior."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:55
+msgid "Contact your hosting provider to install the SimpleXML PHP extension."
+msgstr "Entre em contato com seu provedor de hospedagem para instalar a extensão PHP SimpleXML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:39
+msgid "PHP Stack Size"
+msgstr "Tamanho da pilha PHP"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:48
+msgid "WPML requires at least %s KB of PHP stack size on PHP 8.3 or higher."
+msgstr "O WPML requer pelo menos %s KB de tamanho de pilha PHP no PHP 8.3 ou superior."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:58
+msgid "Add this to your %sphp.ini%s and restart your web server to set the required stack size:"
+msgstr "Adicione isto ao seu %sphp.ini%s e reinicie seu servidor web para definir o tamanho de pilha necessário:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:30
+msgid "WordPress Version"
+msgstr "Versão do WordPress"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:39
+msgid "Your WordPress version is outdated. WPML requires at least %s. "
+msgstr "Sua versão do WordPress está desatualizada. O WPML requer pelo menos %s. "
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:50
+msgid "Please update your WordPress installation to version %s or higher."
+msgstr "Por favor, atualize sua instalação do WordPress para a versão %s ou superior."
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:20
+msgid "Error getting credits"
+msgstr "Erro ao obter créditos"
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:39
+msgid "Error getting account balances"
+msgstr "Erro ao obter saldos da conta"
+
+#: src/Legacy/Component/ATE/Application/Query/Glossary.php:26
+msgid "Error getting glossary data"
+msgstr "Erro ao obter dados do glossário"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:148
+msgid "Error fetching translation engines"
+msgstr "Erro ao buscar mecanismos de tradução"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:171
+msgid "Error fetching available formalities"
+msgstr "Erro ao buscar formalidades disponíveis"
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/ErrorMapper.php:32
+msgid "The jobs could not be created."
+msgstr "Os trabalhos não puderam ser criados."
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/UnsupportedLanguagesInTranslationService.php:43
+msgid "The selected translation service doesn't support the following languages: %s"
+msgstr "O serviço de tradução selecionado não suporta os seguintes idiomas: %s"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:310
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:311
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:312
+msgid "Other texts (Strings)"
+msgstr "Outros textos (Strings)"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/SendToTranslation/SendToTranslationController.php:48
+msgid "The request data for SendToTranslation is not valid."
+msgstr "Os dados da solicitação para SendToTranslation não são válidos."
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/TranslateEverything/EnableController.php:45
+msgid "In order to translate automatically, you first need to enable WPML's Advanced Translation Editor"
+msgstr "Para traduzir automaticamente, você primeiro precisa habilitar o Editor de Tradução Avançado do WPML"

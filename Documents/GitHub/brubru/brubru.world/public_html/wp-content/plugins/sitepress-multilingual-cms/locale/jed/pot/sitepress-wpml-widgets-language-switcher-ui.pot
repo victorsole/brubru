@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:120
+msgid ""
+"To display this Custom HTML block in a specific language, first place it "
+"inside a Group block."
+msgstr ""
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:126
+msgid "Place inside Group block"
+msgstr ""
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:13
+msgid "All"
+msgstr ""
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:56
+msgid "Display on language"
+msgstr ""

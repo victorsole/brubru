@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ja"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "サイトがWPMLの最低要件を満たしました"
+         ],
+         "Start WPML Setup": [
+            "WPMLのセットアップを開始"
+         ],
+         "Need Help?": [
+            "ヘルプが必要ですか？"
+         ],
+         "Contact our support team": [
+            "サポートチームにお問い合わせください"
+         ],
+         " and we'll guide you through it step by step.": [
+            " ステップバイステップでガイドいたします。"
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "サイトがWPMLの最低要件を満たしていません"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "WPMLを使用してサイトをスムーズに運用するためには、これらの簡単な最小要件を満たしてください。"
+         ],
+         "Re-check Now": [
+            "今すぐ再確認"
+         ],
+         "Skip for now": [
+            "今はスキップ"
+         ]
+      }
+   }
+}

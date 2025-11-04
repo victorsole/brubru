@@ -1,0 +1,18 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "But...": [
+            "แต่..."
+         ],
+         "Wait to translate any content that contains media until we're finished configuring it. It will be just a moment.": [
+            "รอแปลเนื้อหาที่มีสื่อจนกว่าจะกำหนดค่าเสร็จ"
+         ]
+      }
+   }
+}

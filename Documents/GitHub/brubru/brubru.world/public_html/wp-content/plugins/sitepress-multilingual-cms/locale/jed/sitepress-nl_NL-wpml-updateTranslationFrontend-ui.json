@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl"
+         },
+         "Please wait, applying translation..": [
+            "Een ogenblik geduld, bezig met toepassen van vertaling..."
+         ],
+         "There was an error in applying translation.": [
+            "Er is een fout opgetreden bij het toepassen van de vertaling."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "Iemand anders is deze vertaling al aan het beoordelen. Probeer het later opnieuw."
+         ]
+      }
+   }
+}

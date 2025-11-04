@@ -1,0 +1,69 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr"
+         },
+         "WPML Translation Editor": [
+            "Éditeur de traduction WPML"
+         ],
+         "WordPress Editor": [
+            "Éditeur WordPress"
+         ],
+         "Translation Dashboard": [
+            "Tableau de bord de traduction"
+         ],
+         "Also, switching back to WPML's Translation Editor later will require re-translating content that you translated with the WordPress editor.": [
+            "De plus, revenir ultérieurement à l'éditeur de traduction de WPML nécessitera de retraduire le contenu que vous avez traduit avec l'éditeur WordPress."
+         ],
+         "This will overwrite content you translated with the WordPress Editor. If you switch now, you'll have to translate selected content again.": [
+            "Cela écrasera le contenu que vous avez traduit avec l'éditeur WordPress. Si vous changez maintenant, vous devrez traduire à nouveau le contenu sélectionné."
+         ],
+         "You are about to translate with the %s": [
+            "Vous êtes sur le point de traduire avec le %s"
+         ],
+         "Translate with the WordPress Editor if you need different designs per language or if the content isn't compatible with WPML's Translation Editor.": [
+            "Traduisez avec l'éditeur WordPress si vous avez besoin de différentes conceptions par langue ou si le contenu n'est pas compatible avec l'éditeur de traduction de WPML."
+         ],
+         "What do you want to translate?": [
+            "Que voulez-vous traduire ?"
+         ],
+         "I understand, switch to the WordPress Editor": [
+            "Je comprends, passer à l'éditeur WordPress"
+         ],
+         "Apply": [
+            "Appliquer"
+         ],
+         "Cancel": [
+            "Annuler"
+         ],
+         "I understand, switch to %s": [
+            "Je comprends, passez au %s"
+         ],
+         "Only this %s": [
+            "Seulement ce %s"
+         ],
+         "Recommended": [
+            "Recommandé"
+         ],
+         "All %s": [
+            "Tous(tes) les %s"
+         ],
+         "All the site's content": [
+            "Tout le contenu du site"
+         ],
+         "I understand, switch to Translation Dashboard": [
+            "Je comprends, passer au tableau de bord de traduction"
+         ],
+         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
+            "L'éditeur WordPress n'offre pas de traduction automatique, de mémoire de traduction et d'autres fonctionnalités qui facilitent la traduction."
+         ],
+         "Translate items in batch after reviewing the cost of AI translation": [
+            "Traduire des éléments par lots après avoir examiné le coût de la traduction IA"
+         ]
+      }
+   }
+}

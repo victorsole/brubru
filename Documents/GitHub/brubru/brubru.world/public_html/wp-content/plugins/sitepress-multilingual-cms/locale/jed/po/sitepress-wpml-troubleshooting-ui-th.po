@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:17
+msgid "Preparing..."
+msgstr "กำลังเตรียมการ..."
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:77
+msgid "All jobs have been cancelled"
+msgstr "งานทั้งหมดถูกยกเลิกแล้ว"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:79
+msgid "There is no more jobs to cancel"
+msgstr "ไม่มีงานที่จะยกเลิกอีกแล้ว"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:82
+msgid "The jobs cancellation has failed"
+msgstr "การยกเลิกงานล้มเหลว"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:88
+msgid "Cancel in-progress automatic jobs"
+msgstr "ยกเลิกงานอัตโนมัติที่กำลังดำเนินการ"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:31
+msgid "Domain name has been updated"
+msgstr "อัปเดตชื่อโดเมนแล้ว"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:33
+msgid "Domain name update has been failed"
+msgstr "การอัปเดตชื่อโดเมนล้มเหลว"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:41
+msgid "Update domain name in language switcher settings"
+msgstr "อัปเดตชื่อโดเมนในการตั้งค่าตัวเลือกภาษา"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:7
+msgid "Disclaimer: MySQL Disk Space"
+msgstr "คำเตือน: พื้นที่ดิสก์ MySQL"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:8
+msgid ""
+"Cleaning and compressing the wp_icl_translate and wp_icl_translation_status "
+"tables reduces its data size, but does not automatically free up disk space "
+"in MySQL. To reclaim disk space, a table rebuild is required—a risky "
+"operation not performed automatically by this tool."
+msgstr "การทำความสะอาดและบีบอัดตาราง wp_icl_translate และ wp_icl_translation_status จะช่วยลดขนาดข้อมูล แต่ไม่ได้คืนพื้นที่ดิสก์ใน MySQL โดยอัตโนมัติ การเรียกคืนพื้นที่ดิสก์ต้องใช้การสร้างตารางใหม่ ซึ่งเป็นการดำเนินการที่มีความเสี่ยงและไม่ได้ทำโดยอัตโนมัติผ่านเครื่องมือนี้."
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:38
+msgid "Optimize translation tables"
+msgstr "ปรับปรุงประสิทธิภาพตารางแปลภาษา"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:47
+msgid "Previous State Migration"
+msgstr "การย้ายสถานะก่อนหน้า"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:58
+msgid "Translation Elements Migration"
+msgstr "การย้ายองค์ประกอบการแปล"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:64
+msgid "Processed"
+msgstr "ดำเนินการแล้ว"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:72
+msgid "Error"
+msgstr "ข้อผิดพลาด"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:82
+msgid "Success"
+msgstr "สำเร็จ"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:83
+msgid "Database tables optimization completed successfully."
+msgstr "การปรับปรุงประสิทธิภาพตารางฐานข้อมูลเสร็จสมบูรณ์."
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:7
+msgid "Warning"
+msgstr "คำเตือน"
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:8
+msgid ""
+"This process is resource-intensive and may take a significant amount of "
+"time. It is recommended to run this optimization during periods of low "
+"traffic."
+msgstr "กระบวนการนี้ใช้ทรัพยากรมากและอาจใช้เวลานาน แนะนำให้ทำการปรับปรุงประสิทธิภาพนี้ในช่วงที่มีการใช้งานน้อย."
+
+#: src/js/troubleshooting/optimizeDbTables/index.js:16
+msgid "Database Tables Optimization"
+msgstr "การปรับปรุงประสิทธิภาพตารางฐานข้อมูล"
+
+#: src/js/troubleshooting/refreshLicense/RefreshLicense.js:14
+msgid "Refresh license data to recognise license update"
+msgstr "รีเฟรชข้อมูลใบอนุญาตเพื่อรับรู้การอัปเดตใบอนุญาต"
+
+#: src/js/troubleshooting/refreshLicense/useRefreshLicense.js:36
+msgid "WPML License has been refreshed"
+msgstr "รีเฟรชใบอนุญาต WPML แล้ว"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:11
+msgid "Translate Everything Automatically is not active."
+msgstr "Translate Everything Automatically ไม่ได้เปิดใช้งานอยู่."
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:49
+msgid "Retry stuck automatic translations"
+msgstr "ลองแปลอัตโนมัติที่ติดขัดใหม่"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:54
+msgid ""
+"Resends translation jobs that couldn't be processed due to a temporary "
+"issue while Translate Everything Automatically was active."
+msgstr "ส่งงานแปลที่ไม่สามารถประมวลผลได้เนื่องจากปัญหาชั่วคราวในขณะที่ Translate Everything Automatically ทำงานอยู่อีกครั้ง."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:10
+msgid "Checking for stuck translation jobs..."
+msgstr "กำลังตรวจสอบงานแปลที่ติดขัด..."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:13
+msgid "Processing... %s stuck translation found so far"
+msgid_plural "Processing... %s stuck translations found so far"
+msgstr[0] "กำลังประมวลผล... พบงานแปลที่ติดขัด %s งานจนถึงตอนนี้"
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:25
+msgid ""
+"Something went wrong while checking for stuck translation jobs. Please "
+"<a>contact WPML support</a>."
+msgstr "เกิดข้อผิดพลาดขณะตรวจสอบงานแปลที่ติดขัด กรุณา<a>ติดต่อฝ่ายสนับสนุนของ WPML</a>."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:37
+msgid "No stuck translation jobs found."
+msgstr "ไม่พบงานแปลที่ติดขัด."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:41
+msgid "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard."
+msgid_plural "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[0] "พบงานแปลที่ติดขัด %s งาน WPML จะแปลงานเหล่านี้โดยอัตโนมัติในพื้นหลัง\nคุณสามารถตรวจสอบความคืบหน้าได้ในแดชบอร์ดการแปล."

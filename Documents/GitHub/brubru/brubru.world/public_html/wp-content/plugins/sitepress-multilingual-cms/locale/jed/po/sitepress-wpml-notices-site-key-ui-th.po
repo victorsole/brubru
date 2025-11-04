@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/notices-site-key/components/HelpLink.js:18
+msgid "Get a key for this site"
+msgstr "รับคีย์สำหรับเว็บไซต์นี้"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:30
+msgid "Site key:"
+msgstr "คีย์เว็บไซต์:"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:41
+msgid "Enter your site key here"
+msgstr "ป้อนคีย์เว็บไซต์ของคุณที่นี่"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Registering..."
+msgstr "กำลังลงทะเบียน..."
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Register"
+msgstr "ลงทะเบียน"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:29
+msgid "A New Site Key Is Required"
+msgstr "จำเป็นต้องใช้คีย์เว็บไซต์ใหม่"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:34
+msgid ""
+"To continue using WPML features like automatic translation and plugin "
+"updates, please register your site again. Don’t worry, your existing "
+"content and translations are safe."
+msgstr "เพื่อใช้คุณสมบัติของ WPML ต่อไป เช่น การแปลอัตโนมัติและการอัปเดตปลั๊กอิน โปรดลงทะเบียนเว็บไซต์ของคุณอีกครั้ง ไม่ต้องกังวล เนื้อหาและการแปลที่มีอยู่ของคุณจะปลอดภัย."
+
+#: src/js/notices-site-key/components/SuccessMessage.js:30
+msgid "Site key registered successfully!"
+msgstr "ลงทะเบียนคีย์เว็บไซต์สำเร็จแล้ว!"
+
+#: src/js/notices-site-key/components/SuccessMessage.js:31
+msgid "Page will reload in %d seconds..."
+msgstr "หน้าจะโหลดใหม่ใน %d วินาที..."
+
+#: src/js/notices-site-key/hooks/useRegisterSiteKey.js:54
+msgid "Registration failed. Please try again."
+msgstr "การลงทะเบียนล้มเหลว โปรดลองอีกครั้ง."

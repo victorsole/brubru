@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "tr"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "Siteniz artık WPML'nin minimum gereksinimlerini karşılıyor"
+         ],
+         "Start WPML Setup": [
+            "WPML Kurulumunu Başlat"
+         ],
+         "Need Help?": [
+            "Yardıma mı ihtiyacınız var?"
+         ],
+         "Contact our support team": [
+            "Destek ekibimizle iletişime geçin"
+         ],
+         " and we'll guide you through it step by step.": [
+            " ve size adım adım rehberlik edelim."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Siteniz WPML'nin minimum gereksinimlerini karşılamıyor"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "WPML ile siteni sorunsuz çalıştırmak için bu basit minimum gereksinimleri karşıladığından emin ol."
+         ],
+         "Re-check Now": [
+            "Şimdi yeniden kontrol et"
+         ],
+         "Skip for now": [
+            "Şimdilik atla"
+         ]
+      }
+   }
+}

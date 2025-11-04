@@ -1,0 +1,32 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/wpmlLanguageSettings/DefaultFlagsFormat/Section.js:30
+msgid "Choose the image file type for flags"
+msgstr "Välj bildfilstyp för flaggor"
+
+#: src/js/wpmlLanguageSettings/DefaultFlagsFormat/Section.js:32
+msgid ""
+"This option affects only the built-in WPML flags, not the custom uploaded "
+"ones."
+msgstr "Detta påverkar endast inbyggda WPML-flaggor."
+
+#: src/js/wpmlLanguageSettings/DefaultFlagsFormat/Section.js:46
+msgid "%s format"
+msgstr "%s-format"
+
+#: src/js/wpmlLanguageSettings/DefaultFlagsFormat/Section.js:63
+msgid "Save"
+msgstr "Spara"
+
+#: src/js/wpmlLanguageSettings/DefaultFlagsFormat/hooks/useSave.js:20
+msgid "The new format has been saved."
+msgstr "Det nya formatet har sparats."
+
+#: src/js/wpmlLanguageSettings/DefaultFlagsFormat/hooks/useSave.js:25
+msgid "Failed to save the new format"
+msgstr "Misslyckades spara nya formatet"

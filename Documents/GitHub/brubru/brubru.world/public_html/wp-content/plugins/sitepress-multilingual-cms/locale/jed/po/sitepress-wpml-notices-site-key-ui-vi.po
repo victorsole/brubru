@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: vi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/notices-site-key/components/HelpLink.js:18
+msgid "Get a key for this site"
+msgstr "Nhận khóa cho trang web này"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:30
+msgid "Site key:"
+msgstr "Khóa trang web:"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:41
+msgid "Enter your site key here"
+msgstr "Nhập khóa trang web của bạn tại đây"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Registering..."
+msgstr "Đang đăng ký..."
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Register"
+msgstr "Đăng ký"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:29
+msgid "A New Site Key Is Required"
+msgstr "Cần một khóa trang web mới"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:34
+msgid ""
+"To continue using WPML features like automatic translation and plugin "
+"updates, please register your site again. Don’t worry, your existing "
+"content and translations are safe."
+msgstr "Để tiếp tục sử dụng các tính năng WPML như dịch tự động và cập nhật plugin, vui lòng đăng ký lại trang web của bạn. Đừng lo lắng, nội dung và bản dịch hiện có của bạn vẫn an toàn."
+
+#: src/js/notices-site-key/components/SuccessMessage.js:30
+msgid "Site key registered successfully!"
+msgstr "Đăng ký khóa trang web thành công!"
+
+#: src/js/notices-site-key/components/SuccessMessage.js:31
+msgid "Page will reload in %d seconds..."
+msgstr "Trang sẽ tải lại sau %d giây..."
+
+#: src/js/notices-site-key/hooks/useRegisterSiteKey.js:54
+msgid "Registration failed. Please try again."
+msgstr "Đăng ký thất bại. Vui lòng thử lại."

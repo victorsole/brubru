@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ko"
+         },
+         "Get a key for this site": [
+            "이 사이트의 키 받기"
+         ],
+         "Site key:": [
+            "사이트 키:"
+         ],
+         "Enter your site key here": [
+            "여기에 사이트 키를 입력하세요"
+         ],
+         "Registering...": [
+            "등록 중..."
+         ],
+         "Register": [
+            "등록"
+         ],
+         "A New Site Key Is Required": [
+            "새로운 사이트 키가 필요합니다"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "자동 번역 및 플러그인 업데이트와 같은 WPML 기능을 계속 사용하려면 사이트를 다시 등록해 주세요. 기존 콘텐츠와 번역은 안전하게 보관됩니다."
+         ],
+         "Site key registered successfully!": [
+            "사이트 키가 성공적으로 등록되었습니다!"
+         ],
+         "Page will reload in %d seconds...": [
+            "%d초 후 페이지가 새로고침됩니다..."
+         ],
+         "Registration failed. Please try again.": [
+            "등록에 실패했습니다. 다시 시도해 주세요."
+         ]
+      }
+   }
+}

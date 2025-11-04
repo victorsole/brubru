@@ -1,0 +1,69 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "WPML Translation Editor": [
+            "Wpml 翻译编辑器"
+         ],
+         "WordPress Editor": [
+            "Wordpress 编辑器"
+         ],
+         "Translation Dashboard": [
+            "翻译仪表板"
+         ],
+         "Also, switching back to WPML's Translation Editor later will require re-translating content that you translated with the WordPress editor.": [
+            "另外，之后切换回 WPML 的翻译编辑器将需要重新翻译您使用 WordPress 编辑器翻译的内容。"
+         ],
+         "This will overwrite content you translated with the WordPress Editor. If you switch now, you'll have to translate selected content again.": [
+            "这将覆盖您使用 WordPress 编辑器翻译的内容。如果现在切换，您将需要再次翻译所选内容。"
+         ],
+         "You are about to translate with the %s": [
+            "您即将使用 %s 进行翻译"
+         ],
+         "Translate with the WordPress Editor if you need different designs per language or if the content isn't compatible with WPML's Translation Editor.": [
+            "如果您需要每种语言使用不同的设计，或者内容与 WPML 的翻译编辑器不兼容，请使用 WordPress 编辑器进行翻译。"
+         ],
+         "What do you want to translate?": [
+            "您想翻译什么？"
+         ],
+         "I understand, switch to the WordPress Editor": [
+            "我明白了，切换到WordPress编辑器"
+         ],
+         "Apply": [
+            "应用"
+         ],
+         "Cancel": [
+            "取消"
+         ],
+         "I understand, switch to %s": [
+            "我明白了，切换到 %s"
+         ],
+         "Only this %s": [
+            "仅此%s"
+         ],
+         "Recommended": [
+            "推荐"
+         ],
+         "All %s": [
+            "全部%s"
+         ],
+         "All the site's content": [
+            "网站的所有内容"
+         ],
+         "I understand, switch to Translation Dashboard": [
+            "我明白了，切换到翻译仪表板"
+         ],
+         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
+            "WordPress编辑器不提供自动翻译、翻译记忆库和其他使翻译更容易的功能。"
+         ],
+         "Translate items in batch after reviewing the cost of AI translation": [
+            "在审核 AI 翻译成本后批量翻译项目"
+         ]
+      }
+   }
+}

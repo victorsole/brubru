@@ -1,0 +1,184 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "Advanced": [
+            "高级"
+         ],
+         "HTML anchor": [
+            "HTML 锚点"
+         ],
+         "Add a shortcut to this block when loading the page using the “#anchor” URL.": [
+            "使用 \"#anchor\" URL 加载页面时，为该区块添加快捷方式。"
+         ],
+         "Additional CSS class(es)": [
+            "附加 CSS 类"
+         ],
+         "Separate multiple classes with spaces.": [
+            "用空格分隔多个班级。"
+         ],
+         "Color": [
+            "颜色"
+         ],
+         "px": [
+            "px"
+         ],
+         "%": [
+            "%"
+         ],
+         "Dimensions": [
+            "尺寸"
+         ],
+         "BLOCK": [
+            "区块"
+         ],
+         "Block margin": [
+            "块边距"
+         ],
+         "Block padding": [
+            "区块填充"
+         ],
+         "LANGUAGE": [
+            "语言"
+         ],
+         "Language spacing": [
+            "语言间距"
+         ],
+         "Language padding": [
+            "语言填充"
+         ],
+         "Display": [
+            "显示器"
+         ],
+         "Show flag": [
+            "显示旗帜"
+         ],
+         "Show language name": [
+            "显示语言名称"
+         ],
+         "Display language name in": [
+            "显示语言名称"
+         ],
+         "Style": [
+            "风格"
+         ],
+         "Flag settings": [
+            "旗帜设置"
+         ],
+         "Width": [
+            "宽度"
+         ],
+         "Height": [
+            "高度"
+         ],
+         "Spacing": [
+            "间距"
+         ],
+         "Allow wrapping to multiple lines": [
+            "允许多行包装"
+         ],
+         "Open on click": [
+            "点击打开"
+         ],
+         "Show arrow": [
+            "显示箭头"
+         ],
+         "Layout": [
+            "布局"
+         ],
+         "Justification": [
+            "理由"
+         ],
+         "Orientation": [
+            "定向"
+         ],
+         "Typography": [
+            "排版"
+         ],
+         "Background": [
+            "背景"
+         ],
+         "Language Text": [
+            "语言文本"
+         ],
+         "Language Background": [
+            "语言背景"
+         ],
+         "Current language text": [
+            "当前语言文本"
+         ],
+         "Current language background": [
+            "当前语言背景"
+         ],
+         "Full name": [
+            "全名"
+         ],
+         "Code": [
+            "代码"
+         ],
+         "Justify items left": [
+            "左对齐项目"
+         ],
+         "Justify items center": [
+            "证明项目中心"
+         ],
+         "Justify items right": [
+            "证明项目正确"
+         ],
+         "Justify items space between": [
+            "说明项目之间的空间"
+         ],
+         "Horizontal": [
+            "横向"
+         ],
+         "Vertical": [
+            "垂直"
+         ],
+         "Normal": [
+            "正常"
+         ],
+         "Medium": [
+            "中等"
+         ],
+         "Large": [
+            "大"
+         ],
+         "X-Large": [
+            "特大号"
+         ],
+         "Ab": [
+            "腹肌"
+         ],
+         "AB": [
+            "AB"
+         ],
+         "ab": [
+            "ab"
+         ],
+         "Small": [
+            "小号"
+         ],
+         "Displays the WPML Language Switcher.": [
+            "显示WPML语言切换器。"
+         ],
+         "Language Switcher": [
+            "语言切换器"
+         ],
+         "displays the WPML Language Switcher": [
+            "显示WPML语言切换器"
+         ],
+         "Displays the WPML Language Switcher. <br/> Learn <a>how to translate this block</a>.": [
+            "显示WPML语言切换器。<br/>了解<a>如何翻译此区块</a>。"
+         ],
+         "Navigation Language Switcher": [
+            "导航语言切换器"
+         ],
+         "Reset all": [
+            "重置全部"
+         ]
+      }
+   }
+}

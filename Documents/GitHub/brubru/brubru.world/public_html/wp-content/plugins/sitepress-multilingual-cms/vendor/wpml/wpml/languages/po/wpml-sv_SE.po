@@ -1,0 +1,193 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:45+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/config-admin-pages.php:126
+msgid "Translation Dashboard"
+msgstr "Översättningspanel"
+
+#: src/config-admin-pages.php:311
+msgid "Automatic translation settings"
+msgstr "Inställningar för automatisk översättning"
+
+#: src/config-admin-pages.php:353
+msgid "WPML Setup"
+msgstr "WPML-inställning"
+
+#: src/config-admin-pages.php:382
+msgid "WPML Support"
+msgstr "WPML-support"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:27
+msgid "Database Version"
+msgstr "Databasversion"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:36
+msgid "Your %sMySQL%s version must be at least %s. Alternatively, you can use %sMariaDb%s version %s or higher."
+msgstr "Din %sMySQL%s-version måste vara minst %s. Alternativt kan du använda %sMariaDB%s version %s eller högre."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:53
+msgid "Contact your hosting provider to upgrade MySQL %s or higher."
+msgstr "Kontakta din webbhotellsleverantör för att uppgradera MySQL till %s eller högre."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:31
+msgid "PHP eval() Function"
+msgstr "PHP eval()-funktion"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:39
+msgid "The PHP eval() function is disabled by the Suhosin extension. WPML requires this function when Suhosin is enabled."
+msgstr "PHP-funktionen eval() är inaktiverad av Suhosin-tillägget. WPML kräver denna funktion när Suhosin är aktiverat."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:47
+msgid "Contact your hosting provider to enable the eval() function in the Suhosin configuration or disable the Suhosin extension."
+msgstr "Kontakta din webbhotellsleverantör för att aktivera eval()-funktionen i Suhosin-konfigurationen eller inaktivera Suhosin-tillägget."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:31
+msgid "libxml PHP Module"
+msgstr "libxml PHP-modul"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:40
+msgid "WPML requires libxml PHP Module version %s or higher to process XML correctly using SimpleXML."
+msgstr "WPML kräver libxml PHP-modul version %s eller högre för att korrekt bearbeta XML med hjälp av SimpleXML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:49
+msgid "Contact your hosting provider to upgrade the libxml PHP Module."
+msgstr "Kontakta din webbhotellsleverantör för att uppgradera libxml PHP-modulen."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:30
+msgid "Multibyte String Extension"
+msgstr "Multibyte string-tillägg"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:39
+msgid "The %sMultibyte String extension%s is required to handle non-Latin character sets in WPML."
+msgstr "%sMultibyte String-tillägget%s krävs för att hantera icke-latinska teckenuppsättningar i WPML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:49
+msgid "Contact your hosting provider to install the Multibyte String (mbstring) PHP extension."
+msgstr "Kontakta din webbhotellsleverantör för att installera Multibyte String (mbstring) PHP-tillägget."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:55
+msgid "Memory limit"
+msgstr "Minnesgräns"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:65
+msgid "Your PHP memory limit is currently %s.  WPML requires at least %s to function properly."
+msgstr "Din PHP-minnesgräns är för närvarande %s. WPML kräver minst %s för att fungera korrekt."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:80
+msgid "To increase the memory limit, add this to the top of your %swp-config.php%s file:"
+msgstr "För att öka minnesgränsen, lägg till detta överst i din %swp-config.php%s-fil:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:25
+msgid "PHP Version"
+msgstr "PHP-version"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:34
+msgid "Your PHP version is outdated. WPML requires at least %s."
+msgstr "Din PHP-version är föråldrad. WPML kräver minst %s."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:44
+msgid "Contact your hosting provider to upgrade PHP to version %s or higher."
+msgstr "Kontakta din webbhotellsleverantör för att uppgradera PHP till version %s eller högre."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:31
+msgid "WordPress REST API"
+msgstr "WordPress REST API"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:41
+msgid "The WordPress REST API must be enabled for WPML to work correctly."
+msgstr "WordPress REST API måste vara aktiverat för att WPML ska fungera korrekt."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:49
+msgid "Ensure the REST API endpoint %s is reachable and that the WordPress REST API is enabled."
+msgstr "Se till att REST API-slutpunkten %s är nåbar och att WordPress REST API är aktiverat."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:31
+msgid "SimpleXML Extension"
+msgstr "SimpleXML-tillägg"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:40
+msgid "The %sSimpleXML extension%s is required to use %sXLIFF files%s in WPML. The libxml PHP Module must also be version 2.7.8 or higher."
+msgstr "%sSimpleXML-tillägget%s krävs för att använda %sXLIFF-filer%s i WPML. Libxml PHP-modulen måste också vara version 2.7.8 eller högre."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:55
+msgid "Contact your hosting provider to install the SimpleXML PHP extension."
+msgstr "Kontakta din webbhotellsleverantör för att installera SimpleXML PHP-tillägget."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:39
+msgid "PHP Stack Size"
+msgstr "PHP-stackstorlek"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:48
+msgid "WPML requires at least %s KB of PHP stack size on PHP 8.3 or higher."
+msgstr "WPML kräver minst %s KB PHP-stackstorlek på PHP 8.3 eller högre."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:58
+msgid "Add this to your %sphp.ini%s and restart your web server to set the required stack size:"
+msgstr "Lägg till detta i din %sphp.ini%s och starta om din webbserver för att ställa in den nödvändiga stackstorleken:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:30
+msgid "WordPress Version"
+msgstr "WordPress-version"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:39
+msgid "Your WordPress version is outdated. WPML requires at least %s. "
+msgstr "Din WordPress-version är föråldrad. WPML kräver minst %s. "
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:50
+msgid "Please update your WordPress installation to version %s or higher."
+msgstr "Vänligen uppdatera din WordPress-installation till version %s eller högre."
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:20
+msgid "Error getting credits"
+msgstr "Fel vid hämtning av krediter"
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:39
+msgid "Error getting account balances"
+msgstr "Fel vid hämtning av kontosaldon"
+
+#: src/Legacy/Component/ATE/Application/Query/Glossary.php:26
+msgid "Error getting glossary data"
+msgstr "Fel vid hämtning av ordlistdata"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:148
+msgid "Error fetching translation engines"
+msgstr "Fel vid hämtning av översättningsmotorer"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:171
+msgid "Error fetching available formalities"
+msgstr "Fel vid hämtning av tillgängliga formaliteter"
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/ErrorMapper.php:32
+msgid "The jobs could not be created."
+msgstr "Jobben kunde inte skapas."
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/UnsupportedLanguagesInTranslationService.php:43
+msgid "The selected translation service doesn't support the following languages: %s"
+msgstr "Den valda översättningstjänsten stöder inte följande språk: %s"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:310
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:311
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:312
+msgid "Other texts (Strings)"
+msgstr "Andra texter (Strängar)"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/SendToTranslation/SendToTranslationController.php:48
+msgid "The request data for SendToTranslation is not valid."
+msgstr "Begärandata för SendToTranslation är inte giltig."
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/TranslateEverything/EnableController.php:45
+msgid "In order to translate automatically, you first need to enable WPML's Advanced Translation Editor"
+msgstr "För att översätta automatiskt måste du först aktivera WPML:s avancerade översättningsredigerare"

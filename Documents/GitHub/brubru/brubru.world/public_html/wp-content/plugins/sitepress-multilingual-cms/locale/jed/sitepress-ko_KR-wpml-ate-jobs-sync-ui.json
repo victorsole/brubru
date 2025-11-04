@@ -1,0 +1,171 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ko"
+         },
+         "Sending for translation": [
+            "번역하도록 전송"
+         ],
+         "This content is being automatically translated. If you want to do something different with it cancel translation jobs first.": [
+            "이 콘텐츠는 자동으로 번역되고 있습니다. 다른 작업을 하고 싶으시면 먼저 번역 작업을 취소하십시오."
+         ],
+         "Connecting to WPML’s Advanced Translation Editor": [
+            "WPML의 고급 번역 편집기에 연결 중"
+         ],
+         "Try again": [
+            "다시 시도"
+         ],
+         "You don't have the rights to review this language": [
+            "이 언어를 검토할 권한이 없습니다."
+         ],
+         "translations": [
+            "번역"
+         ],
+         "left in the queue": [
+            "대기열에 남아있음"
+         ],
+         "Translation on hold": [
+            "번역 대기 중"
+         ],
+         "No translations in the queue": [
+            "대기열에 번역이 없음"
+         ],
+         "%d translations left": [
+            "%d개 번역 남음"
+         ],
+         "%d min remaining": [
+            "%d분 남음"
+         ],
+         "less than 1 min remaining": [
+            "1분 미만 남음"
+         ],
+         "Automatic translation status": [
+            "자동 번역 상태"
+         ],
+         "Translate Everything Automatically": [
+            "모든 것을 자동으로 번역"
+         ],
+         "Translate Everything Automatically is active": [
+            "모든 것을 자동으로 번역 기능이 활성화되었습니다"
+         ],
+         "Translate Everything Automatically is paused": [
+            "모든 것을 자동으로 번역 기능이 일시 중지되었습니다"
+         ],
+         "Translate Everything Automatically is stopped": [
+            "모든 것을 자동으로 번역하기가 중지되었습니다"
+         ],
+         "Out of Credits for Automatic Translation": [
+            "자동 번역을 위한 크레딧이 부족합니다"
+         ],
+         "You have <b>1</b> prepaid translation credit in your wpml.org account. Assign these credits to your site to start using automatic translation": [
+            "Wpml.org 계정에 <b>%s</b>개의 선불 번역 크레딧이 있습니다. 자동 번역을 시작하려면 이 크레딧을 사이트에 할당하십시오"
+         ],
+         "Preparing content for translation": [
+            "번역을 위한 콘텐츠 준비 중"
+         ],
+         "Preparing more content for translation": [
+            "번역을 위한 추가 콘텐츠 준비 중"
+         ],
+         "An error occured, fix it to continue.": [
+            "오류가 발생했습니다. 계속하려면 이를 수정하세요."
+         ],
+         "There is an issue with automatic translation that needs your attention. Fix it to continue.": [
+            "자동 번역에 문제가 있어 귀하의 주의가 필요합니다. 계속하려면 이를 수정하세요."
+         ],
+         "Your default language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "자동 번역을 사용하려면 기본 언어인 %s를 지원되는 언어로 매핑해야 합니다."
+         ],
+         "Your language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "자동 번역을 사용하려면 귀하의 사이트에서 다음 언어를 지원되는 언어로 매핑해야 합니다: %s"
+         ],
+         "Content in those languages: %s, cannot be automatically translated unless you map them to a language that's different from the default.": [
+            "해당 언어의 콘텐츠: %s는 기본 언어와 다른 언어로 매핑하지 않는 한 자동으로 번역될 수 없습니다."
+         ],
+         "%d translation waiting for review": [
+            "%d개의 번역이 검토 대기 중입니다"
+         ],
+         "Account credits used": [
+            "사용된 계정 크레딧"
+         ],
+         "Once you’ve used all your prepaid credits, we’ll invoice you for any additional credits you use after the end of the month": [
+            "선불 크레딧을 모두 사용한 후에는 월말에 추가로 사용한 크레딧에 대해 청구서를 보내드립니다"
+         ],
+         "Payment limit:": [
+            "결제 한도:"
+         ],
+         "%s credits": [
+            "%s 크레딧"
+         ],
+         "Credits used:": [
+            "사용된 크레딧:"
+         ],
+         "Credits left:": [
+            "남은 크레딧:"
+         ],
+         "The number of credit you will receive an invoice for at the end of the month. View your pay-as-you-go details in your site’s automatic translation settings.": [
+            "월말에 청구서를 받게 될 크레딧 수입니다. 사이트의 자동 번역 설정에서 사용한 만큼 지불 세부 정보를 확인하세요."
+         ],
+         "Calculating": [
+            "계산 중"
+         ],
+         "Remaining prepaid credits that are assigned to this site on WPML.org.": [
+            "WPML.org에서 이 사이트에 할당된 남은 선불 크레딧입니다."
+         ],
+         "Prepaid credits left": [
+            "남은 선불 크레딧"
+         ],
+         "Pay-as-you-go credits used": [
+            "사용한 만큼 지불 크레딧"
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "귀하의 사이트가 WPML의 최소 요구 사항을 충족하지 않습니다"
+         ],
+         "Fix it": [
+            "수정하기"
+         ],
+         "Stop": [
+            "중지"
+         ],
+         "Assign credits now": [
+            "지금 크레딧 할당하기"
+         ],
+         "Resume": [
+            "재개"
+         ],
+         "Refreshing translation status": [
+            "번역 상태 새로고침 중"
+         ],
+         "Read more about how to translate your content in the <a>Getting Started Guide</a>": [
+            "<a>시작 가이드</a>에서 콘텐츠 번역 방법에 대해 자세히 알아보세요"
+         ],
+         "Let's Start Translating!": [
+            "번역을 시작해봅시다!"
+         ],
+         "Choose your content from the Translation Dashboard below and create your first translation job!": [
+            "아래 번역 대시보드에서 콘텐츠를 선택하고 첫 번역 작업을 만드세요!"
+         ],
+         "Change your <a>automatic translation settings</a> (in-progress translation jobs will be completed with the current settings).": [
+            "<a>자동 번역 설정</a>을 변경하세요 (진행 중인 번역 작업은 현재 설정으로 완료됩니다)."
+         ],
+         "Read more about translating your site automatically.": [
+            "사이트를 자동으로 번역하는 방법에 대해 자세히 알아보세요."
+         ],
+         "Your site is being automatically translated!": [
+            "귀하의 사이트가 자동으로 번역되고 있습니다!"
+         ],
+         "Calculating...": [
+            "계산 중..."
+         ],
+         "Do not close WP admin!": [
+            "WP 관리자를 닫지 마세요!"
+         ],
+         "The number of translations": [
+            "번역 수"
+         ]
+      }
+   }
+}

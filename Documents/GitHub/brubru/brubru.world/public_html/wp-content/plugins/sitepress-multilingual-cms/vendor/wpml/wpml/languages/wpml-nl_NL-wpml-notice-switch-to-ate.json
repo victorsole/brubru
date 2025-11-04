@@ -1,0 +1,51 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "Krijg meer functies met WPML's Geavanceerde Vertaaleditor"
+         ],
+         "Close banner": [
+            "Banner sluiten"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "Je gebruikt de Klassieke Vertaaleditor, een oude verouderde tool, en mist de vele functies en efficiëntie van onze Geavanceerde Vertaaleditor:"
+         ],
+         "Translation Memory": [
+            "Vertaalgeheugen"
+         ],
+         "HTML Protection": [
+            "HTML-bescherming"
+         ],
+         "Glossary": [
+            "Woordenlijst"
+         ],
+         "Spellchecker": [
+            "Spellingscontrole"
+         ],
+         "AI Assistant": [
+            "AI-assistent"
+         ],
+         "Automatic Translation": [
+            "Automatische vertaling"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "Schakel nu over voor een snellere, gemakkelijkere en betrouwbaardere vertaalervaring."
+         ],
+         "Switch Now": [
+            "Nu overschakelen"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "Meer informatie over de geavanceerde vertaaleditor"
+         ],
+         "Learn More": [
+            "Meer informatie"
+         ]
+      }
+   }
+}

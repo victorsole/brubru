@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "he"
+         },
+         "Please wait, applying translation..": [
+            "אנא המתן, מחיל תרגום..."
+         ],
+         "There was an error in applying translation.": [
+            "אירעה שגיאה בהחלת התרגום."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "מישהו כבר בודק את התרגום הזה. אנא נסה שוב מאוחר יותר."
+         ]
+      }
+   }
+}

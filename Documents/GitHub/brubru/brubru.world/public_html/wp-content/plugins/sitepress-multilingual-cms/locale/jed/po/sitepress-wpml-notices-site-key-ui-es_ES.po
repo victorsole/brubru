@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/notices-site-key/components/HelpLink.js:18
+msgid "Get a key for this site"
+msgstr "Obtén una clave para este sitio"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:30
+msgid "Site key:"
+msgstr "Clave del sitio:"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:41
+msgid "Enter your site key here"
+msgstr "Introduce aquí tu clave del sitio"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Registering..."
+msgstr "Registrando..."
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Register"
+msgstr "Registrar"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:29
+msgid "A New Site Key Is Required"
+msgstr "Se requiere una nueva clave de sitio"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:34
+msgid ""
+"To continue using WPML features like automatic translation and plugin "
+"updates, please register your site again. Don’t worry, your existing "
+"content and translations are safe."
+msgstr "Para seguir usando las funciones de WPML como la traducción automática y las actualizaciones de plugins, por favor registra tu sitio de nuevo. No te preocupes, tu contenido existente y las traducciones están a salvo."
+
+#: src/js/notices-site-key/components/SuccessMessage.js:30
+msgid "Site key registered successfully!"
+msgstr "¡Clave del sitio registrada con éxito!"
+
+#: src/js/notices-site-key/components/SuccessMessage.js:31
+msgid "Page will reload in %d seconds..."
+msgstr "La página se recargará en %d segundos..."
+
+#: src/js/notices-site-key/hooks/useRegisterSiteKey.js:54
+msgid "Registration failed. Please try again."
+msgstr "El registro falló. Por favor, inténtalo de nuevo."

@@ -1,0 +1,342 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/ate-cloned-sites/components/CloseButton.js:15
+msgid "Close"
+msgstr ""
+
+#: src/js/ate-cloned-sites/components/ContactSupport.js:9
+msgid ""
+"Please take a screenshot of this message and report this issue to <a>WPML "
+"support</a>."
+msgstr ""
+
+#: src/js/ate-cloned-sites/components/UnregistrationInfo.js:7
+msgid ""
+"WPML has automatically unregistered your site as part of this wizard. After "
+"you close it, you’ll see a prompt to register the site again. This is "
+"expected, your content and translations are safe."
+msgstr "Το WPML έχει αυτόματα καταργήσει την εγγραφή του ιστοτόπου σας ως μέρος αυτού του οδηγού. Αφού τον κλείσετε, θα δείτε μια προτροπή για να εγγράψετε ξανά τον ιστότοπο. Αυτό είναι αναμενόμενο, το περιεχόμενο και οι μεταφράσεις σας είναι ασφαλή."
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:10
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsCompleted.js:9
+#: src/js/ate-cloned-sites/steps/MoveCompleted.js:10
+msgid "You’re all set"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:23
+msgid ""
+"This site is a copy of the original site %s and it doesn’t currently have "
+"any automatic translation credits."
+msgstr "Αυτός ο ιστότοπος είναι αντίγραφο του αρχικού ιστοτόπου %s και προς το παρόν δεν διαθέτει μονάδες αυτόματης μετάφρασης."
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:33
+msgid ""
+"If you’d like to use automatic translation here in the future, you can "
+"either <a1>add credits</a1> or <a2>share them from the original site</a2>."
+msgstr "Αν θέλετε να χρησιμοποιήσετε αυτόματη μετάφραση εδώ στο μέλλον, μπορείτε είτε να <a1>προσθέσετε μονάδες</a1> είτε να <a2>τις μοιραστείτε από τον αρχικό ιστότοπο</a2>."
+
+#: src/js/ate-cloned-sites/steps/CopyCompleted.js:52
+msgid ""
+"There was an error checking for credits to share. Please take a screenshot "
+"of this message and report it in <a>WPML support</a>."
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:36
+msgid ""
+"To link %s and %s so they share automatic translation credits, follow these "
+"steps:"
+msgstr "Για να συνδέσετε το %s και το %s ώστε να μοιράζονται μονάδες αυτόματης μετάφρασης, ακολουθήστε αυτά τα βήματα:"
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:47
+msgid ""
+"Open <a>this link</a> to access the original site’s admin area. (You can’t "
+"access this screen by visiting %s directly.)"
+msgstr "Ανοίξτε <a>αυτόν τον σύνδεσμο</a> για να αποκτήσετε πρόσβαση στην περιοχή διαχείρισης του αρχικού ιστοτόπου. (Δεν μπορείτε να αποκτήσετε πρόσβαση σε αυτή την οθόνη επισκεπτόμενοι απευθείας το %s.)"
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:59
+msgid "Click <b>Copy migration code</b> on that page."
+msgstr "Κάντε κλικ στο <b>Αντιγραφή κωδικού μετεγκατάστασης</b> σε αυτή τη σελίδα."
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:68
+msgid "Paste the code below to complete the connection."
+msgstr "Επικολλήστε τον κωδικό παρακάτω για να ολοκληρώσετε τη σύνδεση."
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:77
+msgid "Migration code"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:79
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:84
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:75
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:76
+msgid "Continue"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:82
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:95
+msgid "Go back"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyCredits.js:9
+msgid "Connect Automatic Translation Credits"
+msgstr "Σύνδεση μονάδων αυτόματης μετάφρασης"
+
+#: src/js/ate-cloned-sites/steps/CopyError.js:15
+msgid ""
+"WPML was unable to copy your site's translations, translation memory, and "
+"glossary to this new URL."
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyError.js:7
+msgid "Error with copying translation information to new URL"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsCompleted.js:12
+msgid "This site and its copy on %s are now sharing automatic translation credits."
+msgstr "Αυτός ο ιστότοπος και το αντίγραφό του στο %s μοιράζονται πλέον μονάδες αυτόματης μετάφρασης."
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsCompleted.js:30
+msgid ""
+"Any credits you add to one site will be available on both. If you stop "
+"using this site, your credits will remain safe."
+msgstr "Οποιεσδήποτε μονάδες προσθέσετε σε έναν ιστότοπο θα είναι διαθέσιμες και στους δύο. Αν σταματήσετε να χρησιμοποιείτε αυτόν τον ιστότοπο, οι μονάδες σας θα παραμείνουν ασφαλείς."
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsError.js:15
+msgid ""
+"WPML was unable to connect your old and new URLs to share automatic "
+"translation credits."
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CopyWithCreditsError.js:7
+msgid "Error with sharing automatic translation credits"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:12
+msgid ""
+"The site on %s has %d credits for automatic translation. Do you want to "
+"share these credits with this new site %s?"
+msgstr "Ο ιστότοπος στο %s έχει %d μονάδες για αυτόματη μετάφραση. Θέλετε να μοιραστείτε αυτές τις μονάδες με αυτόν τον νέο ιστότοπο %s;?"
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:19
+msgid ""
+"The site on %s has a pay-as-you-go subscription for automatic translation. "
+"Do you want to share these credits between %s and this new location (%s)?"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:66
+msgid "Yes (recommended)"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:68
+msgid "In the next step, you’ll approve the use of same credits on both sites."
+msgstr "Στο επόμενο βήμα, θα εγκρίνετε τη χρήση των ίδιων μονάδων και στους δύο ιστοτόπους."
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:71
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:61
+msgid "No"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:73
+msgid "You’ll need to assign new credits or set up pay-as-you-go."
+msgstr "Θα χρειαστεί να αναθέσετε νέες μονάδες ή να ρυθμίσετε την πληρωμή ανά χρήση."
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:87
+msgid "What happens when you share credits between sites?"
+msgstr "Τι συμβαίνει όταν μοιράζεστε μονάδες μεταξύ ιστοτόπων;?"
+
+#: src/js/ate-cloned-sites/steps/CreditDecision.js:9
+msgid "Translation credits for this site"
+msgstr ""
+
+#: src/js/ate-cloned-sites/steps/Initial.js:10
+msgid "WPML detected a change in your site’s URL"
+msgstr "Το WPML εντόπισε αλλαγή στο URL του ιστοτόπου σας"
+
+#: src/js/ate-cloned-sites/steps/MoveCompleted.js:21
+msgid "You can now continue translating content on this site as usual."
+msgstr "Μπορείτε τώρα να συνεχίσετε να μεταφράζετε περιεχόμενο σε αυτόν τον ιστότοπο ως συνήθως."
+
+#: src/js/ate-cloned-sites/steps/MoveCompleted.js:32
+msgid ""
+"Just a reminder: there shouldn’t be another copy of this site running at "
+"%s. If there is, automatic translation won’t work correctly on that site."
+msgstr "Μια υπενθύμιση: δεν θα πρέπει να υπάρχει άλλο αντίγραφο αυτού του ιστοτόπου που να εκτελείται στο %s. Αν υπάρχει, η αυτόματη μετάφραση δεν θα λειτουργεί σωστά σε εκείνον τον ιστότοπο."
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:33
+msgid "You indicated that the original site at %s is no longer active. This means:"
+msgstr "Υποδείξατε ότι ο αρχικός ιστότοπος στο %s δεν είναι πλέον ενεργός. Αυτό σημαίνει:"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:37
+msgid "Automatic translation will no longer work on the old site"
+msgstr "Η αυτόματη μετάφραση δεν θα λειτουργεί πλέον στον παλιό ιστότοπο"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:40
+msgid "Accessing the old site may trigger warnings on this site"
+msgstr "Η πρόσβαση στον παλιό ιστότοπο ενδέχεται να ενεργοποιήσει προειδοποιήσεις σε αυτόν τον ιστότοπο"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:50
+msgid "Please confirm:"
+msgstr "Παρακαλώ επιβεβαιώστε:"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:61
+msgid "I understand and confirm that <b>%s</b> is no longer in use."
+msgstr "Κατανοώ και επιβεβαιώνω ότι το <b>%s</b> δεν χρησιμοποιείται πλέον."
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:78
+msgid "Back"
+msgstr "Επιστροφή"
+
+#: src/js/ate-cloned-sites/steps/MoveConfirmation.js:9
+msgid "Please Confirm"
+msgstr "Παρακαλώ επιβεβαιώστε"
+
+#: src/js/ate-cloned-sites/steps/MoveError.js:16
+msgid "WPML was unable to update our records with your new URL."
+msgstr "Το WPML δεν κατάφερε να ενημερώσει τα αρχεία μας με τη νέα σας διεύθυνση URL."
+
+#: src/js/ate-cloned-sites/steps/MoveError.js:7
+msgid "Error with moving translation information to new URL"
+msgstr "Σφάλμα κατά τη μεταφορά των πληροφοριών μετάφρασης στη νέα διεύθυνση URL"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:34
+msgid "It looks like this site was previously at %s and is now running on %s."
+msgstr "Φαίνεται ότι αυτός ο ιστότοπος ήταν προηγουμένως στο %s και τώρα εκτελείται στο %s."
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:42
+msgid "Is the original site still available at %s?"
+msgstr "Είναι ο αρχικός ιστότοπος ακόμα διαθέσιμος στο %s;?"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:54
+msgid "Yes"
+msgstr "Ναι"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:57
+msgid ""
+"The original site is still running and this is just a copy of the original "
+"site"
+msgstr "Ο αρχικός ιστότοπος εξακολουθεί να λειτουργεί και αυτό είναι απλώς ένα αντίγραφο του αρχικού ιστοτόπου"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:64
+msgid "I moved the site to this new address and this is now the main site"
+msgstr "Μετέφερα τον ιστότοπο σε αυτή τη νέα διεύθυνση και αυτός είναι πλέον ο κύριος ιστότοπος"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:8
+msgid "WPML Detected a New Site Address"
+msgstr "Το WPML Εντόπισε Νέα Διεύθυνση Ιστοτόπου"
+
+#: src/js/ate-cloned-sites/steps/MoveOrCopy.js:80
+msgid "How to manage translations when migrating from development to production"
+msgstr "Πώς να διαχειριστείτε τις μεταφράσεις κατά τη μετάβαση από το περιβάλλον ανάπτυξης στην παραγωγή"
+
+#: src/js/ate-cloned-sites/steps/NoAdmin.js:11
+msgid ""
+"Looks like this site is a copy of a different site, or moved to a different "
+"URL. Please contact your translation manager to update Translation "
+"Management plugin configuration."
+msgstr "Φαίνεται ότι αυτός ο ιστότοπος είναι αντίγραφο ενός διαφορετικού ιστοτόπου ή μετακινήθηκε σε διαφορετική διεύθυνση URL. Παρακαλώ επικοινωνήστε με τον διαχειριστή μεταφράσεών σας για να ενημερώσετε τη διαμόρφωση του πρόσθετου Διαχείρισης Μεταφράσεων."
+
+#: src/js/ate-cloned-sites/steps/NoAdmin.js:5
+msgid "Site Moved or Copied - Action Required"
+msgstr "Ο Ιστότοπος Μετακινήθηκε ή Αντιγράφηκε - Απαιτείται Ενέργεια"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:36
+msgid "You or someone else moved this site to %s. Please keep in mind that:"
+msgstr "Εσείς ή κάποιος άλλος μετακίνησε αυτόν τον ιστότοπο στο %s. Παρακαλώ λάβετε υπόψη ότι:"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:50
+msgid "Translations that you do at %s will not appear on this site."
+msgstr "Οι μεταφράσεις που κάνετε στο %s δεν θα εμφανίζονται σε αυτόν τον ιστότοπο."
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:56
+msgid "You cannot edit translations on this site."
+msgstr "Δεν μπορείτε να επεξεργαστείτε μεταφράσεις σε αυτόν τον ιστότοπο."
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:67
+msgid ""
+"The site at %s is using the same credits for automatic translation as this "
+"site."
+msgstr "Ο ιστότοπος στο %s χρησιμοποιεί τις ίδιες πιστώσεις για αυτόματη μετάφραση με αυτόν τον ιστότοπο."
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:76
+msgid ""
+"If you didn't intend to move this site to %s, you can <a>indicate that this "
+"site should be at %s</a>."
+msgstr "Εάν δεν σκοπεύατε να μετακινήσετε αυτόν τον ιστότοπο στο %s, μπορείτε να <a>υποδείξετε ότι αυτός ο ιστότοπος θα πρέπει να βρίσκεται στο %s</a>."
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:9
+msgid "This site has moved to a new location"
+msgstr "Αυτός ο ιστότοπος έχει μετακινηθεί σε μια νέα τοποθεσία"
+
+#: src/js/ate-cloned-sites/steps/RevertMove.js:96
+msgid ""
+"If you prefer not to move this site, you can <a>mark it as a copy</a> and "
+"enable automatic translation for it."
+msgstr "Εάν προτιμάτε να μην μετακινήσετε αυτόν τον ιστότοπο, μπορείτε να τον <a>επισημάνετε ως αντίγραφο</a> και να ενεργοποιήσετε την αυτόματη μετάφραση για αυτόν."
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:38
+msgid ""
+"Moving the site back here will mean that you will be able to translate on "
+"this domain again, but you will not be able to update translations at %s."
+msgstr "Η μετακίνηση του ιστοτόπου πίσω εδώ θα σημαίνει ότι θα μπορείτε να μεταφράζετε ξανά σε αυτόν τον τομέα, αλλά δεν θα μπορείτε να ενημερώνετε μεταφράσεις στο %s."
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:50
+msgid "Yes - move back here"
+msgstr "Ναι - μετακίνηση πίσω εδώ"
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:56
+msgid "No - keep the site on %s"
+msgstr "Όχι - διατήρηση του ιστοτόπου στο %s"
+
+#: src/js/ate-cloned-sites/steps/RevertMoveConfirm.js:9
+msgid "Are you sure that this site should run on %s and not %s?"
+msgstr "Είστε βέβαιοι ότι αυτός ο ιστότοπος πρέπει να λειτουργεί στο %s και όχι στο %s;?"
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:16
+msgid ""
+"WPML noticed that your site is being accessed from a different domain or "
+"URL."
+msgstr "Το WPML παρατήρησε ότι γίνεται πρόσβαση στον ιστότοπό σας από διαφορετικό domain ή URL."
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:21
+msgid ""
+"To make sure everything continues working correctly, including automatic "
+"translation and site registration, we need to verify and update your site "
+"settings."
+msgstr "Για να βεβαιωθούμε ότι όλα συνεχίζουν να λειτουργούν σωστά, συμπεριλαμβανομένης της αυτόματης μετάφρασης και της εγγραφής του ιστοτόπου, πρέπει να επαληθεύσουμε και να ενημερώσουμε τις ρυθμίσεις του ιστοτόπου σας."
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:26
+msgid "This will only take a moment."
+msgstr "Αυτό θα διαρκέσει μόνο μια στιγμή."
+
+#: src/js/ate-cloned-sites/steps/initial/MigrationSection.js:36
+msgid "Start Migration"
+msgstr "Έναρξη μετεγκατάστασης"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:17
+msgid ""
+"If you didn't change your main domain and only logged in through a "
+"secondary domain, select this option."
+msgstr "Αν δεν αλλάξατε τον κύριο τομέα σας και απλώς συνδεθήκατε μέσω ενός δευτερεύοντος τομέα, επιλέξτε αυτήν την επιλογή."
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:23
+msgid "Something went wrong"
+msgstr "Κάτι πήγε στραβά"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:39
+msgid "I just logged in from a secondary domain"
+msgstr "Απλώς συνδέθηκα από έναν δευτερεύοντα τομέα"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:48
+msgid "You're all set!"
+msgstr "Είστε έτοιμοι!"
+
+#: src/js/ate-cloned-sites/steps/initial/SecondaryDomainSection.js:53
+msgid ""
+"This domain is now registered as a secondary domain and WPML will recognize "
+"it correctly."
+msgstr "Αυτός ο τομέας είναι πλέον καταχωρημένος ως δευτερεύων τομέας και το WPML θα τον αναγνωρίζει σωστά."

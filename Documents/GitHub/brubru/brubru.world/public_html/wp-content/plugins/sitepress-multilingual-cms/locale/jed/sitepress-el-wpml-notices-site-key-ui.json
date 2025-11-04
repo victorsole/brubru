@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Get a key for this site": [
+            "Αποκτήστε ένα κλειδί για αυτόν τον ιστότοπο"
+         ],
+         "Site key:": [
+            "Κλειδί ιστοτόπου:"
+         ],
+         "Enter your site key here": [
+            "Εισαγάγετε το κλειδί του ιστοτόπου σας εδώ"
+         ],
+         "Registering...": [
+            "Γίνεται εγγραφή..."
+         ],
+         "Register": [
+            "Εγγραφή"
+         ],
+         "A New Site Key Is Required": [
+            "Απαιτείται νέο κλειδί ιστοτόπου"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "Για να συνεχίσετε να χρησιμοποιείτε τις λειτουργίες του WPML όπως η αυτόματη μετάφραση και οι ενημερώσεις πρόσθετων, παρακαλούμε εγγράψτε ξανά τον ιστότοπό σας. Μην ανησυχείτε, το υπάρχον περιεχόμενο και οι μεταφράσεις σας είναι ασφαλή."
+         ],
+         "Site key registered successfully!": [
+            "Το κλειδί του ιστοτόπου καταχωρίστηκε με επιτυχία!"
+         ],
+         "Page will reload in %d seconds...": [
+            "Η σελίδα θα ανανεωθεί σε %d δευτερόλεπτα..."
+         ],
+         "Registration failed. Please try again.": [
+            "Η εγγραφή απέτυχε. Παρακαλώ προσπαθήστε ξανά."
+         ]
+      }
+   }
+}

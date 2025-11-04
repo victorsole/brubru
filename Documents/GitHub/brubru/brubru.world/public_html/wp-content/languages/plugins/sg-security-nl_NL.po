@@ -1,0 +1,1286 @@
+# Translation of Plugins - Security Optimizer &#8211; The All-In-One Protection Plugin - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - Security Optimizer &#8211; The All-In-One Protection Plugin - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-02-20 20:52:49+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - Security Optimizer &#8211; The All-In-One Protection Plugin - Stable (latest release)\n"
+
+#: core/Admin/Admin.php:319
+msgid "By installing and using this plugin you acknowledge that you have read and understood <a href=\"//siteground.com/viewtos/siteground_plugins_privacy_notice\"> SiteGround Plugins Privacy Notice </a>."
+msgstr "Door deze plugin te installeren en te gebruiken erken je dat je <a href=\"//siteground.com/viewtos/siteground_plugins_privacy_notice\"> hebt gelezen en begrepen. SiteGround plugins privacy bericht </a>."
+
+#: react-strings.php:83
+msgid "Rate Plugin"
+msgstr "Waardeer plugin"
+
+#: react-strings.php:82
+msgid "Help other users make the best decision and protect their websites."
+msgstr "Help andere gebruikers de beste beslissing te nemen en hun sites te versnellen."
+
+#: react-strings.php:81
+msgid "Rate your experience with Security Optimizer"
+msgstr "Waardeer je ervaring met Security Optimizer"
+
+#: react-strings.php:120
+msgid "Two-factor authentication forces admin users to login only after providing a token, generated from the Google Authenticator application. If one of your users no longer has access to their Authenticator app and cannot log in to get their backup codes, {{link}}click here{{/link}} to reset their 2-factor authentication."
+msgstr "Twee-factor authenticatie dwingt beheerders om alleen in te loggen na het verstrekken van een token, gegenereerd vanuit de Google Authenticator applicatie. Als een van je gebruikers geen toegang meer heeft tot zijn Authenticator app en niet kan inloggen om zijn back-up codes op te halen, {{link}}klik hier{{/link}} om zijn 2-factor authenticatie te resetten."
+
+#: react-strings.php:17
+msgid "Security Optimizer - Post-hack Actions"
+msgstr "Security Optimizer - Acties na de bericht hack"
+
+#: react-strings.php:15
+msgid "Security Optimizer - Activity Log"
+msgstr "Security Optimizer - Activiteiten log"
+
+#: react-strings.php:13
+msgid "Security Optimizer - Site Security"
+msgstr "Security Optimizer - Site beveiliging"
+
+#: react-strings.php:11
+msgid "Security Optimizer - Login Security"
+msgstr "Security Optimizer - Login beveiliging"
+
+#: react-strings.php:6
+msgid "Send occasional emails with tips on improving my site performance, information about new plugin features and exclusive offers by SiteGround. You can always opt-out from these."
+msgstr "Af en toe e-mails verzenden met tips om de prestaties van mijn site te verbeteren, informatie over nieuwe plugin functies en exclusieve aanbiedingen van SiteGround. Je kunt je hier altijd voor afmelden."
+
+#. Plugin Name of the plugin
+#: sg-security.php core/Admin/Admin.php:170
+msgid "Security Optimizer"
+msgstr "Security Optimizer"
+
+#: core/Admin/Admin.php:169 react-strings.php:9
+msgid "Security Optimizer by SiteGround"
+msgstr "Security Optimizer door SiteGround"
+
+#: templates/error.php:8
+msgid "%1$s &lsaquo; %2$s &#8212; WordPress"
+msgstr "%1$s &lsaquo; %2$s &#8212; WordPress"
+
+#: templates/weekly_report.php:126
+msgid "Blocked visit attempts"
+msgstr "Geblokkeerde bezoek pogingen"
+
+#: templates/weekly_report.php:120
+msgid "Blocked login attempts"
+msgstr "Geblokkeerde login pogingen"
+
+#: templates/weekly_report.php:112
+msgid "Bot traffic"
+msgstr "Botverkeer"
+
+#: templates/weekly_report.php:106
+msgid "Human traffic"
+msgstr "Menselijk verkeer"
+
+#: templates/weekly_report.php:92
+msgid "Traffic summary for "
+msgstr "Verkeersoverzicht voor "
+
+#: templates/weekly_report.php:84
+msgid "Hey there,"
+msgstr "Hallo daar,"
+
+#: templates/partials/new-backup-codes.php:4
+msgid "As you have used all backup codes available for your user, we have generated new ones for you."
+msgstr "Aangezien je alle beschikbare back-up codes voor je gebruiker hebt gebruikt, hebben we nieuwe codes voor je gegenereerd."
+
+#: templates/partials/new-backup-codes.php:2
+msgid "New Backup Codes"
+msgstr "Nieuwe back-up codes"
+
+#: templates/partials/2fa-qr-secret.php:14
+msgid "You can use the secret key to add the token to the Authenticator app."
+msgstr "Je kunt de geheime sleutel gebruiken om het token toe te voegen aan de authenticator app."
+
+#: templates/partials/2fa-qr-secret.php:8
+msgid "Secret Key:"
+msgstr "Geheime sleutel:"
+
+#: templates/backup-codes.php:15 templates/partials/new-backup-codes.php:15
+msgid "I have saved my backup codes."
+msgstr "Ik heb mijn back-up codes opgeslagen."
+
+#: templates/backup-codes.php:6 templates/partials/new-backup-codes.php:6
+msgid "Each code can only be used once."
+msgstr "Elke code kan maar één keer worden gebruikt."
+
+#: templates/backup-codes.php:6 templates/partials/new-backup-codes.php:6
+msgid "Save the codes to make sure that you don’t end up locked out of this website."
+msgstr "Sla de codes op om ervoor te zorgen dat je niet buitengesloten wordt van deze site."
+
+#: templates/backup-codes.php:4
+msgid "Important! In case you lose or change your phone and you no longer have access to the Authenticator app, you can use one of the codes below to log in."
+msgstr "Belangrijk! Als je je telefoon verliest of verandert en je hebt geen toegang meer tot de Authenticator app, kun je een van de onderstaande codes gebruiken om in te loggen."
+
+#: templates/backup-codes.php:2
+msgid "Save the Backup Codes"
+msgstr "De back-up codes opslaan"
+
+#: templates/backup-code-used.php:8 templates/backup-codes.php:18
+msgid "Continue"
+msgstr "Doorgaan"
+
+#: templates/backup-code-used.php:6
+msgid "We have noticed that you’re using a one-time backup code to log in. This code cannot be used anymore. In case you lost access to your authenticator app, please ask the website administrator to reset your 2FA setup."
+msgstr "We hebben gemerkt dat je een eenmalige back-up code gebruikt om in te loggen. Deze code kan niet meer gebruikt worden. Als je geen toegang meer hebt tot je authenticator app, vraag dan de site beheerder om je 2FA setup te resetten."
+
+#: templates/backup-code-used.php:4
+msgid "You are logging in with a one-time Backup Code"
+msgstr "Je logt in met een eenmalige back-up code"
+
+#: templates/2fa-login.php:44
+msgid "Login using backup codes"
+msgstr "Login met back-up codes"
+
+#: templates/2fa-login.php:22
+msgid "In order to log in, please enter the verification code from your Authenticator app:"
+msgstr "Om in te loggen moet je de verificatiecode van je authenticatie app invoeren:"
+
+#: templates/2fa-login-backup-code.php:15
+msgid "Backup Code:"
+msgstr "Back-up code:"
+
+#: templates/2fa-login-backup-code.php:10
+msgid "In order to log in, please enter one of the backup codes you have received on your first login:"
+msgstr "Om in te loggen moet je een van de back-up codes invoeren die je bij je eerste login hebt ontvangen:"
+
+#: templates/2fa-initial-setup-form.php:30
+#: templates/2fa-login-backup-code.php:28 templates/2fa-login.php:39
+msgid "Authenticate"
+msgstr "Authenticeer"
+
+#: templates/2fa-initial-setup-form.php:27 templates/2fa-login.php:36
+msgid "Do not challenge me for the next 30 days."
+msgstr "Daag me de komende 30 dagen niet uit."
+
+#: templates/2fa-initial-setup-form.php:16 templates/2fa-login.php:24
+msgid "Authentication Code:"
+msgstr "Authenticatiecode:"
+
+#: templates/2fa-initial-setup-form.php:10
+msgid "The administrator of this site has asked that you enable 2-factor authentication. To do that, install the Google Authenticator app and scan the QR code below to add a token for this website."
+msgstr "De beheerder van deze site heeft gevraagd dat je 2-factor authenticatie inschakelt. Installeer daarvoor de Google Authenticator app en scan de QR code hieronder om een token voor deze site toe te voegen."
+
+#: templates/2fa-initial-setup-form.php:8 templates/2fa-login-backup-code.php:8
+#: templates/2fa-login.php:20
+msgid "2-factor Authentication"
+msgstr "2-factor authenticatie"
+
+#: react-strings.php:183
+msgid "Email %(name)s already exists."
+msgstr "E-mail %(naam)s bestaat al."
+
+#: react-strings.php:182
+msgid "Invalid email address."
+msgstr "Ongeldig e-mailadres."
+
+#: react-strings.php:179
+msgid "Username %(name)s is not allowed."
+msgstr "Gebruikersnaam %(naam)en' is niet toegestaan."
+
+#: react-strings.php:178
+msgid "Username %(name)s already exists."
+msgstr "Gebruikersnaam %(naam)s bestaat al."
+
+#: react-strings.php:177
+msgid "Username %(name)s already typed."
+msgstr "Gebruikersnaam %(naam)s al getypt."
+
+#: react-strings.php:175 react-strings.php:180 react-strings.php:181
+msgid "This field is required."
+msgstr "Dit veld is vereist."
+
+#: react-strings.php:174
+msgid "You can't enable Away Mode for every day of the week."
+msgstr "Je kunt niet voor elke dag van de week de Away Mode aanzetten."
+
+#: react-strings.php:172 react-strings.php:173 react-strings.php:176
+msgid "Invalid format."
+msgstr "Ongeldig formaat."
+
+#: react-strings.php:170
+msgid "Either a security plugin, custom function or rules in your .htaccess file is preventing the WordPress REST API from working properly. SiteGround Security is using it to store its options and other functionalities so please make sure it works properly."
+msgstr "Een beveiliging plugin, aangepaste functie of regels in je .htaccess bestand voorkomen dat de WordPress REST API goed werkt. SiteGround Security gebruikt het om zijn opties en andere functionaliteiten op te slaan, dus zorg ervoor dat het goed werkt."
+
+#: react-strings.php:169 react-strings.php:171
+msgid "Could not connect to the WordPress REST API"
+msgstr "Kon geen verbinding maken met de WordPress REST API"
+
+#: react-strings.php:168
+msgid "Either a security plugin, custom function, or rules in your .htaccess file is preventing the WordPress REST API from working properly. SiteGround Optimizer is using it to store its options and other functionalities so please make sure it works properly."
+msgstr "Ofwel een beveiliging plugin, aangepaste functie, of regels in je .htaccess bestand voorkomt dat de WordPress REST API goed werkt. SiteGround Optimizer gebruikt het om zijn opties en andere functionaliteiten op te slaan, dus zorg ervoor dat het goed werkt."
+
+#: react-strings.php:167
+msgid "WordPress comes with a readme.html file containing information about your website. The readme.html is often used by hackers to compile lists of potentially vulnerable sites which can be hacked or attacked."
+msgstr "WordPress wordt geleverd met een readme.html bestand met informatie over je site. De readme.html wordt vaak gebruikt door hackers om lijsten samen te stellen van potentieel kwetsbare sites die gehackt of aangevallen kunnen worden."
+
+#: react-strings.php:166
+msgid "Delete the Default Readme.html"
+msgstr "Verwijder de standaard readme.html"
+
+#: react-strings.php:165
+msgid "Enabling this option will add extra headers to your site for protection against XSS attacks."
+msgstr "Als je deze optie inschakelt, worden extra headers aan je site toegevoegd ter bescherming tegen XSS aanvallen."
+
+#: react-strings.php:164
+msgid "Advanced XSS Protection"
+msgstr "Geavanceerde XSS bescherming"
+
+#: react-strings.php:162
+msgid "RSS and ATOM feeds are often used to scrape your content and to perform a number of attacks against your site. Only use feeds if you have readers using your site via RSS readers."
+msgstr "RSS en ATOM feeds worden vaak gebruikt om je inhoud te scrapen en om enkele aanvallen op je site uit te voeren. Gebruik feeds alleen als je lezers hebt die je site via RSS lezers gebruiken."
+
+#: react-strings.php:161
+msgid "Disable RSS and ATOM Feeds"
+msgstr "RSS en ATOM feeds uitschakelen"
+
+#: react-strings.php:159
+msgid "XML-RPC was designed as a protocol enabling WordPress to communicate with third-party systems but recently it has been used in a number of exploits. Unless you specifically need to use it, we recommend that XML-RPC is always disabled."
+msgstr "XML RPC is ontworpen als een protocol waarmee WordPress kan communiceren met systemen van derden, maar kortgeleden is het gebruikt in enkele exploits. Tenzij je het specifiek moet gebruiken, raden we aan XML RPC altijd uit te schakelen."
+
+#: react-strings.php:158
+msgid "Disable XML-RPC"
+msgstr "XML-RPC uitschakelen"
+
+#: react-strings.php:156
+msgid "Disable the option to edit themes and plugins code directly from the WordPress admin to prevent potential coding errors or unauthorised access via the WordPress editor."
+msgstr "Schakel de optie uit om de code van thema's en plugins vanuit de WordPress beheerder te bewerken om mogelijke codeerfouten of ongeoorloofde toegang via de WordPress editor te voorkomen."
+
+#: react-strings.php:155
+msgid "Disable Themes & Plugins Editor"
+msgstr "Thema's & plugins editor uitschakelen"
+
+#: react-strings.php:153
+msgid "Many attackers scan sites for vulnerable WordPress versions. By hiding the version from your site HTML, you avoid being marked by hackers for mass attacks."
+msgstr "Veel aanvallers scannen sites op kwetsbare WordPress versies. Door de versie in de HTML van je site te verbergen, voorkom je dat je door hackers wordt gemarkeerd voor massale aanvallen."
+
+#: react-strings.php:152
+msgid "Hide WordPress Version"
+msgstr "Verberg WordPress versie"
+
+#: react-strings.php:150
+msgid "By enabling this option you are ensuring that no unauthorised or malicious scripts can be executed in your system folders. This is an often exploited back door you can close with a simple toggle."
+msgstr "Door deze optie in te schakelen zorg je ervoor dat er geen ongeautoriseerde of kwaadaardige scripts kunnen worden uitgevoerd in je systeem mappen. Dit is een vaak gebruikte achterdeur die je met een simpele toggle kunt sluiten."
+
+#: react-strings.php:149
+msgid "Lock and Protect System Folders"
+msgstr "Systeem mappen vergrendelen en beschermen"
+
+#: react-strings.php:145
+msgid "This will log out all currently logged in users without asking them to change their passwords."
+msgstr "Dit zal alle nu ingelogde gebruikers uitloggen zonder hen te vragen hun wachtwoord te veranderen."
+
+#: react-strings.php:144 react-strings.php:146
+msgid "Log out All Users"
+msgstr "Log alle gebruikers uit"
+
+#: react-strings.php:143
+msgid "force password reset"
+msgstr "wachtwoord reset forceren"
+
+#: react-strings.php:142
+msgid "All users will be required to change their passwords upon their next login. {{strong}}All currently logged in users will be instantly logged out.{{/strong}}"
+msgstr "Alle gebruikers moeten hun wachtwoord veranderen bij hun volgende login. {{strong}}Alle nu ingelogde gebruikers worden onmiddellijk uitgelogd.{{/strong}}"
+
+#: react-strings.php:141
+msgid "Force Password Reset"
+msgstr "Wachtwoord opnieuw instellen forceren"
+
+#: react-strings.php:140
+msgid "reinstall all"
+msgstr "alles opnieuw installeren"
+
+#: react-strings.php:139
+msgid "Doing this will reinstall the same version of all free plugins you have installed in order to make sure that their codebase is not compromised by an attacker."
+msgstr "Door dit te doen wordt dezelfde versie van alle gratis plugins die je hebt geïnstalleerd opnieuw geïnstalleerd om ervoor te zorgen dat hun codebase niet in gevaar wordt gebracht door een aanvaller."
+
+#: react-strings.php:138
+msgid "Reinstall All Free Plugins"
+msgstr "Installeer alle gratis plugins opnieuw"
+
+#: react-strings.php:137
+msgid "Post-hack Actions"
+msgstr "Acties na de hack"
+
+#: react-strings.php:136
+msgid "Limit the number of times a given user can attempt to log in to your wp-admin with incorrect credentials. Once the login attempt limit is reached, the IP from which the attempts have originated will be blocked first for 1 hour. If the attempts continue after the first hour, the limit will then be triggered for 24 hours and then for 7 days."
+msgstr "Beperk het aantal keren dat een bepaalde gebruiker kan proberen in te loggen op je wp beheerder met verkeerde gegevens. Zodra de limiet voor login pogingen is bereikt, wordt het IP adres waarvan de pogingen afkomstig zijn eerst gedurende 1 uur geblokkeerd. Als de pogingen na het eerste uur doorgaan, zal de limiet vervolgens voor 24 uur en vervolgens voor 7 dagen worden geactiveerd."
+
+#: react-strings.php:135
+msgid "Limit Login Attempts"
+msgstr "Beperk login pogingen"
+
+#: react-strings.php:133
+msgid "Using common usernames like 'admin' is a security threat that often results in unauthorised access. By enabling this option we will disable the creation of common usernames and if you already have one or more users with a weak username, we'll ask you to provide new one(s)."
+msgstr "Het gebruik van algemene gebruiker namen zoals 'admin' is een veiligheid risico dat vaak leidt tot ongeautoriseerde toegang. Door deze optie in te schakelen, schakelen we het aanmaken van standaard gebruikers namen uit en als je al een of meer gebruikers met een zwakke gebruiker naam hebt, vragen we je om een nieuwe gebruiker naam of namen op te geven."
+
+#: react-strings.php:132
+msgid "Disable Common Usernames"
+msgstr "Algemene gebruikers namen uitschakelen"
+
+#: react-strings.php:130
+msgid "Two-factor Authentication for Admin & Editors Users"
+msgstr "Twee-factor authenticatie voor gebruikers van beheerder & editor"
+
+#: react-strings.php:127
+msgid "By default your WordPress login can be accessed by any IP. You can use this feature to allow login only for specific IPs or range of IPs in order to prevent brute-force attacks or malicious login attempts."
+msgstr "Standaard is je WordPress login toegankelijk voor elk IP. Je kunt deze functie gebruiken om login alleen toe te staan voor specifieke IP's of bereik van IP's om brute force aanvallen of kwaadaardige login pogingen te voorkomen."
+
+#: react-strings.php:126
+msgid "Login Access"
+msgstr "Login toegang"
+
+#: react-strings.php:125 react-strings.php:128
+msgid "configure"
+msgstr "configureren"
+
+#: react-strings.php:124
+msgid "Attackers often try exploits on /wp-admin as a default login URL for WordPress. Change it to avoid these attacks and have an easily memorisable login URL."
+msgstr "Aanvallers proberen vaak misbruik te maken van /wp-admin als standaard login URL voor WordPress. Verander het om deze aanvallen te voorkomen en een gemakkelijk te onthouden login URL te hebben."
+
+#: react-strings.php:122 react-strings.php:129 react-strings.php:131
+#: react-strings.php:134 react-strings.php:148 react-strings.php:151
+#: react-strings.php:154 react-strings.php:157 react-strings.php:160
+#: react-strings.php:163
+msgid "recommended"
+msgstr "aanbevolen"
+
+#: react-strings.php:121
+msgid "Login Settings"
+msgstr "Login instellingen"
+
+#: react-strings.php:119
+msgid "Two-factor authentication forces admin users to login only after providing a token, generated from the Google Authenticator application. When you enable this option, {{strong}}all admin & editor users will be asked to configure their two-factor authentication in the Authenticator app on their next login.{{/strong}}"
+msgstr "Twee-factor authenticatie dwingt beheerder gebruikers om alleen in te loggen na het verstrekken van een token, gegenereerd uit de Google Authenticator applicatie. Wanneer je deze optie inschakelt, zullen {{strong}alle beheerder & editor gebruikers gevraagd worden om hun twee-factor authenticatie te configureren in de authenticator app bij hun volgende login.{{/strong}"
+
+#: react-strings.php:118
+msgid "Select User"
+msgstr "Selecteer gebruiker"
+
+#: react-strings.php:117
+msgid "Resetting the 2FA authentication will enable them to set up their Authentication app anew on their next login. Use this functionality when a user no longer has access to their Authenticator app or backup codes and cannot log in."
+msgstr "Door de 2FA authenticatie opnieuw in te stellen, kunnen ze bij hun volgende aanmelding hun authenticator app opnieuw instellen. Gebruik deze functionaliteit wanneer een gebruiker geen toegang meer heeft tot zijn authenticator app of back-up codes en niet kan login."
+
+#: react-strings.php:116
+msgid "Reset 2-factor Authentication"
+msgstr "Reset 2-factor authenticatie"
+
+#: react-strings.php:115
+msgid "Manage Login Access"
+msgstr "Login toegang beheren"
+
+#: react-strings.php:114
+msgid "IP"
+msgstr "IP"
+
+#: react-strings.php:113
+msgid "Bear in mind that the user will NOT be notified of the change."
+msgstr "Houd er rekening mee dat de gebruiker NIET op de hoogte wordt gesteld van de wijziging."
+
+#: react-strings.php:112
+msgid "New username: %(admin)s"
+msgstr "Nieuwe gebruikersnaam: %(admin)s"
+
+#: react-strings.php:111
+msgid "There are one or more users with common usernames. Please provide new username(s) for them."
+msgstr "Er zijn één of meer gebruikers met standaard gebruikersnamen. Geef hen een nieuwe gebruiker naam."
+
+#: react-strings.php:110
+msgid "Change Common Usernames"
+msgstr "Algemene gebruikers namen wijzigen"
+
+#: react-strings.php:109
+msgid "Your site signup URL (wp-signup.php) has a link to your login URL, which can be easily exploited. Please change the signup URL, too and make sure that {{strong}}you update the URL with the new one{{/strong}} if you have it linked in your website, emails or other places."
+msgstr "De URL voor het aanmelden op je site (wp-signup.php) heeft een link naar je login URL, die gemakkelijk kan worden misbruikt. Verander ook de login URL en zorg ervoor dat {{strong}}je de URL update met de nieuwe{{/strong}} als je een link hebt in je site, e-mails of andere plaatsen."
+
+#: react-strings.php:108
+msgid "If you have your registration form open for new users, you will be asked to change the signup URL, too."
+msgstr "Als je je registratie formulier open hebt staan voor nieuwe gebruikers, word je ook gevraagd de aanmelding URL te veranderen."
+
+#: react-strings.php:107
+msgid "Configure Login URL"
+msgstr "Login URL configureren"
+
+#: react-strings.php:106
+msgid "Default Login URL"
+msgstr "Standaard login URL"
+
+#: react-strings.php:105 react-strings.php:123
+msgid "Custom Login URL"
+msgstr "Aangepaste login URL"
+
+#: react-strings.php:104
+msgid "Default Signup URL"
+msgstr "Standaard aanmelding URL"
+
+#: react-strings.php:103
+msgid "Custom Signup URL"
+msgstr "Aangepaste aanmelding URL"
+
+#: react-strings.php:102
+msgid "You can enable Away Mode for maximum of 23 hours daily."
+msgstr "Je kan de afwezig modus maximaal 23 uur per dag inschakelen."
+
+#: react-strings.php:99 react-strings.php:101
+msgid "To"
+msgstr "Naar"
+
+#: react-strings.php:98 react-strings.php:100
+msgid "From"
+msgstr "Van"
+
+#: react-strings.php:97
+msgid "Mode"
+msgstr "Modus"
+
+#: react-strings.php:96
+msgid "When Away Mode is enabled, you won't be able to access your website and make changes, including disabling the away mode."
+msgstr "Wanneer de Away Mode is ingeschakeld, heb je geen toegang tot je site en kun je geen wijzigingen aanbrengen, waaronder het uitschakelen van de Away Mode."
+
+#: react-strings.php:95
+msgid "Use Away Mode with caution."
+msgstr "Gebruik de afwezig modus met de nodige voorzichtigheid."
+
+#: react-strings.php:94
+msgid "Configure Away Mode"
+msgstr "Afwezig modus configureren"
+
+#: react-strings.php:93
+msgid "Sunday"
+msgstr "Zondag"
+
+#: react-strings.php:92
+msgid "Saturday"
+msgstr "Zaterdag"
+
+#: react-strings.php:91
+msgid "Friday"
+msgstr "Vrijdag"
+
+#: react-strings.php:90
+msgid "Thursday"
+msgstr "Donderdag"
+
+#: react-strings.php:89
+msgid "Wednesday"
+msgstr "Woensdag"
+
+#: react-strings.php:88
+msgid "Tuesday"
+msgstr "Dinsdag"
+
+#: react-strings.php:87
+msgid "Monday"
+msgstr "Maandag"
+
+#: react-strings.php:86
+msgid "Daily"
+msgstr "Dagelijks"
+
+#: react-strings.php:85
+msgid "Weekly"
+msgstr "Wekelijks"
+
+#: react-strings.php:84
+msgid "Specific Period"
+msgstr "Specifieke periode"
+
+#: react-strings.php:80
+msgid "Rate Us"
+msgstr "Waardeer ons"
+
+#: react-strings.php:79
+msgid "Important Notifications"
+msgstr "Belangrijke berichten"
+
+#: react-strings.php:78
+msgid "Security Hardening"
+msgstr "Beveiliging verharding"
+
+#: react-strings.php:77
+msgid "View all logs"
+msgstr "Bekijk alle logs"
+
+#: react-strings.php:76
+msgid "Recent Activity"
+msgstr "Recente activiteit"
+
+#: react-strings.php:75
+msgid "Success"
+msgstr "Succes"
+
+#: react-strings.php:74
+msgid "Error"
+msgstr "Fout"
+
+#: react-strings.php:71
+msgid "Manage Notification Emails"
+msgstr "Beheer notificatie e-mails"
+
+#: react-strings.php:70
+msgid "Create"
+msgstr "Maak"
+
+#: react-strings.php:68
+msgid "The maximum number of email accounts that can receive the weekly reports email has been reached."
+msgstr "Het maximum aan e-mailaccounts, die wekelijkse e-mailrapporten kunnen ontvangen, is bereikt."
+
+#: react-strings.php:67
+msgid "Add New Notification Email"
+msgstr "Nieuwe notificatie e-mail toevoegen"
+
+#: react-strings.php:65
+msgid "Manage IP Traffic"
+msgstr "Beheer IP-verkeer"
+
+#: react-strings.php:63
+msgid "Response"
+msgstr "Reactie"
+
+#: react-strings.php:62
+msgid "Page Visited"
+msgstr "Bezochte pagina"
+
+#: react-strings.php:59
+msgid "Visitor Type"
+msgstr "Bezoeker type"
+
+#: react-strings.php:57 react-strings.php:66
+msgid "View Activity"
+msgstr "Bekijk activiteit"
+
+#: react-strings.php:56
+msgid "Manage User Traffic"
+msgstr "Beheer gebruikersverkeer"
+
+#: react-strings.php:54
+msgid "Activity"
+msgstr "Activiteit"
+
+#: react-strings.php:53 react-strings.php:61
+msgid "Hostname:"
+msgstr "Hostnaam:"
+
+#: react-strings.php:52 react-strings.php:60
+msgid "IP Address"
+msgstr "IP-adres"
+
+#: react-strings.php:51
+msgid "User"
+msgstr "Gebruiker"
+
+#: react-strings.php:50 react-strings.php:58
+msgid "Timestamp"
+msgstr "Tijdstempel"
+
+#: react-strings.php:49
+msgid "From here, you can select the number of days you want to log your website's activity events for. You can choose between 1 and 12 days. Please note, that if you select less than 8 days, you will not receive your site's weekly reports."
+msgstr "Van hieruit kun je het aantal dagen selecteren waarvoor je de activiteiten van je site wil registreren. Je kunt kiezen tussen 1 en 12 dagen. Let op, als je minder dan 8 dagen selecteert, zul je de wekelijkse rapporten van je site niet ontvangen."
+
+#: react-strings.php:48
+msgid "Number of days logged"
+msgstr "Aantal gelogde dagen"
+
+#: react-strings.php:47
+msgid "The Activity Log feature is enabled by default and records all website activity events over the last 12 days, including human visits, bot crawls, login attempts, and more. If you expect high traffic, please disable the activity log to stop recording your website's activity events."
+msgstr "De activity log functie is standaard ingeschakeld en registreert alle site activiteit, gebeurtenissen van de laatste 12 dagen, inclusief menselijke bezoeken, bot crawls, login pogingen en meer. Als je veel verkeer verwacht, schakel dan het activiteiten log uit om de registratie van de activiteiten van je site te stoppen."
+
+#: react-strings.php:46
+msgid "Enable Activity Log"
+msgstr "Activiteitenlog inschakelen"
+
+#: react-strings.php:44
+msgid "Blocking {{strong}}%(user)s{{/strong}} will prevent them from accessing your site until you manually unblock them from the Blocked tab."
+msgstr "Als je {{strong}}%(gebruiker)s{{/strong}} blokkeert, krijgen ze geen toegang tot je site totdat je ze handmatig deblokkeert via de tab blokkeren."
+
+#: react-strings.php:43
+msgid "{{strong}}%(user)s{{/strong}} is currently blocked."
+msgstr "{{strong}}%(gebruiker)s{{/strong}} is nu geblokkeerd."
+
+#: react-strings.php:42
+msgid "Block {{em}}{{strong}}%(user)s{{/strong}}{{/em}}"
+msgstr "Blokkeer {{em}}{{strong}}%(user)s{{/strong}}{{/em}}"
+
+#: react-strings.php:41
+msgid "Unblock {{em}}{{strong}}%(user)s{{/strong}}{{/em}}"
+msgstr "Deblokkeer {{em}}{{strong}}%(user)s{{/strong}}{{/em}}"
+
+#: react-strings.php:40 react-strings.php:45
+msgid "Are you sure you wish to proceed?"
+msgstr "Weet je zeker dat je verder wilt gaan?"
+
+#: react-strings.php:39
+msgid "Blocking {{strong}}%(ip)s{{/strong}} will prevent them from accessing your site until you manually unblock them from the Blocked tab."
+msgstr "Door {{strong}}%(ip)s{{/strong}} te blokkeren krijgen ze geen toegang tot je site totdat je ze handmatig deblokkeert via de tab blokkeren."
+
+#: react-strings.php:38
+msgid "{{strong}}%(ip)s{{/strong}} is currently blocked."
+msgstr "{{strong}}%(ip)s{{/strong}} is nu geblokkeerd."
+
+#: react-strings.php:37
+msgid "Block {{em}}{{strong}}%(ip)s{{/strong}}{{/em}}"
+msgstr "Blokkeer {{em}}{{strong}}%(ip)s{{/strong}}{{/em}}"
+
+#: react-strings.php:36
+msgid "Unblock {{em}}{{strong}}%(ip)s{{/strong}}{{/em}}"
+msgstr "Deblokkeer {{em}}{{strong}}%(ip)s{{/strong}}{{/em}}"
+
+#: react-strings.php:34
+msgid "Edit Notification Email"
+msgstr "Bewerk notificatie e-mail"
+
+#: react-strings.php:33
+msgid "This action cannot be undone. Are you sure you wish to proceed?"
+msgstr "Deze actie kan niet ongedaan worden gemaakt. Weet je zeker dat je door wil gaan?"
+
+#: react-strings.php:32
+msgid "Delete Notification Email"
+msgstr "Verwijder notificatie e-mail"
+
+#: react-strings.php:31 react-strings.php:35 react-strings.php:69
+#: react-strings.php:72
+msgid "Email"
+msgstr "E-mail"
+
+#: react-strings.php:30
+msgid "unblock"
+msgstr "deblokkeer"
+
+#: react-strings.php:29 react-strings.php:55 react-strings.php:64
+#: react-strings.php:73
+msgid "Actions"
+msgstr "Acties"
+
+#: react-strings.php:28
+msgid "User/Ip"
+msgstr "Gebruiker/IP"
+
+#: react-strings.php:27
+msgid "Blocked On"
+msgstr "Geblokkeerd op"
+
+#: react-strings.php:26
+msgid "reset"
+msgstr "herstel"
+
+#: react-strings.php:25
+msgid "close"
+msgstr "sluit"
+
+#: react-strings.php:24
+msgid "Filter Activity"
+msgstr "Filter activiteit"
+
+#: react-strings.php:23
+msgid "Log Settings"
+msgstr "Log instellingen"
+
+#: react-strings.php:22
+msgid "Weekly Reports"
+msgstr "Wekelijkse rapporten"
+
+#: react-strings.php:21
+msgid "Blocked"
+msgstr "Geblokkeerd"
+
+#: react-strings.php:20
+msgid "Registered Users Activity"
+msgstr "Geregistreerde gebruikers activiteit"
+
+#: react-strings.php:19
+msgid "Unknown Visitors Activity"
+msgstr "Onbekende bezoekers activiteit"
+
+#: react-strings.php:18
+msgid "If you believe that your website was hacked, you have installed a compromised plugin or one of your users login has been compromised, you can use the tools in our post-hack actions for a quick remedy."
+msgstr "Als je denkt dat je site gehackt is, je een gecompromitteerde plugin hebt geïnstalleerd of als een van je gebruiker login gecompromitteerd is, kun je de gereedschappen in ons bericht hack acties gebruiken voor een snelle oplossing."
+
+#: react-strings.php:16
+msgid "The activity log can help you monitor your site and login page for unauthorised visitors or brute force attempts. You can easily block and unblock IPs or visitors that look suspicious and prevent them from malicious actions."
+msgstr "Het activiteiten log kan je helpen je site en login pagina te controleren op onbevoegde bezoekers of pogingen tot brute force. Je kunt eenvoudig IP's of bezoekers die er verdacht uitzien blokkeren en deblokkeren en voorkomen dat ze kwaadaardige acties ondernemen."
+
+#: react-strings.php:14
+msgid "We have created a list of tools to help you harden your WordPress site's security and keep it safe from malware, exploits and other malicious actions. The options tagged as recommended are essential for your site security."
+msgstr "We hebben een lijst met gereedschappen gemaakt om je te helpen de beveiliging van je WordPress site te versterken en deze veilig te houden van malware, exploits en andere kwaadaardige acties. De aanbevolen opties zijn noodzakelijk voor de beveiliging van je site."
+
+#: react-strings.php:12
+msgid "Login security is paramount for keeping your site and data secure. Use the tools we have compiled to protect your WordPress wp-admin from unauthorised visitors, bots and other human or automated attacks."
+msgstr "Login beveiliging is van het grootste belang om je site en gegevens veilig te houden. Gebruik de gereedschappen die we hebben samengesteld om je WordPress wp beheer te beschermen tegen onbevoegde bezoekers, bots en andere menselijke of geautomatiseerde aanvallen."
+
+#. Description of the plugin
+#: sg-security.php react-strings.php:10
+msgid "Security Optimizer by SiteGround is the all-in-one security solution for your WordPress website. With the carefully selected and easy to configure functions the plugin provides everything you need to secure your website and prevent a number of threats such as brute-force attacks, compromised login, data leaks and more."
+msgstr "Security Optimizer van SiteGround is de all-in-one beveiligingsoplossing voor je WordPress site. Met de zorgvuldig geselecteerde en eenvoudig te configureren functies biedt de plugin alles wat je nodig hebt om je site te beveiligen en een aantal bedreigingen zoals brute force aanvallen, gecompromitteerde logins, datalekken en meer te voorkomen."
+
+#: react-strings.php:8
+msgid "Confirm"
+msgstr "Bevestig"
+
+#: react-strings.php:7
+msgid "Cancel"
+msgstr "Annuleer"
+
+#: react-strings.php:5
+msgid "Collect technical data about my installation. The data will be used to make sure that the plugin(s) works seamlessly on the widest possible range of WordPress sites. (A full list of the data to be collected can be found {{link}}here{{/link}})."
+msgstr "Technische gegevens verzamelen over mijn installatie. De gegevens zullen worden gebruikt om ervoor te zorgen dat de plugin(s) naadloos werken op een zo groot mogelijk aantal WordPress sites. (Een volledige lijst van de te verzamelen gegevens vindt je {{link}} hier{{/link}})."
+
+#: react-strings.php:4
+msgid "Get the Most of This Plugin"
+msgstr "Haal het meeste uit deze plugin"
+
+#: core/Sg_2fa/Sg_2fa.php:929
+msgid "SG Security: We were not able to create encryption file used by 2FA, so the Two Factor Authentication service was disabled. Please check your website files and folders permissions or contact your hosting provider for assistance."
+msgstr "SG Beveiliging: We konden geen coderingsbestand maken dat door 2FA wordt gebruikt, dus de twee-factor authenticatie dienst is uitgeschakeld. Controleer je site bestanden en mappen of neem contact op met je hosting provider voor assistentie."
+
+#: core/Sg_2fa/Sg_2fa.php:692
+msgid "Invalid verification code!"
+msgstr "Ongeldige verificatie code!"
+
+#: core/Sg_2fa/Sg_2fa.php:637
+msgid "Invalid backup code!"
+msgstr "Ongeldige back-up code!"
+
+#: core/Sg_2fa/Sg_2fa.php:513
+msgid "You have logged in successfully."
+msgstr "Je bent succesvol ingelogd."
+
+#: core/Sg_2fa/Sg_2fa.php:346
+msgid "User 2FA reset!"
+msgstr "Gebruiker 2FA reset!"
+
+#: core/Rest/Rest_Helper_Login.php:135
+msgid "Unable to create encryption file! Check the wp-content folder permissions or contact your host."
+msgstr "Kan geen encryptie bestand maken! Controleer de wp-content map rechten of neem contact op met je host."
+
+#: core/Rest/Rest_Helper_Login.php:64
+msgid "You cannot use the default URL."
+msgstr "Je kunt de standaard URL niet gebruiken."
+
+#: core/Rest/Rest_Helper_Login.php:53
+msgid "Login and signup URL cannot be the same."
+msgstr "Login en aanmelding URL kunnen niet hetzelfde zijn."
+
+#: core/Rest/Rest_Helper_Dashboard.php:65
+msgid "Login Security"
+msgstr "Login beveiliging"
+
+#: core/Rest/Rest_Helper_Dashboard.php:63
+msgid "Manage Login"
+msgstr "login beheren"
+
+#: core/Rest/Rest_Helper_Dashboard.php:62
+msgid "Protect your login from unauthorised visitors, bots and other human or automated attacks."
+msgstr "Bescherm je login tegen ongeautoriseerde bezoekers, bots en andere menselijke of geautomatiseerde aanvallen."
+
+#: core/Rest/Rest_Helper_Dashboard.php:57 react-strings.php:147
+msgid "Site Security"
+msgstr "Sitebeveiliging"
+
+#: core/Rest/Rest_Helper_Dashboard.php:55
+msgid "Manage Security"
+msgstr "Beveiliging beheren"
+
+#: core/Rest/Rest_Helper_Dashboard.php:54
+msgid "Set up rules to harden your website security and prevent malware, bruteforce and other security issues."
+msgstr "Stel regels in om de beveiliging van je site te versterken en malware, bruteforce en andere beveiligingsproblemen te voorkomen."
+
+#: core/Rest/Rest_Helper_Dashboard.php:27
+msgid "Update"
+msgstr "Update"
+
+#: core/Rest/Rest_Helper_Dashboard.php:26
+msgid "There are new updates for your website. Keeping your WordPress updated is crucial for your website security"
+msgstr "Er zijn nieuwe updates voor je site. Je WordPress up-to-date houden is cruciaal voor de beveiliging van je site"
+
+#: core/Rest/Rest_Helper_Dashboard.php:25
+msgid "YOUR WORDPRESS NEEDS ATTENTION"
+msgstr "JE WORDPRESS HEEFT AANDACHT NODIG"
+
+#: core/Rest/Rest_Helper_Activity.php:799
+msgid "Notification emails updated."
+msgstr "Melding e-mails geüpdatet."
+
+#: core/Rest/Rest_Helper_Activity.php:607
+msgid "Missing IP param!"
+msgstr "Ontbrekende IP param!"
+
+#: core/Rest/Rest_Helper_Activity.php:580
+#: core/Rest/Rest_Helper_Activity.php:643
+#: core/Rest/Rest_Helper_Activity.php:678 core/Rest/Rest_Helper_Login.php:161
+msgid "Missing ID param!"
+msgstr "Ontbrekende ID param!"
+
+#: core/Rest/Rest_Helper_Activity.php:463
+msgid "Unknown user"
+msgstr "Onbekende gebruiker"
+
+#: core/Rest/Rest_Helper_Activity.php:455
+msgid "Server Systems"
+msgstr "Serversystemen"
+
+#: core/Rest/Rest_Helper_Activity.php:447
+msgid "WP CLI"
+msgstr "WP CLI"
+
+#: core/Plugins_Service/Plugins_Service.php:30
+msgid "Under Maintenance"
+msgstr "Onder onderhoud"
+
+#: core/Plugins_Service/Plugins_Service.php:29
+msgid "Website under planned maintenance. Please check back later."
+msgstr "Site onder gepland onderhoud. Kom later nog eens terug."
+
+#: core/Password_Service/Password_Service.php:171
+msgid "The administrator of this site has requested that you change your password. Enter your new password below or generate one."
+msgstr "De beheerder van deze site heeft verzocht om je wachtwoord te wijzigen. Vul hieronder je nieuwe wachtwoord in of genereer er een."
+
+#: core/Message_Service/Message_Service.php:137
+msgid "Activity Log is disabled."
+msgstr "Activiteitenlog is uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:136
+msgid "Failed to disable Activity Log."
+msgstr "Mislukt om activiteitenlog uit te schakelen."
+
+#: core/Message_Service/Message_Service.php:133
+msgid "Activity Log is enabled."
+msgstr "Activiteitenlog is ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:132
+msgid "Failed to enable Activity Log."
+msgstr "Mislukt om activiteitenlog in te schakelen."
+
+#: core/Message_Service/Message_Service.php:127
+msgid "Common usernames are disabled."
+msgstr "Algemene gebruikersnamen zijn uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:126
+msgid "Failed to Disable Common usernames."
+msgstr "Kan algemene gebruikersnamen niet uitschakelen."
+
+#: core/Message_Service/Message_Service.php:123
+msgid "Common usernames are enabled."
+msgstr "Algemene gebruikersnamen zijn ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:122
+msgid "Failed to Enable Common usernames."
+msgstr "Kan algemene gebruikersnamen niet inschakelen."
+
+#: core/Message_Service/Message_Service.php:117
+msgid "Two-factor Authentication for Admin Users is enabled."
+msgstr "Twee factor authenticatie voor beheerders is ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:116
+msgid "Failed to enable Two-factor Authentication for Admin Users."
+msgstr "Kan twee factor authenticatie niet inschakelen voor beheerdersgebruikers."
+
+#: core/Message_Service/Message_Service.php:113
+msgid "Two-factor Authentication for Admin Users is disabled."
+msgstr "Twee factor authenticatie voor beheerders is uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:112
+msgid "Failed to disable Two-factor Authentication for Admin Users."
+msgstr "Kan twee factor authenticatie voor beheerdersgebruikers niet uitschakelen."
+
+#: core/Message_Service/Message_Service.php:107
+msgid "Advanced XSS Protection is enabled."
+msgstr "Geavanceerde XSS beveiliging is ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:106
+msgid "Failed to enable Advanced XSS Protection."
+msgstr "Kan geavanceerde XSS beveiliging niet inschakelen."
+
+#: core/Message_Service/Message_Service.php:103
+msgid "Advanced XSS Protection is disabled."
+msgstr "Geavanceerde XSS beveiliging is uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:102
+msgid "Failed to disable Advanced XSS Protection."
+msgstr "Kan geavanceerde XSS beveiliging niet uitschakelen."
+
+#: core/Message_Service/Message_Service.php:97
+msgid "RSS/ATOM feeds is disabled."
+msgstr "RSS/ATOM feeds zijn uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:96
+msgid "Failed to Disable RSS/ATOM feeds."
+msgstr "Kan RSS/ATOM feeds niet uitschakelen."
+
+#: core/Message_Service/Message_Service.php:93
+msgid "RSS/ATOM feeds is enabled."
+msgstr "RSS/ATOM feeds zijn ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:92
+msgid "Failed to enable RSS/ATOM feeds."
+msgstr "Kan RSS/ATOM feeds niet inschakelen."
+
+#: core/Message_Service/Message_Service.php:87
+msgid "XML-RPC is disabled."
+msgstr "XML-RPC is uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:86
+msgid "Failed to enable XML-RPC."
+msgstr "Kan XML-RPC niet inschakelen."
+
+#: core/Message_Service/Message_Service.php:83
+msgid "XML-RPC is enabled."
+msgstr "XML-RPC is ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:82
+msgid "Failed to disable XML-RPC."
+msgstr "Kan XML-RPC niet uitschakelen."
+
+#: core/Message_Service/Message_Service.php:77
+msgid "WordPress version is now hidden."
+msgstr "WordPress versie is nu verborgen."
+
+#: core/Message_Service/Message_Service.php:76
+msgid "Failed to hide WordPress version."
+msgstr "Verbergen WordPress versie mislukt."
+
+#: core/Message_Service/Message_Service.php:73
+msgid "WordPress version is now visible."
+msgstr "WordPress versie is nu zichtbaar."
+
+#: core/Message_Service/Message_Service.php:72
+msgid "Failed to show WordPress version."
+msgstr "Tonen WordPress versie mislukt."
+
+#: core/Message_Service/Message_Service.php:67
+msgid "Themes & Plugins Editor is disabled."
+msgstr "Thema's & plugins editor is uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:66
+msgid "Failed to Disable Themes & Plugins Editor."
+msgstr "Kan thema's & plugins editor niet uitschakelen."
+
+#: core/Message_Service/Message_Service.php:63
+msgid "Themes & Plugins Editor is enabled."
+msgstr "Thema's & plugins editor is ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:62
+msgid "Failed to enable Themes & Plugins Editor."
+msgstr "Kan thema's & plugins editor niet inschakelen."
+
+#: core/Message_Service/Message_Service.php:57
+msgid "System Folders protection is enabled."
+msgstr "Beveiliging van systeemmappen is ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:56
+msgid "Failed to enable System Folders protection."
+msgstr "Kan de beveiliging van systeemmappen niet inschakelen."
+
+#: core/Message_Service/Message_Service.php:53
+msgid "System Folders protection is disabled."
+msgstr "Beveiliging van systeemmappen is uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:52
+msgid "Failed to disable System Folders protection."
+msgstr "Kan de beveiliging van systeemmappen niet uitschakelen."
+
+#: core/Message_Service/Message_Service.php:47
+msgid "Deletion of Readme.html is enabled."
+msgstr "Verwijdering van Readme.html is ingeschakeld."
+
+#: core/Message_Service/Message_Service.php:46
+msgid "Failed to enable deletion of Readme.html."
+msgstr "Het verwijderen van readme.html is niet gelukt."
+
+#: core/Message_Service/Message_Service.php:43
+msgid "Deletion of Readme.html is disabled."
+msgstr "Verwijdering van Readme.html is uitgeschakeld."
+
+#: core/Message_Service/Message_Service.php:42
+msgid "Failed to disble deletion of Readme.html."
+msgstr "Het verwijderen van Readme.html is mislukt."
+
+#: core/Message_Service/Message_Service.php:36
+msgid "All users are logged out."
+msgstr "Alle gebruikers zijn uitgelogd."
+
+#: core/Message_Service/Message_Service.php:35
+msgid "Failed to log out all users."
+msgstr "Uitloggen van alle gebruikers mislukt."
+
+#: core/Message_Service/Message_Service.php:32
+msgid "Plugins reinstalled."
+msgstr "Plugins opnieuw geïnstalleerd."
+
+#: core/Message_Service/Message_Service.php:31
+msgid "Failed to reinstall plugins."
+msgstr "Kan plugins niet opnieuw installeren."
+
+#: core/Message_Service/Message_Service.php:28
+msgid "All users will be asked to reset their passwords on next login."
+msgstr "Alle gebruikers zullen worden gevraagd om hun wachtwoord opnieuw in te stellen bij de volgende login."
+
+#: core/Message_Service/Message_Service.php:27
+msgid "Failed to force password reset."
+msgstr "Kan wachtwoord reset niet forceren."
+
+#: core/Login_Service/Login_Service.php:99
+msgid "The access to that page has been restricted by the administrator of this website"
+msgstr "De toegang tot die pagina is beperkt door de beheerder van deze site"
+
+#: core/Custom_Login_Url/Custom_Login_Url.php:461
+msgid "<strong>ERROR</strong>: You are trying to login with an administrative account. Please, use the Custom Login URL instead."
+msgstr "<strong>FOUT</strong>: je probeert in te loggen met een beheerders account. Gebruik in plaats daarvan de aangepaste login URL."
+
+#: core/Custom_Login_Url/Custom_Login_Url.php:352
+msgid "You have enabled registration for your site, please <a href=\""
+msgstr "Je hebt registratie voor je site ingeschakeld, <a href=\""
+
+#: core/Custom_Login_Url/Custom_Login_Url.php:223
+msgid "This feature has been disabled."
+msgstr "Deze functie is uitgeschakeld."
+
+#: core/Block_Service/Block_Service.php:277
+msgid "User Unblocked!."
+msgstr "Gebruiker gedeblokkeerd!"
+
+#: core/Block_Service/Block_Service.php:160
+#: core/Rest/Rest_Helper_Activity.php:623
+msgid "IP Unblocked."
+msgstr "IP gedeblokkeerd."
+
+#: core/Block_Service/Block_Service.php:160
+msgid "IP Blocked."
+msgstr "IP geblokkeerd."
+
+#: core/Block_Service/Block_Service.php:153
+msgid "Could not unblock the IP."
+msgstr "Kon IP niet deblokkeren."
+
+#: core/Block_Service/Block_Service.php:153
+msgid "Could not block the IP."
+msgstr "Kon het IP-adres niet blokkeren."
+
+#: core/Block_Service/Block_Service.php:133
+msgid "You cannot block this IP!"
+msgstr "Je kunt dit IP niet blokkeren!"
+
+#: core/Block_Service/Block_Service.php:122
+msgid "IP not found."
+msgstr "IP niet gevonden."
+
+#: core/Block_Service/Block_Service.php:101
+msgid "User Blocked!."
+msgstr "Gebruiker geblokkeerd!."
+
+#: core/Block_Service/Block_Service.php:80
+msgid "User not found."
+msgstr "Gebruiker niet gevonden."
+
+#: core/Block_Service/Block_Service.php:69
+msgid "This will restrict your account to a Subscriber role and will lock you out of the Admin Menu"
+msgstr "Dit beperkt je account tot een abonnee rol en sluit je uit van het beheerder menu"
+
+#: core/Block_Service/Block_Service.php:45
+#: core/Custom_Login_Url/Custom_Login_Url.php:224
+#: core/Login_Service/Login_Service.php:66
+msgid "Restricted access"
+msgstr "Beperkte toegang"
+
+#: core/Block_Service/Block_Service.php:44
+#: core/Login_Service/Login_Service.php:65
+#: core/Login_Service/Login_Service.php:98
+msgid "You don’t have access to this page. Please contact the administrator of this website for further assistance."
+msgstr "Je hebt geen toegang tot deze pagina. Neem contact op met de beheerder van deze site voor verdere hulp."
+
+#: core/Admin/Admin.php:266
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: core/Activity_Log/Activity_Log_Widgets.php:55
+msgid "Deleted Widget"
+msgstr "Widget verwijderd"
+
+#: core/Activity_Log/Activity_Log_Widgets.php:21
+msgid "Updated Widget"
+msgstr "Geüpdatet widget"
+
+#: core/Activity_Log/Activity_Log_Weekly_Emails.php:34
+msgid "Weekly Activity for "
+msgstr "Wekelijkse activiteit voor "
+
+#: core/Activity_Log/Activity_Log_Users.php:121
+#: core/Activity_Log/Activity_Log_Users.php:122
+msgid "Failed Login Attempt"
+msgstr "Mislukte aanmeldpoging"
+
+#: core/Activity_Log/Activity_Log_Users.php:99
+msgid "User Update"
+msgstr "Gebruiker update"
+
+#: core/Activity_Log/Activity_Log_Users.php:79
+msgid "User Register"
+msgstr "Gebruiker registratie"
+
+#: core/Activity_Log/Activity_Log_Users.php:59
+msgid "User Delete"
+msgstr "Gebruiker verwijderen"
+
+#: core/Activity_Log/Activity_Log_Users.php:38
+msgid "User logout"
+msgstr "Gebruiker uitloggen"
+
+#: core/Activity_Log/Activity_Log_Users.php:17
+msgid "User Login"
+msgstr "Gebruiker login"
+
+#: core/Activity_Log/Activity_Log_Themes.php:172
+msgid "Deleted Theme"
+msgstr "Verwijderd thema"
+
+#: core/Activity_Log/Activity_Log_Themes.php:148
+msgid "Edited Customizer Theme"
+msgstr "Bewerkt customizer thema"
+
+#: core/Activity_Log/Activity_Log_Themes.php:129
+msgid "Switched Theme"
+msgstr "Gewisseld thema"
+
+#: core/Activity_Log/Activity_Log_Themes.php:95
+msgid "Updated Theme"
+msgstr "Thema geüpdatet"
+
+#: core/Activity_Log/Activity_Log_Themes.php:63
+msgid "Installed Theme"
+msgstr "Geïnstalleerd thema"
+
+#: core/Activity_Log/Activity_Log_Themes.php:30
+msgid "Edited Theme"
+msgstr "Bewerkt thema"
+
+#: core/Activity_Log/Activity_Log_Taxonomies.php:40
+msgid "Edited"
+msgstr "Bewerkt"
+
+#: core/Activity_Log/Activity_Log_Posts.php:97
+#: core/Activity_Log/Activity_Log_Taxonomies.php:62
+msgid "Deleted"
+msgstr "Verwijderd"
+
+#: core/Activity_Log/Activity_Log_Posts.php:68
+msgid "Updated"
+msgstr "Geüpdatet"
+
+#: core/Activity_Log/Activity_Log_Posts.php:59
+msgid "Restored"
+msgstr "Teruggezet"
+
+#: core/Activity_Log/Activity_Log_Posts.php:50
+msgid "Trashed"
+msgstr "Naar prullenbak verplaatst"
+
+#: core/Activity_Log/Activity_Log_Posts.php:35
+#: core/Activity_Log/Activity_Log_Taxonomies.php:19
+msgid "Created"
+msgstr "Gemaakt"
+
+#: core/Activity_Log/Activity_Log_Plugins.php:123
+msgid "Updated Plugin"
+msgstr "Plugin geüpdatet"
+
+#: core/Activity_Log/Activity_Log_Plugins.php:91
+msgid "Installed Plugin"
+msgstr "Geïnstalleerde plugin"
+
+#: core/Activity_Log/Activity_Log_Plugins.php:59
+msgid "Edited Plugin"
+msgstr "Bewerkte plugin"
+
+#: core/Activity_Log/Activity_Log_Plugins.php:35
+msgid "Deactivated Plugin"
+msgstr "Gedeactiveerde plugin"
+
+#: core/Activity_Log/Activity_Log_Plugins.php:17
+msgid "Activated Plugin"
+msgstr "Geactiveerde plugin"
+
+#: core/Activity_Log/Activity_Log_Options.php:126
+#: core/Activity_Log/Activity_Log_Options.php:127
+msgid "Updated Option"
+msgstr "Optie geüpdatet"
+
+#: core/Activity_Log/Activity_Log_Export.php:16
+#: core/Activity_Log/Activity_Log_Export.php:17
+msgid "Exported WordPress"
+msgstr "Geëxporteerde WordPress"
+
+#: core/Activity_Log/Activity_Log_Core.php:16
+#: core/Activity_Log/Activity_Log_Core.php:17
+msgid "Updated Core"
+msgstr "Core geüpdatet"
+
+#: core/Activity_Log/Activity_Log_Comments.php:152
+msgid " comment"
+msgstr " reactie"
+
+#: core/Activity_Log/Activity_Log_Comments.php:128
+msgid "Deleted comment"
+msgstr "Verwijderde reactie"
+
+#: core/Activity_Log/Activity_Log_Comments.php:110
+msgid "Unspamed comment"
+msgstr "Reactie uit spam verwijderd"
+
+#: core/Activity_Log/Activity_Log_Comments.php:92
+msgid "Spammed comment"
+msgstr "Spamreactie"
+
+#: core/Activity_Log/Activity_Log_Comments.php:74
+msgid "Untrashed comment"
+msgstr "Reactie uit prullenbak gehaald"
+
+#: core/Activity_Log/Activity_Log_Comments.php:56
+msgid "Trashed comment"
+msgstr "Reactie naar prullenbak verplaatst"
+
+#: core/Activity_Log/Activity_Log_Comments.php:38
+msgid "Edited comment"
+msgstr "Bewerkte reactie"
+
+#: core/Activity_Log/Activity_Log_Comments.php:19
+msgid "New comment"
+msgstr "Nieuwe reactie"
+
+#: core/Activity_Log/Activity_Log_Attachments.php:76
+#: core/Activity_Log/Activity_Log_Attachments.php:82
+msgid "Unknown"
+msgstr "Onbekend"
+
+#: core/Activity_Log/Activity_Log_Attachments.php:53
+msgid "Deleted attachment"
+msgstr "Verwijderde bijlage"
+
+#: core/Activity_Log/Activity_Log_Attachments.php:35
+msgid "Edited attachment"
+msgstr "Bewerkte bijlage"
+
+#: core/Activity_Log/Activity_Log_Attachments.php:17
+msgid "Added attachment"
+msgstr "Bijlage toegevoegd"
+
+#. Author URI of the plugin
+#: sg-security.php
+msgid "https://www.siteground.com"
+msgstr "https://www.siteground.com"
+
+#. Author of the plugin
+#: sg-security.php
+msgid "SiteGround"
+msgstr "SiteGround"
+
+#. Plugin URI of the plugin
+#: sg-security.php
+msgid "https://siteground.com"
+msgstr "https://siteground.com"

@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "PostHog Integration": [
+            "Ενσωμάτωση PostHog"
+         ],
+         "PostHog is running on your site": [
+            "Το PostHog εκτελείται στον ιστότοπό σας"
+         ],
+         "Enable PostHog to help us improve our product": [
+            "Ενεργοποιήστε το PostHog για να μας βοηθήσετε να βελτιώσουμε το προϊόν μας"
+         ],
+         "your PostHog session ID is: ": [
+            "το αναγνωριστικό συνεδρίας PostHog σας είναι: "
+         ]
+      }
+   }
+}

@@ -1,0 +1,57 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ko"
+         },
+         "Accepted": [
+            "수락됨"
+         ],
+         "Approved!": [
+            "승인됨!"
+         ],
+         "Loading the next translation for review...": [
+            "다음 번역을 검토하기 위해 로딩 중..."
+         ],
+         "Back": [
+            "뒤로"
+         ],
+         "Turn off to not automatically load the next translation after finishing this review.": [
+            "이 검토를 마친 후 자동으로 다음 번역을 로드하지 않으려면 끄세요."
+         ],
+         "Turn on to automatically load the next translation after finishing this  .": [
+            "이 검토를 마친 후 자동으로 다음 번역을 로드하려면 켜세요."
+         ],
+         "Edit": [
+            "편집"
+         ],
+         "Edit translation": [
+            "번역 편집"
+         ],
+         "Next review": [
+            "다음 검토"
+         ],
+         "Publish this translation": [
+            "이 번역 게시하기"
+         ],
+         "Accept this translation": [
+            "이 번역 수락하기"
+         ],
+         "Published!": [
+            "게시됨!"
+         ],
+         "Please wait, applying translation..": [
+            "잠시만 기다려주세요, 번역을 적용하는 중입니다.."
+         ],
+         "There was an error in applying translation.": [
+            "번역 적용 중 오류가 발생했습니다."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "이미 다른 사람이 이 번역을 검토 중입니다. 나중에 다시 시도해 주세요."
+         ]
+      }
+   }
+}

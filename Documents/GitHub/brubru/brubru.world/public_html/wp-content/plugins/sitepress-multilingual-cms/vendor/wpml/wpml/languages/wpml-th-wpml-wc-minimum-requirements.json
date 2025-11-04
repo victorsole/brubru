@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "ตอนนี้ไซต์ของคุณตรงตามข้อกำหนดขั้นต่ำของ WPML แล้ว"
+         ],
+         "Start WPML Setup": [
+            "เริ่มการตั้งค่า WPML"
+         ],
+         "Need Help?": [
+            "ต้องการความช่วยเหลือ?"
+         ],
+         "Contact our support team": [
+            "ติดต่อทีมสนับสนุนของเรา"
+         ],
+         " and we'll guide you through it step by step.": [
+            " และเราจะแนะนำคุณทีละขั้นตอน."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "ไซต์ของคุณไม่ตรงตามข้อกำหนดขั้นต่ำของ WPML"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "ตรวจสอบให้แน่ใจว่าเว็บไซต์ของคุณทำงานได้อย่างราบรื่นด้วย WPML โดยการตอบสนองข้อกำหนดขั้นต่ำง่าย ๆ เหล่านี้."
+         ],
+         "Re-check Now": [
+            "ตรวจสอบอีกครั้ง"
+         ],
+         "Skip for now": [
+            "ข้ามไปก่อน"
+         ]
+      }
+   }
+}

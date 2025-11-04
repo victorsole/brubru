@@ -1,0 +1,186 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "Advanced": [
+            "Avancerat"
+         ],
+         "HTML anchor": [
+            "HTML-ankare"
+         ],
+         "Add a shortcut to this block when loading the page using the “#anchor” URL.": [
+            "Lägg till en genväg till detta block när sidan laddas med hjälp av “#anchor” URL:en."
+         ],
+         "Additional CSS class(es)": [
+            "Ytterligare CSS-klass(er)"
+         ],
+         "Separate multiple classes with spaces.": [
+            "Separera flera klasser med mellanslag."
+         ],
+         "Color": [
+            "Färg"
+         ],
+         "px": [
+            "px"
+         ],
+         "%": [
+            "%"
+         ],
+         "Dimensions": [
+            "Dimensioner"
+         ],
+         "BLOCK": [
+            "BLOCK"
+         ],
+         "Block margin": [
+            "Blockmarginaler"
+         ],
+         "Block padding": [
+            "Blockutfyllnad"
+         ],
+         "LANGUAGE": [
+            "SPRÅK"
+         ],
+         "Language spacing": [
+            "Språkavstånd"
+         ],
+         "Language padding": [
+            "Språkutfyllnad"
+         ],
+         "Display": [
+            "Visning"
+         ],
+         "Show flag": [
+            "Visa flagga"
+         ],
+         "Show language name": [
+            "Visa språknamn"
+         ],
+         "Display language name in": [
+            "Visa språknamn i"
+         ],
+         "Style": [
+            "Stil"
+         ],
+         "Flag settings": [
+            "Flagginställningar"
+         ],
+         "Width": [
+            "Bredd"
+         ],
+         "Height": [
+            "Höjd"
+         ],
+         "Spacing": [
+            "Avstånd"
+         ],
+         "Allow wrapping to multiple lines": [
+            "Tillåt radbrytning till flera rader"
+         ],
+         "Open on click": [
+            "Öppna vid klick"
+         ],
+         "Show arrow": [
+            "Visa pil"
+         ],
+         "Layout": [
+            "Layout"
+         ],
+         "Justification": [
+            "Justering"
+         ],
+         "Orientation": [
+            "Orientering"
+         ],
+         "Typography": [
+            "Typografi"
+         ],
+         "Background": [
+            "Bakgrund"
+         ],
+         "Language Text": [
+            "Språktext"
+         ],
+         "Language Background": [
+            "Språkbakgrund"
+         ],
+         "Current language text": [
+            "Aktuell språktext"
+         ],
+         "Current language background": [
+            "Aktuell språkbakgrund"
+         ],
+         "Full name": [
+            "Fullständigt namn"
+         ],
+         "Code": [
+            "Kod"
+         ],
+         "Justify items left": [
+            "Justera objekt till vänster"
+         ],
+         "Justify items center": [
+            "Centrera objekt"
+         ],
+         "Justify items right": [
+            "Justera objekt till höger"
+         ],
+         "Justify items space between": [
+            "Fördela objekt jämnt"
+         ],
+         "Horizontal": [
+            "Horisontell"
+         ],
+         "Vertical": [
+            "Vertikal"
+         ],
+         "Normal": [
+            "Normal"
+         ],
+         "Medium": [
+            "Medium"
+         ],
+         "Large": [
+            "Stor"
+         ],
+         "X-Large": [
+            "Extra stor"
+         ],
+         "Ab": [
+            "Ab"
+         ],
+         "AB": [
+            "AB"
+         ],
+         "ab": [
+            "ab"
+         ],
+         "Small": [
+            "Liten"
+         ],
+         "Displays the WPML Language Switcher.": [
+            "Visar WPML språkväljaren."
+         ],
+         "Language Switcher": [
+            "Språkväljare"
+         ],
+         "displays the WPML Language Switcher": [
+            "visar WPML språkväljaren"
+         ],
+         "Displays the WPML Language Switcher. <br/> Learn <a>how to translate this block</a>.": [
+            "Visar WPML språkväljaren. <br/> Lär dig <a>hur du översätter detta block</a>."
+         ],
+         "Navigation Language Switcher": [
+            "Navigeringsspråkväljare"
+         ],
+         "Reset all": [
+            "Återställ alla"
+         ]
+      }
+   }
+}

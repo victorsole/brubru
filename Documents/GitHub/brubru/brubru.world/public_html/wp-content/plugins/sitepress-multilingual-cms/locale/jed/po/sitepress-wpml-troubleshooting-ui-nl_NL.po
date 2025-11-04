@@ -1,0 +1,141 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:17
+msgid "Preparing..."
+msgstr "Voorbereiden..."
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:77
+msgid "All jobs have been cancelled"
+msgstr "Alle opdrachten zijn geannuleerd"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:79
+msgid "There is no more jobs to cancel"
+msgstr "Er zijn geen opdrachten meer om te annuleren"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:82
+msgid "The jobs cancellation has failed"
+msgstr "Het annuleren van opdrachten is mislukt"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:88
+msgid "Cancel in-progress automatic jobs"
+msgstr "Annuleer lopende automatische opdrachten"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:31
+msgid "Domain name has been updated"
+msgstr "Domeinnaam is bijgewerkt"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:33
+msgid "Domain name update has been failed"
+msgstr "Domeinnaam aanpassing is mislukt"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:41
+msgid "Update domain name in language switcher settings"
+msgstr "Domeinnaam bijwerken in instellingen voor taalswitcher"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:7
+msgid "Disclaimer: MySQL Disk Space"
+msgstr "Disclaimer: MySQL-schijfruimte"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:8
+msgid ""
+"Cleaning and compressing the wp_icl_translate and wp_icl_translation_status "
+"tables reduces its data size, but does not automatically free up disk space "
+"in MySQL. To reclaim disk space, a table rebuild is required—a risky "
+"operation not performed automatically by this tool."
+msgstr "Het opschonen en comprimeren van de tabellen wp_icl_translate en wp_icl_translation_status vermindert de datagrootte, maar maakt niet automatisch schijfruimte vrij in MySQL. Om schijfruimte terug te winnen is een tabelreconstructie nodig - een riskante operatie die niet automatisch door deze tool wordt uitgevoerd."
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:38
+msgid "Optimize translation tables"
+msgstr "Optimaliseer vertaaltabellen"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:47
+msgid "Previous State Migration"
+msgstr "Migratie van vorige staat"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:58
+msgid "Translation Elements Migration"
+msgstr "Migratie van vertaalelementen"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:64
+msgid "Processed"
+msgstr "Verwerkt"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:72
+msgid "Error"
+msgstr "Fout"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:82
+msgid "Success"
+msgstr "Geslaagd"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:83
+msgid "Database tables optimization completed successfully."
+msgstr "De optimalisatie van databasetabellen is succesvol voltooid."
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:7
+msgid "Warning"
+msgstr "Waarschuwing"
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:8
+msgid ""
+"This process is resource-intensive and may take a significant amount of "
+"time. It is recommended to run this optimization during periods of low "
+"traffic."
+msgstr "Dit proces is intensief en kan veel tijd in beslag nemen. Het wordt aanbevolen om deze optimalisatie uit te voeren tijdens periodes met weinig verkeer."
+
+#: src/js/troubleshooting/optimizeDbTables/index.js:16
+msgid "Database Tables Optimization"
+msgstr "Optimalisatie van databasetabellen"
+
+#: src/js/troubleshooting/refreshLicense/RefreshLicense.js:14
+msgid "Refresh license data to recognise license update"
+msgstr "Licentiegegevens verversen om licentie-update te herkennen"
+
+#: src/js/troubleshooting/refreshLicense/useRefreshLicense.js:36
+msgid "WPML License has been refreshed"
+msgstr "WPML licentie is geüpdatet"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:11
+msgid "Translate Everything Automatically is not active."
+msgstr "Alles automatisch vertalen is niet actief."
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:49
+msgid "Retry stuck automatic translations"
+msgstr "Opnieuw proberen van vastgelopen automatische vertalingen"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:54
+msgid ""
+"Resends translation jobs that couldn't be processed due to a temporary "
+"issue while Translate Everything Automatically was active."
+msgstr "Verstuurt vertaalopdrachten opnieuw die niet konden worden verwerkt vanwege een tijdelijk probleem terwijl Alles automatisch vertalen actief was."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:10
+msgid "Checking for stuck translation jobs..."
+msgstr "Controleren op vastgelopen vertaalopdrachten..."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:13
+msgid "Processing... %s stuck translation found so far"
+msgid_plural "Processing... %s stuck translations found so far"
+msgstr[0] "Verwerken... Tot nu toe %s vastgelopen vertaling gevonden"
+msgstr[1] "Verwerken... Tot nu toe %s vastgelopen vertalingen gevonden"
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:25
+msgid ""
+"Something went wrong while checking for stuck translation jobs. Please "
+"<a>contact WPML support</a>."
+msgstr "Er is iets misgegaan bij het controleren op vastgelopen vertaalopdrachten. <a>Neem contact op met WPML-ondersteuning</a>."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:37
+msgid "No stuck translation jobs found."
+msgstr "Geen vastgelopen vertaalopdrachten gevonden."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:41
+msgid "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard."
+msgid_plural "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[0] "%s vastgelopen vertaalopdracht gevonden. WPML zal deze automatisch op de achtergrond vertalen.\nJe kunt de voortgang controleren in het Vertaaldashboard."
+msgstr[1] "%s vastgelopen vertaalopdrachten gevonden. WPML zal deze automatisch op de achtergrond vertalen.\nJe kunt de voortgang controleren in het Vertaaldashboard."

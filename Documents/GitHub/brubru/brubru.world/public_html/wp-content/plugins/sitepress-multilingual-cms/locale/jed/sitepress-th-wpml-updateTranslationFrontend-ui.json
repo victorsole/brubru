@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "Please wait, applying translation..": [
+            "กรุณารอสักครู่ กำลังนำการแปลไปใช้.."
+         ],
+         "There was an error in applying translation.": [
+            "เกิดข้อผิดพลาดในการนำการแปลไปใช้."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "มีคนกำลังตรวจสอบการแปลนี้อยู่ กรุณาลองใหม่อีกครั้งในภายหลัง."
+         ]
+      }
+   }
+}

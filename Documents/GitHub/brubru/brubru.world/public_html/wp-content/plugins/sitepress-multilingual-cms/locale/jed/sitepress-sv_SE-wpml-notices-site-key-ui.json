@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "Get a key for this site": [
+            "Skaffa en nyckel för den här webbplatsen"
+         ],
+         "Site key:": [
+            "Webbplatsnyckel:"
+         ],
+         "Enter your site key here": [
+            "Ange din webbplatsnyckel här"
+         ],
+         "Registering...": [
+            "Registrerar..."
+         ],
+         "Register": [
+            "Registrera"
+         ],
+         "A New Site Key Is Required": [
+            "En ny webbplatsnyckel krävs"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "För att fortsätta använda WPML-funktioner som automatisk översättning och plugin-uppdateringar, vänligen registrera din webbplats igen. Oroa dig inte, ditt befintliga innehåll och översättningar är säkra."
+         ],
+         "Site key registered successfully!": [
+            "Webbplatsnyckeln har registrerats framgångsrikt!"
+         ],
+         "Page will reload in %d seconds...": [
+            "Sidan kommer att laddas om om %d sekunder..."
+         ],
+         "Registration failed. Please try again.": [
+            "Registreringen misslyckades. Vänligen försök igen."
+         ]
+      }
+   }
+}

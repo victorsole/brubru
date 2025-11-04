@@ -1,0 +1,149 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:17
+msgid "Preparing..."
+msgstr "جارٍ التحضير..."
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:77
+msgid "All jobs have been cancelled"
+msgstr "تم إلغاء جميع المهام"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:79
+msgid "There is no more jobs to cancel"
+msgstr "لا يوجد المزيد من المهام لإلغائها"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:82
+msgid "The jobs cancellation has failed"
+msgstr "فشلت عملية إلغاء المهام"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:88
+msgid "Cancel in-progress automatic jobs"
+msgstr "إلغاء مهام الترجمة الآلية قيد التنفيذ"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:31
+msgid "Domain name has been updated"
+msgstr "تم تحديث اسم النطاق"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:33
+msgid "Domain name update has been failed"
+msgstr "فشل تحديث اسم النطاق"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:41
+msgid "Update domain name in language switcher settings"
+msgstr "تحديث اسم النطاق في إعدادات محوّل اللغة"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:7
+msgid "Disclaimer: MySQL Disk Space"
+msgstr "إخلاء مسؤولية: مساحة القرص لـ MySQL"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:8
+msgid ""
+"Cleaning and compressing the wp_icl_translate and wp_icl_translation_status "
+"tables reduces its data size, but does not automatically free up disk space "
+"in MySQL. To reclaim disk space, a table rebuild is required—a risky "
+"operation not performed automatically by this tool."
+msgstr "يؤدي تنظيف وضغط جداول wp_icl_translate وwp_icl_translation_status إلى تقليل حجم البيانات، ولكنه لا يحرر مساحة القرص تلقائيًا في MySQL. لاسترداد مساحة القرص، يلزم إعادة بناء الجدول - وهي عملية محفوفة بالمخاطر لا تقوم بها هذه الأداة تلقائيًا."
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:38
+msgid "Optimize translation tables"
+msgstr "تحسين جداول الترجمة"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:47
+msgid "Previous State Migration"
+msgstr "ترحيل الحالة السابقة"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:58
+msgid "Translation Elements Migration"
+msgstr "ترحيل عناصر الترجمة"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:64
+msgid "Processed"
+msgstr "تمت المعالجة"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:72
+msgid "Error"
+msgstr "خطأ"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:82
+msgid "Success"
+msgstr "نجاح"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:83
+msgid "Database tables optimization completed successfully."
+msgstr "اكتمل تحسين جداول قاعدة البيانات بنجاح."
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:7
+msgid "Warning"
+msgstr "تحذير"
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:8
+msgid ""
+"This process is resource-intensive and may take a significant amount of "
+"time. It is recommended to run this optimization during periods of low "
+"traffic."
+msgstr "هذه العملية كثيفة الموارد وقد تستغرق وقتًا طويلاً. يُنصح بتشغيل هذا التحسين خلال فترات انخفاض حركة المرور."
+
+#: src/js/troubleshooting/optimizeDbTables/index.js:16
+msgid "Database Tables Optimization"
+msgstr "تحسين جداول قاعدة البيانات"
+
+#: src/js/troubleshooting/refreshLicense/RefreshLicense.js:14
+msgid "Refresh license data to recognise license update"
+msgstr "أعد تحديث بيانات الترخيص لإعادة التعرف على تحديث الترخيص"
+
+#: src/js/troubleshooting/refreshLicense/useRefreshLicense.js:36
+msgid "WPML License has been refreshed"
+msgstr "تم تحديث ترخيص WPML"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:11
+msgid "Translate Everything Automatically is not active."
+msgstr "خاصية الترجمة التلقائية للكل غير مفعلة."
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:49
+msgid "Retry stuck automatic translations"
+msgstr "إعادة محاولة الترجمات التلقائية العالقة"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:54
+msgid ""
+"Resends translation jobs that couldn't be processed due to a temporary "
+"issue while Translate Everything Automatically was active."
+msgstr "يعيد إرسال مهام الترجمة التي لم يتم معالجتها بسبب مشكلة مؤقتة أثناء تفعيل خاصية الترجمة التلقائية للكل."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:10
+msgid "Checking for stuck translation jobs..."
+msgstr "جاري التحقق من مهام الترجمة العالقة..."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:13
+msgid "Processing... %s stuck translation found so far"
+msgid_plural "Processing... %s stuck translations found so far"
+msgstr[0] "Processing... %s stuck translations found so far"
+msgstr[1] "جاري المعالجة... تم العثور على %s ترجمة عالقة حتى الآن"
+msgstr[2] "Processing... %s stuck translations found so far"
+msgstr[3] "Processing... %s stuck translations found so far"
+msgstr[4] "Processing... %s stuck translations found so far"
+msgstr[5] "جاري المعالجة... تم العثور على %s ترجمة عالقة حتى الآن"
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:25
+msgid ""
+"Something went wrong while checking for stuck translation jobs. Please "
+"<a>contact WPML support</a>."
+msgstr "حدث خطأ أثناء التحقق من مهام الترجمة العالقة. من فضلك <a>اتصل بدعم WPML</a>."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:37
+msgid "No stuck translation jobs found."
+msgstr "لم يتم العثور على مهام ترجمة عالقة."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:41
+msgid "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard."
+msgid_plural "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[0] "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[1] "تم العثور على %s مهمة ترجمة عالقة. سيقوم WPML بترجمتها تلقائيًا في الخلفية.\nيمكنك متابعة التقدم في لوحة التحكم بالترجمة."
+msgstr[2] "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[3] "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[4] "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[5] "تم العثور على %s مهمة ترجمة عالقة. سيقوم WPML بترجمتها تلقائيًا في الخلفية.\nيمكنك متابعة تقدمها في لوحة التحكم بالترجمة."

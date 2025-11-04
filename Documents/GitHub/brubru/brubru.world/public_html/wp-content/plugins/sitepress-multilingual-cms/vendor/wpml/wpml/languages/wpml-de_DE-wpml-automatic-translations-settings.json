@@ -1,0 +1,87 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "de"
+         },
+         "Could not fetch engines data": [
+            "Konnte keine Daten der Übersetzungsmaschinen abrufen"
+         ],
+         "Could not save settings": [
+            "Einstellungen konnten nicht gespeichert werden"
+         ],
+         "Automatic translation": [
+            "Automatische Übersetzung"
+         ],
+         "Saving...": [
+            "Speichern..."
+         ],
+         "Save settings": [
+            "Einstellungen speichern"
+         ],
+         "Settings saved": [
+            "Einstellungen gespeichert"
+         ],
+         "Some error occurred": [
+            "Ein Fehler ist aufgetreten"
+         ],
+         "AI Translation": [
+            "KI-Übersetzung"
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "Übersetzen Sie keine Entwürfe. Übersetzen Sie nur, wenn ich Inhalte veröffentliche."
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "Übersetzen Sie Entwürfe, sobald ich sie speichere (verbraucht etwas mehr Übersetzungsguthaben)."
+         ],
+         "Do you want to translate drafts automatically?": [
+            "Möchten Sie Entwürfe automatisch übersetzen lassen?"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "Diese Funktion ist nur verfügbar, wenn Sie „Alles automatisch übersetzen“ im %sÜbersetzungs-Dashboard%s aktivieren."
+         ],
+         "What would you like to do after WPML finishes translating your content automatically?": [
+            "Was möchten Sie tun, nachdem WPML Ihre Inhalte automatisch übersetzt hat?"
+         ],
+         "Publish without review": [
+            "Ohne Überprüfung veröffentlichen"
+         ],
+         "Recommended with PTC": [
+            "Empfohlen mit PTC"
+         ],
+         "PTC provides Better Than Human Translations that rarely need improvements, so you can confidently skip the review process. For other translation engines, a human review is recommended to confirm accuracy.": [
+            "PTC liefert Übersetzungen, die besser als menschliche Übersetzungen sind und selten Verbesserungen benötigen, sodass du den Überprüfungsprozess getrost überspringen kannst. Für andere Übersetzungssysteme wird eine menschliche Überprüfung empfohlen, um die Genauigkeit zu bestätigen."
+         ],
+         "WPML publishes translations immediately, skipping the review process.": [
+            "WPML veröffentlicht Übersetzungen sofort und überspringt den Überprüfungsprozess."
+         ],
+         "Wait for review": [
+            "Auf Überprüfung warten"
+         ],
+         "Recommended with DeepL, Google and Microsoft": [
+            "Empfohlen in Verbindung mit DeepL, Google und Microsoft"
+         ],
+         "DeepL, Google, and Microsoft deliver great translations, but we recommend a human review to confirm they are correct. PTC provides Better Than Human Translations that understand context, so you can confidently skip the review process.": [
+            "DeepL, Google und Microsoft liefern großartige Übersetzungen, aber wir empfehlen eine menschliche Überprüfung, um sicherzustellen, dass sie korrekt sind. PTC bietet Übersetzungen, die besser als menschliche Übersetzungen sind und den Kontext verstehen, sodass du den Überprüfungsprozess getrost überspringen kannst."
+         ],
+         "WPML keeps translations unpublished, so you can review them first.": [
+            "WPML hält Übersetzungen unveröffentlicht, damit Sie sie zuerst überprüfen können."
+         ],
+         "Your translators review and approve translations before publishing.": [
+            "Ihre Übersetzer überprüfen und genehmigen Übersetzungen vor der Veröffentlichung."
+         ],
+         "Publish and mark for review": [
+            "Veröffentlichen und zur Überprüfung markieren"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "WPML veröffentlicht Übersetzungen sofort, markiert sie aber für Sie zur späteren Überprüfung."
+         ],
+         "WPML publishes translations immediately but flags them for translators to review later.": [
+            "WPML veröffentlicht Übersetzungen sofort, markiert sie aber für Übersetzer zur späteren Überprüfung."
+         ]
+      }
+   }
+}

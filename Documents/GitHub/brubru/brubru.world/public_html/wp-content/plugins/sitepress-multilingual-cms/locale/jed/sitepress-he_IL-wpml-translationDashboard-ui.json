@@ -1,0 +1,198 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "he"
+         },
+         "Your pending automatic translations will be canceled.": [
+            "התרגומים האוטומטיים הממתינים שלך יבוטלו."
+         ],
+         "Save": [
+            "שמור"
+         ],
+         "Go to the <a>Translation Management Dashboard</a> to translate your content.": [
+            "עבור אל <a>לוח הבקרה לניהול תרגומים</a> כדי לתרגם את התוכן שלך."
+         ],
+         "Review the translations before publishing": [
+            "בדוק את התרגומים לפני הפרסום"
+         ],
+         "Publish translations and review them later": [
+            "פרסם תרגומים ובדוק אותם מאוחר יותר"
+         ],
+         "Publish translations without reviewing": [
+            "פרסם תרגומים ללא בדיקה"
+         ],
+         "Translate Everything": [
+            "תרגם הכל"
+         ],
+         "WPML will automatically translate content that you publish or update": [
+            "WPML יתרגם אוטומטית תוכן שאתה מפרסם או מעדכן"
+         ],
+         "How do you want to translate this site?": [
+            "כיצד ברצונך לתרגם אתר זה?"
+         ],
+         "Translate Some": [
+            "תרגם חלק"
+         ],
+         "I want to choose which content to translate": [
+            "אני רוצה לבחור איזה תוכן לתרגם"
+         ],
+         "All Languages": [
+            "כל השפות"
+         ],
+         "Overwrite existing translations": [
+            "דרוס תרגומים קיימים"
+         ],
+         "Some of the content you want to translate is already translated": [
+            "חלק מהתוכן שברצונך לתרגם כבר מתורגם"
+         ],
+         "What do you want to do with the content that’s already translated?": [
+            "מה ברצונך לעשות עם התוכן שכבר מתורגם?"
+         ],
+         "Leave existing translations as is": [
+            "השאר את התרגומים הקיימים כפי שהם"
+         ],
+         "You chose to review translations before publishing.": [
+            "בחרת לבדוק תרגומים לפני פרסום."
+         ],
+         "If you retranslate content that's already published, the changes will be applied directly to live pages or posts.": [
+            "אם תתרגם מחדש תוכן שכבר פורסם, השינויים יוחלו ישירות על דפים או פוסטים פעילים."
+         ],
+         "This also updates the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "זה גם מעדכן את זיכרון התרגום של האתר שלך. קרא עוד על <a href=\"%s\" target=\"_blank\" >זיכרון תרגום</a>"
+         ],
+         "Allows you to re-translate your content and update the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "מאפשר לך לתרגם מחדש את התוכן שלך ולעדכן את זיכרון התרגום של האתר שלך. קרא עוד על <a href=\"%s\" target=\"_blank\" >זיכרון תרגום</a>"
+         ],
+         "Allows your translators to re-translate your content and update the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "מאפשר למתרגמים שלך לתרגם מחדש את התוכן שלך ולעדכן את זיכרון התרגום של האתר שלך. קרא עוד על <a href=\"%s\" target=\"_blank\" >זיכרון תרגום</a>"
+         ],
+         "HINT: You can add a Note for translators in the table above with special instructions.": [
+            "רמז: תוכל להוסיף הערה למתרגמים בטבלה שלמעלה עם הוראות מיוחדות."
+         ],
+         "Translate automatically": [
+            "תרגם אוטומטית"
+         ],
+         "How do you want to translate?": [
+            "כיצד ברצונך לתרגם?"
+         ],
+         "Assign to a translator": [
+            "הקצה למתרגם"
+         ],
+         "Translate myself": [
+            "תרגם בעצמי"
+         ],
+         "You do not need translation credits to translate content yourself.": [
+            "אינך זקוק לנקודות זכות תרגום כדי לתרגם תוכן בעצמך."
+         ],
+         "You can only automatically translate content from your site's default language (English), to your site's other languages. Deselect content in your site's secondary languages to proceed.": [
+            "ניתן לתרגם אוטומטית תוכן רק משפת ברירת המחדל של האתר שלך (אנגלית) לשפות האחרות של האתר שלך. בטל את הבחירה בתוכן בשפות המשניות של האתר שלך כדי להמשיך."
+         ],
+         "You can only automatically translate content from your primary language (%s) to other languages. Use the language switcher at the top of this page to switch to %s.": [
+            "ניתן לתרגם אוטומטית תוכן רק מהשפה הראשית שלך (%s) לשפות אחרות. השתמש במחליף השפות בראש העמוד הזה כדי לעבור ל-%s."
+         ],
+         "Selected content includes items that were originally created in this language. Deselect these items to proceed.": [
+            "התוכן שנבחר כולל פריטים שנוצרו במקור בשפה זו. בטל את הבחירה בפריטים אלה כדי להמשיך."
+         ],
+         "Add to Translation Queue": [
+            "הוסף לתור התרגום"
+         ],
+         "Select a post or page to translate": [
+            "בחר פוסט או עמוד לתרגום"
+         ],
+         "Translate or duplicate content to at least one language": [
+            "תרגם או שכפל תוכן לפחות לשפה אחת"
+         ],
+         "Choose how you want to translate your content": [
+            "בחר כיצד ברצונך לתרגם את התוכן שלך"
+         ],
+         "Selected content is already translated": [
+            "התוכן שנבחר כבר מתורגם"
+         ],
+         "Selected content includes items in a language other than your site's default language.": [
+            "התוכן שנבחר כולל פריטים בשפה שאינה שפת ברירת המחדל של האתר שלך."
+         ],
+         "Choose at least one translation action": [
+            "בחר לפחות פעולת תרגום אחת"
+         ],
+         "Duplicate": [
+            "שכפל"
+         ],
+         "Start translating and duplicating": [
+            "התחל לתרגם ולשכפל"
+         ],
+         "Add to Translation Basket and duplicate": [
+            "הוסף לסל התרגום ושכפל"
+         ],
+         "Add to Translation Queue and duplicate": [
+            "הוסף לתור התרגום ושכפל"
+         ],
+         "Start translating": [
+            "התחל לתרגם"
+         ],
+         "Add to Translation Basket": [
+            "הוסף לסל התרגום"
+         ],
+         "One more thing...": [
+            "עוד דבר אחד..."
+         ],
+         "What would you like to do when your content has finished translating automatically?": [
+            "מה ברצונך לעשות כאשר התוכן שלך יסיים להתרגם אוטומטית?"
+         ],
+         "Save settings": [
+            "שמור הגדרות"
+         ],
+         "This setting will apply to all future automatic translations. You can change this anytime in WPML → Settings.": [
+            "הגדרה זו תחול על כל התרגומים האוטומטיים העתידיים. תוכל לשנות זאת בכל עת ב-WPML ← הגדרות."
+         ],
+         "Translate": [
+            "תרגם"
+         ],
+         "Duplicate content": [
+            "שכפל תוכן"
+         ],
+         "Do nothing": [
+            "אל תעשה כלום"
+         ],
+         "You need credits to use automatic translation.": [
+            "אתה זקוק לנקודות זכות כדי להשתמש בתרגום אוטומטי."
+         ],
+         "Finish setting up %s on your site": [
+            "סיים את הגדרת %s באתר שלך"
+         ],
+         "You need to authenticate %s to send them content for translation. Visit the %s to finish the setup.": [
+            "עליך לאמת את %s כדי לשלוח להם תוכן לתרגום. בקר ב-%s כדי לסיים את ההגדרה."
+         ],
+         "Connection Error. Please wait a minute and reload this page. If the problem continues, please <a>contact WPML support</a>.": [
+            "שגיאת חיבור. אנא המתן דקה וטען מחדש עמוד זה. אם הבעיה נמשכת, אנא <a>צור קשר עם התמיכה של WPML</a>."
+         ],
+         "Add a translator to use %s.": [
+            "הוסף מתרגם כדי להשתמש ב-%s."
+         ],
+         "To send content to %s for translation, go to the %s to add a translator on your site.": [
+            "כדי לשלוח תוכן ל-%s לתרגום, עבור ל-%s כדי להוסיף מתרגם באתר שלך."
+         ],
+         "Your selected automatic translation engines do not support the following language(s): %s. Read more about <a>choosing a translation engine</a>.": [
+            "מנועי התרגום האוטומטי שבחרת אינם תומכים בשפה/ות הבאה/ות: %s. קרא עוד על <a>בחירת מנוע תרגום</a>."
+         ],
+         "Some of the selected content is already being translated. This will cancel any in-progress translations.": [
+            "חלק מהתוכן שנבחר כבר נמצא בתהליך תרגום. פעולה זו תבטל כל תרגום שנמצא בתהליך."
+         ],
+         "Any existing content (translations) will be overwritten when creating duplicates.": [
+            "כל תוכן קיים (תרגומים) יימחק בעת יצירת עותקים."
+         ],
+         "When duplicating content, please first duplicate parent pages to maintain the site's hierarchy.": [
+            "בעת שכפול תוכן, אנא שכפל תחילה את דפי האב כדי לשמור על היררכיית האתר."
+         ],
+         "To assign content to a translator, first <a href=\"%s\" target=\"_blank\">add a translator</a> or <a href=\"%s\" target=\"_blank\">connect to a translation service</a>.": [
+            "כדי להקצות תוכן למתרגם, תחילה <a href=\"%s\" target=\"_blank\">הוסף מתרגם</a> או <a href=\"%s\" target=\"_blank\">התחבר לשירות תרגום</a>."
+         ],
+         "Translators Tab": [
+            "כרטיסיית מתרגמים"
+         ]
+      }
+   }
+}

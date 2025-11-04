@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "您的网站现在满足 WPML 的最低要求"
+         ],
+         "Start WPML Setup": [
+            "开始 WPML 设置"
+         ],
+         "Need Help?": [
+            "需要帮助？"
+         ],
+         "Contact our support team": [
+            "联系我们的支持团队"
+         ],
+         " and we'll guide you through it step by step.": [
+            " 我们将一步一步指导您完成。"
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "您的网站不满足 WPML 的最低要求"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "确保您的网站通过满足这些简单的最低要求来顺利运行 WPML。"
+         ],
+         "Re-check Now": [
+            "立即重新检查"
+         ],
+         "Skip for now": [
+            "暂时跳过"
+         ]
+      }
+   }
+}

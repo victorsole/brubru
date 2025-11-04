@@ -1,0 +1,222 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "vi"
+         },
+         "Close": [
+            ""
+         ],
+         "Please take a screenshot of this message and report this issue to <a>WPML support</a>.": [
+            ""
+         ],
+         "WPML has automatically unregistered your site as part of this wizard. After you close it, you’ll see a prompt to register the site again. This is expected, your content and translations are safe.": [
+            "WPML đã tự động hủy đăng ký trang web của bạn như một phần của trình hướng dẫn này. Sau khi bạn đóng nó, bạn sẽ thấy lời nhắc đăng ký lại trang web. Điều này là bình thường, nội dung và bản dịch của bạn vẫn an toàn."
+         ],
+         "You’re all set": [
+            ""
+         ],
+         "This site is a copy of the original site %s and it doesn’t currently have any automatic translation credits.": [
+            "Trang web này là bản sao của trang web gốc %s và hiện tại không có bất kỳ tín dụng dịch tự động nào."
+         ],
+         "If you’d like to use automatic translation here in the future, you can either <a1>add credits</a1> or <a2>share them from the original site</a2>.": [
+            "Nếu bạn muốn sử dụng dịch tự động ở đây trong tương lai, bạn có thể <a1>thêm tín dụng</a1> hoặc <a2>chia sẻ chúng từ trang web gốc</a2>."
+         ],
+         "There was an error checking for credits to share. Please take a screenshot of this message and report it in <a>WPML support</a>.": [
+            ""
+         ],
+         "To link %s and %s so they share automatic translation credits, follow these steps:": [
+            "Để liên kết %s và %s để chúng chia sẻ tín dụng dịch tự động, hãy làm theo các bước sau:"
+         ],
+         "Open <a>this link</a> to access the original site’s admin area. (You can’t access this screen by visiting %s directly.)": [
+            "Mở <a>liên kết này</a> để truy cập khu vực quản trị của trang web gốc. (Bạn không thể truy cập màn hình này bằng cách truy cập trực tiếp %s.)"
+         ],
+         "Click <b>Copy migration code</b> on that page.": [
+            "Nhấp vào <b>Sao chép mã di chuyển</b> trên trang đó."
+         ],
+         "Paste the code below to complete the connection.": [
+            "Dán mã bên dưới để hoàn tất kết nối."
+         ],
+         "Migration code": [
+            ""
+         ],
+         "Continue": [
+            ""
+         ],
+         "Go back": [
+            ""
+         ],
+         "Connect Automatic Translation Credits": [
+            "Kết nối tín dụng dịch tự động"
+         ],
+         "WPML was unable to copy your site's translations, translation memory, and glossary to this new URL.": [
+            ""
+         ],
+         "Error with copying translation information to new URL": [
+            ""
+         ],
+         "This site and its copy on %s are now sharing automatic translation credits.": [
+            "Trang web này và bản sao của nó trên %s hiện đang chia sẻ tín dụng dịch tự động."
+         ],
+         "Any credits you add to one site will be available on both. If you stop using this site, your credits will remain safe.": [
+            "Bất kỳ tín dụng nào bạn thêm vào một trang web sẽ có sẵn trên cả hai. Nếu bạn ngừng sử dụng trang web này, tín dụng của bạn vẫn sẽ an toàn."
+         ],
+         "WPML was unable to connect your old and new URLs to share automatic translation credits.": [
+            ""
+         ],
+         "Error with sharing automatic translation credits": [
+            ""
+         ],
+         "The site on %s has %d credits for automatic translation. Do you want to share these credits with this new site %s?": [
+            "Trang web trên %s có %d tín dụng cho dịch tự động. Bạn có muốn chia sẻ những tín dụng này với trang web mới %s không?"
+         ],
+         "The site on %s has a pay-as-you-go subscription for automatic translation. Do you want to share these credits between %s and this new location (%s)?": [
+            ""
+         ],
+         "Yes (recommended)": [
+            ""
+         ],
+         "In the next step, you’ll approve the use of same credits on both sites.": [
+            "Trong bước tiếp theo, bạn sẽ phê duyệt việc sử dụng cùng một tín dụng trên cả hai trang web."
+         ],
+         "No": [
+            ""
+         ],
+         "You’ll need to assign new credits or set up pay-as-you-go.": [
+            "Bạn sẽ cần gán tín dụng mới hoặc thiết lập thanh toán theo mức sử dụng."
+         ],
+         "What happens when you share credits between sites?": [
+            "Điều gì xảy ra khi bạn chia sẻ tín dụng giữa các trang web?"
+         ],
+         "Translation credits for this site": [
+            ""
+         ],
+         "WPML detected a change in your site’s URL": [
+            "WPML phát hiện thay đổi trong URL trang web của bạn"
+         ],
+         "You can now continue translating content on this site as usual.": [
+            "Bây giờ bạn có thể tiếp tục dịch nội dung trên trang web này như bình thường."
+         ],
+         "Just a reminder: there shouldn’t be another copy of this site running at %s. If there is, automatic translation won’t work correctly on that site.": [
+            "Chỉ để nhắc nhở: không nên có bản sao khác của trang web này đang chạy tại %s. Nếu có, dịch tự động sẽ không hoạt động chính xác trên trang web đó."
+         ],
+         "You indicated that the original site at %s is no longer active. This means:": [
+            "Bạn đã chỉ ra rằng trang web gốc tại %s không còn hoạt động nữa. Điều này có nghĩa là:"
+         ],
+         "Automatic translation will no longer work on the old site": [
+            "Dịch tự động sẽ không còn hoạt động trên trang web cũ"
+         ],
+         "Accessing the old site may trigger warnings on this site": [
+            "Việc truy cập trang web cũ có thể kích hoạt cảnh báo trên trang web này"
+         ],
+         "Please confirm:": [
+            "Vui lòng xác nhận:"
+         ],
+         "I understand and confirm that <b>%s</b> is no longer in use.": [
+            "Tôi hiểu và xác nhận rằng <b>%s</b> không còn được sử dụng nữa."
+         ],
+         "Back": [
+            ""
+         ],
+         "Please Confirm": [
+            "Vui lòng xác nhận"
+         ],
+         "WPML was unable to update our records with your new URL.": [
+            ""
+         ],
+         "Error with moving translation information to new URL": [
+            ""
+         ],
+         "It looks like this site was previously at %s and is now running on %s.": [
+            "Có vẻ như trang web này trước đây ở %s và hiện đang chạy trên %s."
+         ],
+         "Is the original site still available at %s?": [
+            "Trang web gốc vẫn còn khả dụng tại %s?"
+         ],
+         "Yes": [
+            ""
+         ],
+         "The original site is still running and this is just a copy of the original site": [
+            "Trang web gốc vẫn đang chạy và đây chỉ là một bản sao của trang web gốc"
+         ],
+         "I moved the site to this new address and this is now the main site": [
+            "Tôi đã di chuyển trang web đến địa chỉ mới này và đây hiện là trang web chính"
+         ],
+         "WPML Detected a New Site Address": [
+            "WPML Phát hiện Địa chỉ Trang web Mới"
+         ],
+         "How to manage translations when migrating from development to production": [
+            "Cách quản lý bản dịch khi di chuyển từ môi trường phát triển sang môi trường sản xuất"
+         ],
+         "Looks like this site is a copy of a different site, or moved to a different URL. Please contact your translation manager to update Translation Management plugin configuration.": [
+            ""
+         ],
+         "Site Moved or Copied - Action Required": [
+            ""
+         ],
+         "You or someone else moved this site to %s. Please keep in mind that:": [
+            ""
+         ],
+         "Translations that you do at %s will not appear on this site.": [
+            ""
+         ],
+         "You cannot edit translations on this site.": [
+            ""
+         ],
+         "The site at %s is using the same credits for automatic translation as this site.": [
+            ""
+         ],
+         "If you didn't intend to move this site to %s, you can <a>indicate that this site should be at %s</a>.": [
+            ""
+         ],
+         "This site has moved to a new location": [
+            ""
+         ],
+         "If you prefer not to move this site, you can <a>mark it as a copy</a> and enable automatic translation for it.": [
+            ""
+         ],
+         "Moving the site back here will mean that you will be able to translate on this domain again, but you will not be able to update translations at %s.": [
+            ""
+         ],
+         "Yes - move back here": [
+            ""
+         ],
+         "No - keep the site on %s": [
+            ""
+         ],
+         "Are you sure that this site should run on %s and not %s?": [
+            ""
+         ],
+         "WPML noticed that your site is being accessed from a different domain or URL.": [
+            "WPML nhận thấy rằng trang web của bạn đang được truy cập từ một tên miền hoặc URL khác."
+         ],
+         "To make sure everything continues working correctly, including automatic translation and site registration, we need to verify and update your site settings.": [
+            "Để đảm bảo mọi thứ tiếp tục hoạt động chính xác, bao gồm dịch tự động và đăng ký trang web, chúng tôi cần xác minh và cập nhật cài đặt trang web của bạn."
+         ],
+         "This will only take a moment.": [
+            "Điều này sẽ chỉ mất một chút thời gian."
+         ],
+         "Start Migration": [
+            "Bắt đầu di chuyển"
+         ],
+         "If you didn't change your main domain and only logged in through a secondary domain, select this option.": [
+            "Nếu bạn không thay đổi tên miền chính và chỉ đăng nhập thông qua một tên miền phụ, hãy chọn tùy chọn này."
+         ],
+         "Something went wrong": [
+            "Đã xảy ra lỗi"
+         ],
+         "I just logged in from a secondary domain": [
+            "Tôi vừa đăng nhập từ một tên miền phụ"
+         ],
+         "You're all set!": [
+            "Bạn đã hoàn tất!"
+         ],
+         "This domain is now registered as a secondary domain and WPML will recognize it correctly.": [
+            "Tên miền này hiện đã được đăng ký là tên miền phụ và WPML sẽ nhận diện nó một cách chính xác."
+         ]
+      }
+   }
+}

@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Please wait, applying translation..": [
+            "Παρακαλώ περιμένετε, γίνεται εφαρμογή της μετάφρασης.."
+         ],
+         "There was an error in applying translation.": [
+            "Προέκυψε σφάλμα κατά την εφαρμογή της μετάφρασης."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "Κάποιος ήδη εξετάζει αυτή τη μετάφραση. Παρακαλώ δοκιμάστε ξανά αργότερα."
+         ]
+      }
+   }
+}

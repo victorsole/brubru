@@ -1,0 +1,222 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "Close": [
+            ""
+         ],
+         "Please take a screenshot of this message and report this issue to <a>WPML support</a>.": [
+            ""
+         ],
+         "WPML has automatically unregistered your site as part of this wizard. After you close it, you’ll see a prompt to register the site again. This is expected, your content and translations are safe.": [
+            "WPML har automatiskt avregistrerat din webbplats som en del av den här guiden. Efter att du stänger den kommer du att se en uppmaning att registrera webbplatsen igen. Detta är förväntat, ditt innehåll och dina översättningar är säkra."
+         ],
+         "You’re all set": [
+            ""
+         ],
+         "This site is a copy of the original site %s and it doesn’t currently have any automatic translation credits.": [
+            "Den här webbplatsen är en kopia av originalwebbplatsen %s och har för närvarande inga automatiska översättningskrediter."
+         ],
+         "If you’d like to use automatic translation here in the future, you can either <a1>add credits</a1> or <a2>share them from the original site</a2>.": [
+            "Om du vill använda automatisk översättning här i framtiden kan du antingen <a1>lägga till krediter</a1> eller <a2>dela dem från originalwebbplatsen</a2>."
+         ],
+         "There was an error checking for credits to share. Please take a screenshot of this message and report it in <a>WPML support</a>.": [
+            ""
+         ],
+         "To link %s and %s so they share automatic translation credits, follow these steps:": [
+            "För att länka %s och %s så att de delar automatiska översättningskrediter, följ dessa steg:"
+         ],
+         "Open <a>this link</a> to access the original site’s admin area. (You can’t access this screen by visiting %s directly.)": [
+            "Öppna <a>den här länken</a> för att få tillgång till originalwebbplatsens adminområde. (Du kan inte komma åt den här skärmen genom att besöka %s direkt.)"
+         ],
+         "Click <b>Copy migration code</b> on that page.": [
+            "Klicka på <b>Kopiera migreringskod</b> på den sidan."
+         ],
+         "Paste the code below to complete the connection.": [
+            "Klistra in koden nedan för att slutföra anslutningen."
+         ],
+         "Migration code": [
+            ""
+         ],
+         "Continue": [
+            ""
+         ],
+         "Go back": [
+            ""
+         ],
+         "Connect Automatic Translation Credits": [
+            "Anslut automatiska översättningskrediter"
+         ],
+         "WPML was unable to copy your site's translations, translation memory, and glossary to this new URL.": [
+            ""
+         ],
+         "Error with copying translation information to new URL": [
+            ""
+         ],
+         "This site and its copy on %s are now sharing automatic translation credits.": [
+            "Den här webbplatsen och dess kopia på %s delar nu automatiska översättningskrediter."
+         ],
+         "Any credits you add to one site will be available on both. If you stop using this site, your credits will remain safe.": [
+            "Alla krediter du lägger till på en webbplats kommer att vara tillgängliga på båda. Om du slutar använda den här webbplatsen kommer dina krediter att förbli säkra."
+         ],
+         "WPML was unable to connect your old and new URLs to share automatic translation credits.": [
+            ""
+         ],
+         "Error with sharing automatic translation credits": [
+            ""
+         ],
+         "The site on %s has %d credits for automatic translation. Do you want to share these credits with this new site %s?": [
+            "Webbplatsen på %s har %d krediter för automatisk översättning. Vill du dela dessa krediter med den här nya webbplatsen %s?"
+         ],
+         "The site on %s has a pay-as-you-go subscription for automatic translation. Do you want to share these credits between %s and this new location (%s)?": [
+            ""
+         ],
+         "Yes (recommended)": [
+            ""
+         ],
+         "In the next step, you’ll approve the use of same credits on both sites.": [
+            "I nästa steg kommer du att godkänna användningen av samma krediter på båda webbplatserna."
+         ],
+         "No": [
+            ""
+         ],
+         "You’ll need to assign new credits or set up pay-as-you-go.": [
+            "Du kommer att behöva tilldela nya krediter eller ställa in betala-när-du-går."
+         ],
+         "What happens when you share credits between sites?": [
+            "Vad händer när du delar krediter mellan webbplatser?"
+         ],
+         "Translation credits for this site": [
+            ""
+         ],
+         "WPML detected a change in your site’s URL": [
+            "WPML upptäckte en förändring i din webbplats URL"
+         ],
+         "You can now continue translating content on this site as usual.": [
+            "Du kan nu fortsätta att översätta innehåll på den här webbplatsen som vanligt."
+         ],
+         "Just a reminder: there shouldn’t be another copy of this site running at %s. If there is, automatic translation won’t work correctly on that site.": [
+            "Bara en påminnelse: det bör inte finnas någon annan kopia av den här webbplatsen som körs på %s. Om det finns det kommer automatisk översättning inte att fungera korrekt på den webbplatsen."
+         ],
+         "You indicated that the original site at %s is no longer active. This means:": [
+            "Du angav att originalwebbplatsen på %s inte längre är aktiv. Detta innebär:"
+         ],
+         "Automatic translation will no longer work on the old site": [
+            "Automatisk översättning kommer inte längre att fungera på den gamla webbplatsen"
+         ],
+         "Accessing the old site may trigger warnings on this site": [
+            "Åtkomst till den gamla webbplatsen kan utlösa varningar på den här webbplatsen"
+         ],
+         "Please confirm:": [
+            "Vänligen bekräfta:"
+         ],
+         "I understand and confirm that <b>%s</b> is no longer in use.": [
+            "Jag förstår och bekräftar att <b>%s</b> inte längre används."
+         ],
+         "Back": [
+            ""
+         ],
+         "Please Confirm": [
+            "Vänligen bekräfta"
+         ],
+         "WPML was unable to update our records with your new URL.": [
+            ""
+         ],
+         "Error with moving translation information to new URL": [
+            ""
+         ],
+         "It looks like this site was previously at %s and is now running on %s.": [
+            "Det verkar som om den här webbplatsen tidigare fanns på %s och nu körs på %s."
+         ],
+         "Is the original site still available at %s?": [
+            "Är originalwebbplatsen fortfarande tillgänglig på %s?"
+         ],
+         "Yes": [
+            ""
+         ],
+         "The original site is still running and this is just a copy of the original site": [
+            "Originalwebbplatsen körs fortfarande och detta är bara en kopia av originalwebbplatsen"
+         ],
+         "I moved the site to this new address and this is now the main site": [
+            "Jag flyttade webbplatsen till denna nya adress och detta är nu huvudwebbplatsen"
+         ],
+         "WPML Detected a New Site Address": [
+            "WPML upptäckte en ny webbplatsadress"
+         ],
+         "How to manage translations when migrating from development to production": [
+            "Hur man hanterar översättningar vid migrering från utveckling till produktion"
+         ],
+         "Looks like this site is a copy of a different site, or moved to a different URL. Please contact your translation manager to update Translation Management plugin configuration.": [
+            ""
+         ],
+         "Site Moved or Copied - Action Required": [
+            ""
+         ],
+         "You or someone else moved this site to %s. Please keep in mind that:": [
+            ""
+         ],
+         "Translations that you do at %s will not appear on this site.": [
+            ""
+         ],
+         "You cannot edit translations on this site.": [
+            ""
+         ],
+         "The site at %s is using the same credits for automatic translation as this site.": [
+            ""
+         ],
+         "If you didn't intend to move this site to %s, you can <a>indicate that this site should be at %s</a>.": [
+            ""
+         ],
+         "This site has moved to a new location": [
+            ""
+         ],
+         "If you prefer not to move this site, you can <a>mark it as a copy</a> and enable automatic translation for it.": [
+            ""
+         ],
+         "Moving the site back here will mean that you will be able to translate on this domain again, but you will not be able to update translations at %s.": [
+            ""
+         ],
+         "Yes - move back here": [
+            ""
+         ],
+         "No - keep the site on %s": [
+            ""
+         ],
+         "Are you sure that this site should run on %s and not %s?": [
+            ""
+         ],
+         "WPML noticed that your site is being accessed from a different domain or URL.": [
+            "WPML har upptäckt att din webbplats nås från en annan domän eller URL."
+         ],
+         "To make sure everything continues working correctly, including automatic translation and site registration, we need to verify and update your site settings.": [
+            "För att säkerställa att allt fortsätter att fungera korrekt, inklusive automatisk översättning och webbplatsregistrering, behöver vi verifiera och uppdatera dina webbplatsinställningar."
+         ],
+         "This will only take a moment.": [
+            "Detta tar bara en stund."
+         ],
+         "Start Migration": [
+            "Starta migrering"
+         ],
+         "If you didn't change your main domain and only logged in through a secondary domain, select this option.": [
+            "Om du inte ändrade din huvuddomän och endast loggade in via en sekundär domän, välj detta alternativ."
+         ],
+         "Something went wrong": [
+            "Något gick fel"
+         ],
+         "I just logged in from a secondary domain": [
+            "Jag loggade bara in från en sekundär domän"
+         ],
+         "You're all set!": [
+            "Du är klar!"
+         ],
+         "This domain is now registered as a secondary domain and WPML will recognize it correctly.": [
+            "Denna domän är nu registrerad som en sekundär domän och WPML kommer att känna igen den korrekt."
+         ]
+      }
+   }
+}

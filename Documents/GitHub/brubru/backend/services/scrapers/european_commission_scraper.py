@@ -1,0 +1,8 @@
+"""European Commission Scraper - Template Implementation"""
+from .base_scraper import BaseScraper
+class EuropeanCommissionScraper(BaseScraper):
+    def __init__(self, **kwargs):
+        super().__init__(base_url="https://commission.europa.eu/index_en", name="EuropeanCommission", **kwargs)
+    async def search(self, query: str, **kwargs): return []
+    async def get_document(self, document_id: str): return {}
+    async def get_latest_updates(self, limit: int = 10): return []

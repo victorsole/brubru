@@ -1,0 +1,51 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "tr"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "WPML'nin Gelişmiş Çeviri Editörü ile Daha Fazla Özellik Edinin"
+         ],
+         "Close banner": [
+            "Afişi kapat"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "Eski bir araç olan Klasik Çeviri Editörü'nü kullanıyorsunuz ve Gelişmiş Çeviri Editörümüzün sunduğu birçok özellik ve verimlilikten mahrum kalıyorsunuz:"
+         ],
+         "Translation Memory": [
+            "Çeviri belleği"
+         ],
+         "HTML Protection": [
+            "HTML Koruması"
+         ],
+         "Glossary": [
+            "Sözlük"
+         ],
+         "Spellchecker": [
+            "Yazım denetleyici"
+         ],
+         "AI Assistant": [
+            "Yapay Zeka Asistanı"
+         ],
+         "Automatic Translation": [
+            "Otomatik çeviri"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "Daha hızlı, daha uygun ve güvenilir bir çeviri deneyimi için şimdi geçiş yapın."
+         ],
+         "Switch Now": [
+            "Şimdi geçiş yap"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "Gelişmiş çeviri editörü hakkında daha fazla bilgi edinin"
+         ],
+         "Learn More": [
+            "Daha fazla bilgi"
+         ]
+      }
+   }
+}

@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "PostHog Integration": [
+            "PostHog集成"
+         ],
+         "PostHog is running on your site": [
+            "PostHog正在您的网站上运行"
+         ],
+         "Enable PostHog to help us improve our product": [
+            "启用PostHog以帮助我们改进产品"
+         ],
+         "your PostHog session ID is: ": [
+            "您的PostHog会话ID是： "
+         ]
+      }
+   }
+}

@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr"
+         },
+         "PostHog Integration": [
+            "Intégration PostHog"
+         ],
+         "PostHog is running on your site": [
+            "PostHog est en cours d'exécution sur votre site"
+         ],
+         "Enable PostHog to help us improve our product": [
+            "Activez PostHog pour nous aider à améliorer notre produit"
+         ],
+         "your PostHog session ID is: ": [
+            "votre ID de session PostHog est : "
+         ]
+      }
+   }
+}

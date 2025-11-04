@@ -1,0 +1,193 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:45+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/config-admin-pages.php:126
+msgid "Translation Dashboard"
+msgstr "Çeviri panosu"
+
+#: src/config-admin-pages.php:311
+msgid "Automatic translation settings"
+msgstr "Otomatik çeviri ayarları"
+
+#: src/config-admin-pages.php:353
+msgid "WPML Setup"
+msgstr "WPML Kurulumu"
+
+#: src/config-admin-pages.php:382
+msgid "WPML Support"
+msgstr "WPML Desteği"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:27
+msgid "Database Version"
+msgstr "Veritabanı sürümü"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:36
+msgid "Your %sMySQL%s version must be at least %s. Alternatively, you can use %sMariaDb%s version %s or higher."
+msgstr "%sMySQL%s sürümünüz en az %s olmalıdır. Alternatif olarak, %sMariaDb%s sürüm %s veya üstünü kullanabilirsiniz."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:53
+msgid "Contact your hosting provider to upgrade MySQL %s or higher."
+msgstr "MySQL'i %s veya daha yüksek bir sürüme yükseltmek için hosting sağlayıcınızla iletişime geçin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:31
+msgid "PHP eval() Function"
+msgstr "PHP eval() Fonksiyonu"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:39
+msgid "The PHP eval() function is disabled by the Suhosin extension. WPML requires this function when Suhosin is enabled."
+msgstr "PHP eval() fonksiyonu Suhosin uzantısı tarafından devre dışı bırakılmış. WPML, Suhosin etkinleştirildiğinde bu fonksiyona ihtiyaç duyar."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:47
+msgid "Contact your hosting provider to enable the eval() function in the Suhosin configuration or disable the Suhosin extension."
+msgstr "Eval() fonksiyonunu Suhosin yapılandırmasında etkinleştirmek veya Suhosin eklentisini devre dışı bırakmak için hosting sağlayıcınızla iletişime geçin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:31
+msgid "libxml PHP Module"
+msgstr "libxml PHP Modülü"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:40
+msgid "WPML requires libxml PHP Module version %s or higher to process XML correctly using SimpleXML."
+msgstr "WPML, XML'i SimpleXML kullanarak doğru şekilde işlemek için libxml PHP Modülü sürüm %s veya daha yüksek bir sürüme ihtiyaç duyar."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:49
+msgid "Contact your hosting provider to upgrade the libxml PHP Module."
+msgstr "Libxml PHP Modülünü yükseltmek için hosting sağlayıcınızla iletişime geçin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:30
+msgid "Multibyte String Extension"
+msgstr "Çok baytlı dize eklentisi"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:39
+msgid "The %sMultibyte String extension%s is required to handle non-Latin character sets in WPML."
+msgstr "WPML'de Latin olmayan karakter setlerini işlemek için %sMultibyte String uzantısı%s gereklidir."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:49
+msgid "Contact your hosting provider to install the Multibyte String (mbstring) PHP extension."
+msgstr "Çok Baytlı Dize (mbstring) PHP eklentisini kurmak için hosting sağlayıcınızla iletişime geçin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:55
+msgid "Memory limit"
+msgstr "Bellek sınırı"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:65
+msgid "Your PHP memory limit is currently %s.  WPML requires at least %s to function properly."
+msgstr "PHP bellek limitiniz şu anda %s. WPML'nin düzgün çalışması için en az %s gereklidir."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:80
+msgid "To increase the memory limit, add this to the top of your %swp-config.php%s file:"
+msgstr "Bellek limitini artırmak için, %swp-config.php%s dosyanızın en üstüne şunu ekleyin:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:25
+msgid "PHP Version"
+msgstr "PHP Sürümü"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:34
+msgid "Your PHP version is outdated. WPML requires at least %s."
+msgstr "PHP sürümünüz güncel değil. WPML en az %s gerektirir."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:44
+msgid "Contact your hosting provider to upgrade PHP to version %s or higher."
+msgstr "PHP'yi %s veya daha yüksek bir sürüme yükseltmek için hosting sağlayıcınızla iletişime geçin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:31
+msgid "WordPress REST API"
+msgstr "WordPress REST API"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:41
+msgid "The WordPress REST API must be enabled for WPML to work correctly."
+msgstr "WPML'nin doğru çalışması için WordPress REST API'nin etkinleştirilmiş olması gerekir."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:49
+msgid "Ensure the REST API endpoint %s is reachable and that the WordPress REST API is enabled."
+msgstr "REST API uç noktası %s'nin erişilebilir olduğundan ve WordPress REST API'nin etkinleştirildiğinden emin olun."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:31
+msgid "SimpleXML Extension"
+msgstr "SimpleXML Eklentisi"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:40
+msgid "The %sSimpleXML extension%s is required to use %sXLIFF files%s in WPML. The libxml PHP Module must also be version 2.7.8 or higher."
+msgstr "WPML'de %sXLIFF dosyalarını%s kullanmak için %sSimpleXML uzantısı%s gereklidir. Ayrıca libxml PHP Modülü sürüm 2.7.8 veya daha yüksek olmalıdır."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:55
+msgid "Contact your hosting provider to install the SimpleXML PHP extension."
+msgstr "SimpleXML PHP eklentisini kurmak için hosting sağlayıcınızla iletişime geçin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:39
+msgid "PHP Stack Size"
+msgstr "PHP Yığın Boyutu"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:48
+msgid "WPML requires at least %s KB of PHP stack size on PHP 8.3 or higher."
+msgstr "WPML, PHP 8.3 veya daha yüksek sürümlerde en az %s KB PHP yığın boyutuna ihtiyaç duyar."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:58
+msgid "Add this to your %sphp.ini%s and restart your web server to set the required stack size:"
+msgstr "Gerekli yığın boyutunu ayarlamak için %sphp.ini%s dosyanıza şunu ekleyin ve web sunucunuzu yeniden başlatın:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:30
+msgid "WordPress Version"
+msgstr "WordPress Sürümü"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:39
+msgid "Your WordPress version is outdated. WPML requires at least %s. "
+msgstr "WordPress sürümünüz güncel değil. WPML en az %s gerektirir. "
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:50
+msgid "Please update your WordPress installation to version %s or higher."
+msgstr "Lütfen WordPress kurulumunuzu %s veya daha yüksek bir sürüme güncelleyin."
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:20
+msgid "Error getting credits"
+msgstr "Kredi alınırken hata oluştu"
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:39
+msgid "Error getting account balances"
+msgstr "Hesap bakiyeleri alınırken hata oluştu"
+
+#: src/Legacy/Component/ATE/Application/Query/Glossary.php:26
+msgid "Error getting glossary data"
+msgstr "Sözlük verileri alınırken hata oluştu"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:148
+msgid "Error fetching translation engines"
+msgstr "Çeviri motorları getirilirken hata oluştu"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:171
+msgid "Error fetching available formalities"
+msgstr "Mevcut resmiyet seviyeleri getirilirken hata oluştu"
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/ErrorMapper.php:32
+msgid "The jobs could not be created."
+msgstr "İşler oluşturulamadı."
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/UnsupportedLanguagesInTranslationService.php:43
+msgid "The selected translation service doesn't support the following languages: %s"
+msgstr "Seçilen çeviri hizmeti şu dilleri desteklemiyor: %s"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:310
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:311
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:312
+msgid "Other texts (Strings)"
+msgstr "Diğer metinler (Dizeler)"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/SendToTranslation/SendToTranslationController.php:48
+msgid "The request data for SendToTranslation is not valid."
+msgstr "SendToTranslation için istek verileri geçerli değil."
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/TranslateEverything/EnableController.php:45
+msgid "In order to translate automatically, you first need to enable WPML's Advanced Translation Editor"
+msgstr "Otomatik çeviri yapmak için öncelikle WPML'nin Gelişmiş Çeviri Düzenleyicisini etkinleştirmeniz gerekmektedir"

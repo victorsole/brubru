@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "he"
+         },
+         "Get a key for this site": [
+            "קבל מפתח לאתר זה"
+         ],
+         "Site key:": [
+            "מפתח האתר:"
+         ],
+         "Enter your site key here": [
+            "הזן את מפתח האתר שלך כאן"
+         ],
+         "Registering...": [
+            "רושם..."
+         ],
+         "Register": [
+            "הרשמה"
+         ],
+         "A New Site Key Is Required": [
+            "נדרש מפתח אתר חדש"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "כדי להמשיך להשתמש בתכונות WPML כמו תרגום אוטומטי ועדכוני תוספים, אנא רשום את האתר שלך מחדש. אל דאגה, התוכן והתרגומים הקיימים שלך בטוחים."
+         ],
+         "Site key registered successfully!": [
+            "מפתח האתר נרשם בהצלחה!"
+         ],
+         "Page will reload in %d seconds...": [
+            "העמוד יטען מחדש בעוד %d שניות..."
+         ],
+         "Registration failed. Please try again.": [
+            "הרישום נכשל. אנא נסה שוב."
+         ]
+      }
+   }
+}

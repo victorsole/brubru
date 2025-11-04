@@ -1,0 +1,222 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl"
+         },
+         "Close": [
+            ""
+         ],
+         "Please take a screenshot of this message and report this issue to <a>WPML support</a>.": [
+            ""
+         ],
+         "WPML has automatically unregistered your site as part of this wizard. After you close it, you’ll see a prompt to register the site again. This is expected, your content and translations are safe.": [
+            "WPML heeft je site automatisch afgemeld als onderdeel van deze wizard. Nadat je deze sluit, zie je een melding om de site opnieuw te registreren. Dit is normaal, je inhoud en vertalingen zijn veilig."
+         ],
+         "You’re all set": [
+            ""
+         ],
+         "This site is a copy of the original site %s and it doesn’t currently have any automatic translation credits.": [
+            "Deze site is een kopie van de originele site %s en heeft momenteel geen automatische vertaalkredieten."
+         ],
+         "If you’d like to use automatic translation here in the future, you can either <a1>add credits</a1> or <a2>share them from the original site</a2>.": [
+            "Als je in de toekomst hier automatische vertaling wilt gebruiken, kun je ofwel <a1>kredieten toevoegen</a1> of <a2>deze delen vanaf de originele site</a2>."
+         ],
+         "There was an error checking for credits to share. Please take a screenshot of this message and report it in <a>WPML support</a>.": [
+            ""
+         ],
+         "To link %s and %s so they share automatic translation credits, follow these steps:": [
+            "Volg deze stappen om %s en %s te koppelen zodat ze automatische vertaalkredieten delen:"
+         ],
+         "Open <a>this link</a> to access the original site’s admin area. (You can’t access this screen by visiting %s directly.)": [
+            "Open <a>deze link</a> om toegang te krijgen tot het beheerdersgedeelte van de originele site. (Je kunt dit scherm niet bereiken door %s direct te bezoeken.)"
+         ],
+         "Click <b>Copy migration code</b> on that page.": [
+            "Klik op die pagina op <b>Migratiecode kopiëren</b>."
+         ],
+         "Paste the code below to complete the connection.": [
+            "Plak de code hieronder om de verbinding te voltooien."
+         ],
+         "Migration code": [
+            ""
+         ],
+         "Continue": [
+            ""
+         ],
+         "Go back": [
+            ""
+         ],
+         "Connect Automatic Translation Credits": [
+            "Automatische vertaalkredieten verbinden"
+         ],
+         "WPML was unable to copy your site's translations, translation memory, and glossary to this new URL.": [
+            ""
+         ],
+         "Error with copying translation information to new URL": [
+            ""
+         ],
+         "This site and its copy on %s are now sharing automatic translation credits.": [
+            "Deze site en de kopie op %s delen nu automatische vertaalkredieten."
+         ],
+         "Any credits you add to one site will be available on both. If you stop using this site, your credits will remain safe.": [
+            "Alle kredieten die je aan één site toevoegt, zijn beschikbaar op beide. Als je stopt met het gebruik van deze site, blijven je kredieten veilig."
+         ],
+         "WPML was unable to connect your old and new URLs to share automatic translation credits.": [
+            ""
+         ],
+         "Error with sharing automatic translation credits": [
+            ""
+         ],
+         "The site on %s has %d credits for automatic translation. Do you want to share these credits with this new site %s?": [
+            "De site op %s heeft %d kredieten voor automatische vertaling. Wil je deze kredieten delen met deze nieuwe site %s?"
+         ],
+         "The site on %s has a pay-as-you-go subscription for automatic translation. Do you want to share these credits between %s and this new location (%s)?": [
+            ""
+         ],
+         "Yes (recommended)": [
+            ""
+         ],
+         "In the next step, you’ll approve the use of same credits on both sites.": [
+            "In de volgende stap keur je het gebruik van dezelfde kredieten op beide sites goed."
+         ],
+         "No": [
+            ""
+         ],
+         "You’ll need to assign new credits or set up pay-as-you-go.": [
+            "Je moet nieuwe kredieten toewijzen of pay-as-you-go instellen."
+         ],
+         "What happens when you share credits between sites?": [
+            "Wat gebeurt er als je kredieten tussen sites deelt?"
+         ],
+         "Translation credits for this site": [
+            ""
+         ],
+         "WPML detected a change in your site’s URL": [
+            "WPML heeft een wijziging in de URL van je site gedetecteerd"
+         ],
+         "You can now continue translating content on this site as usual.": [
+            "Je kunt nu doorgaan met het vertalen van inhoud op deze site zoals gebruikelijk."
+         ],
+         "Just a reminder: there shouldn’t be another copy of this site running at %s. If there is, automatic translation won’t work correctly on that site.": [
+            "Ter herinnering: er zou geen andere kopie van deze site actief moeten zijn op %s. Als dat wel het geval is, zal automatische vertaling op die site niet correct werken."
+         ],
+         "You indicated that the original site at %s is no longer active. This means:": [
+            "Je hebt aangegeven dat de originele site op %s niet langer actief is. Dit betekent:"
+         ],
+         "Automatic translation will no longer work on the old site": [
+            "Automatische vertaling zal niet langer werken op de oude site"
+         ],
+         "Accessing the old site may trigger warnings on this site": [
+            "Toegang tot de oude site kan waarschuwingen op deze site veroorzaken"
+         ],
+         "Please confirm:": [
+            "Bevestig alsjeblieft:"
+         ],
+         "I understand and confirm that <b>%s</b> is no longer in use.": [
+            "Ik begrijp en bevestig dat <b>%s</b> niet langer in gebruik is."
+         ],
+         "Back": [
+            ""
+         ],
+         "Please Confirm": [
+            "Bevestig alsjeblieft"
+         ],
+         "WPML was unable to update our records with your new URL.": [
+            ""
+         ],
+         "Error with moving translation information to new URL": [
+            ""
+         ],
+         "It looks like this site was previously at %s and is now running on %s.": [
+            "Het lijkt erop dat deze site voorheen op %s stond en nu op %s draait."
+         ],
+         "Is the original site still available at %s?": [
+            "Is de originele site nog steeds beschikbaar op %s?"
+         ],
+         "Yes": [
+            ""
+         ],
+         "The original site is still running and this is just a copy of the original site": [
+            "De originele site draait nog steeds en dit is slechts een kopie van de originele site"
+         ],
+         "I moved the site to this new address and this is now the main site": [
+            "Ik heb de site naar dit nieuwe adres verplaatst en dit is nu de hoofdsite"
+         ],
+         "WPML Detected a New Site Address": [
+            "WPML heeft een nieuw siteadres gedetecteerd"
+         ],
+         "How to manage translations when migrating from development to production": [
+            "Hoe vertalingen te beheren bij migratie van ontwikkeling naar productie"
+         ],
+         "Looks like this site is a copy of a different site, or moved to a different URL. Please contact your translation manager to update Translation Management plugin configuration.": [
+            ""
+         ],
+         "Site Moved or Copied - Action Required": [
+            ""
+         ],
+         "You or someone else moved this site to %s. Please keep in mind that:": [
+            ""
+         ],
+         "Translations that you do at %s will not appear on this site.": [
+            ""
+         ],
+         "You cannot edit translations on this site.": [
+            ""
+         ],
+         "The site at %s is using the same credits for automatic translation as this site.": [
+            ""
+         ],
+         "If you didn't intend to move this site to %s, you can <a>indicate that this site should be at %s</a>.": [
+            ""
+         ],
+         "This site has moved to a new location": [
+            ""
+         ],
+         "If you prefer not to move this site, you can <a>mark it as a copy</a> and enable automatic translation for it.": [
+            ""
+         ],
+         "Moving the site back here will mean that you will be able to translate on this domain again, but you will not be able to update translations at %s.": [
+            ""
+         ],
+         "Yes - move back here": [
+            ""
+         ],
+         "No - keep the site on %s": [
+            ""
+         ],
+         "Are you sure that this site should run on %s and not %s?": [
+            ""
+         ],
+         "WPML noticed that your site is being accessed from a different domain or URL.": [
+            "WPML heeft opgemerkt dat je site wordt benaderd vanaf een ander domein of URL."
+         ],
+         "To make sure everything continues working correctly, including automatic translation and site registration, we need to verify and update your site settings.": [
+            "Om ervoor te zorgen dat alles correct blijft werken, inclusief automatische vertaling en siteregistratie, moeten we je site-instellingen verifiëren en bijwerken."
+         ],
+         "This will only take a moment.": [
+            "Dit duurt slechts een ogenblik."
+         ],
+         "Start Migration": [
+            "Start migratie"
+         ],
+         "If you didn't change your main domain and only logged in through a secondary domain, select this option.": [
+            "Als je je hoofddomein niet hebt gewijzigd en alleen via een secundair domein bent ingelogd, selecteer dan deze optie."
+         ],
+         "Something went wrong": [
+            "Er is iets misgegaan"
+         ],
+         "I just logged in from a secondary domain": [
+            "Ik ben zojuist ingelogd via een secundair domein"
+         ],
+         "You're all set!": [
+            "Je bent klaar!"
+         ],
+         "This domain is now registered as a secondary domain and WPML will recognize it correctly.": [
+            "Dit domein is nu geregistreerd als een secundair domein en WPML zal het correct herkennen."
+         ]
+      }
+   }
+}

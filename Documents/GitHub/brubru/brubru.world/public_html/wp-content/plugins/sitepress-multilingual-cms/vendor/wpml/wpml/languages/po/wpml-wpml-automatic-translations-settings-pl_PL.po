@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:42+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Could not fetch engines data"
+msgstr "Nie udało się pobrać danych silników"
+
+msgid "Could not save settings"
+msgstr "Nie udało się zapisać ustawień"
+
+msgid "Automatic translation"
+msgstr "Automatyczne tłumaczenie"
+
+msgid "Saving..."
+msgstr "Zapisywanie..."
+
+msgid "Save settings"
+msgstr "Zapisz ustawienia"
+
+msgid "Settings saved"
+msgstr "Ustawienia zapisane"
+
+msgid "Some error occurred"
+msgstr "Wystąpił jakiś błąd"
+
+msgid "AI Translation"
+msgstr "Tłumaczenie AI"
+
+msgid "Don't translate drafts. Only translate when I publish content."
+msgstr "Nie tłumacz szkiców. Tłumacz tylko gdy publikuję."
+
+msgid "Translate drafts as I save them (consumes a bit more translation credits)."
+msgstr "Tłumacz szkice podczas zapisywania (zżera trochę więcej kredytów)."
+
+msgid "Do you want to translate drafts automatically?"
+msgstr "Czy chcesz automatycznie tłumaczyć wersje robocze?"
+
+msgid "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s."
+msgstr "Ta funkcja działa tylko gdy włączysz „Tłumacz wszystko automatycznie” w %sPanelu tłumaczeń%s."
+
+msgid "What would you like to do after WPML finishes translating your content automatically?"
+msgstr "Co chcesz zrobić po tym, jak WPML automatycznie przetłumaczy Twoją treść?"
+
+msgid "Publish without review"
+msgstr "Opublikuj bez przeglądu"
+
+msgid "Recommended with PTC"
+msgstr "Polecane z PTC"
+
+msgid "PTC provides Better Than Human Translations that rarely need improvements, so you can confidently skip the review process. For other translation engines, a human review is recommended to confirm accuracy."
+msgstr "PTC dostarcza tłumaczenia lepsze niż ludzkie, które rzadko wymagają poprawek, dzięki czemu możesz z pewnością pominąć proces recenzji. W przypadku innych silników tłumaczeniowych zaleca się ludzką recenzję w celu potwierdzenia dokładności."
+
+msgid "WPML publishes translations immediately, skipping the review process."
+msgstr "WPML publikuje tłumaczenia natychmiast, pomijając proces przeglądu."
+
+msgid "Wait for review"
+msgstr "Czekaj na przegląd"
+
+msgid "Recommended with DeepL, Google and Microsoft"
+msgstr "Zalecane z DeepL, Google i Microsoft"
+
+msgid "DeepL, Google, and Microsoft deliver great translations, but we recommend a human review to confirm they are correct. PTC provides Better Than Human Translations that understand context, so you can confidently skip the review process."
+msgstr "DeepL, Google i Microsoft dostarczają świetne tłumaczenia, ale zalecamy ludzką recenzję, aby potwierdzić ich poprawność. PTC zapewnia tłumaczenia lepsze niż ludzkie, które rozumieją kontekst, dzięki czemu możesz z pewnością pominąć proces recenzji."
+
+msgid "WPML keeps translations unpublished, so you can review them first."
+msgstr "WPML zachowuje tłumaczenia nieopublikowane, abyś mógł je najpierw przejrzeć."
+
+msgid "Your translators review and approve translations before publishing."
+msgstr "Twoi tłumacze przeglądają i zatwierdzają tłumaczenia przed publikacją."
+
+msgid "Publish and mark for review"
+msgstr "Opublikuj i oznacz do przeglądu"
+
+msgid "WPML publishes translations immediately but flags them for you to check at your convenience."
+msgstr "WPML publikuje tłumaczenia natychmiast, ale oznacza je, abyś mógł je sprawdzić w dogodnym czasie."
+
+msgid "WPML publishes translations immediately but flags them for translators to review later."
+msgstr "WPML publikuje tłumaczenia natychmiast, ale oznacza je, aby tłumacze mogli je później przejrzeć."

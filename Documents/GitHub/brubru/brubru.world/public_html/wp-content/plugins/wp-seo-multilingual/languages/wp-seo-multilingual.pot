@@ -1,0 +1,65 @@
+# Copyright (C) 2025 OnTheGoSystems
+# This file is distributed under the same license as the WPML SEO plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WPML SEO 2.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-seo-multilingual\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-06-11T16:38:38+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wp-seo-multilingual\n"
+
+#. Plugin Name of the plugin
+#: plugin.php
+msgid "WPML SEO"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: plugin.php
+msgid "https://wpml.org/"
+msgstr ""
+
+#. Description of the plugin
+#: plugin.php
+msgid "Multilingual support for popular SEO plugins"
+msgstr ""
+
+#. Author of the plugin
+#: plugin.php
+msgid "OnTheGoSystems"
+msgstr ""
+
+#. Author URI of the plugin
+#: plugin.php
+msgid "http://www.onthegosystems.com/"
+msgstr ""
+
+#: classes/Upgrade/Commands/DisableHeadLangs.php:58
+msgid "Hreflang tags moved to your sitemap"
+msgstr ""
+
+#: classes/Upgrade/Commands/DisableHeadLangs.php:59
+msgid "To improve SEO and avoid duplicate hreflang data, WPML now adds hreflang tags only to your sitemap. We have disabled the hreflang tags in your page's <head> section."
+msgstr ""
+
+#. translators: %1$s %2$s: opening and closing tags for the link to WPML → Languages → SEO options
+#: classes/Upgrade/Commands/DisableHeadLangs.php:63
+msgid "If you prefer to keep them in the <head>, you can re-enable this option in %1$sWPML → Languages → SEO options%2$s."
+msgstr ""
+
+#: classes/Upgrade/Commands/DisableHeadLangs.php:66
+msgid "Learn more"
+msgstr ""
+
+#: classes/YoastSEO/class-wpml-wpseo-xml-sitemaps-filter.php:175
+msgid "WPML"
+msgstr ""
+
+#: classes/YoastSEO/class-wpml-wpseo-xml-sitemaps-filter.php:176
+msgid "Sitemaps for each language can be accessed below. You need to submit all these sitemaps to Google."
+msgstr ""

@@ -1,0 +1,51 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "Αποκτήστε Περισσότερες Λειτουργίες με τον Προηγμένο Επεξεργαστή Μετάφρασης του WPML"
+         ],
+         "Close banner": [
+            "Κλείσιμο banner"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "Χρησιμοποιείτε τον Κλασικό Επεξεργαστή Μετάφρασης, ένα παλιό εργαλείο, και χάνετε τις πολλές λειτουργίες και την αποδοτικότητα του Προηγμένου Επεξεργαστή Μετάφρασης:"
+         ],
+         "Translation Memory": [
+            "Μνήμη μετάφρασης"
+         ],
+         "HTML Protection": [
+            "Προστασία HTML"
+         ],
+         "Glossary": [
+            "Γλωσσάρι"
+         ],
+         "Spellchecker": [
+            "Ορθογραφικός έλεγχος"
+         ],
+         "AI Assistant": [
+            "Βοηθός AI"
+         ],
+         "Automatic Translation": [
+            "Αυτόματη μετάφραση"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "Κάντε την αλλαγή τώρα για μια πιο γρήγορη, βολική και αξιόπιστη εμπειρία μετάφρασης."
+         ],
+         "Switch Now": [
+            "Αλλαγή τώρα"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "Μάθετε περισσότερα για τον προηγμένο επεξεργαστή μετάφρασης"
+         ],
+         "Learn More": [
+            "Μάθετε περισσότερα"
+         ]
+      }
+   }
+}

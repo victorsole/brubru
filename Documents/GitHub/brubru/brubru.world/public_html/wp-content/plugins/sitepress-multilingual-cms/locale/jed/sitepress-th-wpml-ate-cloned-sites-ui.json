@@ -1,0 +1,222 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "Close": [
+            "ปิด"
+         ],
+         "Please take a screenshot of this message and report this issue to <a>WPML support</a>.": [
+            "กรุณาถ่ายภาพหน้าจอข้อความนี้และรายงานปัญหานี้ไปยัง <a>ฝ่ายสนับสนุนของ WPML</a>."
+         ],
+         "WPML has automatically unregistered your site as part of this wizard. After you close it, you’ll see a prompt to register the site again. This is expected, your content and translations are safe.": [
+            "WPML ได้ยกเลิกการลงทะเบียนไซต์ของคุณโดยอัตโนมัติเป็นส่วนหนึ่งของตัวช่วยสร้างนี้ หลังจากที่คุณปิดตัวช่วยสร้าง คุณจะเห็นข้อความแจ้งให้ลงทะเบียนไซต์อีกครั้ง นี่เป็นสิ่งที่คาดไว้ เนื้อหาและการแปลของคุณยังคงปลอดภัย."
+         ],
+         "You’re all set": [
+            "คุณพร้อมแล้ว"
+         ],
+         "This site is a copy of the original site %s and it doesn’t currently have any automatic translation credits.": [
+            "ไซต์นี้เป็นสำเนาของไซต์ต้นฉบับ %s และปัจจุบันไม่มีเครดิตการแปลอัตโนมัติใดๆ."
+         ],
+         "If you’d like to use automatic translation here in the future, you can either <a1>add credits</a1> or <a2>share them from the original site</a2>.": [
+            "หากคุณต้องการใช้การแปลอัตโนมัติที่นี่ในอนาคต คุณสามารถ<a1>เพิ่มเครดิต</a1>หรือ<a2>แชร์เครดิตจากไซต์ต้นฉบับ</a2>ได้."
+         ],
+         "There was an error checking for credits to share. Please take a screenshot of this message and report it in <a>WPML support</a>.": [
+            "เกิดข้อผิดพลาดในการตรวจสอบเครดิตที่จะแบ่งปัน กรุณาถ่ายภาพหน้าจอข้อความนี้และรายงานไปยัง <a>ฝ่ายสนับสนุนของ WPML</a>."
+         ],
+         "To link %s and %s so they share automatic translation credits, follow these steps:": [
+            "เพื่อเชื่อมโยง %s และ %s ให้แชร์เครดิตการแปลอัตโนมัติ ให้ทำตามขั้นตอนต่อไปนี้:"
+         ],
+         "Open <a>this link</a> to access the original site’s admin area. (You can’t access this screen by visiting %s directly.)": [
+            "เปิด<a>ลิงก์นี้</a>เพื่อเข้าถึงพื้นที่ผู้ดูแลระบบของไซต์ต้นฉบับ (คุณไม่สามารถเข้าถึงหน้าจอนี้โดยการเข้าชม %s โดยตรง)"
+         ],
+         "Click <b>Copy migration code</b> on that page.": [
+            "คลิก<b>คัดลอกรหัสการย้าย</b>บนหน้านั้น."
+         ],
+         "Paste the code below to complete the connection.": [
+            "วางรหัสด้านล่างเพื่อทำการเชื่อมต่อให้สมบูรณ์."
+         ],
+         "Migration code": [
+            "รหัสการย้าย"
+         ],
+         "Continue": [
+            "ดำเนินการต่อ"
+         ],
+         "Go back": [
+            "ย้อนกลับ"
+         ],
+         "Connect Automatic Translation Credits": [
+            "เชื่อมต่อเครดิตการแปลอัตโนมัติ"
+         ],
+         "WPML was unable to copy your site's translations, translation memory, and glossary to this new URL.": [
+            "WPML ไม่สามารถคัดลอกการแปล หน่วยความจำการแปล และอภิธานศัพท์ของเว็บไซต์คุณไปยัง URL ใหม่นี้ได้."
+         ],
+         "Error with copying translation information to new URL": [
+            "เกิดข้อผิดพลาดในการคัดลอกข้อมูลการแปลไปยัง URL ใหม่"
+         ],
+         "This site and its copy on %s are now sharing automatic translation credits.": [
+            "ตอนนี้ไซต์นี้และสำเนาของมันบน %s กำลังแชร์เครดิตการแปลอัตโนมัติ."
+         ],
+         "Any credits you add to one site will be available on both. If you stop using this site, your credits will remain safe.": [
+            "เครดิตใดๆ ที่คุณเพิ่มให้กับไซต์หนึ่งจะสามารถใช้ได้บนทั้งสองไซต์ หากคุณหยุดใช้ไซต์นี้ เครดิตของคุณจะยังคงปลอดภัย."
+         ],
+         "WPML was unable to connect your old and new URLs to share automatic translation credits.": [
+            "WPML ไม่สามารถเชื่อมต่อ URL เก่าและใหม่ของคุณเพื่อแบ่งปันเครดิตการแปลอัตโนมัติได้."
+         ],
+         "Error with sharing automatic translation credits": [
+            "เกิดข้อผิดพลาดในการแบ่งปันเครดิตการแปลอัตโนมัติ"
+         ],
+         "The site on %s has %d credits for automatic translation. Do you want to share these credits with this new site %s?": [
+            "ไซต์บน %s มีเครดิต %d สำหรับการแปลอัตโนมัติ คุณต้องการแชร์เครดิตเหล่านี้กับไซต์ใหม่นี้ %s หรือไม่?"
+         ],
+         "The site on %s has a pay-as-you-go subscription for automatic translation. Do you want to share these credits between %s and this new location (%s)?": [
+            "เว็บไซต์บน %s มีการสมัครสมาชิกแบบจ่ายตามการใช้งานสำหรับการแปลอัตโนมัติ คุณต้องการแบ่งปันเครดิตเหล่านี้ระหว่าง %s และตำแหน่งใหม่นี้ (%s) หรือไม่?"
+         ],
+         "Yes (recommended)": [
+            "ใช่ (แนะนำ)"
+         ],
+         "In the next step, you’ll approve the use of same credits on both sites.": [
+            "ในขั้นตอนถัดไป คุณจะอนุมัติการใช้เครดิตเดียวกันบนทั้งสองไซต์."
+         ],
+         "No": [
+            "ไม่"
+         ],
+         "You’ll need to assign new credits or set up pay-as-you-go.": [
+            "คุณจะต้องกำหนดเครดิตใหม่หรือตั้งค่าการจ่ายเงินตามการใช้งาน."
+         ],
+         "What happens when you share credits between sites?": [
+            "เกิดอะไรขึ้นเมื่อคุณแชร์เครดิตระหว่างไซต์?"
+         ],
+         "Translation credits for this site": [
+            "เครดิตการแปลสำหรับเว็บไซต์นี้"
+         ],
+         "WPML detected a change in your site’s URL": [
+            "WPML ตรวจพบการเปลี่ยนแปลง URL ของไซต์ของคุณ"
+         ],
+         "You can now continue translating content on this site as usual.": [
+            "ตอนนี้คุณสามารถดำเนินการแปลเนื้อหาบนไซต์นี้ได้ตามปกติ."
+         ],
+         "Just a reminder: there shouldn’t be another copy of this site running at %s. If there is, automatic translation won’t work correctly on that site.": [
+            "เพียงแค่เตือนความจำ: ไม่ควรมีสำเนาอื่นของไซต์นี้ที่ทำงานอยู่ที่ %s หากมี การแปลอัตโนมัติจะไม่ทำงานอย่างถูกต้องบนไซต์นั้น."
+         ],
+         "You indicated that the original site at %s is no longer active. This means:": [
+            "คุณระบุว่าไซต์ต้นฉบับที่ %s ไม่ได้ใช้งานอีกต่อไป นี่หมายความว่า:"
+         ],
+         "Automatic translation will no longer work on the old site": [
+            "การแปลอัตโนมัติจะไม่ทำงานบนไซต์เก่าอีกต่อไป"
+         ],
+         "Accessing the old site may trigger warnings on this site": [
+            "การเข้าถึงไซต์เก่าอาจทำให้เกิดคำเตือนบนไซต์นี้"
+         ],
+         "Please confirm:": [
+            "โปรดยืนยัน:"
+         ],
+         "I understand and confirm that <b>%s</b> is no longer in use.": [
+            "ฉันเข้าใจและยืนยันว่า <b>%s</b> ไม่ได้ใช้งานอีกต่อไป."
+         ],
+         "Back": [
+            "กลับ"
+         ],
+         "Please Confirm": [
+            "โปรดยืนยัน"
+         ],
+         "WPML was unable to update our records with your new URL.": [
+            "WPML ไม่สามารถอัปเดตบันทึกของเราด้วย URL ใหม่ของคุณได้."
+         ],
+         "Error with moving translation information to new URL": [
+            "เกิดข้อผิดพลาดในการย้ายข้อมูลการแปลไปยัง URL ใหม่"
+         ],
+         "It looks like this site was previously at %s and is now running on %s.": [
+            "ดูเหมือนว่าไซต์นี้เคยอยู่ที่ %s และตอนนี้กำลังทำงานบน %s."
+         ],
+         "Is the original site still available at %s?": [
+            "ไซต์ต้นฉบับยังคงใช้งานได้ที่ %s หรือไม่?"
+         ],
+         "Yes": [
+            "ใช่"
+         ],
+         "The original site is still running and this is just a copy of the original site": [
+            "ไซต์ต้นฉบับยังคงทำงานอยู่และนี่เป็นเพียงสำเนาของไซต์ต้นฉบับ"
+         ],
+         "I moved the site to this new address and this is now the main site": [
+            "ฉันย้ายไซต์ไปยังที่อยู่ใหม่นี้และนี่คือไซต์หลักในตอนนี้"
+         ],
+         "WPML Detected a New Site Address": [
+            "WPML ตรวจพบที่อยู่ไซต์ใหม่"
+         ],
+         "How to manage translations when migrating from development to production": [
+            "วิธีจัดการการแปลเมื่อย้ายจากการพัฒนาไปสู่การผลิต"
+         ],
+         "Looks like this site is a copy of a different site, or moved to a different URL. Please contact your translation manager to update Translation Management plugin configuration.": [
+            "ดูเหมือนว่าเว็บไซต์นี้เป็นสำเนาของเว็บไซต์อื่น หรือย้ายไปยัง URL อื่น กรุณาติดต่อผู้จัดการการแปลของคุณเพื่ออัปเดตการกำหนดค่าปลั๊กอิน Translation Management."
+         ],
+         "Site Moved or Copied - Action Required": [
+            "เว็บไซต์ถูกย้ายหรือคัดลอก - จำเป็นต้องดำเนินการ"
+         ],
+         "You or someone else moved this site to %s. Please keep in mind that:": [
+            "คุณหรือบางคนได้ย้ายเว็บไซต์นี้ไปที่ %s โปรดทราบว่า:"
+         ],
+         "Translations that you do at %s will not appear on this site.": [
+            "การแปลที่คุณทำที่ %s จะไม่ปรากฏบนเว็บไซต์นี้."
+         ],
+         "You cannot edit translations on this site.": [
+            "คุณไม่สามารถแก้ไขการแปลบนเว็บไซต์นี้ได้."
+         ],
+         "The site at %s is using the same credits for automatic translation as this site.": [
+            "เว็บไซต์ที่ %s กำลังใช้เครดิตเดียวกันสำหรับการแปลอัตโนมัติกับเว็บไซต์นี้."
+         ],
+         "If you didn't intend to move this site to %s, you can <a>indicate that this site should be at %s</a>.": [
+            "หากคุณไม่ได้ตั้งใจย้ายเว็บไซต์นี้ไปที่ %s คุณสามารถ <a>ระบุว่าเว็บไซต์นี้ควรอยู่ที่ %s</a>."
+         ],
+         "This site has moved to a new location": [
+            "เว็บไซต์นี้ได้ย้ายไปยังตำแหน่งใหม่"
+         ],
+         "If you prefer not to move this site, you can <a>mark it as a copy</a> and enable automatic translation for it.": [
+            "หากคุณไม่ต้องการย้ายเว็บไซต์นี้ คุณสามารถ <a>ทำเครื่องหมายว่าเป็นสำเนา</a> และเปิดใช้งานการแปลอัตโนมัติสำหรับมัน."
+         ],
+         "Moving the site back here will mean that you will be able to translate on this domain again, but you will not be able to update translations at %s.": [
+            "การย้ายเว็บไซต์กลับมาที่นี่จะทำให้คุณสามารถแปลบนโดเมนนี้ได้อีกครั้ง แต่คุณจะไม่สามารถอัปเดตการแปลที่ %s ได้."
+         ],
+         "Yes - move back here": [
+            "ใช่ - ย้ายกลับมาที่นี่"
+         ],
+         "No - keep the site on %s": [
+            "ไม่ - ให้เว็บไซต์อยู่ที่ %s ต่อไป"
+         ],
+         "Are you sure that this site should run on %s and not %s?": [
+            "คุณแน่ใจหรือไม่ว่าเว็บไซต์นี้ควรทำงานบน %s และไม่ใช่ %s?"
+         ],
+         "WPML noticed that your site is being accessed from a different domain or URL.": [
+            "WPML สังเกตเห็นว่าไซต์ของคุณกำลังถูกเข้าถึงจากโดเมนหรือ URL ที่แตกต่างออกไป."
+         ],
+         "To make sure everything continues working correctly, including automatic translation and site registration, we need to verify and update your site settings.": [
+            "เพื่อให้แน่ใจว่าทุกอย่างยังคงทำงานได้อย่างถูกต้อง รวมถึงการแปลอัตโนมัติและการลงทะเบียนไซต์ เราจำเป็นต้องตรวจสอบและอัปเดตการตั้งค่าไซต์ของคุณ."
+         ],
+         "This will only take a moment.": [
+            "นี่จะใช้เวลาเพียงครู่เดียวเท่านั้น."
+         ],
+         "Start Migration": [
+            "เริ่มการย้าย"
+         ],
+         "If you didn't change your main domain and only logged in through a secondary domain, select this option.": [
+            "หากคุณไม่ได้เปลี่ยนโดเมนหลักของคุณและเพียงแค่เข้าสู่ระบบผ่านโดเมนรอง ให้เลือกตัวเลือกนี้."
+         ],
+         "Something went wrong": [
+            "เกิดข้อผิดพลาดบางอย่าง"
+         ],
+         "I just logged in from a secondary domain": [
+            "ฉันเพิ่งเข้าสู่ระบบจากโดเมนรอง"
+         ],
+         "You're all set!": [
+            "เสร็จสิ้นแล้ว!"
+         ],
+         "This domain is now registered as a secondary domain and WPML will recognize it correctly.": [
+            "โดเมนนี้ได้รับการลงทะเบียนเป็นโดเมนรองแล้วและ WPML จะรับรู้มันอย่างถูกต้อง."
+         ]
+      }
+   }
+}

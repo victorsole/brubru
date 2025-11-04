@@ -1,0 +1,268 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "From:": [
+            "来自："
+         ],
+         "--Choose language--": [
+            "--选择语言--"
+         ],
+         "to:": [
+            "到："
+         ],
+         "Set language pair(s) for Translator %s:": [
+            "为翻译人员%s设置语言对："
+         ],
+         "+ Add more language pairs for this translator": [
+            "+ 为该翻译人员添加更多语言对"
+         ],
+         "First Name": [
+            "名"
+         ],
+         "Last Name": [
+            "姓"
+         ],
+         "Role": [
+            "角色"
+         ],
+         "(required)": [
+            "（必填）"
+         ],
+         "Make sure that you have provided a correct email address e.g. name@domain.com": [
+            "确保您提供了正确的电子邮件地址，例如 name@domain.com"
+         ],
+         "This field is required": [
+            "此字段为必填项"
+         ],
+         "A translator can be any WordPress role.": [
+            "翻译人员可以是任何WordPress角色。"
+         ],
+         "Username": [
+            "用户名"
+         ],
+         "Email": [
+            "电子邮件"
+         ],
+         "Search": [
+            "搜索"
+         ],
+         "user": [
+            "用户"
+         ],
+         "Editor": [
+            "编辑者"
+         ],
+         "Select an existing %s and set as Translation Manager": [
+            "选择一个现有的%s并设置为翻译经理"
+         ],
+         "Create a new %s and set as Translation Manager": [
+            "创建一个新的%s并设置为翻译经理"
+         ],
+         "Cancel": [
+            "取消"
+         ],
+         "Add Translation Manager": [
+            "添加翻译经理"
+         ],
+         "Add a Translation Manager": [
+            "添加翻译经理"
+         ],
+         "Set language pair(s)": [
+            "设置语言对"
+         ],
+         "Previous": [
+            "上一步"
+         ],
+         "Save": [
+            "保存"
+         ],
+         "Add a Translator": [
+            "添加翻译人员"
+         ],
+         "Select an existing user and set as Translator": [
+            "选择一个现有用户并设置为翻译人员"
+         ],
+         "Create a new user and set as Translator": [
+            "创建一个新用户并设置为翻译人员"
+         ],
+         "Edit language pair(s) for translator": [
+            "编辑翻译人员的语言对"
+         ],
+         "Name": [
+            "姓名"
+         ],
+         "Language Pairs": [
+            "语言对"
+         ],
+         "You can translate to and from all languages": [
+            "您可以翻译所有语言之间的内容"
+         ],
+         "%s file upload failed.": [
+            "%s文件上传失败。"
+         ],
+         "Flag": [
+            "旗帜"
+         ],
+         "Flag file": [
+            "旗帜文件"
+         ],
+         "You just added  language. Next, select it as the site's default language or a translation language.": [
+            "您刚刚添加了语言。接下来，将其选为网站的默认语言或翻译语言。"
+         ],
+         "Language added": [
+            "已添加语言"
+         ],
+         "The value \"%s\" already exists": [
+            "值 “%s” 已存在"
+         ],
+         "Add a new language": [
+            "添加新语言"
+         ],
+         "Create a country-specific language by choosing the general language from the list below. Then, choose the country it should be localized for.": [
+            "通过从下面的列表中选择通用语言来创建特定国家的语言。然后，选择它应该本地化的国家。"
+         ],
+         "By choosing a combination that already exists in the database, WPML can help fill out the necessary fields. Read more about <AddingACustomLanguageLink />.": [
+            "通过选择数据库中已存在的组合，WPML可以帮助填写必要的字段。阅读更多关于<AddingACustomLanguageLink />的信息。"
+         ],
+         "Cannot find?": [
+            "找不到？"
+         ],
+         "Click here": [
+            "点击这里"
+         ],
+         "The wrong format. It may contain only small letters and \"-\". E.g: \"fr\" , \"pt-br\", \"zh-hans\"": [
+            "格式错误。它只能包含小写字母和 “-”。例如：“fr”，“pt-br”，“zh-hans”"
+         ],
+         "Language": [
+            "语言"
+         ],
+         "Location": [
+            "地点"
+         ],
+         "Code": [
+            "代码"
+         ],
+         "The language will not be supported by automatic translations": [
+            "该语言将不支持自动翻译"
+         ],
+         "Language mapping": [
+            "语言映射"
+         ],
+         "Don't map this language": [
+            "不要映射此语言"
+         ],
+         "Default locale": [
+            "默认区域设置"
+         ],
+         "The wrong format. It may contain only small letters and \"_\". E.g: \"de\" , \"de_DE\", \"zh_Hant_TW\"": [
+            "格式错误。它只能包含小写字母和 “_”。例如：“de”，“de_DE”，“zh_Hant_TW”"
+         ],
+         "hreflang": [
+            "hreflang"
+         ],
+         "Encode url?": [
+            "编码URL？"
+         ],
+         "Flags must be:": [
+            "旗帜必须是："
+         ],
+         "NO": [
+            "否"
+         ],
+         "YES": [
+            "是"
+         ],
+         " (required)": [
+            "（必填）"
+         ],
+         "Please fill in the field": [
+            "请填写此字段"
+         ],
+         "PNG, SVG, or JPG files": [
+            "PNG、SVG或JPG文件"
+         ],
+         "Save language": [
+            "保存语言"
+         ],
+         "18 x 12 pixels": [
+            "18 x 12像素"
+         ],
+         "Read more about ": [
+            "阅读更多关于"
+         ],
+         "The name of your language as it will appear on your site's language switcher.": [
+            "您的语言在网站语言切换器上显示的名称。"
+         ],
+         "A unique value that identifies the language in the database and URL. Once saved, the language code cannot be changed.": [
+            "在数据库和URL中标识语言的唯一值。保存后，语言代码不能更改。"
+         ],
+         "If your custom language is similar to an existing language, you can use the existing language's spellcheck and automatic translation. For example, if your custom language is Swiss-German, you can map to German as the language to use for spellcheck and automatic translation. If you don't map your custom language to an existing language, spellcheck and automatic translation features will be unavailable in that language.": [
+            "如果您的自定义语言与现有语言相似，您可以使用现有语言的拼写检查和自动翻译。例如，如果您的自定义语言是瑞士德语，您可以映射到德语作为拼写检查和自动翻译的语言。如果您不将自定义语言映射到现有语言，则该语言将无法使用拼写检查和自动翻译功能。"
+         ],
+         "The value WPML checks when loading translations from MO and PO files. The default locale is included in the filenames in your /wp-content/languages/ folder in your WordPress setup.": [
+            "WPML 从 MO 和 PO 文件加载翻译时检查的值。默认地域包含在 WordPress 设置中您的 /wp-content/languages/ 文件夹的文件名中。"
+         ],
+         "Google uses the hreflang attribute to direct users to sites in their relevant language and location. Examples:": [
+            "Google使用hreflang属性将用户引导到与他们相关的语言和位置的网站。示例："
+         ],
+         "All English-speaking users: en": [
+            "所有英语用户：en"
+         ],
+         "English for UK users: en-gb": [
+            "英国用户的英语：en-gb"
+         ],
+         "English for US users: en-us": [
+            "美国用户的英语：en-us"
+         ],
+         "Determines if URLs in this language are encoded or use ASCII characters (if unsure, leave it as \"No\").": [
+            "确定此语言的URL是否进行编码或使用ASCII字符（如果不确定，请保留为 “否”）。"
+         ],
+         "adding a custom language": [
+            "添加自定义语言"
+         ],
+         "What are the languages of your site?": [
+            "您网站的语言有哪些？"
+         ],
+         "Default language": [
+            "默认语言"
+         ],
+         "What is the current language of your website?": [
+            "您网站的当前语言是什么？"
+         ],
+         "Translation languages": [
+            "翻译语言"
+         ],
+         "Which languages do you want to translate your site into?": [
+            "您想将您的网站翻译成哪些语言？"
+         ],
+         "If you cannot find languages that you need in the list": [
+            "如果您在列表中找不到所需的语言"
+         ],
+         "create a custom language": [
+            "创建自定义语言"
+         ],
+         "You can add a dedicated person to oversee everything translation-related on your site. %sTranslation Managers%s can add new local translators or professional translation services, create and assign translation jobs, review completed translations, and change translation-related settings.": [
+            "您可以添加一个专门的人来监督网站上与翻译相关的所有事务。%s翻译经理%s可以添加新的本地翻译人员或专业翻译服务，创建和分配翻译任务，审核完成的翻译，以及更改与翻译相关的设置。"
+         ],
+         "Translation Managers": [
+            "翻译经理"
+         ],
+         "Note: All Administrators are automatically given Translation Manager privileges.": [
+            "注意：所有管理员自动获得翻译经理权限。"
+         ],
+         "%sLocal translators%s are users of your site that can log in and add, edit, and review your site's translations. Add a translator and their associated translation pairs to assign them translation jobs.": [
+            "%s本地翻译人员%s是您网站的用户，他们可以登录并添加、编辑和审核您网站的翻译。添加翻译人员及其相关的翻译语言对，以便为他们分配翻译任务。"
+         ],
+         "You can %shire an experienced translator%s to review your automatic translations for perfect quality.": [
+            "您可以%s雇佣一位有经验的翻译人员%s来审核您的自动翻译，以确保完美的质量。"
+         ],
+         "Translators": [
+            "翻译人员"
+         ]
+      }
+   }
+}

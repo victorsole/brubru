@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "Get a key for this site": [
+            "รับคีย์สำหรับเว็บไซต์นี้"
+         ],
+         "Site key:": [
+            "คีย์เว็บไซต์:"
+         ],
+         "Enter your site key here": [
+            "ป้อนคีย์เว็บไซต์ของคุณที่นี่"
+         ],
+         "Registering...": [
+            "กำลังลงทะเบียน..."
+         ],
+         "Register": [
+            "ลงทะเบียน"
+         ],
+         "A New Site Key Is Required": [
+            "จำเป็นต้องใช้คีย์เว็บไซต์ใหม่"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "เพื่อใช้คุณสมบัติของ WPML ต่อไป เช่น การแปลอัตโนมัติและการอัปเดตปลั๊กอิน โปรดลงทะเบียนเว็บไซต์ของคุณอีกครั้ง ไม่ต้องกังวล เนื้อหาและการแปลที่มีอยู่ของคุณจะปลอดภัย."
+         ],
+         "Site key registered successfully!": [
+            "ลงทะเบียนคีย์เว็บไซต์สำเร็จแล้ว!"
+         ],
+         "Page will reload in %d seconds...": [
+            "หน้าจะโหลดใหม่ใน %d วินาที..."
+         ],
+         "Registration failed. Please try again.": [
+            "การลงทะเบียนล้มเหลว โปรดลองอีกครั้ง."
+         ]
+      }
+   }
+}

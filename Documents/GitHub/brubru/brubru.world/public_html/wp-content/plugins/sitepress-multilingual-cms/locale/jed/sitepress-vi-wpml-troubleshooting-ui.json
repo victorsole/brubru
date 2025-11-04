@@ -1,0 +1,102 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "vi"
+         },
+         "Preparing...": [
+            "Chuẩn bị..."
+         ],
+         "All jobs have been cancelled": [
+            "Tất cả công việc đã bị hủy"
+         ],
+         "There is no more jobs to cancel": [
+            "Không còn công việc nào để hủy"
+         ],
+         "The jobs cancellation has failed": [
+            "Hủy công việc thất bại"
+         ],
+         "Cancel in-progress automatic jobs": [
+            "Hủy công việc tự động đang làm"
+         ],
+         "Domain name has been updated": [
+            "Tên miền đã được cập nhật"
+         ],
+         "Domain name update has been failed": [
+            "Cập nhật tên miền thất bại"
+         ],
+         "Update domain name in language switcher settings": [
+            "Cập nhật tên miền trong cài đặt ngôn ngữ"
+         ],
+         "Disclaimer: MySQL Disk Space": [
+            "Tuyên bố miễn trừ trách nhiệm: Dung lượng ổ đĩa MySQL"
+         ],
+         "Cleaning and compressing the wp_icl_translate and wp_icl_translation_status tables reduces its data size, but does not automatically free up disk space in MySQL. To reclaim disk space, a table rebuild is required—a risky operation not performed automatically by this tool.": [
+            "Việc dọn dẹp và nén các bảng wp_icl_translate và wp_icl_translation_status giúp giảm kích thước dữ liệu của chúng, nhưng không tự động giải phóng dung lượng ổ đĩa trong MySQL. Để lấy lại dung lượng ổ đĩa, cần phải xây dựng lại bảng - một thao tác rủi ro mà công cụ này không thực hiện tự động."
+         ],
+         "Optimize translation tables": [
+            "Tối ưu hóa bảng dịch"
+         ],
+         "Previous State Migration": [
+            "Di chuyển trạng thái trước đó"
+         ],
+         "Translation Elements Migration": [
+            "Di chuyển các phần tử dịch"
+         ],
+         "Processed": [
+            "Đã xử lý"
+         ],
+         "Error": [
+            "Lỗi"
+         ],
+         "Success": [
+            "Thành công"
+         ],
+         "Database tables optimization completed successfully.": [
+            "Hoàn tất tối ưu hóa bảng dữ liệu thành công."
+         ],
+         "Warning": [
+            "Cảnh báo"
+         ],
+         "This process is resource-intensive and may take a significant amount of time. It is recommended to run this optimization during periods of low traffic.": [
+            "Quá trình này tiêu tốn nhiều tài nguyên và có thể mất một khoảng thời gian đáng kể. Bạn nên chạy việc tối ưu hóa này trong thời gian lưu lượng truy cập thấp."
+         ],
+         "Database Tables Optimization": [
+            "Tối ưu hóa bảng dữ liệu"
+         ],
+         "Refresh license data to recognise license update": [
+            "Làm mới dữ liệu giấy phép"
+         ],
+         "WPML License has been refreshed": [
+            "Giấy phép WPML đã được làm mới"
+         ],
+         "Translate Everything Automatically is not active.": [
+            "Tính năng Tự động dịch mọi thứ không hoạt động."
+         ],
+         "Retry stuck automatic translations": [
+            "Thử lại các bản dịch tự động bị treo"
+         ],
+         "Resends translation jobs that couldn't be processed due to a temporary issue while Translate Everything Automatically was active.": [
+            "Gửi lại các công việc dịch thuật không thể xử lý do sự cố tạm thời khi tính năng Tự động dịch mọi thứ đang hoạt động."
+         ],
+         "Checking for stuck translation jobs...": [
+            "Đang kiểm tra các công việc dịch thuật bị treo..."
+         ],
+         "Processing... %s stuck translation found so far": [
+            "Đang xử lý... Đã tìm thấy %s bản dịch bị treo cho đến nay"
+         ],
+         "Something went wrong while checking for stuck translation jobs. Please <a>contact WPML support</a>.": [
+            "Đã xảy ra lỗi khi kiểm tra các công việc dịch thuật bị treo. Vui lòng <a>liên hệ với bộ phận hỗ trợ của WPML</a>."
+         ],
+         "No stuck translation jobs found.": [
+            "Không tìm thấy công việc dịch thuật nào bị treo."
+         ],
+         "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard.": [
+            "Đã tìm thấy %s công việc dịch thuật bị treo. WPML sẽ tự động dịch chúng trong nền.\nBạn có thể kiểm tra tiến độ của chúng trong Bảng điều khiển Dịch thuật."
+         ]
+      }
+   }
+}

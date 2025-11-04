@@ -1,0 +1,193 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:45+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/config-admin-pages.php:126
+msgid "Translation Dashboard"
+msgstr "แดชบอร์ดการแปล"
+
+#: src/config-admin-pages.php:311
+msgid "Automatic translation settings"
+msgstr "การตั้งค่าการแปลอัตโนมัติ"
+
+#: src/config-admin-pages.php:353
+msgid "WPML Setup"
+msgstr "การตั้งค่า WPML"
+
+#: src/config-admin-pages.php:382
+msgid "WPML Support"
+msgstr "การสนับสนุน WPML"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:27
+msgid "Database Version"
+msgstr "เวอร์ชันฐานข้อมูล"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:36
+msgid "Your %sMySQL%s version must be at least %s. Alternatively, you can use %sMariaDb%s version %s or higher."
+msgstr "เวอร์ชัน %sMySQL%s ของคุณต้องเป็นเวอร์ชัน %s ขึ้นไป หรือคุณสามารถใช้ %sMariaDb%s เวอร์ชัน %s หรือสูงกว่าได้."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:53
+msgid "Contact your hosting provider to upgrade MySQL %s or higher."
+msgstr "ติดต่อผู้ให้บริการโฮสติ้งของคุณเพื่ออัปเกรด MySQL เป็นเวอร์ชัน %s หรือสูงกว่า."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:31
+msgid "PHP eval() Function"
+msgstr "ฟังก์ชัน PHP eval()"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:39
+msgid "The PHP eval() function is disabled by the Suhosin extension. WPML requires this function when Suhosin is enabled."
+msgstr "ฟังก์ชัน eval() ของ PHP ถูกปิดการใช้งานโดยส่วนขยาย Suhosin WPML ต้องใช้ฟังก์ชันนี้เมื่อเปิดใช้งาน Suhosin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:47
+msgid "Contact your hosting provider to enable the eval() function in the Suhosin configuration or disable the Suhosin extension."
+msgstr "ติดต่อผู้ให้บริการโฮสติ้งของคุณเพื่อเปิดใช้งานฟังก์ชัน eval() ในการกำหนดค่า Suhosin หรือปิดการใช้งานส่วนขยาย Suhosin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:31
+msgid "libxml PHP Module"
+msgstr "โมดูล PHP libxml"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:40
+msgid "WPML requires libxml PHP Module version %s or higher to process XML correctly using SimpleXML."
+msgstr "WPML ต้องการโมดูล libxml PHP เวอร์ชัน %s หรือสูงกว่าเพื่อประมวลผล XML อย่างถูกต้องโดยใช้ SimpleXML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:49
+msgid "Contact your hosting provider to upgrade the libxml PHP Module."
+msgstr "ติดต่อผู้ให้บริการโฮสติ้งของคุณเพื่ออัปเกรดโมดูล libxml PHP."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:30
+msgid "Multibyte String Extension"
+msgstr "ส่วนขยายสตริงหลายไบต์"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:39
+msgid "The %sMultibyte String extension%s is required to handle non-Latin character sets in WPML."
+msgstr "ต้องมี%sส่วนขยาย Multibyte String%s เพื่อจัดการชุดอักขระที่ไม่ใช่ภาษาละตินใน WPML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:49
+msgid "Contact your hosting provider to install the Multibyte String (mbstring) PHP extension."
+msgstr "ติดต่อผู้ให้บริการโฮสติ้งของคุณเพื่อติดตั้งส่วนขยาย PHP Multibyte String (mbstring)."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:55
+msgid "Memory limit"
+msgstr "ขีดจำกัดหน่วยความจำ"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:65
+msgid "Your PHP memory limit is currently %s.  WPML requires at least %s to function properly."
+msgstr "ขีดจำกัดหน่วยความจำ PHP ของคุณในปัจจุบันคือ %s WPML ต้องการอย่างน้อย %s เพื่อทำงานได้อย่างถูกต้อง."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:80
+msgid "To increase the memory limit, add this to the top of your %swp-config.php%s file:"
+msgstr "หากต้องการเพิ่มขีดจำกัดหน่วยความจำ ให้เพิ่มข้อความนี้ที่ด้านบนของไฟล์ %swp-config.php%s ของคุณ:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:25
+msgid "PHP Version"
+msgstr "เวอร์ชัน PHP"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:34
+msgid "Your PHP version is outdated. WPML requires at least %s."
+msgstr "เวอร์ชัน PHP ของคุณล้าสมัยแล้ว WPML ต้องการเวอร์ชัน %s เป็นอย่างน้อย."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:44
+msgid "Contact your hosting provider to upgrade PHP to version %s or higher."
+msgstr "ติดต่อผู้ให้บริการโฮสติ้งของคุณเพื่ออัปเกรด PHP เป็นเวอร์ชัน %s หรือสูงกว่า."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:31
+msgid "WordPress REST API"
+msgstr "WordPress REST API"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:41
+msgid "The WordPress REST API must be enabled for WPML to work correctly."
+msgstr "ต้องเปิดใช้งาน WordPress REST API เพื่อให้ WPML ทำงานได้อย่างถูกต้อง."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:49
+msgid "Ensure the REST API endpoint %s is reachable and that the WordPress REST API is enabled."
+msgstr "ตรวจสอบให้แน่ใจว่าสามารถเข้าถึงจุดสิ้นสุด REST API %s ได้และเปิดใช้งาน WordPress REST API แล้ว."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:31
+msgid "SimpleXML Extension"
+msgstr "ส่วนขยาย SimpleXML"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:40
+msgid "The %sSimpleXML extension%s is required to use %sXLIFF files%s in WPML. The libxml PHP Module must also be version 2.7.8 or higher."
+msgstr "ต้องมี%sส่วนขยาย SimpleXML%s เพื่อใช้%sไฟล์ XLIFF%s ใน WPML นอกจากนี้ โมดูล libxml PHP ต้องเป็นเวอร์ชัน 2.7.8 หรือสูงกว่า."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:55
+msgid "Contact your hosting provider to install the SimpleXML PHP extension."
+msgstr "ติดต่อผู้ให้บริการโฮสติ้งของคุณเพื่อติดตั้งส่วนขยาย PHP SimpleXML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:39
+msgid "PHP Stack Size"
+msgstr "ขนาดสแต็ก PHP"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:48
+msgid "WPML requires at least %s KB of PHP stack size on PHP 8.3 or higher."
+msgstr "WPML ต้องใช้ขนาดสแต็ก PHP อย่างน้อย %s KB บน PHP 8.3 หรือสูงกว่า."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:58
+msgid "Add this to your %sphp.ini%s and restart your web server to set the required stack size:"
+msgstr "เพิ่มข้อความนี้ลงในไฟล์ %sphp.ini%s ของคุณและรีสตาร์ทเว็บเซิร์ฟเวอร์เพื่อตั้งค่าขนาดสแต็กที่ต้องการ:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:30
+msgid "WordPress Version"
+msgstr "เวอร์ชัน WordPress"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:39
+msgid "Your WordPress version is outdated. WPML requires at least %s. "
+msgstr "เวอร์ชัน WordPress ของคุณล้าสมัยแล้ว WPML ต้องการเวอร์ชัน %s เป็นอย่างน้อย. "
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:50
+msgid "Please update your WordPress installation to version %s or higher."
+msgstr "โปรดอัปเดตการติดตั้ง WordPress ของคุณเป็นเวอร์ชัน %s หรือสูงกว่า."
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:20
+msgid "Error getting credits"
+msgstr "เกิดข้อผิดพลาดในการรับเครดิต"
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:39
+msgid "Error getting account balances"
+msgstr "เกิดข้อผิดพลาดในการรับยอดคงเหลือในบัญชี"
+
+#: src/Legacy/Component/ATE/Application/Query/Glossary.php:26
+msgid "Error getting glossary data"
+msgstr "เกิดข้อผิดพลาดในการรับข้อมูลอภิธานศัพท์"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:148
+msgid "Error fetching translation engines"
+msgstr "เกิดข้อผิดพลาดในการดึงข้อมูลเครื่องมือแปล"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:171
+msgid "Error fetching available formalities"
+msgstr "เกิดข้อผิดพลาดในการดึงข้อมูลรูปแบบที่มีอยู่"
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/ErrorMapper.php:32
+msgid "The jobs could not be created."
+msgstr "ไม่สามารถสร้างงานได้."
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/UnsupportedLanguagesInTranslationService.php:43
+msgid "The selected translation service doesn't support the following languages: %s"
+msgstr "บริการแปลที่เลือกไม่รองรับภาษาต่อไปนี้: %s"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:310
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:311
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:312
+msgid "Other texts (Strings)"
+msgstr "ข้อความอื่น ๆ (ข้อความ)"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/SendToTranslation/SendToTranslationController.php:48
+msgid "The request data for SendToTranslation is not valid."
+msgstr "ข้อมูลคำขอสำหรับ SendToTranslation ไม่ถูกต้อง."
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/TranslateEverything/EnableController.php:45
+msgid "In order to translate automatically, you first need to enable WPML's Advanced Translation Editor"
+msgstr "เพื่อแปลโดยอัตโนมัติ คุณต้องเปิดใช้งานตัวแก้ไขการแปลขั้นสูงของ WPML ก่อน"

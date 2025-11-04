@@ -1,0 +1,93 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:116
+msgid "WPML Translation Editor"
+msgstr "Éditeur de traduction WPML"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:123
+#: src/js/postEditTranslationEditor/components/SaveModal.js:22
+msgid "WordPress Editor"
+msgstr "Éditeur WordPress"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:99
+#: src/js/postEditTranslationEditor/components/SaveModal.js:24
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:10
+msgid "Translation Dashboard"
+msgstr "Tableau de bord de traduction"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:100
+msgid ""
+"Also, switching back to WPML's Translation Editor later will require "
+"re-translating content that you translated with the WordPress editor."
+msgstr "De plus, revenir ultérieurement à l'éditeur de traduction de WPML nécessitera de retraduire le contenu que vous avez traduit avec l'éditeur WordPress."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:107
+msgid ""
+"This will overwrite content you translated with the WordPress Editor. If "
+"you switch now, you'll have to translate selected content again."
+msgstr "Cela écrasera le contenu que vous avez traduit avec l'éditeur WordPress. Si vous changez maintenant, vous devrez traduire à nouveau le contenu sélectionné."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:35
+msgid "You are about to translate with the %s"
+msgstr "Vous êtes sur le point de traduire avec le %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:41
+msgid ""
+"Translate with the WordPress Editor if you need different designs per "
+"language or if the content isn't compatible with WPML's Translation Editor."
+msgstr "Traduisez avec l'éditeur WordPress si vous avez besoin de différentes conceptions par langue ou si le contenu n'est pas compatible avec l'éditeur de traduction de WPML."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:51
+msgid "What do you want to translate?"
+msgstr "Que voulez-vous traduire ?"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:7
+msgid "I understand, switch to the WordPress Editor"
+msgstr "Je comprends, passer à l'éditeur WordPress"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:75
+msgid "Apply"
+msgstr "Appliquer"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:76
+msgid "Cancel"
+msgstr "Annuler"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:8
+msgid "I understand, switch to %s"
+msgstr "Je comprends, passez au %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Only this %s"
+msgstr "Seulement ce %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Recommended"
+msgstr "Recommandé"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:86
+msgid "All %s"
+msgstr "Tous(tes) les %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:87
+msgid "All the site's content"
+msgstr "Tout le contenu du site"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:9
+msgid "I understand, switch to Translation Dashboard"
+msgstr "Je comprends, passer au tableau de bord de traduction"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:97
+msgid ""
+"The WordPress Editor doesn't offer Automatic Translation, Translation "
+"Memory and other features that make translation easier."
+msgstr "L'éditeur WordPress n'offre pas de traduction automatique, de mémoire de traduction et d'autres fonctionnalités qui facilitent la traduction."
+
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:9
+msgid "Translate items in batch after reviewing the cost of AI translation"
+msgstr "Traduire des éléments par lots après avoir examiné le coût de la traduction IA"

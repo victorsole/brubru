@@ -1,0 +1,13 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Trang web của bạn không đáp ứng các yêu cầu tối thiểu của WPML"
+         ]
+      }
+   }
+}

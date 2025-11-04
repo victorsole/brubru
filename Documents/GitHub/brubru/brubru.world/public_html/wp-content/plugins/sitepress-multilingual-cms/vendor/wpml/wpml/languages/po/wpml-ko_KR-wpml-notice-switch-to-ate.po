@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:43+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Get More Features with WPML's Advanced Translation Editor"
+msgstr "WPML의 고급 번역 편집기로 더 많은 기능 이용하기"
+
+msgid "Close banner"
+msgstr "배너 닫기"
+
+msgid "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:"
+msgstr "귀하는 구식 레거시 도구인 클래식 번역 편집기를 사용하고 있어 고급 번역 편집기의 다양한 기능과 효율성을 놓치고 있습니다:"
+
+msgid "Translation Memory"
+msgstr "번역 메모리"
+
+msgid "HTML Protection"
+msgstr "HTML 보호"
+
+msgid "Glossary"
+msgstr "용어집"
+
+msgid "Spellchecker"
+msgstr "맞춤법 검사기"
+
+msgid "AI Assistant"
+msgstr "AI 어시스턴트"
+
+msgid "Automatic Translation"
+msgstr "자동 번역"
+
+msgid "Switch now for a faster, more convenient, and reliable translation experience."
+msgstr "지금 전환하여 더 빠르고 편리하며 신뢰할 수 있는 번역 경험을 누리세요."
+
+msgid "Switch Now"
+msgstr "지금 전환하기"
+
+msgid "Learn more about Advanced Translation Editor"
+msgstr "고급 번역 편집기에 대해 자세히 알아보기"
+
+msgid "Learn More"
+msgstr "자세히 알아보기"
