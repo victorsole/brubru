@@ -2,8 +2,6 @@
 
   > Your AI multiagent companion for navigating the EU bubble in Brussels
 
-  ![Brubru Logo](public/brubru-logo.svg)
-
   Brubru is brought to you by Beresol BV: https://beresol.eu
 
   GitHub repository: https://github.com/victorsole/brubru
