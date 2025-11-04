@@ -1,0 +1,29 @@
+/* Amendator Page Styles */
+
+.amendator-page {
+  display: flex;
+  min-height: calc(100vh - 73px); /* viewport - header */
+  background-color: var(--color-background);
+}
+
+.amendator-page__main {
+  flex: 1;
+  transition: margin-left var(--transition-base);
+  margin-left: 0;
+  overflow-y: auto;
+}
+
+.amendator-page__main--sidebar-open {
+  margin-left: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .amendator-page {
+    min-height: calc(100vh - 120px); /* viewport - mobile header */
+  }
+
+  .amendator-page__main {
+    margin-left: 0 !important;
+  }
+}

@@ -1,0 +1,125 @@
+/* Sidebar Component Styles */
+
+.sidebar {
+  position: fixed;
+  top: 73px; /* Height of header */
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: var(--z-fixed);
+  transition: transform var(--transition-base);
+}
+
+.sidebar--open {
+  transform: translateX(0);
+}
+
+.sidebar--closed {
+  transform: translateX(-100%);
+}
+
+.sidebar__content {
+  padding: var(--space-6);
+}
+
+.sidebar__toggle {
+  position: fixed;
+  top: 80px;
+  left: var(--space-4);
+  z-index: calc(var(--z-fixed) + 1);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.sidebar__toggle:hover {
+  background-color: var(--color-gray-50);
+  transform: scale(1.05);
+}
+
+.sidebar__toggle:active {
+  transform: scale(0.95);
+}
+
+.sidebar__toggle-icon {
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  transition: transform var(--transition-fast);
+}
+
+.sidebar__toggle-icon--open {
+  transform: rotate(0deg);
+}
+
+.sidebar__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--z-fixed) - 1);
+  animation: fadeIn var(--transition-base);
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .sidebar__overlay {
+    display: none;
+  }
+
+  .sidebar__toggle {
+    left: var(--space-6);
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    width: 280px;
+    top: 120px; /* Adjusted for mobile header height */
+  }
+
+  .sidebar__toggle {
+    top: 130px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .sidebar__toggle-icon {
+    font-size: var(--font-size-base);
+  }
+
+  .sidebar__content {
+    padding: var(--space-4);
+  }
+}
+
+/* Scrollbar Styles */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: var(--color-gray-50);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
+  border-radius: var(--radius-full);
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
+}

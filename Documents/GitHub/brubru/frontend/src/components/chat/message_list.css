@@ -1,0 +1,112 @@
+/* Message List Component Styles */
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.message-list__message {
+  display: flex;
+  animation: slideUp var(--transition-base);
+}
+
+.message-list__message--user {
+  justify-content: flex-end;
+}
+
+.message-list__message--assistant {
+  justify-content: flex-start;
+}
+
+.message-list__message-content {
+  max-width: 70%;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.message-list__message--user .message-list__message-content {
+  background-color: var(--color-accent-blue);
+  color: var(--color-secondary);
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.message-list__message--assistant .message-list__message-content {
+  background-color: var(--color-gray-100);
+  color: var(--color-text);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+.message-list__message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-xs);
+  opacity: 0.9;
+}
+
+.message-list__message--user .message-list__message-header {
+  color: var(--color-secondary);
+}
+
+.message-list__message--assistant .message-list__message-header {
+  color: var(--color-text-secondary);
+}
+
+.message-list__message-role {
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.message-list__message-time {
+  font-weight: var(--font-weight-normal);
+}
+
+.message-list__message-text {
+  line-height: var(--line-height-relaxed);
+  font-size: var(--font-size-base);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .message-list__message-content {
+    max-width: 85%;
+  }
+
+  .message-list__message-text {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Support for markdown rendering (to be implemented later) */
+.message-list__message-text p {
+  margin-bottom: var(--space-2);
+}
+
+.message-list__message-text p:last-child {
+  margin-bottom: 0;
+}
+
+.message-list__message-text code {
+  font-size: var(--font-size-sm);
+  padding: 2px 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+.message-list__message--user .message-list__message-text code {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.message-list__message-text pre {
+  margin: var(--space-2) 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
