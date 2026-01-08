@@ -1,0 +1,42 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:44+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Your site now meets WPML's minimum requirements"
+msgstr "이제 귀하의 사이트가 WPML의 최소 요구 사항을 충족합니다"
+
+msgid "Start WPML Setup"
+msgstr "WPML 설정 시작"
+
+msgid "Need Help?"
+msgstr "도움이 필요하신가요?"
+
+msgid "Contact our support team"
+msgstr "고객 지원팀에 문의하세요"
+
+msgid " and we'll guide you through it step by step."
+msgstr " 저희가 단계별로 안내해 드리겠습니다."
+
+msgid "Your site doesn't meet WPML's minimum requirements"
+msgstr "귀하의 사이트가 WPML의 최소 요구 사항을 충족하지 않습니다"
+
+msgid "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements."
+msgstr "WPML로 사이트가 원활하게 운영되도록 이러한 간단한 최소 요구 사항을 충족하세요."
+
+msgid "Re-check Now"
+msgstr "지금 다시 확인"
+
+msgid "Skip for now"
+msgstr "나중에 건너뛰기"

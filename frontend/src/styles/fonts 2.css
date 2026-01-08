@@ -1,0 +1,45 @@
+/**
+ * Brubru Font Definitions
+ *
+ * Irvin (The New Yorker Font) - Used universally across all Brubru interfaces
+ */
+
+/* Irvin Regular */
+@font-face {
+  font-family: 'Irvin';
+  src: url('/New-Yorker-Font/NY Irvin.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * Note: If additional Irvin font variants are available, add them here following this pattern:
+ *
+ * Irvin Bold:
+ * @font-face {
+ *   font-family: 'Irvin';
+ *   src: url('/public/New-Yorker-Font/NY Irvin Bold.ttf') format('truetype');
+ *   font-weight: 700;
+ *   font-style: normal;
+ *   font-display: swap;
+ * }
+ *
+ * Irvin Italic:
+ * @font-face {
+ *   font-family: 'Irvin';
+ *   src: url('/public/New-Yorker-Font/NY Irvin Italic.ttf') format('truetype');
+ *   font-weight: 400;
+ *   font-style: italic;
+ *   font-display: swap;
+ * }
+ *
+ * Irvin Bold Italic:
+ * @font-face {
+ *   font-family: 'Irvin';
+ *   src: url('/public/New-Yorker-Font/NY Irvin Bold Italic.ttf') format('truetype');
+ *   font-weight: 700;
+ *   font-style: italic;
+ *   font-display: swap;
+ * }
+ */

@@ -1,0 +1,109 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "What should happen with your automatically translated content?": [
+            "¿Qué debe ocurrir con el contenido traducido de forma automática?"
+         ],
+         "Wait for review": [
+            "Esperar revisión"
+         ],
+         "You check and approve translations before publishing.": [
+            "Usted revisa y aprueba las traducciones antes de publicarlas."
+         ],
+         "Your translators check and approve translations before publishing.": [
+            "Sus traductores revisan y aprueban las traducciones antes de publicarlas."
+         ],
+         "Publish and mark for review": [
+            "Publicar y marcar para revisión"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "WPML publica las traducciones inmediatamente pero las marca para que usted las revise cuando le sea conveniente."
+         ],
+         "WPML publishes translations immediately but flags them for your translators to check at their convenience.": [
+            "WPML publica las traducciones inmediatamente pero las marca para que sus traductores las revisen cuando les sea conveniente."
+         ],
+         "Publish without review": [
+            "Publicar sin revisión"
+         ],
+         "The system publishes translations straight away, skipping the review process.": [
+            "El sistema publica las traducciones de inmediato, omitiendo el proceso de revisión."
+         ],
+         "Automatic translation": [
+            "Traducción automática"
+         ],
+         "What should happen with your automatically translated content": [
+            "¿Qué debe suceder con el contenido traducido automáticamente?"
+         ],
+         "Save settings": [
+            "Guardar configuración"
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "Traducir borradores mientras los guardo (consume un poco más de créditos de traducción)."
+         ],
+         "Do you want to translate drafts automatically?": [
+            "¿Desea traducir los borradores automáticamente?"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "Esta función solo está disponible cuando habilita “Traducir todo automáticamente” desde el %sPanel de control de traducciones%s."
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "No traducir borradores. Solo traducir cuando publico contenido."
+         ],
+         "%d credits/word": [
+            "%d créditos/palabra"
+         ],
+         "Informal": [
+            "Informal"
+         ],
+         "Automatic": [
+            "Automático"
+         ],
+         "Formal": [
+            "Formal"
+         ],
+         "Which translation engines do you want to use?": [
+            "¿Qué motores de traducción desea usar?"
+         ],
+         "Automatic translation engines differ in translation style and supported language pairs.\nIf your preferred translation engine does not support a language pair that you want to use, we fall back to your next preferred engine that does support it.\n": [
+            "Los motores de traducción automática difieren en el estilo de traducción y en los pares de idiomas admitidos.\nSi tu motor de traducción preferido no admite un par de idiomas que quieres utilizar, recurrimos a tu siguiente motor preferido que sí lo admita.\n"
+         ],
+         "Drag & drop to sort from the most to the least preferred engine.": [
+            "Arrastre y coloque para ordenar los motores de mayor a menor preferencia."
+         ],
+         "Choose the tone of your automatic translations.": [
+            "Elija el tono de las traducciones automáticas."
+         ],
+         "Read more": [
+            "Leer más"
+         ],
+         "Learn more": [
+            "Más información"
+         ],
+         "On": [
+            "Activado"
+         ],
+         "Off": [
+            "Desactivado"
+         ],
+         "Could not load translation engines": [
+            "No se pudieron cargar los motores de traducción"
+         ],
+         "Could not update engine": [
+            "No se pudo actualizar el motor"
+         ],
+         "Could not save review mode": [
+            "No se pudo guardar el modo de revisión"
+         ],
+         "Could not save translate everything drafts": [
+            "No se pudieron guardar los borradores de traducción de todo"
+         ],
+         "Settings saved successfully": [
+            "Configuración guardada correctamente"
+         ]
+      }
+   }
+}

@@ -1,0 +1,312 @@
+/* Header Component Styles */
+
+.header {
+  width: 100%;
+  background-color: var(--color-secondary);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+.header__container {
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.header__logo:hover {
+  color: var(--color-accent-blue);
+  text-decoration: none;
+}
+
+.header__logo-image {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+.header__logo-text {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: inherit;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.header__nav-link {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.header__nav-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-gray-50);
+  text-decoration: none;
+}
+
+.header__nav-link--active {
+  color: var(--color-accent-blue);
+  font-weight: var(--font-weight-semibold);
+}
+
+.header__nav-link--active::after {
+  content: '';
+  position: absolute;
+  bottom: -17px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-accent-blue);
+  animation: slideInUnderline 0.3s ease-out;
+  transform-origin: left;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.header__language {
+  display: flex;
+  align-items: center;
+}
+
+.header__language-selector {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-width: 180px;
+}
+
+.header__language-selector:hover {
+  border-color: var(--color-border-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.header__language-selector:focus {
+  outline: none;
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 0 3px rgba(6, 147, 227, 0.1);
+}
+
+/* User Menu Dropdown */
+.header__user {
+  position: relative;
+}
+
+.header__user-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: white;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.header__user-button:hover {
+  border-color: var(--color-accent-blue);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.header__user-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.header__user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 240px;
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-2);
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header__user-info {
+  padding: var(--space-3);
+}
+
+.header__user-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-1);
+}
+
+.header__user-email {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.header__user-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-2) 0;
+}
+
+.header__user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.header__user-menu-item:hover {
+  background: var(--color-gray-50);
+  color: var(--color-primary);
+}
+
+.header__user-menu-item--logout {
+  color: #dc2626;
+}
+
+.header__user-menu-item--logout:hover {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.header__user-menu-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.header__user-menu-icon-img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .header__container {
+    padding: var(--space-3) var(--space-4);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .header__logo {
+    font-size: var(--font-size-lg);
+  }
+
+  .header__logo-image {
+    height: 36px;
+  }
+
+  .header__logo-text {
+    font-size: var(--font-size-lg);
+  }
+
+  .header__nav {
+    gap: var(--space-3);
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .header__nav-link {
+    font-size: var(--font-size-sm);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .header__actions {
+    order: 2;
+    gap: var(--space-2);
+  }
+
+  .header__language {
+    order: 2;
+  }
+
+  .header__language-selector {
+    min-width: 140px;
+    font-size: var(--font-size-xs);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .header__user-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .header__user-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header__user-dropdown {
+    min-width: 200px;
+    right: -8px;
+  }
+}

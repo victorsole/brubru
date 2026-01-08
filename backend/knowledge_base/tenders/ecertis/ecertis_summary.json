@@ -1,0 +1,93 @@
+{
+  "source": "eCertis REST API",
+  "api_url": "https://ec.europa.eu/growth/tools-databases/ecertisrest",
+  "extraction_date": "2025-11-27T12:30:39.969589",
+  "countries": {
+    "at": {
+      "name": "Austria",
+      "criteria_count": 12
+    },
+    "bg": {
+      "name": "Bulgaria",
+      "criteria_count": 52
+    },
+    "hr": {
+      "name": "Croatia",
+      "criteria_count": 58
+    },
+    "cy": {
+      "name": "Cyprus",
+      "criteria_count": 31
+    },
+    "cz": {
+      "name": "Czechia",
+      "criteria_count": 41
+    },
+    "dk": {
+      "name": "Denmark",
+      "criteria_count": 55
+    },
+    "ee": {
+      "name": "Estonia",
+      "criteria_count": 48
+    },
+    "fi": {
+      "name": "Finland",
+      "criteria_count": 31
+    },
+    "gr": {
+      "name": "Greece",
+      "criteria_count": 46
+    },
+    "hu": {
+      "name": "Hungary",
+      "criteria_count": 53
+    },
+    "ie": {
+      "name": "Ireland",
+      "criteria_count": 61
+    },
+    "lv": {
+      "name": "Latvia",
+      "criteria_count": 44
+    },
+    "lt": {
+      "name": "Lithuania",
+      "criteria_count": 46
+    },
+    "lu": {
+      "name": "Luxembourg",
+      "criteria_count": 13
+    },
+    "mt": {
+      "name": "Malta",
+      "criteria_count": 54
+    },
+    "pl": {
+      "name": "Poland",
+      "criteria_count": 67
+    },
+    "pt": {
+      "name": "Portugal",
+      "criteria_count": 49
+    },
+    "ro": {
+      "name": "Romania",
+      "criteria_count": 51
+    },
+    "sk": {
+      "name": "Slovakia",
+      "criteria_count": 36
+    },
+    "si": {
+      "name": "Slovenia",
+      "criteria_count": 56
+    },
+    "se": {
+      "name": "Sweden",
+      "criteria_count": 66
+    }
+  },
+  "total_countries": 21,
+  "total_criteria": 970
+}

@@ -1,0 +1,372 @@
+{
+  "dg_code": "SANTE",
+  "dg_name": "Directorate-General for Health & Food Safety",
+  "commissioner": {
+    "name": "Olivér Várhelyi",
+    "title": "Commissioner"
+  },
+  "director_general": {
+    "name": "Sandra Gallina",
+    "title": "Director-General",
+    "assistants": [
+      "Richard McGeehan",
+      "Luca Battistini"
+    ]
+  },
+  "principal_advisers": [
+    {
+      "name": "Vacant",
+      "role": "Health and Crisis Management"
+    },
+    {
+      "name": "Veronique Wasbauer",
+      "role": "Non-Communicable Diseases"
+    }
+  ],
+  "advisers": [
+    {
+      "name": "Wojciech Kalamarz",
+      "role": "International"
+    },
+    {
+      "name": "Francisco Perez Canado",
+      "role": "External Dimension of Health"
+    },
+    {
+      "name": "Johan Vernelen",
+      "role": "HR Correspondent"
+    },
+    {
+      "name": "Stefan Schreck",
+      "role": "Stakeholder Relations (deputising for the Director)"
+    }
+  ],
+  "deputy_directors_general": [
+    {
+      "name": "Lorena Boix Alonso",
+      "title": "Deputy Director-General for Health",
+      "responsible_for": ["SANTE.B", "SANTE.C", "SANTE.D"],
+      "assistant": "Patricia Lamotte"
+    },
+    {
+      "name": "Claire Bury",
+      "title": "Deputy Director-General for Food Sustainability",
+      "responsible_for": ["SANTE.E", "SANTE.F", "SANTE.G"],
+      "assistant": "Julie Sainz"
+    }
+  ],
+  "special_units": [
+    {
+      "code": "SANTE.01",
+      "name": "Policy Strategy",
+      "head": "Cristina Modoran",
+      "deputy": "Thomas Van Cangh"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "SANTE.A",
+      "name": "One Health",
+      "director": "Roser Domenech Amado",
+      "units": [
+        {
+          "code": "SANTE.A.1",
+          "name": "One Health, Antimicrobial Resistance",
+          "head": "Ariane Vander Stappen",
+          "deputy": "Sigrid Weiland"
+        },
+        {
+          "code": "SANTE.A.2",
+          "name": "Inter-Institutional Relations",
+          "head": "Marta Moya Diaz",
+          "deputy": "Alina Timofte"
+        },
+        {
+          "code": "SANTE.A.3",
+          "name": "Communication",
+          "head": "Emer Traynor",
+          "deputy": "Frederic Vincent"
+        },
+        {
+          "code": "SANTE.A.4",
+          "name": "Multilateral International Relations",
+          "head": "Florina Telea",
+          "deputy": "Sebastien Goux"
+        },
+        {
+          "code": "SANTE.A.5",
+          "name": "Bilateral International Relations",
+          "head": "Caroline Boeshertz",
+          "deputy": "Martin Pouliot"
+        }
+      ]
+    },
+    {
+      "code": "SANTE.B",
+      "name": "Public Health, Cancer and Health Security",
+      "director": "Antonio Parenti",
+      "units": [
+        {
+          "code": "SANTE.B.1",
+          "name": "Cancer, Health in All Policies",
+          "head": "Philippe Roux",
+          "deputy": "Matthias Schuppe"
+        },
+        {
+          "code": "SANTE.B.2",
+          "name": "Health Security",
+          "head": "Ingrid Keller",
+          "deputy": "Jaroslaw Waligora"
+        },
+        {
+          "code": "SANTE.B.3",
+          "name": "Health Monitoring and Cooperation, Health Networks",
+          "head": "Donata Meroni",
+          "deputy": "Nichola Larkins"
+        },
+        {
+          "code": "SANTE.B.4",
+          "name": "Disease Prevention and Health Promotion",
+          "head": "Marianne Takki"
+        }
+      ]
+    },
+    {
+      "code": "SANTE.C",
+      "name": "Digital, EU4Health and Health Systems Modernisation",
+      "director": "Marco Marsella",
+      "units": [
+        {
+          "code": "SANTE.C.1",
+          "name": "Digital Health",
+          "head": "Fulvia Raffaelli",
+          "deputy": "Martin Dorazil"
+        },
+        {
+          "code": "SANTE.C.2",
+          "name": "Health Technology Assessment",
+          "head": "Maya Matthews"
+        },
+        {
+          "code": "SANTE.C.3",
+          "name": "State of Health",
+          "head": "Vacant",
+          "deputy": "Dirk Van Den Steen"
+        },
+        {
+          "code": "SANTE.C.4",
+          "name": "EU4Health and Health Research",
+          "head": "Luca Battistini",
+          "deputy": "Adrian Peres"
+        }
+      ]
+    },
+    {
+      "code": "SANTE.D",
+      "name": "Medical Products and Innovation",
+      "director": "Rainer Becker",
+      "units": [
+        {
+          "code": "SANTE.D.1",
+          "name": "Medicines: Policy, Autorisation and Monitoring",
+          "head": "Olga Solomon",
+          "deputy": "Florian Schmidt"
+        },
+        {
+          "code": "SANTE.D.2",
+          "name": "Medical Products: Quality, Safety, Innovation",
+          "head": "Agnes Mathieu-Mendes",
+          "deputy": "Harald Mische"
+        },
+        {
+          "code": "SANTE.D.3",
+          "name": "Medical Devices",
+          "head": "Flora Giorgio"
+        },
+        {
+          "code": "SANTE.D.4",
+          "name": "Veterinary Medicines",
+          "head": "Eva Zamora Escribano",
+          "deputy": "Alfonso Las Heras"
+        }
+      ]
+    },
+    {
+      "code": "SANTE.E",
+      "name": "Food Safety, Sustainability and Innovation",
+      "director": "Klaus Berend",
+      "units": [
+        {
+          "code": "SANTE.E.1",
+          "name": "General Food Law, Food Waste and Food Information to Consumers",
+          "head": "Alexandra Nikolakopoulou",
+          "deputy": "Anastasia Alvizou"
+        },
+        {
+          "code": "SANTE.E.2",
+          "name": "Food Processing Technologies and Novel Foods",
+          "head": "Sabine Pelsser",
+          "deputy": "Frans Verstraete"
+        },
+        {
+          "code": "SANTE.E.3",
+          "name": "Biotechnology",
+          "head": "Irene Sacristan Sanchez",
+          "deputy": "Sirkku Heinimaa"
+        },
+        {
+          "code": "SANTE.E.4",
+          "name": "Pesticides and Biocides",
+          "head": "Almut Bitterhof"
+        }
+      ]
+    },
+    {
+      "code": "SANTE.F",
+      "name": "Health and Food Audits and Analysis",
+      "director": "Ruben Tascon (Acting)",
+      "note": "Entities located in Ireland (Grange)",
+      "units": [
+        {
+          "code": "SANTE.F.1",
+          "name": "Food",
+          "head": "Andrew Owen-Griffiths",
+          "deputy": "Javier Tellechea Vertiz"
+        },
+        {
+          "code": "SANTE.F.2",
+          "name": "Animals",
+          "head": "Ana Ramirez Vela",
+          "deputy": "Faye Ioannou"
+        },
+        {
+          "code": "SANTE.F.3",
+          "name": "Plants",
+          "head": "Aidan O'Connor",
+          "deputy": "Graeme Jones"
+        },
+        {
+          "code": "SANTE.F.4",
+          "name": "Trade Related Controls, Residues and Feed Safety",
+          "head": "Eric Thevenard",
+          "deputy": "Joanna Warnel"
+        },
+        {
+          "code": "SANTE.F.5",
+          "name": "Health Protection",
+          "head": "Ruben Tascon",
+          "deputy": "Sara Tavares"
+        }
+      ]
+    },
+    {
+      "code": "SANTE.G",
+      "name": "Crisis Preparedness in Food, Animals and Plants",
+      "director": "Bernard Van Goethem",
+      "units": [
+        {
+          "code": "SANTE.G.1",
+          "name": "Plant Health",
+          "head": "Sylvain Giraud",
+          "deputy": "Maria Kammenou"
+        },
+        {
+          "code": "SANTE.G.2",
+          "name": "Animal Health",
+          "head": "Francisco Reviriego Gordejo",
+          "deputy": "Barbara Logar"
+        },
+        {
+          "code": "SANTE.G.3",
+          "name": "Animal Welfare",
+          "head": "Andrea Gavinelli",
+          "deputy": "Lucie Carrouee"
+        },
+        {
+          "code": "SANTE.G.4",
+          "name": "Official Controls",
+          "head": "Peter Bokor",
+          "deputy": "Bruno Saimour"
+        },
+        {
+          "code": "SANTE.G.5",
+          "name": "Food Hygiene, Feed and Fraud",
+          "head": "Koen Van Dyck",
+          "deputy": "Eric Marin"
+        }
+      ]
+    },
+    {
+      "code": "SANTE.R",
+      "name": "Policy and Administrative Support",
+      "director": "Gabriella Fesus",
+      "units": [
+        {
+          "code": "SANTE.R.1",
+          "name": "Better Regulation",
+          "head": "Caterina Gozzi",
+          "deputy": "Nicolas Pradalie"
+        },
+        {
+          "code": "SANTE.R.2",
+          "name": "Legal Affairs",
+          "head": "Rossella Delfino",
+          "deputy": "Ville Jamsa"
+        },
+        {
+          "code": "SANTE.R.3",
+          "name": "Finance, Budget and Controls",
+          "head": "Jeroen Lettens",
+          "deputy": "Stanislava Mihaylova"
+        },
+        {
+          "code": "SANTE.R.4",
+          "name": "Information Systems",
+          "head": "Giorgos Georgiannakis",
+          "deputy": "Didier Charneux"
+        }
+      ]
+    }
+  ],
+  "linked_agency": {
+    "code": "HaDEA",
+    "name": "Health and Digital Executive Agency",
+    "director": "Marina Zanchi",
+    "departments": [
+      {
+        "code": "HaDEA.A",
+        "name": "Health and Food",
+        "director": "Angelo Marino",
+        "units": [
+          {
+            "code": "HaDEA.A.1",
+            "name": "EU4Health",
+            "head": "Vacant",
+            "deputy": "Nadia Elhaggagi"
+          },
+          {
+            "code": "HaDEA.A.2",
+            "name": "EU4Health / Single Market Programme - Food",
+            "head": "Vacant",
+            "deputy": "Nicolas Krieger"
+          }
+        ]
+      },
+      {
+        "code": "HaDEA.C",
+        "name": "Finance and Resources",
+        "director": "Jacques Remacle",
+        "units": [
+          {
+            "code": "HaDEA.C.3",
+            "name": "Staff, Communication and Support",
+            "head": "Sylvia Ferretti"
+          }
+        ]
+      }
+    ],
+    "note": "Entities located in Luxembourg"
+  },
+  "seconded_manager": "Annukka Ojala - seconded to the Cabinet of Executive Vice-President Minzatu",
+  "date_of_effect": "2025-11-01"
+}

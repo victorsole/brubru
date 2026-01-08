@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:43+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Get More Features with WPML's Advanced Translation Editor"
+msgstr "Krijg meer functies met WPML's Geavanceerde Vertaaleditor"
+
+msgid "Close banner"
+msgstr "Banner sluiten"
+
+msgid "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:"
+msgstr "Je gebruikt de Klassieke Vertaaleditor, een oude verouderde tool, en mist de vele functies en efficiëntie van onze Geavanceerde Vertaaleditor:"
+
+msgid "Translation Memory"
+msgstr "Vertaalgeheugen"
+
+msgid "HTML Protection"
+msgstr "HTML-bescherming"
+
+msgid "Glossary"
+msgstr "Woordenlijst"
+
+msgid "Spellchecker"
+msgstr "Spellingscontrole"
+
+msgid "AI Assistant"
+msgstr "AI-assistent"
+
+msgid "Automatic Translation"
+msgstr "Automatische vertaling"
+
+msgid "Switch now for a faster, more convenient, and reliable translation experience."
+msgstr "Schakel nu over voor een snellere, gemakkelijkere en betrouwbaardere vertaalervaring."
+
+msgid "Switch Now"
+msgstr "Nu overschakelen"
+
+msgid "Learn more about Advanced Translation Editor"
+msgstr "Meer informatie over de geavanceerde vertaaleditor"
+
+msgid "Learn More"
+msgstr "Meer informatie"

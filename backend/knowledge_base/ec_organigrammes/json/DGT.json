@@ -1,0 +1,105 @@
+{
+  "dg_code": "DGT",
+  "dg_name": "Translation",
+  "full_name": "Directorate-General for Translation",
+  "date_of_effect": "2025-11-01",
+  "commissioner": {
+    "name": "Piotr Serafin",
+    "title": "Commissioner"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "C Ellindes",
+      "position": "Director-General",
+      "assistants": [
+        {
+          "name": "I. Zelicovic",
+          "role": "Assistant to the DG"
+        },
+        {
+          "name": "J. Virrata",
+          "role": "Assistant to the DG"
+        }
+      ]
+    },
+    "deputy_director_general": {
+      "name": "V. Dario (acting)",
+      "position": "Deputy Director-General",
+      "responsibility": "Responsible for Directorates A, B, C and D"
+    }
+  },
+  "units": {
+    "dgt_01": {
+      "code": "DGT.01",
+      "name": "Coordination & Institutional Affairs",
+      "head": "J. Hederstr\u00f6m"
+    },
+    "dgt_02": {
+      "code": "DGT.02",
+      "name": "Communication",
+      "head": "M. Solombono"
+    }
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "DGT.A",
+      "name": "Translation",
+      "director": {
+        "name": "R. Enciu",
+        "position": "Director"
+      }
+    },
+    "directorate_b": {
+      "code": "DGT.B",
+      "name": "Translation",
+      "director": {
+        "name": "M. Hennessy",
+        "position": "Director"
+      }
+    },
+    "directorate_c": {
+      "code": "DGT.C",
+      "name": "Translation",
+      "director": {
+        "name": "J. Bernarich (acting)",
+        "position": "Director"
+      }
+    },
+    "directorate_d": {
+      "code": "DGT.D",
+      "name": "Translation",
+      "director": {
+        "name": "V. Dario",
+        "position": "Director"
+      }
+    },
+    "directorate_r": {
+      "code": "DGT.R",
+      "name": "Resources",
+      "director": {
+        "name": "A. Mara\u0161lis",
+        "position": "Director"
+      }
+    },
+    "directorate_t": {
+      "code": "DGT.T",
+      "name": "Technology",
+      "director": {
+        "name": "K. Erben",
+        "position": "Director"
+      }
+    }
+  },
+  "special_units": {
+    "translation_centre_bodies_union": {
+      "code": "E.dT",
+      "name": "Translation Centre for the Bodies of the European Union",
+      "location": "Luxembourg"
+    }
+  },
+  "notes": [
+    "Deputy to the Director",
+    "Management in Luxembourg",
+    "'Transadministre' entity"
+  ]
+}

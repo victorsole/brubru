@@ -1,0 +1,208 @@
+{
+  "dg_code": "SCIC",
+  "dg_name": "Directorate-General for Interpretation",
+  "commissioner": {
+    "name": "Piotr Serafin",
+    "title": "Commissioner"
+  },
+  "director_general": {
+    "name": "Genoveva Ruiz Calavera",
+    "title": "Director-General",
+    "assistant": "Anne-Laure Hubert"
+  },
+  "deputy_director_general": {
+    "name": "Colin Scicluna",
+    "title": "Deputy Director-General"
+  },
+  "principal_adviser": {
+    "name": "Janek Poniatowski",
+    "role": "Principal Adviser"
+  },
+  "special_units": [
+    {
+      "code": "SCIC.01",
+      "name": "Strategy, Policy and Communication",
+      "head": "Javier Hernandez Saseta"
+    }
+  ],
+  "departments": [
+    {
+      "code": "SCIC.A",
+      "name": "Interpreters",
+      "director": "Alexandru Panagarou",
+      "interpretation_departments": [
+        {
+          "name": "Interpretation Department I",
+          "head": "Alexandru Panagarou (Acting)",
+          "units": [
+            {
+              "code": "SCIC.A.AS",
+              "head": "Anna Janowska"
+            },
+            {
+              "code": "SCIC.A.DA",
+              "head": "Hannah Nielsen"
+            },
+            {
+              "code": "SCIC.A.ES",
+              "head": "Maria Adelaida De Francia Caudin"
+            },
+            {
+              "code": "SCIC.A.LT",
+              "head": "Surnanti Marujaskrene"
+            },
+            {
+              "code": "SCIC.A.RO",
+              "head": "Maria Kordonau"
+            },
+            {
+              "code": "SCIC.A.SL",
+              "head": "Katja Zuemer"
+            }
+          ]
+        },
+        {
+          "name": "Interpretation Department II",
+          "head": "Marjana Rupnik",
+          "units": [
+            {
+              "code": "SCIC.A.BG",
+              "head": "Katja Zuemer (Acting)"
+            },
+            {
+              "code": "SCIC.A.DE",
+              "head": "Monika Schober"
+            },
+            {
+              "code": "SCIC.A.EL",
+              "head": "Evgenia Papakirou"
+            },
+            {
+              "code": "SCIC.A.IT",
+              "head": "Maria Graziagoletta Bauer"
+            },
+            {
+              "code": "SCIC.A.PL",
+              "head": "Dorota Mofska Seranyi"
+            },
+            {
+              "code": "SCIC.A.SK",
+              "head": "Zuzana Kriels-Lalinova"
+            },
+            {
+              "code": "SCIC.A.SV",
+              "head": "Daniel Pagiley"
+            }
+          ]
+        },
+        {
+          "name": "Interpretation Department III",
+          "head": "Verena Korper",
+          "units": [
+            {
+              "code": "SCIC.A.EN.A",
+              "head": "Noraad Heath"
+            },
+            {
+              "code": "SCIC.A.FI",
+              "head": "Riikka Vespalajnen"
+            },
+            {
+              "code": "SCIC.A.HR",
+              "head": "Patricia Magolaski"
+            },
+            {
+              "code": "SCIC.A.HU",
+              "head": "Maria Kordonau (Acting)"
+            },
+            {
+              "code": "SCIC.A.LV",
+              "head": "Uldis Sprogis"
+            },
+            {
+              "code": "SCIC.A.MT",
+              "head": "Peter Mifsud"
+            },
+            {
+              "code": "SCIC.A.NL",
+              "head": "Margo Sujs"
+            },
+            {
+              "code": "SCIC.A.PT",
+              "head": "Julio Monteiro"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "SCIC.B",
+      "name": "Interpretation Services Management and Professional Support",
+      "director": "Filip Majcen",
+      "units": [
+        {
+          "code": "SCIC.B.1",
+          "name": "Talent Development",
+          "head": "Daniele Morganti"
+        },
+        {
+          "code": "SCIC.B.2",
+          "name": "Programming of Interpretation",
+          "head": "Ana Moudomde Neiuromdue"
+        },
+        {
+          "code": "SCIC.B.3",
+          "name": "Interinstitutional Interpretation and Info Delivery Modes",
+          "head": "Susannah Mangiameli"
+        },
+        {
+          "code": "SCIC.B.4",
+          "name": "External Partnerships & Supporting Agent",
+          "head": "Jaroslav Stepren (Acting)"
+        }
+      ]
+    },
+    {
+      "code": "SCIC.C",
+      "name": "Resources and Corporate Services",
+      "director": "Gianluca Pecchi",
+      "units": [
+        {
+          "code": "SCIC.C.1",
+          "name": "Conference Services",
+          "head": "Ildefonso Bartoletto"
+        },
+        {
+          "code": "SCIC.C.2",
+          "name": "Budget and Financial Management",
+          "head": "Stamatis Safitis"
+        },
+        {
+          "code": "SCIC.C.3",
+          "name": "ICT, Finance Planning, HR-Hospital, Internal Control, and Logistics",
+          "head": "Maria Gonzalez Cabello"
+        },
+        {
+          "code": "SCIC.C.4",
+          "name": "Communication and Customer Services",
+          "head": "Magdalena Collins"
+        },
+        {
+          "code": "SCIC.C.5",
+          "name": "Admin Services, Solutions and Sound Quality",
+          "head": "Vacant"
+        },
+        {
+          "code": "SCIC.C.6",
+          "name": "IT and Digital Transformation",
+          "head": "Petrus Dahigrenblauberg"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Including the HR Correspondent: J Pelconen",
+    "Including Meetings Services in Luxembourg"
+  ],
+  "date_of_effect": "2025-11-01"
+}

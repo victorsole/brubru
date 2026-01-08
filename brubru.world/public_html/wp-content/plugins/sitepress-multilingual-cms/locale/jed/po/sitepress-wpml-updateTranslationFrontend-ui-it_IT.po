@@ -1,0 +1,18 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/updateTranslationFrontend/components/InProgressText.js:8
+msgid "Please wait, applying translation.."
+msgstr "Attendere prego, sto applicando la traduzione..."
+
+#: src/js/updateTranslationFrontend/store.js:29
+msgid "There was an error in applying translation."
+msgstr "Si è verificato un errore nell'applicare la traduzione."
+
+#: src/js/updateTranslationFrontend/useATESync.js:34
+msgid "Someone is already reviewing this translation. Please try again later."
+msgstr "Qualcuno sta già revisionando questa traduzione. Si prega di riprovare più tardi."

@@ -1,0 +1,405 @@
+{
+  "dg_code": "JRC",
+  "dg_name": "Joint Research Centre",
+  "commissioner": "Ekaterina Zaharieva",
+  "date_of_effect": "2025-03-01",
+  "director_general": {
+    "name": "Bernard Magenhann",
+    "assistants": [
+      "Célia Doumerg"
+    ]
+  },
+  "deputy_director_general": {
+    "name": "Bernard Magenhann (Acting)",
+    "code": "JRC.G.1"
+  },
+  "adviser_for_strategy": {
+    "name": "Not shown"
+  },
+  "adviser_for_foresight_and_partnerships": {
+    "name": "Vacant"
+  },
+  "jrc_02": {
+    "name": "Expert Coordination",
+    "head": "Natasha Vollert",
+    "deputy": "Georgios Kosmopoulou"
+  },
+  "directorates": [
+    {
+      "code": "JRC.A",
+      "name": "Strategy and Impact",
+      "director": "Vacant",
+      "units": [
+        {
+          "code": "JRC.A.1",
+          "name": "EU Science and Knowledge Discovery",
+          "head": "Luis Calero",
+          "deputy": "Antoine Karmazs"
+        },
+        {
+          "code": "JRC.A.2",
+          "name": "Science Policy and Coordination",
+          "head": "Alexandre Colas",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "JRC.A.3",
+          "name": "Business Development and Research Infrastructure",
+          "head": "Marco Iozzo",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "JRC.A.4",
+          "name": "Territorial and Development",
+          "head": "Vacant",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "JRC.A.5",
+          "name": "Innovation and Industry Sector and Components",
+          "head": "David Szauer",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "JRC.A.6",
+          "name": "Communications",
+          "head": "Valentina Marchi",
+          "deputy": "Not shown"
+        }
+    ]
+    },
+    {
+      "code": "JRC.B",
+      "name": "Life and Sustainable Economy",
+      "director": "Susanna Salminen",
+      "units": [
+        {
+          "code": "JRC.B.1",
+          "name": "Reference Materials and Measurements",
+          "head": "Beatrix Capernicus"
+        },
+        {
+          "code": "JRC.B.2",
+          "name": "Food, Science, Policy and Analysis",
+          "head": "Petra Kucova"
+        },
+        {
+          "code": "JRC.B.3",
+          "name": "Health and Consumer Products",
+          "head": "Maurice Whelan"
+        },
+        {
+          "code": "JRC.B.4",
+          "name": "Innovation Policy & Technology Transfer",
+          "head": "Luigi Antonio"
+        },
+        {
+          "code": "JRC.B.5",
+          "name": "EU Reference Lab",
+          "head": "Philippe Testud-Marquarey"
+        },
+        {
+          "code": "JRC.B.6",
+          "name": "Innovation R&D Water",
+          "head": "Simone Manfredi"
+        },
+        {
+          "code": "JRC.B.7",
+          "name": "Production Site & S.C.R.C. Plant",
+          "head": "Michel Berge De Rovira"
+        },
+        {
+          "code": "JRC.B.8",
+          "name": "Research and Innovation",
+          "head": "Francesco Peraudo"
+        }
+      ]
+    },
+    {
+      "code": "JRC.C",
+      "name": "Energy, Climate and Change",
+      "director": "Not shown",
+      "units": [
+        {
+          "code": "JRC.C.1",
+          "name": "Energy Transition, Energy System",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.C.2",
+          "name": "Renewable Energy and Energy System Analysis",
+          "head": "Georgios Kopanos"
+        },
+        {
+          "code": "JRC.C.3",
+          "name": "Transport and Infrastructure",
+          "head": "Giacomo Lozzi"
+        },
+        {
+          "code": "JRC.C.4",
+          "name": "Clean and Circular Economy",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.C.5",
+          "name": "Energy and Environment Monitoring and Modelling",
+          "head": "Greet Janssens-Maenhout"
+        },
+        {
+          "code": "JRC.C.6",
+          "name": "Bio and Carbon Engineering and Climate",
+          "head": "Dan Popescu"
+        },
+        {
+          "code": "JRC.C.7",
+          "name": "Nuclear Security, Environment Radioactivity",
+          "head": "Viorica Lazanu"
+        }
+      ]
+    },
+    {
+      "code": "JRC.D",
+      "name": "Sustainable Resources",
+      "director": "Not shown",
+      "units": [
+        {
+          "code": "JRC.D.1",
+          "name": "Earth Observation",
+          "head": "Pierre Soille"
+        },
+        {
+          "code": "JRC.D.2",
+          "name": "Bio-Economy",
+          "head": "Davide Campolongo"
+        },
+        {
+          "code": "JRC.D.3",
+          "name": "Risk, Resilience and Global Food Security",
+          "head": "Andrea Pagano"
+        },
+        {
+          "code": "JRC.D.4",
+          "name": "Forest and Infrastructure and Support",
+          "head": "Eric Arets"
+        },
+        {
+          "code": "JRC.D.5",
+          "name": "Water Resources",
+          "head": "Fayçal Bouraoui"
+        },
+        {
+          "code": "JRC.D.6",
+          "name": "Rural Environmental Development and Forest",
+          "head": "Bénédicte Liegois"
+        },
+        {
+          "code": "JRC.D.7",
+          "name": "Food, Climate and Resilience",
+          "head": "Alois Frotschur"
+        }
+      ]
+    },
+    {
+      "code": "JRC.E",
+      "name": "Space, Security and Migration",
+      "director": "Not shown",
+      "units": [
+        {
+          "code": "JRC.E.1",
+          "name": "Global Security and Crisis Management",
+          "head": "Stefano Ferracuti"
+        },
+        {
+          "code": "JRC.E.2",
+          "name": "Disaster Risk Management",
+          "head": "Luc Feyen"
+        },
+        {
+          "code": "JRC.E.3",
+          "name": "European Laboratory for Structural Assessment",
+          "head": "Marco Domaneschi"
+        },
+        {
+          "code": "JRC.E.4",
+          "name": "Nuclear Decommissioning and Waste Management",
+          "head": "Hamid Aït Abderrahim"
+        },
+        {
+          "code": "JRC.E.5",
+          "name": "Nuclear Reactor Systems and Fuel Cycle",
+          "head": "Alessandro Perego"
+        }
+      ]
+    },
+    {
+      "code": "JRC.F",
+      "name": "Health, Consumers and Reference Materials",
+      "director": "Not shown",
+      "units": [
+        {
+          "code": "JRC.F.1",
+          "name": "Health in Society, Disease Prevention",
+          "head": "Montse Gispert"
+        },
+        {
+          "code": "JRC.F.2",
+          "name": "Chemicals Safety and Alternative Methods",
+          "head": "Maurice Whelan"
+        },
+        {
+          "code": "JRC.F.3",
+          "name": "Reference Materials and EU Reference Laboratories",
+          "head": "Martina Steliarov"
+        },
+        {
+          "code": "JRC.F.4",
+          "name": "Consumer and Product Safety, Exposure",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.F.5",
+          "name": "Precision Medicine, Early and Accurate Diagnosis",
+          "head": "Philippe Corbisier"
+        },
+        {
+          "code": "JRC.F.6",
+          "name": "Chemical, Biological, Radiological and Nuclear",
+          "head": "Ralf Kägi"
+        },
+        {
+          "code": "JRC.F.7",
+          "name": "E.U. Science Hub",
+          "head": "Vacant"
+        }
+      ]
+    },
+    {
+      "code": "JRC.G",
+      "name": "Innovation, Engineering and Research",
+      "director": "Not shown",
+      "units": [
+        {
+          "code": "JRC.G.1",
+          "name": "Text and Data Mining",
+          "head": "Domenico Daniele"
+        },
+        {
+          "code": "JRC.G.2",
+          "name": "Computational Physics",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.G.3",
+          "name": "Artificial Intelligence",
+          "head": "Erik Brilla-Thøgersen"
+        },
+        {
+          "code": "JRC.G.4",
+          "name": "Innovation for Digital Transformation",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.G.5",
+          "name": "Robotics",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.G.6",
+          "name": "Knowledge for Digital Age",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.G.7.1",
+          "name": "JRC Support Services (Geel)",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.G.8",
+          "name": "Admin-Interoperability and Blockchain",
+          "head": "Not shown"
+        }
+      ]
+    },
+    {
+      "code": "JRC.I",
+      "name": "Competence Centre on Behavioural Insights",
+      "director": "Not shown"
+    },
+    {
+      "code": "JRC.T",
+      "name": "Text, Transformation for Agents",
+      "director": "Not shown"
+    },
+    {
+      "code": "JRC.R",
+      "name": "Finance, Services and Site Operations",
+      "director": "Not shown",
+      "units": [
+        {
+          "code": "JRC.R.1",
+          "name": "Finance and Accounting",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.R.2",
+          "name": "Budget and Financial Management and Compliance",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.R.3",
+          "name": "IT and Knowledge Management and Services",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.R.4",
+          "name": "Contracts and Site Infrastructure",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.R.5",
+          "name": "Site Operations",
+          "head": "Not shown"
+        }
+      ]
+    },
+    {
+      "code": "JRC.S",
+      "name": "Ispra Site Operations and Services",
+      "director": "Not shown",
+      "units": [
+        {
+          "code": "JRC.S.1",
+          "name": "Services for Ispra Site 1",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.S.2",
+          "name": "Services for Ispra Site 2",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.S.3",
+          "name": "Infrastructures, Maintenance and Compliance Ispra",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.S.4",
+          "name": "Technical Realization",
+          "head": "Not shown"
+        },
+        {
+          "code": "JRC.S.5",
+          "name": "Safety and Infrastructure for Site",
+          "head": "Not shown"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "D: Deputy to the Director",
+    "DG: Dir. D, Dept. with functional reporting to Directors with Directorate/heads in thematic/geographic",
+    "D1: Dir. E, Dept. with functional reporting to the Site Director of the JRC Petten and Karlsruhe sites",
+    "A: High administrative responsibility for the decommissioning teams directly attached to the Directors of Directorate E",
+    "Note: This organizational chart was very difficult to read comprehensively due to image quality and overlap of organizational elements"
+  ]
+}

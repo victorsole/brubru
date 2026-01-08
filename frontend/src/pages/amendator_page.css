@@ -1,0 +1,105 @@
+/* Amendator Page Styles */
+
+.amendator-page {
+  display: flex;
+  flex: 1; /* Take up remaining space, pushing footer to bottom */
+  background-color: var(--color-background);
+  overflow: hidden;
+}
+
+.amendator-page__main {
+  flex: 1;
+  display: flex;
+  transition: margin-left var(--transition-base);
+  margin-left: 0;
+  overflow: hidden;
+}
+
+.amendator-page__main--sidebar-open {
+  margin-left: 300px;
+}
+
+.amendator-page__main--ai-sidebar-open {
+  /* AI sidebar is included in the flex layout, no margin needed */
+}
+
+/* Save Amendments Bar */
+.amendator-page__save-bar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: var(--color-secondary);
+  border-bottom: 2px solid var(--color-primary);
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.amendator-page__save-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.amendator-page__amendment-count {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.amendator-page__save-message {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+.amendator-page__save-message--success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.amendator-page__save-message--error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.amendator-page__save-button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.amendator-page__save-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .amendator-page {
+    overflow: visible;
+    overflow-y: auto;
+    flex-direction: column;
+  }
+
+  .amendator-page__main {
+    margin-left: 0 !important;
+    overflow: visible;
+    flex-direction: column;
+  }
+
+  .amendator-page__main--ai-sidebar-open {
+    /* AI sidebar slides in from right on mobile */
+  }
+
+  .amendator-page__save-bar {
+    padding: var(--space-2) var(--space-3);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}

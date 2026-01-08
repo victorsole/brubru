@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/notices-site-key/components/HelpLink.js:18
+msgid "Get a key for this site"
+msgstr "Αποκτήστε ένα κλειδί για αυτόν τον ιστότοπο"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:30
+msgid "Site key:"
+msgstr "Κλειδί ιστοτόπου:"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:41
+msgid "Enter your site key here"
+msgstr "Εισαγάγετε το κλειδί του ιστοτόπου σας εδώ"
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Registering..."
+msgstr "Γίνεται εγγραφή..."
+
+#: src/js/notices-site-key/components/SiteKeyForm.js:50
+msgid "Register"
+msgstr "Εγγραφή"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:29
+msgid "A New Site Key Is Required"
+msgstr "Απαιτείται νέο κλειδί ιστοτόπου"
+
+#: src/js/notices-site-key/components/SiteKeyNotice.js:34
+msgid ""
+"To continue using WPML features like automatic translation and plugin "
+"updates, please register your site again. Don’t worry, your existing "
+"content and translations are safe."
+msgstr "Για να συνεχίσετε να χρησιμοποιείτε τις λειτουργίες του WPML όπως η αυτόματη μετάφραση και οι ενημερώσεις πρόσθετων, παρακαλούμε εγγράψτε ξανά τον ιστότοπό σας. Μην ανησυχείτε, το υπάρχον περιεχόμενο και οι μεταφράσεις σας είναι ασφαλή."
+
+#: src/js/notices-site-key/components/SuccessMessage.js:30
+msgid "Site key registered successfully!"
+msgstr "Το κλειδί του ιστοτόπου καταχωρίστηκε με επιτυχία!"
+
+#: src/js/notices-site-key/components/SuccessMessage.js:31
+msgid "Page will reload in %d seconds..."
+msgstr "Η σελίδα θα ανανεωθεί σε %d δευτερόλεπτα..."
+
+#: src/js/notices-site-key/hooks/useRegisterSiteKey.js:54
+msgid "Registration failed. Please try again."
+msgstr "Η εγγραφή απέτυχε. Παρακαλώ προσπαθήστε ξανά."

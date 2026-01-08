@@ -1,0 +1,426 @@
+{
+  "dg_code": "INTPA",
+  "dg_name": "International Partnerships",
+  "commissioner": "Jozef Síkela",
+  "date_of_effect": "2025-10-16",
+  "director_general": {
+    "name": "Koen Doens",
+    "assistants": [
+      "Margarita Nikolova",
+      "Tristan Le Berigot",
+      "Benedetta Ruffini"
+    ]
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Myriam Ferran",
+      "responsibilities": "Directorates A, B & C"
+    },
+    {
+      "name": "Marjeta Jager",
+      "responsibilities": "Directorates D, E & F"
+    },
+    {
+      "name": "Martin Seychell",
+      "responsibilities": "Directorates G & R"
+    }
+  ],
+  "principal_advisers": [
+    {
+      "name": "Sandra Bartelt",
+      "area": "G7 and G20 Sustainable Development Agendas"
+    },
+    {
+      "name": "Antti Karhunen",
+      "area": "Financing for Development"
+    },
+    {
+      "name": "Mathieu Briens",
+      "area": "Emerging Donors",
+      "note": "Seconded to the EEAS as Director AFRICA.DMD"
+    }
+  ],
+  "hors_classe_adviser": {
+    "name": "Henrik Hololei"
+  },
+  "directorates": [
+    {
+      "code": "INTPA.01",
+      "name": "General Coordination & Inter-Institutional Relations",
+      "director": "Javier Raya Aguado",
+      "deputy": "Agathe Plauchut"
+    },
+    {
+      "code": "INTPA.02",
+      "name": "Political Strategy & Communication",
+      "director": "Mark Gray",
+      "deputy": "Lejla Haveric"
+    },
+    {
+      "code": "INTPA.A",
+      "name": "Africa",
+      "director": "Geza Strammer (Acting)",
+      "units": [
+        {
+          "code": "INTPA.A.1",
+          "name": "Strategic Partnerships with Africa & with the ACP",
+          "head": "Domenico Rosa",
+          "deputy": "Genevieve-Anne Dehoux"
+        },
+        {
+          "code": "INTPA.A.2",
+          "name": "Regional & Multi-Country Programmes for Africa",
+          "head": "Laurent Sillano",
+          "deputy": "Briac Deffobis"
+        },
+        {
+          "code": "INTPA.A.3",
+          "name": "Western Africa",
+          "head": "Pilar Palmero Vaquero",
+          "deputy": "Fabio Di Stefano"
+        },
+        {
+          "code": "INTPA.A.4",
+          "name": "Eastern & Central Africa",
+          "head": "Geza Strammer",
+          "deputy": "Virginie De Ruyt"
+        },
+        {
+          "code": "INTPA.A.5",
+          "name": "Southern Africa, Indian Ocean",
+          "head": "Philippe Latriche",
+          "deputy": "Ellen Kelly"
+        },
+        {
+          "code": "INTPA.A.6",
+          "name": "Finance & Contracts",
+          "head": "Laurent Sarazin",
+          "deputy": "Kris Engelen"
+        }
+      ],
+      "cooperation_units": [
+        {
+          "location": "Mali",
+          "head": "Michel De Knoop (Acting)"
+        },
+        {
+          "location": "Burkina Faso",
+          "head": "Marc Duponcel (Acting)"
+        },
+        {
+          "location": "Ethiopia",
+          "head": "Beatrice Neri (Acting)"
+        },
+        {
+          "location": "Niger",
+          "head": "Gerard Von Driessche (Acting)"
+        },
+        {
+          "location": "Mozambique",
+          "head": "Paula Vazquez Horyaans"
+        }
+      ]
+    },
+    {
+      "code": "INTPA.B",
+      "name": "Latin America & the Caribbean; Relations with Overseas Countries & Territories",
+      "director": "Felix Fernandez-Shaw",
+      "units": [
+        {
+          "code": "INTPA.B.1",
+          "name": "Regional Programmes for Latin America & the Caribbean",
+          "head": "Felice Zaccheo",
+          "deputy": "Diana Montero Melis"
+        },
+        {
+          "code": "INTPA.B.2",
+          "name": "Country Programmes for Latin America & the Caribbean",
+          "head": "Olivier Luyckx",
+          "deputy": "Olga Baus Gibert"
+        },
+        {
+          "code": "INTPA.B.3",
+          "name": "All Overseas Countries & Territories (OCTs)",
+          "head": "Anna Burylo",
+          "deputy": "Aurelie Godefroy"
+        }
+      ],
+      "oct_offices": [
+        {
+          "location": "Noumea/New Caledonia (including French Polynesia, Wallis & Futuna)",
+          "head": "Vacant"
+        },
+        {
+          "location": "Nuuk/Greenland",
+          "head": "Simon Bojsen-Moller"
+        }
+      ]
+    },
+    {
+      "code": "INTPA.C",
+      "name": "Asia & Pacific",
+      "director": "Peteris Ustubs",
+      "units": [
+        {
+          "code": "INTPA.C.1",
+          "name": "Central Asia & Afghanistan",
+          "head": "Charlotte Adriaen",
+          "deputy": "Fabienne Van Den Eede"
+        },
+        {
+          "code": "INTPA.C.2",
+          "name": "South & South-East Asia",
+          "head": "Mario Ronconi",
+          "deputy": "Ian Hoskins"
+        },
+        {
+          "code": "INTPA.C.3",
+          "name": "East Asia & the Pacific",
+          "head": "Sarah Rinaldi",
+          "deputy": "Maria Barbara Chojnacka"
+        },
+        {
+          "code": "INTPA.C.4",
+          "name": "Finance & Contracts (serves both Directorates B&C)",
+          "head": "Enrique Lobera Arguelles",
+          "deputy": "Armando Lama"
+        }
+      ],
+      "cooperation_units": [
+        {
+          "location": "Afghanistan",
+          "head": "Eric Beaume"
+        },
+        {
+          "location": "Bangladesh",
+          "head": "Michal Krejza"
+        },
+        {
+          "location": "China, India, Malaysia, Mongolia, Thailand",
+          "head": "Tom Corrie (Acting)"
+        },
+        {
+          "location": "Fiji & the Pacific Region",
+          "head": "Maurizio Cian"
+        }
+      ]
+    },
+    {
+      "code": "INTPA.D",
+      "name": "Sustainable Development Policy & Coordination",
+      "director": "Luc Bagur",
+      "units": [
+        {
+          "code": "INTPA.D.1",
+          "name": "Effective Development Policy & Team Europe",
+          "head": "Isabelle Combes (Acting)",
+          "deputy": "Isabelle Combes"
+        },
+        {
+          "code": "INTPA.D.2",
+          "name": "Sustainable Development Policy & Global Partnerships with UN",
+          "head": "Mathieu Remond",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "INTPA.D.3",
+          "name": "Coordination & Oversight of Financing Instruments",
+          "head": "Vincent Grimaud",
+          "deputy": "Nicolas Stoetzel"
+        },
+        {
+          "code": "INTPA.D.4",
+          "name": "Quality and Results, Evaluation, Knowledge Management",
+          "head": "Jean-Herve Ramat",
+          "deputy": "Malgorzata Peksa-Blanchard"
+        }
+      ]
+    },
+    {
+      "code": "INTPA.E",
+      "name": "Sustainable Finance, Investment & Jobs; Economy That Works for the People",
+      "director": "Karolina Leib (Acting)",
+      "units": [
+        {
+          "code": "INTPA.E.1",
+          "name": "Macro-Economic Analysis, Fiscal Policies & Budget Support, Global Partnerships with IFIs",
+          "head": "Karolina Leib",
+          "deputy": "Silvina Ilieva"
+        },
+        {
+          "code": "INTPA.E.2",
+          "name": "Trade, Investment Climate, Entrepreneurship & Value Chains",
+          "head": "Paz Velasco Velazquez",
+          "deputy": "Isabelle Magne"
+        },
+        {
+          "code": "INTPA.E.3",
+          "name": "Private Sector Engagement & Employment",
+          "head": "Rigo Belpaire (Acting)",
+          "deputy": "Rigo Belpaire"
+        },
+        {
+          "code": "INTPA.E.4",
+          "name": "Sustainable Finance Policy",
+          "head": "Caroline Wellemans",
+          "deputy": "Peter Pontuch"
+        },
+        {
+          "code": "INTPA.E.5",
+          "name": "External Action Guarantees",
+          "head": "Kay Parplies",
+          "deputy": "Filippo La Verghetta"
+        },
+        {
+          "code": "INTPA.E.6",
+          "name": "Risk Management",
+          "head": "Torsten Ewerbeck",
+          "deputy": "Celine Maertens"
+        }
+      ]
+    },
+    {
+      "code": "INTPA.F",
+      "name": "Green Deal, Digital Agenda",
+      "director": "Stefano Signore (Acting)",
+      "units": [
+        {
+          "code": "INTPA.F.1",
+          "name": "Climate Change & Sustainable Energy; Nuclear Safety",
+          "head": "Stefano Signore",
+          "deputy": "Arnaud Demoor"
+        },
+        {
+          "code": "INTPA.F.2",
+          "name": "Environment, Sustainable Natural Resources",
+          "head": "Chantal Marijnissen",
+          "deputy": "Thais Leray"
+        },
+        {
+          "code": "INTPA.F.3",
+          "name": "Sustainable Agri-Food Systems & Fisheries",
+          "head": "Leonard Mizzi",
+          "deputy": "Andrea Alfieri"
+        },
+        {
+          "code": "INTPA.F.4",
+          "name": "Sustainable Transport & Urban Development",
+          "head": "Sergio Oliete Josa",
+          "deputy": "Antonio Crespo Moreno"
+        },
+        {
+          "code": "INTPA.F.5",
+          "name": "Digital Transformation",
+          "head": "Ariane Labat",
+          "deputy": "Miguel Exposito Verdejo"
+        }
+      ],
+      "advisers": [
+        {
+          "name": "Vacant",
+          "area": "Food Systems"
+        },
+        {
+          "name": "Tomasz Husak",
+          "area": "Digital Agenda & Data Technologies"
+        }
+      ]
+    },
+    {
+      "code": "INTPA.G",
+      "name": "Human Development, Migration, Governance & Peace",
+      "director": "Erica Gerretsen",
+      "units": [
+        {
+          "code": "INTPA.G.1",
+          "name": "Gender Equality, Human Rights & Democratic Governance",
+          "head": "Chiara Adamo",
+          "deputy": "Micha Ramakers"
+        },
+        {
+          "code": "INTPA.G.2",
+          "name": "Local Authorities, Civil Society Organisations & Foundations",
+          "head": "Marlene Holzner",
+          "deputy": "Camilla Lombard"
+        },
+        {
+          "code": "INTPA.G.3",
+          "name": "Youth, Education & Research, Culture",
+          "head": "Annica Floren (Acting)",
+          "deputy": "Annica Floren"
+        },
+        {
+          "code": "INTPA.G.4",
+          "name": "Social Inclusion & Protection, Health & Demography",
+          "head": "Cecile Billaux",
+          "deputy": "Zakaria Sbitri"
+        },
+        {
+          "code": "INTPA.G.5",
+          "name": "Resilience, Peace, Security",
+          "head": "Sabine Zwaenepoel (Acting)",
+          "deputy": "Sabine Zwaenepoel"
+        },
+        {
+          "code": "INTPA.G.6",
+          "name": "Migration & Forced Displacement",
+          "head": "Francesco Luciani",
+          "deputy": "Camilla Hagstrom"
+        }
+      ]
+    },
+    {
+      "code": "INTPA.R",
+      "name": "Resources",
+      "director": "Didier Verse",
+      "units": [
+        {
+          "code": "INTPA.R.1",
+          "name": "Human Resources, Learning & Development, Document Management, Internal Communication",
+          "head": "Hannah Cole",
+          "deputy": "Damien Veyret"
+        },
+        {
+          "code": "INTPA.R.2",
+          "name": "Planning, Budget, Reporting",
+          "head": "Daniele D'Amico",
+          "deputy": "Yves Tielemans"
+        },
+        {
+          "code": "INTPA.R.3",
+          "name": "Audit & Control",
+          "head": "Emmanouil Papaioannou",
+          "deputy": "Daria Hasenclever"
+        },
+        {
+          "code": "INTPA.R.4",
+          "name": "Legal Affairs",
+          "head": "Dolores Dominguez Perez",
+          "deputy": "Paolo Sergio"
+        },
+        {
+          "code": "INTPA.R.5",
+          "name": "Data & Information Technology",
+          "head": "Pavel Borkovec",
+          "deputy": "Samuel Cansse"
+        },
+        {
+          "code": "INTPA.R.6",
+          "name": "Finance & Contracts for Centralised Operations (serves Directorates D, E, F, G & R, and Units 01 & 02)",
+          "head": "Karine Genty",
+          "deputy": "Hilde Timmerman"
+        }
+      ]
+    }
+  ],
+  "seconded_managers": [
+    "S. Kramer as HoD South Africa",
+    "R. Bento-Pais as HoD Angola",
+    "G. Jones as HoD Togo",
+    "F. Di Mauro as HoD Ivory Coast",
+    "D. Escalona Paturel as HoD Central African Republic",
+    "F. Ramsey as HoD Barbados",
+    "S. Millot as HoD Cape Verde",
+    "D. Giorev seconded to UNOPS"
+  ]
+}

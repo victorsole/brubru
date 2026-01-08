@@ -1,0 +1,382 @@
+{
+    "metadata": {
+      "title": "European Commission Directorates-General (DGs) - Organigrammes",
+      "last_updated": "November 2025",
+      "description": "Complete list of EU Commission DGs with their organisational charts (organigrammes) in PDF format",
+      "total_dgs": 38,
+      "notes": [
+        "Organigrammes are typically updated every few months or after Commission reorganisations",
+        "Most organigrammes are available in English (EN), French (FR), and German (DE)",
+        "February 2025: DG NEAR was split into DG MENA and DG ELARG"
+      ]
+    },
+    "directorates_general": {
+      "policy_dgs": [
+        {
+          "abbreviation": "AGRI",
+          "full_name": "Agriculture and Rural Development",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/1c37edb3-63f2-442b-9222-e61ccc8d47c8_en?filename=organisation-chart-dg-agri_en.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/agriculture-and-rural-development_en",
+          "description": "Responsible for the Common Agricultural Policy (CAP) and rural development"
+        },
+        {
+          "abbreviation": "CLIMA",
+          "full_name": "Climate Action",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/climate-action_en",
+          "description": "Leads EU's efforts to fight climate change"
+        },
+        {
+          "abbreviation": "COMM",
+          "full_name": "Communication",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/communication_en",
+          "description": "Explains EU policies to outside audiences and monitors public opinion"
+        },
+        {
+          "abbreviation": "COMP",
+          "full_name": "Competition",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/competition_en",
+          "description": "Enforces EU competition rules"
+        },
+        {
+          "abbreviation": "CONNECT",
+          "full_name": "Communications Networks, Content and Technology",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/5a7d928a-ddf7-4603-9646-0e09da0031c8_en?filename=DG+CONNECT+Organisation+Chart.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/communications-networks-content-and-technology_en",
+          "description": "Develops digital single market policy"
+        },
+        {
+          "abbreviation": "EAC",
+          "full_name": "Education, Youth, Sport and Culture",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/bd233487-73a9-456c-af2d-93cc3dfa35cd_en?filename=OrgChart-DG-EAC_EN-16-02-2025.pdf",
+          "department_page": "https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/education-youth-sport-and-culture_en",
+          "description": "Develops policies for education, training, youth, sport and culture"
+        },
+        {
+          "abbreviation": "ECFIN",
+          "full_name": "Economic and Financial Affairs",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about-european-commission/departments-and-executive-agencies/economic-and-financial-affairs_en",
+          "description": "Promotes economic growth, employment, stable public finances and financial stability"
+        },
+        {
+          "abbreviation": "EMPL",
+          "full_name": "Employment, Social Affairs and Inclusion",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/employment-social-affairs-and-inclusion_en",
+          "description": "Responsible for EU employment and social policies"
+        },
+        {
+          "abbreviation": "ENER",
+          "full_name": "Energy",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/energy_en",
+          "description": "Develops EU energy policy for secure, sustainable, and competitively priced energy"
+        },
+        {
+          "abbreviation": "ENV",
+          "full_name": "Environment",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/environment_en",
+          "description": "Protects, preserves and improves the environment"
+        },
+        {
+          "abbreviation": "FISMA",
+          "full_name": "Financial Stability, Financial Services and Capital Markets Union",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/41bb4b1f-b4ff-45e1-a490-91cb49dcf6e0_en?filename=250216-organisation-chart-dg-fisma_en.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/financial-stability-financial-services-and-capital-markets-union_en",
+          "description": "Responsible for EU policy on financial stability and services"
+        },
+        {
+          "abbreviation": "GROW",
+          "full_name": "Internal Market, Industry, Entrepreneurship and SMEs",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/internal-market-industry-entrepreneurship-and-smes_en",
+          "description": "Supports the Single Market, industry competitiveness and SMEs"
+        },
+        {
+          "abbreviation": "HOME",
+          "full_name": "Migration and Home Affairs",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/33ec1390-9a36-4d14-8138-b770b1fc25be_en?filename=organisation-chart-dg-home_en.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/migration-and-home-affairs_en",
+          "description": "Develops EU policy on migration, asylum, borders and security"
+        },
+        {
+          "abbreviation": "JUST",
+          "full_name": "Justice and Consumers",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/db498409-beaa-4488-b628-be3cea3fdc4a_en?filename=DG+JUST_Organigramme+01.05.2025_EN.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/justice-and-consumers_en",
+          "description": "Responsible for justice, consumer rights and gender equality"
+        },
+        {
+          "abbreviation": "MARE",
+          "full_name": "Maritime Affairs and Fisheries",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/b4c9d5fa-db8b-4329-a90a-85b9b0afd771_en?filename=organisation-chart-dg-mare_en.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/maritime-affairs-and-fisheries_en",
+          "description": "Develops EU policy on maritime affairs and fisheries"
+        },
+        {
+          "abbreviation": "MOVE",
+          "full_name": "Mobility and Transport",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/mobility-and-transport_en",
+          "description": "Develops EU transport policy and sustainable mobility"
+        },
+        {
+          "abbreviation": "RTD",
+          "full_name": "Research and Innovation",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/4710e589-72e0-4ecc-a970-2b3688020508_en?filename=organisation-chart_dg-rtd_en.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/research-and-innovation_en",
+          "description": "Develops EU policy on research, science and innovation"
+        },
+        {
+          "abbreviation": "REGIO",
+          "full_name": "Regional and Urban Policy",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/regional-and-urban-policy_en",
+          "description": "Supports job creation and regional development across the EU"
+        },
+        {
+          "abbreviation": "SANTE",
+          "full_name": "Health and Food Safety",
+          "category": "Policy DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/277adfe3-745d-40ad-b530-450af9d715e2_en?filename=organisation-chart-dg-sante_en.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/health-and-food-safety_en",
+          "description": "Responsible for food safety and health policy"
+        },
+        {
+          "abbreviation": "TAXUD",
+          "full_name": "Taxation and Customs Union",
+          "category": "Policy DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/taxation-and-customs-union_en",
+          "description": "Manages tax policy and customs union"
+        }
+      ],
+      "external_relations_dgs": [
+        {
+          "abbreviation": "INTPA",
+          "full_name": "International Partnerships",
+          "category": "External Relations DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/ba4a8eb4-dc28-491d-8f8a-9064a8541c57_en",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/international-partnerships_en",
+          "description": "Leads on international cooperation and development policy"
+        },
+        {
+          "abbreviation": "ECHO",
+          "full_name": "European Civil Protection and Humanitarian Aid Operations",
+          "category": "External Relations DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/european-civil-protection-and-humanitarian-aid-operations_en",
+          "description": "Delivers EU humanitarian aid and civil protection"
+        },
+        {
+          "abbreviation": "NEAR",
+          "full_name": "Neighbourhood and Enlargement Negotiations",
+          "category": "External Relations DG",
+          "organigramme_pdf": "DISCONTINUED - Split into DG MENA and DG ELARG in February 2025",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/european-neighbourhood-and-enlargement-negotiations_en",
+          "description": "Former DG responsible for neighbourhood and enlargement policies",
+          "status": "discontinued",
+          "split_date": "2025-02-01",
+          "successor_dgs": ["MENA", "ELARG"]
+        },
+        {
+          "abbreviation": "MENA",
+          "full_name": "Middle East, North Africa and Gulf",
+          "category": "External Relations DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "To be confirmed",
+          "description": "New DG created from DG NEAR split, covers MENA region",
+          "status": "new",
+          "created_date": "2025-02-01",
+          "predecessor_dg": "NEAR"
+        },
+        {
+          "abbreviation": "ELARG",
+          "full_name": "Enlargement and Eastern Neighbourhood",
+          "category": "External Relations DG",
+          "organigramme_pdf": "Available at https://enlargement.ec.europa.eu/organisation-chart_en",
+          "department_page": "https://enlargement.ec.europa.eu/",
+          "description": "New DG created from DG NEAR split, covers enlargement and eastern neighbourhood",
+          "status": "new",
+          "created_date": "2025-02-01",
+          "predecessor_dg": "NEAR"
+        },
+        {
+          "abbreviation": "TRADE",
+          "full_name": "Trade",
+          "category": "External Relations DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/trade_en",
+          "description": "Conducts EU's common trade policy"
+        },
+        {
+          "abbreviation": "FPI",
+          "full_name": "Foreign Policy Instruments",
+          "category": "External Relations DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/service-foreign-policy-instruments_en",
+          "description": "Service for Foreign Policy Instruments"
+        },
+        {
+          "abbreviation": "DEFIS",
+          "full_name": "Defence Industry and Space",
+          "category": "External Relations DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/defence-industry-and-space_en",
+          "description": "Responsible for EU defence industry and space policy"
+        }
+      ],
+      "general_service_dgs": [
+        {
+          "abbreviation": "BUDG",
+          "full_name": "Budget",
+          "category": "General Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/budget_en",
+          "description": "Manages the EU budget"
+        },
+        {
+          "abbreviation": "DIGIT",
+          "full_name": "Digital Services",
+          "category": "General Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/digital-services_en",
+          "description": "Provides digital services for Commission departments"
+        },
+        {
+          "abbreviation": "HR",
+          "full_name": "Human Resources and Security",
+          "category": "General Service DG",
+          "organigramme_pdf": "https://commission.europa.eu/document/download/12e37ade-39c5-4bd4-aec9-5f94f9941a3c_en?filename=organisation-chart-dg-hr_en_0.pdf",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/human-resources-and-security_en",
+          "description": "Oversees recruitment, training and staff management"
+        },
+        {
+          "abbreviation": "SCIC",
+          "full_name": "Interpretation",
+          "category": "General Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/interpretation_en",
+          "description": "Provides interpretation services for Commission meetings"
+        },
+        {
+          "abbreviation": "OLAF",
+          "full_name": "European Anti-Fraud Office",
+          "category": "General Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/european-anti-fraud-office_en",
+          "description": "Protects EU financial interests by investigating fraud and corruption"
+        },
+        {
+          "abbreviation": "OP",
+          "full_name": "Publications Office",
+          "category": "General Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://op.europa.eu/en/web/about/organisation",
+          "description": "Publishes EU official documents and information"
+        },
+        {
+          "abbreviation": "EUROSTAT",
+          "full_name": "European Statistical Office",
+          "category": "General Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/eurostat_en",
+          "description": "Provides statistical information for the EU"
+        },
+        {
+          "abbreviation": "JRC",
+          "full_name": "Joint Research Centre",
+          "category": "General Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/joint-research-centre_en",
+          "description": "Commission's science and knowledge service"
+        }
+      ],
+      "internal_service_dgs": [
+        {
+          "abbreviation": "SG",
+          "full_name": "Secretariat-General",
+          "category": "Internal Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/secretariat-general_en",
+          "description": "Coordinates Commission's political priorities and legislative work"
+        },
+        {
+          "abbreviation": "SJ",
+          "full_name": "Legal Service",
+          "category": "Internal Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/legal-service_en",
+          "description": "Provides legal advice to the Commission"
+        },
+        {
+          "abbreviation": "DGT",
+          "full_name": "Translation",
+          "category": "Internal Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://commission.europa.eu/about/departments-and-executive-agencies/translation_en",
+          "description": "Provides translation services for Commission documents"
+        },
+        {
+          "abbreviation": "EPSO",
+          "full_name": "European Personnel Selection Office",
+          "category": "Internal Service DG",
+          "organigramme_pdf": "Available on department page",
+          "department_page": "https://epso.europa.eu/en/about-epso",
+          "description": "Manages recruitment competitions for EU institutions"
+        }
+      ]
+    },
+    "access_methods": {
+      "direct_pdf_links": "Click on the organigramme_pdf URL for direct download",
+      "department_pages": "Visit department_page URL and look for 'Organisation chart' link",
+      "url_pattern": "https://commission.europa.eu/document/download/[UUID]_en?filename=organisation-chart-dg-[abbreviation]_en.pdf",
+      "language_variants": {
+        "english": "_en",
+        "french": "_fr",
+        "german": "_de"
+      },
+      "main_directory": "https://commission.europa.eu/about/organisation_en"
+    },
+    "scraping_recommendations": {
+      "update_frequency": "Monthly or after Commission reorganisations",
+      "file_format": "PDF",
+      "parsing_method": "Use PDF text extraction utilities",
+      "key_data_points": [
+        "Director-General name",
+        "Deputy Directors-General",
+        "Directorate structure (A, B, C, etc.)",
+        "Unit-level organisation",
+        "Reporting lines",
+        "Key personnel names and positions"
+      ],
+      "integration_points": [
+        "Link DG structures to policy competences for Strategist agent",
+        "Map organisational units to relevant MEPs and committees",
+        "Track personnel changes for decision-maker identification",
+        "Update institutional contact points"
+      ]
+    }
+  }

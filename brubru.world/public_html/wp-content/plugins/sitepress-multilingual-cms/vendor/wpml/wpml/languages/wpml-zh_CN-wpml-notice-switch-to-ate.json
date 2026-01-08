@@ -1,0 +1,51 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "使用WPML的高级翻译编辑器获取更多功能"
+         ],
+         "Close banner": [
+            "关闭横幅"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "您正在使用经典翻译编辑器，这是一个旧的传统工具，错过了我们高级翻译编辑器的许多功能和效率："
+         ],
+         "Translation Memory": [
+            "翻译记忆库"
+         ],
+         "HTML Protection": [
+            "HTML保护"
+         ],
+         "Glossary": [
+            "词汇表"
+         ],
+         "Spellchecker": [
+            "拼写检查器"
+         ],
+         "AI Assistant": [
+            "AI助手"
+         ],
+         "Automatic Translation": [
+            "自动翻译"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "立即切换，体验更快速、更方便、更可靠的翻译体验。"
+         ],
+         "Switch Now": [
+            "立即切换"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "了解更多关于高级翻译编辑器的信息"
+         ],
+         "Learn More": [
+            "了解更多"
+         ]
+      }
+   }
+}

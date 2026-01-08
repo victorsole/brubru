@@ -1,0 +1,730 @@
+# Brubru
+
+> Your AI-powered strategic advocacy assistant for navigating the EU bubble in Brussels
+
+![Brubru Logo](frontend/public/assets/brubru_mainlogo.png)
+
+**Developed by:** [Beresol BV](https://beresol.eu)
+**Website:** [https://brubru.beresol.eu](https://brubru.beresol.eu)
+**Contact:** helloberesol@gmail.com
+**GitHub:** [https://github.com/victorsole/brubru](https://github.com/victorsole/brubru)
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Subscription Tiers](#subscription-tiers)
+- [Data Sources](#data-sources)
+- [Development Guidelines](#development-guidelines)
+- [Deployment](#deployment)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+---
+
+## Overview
+
+**Brubru** is an AI-powered strategic advocacy assistant designed specifically for EU policy professionals, lobbyists, and organizations working within the Brussels institutional ecosystem. Combining cutting-edge conversational AI with specialized legislative tools, Brubru helps users analyze policies, draft amendments, monitor EU legislative procedures, and navigate institutional processes with confidence.
+
+### What Brubru Does
+
+- **🤖 AI Chat:** Context-aware conversational interface powered by Anthropic Claude and OpenAI GPT-4
+- **📝 Amendator:** Professional legislative amendment authoring tool (Akoma Ntoso XML compliant)
+- **📰 My EU Bubble:** Personalized RSS feed aggregation from 15+ EU institutional sources
+- **✅ EU Law Comply:** Automated compliance checking and gap analysis for EU regulations
+- **📊 Legislative Tracking:** Real-time monitoring of EU legislative procedures and timelines
+- **🌍 Multilingual:** Full support for all 23 official EU languages
+
+---
+
+## Key Features
+
+### 1. **Brubru Chat** (Main Interface)
+
+AI-powered conversational assistant for EU policy analysis with deep institutional context.
+
+**Capabilities:**
+- Natural language queries about EU legislation and policy
+- Strategic guidance on advocacy approaches
+- Stakeholder mapping and voting pattern analysis
+- Procedural coaching on EU institutional processes
+- Document uploads (PDF, DOCX) for contextual analysis
+- Citation tracking with source references
+
+**AI Models:**
+- Primary: Anthropic Claude (Sonnet 4, Opus 4)
+- Fallback: OpenAI GPT-4, GPT-3.5-turbo
+- Legal Specialist: Saul-7B (Hugging Face)
+- Embeddings: BAAI/bge-m3 (multilingual)
+
+### 2. **Amendator** (Legislative Amendment Editor)
+
+XML-first legislative amendment authoring tool inspired by AT4AM, enhanced with modern AI capabilities.
+
+**Features:**
+- Akoma Ntoso XML compliance (OASIS LegalDocumentML standard)
+- Two-column layout: Original text | Proposed amendment
+- Click-to-amend interface with context menus
+- AI-powered drafting assistance from natural language
+- Position reference automation (Article X, paragraph Y, point (a))
+- Track changes visualization (bold/strikethrough)
+- Amendment workflow: Candidate → Tabled → Withdrawn
+- Multi-format export: XML, HTML, PDF, Word
+
+### 3. **My EU Bubble** (RSS Feed Aggregator)
+
+Personalized news feed from EU institutional sources.
+
+**Sources:**
+- European Parliament (33+ topic & committee feeds)
+- European Commission DGs
+- Council of the EU
+- OEIL Legislative Observatory
+- Think Tank research (EPRS)
+- General EU news feeds
+
+**Features:**
+- Subscribe/unsubscribe from feeds
+- Mark entries as read
+- Save/bookmark to collections
+- Filter by category, source, date
+- Email alerts (configurable)
+
+### 4. **EU Law Comply** (Compliance Checker)
+
+Automated compliance gap analysis for EU regulations.
+
+**Process:**
+1. Upload documents (PDF, DOCX, TXT)
+2. Backend extracts text and identifies requirements
+3. AI compares document against law cluster requirements
+4. Gap analysis with severity ratings
+5. Export detailed compliance report
+
+**Reports Include:**
+- Overall compliance score (0-100%)
+- Gap summary (missing, partial, unclear)
+- Detailed findings per requirement
+- Recommended actions
+- Export formats: PDF, Word, HTML, JSON
+
+### 5. **Legislative Tracking**
+
+Real-time monitoring of EU legislative procedures.
+
+**Data Sources:**
+- OEIL Legislative Observatory (21,600+ procedures)
+- Legislative Train Schedule (490 priority files)
+- European Parliament calendar
+- Council working groups
+
+**Tracking Features:**
+- Procedure status updates
+- Committee assignments
+- Voting schedules
+- Timeline visualization
+
+### 6. **Admin Panel** (Restricted Access)
+
+Backend management system accessible exclusively to Beresol team (helloberesol@gmail.com).
+
+**Capabilities:**
+- User management and subscription administration
+- Usage analytics and dashboards
+- Scraper management and monitoring
+- Database administration
+- Feature flag management
+
+---
+
+## Technology Stack
+
+### Frontend
+- **Framework:** React 18 with TypeScript
+- **Build Tool:** Vite 7.x
+- **Styling:** CSS (Irvin font from The New Yorker)
+- **Internationalization:** i18next (23 EU languages)
+- **State Management:** Zustand
+- **UI Components:** Framer Motion (animations), Material Design Icons
+- **Authentication:** Google OAuth, LinkedIn OAuth, Supabase Auth
+
+### Backend
+- **Framework:** FastAPI (Python 3.11+)
+- **ORM:** SQLAlchemy 2.0 with Alembic migrations
+- **Database:** PostgreSQL 15+ (Supabase managed)
+- **API Standards:** REST with OpenAPI/Swagger docs
+- **Data Validation:** Pydantic 2.5+
+- **Task Scheduling:** APScheduler (RSS feed updates)
+
+### AI & ML Services
+- **Primary AI:** Anthropic Claude (Sonnet 4, Opus 4)
+- **Secondary AI:** OpenAI GPT-4, GPT-3.5-turbo
+- **Embeddings:** Hugging Face (BAAI/bge-m3 multilingual)
+- **Legal Models:** Saul-7B (legal document analysis)
+- **RAG Framework:** LangChain + ChromaDB
+- **Vector Database:** FAISS (CPU) / pgvector (PostgreSQL)
+
+### Document Processing
+- **PDF:** PyPDF, pdfplumber, pikepdf
+- **Word:** python-docx
+- **XML:** lxml (Akoma Ntoso legislative standard)
+- **Scraping:** BeautifulSoup4, aiohttp, feedparser
+
+### Infrastructure
+- **Hosting:** IONOS Deploy Now (frontend + backend on brubru.beresol.eu)
+- **Database:** Supabase PostgreSQL (migrating to Google Cloud SQL)
+- **Containers:** Docker with Nginx reverse proxy
+- **SSL/TLS:** IONOS-managed certificates (1.3+)
+- **Payment Processing:** Stripe
+
+### Key Dependencies
+```txt
+# Backend (requirements.txt)
+fastapi>=0.104.0
+sqlalchemy>=2.0.0
+alembic>=1.12.0
+supabase>=2.0.0
+anthropic>=0.7.0
+openai>=1.3.0
+lxml>=4.9.0
+pydantic>=2.5.0
+python-jose[cryptography]
+passlib[bcrypt]
+feedparser>=6.0.10
+apscheduler>=3.10.4
+chromadb>=0.4.15
+sentence-transformers>=2.2.2
+
+# Frontend (package.json)
+react@18.x
+react-router-dom@6.x
+typescript@5.x
+vite@7.x
+i18next@23.x
+zustand@4.x
+framer-motion@11.x
+axios@1.x
+@anthropic-ai/sdk
+```
+
+---
+
+## Project Structure
+
+```
+brubru/
+├── frontend/                          # React SPA (Vite)
+│   ├── src/
+│   │   ├── pages/                    # Route pages
+│   │   │   ├── landing_page.tsx
+│   │   │   ├── login_page.tsx
+│   │   │   ├── signup_page.tsx
+│   │   │   ├── main_page.tsx         # Main chat interface
+│   │   │   ├── amendator_page.tsx    # Amendment editor
+│   │   │   ├── subscription_page.tsx # Pricing & billing
+│   │   │   ├── profile_page.tsx      # User profile
+│   │   │   ├── my_eu_bubble_page.tsx # RSS feeds
+│   │   │   ├── eu_comply_page.tsx    # Compliance checker
+│   │   │   ├── admin_panel_page.tsx  # Admin dashboard
+│   │   │   ├── about_page.tsx        # About Brubru
+│   │   │   ├── contact_page.tsx      # Contact information
+│   │   │   ├── privacy_page.tsx      # Privacy Policy
+│   │   │   ├── terms_page.tsx        # Terms of Service
+│   │   │   ├── cookies_page.tsx      # Cookie Policy
+│   │   │   └── subprocessors_page.tsx # Subprocessors list
+│   │   │
+│   │   ├── components/
+│   │   │   ├── shared/               # Reusable components
+│   │   │   ├── chat/                 # Chat interface components
+│   │   │   ├── amendator/            # Amendment editor components
+│   │   │   ├── bubble/               # My EU Bubble components
+│   │   │   ├── eu_comply/            # Compliance checker components
+│   │   │   └── admin/                # Admin panel components
+│   │   │
+│   │   ├── hooks/                    # Custom React hooks
+│   │   ├── services/                 # API clients
+│   │   ├── styles/                   # Global CSS (Irvin font)
+│   │   └── i18n/                     # i18next configuration
+│   │
+│   ├── public/
+│   │   └── assets/                   # Images, icons, backgrounds
+│   │
+│   ├── vite.config.ts
+│   └── package.json
+│
+├── backend/
+│   ├── api/                          # FastAPI routers
+│   │   ├── auth.py                  # Authentication endpoints
+│   │   ├── chat.py                  # Chat endpoints
+│   │   ├── amendments.py            # Amendment CRUD
+│   │   ├── subscriptions.py         # Subscription management
+│   │   ├── stripe_payment.py        # Stripe integration
+│   │   ├── my_eu_bubble.py          # RSS feed management
+│   │   ├── eu_law_comply.py         # Compliance analysis
+│   │   ├── legislative_train.py     # Legislative Train tracking
+│   │   ├── documents.py             # Document upload & management
+│   │   ├── rss_feeds.py             # RSS feed configuration
+│   │   └── admin_panel.py           # Admin dashboard
+│   │
+│   ├── models/                       # SQLAlchemy ORM models
+│   │   ├── user.py                  # User profile
+│   │   ├── chat.py                  # Chat conversations
+│   │   ├── amendment.py             # Amendments
+│   │   ├── eu_law.py                # EU laws database
+│   │   ├── compliance.py            # Compliance analyses
+│   │   ├── rss_feed.py              # RSS feeds
+│   │   └── legislative_train.py     # Legislative train items
+│   │
+│   ├── schemas/                      # Pydantic request/response models
+│   │
+│   ├── services/
+│   │   ├── ai_service.py            # Claude integration
+│   │   ├── ai/                      # AI-specific services
+│   │   │   ├── context_builder.py    # EU context injection
+│   │   │   └── citation_tracker.py   # Source tracking
+│   │   ├── compliance/              # Compliance checking
+│   │   ├── scrapers/                # 15+ institutional scrapers
+│   │   │   ├── european_parliament_scraper.py
+│   │   │   ├── eurlex_scraper.py
+│   │   │   ├── oeil_scraper.py
+│   │   │   ├── legislative_train_scraper.py
+│   │   │   └── scraper_orchestrator.py
+│   │   ├── amendator/               # Amendment processing
+│   │   ├── document_processing/     # PDF/DOCX parsing
+│   │   ├── vector_db/               # Embeddings & similarity search
+│   │   ├── rss/                     # RSS feed management
+│   │   └── translation_service.py   # Google Translate integration
+│   │
+│   ├── core/
+│   │   ├── config.py                # Environment configuration
+│   │   ├── database.py              # Supabase/PostgreSQL setup
+│   │   └── security.py              # Authentication utilities
+│   │
+│   ├── knowledge_base/              # Static EU institutional data
+│   ├── migrations/                   # Alembic database migrations
+│   ├── main.py                       # FastAPI app entry point
+│   └── requirements.txt              # Python dependencies
+│
+├── docs/                             # Documentation
+│   ├── brubru_technical_specification.md
+│   ├── EU_APIs_RSS.md
+│   ├── README_SCRAPERS.md
+│   └── users.md                      # Test users for development
+│
+├── .env                              # Environment variables (not in repo)
+├── docker-compose.yml                # Docker services
+└── README.md                         # This file
+```
+
+**Note:** All files use `snake_case` naming convention. All frontend text is written in British English.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Node.js** 18+ and npm
+- **Python** 3.11+
+- **PostgreSQL** 15+ (or use Supabase)
+- **Docker** and Docker Compose (optional, recommended)
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/victorsole/brubru.git
+cd brubru
+```
+
+2. **Set up environment variables**
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your credentials:
+```env
+# Supabase
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_KEY=your-service-role-key
+
+# AI Services
+ANTHROPIC_API_KEY=your-anthropic-key
+OPENAI_API_KEY=your-openai-key
+
+# OAuth (optional)
+GOOGLE_CLIENT_ID=your-google-client-id
+LINKEDIN_CLIENT_ID=your-linkedin-client-id
+
+# Stripe (optional)
+STRIPE_SECRET_KEY=your-stripe-secret-key
+STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
+
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/brubru
+```
+
+3. **Install frontend dependencies**
+```bash
+cd frontend
+npm install
+```
+
+4. **Install backend dependencies**
+```bash
+cd ../backend
+pip install -r requirements.txt
+```
+
+5. **Set up database**
+```bash
+cd backend
+alembic upgrade head
+```
+
+6. **Run the application**
+
+**Option A: Docker Compose (recommended)**
+```bash
+docker-compose up
+```
+
+**Option B: Manual**
+```bash
+# Terminal 1: Backend
+cd backend
+python -m uvicorn main:app --reload
+
+# Terminal 2: Frontend
+cd frontend
+npm run dev
+```
+
+7. **Access the application**
+- **Frontend:** http://localhost:5173 (Vite dev server)
+- **Backend API:** http://localhost:8000
+- **API Docs:** http://localhost:8000/docs
+
+8. **Populate EU Context Data** (Essential for AI responses)
+
+The chat interface requires EU data for context-aware responses.
+
+```bash
+# Quick test (10 items, ~30 seconds)
+python -m backend.scripts.populate_vector_db --limit 10
+
+# Recommended (100 items, ~5 minutes)
+python -m backend.scripts.populate_vector_db --limit 100
+
+# Full population (1000+ items, ~30 minutes)
+python -m backend.scripts.populate_vector_db --limit 1000
+```
+
+This fetches and indexes:
+- Legislative documents from EUR-Lex
+- MEP profiles from European Parliament
+- Legislative procedures from OEIL
+- Recent RSS feed entries
+
+After populating, test with: *"What's the status of the AI Act?"*
+
+9. **Seed Test Users** (Optional, for development/testing)
+
+```bash
+python3.12 -m backend.scripts.seed_test_users
+```
+
+This creates 13 pre-configured test users with different subscription tiers and policy interests. See `docs/users.md` for the full list.
+
+| Tier | Users | Password |
+|------|-------|----------|
+| Blue | 5 | `test123` |
+| Yellow | 8 | `test123` (except Meritxell: `test23`) |
+
+---
+
+## Subscription Tiers
+
+Brubru offers three subscription tiers to meet different user needs:
+
+### White (Free)
+**Price:** Free
+**Target:** Individuals exploring EU policy
+
+**Features:**
+- Basic chat with GPT-3.5-turbo
+- 5 amendments/month
+- Basic export (XML, HTML only)
+- Community support
+- Watermark on exports
+
+### Yellow (Professional)
+**Price:** €79/month or €790/year
+**Target:** Individual consultants, lobbyists, advocacy professionals
+
+**Features:**
+- Advanced AI (GPT-4, Claude Sonnet)
+- Unlimited amendments
+- All export formats (XML, HTML, PDF, Word)
+- No watermarks
+- 1,000 API calls/month
+- RSS alerts enabled
+- Email support (48-hour response)
+
+### Blue (Enterprise)
+**Price:** €599/month (custom for 5+ users)
+**Target:** Large organizations, government agencies, think tanks
+
+**Features:**
+- Everything in Yellow
+- Unlimited API calls/month
+- Claude Opus (most capable model)
+- Multi-user accounts (5+ users)
+- White-label support
+- Dedicated account manager
+- 24/7 priority support
+- SLA with uptime guarantee
+- Custom training modules
+
+**Payment Processing:** Stripe (secure, PCI-compliant)
+**Refund Policy:** 14-day money-back guarantee on first subscription
+
+---
+
+## Data Sources
+
+Brubru aggregates information from 15+ authoritative EU institutional sources:
+
+### Legislative & Legal Databases
+- **[EUR-Lex](https://eur-lex.europa.eu)** - Official legislative texts, consolidated acts, case law
+- **[OEIL](https://oeil.secure.europarl.europa.eu)** - Legislative procedure tracking (21,600+ files)
+- **[EU Law Tracker](https://law-tracker.europa.eu)** - Commission legislative initiative tracking
+- **[Publications Office](https://op.europa.eu)** - Official documents archive
+
+### Parliamentary Data
+- **[European Parliament](https://www.europarl.europa.eu)** - MEP data, committees, voting records
+- **[Parliament Open Data](https://data.europarl.europa.eu)** - RDF/JSON-LD API (7+ datasets)
+- **[Legislative Train Schedule](https://www.europarl.europa.eu/legislative-train)** - Commission priorities (490 files)
+- **[Think Tank](https://epthinktank.eu)** - Research briefings and studies
+
+### Institutional Intelligence
+- **[Who's Who](https://op.europa.eu/en/web/who-is-who)** - Staff directories, org charts
+- **[AssistEU](https://assist.eu)** - Procedural guidance
+- **[Council of the EU](https://www.consilium.europa.eu)** - Council positions, working groups
+
+### Research & Standards
+- **[JRC](https://joint-research-centre.ec.europa.eu)** - Scientific research, technical reports
+- **[IATE](https://iate.europa.eu)** - EU terminology database (24 languages)
+- **[Style Guide](https://style-guide.europa.eu)** - EU writing standards
+
+---
+
+## Development Guidelines
+
+### Code Style
+
+1. **File Naming:** All files use `snake_case`
+   - ✅ `chat_interface.tsx`, `ai_service.py`, `amendment_grid.tsx`
+   - ❌ `ChatInterface.tsx`, `AiService.py`, `AmendmentGrid.tsx`
+
+2. **React Components:** Export in PascalCase
+```typescript
+// File: chat_interface.tsx
+export const ChatInterface = () => { ... }
+```
+
+3. **Typography:** Use Irvin font universally (no exceptions)
+
+4. **Language:** All frontend text in British English
+
+5. **Accessibility:** WCAG 2.1 Level AA compliance
+
+### Git Workflow
+
+- **Main branch:** `main` (production-ready)
+- **Feature branches:** `feature/description-in-kebab-case`
+- **Commit messages:** Conventional Commits format
+
+### Testing
+
+- **Frontend:** Vitest + React Testing Library
+- **Backend:** pytest with FastAPI TestClient
+- **E2E:** Playwright
+
+---
+
+## Deployment
+
+### Production Architecture
+
+| Component | Platform | Domain |
+|-----------|----------|--------|
+| **Frontend** | IONOS Deploy Now | brubru.beresol.eu |
+| **Backend** | IONOS Deploy Now (Docker) | brubru.beresol.eu/api |
+| **Database** | Supabase PostgreSQL | (managed) |
+| **SSL/TLS** | IONOS (auto-managed) | 1.3+ |
+
+> **Migration Note:** The database will migrate from Supabase to Google Cloud SQL in a future phase. The backend uses pure SQLAlchemy with no Supabase SDK dependencies, making migration straightforward (change `DATABASE_URL` only).
+
+### Environment Variables (Production)
+
+```env
+# Application
+ENVIRONMENT=production
+DEBUG=false
+SECRET_KEY=your-secret-key
+ALLOWED_ORIGINS=https://brubru.beresol.eu
+
+# Database (Supabase → Google Cloud SQL in future)
+DATABASE_URL=postgresql://user:password@host:5432/brubru
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-anon-key
+SUPABASE_SERVICE_KEY=your-service-key
+
+# AI Services
+ANTHROPIC_API_KEY=your-anthropic-key
+OPENAI_API_KEY=your-openai-key
+
+# OAuth
+GOOGLE_CLIENT_ID=your-google-client-id
+LINKEDIN_CLIENT_ID=your-linkedin-client-id
+
+# Stripe Payments
+STRIPE_SECRET_KEY=your-stripe-secret
+STRIPE_PUBLISHABLE_KEY=your-stripe-publishable
+```
+
+### Docker Deployment (IONOS)
+
+```bash
+# Build backend image
+cd backend
+docker build -t brubru-backend .
+
+# Run with docker-compose (includes nginx reverse proxy)
+cd ..
+docker-compose up -d
+
+# View logs
+docker-compose logs -f backend
+
+# Health check
+curl https://brubru.beresol.eu/api/health
+```
+
+### Manual Deployment Commands
+
+```bash
+# Backend only (without nginx)
+cd backend
+docker build -t brubru-backend .
+docker run -d \
+  --name brubru-backend \
+  -p 8000:8000 \
+  --env-file .env \
+  brubru-backend
+
+# Frontend (static build for IONOS)
+cd frontend
+npm run build
+# Deploy dist/ folder to IONOS Deploy Now
+```
+
+### Database Migration Path (Supabase → Google Cloud)
+
+When ready to migrate from Supabase to Google Cloud SQL:
+
+1. **Export data:** `pg_dump` from Supabase PostgreSQL
+2. **Create Cloud SQL instance:** PostgreSQL 15+ in desired region
+3. **Import data:** `pg_restore` to Cloud SQL
+4. **Update environment:** Change `DATABASE_URL` to Cloud SQL connection string
+5. **Remove Supabase SDK:** Delete `backend/core/supabase.py` and `supabase` from `requirements.txt`
+6. **Redeploy:** `docker-compose up -d --build`
+
+No code changes required - SQLAlchemy handles database abstraction.
+
+---
+
+## Roadmap
+
+### ✅ Completed Phases
+- **Phase 1:** Foundation (project setup, architecture)
+- **Phase 2:** Chat implementation (Anthropic integration)
+- **Phase 3:** Amendator (XML processing, UI)
+- **Phase 4:** Intelligence layer (15+ scrapers)
+- **Phase 5:** RSS feeds (My EU Bubble)
+- **Phase 6:** Compliance checker (EU Law Comply)
+- **Phase 7:** Subscription system (Stripe integration)
+- **Phase 8:** Multi-language support (i18next, 23 languages)
+
+### 🔄 Current Phase
+- **Phase 13:** AI Context Injection (hybrid legal assistant)
+  - Improving EU context relevance
+  - Citation accuracy enhancement
+  - Legislative file analysis
+
+### 🚀 Planned Future Features
+- Real-time collaboration (WebSocket support)
+- Amendment success prediction (ML model training)
+- Voting pattern analysis (historical voting data)
+- Advanced analytics (usage patterns, success metrics)
+- Integration with EP systems (direct submission)
+- Fine-tuned models (LORA adapters for EU context)
+- Multi-language amendment validation
+
+---
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+---
+
+## License
+
+This project is proprietary software owned by Beresol BV. All rights reserved.
+
+The Brubru trademark is registered with the European Union Intellectual Property Office (EUIPO).
+
+For licensing inquiries, contact helloberesol@gmail.com.
+
+---
+
+## Acknowledgments
+
+- **AT4AM:** Inspiration for Amendator component
+- **NSESA:** Reference implementation for legislative XML processing
+- **European Parliament:** Akoma Ntoso standard and legislative procedures
+- **Anthropic & OpenAI:** AI capabilities powering the intelligence layer
+- **EU Institutions:** Open data access enabling comprehensive EU context
+
+---
+
+## Contact
+
+- **Website:** [https://brubru.beresol.eu](https://brubru.beresol.eu)
+- **Email:** helloberesol@gmail.com
+- **Company:** [Beresol BV](https://beresol.eu)
+- **GitHub:** [https://github.com/victorsole/brubru](https://github.com/victorsole/brubru)
+
+---
+
+**Brubru** - Empowering strategic advocacy in the EU bubble
+
+*Built with ❤️ in Brussels by Beresol BV*

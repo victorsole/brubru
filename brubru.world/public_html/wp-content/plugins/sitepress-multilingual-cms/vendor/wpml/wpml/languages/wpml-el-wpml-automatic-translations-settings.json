@@ -1,0 +1,87 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Could not fetch engines data": [
+            "Δεν ήταν δυνατή η ανάκτηση δεδομένων μηχανών"
+         ],
+         "Could not save settings": [
+            "Δεν ήταν δυνατή η αποθήκευση ρυθμίσεων"
+         ],
+         "Automatic translation": [
+            "Αυτόματη μετάφραση"
+         ],
+         "Saving...": [
+            "Αποθήκευση..."
+         ],
+         "Save settings": [
+            "Αποθήκευση ρυθμίσεων"
+         ],
+         "Settings saved": [
+            "Οι ρυθμίσεις αποθηκεύτηκαν"
+         ],
+         "Some error occurred": [
+            "Παρουσιάστηκε κάποιο σφάλμα"
+         ],
+         "AI Translation": [
+            "Μετάφραση AI"
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "Μην μεταφράζετε προσχέδια. Μεταφράστε μόνο όταν δημοσιεύω περιεχόμενο."
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "Μεταφράστε προσχέδια καθώς τα αποθηκεύω (καταναλώνει λίγο περισσότερες μονάδες μετάφρασης)."
+         ],
+         "Do you want to translate drafts automatically?": [
+            "Θέλετε να μεταφράζονται αυτόματα τα προσχέδια;?"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "Αυτή η λειτουργία είναι διαθέσιμη μόνο όταν ενεργοποιήσετε την επιλογή “Αυτόματη Μετάφραση Όλων” από τον %sΠίνακα Ελέγχου Μεταφράσεων%s."
+         ],
+         "What would you like to do after WPML finishes translating your content automatically?": [
+            "Τι θα θέλατε να κάνετε αφού το WPML ολοκληρώσει την αυτόματη μετάφραση του περιεχομένου σας;?"
+         ],
+         "Publish without review": [
+            "Δημοσίευση χωρίς επανεξέταση"
+         ],
+         "Recommended with PTC": [
+            "Προτείνεται με το PTC"
+         ],
+         "PTC provides Better Than Human Translations that rarely need improvements, so you can confidently skip the review process. For other translation engines, a human review is recommended to confirm accuracy.": [
+            "Το PTC παρέχει μεταφράσεις καλύτερες από τις ανθρώπινες που σπάνια χρειάζονται βελτιώσεις, οπότε μπορείς με σιγουριά να παραλείψεις τη διαδικασία αναθεώρησης. Για άλλες μηχανές μετάφρασης, συνιστάται ανθρώπινη αναθεώρηση για επιβεβαίωση της ακρίβειας."
+         ],
+         "WPML publishes translations immediately, skipping the review process.": [
+            "Το WPML δημοσιεύει τις μεταφράσεις αμέσως, παραλείποντας τη διαδικασία επανεξέτασης."
+         ],
+         "Wait for review": [
+            "Αναμονή για επανεξέταση"
+         ],
+         "Recommended with DeepL, Google and Microsoft": [
+            "Συνιστάται με DeepL, Google και Microsoft"
+         ],
+         "DeepL, Google, and Microsoft deliver great translations, but we recommend a human review to confirm they are correct. PTC provides Better Than Human Translations that understand context, so you can confidently skip the review process.": [
+            "Οι DeepL, Google και Microsoft παρέχουν εξαιρετικές μεταφράσεις, αλλά συνιστούμε ανθρώπινη αναθεώρηση για να επιβεβαιώσεις ότι είναι σωστές. Το PTC παρέχει μεταφράσεις καλύτερες από τις ανθρώπινες που κατανοούν το πλαίσιο, οπότε μπορείς με σιγουριά να παραλείψεις τη διαδικασία αναθεώρησης."
+         ],
+         "WPML keeps translations unpublished, so you can review them first.": [
+            "Το WPML διατηρεί τις μεταφράσεις μη δημοσιευμένες, ώστε να μπορείτε να τις επανεξετάσετε πρώτα."
+         ],
+         "Your translators review and approve translations before publishing.": [
+            "Οι μεταφραστές σας επανεξετάζουν και εγκρίνουν τις μεταφράσεις πριν από τη δημοσίευση."
+         ],
+         "Publish and mark for review": [
+            "Δημοσίευση και επισήμανση για επανεξέταση"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "Το WPML δημοσιεύει τις μεταφράσεις αμέσως αλλά τις επισημαίνει για να τις ελέγξετε όταν σας βολεύει."
+         ],
+         "WPML publishes translations immediately but flags them for translators to review later.": [
+            "Το WPML δημοσιεύει τις μεταφράσεις αμέσως αλλά τις επισημαίνει για να τις επανεξετάσουν οι μεταφραστές αργότερα."
+         ]
+      }
+   }
+}

@@ -1,0 +1,199 @@
+{
+  "source_file": "contract-nature.gc",
+  "columns": [
+    {
+      "id": "code",
+      "use": "required"
+    },
+    {
+      "id": "Name",
+      "use": "optional"
+    },
+    {
+      "id": "bul_label",
+      "use": "optional"
+    },
+    {
+      "id": "spa_label",
+      "use": "optional"
+    },
+    {
+      "id": "ces_label",
+      "use": "optional"
+    },
+    {
+      "id": "dan_label",
+      "use": "optional"
+    },
+    {
+      "id": "deu_label",
+      "use": "optional"
+    },
+    {
+      "id": "est_label",
+      "use": "optional"
+    },
+    {
+      "id": "ell_label",
+      "use": "optional"
+    },
+    {
+      "id": "eng_label",
+      "use": "optional"
+    },
+    {
+      "id": "fra_label",
+      "use": "optional"
+    },
+    {
+      "id": "gle_label",
+      "use": "optional"
+    },
+    {
+      "id": "hrv_label",
+      "use": "optional"
+    },
+    {
+      "id": "ita_label",
+      "use": "optional"
+    },
+    {
+      "id": "lav_label",
+      "use": "optional"
+    },
+    {
+      "id": "lit_label",
+      "use": "optional"
+    },
+    {
+      "id": "hun_label",
+      "use": "optional"
+    },
+    {
+      "id": "mlt_label",
+      "use": "optional"
+    },
+    {
+      "id": "nld_label",
+      "use": "optional"
+    },
+    {
+      "id": "pol_label",
+      "use": "optional"
+    },
+    {
+      "id": "por_label",
+      "use": "optional"
+    },
+    {
+      "id": "ron_label",
+      "use": "optional"
+    },
+    {
+      "id": "slk_label",
+      "use": "optional"
+    },
+    {
+      "id": "slv_label",
+      "use": "optional"
+    },
+    {
+      "id": "fin_label",
+      "use": "optional"
+    },
+    {
+      "id": "swe_label",
+      "use": "optional"
+    }
+  ],
+  "items": [
+    {
+      "code": "services",
+      "Name": "Services",
+      "bul_label": "Услуги",
+      "ces_label": "Služby",
+      "dan_label": "Tjenesteydelser",
+      "deu_label": "Dienstleistungen",
+      "ell_label": "Υπηρεσίες",
+      "eng_label": "Services",
+      "spa_label": "Servicios",
+      "est_label": "Teenused",
+      "fin_label": "Palvelut",
+      "fra_label": "Services",
+      "gle_label": "Seirbhísí",
+      "hrv_label": "Usluge",
+      "hun_label": "Szolgáltatásmegrendelés",
+      "ita_label": "Servizi",
+      "lit_label": "Paslaugos",
+      "lav_label": "Pakalpojumi",
+      "mlt_label": "Servizzi",
+      "nld_label": "Diensten",
+      "pol_label": "Usługi",
+      "por_label": "Serviços",
+      "ron_label": "Servicii",
+      "slk_label": "Služby",
+      "slv_label": "Storitve",
+      "swe_label": "Tjänster"
+    },
+    {
+      "code": "supplies",
+      "Name": "Supplies",
+      "bul_label": "Доставки",
+      "ces_label": "Dodávky",
+      "dan_label": "Varer",
+      "deu_label": "Lieferleistungen",
+      "ell_label": "Αγαθά",
+      "eng_label": "Supplies",
+      "spa_label": "Suministros",
+      "est_label": "Asjad",
+      "fin_label": "Tavarahankinnat",
+      "fra_label": "Fournitures",
+      "gle_label": "Soláthairtí",
+      "hrv_label": "Roba",
+      "hun_label": "Árubeszerzés",
+      "ita_label": "Forniture",
+      "lit_label": "Prekės",
+      "lav_label": "Piegādes",
+      "mlt_label": "Provvisti",
+      "nld_label": "Leveringen",
+      "pol_label": "Dostawy",
+      "por_label": "Fornecimentos",
+      "ron_label": "Produse",
+      "slk_label": "Tovary",
+      "slv_label": "Blago",
+      "swe_label": "Varor"
+    },
+    {
+      "code": "works",
+      "Name": "Works",
+      "bul_label": "Строителство",
+      "ces_label": "Práce",
+      "dan_label": "Bygge- og anlægsarbejder",
+      "deu_label": "Bauleistungen",
+      "ell_label": "Έργα",
+      "eng_label": "Works",
+      "spa_label": "Obras",
+      "est_label": "Ehitustööd",
+      "fin_label": "Rakennusurakat",
+      "fra_label": "Travaux",
+      "gle_label": "Oibreacha",
+      "hrv_label": "Radovi",
+      "hun_label": "Építési beruházás",
+      "ita_label": "Lavori",
+      "lit_label": "Darbai",
+      "lav_label": "Būvdarbi",
+      "mlt_label": "Xogħlijiet",
+      "nld_label": "Werken",
+      "pol_label": "Roboty budowlane",
+      "por_label": "Obras",
+      "ron_label": "Lucrări",
+      "slk_label": "Práce",
+      "slv_label": "Gradnje",
+      "swe_label": "Byggentreprenader"
+    }
+  ],
+  "identification": {
+    "short_name": "ContractNature",
+    "version": "20241211-0"
+  }
+}

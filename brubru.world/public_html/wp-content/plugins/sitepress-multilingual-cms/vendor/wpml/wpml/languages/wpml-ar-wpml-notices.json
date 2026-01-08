@@ -1,0 +1,46 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);",
+            "lang": "ar"
+         },
+         "Add glossary terms": [
+            "إضافة مصطلحات المسرد"
+         ],
+         "Minimize": [
+            "تصغير"
+         ],
+         "Expand": [
+            "توسيع"
+         ],
+         "There's nothing yet in the Glossary": [
+            "لا يوجد شيء في المسرد بعد"
+         ],
+         "Looks like you're not yet using the glossary. Glossary can help you:": [
+            "يبدو أنك لم تستخدم المسرد بعد. يمكن للمسرد أن يساعدك في:"
+         ],
+         "Improve the quality of the translation": [
+            "تحسين جودة الترجمة"
+         ],
+         "Ensure translation consistency": [
+            "ضمان اتساق الترجمة"
+         ],
+         "Reduce translation costs": [
+            "تقليل تكاليف الترجمة"
+         ],
+         "Improve SEO in translation languages": [
+            "تحسين تحسين محركات البحث في لغات الترجمة"
+         ],
+         "How to Use the Glossary for Accurate Translations": [
+            "كيفية استخدام المسرد للترجمات الدقيقة"
+         ],
+         "%d item in the <a>Glossary</a>": [
+            "%d عنصر في <a>المسرد</a>",
+            "%d عنصر في <a>المسرد</a>"
+         ]
+      }
+   }
+}

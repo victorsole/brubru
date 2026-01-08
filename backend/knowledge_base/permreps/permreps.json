@@ -1,0 +1,1245 @@
+{
+    "meta": {
+      "title": "EU Member States Permanent Representations and Regional Offices in Brussels",
+      "description": "Comprehensive directory of all 27 EU member states' permanent representations and regional representations in Brussels",
+      "last_updated": "2025-11-19",
+      "source": "Compiled from EU official sources, EEAS, Committee of Regions, and member state websites"
+    },
+    "permanent_representations": {
+      "austria": {
+        "country": "Austria",
+        "official_name": "Permanent Representation of Austria to the European Union",
+        "address": "Avenue de Cortenbergh 30, B-1040 Brussels",
+        "phone": "+32 (0)2 234 51 71",
+        "email": "bruessel-ov@bmeia.gv.at",
+        "website": "https://www.bmeia.gv.at/",
+        "contacts": [
+          {
+            "name": "Martin Botta",
+            "email": "Martin.botta@bmeia.gv.at"
+          },
+          {
+            "name": "Christine Freilinger"
+          },
+          {
+            "name": "Juliane Hohenwarter",
+            "role": "Assistant",
+            "email": "juliane.hohenwarter@bmeia.gv.at"
+          }
+        ]
+      },
+      "belgium": {
+        "country": "Belgium",
+        "official_name": "Permanent Representation of Belgium to the European Union",
+        "address": "Rue Belliard 65, B-1040 Brussels",
+        "phone": ["+32 (0)2 233 21 22", "+32 (0)2 233 03 47", "+32 (0)2 233 14 29"],
+        "website": "https://diplomatie.belgium.be/",
+        "contacts": [
+          {
+            "name": "Arnout Pauwels",
+            "email": "arnout.pauwels@diplobel.fed.be"
+          },
+          {
+            "name": "Eliza-Franciska Joó",
+            "email": "eliza-franciska.joo@diplobel.fed.be"
+          },
+          {
+            "name": "Michel Malherbe",
+            "email": "Michel.malherbe@diplobel.fed.be"
+          },
+          {
+            "name": "Karina Tuytschaever",
+            "email": "Karina.tuytschaever@diplobel.fed.be"
+          }
+        ]
+      },
+      "bulgaria": {
+        "country": "Bulgaria",
+        "official_name": "Permanent Representation of Bulgaria to the European Union",
+        "address": "Square Marie-Louise 49, B-1000 Brussels",
+        "phone": "+32 2 235 8461",
+        "email": "recruitment@bg-permrep.eu",
+        "website": "https://www.mfa.bg/",
+        "contacts": [
+          {
+            "name": "Adelina Tomova",
+            "role": "Second Secretary",
+            "email": "adelina.tomova@bg-permrep.eu",
+            "mobile": "+32 493 354 511"
+          },
+          {
+            "name": "Maria Chopova",
+            "role": "Counsellor - HR Directorate",
+            "email": "mshopova@mfa.bg"
+          }
+        ]
+      },
+      "croatia": {
+        "country": "Croatia",
+        "official_name": "Permanent Representation of Croatia to the European Union",
+        "address": "Rue d'Arlon 108, B-1000 Brussels",
+        "phone": "+32 (0)2 436 71 92",
+        "email": "hr.perm.rep@mvep.hr",
+        "website": "https://mvep.gov.hr/",
+        "contacts": [
+          {
+            "name": "Hrvoje Ćurko",
+            "role": "Minister Plenipotentiary",
+            "email": "hrvoje.curko@mvep.hr"
+          }
+        ]
+      },
+      "cyprus": {
+        "country": "Cyprus",
+        "official_name": "Permanent Representation of Cyprus to the European Union",
+        "address": "Avenue de Cortenbergh 61, B-1000 Brussels",
+        "phone": ["+32 (0)2 739 51 75", "+32 (0)2 739 51 26", "+32 (0)2 739 51 11"],
+        "email": "cy.perm.rep@mfa.gov.cy",
+        "website": "https://mfa.gov.cy/",
+        "contacts": [
+          {
+            "name": "Paraskevi Nikolaidou",
+            "role": "Administration Officer",
+            "email": "pnikolaidou@mfa.gov.cy"
+          },
+          {
+            "name": "Theodosia Pantazi",
+            "email": "TPantazi@mfa.gov.cy"
+          }
+        ]
+      },
+      "czech_republic": {
+        "country": "Czech Republic",
+        "official_name": "Permanent Representation of the Czech Republic to the European Union",
+        "address": "Rue Caroly 15, B-1050 Brussels",
+        "phone": "+32 2 213 92 02",
+        "email": "eu.brussels@embassy.mzv.cz",
+        "website": "https://www.mzv.cz/",
+        "contacts": [
+          {
+            "name": "Eliška Maday",
+            "email": "eliska_maday@mzv.cz"
+          },
+          {
+            "name": "Andrea Vítková",
+            "role": "Head of National Focal Point, HR Department",
+            "email": "andrea_vitkova@mzv.cz"
+          }
+        ]
+      },
+      "denmark": {
+        "country": "Denmark",
+        "official_name": "Permanent Representation of Denmark to the European Union",
+        "address": "Rue d'Arlon 73, B-1040 Brussels",
+        "phone": "+32 (0)2 233 08 11",
+        "email": "brurep@um.dk",
+        "website": "https://um.dk/",
+        "contacts": [
+          {
+            "name": "Søren Toft",
+            "email": "sortof@um.dk"
+          },
+          {
+            "name": "Danièle Lauridsen",
+            "email": "danlau@um.dk"
+          },
+          {
+            "name": "Martin Mikkelsen",
+            "email": "marmik@um.dk"
+          }
+        ]
+      },
+      "estonia": {
+        "country": "Estonia",
+        "official_name": "Permanent Representation of Estonia to the European Union",
+        "address": "Rue Guimard 11/13, B-1040 Brussels",
+        "phone": "+32 (0)2 227 39 21",
+        "email": "permrep.eu@mfa.ee",
+        "website": "https://vm.ee/",
+        "contacts": [
+          {
+            "name": "Algis Kokka",
+            "email": "Algis.Kokka@mfa.ee"
+          },
+          {
+            "name": "Raili Lillemets",
+            "role": "Councillor",
+            "email": "raili.lillemets@mfa.ee"
+          },
+          {
+            "name": "Siiri Liivandi",
+            "email": "siiri.liivandi@mfa.ee"
+          }
+        ]
+      },
+      "finland": {
+        "country": "Finland",
+        "official_name": "Permanent Representation of Finland to the European Union",
+        "address": "Avenue de Cortenbergh 80, B-1000 Brussels",
+        "phone": "+32 (0)2 287 84 61",
+        "email": "sanomat.eue@formin.fi",
+        "website": "https://um.fi/",
+        "contacts": [
+          {
+            "name": "Jenni Hakala",
+            "role": "Counsellor (Institutional issues, EU-recruitments)",
+            "email": "FI-PR-EU-recruitments@formin.fi"
+          },
+          {
+            "name": "Marja Rosvall",
+            "role": "Team Leader",
+            "email": "marja.rosvall@formin.fi"
+          }
+        ]
+      },
+      "france": {
+        "country": "France",
+        "official_name": "Permanent Representation of France to the European Union",
+        "address": "Place de Louvain 14, B-1000 Brussels",
+        "phone": ["+32 (0)2 229 82 11", "+32 (0)2 229 82 09", "+32 (0)2 229 82 05"],
+        "email": "courrier.bruxelles-dfra@diplomatie.gouv.fr",
+        "press_email": "presse.bruxelles-dfra@diplomatie.gouv.fr",
+        "website": "https://ue.delegfrance.org/",
+        "contacts": [
+          {
+            "name": "Natacha Ficarelli",
+            "role": "Secteur 'Présence française'",
+            "email": "natacha.ficarelli@diplomatie.gouv.fr"
+          },
+          {
+            "name": "Matthias Clerc",
+            "role": "Délégation aux Fonctionnaires Internationaux",
+            "email": "jpd.dgp-nuoi-fi@diplomatie.gouv.fr"
+          }
+        ]
+      },
+      "germany": {
+        "country": "Germany",
+        "official_name": "Permanent Representation of Germany to the European Union",
+        "address": "Avenue de Cortenbergh 75, B-1040 Brussels",
+        "phone": "+32 (0)2 787 10 00",
+        "email": "info@bruessel-eu.diplo.de",
+        "website": "https://bruessel-eu.diplo.de/",
+        "organizational_structure": {
+          "leadership": [
+            "Permanent Representative (Ambassador rank)",
+            "Deputy Permanent Representative (Ambassador rank)",
+            "Head of Political and Security Committee (Ambassador rank)"
+          ],
+          "divisions": ["Political Division", "Financial Division", "Economic Division"],
+          "staff_origin": "All German Federal Ministries and Federal Agencies",
+          "coreper_participation": {
+            "coreper_I": "Deputy deals with competitiveness, agriculture, education, labour, social affairs, environment, infrastructure",
+            "coreper_II": "Permanent Representative deals with economic, financial, trade policy, justice, inner affairs, foreign and general affairs"
+          }
+        },
+        "contacts": [
+          {
+            "name": "Claudia Volkmann",
+            "role": "BFIO Contact",
+            "email": "bfio@arbeitsagentur.de"
+          }
+        ]
+      },
+      "greece": {
+        "country": "Greece",
+        "official_name": "Permanent Representation of Greece to the European Union",
+        "address": "Rue Jacques de Lalaing 19-21, B-1040 Brussels",
+        "phone": "+32 (0)2 551 57 91",
+        "email": "admin@rp-grece.be",
+        "website": "https://www.mfa.gr/",
+        "contacts": [
+          {
+            "name": "Stella Kromlidou",
+            "email": "admin@rp-grece.be"
+          },
+          {
+            "name": "Michalis Chaintoutis",
+            "role": "Attaché",
+            "email": "chaintoutis.michalis@mfa.gr"
+          }
+        ]
+      },
+      "hungary": {
+        "country": "Hungary",
+        "official_name": "Permanent Representation of Hungary to the European Union",
+        "address": "Rue de Trèves 92-98, B-1040 Brussels",
+        "phone": "+32 2 234 1410",
+        "website": "https://kormany.hu/",
+        "contacts": [
+          {
+            "name": "Zsuzsanna Beszteri",
+            "role": "Counsellor",
+            "email": "zsuzsa.beszteri@mfa.gov.hu"
+          },
+          {
+            "name": "Krisztina Bándy Péntekné",
+            "role": "Head of Unit",
+            "email": "krisztina.bandy@mfa.gov.hu"
+          }
+        ]
+      },
+      "ireland": {
+        "country": "Ireland",
+        "official_name": "Permanent Representation of Ireland to the European Union",
+        "address": "Rue Froissart 50, B-1040 Brussels",
+        "phone": "+32 (0)2 282 32 78",
+        "email": "eujpd@dfa.ie",
+        "website": "https://www.dfa.ie/",
+        "contacts": [
+          {
+            "name": "Sarah Greene",
+            "role": "Institutional Affairs"
+          },
+          {
+            "name": "Declan Johnston",
+            "role": "Political Secretariat"
+          }
+        ]
+      },
+      "italy": {
+        "country": "Italy",
+        "official_name": "Permanent Representation of Italy to the European Union",
+        "address": "Rue du Marteau 9, B-1000 Brussels",
+        "phone": "+32 (0)2 220 04 82",
+        "email": "rpue.pers.ue@esteri.it",
+        "website": "https://italiaue.esteri.it/",
+        "permanent_representative": "Vincenzo Celeste (Ambassador)",
+        "transparency_rating": "Top 6 out of 27 for transparency and public information (2025 Civil Society Europe Report)",
+        "contacts": [
+          {
+            "name": "Vincenzo Termine",
+            "role": "Personale Istituzioni"
+          },
+          {
+            "name": "Filippo Lonardo",
+            "role": "DG Development Cooperation, Multilateral Office",
+            "email": "dgcs-multilaterale@esteri.it"
+          }
+        ]
+      },
+      "latvia": {
+        "country": "Latvia",
+        "official_name": "Permanent Representation of Latvia to the European Union",
+        "address": "Avenue des Arts 23, B-1000 Brussels",
+        "phone": "+32 2 238 32 10",
+        "email": "permrep.eu@mfa.gov.lv",
+        "website": "https://www.mfa.gov.lv/",
+        "contacts": [
+          {
+            "name": "Andris Budļevskis",
+            "role": "Director of the Administrative department",
+            "email": "andris.budlevskis@mfa.gov.lv"
+          },
+          {
+            "name": "Nellija Reinicāne",
+            "role": "Counsellor",
+            "email": "nellija.reinicane@mfa.gov.lv"
+          }
+        ]
+      },
+      "lithuania": {
+        "country": "Lithuania",
+        "official_name": "Permanent Representation of Lithuania to the European Union",
+        "address": "Rue Belliard 41-43, B-1040 Brussels",
+        "phone": "+32 (0)2 401 98 48",
+        "email": "office@eu.mfa.lt",
+        "website": "https://urm.lt/",
+        "contacts": [
+          {
+            "name": "Justina Laurinavičiūtė",
+            "email": "LT-Recruitment-EU@urm.lt"
+          },
+          {
+            "name": "Agnė Šniukovienė",
+            "role": "Chief Officer – Performance Appraisal and Training Division",
+            "email": "agne.sniukoviene@urm.lt"
+          }
+        ]
+      },
+      "luxembourg": {
+        "country": "Luxembourg",
+        "official_name": "Permanent Representation of Luxembourg to the European Union",
+        "address": "Avenue Cortenbergh 75, B-1040 Brussels",
+        "phone": "+32 (0)2 737 56 00",
+        "email": "bruxelles.rpue@mae.etat.lu",
+        "website": "https://maee.gouvernement.lu/",
+        "contacts": [
+          {
+            "name": "Sandrine Gorgon",
+            "email": "sandrine.gorgon@mae.etat.lu"
+          },
+          {
+            "name": "Marc Pitzen",
+            "role": "Directeur adjoint des Ressources Humaines",
+            "email": "marc.pitzen@mae.etat.lu"
+          },
+          {
+            "name": "Alexandra Allen",
+            "role": "Directrice adjointe Personnel détaché",
+            "email": "alexandra.allen@mae.etat.lu"
+          }
+        ]
+      },
+      "malta": {
+        "country": "Malta",
+        "official_name": "Permanent Representation of Malta to the European Union",
+        "address": "Rue Archimède 25, B-1000 Brussels",
+        "email": "maltarep@gov.mt",
+        "website": "https://foreignandeu.gov.mt/",
+        "contacts": [
+          {
+            "name": "Charlene Caruana",
+            "role": "Technical Attaché"
+          },
+          {
+            "name": "Mary McNamara",
+            "role": "Staffing Officer in Scale 4, Missions Abroad, Training and Development",
+            "phone": "+356 22043077",
+            "email": "mary.mc-namara@gov.mt"
+          }
+        ]
+      },
+      "netherlands": {
+        "country": "Netherlands",
+        "official_name": "Permanent Representation of the Netherlands to the European Union",
+        "address": "Kortenberglaan 4-10, B-1040 Brussels",
+        "phone": "+32 490 56 41 83",
+        "email": "bre-abd@minbuza.nl",
+        "website": "https://www.permanentrepresentations.nl/permanent-representations/pr-eu-brussels",
+        "permanent_representative": "Pieter Jan Kleiweg de Zwaan (Ambassador, since February 2024)",
+        "contacts": [
+          {
+            "name": "Tristan Schyns",
+            "role": "Policy advisor",
+            "email": "bre-abd@minbuza.nl"
+          }
+        ]
+      },
+      "poland": {
+        "country": "Poland",
+        "official_name": "Permanent Representation of Poland to the European Union",
+        "address": "Rue Stevin 139, B-1000 Brussels",
+        "phone": "+32 2 780 4336",
+        "email": "Brussels.eu.careers@msz.gov.pl",
+        "website": "https://www.gov.pl/web/dyplomacja",
+        "contacts": [
+          {
+            "name": "Filip Slezak",
+            "role": "II Secretary, Institutional and Legal Affairs Unit",
+            "email": "filip.slezak@msz.gov.pl"
+          },
+          {
+            "name": "Anna Atłas",
+            "role": "Expert",
+            "email": "anna.atlas@msz.gov.pl"
+          }
+        ]
+      },
+      "portugal": {
+        "country": "Portugal",
+        "official_name": "Permanent Representation of Portugal to the European Union",
+        "address": "Avenue de Cortenbergh 12, B-1040 Brussels",
+        "phone": "+32 (0) 2 286 42 49",
+        "website": "https://portaldiplomatico.mne.gov.pt/",
+        "contacts": [
+          {
+            "name": "Filipe Honrado",
+            "role": "Counsellor",
+            "email": "Filipe.honrado@mne.pt"
+          },
+          {
+            "name": "Alice Ergin",
+            "email": "Alice.ergin@mne.pt"
+          },
+          {
+            "name": "Ana Catarina Centeno de Magalhães",
+            "role": "Diplomatic Institute",
+            "email": "ana.magalhaes@mne.pt"
+          }
+        ]
+      },
+      "romania": {
+        "country": "Romania",
+        "official_name": "Permanent Representation of Romania to the European Union",
+        "address": "Avenue de Cortenbergh 107, B-1000 Brussels",
+        "phone": "+32 (0)2 700 04 23",
+        "website": "https://www.mae.ro/",
+        "contacts": [
+          {
+            "name": "Alexandru Cojocaru",
+            "role": "First Secretary",
+            "email": "alexandru.cojocaru@rpro.eu"
+          },
+          {
+            "name": "Adina Petcu",
+            "role": "Minister Counsellor",
+            "email": "adina.petcu@mae.ro"
+          }
+        ]
+      },
+      "slovakia": {
+        "country": "Slovakia",
+        "official_name": "Permanent Representation of Slovakia to the European Union",
+        "address": "Avenue de Cortenbergh 79, B-1000 Brussels",
+        "phone": "+32 2 743 6873",
+        "email": "eu.brussels@mzv.sk",
+        "website": "https://www.mzv.sk/",
+        "contacts": [
+          {
+            "name": "Petra Ružičková",
+            "email": "petra.ruzickova@mzv.sk"
+          },
+          {
+            "name": "Soňa Szentivány",
+            "email": "sona.szentivany@mzv.sk"
+          },
+          {
+            "name": "Zuzana Cagalová",
+            "email": "zuzana.cagalova@mzv.sk"
+          },
+          {
+            "name": "Imrich Babic",
+            "role": "Ministry of Foreign Affairs, Department of Diplomatic Academy",
+            "email": "imrich.babic@mzv.sk"
+          }
+        ]
+      },
+      "slovenia": {
+        "country": "Slovenia",
+        "official_name": "Permanent Representation of Slovenia to the European Union",
+        "address": "Boulevard du Regent 45-46, B-1000 Brussels",
+        "phone": "+32 (0)2 213 63 00",
+        "email": "slomission.eu@gov.si",
+        "website": "https://www.gov.si/",
+        "contacts": [
+          {
+            "name": "Roman Weixler",
+            "role": "Minister Plenipotentiary, Head of Administration",
+            "email": "roman.weixler@gov.si"
+          },
+          {
+            "name": "Jana Š. Kvaternik",
+            "email": "jana.kvaternik@gov.si"
+          },
+          {
+            "name": "Tina Trtnik",
+            "email": "tina.trtnik1@gov.si"
+          }
+        ]
+      },
+      "spain": {
+        "country": "Spain",
+        "official_name": "Permanent Representation of Spain to the European Union",
+        "address": "Boulevard du Régent 52, B-1000 Brussels",
+        "phone": "+32 (0)2 509 86 11",
+        "email": "unidaddeapoyo@reper.maec.es",
+        "website": "https://en.es-ue.org/",
+        "organizational_structure": {
+          "description": "Embassy of the Spanish Government in Brussels, reflection of Spanish administration with civil servants from all ministries",
+          "working_groups": "More than 150 working groups",
+          "committees": "Two Permanent Representative Committees (COREPER)",
+          "mission": "Promote and defend Spanish interests in EU decision-making process"
+        },
+        "contacts": [
+          {
+            "name": "César Plá",
+            "role": "Unidad de Apoyo para la presencia de españoles en las Instituciones UE"
+          },
+          {
+            "name": "Álvaro Sánchez",
+            "role": "Unidad de fomento de presencia de españoles en las Instituciones UE",
+            "email": "seleccionjpd@maec.es"
+          }
+        ]
+      },
+      "sweden": {
+        "country": "Sweden",
+        "official_name": "Permanent Representation of Sweden to the European Union",
+        "address": "Square de Meeûs 30, B-1000 Brussels",
+        "phone": "+32 (0)2 289 56 33",
+        "email": "Representationen.Bryssel-EUrekrytering@regeringskansliet.se",
+        "website": "https://www.government.se/",
+        "contacts": [
+          {
+            "name": "Nataša Boškovic",
+            "role": "Minister Counsellor, Strategic EU-recruitment",
+            "mobile": "+46 (0)76 495 56 05"
+          },
+          {
+            "name": "Anna Winström",
+            "role": "Senior Programme Manager, SIDA",
+            "phone": "+46 (0)8 698 50 66",
+            "email": "anna.winstrom@sida.se"
+          }
+        ]
+      }
+    },
+    "regional_representations": {
+      "spain": [
+        {
+          "region": "Catalonia",
+          "official_name": "Delegation of the Government of Catalonia to the European Union",
+          "address": "Rue de la Loi 227, B-1040 Brussels",
+          "phone": "+32 (0)2 231 03 30",
+          "fax": "+32 (0)2 230 21 10",
+          "email": "eu@gencat.cat",
+          "website": "https://catalangovernment.eu/",
+          "established": "1986",
+          "representative": "Meritxell Serret i Aleu",
+          "facilities": "Espai Catalunya Europa (exhibition space, conference hall, meeting rooms, networking space)",
+          "staff_size": "11 employees",
+          "mission": [
+            "Represent and promote Catalonia's interests to EU institutions",
+            "Monitor and influence EU decision-making process",
+            "Act as bridge with other delegations and Spanish Permanent Representation",
+            "Promote internationalization of Catalonia and its companies within EU"
+          ]
+        },
+        {
+          "region": "Andalusia",
+          "official_name": "Delegation of the Andalusian Government in Brussels",
+          "address": "Rue d'Arlon 25, B-1040 Brussels",
+          "email": "delegacion.bruselas@juntadeandalucia.es",
+          "website": "https://www.juntadeandalucia.es/"
+        },
+        {
+          "region": "Basque Country",
+          "official_name": "Delegation of the Basque Country to the EU",
+          "address": "Rue des Deux Eglises 27, B-1000 Brussels",
+          "email": "AneGorostiza@euskadi.eus",
+          "website": "https://www.euskadi.eus/"
+        },
+        {
+          "region": "Valencia",
+          "official_name": "Region of Valencia EU Office",
+          "address": "Avenue Edmond Mesens 7A, B-1000 Brussels",
+          "email": "direccion@delcomval.be",
+          "website": "https://ue.gva.es/"
+        },
+        {
+          "region": "Galicia",
+          "official_name": "Fundacion Galicia Europa",
+          "address": "Rue de la Loi 38 - bte 2, B-1000 Brussels",
+          "email": "bruselas@fundaciongaliciaeuropa.eu",
+          "website": "https://fundaciongaliciaeuropa.eu/"
+        },
+        {
+          "region": "Aragon",
+          "official_name": "Delegation of the Government of Aragón to the European Union",
+          "address": "Boulevard du Régent 52, B-1000 Brussels",
+          "email": "bruselas.ccaa.aragon@reper.maec.es",
+          "website": "https://www.aragon.es/"
+        },
+        {
+          "region": "Asturias",
+          "official_name": "Principality Of Asturias",
+          "address": "Boulevard du Régent 52, B-1000 Brussels",
+          "email": "Maria_Jesus.Martinez@reper.maec.es",
+          "website": "https://www.asturias.es/"
+        },
+        {
+          "region": "Balearic Islands",
+          "official_name": "Balearic Islands Government Office in Brussels",
+          "address": "Avenue des Arts 3-4-5, 5ème étage, B-1000 Brussels",
+          "email": "mcaballero@dgre.caib.es",
+          "website": "https://www.caib.es/"
+        },
+        {
+          "region": "Cantabria",
+          "official_name": "Oficina del Gobierno de Cantabria en Bruselas",
+          "address": "Avenue d'Auderghem 22-28, B-1000 Brussels",
+          "email": "ue@cantabria.be",
+          "website": "https://cantabriaeuropa.org/"
+        },
+        {
+          "region": "Castilla y León",
+          "official_name": "Permanent Delegation of Castilla y León to the EU",
+          "address": "Boulevard du Régent 52, B-1000 Brussels",
+          "email": "ccanto.ccaa.cyl@reper.maec.es",
+          "website": "https://eucyl.jcyl.es/"
+        },
+        {
+          "region": "Castilla-La Mancha",
+          "official_name": "Office of Castilla-La Mancha to the European Union",
+          "address": "Boulevard du Régent 52, B-1000 Brussels",
+          "email": "oficina.bruselas@jccm.es",
+          "website": "https://www.castillalamancha.es/"
+        },
+        {
+          "region": "Murcia",
+          "official_name": "Oficina De La Region De Murcia En Bruselas",
+          "address": "Avenue des Arts 3-4-5, B-1000 Brussels",
+          "email": "of.murcia@info.carm.es",
+          "website": "https://murciaregioneuropea.es/"
+        },
+        {
+          "region": "Navarra",
+          "official_name": "Delegation of the Government of Navarra to the EU",
+          "address": "Rue de Toulouse 30, B-1000 Brussels",
+          "email": "delegacion.bruselas@navarra.es",
+          "website": "https://www.navarra.es/"
+        },
+        {
+          "region": "Barcelona (Diputació)",
+          "official_name": "Diputació de Barcelona",
+          "address": "Avenue des Arts 3, B-1000 Brussels",
+          "email": "solertb@diba.cat",
+          "website": "https://www.diba.cat/"
+        }
+      ],
+      "germany": [
+        {
+          "region": "Bavaria",
+          "official_name": "Bavarian Representation to the EU / Office of the Bavarian Parliament in Brussels",
+          "address": "Rue Wiertz 77, B-1040 Brussels",
+          "email": "europa@bayern.landtag.de",
+          "website": "https://www.bayern.de/",
+          "building_note": "Historic Institut Pasteur building in Parc Leopold next to European Parliament"
+        },
+        {
+          "region": "Baden-Württemberg",
+          "official_name": "Europabüro der Baden-Württembergischen Kommunen",
+          "address": "Rue Belliard 60-62, B-1040 Brussels",
+          "email": "sekretariat@europabuero-bw.de",
+          "website": "https://www.landtag-bw.de/"
+        },
+        {
+          "region": "North Rhine-Westphalia",
+          "official_name": "Representation of the State of North Rhine-Westphalia to the EU",
+          "address": "Rue Montoyer 47, B-1040 Brussels",
+          "email": "denise.schmidt@lv-eu.nrw.de",
+          "website": "https://mbeim.nrw/"
+        },
+        {
+          "region": "Saxony-Anhalt",
+          "official_name": "Representation of Saxony-Anhalt to the EU",
+          "address": "Boulevard Saint-Michel 80, B-1040 Brussels",
+          "email": "sekretariat@lv-bruessel.stk.sachsen-anhalt.de",
+          "website": "https://europa.sachsen-anhalt.de/",
+          "building_note": "Center of Regions"
+        },
+        {
+          "region": "Hessen",
+          "official_name": "Delegation of Hessen",
+          "address": "Rue Montoyer 21, B-1040 Brussels",
+          "building_note": "Multiple-Regions-House"
+        },
+        {
+          "region": "Mecklenburg-Vorpommern",
+          "official_name": "Representation of Mecklenburg-Vorpommern",
+          "address": "Boulevard Saint Michel 80, B-1040 Brussels",
+          "building_note": "Center of Regions (shared with Saxony-Anhalt)"
+        },
+        {
+          "region": "Hamburg & Schleswig-Holstein",
+          "official_name": "Hanse-Office, Gemeinsame Landesvertretung",
+          "building_note": "Joint representation of Hamburg and Schleswig-Holstein"
+        },
+        {
+          "region": "Frankfurt Rhine Main Metropolitan Region",
+          "official_name": "European Office of the Metropolitan Region Frankfurt Rhein Main",
+          "address": "Rue Montoyer 21, B-1040 Brussels",
+          "email": "europa@region-frankfurt.de",
+          "website": "https://www.europabuero-frm.de/"
+        },
+        {
+          "region": "Stuttgart Region",
+          "official_name": "Stuttgart Region European Office",
+          "address": "Avenue des Arts 56, B-1040 Brussels",
+          "email": "marcus.goepfert@region-stuttgart.de",
+          "website": "https://eu.region-stuttgart.de/"
+        }
+      ],
+      "austria": [
+        {
+          "region": "Salzburg",
+          "official_name": "Representation of Salzburg",
+          "address": "Rue Frederic Pelletier 107, B-1040 Brussels",
+          "email": "katharina.stolberg@salzburg.gv.at",
+          "website": "https://www.salzburg.gv.at/"
+        },
+        {
+          "region": "Upper Austria",
+          "official_name": "Verbindungsbüro Oberösterreich",
+          "address": "Rue de la Loi 28/14, B-1040 Brussels",
+          "email": "eub.post@ooe.gv.at",
+          "website": "https://www.land-oberoesterreich.gv.at/"
+        },
+        {
+          "region": "Styria",
+          "official_name": "Steiermark Büro Brüssel / Steiermark-Office Brussels",
+          "address": "Avenue de Tervueren 82-84, B-1040 Brussels",
+          "email": "steiermark-office@stmk.gv.at",
+          "website": "https://www.europa.steiermark.at/"
+        },
+        {
+          "region": "Tyrol",
+          "official_name": "Representation of Tyrol",
+          "address": "Rue de Pascale 45, B-1040 Brussels",
+          "email": "tirol@europaregion.info",
+          "website": "https://www.europaregion.info/"
+        },
+        {
+          "region": "Carinthia",
+          "official_name": "EU-Representation Office of Carinthia",
+          "address": "Rue du Commerce 49, B-1040 Brussels",
+          "email": "abt1.vbb@ktn.gv.at",
+          "website": "https://vbb.ktn.gv.at/"
+        },
+        {
+          "region": "Lower Austria",
+          "official_name": "Verbindungsbüro Niederösterreich",
+          "address": "Rue Montoyer 40, B-1040 Brussels",
+          "email": "post.noevbb@noel.gv.at",
+          "website": "https://www.noel.gv.at/"
+        }
+      ],
+      "belgium": [
+        {
+          "region": "Wallonia",
+          "official_name": "AWEX-Region of Wallonia",
+          "address": "Brussels, Belgium"
+        },
+        {
+          "region": "Brussels",
+          "official_name": "Bureau de Liaison Bruxelles-Europe",
+          "address": "Brussels, Belgium"
+        },
+        {
+          "region": "German Speaking Community",
+          "official_name": "Ministry of the German Speaking Community of Belgium",
+          "address": "Rue Jacques Jordaens 34, B-1000 Brussels",
+          "email": "Janina.Vomberg@dgov.be",
+          "website": "https://ostbelgienlive.be/"
+        }
+      ],
+      "italy": [
+        {
+          "region": "Lombardy",
+          "official_name": "Lombardy Region Delegation to the EU",
+          "address": "Place du Champ de Mars 2, B-1050 Brussels",
+          "phone": "+32 2 518 76 00",
+          "email": "lombardia_ue@regione.lombardia.it",
+          "website": "https://www.regione.lombardia.it/",
+          "facilities": "Casa della Lombardia - comprehensive ecosystem with Universities, Chamber of commerce, Associations",
+          "strategic_alliances": "Four Motors for Europe (with Baden-Württemberg, Auvergne-Rhône Alpes, Catalonia)"
+        },
+        {
+          "region": "Lazio",
+          "official_name": "Regione Lazio",
+          "address": "Rond Point Schuman 14, B-1040 Brussels",
+          "email": "areue@regione.lazio.it",
+          "website": "https://www.lazioeuropa.it/"
+        },
+        {
+          "region": "Sardinia",
+          "official_name": "Regione Autonoma della Sardegna",
+          "address": "Rond point Schuman 2, B-1040 Brussels",
+          "email": "bruxelles@regione.sardegna.it",
+          "website": "https://www.regione.sardegna.it/"
+        },
+        {
+          "region": "Calabria",
+          "official_name": "Calabria delegation in Brussels",
+          "address": "Rond Point Shuman 14 (third floor), B-1040 Brussels",
+          "email": "cte.calabria@regione.calabria.it",
+          "website": "https://calabriaeuropa.regione.calabria.it/"
+        },
+        {
+          "region": "Emilia Romagna",
+          "official_name": "Emilia Romagna Region - Delegation to the EU",
+          "address": "Rue Montoyer 21, B-1040 Brussels",
+          "email": "rerbruxelles@regione.emilia-romagna.it",
+          "website": "https://www.regione.emilia-romagna.it/"
+        },
+        {
+          "region": "Campania",
+          "official_name": "Regione Campania - Ufficio Comunitario",
+          "address": "Avenue de Cortenbergh 60, B-1040 Brussels",
+          "email": "ucr@regione.campania.it",
+          "website": "https://bruxelles.regione.campania.it/"
+        },
+        {
+          "region": "Abruzzo",
+          "official_name": "Regione Abruzzo",
+          "address": "Avenue Louise 210, B-1040 Brussels",
+          "email": "rp.bruxelles@regione.abruzzo.it",
+          "website": "https://www.regione.abruzzo.it/"
+        },
+        {
+          "region": "South Tyrol / Bolzano",
+          "official_name": "Autonomous Province of Bozen/Bolzano - South Tyrol",
+          "address": "Rue de Pascale 45/47, B-1040 Brussels",
+          "email": "vesna.caminades@europaregion.info",
+          "website": "https://www.europaregion.info/"
+        },
+        {
+          "region": "Veneto",
+          "official_name": "Region of Veneto",
+          "address": "Avenue de Tervueren 67, B-1040 Brussels",
+          "email": "bruxelles@regione.veneto.it",
+          "website": "https://www.regione.veneto.it/"
+        },
+        {
+          "region": "Umbria",
+          "official_name": "Regione Umbria - Brussels Office",
+          "address": "Rond Point Schuman 14, B-1040 Brussels",
+          "email": "umbria@europa.regione.umbria.it",
+          "website": "https://www.regione.umbria.it/"
+        },
+        {
+          "region": "Piedmont",
+          "official_name": "Piedmont Region",
+          "address": "Troonlaan 62, B-1050 Brussels",
+          "email": "tiziana.patrizi@regione.piemonte.it",
+          "website": "https://www.iosonopiemonte.com/"
+        },
+        {
+          "region": "Tuscany",
+          "official_name": "Region of Tuscany",
+          "address": "Rond Point Schuman 14, B-1040 Brussels",
+          "email": "segreteria.bruxelles@regione.toscana.it",
+          "website": "https://www.regione.toscana.it/"
+        },
+        {
+          "region": "Molise",
+          "official_name": "Regione Molise",
+          "address": "Rue de Toulouse 47, B-1040 Brussels",
+          "email": "g.tocci@regione.molise.it",
+          "website": "https://www.regione.molise.it/"
+        },
+        {
+          "region": "Valle d'Aosta",
+          "official_name": "Ufficio di Rappresentanza della Regione autonoma Valle d'Aosta",
+          "address": "Rue du Trone 62, B-1050 Brussels",
+          "email": "u-bruxelles@regione.vda.it",
+          "website": "https://www.regione.vda.it/"
+        },
+        {
+          "region": "Trento",
+          "official_name": "Ufficio di rappresentanza della Provincia Autonoma di Trento",
+          "address": "Rue de Pascale 45-47, B-1040 Brussels",
+          "email": "secretariat@europaregion.info",
+          "website": "https://www.europaregion.info/"
+        },
+        {
+          "region": "Basilicata",
+          "official_name": "Basilicata Region Brussels Antenna",
+          "address": "Rue du Trône 62, B-1050 Brussels",
+          "email": "lucio.bernardini@sviluppobasilicata.it",
+          "website": "https://www.sviluppobasilicata.it/"
+        }
+      ],
+      "france": [
+        {
+          "region": "Nouvelle-Aquitaine",
+          "official_name": "Représentation Nouvelle-Aquitaine à Bruxelles",
+          "address": "Rue Montoyer 21, B-1040 Brussels",
+          "email": "marie-pierre.mesplede@nouvelle-aquitaine.fr",
+          "website": "https://www.europe-en-nouvelle-aquitaine.eu/"
+        },
+        {
+          "region": "Grand Est",
+          "official_name": "Grand Est Europe",
+          "address": "Rue du Luxembourg 15, B-1040 Brussels",
+          "email": "victor.mr@grandest.eu",
+          "website": "https://www.grandest.eu/"
+        },
+        {
+          "region": "Corsica",
+          "official_name": "Antenne de la Collectivité de Corse",
+          "address": "Rue Breydel 36, B-1040 Brussels",
+          "email": "antennebruxelles@isula.corsica",
+          "website": "https://www.europa.corsica/"
+        },
+        {
+          "region": "Occitanie",
+          "official_name": "Occitanie Europe",
+          "address": "Rond-point Schuman 14, B-1040 Brussels",
+          "email": "office@occitanie-europe.eu",
+          "website": "https://occitanie-europe.eu/"
+        },
+        {
+          "region": "Auvergne Rhone Alpes",
+          "official_name": "Région Auvergne Rhone Alpes",
+          "address": "Place des Barricades 11, B-1000 Brussels",
+          "email": "pascale.riou@auvergnerhonealpes.fr",
+          "website": "https://www.auvergnerhonealpes.fr/",
+          "strategic_alliances": "Four Motors for Europe (with Baden-Württemberg, Lombardy, Catalonia)"
+        },
+        {
+          "region": "Ile-de-France",
+          "official_name": "Ile-de-France Europe",
+          "address": "Rue du Trône 98 - 4ème étage, B-1050 Brussels",
+          "email": "info@iledefrance-europe.eu",
+          "website": "https://www.iledefrance-europe.eu/"
+        },
+        {
+          "region": "Brittany",
+          "official_name": "Région Bretagne",
+          "address": "Rond-point Schuman 11, B-1040 Brussels",
+          "email": "delegation.bruxelles@bretagne.bzh",
+          "website": "https://www.bretagne.bzh/"
+        },
+        {
+          "region": "Bourgogne-Franche-Comté",
+          "official_name": "Bureau de la Région Bourgogne-Franche-Comté",
+          "address": "Rue d'Arlon 55, B-1040 Brussels",
+          "email": "christophe.goult@bourgognefranchecomte.fr",
+          "website": "https://www.bourgognefranchecomte.fr/"
+        }
+      ],
+      "poland": [
+        {
+          "region": "Lubuskie",
+          "official_name": "Regional Office of the Lubuskie Voivodeship in Brussels",
+          "address": "Rue de la Loi 155C, B-1040 Brussels",
+          "email": "bruksela@lubuskie.pl",
+          "website": "https://bruksela.lubuskie.pl/"
+        },
+        {
+          "region": "West Pomerania",
+          "official_name": "Regional Office of the West Pomerania Region",
+          "address": "Rue Montoyer 31, B-1040 Brussels",
+          "email": "marszalek@wzp.pl",
+          "website": "https://pomorskieregion.eu/"
+        },
+        {
+          "region": "Mazovia",
+          "official_name": "Mazova Region Office in Brussels",
+          "address": "Rue Victor Hugo 199, B-1040 Brussels",
+          "email": "nina.malachowska@mazovia.pl",
+          "website": "http://www.mazovia.pl/"
+        },
+        {
+          "region": "Silesia",
+          "official_name": "Regional Office of the Silesian Voivodeship",
+          "address": "Rue de la Science 41, B-1040 Brussels",
+          "email": "bruksela@slaskie.pl"
+        },
+        {
+          "region": "Lodzkie",
+          "official_name": "Regional Office of Lodzkie Region",
+          "address": "Square Marie Louise 2, B-1000 Brussels",
+          "email": "kazimiera.pomianowska@lodzkie.pl",
+          "website": "https://bruksela.lodzkie.pl/"
+        },
+        {
+          "region": "Wielkopolska",
+          "official_name": "Wielkopolska Region Brussels Office",
+          "address": "Rue Montoyer 21, B-1040 Brussels",
+          "email": "brussels.office@wielkopolska.eu"
+        },
+        {
+          "region": "Podkarpackie",
+          "official_name": "Podkarpackie Region in Brussels East Poland House",
+          "address": "Avenue de Tervueren 48, B-1040 Brussels",
+          "email": "a.magda@podkarpackie.pl",
+          "website": "https://eastpoland.eu/"
+        },
+        {
+          "region": "Pomorskie",
+          "official_name": "Pomorskie",
+          "address": "Rue du Luxembourg 3, B-1040 Brussels",
+          "email": "pomorskie@pomorskieregion.eu",
+          "website": "https://pomorskieregion.eu/"
+        }
+      ],
+      "denmark": [
+        {
+          "region": "South Denmark",
+          "official_name": "South Denmark European Office",
+          "address": "Avenue Palmerston 18, B-1040 Brussels",
+          "email": "ram@southdenmark.be",
+          "website": "https://southdenmark.eu/"
+        },
+        {
+          "region": "Greater Copenhagen",
+          "official_name": "Greater Copenhagen EU Office",
+          "address": "Rue de Luxembourg, B-1000 Brussels",
+          "email": "aw@cphoffice.eu",
+          "website": "https://www.regionh.dk/cpheuoffice/"
+        }
+      ],
+      "finland": [
+        {
+          "region": "Helsinki",
+          "official_name": "Helsinki EU Office",
+          "address": "Rue Guimard 7, B-1040 Brussels",
+          "email": "info2@helsinki.eu",
+          "website": "https://helsinki.eu/"
+        },
+        {
+          "region": "Turku / Southwest Finland",
+          "official_name": "Turku - Southwest Finland European Office",
+          "address": "Rue du Luxembourg 3, B-1000 Brussels",
+          "email": "european.office@turku.fi",
+          "website": "https://www.turku.fi/en/europeanoffice"
+        }
+      ],
+      "netherlands": [
+        {
+          "region": "Dutch Cities (G-4)",
+          "official_name": "G-4 EU Office (Amsterdam, The Hague, Rotterdam, Utrecht)",
+          "address": "Square de Meeûs 1, B-1000 Brussels",
+          "note": "Joint representation of Amsterdam, The Hague, Rotterdam, and Utrecht"
+        },
+        {
+          "region": "North Brabant",
+          "note": "Part of European semiconductor regions alliance"
+        },
+        {
+          "region": "Overijssel",
+          "note": "Part of European semiconductor regions alliance"
+        }
+      ],
+      "portugal": [
+        {
+          "region": "Açores",
+          "official_name": "Representation of Açores",
+          "address": "Rond Point Schuman 14, B-1040 Brussels",
+          "email": "gabinetebruxelas@azores.gov.pt",
+          "website": "https://portal.azores.gov.pt/"
+        }
+      ],
+      "romania": [
+        {
+          "region": "National Union of County Councils",
+          "official_name": "National Union of County Councils of Romania - UNCJR",
+          "address": "Square du Meeus 35, B-1000 Brussels",
+          "email": "madalina.trandafir@uncjr.org",
+          "website": "https://uncjr.ro/"
+        },
+        {
+          "region": "North-East Romania",
+          "official_name": "North-East Romania Regional Development Agency",
+          "address": "Avenue Louise 54, B-1040 Brussels",
+          "email": "brussels@adrnordest.ro",
+          "website": "https://www.adrnordest.ro/"
+        }
+      ],
+      "croatia": [
+        {
+          "region": "Slavonia, Baranja and Srijem",
+          "official_name": "Representation of Slavonia, Baranja and Srijem",
+          "address": "Rue Montoyer 18b, B-1040 Brussels",
+          "email": "slavonija@slavonija.be",
+          "website": "https://www.sbsoffice.eu/"
+        }
+      ],
+      "hungary": [
+        {
+          "region": "Budapest",
+          "official_name": "Representation of Budapest in Brussels",
+          "address": "Rue Montoyer 39, B-1040 Brussels",
+          "email": "bruoffice@budapest.eu",
+          "website": "https://www.budapest.hu/"
+        }
+      ],
+      "greece": [
+        {
+          "region": "REGIOEUROPA",
+          "official_name": "REGIOEUROPA",
+          "address": "Rue du Trône 62, B-1050 Brussels",
+          "email": "regioeuropa@skynet.be"
+        },
+        {
+          "region": "Eastern Macedonia and Thrace",
+          "official_name": "Region of Eastern Macedonia and Thrace",
+          "address": "Rue Joseph II 106, B-1040 Brussels",
+          "email": "regionalpartners@skynet.be",
+          "website": "https://pta.gov.gr/"
+        }
+      ],
+      "slovakia": [
+        {
+          "region": "Bratislava",
+          "official_name": "Representation of the Bratislava Region to the EU",
+          "address": "Rue d'Arlon 63-67, B-1040 Brussels",
+          "email": "brussels@region-bsk.sk",
+          "website": "https://bratislavskykraj.sk/"
+        }
+      ],
+      "serbia": [
+        {
+          "region": "Vojvodina",
+          "official_name": "Office of the Autonomous Province of Vojvodina in Brussels",
+          "address": "Boulevard du Régent 53, B-1040 Brussels",
+          "email": "vucurevic@vojvodinahouse.eu",
+          "website": "https://vojvodinahouse.eu/",
+          "note": "Serbia is not an EU member state but has regional representation"
+        }
+      ],
+      "sweden": [
+        {
+          "region": "Malmö",
+          "official_name": "City of Malmö EU office",
+          "address": "Rue du Luxembourg 3, B-1000 Brussels",
+          "email": "ola.nord@malmo.se",
+          "website": "https://malmo.se/"
+        }
+      ],
+      "lithuania": [
+        {
+          "region": "Association of Local Authorities",
+          "official_name": "Association of Local Authorities in Lithuania",
+          "address": "Square De Meeus 1, B-1000 Brussels",
+          "email": "bru@lsa.lt",
+          "website": "https://www.lsa.lt/"
+        }
+      ],
+      "united_kingdom": [
+        {
+          "region": "Scotland (COSLA)",
+          "official_name": "Convention of Scottish Local Authorities (COSLA)",
+          "address": "Square de Meeus 1, B-1000 Brussels",
+          "email": "judith@cosla.gov.uk",
+          "website": "https://www.cosla.gov.uk/",
+          "note": "UK is no longer an EU member state but Scottish local authorities maintain representation"
+        }
+      ]
+    },
+    "multi_regional_representations": [
+      {
+        "name": "European Region Tyrol-South Tyrol-Trentino (Euregio)",
+        "countries": ["Austria", "Italy"],
+        "regions": ["Tyrol (AT)", "South Tyrol/Bolzano (IT)", "Trentino (IT)"],
+        "address": "Rue de Pascale 45-47, B-1040 Brussels",
+        "email": "secretariat@alpeuregio.eu",
+        "website": "https://www.europaregion.info/"
+      },
+      {
+        "name": "Adriatic Ionian Euroregion",
+        "countries": ["Italy", "Croatia", "Slovenia", "Bosnia & Herzegovina", "Albania", "Greece", "Montenegro"],
+        "address": "Square Charles Maurice Wiser 19, B-1040 Brussels",
+        "email": "secretariat@adriaticionianeuroregion.eu",
+        "website": "https://www.adriaticionianeuroregion.eu/"
+      },
+      {
+        "name": "Four Motors for Europe",
+        "countries": ["Germany", "France", "Italy", "Spain"],
+        "regions": ["Baden-Württemberg (DE)", "Auvergne-Rhône Alpes (FR)", "Lombardy (IT)", "Catalonia (ES)"],
+        "note": "Strategic alliance established for economic cooperation and innovation"
+      }
+    ],
+    "notes": {
+      "total_permanent_representations": 27,
+      "total_regional_offices": "300+ (not all included in this list)",
+      "transparency_leaders": [
+        "Italy",
+        "Croatia",
+        "Finland",
+        "Portugal",
+        "Romania",
+        "Sweden"
+      ],
+      "coreper_structure": {
+        "coreper_I": "Deputies handle competitiveness, agriculture, education, labour, social affairs, environment, infrastructure",
+        "coreper_II": "Permanent Representatives handle economic, financial, trade policy, justice, inner affairs, foreign and general affairs"
+      },
+      "working_groups": "150+ Council working groups where permanent representations participate",
+      "regional_recognition": "Brussels-Capital Region issues regional certificates to accredit regional representations",
+      "committee_of_regions": "EU advisory body established by 1992 Treaty of Maastricht for subnational representation"
+    }
+  }

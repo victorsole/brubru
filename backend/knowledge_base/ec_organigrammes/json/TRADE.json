@@ -1,0 +1,263 @@
+{
+  "dg_code": "TRADE",
+  "dg_name": "Directorate-General for Trade and Economic Security",
+  "commissioner": {
+    "name": "Maroš Šefčovič",
+    "title": "Commissioner"
+  },
+  "director_general": {
+    "name": "Sabine Weyand",
+    "title": "Director-General",
+    "assistants": [
+      "Inta Gainare",
+      "Walter Metzger Ferber"
+    ]
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Maria Martin Prat",
+      "title": "Deputy Director-General"
+    },
+    {
+      "name": "Leopoldo Rubinacci",
+      "title": "Deputy Director-General"
+    },
+    {
+      "name": "Denis Redonnet",
+      "title": "Deputy Director-General - Chief Enforcement Officer",
+      "adviser": {
+        "name": "Vacant",
+        "role": "For Enforcement"
+      }
+    }
+  ],
+  "directorates": [
+    {
+      "code": "TRADE.A",
+      "name": "Multilateral Affairs, Strategy and Analysis, Legal",
+      "director": "Emily Zammata",
+      "units": [
+        {
+          "code": "TRADE.A.1",
+          "name": "Horizontal Affairs & Wto Reform",
+          "head": "Taddeu"
+        },
+        {
+          "code": "TRADE.A.2",
+          "name": "Strategy and Analysis, Chief Economist",
+          "head": "Jan-willem Potters"
+        },
+        {
+          "code": "TRADE.A.3",
+          "name": "Legal",
+          "head": "Yves Venclovas"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.B",
+      "name": "Markets & Asia-Pac, Aus-Nz, Trade Investment, Digital Trade, Intellectual Property",
+      "director": "Jovanna Szychowska",
+      "units": [
+        {
+          "code": "TRADE.B.1",
+          "name": "Financial Services",
+          "head": "Jonathan Stoner"
+        },
+        {
+          "code": "TRADE.B.2",
+          "name": "Investment, Digital Trade, Intellectual Property & Services",
+          "head": "Martin Berkes"
+        },
+        {
+          "code": "TRADE.B.3",
+          "name": "Australia & New Zealand",
+          "head": "John Donne"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.C",
+      "name": "Mercosur, Mexico, Asc Asia-Pac, Asociaba, Afa, Juz, Trade & Sustainable Development, Procurement",
+      "director": "Ian Layton",
+      "units": [
+        {
+          "code": "TRADE.C.1",
+          "name": "Agreement Services - Services",
+          "head": "Mariana Valeiro"
+        },
+        {
+          "code": "TRADE.C.2",
+          "name": "Asian Tiger Economies & Proximity Approach For Trade And Sustainable Development, Avul Weir Teun",
+          "head": "Heinz Knast Elg, Agrorzma"
+        },
+        {
+          "code": "TRADE.C.3",
+          "name": "Asian Trade Economies & Proximity",
+          "head": "Helia Bietzla"
+        },
+        {
+          "code": "TRADE.C.4",
+          "name": "Trade And Proximity Policy",
+          "head": "Philippe Perard"
+        },
+        {
+          "code": "TRADE.C.5",
+          "name": "Emerging Trade And Associates",
+          "head": "Leo Coucham"
+        },
+        {
+          "code": "TRADE.C.6",
+          "name": "Trade And Sustainable Development On Sustainable Development",
+          "head": "Christina Gianna"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.D",
+      "name": "Neighbours, Agri-Food & Turkey",
+      "director": "Mathieu Garchery",
+      "units": [
+        {
+          "code": "TRADE.D.1",
+          "name": "Us, Canada",
+          "head": "Lisa Ochileira"
+        },
+        {
+          "code": "TRADE.D.2",
+          "name": "Acp",
+          "head": "Lyan Oberra Mrs Carrigan"
+        },
+        {
+          "code": "TRADE.D.3",
+          "name": "Neighbours - Agreement, Usa, Eurostar",
+          "head": "Alianca Gotman"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.E",
+      "name": "Modernisation Of Exports, Trade In Goods And Industrial Products",
+      "director": "Lucille Liheb",
+      "units": [
+        {
+          "code": "TRADE.E.1",
+          "name": "Trade In Agro Bermudamons",
+          "head": "Lubon Hernamdez Saugurons"
+        },
+        {
+          "code": "TRADE.E.2",
+          "name": "Southern Neighbors, Mgios Euc",
+          "head": "Noria Laga Liascherama"
+        },
+        {
+          "code": "TRADE.E.3",
+          "name": "Clisicostema",
+          "head": "Lukastoroma"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.F",
+      "name": "Economic Security",
+      "director": "Peter Sampler",
+      "units": [
+        {
+          "code": "TRADE.F.1",
+          "name": "Sanctions & Other Policy Amp",
+          "head": "Vacant"
+        },
+        {
+          "code": "TRADE.F.2",
+          "name": "Sanctions, Other With Monkeurs, Apl, Kus, Evalt, Security And & Tro",
+          "head": "Herein Tut"
+        },
+        {
+          "code": "TRADE.F.3",
+          "name": "China & Access To Trade Controls And",
+          "head": "Olivier Gossum"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.G",
+      "name": "Trade Defence",
+      "director": "Martin Luiga",
+      "units": [
+        {
+          "code": "TRADE.G.1",
+          "name": "A; C, G, Ant-Wto Affairs, Appeals, A Avitsocals, Appeal & Other Steel Contact Law",
+          "head": "Michel Lambert"
+        },
+        {
+          "code": "TRADE.G.2",
+          "name": "Saadet Dept Point For",
+          "head": "Jan Truchars"
+        },
+        {
+          "code": "TRADE.G.3",
+          "name": "Arlecadult, Investigations, With Mavers",
+          "head": "Olivier Fontenu"
+        },
+        {
+          "code": "TRADE.G.4",
+          "name": "New Evry Mori-Martines, Freduralvado Mannery",
+          "head": "Marion Liary"
+        },
+        {
+          "code": "TRADE.G.5",
+          "name": "Advance, Im Crossplicent And",
+          "head": "Christine Macmay"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.H",
+      "name": "Communication & Resources",
+      "director": "Silke Schaug",
+      "units": [
+        {
+          "code": "TRADE.H.1",
+          "name": "Communication Relations &",
+          "head": "Agne Barauskiene"
+        },
+        {
+          "code": "TRADE.H.2",
+          "name": "Single Entry Point For",
+          "head": "Claudia Cornellissen"
+        },
+        {
+          "code": "TRADE.H.3",
+          "name": "It And Knowlment, And Partnership, Outreach,",
+          "head": "Miyoti Laort"
+        },
+        {
+          "code": "TRADE.H.4",
+          "name": "Management Exchanges And Ev 3-2 Systems",
+          "head": "Julie Ulam Juno"
+        },
+        {
+          "code": "TRADE.H.5",
+          "name": "Advance, Im Crossplicent And",
+          "head": "Aga Balaszewscha"
+        }
+      ]
+    },
+    {
+      "code": "TRADE.DG01",
+      "name": "Trade & Economic Sector Im The Eu Delegation In China",
+      "head": "Pablo Martin Y Pera Losada"
+    },
+    {
+      "code": "TRADE.DG01",
+      "name": "Trade & Economic Sector Im The Eu Delegation To Peru",
+      "head": "Christian Ehrnroek"
+    },
+    {
+      "code": "TRADE.DG01",
+      "name": "Adviser: Verification And Information",
+      "head": "Ivo Hoefkens"
+    }
+  ],
+  "date_of_effect": "2025-09-02"
+}

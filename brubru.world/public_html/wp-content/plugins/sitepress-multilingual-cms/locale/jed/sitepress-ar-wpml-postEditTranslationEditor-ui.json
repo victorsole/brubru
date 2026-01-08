@@ -1,0 +1,69 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);",
+            "lang": "ar"
+         },
+         "WPML Translation Editor": [
+            "محرر WPML للترجمة"
+         ],
+         "WordPress Editor": [
+            "محرر WordPress"
+         ],
+         "Translation Dashboard": [
+            "لوحة التحكم بالترجمة"
+         ],
+         "Also, switching back to WPML's Translation Editor later will require re-translating content that you translated with the WordPress editor.": [
+            "أيضًا، سيتطلب التبديل مرة أخرى إلى محرر الترجمة الخاص بـ WPML إعادة ترجمة المحتوى الذي قمت بترجمته باستخدام محرر ووردبريس."
+         ],
+         "This will overwrite content you translated with the WordPress Editor. If you switch now, you'll have to translate selected content again.": [
+            "سيؤدي هذا إلى استبدال المحتوى الذي قمت بترجمته باستخدام محرر ووردبريس. إذا قمت بالتبديل الآن، ستضطر إلى إعادة ترجمة المحتوى المحدد."
+         ],
+         "You are about to translate with the %s": [
+            "أنت على وشك الترجمة باستخدام %s"
+         ],
+         "Translate with the WordPress Editor if you need different designs per language or if the content isn't compatible with WPML's Translation Editor.": [
+            "ترجم باستخدام محرر ووردبريس إذا كنت بحاجة إلى تصميمات مختلفة لكل لغة أو إذا كان المحتوى غير متوافق مع محرر الترجمة الخاص بـ WPML."
+         ],
+         "What do you want to translate?": [
+            "ماذا تريد أن تترجم؟?"
+         ],
+         "I understand, switch to the WordPress Editor": [
+            "أفهم، انتقل إلى محرر ووردبريس"
+         ],
+         "Apply": [
+            "تطبيق"
+         ],
+         "Cancel": [
+            "إلغاء"
+         ],
+         "I understand, switch to %s": [
+            "أفهم، قم بالتبديل إلى %s"
+         ],
+         "Only this %s": [
+            "فقط هذا %s"
+         ],
+         "Recommended": [
+            "موصى به"
+         ],
+         "All %s": [
+            "جميع %s"
+         ],
+         "All the site's content": [
+            "كل محتوى الموقع"
+         ],
+         "I understand, switch to Translation Dashboard": [
+            "فهمت، انتقل إلى لوحة التحكم بالترجمة"
+         ],
+         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
+            "لا يوفر محرر ووردبريس الترجمة التلقائية وذاكرة الترجمة وميزات أخرى تجعل الترجمة أسهل."
+         ],
+         "Translate items in batch after reviewing the cost of AI translation": [
+            "ترجم العناصر دفعة واحدة بعد مراجعة تكلفة الترجمة بالذكاء الاصطناعي"
+         ]
+      }
+   }
+}

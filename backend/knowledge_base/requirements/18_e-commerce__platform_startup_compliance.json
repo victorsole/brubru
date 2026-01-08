@@ -1,0 +1,575 @@
+{
+  "cluster_id": 18,
+  "cluster_name": "E-commerce & Platform Startup Compliance",
+  "policy_area": "Digital Policy and Digital Economy",
+  "description": "Essential compliance for e-commerce platforms, marketplaces, and online services",
+  "applicability": "E-commerce startups, online marketplaces, platform economy, SaaS providers",
+  "extraction_date": "2026-01-01T03:33:55.356825",
+  "total_laws": 5,
+  "total_requirements": 33,
+  "requirements": [
+    {
+      "article": "Article 4(2)",
+      "requirement_text": "Information shall be collected for private households with at least one member aged 16 to 74 residing in the territory of the Member State",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "households",
+        "age requirements",
+        "territory"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 4(3)",
+      "requirement_text": "Information shall be collected for individuals aged 16 to 74 residing in the territory of the Member State",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "individuals",
+        "age requirements",
+        "territory"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 4(5)",
+      "requirement_text": "Data collection for the use of information and communication technologies domain shall be carried out for a sample of private households or a sample of persons belonging to private households as observation units",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "sampling",
+        "households",
+        "observation units"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 7(1)",
+      "requirement_text": "Imputation, modelling or weighting shall be applied to the data where information is missing, invalid or inconsistent",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "imputation",
+        "data processing",
+        "missing data",
+        "validation"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 8(1)",
+      "requirement_text": "Member States shall transmit the final data to the Commission (Eurostat)",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 5 October 2024",
+      "keywords": [
+        "data transmission",
+        "Eurostat",
+        "final data",
+        "deadline"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 8(2)",
+      "requirement_text": "The data shall be transmitted in the form of microdata files, including appropriate weights. The data shall be fully checked and validated, using the statistical data and metadata exchange standard through the Single Entry Point before the transmission",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "microdata",
+        "validation",
+        "Single Entry Point",
+        "metadata exchange"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 8(3)",
+      "requirement_text": "Member States shall provide the metadata to the Commission (Eurostat) in the standard metadata structure defined by the Commission (Eurostat). They shall provide it through the Single Entry Point",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 5 January 2025",
+      "keywords": [
+        "metadata",
+        "standard structure",
+        "Single Entry Point",
+        "Eurostat"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 9(1)",
+      "requirement_text": "Member States shall transmit to the Commission (Eurostat) an annual quality report on the use of information and communication technologies domain",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality report",
+        "annual",
+        "ICT domain",
+        "transmission"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 9(2)",
+      "requirement_text": "The annual quality report shall be compliant with the most recent European Statistical System (ESS) standards and shall contain quality-related data and metadata and information on the accuracy and reliability of the survey",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ESS standards",
+        "quality data",
+        "accuracy",
+        "reliability",
+        "survey"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 9(3)",
+      "requirement_text": "The annual quality report shall be transmitted to the Commission (Eurostat) in accordance with the technical standards established by the Commission (Eurostat)",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 5 January 2025",
+      "keywords": [
+        "quality report",
+        "technical standards",
+        "transmission",
+        "Eurostat"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 9(4)",
+      "requirement_text": "The annual quality report shall be submitted through the Single Entry Point",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality report",
+        "Single Entry Point",
+        "submission"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "The members of the group should be national contact points appointed under Article 19(2) of the Directive on electronic commerce (one member per Member State)",
+      "applicable_entity": "member states",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "national contact points",
+        "appointment",
+        "member states",
+        "expert group"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 3(4)",
+      "requirement_text": "Members who are not capable anymore to contribute efficiently to the works of the group, who resign or who do not respect the conditions outlined under Article 3(1) or Article 287 of the Treaty, may be replaced by an alternative Member, for the remaining duration of their mandate",
+      "applicable_entity": "member states",
+      "criticality": "important",
+      "deadline_text": "for the remaining duration of their mandate",
+      "keywords": [
+        "member replacement",
+        "mandate duration",
+        "expert group members"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The Group shall be chaired by a representative of the Commission",
+      "applicable_entity": "european commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "group chair",
+        "commission representative",
+        "expert group"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "Information obtained during the works of the group or of the sub-groups may not be disseminated if the Commission is of the opinion they are confidential",
+      "applicable_entity": "expert group members",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "confidential information",
+        "dissemination prohibition",
+        "expert group"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The expert group on electronic commerce shall adopt agreed rules of procedure on the basis of a model adopted by the Commission",
+      "applicable_entity": "expert group on electronic commerce",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "rules of procedure",
+        "adoption",
+        "commission model",
+        "expert group"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "The Group and the sub-groups shall normally meet at the Commission premises, in the form and according to the timetable determined by the Commission",
+      "applicable_entity": "expert group and sub-groups",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "meeting location",
+        "commission premises",
+        "timetable",
+        "expert group meetings"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "The Secretariat of the Group shall be provided by the Commission",
+      "applicable_entity": "european commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "secretariat",
+        "commission provision",
+        "expert group support"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 6",
+      "requirement_text": "Travel and subsistence expenses incurred by members, observers and experts, in connection with the activities of the Group, shall be reimbursed by the Commission in accordance with the provisions in force within the Commission",
+      "applicable_entity": "european commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "expense reimbursement",
+        "travel expenses",
+        "subsistence expenses",
+        "commission provisions"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "Explanations requested by the Commission or accompanying persons pursuant to Article 69(2), points (f) and (g), of Regulation (EU) 2022/2065 shall be given only by authorised representatives or members of staff",
+      "applicable_entity": "providers of very large online platforms, providers of very large online search engines, or other persons referred to in Article 67(1) of Regulation (EU) 2022/2065",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "explanations",
+        "inspections",
+        "authorised representatives",
+        "very large online platforms",
+        "very large online search engines"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "After the inspection, a copy of any recording made pursuant to paragraph 1 shall be made available to the provider concerned",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "after the inspection",
+      "keywords": [
+        "recording",
+        "inspection",
+        "copy",
+        "access to file"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "The Commission may specify the technical means or the interfaces through which providers shall provide access to databases or algorithmic systems",
+      "applicable_entity": "European Commission",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "technical means",
+        "interfaces",
+        "databases",
+        "algorithmic systems",
+        "monitoring"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Providers ordered to provide access pursuant to Article 72(1) shall do so in a timely and effective manner, enabling the Commission to access all information in the databases concerned and all information in relation to the algorithm concerned which are necessary for assessment",
+      "applicable_entity": "providers of very large online platforms or of very large online search engines",
+      "criticality": "critical",
+      "deadline_text": "in a timely manner",
+      "keywords": [
+        "access",
+        "databases",
+        "algorithms",
+        "timely",
+        "effective manner",
+        "monitoring"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 3(3)",
+      "requirement_text": "Providers ordered to provide access pursuant to Article 72(1) shall comply with the requirements laid down in Article 7 of this Regulation",
+      "applicable_entity": "providers of very large online platforms or of very large online search engines",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "compliance",
+        "Article 7",
+        "access requirements"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 3(4)",
+      "requirement_text": "Where the Commission imposes an obligation to retain all documents necessary to assess implementation and compliance, the Commission shall define the terms of retention, including the period and scope of documents to be retained",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "document retention",
+        "terms of retention",
+        "period",
+        "scope",
+        "compliance assessment"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 43(1)",
+      "requirement_text": "The Commission is required to charge providers of very large online platforms and of very large online search engines annual supervisory fees",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "annual",
+      "keywords": [
+        "supervisory fees",
+        "very large online platforms",
+        "very large online search engines",
+        "annual"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 43(1)",
+      "requirement_text": "Providers of very large online platforms and very large online search engines must pay annual supervisory fees to the Commission",
+      "applicable_entity": "providers of very large online platforms and very large online search engines",
+      "criticality": "critical",
+      "deadline_text": "annual",
+      "keywords": [
+        "supervisory fees",
+        "payment obligation",
+        "very large online platforms",
+        "very large online search engines"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 43(3)",
+      "requirement_text": "The Commission is to adopt each year individual implementing acts setting out the individual amount of the supervisory fee to be charged to each provider",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "each year",
+      "keywords": [
+        "implementing acts",
+        "supervisory fee",
+        "individual amount",
+        "annual"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Article 43(5)",
+      "requirement_text": "Any provider of the designated service or services is not to pay an overall amount of supervisory fee exceeding 0,05% of its annual worldwide net income",
+      "applicable_entity": "providers of designated services",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "supervisory fee",
+        "maximum limit",
+        "0.05%",
+        "worldwide net income",
+        "economic capacity"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Recital 4",
+      "requirement_text": "Where the designation decision is addressed to more than one legal person, all addressees of that decision should be jointly and severally liable for the payment of the supervisory fee",
+      "applicable_entity": "multiple addressees of designation decisions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "joint and several liability",
+        "supervisory fee",
+        "designation decision",
+        "multiple addressees"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Recital 9",
+      "requirement_text": "The supervisory fee must be paid by the end of that same calendar year",
+      "applicable_entity": "providers of designated services",
+      "criticality": "critical",
+      "deadline_text": "by the end of that same calendar year",
+      "keywords": [
+        "payment deadline",
+        "supervisory fee",
+        "calendar year"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Recital 10",
+      "requirement_text": "Failure to pay within the deadline shall give rise to recovery of the unpaid amount together with default interest at the European Central Bank refinancing rate increased by 3,5%",
+      "applicable_entity": "providers of designated services",
+      "criticality": "critical",
+      "deadline_text": "within the deadline",
+      "keywords": [
+        "default interest",
+        "unpaid amount",
+        "ECB refinancing rate",
+        "3.5%",
+        "recovery"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    },
+    {
+      "article": "Recital 11",
+      "requirement_text": "The Commission should annually report costs incurred and revenues collected to the European Parliament and the Council and make such report publicly available on its website",
+      "applicable_entity": "European Commission",
+      "criticality": "important",
+      "deadline_text": "annually",
+      "keywords": [
+        "annual report",
+        "costs incurred",
+        "revenues collected",
+        "publicly available",
+        "transparency"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 18
+    }
+  ]
+}

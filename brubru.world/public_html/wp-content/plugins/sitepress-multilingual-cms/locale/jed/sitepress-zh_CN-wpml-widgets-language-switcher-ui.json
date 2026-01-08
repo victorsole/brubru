@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "To display this Custom HTML block in a specific language, first place it inside a Group block.": [
+            "要在特定语言中显示此自定义 HTML 块，首先将其放置在群组块内。"
+         ],
+         "Place inside Group block": [
+            "放置在群组块内"
+         ],
+         "All": [
+            "全"
+         ],
+         "Display on language": [
+            "语言显示"
+         ]
+      }
+   }
+}

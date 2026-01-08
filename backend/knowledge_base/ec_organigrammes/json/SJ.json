@@ -1,0 +1,202 @@
+{
+  "dg_code": "SJ",
+  "dg_name": "Legal Service",
+  "president": {
+    "name": "Ursula von der Leyen",
+    "title": "President"
+  },
+  "director_general": {
+    "name": "Daniel Calleja Crespo",
+    "title": "Director-General",
+    "assistants": [
+      "The Maram Refque - Legal Coordination",
+      "Managing - Taxonomy Reform - Legal Coordination",
+      "Managing - Interinstitutional",
+      "Maribeth Maur - Dispute Settlement"
+    ],
+    "principal_adviser": {
+      "name": "Hannes Kraemer",
+      "role": "Legal Matters Related to Taxation"
+    }
+  },
+  "deputy_director_general": {
+    "name": "Clemens Ladenburger",
+    "title": "Deputy Director-General"
+  },
+  "units": [
+    {
+      "code": "SJ.R",
+      "name": "Resources and Performance Management",
+      "head": "Gilles Bartelet",
+      "deputy": "Vacant"
+    },
+    {
+      "code": "SJ.R.1",
+      "name": "ICT, Correspondent Finance & Digital Solutions",
+      "head": "Emil Wezdenbeck"
+    },
+    {
+      "code": "SJ.R.2",
+      "name": "Strategy, Knowledge Management & Documentation",
+      "head": "David Blanchard"
+    },
+    {
+      "code": "SJ.R.3",
+      "name": "Conventions, Agreements & Litigations",
+      "head": "Olivier Verhenne"
+    },
+    {
+      "code": "SJ.A",
+      "name": "Affair - Business Law",
+      "head": "Allerton Gregorio",
+      "units": [
+        {
+          "code": "SJ.A.1",
+          "name": "Agriculture & Fisheries",
+          "head": "Chiara Cattariga"
+        },
+        {
+          "code": "SJ.A.2",
+          "name": "Humos Kunchumyties"
+        }
+      ]
+    },
+    {
+      "code": "SJ.B",
+      "name": "AGRI - Agriculture & Fisheries",
+      "head": "Chiara Cattariga",
+      "units": [
+        {
+          "code": "SJ.B.1",
+          "name": "Agriculture & Fisheries, Operating",
+          "head": "Convention"
+        },
+        {
+          "code": "SJ.B.2",
+          "name": "Agriculture & Fisheries, Operating",
+          "head": "Humos Kunchumyties"
+        }
+      ]
+    },
+    {
+      "code": "SJ.C",
+      "name": "AIDE - State Aids",
+      "head": "Leda Flynn",
+      "deputy": "Andre Boulquet"
+    },
+    {
+      "code": "SJ.D",
+      "name": "BUDG - Budget, Customs, Taxation",
+      "head": "Bernd Martengigm"
+    },
+    {
+      "code": "SJ.E",
+      "name": "COMP - Competition & Mergers",
+      "head": "Paulo Stingionelli",
+      "units": [
+        {
+          "code": "SJ.E.1",
+          "name": "Erik Copovi Federher"
+        }
+      ]
+    },
+    {
+      "code": "SJ.F",
+      "name": "INST - Institutions",
+      "head": "Paolo Stingionelli",
+      "units": [
+        {
+          "code": "SJ.F.1",
+          "name": "Frederick Bellenger"
+        }
+      ]
+    },
+    {
+      "code": "SJ.G",
+      "name": "EAC - Employment & Social Affairs",
+      "head": "Maria Gloria Martinez Del Peral",
+      "units": [
+        {
+          "code": "SJ.G.1",
+          "name": "Sandra Herdelius"
+        }
+      ]
+    },
+    {
+      "code": "SJ.H",
+      "name": "RELEX - Relax & International Law",
+      "head": "Hannes Kraemer (Acting)",
+      "units": [
+        {
+          "code": "SJ.H.1",
+          "name": "Christophe Gaslito"
+        }
+      ]
+    },
+    {
+      "code": "SJ.I",
+      "name": "JLS - Justice, Freedom & Security; Privacy; Law, Crime; Law",
+      "head": "Elisabetta Montalhanti",
+      "units": [
+        {
+          "code": "SJ.I.1",
+          "name": "Elamco Vidal, Piriz"
+        }
+      ]
+    },
+    {
+      "code": "SJ.J",
+      "name": "EUROZONE - Eurozone & Economic Issues",
+      "head": "Jean-Paul Keppennes",
+      "units": [
+        {
+          "code": "SJ.J.1",
+          "name": "Celine Valerio"
+        }
+      ]
+    },
+    {
+      "code": "SJ.K",
+      "name": "LEG - Quality of Legislation",
+      "head": "Tibor Scharf",
+      "units": [
+        {
+          "code": "SJ.K.1",
+          "name": "Sarah Mortimer Gaham"
+        },
+        {
+          "code": "SJ.K.2",
+          "name": "Pela Van Delsen Romau"
+        }
+      ]
+    },
+    {
+      "code": "SJ.L",
+      "name": "TRADE - Trade Policy",
+      "head": "Marcos Oremeithein",
+      "units": [
+        {
+          "code": "SJ.L.1",
+          "name": "Elamco Vidal, Piriz"
+        }
+      ]
+    },
+    {
+      "code": "SJ.M",
+      "name": "PERS - European Civil Service Law",
+      "head": "Florence Clodrighe Dowkehaut",
+      "units": [
+        {
+          "code": "SJ.M.1",
+          "name": "Klaïa Talaire-Ruitz"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Assistants to the Director-General and Deputy Director-General",
+    "The HR Correspondent has a functional reporting line to the Director-General",
+    "For the subjects treated by the teams of the Legal Service, please consult the page 'The Teams of the Legal Service'"
+  ],
+  "date_of_effect": "2025-12-01"
+}

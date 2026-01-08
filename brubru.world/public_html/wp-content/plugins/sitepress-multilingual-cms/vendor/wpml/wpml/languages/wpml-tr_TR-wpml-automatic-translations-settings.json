@@ -1,0 +1,87 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "tr"
+         },
+         "Could not fetch engines data": [
+            "Motor verileri alınamadı"
+         ],
+         "Could not save settings": [
+            "Ayarlar kaydedilemedi"
+         ],
+         "Automatic translation": [
+            "Otomatik çeviri"
+         ],
+         "Saving...": [
+            "Kaydediliyor..."
+         ],
+         "Save settings": [
+            "Ayarları kaydet"
+         ],
+         "Settings saved": [
+            "Ayarlar kaydedildi"
+         ],
+         "Some error occurred": [
+            "Bir hata oluştu"
+         ],
+         "AI Translation": [
+            "YZ Çevirisi"
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "Taslakları tercüme etmeyin. Yalnızca içeriği yayınladığımda tercüme edin."
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "Taslakları kaydettiğim anda tercüme edin (biraz daha fazla tercüme kredisi tüketir)."
+         ],
+         "Do you want to translate drafts automatically?": [
+            "Taslakları otomatik olarak çevirmek istiyor musunuz?"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "Bu özellik yalnızca %sTercüme Kontrol Paneli%s'nden “Her Şeyi Otomatik Olarak Tercüme Et” seçeneğini etkinleştirdiğinizde kullanılabilir."
+         ],
+         "What would you like to do after WPML finishes translating your content automatically?": [
+            "WPML içeriğinizi otomatik olarak çevirmeyi bitirdikten sonra ne yapmak istersiniz?"
+         ],
+         "Publish without review": [
+            "İnceleme olmadan yayınla"
+         ],
+         "Recommended with PTC": [
+            "PTC ile önerilen"
+         ],
+         "PTC provides Better Than Human Translations that rarely need improvements, so you can confidently skip the review process. For other translation engines, a human review is recommended to confirm accuracy.": [
+            "PTC, nadiren iyileştirme gerektiren İnsandan Daha İyi Çeviriler sunar, böylece inceleme sürecini güvenle atlayabilirsiniz. Diğer çeviri motorları için, doğruluğu onaylamak amacıyla insan incelemesi önerilir."
+         ],
+         "WPML publishes translations immediately, skipping the review process.": [
+            "WPML çevirileri inceleme sürecini atlayarak hemen yayınlar."
+         ],
+         "Wait for review": [
+            "İnceleme için bekle"
+         ],
+         "Recommended with DeepL, Google and Microsoft": [
+            "DeepL, Google ve Microsoft ile tavsiye edilir"
+         ],
+         "DeepL, Google, and Microsoft deliver great translations, but we recommend a human review to confirm they are correct. PTC provides Better Than Human Translations that understand context, so you can confidently skip the review process.": [
+            "DeepL, Google ve Microsoft harika çeviriler sunar, ancak doğru olduklarından emin olmak için insan incelemesi öneririz. PTC, bağlamı anlayan İnsandan Daha İyi Çeviriler sunar, böylece inceleme sürecini güvenle atlayabilirsiniz."
+         ],
+         "WPML keeps translations unpublished, so you can review them first.": [
+            "WPML çevirileri yayınlanmamış olarak tutar, böylece önce onları inceleyebilirsiniz."
+         ],
+         "Your translators review and approve translations before publishing.": [
+            "Çevirmenleriniz yayınlamadan önce çevirileri inceler ve onaylar."
+         ],
+         "Publish and mark for review": [
+            "Yayınla ve inceleme için işaretle"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "WPML çevirileri hemen yayınlar ancak size uygun olduğunda kontrol etmeniz için işaretler."
+         ],
+         "WPML publishes translations immediately but flags them for translators to review later.": [
+            "WPML çevirileri hemen yayınlar ancak çevirmenlerin daha sonra incelemesi için işaretler."
+         ]
+      }
+   }
+}

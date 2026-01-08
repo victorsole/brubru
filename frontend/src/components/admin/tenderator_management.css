@@ -1,0 +1,478 @@
+/* frontend/src/components/admin/tenderator_management.css */
+
+.tenderator-mgmt {
+  padding: 1rem 0;
+}
+
+.tenderator-mgmt__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.tenderator-mgmt__header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-text-primary, #1f2937);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tenderator-mgmt__header h2 .mdi {
+  color: var(--color-primary, #3b82f6);
+}
+
+.tenderator-mgmt__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Loading and Error States */
+.tenderator-mgmt__loading,
+.tenderator-mgmt__error {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.tenderator-mgmt__error {
+  color: #b91c1c;
+}
+
+/* Tabs */
+.tenderator-mgmt__tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-border, #e5e7eb);
+  padding-bottom: 0;
+}
+
+.tenderator-mgmt__tab {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #6b7280);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tenderator-mgmt__tab:hover {
+  color: var(--color-primary, #3b82f6);
+}
+
+.tenderator-mgmt__tab--active {
+  color: var(--color-primary, #3b82f6);
+  border-bottom-color: var(--color-primary, #3b82f6);
+}
+
+/* Stats Grid */
+.tenderator-mgmt__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Charts Section */
+.tenderator-mgmt__charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tenderator-mgmt__chart-card {
+  background: white;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.tenderator-mgmt__chart-card h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.tenderator-mgmt__chart-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tenderator-mgmt__chart-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tenderator-mgmt__chart-label {
+  width: 80px;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+  flex-shrink: 0;
+}
+
+.tenderator-mgmt__chart-bar-container {
+  flex: 1;
+  height: 20px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tenderator-mgmt__chart-bar {
+  height: 100%;
+  background: var(--color-primary, #3b82f6);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.tenderator-mgmt__chart-bar--sector {
+  background: #10b981;
+}
+
+.tenderator-mgmt__chart-value {
+  width: 50px;
+  text-align: right;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+/* Quick Actions */
+.tenderator-mgmt__quick-actions {
+  background: #f9fafb;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.tenderator-mgmt__quick-actions h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.tenderator-mgmt__action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Filters */
+.tenderator-mgmt__filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tenderator-mgmt__search {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.tenderator-mgmt__select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: white;
+  min-width: 140px;
+}
+
+/* Table Styles */
+.tenderator-mgmt__table-container {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+}
+
+.tenderator-mgmt__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.tenderator-mgmt__table th,
+.tenderator-mgmt__table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.tenderator-mgmt__table th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.tenderator-mgmt__table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.tenderator-mgmt__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tenderator-mgmt__table a {
+  color: var(--color-primary, #3b82f6);
+  text-decoration: none;
+}
+
+.tenderator-mgmt__table a:hover {
+  text-decoration: underline;
+}
+
+.tenderator-mgmt__title-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tenderator-mgmt__user-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.tenderator-mgmt__user-cell span {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+/* Status Badges */
+.tenderator-mgmt__status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.tenderator-mgmt__status--open {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.tenderator-mgmt__status--closed {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.tenderator-mgmt__status--awarded {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.tenderator-mgmt__status--cancelled {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.tenderator-mgmt__status--pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Pagination */
+.tenderator-mgmt__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+.tenderator-mgmt__pagination span {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+/* Fetch Configuration */
+.tenderator-mgmt__fetch-config {
+  background: white;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.tenderator-mgmt__fetch-config h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.tenderator-mgmt__fetch-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tenderator-mgmt__fetch-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.tenderator-mgmt__fetch-history h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Form Groups */
+.tenderator-mgmt__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tenderator-mgmt__form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.tenderator-mgmt__form-group input,
+.tenderator-mgmt__form-group select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.tenderator-mgmt__form-group--checkbox {
+  flex-direction: row;
+  align-items: center;
+}
+
+.tenderator-mgmt__form-group--checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.tenderator-mgmt__form-group--checkbox input {
+  width: auto;
+}
+
+.tenderator-mgmt__form-hint {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #9ca3af);
+}
+
+/* Settings */
+.tenderator-mgmt__settings-card {
+  background: white;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 600px;
+}
+
+.tenderator-mgmt__settings-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.tenderator-mgmt__settings-info {
+  margin: 0 0 1.5rem;
+  color: var(--color-text-secondary, #6b7280);
+  font-size: 0.875rem;
+}
+
+.tenderator-mgmt__settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Button Styles */
+.btn--icon {
+  padding: 0.375rem;
+  min-width: auto;
+}
+
+.btn--danger {
+  background: transparent;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+}
+
+.btn--danger:hover {
+  background: #fef2f2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tenderator-mgmt__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .tenderator-mgmt__tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tenderator-mgmt__stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tenderator-mgmt__charts {
+    grid-template-columns: 1fr;
+  }
+
+  .tenderator-mgmt__filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tenderator-mgmt__search {
+    min-width: 100%;
+  }
+
+  .tenderator-mgmt__action-buttons {
+    flex-direction: column;
+  }
+
+  .tenderator-mgmt__fetch-buttons {
+    flex-direction: column;
+  }
+
+  .tenderator-mgmt__table {
+    font-size: 0.8125rem;
+  }
+
+  .tenderator-mgmt__table th,
+  .tenderator-mgmt__table td {
+    padding: 0.5rem;
+  }
+}

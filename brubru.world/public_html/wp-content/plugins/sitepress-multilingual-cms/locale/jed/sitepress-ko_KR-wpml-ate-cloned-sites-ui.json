@@ -1,0 +1,222 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ko"
+         },
+         "Close": [
+            ""
+         ],
+         "Please take a screenshot of this message and report this issue to <a>WPML support</a>.": [
+            ""
+         ],
+         "WPML has automatically unregistered your site as part of this wizard. After you close it, you’ll see a prompt to register the site again. This is expected, your content and translations are safe.": [
+            "이 마법사의 일환으로 WPML이 자동으로 귀하의 사이트 등록을 해제했습니다. 마법사를 닫은 후 사이트를 다시 등록하라는 메시지가 표시될 것입니다. 이는 예상된 절차이며, 귀하의 콘텐츠와 번역은 안전합니다."
+         ],
+         "You’re all set": [
+            ""
+         ],
+         "This site is a copy of the original site %s and it doesn’t currently have any automatic translation credits.": [
+            "이 사이트는 원본 사이트 %s의 사본이며 현재 자동 번역 크레딧이 없습니다."
+         ],
+         "If you’d like to use automatic translation here in the future, you can either <a1>add credits</a1> or <a2>share them from the original site</a2>.": [
+            "향후 여기서 자동 번역을 사용하고 싶으시다면, <a1>크레딧을 추가</a1>하거나 <a2>원본 사이트에서 크레딧을 공유</a2>할 수 있습니다."
+         ],
+         "There was an error checking for credits to share. Please take a screenshot of this message and report it in <a>WPML support</a>.": [
+            ""
+         ],
+         "To link %s and %s so they share automatic translation credits, follow these steps:": [
+            "%s와 %s를 연결하여 자동 번역 크레딧을 공유하려면 다음 단계를 따르세요:"
+         ],
+         "Open <a>this link</a> to access the original site’s admin area. (You can’t access this screen by visiting %s directly.)": [
+            "원본 사이트의 관리자 영역에 접근하려면 <a>이 링크</a>를 열어주세요. (%s에 직접 방문해서는 이 화면에 접근할 수 없습니다.)"
+         ],
+         "Click <b>Copy migration code</b> on that page.": [
+            "해당 페이지에서 <b>마이그레이션 코드 복사</b>를 클릭하세요."
+         ],
+         "Paste the code below to complete the connection.": [
+            "아래에 코드를 붙여넣어 연결을 완료하세요."
+         ],
+         "Migration code": [
+            "마이그레이션 코드"
+         ],
+         "Continue": [
+            "계속하기"
+         ],
+         "Go back": [
+            "돌아가기"
+         ],
+         "Connect Automatic Translation Credits": [
+            "자동 번역 크레딧 연결"
+         ],
+         "WPML was unable to copy your site's translations, translation memory, and glossary to this new URL.": [
+            "WPML이 사이트의 번역, 번역 메모리 및 용어집을 이 새로운 URL로 복사하지 못했습니다."
+         ],
+         "Error with copying translation information to new URL": [
+            "새 URL로 번역 정보 복사 중 오류 발생"
+         ],
+         "This site and its copy on %s are now sharing automatic translation credits.": [
+            "이 사이트와 %s의 복사본이 이제 자동 번역 크레딧을 공유하고 있습니다."
+         ],
+         "Any credits you add to one site will be available on both. If you stop using this site, your credits will remain safe.": [
+            "한 사이트에 추가한 크레딧은 두 사이트 모두에서 사용 가능합니다. 이 사이트 사용을 중단하더라도 크레딧은 안전하게 유지됩니다."
+         ],
+         "WPML was unable to connect your old and new URLs to share automatic translation credits.": [
+            "WPML이 자동 번역 크레딧을 공유하기 위해 이전 URL과 새 URL을 연결하지 못했습니다."
+         ],
+         "Error with sharing automatic translation credits": [
+            "자동 번역 크레딧 공유 중 오류 발생"
+         ],
+         "The site on %s has %d credits for automatic translation. Do you want to share these credits with this new site %s?": [
+            "%s의 사이트에는 자동 번역을 위한 %d 크레딧이 있습니다. 이 크레딧을 새 사이트 %s와 공유하시겠습니까?"
+         ],
+         "The site on %s has a pay-as-you-go subscription for automatic translation. Do you want to share these credits between %s and this new location (%s)?": [
+            "%s의 사이트에 자동 번역을 위한 종량제 구독이 있습니다. 이 크레딧을 %s와 이 새로운 위치 (%s) 간에 공유하시겠습니까?"
+         ],
+         "Yes (recommended)": [
+            "예 (권장)"
+         ],
+         "In the next step, you’ll approve the use of same credits on both sites.": [
+            "다음 단계에서 두 사이트에서 동일한 크레딧 사용을 승인하게 됩니다."
+         ],
+         "No": [
+            "아니오"
+         ],
+         "You’ll need to assign new credits or set up pay-as-you-go.": [
+            "새로운 크레딧을 할당하거나 사용한 만큼 지불하는 방식을 설정해야 합니다."
+         ],
+         "What happens when you share credits between sites?": [
+            "사이트 간 크레딧을 공유하면 어떻게 되나요?"
+         ],
+         "Translation credits for this site": [
+            "이 사이트의 번역 크레딧"
+         ],
+         "WPML detected a change in your site’s URL": [
+            "WPML이 사이트 URL의 변경을 감지했습니다"
+         ],
+         "You can now continue translating content on this site as usual.": [
+            "이제 이 사이트에서 평소와 같이 콘텐츠 번역을 계속할 수 있습니다."
+         ],
+         "Just a reminder: there shouldn’t be another copy of this site running at %s. If there is, automatic translation won’t work correctly on that site.": [
+            "주의사항: %s에서 이 사이트의 다른 복사본이 실행되고 있어서는 안 됩니다. 만약 그렇다면, 해당 사이트에서 자동 번역이 올바르게 작동하지 않을 것입니다."
+         ],
+         "You indicated that the original site at %s is no longer active. This means:": [
+            "귀하께서 %s의 원본 사이트가 더 이상 활성화되지 않았다고 표시하셨습니다. 이는 다음을 의미합니다:"
+         ],
+         "Automatic translation will no longer work on the old site": [
+            "이전 사이트에서 자동 번역이 더 이상 작동하지 않습니다"
+         ],
+         "Accessing the old site may trigger warnings on this site": [
+            "이전 사이트에 접속하면 이 사이트에서 경고가 발생할 수 있습니다"
+         ],
+         "Please confirm:": [
+            "다음 사항을 확인해 주세요:"
+         ],
+         "I understand and confirm that <b>%s</b> is no longer in use.": [
+            "<b>%s</b>가 더 이상 사용되지 않는다는 것을 이해하고 확인합니다."
+         ],
+         "Back": [
+            "뒤로"
+         ],
+         "Please Confirm": [
+            "확인해 주세요"
+         ],
+         "WPML was unable to update our records with your new URL.": [
+            "WPML이 새 URL로 기록을 업데이트하지 못했습니다."
+         ],
+         "Error with moving translation information to new URL": [
+            "새 URL로 번역 정보 이동 중 오류 발생"
+         ],
+         "It looks like this site was previously at %s and is now running on %s.": [
+            "이 사이트가 이전에 %s에 있었고 현재 %s에서 실행 중인 것 같습니다."
+         ],
+         "Is the original site still available at %s?": [
+            "원본 사이트가 여전히 %s에서 사용 가능합니까?"
+         ],
+         "Yes": [
+            "예"
+         ],
+         "The original site is still running and this is just a copy of the original site": [
+            "원본 사이트는 여전히 실행 중이며 이는 단지 원본 사이트의 복사본입니다"
+         ],
+         "I moved the site to this new address and this is now the main site": [
+            "사이트를 이 새 주소로 이전했으며 이제 이곳이 메인 사이트입니다"
+         ],
+         "WPML Detected a New Site Address": [
+            "WPML이 새 사이트 주소를 감지했습니다"
+         ],
+         "How to manage translations when migrating from development to production": [
+            "개발 환경에서 프로덕션 환경으로 이전 시 번역을 관리하는 방법"
+         ],
+         "Looks like this site is a copy of a different site, or moved to a different URL. Please contact your translation manager to update Translation Management plugin configuration.": [
+            "이 사이트가 다른 사이트의 복사본이거나 다른 URL로 이동된 것 같습니다. 번역 관리자에게 연락하여 번역 관리 플러그인 구성을 업데이트하세요."
+         ],
+         "Site Moved or Copied - Action Required": [
+            "사이트 이동 또는 복사됨 - 조치 필요"
+         ],
+         "You or someone else moved this site to %s. Please keep in mind that:": [
+            "귀하 또는 다른 사람이 이 사이트를 %s로 이동했습니다. 다음 사항을 유의하세요:"
+         ],
+         "Translations that you do at %s will not appear on this site.": [
+            "%s에서 수행한 번역은 이 사이트에 나타나지 않습니다."
+         ],
+         "You cannot edit translations on this site.": [
+            "이 사이트에서 번역을 편집할 수 없습니다."
+         ],
+         "The site at %s is using the same credits for automatic translation as this site.": [
+            "%s의 사이트는 이 사이트와 동일한 자동 번역 크레딧을 사용하고 있습니다."
+         ],
+         "If you didn't intend to move this site to %s, you can <a>indicate that this site should be at %s</a>.": [
+            "의도적으로 이 사이트를 %s로 이동하지 않았다면, <a>이 사이트가 %s에 있어야 한다고 표시</a>할 수 있습니다."
+         ],
+         "This site has moved to a new location": [
+            "이 사이트가 새로운 위치로 이동되었습니다"
+         ],
+         "If you prefer not to move this site, you can <a>mark it as a copy</a> and enable automatic translation for it.": [
+            "이 사이트를 이동하지 않기를 원한다면, <a>복사본으로 표시</a>하고 자동 번역을 활성화할 수 있습니다."
+         ],
+         "Moving the site back here will mean that you will be able to translate on this domain again, but you will not be able to update translations at %s.": [
+            "사이트를 여기로 다시 이동하면 이 도메인에서 다시 번역할 수 있지만, %s에서는 번역을 업데이트할 수 없게 됩니다."
+         ],
+         "Yes - move back here": [
+            "예 - 여기로 다시 이동합니다"
+         ],
+         "No - keep the site on %s": [
+            "아니오 - %s에 사이트를 유지합니다"
+         ],
+         "Are you sure that this site should run on %s and not %s?": [
+            "이 사이트가 %s가 아닌 %s에서 실행되어야 한다고 확신하십니까?"
+         ],
+         "WPML noticed that your site is being accessed from a different domain or URL.": [
+            "WPML이 귀하의 사이트가 다른 도메인이나 URL에서 접속되고 있음을 감지했습니다."
+         ],
+         "To make sure everything continues working correctly, including automatic translation and site registration, we need to verify and update your site settings.": [
+            "자동 번역 및 사이트 등록을 포함한 모든 기능이 계속 올바르게 작동하도록 하기 위해 사이트 설정을 확인하고 업데이트해야 합니다."
+         ],
+         "This will only take a moment.": [
+            "이 작업은 잠시만 소요됩니다."
+         ],
+         "Start Migration": [
+            "이전 시작"
+         ],
+         "If you didn't change your main domain and only logged in through a secondary domain, select this option.": [
+            "주 도메인을 변경하지 않고 보조 도메인을 통해서만 로그인한 경우 이 옵션을 선택하세요."
+         ],
+         "Something went wrong": [
+            "문제가 발생했습니다"
+         ],
+         "I just logged in from a secondary domain": [
+            "보조 도메인을 통해 로그인했습니다"
+         ],
+         "You're all set!": [
+            "모든 설정이 완료되었습니다!"
+         ],
+         "This domain is now registered as a secondary domain and WPML will recognize it correctly.": [
+            "이 도메인은 이제 보조 도메인으로 등록되었으며 WPML이 올바르게 인식할 것입니다."
+         ]
+      }
+   }
+}

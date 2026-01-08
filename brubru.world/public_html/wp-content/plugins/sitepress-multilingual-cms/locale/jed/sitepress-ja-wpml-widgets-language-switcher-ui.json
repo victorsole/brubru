@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ja"
+         },
+         "To display this Custom HTML block in a specific language, first place it inside a Group block.": [
+            "このカスタムHTMLブロックを特定の言語で表示するには、まずグループブロック内に配置してください。"
+         ],
+         "Place inside Group block": [
+            "グループブロック内に配置する"
+         ],
+         "All": [
+            "すべて"
+         ],
+         "Display on language": [
+            "言語上に表示"
+         ]
+      }
+   }
+}

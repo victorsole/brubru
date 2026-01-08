@@ -1,0 +1,15 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ko"
+         },
+         "Your site doesn't meet WPML's minimum requirements": [
+            "사이트가 WPML의 최소 요구 사항을 충족하지 않습니다"
+         ]
+      }
+   }
+}

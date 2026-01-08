@@ -1,0 +1,33 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "ru"
+         },
+         "Warning:": [
+            "Предупреждение:"
+         ],
+         "Edits you're about to make will be lost": [
+            "Изменения, которые вы собираетесь внести, будут утрачены"
+         ],
+         "You are about to edit this translation using %s.": [
+            "Вы собираетесь редактировать этот перевод, используя %s."
+         ],
+         "Any changes you make will be lost the next time you send this page for translation.": [
+            "Любые внесенные вами изменения будут утрачены при следующей отправке этой страницы на перевод."
+         ],
+         "Go back": [
+            "Вернуться"
+         ],
+         "Edit in Advanced Translation Editor": [
+            "Редактировать в расширенном редакторе перевода"
+         ],
+         "Edit anyway (Not recommended)": [
+            "Редактировать в любом случае (Не рекомендуется)"
+         ]
+      }
+   }
+}

@@ -1,0 +1,4317 @@
+{
+  "country_code": "cy",
+  "country_name": "Cyprus",
+  "extraction_date": "2025-11-27T12:19:12.495694",
+  "criteria_count": 31,
+  "criteria": [
+    {
+      "Id": {
+        "value": "3e85c1f9-d45b-4a35-8c32-d7cc1b5bee1a"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Guilty of grave professional misconduct",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator  guilty of grave professional misconduct? Where applicable, see definitions in national law, the relevant notice or the procurement documents",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(4)(c)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "10b2178c-6eec-4f0d-92e4-fd3b834973f1"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b83d17f7-d104-48a4-a358-9d0f4351f967"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "No evidence - The contracting authority shall not award the contract to an economic operator where it comes to its knowledge that the economic operator is in one of the situations mentioned in A. 57(4)(a) and (c) - (i) of L. 73(I)/2016",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/19021?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "514d3fde-1e3e-4dcd-b02a-9f984d5bbda3"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Guilty of grave professional misconduct",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator  guilty of grave professional misconduct? Where applicable, see definitions in national law, the relevant notice or the procurement documents",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "a4bea47f-51eb-4ced-bfc5-7124f676f9c6"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Business activities are suspended",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Are the business activities of the economic operator suspended? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(4)(b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "80375168-534c-4c44-9a3a-0596f791dcef"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2c39935-6138-4273-85a2-d4885be8d975"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "7"
+              },
+              "FeeAmount": {
+                "value": 40.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mcit.gov.cy/drcor"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Registrar of Companies and Official Receiver ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16022?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "166536e2-77f7-455c-b018-70582474e4f6"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Business activities are suspended",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Are the business activities of the economic operator suspended? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "2bfcceda-5b3f-4bd3-a546-5cc78edfd6f6"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Analogous situation like bankruptcy under national law",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator in in any analogous situation like bankruptcy arising from a similar procedure under national laws and regulations? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "4"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "d40475b7-11c9-4727-9d67-5520f6127cfb"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2c39935-6138-4273-85a2-d4885be8d975"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "7"
+              },
+              "FeeAmount": {
+                "value": 40.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mcit.gov.cy/drcor"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Registrar of Companies and Official Receiver ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16022?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "daffa2a9-9f8f-4568-8be8-7b8bf306d096"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Analogous situation like bankruptcy under national law",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator in in any analogous situation like bankruptcy arising from a similar procedure under national laws and regulations? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "4"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "0f0a7b2a-575f-47af-ba95-279aadfb0195"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Assets being administered by liquidator",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Are the assets of the economic operator being administered by a liquidator or by the court? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(4)(b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "2d96977e-f1a7-4912-915b-0ed27c5c1b02"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2c39935-6138-4273-85a2-d4885be8d975"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "7"
+              },
+              "FeeAmount": {
+                "value": 40.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mcit.gov.cy/drcor"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Registrar of Companies and Official Receiver ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16022?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "8fda202a-0c37-41bb-9d7d-de3f49edbfcb"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Assets being administered by liquidator",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Are the assets of the economic operator being administered by a liquidator or by the court? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "3efb104c-3da0-4498-af6b-b042ae9a0f3f"
+      },
+      "TypeCode": {
+        "value": "Not assigned"
+      },
+      "Name": {
+        "value": "For works contracts: performance of works of the specified type",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "For public works contracts only: During the reference period, the economic operator has performed the following works of the specified type. Contracting authorities may require up to five years and allow experience dating from more than five years.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(4)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "98e55794-4e43-45fd-bca0-781288fe775b"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "3447b4de-7f9a-40b4-b41a-476a2bec708f"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Documentation of the Tenderer's Tehnical and Professional Ability",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "2"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18683?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "cdd3bb3e-34a5-43d5-b668-2aab86a73822"
+        },
+        "TypeCode": {
+          "value": "Not assigned"
+        },
+        "Name": {
+          "value": "For works contracts: performance of works of the specified type",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "For public works contracts only: During the reference period, the economic operator has performed the following works of the specified type. Contracting authorities may require up to five years and allow experience dating from more than five years.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "b006f1ed-8f01-41da-be51-5f0ccc1bbfa6"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "For service contracts: performance of services of the specified type",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "For public service contracts only: During the reference period, the economic operator has provided the following main services of the type specified. Contracting authorities may require up to three years and allow experience dating from more than three years.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(4)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "b4e50f54-28c2-444a-8f32-da407f927258"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "3447b4de-7f9a-40b4-b41a-476a2bec708f"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Documentation of the Tenderer's Tehnical and Professional Ability",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "2"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18683?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "5e506c16-26ab-4e32-bb78-b27f87dc0565"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "For service contracts: performance of services of the specified type",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "For public service contracts only: During the reference period, the economic operator has provided the following main services of the type specified. Contracting authorities may require up to three years and allow experience dating from more than three years.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "784661d7-55b5-48dc-bc26-a61e7bd10169"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Direct or indirect involvement in the preparation of this procurement procedure",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator or an undertaking related to it advised the contracting authority or contracting entity or otherwise been involved in the preparation of the procurement procedure?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(f)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "ebbf75c8-b4a9-421a-bddf-034ffef5ec58"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b83d17f7-d104-48a4-a358-9d0f4351f967"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "No evidence - The contracting authority shall not award the contract to an economic operator where it comes to its knowledge that the economic operator is in one of the situations mentioned in A. 57(4)(a) and (c) - (i) of L. 73(I)/2016",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/19021?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "61874050-5130-4f1c-a174-720939c7b483"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Direct or indirect involvement in the preparation of this procurement procedure",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator or an undertaking related to it advised the contracting authority or contracting entity or otherwise been involved in the preparation of the procurement procedure?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "4cdd4cef-1b33-45f0-80a9-5fd36f80588a"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Arrangement with creditors",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator in arrangement with creditors? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "4"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(4)(b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "512f6840-a816-41ea-b0ef-47480645e707"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2c39935-6138-4273-85a2-d4885be8d975"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "7"
+              },
+              "FeeAmount": {
+                "value": 40.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mcit.gov.cy/drcor"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Registrar of Companies and Official Receiver ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16022?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "68918c7a-f5bc-4a1a-a62f-ad8983600d48"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Arrangement with creditors",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator in arrangement with creditors? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "4"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "76353f26-02af-447c-a5e8-9a65a59e8ef4"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Tools, plant or technical equipment",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The following tools, plant or technical equipment will be available to it for performing the contract:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(4)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "40d63d11-1424-4da1-98ab-4f90c801b7f6"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "eeba7d0c-74db-4016-bdec-a6a787395084"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Declaration for tools, plant and equipment",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18961?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "cc18c023-211d-484d-a32e-52f3f970285f"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Tools, plant or technical equipment",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The following tools, plant or technical equipment will be available to it for performing the contract:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "eb58df3f-06df-4737-b802-7fb9b40b088e"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Child labour and other forms of trafficking in human beings",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Money laundering or terrorist financing, as defined in Article 2 of Directive 2011/36/EU of the European Parliament and of the Council of 5 April 2011 on preventing and combating trafficking in human beings and protecting its victims, and replacing Council Framework Decision 2002/629/JHA (OJ L 101, 15.4.2011)",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(1)(f)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "5d7550d8-32e3-426c-b617-42badafced7a"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "64f4f811-c03b-4723-b084-05bc104cb150"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Clear Criminal Record Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue of the certificate is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "6"
+              },
+              "FeeAmount": {
+                "value": 20.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.police.gov.cy"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Cyprus Police",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16041?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d789d01a-fe03-4ccd-9898-73f9cfa080d1"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Child labour and other forms of trafficking in human beings",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Money laundering or terrorist financing, as defined in Article 2 of Directive 2011/36/EU of the European Parliament and of the Council of 5 April 2011 on preventing and combating trafficking in human beings and protecting its victims, and replacing Council Framework Decision 2002/629/JHA (OJ L 101, 15.4.2011)",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "5d313fc0-4cbb-43d8-a8ee-d7f906e4380f"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Bankruptcy",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator bankrupt? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(4)(b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "00cbd7a3-d4dc-48db-b0bf-ea3dac23ddc8"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2c39935-6138-4273-85a2-d4885be8d975"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "7"
+              },
+              "FeeAmount": {
+                "value": 40.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mcit.gov.cy/drcor"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Registrar of Companies and Official Receiver ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16022?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d3732c09-7d62-4edc-a172-241da6636e7c"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Bankruptcy",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator bankrupt? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "feab5678-afd4-43bf-818e-a0018bf78f1a"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Conflict of interest due to its participation in the procurement procedure",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator aware of any conflict of interest as indicated in national law, the relevant notice or the procurement documents due to its participation in the procurement procedure?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(f) / A.57(4)(e)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "729dfd57-ea32-4e25-aeca-60407c267d74"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b83d17f7-d104-48a4-a358-9d0f4351f967"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "No evidence - The contracting authority shall not award the contract to an economic operator where it comes to its knowledge that the economic operator is in one of the situations mentioned in A. 57(4)(a) and (c) - (i) of L. 73(I)/2016",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/19021?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "b1b5ac18-f393-4280-9659-1367943c1a2e"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Conflict of interest due to its participation in the procurement procedure",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator aware of any conflict of interest as indicated in national law, the relevant notice or the procurement documents due to its participation in the procurement procedure?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "aeee12a3-38af-46b5-b945-28cfd2e4f86c"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Suitability test"
+      },
+      "Name": {
+        "value": "Enrolment in a relevant professional register",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "It is enrolled in relevant professional registers kept in the Member State of its establishment as described in Annex XI of Directive 2014/24/EU; economic operators from certain Member States may have to comply with other requirements set out in that Annex.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(2)(a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "6aac9ba3-e890-4772-8025-39b9c653bafa"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "7aab3d95-89b2-4061-b99c-d375362e0fcd"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of Registration",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {
+                "value": 200.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.contractorscouncil.org.cy"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Council for the Registration and Control of Contractors ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18681?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "6ee55a59-6adb-4c3a-b89f-e62a7ad7be7f"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Suitability test"
+        },
+        "Name": {
+          "value": "Enrolment in a relevant professional register",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "It is enrolled in relevant professional registers kept in the Member State of its establishment as described in Annex XI of Directive 2014/24/EU; economic operators from certain Member States may have to comply with other requirements set out in that Annex.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "e004883f-45dd-4d34-ba9e-b996b2a51d28"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Suitability test"
+      },
+      "Name": {
+        "value": "Enrolment in a trade register",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "It is enrolled in trade registers kept in the Member State of its establishment as described in Annex XI of Directive 2014/24/EU; economic operators from certain Member States may have to comply with other requirements set out in that Annex.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "1"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(2)(a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "4b061ff9-b178-4e43-9c6e-330bc2d5693a"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2c39935-6138-4273-85a2-d4885be8d975"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "7"
+              },
+              "FeeAmount": {
+                "value": 40.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mcit.gov.cy/drcor"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Registrar of Companies and Official Receiver ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16022?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "87b3fa26-3549-4f92-b8e0-3fd8f04bf5c7"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Suitability test"
+        },
+        "Name": {
+          "value": "Enrolment in a trade register",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "It is enrolled in trade registers kept in the Member State of its establishment as described in Annex XI of Directive 2014/24/EU; economic operators from certain Member States may have to comply with other requirements set out in that Annex.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "1"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "fff6c67c-9a07-4127-8f7e-3209a7576c36"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Average yearly turnover",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Its average yearly turnover for the number of years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 58(3)(a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "92530dbf-4cf1-4749-8a2a-db1cf62e8c09"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2e56351-bf87-4ca6-8bcd-793e9fcd979c"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Documentation of the economic operator's economic and financial standing",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18601?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "b16cb9fc-6cb7-4585-9302-9533b415cf48"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Average yearly turnover",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Its average yearly turnover for the number of years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "b418b858-2933-406e-b4df-0b77cc0b8232"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Guilty of misrepresentation, withheld information, unable to provide required documents and obtained confidential information of this procedure",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Can the economic operator confirm that it has not been guilty of serious misrepresentation in supplying the information required for the verification of the absence of grounds for exclusion or the fulfilment of the selection criteria, it has not withheld such information, it has been able, without delay, to submit the supporting documents required by a contracting authority or contracting entity, and it has not undertaken to unduly influence the decision making process of the contracting authority or contracting entity, to obtain confidential information that may confer upon it undue advantages in the procurement procedure or to negligently provide misleading information that may have a material influence on decisions concerning exclusion, selection or award?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "5"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(i) / A.57(4)(h)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "c3c69a6c-d7f5-4be5-ae67-176d9ec433a2"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b83d17f7-d104-48a4-a358-9d0f4351f967"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "No evidence - The contracting authority shall not award the contract to an economic operator where it comes to its knowledge that the economic operator is in one of the situations mentioned in A. 57(4)(a) and (c) - (i) of L. 73(I)/2016",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/19021?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "696a75b2-6107-428f-8b74-82affb67e184"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Guilty of misrepresentation, withheld information, unable to provide required documents and obtained confidential information of this procedure",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Can the economic operator confirm that it has not been guilty of serious misrepresentation in supplying the information required for the verification of the absence of grounds for exclusion or the fulfilment of the selection criteria, it has not withheld such information, it has been able, without delay, to submit the supporting documents required by a contracting authority or contracting entity, and it has not undertaken to unduly influence the decision making process of the contracting authority or contracting entity, to obtain confidential information that may confer upon it undue advantages in the procurement procedure or to negligently provide misleading information that may have a material influence on decisions concerning exclusion, selection or award?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "5"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "91f430e8-799a-4e33-b807-3f33fb9660e9"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Terrorist offences or offences linked to terrorist activities",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Terrorist offences or offences linked to terrorist activities, as defined in Articles 1 and 3 of Council Framework Decision of 13 June 2002 on combating terrorism (OJ L 164, 22.6.2002). This exclusion ground also includes inciting or aiding or abetting or attempting to commit an offence, as referred to in Article 4 of that Framework Decision",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(1)(d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "472dad3b-a250-4f17-be44-0ce3b2c61b64"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "64f4f811-c03b-4723-b084-05bc104cb150"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Clear Criminal Record Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue of the certificate is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "6"
+              },
+              "FeeAmount": {
+                "value": 20.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.police.gov.cy"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Cyprus Police",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16041?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d486fb70-86b3-4e75-97f2-0d71b5697c7d"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Terrorist offences or offences linked to terrorist activities",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Terrorist offences or offences linked to terrorist activities, as defined in Articles 1 and 3 of Council Framework Decision of 13 June 2002 on combating terrorism (OJ L 164, 22.6.2002). This exclusion ground also includes inciting or aiding or abetting or attempting to commit an offence, as referred to in Article 4 of that Framework Decision",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "86971627-8147-4ef5-ab41-6ba367310d50"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Agreements with other economic operators aimed at distorting competition",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator entered into agreements with other economic operators aimed at distorting competition?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "ac56241f-4d6e-4d12-b583-dfe503e3238c"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b83d17f7-d104-48a4-a358-9d0f4351f967"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "No evidence - The contracting authority shall not award the contract to an economic operator where it comes to its knowledge that the economic operator is in one of the situations mentioned in A. 57(4)(a) and (c) - (i) of L. 73(I)/2016",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/19021?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "56d13e3d-76e8-4f23-8af6-13e60a2ee356"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Agreements with other economic operators aimed at distorting competition",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator entered into agreements with other economic operators aimed at distorting competition?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "957c96fb-feab-4ad9-b117-ea2e5e5fe0d0"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Money laundering or terrorist financing",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator itself or any person who is a member of its administrative, management or supervisory body or has powers of representation, decision or control therein been the subject of a conviction by final judgement for money laundering or terrorist financing, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable? As defined in Article 1 of Directive 2005/60/EC of the European Parliament and of the Council of 26 October 2005 on the prevention of the use of the financial system for the purpose of money laundering and terrorist financing (OJ L 309, 25.11.2005, p. 15).",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(1)(e)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "5a846d10-5121-4357-bc27-aba04ecb63b8"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "64f4f811-c03b-4723-b084-05bc104cb150"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Clear Criminal Record Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue of the certificate is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "6"
+              },
+              "FeeAmount": {
+                "value": 20.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.police.gov.cy"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Cyprus Police",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16041?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "47112079-6fec-47a3-988f-e561668c3aef"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Money laundering or terrorist financing",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator itself or any person who is a member of its administrative, management or supervisory body or has powers of representation, decision or control therein been the subject of a conviction by final judgement for money laundering or terrorist financing, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable? As defined in Article 1 of Directive 2005/60/EC of the European Parliament and of the Council of 26 October 2005 on the prevention of the use of the financial system for the purpose of money laundering and terrorist financing (OJ L 309, 25.11.2005, p. 15).",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "04fdd288-ebeb-416c-b730-c9830399341b"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Educational and professional qualifications",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The following educational and professional qualifications are held by the service provider or the contractor itself, and/or (depending on the requirements set out in the relevant notice or the procurement documents by its managerial staff.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(4)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "6fe3162d-379b-41da-bd1d-a96a4f55371f"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f005714d-0cdb-41c4-9533-0e5920b46bac"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "CV's of the key experts - services and supplies",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "5"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18684?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "07301031-2270-41af-8e7e-66fe0c777107"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Educational and professional qualifications",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The following educational and professional qualifications are held by the service provider or the contractor itself, and/or (depending on the requirements set out in the relevant notice or the procurement documents by its managerial staff.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "231528f0-bf9c-4623-8654-99a9b5b362ad"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Participation in a criminal organisation",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Participation in a criminal organisation, as defined in Article 2 of Council Framework Decision 2008/841/JHA of 24 October 2008 on the fight against organised crime",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "Article 57(1)(a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "3b083407-b8a4-40da-94f4-083dffb45e9e"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "64f4f811-c03b-4723-b084-05bc104cb150"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Clear Criminal Record Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue of the certificate is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "6"
+              },
+              "FeeAmount": {
+                "value": 20.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.police.gov.cy"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Cyprus Police",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16041?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "005eb9ed-1347-4ca3-bb29-9bc0db64e1ab"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Participation in a criminal organisation",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Participation in a criminal organisation, as defined in Article 2 of Council Framework Decision 2008/841/JHA of 24 October 2008 on the fight against organised crime",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "c7a50936-fa0b-4eef-b74e-a41e7ee91917"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Corruption",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator itself or any person who is a member of its administrative, management or supervisory body or powers of representation, decision or control therein has been the subject of a conviction by final judgement for corruption, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable. Corruption, as defined in the relevant legislation.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "5"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.57(1)(b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "535ab965-f1cf-4e92-84af-14c04f50ac8b"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "64f4f811-c03b-4723-b084-05bc104cb150"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Clear Criminal Record Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue of the certificate is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "6"
+              },
+              "FeeAmount": {
+                "value": 20.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.police.gov.cy"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Cyprus Police",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16041?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "c27b7c4e-c837-4529-b867-ed55ce639db5"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Corruption",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator itself or any person who is a member of its administrative, management or supervisory body or powers of representation, decision or control therein has been the subject of a conviction by final judgement for corruption, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable. Corruption, as defined in the relevant legislation.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "5"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "f808ae0e-609c-4db0-a0e1-8b672b416577"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Fraud",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Fraud within the meaning of Article 1 of the Convention on the protection of the European Communities' financial interests (OJ C 316, 27.11.1995)",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "Article 57(1)(c)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "e2dc482c-83dd-4ff4-b07c-460a749f6656"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "64f4f811-c03b-4723-b084-05bc104cb150"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Clear Criminal Record Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue of the certificate is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "6"
+              },
+              "FeeAmount": {
+                "value": 20.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.police.gov.cy"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Cyprus Police",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16041?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "297d2323-3ede-424e-94bc-a91561e6f320"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Fraud",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Fraud within the meaning of Article 1 of the Convention on the protection of the European Communities' financial interests (OJ C 316, 27.11.1995)",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "cc1fa6e4-fa30-4788-a3c3-e8f41477c842"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Breaching of obligations in the fields of social law",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator has to its knowledge, breached its obligations in the field of social law.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "6"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "5e6e4bcc-72da-4047-b052-ed53438b185f"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b83d17f7-d104-48a4-a358-9d0f4351f967"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "No evidence - The contracting authority shall not award the contract to an economic operator where it comes to its knowledge that the economic operator is in one of the situations mentioned in A. 57(4)(a) and (c) - (i) of L. 73(I)/2016",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/19021?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "a261a395-ed17-4939-9c75-b9ff1109ca6e"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Breaching of obligations in the fields of social law",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator has to its knowledge, breached its obligations in the field of social law.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "6"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "94c0d206-3ea0-4f7d-b26a-f06f88e90581"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Insolvency",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator the subject of insolvency or winding-up? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "58bdf021-5fcc-454b-8620-dc71fef7d5ec"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d2c39935-6138-4273-85a2-d4885be8d975"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The above certificate is submitted only by the successful tenderer at the signature of the contract. The certificate as such does not specify a validity period. However, for public procurement purposes the acceptable date of issue is specified in the tender documents.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "7"
+              },
+              "FeeAmount": {
+                "value": 40.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mcit.gov.cy/drcor"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Registrar of Companies and Official Receiver ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16022?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "396f288a-e267-4c20-851a-ed4f7498f137"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Insolvency",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator the subject of insolvency or winding-up? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "b9c53114-5ecf-4f22-ae3e-139c4323b954"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Other economic or financial requirements",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Concerning the other economic or financial requirements, if any, that may have been specified in the relevant notice or the procurement documents, the economic operator declares that:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(3)(a)(ii)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "1b54ebef-1531-4b54-9905-3a13b7857b7c"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "d088a84e-004a-4e71-ad97-3ca09c613127"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Credit Facility to cover the Working Capital",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "The amount of charge is defined by each bank/credit institution individually",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {
+                "value": 1.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {},
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Banks or any other Credit Institutions",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18603?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "ab0e7f2e-6418-40e2-8870-6713123e41ad"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Other economic or financial requirements",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Concerning the other economic or financial requirements, if any, that may have been specified in the relevant notice or the procurement documents, the economic operator declares that:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "916d1577-8057-4f3c-88de-b8928f22e242"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+      },
+      "Name": {
+        "value": "Payment of taxes",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator breached its obligations relating to the payment of taxes, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "Article 57(2)(a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {},
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "dd2650c1-244c-4505-a5ca-16be4b498389"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Attestation from the Tax Department",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The certificate is submitted only by the successful tenderer at the signature of the contract.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "5"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mof.gov.cy/tax"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Tax Department ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16023?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "b61bbeb7-690e-4a40-bc68-d6d4ecfaa3d4"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+        },
+        "Name": {
+          "value": "Payment of taxes",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator breached its obligations relating to the payment of taxes, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "74e5abaf-0a8b-4a54-b0dc-61b1c199a259"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Early termination, damages or other comparable sanctions",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator experienced that a prior public contract, a prior contract with a contracting entity or a prior concession contract was terminated early, or that damages or other comparable sanctions were imposed in connection with that prior contract?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A. 57(4)(g)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "6b662b65-68aa-477c-ad6d-ddf6b4a2b126"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b83d17f7-d104-48a4-a358-9d0f4351f967"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "No evidence - The contracting authority shall not award the contract to an economic operator where it comes to its knowledge that the economic operator is in one of the situations mentioned in A. 57(4)(a) and (c) - (i) of L. 73(I)/2016",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/19021?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "3293e92b-7f3e-42f1-bee6-a7641bb04251"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Early termination, damages or other comparable sanctions",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator experienced that a prior public contract, a prior contract with a contracting entity or a prior concession contract was terminated early, or that damages or other comparable sanctions were imposed in connection with that prior contract?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "876ecdca-35a2-4823-847e-d0d7038eb8c9"
+      },
+      "TypeCode": {
+        "value": "Not assigned"
+      },
+      "Name": {
+        "value": "For supply contracts: performance of deliveries of the specified type",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "For public supply contracts only: During the reference period, the economic operator has delivered the following principal deliveries of the type specified. Contracting authorities may require up to three years and allow experience dating from more than three years.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.58(4)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "dd0bbcf1-fd7f-4971-975f-7485f88f7b18"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "3447b4de-7f9a-40b4-b41a-476a2bec708f"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Documentation of the Tenderer's Tehnical and Professional Ability",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "2"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18683?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "3a18a175-1863-4b1d-baef-588ce61960ca"
+        },
+        "TypeCode": {
+          "value": "Not assigned"
+        },
+        "Name": {
+          "value": "For supply contracts: performance of deliveries of the specified type",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "For public supply contracts only: During the reference period, the economic operator has delivered the following principal deliveries of the type specified. Contracting authorities may require up to three years and allow experience dating from more than three years.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "52816a8d-283e-49ed-8703-e8bd8f0519b8"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+      },
+      "Name": {
+        "value": "Payment of social security contributions",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator breached its obligations relating to the payment social security contributions, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "Article 57(2)(a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "f1d76c43-eb45-42b7-a4e3-abd2b8e86867"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "832b82ab-b5b5-4053-9bac-1cc36a259f04"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Attestation from the Social Insurance Services",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "At the tender submission stage, a Self Declaration is required to be submitted by the economic operators. The certificate is submitted only by the successful tenderer at the signature of the contract.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {
+                "value": 2.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "www.mlsi.gov.cy/sid"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Department of Social Insurance Services ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/16220?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "7d85e333-bbab-49c0-be8d-c36d71a72f5e"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+        },
+        "Name": {
+          "value": "Payment of social security contributions",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator breached its obligations relating to the payment social security contributions, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "0a615f87-6479-4ead-970e-8bcf55c82f91"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Quality assurance schemes and environmental management standards"
+      },
+      "Name": {
+        "value": "Certificates by independent bodies about quality assurance standards",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Will the economic operator be able to produce certificates drawn up by independent bodies attesting that the economic operator complies with the required quality assurance standards, including accessibility for disabled persons?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "L.73(I)/2016",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "The Coordination of Procedures on Public Procurement and on Related Matters Law of 2016 [Law 73(I)/2016]",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "cy"
+          },
+          "Article": {
+            "value": "A.62 / A.62",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "www.treasury.gov.cy"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "5344b34c-5a7f-472d-b0c1-428ca2f8c659"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "ae95f007-059b-498c-a10c-6126f70ed6cf"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Compliance with Cypriot standards serires CYS EN ISO 9000:2015 - Quality Assurance Measures",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "The economic operators may hold some other equivalent certification issued by Organisations established in Member States of the European Union, or other proof of the existence of equivalent quality assurance measures for the services/supplies/works that they provide.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "5"
+              },
+              "FeeAmount": {
+                "value": 0.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {},
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Accredited Bodies",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "7249613f-c700-45d8-a8b7-0f381e368e54"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "32216ffa-59b6-4a4f-9c6d-d8abb73ae825"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificates by independent bodies about quality assurance standards and environmental management standards",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "The economic operators may be required to submit certificates drawn up by independent bodies attesting that the economic operator complies with the required quality assurance standards and environmental management standards.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {
+                "value": 0.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {},
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Accredited Bodies",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "cy"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/18686?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d726bac9-e153-4e75-bfca-c5385587766d"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Quality assurance schemes and environmental management standards"
+        },
+        "Name": {
+          "value": "Certificates by independent bodies about quality assurance standards",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Will the economic operator be able to produce certificates drawn up by independent bodies attesting that the economic operator complies with the required quality assurance standards, including accessibility for disabled persons?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    }
+  ]
+}

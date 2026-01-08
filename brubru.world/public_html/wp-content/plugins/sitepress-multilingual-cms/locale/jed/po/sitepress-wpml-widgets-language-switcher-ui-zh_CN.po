@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: zh@Hans\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:120
+msgid ""
+"To display this Custom HTML block in a specific language, first place it "
+"inside a Group block."
+msgstr "要在特定语言中显示此自定义 HTML 块，首先将其放置在群组块内。"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:126
+msgid "Place inside Group block"
+msgstr "放置在群组块内"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:13
+msgid "All"
+msgstr "全"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:56
+msgid "Display on language"
+msgstr "语言显示"

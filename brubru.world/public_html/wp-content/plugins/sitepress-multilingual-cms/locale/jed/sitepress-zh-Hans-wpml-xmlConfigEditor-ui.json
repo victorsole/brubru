@@ -1,0 +1,31 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "The wpml-config.xml file in the root folder of your theme and plugins tells WPML which content is translatable. You can override these settings with your own custom settings by adding them below.": [
+            "主题和插件根目录下的 wpml-config.xml 文件会告诉 WPML 哪些内容可以翻译。您可以在下面添加自己的自定义设置来覆盖这些设置。"
+         ],
+         "Read more about language configuration files.": [
+            "了解有关语言配置文件的更多信息。"
+         ],
+         "Save": [
+            "保存"
+         ],
+         "Error": [
+            "错误"
+         ],
+         "Shortcuts": [
+            "捷径"
+         ],
+         "Fold/Unfold code": [
+            "折叠/展开代码"
+         ],
+         "Auto format": [
+            "自动格式"
+         ]
+      }
+   }
+}

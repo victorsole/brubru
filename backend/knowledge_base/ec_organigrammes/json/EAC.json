@@ -1,0 +1,125 @@
+{
+  "dg_code": "EAC",
+  "dg_name": "Education, Youth, Sport and Culture",
+  "full_name": "Directorate-General for Education, Youth, Sport and Culture",
+  "date_of_effect": "2025-08-01",
+  "commissioners": [
+    {
+      "name": "Ekaterina Zaharieva",
+      "title": "Commissioner"
+    },
+    {
+      "name": "Glenn Micallef",
+      "title": "Commissioner"
+    }
+  ],
+  "executive_vice_president": {
+    "name": "Roxana M\u00eenzatu",
+    "title": "Executive Vice-President"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "Pia Ahrenkilde Hansen",
+      "position": "Director-General",
+      "assistants": [
+        {
+          "name": "Akvile Normantiene",
+          "role": "Assistant to the DG"
+        },
+        {
+          "name": "Na\u00efs Rigollet",
+          "role": "Assistant to the DG"
+        }
+      ]
+    },
+    "deputy_director_general": {
+      "name": "Normunds Popens",
+      "position": "Deputy Director-General",
+      "assistant": {
+        "name": "Kate Moriarty",
+        "role": "Assistant to the Deputy Director-General"
+      }
+    },
+    "principal_advisers": [
+      {
+        "name": "Sophie Beernaerts",
+        "title": "Principal Adviser EAC"
+      },
+      {
+        "name": "Tam\u00e1s Sz\u0171cs",
+        "title": "Principal Adviser",
+        "area": "International Dimension of Policies and Programmes"
+      }
+    ],
+    "hors_class_adviser": {
+      "name": "Vladimir \u0160ucha",
+      "title": "Hors-Class Adviser"
+    }
+  },
+  "units": {
+    "eac_dg_01": {
+      "code": "EAC.DG.01",
+      "name": "Policy Coordination and Interinstitutional Relations",
+      "head": {
+        "name": "Adrienn Geges",
+        "deputy": "Oona Van Landuyt"
+      }
+    }
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "EAC.A",
+      "name": "Policy Strategy and Evaluation",
+      "director": {
+        "name": "Stefaan Hermans",
+        "position": "Director"
+      }
+    },
+    "directorate_b": {
+      "code": "EAC.B",
+      "name": "Youth, Education and Erasmus+",
+      "director": {
+        "name": "Michael Teutsch (acting)",
+        "position": "Director"
+      }
+    },
+    "directorate_c": {
+      "code": "EAC.C",
+      "name": "Innovation, Digital Education and International Cooperation",
+      "director": {
+        "name": "Antoaneta Angelova-Krasteva",
+        "position": "Director"
+      }
+    },
+    "directorate_d": {
+      "code": "EAC.D",
+      "name": "Culture, Creativity and Sport",
+      "director": {
+        "name": "Georg Haeusler",
+        "position": "Director"
+      }
+    },
+    "directorate_r": {
+      "code": "EAC.R",
+      "name": "Performance Management, Supervision and Resources",
+      "director": {
+        "name": "Normunds Popens (acting)",
+        "position": "Director"
+      }
+    }
+  },
+  "executive_agency": {
+    "code": "EACEA",
+    "name": "Education, Audiovisual and Culture Executive Agency",
+    "director": {
+      "name": "Fr\u00e9d\u00e9ric Fimeyer",
+      "position": "Director"
+    }
+  },
+  "notes": [
+    "Deputy to the Director",
+    "Mirror Entity in an Executive Agency",
+    "Seconded Manager: Vanessa Debiais-Sainton",
+    "Including HR Correspondent"
+  ]
+}

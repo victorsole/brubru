@@ -1,0 +1,52 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "ru"
+         },
+         "You must use the Advanced Translation Editor if you want to translate your content automatically.": [
+            "Если вы хотите переводить свой контент автоматически, следует использовать Расширенный редактор перевода."
+         ],
+         "Synchronize translators and translation managers with ATE": [
+            "Синхронизировать переводчиков и менеджеров переводческих проектов с РРП"
+         ],
+         "Please try again in a few minutes. If the problem persists, please contact %sWPML support%s.": [
+            "Повторите попытку позже. В случае повторного возникновения проблемы обратитесь в %sслужбу поддержки WPML%s."
+         ],
+         "Save": [
+            "Сохранить"
+         ],
+         "Please confirm this translation setting": [
+            "Подтвердите настройку перевода"
+         ],
+         "Your site is set to translate all content automatically. When you make <PostTypesNames /> translatable, WPML will automatically translate the %1$d existing item.": [
+            "Ваш сайт настроен на автоматический перевод всего содержимого. Когда Вы сделаете <PostTypesNames /> переводимым, WPML автоматически переведет существующий элемент %1$d.",
+            "Ваш сайт настроен на автоматический перевод всего содержимого. Когда Вы сделаете <PostTypesNames /> переводимым, WPML автоматически переведет существующие элементы %1$d."
+         ],
+         "Your site is set to translate all content automatically. When you make <PostTypesNames /> translatable, WPML will automatically translate all future content.": [
+            "В настройках вашего сайта задан автоматический перевод контента. Если вы сделаете <PostTypesNames /> пригодным к переводу, WPML будет автоматически переводить будущий контент."
+         ],
+         "Are you OK with paying for this?": [
+            "Вы согласны заплатить за это?"
+         ],
+         "Cancel": [
+            "Отмена"
+         ],
+         "Make translatable": [
+            "Подготовить к переводу"
+         ],
+         "Yes, translate <b>existing</b> and <b>future</b> content automatically": [
+            "Да, переводить <b>существующий</b> и <b>будущий</b> контент автоматически"
+         ],
+         "Yes, but only translate <b>future</b> content automatically": [
+            "Да, но переводить автоматически только <b>будущий</b> контент"
+         ],
+         "Yes, translate <b>future</b> content automatically": [
+            "Да, переводить <b>будущий</b> контент автоматически"
+         ]
+      }
+   }
+}

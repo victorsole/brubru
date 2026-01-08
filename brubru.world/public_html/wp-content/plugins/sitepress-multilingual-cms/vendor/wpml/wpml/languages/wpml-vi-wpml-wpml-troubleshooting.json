@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "vi"
+         },
+         "PostHog Integration": [
+            "Tích hợp PostHog"
+         ],
+         "PostHog is running on your site": [
+            "PostHog đang chạy trên trang web của bạn"
+         ],
+         "Enable PostHog to help us improve our product": [
+            "Bật PostHog để giúp chúng tôi cải thiện sản phẩm của mình"
+         ],
+         "your PostHog session ID is: ": [
+            "ID phiên PostHog của bạn là: "
+         ]
+      }
+   }
+}

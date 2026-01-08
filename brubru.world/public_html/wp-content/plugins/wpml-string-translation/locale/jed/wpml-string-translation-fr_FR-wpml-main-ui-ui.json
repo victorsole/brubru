@@ -1,0 +1,60 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr"
+         },
+         "Edit": [
+            "Éditer"
+         ],
+         "Shift+Tab": [
+            "Maj+tab"
+         ],
+         "Tab": [
+            "Onglet"
+         ],
+         "Translation to:": [
+            "Traduction à:"
+         ],
+         "Copy from original": [
+            "Copie de l'original"
+         ],
+         "Use Shift+Enter to add a new line.": [
+            "Utilisez les touches Maj+Entrée pour ajouter une nouvelle ligne."
+         ],
+         "Original:": [
+            "Original:"
+         ],
+         "Add %s translation": [
+            "Ajouter la traduction de %s "
+         ],
+         "Edit %s translation": [
+            "Editer la traduction de %s "
+         ],
+         "Add %s translation (the string appears on the site and is not translated)": [
+            "Ajouter la traduction de %s (la chaîne apparaît sur le site et n'est pas traduite)"
+         ],
+         "Original language %s": [
+            "Langue originale %s"
+         ],
+         "Waiting for translator to %s": [
+            "En attendant que le traducteur %s"
+         ],
+         "Translation in progress to %s": [
+            "Conversion en cours en %s"
+         ],
+         "In basket for translation to %s": [
+            "En corbeille pour la traduction en %s"
+         ],
+         "Translation saved.": [
+            "La traduction est sauvée."
+         ],
+         "Translation update failed.": [
+            "La mise à jour de la traduction a échoué."
+         ]
+      }
+   }
+}

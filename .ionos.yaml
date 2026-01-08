@@ -1,0 +1,21 @@
+# IONOS Deploy Now Configuration for Brubru
+# Documentation: https://docs.ionos.space/
+
+distFolder: frontend/dist
+
+setup:
+  - name: Setup Node.js
+    action: actions/setup-node@v4
+    properties:
+      node-version: '20'
+
+build:
+  - name: Install Dependencies
+    command: cd frontend && npm ci --legacy-peer-deps
+
+  - name: Build Frontend
+    command: cd frontend && npm run build
+    environment:
+      VITE_API_URL: https://brubru.beresol.eu/api
+      VITE_API_BASE_URL: https://brubru.beresol.eu/api
+      VITE_APP_ENV: production

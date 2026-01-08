@@ -1,0 +1,208 @@
+/* frontend/src/components/tour/tour_tooltip.css */
+
+.tour-tooltip {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  max-width: 380px;
+  min-width: 300px;
+  padding: 1.25rem;
+  border-top: 3px solid transparent;
+  background-image: linear-gradient(white, white),
+    linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Close button */
+.tour-tooltip__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.15s ease;
+}
+
+.tour-tooltip__close:hover {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.tour-tooltip__close:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Content */
+.tour-tooltip__content {
+  margin-bottom: 1rem;
+  padding-right: 1.5rem;
+}
+
+.tour-tooltip__title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a202c;
+  font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, serif;
+}
+
+.tour-tooltip__body {
+  font-size: 0.925rem;
+  line-height: 1.6;
+  color: #4a5568;
+}
+
+/* Footer */
+.tour-tooltip__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* Progress */
+.tour-tooltip__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tour-tooltip__progress-text {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.tour-tooltip__progress-dots {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.tour-tooltip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.tour-tooltip__dot--active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  transform: scale(1.2);
+}
+
+.tour-tooltip__dot--completed {
+  background: #667eea;
+}
+
+/* Actions */
+.tour-tooltip__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Buttons */
+.tour-tooltip__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  font-family: inherit;
+}
+
+.tour-tooltip__button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.tour-tooltip__button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.tour-tooltip__button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.tour-tooltip__button--back {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.tour-tooltip__button--back:hover {
+  background: #e2e8f0;
+}
+
+.tour-tooltip__button--skip {
+  background: transparent;
+  color: #94a3b8;
+  padding: 0.5rem 0.5rem;
+}
+
+.tour-tooltip__button--skip:hover {
+  color: #64748b;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .tour-tooltip {
+    max-width: calc(100vw - 2rem);
+    min-width: unset;
+  }
+
+  .tour-tooltip__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .tour-tooltip__progress {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .tour-tooltip__actions {
+    justify-content: center;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .tour-tooltip__button {
+    transition: none;
+  }
+
+  .tour-tooltip__button--primary:hover {
+    transform: none;
+  }
+
+  .tour-tooltip__dot {
+    transition: none;
+  }
+}

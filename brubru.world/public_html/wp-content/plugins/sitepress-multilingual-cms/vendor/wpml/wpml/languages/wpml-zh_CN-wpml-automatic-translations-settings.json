@@ -1,0 +1,87 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "Could not fetch engines data": [
+            "无法获取引擎数据"
+         ],
+         "Could not save settings": [
+            "无法保存设置"
+         ],
+         "Automatic translation": [
+            "自动翻译"
+         ],
+         "Saving...": [
+            "正在保存..."
+         ],
+         "Save settings": [
+            "保存设置"
+         ],
+         "Settings saved": [
+            "设置已保存"
+         ],
+         "Some error occurred": [
+            "发生了一些错误"
+         ],
+         "AI Translation": [
+            "人工智能翻译"
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "不要翻译草稿。只在我发布内容时翻译。"
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "在我保存草稿时就进行翻译（会消耗更多翻译额度）。"
+         ],
+         "Do you want to translate drafts automatically?": [
+            "您是否想自动翻译草稿？"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "此功能仅在您从%s翻译仪表板%s启用 “\"自动翻译所有内容\"” 时可用。"
+         ],
+         "What would you like to do after WPML finishes translating your content automatically?": [
+            "WPML自动完成内容翻译后，您想做什么？"
+         ],
+         "Publish without review": [
+            "不审核直接发布"
+         ],
+         "Recommended with PTC": [
+            "PTC 推荐"
+         ],
+         "PTC provides Better Than Human Translations that rarely need improvements, so you can confidently skip the review process. For other translation engines, a human review is recommended to confirm accuracy.": [
+            "PTC 提供优于人工的翻译,很少需要改进,因此你可以放心地跳过审核过程。对于其他翻译引擎,建议进行人工审核以确认准确性。"
+         ],
+         "WPML publishes translations immediately, skipping the review process.": [
+            "WPML立即发布翻译，跳过审核过程。"
+         ],
+         "Wait for review": [
+            "等待审核"
+         ],
+         "Recommended with DeepL, Google and Microsoft": [
+            "建议与DeepL、Google和Microsoft一起使用"
+         ],
+         "DeepL, Google, and Microsoft deliver great translations, but we recommend a human review to confirm they are correct. PTC provides Better Than Human Translations that understand context, so you can confidently skip the review process.": [
+            "DeepL、Google 和 Microsoft 提供出色的翻译,但我们建议进行人工审核以确认其正确性。PTC 提供优于人工的翻译,能够理解语境,因此你可以放心地跳过审核过程。"
+         ],
+         "WPML keeps translations unpublished, so you can review them first.": [
+            "WPML保持翻译未发布状态，以便您先进行审核。"
+         ],
+         "Your translators review and approve translations before publishing.": [
+            "您的翻译人员在发布前审核并批准翻译。"
+         ],
+         "Publish and mark for review": [
+            "发布并标记为待审核"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "WPML立即发布翻译，但标记它们以便您在方便时检查。"
+         ],
+         "WPML publishes translations immediately but flags them for translators to review later.": [
+            "WPML立即发布翻译，但标记它们以供翻译人员稍后审核。"
+         ]
+      }
+   }
+}

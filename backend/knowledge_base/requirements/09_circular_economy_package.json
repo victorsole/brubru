@@ -1,0 +1,2133 @@
+{
+  "cluster_id": 9,
+  "cluster_name": "Circular Economy Package",
+  "policy_area": "Environment",
+  "description": "Waste reduction, recycling, and circular economy legislation",
+  "applicability": "Manufacturers, waste management, product design",
+  "extraction_date": "2025-12-31T23:42:03.959147",
+  "total_laws": 41,
+  "total_requirements": 122,
+  "requirements": [
+    {
+      "article": "Article 41(4)",
+      "requirement_text": "Products covered by a delegated act adopted pursuant to Article 4 which have been awarded the EU Ecolabel pursuant to Regulation (EC) No 66/2010 shall be presumed to comply with the ecodesign requirements set out in that delegated act to the extent that those requirements are covered by the EU Ecolabel criteria established pursuant to Article 8 of that Regulation",
+      "applicable_entity": "products with EU Ecolabel",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "EU Ecolabel",
+        "ecodesign requirements",
+        "delegated act",
+        "compliance presumption"
+      ],
+      "law_id": 2616,
+      "law_celex": "32025R90356",
+      "law_title": "Corrigendum to Regulation (EU) 2024/1781 of the European Parliament and of the Council of 13 June 2024 establishing a framework for the setting of ecodesign requirements for sustainable products, amending Directive (EU) 2020/1828 and Regulation (EU) 2023/1542 and repealing Directive 2009/125/EC (Official Journal of the European Union L, 2024/1781, 28 June 2024)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 65(3)",
+      "requirement_text": "Targets shall require, on an annual or multiannual basis, a minimum percentage of 50% of procurement conducted at the level of contracting authorities or contracting entities, or at an aggregated national level, of the most environmentally sustainable products",
+      "applicable_entity": "contracting authorities and contracting entities",
+      "criticality": "critical",
+      "deadline_text": "on an annual or multiannual basis",
+      "keywords": [
+        "procurement targets",
+        "50% minimum",
+        "environmentally sustainable products",
+        "contracting authorities"
+      ],
+      "law_id": 2616,
+      "law_celex": "32025R90356",
+      "law_title": "Corrigendum to Regulation (EU) 2024/1781 of the European Parliament and of the Council of 13 June 2024 establishing a framework for the setting of ecodesign requirements for sustainable products, amending Directive (EU) 2020/1828 and Regulation (EU) 2023/1542 and repealing Directive 2009/125/EC (Official Journal of the European Union L, 2024/1781, 28 June 2024)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 69(5)",
+      "requirement_text": "The information to be provided to the Commission and the other Member States in accordance with paragraph 4 of this Article shall be communicated through the information and communication system referred to in Article 34 of Regulation (EU) 2019/1020 and shall include all available details, in particular the data necessary for the identification of the non-compliant product, the origin of the product, the nature of the non-compliance alleged and the risk involved",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "information communication",
+        "non-compliant product",
+        "member states",
+        "Commission",
+        "risk assessment"
+      ],
+      "law_id": 2616,
+      "law_celex": "32025R90356",
+      "law_title": "Corrigendum to Regulation (EU) 2024/1781 of the European Parliament and of the Council of 13 June 2024 establishing a framework for the setting of ecodesign requirements for sustainable products, amending Directive (EU) 2020/1828 and Regulation (EU) 2023/1542 and repealing Directive 2009/125/EC (Official Journal of the European Union L, 2024/1781, 28 June 2024)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The criteria set out in Section 1 of the Annex shall be taken into account by port reception facilities or port authorities when calculating the reduction of the fee in accordance with Article 8(5), first subparagraph, point (b) of Directive (EU) 2019/883",
+      "applicable_entity": "port reception facilities or port authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "criteria",
+        "Section 1",
+        "Annex",
+        "fee reduction",
+        "port reception facilities",
+        "port authorities",
+        "waste management"
+      ],
+      "law_id": 3085,
+      "law_celex": "32022R0091",
+      "law_title": "Commission Implementing Regulation (EU) 2022/91 of 21 January 2022 defining the criteria for determining that a ship produces reduced quantities of waste and manages its waste in a sustainable and environmentally sound manner in accordance with Directive (EU) 2019/883 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall be binding in its entirety and directly applicable in all Member States",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "binding",
+        "directly applicable",
+        "Member States",
+        "regulation"
+      ],
+      "law_id": 3085,
+      "law_celex": "32022R0091",
+      "law_title": "Commission Implementing Regulation (EU) 2022/91 of 21 January 2022 defining the criteria for determining that a ship produces reduced quantities of waste and manages its waste in a sustainable and environmentally sound manner in accordance with Directive (EU) 2019/883 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The position to be taken on the Union's behalf at the fifteenth meeting of the Conference of the Parties to the Basel Convention shall be not to support the proposal by the Russian Federation to amend paragraph 2 of Article 6 of the Convention",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "at the fifteenth meeting of the Conference of the Parties",
+      "keywords": [
+        "Basel Convention",
+        "Conference of the Parties",
+        "amendment",
+        "Russian Federation proposal"
+      ],
+      "law_id": 3118,
+      "law_celex": "32022D1025",
+      "law_title": "Council Decision (EU) 2022/1025 of 2 June 2022 on the position to be taken on behalf of the European Union at the fifteenth meeting of the Conference of the Parties to the Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal with regard to certain amendments to paragraph 2 of Article 6 of that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "The Union shall put forward an initiative or support initiatives by other Parties to the Convention to improve the functioning of the prior informed consent procedure, set out in Article 6 of the Convention, at the fifteenth meeting of the Conference of the Parties to the Convention, provided that such initiatives meet the specified conditions",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "at the fifteenth meeting of the Conference of the Parties to the Convention",
+      "keywords": [
+        "prior informed consent",
+        "initiative",
+        "Basel Convention",
+        "waste management",
+        "circular economy"
+      ],
+      "law_id": 3118,
+      "law_celex": "32022D1025",
+      "law_title": "Council Decision (EU) 2022/1025 of 2 June 2022 on the position to be taken on behalf of the European Union at the fifteenth meeting of the Conference of the Parties to the Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal with regard to certain amendments to paragraph 2 of Article 6 of that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The amounts of food waste shall be measured separately for the following stages of the food supply chain: (a) primary production; (b) processing and manufacturing; (c) retail and other distribution of food; (d) restaurants and food services; (e) households.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "food waste",
+        "measurement",
+        "stages",
+        "food supply chain"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "Food waste shall be attributed to each of the stages of the food supply chain referred to in paragraph 1 in accordance with Annex I.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "food waste",
+        "attribution",
+        "stages",
+        "Annex I"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(4)",
+      "requirement_text": "The measurement of food waste shall not cover the following items: (a) agricultural material referred to in Article 2(1)(f) of Directive 2008/98/EC; (b) animal by-products referred to in Article 2(2)(b) of Directive 2008/98/EC; (c) food waste residues collected within packaging waste classified under waste code 15 01; (d) food waste residues collected within waste classified under waste code 20 03 03; (e) non-food materials that are mixed together with food waste when collected, to the extent possible.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "measurement exclusions",
+        "agricultural material",
+        "animal by-products",
+        "packaging waste"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(5)",
+      "requirement_text": "The measurement of food waste shall not cover the following items: (a) food waste drained as or with wastewater; (b) substances that are destined for use as feed materials referred to in Article 2(2)(e) of Directive 2008/98/EC.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "measurement exclusions",
+        "wastewater",
+        "feed materials"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "Member States shall measure each year the amount of food waste generated in a full calendar year.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "each year",
+      "keywords": [
+        "annual measurement",
+        "food waste",
+        "calendar year"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "Member States shall measure the amount of food waste for a given stage of the food supply chain using the methodology set out in Annex III at least once every four years.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "at least once every four years",
+      "keywords": [
+        "methodology",
+        "Annex III",
+        "four years",
+        "food supply chain"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "When the methodology set out in Annex III is not used, Member States shall measure the amount of food waste for a given stage of the food supply chain using the methodology set out in Annex IV.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "methodology",
+        "Annex IV",
+        "alternative measurement"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(4)",
+      "requirement_text": "For the first reporting period, as referred to in the third subparagraph of Article 37(3) of Directive 2008/98/EC, Member States shall measure the amount of food waste for all stages of the food supply chain using the methodology set out in Annex III.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "for the first reporting period",
+      "keywords": [
+        "first reporting period",
+        "methodology",
+        "Annex III",
+        "all stages"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(5)",
+      "requirement_text": "The amounts of food waste shall be measured in metric tons of fresh mass.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "metric tons",
+        "fresh mass",
+        "measurement unit"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 4(1)",
+      "requirement_text": "Member States shall take appropriate measures to ensure the reliability and accuracy of the measurements of food waste.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "reliability",
+        "accuracy",
+        "measurements",
+        "appropriate measures"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 4(1)(a)",
+      "requirement_text": "Member States shall ensure that the measurements conducted in accordance with the methodology set out in Annex III are based on a representative sample of the population to which its results are applied, and adequately reflect the variations in the data on food waste amounts to be measured.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "representative sample",
+        "population",
+        "variations",
+        "Annex III methodology"
+      ],
+      "law_id": 4099,
+      "law_celex": "32019L1597",
+      "law_title": "Commission Delegated Decision (EU) 2019/1597 of 3 May 2019 supplementing Directive 2008/98/EC of the European Parliament and of the Council as regards a common methodology and minimum quality requirements for the uniform measurement of levels of food waste (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Annex II footnote (*)",
+      "requirement_text": "The value of HDD (Heating Degree Days) should be taken as the average of annual HDD values for the incineration facility location, calculated for a period of 20 consecutive years before the year for which CCF is calculated",
+      "applicable_entity": "operators of incineration facilities",
+      "criticality": "important",
+      "deadline_text": "20 consecutive years before the year for which CCF is calculated",
+      "keywords": [
+        "HDD",
+        "heating degree days",
+        "incineration facility",
+        "CCF calculation",
+        "20 consecutive years"
+      ],
+      "law_id": 5172,
+      "law_celex": null,
+      "law_title": "Corrigendum to Commission Directive (EU) 2015/1127 of 10 July 2015 amending Annex II to Directive 2008/98/EC of the European Parliament and of the Council on waste and repealing certain Directives (Official Journal of the European Union L 184 of 11 July 2015)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Annex II footnote (*)",
+      "requirement_text": "For the calculation of the value of HDD the following method established by Eurostat should be applied: HDD is equal to (18 °C – Tm) × d if Tm is lower than or equal to 15 °C (heating threshold) and is nil if Tm is greater than 15 °C; where Tm is the mean (Tmin + Tmax)/2 outdoor temperature over a period of d days",
+      "applicable_entity": "operators of incineration facilities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "HDD calculation",
+        "Eurostat method",
+        "heating threshold",
+        "outdoor temperature",
+        "daily basis"
+      ],
+      "law_id": 5172,
+      "law_celex": null,
+      "law_title": "Corrigendum to Commission Directive (EU) 2015/1127 of 10 July 2015 amending Annex II to Directive 2008/98/EC of the European Parliament and of the Council on waste and repealing certain Directives (Official Journal of the European Union L 184 of 11 July 2015)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Annex II footnote (*)",
+      "requirement_text": "Calculations are to be executed on a daily basis (d = 1), added up to a year",
+      "applicable_entity": "operators of incineration facilities",
+      "criticality": "important",
+      "deadline_text": "daily basis, added up to a year",
+      "keywords": [
+        "daily calculations",
+        "annual aggregation",
+        "HDD calculations"
+      ],
+      "law_id": 5172,
+      "law_celex": null,
+      "law_title": "Corrigendum to Commission Directive (EU) 2015/1127 of 10 July 2015 amending Annex II to Directive 2008/98/EC of the European Parliament and of the Council on waste and repealing certain Directives (Official Journal of the European Union L 184 of 11 July 2015)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The Annex to Implementing Decision (EU) 2016/2323 is replaced by the text in the Annex to this Decision.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "annex",
+        "replacement",
+        "European List",
+        "ship recycling facilities"
+      ],
+      "law_id": 7040,
+      "law_celex": "32018R1906",
+      "law_title": "Commission Implementing Decision (EU) 2018/1906 of 30 November 2018 amending Implementing Decision (EU) 2016/2323 to update the European List of ship recycling facilities established pursuant to Regulation (EU) No 1257/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the third day following that of its publication in the Official Journal of the European Union.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "on the third day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal",
+        "deadline"
+      ],
+      "law_id": 7040,
+      "law_celex": "32018R1906",
+      "law_title": "Commission Implementing Decision (EU) 2018/1906 of 30 November 2018 amending Implementing Decision (EU) 2016/2323 to update the European List of ship recycling facilities established pursuant to Regulation (EU) No 1257/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "regulation itself",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal",
+        "European Union"
+      ],
+      "law_id": 7168,
+      "law_celex": "32023R0003",
+      "law_title": "Commission Regulation (EU) 2023/3 of 3 January 2023 correcting the German language version of Regulation (EU) 2019/1781 laying down ecodesign requirements for electric motors and variable speed drives pursuant to Directive 2009/125/EC of the European Parliament and of the Council, amending Regulation (EC) No 641/2009 with regard to ecodesign requirements for glandless standalone circulators and glandless circulators integrated in products (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall be binding in its entirety and directly applicable in all Member States",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "binding",
+        "directly applicable",
+        "member states",
+        "regulation"
+      ],
+      "law_id": 7168,
+      "law_celex": "32023R0003",
+      "law_title": "Commission Regulation (EU) 2023/3 of 3 January 2023 correcting the German language version of Regulation (EU) 2019/1781 laying down ecodesign requirements for electric motors and variable speed drives pursuant to Directive 2009/125/EC of the European Parliament and of the Council, amending Regulation (EC) No 641/2009 with regard to ecodesign requirements for glandless standalone circulators and glandless circulators integrated in products (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(a)",
+      "requirement_text": "The Union shall not support the proposal for amendments to Article 6(2) of the Convention, as submitted by the Russian Federation",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "at the sixteenth meetings of the Conference of the Parties to the Basel Convention",
+      "keywords": [
+        "Basel Convention",
+        "amendments",
+        "Article 6(2)",
+        "Russian Federation",
+        "support prohibition"
+      ],
+      "law_id": 7726,
+      "law_celex": "32023D1007",
+      "law_title": "Council Decision (EU) 2023/1007 of 25 April 2023 on the position to be taken on behalf of the European Union at the sixteenth meeting of the Conference of the Parties to the Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal with regard to certain amendments of Articles and Annexes in that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(b)",
+      "requirement_text": "The Union shall continue to support the adoption of amendments to Annex IV and certain entries in Annexes II and IX of the Convention",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "at the sixteenth meetings of the Conference of the Parties to the Basel Convention",
+      "keywords": [
+        "Basel Convention",
+        "Annex IV",
+        "Annex II",
+        "Annex IX",
+        "amendments",
+        "support obligation"
+      ],
+      "law_id": 7726,
+      "law_celex": "32023D1007",
+      "law_title": "Council Decision (EU) 2023/1007 of 25 April 2023 on the position to be taken on behalf of the European Union at the sixteenth meeting of the Conference of the Parties to the Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal with regard to certain amendments of Articles and Annexes in that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3",
+      "requirement_text": "This Decision shall enter into force on the date of its adoption",
+      "applicable_entity": "Council Decision",
+      "criticality": "critical",
+      "deadline_text": "on the date of its adoption",
+      "keywords": [
+        "entry into force",
+        "adoption date",
+        "Council Decision"
+      ],
+      "law_id": 7726,
+      "law_celex": "32023D1007",
+      "law_title": "Council Decision (EU) 2023/1007 of 25 April 2023 on the position to be taken on behalf of the European Union at the sixteenth meeting of the Conference of the Parties to the Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal with regard to certain amendments of Articles and Annexes in that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "This Regulation establishes ecodesign requirements for the placing on the market or the putting into service of electrical mains-operated welding equipment",
+      "applicable_entity": "manufacturers and importers of welding equipment",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ecodesign requirements",
+        "placing on market",
+        "welding equipment",
+        "electrical mains-operated"
+      ],
+      "law_id": 8074,
+      "law_celex": "32019R1784",
+      "law_title": "Commission Regulation (EU) 2019/1784 of 1 October 2019 laying down ecodesign requirements for welding equipment pursuant to Directive 2009/125/EC of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "This Regulation shall apply to welding equipment using one or more of the specified welding and allied processes",
+      "applicable_entity": "manufacturers and importers of welding equipment",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "welding equipment",
+        "manual metal arc welding",
+        "shielded metal arc welding",
+        "flux-cored welding",
+        "plasma arc cutting"
+      ],
+      "law_id": 8074,
+      "law_celex": "32019R1784",
+      "law_title": "Commission Regulation (EU) 2019/1784 of 1 October 2019 laying down ecodesign requirements for welding equipment pursuant to Directive 2009/125/EC of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(3)",
+      "requirement_text": "This Regulation shall not apply to welding equipment using submerged arc welding, limited-duty arc welding, resistance welding, or stud welding",
+      "applicable_entity": "manufacturers and importers of welding equipment",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exclusions",
+        "submerged arc welding",
+        "limited-duty arc welding",
+        "resistance welding",
+        "stud welding"
+      ],
+      "law_id": 8074,
+      "law_celex": "32019R1784",
+      "law_title": "Commission Regulation (EU) 2019/1784 of 1 October 2019 laying down ecodesign requirements for welding equipment pursuant to Directive 2009/125/EC of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The position to be taken on the Union's behalf at the 22nd meeting of the Contracting Parties to the Barcelona Convention and its Protocols shall be to support the adoption of a decision adopting Regional Plans on urban wastewater treatment and sewage sludge management in the framework of Article 15 of the Protocol for the Protection of the Mediterranean Sea against Pollution from Land-Based Sources and Activities.",
+      "applicable_entity": "European Union representatives",
+      "criticality": "critical",
+      "deadline_text": "at the 22nd meeting of the Contracting Parties to the Barcelona Convention and its Protocols",
+      "keywords": [
+        "position",
+        "support",
+        "adoption",
+        "Regional Plans",
+        "urban wastewater treatment",
+        "sewage sludge management",
+        "Barcelona Convention",
+        "LBS Protocol"
+      ],
+      "law_id": 8393,
+      "law_celex": "32022D0014",
+      "law_title": "Council Decision (EU) 2022/14 of 2 December 2021 on the position to be taken on behalf of the European Union at the 22nd meeting of the Contracting Parties to the Convention for the Protection of the Marine Environment and the Coastal Region of the Mediterranean (Barcelona Convention) and its Protocols as regards the adoption of a decision to adopt Regional Plans on Urban Wastewater Treatment and Sewage Sludge Management in the framework of Article 15 of the Protocol for the Protection of the Mediterranean Sea against Pollution from Land-Based Sources and Activities (LBS Protocol)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "Refinement of the position referred to in Article 1 may be agreed to by the representatives of the Union, in consultation with Member States, during on-the-spot coordination meetings without a further decision of the Council.",
+      "applicable_entity": "European Union representatives",
+      "criticality": "important",
+      "deadline_text": "during on-the-spot coordination meetings",
+      "keywords": [
+        "refinement",
+        "position",
+        "consultation",
+        "Member States",
+        "coordination meetings"
+      ],
+      "law_id": 8393,
+      "law_celex": "32022D0014",
+      "law_title": "Council Decision (EU) 2022/14 of 2 December 2021 on the position to be taken on behalf of the European Union at the 22nd meeting of the Contracting Parties to the Convention for the Protection of the Marine Environment and the Coastal Region of the Mediterranean (Barcelona Convention) and its Protocols as regards the adoption of a decision to adopt Regional Plans on Urban Wastewater Treatment and Sewage Sludge Management in the framework of Article 15 of the Protocol for the Protection of the Mediterranean Sea against Pollution from Land-Based Sources and Activities (LBS Protocol)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The Annex to Implementing Decision (EU) 2016/2323 is replaced by the text in the Annex to this Decision",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "annex replacement",
+        "implementing decision",
+        "european list",
+        "ship recycling facilities"
+      ],
+      "law_id": 9203,
+      "law_celex": "32021R1211",
+      "law_title": "Commission Implementing Decision (EU) 2021/1211 of 22 July 2021 amending Implementing Decision (EU) 2016/2323 establishing the European List of ship recycling facilities pursuant to Regulation (EU) No 1257/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "official journal",
+        "twentieth day"
+      ],
+      "law_id": 9203,
+      "law_celex": "32021R1211",
+      "law_title": "Commission Implementing Decision (EU) 2021/1211 of 22 July 2021 amending Implementing Decision (EU) 2016/2323 establishing the European List of ship recycling facilities pursuant to Regulation (EU) No 1257/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The position to be taken on the Union's behalf at the fourteenth meeting of the Conference of the Parties to the Basel Convention shall be to support the adoption of the amendments to Annexes II, VIII and IX to the Convention to add and revise entries concerning plastic waste, subject to specified considerations",
+      "applicable_entity": "European Union representatives",
+      "criticality": "critical",
+      "deadline_text": "at the fourteenth meeting of the Conference of the Parties",
+      "keywords": [
+        "Basel Convention",
+        "Conference of the Parties",
+        "plastic waste",
+        "Annexes II VIII IX",
+        "amendments"
+      ],
+      "law_id": 10337,
+      "law_celex": "32019D0638",
+      "law_title": "Council Decision (EU) 2019/638 of 15 April 2019 on the position to be taken on behalf of the European Union at the fourteenth meeting of the Conference of the Parties with regard to certain amendments to Annexes II, VIII and IX to the Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "In case the addition of a new entry for non-hazardous plastic waste in Annex II or the revision of entry B3010 in Annex IX to the Convention, or both, are adopted at the fourteenth meeting of the Conference of the Parties to the Convention, the Union shall, as far as necessary, take the steps required under the OECD Decision and Article 11 of the Convention to ensure that the current controls on shipments of non-hazardous plastic waste, including certain mixtures of non-hazardous plastic waste within the Union and the EEA, remain unaffected",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "as far as necessary following adoption at the fourteenth meeting",
+      "keywords": [
+        "non-hazardous plastic waste",
+        "Annex II",
+        "entry B3010",
+        "Annex IX",
+        "OECD Decision",
+        "Article 11",
+        "shipments",
+        "EEA"
+      ],
+      "law_id": 10337,
+      "law_celex": "32019D0638",
+      "law_title": "Council Decision (EU) 2019/638 of 15 April 2019 on the position to be taken on behalf of the European Union at the fourteenth meeting of the Conference of the Parties with regard to certain amendments to Annexes II, VIII and IX to the Basel Convention on the Control of Transboundary Movements of Hazardous Wastes and their Disposal",
+      "cluster_id": 9
+    },
+    {
+      "article": "Recital 9",
+      "requirement_text": "Commission Regulation (EC) No 1275/2008 that does not apply to televisions, should no longer apply to the additional electronic displays types covered by the scope of this Regulation. Regulation (EC) No 1275/2008 should be amended accordingly.",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "amendment",
+        "regulation",
+        "electronic displays",
+        "standby mode",
+        "networked standby",
+        "off mode"
+      ],
+      "law_id": 11222,
+      "law_celex": "32019R2021",
+      "law_title": "Commission Regulation (EU) 2019/2021 of 1 October 2019 laying down ecodesign requirements for electronic displays pursuant to Directive 2009/125/EC of the European Parliament and of the Council, amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EC) No 642/2009 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Annex III",
+      "requirement_text": "The methods to be used are described in Commission Regulation (EC) No 440/2008 and in other relevant CEN notes or other internationally recognised test methods and guidelines",
+      "applicable_entity": "entities conducting waste hazardous property tests",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "test methods",
+        "Commission Regulation 440/2008",
+        "CEN notes",
+        "internationally recognised test methods",
+        "waste testing",
+        "hazardous properties"
+      ],
+      "law_id": 11299,
+      "law_celex": null,
+      "law_title": "Corrigendum to Commission Regulation (EU) No 1357/2014 of 18 December 2014 replacing Annex III to Directive 2008/98/EC of the European Parliament and of the Council on waste and repealing certain Directives (Official Journal of the European Union L 365 of 19 December 2014)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "Supporting documents relating to the own resource based on non-recycled plastic packaging waste shall be kept by the Member States until 31 July of the fifth year following the financial year in question",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "until 31 July of the fifth year following the financial year in question",
+      "keywords": [
+        "supporting documents",
+        "plastic packaging waste",
+        "record keeping",
+        "retention period"
+      ],
+      "law_id": 11354,
+      "law_celex": "32021R0770",
+      "law_title": "Council Regulation (EU, Euratom) 2021/770 of 30 April 2021 on the calculation of the own resource based on plastic packaging waste that is not recycled, on the methods and procedure for making available that own resource, on the measures to meet cash requirements, and on certain aspects of the own resource based on gross national income",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "Documents shall be kept beyond the time limit provided for in paragraph 1 for a sufficient period to permit the correction or adjustment to be made and monitored when verification shows that a correction or adjustment is required",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "for a sufficient period to permit the correction or adjustment to be made and monitored",
+      "keywords": [
+        "document retention",
+        "correction",
+        "adjustment",
+        "verification",
+        "monitoring"
+      ],
+      "law_id": 11354,
+      "law_celex": "32021R0770",
+      "law_title": "Council Regulation (EU, Euratom) 2021/770 of 30 April 2021 on the calculation of the own resource based on plastic packaging waste that is not recycled, on the methods and procedure for making available that own resource, on the measures to meet cash requirements, and on certain aspects of the own resource based on gross national income",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "Member State shall transmit the supporting documents necessary for the financial follow-up to the Commission within two months after settlement of disputes",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "within two months after that settlement",
+      "keywords": [
+        "supporting documents",
+        "financial follow-up",
+        "dispute settlement",
+        "transmission to Commission"
+      ],
+      "law_id": 11354,
+      "law_celex": "32021R0770",
+      "law_title": "Council Regulation (EU, Euratom) 2021/770 of 30 April 2021 on the calculation of the own resource based on plastic packaging waste that is not recycled, on the methods and procedure for making available that own resource, on the measures to meet cash requirements, and on certain aspects of the own resource based on gross national income",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "Each Member State shall inform the Commission of the names of the departments or agencies responsible for calculating, establishing, making available and controlling the own resource based on non-recycled plastic packaging waste",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "inform Commission",
+        "responsible departments",
+        "agencies",
+        "plastic packaging waste",
+        "own resource"
+      ],
+      "law_id": 11354,
+      "law_celex": "32021R0770",
+      "law_title": "Council Regulation (EU, Euratom) 2021/770 of 30 April 2021 on the calculation of the own resource based on plastic packaging waste that is not recycled, on the methods and procedure for making available that own resource, on the measures to meet cash requirements, and on certain aspects of the own resource based on gross national income",
+      "cluster_id": 9
+    },
+    {
+      "article": "Annex 1, Part A",
+      "requirement_text": "Must report total amounts of fishing gear and its components placed on the market using the specified format with mandatory reporting for total amounts in white cells",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "fishing gear",
+        "reporting",
+        "mandatory",
+        "market placement",
+        "total amounts"
+      ],
+      "law_id": 11730,
+      "law_celex": null,
+      "law_title": "Corrigendum to Commission Implementing Decision (EU) 2021/958 of 31 May 2021 laying down the format for reporting data and information on fishing gear placed on the market and waste fishing gear collected in Member States and the format for the quality check report in accordance with Articles 13(1)(d) and 13(2) of Directive (EU) 2019/904 of the European Parliament and of the Council (Official Journal of the European Union L 211 of 15 June 2021)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Annex 1, Part B",
+      "requirement_text": "Must report total amounts of waste fishing gear collected using the specified format with mandatory reporting for total amounts in white cells, including any fishing gear containing plastics and separate components that were part of such gear when discarded, abandoned or lost",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "waste fishing gear",
+        "reporting",
+        "mandatory",
+        "collection",
+        "plastics",
+        "discarded",
+        "abandoned",
+        "lost"
+      ],
+      "law_id": 11730,
+      "law_celex": null,
+      "law_title": "Corrigendum to Commission Implementing Decision (EU) 2021/958 of 31 May 2021 laying down the format for reporting data and information on fishing gear placed on the market and waste fishing gear collected in Member States and the format for the quality check report in accordance with Articles 13(1)(d) and 13(2) of Directive (EU) 2019/904 of the European Parliament and of the Council (Official Journal of the European Union L 211 of 15 June 2021)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Member States shall report the data and submit the quality check report concerning the implementation of Article 9(5) of Directive 2008/98/EC in the format laid down in the Annex to this Decision",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "reporting",
+        "data",
+        "quality check report",
+        "food waste",
+        "format",
+        "Annex"
+      ],
+      "law_id": 11887,
+      "law_celex": "32019L2000",
+      "law_title": "Commission Implementing Decision (EU) 2019/2000 of 28 November 2019 laying down a format for reporting of data on food waste and for submission of the quality check report in accordance with Directive 2008/98/EC of the European Parliament and of the Council (notified under document C(2019) 8577) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The position to be taken on the Union's behalf in the second segment of the fourth meeting of the Conference of the Parties to the Convention shall be to support the adoption of a Decision on thresholds for contaminated mercury waste that is consistent with the Union acquis",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "in the second segment of the fourth meeting of the Conference of the Parties to the Convention",
+      "keywords": [
+        "position",
+        "Conference of the Parties",
+        "mercury waste",
+        "thresholds",
+        "Union acquis"
+      ],
+      "law_id": 12006,
+      "law_celex": "32022D0550",
+      "law_title": "Council Decision (EU) 2022/550 of 17 March 2022 on the position to be taken on behalf of the European Union at the second segment of the fourth meeting of the Conference of the Parties to the Minamata Convention on Mercury as regards the adoption of a Decision establishing thresholds for mercury waste, in accordance with Article 11(2) of that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the date of its adoption",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "on the date of its adoption",
+      "keywords": [
+        "enter into force",
+        "adoption",
+        "Decision"
+      ],
+      "law_id": 12006,
+      "law_celex": "32022D0550",
+      "law_title": "Council Decision (EU) 2022/550 of 17 March 2022 on the position to be taken on behalf of the European Union at the second segment of the fourth meeting of the Conference of the Parties to the Minamata Convention on Mercury as regards the adoption of a Decision establishing thresholds for mercury waste, in accordance with Article 11(2) of that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The European List of ship recycling facilities pursuant to Article 16(1) of Regulation (EU) No 1257/2013 shall be established as set out in the Annex to this Decision.",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "European List",
+        "ship recycling facilities",
+        "establishment",
+        "annex"
+      ],
+      "law_id": 13546,
+      "law_celex": "32016R2323",
+      "law_title": "Commission Implementing Decision (EU) 2016/2323 of 19 December 2016 establishing the European List of ship recycling facilities pursuant to Regulation (EU) No 1257/2013 of the European Parliament and of the Council on ship recycling (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The position to be taken on behalf of the European Union at the second meeting of the Conference of the Parties to the Minamata Convention on Mercury (COP2) shall be to support the adoption of the guidelines on the environmentally sound interim storage of mercury, other than waste mercury, referred to in Article 10(2) and (3) of the Convention, as contained in the documents submitted for adoption at COP2.",
+      "applicable_entity": "European Union representatives",
+      "criticality": "critical",
+      "deadline_text": "at the second meeting of the Conference of the Parties to the Minamata Convention on Mercury (COP2)",
+      "keywords": [
+        "COP2",
+        "guidelines",
+        "mercury storage",
+        "Minamata Convention",
+        "support adoption"
+      ],
+      "law_id": 14325,
+      "law_celex": "32018D1730",
+      "law_title": "Council Decision (EU) 2018/1730 of 12 November 2018 on the position to be taken on behalf of the European Union at the second meeting of the Conference of the Parties to the Minamata Convention on Mercury with regard to the adoption of guidelines on the environmentally sound interim storage of mercury, other than waste mercury, referred to in Article 10(2) and (3) of the Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The Annex to Implementing Decision (EU) 2016/2323 is replaced by the text in the Annex to this Decision",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "annex",
+        "replacement",
+        "implementing decision",
+        "European List"
+      ],
+      "law_id": 14746,
+      "law_celex": "32022R2462",
+      "law_title": "Commission Implementing Decision (EU) 2022/2462 of 14 December 2022 amending Commission Implementing Decision (EU) 2016/2323 establishing the European List of ship recycling facilities pursuant to Regulation (EU) No 1257/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "European Union institutions",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal",
+        "twenty days"
+      ],
+      "law_id": 14746,
+      "law_celex": "32022R2462",
+      "law_title": "Commission Implementing Decision (EU) 2022/2462 of 14 December 2022 amending Commission Implementing Decision (EU) 2016/2323 establishing the European List of ship recycling facilities pursuant to Regulation (EU) No 1257/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 4(2)",
+      "requirement_text": "Member States shall appoint their representatives and shall ensure that their representatives provide a high level of expertise in compiling statistics on plastic packaging waste",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "appoint",
+        "representatives",
+        "expertise",
+        "plastic packaging waste",
+        "statistics"
+      ],
+      "law_id": 15148,
+      "law_celex": null,
+      "law_title": "Commission Decision of 11 August 2021 on setting up the Commission expert group on statistics on plastic packaging waste",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 6(6)",
+      "requirement_text": "Minutes on the discussion on each point on the agenda and on the opinions delivered by the SPPW expert group shall be meaningful and complete. Minutes shall be drafted by the secretariat under the responsibility of the Chair",
+      "applicable_entity": "Commission (Eurostat) secretariat and Chair",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "minutes",
+        "meaningful",
+        "complete",
+        "secretariat",
+        "Chair"
+      ],
+      "law_id": 15148,
+      "law_celex": null,
+      "law_title": "Commission Decision of 11 August 2021 on setting up the Commission expert group on statistics on plastic packaging waste",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 6(7)",
+      "requirement_text": "The SPPW expert group shall adopt its opinions, recommendations or reports where possible by consensus",
+      "applicable_entity": "SPPW expert group",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "adopt",
+        "opinions",
+        "recommendations",
+        "reports",
+        "consensus"
+      ],
+      "law_id": 15148,
+      "law_celex": null,
+      "law_title": "Commission Decision of 11 August 2021 on setting up the Commission expert group on statistics on plastic packaging waste",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 10",
+      "requirement_text": "The SPPW expert group shall adopt its rules of procedure by simple majority of its members, on the basis of the standard rules of procedure for expert groups, in compliance with the horizontal rules",
+      "applicable_entity": "SPPW expert group",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "adopt",
+        "rules of procedure",
+        "simple majority",
+        "horizontal rules"
+      ],
+      "law_id": 15148,
+      "law_celex": null,
+      "law_title": "Commission Decision of 11 August 2021 on setting up the Commission expert group on statistics on plastic packaging waste",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 11(2)",
+      "requirement_text": "The members of the SPPW expert group and their representatives, as well as invited experts and observers shall respect the statistical confidentiality, laid down in Regulation (EC) No 223/2009, and in particular in Article 20 (Protection of confidential data) thereof",
+      "applicable_entity": "SPPW expert group members, representatives, invited experts, and observers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "statistical confidentiality",
+        "protection",
+        "confidential data",
+        "members",
+        "representatives",
+        "experts",
+        "observers"
+      ],
+      "law_id": 15148,
+      "law_celex": null,
+      "law_title": "Commission Decision of 11 August 2021 on setting up the Commission expert group on statistics on plastic packaging waste",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 12(1)",
+      "requirement_text": "The SPPW expert group and its sub-groups shall be registered in the Register of Commission expert groups and other similar entities. The name of the Member States' authorities and the names of observers shall be published on the Register of expert groups",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "register",
+        "expert groups",
+        "publish",
+        "Member States",
+        "observers"
+      ],
+      "law_id": 15148,
+      "law_celex": null,
+      "law_title": "Commission Decision of 11 August 2021 on setting up the Commission expert group on statistics on plastic packaging waste",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 12(2)",
+      "requirement_text": "All relevant documents, including the agendas, the minutes and the participants' submissions, shall be made available after the meetings via a link from the Register of expert groups to a dedicated website. The agenda shall be published in due time ahead of the meeting, followed by timely publication of minutes",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "in due time ahead of the meeting, followed by timely publication",
+      "keywords": [
+        "documents",
+        "agendas",
+        "minutes",
+        "submissions",
+        "publish",
+        "dedicated website",
+        "timely"
+      ],
+      "law_id": 15148,
+      "law_celex": null,
+      "law_title": "Commission Decision of 11 August 2021 on setting up the Commission expert group on statistics on plastic packaging waste",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "Establishes ecodesign requirements for placing on the market and putting into service solid fuel boilers with a rated heat output of 500 kilowatt or less, including those integrated in packages",
+      "applicable_entity": "manufacturers and suppliers of solid fuel boilers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ecodesign requirements",
+        "placing on market",
+        "solid fuel boilers",
+        "rated heat output"
+      ],
+      "law_id": 15205,
+      "law_celex": "32015R1189",
+      "law_title": "Commission Regulation (EU) 2015/1189 of 28 April 2015 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for solid fuel boilers (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)(a)",
+      "requirement_text": "This Regulation shall not apply to boilers generating heat exclusively for providing hot drinking or sanitary water",
+      "applicable_entity": "manufacturers and suppliers of boilers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exemption",
+        "hot drinking water",
+        "sanitary water",
+        "boilers"
+      ],
+      "law_id": 15205,
+      "law_celex": "32015R1189",
+      "law_title": "Commission Regulation (EU) 2015/1189 of 28 April 2015 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for solid fuel boilers (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)(b)",
+      "requirement_text": "This Regulation shall not apply to boilers for heating and distributing gaseous heat transfer media such as vapour or air",
+      "applicable_entity": "manufacturers and suppliers of boilers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exemption",
+        "gaseous heat transfer",
+        "vapour",
+        "air heating"
+      ],
+      "law_id": 15205,
+      "law_celex": "32015R1189",
+      "law_title": "Commission Regulation (EU) 2015/1189 of 28 April 2015 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for solid fuel boilers (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)(c)",
+      "requirement_text": "This Regulation shall not apply to solid fuel cogeneration boilers with a maximum electrical capacity of 50 kW or more",
+      "applicable_entity": "manufacturers and suppliers of cogeneration boilers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exemption",
+        "cogeneration boilers",
+        "electrical capacity",
+        "50 kW"
+      ],
+      "law_id": 15205,
+      "law_celex": "32015R1189",
+      "law_title": "Commission Regulation (EU) 2015/1189 of 28 April 2015 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for solid fuel boilers (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)(d)",
+      "requirement_text": "This Regulation shall not apply to non-woody biomass boilers",
+      "applicable_entity": "manufacturers and suppliers of biomass boilers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exemption",
+        "non-woody biomass",
+        "biomass boilers"
+      ],
+      "law_id": 15205,
+      "law_celex": "32015R1189",
+      "law_title": "Commission Regulation (EU) 2015/1189 of 28 April 2015 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for solid fuel boilers (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Whereas (14)",
+      "requirement_text": "Manufacturers should provide the information contained in the technical documentation referred to in Annexes IV and V to Directive 2009/125/EC insofar as that information relates to the requirements laid down in this Regulation",
+      "applicable_entity": "manufacturers",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "technical documentation",
+        "compliance checks",
+        "manufacturers",
+        "information provision"
+      ],
+      "law_id": 15205,
+      "law_celex": "32015R1189",
+      "law_title": "Commission Regulation (EU) 2015/1189 of 28 April 2015 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for solid fuel boilers (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Whereas (15)",
+      "requirement_text": "Manufacturers should provide information on disassembly, recycling and disposal",
+      "applicable_entity": "manufacturers",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "disassembly",
+        "recycling",
+        "disposal",
+        "environmental information"
+      ],
+      "law_id": 15205,
+      "law_celex": "32015R1189",
+      "law_title": "Commission Regulation (EU) 2015/1189 of 28 April 2015 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for solid fuel boilers (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "Member States shall apply the formulas laid down in Annex I to calculate the amount of separately collected waste single-use bottles.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "calculation",
+        "formulas",
+        "separately collected",
+        "waste",
+        "single-use bottles"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "The weight of the waste single-use bottles shall include the weight of their caps and lids.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "weight",
+        "caps",
+        "lids",
+        "waste single-use bottles"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "The weight of the waste single-use bottles shall not include the weight of any remaining beverage.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "weight",
+        "remaining beverage",
+        "exclusion"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(5)(a)",
+      "requirement_text": "The quality assurance systems shall take account of the adequacy of personnel, their knowledge and skills, and the organisation of the premises and equipment to the extent necessary to ensure that collected waste single-use bottles comply with the conditions.",
+      "applicable_entity": "waste operators",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality assurance",
+        "personnel",
+        "knowledge",
+        "skills",
+        "premises",
+        "equipment"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(5)(b)",
+      "requirement_text": "The quality assurance systems shall carry out the verifying operations accordance with pre-established instructions and procedures.",
+      "applicable_entity": "waste operators",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality assurance",
+        "verifying operations",
+        "instructions",
+        "procedures"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(5)(c)",
+      "requirement_text": "The quality assurance systems shall be certified by an independent third party.",
+      "applicable_entity": "waste operators",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality assurance",
+        "certification",
+        "independent third party"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(6)",
+      "requirement_text": "The weight of waste single-use bottles collected separately shall be measured at the point where they are collected or at the output of the sorting operations.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "weight measurement",
+        "collection point",
+        "sorting operations"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(7)",
+      "requirement_text": "The weight of waste single-use bottles collected separately in accordance with paragraph 4, point (b), shall be measured at the output of the sorting operations where they are separated from the other waste with which they were collected.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "weight measurement",
+        "sorting operations",
+        "separation"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(8)",
+      "requirement_text": "Where waste single-use bottles and other packaging waste of the same polymer are present at the output of a sorting operation, the weight of the waste single-use bottles shall be proportional to the share of waste single-use bottles at the input of a sorting operation.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "proportional weight",
+        "same polymer",
+        "sorting operation",
+        "representative sampling"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2(8)",
+      "requirement_text": "That share shall be determined based on representative sampling and subsequent compositional analysis or by use of electronic registries.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "representative sampling",
+        "compositional analysis",
+        "electronic registries"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 4(2)",
+      "requirement_text": "The data collection and analysis shall cover the entire territory of a given Member State.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "analysis",
+        "entire territory",
+        "coverage"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5(1)",
+      "requirement_text": "Collection of data to calculate the weight of waste single-use bottles and single-use bottles placed on the market shall be carried out every year.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "every year",
+      "keywords": [
+        "data collection",
+        "weight calculation",
+        "annual",
+        "yearly"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5(1)",
+      "requirement_text": "Member States shall, to the extent possible, use electronic registries to collect and report data.",
+      "applicable_entity": "member states",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "electronic registries",
+        "data collection",
+        "reporting"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5(2)",
+      "requirement_text": "Member States shall report the data in the format laid down in Annex II to this Decision and submit the quality check report in the format laid down in Annex III to this Decision.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "reporting",
+        "data format",
+        "Annex II",
+        "quality check report",
+        "Annex III"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5(3)",
+      "requirement_text": "The Commission shall publish the data reported by the Member States unless a Member State provides a justified request in the report to withhold the publication of certain data.",
+      "applicable_entity": "european commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data publication",
+        "commission",
+        "justified request",
+        "withhold publication"
+      ],
+      "law_id": 12150,
+      "law_celex": "32021L1752",
+      "law_title": "Commission Implementing Decision (EU) 2021/1752 of 1 October 2021 laying down rules for the application of Directive (EU) 2019/904 of the European Parliament and of the Council as regards the calculation, verification and reporting of data on the separate collection of waste single-use plastic beverage bottles",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "This Regulation establishes ecodesign requirements for the placing on the market or the putting into service of electric mains-operated household dishwashers, including built-in household dishwashers and electric mains-operated household dishwashers that can also be powered by batteries.",
+      "applicable_entity": "manufacturers, importers, distributors",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ecodesign requirements",
+        "placing on market",
+        "putting into service",
+        "household dishwashers"
+      ],
+      "law_id": 15896,
+      "law_celex": "32019R2022",
+      "law_title": "Commission Regulation (EU) 2019/2022 of 1 October 2019 laying down ecodesign requirements for household dishwashers pursuant to Directive 2009/125/EC of the European Parliament and of the Council amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EU) No 1016/2010 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)(a)",
+      "requirement_text": "This Regulation shall not apply to dishwashers in the scope of Directive 2006/42/EC",
+      "applicable_entity": "manufacturers, importers, distributors",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exclusion",
+        "Directive 2006/42/EC",
+        "machinery directive"
+      ],
+      "law_id": 15896,
+      "law_celex": "32019R2022",
+      "law_title": "Commission Regulation (EU) 2019/2022 of 1 October 2019 laying down ecodesign requirements for household dishwashers pursuant to Directive 2009/125/EC of the European Parliament and of the Council amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EU) No 1016/2010 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(2)(b)",
+      "requirement_text": "This Regulation shall not apply to battery-operated household dishwashers that can be connected to the mains through an AC/DC converter purchased separately",
+      "applicable_entity": "manufacturers, importers, distributors",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exclusion",
+        "battery-operated",
+        "AC/DC converter"
+      ],
+      "law_id": 15896,
+      "law_celex": "32019R2022",
+      "law_title": "Commission Regulation (EU) 2019/2022 of 1 October 2019 laying down ecodesign requirements for household dishwashers pursuant to Directive 2009/125/EC of the European Parliament and of the Council amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EU) No 1016/2010 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Recital 11",
+      "requirement_text": "The requirements of Commission Regulation (EC) No 1275/2008 should not apply to household dishwashers covered by the scope of this Regulation. Regulation (EC) No 1275/2008 should be amended accordingly.",
+      "applicable_entity": "manufacturers, importers, distributors",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "standby mode",
+        "Regulation 1275/2008",
+        "exclusion"
+      ],
+      "law_id": 15896,
+      "law_celex": "32019R2022",
+      "law_title": "Commission Regulation (EU) 2019/2022 of 1 October 2019 laying down ecodesign requirements for household dishwashers pursuant to Directive 2009/125/EC of the European Parliament and of the Council amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EU) No 1016/2010 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Recital 14",
+      "requirement_text": "manufacturers, importers or authorised representatives should provide information in the technical documentation referred to in Annexes IV and V to Directive 2009/125/EC in so far as that information relates to the requirements laid down in this Regulation",
+      "applicable_entity": "manufacturers, importers, authorised representatives",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "technical documentation",
+        "compliance checks",
+        "Directive 2009/125/EC"
+      ],
+      "law_id": 15896,
+      "law_celex": "32019R2022",
+      "law_title": "Commission Regulation (EU) 2019/2022 of 1 October 2019 laying down ecodesign requirements for household dishwashers pursuant to Directive 2009/125/EC of the European Parliament and of the Council amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EU) No 1016/2010 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Recital 15",
+      "requirement_text": "manufacturers, importers or authorised representatives should enter the corresponding data into the product database defined by Regulation (EU) 2017/1369",
+      "applicable_entity": "manufacturers, importers, authorised representatives",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "product database",
+        "Regulation 2017/1369",
+        "data entry"
+      ],
+      "law_id": 15896,
+      "law_celex": "32019R2022",
+      "law_title": "Commission Regulation (EU) 2019/2022 of 1 October 2019 laying down ecodesign requirements for household dishwashers pursuant to Directive 2009/125/EC of the European Parliament and of the Council amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EU) No 1016/2010 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Recital 16",
+      "requirement_text": "products that automatically alter their performance in test conditions to improve the declared parameters should not be allowed to be placed on the market",
+      "applicable_entity": "manufacturers, importers, distributors",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "test conditions",
+        "performance alteration",
+        "prohibited",
+        "market placement"
+      ],
+      "law_id": 15896,
+      "law_celex": "32019R2022",
+      "law_title": "Commission Regulation (EU) 2019/2022 of 1 October 2019 laying down ecodesign requirements for household dishwashers pursuant to Directive 2009/125/EC of the European Parliament and of the Council amending Commission Regulation (EC) No 1275/2008 and repealing Commission Regulation (EU) No 1016/2010 (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The Annex to Regulation (EC) No 1418/2007 is amended in accordance with the Annex to this Regulation",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "annex",
+        "amendment",
+        "regulation 1418/2007"
+      ],
+      "law_id": 16175,
+      "law_celex": "32021R1840",
+      "law_title": "Commission Regulation (EU) 2021/1840 of 20 October 2021 amending Regulation (EC) No 1418/2007 concerning the export for recovery of certain waste listed in Annex III or IIIA to Regulation (EC) No 1013/2006 of the European Parliament and of the Council to certain countries to which the OECD Decision on the control of transboundary movements of wastes does not apply (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "twentieth day following publication in Official Journal",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "official journal"
+      ],
+      "law_id": 16175,
+      "law_celex": "32021R1840",
+      "law_title": "Commission Regulation (EU) 2021/1840 of 20 October 2021 amending Regulation (EC) No 1418/2007 concerning the export for recovery of certain waste listed in Annex III or IIIA to Regulation (EC) No 1013/2006 of the European Parliament and of the Council to certain countries to which the OECD Decision on the control of transboundary movements of wastes does not apply (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall be binding in its entirety and directly applicable in all Member States",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "binding",
+        "directly applicable",
+        "member states"
+      ],
+      "law_id": 16175,
+      "law_celex": "32021R1840",
+      "law_title": "Commission Regulation (EU) 2021/1840 of 20 October 2021 amending Regulation (EC) No 1418/2007 concerning the export for recovery of certain waste listed in Annex III or IIIA to Regulation (EC) No 1013/2006 of the European Parliament and of the Council to certain countries to which the OECD Decision on the control of transboundary movements of wastes does not apply (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal"
+      ],
+      "law_id": 16380,
+      "law_celex": "32020R1000",
+      "law_title": "Commission Regulation (EU) 2020/1000 of 9 July 2020 correcting certain language versions of Regulation (EU) No 1253/2014 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for ventilation units (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall be binding in its entirety and directly applicable in all Member States",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "binding",
+        "directly applicable",
+        "member states"
+      ],
+      "law_id": 16380,
+      "law_celex": "32020R1000",
+      "law_title": "Commission Regulation (EU) 2020/1000 of 9 July 2020 correcting certain language versions of Regulation (EU) No 1253/2014 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for ventilation units (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The best available techniques (BAT) conclusions for the common waste gas management and treatment systems in the chemical sector, as set out in the Annex, are adopted.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "BAT conclusions",
+        "best available techniques",
+        "waste gas management",
+        "chemical sector",
+        "adoption"
+      ],
+      "law_id": 16806,
+      "law_celex": "32022L2427",
+      "law_title": "Commission Implementing Decision (EU) 2022/2427 of 6 December 2022 establishing the best available techniques (BAT) conclusions, under Directive 2010/75/EU of the European Parliament and of the Council on industrial emissions, for common waste gas management and treatment systems in the chemical sector (notified under document C(2022) 8788) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Whereas (1)",
+      "requirement_text": "Competent authorities should set emission limit values which ensure that, under normal operating conditions, emissions do not exceed the emission levels associated with the best available techniques as laid down in the BAT conclusions.",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "emission limit values",
+        "BAT conclusions",
+        "emission levels",
+        "normal operating conditions",
+        "competent authorities"
+      ],
+      "law_id": 16806,
+      "law_celex": "32022L2427",
+      "law_title": "Commission Implementing Decision (EU) 2022/2427 of 6 December 2022 establishing the best available techniques (BAT) conclusions, under Directive 2010/75/EU of the European Parliament and of the Council on industrial emissions, for common waste gas management and treatment systems in the chemical sector (notified under document C(2022) 8788) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The position to be taken on the Union's behalf at the fifth meeting of the COP to the Minamata Convention on Mercury shall be to support the adoption of a decision establishing thresholds for mercury-contaminated waste that is consistent with the Union acquis",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "at the fifth meeting of the COP to the Minamata Convention on Mercury",
+      "keywords": [
+        "Minamata Convention",
+        "mercury-contaminated waste",
+        "thresholds",
+        "Union acquis",
+        "COP"
+      ],
+      "law_id": 17099,
+      "law_celex": "32023D2426",
+      "law_title": "Council Decision (EU) 2023/2426 of 23 October 2023 on the position to be taken on behalf of the European Union at the fifth meeting of the Conference of the Parties to the Minamata Convention on Mercury as regards the adoption of a decision establishing thresholds for mercury-contaminated waste in accordance with that Convention",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The product group footwear shall comprise all articles designed to protect or cover the foot, with an applied sole which comes into contact with the ground",
+      "applicable_entity": "EU Ecolabel applicants and competent bodies",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "product group",
+        "footwear",
+        "scope definition",
+        "EU Ecolabel"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(3)",
+      "requirement_text": "The product group shall not comprise footwear containing any electric or electronic components, footwear that is disposed of after a single use, socks with an applied sole, and toy footwear",
+      "applicable_entity": "EU Ecolabel applicants and competent bodies",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exclusions",
+        "prohibited products",
+        "electric components",
+        "single use",
+        "toy footwear"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3",
+      "requirement_text": "In order to be awarded the EU Ecolabel under Regulation (EC) No 66/2010, a product shall fall within the product group footwear as defined in Article 1 of this Decision and shall comply with the ecological criteria and the related assessment and verification requirements set out in the Annex to this Decision",
+      "applicable_entity": "EU Ecolabel applicants",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "EU Ecolabel",
+        "ecological criteria",
+        "compliance",
+        "assessment",
+        "verification"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The ecological criteria for the product group footwear and the related assessment and verification requirements shall be valid for six years from the date of adoption of this Decision",
+      "applicable_entity": "competent bodies and EU Ecolabel applicants",
+      "criticality": "critical",
+      "deadline_text": "six years from the date of adoption of this Decision",
+      "keywords": [
+        "validity period",
+        "ecological criteria",
+        "six years",
+        "assessment requirements"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "For administrative purposes, the code number assigned to the product group footwear shall be 017",
+      "applicable_entity": "competent bodies and administrative authorities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "code number",
+        "017",
+        "administrative purposes",
+        "product group"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 7(1)",
+      "requirement_text": "Applications for the EU Ecolabel for products falling within the product group footwear submitted before the date of adoption of this Decision shall be evaluated in accordance with the conditions laid down in Decision 2009/563/EC",
+      "applicable_entity": "competent bodies",
+      "criticality": "critical",
+      "deadline_text": "before the date of adoption of this Decision",
+      "keywords": [
+        "transitional provision",
+        "applications",
+        "evaluation",
+        "Decision 2009/563/EC"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 7(2)",
+      "requirement_text": "Applications for the EU Ecolabel for products falling within the product group footwear submitted within two months of the date of adoption of this Decision may be based either on the criteria set out in Decision 2009/563/EC or on the criteria set out in this Decision. Applications shall be evaluated in accordance with the criteria on which they are based",
+      "applicable_entity": "EU Ecolabel applicants and competent bodies",
+      "criticality": "critical",
+      "deadline_text": "within two months of the date of adoption of this Decision",
+      "keywords": [
+        "transitional period",
+        "two months",
+        "application criteria",
+        "evaluation"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 7(3)",
+      "requirement_text": "EU Ecolabel licences awarded in accordance with the criteria set out in Decision 2009/563/EC may be used for 12 months from the date of adoption of this Decision",
+      "applicable_entity": "EU Ecolabel licence holders",
+      "criticality": "critical",
+      "deadline_text": "12 months from the date of adoption of this Decision",
+      "keywords": [
+        "licence validity",
+        "12 months",
+        "transitional period",
+        "Decision 2009/563/EC"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5(1) of Directive 75/442/EEC",
+      "requirement_text": "Member States shall take appropriate measures, in cooperation with other Member States where this is necessary or advisable, to establish an integrated and adequate network of disposal installations, taking account of the best available technology not involving excessive costs",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "disposal installations",
+        "integrated network",
+        "adequate network",
+        "best available technology",
+        "cooperation"
+      ],
+      "law_id": 484,
+      "law_celex": "32006D0237",
+      "law_title": "Commission Decision of 22 June 2005 on the aid measures implemented by the Netherlands for AVR for dealing with hazardous waste (notified under document number C(2005) 1789) (Only the Dutch version is authentic) (Text with EEA relevance) (2006/237/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5(1) of Directive 75/442/EEC",
+      "requirement_text": "The network must enable the Community as a whole to become self-sufficient in waste disposal and the Member States to move towards that aim individually, taking into account geographical circumstances or the need for specialized installations for certain types of waste",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "self-sufficient",
+        "waste disposal",
+        "specialized installations",
+        "geographical circumstances"
+      ],
+      "law_id": 484,
+      "law_celex": "32006D0237",
+      "law_title": "Commission Decision of 22 June 2005 on the aid measures implemented by the Netherlands for AVR for dealing with hazardous waste (notified under document number C(2005) 1789) (Only the Dutch version is authentic) (Text with EEA relevance) (2006/237/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 5(2) of Directive 75/442/EEC",
+      "requirement_text": "The network must also enable waste to be disposed of in one of the nearest appropriate installations, by means of the most appropriate methods and technologies in order to ensure a high level of protection for the environment and public health",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "nearest appropriate installations",
+        "appropriate methods",
+        "appropriate technologies",
+        "environmental protection",
+        "public health protection"
+      ],
+      "law_id": 484,
+      "law_celex": "32006D0237",
+      "law_title": "Commission Decision of 22 June 2005 on the aid measures implemented by the Netherlands for AVR for dealing with hazardous waste (notified under document number C(2005) 1789) (Only the Dutch version is authentic) (Text with EEA relevance) (2006/237/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Must comply with permit exemption rules for recovery of hazardous wastes as specified in the notified regulations",
+      "applicable_entity": "establishments and undertakings in England, Wales, Northern Ireland and Scotland recovering hazardous waste",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "permit exemptions",
+        "hazardous waste",
+        "recovery",
+        "compliance"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Regulation 18(1) of SI No 1056/1994",
+      "requirement_text": "Must register with the appropriate registration authority before carrying on any exempt activity involving the recovery or disposal of waste",
+      "applicable_entity": "establishments and undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "registration",
+        "exempt activity",
+        "recovery",
+        "disposal",
+        "waste",
+        "registration authority"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Schedule 4, Paragraph 4(1)(a) of SI No 1056/1994",
+      "requirement_text": "Must comply with the requirements equivalent to Article 4 of Directive 2006/12/EC regarding types, quantities of waste and methods of recovery",
+      "applicable_entity": "establishments and undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "waste management",
+        "recovery methods",
+        "waste quantities",
+        "waste types"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Schedule 3 exemptions",
+      "requirement_text": "Must comply with specified maximum quantities of hazardous wastes and prescribed requirements for storage activities",
+      "applicable_entity": "establishments and undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "maximum quantities",
+        "hazardous waste",
+        "storage activities",
+        "prescribed requirements"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Decision 2000/532/EC reference",
+      "requirement_text": "Must properly identify waste typology according to the established waste list classification",
+      "applicable_entity": "establishments and undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "waste typology",
+        "waste classification",
+        "waste list",
+        "identification"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "This Regulation establishes eco-design requirements for the placing on the market of electric mains-operated air conditioners with a rated capacity of ≤ 12 kW for cooling, or heating if the product has no cooling function, and comfort fans with an electric fan power input ≤ 125W.",
+      "applicable_entity": "manufacturers placing air conditioners and comfort fans on the market",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ecodesign requirements",
+        "placing on market",
+        "air conditioners",
+        "comfort fans",
+        "rated capacity",
+        "12 kW",
+        "125W"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "The ecodesign requirements for air conditioners and comfort fans are set out in Annex I.",
+      "applicable_entity": "manufacturers of air conditioners and comfort fans",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ecodesign requirements",
+        "Annex I",
+        "air conditioners",
+        "comfort fans"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Single duct and double duct air conditioners shall correspond to requirements as indicated in Annex I, point 2(a).",
+      "applicable_entity": "manufacturers of single duct and double duct air conditioners",
+      "criticality": "critical",
+      "deadline_text": "From 1 January 2013",
+      "keywords": [
+        "single duct",
+        "double duct",
+        "air conditioners",
+        "Annex I",
+        "point 2(a)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Air conditioners, except single and double duct air conditioners, shall correspond to requirements as indicated in Annex I, point 2(b) and points 3(a), 3(b), 3(c).",
+      "applicable_entity": "manufacturers of air conditioners (except single and double duct)",
+      "criticality": "critical",
+      "deadline_text": "From 1 January 2013",
+      "keywords": [
+        "air conditioners",
+        "Annex I",
+        "point 2(b)",
+        "points 3(a)",
+        "3(b)",
+        "3(c)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Single ducts and double ducts shall correspond to requirements as indicated in Annex I, points 3(a), 3(b), 3(d).",
+      "applicable_entity": "manufacturers of single duct and double duct air conditioners",
+      "criticality": "critical",
+      "deadline_text": "From 1 January 2013",
+      "keywords": [
+        "single ducts",
+        "double ducts",
+        "Annex I",
+        "points 3(a)",
+        "3(b)",
+        "3(d)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Comfort fans shall correspond to requirements as indicated in Annex I, points 3(a), 3(b), 3(e).",
+      "applicable_entity": "manufacturers of comfort fans",
+      "criticality": "critical",
+      "deadline_text": "From 1 January 2013",
+      "keywords": [
+        "comfort fans",
+        "Annex I",
+        "points 3(a)",
+        "3(b)",
+        "3(e)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Air conditioners shall correspond to ecodesign requirements as indicated in Annex I, point 2(c).",
+      "applicable_entity": "manufacturers of air conditioners",
+      "criticality": "critical",
+      "deadline_text": "From 1 January 2014",
+      "keywords": [
+        "air conditioners",
+        "ecodesign requirements",
+        "Annex I",
+        "point 2(c)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Single duct and double duct air conditioners shall correspond to requirements as indicated in Annex I, point 2(d).",
+      "applicable_entity": "manufacturers of single duct and double duct air conditioners",
+      "criticality": "critical",
+      "deadline_text": "From 1 January 2014",
+      "keywords": [
+        "single duct",
+        "double duct",
+        "air conditioners",
+        "Annex I",
+        "point 2(d)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 3(3)",
+      "requirement_text": "Compliance with ecodesign requirements shall be measured and calculated in accordance with requirements set out in Annex II.",
+      "applicable_entity": "manufacturers of air conditioners and comfort fans",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "compliance",
+        "ecodesign requirements",
+        "measured",
+        "calculated",
+        "Annex II"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    },
+    {
+      "article": "Article 4(1)",
+      "requirement_text": "The conformity assessment procedure referred to in Article 8 of Directive 2009/125/EC shall be the internal design control set out in Annex IV.",
+      "applicable_entity": "manufacturers of air conditioners and comfort fans",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "conformity assessment",
+        "internal design control",
+        "Annex IV",
+        "Directive 2009/125/EC"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 9
+    }
+  ]
+}

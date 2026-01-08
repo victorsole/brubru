@@ -1,0 +1,150 @@
+{
+  "metadata": {
+    "title": "Manually Curated Well-Known EU Legislation Acronyms",
+    "description": "Common acronyms for major EU laws that are not defined in official titles",
+    "last_updated": "2025-11-19",
+    "note": "These are informal but widely-used acronyms. Supplement to automatically extracted acronyms."
+  },
+  "acronyms": {
+    "CBAM": {
+      "celex": "32023R0956",
+      "full_title": "Regulation (EU) 2023/956 establishing a carbon border adjustment mechanism",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "Carbon Border Adjustment Mechanism"
+    },
+    "GDPR": {
+      "celex": "32016R0679",
+      "full_title": "Regulation (EU) 2016/679 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data (General Data Protection Regulation)",
+      "type": "Regulation",
+      "year": 2016,
+      "full_name": "General Data Protection Regulation"
+    },
+    "AI Act": {
+      "celex": "32024R1689",
+      "full_title": "Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Artificial Intelligence Act"
+    },
+    "DSA": {
+      "celex": "32022R2065",
+      "full_title": "Regulation (EU) 2022/2065 on a Single Market For Digital Services (Digital Services Act)",
+      "type": "Regulation",
+      "year": 2022,
+      "full_name": "Digital Services Act"
+    },
+    "DMA": {
+      "celex": "32022R1925",
+      "full_title": "Regulation (EU) 2022/1925 on contestable and fair markets in the digital sector (Digital Markets Act)",
+      "type": "Regulation",
+      "year": 2022,
+      "full_name": "Digital Markets Act"
+    },
+    "DGA": {
+      "celex": "32022R0868",
+      "full_title": "Regulation (EU) 2022/868 on European data governance (Data Governance Act)",
+      "type": "Regulation",
+      "year": 2022,
+      "full_name": "Data Governance Act"
+    },
+    "Data Act": {
+      "celex": "32023R2854",
+      "full_title": "Regulation (EU) 2023/2854 on harmonised rules on fair access to and use of data",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "Data Act"
+    },
+    "NIS2": {
+      "celex": "32022L2555",
+      "full_title": "Directive (EU) 2022/2555 on measures for a high common level of cybersecurity across the Union (NIS 2 Directive)",
+      "type": "Directive",
+      "year": 2022,
+      "full_name": "Network and Information Security Directive 2"
+    },
+    "CRA": {
+      "celex": "32024R2847",
+      "full_title": "Regulation (EU) 2024/2847 on horizontal cybersecurity requirements for products with digital elements (Cyber Resilience Act)",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Cyber Resilience Act"
+    },
+    "eIDAS": {
+      "celex": "32014R0910",
+      "full_title": "Regulation (EU) No 910/2014 on electronic identification and trust services for electronic transactions in the internal market",
+      "type": "Regulation",
+      "year": 2014,
+      "full_name": "Electronic Identification, Authentication and Trust Services"
+    },
+    "MiCA": {
+      "celex": "32023R1114",
+      "full_title": "Regulation (EU) 2023/1114 on markets in crypto-assets",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "Markets in Crypto-Assets Regulation"
+    },
+    "CSDDD": {
+      "celex": "32024L1760",
+      "full_title": "Directive (EU) 2024/1760 on Corporate Sustainability Due Diligence",
+      "type": "Directive",
+      "year": 2024,
+      "full_name": "Corporate Sustainability Due Diligence Directive"
+    },
+    "CSRD": {
+      "celex": "32022L2464",
+      "full_title": "Directive (EU) 2022/2464 on corporate sustainability reporting (Corporate Sustainability Reporting Directive)",
+      "type": "Directive",
+      "year": 2022,
+      "full_name": "Corporate Sustainability Reporting Directive"
+    },
+    "SFDR": {
+      "celex": "32019R2088",
+      "full_title": "Regulation (EU) 2019/2088 on sustainability‐related disclosures in the financial services sector",
+      "type": "Regulation",
+      "year": 2019,
+      "full_name": "Sustainable Finance Disclosure Regulation"
+    },
+    "EU ETS": {
+      "celex": "32003L0087",
+      "full_title": "Directive 2003/87/EC establishing a system for greenhouse gas emission allowance trading within the Union",
+      "type": "Directive",
+      "year": 2003,
+      "full_name": "EU Emissions Trading System"
+    },
+    "ETS": {
+      "celex": "32003L0087",
+      "full_title": "Directive 2003/87/EC establishing a system for greenhouse gas emission allowance trading within the Union",
+      "type": "Directive",
+      "year": 2003,
+      "full_name": "Emissions Trading System"
+    },
+    "REACH": {
+      "celex": "32006R1907",
+      "full_title": "Regulation (EC) No 1907/2006 concerning the Registration, Evaluation, Authorisation and Restriction of Chemicals",
+      "type": "Regulation",
+      "year": 2006,
+      "full_name": "Registration, Evaluation, Authorisation and Restriction of Chemicals"
+    },
+    "CLP": {
+      "celex": "32008R1272",
+      "full_title": "Regulation (EC) No 1272/2008 on classification, labelling and packaging of substances and mixtures",
+      "type": "Regulation",
+      "year": 2008,
+      "full_name": "Classification, Labelling and Packaging"
+    },
+    "PACT Act": {
+      "celex": "32024R1828",
+      "full_title": "Regulation (EU) 2024/1828 on the packaging and packaging waste (Packaging and Packaging Waste Regulation)",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Packaging and Packaging Waste Regulation"
+    },
+    "TDI": {
+      "celex": "32024L0900",
+      "full_title": "Directive (EU) 2024/900 amending the Taxpayers' Rights Directive",
+      "type": "Directive",
+      "year": 2024,
+      "full_name": "Tax Dispute Resolution Directive"
+    }
+  }
+}

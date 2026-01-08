@@ -1,0 +1,702 @@
+{
+    "metadata": {
+      "title": "European Commission Directorates-General, Agencies, and EU Bodies Directory",
+      "last_updated": "2025-11-19",
+      "total_dgs_and_services": 46,
+      "total_executive_agencies": 6,
+      "total_eu_agencies_and_bodies": 52,
+      "total_joint_undertakings": 11,
+      "recent_changes": "February 2025 reorganization: DG NEAR replaced with DG ENEST (Enlargement and Eastern Neighbourhood) and DG MENA (Middle East, North Africa and the Gulf)",
+      "sources": [
+        "https://commission.europa.eu/about/departments-and-executive-agencies_en"
+      ]
+    },
+    "commission_structure": {
+      "directorates_general_and_services": {
+        "total": 46,
+        "categories": [
+          {
+            "category": "Major Policy Directorates",
+            "description": "Primary policy-making directorates covering key EU policy areas",
+            "departments": [
+              {
+                "acronym": "DG AGRI",
+                "full_name": "Agriculture and Rural Development",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/agriculture-and-rural-development_en",
+                "policy_area": "Agriculture"
+              },
+              {
+                "acronym": "DG CLIMA",
+                "full_name": "Climate Action",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/climate-action_en",
+                "policy_area": "Climate and environment"
+              },
+              {
+                "acronym": "DG CNECT",
+                "full_name": "Communications Networks, Content and Technology",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/communications-networks-content-and-technology_en",
+                "policy_area": "Digital"
+              },
+              {
+                "acronym": "DG COMP",
+                "full_name": "Competition",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/competition_en",
+                "policy_area": "Competition"
+              },
+              {
+                "acronym": "DG DEFIS",
+                "full_name": "Defence Industry and Space",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/defence-industry-and-space_en",
+                "policy_area": "Defence and space"
+              },
+              {
+                "acronym": "DG EAC",
+                "full_name": "Education and Culture",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/education-and-culture_en",
+                "policy_area": "Education and culture"
+              },
+              {
+                "acronym": "DG ECFIN",
+                "full_name": "Economic and Financial Affairs",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/economic-and-financial-affairs_en",
+                "policy_area": "Economy and finance"
+              },
+              {
+                "acronym": "DG EMPL",
+                "full_name": "Employment, Social Affairs and Inclusion",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/employment-social-affairs-and-inclusion_en",
+                "policy_area": "Employment and social affairs"
+              },
+              {
+                "acronym": "DG ENER",
+                "full_name": "Energy",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/energy_en",
+                "policy_area": "Energy"
+              },
+              {
+                "acronym": "DG ENV",
+                "full_name": "Environment",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/environment_en",
+                "policy_area": "Environment"
+              },
+              {
+                "acronym": "DG FISMA",
+                "full_name": "Financial Stability, Financial Services and Capital Markets Union",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/financial-stability-financial-services-and-capital-markets-union_en",
+                "policy_area": "Financial services"
+              },
+              {
+                "acronym": "DG GROW",
+                "full_name": "Internal Market, Industry, Entrepreneurship and SMEs",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/internal-market-industry-entrepreneurship-and-smes_en",
+                "policy_area": "Single market and industry"
+              },
+              {
+                "acronym": "DG HOME",
+                "full_name": "Home Affairs",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/home-affairs_en",
+                "policy_area": "Migration and home affairs"
+              },
+              {
+                "acronym": "DG JUST",
+                "full_name": "Justice and Consumers",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/justice-and-consumers_en",
+                "policy_area": "Justice and consumer protection"
+              },
+              {
+                "acronym": "DG MARE",
+                "full_name": "Maritime Affairs and Fisheries",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/maritime-affairs-and-fisheries_en",
+                "policy_area": "Fisheries and maritime affairs"
+              },
+              {
+                "acronym": "DG MOVE",
+                "full_name": "Mobility and Transport",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/mobility-and-transport_en",
+                "policy_area": "Transport"
+              },
+              {
+                "acronym": "DG REGIO",
+                "full_name": "Regional and Urban Policy",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/regional-and-urban-policy_en",
+                "policy_area": "Regional policy"
+              },
+              {
+                "acronym": "DG RTD",
+                "full_name": "Research and Innovation",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/research-and-innovation_en",
+                "policy_area": "Research and innovation"
+              },
+              {
+                "acronym": "DG SANTE",
+                "full_name": "Health and Food Safety",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/health-and-food-safety_en",
+                "policy_area": "Health and food safety"
+              },
+              {
+                "acronym": "DG HERA",
+                "full_name": "Health Emergency Preparedness and Response Authority",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/health-emergency-preparedness-and-response-authority_en",
+                "policy_area": "Health emergency preparedness and response"
+              },
+              {
+                "acronym": "DG TAXUD",
+                "full_name": "Taxation and Customs Union",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/taxation-and-customs-union_en",
+                "policy_area": "Taxation and customs"
+              },
+              {
+                "acronym": "DG TRADE",
+                "full_name": "Trade and Economic Security",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/trade_en",
+                "policy_area": "Trade"
+              }
+            ]
+          },
+          {
+            "category": "External Relations Directorates",
+            "description": "Directorates managing EU's external relations and development cooperation",
+            "departments": [
+              {
+                "acronym": "DG ECHO",
+                "full_name": "European Civil Protection and Humanitarian Aid Operations",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/european-civil-protection-and-humanitarian-aid-operations_en",
+                "policy_area": "Humanitarian aid and civil protection"
+              },
+              {
+                "acronym": "DG ENEST",
+                "full_name": "Enlargement and Eastern Neighbourhood",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/enlargement-and-eastern-neighbourhood_en",
+                "policy_area": "EU enlargement and Eastern neighbourhood",
+                "notes": "Created February 2025, replaced part of DG NEAR"
+              },
+              {
+                "acronym": "DG FPI",
+                "full_name": "Service for Foreign Policy Instruments",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/service-foreign-policy-instruments_en",
+                "policy_area": "Foreign policy instruments"
+              },
+              {
+                "acronym": "DG INTPA",
+                "full_name": "International Partnerships",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/international-partnerships_en",
+                "policy_area": "Development and international partnerships"
+              },
+              {
+                "acronym": "DG MENA",
+                "full_name": "Middle East, North Africa and the Gulf",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/middle-east-north-africa-and-gulf_en",
+                "policy_area": "Relations with Middle East, North Africa and Gulf region",
+                "notes": "Created February 2025, replaced part of DG NEAR"
+              }
+            ]
+          },
+          {
+            "category": "General Services",
+            "description": "Horizontal services supporting Commission operations",
+            "departments": [
+              {
+                "acronym": "DG BUDG",
+                "full_name": "Budget",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/budget_en",
+                "policy_area": "Budget management"
+              },
+              {
+                "acronym": "DG COMM",
+                "full_name": "Communication",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/communication_en",
+                "policy_area": "Communications"
+              },
+              {
+                "acronym": "DG ESTAT",
+                "full_name": "Eurostat",
+                "url": "https://ec.europa.eu/eurostat/",
+                "policy_area": "Statistics"
+              },
+              {
+                "acronym": "DG HR",
+                "full_name": "Human Resources and Security",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/human-resources-and-security_en",
+                "policy_area": "Human resources"
+              },
+              {
+                "acronym": "DG JRC",
+                "full_name": "Joint Research Centre",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/joint-research-centre_en",
+                "policy_area": "Scientific research"
+              },
+              {
+                "acronym": "SG",
+                "full_name": "Secretariat-General",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/secretariat-general_en",
+                "policy_area": "Central coordination"
+              },
+              {
+                "acronym": "SJ",
+                "full_name": "Legal Service",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/legal-service_en",
+                "policy_area": "Legal affairs"
+              }
+            ]
+          },
+          {
+            "category": "Internal Services",
+            "description": "Internal support services for Commission operations",
+            "departments": [
+              {
+                "acronym": "DG DIGIT",
+                "full_name": "Digital Services",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/digital-services_en",
+                "policy_area": "IT services"
+              },
+              {
+                "acronym": "DGT",
+                "full_name": "Translation",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/translation_en",
+                "policy_area": "Translation services"
+              },
+              {
+                "acronym": "DG SCIC",
+                "full_name": "Interpretation",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/interpretation_en",
+                "policy_area": "Interpretation services"
+              },
+              {
+                "acronym": "IAS",
+                "full_name": "Internal Audit Service",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/internal-audit-service_en",
+                "policy_area": "Internal audit"
+              },
+              {
+                "acronym": "OLAF",
+                "full_name": "European Anti-Fraud Office",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/european-anti-fraud-office_en",
+                "policy_area": "Anti-fraud"
+              },
+              {
+                "acronym": "EPSC",
+                "full_name": "European Political Strategy Centre",
+                "url": "https://commission.europa.eu/about/departments-and-executive-agencies/european-political-strategy-centre_en",
+                "policy_area": "Strategic policy advice"
+              }
+            ]
+          }
+        ]
+      },
+      "executive_agencies": {
+        "total": 6,
+        "description": "Executive agencies implementing EU programmes on behalf of the Commission",
+        "agencies": [
+          {
+            "acronym": "CINEA",
+            "full_name": "European Climate, Infrastructure and Environment Executive Agency",
+            "url": "https://cinea.ec.europa.eu/",
+            "mandate": "Climate, energy, transport infrastructure, and environment programmes"
+          },
+          {
+            "acronym": "EACEA",
+            "full_name": "European Education and Culture Executive Agency",
+            "url": "https://www.eacea.ec.europa.eu/",
+            "mandate": "Education, culture, audiovisual, sport, citizenship, and volunteering programmes"
+          },
+          {
+            "acronym": "EISMEA",
+            "full_name": "European Innovation Council and SMEs Executive Agency",
+            "url": "https://eismea.ec.europa.eu/",
+            "mandate": "Innovation, SME support, single market, and consumer programmes"
+          },
+          {
+            "acronym": "ERCEA",
+            "full_name": "European Research Council Executive Agency",
+            "url": "https://rea.ec.europa.eu/ercea_en",
+            "mandate": "European Research Council grants for frontier research"
+          },
+          {
+            "acronym": "HaDEA",
+            "full_name": "European Health and Digital Executive Agency",
+            "url": "https://hadea.ec.europa.eu/",
+            "mandate": "Health, food safety, and digital programmes"
+          },
+          {
+            "acronym": "REA",
+            "full_name": "European Research Executive Agency",
+            "url": "https://rea.ec.europa.eu/",
+            "mandate": "Horizon Europe research and innovation programmes"
+          }
+        ]
+      }
+    },
+    "eu_agencies_and_bodies": {
+      "total": 52,
+      "description": "Decentralized agencies, joint undertakings, and specialized bodies confirmed by the EU Agencies Network",
+      "categories": [
+        {
+          "category": "Key Regulatory Agencies",
+          "description": "Agencies with regulatory and supervisory powers in specific sectors",
+          "agencies": [
+            {
+              "acronym": "ACER",
+              "full_name": "Agency for the Cooperation of Energy Regulators",
+              "url": "https://www.acer.europa.eu/",
+              "sector": "Energy regulation"
+            },
+            {
+              "acronym": "EBA",
+              "full_name": "European Banking Authority",
+              "url": "https://www.eba.europa.eu/",
+              "sector": "Banking supervision"
+            },
+            {
+              "acronym": "ECHA",
+              "full_name": "European Chemicals Agency",
+              "url": "https://echa.europa.eu/",
+              "sector": "Chemicals regulation"
+            },
+            {
+              "acronym": "EFSA",
+              "full_name": "European Food Safety Authority",
+              "url": "https://www.efsa.europa.eu/",
+              "sector": "Food safety"
+            },
+            {
+              "acronym": "EMA",
+              "full_name": "European Medicines Agency",
+              "url": "https://www.ema.europa.eu/",
+              "sector": "Medicines authorization"
+            },
+            {
+              "acronym": "ENISA",
+              "full_name": "European Union Agency for Cybersecurity",
+              "url": "https://www.enisa.europa.eu/",
+              "sector": "Cybersecurity"
+            },
+            {
+              "acronym": "ESMA",
+              "full_name": "European Securities and Markets Authority",
+              "url": "https://www.esma.europa.eu/",
+              "sector": "Financial markets supervision"
+            }
+          ]
+        },
+        {
+          "category": "Security and Justice Agencies",
+          "description": "Agencies supporting law enforcement, border control, and judicial cooperation",
+          "agencies": [
+            {
+              "acronym": "Europol",
+              "full_name": "European Union Agency for Law Enforcement Cooperation",
+              "url": "https://www.europol.europa.eu/",
+              "mandate": "Law enforcement cooperation and intelligence sharing"
+            },
+            {
+              "acronym": "Eurojust",
+              "full_name": "European Union Agency for Criminal Justice Cooperation",
+              "url": "https://www.eurojust.europa.eu/",
+              "mandate": "Judicial cooperation in criminal matters"
+            },
+            {
+              "acronym": "FRONTEX",
+              "alternative_acronym": "EBCGA",
+              "full_name": "European Border and Coast Guard Agency",
+              "url": "https://www.frontex.europa.eu/",
+              "mandate": "Border management and coast guard"
+            },
+            {
+              "acronym": "EPPO",
+              "full_name": "European Public Prosecutor's Office",
+              "url": "https://www.eppo.europa.eu/",
+              "mandate": "Investigation and prosecution of crimes against EU budget"
+            },
+            {
+              "acronym": "CEPOL",
+              "full_name": "European Union Agency for Law Enforcement Training",
+              "url": "https://www.cepol.europa.eu/",
+              "mandate": "Law enforcement training"
+            },
+            {
+              "acronym": "EUAA",
+              "full_name": "European Union Agency for Asylum",
+              "url": "https://euaa.europa.eu/",
+              "mandate": "Asylum system cooperation"
+            },
+            {
+              "acronym": "eu-LISA",
+              "full_name": "European Union Agency for the Operational Management of Large-Scale IT Systems",
+              "url": "https://www.eulisa.europa.eu/",
+              "mandate": "Management of large-scale IT systems for border management and security"
+            }
+          ]
+        },
+        {
+          "category": "Social and Labour Agencies",
+          "description": "Agencies supporting employment, working conditions, and social rights",
+          "agencies": [
+            {
+              "acronym": "ELA",
+              "full_name": "European Labour Authority",
+              "url": "https://www.ela.europa.eu/",
+              "mandate": "Labour mobility and social security coordination"
+            },
+            {
+              "acronym": "Eurofound",
+              "full_name": "European Foundation for the Improvement of Living and Working Conditions",
+              "url": "https://www.eurofound.europa.eu/",
+              "mandate": "Research on living and working conditions"
+            },
+            {
+              "acronym": "EU-OSHA",
+              "full_name": "European Agency for Safety and Health at Work",
+              "url": "https://osha.europa.eu/",
+              "mandate": "Occupational safety and health"
+            },
+            {
+              "acronym": "EIGE",
+              "full_name": "European Institute for Gender Equality",
+              "url": "https://eige.europa.eu/",
+              "mandate": "Gender equality research and support"
+            }
+          ]
+        },
+        {
+          "category": "Environmental and Health Agencies",
+          "description": "Agencies monitoring environment, health threats, and drug issues",
+          "agencies": [
+            {
+              "acronym": "EEA",
+              "full_name": "European Environment Agency",
+              "url": "https://www.eea.europa.eu/",
+              "mandate": "Environmental monitoring and assessment"
+            },
+            {
+              "acronym": "ECDC",
+              "full_name": "European Centre for Disease Prevention and Control",
+              "url": "https://www.ecdc.europa.eu/",
+              "mandate": "Disease surveillance and response"
+            },
+            {
+              "acronym": "EUDA",
+              "full_name": "European Union Drugs Agency",
+              "former_name": "EMCDDA",
+              "url": "https://www.euda.europa.eu/",
+              "mandate": "Drug monitoring and harm reduction"
+            }
+          ]
+        },
+        {
+          "category": "Transport and Safety Agencies",
+          "description": "Agencies ensuring safety in aviation, maritime, rail, and fisheries",
+          "agencies": [
+            {
+              "acronym": "EASA",
+              "full_name": "European Union Aviation Safety Agency",
+              "url": "https://www.easa.europa.eu/",
+              "sector": "Aviation safety"
+            },
+            {
+              "acronym": "EMSA",
+              "full_name": "European Maritime Safety Agency",
+              "url": "https://www.emsa.europa.eu/",
+              "sector": "Maritime safety"
+            },
+            {
+              "acronym": "ERA",
+              "full_name": "European Union Agency for Railways",
+              "url": "https://www.era.europa.eu/",
+              "sector": "Railway safety"
+            },
+            {
+              "acronym": "EFCA",
+              "full_name": "European Fisheries Control Agency",
+              "url": "https://www.efca.europa.eu/",
+              "sector": "Fisheries control"
+            }
+          ]
+        },
+        {
+          "category": "Innovation and Research Organizations",
+          "description": "Bodies supporting innovation, vocational training, and research",
+          "agencies": [
+            {
+              "acronym": "EIT",
+              "full_name": "European Institute of Innovation and Technology",
+              "url": "https://eit.europa.eu/",
+              "mandate": "Innovation ecosystems and knowledge triangle integration"
+            },
+            {
+              "acronym": "ETF",
+              "full_name": "European Training Foundation",
+              "url": "https://www.etf.europa.eu/",
+              "mandate": "Vocational education and training in partner countries"
+            },
+            {
+              "acronym": "CEDEFOP",
+              "full_name": "European Centre for the Development of Vocational Training",
+              "url": "https://www.cedefop.europa.eu/",
+              "mandate": "Vocational education and training policy"
+            }
+          ]
+        },
+        {
+          "category": "Intellectual Property and Industry Agencies",
+          "description": "Agencies managing intellectual property rights",
+          "agencies": [
+            {
+              "acronym": "EUIPO",
+              "full_name": "European Union Intellectual Property Office",
+              "url": "https://euipo.europa.eu/",
+              "mandate": "EU trademarks and designs"
+            },
+            {
+              "acronym": "CPVO",
+              "full_name": "Community Plant Variety Office",
+              "url": "https://cpvo.europa.eu/",
+              "mandate": "Plant variety rights"
+            }
+          ]
+        },
+        {
+          "category": "Financial Supervision",
+          "description": "Financial supervisory authorities beyond banking and securities",
+          "agencies": [
+            {
+              "acronym": "EIOPA",
+              "full_name": "European Insurance and Occupational Pensions Authority",
+              "url": "https://www.eiopa.europa.eu/",
+              "sector": "Insurance and pensions supervision"
+            }
+          ]
+        },
+        {
+          "category": "Space and Defence Agencies",
+          "description": "Agencies supporting space programmes and defence cooperation",
+          "agencies": [
+            {
+              "acronym": "EUSPA",
+              "full_name": "European Union Agency for the Space Programme",
+              "url": "https://www.euspa.europa.eu/",
+              "mandate": "EU space programmes including Galileo and Copernicus"
+            },
+            {
+              "acronym": "EDA",
+              "full_name": "European Defence Agency",
+              "url": "https://www.eda.europa.eu/",
+              "mandate": "Defence cooperation and capability development"
+            },
+            {
+              "acronym": "EUISS",
+              "full_name": "European Union Institute for Security Studies",
+              "url": "https://www.iss.europa.eu/",
+              "mandate": "Security and defence research and analysis"
+            },
+            {
+              "acronym": "SatCen",
+              "full_name": "European Union Satellite Centre",
+              "url": "https://www.satcen.europa.eu/",
+              "mandate": "Satellite imagery and geospatial intelligence"
+            }
+          ]
+        },
+        {
+          "category": "Additional Specialized Bodies",
+          "description": "Other specialized EU bodies with specific mandates",
+          "agencies": [
+            {
+              "acronym": "BEREC Office",
+              "full_name": "Body of European Regulators for Electronic Communications",
+              "url": "https://www.berec.europa.eu/",
+              "mandate": "Electronic communications regulation"
+            },
+            {
+              "acronym": "FRA",
+              "full_name": "European Union Agency for Fundamental Rights",
+              "url": "https://fra.europa.eu/",
+              "mandate": "Fundamental rights protection and promotion"
+            },
+            {
+              "acronym": "AMLA",
+              "full_name": "Authority for Anti-Money Laundering and Countering the Financing of Terrorism",
+              "url": "https://www.amla.europa.eu/",
+              "mandate": "Anti-money laundering supervision"
+            },
+            {
+              "acronym": "ESA",
+              "full_name": "Euratom Supply Agency",
+              "url": "https://euratom-supply.ec.europa.eu/",
+              "mandate": "Nuclear fuel supply"
+            },
+            {
+              "acronym": "F4E",
+              "full_name": "Fusion for Energy",
+              "url": "https://fusionforenergy.europa.eu/",
+              "mandate": "EU contribution to ITER fusion reactor project"
+            }
+          ]
+        }
+      ]
+    },
+    "joint_undertakings": {
+      "total": 11,
+      "description": "Public-private partnerships supporting research and innovation in strategic sectors",
+      "partnerships": [
+        {
+          "acronym": "CBE JU",
+          "full_name": "Circular Bio-based Europe Joint Undertaking",
+          "url": "https://www.cbe.europa.eu/",
+          "sector": "Bio-based industries and circular economy"
+        },
+        {
+          "acronym": "Clean Aviation JU",
+          "full_name": "Clean Aviation Joint Undertaking",
+          "url": "https://www.clean-aviation.eu/",
+          "sector": "Sustainable aviation technologies"
+        },
+        {
+          "acronym": "Clean Hydrogen JU",
+          "full_name": "Clean Hydrogen Joint Undertaking",
+          "url": "https://www.clean-hydrogen.europa.eu/",
+          "sector": "Hydrogen technologies and value chain"
+        },
+        {
+          "acronym": "Chips JU",
+          "full_name": "Chips Joint Undertaking",
+          "url": "https://www.chips-ju.europa.eu/",
+          "sector": "Semiconductor technologies"
+        },
+        {
+          "acronym": "Europe's Rail JU",
+          "full_name": "Europe's Rail Joint Undertaking",
+          "url": "https://rail-research.europa.eu/",
+          "sector": "Rail innovation and digitalization"
+        },
+        {
+          "acronym": "IHI",
+          "full_name": "Innovative Health Initiative",
+          "url": "https://www.ihi.europa.eu/",
+          "sector": "Health research and innovation"
+        },
+        {
+          "acronym": "SESAR JU",
+          "full_name": "Single European Sky ATM Research Joint Undertaking",
+          "url": "https://www.sesarju.eu/",
+          "sector": "Air traffic management modernization"
+        },
+        {
+          "acronym": "SNS JU",
+          "full_name": "Smart Networks and Services Joint Undertaking",
+          "url": "https://smart-networks.europa.eu/",
+          "sector": "6G and advanced digital networks"
+        },
+        {
+          "notes": "Three additional joint undertakings mentioned but details not provided in source document"
+        }
+      ]
+    },
+    "summary": {
+      "commission_departments": 46,
+      "executive_agencies": 6,
+      "decentralized_agencies_and_bodies": 52,
+      "joint_undertakings": 11,
+      "major_2025_reorganization": "DG NEAR split into DG ENEST and DG MENA (February 2025)",
+      "url_pattern_commission": "https://commission.europa.eu/about/departments-and-executive-agencies/[department-name]_en"
+    }
+  }

@@ -1,0 +1,395 @@
+{
+  "source_file": "procurement-procedure-type.gc",
+  "columns": [
+    {
+      "id": "code",
+      "use": "required"
+    },
+    {
+      "id": "Name",
+      "use": "optional"
+    },
+    {
+      "id": "bul_label",
+      "use": "optional"
+    },
+    {
+      "id": "spa_label",
+      "use": "optional"
+    },
+    {
+      "id": "ces_label",
+      "use": "optional"
+    },
+    {
+      "id": "dan_label",
+      "use": "optional"
+    },
+    {
+      "id": "deu_label",
+      "use": "optional"
+    },
+    {
+      "id": "est_label",
+      "use": "optional"
+    },
+    {
+      "id": "ell_label",
+      "use": "optional"
+    },
+    {
+      "id": "eng_label",
+      "use": "optional"
+    },
+    {
+      "id": "fra_label",
+      "use": "optional"
+    },
+    {
+      "id": "gle_label",
+      "use": "optional"
+    },
+    {
+      "id": "hrv_label",
+      "use": "optional"
+    },
+    {
+      "id": "ita_label",
+      "use": "optional"
+    },
+    {
+      "id": "lav_label",
+      "use": "optional"
+    },
+    {
+      "id": "lit_label",
+      "use": "optional"
+    },
+    {
+      "id": "hun_label",
+      "use": "optional"
+    },
+    {
+      "id": "mlt_label",
+      "use": "optional"
+    },
+    {
+      "id": "nld_label",
+      "use": "optional"
+    },
+    {
+      "id": "pol_label",
+      "use": "optional"
+    },
+    {
+      "id": "por_label",
+      "use": "optional"
+    },
+    {
+      "id": "ron_label",
+      "use": "optional"
+    },
+    {
+      "id": "slk_label",
+      "use": "optional"
+    },
+    {
+      "id": "slv_label",
+      "use": "optional"
+    },
+    {
+      "id": "fin_label",
+      "use": "optional"
+    },
+    {
+      "id": "swe_label",
+      "use": "optional"
+    }
+  ],
+  "items": [
+    {
+      "code": "comp-dial",
+      "Name": "Competitive dialogue",
+      "bul_label": "Състезателен диалог",
+      "ces_label": "Soutěžní dialog",
+      "dan_label": "Konkurrencepræget dialog",
+      "deu_label": "Wettbewerblicher Dialog",
+      "ell_label": "Ανταγωνιστικός διάλογος",
+      "eng_label": "Competitive dialogue",
+      "spa_label": "Diálogo competitivo",
+      "est_label": "Võistlev dialoog",
+      "fin_label": "Kilpailullinen neuvottelumenettely",
+      "fra_label": "Dialogue compétitif",
+      "gle_label": "Idirphlé iomaíoch",
+      "hrv_label": "Natjecateljski dijalog",
+      "hun_label": "Versenypárbeszéd",
+      "ita_label": "Dialogo competitivo",
+      "lit_label": "Konkurencinis dialogas",
+      "lav_label": "Konkursa dialogs",
+      "mlt_label": "Djalogu kompetittiv",
+      "nld_label": "Concurrentiegerichte dialoog",
+      "pol_label": "Dialog konkurencyjny",
+      "por_label": "Diálogo concorrencial",
+      "ron_label": "Dialog competitiv",
+      "slk_label": "Súťažný dialóg",
+      "slv_label": "Konkurenčni dialog",
+      "swe_label": "Konkurrenspräglad dialog"
+    },
+    {
+      "code": "comp-tend",
+      "Name": "Competitive tendering (article 5(3) of Regulation 1370/2007) ",
+      "bul_label": "Конкурентна тръжна процедура (член 5, параграф 3 от Регламент 1370/2007)",
+      "ces_label": "Nabídkové řízení (čl. 5 odst. 3 nařízení č. 1370/2007)",
+      "dan_label": "Udbudsprocedure (artikel 5, stk. 3, i forordning (EF) nr. 1370/2007)",
+      "deu_label": "Wettbewerbliche Vergabeverfahren (Artikel 5 Absatz 3 der Verordnung (EG) Nr. 1370/2007)",
+      "ell_label": "Διαδικασία διαγωνισμού [άρθρο 5 παράγραφος 3 του κανονισμού (ΕΚ) αριθ. 1370/2007]",
+      "eng_label": "Competitive tendering (article 5(3) of Regulation 1370/2007) ",
+      "spa_label": "Licitación competitiva [artículo 5, apartado 3, del Reglamento (CE) n.º 1370/2007]",
+      "est_label": "Võistlev pakkumismenetlus (määruse 1370/2007 artikli 5 lõige 3)",
+      "fin_label": "Tarjouskilpailu (asetuksen (EY) N:o 1370/2007 5 artiklan 3 kohta)",
+      "fra_label": "Mise en concurrence [article 5, paragraphe 3, du règlement (CE) nº 1370/2007]",
+      "gle_label": "Tairiscintí iomaíocha (Airteagal 5(3) de Rialachán 1370/2007)",
+      "hrv_label": "Konkurentno nadmetanje (članak 5. stavak 3. Uredbe 1370/2007)",
+      "hun_label": "Versenytárgyalási eljárás (az 1370/2007/EK rendelet 5. cikkének (3) bekezdése)",
+      "ita_label": "Procedura di gara (articolo 5, paragrafo 3, del regolamento (CE) n. 1370/2007)",
+      "lit_label": "Konkursas (Reglamento (EB) Nr. 1370/2007 5 straipsnio 3 dalis)",
+      "lav_label": "Konkurss (Regulas (EK) Nr. 1370/2007 5. panta 3. punkts)",
+      "mlt_label": "Proċedura ta’ sejħa kompetittiva għall-offerti (Artikolu 5(3) tar-Regolament 1370/2007)",
+      "nld_label": "Openbare aanbesteding (artikel 5, lid 3, van Verordening (EG) nr. 1370/2007)",
+      "pol_label": "Konkurencyjne przetargi (art. 5 ust. 3 rozporządzenia 1370/2007)",
+      "por_label": "Concurso [artigo 5.º, n.º 3, do Regulamento (CE) n.º 1370/2007]",
+      "ron_label": "Procedură competitivă de atribuire [articolul 5 alineatul (3) din Regulamentul (UE) nr. 1370/2007]",
+      "slk_label": "Verejná súťaž (článok 5 ods. 3 nariadenia č. 1370/2007)",
+      "slv_label": "Konkurenčni razpisni postopki (člen 5(3) Uredbe (ES) št. 1370/2007)",
+      "swe_label": "Konkurrensutsatt anbudsförfarande (artikel 5.3 i förordning 1370/2007)"
+    },
+    {
+      "code": "exp-int-rail",
+      "Name": "Request for expression of interest – only for rail (article 5(3b) of Regulation 1370/2007)",
+      "bul_label": "Искане за изразяване на интерес — само за железопътен транспорт (член 5, параграф 3б от Регламент 1370/2007)",
+      "ces_label": "Žádost o vyjádření zájmu – pouze pro železnici (čl. 5 odst. 3b nařízení č. 1370/2007)",
+      "dan_label": "Anmodning om interessetilkendegivelse — kun for jernbane (artikel 5, stk. 3b, i forordning (EF) nr. 1370/2007)",
+      "deu_label": "Aufruf zur Interessenbekundung – nur für die Schiene (Artikel 5 Absatz 3b der Verordnung (EG) Nr. 1370/2007)",
+      "ell_label": "Πρόσκληση εκδήλωσης ενδιαφέροντος — μόνο για σιδηροδρομικές μεταφορές [άρθρο 5 παράγραφος 3β του κανονισμού (ΕΚ) αριθ. 1370/2007]",
+      "eng_label": "Request for expression of interest – only for rail (article 5(3b) of Regulation 1370/2007)",
+      "spa_label": "Solicitud de manifestación de interés — solo para ferrocarril [artículo 5, apartado 3 ter, del Reglamento (CE) n.º 1370/2007]",
+      "est_label": "Osalemiskutse – ainult raudteetranspordi puhul (määruse 1370/2007 artikli 5 lõige 3b)",
+      "fin_label": "Kiinnostuksenilmaisupyyntö – ainoastaan rautatiepalvelut (asetuksen (EY) N:o 1370/2007 5 artiklan 3 b kohta)",
+      "fra_label": "Appel à manifestation d’intérêt — uniquement pour le transport par chemin de fer [article 5, paragraphe 3 ter, du règlement (CE) nº 1370/2007]",
+      "gle_label": "Iarraidh ar léiriú spéise — le haghaidh iarnróid amháin (Airteagal 5(3b) de Rialachán 1370/2007)",
+      "hrv_label": "Zahtjev za iskaz interesa – samo za željeznicu (članak 5. stavak 3.b Uredbe 1370/2007)",
+      "hun_label": "Érdeklődés jelzésére irányuló kérelem – csak a vasút esetében (az 1370/2007/EK rendelet 5. cikkének (3b) bekezdése)",
+      "ita_label": "Invito a manifestare interesse — solo per il trasporto ferroviario (articolo 5, paragrafo 3 ter, del regolamento (CE) n. 1370/2007)",
+      "lit_label": "Prašymas pareikšti susidomėjimą – tik geležinkelių transportui (Reglamento (EB) Nr. 1370/2007 5 straipsnio 3b dalis)",
+      "lav_label": "Uzaicinājums paust interesi — tikai attiecībā uz dzelzceļu (Regulas (EK) Nr. 1370/2007 5. panta 3.b punkts)",
+      "mlt_label": "Talba għal espressjoni ta’ interess — għall-ferroviji biss (Artikolu 5(3b) tar-Regolament 1370/2007)",
+      "nld_label": "Verzoek om blijken van belangstelling – alleen voor spoorvervoer (artikel 5, lid 3 ter, van Verordening (EG) nr. 1370/2007)",
+      "pol_label": "Zaproszenie do wyrażenia zainteresowania – wyłącznie w odniesieniu do kolei (art. 5 ust. 3b rozporządzenia 1370/2007)",
+      "por_label": "Convite à manifestação de interesse — apenas para o transporte ferroviário [artigo 5.º, n.º 3-B, do Regulamento (CE) n.º 1370/2007]",
+      "ron_label": "Cerere de exprimare a interesului – numai pentru transportul feroviar [articolul 5 alineatul (3b) din Regulamentul 1370/2007]",
+      "slk_label": "Žiadosť o vyjadrenie záujmu – len v prípade železničnej dopravy (článok 5 ods. 3b nariadenia 1370/2007)",
+      "slv_label": "Zahteva za prijavo interesa – samo za železniški prevoz (člen 5(3b) Uredbe (ES) št. 1370/2007)",
+      "swe_label": "Begäran om intresseanmälan – endast för järnväg (artikel 5.3b i förordning 1370/2007)"
+    },
+    {
+      "code": "innovation",
+      "Name": "Innovation partnership",
+      "bul_label": "Партньорство за иновации",
+      "ces_label": "Inovační partnerství",
+      "dan_label": "Innovationspartnerskab",
+      "deu_label": "Innovationspartnerschaften",
+      "ell_label": "Σύμπραξη καινοτομίας",
+      "eng_label": "Innovation partnership",
+      "spa_label": "Asociación para la innovación",
+      "est_label": "Innovatsioonipartnerlus",
+      "fin_label": "Innovaatiokumppanuus",
+      "fra_label": "Partenariat d’innovation",
+      "gle_label": "Comhpháirtíocht nuálaíochta",
+      "hrv_label": "Partnerstvo za inovacije",
+      "hun_label": "Innovációs partnerség",
+      "ita_label": "Partenariato per l'innovazione",
+      "lit_label": "Inovacijų partnerystė",
+      "lav_label": "Inovācijas partnerība",
+      "mlt_label": "Sħubija għall-innovazzjoni",
+      "nld_label": "Innovatiepartnerschap",
+      "pol_label": "Partnerstwo innowacyjne",
+      "por_label": "Parcerias para a inovação",
+      "ron_label": "Parteneriat pentru inovare",
+      "slk_label": "Inovatívne partnerstvo",
+      "slv_label": "Partnerstvo za inovacije",
+      "swe_label": "Innovationspartnerskap"
+    },
+    {
+      "code": "neg-w-call",
+      "Name": "Negotiated with prior publication of a call for competition / competitive with negotiation",
+      "bul_label": "Договаряне с предварително публикуване на покана за участие в състезателна процедура / състезателна с договаряне",
+      "ces_label": "Jednací řízení s uveřejněním / jednací řízení",
+      "dan_label": "Udbud med forhandling/indkaldelse af tilbud med forudgående offentliggørelse",
+      "deu_label": "Verhandlungsverfahren mit vorheriger Veröffentlichung eines Aufrufs zum Wettbewerb/Verhandlungsverfahren",
+      "ell_label": "Με διαπραγμάτευση με προηγούμενη δημοσίευση προκήρυξης διαγωνισμού/ανταγωνιστική διαδικασία με διαπραγμάτευση",
+      "eng_label": "Negotiated with prior publication of a call for competition / competitive with negotiation",
+      "spa_label": "Negociado con publicación previa de un anuncio de licitación / licitación con negociación",
+      "est_label": "Väljakuulutamisega läbirääkimistega hankemenetlus / konkurentsipõhine läbirääkimistega hankemenetlus",
+      "fin_label": "Tarjouskilpailukutsun julkaisemisen jälkeinen neuvottelumenettely / tarjousperusteinen neuvottelumenettely",
+      "fra_label": "Négociée avec publication préalable d’un appel à la concurrence / concurrentielle avec négociation",
+      "gle_label": "Idirbheartaíocht lena mbaineann foilsiú roimh ré glao ar iomaíocht / iomaíocht lena mbaineann idirbheartaíocht",
+      "hrv_label": "Pregovarački s prethodnom objavom poziva na nadmetanje / natjecateljski uz pregovore",
+      "hun_label": "Eljárást megindító felhívás előzetes közzétételével járó tárgyalásos / tárgyalásos",
+      "ita_label": "Negoziata con previa indizione di gara / competitiva con negoziazione",
+      "lit_label": "Derybos su išankstiniu kvietimu dalyvauti konkurse ir (arba) konkursas su derybomis",
+      "lav_label": "Sarunu procedūra ar iepirkuma iepriekšēju izsludināšanu/konkursa procedūra ar sarunām",
+      "mlt_label": "Innegozjata bil-pubblikazzjoni minn qabel ta’ sejħa għall-kompetizzjoni/għall-kompetizzjoni bin-negozjar",
+      "nld_label": "Onderhandelingsprocedure met voorafgaande oproep tot mededinging / mededingingsprocedure met onderhandeling",
+      "pol_label": "Negocjacyjna z uprzednią publikacją zaproszenia do ubiegania się o zamówienie / konkurencyjna z negocjacjami",
+      "por_label": "Por negociação com publicação prévia de um convite à apresentação de propostas/concurso com negociação",
+      "ron_label": "Negociată cu publicarea prealabilă a unei proceduri concurențiale de ofertare / competitivă cu negociere",
+      "slk_label": "Rokovacie konanie so zverejnením výzvy na súťaž/súťažné obstarávanie s rokovacím konaním",
+      "slv_label": "S pogajanji, s predhodno objavo javnega razpisa / konkurenčni postopek s pogajanji",
+      "swe_label": "Förhandlat förfarande med föregående meddelande om upphandling/under konkurrens"
+    },
+    {
+      "code": "neg-wo-call",
+      "Name": "Negotiated without prior call for competition",
+      "bul_label": "Договаряне без предварително обявление",
+      "ces_label": "Jednací řízení bez uveřejnění",
+      "dan_label": "Udbud med forhandling uden forudgående offentliggørelse",
+      "deu_label": "Verhandlungsverfahren ohne Aufruf zum Wettbewerb",
+      "ell_label": "Με διαπραγμάτευση χωρίς προηγούμενη δημοσίευση προκήρυξης διαγωνισμού",
+      "eng_label": "Negotiated without prior call for competition",
+      "spa_label": "Negociado sin convocatoria de licitación previa",
+      "est_label": "Väljakuulutamiseta läbirääkimistega hankemenetlus",
+      "fin_label": "Neuvottelumenettely ilman edeltävää tarjouskilpailukutsua",
+      "fra_label": "Négociée sans mise en concurrence préalable",
+      "gle_label": "Idirbheartaíocht lena mbaineann glao roimh ré ar iomaíocht",
+      "hrv_label": "Pregovarački bez prethodnog poziva na nadmetanje",
+      "hun_label": "Felhívás nélküli tárgyalásos eljárás",
+      "ita_label": "Negoziata senza previa indizione di gara",
+      "lit_label": "Derybos be išankstinio skelbimo apie pirkimą",
+      "lav_label": "Sarunu procedūra bez iepirkuma iepriekšējas izsludināšanas",
+      "mlt_label": "Innegozjata mingħajr sejħa minn qabel għall-kompetizzjoni",
+      "nld_label": "Onderhandelingsprocedure zonder voorafgaande oproep tot mededinging",
+      "pol_label": "Negocjacyjna bez uprzedniej publikacji zaproszenia do ubiegania się o zamówienie",
+      "por_label": "Por negociação sem abertura prévia de concurso",
+      "ron_label": "Negociată fără publicarea unei proceduri concurențiale de ofertare",
+      "slk_label": "Rokovacie konanie bez zverejnenia výzvy na súťaž",
+      "slv_label": "S pogajanji, brez predhodnega javnega razpisa",
+      "swe_label": "Förhandlat förfarande utan föregående meddelande om upphandling"
+    },
+    {
+      "code": "open",
+      "Name": "Open",
+      "bul_label": "Открита",
+      "ces_label": "Otevřené",
+      "dan_label": "Offentligt udbud",
+      "deu_label": "Offenes Verfahren",
+      "ell_label": "Ανοικτή",
+      "eng_label": "Open",
+      "spa_label": "Abierto",
+      "est_label": "Avatud",
+      "fin_label": "Avoin",
+      "fra_label": "Ouverte",
+      "gle_label": "Oscailte",
+      "hrv_label": "Otvoren",
+      "hun_label": "Nyitott",
+      "ita_label": "Aperta",
+      "lit_label": "Atviras",
+      "lav_label": "Atklāta",
+      "mlt_label": "Miftuħa",
+      "nld_label": "Openbaar",
+      "pol_label": "Otwarta",
+      "por_label": "Aberto",
+      "ron_label": "Deschisă",
+      "slk_label": "Verejná súťaž",
+      "slv_label": "Odprti postopek",
+      "swe_label": "Öppet"
+    },
+    {
+      "code": "oth-mult",
+      "Name": "Other multiple stage procedure",
+      "bul_label": "Друга многоетапна процедура",
+      "ces_label": "Jiné vícefázové řízení",
+      "dan_label": "Anden procedure, der afvikles i flere faser",
+      "deu_label": "Sonstiges zweistufiges Verfahren",
+      "ell_label": "Άλλη διαδικασία πολλών σταδίων",
+      "eng_label": "Other multiple stage procedure",
+      "spa_label": "Otro procedimiento de múltiples etapas",
+      "est_label": "Muu mitmeetapiline menetlus",
+      "fin_label": "Muu monivaiheinen menettely",
+      "fra_label": "Autre procédure en plusieurs étapes",
+      "gle_label": "Nós imeachta ilchéime eile",
+      "hrv_label": "Ostali postupci u više faza",
+      "hun_label": "Egyéb többszakaszos eljárás",
+      "ita_label": "Altra procedura a più fasi",
+      "lit_label": "Kita kelių etapų procedūra",
+      "lav_label": "Cita daudzpakāpju procedūra",
+      "mlt_label": "Proċedura oħra b’diversi stadji",
+      "nld_label": "Andere procedure in meerdere fasen",
+      "pol_label": "Inna procedura wieloetapowa",
+      "por_label": "Outro processo em múltiplas fases",
+      "ron_label": "Altă procedură cu mai multe etape",
+      "slk_label": "Iný viacfázový postup",
+      "slv_label": "Drugi večstopenjski postopek",
+      "swe_label": "Annat förfarande i flera steg"
+    },
+    {
+      "code": "oth-single",
+      "Name": "Other single stage procedure",
+      "bul_label": "Друга едноетапна процедура",
+      "ces_label": "Jiné jednofázové řízení",
+      "dan_label": "Anden procedure, der afvikles i to faser",
+      "deu_label": "Sonstiges einstufiges Verfahren",
+      "ell_label": "Άλλη διαδικασία ενός σταδίου",
+      "eng_label": "Other single stage procedure",
+      "spa_label": "Otro procedimiento de una sola etapa",
+      "est_label": "Muu üheetapiline menetlus",
+      "fin_label": "Muu yksivaiheinen menettely",
+      "fra_label": "Autre procédure en une seule étape",
+      "gle_label": "Nós imeachta aonchéime eile",
+      "hrv_label": "Ostali postupci od jedne faze",
+      "hun_label": "Egyéb egyszakaszos eljárás",
+      "ita_label": "Altra procedura a fase unica",
+      "lit_label": "Kita vieno etapo procedūra",
+      "lav_label": "Cita vienpakāpes procedūra",
+      "mlt_label": "Proċedura oħra bi stadju wieħed",
+      "nld_label": "Andere procedure in één fase",
+      "pol_label": "Inna procedura jednoetapowa",
+      "por_label": "Outro processo de fase única",
+      "ron_label": "Altă procedură cu o singură etapă",
+      "slk_label": "Iný jednofázový postup",
+      "slv_label": "Drugi enostopenjski postopek",
+      "swe_label": "Annat förfarande i ett steg"
+    },
+    {
+      "code": "restricted",
+      "Name": "Restricted",
+      "bul_label": "Ограничена",
+      "ces_label": "Užší",
+      "dan_label": "Begrænset",
+      "deu_label": "Nichtoffenes Verfahren",
+      "ell_label": "Κλειστή",
+      "eng_label": "Restricted",
+      "spa_label": "Restringido",
+      "est_label": "Piiratud",
+      "fin_label": "Rajoitettu",
+      "fra_label": "Restreinte",
+      "gle_label": "Teoranta",
+      "hrv_label": "Ograničen",
+      "hun_label": "Zárt",
+      "ita_label": "Ristretta",
+      "lit_label": "Ribotas",
+      "lav_label": "Slēgta",
+      "mlt_label": "Ristretta",
+      "nld_label": "Niet-openbaar",
+      "pol_label": "Ograniczona",
+      "por_label": "Limitado",
+      "ron_label": "Restrânsă",
+      "slk_label": "Užšia súťaž",
+      "slv_label": "Omejeni postopek",
+      "swe_label": "Selektivt"
+    }
+  ],
+  "identification": {
+    "short_name": "ProcurementProcedureType",
+    "version": "20250924-0"
+  }
+}

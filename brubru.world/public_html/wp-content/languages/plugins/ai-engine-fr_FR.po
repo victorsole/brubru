@@ -1,0 +1,200 @@
+# Translation of Plugins - AI Engine - Stable (latest release) in French (France)
+# This file is distributed under the same license as the Plugins - AI Engine - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-09-16 07:30:47+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: fr\n"
+"Project-Id-Version: Plugins - AI Engine - Stable (latest release)\n"
+
+#: classes/rest/ai.php:214
+msgid "Magic Wand is not enabled."
+msgstr "La baguette magique n’est pas activée."
+
+#: classes/rest.php:1500
+msgid "The media file cannot be found."
+msgstr "Le fichier média est introuvable."
+
+#: classes/rest.php:966
+msgid "The url is required."
+msgstr "L’URL est obligatoire."
+
+#: classes/rest.php:884 classes/rest.php:904
+msgid "There is no post with this ID."
+msgstr "Il n’y a aucune publication avec cet ID."
+
+#: classes/rest.php:644
+msgid "Environment not found."
+msgstr "Environnement non trouvé."
+
+#: classes/modules/discussions.php:211
+msgid "Discussion"
+msgstr "Discussion"
+
+#: classes/modules/discussions.php:203 classes/modules/discussions.php:214
+#: app/i18n.js:622
+msgid "Untitled"
+msgstr "Sans Titre"
+
+#: classes/modules/discussions.php:187
+msgid "Conversation:"
+msgstr "Conversation :"
+
+#: classes/modules/discussions.php:187 app/i18n.js:623
+msgid "Based on the following conversation, generate a concise and specific title for the discussion, strictly less than 64 characters. Focus on the main topic, avoiding unnecessary words such as articles, pronouns, or adjectives. Do not include any punctuation at the end. Do not include anything else than the title itself, only one sentence, no line breaks, just the title."
+msgstr "Sur la base de la conversation suivante, générez un titre concis et spécifique pour la discussion, strictement inférieur à 64 caractères. Concentrez-vous sur le sujet principal, en évitant les mots inutiles tels que les articles, les pronoms ou les adjectifs. N’incluez aucune ponctuation à la fin. N’incluez rien d’autre que le titre lui-même, une seule phrase, pas de sauts de ligne, uniquement le titre."
+
+#: classes/engines/core.php:404
+msgid "The last message must be a user message."
+msgstr "Le dernier message doit être un message d’utilisateur/utilisatrice."
+
+#: classes/engines/core.php:333
+msgid "AI Engine: The model '%s' is not available."
+msgstr "AI Engine : Le modèle « %s » n’est pas disponible."
+
+#: classes/core.php:225
+msgid "Embeddings query cannot have an empty message. Please check that the conversation context is properly extracted."
+msgstr "La requête d’incorporations ne peut pas avoir un message vide. Veuillez vérifier que le contexte de la conversation est correctement extrait."
+
+#: classes/core.php:220
+msgid "Invalid query object after filtering. The mwai_ai_query filter must return a valid query object."
+msgstr "Objet de requête invalide après le filtrage. Le filtre mwai_ai_query doit renvoyer un objet de requête valide."
+
+#: classes/api.php:418 classes/api.php:449 classes/api.php:480
+#: classes/api.php:515 classes/api.php:562 classes/api.php:596
+msgid "The message is required."
+msgstr "Le message est obligatoire."
+
+#: classes/api.php:190
+msgid "The botId and message are required."
+msgstr "Le botId et le message sont obligatoires."
+
+#: classes/admin.php:166
+msgid "Generate Title"
+msgstr "Générer le titre"
+
+#: classes/admin.php:179 app/i18n.js:42
+msgid "Edit"
+msgstr "Modifier"
+
+#. Description of the plugin
+#: ai-engine.php
+msgid "AI meets WordPress. Your site can now chat, write poetry, solve problems, and maybe make you coffee."
+msgstr "L’IA rencontre WordPress. Votre site peut désormais discuter, écrire des poèmes, résoudre des problèmes et peut-être vous préparer un café."
+
+#: classes/admin.php:163
+msgid "Magic Wand"
+msgstr "Baguette magique"
+
+#: classes/admin.php:123 app/i18n.js:144
+msgid "Images"
+msgstr "Images"
+
+#: classes/admin.php:169 app/i18n.js:550
+msgid "Generate Excerpt"
+msgstr "Générer un extrait"
+
+#: classes/admin.php:115 app/i18n.js:143
+msgid "Content"
+msgstr "Contenu"
+
+#: classes/admin.php:66 classes/admin.php:142 app/i18n.js:115
+msgid "Playground"
+msgstr "Terrain de jeux"
+
+#: common/news.php:101
+msgid "❌ Delete"
+msgstr "❌ Supprimer"
+
+#: common/news.php:92
+msgid "👉 AI Engine at WordPress.org"
+msgstr "👉 AI Engine sur WordPress.org"
+
+#: common/news.php:87
+msgid "<p style=\"font-size: 14px;\">Since the end of 2022, I worked a lot to craft <b>the perfect AI plugin for WordPress</b>. Since March 2023, it's perfectly stable and packed with features. You'll get chatbots, AI forms, easy model training, content and images generation, a template system that will allow you to create your personal assistants for various tasks and much more! Here it is: <a href=\"%s\" target=\"_blank\">AI Engine</a>. Believe me, you will enjoy this. Have fun, and let me know how it goes! 🥳</p>"
+msgstr "<p style=\"font-size: 14px;\">Depuis la fin de l’année 2022, j’ai beaucoup travaillé pour concevoir <b>l’extension IA parfaite pour WordPress</b>. Depuis mars 2023, elle est parfaitement stable et rempli de fonctionnalités. Vous obtiendrez des chatbots, des formulaires d’IA, un entraînement facile des modèles, la génération de contenu et d’images, un système de modèles qui vous permettra de créer vos assistants personnels pour diverses tâches et bien plus encore ! Le voici : <a href=\"%s\" target=\"_blank\">AI Engine</a>. Croyez-moi, vous allez vous régaler. Amusez-vous bien et tenez-moi au courant ! 🥳</p>"
+
+#: common/news.php:84
+msgid "<h2 style=\"margin: 0 0 10px 0\" class=\"title\">AI Engine by Meow Apps: The Power of AI into WordPress 💫</h2>"
+msgstr "<h2 style=\"margin: 0 0 10px 0\" class=\"title\">AI Engine by Meow Apps : La puissance de l’IA à l’intérieur de WordPress 💫</h2>"
+
+#: common/ratings.php:120 app/i18n.js:141
+msgid "Hide"
+msgstr "Masquer"
+
+#: common/ratings.php:106
+msgid "✌️ Done!"
+msgstr "✌️ Terminé !"
+
+#: common/ratings.php:95
+msgid "<h2 style=\"margin: 0\" class=\"title\">You have been using <b>%1$s</b> for some time now. Thank you! 💕</h2><p>If you have a minute, can you write a <b><a target=\"_blank\" href=\""
+msgstr "<h2 style=\"margin: 0\" class=\"title\">Vous utilisez <b>%1$s</b> depuis un certain temps maintenant. Merci ! 💕</h2><p>Si vous avez une minute, pouvez-vous écrire un <b><a target=\"_blank\" href=\""
+
+#. Plugin Name of the plugin
+#: ai-engine.php classes/admin.php:106
+msgid "AI Engine"
+msgstr "AI Engine"
+
+#. Plugin URI of the plugin
+#: ai-engine.php
+msgid "https://wordpress.org/plugins/ai-engine/"
+msgstr "https://fr.wordpress.org/plugins/ai-engine/"
+
+#: common/news.php:96 common/ratings.php:114
+msgid "⏰ Remind me later"
+msgstr "⏰ Me le rappeler ultérieurement"
+
+#. translators: %1$s is the version of the interface; %2$s is a file path.
+#: common/admin.php:211
+msgid "Thanks for using <a href=\"https://meowapps.com\">Meow Apps</a>! This is the Meow Admin %1$s <br /><i>Loaded from %2$s </i>"
+msgstr "Merci d'utiliser les <a href=\"https://meowapps.com\">Meow Apps</a>! C'est le Meow Admin %1$s <br /><i>chargé de %2$s </i>"
+
+#: common/admin.php:176
+msgid "<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a cleaner admin. This option will be reset if a new Meow Apps plugin is installed.<br /><b>Once activated, an option will be added in your General settings to display it again.</b></small>"
+msgstr "<label>Cacher le menu des <b>Meow Apps</b></label><br /><small>Cacher le menu des Meow Apps et tous ses composants, pour une administration plus propre. Cette option sera réinitialisée si un nouveau plugin Meow Apps est installé. <b>Une fois activée, une option sera ajoutée dans vos paramètres généraux pour l'afficher à nouveau.</b></small>"
+
+#: common/admin.php:155 common/admin.php:156 app/i18n.js:212
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: common/admin.php:126
+msgid "Remove the license"
+msgstr "Supprimer la licence"
+
+#: common/admin.php:119
+msgid "<p>It looks like you are using the free version of the plugin (<b>%s</b>) but a license for the Pro version was also found. The Pro version might have been replaced by the Free version during an update (might be caused by a temporarily issue). If it is the case, <b>please download it again</b> from the <a target=\"_blank\" href=\"https://meowapps.com\">Meow Store</a>. If you wish to continue using the free version and clear this message, click on this button."
+msgstr "<p>Il semble que vous utilisiez la version gratuite du plugin (<b>%s</b>) mais une licence pour la version Pro a également été trouvée. La version Pro a peut-être été remplacée par la version gratuite lors d’une mise à jour (peut être causée par un problème temporaire). Si c’est le cas, <b>veuillez le télécharger à nouveau</b> sur le <a target=\"_blank\" href=\"https://meowapps.com\">Meow Store</a>. Si vous souhaitez continuer à utiliser la version gratuite et effacer ce message, cliquez sur ce bouton."
+
+#: common/admin.php:88
+msgid "<a target=\"_blank\" href=\"https://meowapps.com\">Get the <u>Pro Version</u></a>"
+msgstr "<a target=\"_blank\" href=\"https://meowapps.com\">Obtenez la <u>version Pro</u></a>"
+
+#: common/admin.php:88
+msgid "License Issue"
+msgstr "Problème de licence"
+
+#: common/admin.php:87
+msgid "Pro Version"
+msgstr "Version Pro"
+
+#: common/admin.php:84
+msgid "<a href=\"admin.php?page=%s_settings\">Settings</a>"
+msgstr "<a href=\"admin.php?page=%s_settings\">Paramètres</a>"
+
+#: classes/init.php:5
+msgid "Thanks for installing the Pro version of AI Engine :) However, the free version is still enabled. Please disable or uninstall it."
+msgstr "Merci d’avoir installé la version Pro d’AI Engine :) Cependant, la version gratuite est toujours activée. Veuillez le désactiver ou le désinstaller."
+
+#. Author URI of the plugin
+#: ai-engine.php
+msgid "https://jordymeow.com"
+msgstr "https://jordymeow.com"
+
+#. Author of the plugin
+#: ai-engine.php
+msgid "Jordy Meow"
+msgstr "Jordy Meow"

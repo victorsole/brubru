@@ -1,0 +1,141 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:17
+msgid "Preparing..."
+msgstr "Προετοιμασία..."
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:77
+msgid "All jobs have been cancelled"
+msgstr "Όλες οι εργασίες έχουν ακυρωθεί"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:79
+msgid "There is no more jobs to cancel"
+msgstr "Δεν υπάρχουν άλλες εργασίες για ακύρωση"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:82
+msgid "The jobs cancellation has failed"
+msgstr "Η ακύρωση των εργασιών απέτυχε"
+
+#: src/js/troubleshooting/cancelJobs/CancelJobs.js:88
+msgid "Cancel in-progress automatic jobs"
+msgstr "Ακύρωση αυτόματων εργασιών σε εξέλιξη"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:31
+msgid "Domain name has been updated"
+msgstr "Το όνομα τομέα έχει ενημερωθεί"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:33
+msgid "Domain name update has been failed"
+msgstr "Η ενημέρωση του ονόματος τομέα απέτυχε"
+
+#: src/js/troubleshooting/lsTemplates/UpdateDomain.js:41
+msgid "Update domain name in language switcher settings"
+msgstr "Ενημέρωση ονόματος τομέα στις ρυθμίσεις εναλλαγής γλώσσας"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:7
+msgid "Disclaimer: MySQL Disk Space"
+msgstr "Αποποίηση ευθύνης: Χώρος στο δίσκο MySQL"
+
+#: src/js/troubleshooting/optimizeDbTables/components/DiskSpaceDisclaimerAlert.js:8
+msgid ""
+"Cleaning and compressing the wp_icl_translate and wp_icl_translation_status "
+"tables reduces its data size, but does not automatically free up disk space "
+"in MySQL. To reclaim disk space, a table rebuild is required—a risky "
+"operation not performed automatically by this tool."
+msgstr "Ο καθαρισμός και η συμπίεση των πινάκων wp_icl_translate και wp_icl_translation_status μειώνει το μέγεθος των δεδομένων τους, αλλά δεν απελευθερώνει αυτόματα χώρο στο δίσκο στη MySQL. Για την ανάκτηση χώρου στο δίσκο, απαιτείται ανακατασκευή του πίνακα—μια επικίνδυνη λειτουργία που δεν εκτελείται αυτόματα από αυτό το εργαλείο."
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:38
+msgid "Optimize translation tables"
+msgstr "Βελτιστοποίηση πινάκων μετάφρασης"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:47
+msgid "Previous State Migration"
+msgstr "Μετάβαση προηγούμενης κατάστασης"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:58
+msgid "Translation Elements Migration"
+msgstr "Μετάβαση στοιχείων μετάφρασης"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:64
+msgid "Processed"
+msgstr "Επεξεργασμένα"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:72
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:82
+msgid "Success"
+msgstr "Επιτυχία"
+
+#: src/js/troubleshooting/optimizeDbTables/components/OptimizeDbTables.js:83
+msgid "Database tables optimization completed successfully."
+msgstr "Η βελτιστοποίηση των πινάκων της βάσης δεδομένων ολοκληρώθηκε με επιτυχία."
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:7
+msgid "Warning"
+msgstr "Προειδοποίηση"
+
+#: src/js/troubleshooting/optimizeDbTables/components/ResourceWarningAlert.js:8
+msgid ""
+"This process is resource-intensive and may take a significant amount of "
+"time. It is recommended to run this optimization during periods of low "
+"traffic."
+msgstr "Αυτή η διαδικασία απαιτεί πολλούς πόρους και μπορεί να διαρκέσει σημαντικό χρονικό διάστημα. Συνιστάται να εκτελείτε αυτή τη βελτιστοποίηση κατά τη διάρκεια περιόδων χαμηλής κίνησης."
+
+#: src/js/troubleshooting/optimizeDbTables/index.js:16
+msgid "Database Tables Optimization"
+msgstr "Βελτιστοποίηση πινάκων βάσης δεδομένων"
+
+#: src/js/troubleshooting/refreshLicense/RefreshLicense.js:14
+msgid "Refresh license data to recognise license update"
+msgstr "Ανανέωση δεδομένων άδειας για αναγνώριση ενημέρωσης άδειας"
+
+#: src/js/troubleshooting/refreshLicense/useRefreshLicense.js:36
+msgid "WPML License has been refreshed"
+msgstr "Η άδεια WPML έχει ανανεωθεί"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:11
+msgid "Translate Everything Automatically is not active."
+msgstr "Η Αυτόματη Μετάφραση Όλων δεν είναι ενεργή."
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:49
+msgid "Retry stuck automatic translations"
+msgstr "Επανάληψη κολλημένων αυτόματων μεταφράσεων"
+
+#: src/js/troubleshooting/retryStuckJobs/RetryStuckJobs.js:54
+msgid ""
+"Resends translation jobs that couldn't be processed due to a temporary "
+"issue while Translate Everything Automatically was active."
+msgstr "Ξαναστέλνει εργασίες μετάφρασης που δεν μπόρεσαν να επεξεργαστούν λόγω προσωρινού προβλήματος ενώ η Αυτόματη Μετάφραση Όλων ήταν ενεργή."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:10
+msgid "Checking for stuck translation jobs..."
+msgstr "Έλεγχος για κολλημένες εργασίες μετάφρασης..."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:13
+msgid "Processing... %s stuck translation found so far"
+msgid_plural "Processing... %s stuck translations found so far"
+msgstr[0] "Επεξεργασία... Βρέθηκε %s κολλημένη μετάφραση μέχρι στιγμής"
+msgstr[1] "Επεξεργασία... Βρέθηκαν %s κολλημένες μεταφράσεις μέχρι στιγμής"
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:25
+msgid ""
+"Something went wrong while checking for stuck translation jobs. Please "
+"<a>contact WPML support</a>."
+msgstr "Κάτι πήγε στραβά κατά τον έλεγχο για κολλημένες εργασίες μετάφρασης. Παρακαλώ <a>επικοινώνησε με την υποστήριξη του WPML</a>."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:37
+msgid "No stuck translation jobs found."
+msgstr "Δεν βρέθηκαν κολλημένες εργασίες μετάφρασης."
+
+#: src/js/troubleshooting/retryStuckJobs/Utils/getStatusMessage.js:41
+msgid "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard."
+msgid_plural "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard."
+msgstr[0] "Βρέθηκε %s κολλημένη εργασία μετάφρασης. Το WPML θα τη μεταφράσει αυτόματα στο παρασκήνιο.\nΜπορείς να ελέγξεις την πρόοδο στον Πίνακα Ελέγχου Μεταφράσεων."
+msgstr[1] "Βρέθηκαν %s κολλημένες εργασίες μετάφρασης. Το WPML θα τις μεταφράσει αυτόματα στο παρασκήνιο.\nΜπορείς να ελέγξεις την πρόοδό τους στον Πίνακα Ελέγχου Μεταφράσεων."

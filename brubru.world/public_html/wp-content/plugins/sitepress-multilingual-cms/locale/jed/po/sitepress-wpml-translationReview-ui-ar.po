@@ -1,0 +1,69 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+
+#: src/js/translationReview/components/AcceptedMessage.js:8
+msgid "Accepted"
+msgstr "مقبول"
+
+#: src/js/translationReview/components/AcceptedText.js:8
+msgid "Approved!"
+msgstr "موافق عليه!"
+
+#: src/js/translationReview/components/AcceptedText.js:9
+#: src/js/translationReview/components/PublishedText.js:9
+msgid "Loading the next translation for review..."
+msgstr "جارٍ تحميل الترجمة التالية لمراجعتها..."
+
+#: src/js/translationReview/components/BackButton.js:7
+msgid "Back"
+msgstr "رجوع"
+
+#: src/js/translationReview/components/ContinueReviewToggle.js:17
+msgid ""
+"Turn off to not automatically load the next translation after finishing "
+"this review."
+msgstr "أوقف تشغيل الخيار كي لا يتم تحميل الترجمة التالية تلقائيًا بعد استكمال هذه المراجعة."
+
+#: src/js/translationReview/components/ContinueReviewToggle.js:18
+msgid "Turn on to automatically load the next translation after finishing this  ."
+msgstr "قم بتفعيل هذا الخيار لتحميل الترجمة التالية تلقائيًا بعد الانتهاء من هذه الترجمة."
+
+#: src/js/translationReview/components/EditButton.js:10
+msgid "Edit"
+msgstr "تحرير"
+
+#: src/js/translationReview/components/EditButton.js:9
+msgid "Edit translation"
+msgstr "تحرير الترجمة"
+
+#: src/js/translationReview/components/NextTranslationReview.js:22
+msgid "Next review"
+msgstr "المراجعة التالية"
+
+#: src/js/translationReview/components/PublishButton.js:10
+msgid "Publish this translation"
+msgstr "نشر هذه الترجمة"
+
+#: src/js/translationReview/components/PublishButton.js:9
+msgid "Accept this translation"
+msgstr "قبول هذه الترجمة"
+
+#: src/js/translationReview/components/PublishedText.js:8
+msgid "Published!"
+msgstr "تم النشر!"
+
+#: src/js/updateTranslationFrontend/components/InProgressText.js:8
+msgid "Please wait, applying translation.."
+msgstr "يُرجى الانتظار، جارٍ تطبيق الترجمة..."
+
+#: src/js/updateTranslationFrontend/store.js:29
+msgid "There was an error in applying translation."
+msgstr "حدث خطأ أثناء تطبيق الترجمة."
+
+#: src/js/updateTranslationFrontend/useATESync.js:34
+msgid "Someone is already reviewing this translation. Please try again later."
+msgstr "يقوم شخص ما بمراجعة هذه الترجمة بالفعل. يُرجى إعادة المحاولة لاحقًا."

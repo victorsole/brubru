@@ -1,0 +1,88 @@
+{
+  "dg_code": "DIGIT",
+  "dg_name": "Digital Services",
+  "full_name": "Directorate-General for Digital Services",
+  "date_of_effect": "2025-09-16",
+  "executive_vice_president": {
+    "name": "Henna Virkkunen",
+    "title": "Executive Vice-President"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "Veronica Gaffey",
+      "position": "Director-General",
+      "assistant": {
+        "name": "Marleen Hoebeke",
+        "role": "Assistant to the DG"
+      }
+    },
+    "deputy_director_general": {
+      "name": "Philippe Van Damme",
+      "position": "Deputy Director-General"
+    }
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "DIGIT.A",
+      "name": "Digital Transformation",
+      "director": {
+        "name": "Carl-Christian Buhr",
+        "position": "Director"
+      }
+    },
+    "directorate_b": {
+      "code": "DIGIT.B",
+      "name": "Digital Enablers & Innovation",
+      "director": {
+        "name": "Natalia Aristimuno Perez (acting)",
+        "position": "Director"
+      }
+    },
+    "directorate_c": {
+      "code": "DIGIT.C",
+      "name": "Digital Workplace & Infrastructure",
+      "director": {
+        "name": "Philippe Van Damme (acting)",
+        "position": "Director"
+      }
+    },
+    "directorate_r": {
+      "code": "DIGIT.R",
+      "name": "Change Management & Resources",
+      "director": {
+        "name": "Natalia Aristimuno Perez",
+        "position": "Director"
+      }
+    },
+    "directorate_s": {
+      "code": "DIGIT.S",
+      "name": "Cybersecurity",
+      "director": {
+        "name": "Grzegorz Minczakiewicz",
+        "position": "Director"
+      }
+    }
+  },
+  "special_units": {
+    "cert_eu": {
+      "code": "DIGIT.CERT-EU",
+      "name": "Cybersecurity Service for the Union Institutions, Bodies, Offices and Agencies",
+      "head": {
+        "name": "Saad Kadhi",
+        "position": "Head"
+      }
+    },
+    "hr_correspondent_team": {
+      "code": "HR Correspondent Team",
+      "head": {
+        "name": "Catherine Alterman",
+        "position": "Head"
+      }
+    }
+  },
+  "notes": [
+    "Entities located in Luxembourg",
+    "Deputy to the Director",
+    "Deputy Head of Unit"
+  ]
+}

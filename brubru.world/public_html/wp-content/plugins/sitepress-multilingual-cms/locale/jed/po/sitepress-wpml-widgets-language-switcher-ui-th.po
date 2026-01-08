@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:120
+msgid ""
+"To display this Custom HTML block in a specific language, first place it "
+"inside a Group block."
+msgstr "เพื่อแสดงบล็อก HTML แบบกำหนดเองนี้ในภาษาเฉพาะ อันดับแรกให้วางไว้ภายในบล็อกกลุ่ม."
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:126
+msgid "Place inside Group block"
+msgstr "วางไว้ภายในบล็อกกลุ่ม"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:13
+msgid "All"
+msgstr "ทั้งหมด"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:56
+msgid "Display on language"
+msgstr "แสดงตามภาษา"

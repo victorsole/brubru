@@ -1,0 +1,49 @@
+{
+  "dg_code": "CONNECT",
+  "dg_name": "Communications Networks, Content and Technology",
+  "full_name": "Directorate-General for Communications Networks, Content & Technology",
+  "date_of_effect": "2025-10-01",
+  "executive_vice_president": {
+    "name": "Henna Virkkunen",
+    "title": "Executive Vice-President"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "Roberto Viola",
+      "position": "Director-General",
+      "assistants": [
+        {
+          "name": "Rana Jaakoura",
+          "role": "Assistant"
+        },
+        {
+          "name": "Malt Wijnholds Leeuwen",
+          "role": "Assistant"
+        }
+      ]
+    },
+    "deputy_director_generals": [
+      {
+        "name": "Thomas Skordas",
+        "position": "Deputy Director-General",
+        "responsibility": "In charge of directorates A, C, E"
+      },
+      {
+        "name": "Renata Nikolay",
+        "position": "Deputy Director-General",
+        "responsibility": "In charge of directorates B, D, F, G, I, H (acting)"
+      },
+      {
+        "name": "Despina Spanou",
+        "position": "Deputy Director-General",
+        "responsibility": "In charge of directorates H"
+      }
+    ]
+  },
+  "notes": [
+    "Reporting lines: R. Viola for Directorate R, Th. Skordas for Directorates A, C, E, R. Nikolay for Directorates B, D, F, G, I, R. Viola (Acting) for Directorate H",
+    "Seconded managers: L. Chapuis, Head of Unit seconded to Cabinet of High Representative for Foreign Affairs and Security Policy and Vice President Kallas",
+    "Union with Legal Personality markers present",
+    "Staff located in Luxembourg"
+  ]
+}

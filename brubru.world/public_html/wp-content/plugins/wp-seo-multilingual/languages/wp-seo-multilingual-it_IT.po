@@ -1,0 +1,65 @@
+# Copyright (C) 2025 OnTheGoSystems
+# This file is distributed under the same license as the WPML SEO plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WPML SEO 2.2.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-seo-multilingual\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-06-11T16:38:38+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wp-seo-multilingual\n"
+
+#. Plugin Name of the plugin
+#: plugin.php
+msgid "WPML SEO"
+msgstr "WPML SEO"
+
+#. Plugin URI of the plugin
+#: plugin.php
+msgid "https://wpml.org/"
+msgstr "https://wpml.org/"
+
+#. Description of the plugin
+#: plugin.php
+msgid "Multilingual support for popular SEO plugins"
+msgstr "Supporto multilingua per plugin SEO popolari"
+
+#. Author of the plugin
+#: plugin.php
+msgid "OnTheGoSystems"
+msgstr "OnTheGoSystems"
+
+#. Author URI of the plugin
+#: plugin.php
+msgid "http://www.onthegosystems.com/"
+msgstr "http://www.onthegosystems.com/"
+
+#: classes/Upgrade/Commands/DisableHeadLangs.php:58
+msgid "Hreflang tags moved to your sitemap"
+msgstr "Tag hreflang spostati nella tua sitemap"
+
+#: classes/Upgrade/Commands/DisableHeadLangs.php:59
+msgid "To improve SEO and avoid duplicate hreflang data, WPML now adds hreflang tags only to your sitemap. We have disabled the hreflang tags in your page's <head> section."
+msgstr "Per migliorare la SEO ed evitare dati hreflang duplicati, WPML ora aggiunge i tag hreflang solo alla tua sitemap. Abbiamo disabilitato i tag hreflang nella sezione <head> della tua pagina."
+
+#. translators: %1$s %2$s: opening and closing tags for the link to WPML → Languages → SEO options
+#: classes/Upgrade/Commands/DisableHeadLangs.php:63
+msgid "If you prefer to keep them in the <head>, you can re-enable this option in %1$sWPML → Languages → SEO options%2$s."
+msgstr "Se preferisci mantenerli nel <head>, puoi riabilitare questa opzione in %1$sWPML → Lingue → Opzioni SEO%2$s."
+
+#: classes/Upgrade/Commands/DisableHeadLangs.php:66
+msgid "Learn more"
+msgstr "Scopri di più"
+
+#: classes/YoastSEO/class-wpml-wpseo-xml-sitemaps-filter.php:175
+msgid "WPML"
+msgstr "WPML"
+
+#: classes/YoastSEO/class-wpml-wpseo-xml-sitemaps-filter.php:176
+msgid "Sitemaps for each language can be accessed below. You need to submit all these sitemaps to Google."
+msgstr "Le sitemap per ogni lingua sono accessibili di seguito. Devi inviare tutte queste sitemap a Google."

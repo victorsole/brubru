@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "vi"
+         },
+         "To display this Custom HTML block in a specific language, first place it inside a Group block.": [
+            "Để hiển thị khối HTML Tùy chỉnh này trong một ngôn ngữ cụ thể, trước tiên hãy đặt nó bên trong một khối Nhóm."
+         ],
+         "Place inside Group block": [
+            "Đặt bên trong khối Nhóm"
+         ],
+         "All": [
+            "Tất cả"
+         ],
+         "Display on language": [
+            "Hiển thị trên ngôn ngữ"
+         ]
+      }
+   }
+}

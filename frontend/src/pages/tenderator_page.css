@@ -1,0 +1,377 @@
+/* frontend/src/pages/tenderator_page.css */
+
+.tenderator-page {
+  min-height: calc(100vh - 200px);
+  position: relative;
+  padding: 2rem;
+  padding-bottom: 4rem;
+}
+
+.tenderator-page__background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  object-fit: fill;
+  opacity: 1;
+}
+
+.tenderator-page__background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 51, 102, 0.08) 100%);
+  z-index: 1;
+}
+
+.tenderator-page__layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  transition: grid-template-columns 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.tenderator-page__container {
+  min-width: 0;
+}
+
+/* Header */
+.tenderator-page__header {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tenderator-page__header-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.tenderator-page__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tenderator-page__mascot {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.tenderator-page__title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0;
+  font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, serif;
+}
+
+.tenderator-page__subtitle {
+  font-size: 1.1rem;
+  color: #4a5568;
+  margin: 0.5rem 0 0;
+}
+
+.tenderator-page__tier-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+  border-radius: 20px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.tenderator-page__tier-badge .mdi {
+  font-size: 1.25rem;
+}
+
+/* Navigation Tabs */
+.tenderator-page__tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tenderator-page__tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: #4a5568;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tenderator-page__tab:hover {
+  background: #f7fafc;
+  color: #3182ce;
+}
+
+.tenderator-page__tab--active {
+  background: #ebf8ff;
+  color: #3182ce;
+}
+
+.tenderator-page__tab .mdi {
+  font-size: 1.25rem;
+}
+
+/* Loading & Error States */
+.tenderator-page__loading,
+.tenderator-page__error {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tenderator-page__loading {
+  color: #4a5568;
+}
+
+.tenderator-page__loading .mdi {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.tenderator-page__error {
+  color: #c53030;
+}
+
+.tenderator-page__error .mdi {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.tenderator-page__error button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  background: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+/* Setup Prompt */
+.tenderator-page__setup-prompt {
+  background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+  border: 2px dashed #3182ce;
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.tenderator-page__setup-prompt .mdi {
+  font-size: 3rem;
+  color: #3182ce;
+  margin-bottom: 1rem;
+}
+
+.tenderator-page__setup-prompt h3 {
+  font-size: 1.5rem;
+  color: #1a202c;
+  margin: 0 0 0.75rem;
+}
+
+.tenderator-page__setup-prompt p {
+  color: #4a5568;
+  margin: 0 0 1.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tenderator-page__setup-prompt button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(49, 130, 206, 0.4);
+}
+
+.tenderator-page__setup-prompt button .mdi {
+  font-size: 1.4rem;
+  color: white;
+  margin-bottom: 0;
+}
+
+.tenderator-page__setup-prompt button:hover {
+  background: linear-gradient(135deg, #2c5282 0%, #1a365d 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(49, 130, 206, 0.5);
+}
+
+.tenderator-page__setup-prompt button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(49, 130, 206, 0.4);
+}
+
+/* Stats Sidebar */
+.tenderator-page__stats-sidebar {
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+/* Upgrade Prompt */
+.tenderator-page__upgrade-prompt {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tenderator-page__upgrade-card {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tenderator-page__upgrade-icon {
+  font-size: 4rem;
+  color: #3182ce;
+  margin-bottom: 1.5rem;
+}
+
+.tenderator-page__upgrade-card h2 {
+  font-size: 1.75rem;
+  color: #1a202c;
+  margin: 0 0 1rem;
+}
+
+.tenderator-page__upgrade-card > p {
+  color: #4a5568;
+  margin: 0 0 1.5rem;
+}
+
+.tenderator-page__upgrade-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem;
+  text-align: left;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tenderator-page__upgrade-card li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  color: #2d3748;
+}
+
+.tenderator-page__upgrade-card li .mdi {
+  color: #38a169;
+  font-size: 1.25rem;
+}
+
+.tenderator-page__upgrade-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tenderator-page__upgrade-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(49, 130, 206, 0.3);
+}
+
+.tenderator-page__upgrade-button .mdi {
+  font-size: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .tenderator-page__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tenderator-page__stats-sidebar {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .tenderator-page {
+    padding: 1rem;
+  }
+
+  .tenderator-page__header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .tenderator-page__header-content {
+    flex-direction: column;
+  }
+
+  .tenderator-page__title {
+    font-size: 2rem;
+  }
+
+  .tenderator-page__tabs {
+    flex-wrap: wrap;
+  }
+
+  .tenderator-page__tab {
+    flex: 1;
+    justify-content: center;
+    min-width: 100px;
+  }
+}

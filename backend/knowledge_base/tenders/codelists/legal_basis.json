@@ -1,0 +1,395 @@
+{
+  "source_file": "legal-basis.gc",
+  "columns": [
+    {
+      "id": "code",
+      "use": "required"
+    },
+    {
+      "id": "Name",
+      "use": "optional"
+    },
+    {
+      "id": "bul_label",
+      "use": "optional"
+    },
+    {
+      "id": "spa_label",
+      "use": "optional"
+    },
+    {
+      "id": "ces_label",
+      "use": "optional"
+    },
+    {
+      "id": "dan_label",
+      "use": "optional"
+    },
+    {
+      "id": "deu_label",
+      "use": "optional"
+    },
+    {
+      "id": "est_label",
+      "use": "optional"
+    },
+    {
+      "id": "ell_label",
+      "use": "optional"
+    },
+    {
+      "id": "eng_label",
+      "use": "optional"
+    },
+    {
+      "id": "fra_label",
+      "use": "optional"
+    },
+    {
+      "id": "gle_label",
+      "use": "optional"
+    },
+    {
+      "id": "hrv_label",
+      "use": "optional"
+    },
+    {
+      "id": "ita_label",
+      "use": "optional"
+    },
+    {
+      "id": "lav_label",
+      "use": "optional"
+    },
+    {
+      "id": "lit_label",
+      "use": "optional"
+    },
+    {
+      "id": "hun_label",
+      "use": "optional"
+    },
+    {
+      "id": "mlt_label",
+      "use": "optional"
+    },
+    {
+      "id": "nld_label",
+      "use": "optional"
+    },
+    {
+      "id": "pol_label",
+      "use": "optional"
+    },
+    {
+      "id": "por_label",
+      "use": "optional"
+    },
+    {
+      "id": "ron_label",
+      "use": "optional"
+    },
+    {
+      "id": "slk_label",
+      "use": "optional"
+    },
+    {
+      "id": "slv_label",
+      "use": "optional"
+    },
+    {
+      "id": "fin_label",
+      "use": "optional"
+    },
+    {
+      "id": "swe_label",
+      "use": "optional"
+    }
+  ],
+  "items": [
+    {
+      "code": "31985R2137",
+      "Name": "Regulation (EEC) No 2137/85",
+      "bul_label": "Регламент (ЕИО) № 2137/85",
+      "ces_label": "Nařízení (EHS) č. 2137/85",
+      "dan_label": "Forordning (EØF) nr. 2137/85",
+      "deu_label": "Verordnung (EWG) Nr. 2137/85",
+      "ell_label": "Κανονισμός (ΕΟΚ) αριθ. 2137/85",
+      "eng_label": "Regulation (EEC) No 2137/85",
+      "spa_label": "Reglamento (CEE) n.º 2137/85",
+      "est_label": "Määrus (EMÜ) nr 2137/85",
+      "fin_label": "Asetus (ETY) N:o 2137/85",
+      "fra_label": "Règlement (CEE) n° 2137/85",
+      "gle_label": "Rialachán (CEE) Uimh. 2137/85",
+      "hrv_label": "Uredba (EEZ) br. 2137/85",
+      "hun_label": "2137/85/EGK rendelet",
+      "ita_label": "Regolamento (CEE) n. 2137/85",
+      "lit_label": "Reglamentas (EEB) Nr. 2137/85",
+      "lav_label": "Regula (EEK) Nr. 2137/85",
+      "mlt_label": "Regolament (KEE) Nru 2137/85",
+      "nld_label": "Verordening (EEG) nr. 2137/85",
+      "pol_label": "Rozporządzenie (EWG) nr 2137/85",
+      "por_label": "Regulamento (CEE) n.° 2137/85",
+      "ron_label": "Regulamentul (CEE) nr. 2137/85",
+      "slk_label": "Nariadenie (EHS) č. 2137/85",
+      "slv_label": "Uredba (EGS) št. 2137/85",
+      "swe_label": "Förordning (EEG) nr 2137/85"
+    },
+    {
+      "code": "32001R2157",
+      "Name": "Regulation (EC) No 2157/2001",
+      "bul_label": "Регламент (ЕО) № 2157/2001",
+      "ces_label": "Nařízení (ES) č. 2157/2001",
+      "dan_label": "Forordning (EF) nr. 2157/2001",
+      "deu_label": "Verordnung (EG) Nr. 2157/2001",
+      "ell_label": "Κανονισμός (ΕΚ) αριθ. 2157/2001",
+      "eng_label": "Regulation (EC) No 2157/2001",
+      "spa_label": "Reglamento (CE) n.º 2157/2001",
+      "est_label": "Määrus (EÜ) nr 2157/2001",
+      "fin_label": "Asetus (EY) N:o 2157/2001",
+      "fra_label": "Règlement (CE) n° 2157/2001",
+      "gle_label": "Rialachán (CE) Uimh. 2137/85",
+      "hrv_label": "Uredba (EZ) br. 2157/2001",
+      "hun_label": "2157/2001/EK rendelet",
+      "ita_label": "Regolamento (CE) n. 2157/2001",
+      "lit_label": "Reglamentas (EB) Nr. 2157/2001",
+      "lav_label": "Regula (EK) Nr. 2157/2001",
+      "mlt_label": "Regolament (KE) Nru 2157/2001",
+      "nld_label": "Verordening (EG) nr. 2157/2001",
+      "pol_label": "Rozporządzenie (WE) nr 2157/2001",
+      "por_label": "Regulamento (CE) n.° 2157/2001",
+      "ron_label": "Regulamentul (CE) nr. 2157/2001",
+      "slk_label": "Nariadenie (ES) č. 2157/2001",
+      "slv_label": "Uredba (ES) št. 2157/2001",
+      "swe_label": "Förordning (EG) nr 2157/2001"
+    },
+    {
+      "code": "32003R1435",
+      "Name": "Regulation (EC) No 1435/2003",
+      "bul_label": "Регламент (ЕО) 1435/2003",
+      "ces_label": "Nařízení (ES) č. 1435/2003",
+      "dan_label": "Forordning (EF) nr. 1435/2003",
+      "deu_label": "Verordnung (EG) Nr. 1435/2003",
+      "ell_label": "Κανονισμός (ΕΚ) αριθ. 1435/2003",
+      "eng_label": "Regulation (EC) No 1435/2003",
+      "spa_label": "Reglamento (CE) n.º 1435/2003",
+      "est_label": "Määrus (EÜ) nr 1435/2003",
+      "fin_label": "Asetus (EY) N:o 1435/2003",
+      "fra_label": "Règlement (CE) n° 1435/2003",
+      "gle_label": "Rialachán (CE) Uimh. 1435/2003",
+      "hrv_label": "Uredba (EZ) br. 1435/2003",
+      "hun_label": "1435/2003/EK rendelet",
+      "ita_label": "Regolamento (CE) n. 1435/2003",
+      "lit_label": "Reglamentas (EB) Nr. 1435/2003",
+      "lav_label": "Regula (EK) Nr. 1435/2003",
+      "mlt_label": "Regolament (KE) Nru 1435/2003",
+      "nld_label": "Verordening (EG) nr. 1435/2003",
+      "pol_label": "Rozporządzenie (WE) nr 1435/2003",
+      "por_label": "Regulamento (CE) n.° 1435/2003",
+      "ron_label": "Regulamentul (CE) nr. 1435/2003",
+      "slk_label": "Nariadenie (ES) č. 1435/2003",
+      "slv_label": "Uredba (ES) št. 1435/2003",
+      "swe_label": "Förordning (EG) nr 1435/2003"
+    },
+    {
+      "code": "32007R1370",
+      "Name": "Regulation (EC) No 1370/2007",
+      "bul_label": "Регламент (ЕО) № 1370/2007",
+      "ces_label": "Nařízení (ES) č. 1370/2007",
+      "dan_label": "Forordning (EF) nr. 1370/2007",
+      "deu_label": "Verordnung (EG) Nr. 1370/2007",
+      "ell_label": "Κανονισμός (ΕΚ) αριθ. 1370/2007",
+      "eng_label": "Regulation (EC) No 1370/2007",
+      "spa_label": "Reglamento (CE) n.º 1370/2007",
+      "est_label": "Määrus (EÜ) nr 1370/2007",
+      "fin_label": "Asetus (EY) N:o 1370/2007",
+      "fra_label": "Règlement (CE) n° 1370/2007",
+      "gle_label": "Rialachán (CE) Uimh. 1370/2007",
+      "hrv_label": "Uredba (EZ) br. 1370/2007",
+      "hun_label": "1370/2007/EK rendelet",
+      "ita_label": "Regolamento (CE) n. 1370/2007",
+      "lit_label": "Reglamentas (EB) Nr. 1370/2007",
+      "lav_label": "Regula (EK) Nr. 1370/2007",
+      "mlt_label": "Regolament (KE) Nru 1370/2007",
+      "nld_label": "Verordening (EG) nr. 1370/2007",
+      "pol_label": "Rozporządzenie (WE) nr 1370/2007",
+      "por_label": "Regulamento (CE) n.° 1370/2007",
+      "ron_label": "Regulamentul (CE) nr. 1370/2007",
+      "slk_label": "Nariadenie (ES) č. 1370/2007",
+      "slv_label": "Uredba (ES) št. 1370/2007",
+      "swe_label": "Förordning (EG) nr 1370/2007"
+    },
+    {
+      "code": "32009L0081",
+      "Name": "Directive 2009/81/EC",
+      "bul_label": "Директива 2009/81/ЕО",
+      "ces_label": "Směrnice 2009/81/ES",
+      "dan_label": "Direktiv 2009/81/EF",
+      "deu_label": "Richtlinie 2009/81/EG",
+      "ell_label": "Οδηγία 2009/81/ΕΚ",
+      "eng_label": "Directive 2009/81/EC",
+      "spa_label": "Directiva 2009/81/CE",
+      "est_label": "Direktiiv 2009/81/EÜ",
+      "fin_label": "Direktiivi 2009/81/EY",
+      "fra_label": "Directive 2009/81/CE",
+      "gle_label": "Treoir 2009/81/CE",
+      "hrv_label": "Direktiva 2009/81/EZ",
+      "hun_label": "2009/81/EK irányelv",
+      "ita_label": "Direttiva 2009/81/CE",
+      "lit_label": "Direktyva 2009/81/EB",
+      "lav_label": "Direktīva 2009/81/EK",
+      "mlt_label": "Direttiva 2009/81/KE",
+      "nld_label": "Richtlijn 2009/81/EG",
+      "pol_label": "Dyrektywa 2009/81/WE",
+      "por_label": "Diretiva 2009/81/CE",
+      "ron_label": "Directiva 2009/81/CE",
+      "slk_label": "Smernica 2009/81/ES",
+      "slv_label": "Direktiva 2009/81/ES",
+      "swe_label": "Direktiv 2009/81/EG"
+    },
+    {
+      "code": "32014L0023",
+      "Name": "Directive 2014/23/EU",
+      "bul_label": "Директива 2014/23/ЕС",
+      "ces_label": "Směrnice 2014/23/EU",
+      "dan_label": "Direktiv 2014/23/EU",
+      "deu_label": "Richtlinie 2014/23/EU",
+      "ell_label": "Οδηγία 2014/23/ΕΕ",
+      "eng_label": "Directive 2014/23/EU",
+      "spa_label": "Directiva 2014/23/UE",
+      "est_label": "Direktiiv 2014/23/EL",
+      "fin_label": "Direktiivi 2014/23/EU",
+      "fra_label": "Directive 2014/23/UE",
+      "gle_label": "Treoir 2014/23/AE",
+      "hrv_label": "Direktiva 2014/23/EU",
+      "hun_label": "2014/23/EU irányelv",
+      "ita_label": "Direttiva 2014/23/UE",
+      "lit_label": "Direktyva 2014/23/ES",
+      "lav_label": "Direktīva 2014/23/ES",
+      "mlt_label": "Direttiva 2014/23/UE",
+      "nld_label": "Richtlijn 2014/23/EU",
+      "pol_label": "Dyrektywa 2014/23/UE",
+      "por_label": "Diretiva 2014/23/UE",
+      "ron_label": "Directiva 2014/23/UE",
+      "slk_label": "Smernica 2014/23/EÚ",
+      "slv_label": "Direktiva 2014/23/EU",
+      "swe_label": "Direktiv 2014/23/EU"
+    },
+    {
+      "code": "32014L0024",
+      "Name": "Directive 2014/24/EU",
+      "bul_label": "Директива 2014/24/ЕС",
+      "ces_label": "Směrnice 2014/24/EU",
+      "dan_label": "Direktiv 2014/24/EU",
+      "deu_label": "Richtlinie 2014/24/EU",
+      "ell_label": "Οδηγία 2014/24/ΕΕ",
+      "eng_label": "Directive 2014/24/EU",
+      "spa_label": "Directiva 2014/24/UE",
+      "est_label": "Direktiiv 2014/24/EL",
+      "fin_label": "Direktiivi 2014/24/EU",
+      "fra_label": "Directive 2014/24/UE",
+      "gle_label": "Treoir 2014/24/AE",
+      "hrv_label": "Direktiva 2014/24/EU",
+      "hun_label": "2014/24/EU irányelv",
+      "ita_label": "Direttiva 2014/24/UE",
+      "lit_label": "Direktyva 2014/24/ES",
+      "lav_label": "Direktīva 2014/24/ES",
+      "mlt_label": "Direttiva 2014/24/UE",
+      "nld_label": "Richtlijn 2014/24/EU",
+      "pol_label": "Dyrektywa 2014/24/UE",
+      "por_label": "Diretiva 2014/24/UE",
+      "ron_label": "Directiva 2014/24/UE",
+      "slk_label": "Smernica 2014/24/EÚ",
+      "slv_label": "Direktiva 2014/24/EU",
+      "swe_label": "Direktiv 2014/24/EU"
+    },
+    {
+      "code": "32014L0025",
+      "Name": "Directive 2014/25/EU",
+      "bul_label": "Директива 2014/25/ЕС",
+      "ces_label": "Směrnice 2014/25/EU",
+      "dan_label": "Direktiv 2014/25/EU",
+      "deu_label": "Richtlinie 2014/25/EU",
+      "ell_label": "Οδηγία 2014/25/ΕΕ",
+      "eng_label": "Directive 2014/25/EU",
+      "spa_label": "Directiva 2014/25/UE",
+      "est_label": "Direktiiv 2014/25/EL",
+      "fin_label": "Direktiivi 2014/25/EU",
+      "fra_label": "Directive 2014/25/UE",
+      "gle_label": "Treoir 2014/25/AE",
+      "hrv_label": "Direktiva 2014/25/EU",
+      "hun_label": "2014/25/EU irányelv",
+      "ita_label": "Direttiva 2014/25/UE",
+      "lit_label": "Direktyva 2014/25/ES",
+      "lav_label": "Direktīva 2014/25/ES",
+      "mlt_label": "Direttiva 2014/25/UE",
+      "nld_label": "Richtlijn 2014/25/EU",
+      "pol_label": "Dyrektywa 2014/25/UE",
+      "por_label": "Diretiva 2014/25/UE",
+      "ron_label": "Directiva 2014/25/UE",
+      "slk_label": "Smernica 2014/25/EÚ",
+      "slv_label": "Direktiva 2014/25/EU",
+      "swe_label": "Direktiv 2014/25/EU"
+    },
+    {
+      "code": "32024R2509",
+      "Name": "Regulation (EU, Euratom) 2024/2509",
+      "bul_label": "Регламент (ЕС, Евратом) 2024/2509",
+      "ces_label": "Nařízení (EU, Euratom) 2024/2509",
+      "dan_label": "Forordning (EU, Euratom) 2024/2509",
+      "deu_label": "Verordnung (EU, Euratom) 2024/2509",
+      "ell_label": "Κανονισμός (ΕΕ, Ευρατόμ) 2024/2509",
+      "eng_label": "Regulation (EU, Euratom) 2024/2509",
+      "spa_label": "Reglamento (UE, Euratom) 2024/2509",
+      "est_label": "Määrus (EL, Euratom) 2024/2509",
+      "fin_label": "Asetus (EU, Euratom) 2024/2509",
+      "fra_label": "Règlement (UE, Euratom) 2024/2509",
+      "gle_label": "Rialachán (AE, Euratom) 2024/2509",
+      "hrv_label": "Uredba (EU, Euratom) 2024/2509",
+      "hun_label": "(EU, Euratom) 2024/2509 rendelet",
+      "ita_label": "Regolamento (UE, Euratom) 2024/2509",
+      "lit_label": "Reglamentas (ES, Euratomas) 2024/2509",
+      "lav_label": "Regula (ES, Euratom) 2024/2509",
+      "mlt_label": "Regolament (UE, Euratom) 2024/2509",
+      "nld_label": "Verordening (EU, Euratom) 2024/2509",
+      "pol_label": "Rozporządzenie (UE, Euratom) 2024/2509",
+      "por_label": "Regulamento (UE, Euratom) 2024/2509",
+      "ron_label": "Regulamentul (UE, Euratom) 2024/2509",
+      "slk_label": "Nariadenie (EÚ, Euratom) 2024/2509",
+      "slv_label": "Uredba (EU, Euratom) 2024/2509",
+      "swe_label": "Förordning (EU, Euratom) 2024/2509"
+    },
+    {
+      "code": "other",
+      "Name": "Other",
+      "bul_label": "Друго",
+      "ces_label": "Jiný",
+      "dan_label": "Anden",
+      "deu_label": "Andere",
+      "ell_label": "Άλλο",
+      "eng_label": "Other",
+      "spa_label": "Otro",
+      "est_label": "Muu",
+      "fin_label": "Muu",
+      "fra_label": "Autre",
+      "gle_label": "Eile",
+      "hrv_label": "Druga",
+      "hun_label": "Egyéb",
+      "ita_label": "Altro",
+      "lit_label": "Kitas",
+      "lav_label": "Cits",
+      "mlt_label": "Ieħor",
+      "nld_label": "Ander",
+      "pol_label": "Inny",
+      "por_label": "Outro",
+      "ron_label": "Altele",
+      "slk_label": "Iný",
+      "slv_label": "Drugo",
+      "swe_label": "Annan"
+    }
+  ],
+  "identification": {
+    "short_name": "LegalBasis",
+    "version": "20250319-0"
+  }
+}

@@ -1,0 +1,198 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Your pending automatic translations will be canceled.": [
+            "Οι εκκρεμείς αυτόματες μεταφράσεις σας θα ακυρωθούν."
+         ],
+         "Save": [
+            "Αποθήκευση"
+         ],
+         "Go to the <a>Translation Management Dashboard</a> to translate your content.": [
+            "Μεταβείτε στον <a>Πίνακα Ελέγχου Διαχείρισης Μεταφράσεων</a> για να μεταφράσετε το περιεχόμενό σας."
+         ],
+         "Review the translations before publishing": [
+            "Ελέγξτε τις μεταφράσεις πριν τη δημοσίευση"
+         ],
+         "Publish translations and review them later": [
+            "Δημοσιεύστε τις μεταφράσεις και ελέγξτε τις αργότερα"
+         ],
+         "Publish translations without reviewing": [
+            "Δημοσιεύστε τις μεταφράσεις χωρίς έλεγχο"
+         ],
+         "Translate Everything": [
+            "Μετάφραση Όλων"
+         ],
+         "WPML will automatically translate content that you publish or update": [
+            "Το WPML θα μεταφράζει αυτόματα το περιεχόμενο που δημοσιεύετε ή ενημερώνετε"
+         ],
+         "How do you want to translate this site?": [
+            "Πώς θέλετε να μεταφράσετε αυτόν τον ιστότοπο;?"
+         ],
+         "Translate Some": [
+            "Μετάφραση Μερικών"
+         ],
+         "I want to choose which content to translate": [
+            "Θέλω να επιλέξω ποιο περιεχόμενο θα μεταφραστεί"
+         ],
+         "All Languages": [
+            "Όλες οι Γλώσσες"
+         ],
+         "Overwrite existing translations": [
+            "Αντικατάσταση υπαρχουσών μεταφράσεων"
+         ],
+         "Some of the content you want to translate is already translated": [
+            "Ένα μέρος του περιεχομένου που θέλετε να μεταφράσετε είναι ήδη μεταφρασμένο"
+         ],
+         "What do you want to do with the content that’s already translated?": [
+            "Τι θέλετε να κάνετε με το περιεχόμενο που είναι ήδη μεταφρασμένο;?"
+         ],
+         "Leave existing translations as is": [
+            "Διατήρηση των υπαρχουσών μεταφράσεων ως έχουν"
+         ],
+         "You chose to review translations before publishing.": [
+            "Επιλέξατε να ελέγχετε τις μεταφράσεις πριν τη δημοσίευση."
+         ],
+         "If you retranslate content that's already published, the changes will be applied directly to live pages or posts.": [
+            "Εάν μεταφράσετε εκ νέου περιεχόμενο που είναι ήδη δημοσιευμένο, οι αλλαγές θα εφαρμοστούν απευθείας στις ζωντανές σελίδες ή αναρτήσεις."
+         ],
+         "This also updates the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "Αυτό ενημερώνει επίσης τη μεταφραστική μνήμη για τον ιστότοπό σας. Διαβάστε περισσότερα σχετικά με τη <a href=\"%s\" target=\"_blank\" >μεταφραστική μνήμη</a>"
+         ],
+         "Allows you to re-translate your content and update the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "Σας επιτρέπει να μεταφράσετε εκ νέου το περιεχόμενό σας και να ενημερώσετε τη μεταφραστική μνήμη για τον ιστότοπό σας. Διαβάστε περισσότερα για τη <a href=\"%s\" target=\"_blank\" >μεταφραστική μνήμη</a>"
+         ],
+         "Allows your translators to re-translate your content and update the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "Επιτρέπει στους μεταφραστές σας να μεταφράσουν εκ νέου το περιεχόμενό σας και να ενημερώσουν τη μεταφραστική μνήμη για τον ιστότοπό σας. Διαβάστε περισσότερα για τη <a href=\"%s\" target=\"_blank\" >μεταφραστική μνήμη</a>"
+         ],
+         "HINT: You can add a Note for translators in the table above with special instructions.": [
+            "ΥΠΟΔΕΙΞΗ: Μπορείτε να προσθέσετε μια Σημείωση για τους μεταφραστές στον παραπάνω πίνακα με ειδικές οδηγίες."
+         ],
+         "Translate automatically": [
+            "Αυτόματη μετάφραση"
+         ],
+         "How do you want to translate?": [
+            "Πώς θέλετε να μεταφράσετε;?"
+         ],
+         "Assign to a translator": [
+            "Ανάθεση σε μεταφραστή"
+         ],
+         "Translate myself": [
+            "Μετάφραση από εμένα"
+         ],
+         "You do not need translation credits to translate content yourself.": [
+            "Δεν χρειάζεστε μονάδες μετάφρασης για να μεταφράσετε το περιεχόμενο μόνοι σας."
+         ],
+         "You can only automatically translate content from your site's default language (English), to your site's other languages. Deselect content in your site's secondary languages to proceed.": [
+            "Μπορείτε να μεταφράσετε αυτόματα περιεχόμενο μόνο από την προεπιλεγμένη γλώσσα του ιστοτόπου σας (Αγγλικά) στις άλλες γλώσσες του ιστοτόπου σας. Αποεπιλέξτε το περιεχόμενο στις δευτερεύουσες γλώσσες του ιστοτόπου σας για να συνεχίσετε."
+         ],
+         "You can only automatically translate content from your primary language (%s) to other languages. Use the language switcher at the top of this page to switch to %s.": [
+            "Μπορείτε να μεταφράσετε αυτόματα περιεχόμενο μόνο από την κύρια γλώσσα σας (%s) σε άλλες γλώσσες. Χρησιμοποιήστε τον επιλογέα γλώσσας στο πάνω μέρος αυτής της σελίδας για να μεταβείτε στα %s."
+         ],
+         "Selected content includes items that were originally created in this language. Deselect these items to proceed.": [
+            "Το επιλεγμένο περιεχόμενο περιλαμβάνει στοιχεία που δημιουργήθηκαν αρχικά σε αυτήν τη γλώσσα. Αποεπιλέξτε αυτά τα στοιχεία για να συνεχίσετε."
+         ],
+         "Add to Translation Queue": [
+            "Προσθήκη στην Ουρά Μετάφρασης"
+         ],
+         "Select a post or page to translate": [
+            "Επιλέξτε μια ανάρτηση ή σελίδα για μετάφραση"
+         ],
+         "Translate or duplicate content to at least one language": [
+            "Μεταφράστε ή αντιγράψτε περιεχόμενο σε τουλάχιστον μία γλώσσα"
+         ],
+         "Choose how you want to translate your content": [
+            "Επιλέξτε πώς θέλετε να μεταφράσετε το περιεχόμενό σας"
+         ],
+         "Selected content is already translated": [
+            "Το επιλεγμένο περιεχόμενο είναι ήδη μεταφρασμένο"
+         ],
+         "Selected content includes items in a language other than your site's default language.": [
+            "Το επιλεγμένο περιεχόμενο περιλαμβάνει στοιχεία σε γλώσσα διαφορετική από την προεπιλεγμένη γλώσσα του ιστοτόπου σας."
+         ],
+         "Choose at least one translation action": [
+            "Επιλέξτε τουλάχιστον μία ενέργεια μετάφρασης"
+         ],
+         "Duplicate": [
+            "Αντιγραφή"
+         ],
+         "Start translating and duplicating": [
+            "Έναρξη μετάφρασης και αντιγραφής"
+         ],
+         "Add to Translation Basket and duplicate": [
+            "Προσθήκη στο Καλάθι Μετάφρασης και αντιγραφή"
+         ],
+         "Add to Translation Queue and duplicate": [
+            "Προσθήκη στην Ουρά Μετάφρασης και αντιγραφή"
+         ],
+         "Start translating": [
+            "Έναρξη μετάφρασης"
+         ],
+         "Add to Translation Basket": [
+            "Προσθήκη στο Καλάθι Μετάφρασης"
+         ],
+         "One more thing...": [
+            "Ένα ακόμη πράγμα..."
+         ],
+         "What would you like to do when your content has finished translating automatically?": [
+            "Τι θα θέλατε να κάνετε όταν ολοκληρωθεί η αυτόματη μετάφραση του περιεχομένου σας;?"
+         ],
+         "Save settings": [
+            "Αποθήκευση ρυθμίσεων"
+         ],
+         "This setting will apply to all future automatic translations. You can change this anytime in WPML → Settings.": [
+            "Αυτή η ρύθμιση θα εφαρμοστεί σε όλες τις μελλοντικές αυτόματες μεταφράσεις. Μπορείτε να την αλλάξετε οποιαδήποτε στιγμή στο WPML → Ρυθμίσεις."
+         ],
+         "Translate": [
+            "Μετάφραση"
+         ],
+         "Duplicate content": [
+            "Αντιγραφή περιεχομένου"
+         ],
+         "Do nothing": [
+            "Καμία ενέργεια"
+         ],
+         "You need credits to use automatic translation.": [
+            "Χρειάζεστε μονάδες για να χρησιμοποιήσετε την αυτόματη μετάφραση."
+         ],
+         "Finish setting up %s on your site": [
+            "Ολοκληρώστε τη ρύθμιση του %s στον ιστότοπό σας"
+         ],
+         "You need to authenticate %s to send them content for translation. Visit the %s to finish the setup.": [
+            "Πρέπει να πιστοποιήσετε το %s για να τους στείλετε περιεχόμενο για μετάφραση. Επισκεφθείτε το %s για να ολοκληρώσετε τη ρύθμιση."
+         ],
+         "Connection Error. Please wait a minute and reload this page. If the problem continues, please <a>contact WPML support</a>.": [
+            "Σφάλμα σύνδεσης. Παρακαλώ περιμένετε ένα λεπτό και ανανεώστε αυτή τη σελίδα. Εάν το πρόβλημα συνεχίζεται, παρακαλώ <a>επικοινωνήστε με την υποστήριξη του WPML</a>."
+         ],
+         "Add a translator to use %s.": [
+            "Προσθέστε έναν μεταφραστή για να χρησιμοποιήσετε το %s."
+         ],
+         "To send content to %s for translation, go to the %s to add a translator on your site.": [
+            "Για να στείλετε περιεχόμενο στο %s για μετάφραση, μεταβείτε στο %s για να προσθέσετε έναν μεταφραστή στον ιστότοπό σας."
+         ],
+         "Your selected automatic translation engines do not support the following language(s): %s. Read more about <a>choosing a translation engine</a>.": [
+            "Οι επιλεγμένες μηχανές αυτόματης μετάφρασης δεν υποστηρίζουν τις ακόλουθες γλώσσες: %s. Διαβάστε περισσότερα σχετικά με την <a>επιλογή μηχανής μετάφρασης</a>."
+         ],
+         "Some of the selected content is already being translated. This will cancel any in-progress translations.": [
+            "Ορισμένο από το επιλεγμένο περιεχόμενο μεταφράζεται ήδη. Αυτό θα ακυρώσει τυχόν μεταφράσεις που βρίσκονται σε εξέλιξη."
+         ],
+         "Any existing content (translations) will be overwritten when creating duplicates.": [
+            "Τυχόν υπάρχον περιεχόμενο (μεταφράσεις) θα αντικατασταθεί κατά τη δημιουργία αντιγράφων."
+         ],
+         "When duplicating content, please first duplicate parent pages to maintain the site's hierarchy.": [
+            "Κατά την αντιγραφή περιεχομένου, παρακαλούμε πρώτα να αντιγράψετε τις γονικές σελίδες για να διατηρήσετε την ιεραρχία του ιστότοπου."
+         ],
+         "To assign content to a translator, first <a href=\"%s\" target=\"_blank\">add a translator</a> or <a href=\"%s\" target=\"_blank\">connect to a translation service</a>.": [
+            "Για να αναθέσετε περιεχόμενο σε έναν μεταφραστή, πρώτα <a href=\"%s\" target=\"_blank\">προσθέστε έναν μεταφραστή</a> ή <a href=\"%s\" target=\"_blank\">συνδεθείτε με μια υπηρεσία μετάφρασης</a>."
+         ],
+         "Translators Tab": [
+            "Καρτέλα Μεταφραστών"
+         ]
+      }
+   }
+}

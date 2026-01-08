@@ -1,0 +1,226 @@
+{
+    "metadata": {
+      "title": "Main EU Institutions and Bodies Directory",
+      "description": "Complete directory of the seven principal EU institutions, advisory bodies, financial institutions, oversight bodies, and interinstitutional services",
+      "last_updated": "2025-11-06",
+      "total_entities": 20,
+      "sources": [
+        "https://european-union.europa.eu/institutions-law-budget/institutions-and-bodies_en"
+      ]
+    },
+    "institutions": {
+      "principal_institutions": {
+        "total": 7,
+        "description": "The seven principal institutions that govern the European Union",
+        "institutions": [
+          {
+            "name": "European Parliament",
+            "acronym": "EP",
+            "url": "https://www.europarl.europa.eu/",
+            "role": "Directly elected legislative body representing EU citizens",
+            "location": "Strasbourg (plenary sessions), Brussels (committees), Luxembourg (secretariat)"
+          },
+          {
+            "name": "European Council",
+            "acronym": null,
+            "url": "https://www.consilium.europa.eu/en/european-council/",
+            "role": "Defines the general political direction and priorities of the EU",
+            "composition": "EU heads of state or government, President of the European Council, President of the European Commission"
+          },
+          {
+            "name": "Council of the European Union",
+            "acronym": "Council",
+            "alternative_name": "Council of Ministers",
+            "url": "https://www.consilium.europa.eu/",
+            "role": "Legislative body representing member state governments",
+            "composition": "Ministers from member state governments"
+          },
+          {
+            "name": "European Commission",
+            "acronym": "EC",
+            "url": "https://commission.europa.eu/",
+            "role": "Executive body proposing legislation and implementing EU policies",
+            "composition": "College of 27 Commissioners (one per member state)"
+          },
+          {
+            "name": "Court of Justice of the European Union",
+            "acronym": "CJEU",
+            "url": "https://curia.europa.eu/",
+            "role": "Judicial authority ensuring uniform interpretation and application of EU law",
+            "location": "Luxembourg"
+          },
+          {
+            "name": "European Central Bank",
+            "acronym": "ECB",
+            "url": "https://www.ecb.europa.eu/",
+            "role": "Manages the euro and EU monetary policy",
+            "location": "Frankfurt, Germany"
+          },
+          {
+            "name": "European Court of Auditors",
+            "acronym": "ECA",
+            "url": "https://www.eca.europa.eu/",
+            "role": "Audits EU finances and ensures proper use of EU funds",
+            "location": "Luxembourg"
+          }
+        ]
+      },
+      "advisory_bodies": {
+        "total": 2,
+        "description": "Consultative bodies providing input on EU legislation",
+        "bodies": [
+          {
+            "name": "European Economic and Social Committee",
+            "acronym": "EESC",
+            "url": "https://www.eesc.europa.eu/",
+            "role": "Represents civil society organizations, employers, workers, and other interest groups",
+            "composition": "329 members representing economic and social stakeholders"
+          },
+          {
+            "name": "European Committee of the Regions",
+            "acronym": "CoR",
+            "url": "https://cor.europa.eu/",
+            "role": "Represents local and regional authorities in EU policymaking",
+            "composition": "329 members from regional and local governments"
+          }
+        ]
+      },
+      "financial_institutions": {
+        "total": 3,
+        "description": "EU financial institutions supporting investment and economic stability",
+        "institutions": [
+          {
+            "name": "European Investment Bank",
+            "acronym": "EIB",
+            "url": "https://www.eib.org/",
+            "role": "EU's lending institution providing long-term finance for investment projects",
+            "location": "Luxembourg"
+          },
+          {
+            "name": "European Investment Fund",
+            "acronym": "EIF",
+            "url": "https://www.eif.org/",
+            "role": "Supports SMEs through venture capital, guarantees, and microfinance",
+            "ownership": "Part of the EIB Group"
+          },
+          {
+            "name": "European Stability Mechanism",
+            "acronym": "ESM",
+            "url": "https://www.esm.europa.eu/",
+            "role": "Provides financial assistance to eurozone member states in financial difficulty",
+            "location": "Luxembourg"
+          }
+        ]
+      },
+      "independent_oversight_bodies": {
+        "total": 3,
+        "description": "Independent bodies ensuring accountability and data protection",
+        "bodies": [
+          {
+            "name": "European Ombudsman",
+            "acronym": null,
+            "url": "https://www.ombudsman.europa.eu/",
+            "role": "Investigates complaints about maladministration in EU institutions",
+            "location": "Strasbourg"
+          },
+          {
+            "name": "European Data Protection Supervisor",
+            "acronym": "EDPS",
+            "url": "https://edps.europa.eu/",
+            "role": "Ensures EU institutions and bodies respect privacy when processing personal data",
+            "location": "Brussels"
+          },
+          {
+            "name": "European Data Protection Board",
+            "acronym": "EDPB",
+            "url": "https://edpb.europa.eu/",
+            "role": "Ensures consistent application of GDPR across the EU",
+            "composition": "Representatives from national data protection authorities"
+          }
+        ]
+      },
+      "interinstitutional_services": {
+        "total": 4,
+        "description": "Shared services supporting multiple EU institutions",
+        "services": [
+          {
+            "name": "Publications Office of the European Union",
+            "acronym": "Publications Office",
+            "url": "https://op.europa.eu/",
+            "role": "Publishing and distributing EU publications and official documents",
+            "location": "Luxembourg"
+          },
+          {
+            "name": "European Personnel Selection Office",
+            "acronym": "EPSO",
+            "url": "https://epso.europa.eu/",
+            "role": "Recruits staff for EU institutions",
+            "location": "Brussels"
+          },
+          {
+            "name": "Computer Emergency Response Team for EU Institutions",
+            "acronym": "CERT-EU",
+            "url": "https://cert.europa.eu/",
+            "role": "Cybersecurity support for EU institutions, bodies, and agencies",
+            "location": "Brussels"
+          },
+          {
+            "name": "European School of Administration",
+            "acronym": "EU-ESA",
+            "url": "https://eu-esa.eu/",
+            "role": "Training and professional development for EU staff",
+            "location": "Brussels"
+          }
+        ]
+      },
+      "additional_significant_bodies": {
+        "total": 3,
+        "description": "Other significant EU bodies with specialized mandates",
+        "bodies": [
+          {
+            "name": "European External Action Service",
+            "acronym": "EEAS",
+            "url": "https://www.eeas.europa.eu/",
+            "role": "EU's diplomatic service managing foreign and security policy",
+            "head": "High Representative for Foreign Affairs and Security Policy",
+            "location": "Brussels"
+          },
+          {
+            "name": "Single Resolution Board",
+            "acronym": "SRB",
+            "url": "https://www.srb.europa.eu/",
+            "role": "Manages resolution of failing banks in the Banking Union",
+            "location": "Brussels"
+          },
+          {
+            "name": "European University Institute",
+            "acronym": "EUI",
+            "url": "https://www.eui.eu/",
+            "role": "Postgraduate teaching and research institution in social sciences",
+            "location": "Florence, Italy"
+          }
+        ]
+      }
+    },
+    "summary": {
+      "total_entities": 22,
+      "principal_institutions": 7,
+      "advisory_bodies": 2,
+      "financial_institutions": 3,
+      "independent_oversight_bodies": 3,
+      "interinstitutional_services": 4,
+      "additional_significant_bodies": 3,
+      "institutional_triangle": [
+        "European Parliament (legislative)",
+        "Council of the European Union (legislative)",
+        "European Commission (executive)"
+      ],
+      "locations": {
+        "Brussels": ["European Commission", "European Parliament (committees)", "Council", "EEAS", "SRB", "EDPS", "EPSO", "CERT-EU", "EU-ESA"],
+        "Strasbourg": ["European Parliament (plenary)", "European Ombudsman"],
+        "Luxembourg": ["Court of Justice", "European Court of Auditors", "EIB", "ESM", "Publications Office"],
+        "Frankfurt": ["European Central Bank"],
+        "Florence": ["European University Institute"]
+      }
+    }
+  }

@@ -1,0 +1,69 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "WPML Translation Editor": [
+            "โปรแกรมแปล WPML"
+         ],
+         "WordPress Editor": [
+            "ตัวแก้ไข WordPress"
+         ],
+         "Translation Dashboard": [
+            "แดชบอร์ดการแปล"
+         ],
+         "Also, switching back to WPML's Translation Editor later will require re-translating content that you translated with the WordPress editor.": [
+            "นอกจากนี้ การสลับกลับไปใช้ตัวแก้ไขการแปลของ WPML ในภายหลังจะต้องแปลเนื้อหาที่คุณได้แปลด้วยตัวแก้ไขของ WordPress ใหม่อีกครั้ง."
+         ],
+         "This will overwrite content you translated with the WordPress Editor. If you switch now, you'll have to translate selected content again.": [
+            "การดำเนินการนี้จะเขียนทับเนื้อหาที่คุณแปลด้วยตัวแก้ไขของ WordPress หากคุณสลับตอนนี้ คุณจะต้องแปลเนื้อหาที่เลือกไว้อีกครั้ง."
+         ],
+         "You are about to translate with the %s": [
+            "คุณกำลังจะแปลด้วย %s"
+         ],
+         "Translate with the WordPress Editor if you need different designs per language or if the content isn't compatible with WPML's Translation Editor.": [
+            "แปลด้วยตัวแก้ไขของ WordPress หากคุณต้องการการออกแบบที่แตกต่างกันสำหรับแต่ละภาษา หรือหากเนื้อหาไม่สามารถใช้งานร่วมกับตัวแก้ไขการแปลของ WPML ได้."
+         ],
+         "What do you want to translate?": [
+            "คุณต้องการแปลอะไร?"
+         ],
+         "I understand, switch to the WordPress Editor": [
+            "ฉันเข้าใจแล้ว เปลี่ยนไปใช้ตัวแก้ไข WordPress"
+         ],
+         "Apply": [
+            "นำไปใช้"
+         ],
+         "Cancel": [
+            "ยกเลิก"
+         ],
+         "I understand, switch to %s": [
+            "ฉันเข้าใจแล้ว เปลี่ยนไปใช้ %s"
+         ],
+         "Only this %s": [
+            "เฉพาะ %s นี้"
+         ],
+         "Recommended": [
+            "แนะนำ"
+         ],
+         "All %s": [
+            "ทุก %s"
+         ],
+         "All the site's content": [
+            "เนื้อหาทั้งหมดของเว็บไซต์"
+         ],
+         "I understand, switch to Translation Dashboard": [
+            "เข้าใจแล้ว เปลี่ยนไปที่แดชบอร์ดการแปล"
+         ],
+         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
+            "ตัวแก้ไข WordPress ไม่มีการแปลอัตโนมัติ หน่วยความจำการแปล และคุณสมบัติอื่นๆ ที่ทำให้การแปลง่ายขึ้น."
+         ],
+         "Translate items in batch after reviewing the cost of AI translation": [
+            "แปลรายการเป็นชุดหลังจากตรวจสอบค่าใช้จ่ายในการแปลด้วย AI"
+         ]
+      }
+   }
+}

@@ -1,0 +1,22 @@
+{
+  "extraction_date": "2025-11-27T11:44:05.686046",
+  "source": "OP-TED eForms SDK",
+  "repository": "https://github.com/OP-TED/eForms-SDK",
+  "files": {
+    "countries.json": 246,
+    "cpv_codes.json": 9454,
+    "procedure_types.json": 10,
+    "currencies.json": 156,
+    "exclusion_grounds.json": 31,
+    "selection_criteria.json": 32,
+    "nuts_regions.json": 1903,
+    "award_criteria.json": 3,
+    "legal_basis.json": 10,
+    "notice_types.json": 21,
+    "form_types.json": 8,
+    "contract_nature.json": 3,
+    "buyer_legal_types.json": 19,
+    "main_activities.json": 20
+  },
+  "total_items": 11916
+}

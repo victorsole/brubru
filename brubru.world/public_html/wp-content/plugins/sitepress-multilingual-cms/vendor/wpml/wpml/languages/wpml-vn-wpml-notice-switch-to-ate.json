@@ -1,0 +1,49 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "Nhận thêm tính năng với Trình biên dịch nâng cao của WPML"
+         ],
+         "Close banner": [
+            "Đóng banner"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "Bạn đang sử dụng Trình biên dịch Cổ điển, một công cụ lâu đời, và đang bỏ lỡ nhiều tính năng và hiệu quả của Trình biên dịch nâng cao của chúng tôi:"
+         ],
+         "Translation Memory": [
+            "Bộ nhớ dịch"
+         ],
+         "HTML Protection": [
+            "Bảo vệ HTML"
+         ],
+         "Glossary": [
+            "Bảng thuật ngữ"
+         ],
+         "Spellchecker": [
+            "Kiểm tra chính tả"
+         ],
+         "AI Assistant": [
+            "Trợ lý AI"
+         ],
+         "Automatic Translation": [
+            "Bản dịch tự động"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "Chuyển đổi ngay để có trải nghiệm dịch thuật nhanh hơn, thuận tiện hơn và đáng tin cậy hơn."
+         ],
+         "Switch Now": [
+            "Chuyển đổi ngay"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "Tìm hiểu thêm về Trình biên dịch nâng cao"
+         ],
+         "Learn More": [
+            "Tìm hiểu thêm"
+         ]
+      }
+   }
+}

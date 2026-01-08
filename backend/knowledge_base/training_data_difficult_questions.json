@@ -1,0 +1,95 @@
+{
+  "version": "2.0",
+  "last_updated": "2026-01-06",
+  "description": "Training data for Brubru chatbot - includes difficult questions and hallucination corrections",
+
+  "hallucination_corrections": [
+    {
+      "id": "hc_001",
+      "source": "example - to be replaced with actual hallucination report UUIDs",
+      "question": "What's the fine for GDPR violations?",
+      "wrong_answer": "Fines can reach €50 million",
+      "correct_answer": "Under GDPR Article 83, administrative fines can reach up to €20 million or 4% of total worldwide annual turnover, whichever is higher.",
+      "celex_reference": "32016R0679",
+      "root_cause": "ai_fabrication",
+      "added_date": "2026-01-06",
+      "resolved": true
+    }
+  ],
+
+  "difficult_questions": [
+  {
+    "id": 1,
+    "category": "Legislative Procedure - Digital Euro",
+    "difficulty": "high",
+    "question": "Where do things stand on the proposal for the digital euro?",
+    "user_follow_up": "In terms of next steps, any news on where the Council stands?",
+    "brubru_response_quality": "good",
+    "notes": "User asked for specific Council position updates. Brubru correctly identified this requires real-time legislative tracking data.",
+    "improvement_areas": [
+      "Need access to Council working group status updates",
+      "Need real-time legislative procedure tracking",
+      "Should integrate with Oeil database for procedure status"
+    ]
+  },
+  {
+    "id": 2,
+    "category": "Adopted Legislation - AI Act",
+    "difficulty": "medium",
+    "question": "What's the status of the AI Act?",
+    "brubru_response_quality": "excellent",
+    "notes": "Brubru correctly identified the AI Act is adopted and provided implementation timeline. Good use of knowledge base.",
+    "improvement_areas": []
+  },
+  {
+    "id": 3,
+    "category": "Economic Governance - Excessive Deficit Procedure",
+    "difficulty": "high",
+    "question": "Why did the European Commission keep the excessive deficit procedure for Romania in abeyance?",
+    "brubru_response_quality": "good",
+    "notes": "Brubru provided context about EDP suspension during pandemic. However, may lack real-time updates on Romania's specific case.",
+    "improvement_areas": [
+      "Need access to latest European Semester country-specific recommendations",
+      "Need real-time fiscal surveillance data",
+      "Should integrate Commission economic assessments database"
+    ]
+  },
+  {
+    "id": 4,
+    "category": "Fiscal Surveillance - Draft Budgetary Plans",
+    "difficulty": "very_high",
+    "question": "What is the conclusion the Commission´s assessment of Portugal´s draft budgetary plan?",
+    "user_follow_up": "Could you not consult it for me?",
+    "brubru_response_quality": "poor",
+    "notes": "Brubru correctly identified it doesn't have access to this specific document. User expected real-time document retrieval.",
+    "improvement_areas": [
+      "CRITICAL: Need integration with Commission opinions database",
+      "Need automated retrieval of Draft Budgetary Plan assessments",
+      "Should scrape/index European Semester documents",
+      "Consider EUR-Lex API integration for real-time document access"
+    ],
+    "user_expectation": "Real-time document lookup and analysis"
+  },
+  {
+    "id": 5,
+    "category": "Information Retrieval - Document Location",
+    "difficulty": "medium",
+    "question": "Where can I find the Commission opinion?",
+    "brubru_response_quality": "good",
+    "notes": "Brubru provided helpful guidance on where to find Commission opinions. Good knowledge of EU information sources.",
+    "improvement_areas": [
+      "Could provide direct EUR-Lex search links",
+      "Could provide direct links to European Semester pages"
+    ]
+  },
+  {
+    "id": 6,
+    "category": "EU Officials - Commissioners",
+    "difficulty": "low",
+    "question": "who is Virkkunen?",
+    "brubru_response_quality": "excellent",
+    "notes": "Brubru correctly identified Henna Virkkunen and her role in the Commission. Good biographical data.",
+    "improvement_areas": []
+  }
+  ]
+}

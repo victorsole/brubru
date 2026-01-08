@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:120
+msgid ""
+"To display this Custom HTML block in a specific language, first place it "
+"inside a Group block."
+msgstr "Para exibir este bloco de HTML personalizado em um idioma específico, primeiro coloque-o dentro de um bloco de Grupo."
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:126
+msgid "Place inside Group block"
+msgstr "Colocar dentro do bloco de Grupo"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:13
+msgid "All"
+msgstr "Todos(as)"
+
+#: src/js/widgets-language-switcher/LanguageSwitcher.js:56
+msgid "Display on language"
+msgstr "Mostrar no idioma"

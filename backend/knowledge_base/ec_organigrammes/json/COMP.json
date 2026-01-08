@@ -1,0 +1,492 @@
+{
+  "dg_code": "COMP",
+  "dg_name": "Competition",
+  "full_name": "Directorate-General for Competition",
+  "date_of_effect": "2025-09-16",
+  "executive_vice_president": {
+    "name": "Teresa Ribera",
+    "title": "Executive Vice-President (Acting)"
+  },
+  "leadership": {
+    "acting_director_general": {
+      "name": "Linsey McCallum",
+      "position": "Acting Director-General"
+    },
+    "deputy_director_generals": [
+      {
+        "name": "Guillaume Loriot",
+        "position": "Deputy Director-General - Mergers",
+        "responsibility": "Mergers"
+      },
+      {
+        "name": "Linsey McCallum",
+        "position": "Deputy Director-General - Antitrust & Regulation of Digital",
+        "responsibility": "Antitrust & Regulation of Digital"
+      },
+      {
+        "name": "Anthony Whelan",
+        "position": "Deputy Director-General - State Aid",
+        "responsibility": "State Aid"
+      }
+    ],
+    "advisers": [
+      {
+        "name": "Andreas Schwab",
+        "title": "Adviser to Environment",
+        "area": "Environment"
+      },
+      {
+        "name": "vacant",
+        "title": "Adviser, Cartels",
+        "area": "Cartels"
+      }
+    ],
+    "chief_technology_officer": {
+      "code": "COMP.CTO",
+      "name": "vacant",
+      "position": "Chief Technology Officer"
+    },
+    "chief_economist": {
+      "name": "Penelope Papandropoulou",
+      "position": "Chief Economist"
+    },
+    "principal_advisers": [
+      {
+        "name": "vacant",
+        "title": "Principal Adviser",
+        "area": "Economic Evaluation, Damage/Emittith"
+      }
+    ]
+  },
+  "units": {
+    "comp_01": {
+      "code": "COMP.01",
+      "name": "Commissioner's Priorities & Strategic Coordination",
+      "head_of_unit": {
+        "name": "Romina Lupu (acting)",
+        "deputy": null
+      }
+    },
+    "comp_cto1": {
+      "code": "COMP.CTO.1",
+      "name": "Data Analysis & Technology",
+      "head_of_unit": {
+        "name": "Nicholas Cohen (acting)",
+        "deputy": null
+      }
+    }
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "COMP.A",
+      "name": "Policy & Strategy",
+      "director": {
+        "name": "Marco Biancarelli",
+        "position": "Director"
+      },
+      "units": {
+        "a1": {
+          "code": "COMP.A.1",
+          "name": "Policy & Support & Rules",
+          "head_of_unit": {
+            "name": "Serge Morens",
+            "deputy": "Deputy to the Director"
+          }
+        },
+        "a2": {
+          "code": "COMP.A.2",
+          "name": "Support for State Aid & Policy",
+          "head_of_unit": {
+            "name": "Daniel Gal",
+            "deputy": null
+          }
+        },
+        "a3": {
+          "code": "COMP.A.3",
+          "name": "Strategic Communications & Policy",
+          "head_of_unit": {
+            "name": "Mercedes Lara",
+            "deputy": null
+          }
+        },
+        "a4": {
+          "code": "COMP.A.4",
+          "name": "International Cooperation & Rules",
+          "head_of_unit": {
+            "name": "Macarena Arias",
+            "deputy": null
+          }
+        },
+        "a5": {
+          "code": "COMP.A.5",
+          "name": "Procedural Relations & Policy",
+          "head_of_unit": {
+            "name": "Maria Luisa Simone Chiarello",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_b": {
+      "code": "COMP.B",
+      "name": "Markets & Cases I: Energy & Environment",
+      "director": {
+        "name": "Philippe Grospernin",
+        "position": "Director"
+      },
+      "units": {
+        "b1": {
+          "code": "COMP.B.1",
+          "name": "Energy & Environment",
+          "head_of_unit": {
+            "name": "Maria Schaunchez",
+            "deputy": null
+          },
+          "marker": "Deputy to the Director"
+        },
+        "b2": {
+          "code": "COMP.B.2",
+          "name": "Energy",
+          "head_of_unit": {
+            "name": "Stefan Kalt",
+            "deputy": null
+          }
+        },
+        "b3": {
+          "code": "COMP.B.3",
+          "name": "Energy",
+          "head_of_unit": {
+            "name": "Manuel Campa",
+            "deputy": null
+          }
+        },
+        "b4": {
+          "code": "COMP.B.4",
+          "name": "Environment & Climate",
+          "head_of_unit": {
+            "name": "Alexandra Kok",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_c": {
+      "code": "COMP.C",
+      "name": "Markets & Cases II: Information Technology, Communications & Media",
+      "director": {
+        "name": "Carmen Arnauld",
+        "position": "Director"
+      },
+      "units": {
+        "c1": {
+          "code": "COMP.C.1",
+          "name": "Telecom & Internet: Communications",
+          "head_of_unit": {
+            "name": "Apostolos Chatsivaias",
+            "deputy": null
+          }
+        },
+        "c2": {
+          "code": "COMP.C.2",
+          "name": "Technology Market: Wares",
+          "head_of_unit": {
+            "name": "Euclades Sanchez Worces",
+            "deputy": null
+          }
+        },
+        "c3": {
+          "code": "COMP.C.3",
+          "name": "Digital Platforms",
+          "head_of_unit": {
+            "name": "Nick Hauk",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_d": {
+      "code": "COMP.D",
+      "name": "Markets & Cases III: Financial Services",
+      "director": {
+        "name": "vacant",
+        "position": "Director"
+      },
+      "units": {
+        "d1": {
+          "code": "COMP.D.1",
+          "name": "Financial Services Systems",
+          "head_of_unit": {
+            "name": "Luis Rodriguez Campiro",
+            "deputy": null
+          },
+          "marker": "Deputy to the Director"
+        },
+        "d2": {
+          "code": "COMP.D.2",
+          "name": "State Aid - Financial Services & Financial Markets",
+          "head_of_unit": {
+            "name": "Eva Gizanges Sampello",
+            "deputy": null
+          }
+        },
+        "d3": {
+          "code": "COMP.D.3",
+          "name": "Insurance & Portfolio Operations",
+          "head_of_unit": {
+            "name": "Pierre Jandemaciop",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_e": {
+      "code": "COMP.E",
+      "name": "Markets & Cases IV: Basic Industries, Manufacturing & Agriculture",
+      "director": {
+        "name": "Luis Roberto",
+        "position": "Director"
+      },
+      "units": {
+        "e1": {
+          "code": "COMP.E.1",
+          "name": "Basic Industries",
+          "head_of_unit": {
+            "name": "Bela Sandorly",
+            "deputy": null
+          }
+        },
+        "e2": {
+          "code": "COMP.E.2",
+          "name": "Manufacturing",
+          "head_of_unit": {
+            "name": "Mikael Petrotors",
+            "deputy": null
+          }
+        },
+        "e3": {
+          "code": "COMP.E.3",
+          "name": "Agriculture",
+          "head_of_unit": {
+            "name": "Carsten Godefroy",
+            "deputy": null
+          }
+        },
+        "e4": {
+          "code": "COMP.E.4",
+          "name": "Forestry & Packaging, Food & Agriculture",
+          "head_of_unit": {
+            "name": "Vivien Raidford",
+            "deputy": null
+          }
+        },
+        "e5": {
+          "code": "COMP.E.5",
+          "name": "Agriculture, Food & Agri-Business",
+          "head_of_unit": {
+            "name": "vacant",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_f": {
+      "code": "COMP.F",
+      "name": "Markets & Cases V: Transport, Post & Other Services",
+      "director": {
+        "name": "Filipa Rodigues",
+        "position": "Director"
+      },
+      "units": {
+        "f1": {
+          "code": "COMP.F.1",
+          "name": "Transport",
+          "head_of_unit": {
+            "name": "Eveina Rodrigues",
+            "deputy": null
+          }
+        },
+        "f2": {
+          "code": "COMP.F.2",
+          "name": "State Aid - Post, TV & Other Services",
+          "head_of_unit": {
+            "name": "Carsten Sataria",
+            "deputy": null
+          }
+        },
+        "f3": {
+          "code": "COMP.F.3",
+          "name": "Post & Other Services",
+          "head_of_unit": {
+            "name": "Evelina Rodriguez",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_g": {
+      "code": "COMP.G",
+      "name": "Cartels",
+      "director": {
+        "name": "Carles Esteva Mosso",
+        "position": "Director"
+      },
+      "units": {
+        "g1": {
+          "code": "COMP.G.1",
+          "name": "Cartels I",
+          "head_of_unit": {
+            "name": "Olivier Guersent",
+            "deputy": null
+          }
+        },
+        "g2": {
+          "code": "COMP.G.2",
+          "name": "Cartels II",
+          "head_of_unit": {
+            "name": "Claudine Lesueur",
+            "deputy": null
+          }
+        },
+        "g3": {
+          "code": "COMP.G.3",
+          "name": "Cartels III - Support for Cartels & Policy",
+          "head_of_unit": {
+            "name": "Bogdan Molodvijan",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_h": {
+      "code": "COMP.H",
+      "name": "State Aid: General Scrutiny & Enforcement",
+      "director": {
+        "name": "Klaus Wiedner",
+        "position": "Director"
+      },
+      "units": {
+        "h1": {
+          "code": "COMP.H.1",
+          "name": "State Aid I: General & Innovations",
+          "head_of_unit": {
+            "name": "Isabel Speranta",
+            "deputy": null
+          },
+          "marker": "Deputy to the Director"
+        },
+        "h2": {
+          "code": "COMP.H.2",
+          "name": "State Aid II: General & Innovations II",
+          "head_of_unit": {
+            "name": "Russ Speranta",
+            "deputy": null
+          }
+        },
+        "h3": {
+          "code": "COMP.H.3",
+          "name": "Recovery, Monitoring",
+          "head_of_unit": {
+            "name": "Anita Uurten",
+            "deputy": null
+          }
+        },
+        "h4": {
+          "code": "COMP.H.4",
+          "name": "Audit, Recoury & Monitoring",
+          "head_of_unit": {
+            "name": "Angela Flakston",
+            "deputy": null
+          }
+        },
+        "h5": {
+          "code": "COMP.H.5",
+          "name": "Case Support, Members & Records",
+          "head_of_unit": {
+            "name": "vacant",
+            "deputy": null
+          }
+        },
+        "h6": {
+          "code": "COMP.H.6",
+          "name": "State Aid - General & Governance",
+          "head_of_unit": {
+            "name": "Paula Harford",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_j": {
+      "code": "COMP.J",
+      "name": "Markets & Cases VI: Digital Platforms & Licensing Control",
+      "director": {
+        "name": "Alin Claparton Colls",
+        "position": "Director"
+      },
+      "units": {
+        "j1": {
+          "code": "COMP.J.1",
+          "name": "Digital Platforms I",
+          "head_of_unit": {
+            "name": "Leeza Dionova",
+            "deputy": null
+          }
+        },
+        "j2": {
+          "code": "COMP.J.2",
+          "name": "Digital Platforms II",
+          "head_of_unit": {
+            "name": "vacant",
+            "deputy": null
+          }
+        },
+        "j3": {
+          "code": "COMP.J.3",
+          "name": "Digital Platforms III",
+          "head_of_unit": {
+            "name": "Micha Platform III",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_k": {
+      "code": "COMP.K",
+      "name": "Horizontal",
+      "director": {
+        "name": "Karl Soukup",
+        "position": "Director"
+      }
+    },
+    "directorate_k1": {
+      "code": "COMP.K.1",
+      "name": "Foreign Subsidies",
+      "director": {
+        "name": "vacant",
+        "position": "Director",
+        "marker": "Deputy to the Director"
+      }
+    },
+    "directorate_k2": {
+      "code": "COMP.K.2",
+      "name": "Cartels",
+      "director": {
+        "name": "Alin Colcampeli",
+        "position": "Director"
+      }
+    },
+    "directorate_k3": {
+      "code": "COMP.K.3",
+      "name": "Abuse",
+      "director": {
+        "name": "Patrik Grefrath III",
+        "position": "Director"
+      }
+    }
+  },
+  "notes": [
+    "Deputy to the Director",
+    "Seconded Managers and Advisers: II Fin - seconded to the Cabinet of the President of the Council. II G Graise - seconded to the European Court of Auditors",
+    "Seconded managers and advisers: Michele Periciano, seconded to the Cabinet of the President von der Leyen; Hanna Antilanen, seconded to the Cabinet of EVP Séjourné; Anna Vernet, seconded to the Cabinet of EVP Ribera"
+  ]
+}

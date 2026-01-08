@@ -1,0 +1,967 @@
+{
+  "cluster_id": 15,
+  "cluster_name": "Climate Tech Startup Compliance",
+  "policy_area": "Climate Action",
+  "description": "Carbon markets, emissions trading, and CBAM compliance for climate startups",
+  "applicability": "Climate tech startups, carbon credit platforms, emission reduction technology, green hydrogen, CCUS",
+  "extraction_date": "2026-01-01T02:01:57.970444",
+  "total_laws": 18,
+  "total_requirements": 54,
+  "requirements": [
+    {
+      "article": "Article 1",
+      "requirement_text": "Member States shall use the questionnaire set out in the Annex for the purpose of drawing up the annual report to be submitted to the Commission pursuant to Article 21(1) of Directive 2003/87/EC",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "questionnaire",
+        "annual report",
+        "Commission",
+        "Directive 2003/87/EC"
+      ],
+      "law_id": 1254,
+      "law_celex": "32005L0381",
+      "law_title": "Commission Decision of 4 May 2005 establishing a questionnaire for reporting on the application of Directive 2003/87/EC of the European Parliament and of the Council establishing a scheme for greenhouse gas emission allowance trading within the Community and amending Council Directive 96/61/EC (notified under document number C(2005) 1359) (Text with EEA relevance) (2005/381/EC)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "The first report shall cover the four-month period from 1 January 2005 to 30 April 2005",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "due for submission by 30 June 2005",
+      "keywords": [
+        "first report",
+        "1 January 2005",
+        "30 April 2005",
+        "30 June 2005"
+      ],
+      "law_id": 1254,
+      "law_celex": "32005L0381",
+      "law_title": "Commission Decision of 4 May 2005 establishing a questionnaire for reporting on the application of Directive 2003/87/EC of the European Parliament and of the Council establishing a scheme for greenhouse gas emission allowance trading within the Community and amending Council Directive 96/61/EC (notified under document number C(2005) 1359) (Text with EEA relevance) (2005/381/EC)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "Subsequent reports shall be submitted to the Commission by 30 June each year and shall cover the preceding calendar year from 1 January to 31 December commencing with the calendar year 2005",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 30 June each year",
+      "keywords": [
+        "subsequent reports",
+        "Commission",
+        "30 June",
+        "calendar year",
+        "1 January",
+        "31 December"
+      ],
+      "law_id": 1254,
+      "law_celex": "32005L0381",
+      "law_title": "Commission Decision of 4 May 2005 establishing a questionnaire for reporting on the application of Directive 2003/87/EC of the European Parliament and of the Council establishing a scheme for greenhouse gas emission allowance trading within the Community and amending Council Directive 96/61/EC (notified under document number C(2005) 1359) (Text with EEA relevance) (2005/381/EC)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "For 2021, the Union-wide quantity of allowances referred to in Article 9 of Directive 2003/87/EC amounts to 1571583007",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "for 2021",
+      "keywords": [
+        "allowances",
+        "Union-wide quantity",
+        "EU ETS",
+        "emissions trading",
+        "2021"
+      ],
+      "law_id": 1579,
+      "law_celex": "32020D1722",
+      "law_title": "Commission Decision (EU) 2020/1722 of 16 November 2020 on the Union-wide quantity of allowances to be issued under the EU Emissions Trading System for 2021 (notified under document C(2020)7704) (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "For each year in the allocation period 2021 to 2025, the uniform cross-sectoral correction factor for the adjustment of free allocations of emission allowances in accordance with Article 10a(5) and 10a(5a) of Directive 2003/87/EC shall be 100%",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "for each year in the allocation period 2021 to 2025",
+      "keywords": [
+        "cross-sectoral correction factor",
+        "free allocations",
+        "emission allowances",
+        "100%",
+        "allocation period"
+      ],
+      "law_id": 1893,
+      "law_celex": "32021D0927",
+      "law_title": "Commission Implementing Decision (EU) 2021/927 of 31 May 2021 determining the uniform cross-sectoral correction factor for the adjustment of free allocations of emission allowances for the period 2021 to 2025 (notified under document C(2021) 3745) (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital 15",
+      "requirement_text": "Aircraft operators shall be responsible for complying with the obligations imposed by this Directive, including the obligation to prepare a monitoring plan and to monitor and report emissions in accordance with that plan",
+      "applicable_entity": "aircraft operators",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "aircraft operators",
+        "monitoring plan",
+        "monitor emissions",
+        "report emissions",
+        "compliance obligations"
+      ],
+      "law_id": 2714,
+      "law_celex": "32008L0101",
+      "law_title": "Directive 2008/101/EC of the European Parliament and of the Council of 19 November 2008 amending Directive 2003/87/EC so as to include aviation activities in the scheme for greenhouse gas emission allowance trading within the Community (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital 15",
+      "requirement_text": "If the identity of the aircraft operator is not known, the owner of the aircraft should be regarded as the aircraft operator unless it proves which other person was the aircraft operator",
+      "applicable_entity": "aircraft owners",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "aircraft owner",
+        "aircraft operator",
+        "identity",
+        "proof",
+        "responsibility"
+      ],
+      "law_id": 2714,
+      "law_celex": "32008L0101",
+      "law_title": "Directive 2008/101/EC of the European Parliament and of the Council of 19 November 2008 amending Directive 2003/87/EC so as to include aviation activities in the scheme for greenhouse gas emission allowance trading within the Community (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital 16",
+      "requirement_text": "Emissions from all flights arriving at and departing from Community aerodromes should be included",
+      "applicable_entity": "aircraft operators",
+      "criticality": "critical",
+      "deadline_text": "from 2012",
+      "keywords": [
+        "emissions",
+        "flights",
+        "Community aerodromes",
+        "arriving",
+        "departing",
+        "inclusion"
+      ],
+      "law_id": 2714,
+      "law_celex": "32008L0101",
+      "law_title": "Directive 2008/101/EC of the European Parliament and of the Council of 19 November 2008 amending Directive 2003/87/EC so as to include aviation activities in the scheme for greenhouse gas emission allowance trading within the Community (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The position to be taken, on behalf of the Union, during the fifth meeting of the Joint Committee, or earlier by means of the written procedure pursuant to Article 8(4) of the Rules of Procedure of the Joint Committee, shall be based on the draft Decision of the Joint Committee attached to this Decision.",
+      "applicable_entity": "European Union representatives",
+      "criticality": "critical",
+      "deadline_text": "during the fifth meeting of the Joint Committee, or earlier by means of the written procedure",
+      "keywords": [
+        "Joint Committee",
+        "position",
+        "draft Decision",
+        "written procedure"
+      ],
+      "law_id": 4052,
+      "law_celex": "32022D1660",
+      "law_title": "Council Decision (EU) 2022/1660 of 20 September 2022 on the position to be taken, on behalf of the European Union, within the Joint Committee established by the Agreement between the European Union and the Swiss Confederation on the linking of their greenhouse gas emissions trading systems, as regards the amendment of Annexes III and IV to the Agreement (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 8(5) of Regulation (EC) No 443/2009",
+      "requirement_text": "The Commission is required to confirm each year the average specific emissions of CO2 and the specific emissions target for each manufacturer of passenger cars in the Union as well as for each pool of manufacturers formed in accordance with Article 7(1) of that Regulation",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "each year",
+      "keywords": [
+        "CO2 emissions",
+        "specific emissions target",
+        "manufacturers",
+        "passenger cars",
+        "annual confirmation"
+      ],
+      "law_id": 5160,
+      "law_celex": "32015R2251",
+      "law_title": "Commission Implementing Decision (EU) 2015/2251 of 26 November 2015 confirming or amending the average specific emission of CO2 and specific emissions targets for manufacturers of passenger cars for the calendar year 2014 pursuant to Regulation (EC) No 443/2009 of the European Parliament and of the Council (notified under document C(2015) 8348) (Only the Dutch, English, French, German, Italian, and Swedish texts are authentic)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 8(2) of Regulation (EC) No 443/2009",
+      "requirement_text": "Member States must submit data to the Commission by the time limit of 28 February",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "by 28 February 2015",
+      "keywords": [
+        "data submission",
+        "Member States",
+        "February deadline",
+        "registration data"
+      ],
+      "law_id": 5160,
+      "law_celex": "32015R2251",
+      "law_title": "Commission Implementing Decision (EU) 2015/2251 of 26 November 2015 confirming or amending the average specific emission of CO2 and specific emissions targets for manufacturers of passenger cars for the calendar year 2014 pursuant to Regulation (EC) No 443/2009 of the European Parliament and of the Council (notified under document C(2015) 8348) (Only the Dutch, English, French, German, Italian, and Swedish texts are authentic)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 8(4) of Regulation (EC) No 443/2009",
+      "requirement_text": "The Commission shall publish the provisional data and notify manufacturers of the provisional calculations of their average specific emissions of CO2 and their specific emissions targets",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "provisional data",
+        "notification",
+        "manufacturers",
+        "CO2 emissions",
+        "publication"
+      ],
+      "law_id": 5160,
+      "law_celex": "32015R2251",
+      "law_title": "Commission Implementing Decision (EU) 2015/2251 of 26 November 2015 confirming or amending the average specific emission of CO2 and specific emissions targets for manufacturers of passenger cars for the calendar year 2014 pursuant to Regulation (EC) No 443/2009 of the European Parliament and of the Council (notified under document C(2015) 8348) (Only the Dutch, English, French, German, Italian, and Swedish texts are authentic)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 8(5) of Regulation (EC) No 443/2009",
+      "requirement_text": "Manufacturers must verify the data and notify the Commission of any errors within 3 months of receipt of the notification",
+      "applicable_entity": "manufacturers of passenger cars",
+      "criticality": "critical",
+      "deadline_text": "within 3 months of receipt of the notification",
+      "keywords": [
+        "data verification",
+        "error notification",
+        "manufacturers",
+        "3 months",
+        "corrections"
+      ],
+      "law_id": 5160,
+      "law_celex": "32015R2251",
+      "law_title": "Commission Implementing Decision (EU) 2015/2251 of 26 November 2015 confirming or amending the average specific emission of CO2 and specific emissions targets for manufacturers of passenger cars for the calendar year 2014 pursuant to Regulation (EC) No 443/2009 of the European Parliament and of the Council (notified under document C(2015) 8348) (Only the Dutch, English, French, German, Italian, and Swedish texts are authentic)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 9 of Regulation (EC) No 443/2009",
+      "requirement_text": "Where the average emissions exceed the specific emissions target, an excess emission premium are to be imposed unless the manufacturer concerned benefits from an exemption or is a member of a compliant pool",
+      "applicable_entity": "manufacturers of passenger cars",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "excess emission premium",
+        "specific emissions target",
+        "penalties",
+        "exemptions",
+        "pools"
+      ],
+      "law_id": 5160,
+      "law_celex": "32015R2251",
+      "law_title": "Commission Implementing Decision (EU) 2015/2251 of 26 November 2015 confirming or amending the average specific emission of CO2 and specific emissions targets for manufacturers of passenger cars for the calendar year 2014 pursuant to Regulation (EC) No 443/2009 of the European Parliament and of the Council (notified under document C(2015) 8348) (Only the Dutch, English, French, German, Italian, and Swedish texts are authentic)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The benchmark to be used to allocate allowances free of charge to aircraft operators pursuant to Article 3f of Directive 2003/87/EC for the period from 1 January 2013 to 31 December 2020 shall be 0,000642186914222035 allowances per tonne-kilometre per year.",
+      "applicable_entity": "aircraft operators",
+      "criticality": "critical",
+      "deadline_text": "for the period from 1 January 2013 to 31 December 2020",
+      "keywords": [
+        "benchmark",
+        "allowances",
+        "aircraft operators",
+        "free allocation",
+        "tonne-kilometre"
+      ],
+      "law_id": 12280,
+      "law_celex": "32016L0775",
+      "law_title": "Commission Implementing Decision (EU) 2016/775 of 18 May 2016 on the benchmark to allocate greenhouse gas emission allowances free of charge to aircraft operators pursuant to Article 3f(5) of Directive 2003/87/EC of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "The benchmark to be used to allocate allowances free of charge to aircraft operators pursuant to Article 3f of Directive 2003/87/EC for the purpose of Article 5 of the Implementing Decision 2014/389/EU for the period from 1 January 2014 to 31 December 2020 shall be 0,000642186914222035 allowances per tonne-kilometre per year.",
+      "applicable_entity": "aircraft operators",
+      "criticality": "critical",
+      "deadline_text": "for the period from 1 January 2014 to 31 December 2020",
+      "keywords": [
+        "benchmark",
+        "allowances",
+        "aircraft operators",
+        "free allocation",
+        "Croatia accession",
+        "tonne-kilometre"
+      ],
+      "law_id": 12280,
+      "law_celex": "32016L0775",
+      "law_title": "Commission Implementing Decision (EU) 2016/775 of 18 May 2016 on the benchmark to allocate greenhouse gas emission allowances free of charge to aircraft operators pursuant to Article 3f(5) of Directive 2003/87/EC of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "Calculations relating to a number of allowances to be allocated in accordance with the benchmarks set out in Article 1 shall be rounded down to the nearest allowance.",
+      "applicable_entity": "aircraft operators",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "calculations",
+        "allowances",
+        "benchmark",
+        "rounded down",
+        "allocation"
+      ],
+      "law_id": 12280,
+      "law_celex": "32016L0775",
+      "law_title": "Commission Implementing Decision (EU) 2016/775 of 18 May 2016 on the benchmark to allocate greenhouse gas emission allowances free of charge to aircraft operators pursuant to Article 3f(5) of Directive 2003/87/EC of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The Central Administrator of the Union registry shall transfer as soon as possible and before the end of the true up period for the first commitment period under the Kyoto Protocol a total quantity which shall not exceed 10 million (10000000) of assigned amount units to the Party to the Kyoto Protocol holding account in the registry of Finland.",
+      "applicable_entity": "Central Administrator of the Union registry",
+      "criticality": "critical",
+      "deadline_text": "as soon as possible and before the end of the true up period for the first commitment period under the Kyoto Protocol",
+      "keywords": [
+        "Central Administrator",
+        "Union registry",
+        "transfer",
+        "assigned amount units",
+        "Finland",
+        "Kyoto Protocol",
+        "true up period"
+      ],
+      "law_id": 125,
+      "law_celex": "32014D0224",
+      "law_title": "Commission Implementing Decision of 16 April 2014 on the transfer of assigned amount units to the Party to the Kyoto Protocol holding account in the registry of Finland (notified under document C(2014) 2475) (2014/224/EU)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "The transfer shall be made subject to the availability of assigned amount units in the Union registry and when the commitment regarding Croatia as set out in the Protocol on certain arrangements concerning a possible one-off transfer of assigned amount units issued under the Kyoto Protocol to the United Nations Framework Convention on Climate Change to the Republic of Croatia, as well as the related compensation to the Treaty concerning the accession of the Republic of Croatia to the European Union has been settled or resolved.",
+      "applicable_entity": "Central Administrator of the Union registry",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "transfer",
+        "availability",
+        "assigned amount units",
+        "Union registry",
+        "Croatia",
+        "commitment",
+        "settled",
+        "resolved"
+      ],
+      "law_id": 125,
+      "law_celex": "32014D0224",
+      "law_title": "Commission Implementing Decision of 16 April 2014 on the transfer of assigned amount units to the Party to the Kyoto Protocol holding account in the registry of Finland (notified under document C(2014) 2475) (2014/224/EU)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The average specific CO2 emissions per manufacturer for the reporting period of the year 2019 are indicated in the second column of the table of Annex I",
+      "applicable_entity": "manufacturers",
+      "criticality": "critical",
+      "deadline_text": "reporting period of the year 2019",
+      "keywords": [
+        "CO2 emissions",
+        "manufacturer",
+        "reporting",
+        "Annex I"
+      ],
+      "law_id": 245,
+      "law_celex": "32021R0781",
+      "law_title": "Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication of a list indicating certain CO2 emissions values per manufacturer as well as average specific CO2 emissions of all new heavy-duty vehicles registered in the Union and reference CO2 emissions pursuant to Regulation (EU) 2019/1242 of the European Parliament and of the Council for the reporting period of the year 2019 (notified under document C(2021) 3109) (Only the Dutch, English, French, German, Italian and Swedish text are authentic) (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "The zero- and low-emission factor per manufacturer for the reporting period of the year 2019 is indicated in the third column of the table of Annex I",
+      "applicable_entity": "manufacturers",
+      "criticality": "critical",
+      "deadline_text": "reporting period of the year 2019",
+      "keywords": [
+        "zero-emission",
+        "low-emission",
+        "manufacturer",
+        "reporting",
+        "Annex I"
+      ],
+      "law_id": 245,
+      "law_celex": "32021R0781",
+      "law_title": "Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication of a list indicating certain CO2 emissions values per manufacturer as well as average specific CO2 emissions of all new heavy-duty vehicles registered in the Union and reference CO2 emissions pursuant to Regulation (EU) 2019/1242 of the European Parliament and of the Council for the reporting period of the year 2019 (notified under document C(2021) 3109) (Only the Dutch, English, French, German, Italian and Swedish text are authentic) (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 3",
+      "requirement_text": "The CO2 emission reduction trajectory and the emission credits per manufacturer for the reporting period of the year 2019 are indicated in the fourth and fifth column respectively of the table of Annex I",
+      "applicable_entity": "manufacturers",
+      "criticality": "critical",
+      "deadline_text": "reporting period of the year 2019",
+      "keywords": [
+        "CO2 emission reduction",
+        "emission credits",
+        "manufacturer",
+        "reporting",
+        "Annex I"
+      ],
+      "law_id": 245,
+      "law_celex": "32021R0781",
+      "law_title": "Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication of a list indicating certain CO2 emissions values per manufacturer as well as average specific CO2 emissions of all new heavy-duty vehicles registered in the Union and reference CO2 emissions pursuant to Regulation (EU) 2019/1242 of the European Parliament and of the Council for the reporting period of the year 2019 (notified under document C(2021) 3109) (Only the Dutch, English, French, German, Italian and Swedish text are authentic) (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 6",
+      "requirement_text": "This Decision is addressed to the specified manufacturers",
+      "applicable_entity": "specified manufacturers (DAIMLER TRUCK AG, DAF NV, Ford Otomotiv Sanayi AS, Iveco Magirus-AG, IVECO SPA, MAN TRUCK AND BUS SE, RENAULT TRUCK SA, SCANIA CV AB, VOLVO TRUCK CORPORATION)",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "decision addressed",
+        "manufacturers",
+        "compliance"
+      ],
+      "law_id": 245,
+      "law_celex": "32021R0781",
+      "law_title": "Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication of a list indicating certain CO2 emissions values per manufacturer as well as average specific CO2 emissions of all new heavy-duty vehicles registered in the Union and reference CO2 emissions pursuant to Regulation (EU) 2019/1242 of the European Parliament and of the Council for the reporting period of the year 2019 (notified under document C(2021) 3109) (Only the Dutch, English, French, German, Italian and Swedish text are authentic) (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "A market stability reserve shall be established in 2018 and the placing of allowances in the reserve shall operate from 1 January 2019",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "established in 2018, operational from 1 January 2019",
+      "keywords": [
+        "market stability reserve",
+        "establishment",
+        "allowances",
+        "EU ETS"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "The quantity of 900 million allowances deducted from auctioning volumes during the period 2014-2016 shall not be added to the volumes to be auctioned in 2019 and 2020 but shall instead be placed in the reserve",
+      "applicable_entity": "Member States and Commission",
+      "criticality": "critical",
+      "deadline_text": "2019 and 2020",
+      "keywords": [
+        "900 million allowances",
+        "auctioning volumes",
+        "reserve placement"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(3)",
+      "requirement_text": "Allowances not allocated to installations pursuant to Article 10a(7) of Directive 2003/87/EC and allowances not allocated to installations because of the application of Article 10a(19) and (20) of that Directive shall be placed in the reserve in 2020",
+      "applicable_entity": "Member States and Commission",
+      "criticality": "critical",
+      "deadline_text": "in 2020",
+      "keywords": [
+        "unallocated allowances",
+        "reserve placement",
+        "installations"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(3)",
+      "requirement_text": "The Commission shall review Directive 2003/87/EC in relation to those unallocated allowances and, if appropriate, submit a proposal to the European Parliament and to the Council",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "not specified",
+      "keywords": [
+        "review",
+        "Directive 2003/87/EC",
+        "unallocated allowances",
+        "proposal"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1(4)",
+      "requirement_text": "The Commission shall publish the total number of allowances in circulation each year, by 15 May of the subsequent year",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "by 15 May of the subsequent year",
+      "keywords": [
+        "publication",
+        "allowances in circulation",
+        "annual reporting"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital (6)",
+      "requirement_text": "The Commission and the Member States should, without undue delay following the publication of the total number of allowances in circulation by the Commission by 15 May of a given year, ensure that the auction calendars of the common auction platform and, where applicable, of opt-out auction platforms are adjusted",
+      "applicable_entity": "European Commission and Member States",
+      "criticality": "important",
+      "deadline_text": "without undue delay following publication by 15 May",
+      "keywords": [
+        "auction calendars",
+        "adjustment",
+        "common auction platform",
+        "opt-out platforms"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital (9)",
+      "requirement_text": "The Commission should review Directive 2003/87/EC, in particular Article 10a thereof, and submit a proposal for the revision of that Directive within six months of the adoption of this Decision",
+      "applicable_entity": "European Commission",
+      "criticality": "important",
+      "deadline_text": "within six months of the adoption of this Decision",
+      "keywords": [
+        "review",
+        "Directive revision",
+        "Article 10a",
+        "free allocation",
+        "carbon leakage"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital (10)",
+      "requirement_text": "The Commission should monitor the functioning of the reserve in the context of its annual carbon market report",
+      "applicable_entity": "European Commission",
+      "criticality": "important",
+      "deadline_text": "annually",
+      "keywords": [
+        "monitoring",
+        "reserve functioning",
+        "carbon market report",
+        "competitiveness"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital (10)",
+      "requirement_text": "The Commission should, within three years of the date of operation of the reserve and periodically thereafter, review the functioning of the reserve in the light of the experience gained from its application",
+      "applicable_entity": "European Commission",
+      "criticality": "important",
+      "deadline_text": "within three years of operation and periodically thereafter",
+      "keywords": [
+        "review",
+        "reserve functioning",
+        "periodic review",
+        "market balance"
+      ],
+      "law_id": 295,
+      "law_celex": "32015L1814",
+      "law_title": "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 October 2015 concerning the establishment and operation of a market stability reserve for the Union greenhouse gas emission trading scheme and amending Directive 2003/87/EC (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Until 31 December 2030, the percentages and the 100 million allowances referred to in Article 1(5) first and second sentences shall be doubled for determining the number of allowances to be placed in the market stability reserve",
+      "applicable_entity": "European Union institutions implementing the EU ETS market stability reserve",
+      "criticality": "critical",
+      "deadline_text": "until 31 December 2030",
+      "keywords": [
+        "market stability reserve",
+        "allowances",
+        "doubled",
+        "percentage",
+        "EU ETS",
+        "emission trading"
+      ],
+      "law_id": 455,
+      "law_celex": "32023D0852",
+      "law_title": "Decision (EU) 2023/852 of the European Parliament and of the Council of 19 April 2023 amending Decision (EU) 2015/1814 as regards the number of allowances to be placed in the market stability reserve for the Union greenhouse gas emission trading system until 2030 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the twentieth day following that of its publication in the Official Journal",
+      "applicable_entity": "European Union",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following publication",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal",
+        "twentieth day"
+      ],
+      "law_id": 455,
+      "law_celex": "32023D0852",
+      "law_title": "Decision (EU) 2023/852 of the European Parliament and of the Council of 19 April 2023 amending Decision (EU) 2015/1814 as regards the number of allowances to be placed in the market stability reserve for the Union greenhouse gas emission trading system until 2030 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital 4",
+      "requirement_text": "Member States shall implement accounting rules and provide information on their LULUCF actions",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "accounting rules",
+        "LULUCF",
+        "implementation",
+        "information provision"
+      ],
+      "law_id": 555,
+      "law_celex": "32013D0529",
+      "law_title": "Decision No 529/2013/EU of the European Parliament and of the Council of 21 May 2013 on accounting rules on greenhouse gas emissions and removals resulting from activities relating to land use, land-use change and forestry and on information concerning actions relating to those activities",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital 9",
+      "requirement_text": "Member States shall prepare and maintain their accounts ensuring the accuracy, completeness, consistency, comparability and transparency of relevant information used in estimating emissions and removals from the LULUCF sector in line with guidance provided in relevant IPCC Guidelines",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "accounts preparation",
+        "accuracy",
+        "completeness",
+        "consistency",
+        "comparability",
+        "transparency",
+        "IPCC Guidelines",
+        "emissions",
+        "removals"
+      ],
+      "law_id": 555,
+      "law_celex": "32013D0529",
+      "law_title": "Decision No 529/2013/EU of the European Parliament and of the Council of 21 May 2013 on accounting rules on greenhouse gas emissions and removals resulting from activities relating to land use, land-use change and forestry and on information concerning actions relating to those activities",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital 8",
+      "requirement_text": "Member States shall apply accounting rules on a mandatory basis to the activities of afforestation, reforestation, deforestation and forest management, as well as to the activities of grazing land management and cropland management",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "mandatory accounting",
+        "afforestation",
+        "reforestation",
+        "deforestation",
+        "forest management",
+        "grazing land management",
+        "cropland management"
+      ],
+      "law_id": 555,
+      "law_celex": "32013D0529",
+      "law_title": "Decision No 529/2013/EU of the European Parliament and of the Council of 21 May 2013 on accounting rules on greenhouse gas emissions and removals resulting from activities relating to land use, land-use change and forestry and on information concerning actions relating to those activities",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital 12",
+      "requirement_text": "Member States shall carry out appropriate technical corrections to include the impact of recalculations in the accounting for forest management if improvements to methodologies or data relating to the establishment of the reference level become available",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "technical corrections",
+        "recalculations",
+        "forest management accounting",
+        "reference level",
+        "methodologies"
+      ],
+      "law_id": 555,
+      "law_celex": "32013D0529",
+      "law_title": "Decision No 529/2013/EU of the European Parliament and of the Council of 21 May 2013 on accounting rules on greenhouse gas emissions and removals resulting from activities relating to land use, land-use change and forestry and on information concerning actions relating to those activities",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "This Regulation applies to the reports submitted by the Member States containing data required for the year 2021 onwards",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "for the year 2021 onwards",
+      "keywords": [
+        "reports",
+        "data",
+        "member states",
+        "2021"
+      ],
+      "law_id": 790,
+      "law_celex": "32020R1044",
+      "law_title": "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation (EU) 2018/1999 of the European Parliament and of the Council with regard to values for global warming potentials and the inventory guidelines and with regard to the Union inventory system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "The Member States and the Commission shall use the global warming potentials listed in Annex I to this Regulation for the purpose of determining and reporting greenhouse gas inventories data pursuant to paragraphs 3, 4 and 5 of Article 26 of Regulation (EU) 2018/1999",
+      "applicable_entity": "member states and the commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "global warming potentials",
+        "greenhouse gas inventories",
+        "Annex I",
+        "reporting"
+      ],
+      "law_id": 790,
+      "law_celex": "32020R1044",
+      "law_title": "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation (EU) 2018/1999 of the European Parliament and of the Council with regard to values for global warming potentials and the inventory guidelines and with regard to the Union inventory system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 3",
+      "requirement_text": "The Member States and the Commission shall determine greenhouse gas inventories referred to in paragraphs 3, 4 and 5 of Article 26 of Regulation (EU) 2018/1999 in accordance with the 2006 Intergovernmental Panel on Climate Change (IPCC) Guidelines for National Greenhouse Gas Inventories and the modalities, procedures and guidelines for the transparency framework for action and support referred to in Article 13 of the Paris Agreement set out in the Annex to Decision 18/CMA.1",
+      "applicable_entity": "member states and the commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "greenhouse gas inventories",
+        "IPCC Guidelines",
+        "Paris Agreement",
+        "Decision 18/CMA.1"
+      ],
+      "law_id": 790,
+      "law_celex": "32020R1044",
+      "law_title": "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation (EU) 2018/1999 of the European Parliament and of the Council with regard to values for global warming potentials and the inventory guidelines and with regard to the Union inventory system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 4(1)",
+      "requirement_text": "The Commission shall manage, maintain and seek to continuously improve the Union greenhouse gas inventory system based on quality assurance and quality control programme objectives",
+      "applicable_entity": "the commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "manage",
+        "maintain",
+        "improve",
+        "inventory system",
+        "quality assurance",
+        "quality control"
+      ],
+      "law_id": 790,
+      "law_celex": "32020R1044",
+      "law_title": "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation (EU) 2018/1999 of the European Parliament and of the Council with regard to values for global warming potentials and the inventory guidelines and with regard to the Union inventory system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 4(4)",
+      "requirement_text": "Member States shall ensure the quality of activity data, emission factors and other parameters used for their national greenhouse gas inventory",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ensure quality",
+        "activity data",
+        "emission factors",
+        "parameters",
+        "national inventory"
+      ],
+      "law_id": 790,
+      "law_celex": "32020R1044",
+      "law_title": "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation (EU) 2018/1999 of the European Parliament and of the Council with regard to values for global warming potentials and the inventory guidelines and with regard to the Union inventory system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 5(1)",
+      "requirement_text": "The Commission estimates for completing the inventory data submitted by a Member State as referred to in Article 37(5) of Regulation (EU) 2018/1999 shall be based on specified methodologies and data",
+      "applicable_entity": "the commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "estimates",
+        "inventory data",
+        "methodologies",
+        "gap filling"
+      ],
+      "law_id": 790,
+      "law_celex": "32020R1044",
+      "law_title": "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regulation (EU) 2018/1999 of the European Parliament and of the Council with regard to values for global warming potentials and the inventory guidelines and with regard to the Union inventory system and repealing Commission Delegated Regulation (EU) No 666/2014 (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "The President of the Council shall designate the person(s) empowered to deposit, on behalf of the Union, the instrument of ratification with the Secretary-General of the United Nations, in accordance with Article 20, paragraph 1, of the Paris Agreement, together with the Declaration of Competence.",
+      "applicable_entity": "President of the Council",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ratification",
+        "instrument",
+        "Secretary-General",
+        "United Nations",
+        "Declaration of Competence"
+      ],
+      "law_id": 971,
+      "law_celex": "32016D1841",
+      "law_title": "Council Decision (EU) 2016/1841 of 5 October 2016 on the conclusion, on behalf of the European Union, of the Paris Agreement adopted under the United Nations Framework Convention on Climate Change",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "Member States shall endeavour to take the necessary steps with a view to depositing instruments of ratification simultaneously with the Union or as soon as possible thereafter.",
+      "applicable_entity": "Member States",
+      "criticality": "important",
+      "deadline_text": "simultaneously with the Union or as soon as possible thereafter",
+      "keywords": [
+        "ratification",
+        "instruments",
+        "simultaneously",
+        "Member States"
+      ],
+      "law_id": 971,
+      "law_celex": "32016D1841",
+      "law_title": "Council Decision (EU) 2016/1841 of 5 October 2016 on the conclusion, on behalf of the European Union, of the Paris Agreement adopted under the United Nations Framework Convention on Climate Change",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Member States shall inform the Commission of their decisions on ratification of the Paris Agreement or, according to the circumstances, of the probable date of completion of the necessary procedures.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "inform",
+        "Commission",
+        "ratification",
+        "decisions",
+        "procedures"
+      ],
+      "law_id": 971,
+      "law_celex": "32016D1841",
+      "law_title": "Council Decision (EU) 2016/1841 of 5 October 2016 on the conclusion, on behalf of the European Union, of the Paris Agreement adopted under the United Nations Framework Convention on Climate Change",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Annexes I and III to Regulation (EU) 2019/631 are amended in accordance with the Annex to this Regulation",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "annexes",
+        "amendment",
+        "regulation",
+        "CO2 emissions"
+      ],
+      "law_id": 1081,
+      "law_celex": "32020R0022",
+      "law_title": "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as regards the monitoring of CO2 emissions from new light commercial vehicles type-approved in a multi-stage process (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall enter into force on the seventh day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "seventh day following publication",
+      "keywords": [
+        "entry into force",
+        "official journal",
+        "publication"
+      ],
+      "law_id": 1081,
+      "law_celex": "32020R0022",
+      "law_title": "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as regards the monitoring of CO2 emissions from new light commercial vehicles type-approved in a multi-stage process (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall be binding in its entirety and directly applicable in all Member States",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "binding",
+        "directly applicable",
+        "member states"
+      ],
+      "law_id": 1081,
+      "law_celex": "32020R0022",
+      "law_title": "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as regards the monitoring of CO2 emissions from new light commercial vehicles type-approved in a multi-stage process (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital (5)",
+      "requirement_text": "The base vehicle manufacturer should report the input values used for the interpolation method as well as the resulting CO2 emissions and mass of incomplete base vehicles to the Commission",
+      "applicable_entity": "base vehicle manufacturers",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "reporting",
+        "CO2 emissions",
+        "interpolation method",
+        "base vehicle"
+      ],
+      "law_id": 1081,
+      "law_celex": "32020R0022",
+      "law_title": "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as regards the monitoring of CO2 emissions from new light commercial vehicles type-approved in a multi-stage process (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital (5)",
+      "requirement_text": "Member States should continue to report to the Commission the specific emissions of CO2 and mass in running order of the completed vehicles",
+      "applicable_entity": "member states",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "reporting",
+        "CO2 emissions",
+        "completed vehicles",
+        "member states"
+      ],
+      "law_id": 1081,
+      "law_celex": "32020R0022",
+      "law_title": "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as regards the monitoring of CO2 emissions from new light commercial vehicles type-approved in a multi-stage process (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Recital (6)",
+      "requirement_text": "The Commission should continuously assess the representativeness of the monitoring CO2 emissions of the base vehicle and inform the manufacturers of any divergences found",
+      "applicable_entity": "european commission",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "assessment",
+        "monitoring",
+        "CO2 emissions",
+        "divergences"
+      ],
+      "law_id": 1081,
+      "law_celex": "32020R0022",
+      "law_title": "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes I and III to Regulation (EU) 2019/631 of the European Parliament and of the Council as regards the monitoring of CO2 emissions from new light commercial vehicles type-approved in a multi-stage process (Text with EEA relevance)",
+      "cluster_id": 15
+    },
+    {
+      "article": "Sole Article",
+      "requirement_text": "The central administrator shall enter the changes into the international credit entitlement tables in the European Union Transaction Log",
+      "applicable_entity": "central administrator",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "central administrator",
+        "international credit entitlement tables",
+        "European Union Transaction Log",
+        "changes",
+        "enter"
+      ],
+      "law_id": 1250,
+      "law_celex": null,
+      "law_title": "Commission Decision of 15 December 2020 instructing the central administrator to enter changes into the international credit entitlement tables in the European Union Transaction Log",
+      "cluster_id": 15
+    }
+  ]
+}

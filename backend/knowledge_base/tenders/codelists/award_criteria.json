@@ -1,0 +1,199 @@
+{
+  "source_file": "award-criterion-type.gc",
+  "columns": [
+    {
+      "id": "code",
+      "use": "required"
+    },
+    {
+      "id": "Name",
+      "use": "optional"
+    },
+    {
+      "id": "bul_label",
+      "use": "optional"
+    },
+    {
+      "id": "spa_label",
+      "use": "optional"
+    },
+    {
+      "id": "ces_label",
+      "use": "optional"
+    },
+    {
+      "id": "dan_label",
+      "use": "optional"
+    },
+    {
+      "id": "deu_label",
+      "use": "optional"
+    },
+    {
+      "id": "est_label",
+      "use": "optional"
+    },
+    {
+      "id": "ell_label",
+      "use": "optional"
+    },
+    {
+      "id": "eng_label",
+      "use": "optional"
+    },
+    {
+      "id": "fra_label",
+      "use": "optional"
+    },
+    {
+      "id": "gle_label",
+      "use": "optional"
+    },
+    {
+      "id": "hrv_label",
+      "use": "optional"
+    },
+    {
+      "id": "ita_label",
+      "use": "optional"
+    },
+    {
+      "id": "lav_label",
+      "use": "optional"
+    },
+    {
+      "id": "lit_label",
+      "use": "optional"
+    },
+    {
+      "id": "hun_label",
+      "use": "optional"
+    },
+    {
+      "id": "mlt_label",
+      "use": "optional"
+    },
+    {
+      "id": "nld_label",
+      "use": "optional"
+    },
+    {
+      "id": "pol_label",
+      "use": "optional"
+    },
+    {
+      "id": "por_label",
+      "use": "optional"
+    },
+    {
+      "id": "ron_label",
+      "use": "optional"
+    },
+    {
+      "id": "slk_label",
+      "use": "optional"
+    },
+    {
+      "id": "slv_label",
+      "use": "optional"
+    },
+    {
+      "id": "fin_label",
+      "use": "optional"
+    },
+    {
+      "id": "swe_label",
+      "use": "optional"
+    }
+  ],
+  "items": [
+    {
+      "code": "cost",
+      "Name": "Cost",
+      "bul_label": "Разходи",
+      "ces_label": "Náklady",
+      "dan_label": "Omkostninger",
+      "deu_label": "Kosten",
+      "ell_label": "Κόστος",
+      "eng_label": "Cost",
+      "spa_label": "Coste",
+      "est_label": "Kulu",
+      "fin_label": "Kustannukset",
+      "fra_label": "Coût",
+      "gle_label": "Costas",
+      "hrv_label": "Troškovi",
+      "hun_label": "Költség",
+      "ita_label": "Costo",
+      "lit_label": "Sąnaudos",
+      "lav_label": "Izmaksas",
+      "mlt_label": "Kost",
+      "nld_label": "Kosten",
+      "pol_label": "Koszt",
+      "por_label": "Custo",
+      "ron_label": "Cost",
+      "slk_label": "Náklady",
+      "slv_label": "Stroški",
+      "swe_label": "Kostnader"
+    },
+    {
+      "code": "price",
+      "Name": "Price",
+      "bul_label": "Цена",
+      "ces_label": "Cena",
+      "dan_label": "Pris",
+      "deu_label": "Preis",
+      "ell_label": "Τιμή",
+      "eng_label": "Price",
+      "spa_label": "Precio",
+      "est_label": "Hind",
+      "fin_label": "Hinta",
+      "fra_label": "Prix",
+      "gle_label": "Praghas",
+      "hrv_label": "Cijena",
+      "hun_label": "Ár",
+      "ita_label": "Prezzo",
+      "lit_label": "Kaina",
+      "lav_label": "Cena",
+      "mlt_label": "Prezz",
+      "nld_label": "Prijs",
+      "pol_label": "Cena",
+      "por_label": "Preço",
+      "ron_label": "Preț",
+      "slk_label": "Cena",
+      "slv_label": "Cena",
+      "swe_label": "Pris"
+    },
+    {
+      "code": "quality",
+      "Name": "Quality",
+      "bul_label": "Качество",
+      "ces_label": "Kvalita",
+      "dan_label": "Kvalitet",
+      "deu_label": "Qualität",
+      "ell_label": "Ποιότητα",
+      "eng_label": "Quality",
+      "spa_label": "Calidad",
+      "est_label": "Kvaliteet",
+      "fin_label": "Laatu",
+      "fra_label": "Qualité",
+      "gle_label": "Cáilíocht",
+      "hrv_label": "Kvaliteta",
+      "hun_label": "Minőség",
+      "ita_label": "Qualità",
+      "lit_label": "Kokybė",
+      "lav_label": "Kvalitāte",
+      "mlt_label": "Kwalità",
+      "nld_label": "Kwaliteit",
+      "pol_label": "Jakość",
+      "por_label": "Qualidade",
+      "ron_label": "Calitate",
+      "slk_label": "Kvalita",
+      "slv_label": "Kakovost",
+      "swe_label": "Kvalitet"
+    }
+  ],
+  "identification": {
+    "short_name": "AwardCriterionType",
+    "version": "20250924-0"
+  }
+}

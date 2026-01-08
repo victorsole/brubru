@@ -1,0 +1,51 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ko"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "WPML의 고급 번역 편집기로 더 많은 기능 이용하기"
+         ],
+         "Close banner": [
+            "배너 닫기"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "귀하는 구식 레거시 도구인 클래식 번역 편집기를 사용하고 있어 고급 번역 편집기의 다양한 기능과 효율성을 놓치고 있습니다:"
+         ],
+         "Translation Memory": [
+            "번역 메모리"
+         ],
+         "HTML Protection": [
+            "HTML 보호"
+         ],
+         "Glossary": [
+            "용어집"
+         ],
+         "Spellchecker": [
+            "맞춤법 검사기"
+         ],
+         "AI Assistant": [
+            "AI 어시스턴트"
+         ],
+         "Automatic Translation": [
+            "자동 번역"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "지금 전환하여 더 빠르고 편리하며 신뢰할 수 있는 번역 경험을 누리세요."
+         ],
+         "Switch Now": [
+            "지금 전환하기"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "고급 번역 편집기에 대해 자세히 알아보기"
+         ],
+         "Learn More": [
+            "자세히 알아보기"
+         ]
+      }
+   }
+}

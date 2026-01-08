@@ -1,0 +1,69 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "WPML Translation Editor": [
+            "WPML Översättningsredigerare"
+         ],
+         "WordPress Editor": [
+            "WordPress-redigerare"
+         ],
+         "Translation Dashboard": [
+            "Översättningspanel"
+         ],
+         "Also, switching back to WPML's Translation Editor later will require re-translating content that you translated with the WordPress editor.": [
+            "Tänk också på att om du senare byter tillbaka till WPML:s översättningsredigerare kommer du behöva översätta om innehåll som du översatt med WordPress-redigeraren."
+         ],
+         "This will overwrite content you translated with the WordPress Editor. If you switch now, you'll have to translate selected content again.": [
+            "Detta kommer att skriva över innehåll som du har översatt med WordPress-redigeraren. Om du byter nu måste du översätta det valda innehållet igen."
+         ],
+         "You are about to translate with the %s": [
+            "Du är på väg att översätta med %s"
+         ],
+         "Translate with the WordPress Editor if you need different designs per language or if the content isn't compatible with WPML's Translation Editor.": [
+            "Översätt med WordPress-redigeraren om du behöver olika design för olika språk eller om innehållet inte är kompatibelt med WPML:s översättningsredigerare."
+         ],
+         "What do you want to translate?": [
+            "Vad vill du översätta?"
+         ],
+         "I understand, switch to the WordPress Editor": [
+            "Jag förstår, byt till WordPress-redigeraren"
+         ],
+         "Apply": [
+            "Tillämpa"
+         ],
+         "Cancel": [
+            "Avbryt"
+         ],
+         "I understand, switch to %s": [
+            "Jag förstår, byt till %s"
+         ],
+         "Only this %s": [
+            "Endast detta %s"
+         ],
+         "Recommended": [
+            "Rekommenderad"
+         ],
+         "All %s": [
+            "Alla %s"
+         ],
+         "All the site's content": [
+            "Allt innehåll på webbplatsen"
+         ],
+         "I understand, switch to Translation Dashboard": [
+            "Jag förstår, byt till översättningspanelen"
+         ],
+         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
+            "WordPress-redigeraren erbjuder inte automatisk översättning, översättningsminne och andra funktioner som underlättar översättning."
+         ],
+         "Translate items in batch after reviewing the cost of AI translation": [
+            "Översätt objekt i grupp efter att ha granskat kostnaden för AI-översättning"
+         ]
+      }
+   }
+}

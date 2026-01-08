@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "ru"
+         },
+         "Get a key for this site": [
+            "Получить ключ для этого сайта"
+         ],
+         "Site key:": [
+            "Ключ сайта:"
+         ],
+         "Enter your site key here": [
+            "Введите ключ вашего сайта здесь"
+         ],
+         "Registering...": [
+            "Регистрация..."
+         ],
+         "Register": [
+            "Зарегистрировать"
+         ],
+         "A New Site Key Is Required": [
+            "Требуется новый ключ сайта"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "Чтобы продолжить использование функций WPML, таких как автоматический перевод и обновления плагинов, пожалуйста, зарегистрируйте ваш сайт снова. Не беспокойтесь, ваш существующий контент и переводы в безопасности."
+         ],
+         "Site key registered successfully!": [
+            "Ключ сайта успешно зарегистрирован!"
+         ],
+         "Page will reload in %d seconds...": [
+            "Страница перезагрузится через %d секунд..."
+         ],
+         "Registration failed. Please try again.": [
+            "Регистрация не удалась. Пожалуйста, попробуйте еще раз."
+         ]
+      }
+   }
+}

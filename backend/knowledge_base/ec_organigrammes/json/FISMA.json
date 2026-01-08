@@ -1,0 +1,224 @@
+{
+  "dg_code": "FISMA",
+  "dg_name": "Financial Stability, Financial Services and Capital Markets Union",
+  "commissioner": "Maria Luís Albuquerque",
+  "date_of_effect": "2025-10-16",
+  "director_general": {
+    "name": "John Berrigan",
+    "policy_assistant": "Ward Möhlmann"
+  },
+  "deputy_director_general": {
+    "name": "Alexandra Jour-Schroeder"
+  },
+  "hr_correspondent": {
+    "name": "Chantal Hughes"
+  },
+  "directorates": [
+    {
+      "code": "FISMA.01",
+      "name": "Finance, Internal Control & IT",
+      "director": "Anne-Françoise Melot",
+      "deputy": "Simon Davies"
+    },
+    {
+      "code": "FISMA.A",
+      "name": "General Affairs",
+      "director": "Alexandra Jour-Schroeder (Acting)",
+      "units": [
+        {
+          "code": "FISMA.A.1",
+          "name": "Policy Definition & Coordination",
+          "head": "Anne Schaedle",
+          "deputy": "Piotr Plizga"
+        },
+        {
+          "code": "FISMA.A.2",
+          "name": "Policy Planning & Implementation, Inter-Institutional Relations",
+          "head": "Dorota Zaliwska",
+          "deputy": "Tommy De Temmerman"
+        },
+        {
+          "code": "FISMA.A.3",
+          "name": "Communication & Document Management",
+          "head": "Chantal Hughes",
+          "deputy": "Florian Denis"
+        },
+        {
+          "code": "FISMA.A.4",
+          "name": "International Affairs",
+          "head": "Raffaella Assetta",
+          "deputy": "Massimo Zaffiro"
+        },
+        {
+          "code": "FISMA.A.5",
+          "name": "Economic Analysis & Evaluation",
+          "head": "Leonie Bell",
+          "deputy": "Stan Maes"
+        }
+      ]
+    },
+    {
+      "code": "FISMA.B",
+      "name": "Horizontal Policies",
+      "director": "Eric Ducoulombier (Acting)",
+      "units": [
+        {
+          "code": "FISMA.B.1",
+          "name": "Savings and Investments Union Coordination",
+          "head": "Andrea Beltramello",
+          "deputy": "Alessandra Atripaldi"
+        },
+        {
+          "code": "FISMA.B.2",
+          "name": "Sustainable Finance",
+          "head": "Didier Millerot",
+          "deputy": "Joanna Sikora-Wittnebel"
+        },
+        {
+          "code": "FISMA.B.3",
+          "name": "Retail Financial Services and Payments",
+          "head": "Eric Ducoulombier",
+          "deputy": "Andrea Liesenfeld"
+        },
+        {
+          "code": "FISMA.B.4",
+          "name": "Digital Finance",
+          "head": "Mattias Levin (Acting)",
+          "deputy": "Mattias Levin"
+        }
+      ],
+      "advisers": [
+        {
+          "name": "Peter Kerstens",
+          "area": "Technological Innovation & Cyber Security"
+        },
+        {
+          "name": "Nigel Nagarajan",
+          "area": "Financial Services Strategy"
+        }
+      ]
+    },
+    {
+      "code": "FISMA.C",
+      "name": "Financial Markets",
+      "director": "Martin Merlin",
+      "units": [
+        {
+          "code": "FISMA.C.1",
+          "name": "Corporate Reporting, Audit & Credit Rating Agencies",
+          "head": "Sven Gentner",
+          "deputy": "Petr Wagner"
+        },
+        {
+          "code": "FISMA.C.2",
+          "name": "Financial Markets Infrastructure",
+          "head": "Jennifer Robertson",
+          "deputy": "Sebastijan Hrovatin"
+        },
+        {
+          "code": "FISMA.C.3",
+          "name": "Securities Markets",
+          "head": "Tanya Panova",
+          "deputy": "Agnès Le Thiec"
+        },
+        {
+          "code": "FISMA.C.4",
+          "name": "Asset Management",
+          "head": "Hélène Bussières",
+          "deputy": "Alessandro Malchiodi"
+        }
+      ]
+    },
+    {
+      "code": "FISMA.D",
+      "name": "Banking, Insurance & Financial Crime",
+      "director": "Ugo Bassi",
+      "units": [
+        {
+          "code": "FISMA.D.1",
+          "name": "Banking Regulation & Supervision",
+          "head": "Almorò Rubin De Cervin",
+          "deputy": "Marc Peters"
+        },
+        {
+          "code": "FISMA.D.2",
+          "name": "Financial Crime",
+          "head": "Raluca Pruna",
+          "deputy": "Claude Bocqueraz"
+        },
+        {
+          "code": "FISMA.D.3",
+          "name": "Resolution & Deposit Insurance",
+          "head": "Yann Germaine (Acting)",
+          "deputy": "Yann Germaine"
+        },
+        {
+          "code": "FISMA.D.4",
+          "name": "Insurance & Pensions",
+          "head": "Tilman Lueder",
+          "deputy": "Marc Horovitz"
+        },
+        {
+          "code": "FISMA.D.AMLA.TF",
+          "name": "Task Force Anti-Money Laundering Authority",
+          "head": "Dominique Thienpont (Acting)",
+          "deputy": "Chiara Bacci (Acting)"
+        }
+      ],
+      "advisers": [
+        {
+          "name": "Alain Deckers",
+          "area": "Adviser"
+        },
+        {
+          "name": "Ralf Jacob",
+          "area": "Financial Stability"
+        }
+      ],
+      "task_force": {
+        "name": "Resolution",
+        "head": "Silvia Scatizzi"
+      }
+    },
+    {
+      "code": "FISMA.E",
+      "name": "Financial Sector Stability and Security, Enforcement and Sanctions",
+      "director": "Klaus Wiedner",
+      "units": [
+        {
+          "code": "FISMA.E.1",
+          "name": "Macro-Finance and Macroprudential Policy",
+          "head": "Emiliano Tornese",
+          "deputy": "Anca Grigorut"
+        },
+        {
+          "code": "FISMA.E.2",
+          "name": "National Financial Systems",
+          "head": "Rainer Wichern",
+          "deputy": "Anna Grochowska"
+        },
+        {
+          "code": "FISMA.E.3",
+          "name": "Economic Security in Financial Services",
+          "head": "Jung-Duk Lichtenberger (Acting)",
+          "deputy": "Jung-Duk Lichtenberger"
+        },
+        {
+          "code": "FISMA.E.4",
+          "name": "Free Movement of Capital & Application of EU Law",
+          "head": "Tomasz Dolny",
+          "deputy": "Agita Sproge"
+        },
+        {
+          "code": "FISMA.E.5",
+          "name": "Sanctions",
+          "head": "Michael Stelzer",
+          "deputy": "Franca Poliani"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "D: Deputy to the Director"
+  ]
+}

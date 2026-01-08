@@ -1,0 +1,270 @@
+{
+  "dg_code": "RTD",
+  "linked_executive_agencies": [
+    {
+      "code": "ERCEA",
+      "name": "European Research Council Executive Agency",
+      "director": "Laurence Moreau",
+      "departments": [
+        {
+          "code": "ERCEA.A",
+          "units": [
+            {
+              "code": "ERCEA.A.1",
+              "head": "Alban Kellerbauer"
+            },
+            {
+              "code": "ERCEA.A.2",
+              "head": "Martin Penny"
+            }
+          ]
+        },
+        {
+          "code": "ERCEA.B",
+          "director": "Philippe Cupers",
+          "units": [
+            {
+              "code": "ERCEA.B.1",
+              "head": "Raluca Ionescu"
+            },
+            {
+              "code": "ERCEA.B.2",
+              "head": "Josefina Enfedaque"
+            },
+            {
+              "code": "ERCEA.B.3",
+              "head": "Philippe Cupers (Acting)"
+            },
+            {
+              "code": "ERCEA.B.4",
+              "head": "Pablo Perez-Illana"
+            },
+            {
+              "code": "ERCEA.B.5",
+              "head": "Lino Paula"
+            }
+          ]
+        },
+        {
+          "code": "ERCEA.C",
+          "director": "Mila Bas Sanchez",
+          "units": [
+            {
+              "code": "ERCEA.C.1",
+              "head": "Niki Atzoulatou"
+            },
+            {
+              "code": "ERCEA.C.2",
+              "head": "Anisoara Ulceluse-Pirvan"
+            },
+            {
+              "code": "ERCEA.C.3",
+              "head": "Anita Kucharska"
+            },
+            {
+              "code": "ERCEA.C.4",
+              "head": "Nikola Car"
+            }
+          ]
+        },
+        {
+          "code": "ERCEA.D",
+          "director": "Pascale Cid",
+          "units": [
+            {
+              "code": "ERCEA.D.1",
+              "head": "Philippe Vijghen"
+            },
+            {
+              "code": "ERCEA.D.2",
+              "head": "Carole Micmacher"
+            },
+            {
+              "code": "ERCEA.D.3",
+              "head": "Gwennael Joliff-Botrel"
+            }
+          ]
+        }
+      ],
+      "linked_to": "DDG Planet, People & Science for Policy"
+    },
+    {
+      "code": "EISMEA",
+      "name": "European Innovation, Small and Medium-sized Enterprises Executive Agency",
+      "director": "Stéphane Ouaki (Acting)",
+      "departments": [
+        {
+          "code": "EISMEA.E",
+          "director": "Stephane Ouaki",
+          "units": [
+            {
+              "code": "EISMEA.E.1",
+              "head": "Timo Hallantie",
+              "deputy": "Grzegorz Ambroziewicz"
+            },
+            {
+              "code": "EISMEA.E.3",
+              "head": "Denisa Perrin",
+              "deputy": "Andrei Lintu"
+            }
+          ]
+        },
+        {
+          "code": "EISMEA.I.1",
+          "head": "Francesca Doria"
+        },
+        {
+          "code": "EISMEA.C",
+          "director": "Marisa Atienza Morales",
+          "units": [
+            {
+              "code": "EISMEA.C.1",
+              "head": "Alice Langerova"
+            },
+            {
+              "code": "EISMEA.C.2",
+              "head": "Kyriakos Georgopoulos"
+            }
+          ]
+        }
+      ],
+      "linked_to": "Directorate A and Directorate H"
+    },
+    {
+      "code": "REA",
+      "name": "Research Executive Agency",
+      "director": "Marc Tachelet",
+      "departments": [
+        {
+          "code": "REA.B",
+          "director": "Paul Webb",
+          "units": [
+            {
+              "code": "REA.B.1",
+              "head": "Sebastiano Fumero",
+              "deputy": "Julio Riesgo Arnaldo"
+            },
+            {
+              "code": "REA.B.3",
+              "head": "Amoldas Milukas",
+              "deputy": "Attila Berczik"
+            }
+          ]
+        },
+        {
+          "code": "REA.C",
+          "director": "Minna Wilkki",
+          "units": [
+            {
+              "code": "REA.C.1",
+              "head": "Kristien Van Goey",
+              "deputy": "Bart Van Caenegem"
+            },
+            {
+              "code": "REA.C.3",
+              "head": "Ales Fiala"
+            },
+            {
+              "code": "REA.C.4",
+              "head": "Sari Vartiainen-Mathieu",
+              "deputy": "Wainer Lusoli"
+            }
+          ]
+        },
+        {
+          "code": "REA.A.5",
+          "head": "Michel Vanbiervliet",
+          "deputy": "Thierry Brefort"
+        },
+        {
+          "code": "REA.D",
+          "director": "Marc Bellens",
+          "units": [
+            {
+              "code": "REA.D.1",
+              "head": "Barbara Kampis"
+            },
+            {
+              "code": "REA.D.2",
+              "head": "Lara Passante",
+              "deputy": "Sabine Gruener"
+            },
+            {
+              "code": "REA.D.3",
+              "head": "Griet Van Caenegem",
+              "deputy": "Filippo De Rosa"
+            },
+            {
+              "code": "REA.D.4",
+              "head": "Elena Simova"
+            }
+          ]
+        }
+      ],
+      "linked_to": "Multiple Directorates"
+    },
+    {
+      "code": "CINEA",
+      "name": "European Climate, Infrastructure and Environment Executive Agency",
+      "departments": [
+        {
+          "code": "CINEA.C",
+          "director": "Matthias Langemeyer",
+          "units": [
+            {
+              "code": "CINEA.C.1",
+              "head": "Ivan Konaktchiev"
+            },
+            {
+              "code": "CINEA.C.2",
+              "head": "Peter Petrov"
+            },
+            {
+              "code": "CINEA.C.3",
+              "head": "..."
+            }
+          ]
+        },
+        {
+          "code": "CINEA.A",
+          "units": [
+            {
+              "code": "CINEA.A.1",
+              "head": "Philipp Troppmann"
+            },
+            {
+              "code": "CINEA.A.2",
+              "head": "Jean-Christophe Gayrand"
+            },
+            {
+              "code": "CINEA.A.3",
+              "head": "Céline Vandreche-Teniers"
+            }
+          ]
+        }
+      ],
+      "linked_to": "Directorate C and Directorate H"
+    },
+    {
+      "code": "HADEA",
+      "name": "European Health and Digital Executive Agency",
+      "units": [
+        {
+          "code": "HADEA.A.3",
+          "head": "Stephane Hogan"
+        },
+        {
+          "code": "HADEA.B.3",
+          "head": "Natascia Lai"
+        },
+        {
+          "code": "HADEA.C.1",
+          "head": "Alexandros Iatrou",
+          "deputy": "Katarzyna Stryjniak"
+        }
+      ],
+      "linked_to": "Directorate D and Directorate H"
+    }
+  ],
+  "note": "Executive agencies have functional reporting lines to various RTD directorates based on their area of work"
+}

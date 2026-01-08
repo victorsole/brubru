@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ko"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "이제 귀하의 사이트가 WPML의 최소 요구 사항을 충족합니다"
+         ],
+         "Start WPML Setup": [
+            "WPML 설정 시작"
+         ],
+         "Need Help?": [
+            "도움이 필요하신가요?"
+         ],
+         "Contact our support team": [
+            "고객 지원팀에 문의하세요"
+         ],
+         " and we'll guide you through it step by step.": [
+            " 저희가 단계별로 안내해 드리겠습니다."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "귀하의 사이트가 WPML의 최소 요구 사항을 충족하지 않습니다"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "WPML로 사이트가 원활하게 운영되도록 이러한 간단한 최소 요구 사항을 충족하세요."
+         ],
+         "Re-check Now": [
+            "지금 다시 확인"
+         ],
+         "Skip for now": [
+            "나중에 건너뛰기"
+         ]
+      }
+   }
+}

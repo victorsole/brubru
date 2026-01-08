@@ -1,0 +1,300 @@
+{
+  "dg_code": "REGIO",
+  "dg_name": "Directorate-General for Regional & Urban Policy",
+  "executive_vice_president": {
+    "name": "Raffaele Fitto",
+    "title": "Executive Vice-President"
+  },
+  "director_general": {
+    "name": "Themis Christophidou",
+    "title": "Director-General",
+    "policy_assistants": [
+      "Carlo Girlanda",
+      "Iris Petsa"
+    ],
+    "hr_correspondent": "Davinia Wood"
+  },
+  "deputy_director_general": {
+    "name": "Hugo Sobral",
+    "title": "Deputy Director-General for Programme Implementation",
+    "assistant": "Patricia Lamotte"
+  },
+  "special_units": [
+    {
+      "code": "REGIO.01",
+      "name": "Political Coordination, Strategic Management & Inter-Institutional Relations",
+      "head": "Davinia Wood",
+      "deputy": "Michaela Stahl"
+    },
+    {
+      "code": "REGIO.02",
+      "name": "Coordination of Programmes",
+      "head": "Iulia-Mirela Șerban",
+      "deputy": "Vacant"
+    },
+    {
+      "code": "REGIO.03",
+      "name": "Cities, Communities, People",
+      "head": "Kadri Uustal",
+      "deputy": "Gergana Miladinova"
+    },
+    {
+      "code": "REGIO.04",
+      "name": "Cyprus Settlement Support",
+      "head": "Giulia Bertezzolo",
+      "deputy": "Jutta Pomoell-Segurola"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "REGIO.A",
+      "name": "Budget, Communication & General Affairs",
+      "director": "Davinia Wood (Acting)",
+      "units": [
+        {
+          "code": "REGIO.A.1",
+          "name": "Outermost Regions",
+          "head": "Axel Badrichani",
+          "deputy": "Germán Esteban"
+        },
+        {
+          "code": "REGIO.A.2",
+          "name": "Communication",
+          "head": "Klavdija Cernilogar Dwyer",
+          "deputy": "Elina Hakonen-Meddings"
+        },
+        {
+          "code": "REGIO.A.3",
+          "name": "Budget & Financial Management",
+          "head": "Momchil Sabev",
+          "deputy": "Gabor Miklósi"
+        },
+        {
+          "code": "REGIO.A.4",
+          "name": "IT Implementation & IT Governance",
+          "head": "Morten Greve",
+          "deputy": "Daniel Coman"
+        }
+      ],
+      "mirror_entity": {
+        "code": "REGIO.A3.EISMEA.C.01",
+        "head": "Ioanna Kokkori"
+      }
+    },
+    {
+      "code": "REGIO.B",
+      "name": "Policy",
+      "director": "Peter Berkowitz",
+      "units": [
+        {
+          "code": "REGIO.B.1",
+          "name": "Policy Development & Evaluation",
+          "head": "Anna Wagner",
+          "deputy": "Enrico Pesaresi"
+        },
+        {
+          "code": "REGIO.B.2",
+          "name": "European Semester & Economic Analysis",
+          "head": "Stefan Appel",
+          "deputy": "Francisco Barros Castro"
+        },
+        {
+          "code": "REGIO.B.3",
+          "name": "Financial Instruments & Relations with International Financial Institutions",
+          "head": "Jonathan Denness",
+          "deputy": "Benoit Nadler"
+        },
+        {
+          "code": "REGIO.B.4",
+          "name": "Legal Affairs",
+          "head": "Eveline Petrat Charléty",
+          "deputy": "Margaret Butler"
+        }
+      ]
+    },
+    {
+      "code": "DAC",
+      "name": "Joint Audit Directorate for Cohesion",
+      "director": "Franck Sébert",
+      "note": "Joint Directorate with DG EMPL as specified in Commission Decision SEC(2021)194",
+      "units": [
+        {
+          "code": "DAC.1",
+          "name": "Audit I",
+          "head": "Cristina Asturias",
+          "deputy": "Brian Debattista"
+        },
+        {
+          "code": "DAC.2",
+          "name": "Audit II",
+          "head": "Ilse Van Den Abeele",
+          "deputy": "Jarosław Hawrysz"
+        },
+        {
+          "code": "DAC.3",
+          "name": "Audit III",
+          "head": "Miriam Fernandez Jutz",
+          "deputy": "Vladislava Glietz"
+        },
+        {
+          "code": "DAC.4",
+          "name": "Audit IV",
+          "head": "Rafael López Sánchez",
+          "deputy": "Olivia Jordan"
+        },
+        {
+          "code": "DAC.5",
+          "name": "Audit V",
+          "head": "Cendrine De Buggenoms",
+          "deputy": "Beatrice Stanciu"
+        },
+        {
+          "code": "DAC.6",
+          "name": "Audit VI",
+          "head": "Marcela Buzoi (Acting)",
+          "deputy": "Marcela Buzoi"
+        },
+        {
+          "code": "DAC.7",
+          "name": "Coordination, Relations with ECA and OLAF",
+          "head": "Agnieszka Krolikowska",
+          "deputy": "Dinos Alevizopoulos"
+        }
+      ]
+    },
+    {
+      "code": "REGIO.D",
+      "name": "European Territorial Cooperation, Macro-Regions, Interreg & Programmes Implementation I",
+      "director": "Hugo Sobral (Acting)",
+      "units": [
+        {
+          "code": "REGIO.D.1",
+          "name": "Macro-Regions, Transnational/Interregional/External Cooperation, Enlargement",
+          "head": "Moray Gilland",
+          "deputy": "Oana Dordain"
+        },
+        {
+          "code": "REGIO.D.2",
+          "name": "Interreg, Cross-Border Cooperation, Internal Borders",
+          "head": "Simona Pohlová (Acting)",
+          "deputy": "Simona Pohlová"
+        },
+        {
+          "code": "REGIO.D.3",
+          "name": "Belgium, France, Luxembourg",
+          "head": "Carsten Rasmussen",
+          "deputy": "Jordi Torrebadella Aguila"
+        },
+        {
+          "code": "REGIO.D.4",
+          "name": "Estonia, Finland, Latvia & Lithuania",
+          "head": "Agnès Monfret",
+          "deputy": "Linda Sproge"
+        }
+      ]
+    },
+    {
+      "code": "REGIO.E",
+      "name": "Administrative Capacity Building & Programmes Implementation II",
+      "director": "Sofia Alves",
+      "units": [
+        {
+          "code": "REGIO.E.1",
+          "name": "Administrative Capacity Building & Solidarity Instruments",
+          "head": "Loredana Von Buttlar",
+          "deputy": "Simeon Shenev"
+        },
+        {
+          "code": "REGIO.E.2",
+          "name": "Croatia & Romania",
+          "head": "Aida Liha Matejiček",
+          "deputy": "Krzysztof Kasprzyk"
+        },
+        {
+          "code": "REGIO.E.3",
+          "name": "Bulgaria, Hungary & Slovenia",
+          "head": "Andreas Von Busch",
+          "deputy": "Zsolt Szokolai"
+        },
+        {
+          "code": "REGIO.E.4",
+          "name": "Denmark, Ireland, Sweden & The United Kingdom",
+          "head": "Marek Teplansky",
+          "deputy": "Vacant",
+          "note": "As stipulated in the withdrawal agreement between the EU and UK, the implementation and the closure of the UK programmes are carried out in the same way as for the programmes of EU Member states"
+        }
+      ]
+    },
+    {
+      "code": "REGIO.F",
+      "name": "Better Implementation, Closure & Programme Implementation III",
+      "director": "Emma Toledano Laredo",
+      "units": [
+        {
+          "code": "REGIO.F.1",
+          "name": "Better Implementation & Closure",
+          "head": "Charlie Grant",
+          "deputy": "Sabine Vandermotten"
+        },
+        {
+          "code": "REGIO.F.2",
+          "name": "Austria, Germany & The Netherlands",
+          "head": "Nicolas Gibert-Morin",
+          "deputy": "Anna-Lena Zademach-Schwierz"
+        },
+        {
+          "code": "REGIO.F.3",
+          "name": "Poland",
+          "head": "Angela Martinez Sarasola",
+          "deputy": "Kai Stryczynski"
+        },
+        {
+          "code": "REGIO.F.4",
+          "name": "Czech Republic & Slovakia",
+          "head": "Pascal Boijmans",
+          "deputy": "Kateřina Kapounová"
+        }
+      ]
+    },
+    {
+      "code": "REGIO.G",
+      "name": "Smart & Sustainable Growth & Programmes Implementation IV",
+      "director": "Nicola De Michelis",
+      "units": [
+        {
+          "code": "REGIO.G.1",
+          "name": "Smart & Sustainable Growth",
+          "head": "Catherine Wendt",
+          "deputy": "Eva Nussmueller"
+        },
+        {
+          "code": "REGIO.G.2",
+          "name": "Portugal & Spain",
+          "head": "Caroline Callens",
+          "deputy": "Diego Villalba De Miguel"
+        },
+        {
+          "code": "REGIO.G.3",
+          "name": "Cyprus & Greece",
+          "head": "Panagiotis Padazatos (Acting)",
+          "deputy": "Panagiotis Padazatos"
+        },
+        {
+          "code": "REGIO.G.4",
+          "name": "Italy & Malta",
+          "head": "Carmen Gonzalez Hernandez",
+          "deputy": "Luca Mattiotti"
+        }
+      ],
+      "mirror_entity": {
+        "code": "REGIO.G1.EISMEA.I.01",
+        "head": "Gérald Cultot"
+      }
+    }
+  ],
+  "seconded_managers": [
+    "D. Srsen seconded to a Cabinet",
+    "K. Kottova seconded to a Cabinet"
+  ],
+  "date_of_effect": "2025-10-16"
+}

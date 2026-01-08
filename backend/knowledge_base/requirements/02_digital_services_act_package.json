@@ -1,0 +1,429 @@
+{
+  "cluster_id": 2,
+  "cluster_name": "Digital Services Act Package",
+  "policy_area": "Digital Policy and Digital Economy",
+  "description": "Digital Services Act regulating online intermediaries and platforms in the EU",
+  "applicability": "Online platforms, intermediary services, very large online platforms (VLOPs)",
+  "extraction_date": "2025-12-31T22:46:23.733157",
+  "total_laws": 4,
+  "total_requirements": 25,
+  "requirements": [
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "Explanations requested by the Commission or accompanying persons pursuant to Article 69(2), points (f) and (g), of Regulation (EU) 2022/2065 shall be given only by authorised representatives or members of staff",
+      "applicable_entity": "providers of very large online platforms, providers of very large online search engines, other persons referred to in Article 67(1) of Regulation (EU) 2022/2065",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "inspections",
+        "explanations",
+        "authorised representatives",
+        "staff members"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "After the inspection, a copy of any recording made pursuant to paragraph 1 shall be made available to the provider concerned",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "after the inspection",
+      "keywords": [
+        "recording",
+        "inspection",
+        "copy",
+        "availability"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "The Commission shall set a time limit within which the provider or person concerned may communicate rectification, amendment or supplement to explanations given by unauthorised representatives or staff",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "within time limit set by Commission",
+      "keywords": [
+        "time limit",
+        "rectification",
+        "amendment",
+        "supplement",
+        "explanations"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Providers shall provide access in a timely and effective manner, enabling the Commission to access all information in the databases and algorithms necessary for assessment of compliance",
+      "applicable_entity": "providers of very large online platforms, providers of very large online search engines",
+      "criticality": "critical",
+      "deadline_text": "in a timely manner",
+      "keywords": [
+        "database access",
+        "algorithmic systems",
+        "timely",
+        "effective",
+        "compliance assessment"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 3(3)",
+      "requirement_text": "Providers ordered to provide access pursuant to Article 72(1) shall comply with the requirements laid down in Article 7 of this Regulation",
+      "applicable_entity": "providers of very large online platforms, providers of very large online search engines",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "access requirements",
+        "Article 7 compliance",
+        "monitoring"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 3(4)",
+      "requirement_text": "The Commission shall define the terms of retention, including the period and scope of documents to be retained when imposing document retention obligations",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "document retention",
+        "retention period",
+        "retention scope",
+        "terms definition"
+      ],
+      "law_id": 1030,
+      "law_celex": "32023R1201",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1201 of 21 June 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/2065 of the European Parliament and of the Council (Digital Services Act)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(1)",
+      "requirement_text": "The Commission shall charge providers of very large online platforms and of very large online search engines annual supervisory fees",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "annually",
+      "keywords": [
+        "supervisory fees",
+        "annual",
+        "very large online platforms",
+        "very large online search engines"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(1)",
+      "requirement_text": "Providers of very large online platforms and of very large online search engines must pay annual supervisory fees to cover all estimated costs of Commission supervisory tasks",
+      "applicable_entity": "providers of very large online platforms and very large online search engines",
+      "criticality": "critical",
+      "deadline_text": "annually",
+      "keywords": [
+        "supervisory fees",
+        "annual payment",
+        "estimated costs",
+        "supervisory tasks"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(2)",
+      "requirement_text": "The Commission shall estimate costs by taking into account all human resources to be employed in year n+1 to carry out supervisory tasks, including officials, temporary and contract agents and seconded national experts",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "for year n+1",
+      "keywords": [
+        "cost estimation",
+        "human resources",
+        "Full-Time-Equivalent",
+        "supervisory tasks"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(3)",
+      "requirement_text": "The Commission shall adopt each year individual implementing acts setting out the individual amount of the supervisory fee to be charged to each provider for the designated service or services",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "each year",
+      "keywords": [
+        "implementing acts",
+        "individual supervisory fee",
+        "designated services"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(4)",
+      "requirement_text": "Where the designation decision is addressed to more than one legal person, all addressees shall be jointly and severally liable for the payment of the supervisory fee",
+      "applicable_entity": "addressees of designation decisions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "joint and several liability",
+        "designation decision",
+        "supervisory fee payment"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(5)",
+      "requirement_text": "Any provider shall not pay an overall amount of supervisory fee exceeding 0.05% of its annual worldwide net income",
+      "applicable_entity": "providers of designated services",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "maximum fee limit",
+        "0.05%",
+        "annual worldwide net income",
+        "economic capacity"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(6)",
+      "requirement_text": "Providers must provide financial information to the Commission to determine their economic capacity based on financial statements",
+      "applicable_entity": "providers of designated services",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "financial statements",
+        "economic capacity",
+        "financial information",
+        "reporting standards"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(7)",
+      "requirement_text": "The Commission shall communicate the provisional amount of the fee to the concerned provider before adopting any implementing decision to give opportunity to submit observations",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "before adopting implementing decision",
+      "keywords": [
+        "provisional fee amount",
+        "observations",
+        "implementing decision",
+        "consultation"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(8)",
+      "requirement_text": "Supervisory fees must be paid by the end of the same calendar year as specified in the implementing act",
+      "applicable_entity": "providers of designated services",
+      "criticality": "critical",
+      "deadline_text": "by the end of that same calendar year",
+      "keywords": [
+        "payment deadline",
+        "calendar year",
+        "implementing act",
+        "supervisory fee payment"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(9)",
+      "requirement_text": "Failure to pay within the deadline shall give rise to recovery of unpaid amount together with default interest at ECB refinancing rate increased by 3.5%",
+      "applicable_entity": "providers of designated services",
+      "criticality": "critical",
+      "deadline_text": "within the deadline determined by implementing acts",
+      "keywords": [
+        "default interest",
+        "ECB refinancing rate",
+        "3.5%",
+        "unpaid amount",
+        "recovery"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 43(10)",
+      "requirement_text": "The Commission shall annually report costs incurred and revenues collected to the European Parliament and Council and make such report publicly available on its website",
+      "applicable_entity": "European Commission",
+      "criticality": "critical",
+      "deadline_text": "annually",
+      "keywords": [
+        "annual report",
+        "costs incurred",
+        "revenues collected",
+        "transparency",
+        "public availability"
+      ],
+      "law_id": 16303,
+      "law_celex": "32023R1127",
+      "law_title": "Commission Delegated Regulation (EU) 2023/1127 of 2 March 2023 supplementing Regulation (EU) 2022/2065 of the European Parliament and of the Council with the detailed methodologies and procedures regarding the supervisory fees charged by the Commission on providers of very large online platforms and very large online search engines (Text with EEA relevance)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "The members of the group should be national contact points appointed under Article 19(2) of the Directive on electronic commerce",
+      "applicable_entity": "member states",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "national contact points",
+        "appointment",
+        "electronic commerce directive"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 3(3)",
+      "requirement_text": "Members remain in function until their replacement or until the end of their mandate",
+      "applicable_entity": "expert group members",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "members",
+        "mandate",
+        "replacement"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The Group shall be chaired by a representative of the Commission",
+      "applicable_entity": "commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "chair",
+        "commission representative"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "Information obtained during the works of the group or of the sub-groups may not be disseminated if the Commission is of the opinion they are confidential",
+      "applicable_entity": "expert group members",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "confidential information",
+        "dissemination",
+        "prohibition"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The expert group on electronic commerce shall adopt agreed rules of procedure on the basis of a model adopted by the Commission",
+      "applicable_entity": "expert group on electronic commerce",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "rules of procedure",
+        "adoption",
+        "commission model"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "The Group and the sub-groups shall normally meet at the Commission premises",
+      "applicable_entity": "expert group and sub-groups",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "meetings",
+        "commission premises",
+        "location"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "The Secretariat of the Group shall be provided by the Commission",
+      "applicable_entity": "commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "secretariat",
+        "commission",
+        "administrative support"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    },
+    {
+      "article": "Article 6",
+      "requirement_text": "Travel and subsistence expenses incurred by members, observers and experts, in connection with the activities of the Group, shall be reimbursed by the Commission in accordance with the provisions in force within the Commission",
+      "applicable_entity": "commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "travel expenses",
+        "reimbursement",
+        "subsistence expenses"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 2
+    }
+  ]
+}

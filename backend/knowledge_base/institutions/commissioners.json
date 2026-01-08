@@ -1,0 +1,341 @@
+{
+    "metadata": {
+      "title": "European Commission College of Commissioners 2024-2029",
+      "commission_name": "Von der Leyen Commission II",
+      "term": "2024-2029",
+      "took_office": "2024-12-01",
+      "parliamentary_approval": "2024-11-27",
+      "president": "Ursula von der Leyen",
+      "total_commissioners": 27,
+      "gender_distribution": {
+        "women": 11,
+        "men": 16,
+        "women_percentage": 40.7
+      },
+      "returning_commissioners": 5,
+      "priority_areas": [
+        "Prosperity and competitiveness",
+        "Defence and security",
+        "Social model",
+        "Quality of life",
+        "Democracy and values",
+        "Global Europe",
+        "Delivering together"
+      ],
+      "url_pattern": "https://commission.europa.eu/about/organisation/college-commissioners/[name]_en",
+      "sources": [
+        "https://commission.europa.eu/about/commission-2024-2029_en",
+        "https://ec.europa.eu/stories/2024-2029-commission/"
+      ]
+    },
+    "college": {
+      "president": {
+        "name": "Ursula von der Leyen",
+        "country": "Germany",
+        "position": "President of the European Commission",
+        "term_number": "Second term",
+        "url": "https://commission.europa.eu/about/organisation/college-commissioners/ursula-von-der-leyen_en",
+        "responsibilities": "Overall leadership and strategic direction of the Commission"
+      },
+      "executive_vice_presidents": [
+        {
+          "name": "Teresa Ribera Rodríguez",
+          "country": "Spain",
+          "position": "Executive Vice-President",
+          "portfolio": "Clean, Just and Competitive Transition",
+          "additional_portfolio": "Competition",
+          "dg_oversight": ["DG COMP"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/teresa-ribera-rodriguez_en",
+          "gender": "female"
+        },
+        {
+          "name": "Henna Virkkunen",
+          "country": "Finland",
+          "position": "Executive Vice-President",
+          "portfolio": "Tech Sovereignty, Security and Democracy",
+          "additional_portfolio": "Digital and Frontier Technologies",
+          "dg_oversight": ["DG CNECT"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/henna-virkkunen_en",
+          "gender": "female"
+        },
+        {
+          "name": "Stéphane Séjourné",
+          "country": "France",
+          "position": "Executive Vice-President",
+          "portfolio": "Prosperity and Industrial Strategy",
+          "additional_portfolio": "Industry, SMEs and the Single Market",
+          "dg_oversight": ["DG GROW"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/stephane-sejourne_en",
+          "gender": "male"
+        },
+        {
+          "name": "Kaja Kallas",
+          "country": "Estonia",
+          "position": "High Representative and Vice-President",
+          "portfolio": "Foreign Affairs and Security Policy",
+          "dg_oversight": ["EEAS"],
+          "special_role": "High Representative of the Union for Foreign Affairs and Security Policy",
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/kaja-kallas_en",
+          "gender": "female"
+        },
+        {
+          "name": "Roxana Mînzatu",
+          "country": "Romania",
+          "position": "Executive Vice-President",
+          "portfolio": "People, Skills and Preparedness",
+          "additional_portfolios": ["Skills, Education and Culture", "Quality Jobs and Social Rights"],
+          "dg_oversight": ["DG EAC", "DG EMPL"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/roxana-minzatu_en",
+          "gender": "female"
+        },
+        {
+          "name": "Raffaele Fitto",
+          "country": "Italy",
+          "position": "Executive Vice-President",
+          "portfolio": "Cohesion and Reforms",
+          "additional_portfolio": "Cohesion Policy, Regional Development and Cities",
+          "dg_oversight": ["DG REGIO"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/raffaele-fitto_en",
+          "gender": "male"
+        }
+      ],
+      "commissioners": [
+        {
+          "name": "Maroš Šefčovič",
+          "country": "Slovakia",
+          "portfolio": "Trade and Economic Security",
+          "additional_portfolio": "Interinstitutional Relations and Transparency",
+          "dg_oversight": ["DG TRADE"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/maros-sefcovic_en",
+          "returning_commissioner": true,
+          "gender": "male"
+        },
+        {
+          "name": "Valdis Dombrovskis",
+          "country": "Latvia",
+          "portfolio": "Economy and Productivity",
+          "additional_portfolio": "Implementation and Simplification",
+          "dg_oversight": ["DG ECFIN"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/valdis-dombrovskis_en",
+          "returning_commissioner": true,
+          "gender": "male"
+        },
+        {
+          "name": "Dubravka Šuica",
+          "country": "Croatia",
+          "portfolio": "Mediterranean",
+          "dg_oversight": ["DG MENA"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/dubravka-suica_en",
+          "returning_commissioner": true,
+          "gender": "female"
+        },
+        {
+          "name": "Olivér Várhelyi",
+          "country": "Hungary",
+          "portfolio": "Health and Animal Welfare",
+          "dg_oversight": ["DG SANTE"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/oliver-varhelyi_en",
+          "returning_commissioner": true,
+          "gender": "male"
+        },
+        {
+          "name": "Wopke Hoekstra",
+          "country": "Netherlands",
+          "portfolio": "Climate, Net Zero and Clean Growth",
+          "dg_oversight": ["DG CLIMA", "DG TAXUD"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/wopke-hoekstra_en",
+          "returning_commissioner": true,
+          "gender": "male"
+        },
+        {
+          "name": "Andrius Kubilius",
+          "country": "Lithuania",
+          "portfolio": "Defence and Space",
+          "dg_oversight": ["DG DEFIS"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/andrius-kubilius_en",
+          "gender": "male"
+        },
+        {
+          "name": "Marta Kos",
+          "country": "Slovenia",
+          "portfolio": "Enlargement",
+          "dg_oversight": ["DG ENEST"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/marta-kos_en",
+          "gender": "female",
+          "notes": "Oversees newly created DG ENEST (formerly part of DG NEAR)"
+        },
+        {
+          "name": "Jozef Síkela",
+          "country": "Czech Republic",
+          "portfolio": "International Partnerships",
+          "dg_oversight": ["DG INTPA"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/jozef-sikela_en",
+          "gender": "male"
+        },
+        {
+          "name": "Costas Kadis",
+          "country": "Cyprus",
+          "portfolio": "Fisheries and Oceans",
+          "dg_oversight": ["DG MARE"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/costas-kadis_en",
+          "gender": "male"
+        },
+        {
+          "name": "Maria Luís Albuquerque",
+          "country": "Portugal",
+          "portfolio": "Financial Services and the Savings and Investments Union",
+          "dg_oversight": ["DG FISMA"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/maria-luis-albuquerque_en",
+          "gender": "female"
+        },
+        {
+          "name": "Hadja Lahbib",
+          "country": "Belgium",
+          "portfolio": "Equality",
+          "additional_portfolio": "Preparedness and Crisis Management",
+          "dg_oversight": ["DG ECHO"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/hadja-lahbib_en",
+          "gender": "female"
+        },
+        {
+          "name": "Magnus Brunner",
+          "country": "Austria",
+          "portfolio": "Internal Affairs and Migration",
+          "dg_oversight": ["DG HOME"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/magnus-brunner_en",
+          "gender": "male"
+        },
+        {
+          "name": "Jessika Roswall",
+          "country": "Sweden",
+          "portfolio": "Environment, Water Resilience and a Competitive Circular Economy",
+          "dg_oversight": ["DG ENV"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/jessika-roswall_en",
+          "gender": "female"
+        },
+        {
+          "name": "Piotr Serafin",
+          "country": "Poland",
+          "portfolio": "Budget, Anti-Fraud and Public Administration",
+          "dg_oversight": ["DG BUDG", "OLAF"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/piotr-serafin_en",
+          "gender": "male"
+        },
+        {
+          "name": "Dan Jørgensen",
+          "country": "Denmark",
+          "portfolio": "Energy and Housing",
+          "dg_oversight": ["DG ENER"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/dan-jorgensen_en",
+          "gender": "male"
+        },
+        {
+          "name": "Ekaterina Zaharieva",
+          "country": "Bulgaria",
+          "portfolio": "Startups, Research and Innovation",
+          "dg_oversight": ["DG RTD"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/ekaterina-zaharieva_en",
+          "gender": "female"
+        },
+        {
+          "name": "Michael McGrath",
+          "country": "Ireland",
+          "portfolio": "Democracy, Justice, the Rule of Law and Consumer Protection",
+          "dg_oversight": ["DG JUST"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/michael-mcgrath_en",
+          "gender": "male"
+        },
+        {
+          "name": "Apostolos Tzitzikostas",
+          "country": "Greece",
+          "portfolio": "Sustainable Transport and Tourism",
+          "dg_oversight": ["DG MOVE"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/apostolos-tzitzikostas_en",
+          "gender": "male"
+        },
+        {
+          "name": "Christophe Hansen",
+          "country": "Luxembourg",
+          "portfolio": "Agriculture and Food",
+          "dg_oversight": ["DG AGRI"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/christophe-hansen_en",
+          "gender": "male"
+        },
+        {
+          "name": "Glenn Micallef",
+          "country": "Malta",
+          "portfolio": "Intergenerational Fairness, Youth, Culture and Sport",
+          "dg_oversight": ["DG EAC"],
+          "url": "https://commission.europa.eu/about/organisation/college-commissioners/glenn-micallef_en",
+          "gender": "male"
+        }
+      ]
+    },
+    "statistics": {
+      "total_commissioners": 27,
+      "president": 1,
+      "executive_vice_presidents": 6,
+      "commissioners_with_portfolios": 20,
+      "women_commissioners": 11,
+      "men_commissioners": 16,
+      "returning_commissioners": 5,
+      "returning_commissioners_names": [
+        "Dubravka Šuica",
+        "Olivér Várhelyi",
+        "Wopke Hoekstra",
+        "Valdis Dombrovskis",
+        "Maroš Šefčovič"
+      ],
+      "member_states_represented": 27,
+      "commissioners_by_gender": {
+        "female": [
+          "Ursula von der Leyen (President)",
+          "Teresa Ribera Rodríguez (EVP)",
+          "Henna Virkkunen (EVP)",
+          "Kaja Kallas (HRVP)",
+          "Roxana Mînzatu (EVP)",
+          "Dubravka Šuica",
+          "Marta Kos",
+          "Maria Luís Albuquerque",
+          "Hadja Lahbib",
+          "Jessika Roswall",
+          "Ekaterina Zaharieva"
+        ],
+        "male": [
+          "Stéphane Séjourné (EVP)",
+          "Raffaele Fitto (EVP)",
+          "Maroš Šefčovič",
+          "Valdis Dombrovskis",
+          "Olivér Várhelyi",
+          "Wopke Hoekstra",
+          "Andrius Kubilius",
+          "Jozef Síkela",
+          "Costas Kadis",
+          "Magnus Brunner",
+          "Piotr Serafin",
+          "Dan Jørgensen",
+          "Michael McGrath",
+          "Apostolos Tzitzikostas",
+          "Christophe Hansen",
+          "Glenn Micallef"
+        ]
+      },
+      "dgs_with_multiple_oversight": {
+        "DG EAC": ["Roxana Mînzatu (EVP)", "Glenn Micallef"],
+        "note": "Some portfolios overlap, requiring coordination between commissioners"
+      }
+    },
+    "key_features": {
+      "organizational_structure": "Commission organized around seven priority areas with executive vice-presidents coordinating work across policy domains",
+      "gender_balance": "40.7% women, highest percentage in Commission history",
+      "continuity": "Five returning commissioners provide institutional memory and policy continuity",
+      "dual_portfolios": "Several commissioners hold dual portfolios to address cross-cutting priorities",
+      "new_focus_areas": [
+        "Defence and Space (first dedicated commissioner)",
+        "Mediterranean (new regional focus)",
+        "Startups (innovation emphasis)",
+        "Energy and Housing (combined portfolio)",
+        "Intergenerational Fairness (long-term perspective)"
+      ]
+    }
+  }

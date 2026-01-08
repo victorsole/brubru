@@ -1,0 +1,171 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ja"
+         },
+         "Sending for translation": [
+            "翻訳に送る"
+         ],
+         "This content is being automatically translated. If you want to do something different with it cancel translation jobs first.": [
+            "このコンテンツは自動的に翻訳されています。別の操作を行いたい場合は、まず翻訳ジョブをキャンセルしてください。"
+         ],
+         "Connecting to WPML’s Advanced Translation Editor": [
+            "WPMLのアドバンス翻訳エディターに接続中"
+         ],
+         "Try again": [
+            "再試行"
+         ],
+         "You don't have the rights to review this language": [
+            "あなたにこの言語をレビューする権限はありません"
+         ],
+         "translations": [
+            "翻訳"
+         ],
+         "left in the queue": [
+            "キューに残っています"
+         ],
+         "Translation on hold": [
+            "保留中の翻訳"
+         ],
+         "No translations in the queue": [
+            "キューに翻訳がありません"
+         ],
+         "%d translations left": [
+            "%d 翻訳が残っています"
+         ],
+         "%d min remaining": [
+            "残り %d 分"
+         ],
+         "less than 1 min remaining": [
+            "残り 1 分未満"
+         ],
+         "Automatic translation status": [
+            "自動翻訳ステータス"
+         ],
+         "Translate Everything Automatically": [
+            "すべてを自動で翻訳する"
+         ],
+         "Translate Everything Automatically is active": [
+            "「すべてを自動で翻訳する」が有効です"
+         ],
+         "Translate Everything Automatically is paused": [
+            "「すべてを自動的に翻訳する」が一時停止されています"
+         ],
+         "Translate Everything Automatically is stopped": [
+            "自動翻訳がすべて停止しました"
+         ],
+         "Out of Credits for Automatic Translation": [
+            "自動翻訳のクレジットが不足しています"
+         ],
+         "You have <b>1</b> prepaid translation credit in your wpml.org account. Assign these credits to your site to start using automatic translation": [
+            "Wpml.orgアカウントに<b>%s</b>の前払い翻訳クレジットがあります。自動翻訳を開始するには、これらのクレジットをサイトに割り当ててください"
+         ],
+         "Preparing content for translation": [
+            "翻訳用のコンテンツを準備中"
+         ],
+         "Preparing more content for translation": [
+            "翻訳用により多くのコンテンツを準備中"
+         ],
+         "An error occured, fix it to continue.": [
+            "エラーが発生しています。修正して続行してください。"
+         ],
+         "There is an issue with automatic translation that needs your attention. Fix it to continue.": [
+            "自動翻訳に問題が発生しました。継続するには、修正してください。"
+         ],
+         "Your default language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "自動翻訳を使用するには、あなたのデフォルト言語、%sを対応言語のマップで示す必要があります。"
+         ],
+         "Your language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "自動翻訳を使用するには、あなたのサイトの以下の言語をサポートされている言語にマッピングする必要があります：%s"
+         ],
+         "Content in those languages: %s, cannot be automatically translated unless you map them to a language that's different from the default.": [
+            "これらの言語のコンテンツ: %s、はこれらをデフォルトと異なる言語に地図を付けなければ、自動翻訳できません。"
+         ],
+         "%d translation waiting for review": [
+            "%d 件の翻訳がレビュー待ちです"
+         ],
+         "Account credits used": [
+            "アカウントクレジットを使用しました"
+         ],
+         "Once you’ve used all your prepaid credits, we’ll invoice you for any additional credits you use after the end of the month": [
+            "プリペイドクレジットをすべて使用すると、月末後に追加分として使用されたクレジットの請求を受け取ります。"
+         ],
+         "Payment limit:": [
+            "支払い限界："
+         ],
+         "%s credits": [
+            "%sクレジット"
+         ],
+         "Credits used:": [
+            "使用済みクレジット："
+         ],
+         "Credits left:": [
+            "クレジット残高："
+         ],
+         "The number of credit you will receive an invoice for at the end of the month. View your pay-as-you-go details in your site’s automatic translation settings.": [
+            "月末にご請求させていただくクレジット数です。サイトの自動翻訳設定で、従量課金型の詳細を表示してください。"
+         ],
+         "Calculating": [
+            "計算中"
+         ],
+         "Remaining prepaid credits that are assigned to this site on WPML.org.": [
+            "WPML.org.によりこのサイトに割り当てられたプリペイドクレジットの残高"
+         ],
+         "Prepaid credits left": [
+            "プリペイドクレジットの残高"
+         ],
+         "Pay-as-you-go credits used": [
+            "使用済みの従量課金型のクレジット"
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "あなたのサイトがWPMLの最小要件を満たしていません。"
+         ],
+         "Fix it": [
+            "修正する"
+         ],
+         "Stop": [
+            "ストップします"
+         ],
+         "Assign credits now": [
+            "今すぐクレジットを割り当てる"
+         ],
+         "Resume": [
+            "再開する"
+         ],
+         "Refreshing translation status": [
+            "翻訳ステータスを更新中"
+         ],
+         "Read more about how to translate your content in the <a>Getting Started Guide</a>": [
+            "コンテンツの翻訳方法については、<a>はじめてのガイド</a>をご覧ください"
+         ],
+         "Let's Start Translating!": [
+            "翻訳を始めましょう！"
+         ],
+         "Choose your content from the Translation Dashboard below and create your first translation job!": [
+            "以下の翻訳ダッシュボードからコンテンツを選択し、最初の翻訳ジョブを作成してください！"
+         ],
+         "Change your <a>automatic translation settings</a> (in-progress translation jobs will be completed with the current settings).": [
+            "<a>自動翻訳設定</a>を変更してください（進行中の翻訳ジョブは現在の設定で完了します）。"
+         ],
+         "Read more about translating your site automatically.": [
+            "サイトの自動翻訳についての詳細を読む。"
+         ],
+         "Your site is being automatically translated!": [
+            "あなたのサイトは自動翻訳中です！"
+         ],
+         "Calculating...": [
+            "計算中..."
+         ],
+         "Do not close WP admin!": [
+            "WP管理画面を閉じないでください！"
+         ],
+         "The number of translations": [
+            "翻訳の数"
+         ]
+      }
+   }
+}

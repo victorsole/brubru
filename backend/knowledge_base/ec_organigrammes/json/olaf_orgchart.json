@@ -1,0 +1,205 @@
+{
+  "dg_code": "OLAF",
+  "dg_name": "European Anti-Fraud Office",
+  "commissioner": {
+    "name": "Piotr Serafin",
+    "title": "Commissioner",
+    "note": "The OLAF Director-General is completely independent from the Commission in exercising the powers of investigation"
+  },
+  "director_general": {
+    "name": "Salla Saastamoinen (Acting)",
+    "title": "Director-General",
+    "assistants": [
+      "Clare Twomey",
+      "Roman Vokurek"
+    ],
+    "spokesperson": "Pierluigi Caterino",
+    "principal_adviser": "Florin Postica"
+  },
+  "deputy_director_general": {
+    "name": "Salla Saastamoinen",
+    "title": "Deputy Director-General",
+    "assistant": "Guido Lanzke"
+  },
+  "supporting_functions": {
+    "data_protection_officer": "Veselina Tzankova",
+    "human_resources_correspondent": "Iván Cusí Leal",
+    "internal_auditor": "Maria Del Carmen Glaria Santafe",
+    "bureau_in_luxembourg": true
+  },
+  "special_units": [
+    {
+      "code": "OLAF.01",
+      "name": "Operations & Investigations Selection",
+      "head": "Romana Panait (Acting)",
+      "deputy": "Romana Panait"
+    },
+    {
+      "code": "OLAF.02",
+      "name": "Inter-Institutional & International Relations and Communication",
+      "head": "Johannes Noack",
+      "deputy": "Lukas Jelinek"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "OLAF.A",
+      "name": "Expenditure Operations & Investigations",
+      "director": "Vasil Kirov (Acting)",
+      "adviser": "Expenditure O&I",
+      "units": [
+        {
+          "code": "OLAF.A.1",
+          "name": "Internal Investigations",
+          "head": "Jana Cappello",
+          "deputy": "Odile Teychenne"
+        },
+        {
+          "code": "OLAF.A.2",
+          "name": "Direct Expenditure Operations & Investigations",
+          "head": "Vasil Kirov",
+          "deputy": "Ieva Panavaite"
+        },
+        {
+          "code": "OLAF.A.3",
+          "name": "Shared Management and Recovery and Resilience Facility I Operations & Investigations",
+          "head": "Amira Szonyi",
+          "deputy": "Agnieszka Kuszka-Jagielska"
+        },
+        {
+          "code": "OLAF.A.4",
+          "name": "Shared Management and Recovery and Resilience Facility II Operations & Investigations",
+          "head": "Cvetelina Cholakova",
+          "deputy": "Miguel Janssoone"
+        },
+        {
+          "code": "OLAF.A.5",
+          "name": "Shared Management and Recovery and Resilience Facility III Operations & Investigations",
+          "head": "Francesco Albore",
+          "deputy": "Antigoni Papagianni"
+        }
+      ]
+    },
+    {
+      "code": "OLAF.B",
+      "name": "Revenue & International Operations Investigations & Strategy",
+      "director": "Ernesto Bianchi",
+      "advisers": [
+        {
+          "name": "Marco Pecoraro",
+          "role": "Revenue & International Operations"
+        }
+      ],
+      "units": [
+        {
+          "code": "OLAF.B.1",
+          "name": "Customs, Trade & Tobacco Anti-Fraud Strategy",
+          "head": "Lara Dobinson",
+          "deputy": "Patrick Ravillard"
+        },
+        {
+          "code": "OLAF.B.2",
+          "name": "Illicit Trade, Health & Environment Operations & Investigations",
+          "head": "Marta Castillo Gonzalez",
+          "deputy": "Audrius Poviliunas"
+        },
+        {
+          "code": "OLAF.B.3",
+          "name": "Customs & Trade Operations & Investigations",
+          "head": "Pablo Tedo Murua",
+          "deputy": "Zuzana Harmathova"
+        },
+        {
+          "code": "UNIT.B4",
+          "name": "International Operations & Investigations",
+          "head": "Biagio Fiorito",
+          "deputy": "Nadine Kolloczek"
+        }
+      ]
+    },
+    {
+      "code": "OLAF.C",
+      "name": "Anti-Fraud Knowledge Centre",
+      "director": "James Sweeney",
+      "advisers": [
+        {
+          "name": "Juergen Marke",
+          "role": "Knowledge Centre"
+        }
+      ],
+      "units": [
+        {
+          "code": "OLAF.C.1",
+          "name": "Anti-Corruption, Anti-Fraud Strategy & Analysis",
+          "head": "Andrea Bordoni (Acting)",
+          "deputy": "Andrea Bordoni"
+        },
+        {
+          "code": "OLAF.C.2",
+          "name": "Intelligence & Operational Analysis",
+          "head": "Georg Roebling",
+          "deputy": "Bogdan Necula"
+        },
+        {
+          "code": "OLAF.C.3",
+          "name": "Digital Strategy & Forensics",
+          "head": "Konstantinos Bovalis",
+          "deputy": "Costinel Prica"
+        },
+        {
+          "code": "OLAF.C.4",
+          "name": "Monitoring and Reporting",
+          "head": "Claire Scharf-Kroener",
+          "deputy": "Barbora Buhrova"
+        }
+      ]
+    },
+    {
+      "code": "OLAF.D",
+      "name": "Legal, Resources and Partnership",
+      "director": "Petra Kneuer",
+      "advisers": [
+        {
+          "name": "Agnes Lecomte",
+          "role": "Legal, Resources and Partnership"
+        }
+      ],
+      "units": [
+        {
+          "code": "OLAF.D.1",
+          "name": "Legislation and Policy",
+          "head": "Frank Michlik",
+          "deputy": "Sorina Buksa"
+        },
+        {
+          "code": "OLAF.D.2",
+          "name": "Legal Advice",
+          "head": "Eleonore Von Bardeleben",
+          "deputy": "Marta Laszuk"
+        },
+        {
+          "code": "OLAF.D.3",
+          "name": "Budget and Procurement, Security and Document Management",
+          "head": "Helka Nykänen",
+          "deputy": "Prisca Giordani"
+        },
+        {
+          "code": "OLAF.D.4",
+          "name": "Cooperation with EPPO and Anti-Fraud Partners",
+          "head": "Rita Di Prospero",
+          "deputy": "Katarzyna Cuadrat-Grzybowska"
+        }
+      ]
+    }
+  ],
+  "supervisory_committee": {
+    "chair": "Marita Salgrāve",
+    "members": [
+      "Dušan Sterle",
+      "Maria Stylianidi",
+      "Andrei Chendi",
+      "Angelo Maria Quaglini"
+    ]
+  },
+  "date_of_effect": "2025-10-17"
+}

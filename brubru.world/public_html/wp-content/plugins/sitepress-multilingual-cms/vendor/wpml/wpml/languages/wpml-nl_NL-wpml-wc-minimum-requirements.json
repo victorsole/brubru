@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "Je site voldoet nu aan de minimale vereisten van WPML"
+         ],
+         "Start WPML Setup": [
+            "Start WPML-installatie"
+         ],
+         "Need Help?": [
+            "Hulp nodig?"
+         ],
+         "Contact our support team": [
+            "Neem contact op met ons ondersteuningsteam"
+         ],
+         " and we'll guide you through it step by step.": [
+            " en we begeleiden je er stap voor stap doorheen."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Je site voldoet niet aan de minimale vereisten van WPML"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "Zorg ervoor dat je site soepel draait met WPML door aan deze eenvoudige minimumvereisten te voldoen."
+         ],
+         "Re-check Now": [
+            "Nu opnieuw controleren"
+         ],
+         "Skip for now": [
+            "Nu overslaan"
+         ]
+      }
+   }
+}

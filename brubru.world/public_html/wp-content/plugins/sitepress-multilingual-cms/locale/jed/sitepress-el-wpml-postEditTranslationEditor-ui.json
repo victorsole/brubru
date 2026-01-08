@@ -1,0 +1,69 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "WPML Translation Editor": [
+            "Επεξεργαστής Μετάφρασης WPML"
+         ],
+         "WordPress Editor": [
+            "Επεξεργαστής WordPress"
+         ],
+         "Translation Dashboard": [
+            "Πίνακας ελέγχου μεταφράσεων"
+         ],
+         "Also, switching back to WPML's Translation Editor later will require re-translating content that you translated with the WordPress editor.": [
+            "Επίσης, η επιστροφή στον Επεξεργαστή Μετάφρασης του WPML αργότερα θα απαιτήσει εκ νέου μετάφραση του περιεχομένου που μεταφράσατε με τον επεξεργαστή του WordPress."
+         ],
+         "This will overwrite content you translated with the WordPress Editor. If you switch now, you'll have to translate selected content again.": [
+            "Αυτό θα αντικαταστήσει το περιεχόμενο που μεταφράσατε με τον Επεξεργαστή WordPress. Αν αλλάξετε τώρα, θα πρέπει να μεταφράσετε ξανά το επιλεγμένο περιεχόμενο."
+         ],
+         "You are about to translate with the %s": [
+            "Πρόκειται να μεταφράσετε με το %s"
+         ],
+         "Translate with the WordPress Editor if you need different designs per language or if the content isn't compatible with WPML's Translation Editor.": [
+            "Μεταφράστε με τον Επεξεργαστή WordPress εάν χρειάζεστε διαφορετικά σχέδια ανά γλώσσα ή εάν το περιεχόμενο δεν είναι συμβατό με τον Επεξεργαστή Μετάφρασης του WPML."
+         ],
+         "What do you want to translate?": [
+            "Τι θέλετε να μεταφράσετε;?"
+         ],
+         "I understand, switch to the WordPress Editor": [
+            "Κατάλαβα, μετάβαση στον Επεξεργαστή WordPress"
+         ],
+         "Apply": [
+            "Εφαρμογή"
+         ],
+         "Cancel": [
+            "Ακύρωση"
+         ],
+         "I understand, switch to %s": [
+            "Κατανοώ, αλλάξτε σε %s"
+         ],
+         "Only this %s": [
+            "Μόνο αυτό το %s"
+         ],
+         "Recommended": [
+            "Προτεινόμενο"
+         ],
+         "All %s": [
+            "Όλα τα %s"
+         ],
+         "All the site's content": [
+            "Όλο το περιεχόμενο του ιστότοπου"
+         ],
+         "I understand, switch to Translation Dashboard": [
+            "Κατάλαβα, μετάβαση στον Πίνακα Ελέγχου Μεταφράσεων"
+         ],
+         "The WordPress Editor doesn't offer Automatic Translation, Translation Memory and other features that make translation easier.": [
+            "Ο Επεξεργαστής WordPress δεν προσφέρει Αυτόματη Μετάφραση, Μνήμη Μετάφρασης και άλλα χαρακτηριστικά που διευκολύνουν τη μετάφραση."
+         ],
+         "Translate items in batch after reviewing the cost of AI translation": [
+            "Μετάφραση αντικειμένων σε παρτίδες αφού εξετάσεις το κόστος της μετάφρασης με AI"
+         ]
+      }
+   }
+}

@@ -1,0 +1,102 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "Preparing...": [
+            "กำลังเตรียมการ..."
+         ],
+         "All jobs have been cancelled": [
+            "งานทั้งหมดถูกยกเลิกแล้ว"
+         ],
+         "There is no more jobs to cancel": [
+            "ไม่มีงานที่จะยกเลิกอีกแล้ว"
+         ],
+         "The jobs cancellation has failed": [
+            "การยกเลิกงานล้มเหลว"
+         ],
+         "Cancel in-progress automatic jobs": [
+            "ยกเลิกงานอัตโนมัติที่กำลังดำเนินการ"
+         ],
+         "Domain name has been updated": [
+            "อัปเดตชื่อโดเมนแล้ว"
+         ],
+         "Domain name update has been failed": [
+            "การอัปเดตชื่อโดเมนล้มเหลว"
+         ],
+         "Update domain name in language switcher settings": [
+            "อัปเดตชื่อโดเมนในการตั้งค่าตัวเลือกภาษา"
+         ],
+         "Disclaimer: MySQL Disk Space": [
+            "คำเตือน: พื้นที่ดิสก์ MySQL"
+         ],
+         "Cleaning and compressing the wp_icl_translate and wp_icl_translation_status tables reduces its data size, but does not automatically free up disk space in MySQL. To reclaim disk space, a table rebuild is required—a risky operation not performed automatically by this tool.": [
+            "การทำความสะอาดและบีบอัดตาราง wp_icl_translate และ wp_icl_translation_status จะช่วยลดขนาดข้อมูล แต่ไม่ได้คืนพื้นที่ดิสก์ใน MySQL โดยอัตโนมัติ การเรียกคืนพื้นที่ดิสก์ต้องใช้การสร้างตารางใหม่ ซึ่งเป็นการดำเนินการที่มีความเสี่ยงและไม่ได้ทำโดยอัตโนมัติผ่านเครื่องมือนี้."
+         ],
+         "Optimize translation tables": [
+            "ปรับปรุงประสิทธิภาพตารางแปลภาษา"
+         ],
+         "Previous State Migration": [
+            "การย้ายสถานะก่อนหน้า"
+         ],
+         "Translation Elements Migration": [
+            "การย้ายองค์ประกอบการแปล"
+         ],
+         "Processed": [
+            "ดำเนินการแล้ว"
+         ],
+         "Error": [
+            "ข้อผิดพลาด"
+         ],
+         "Success": [
+            "สำเร็จ"
+         ],
+         "Database tables optimization completed successfully.": [
+            "การปรับปรุงประสิทธิภาพตารางฐานข้อมูลเสร็จสมบูรณ์."
+         ],
+         "Warning": [
+            "คำเตือน"
+         ],
+         "This process is resource-intensive and may take a significant amount of time. It is recommended to run this optimization during periods of low traffic.": [
+            "กระบวนการนี้ใช้ทรัพยากรมากและอาจใช้เวลานาน แนะนำให้ทำการปรับปรุงประสิทธิภาพนี้ในช่วงที่มีการใช้งานน้อย."
+         ],
+         "Database Tables Optimization": [
+            "การปรับปรุงประสิทธิภาพตารางฐานข้อมูล"
+         ],
+         "Refresh license data to recognise license update": [
+            "รีเฟรชข้อมูลใบอนุญาตเพื่อรับรู้การอัปเดตใบอนุญาต"
+         ],
+         "WPML License has been refreshed": [
+            "รีเฟรชใบอนุญาต WPML แล้ว"
+         ],
+         "Translate Everything Automatically is not active.": [
+            "Translate Everything Automatically ไม่ได้เปิดใช้งานอยู่."
+         ],
+         "Retry stuck automatic translations": [
+            "ลองแปลอัตโนมัติที่ติดขัดใหม่"
+         ],
+         "Resends translation jobs that couldn't be processed due to a temporary issue while Translate Everything Automatically was active.": [
+            "ส่งงานแปลที่ไม่สามารถประมวลผลได้เนื่องจากปัญหาชั่วคราวในขณะที่ Translate Everything Automatically ทำงานอยู่อีกครั้ง."
+         ],
+         "Checking for stuck translation jobs...": [
+            "กำลังตรวจสอบงานแปลที่ติดขัด..."
+         ],
+         "Processing... %s stuck translation found so far": [
+            "กำลังประมวลผล... พบงานแปลที่ติดขัด %s งานจนถึงตอนนี้"
+         ],
+         "Something went wrong while checking for stuck translation jobs. Please <a>contact WPML support</a>.": [
+            "เกิดข้อผิดพลาดขณะตรวจสอบงานแปลที่ติดขัด กรุณา<a>ติดต่อฝ่ายสนับสนุนของ WPML</a>."
+         ],
+         "No stuck translation jobs found.": [
+            "ไม่พบงานแปลที่ติดขัด."
+         ],
+         "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard.": [
+            "พบงานแปลที่ติดขัด %s งาน WPML จะแปลงานเหล่านี้โดยอัตโนมัติในพื้นหลัง\nคุณสามารถตรวจสอบความคืบหน้าได้ในแดชบอร์ดการแปล."
+         ]
+      }
+   }
+}

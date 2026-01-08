@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brubru Logo Mockup</title>
+    <style>
+        @font-face {
+            font-family: 'NY Irvin';
+            src: url('../frontend/public/New-Yorker-Font/NY Irvin.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-image {
+            max-width: 300px;
+            height: auto;
+        }
+
+        .logo-text {
+            font-family: 'NY Irvin', Georgia, serif;
+            font-size: 72px;
+            color: #000000;
+            letter-spacing: 8px;
+        }
+
+        .powered-by {
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-size: 18px;
+            color: #1a365d;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="../frontend/public/assets/brubru_mainlogo.png" alt="Brubru Logo" class="logo-image">
+        <h1 class="logo-text">BRUBRU</h1>
+        <p class="powered-by">Powered by Beresol</p>
+    </div>
+</body>
+</html>

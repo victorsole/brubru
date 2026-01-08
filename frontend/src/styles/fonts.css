@@ -1,0 +1,60 @@
+/**
+ * Brubru Font Definitions
+ *
+ * Adobe Caslon Pro - The New Yorker's body text font
+ * Used universally across all Brubru interfaces for elegant, readable typography
+ */
+
+/* Adobe Caslon Pro Regular */
+@font-face {
+  font-family: 'Adobe Caslon Pro';
+  src: url('/New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Adobe Caslon Pro Italic */
+@font-face {
+  font-family: 'Adobe Caslon Pro';
+  src: url('/New-Yorker-Font/ACaslonPro-Italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Adobe Caslon Pro Semibold */
+@font-face {
+  font-family: 'Adobe Caslon Pro';
+  src: url('/New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Adobe Caslon Pro Semibold Italic */
+@font-face {
+  font-family: 'Adobe Caslon Pro';
+  src: url('/New-Yorker-Font/ACaslonPro-SemiboldItalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Adobe Caslon Pro Bold */
+@font-face {
+  font-family: 'Adobe Caslon Pro';
+  src: url('/New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Adobe Caslon Pro Bold Italic */
+@font-face {
+  font-family: 'Adobe Caslon Pro';
+  src: url('/New-Yorker-Font/ACaslonPro-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}

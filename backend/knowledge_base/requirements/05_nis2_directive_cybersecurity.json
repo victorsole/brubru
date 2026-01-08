@@ -1,0 +1,538 @@
+{
+  "cluster_id": 5,
+  "cluster_name": "NIS2 Directive (Cybersecurity)",
+  "policy_area": "Digital Policy and Digital Economy",
+  "description": "Network and Information Security Directive establishing cybersecurity requirements",
+  "applicability": "Essential and important entities, digital infrastructure operators",
+  "extraction_date": "2025-12-31T23:25:32.175008",
+  "total_laws": 5,
+  "total_requirements": 31,
+  "requirements": [
+    {
+      "article": "Whereas (4)",
+      "requirement_text": "Due account should be taken of the divergent risk exposure of relevant entities, such as the criticality of the relevant entity, the risks to which it is exposed, the relevant entity's size and structure as well as the likelihood of occurrence of incidents and their severity, including their societal and economic impact, when complying with the technical and methodological requirements of cybersecurity risk-management measures set out in the Annex to this Regulation.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "risk exposure",
+        "proportionality",
+        "cybersecurity risk-management measures",
+        "technical requirements"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (6)",
+      "requirement_text": "Where a relevant entity considers it not appropriate, not applicable or not feasible for the relevant entity to apply certain technical and methodological requirements as provided for in the Annex to this Regulation, the relevant entity should in a comprehensible manner document its reasoning to that effect.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "documentation",
+        "reasoning",
+        "technical requirements",
+        "methodological requirements"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (9)",
+      "requirement_text": "The relevant entities should establish a policy on the security of network and information systems as well as topic-specific policies, such as policies on access control, which should be coherent with the policy on the security of network and information systems.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "security policy",
+        "network and information systems",
+        "access control",
+        "topic-specific policies"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (9)",
+      "requirement_text": "The policy on the security of network and information systems should be the highest-level document setting out the relevant entities' overall approach to their security of network and information systems and should be approved by the management bodies of the relevant entities.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "security policy",
+        "management approval",
+        "network and information systems",
+        "management bodies"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (9)",
+      "requirement_text": "The topic-specific policies should be approved by an appropriate level of management.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "topic-specific policies",
+        "management approval",
+        "appropriate level"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (11)",
+      "requirement_text": "The relevant entities should establish and maintain an appropriate risk management framework.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "risk management framework",
+        "establish",
+        "maintain"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (11)",
+      "requirement_text": "The relevant entities should establish, implement and monitor a risk treatment plan.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "risk treatment plan",
+        "establish",
+        "implement",
+        "monitor"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (11)",
+      "requirement_text": "The relevant entities should take the appropriate risk treatment measures.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "risk treatment measures",
+        "appropriate measures"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (12)",
+      "requirement_text": "The relevant entities should monitor their network and information systems and should take actions to evaluate events, near misses and incidents.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "monitoring",
+        "network and information systems",
+        "events",
+        "incidents",
+        "near misses"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (14)",
+      "requirement_text": "The relevant entities should establish a supply chain security policy which governs their relations with their direct suppliers and service providers.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "supply chain security policy",
+        "suppliers",
+        "service providers"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (14)",
+      "requirement_text": "These entities should specify in the contracts with their direct suppliers or service providers adequate security clauses, for example by requiring, where appropriate, cybersecurity risk-management measures according to Article 21(2) of Directive (EU) 2022/2555 or other similar legal requirements.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "contracts",
+        "security clauses",
+        "suppliers",
+        "cybersecurity risk-management measures"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Whereas (15)",
+      "requirement_text": "The relevant entities should regularly carry out security tests based on a dedicated policy and procedures to verify whether the cybersecurity risk-management measures are implemented and function properly.",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "security tests",
+        "regularly",
+        "policy",
+        "procedures",
+        "cybersecurity risk-management measures"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The position to be adopted, on behalf of the Union, within the EEA Joint Committee on the proposed amendment to Protocol 31 to the EEA Agreement, on cooperation in specific fields outside the four freedoms, shall be based on the draft Decision of the EEA Joint Committee attached to this Decision.",
+      "applicable_entity": "European Union (when acting within the EEA Joint Committee)",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "EEA Joint Committee",
+        "Protocol 31",
+        "EEA Agreement",
+        "position adoption",
+        "cybersecurity cooperation"
+      ],
+      "law_id": 10478,
+      "law_celex": "32023D0273",
+      "law_title": "Council Decision (EU) 2023/273 of 30 January 2023 on the position to be adopted, on behalf of the European Union, within the EEA Joint Committee concerning an amendment to Protocol 31 to the EEA Agreement, on cooperation in specific fields outside the four freedoms (Cybersecurity Centre) (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 4(2)",
+      "requirement_text": "For the variables listed in the Annex that concern the households, information shall be collected for private households with at least one member aged 16 to 74 residing in the territory of the Member State.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "households",
+        "information collection",
+        "age requirements"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 4(3)",
+      "requirement_text": "For the variables listed in the Annex that concern the individuals, information shall be collected for individuals aged 16 to 74 residing in the territory of the Member State.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "individuals",
+        "information collection",
+        "age requirements"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 4(5)",
+      "requirement_text": "The data collection for the use of information and communication technologies domain shall be carried out for a sample of private households or a sample of persons belonging to private households as observation units.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "sample survey",
+        "households",
+        "observation units"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 7(1)",
+      "requirement_text": "Imputation, modelling or weighting shall be applied to the data where information is missing, invalid or inconsistent.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data processing",
+        "imputation",
+        "data quality",
+        "missing data"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 8(1)",
+      "requirement_text": "Member States shall transmit the final data to the Commission (Eurostat) by 5 October 2024.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 5 October 2024",
+      "keywords": [
+        "data transmission",
+        "deadline",
+        "final data",
+        "eurostat"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 8(2)",
+      "requirement_text": "The data shall be transmitted in the form of microdata files, including appropriate weights. The data shall be fully checked and validated, using the statistical data and metadata exchange standard through the Single Entry Point before the transmission.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data transmission",
+        "microdata",
+        "validation",
+        "single entry point",
+        "data format"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 8(2)",
+      "requirement_text": "That data shall comply with the validation rules in accordance with the specification of variables based on the coding and filters as set out in the Annex.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data validation",
+        "compliance",
+        "validation rules",
+        "data specifications"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 8(3)",
+      "requirement_text": "Member States shall provide the metadata to the Commission (Eurostat) in the standard metadata structure defined by the Commission (Eurostat) by 5 January 2025. They shall provide it through the Single Entry Point.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 5 January 2025",
+      "keywords": [
+        "metadata",
+        "transmission",
+        "deadline",
+        "single entry point",
+        "standard structure"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 9(1)",
+      "requirement_text": "Member States shall transmit to the Commission (Eurostat) an annual quality report on the use of information and communication technologies domain.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality report",
+        "annual report",
+        "transmission",
+        "ICT domain"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 9(2)",
+      "requirement_text": "The annual quality report shall be compliant with the most recent European Statistical System (ESS) standards and shall contain quality-related data and metadata and information on the accuracy and reliability of the survey.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality report",
+        "ESS standards",
+        "compliance",
+        "data quality",
+        "metadata"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 9(3)",
+      "requirement_text": "The annual quality report shall be transmitted to the Commission (Eurostat) in accordance with the technical standards established by the Commission (Eurostat), by 5 January 2025.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 5 January 2025",
+      "keywords": [
+        "quality report",
+        "transmission",
+        "deadline",
+        "technical standards"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 9(4)",
+      "requirement_text": "The annual quality report shall be submitted through the Single Entry Point.",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality report",
+        "submission",
+        "single entry point"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "Members of the group should be national contact points appointed under Article 19(2) of the Directive on electronic commerce (one member per Member State) and representatives of the Commission",
+      "applicable_entity": "member states",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "national contact points",
+        "appointment",
+        "member states",
+        "electronic commerce directive"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The Group shall be chaired by a representative of the Commission",
+      "applicable_entity": "european commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "chairmanship",
+        "commission representative",
+        "expert group"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The expert group on electronic commerce shall adopt agreed rules of procedure on the basis of a model adopted by the Commission",
+      "applicable_entity": "expert group on electronic commerce",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "rules of procedure",
+        "adoption",
+        "commission model"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "The Group and the sub-groups shall normally meet at the Commission premises, in the form and according to the timetable determined by the Commission",
+      "applicable_entity": "expert group on electronic commerce",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "meetings",
+        "commission premises",
+        "timetable",
+        "sub-groups"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "The Secretariat of the Group shall be provided by the Commission",
+      "applicable_entity": "european commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "secretariat",
+        "commission",
+        "administrative support"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 5
+    },
+    {
+      "article": "Article 6",
+      "requirement_text": "Travel and subsistence expenses incurred by members, observers and experts, in connection with the activities of the Group, shall be reimbursed by the Commission in accordance with the provisions in force within the Commission",
+      "applicable_entity": "european commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "travel expenses",
+        "reimbursement",
+        "commission",
+        "members",
+        "observers",
+        "experts"
+      ],
+      "law_id": 356,
+      "law_celex": "32005D0752",
+      "law_title": "Commission Decision of 24 October 2005 establishing an expert group on electronic commerce (2005/752/EC)",
+      "cluster_id": 5
+    }
+  ]
+}

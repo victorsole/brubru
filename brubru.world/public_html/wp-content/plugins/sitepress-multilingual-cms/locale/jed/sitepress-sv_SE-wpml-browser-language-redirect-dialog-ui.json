@@ -1,0 +1,36 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "How Browser Language Redirect Affects Google Indexing": [
+            "Hur språkbaserad webbläsaromdirigering påverkar Google-indexering"
+         ],
+         "Documentation": [
+            "Dokumentation"
+         ],
+         "Browser redirect affects Google indexing and search results": [
+            "Webbläsaromdirigering påverkar Google-indexering"
+         ],
+         "Got it, activate anyway": [
+            "Förstått, aktivera ändå"
+         ],
+         "Cancel": [
+            "Avbryt"
+         ],
+         "When you redirect visitors based on their language, you also redirect Google. Google wants to see your site exactly like visitors see it, including any redirects that you apply.": [
+            "Språkbaserad omdirigering påverkar Google-indexering."
+         ],
+         "It is OK to redirect visitors based on their language, but you need to realize that this feature affects SEO.": [
+            "Språkomdirigering OK, men påverkar SEO."
+         ],
+         "Before proceeding, we recommend that you read these two pages:": [
+            "Läs dessa sidor innan du fortsätter:"
+         ]
+      }
+   }
+}

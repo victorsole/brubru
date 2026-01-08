@@ -1,0 +1,170 @@
+{
+  "cluster_id": 3,
+  "cluster_name": "Digital Markets Act Package",
+  "policy_area": "Digital Policy and Digital Economy",
+  "description": "Digital Markets Act establishing rules for digital gatekeepers",
+  "applicability": "Large digital platforms designated as gatekeepers, core platform services",
+  "extraction_date": "2025-12-31T22:49:15.765439",
+  "total_laws": 1,
+  "total_requirements": 9,
+  "requirements": [
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "Notifications pursuant to Article 3(3), first subparagraph, of Regulation (EU) 2022/1925 shall contain all the information, including documents, indicated in the form set out in Annex I to this Regulation.",
+      "applicable_entity": "undertakings providing core platform services",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "notification",
+        "core platform services",
+        "Annex I",
+        "information",
+        "documents"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "Submissions of information following a Commission request for information referred to in Article 3(3), second subparagraph, of Regulation (EU) 2022/1925 shall contain all the information, including documents, set out in the Commission's request.",
+      "applicable_entity": "undertakings providing core platform services",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "submission",
+        "Commission request",
+        "information",
+        "documents"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "If the notifying undertaking wishes to submit substantiated arguments to demonstrate that it does not satisfy the requirements of Article 3(1) of Regulation (EU) 2022/1925, it shall provide such arguments in an annex to its notification. A separate annex shall be submitted for each distinct core platform service.",
+      "applicable_entity": "notifying undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "substantiated arguments",
+        "annex",
+        "core platform service",
+        "notification"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "The notifying undertaking shall clearly identify to which of the three cumulative requirements set out in Article 3(1) of Regulation (EU) 2022/1925 its arguments relate and, for each argument, shall explain why the relevant core platform service exceptionally does not satisfy that requirement.",
+      "applicable_entity": "notifying undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "identify",
+        "arguments",
+        "cumulative requirements",
+        "explain"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 2(4)",
+      "requirement_text": "The information submitted to the Commission shall be correct, complete and not misleading. It shall be presented in a clear, well-structured and intelligible manner.",
+      "applicable_entity": "undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "correct",
+        "complete",
+        "not misleading",
+        "clear",
+        "well-structured",
+        "intelligible"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 2(6)",
+      "requirement_text": "Notifications and submissions shall be drafted in one of the official languages of the Union. Any annexes shall be submitted in their original language and, where their original language is not one of the official languages of the Union, they shall be accompanied by a faithful translation into the language of the procedure.",
+      "applicable_entity": "undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "official languages",
+        "Union",
+        "translation",
+        "faithful translation",
+        "language of procedure"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 2(7)",
+      "requirement_text": "The notifications and submissions shall be accompanied by written proof that the persons submitting them are authorised to act on behalf of the undertaking concerned.",
+      "applicable_entity": "undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "written proof",
+        "authorised",
+        "act on behalf",
+        "undertaking"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 2(9)",
+      "requirement_text": "The Commission shall, without undue delay, acknowledge in writing to the undertaking concerned or its representatives receipt of notifications or submissions.",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "without undue delay",
+      "keywords": [
+        "acknowledge",
+        "writing",
+        "receipt",
+        "notifications",
+        "submissions"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "Where the information contained in a notification or in a submission is incomplete in any material respect, the Commission shall inform the undertaking concerned or its representatives in writing without undue delay.",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "without undue delay",
+      "keywords": [
+        "incomplete",
+        "material respect",
+        "inform",
+        "writing"
+      ],
+      "law_id": 26056,
+      "law_celex": "32023R0814",
+      "law_title": "Commission Implementing Regulation (EU) 2023/814 of 14 April 2023 on detailed arrangements for the conduct of certain proceedings by the Commission pursuant to Regulation (EU) 2022/1925 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 3
+    }
+  ]
+}

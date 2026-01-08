@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "Votre site répond désormais aux exigences minimales de WPML"
+         ],
+         "Start WPML Setup": [
+            "Démarrer la configuration de WPML"
+         ],
+         "Need Help?": [
+            "Besoin d'aide ?"
+         ],
+         "Contact our support team": [
+            "Contactez notre équipe d'assistance"
+         ],
+         " and we'll guide you through it step by step.": [
+            " et nous vous guiderons étape par étape."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Votre site ne répond pas aux exigences minimales de WPML"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "Assurez-vous que votre site fonctionne parfaitement avec WPML en respectant ces simples exigences minimales."
+         ],
+         "Re-check Now": [
+            "Vérifier à nouveau"
+         ],
+         "Skip for now": [
+            "Ignorer pour le moment"
+         ]
+      }
+   }
+}

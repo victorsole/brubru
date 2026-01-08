@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl"
+         },
+         "Get a key for this site": [
+            "Verkrijg een sleutel voor deze site"
+         ],
+         "Site key:": [
+            "Sitesleutel:"
+         ],
+         "Enter your site key here": [
+            "Voer hier je sitesleutel in"
+         ],
+         "Registering...": [
+            "Bezig met registreren..."
+         ],
+         "Register": [
+            "Registreren"
+         ],
+         "A New Site Key Is Required": [
+            "Er is een nieuwe sitesleutel vereist"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "Om WPML-functies zoals automatische vertaling en plugin-updates te blijven gebruiken, moet je je site opnieuw registreren. Maak je geen zorgen, je bestaande inhoud en vertalingen blijven veilig."
+         ],
+         "Site key registered successfully!": [
+            "Sitesleutel succesvol geregistreerd!"
+         ],
+         "Page will reload in %d seconds...": [
+            "De pagina wordt over %d seconden herladen..."
+         ],
+         "Registration failed. Please try again.": [
+            "Registratie mislukt. Probeer het opnieuw."
+         ]
+      }
+   }
+}

@@ -1,0 +1,26 @@
+{% set display = '' %}
+{% if not render_section %}
+{% set display = ' style="display: none"' %}
+{% endif %}
+<tbody id="wpml-{{ type }}-content-header"{{ display|raw }}>
+    {% include 'theme-plugin-localization-ui-category-header.twig' %}
+</tbody>
+<tbody id="wpml-{{ type }}-content" class="wpml-section wpml-section-table-content wpml-section-table-content-{{ type }} wpml-st-localization {{ section_class }}"{{ display|raw }}>
+    <input type="hidden" name="{{ scan_folder_nonce_field }}" value="{{ scan_folder_nonce_val }}">
+    <input type="hidden" name="{{ scan_files_nonce_field }}" value="{{ scan_files_nonce_val }}">
+
+    {% for dir_and_file, component_data in components %}
+        {% if show_active_label and component_data.active %}
+            {% include 'theme-plugin-localization-ui-item.twig' with {'dir_and_file': dir_and_file, 'component_data': component_data} %}
+        {% endif %}
+    {% endfor %}
+    {% for dir_and_file, component_data in components %}
+        {% if show_active_label %}
+            {% if not component_data.active %}
+                {% include 'theme-plugin-localization-ui-item.twig' with {'dir_and_file': dir_and_file, 'component_data': component_data} %}
+            {% endif %}
+        {% else %}
+            {% include 'theme-plugin-localization-ui-item.twig' with {'dir_and_file': dir_and_file, 'component_data': component_data} %}
+        {% endif %}
+    {% endfor %}
+</tbody>

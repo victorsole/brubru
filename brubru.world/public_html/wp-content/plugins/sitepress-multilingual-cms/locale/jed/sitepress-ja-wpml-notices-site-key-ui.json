@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "ja"
+         },
+         "Get a key for this site": [
+            "このサイトのキーを取得"
+         ],
+         "Site key:": [
+            "サイトキー："
+         ],
+         "Enter your site key here": [
+            "サイトキーをここに入力してください"
+         ],
+         "Registering...": [
+            "登録中..."
+         ],
+         "Register": [
+            "登録"
+         ],
+         "A New Site Key Is Required": [
+            "新しいサイトキーが必要です"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "WPMLの自動翻訳やプラグインの更新などの機能を引き続き使用するには、サイトを再度登録してください。既存のコンテンツや翻訳は安全です。ご心配なく。"
+         ],
+         "Site key registered successfully!": [
+            "サイトキーが正常に登録されました！"
+         ],
+         "Page will reload in %d seconds...": [
+            "%d秒後にページが再読み込みされます..."
+         ],
+         "Registration failed. Please try again.": [
+            "登録に失敗しました。もう一度お試しください。"
+         ]
+      }
+   }
+}

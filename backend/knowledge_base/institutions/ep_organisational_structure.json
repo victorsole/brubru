@@ -1,0 +1,692 @@
+{
+    "metadata": {
+      "title": "European Parliament Organizational Structure 2024-2029",
+      "term": "10th European Parliament",
+      "election_date": "2024-06",
+      "total_meps": 720,
+      "last_updated": "2025-11-06",
+      "major_changes_2025": "January 2025: SEDE and SANT upgraded to standing committees, ENVI renamed",
+      "url_pattern_committees": "https://www.europarl.europa.eu/committees/en/[ACRONYM]/home",
+      "url_pattern_delegations": "https://www.europarl.europa.eu/delegations/en/[ACRONYM]/home",
+      "sources": [
+        "https://www.europarl.europa.eu/",
+        "https://www.europarl.europa.eu/committees/en/home",
+        "https://www.europarl.europa.eu/delegations/en/home"
+      ]
+    },
+    "parliamentary_committees": {
+      "total": 28,
+      "total_standing_committees": 24,
+      "total_subcommittees": 2,
+      "total_special_committees": 2,
+      "restructuring_date": "2025-01",
+      "categories": [
+        {
+          "category": "Foreign Affairs and External Relations",
+          "committees": [
+            {
+              "acronym": "AFET",
+              "full_name": "Committee on Foreign Affairs",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/afet/home",
+              "policy_areas": ["Foreign policy", "Common Foreign and Security Policy", "External relations"]
+            },
+            {
+              "acronym": "SEDE",
+              "full_name": "Committee on Security and Defence",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/sede/home",
+              "policy_areas": ["Common Security and Defence Policy", "Military and civilian crisis management", "Defence readiness", "EU defence partnerships"],
+              "status_change": "Upgraded from subcommittee to standing committee in January 2025"
+            },
+            {
+              "acronym": "DEVE",
+              "full_name": "Committee on Development",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/deve/home",
+              "policy_areas": ["Development cooperation", "Aid policy", "Sustainable development"]
+            },
+            {
+              "acronym": "INTA",
+              "full_name": "Committee on International Trade",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/inta/home",
+              "policy_areas": ["Trade agreements", "WTO", "Trade policy"]
+            }
+          ]
+        },
+        {
+          "category": "Budget and Financial Control",
+          "committees": [
+            {
+              "acronym": "BUDG",
+              "full_name": "Committee on Budgets",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/budg/home",
+              "policy_areas": ["EU budget", "Multiannual Financial Framework", "Own resources"]
+            },
+            {
+              "acronym": "CONT",
+              "full_name": "Committee on Budgetary Control",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/cont/home",
+              "policy_areas": ["Budget discharge", "Financial oversight", "Fraud prevention"]
+            }
+          ]
+        },
+        {
+          "category": "Economic and Monetary Affairs",
+          "committees": [
+            {
+              "acronym": "ECON",
+              "full_name": "Committee on Economic and Monetary Affairs",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/econ/home",
+              "policy_areas": ["Economic policy", "European Central Bank", "Financial services", "Banking union", "Capital markets union"]
+            },
+            {
+              "acronym": "EMPL",
+              "full_name": "Committee on Employment and Social Affairs",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/empl/home",
+              "policy_areas": ["Employment policy", "Labour rights", "Social dialogue", "Working conditions"]
+            }
+          ]
+        },
+        {
+          "category": "Environment and Health",
+          "committees": [
+            {
+              "acronym": "ENVI",
+              "full_name": "Committee on Environment, Climate and Food Safety",
+              "former_name": "Committee on Environment, Public Health and Food Safety",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/envi/home",
+              "policy_areas": ["Environmental protection", "Climate action", "Biodiversity", "Net zero targets", "Food safety"],
+              "status_change": "Renamed in January 2025"
+            },
+            {
+              "acronym": "SANT",
+              "full_name": "Committee on Public Health",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/sant/home",
+              "policy_areas": ["Public health policy", "Health systems", "Pandemic preparedness", "EMA procedures"],
+              "status_change": "Elevated from subcommittee to standing committee in January 2025"
+            }
+          ]
+        },
+        {
+          "category": "Industry, Research, and Digital",
+          "committees": [
+            {
+              "acronym": "ITRE",
+              "full_name": "Committee on Industry, Research and Energy",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/itre/home",
+              "policy_areas": ["Industrial policy", "Horizon Europe", "Energy policy", "Digital economy", "Space", "Startups", "Research and innovation"]
+            }
+          ]
+        },
+        {
+          "category": "Internal Market and Consumer Affairs",
+          "committees": [
+            {
+              "acronym": "IMCO",
+              "full_name": "Committee on Internal Market and Consumer Protection",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/imco/home",
+              "policy_areas": ["Single market", "Consumer rights", "Product safety", "Standardization"]
+            },
+            {
+              "acronym": "TRAN",
+              "full_name": "Committee on Transport and Tourism",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/tran/home",
+              "policy_areas": ["Transport policy", "Sustainable transport", "Mobility", "Tourism"]
+            }
+          ]
+        },
+        {
+          "category": "Regional Development and Agriculture",
+          "committees": [
+            {
+              "acronym": "REGI",
+              "full_name": "Committee on Regional Development",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/regi/home",
+              "policy_areas": ["Cohesion policy", "Structural funds", "Regional development"]
+            },
+            {
+              "acronym": "AGRI",
+              "full_name": "Committee on Agriculture and Rural Development",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/agri/home",
+              "policy_areas": ["Common Agricultural Policy", "Rural development", "Agricultural markets"]
+            },
+            {
+              "acronym": "PECH",
+              "full_name": "Committee on Fisheries",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/pech/home",
+              "policy_areas": ["Common Fisheries Policy", "Fisheries management", "Aquaculture"]
+            }
+          ]
+        },
+        {
+          "category": "Civil Liberties, Justice, and Culture",
+          "committees": [
+            {
+              "acronym": "LIBE",
+              "full_name": "Committee on Civil Liberties, Justice and Home Affairs",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/libe/home",
+              "policy_areas": ["Fundamental rights", "Justice policy", "Schengen", "Migration", "Data protection", "Internal security"]
+            },
+            {
+              "acronym": "JURI",
+              "full_name": "Committee on Legal Affairs",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/juri/home",
+              "policy_areas": ["Intellectual property", "Corporate law", "Legal procedures"]
+            },
+            {
+              "acronym": "CULT",
+              "full_name": "Committee on Culture and Education",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/cult/home",
+              "policy_areas": ["Education policy", "Culture", "Youth", "Sport", "Erasmus+", "Audiovisual policy"]
+            }
+          ]
+        },
+        {
+          "category": "Constitutional and Institutional Affairs",
+          "committees": [
+            {
+              "acronym": "AFCO",
+              "full_name": "Committee on Constitutional Affairs",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/afco/home",
+              "policy_areas": ["Treaty amendments", "Electoral law", "Institutional reform"]
+            },
+            {
+              "acronym": "FEMM",
+              "full_name": "Committee on Women's Rights and Gender Equality",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/femm/home",
+              "policy_areas": ["Gender equality", "Women's rights", "Violence against women", "Gender mainstreaming"]
+            },
+            {
+              "acronym": "PETI",
+              "full_name": "Committee on Petitions",
+              "type": "standing",
+              "url": "https://www.europarl.europa.eu/committees/en/peti/home",
+              "policy_areas": ["Citizens' petitions", "Right to petition", "Citizen complaints"]
+            }
+          ]
+        }
+      ],
+      "subcommittees": [
+        {
+          "acronym": "DROI",
+          "full_name": "Subcommittee on Human Rights",
+          "type": "subcommittee",
+          "parent_committee": "AFET",
+          "url": "https://www.europarl.europa.eu/committees/en/droi/home",
+          "policy_areas": ["Human rights worldwide", "Democracy promotion", "Sakharov Prize"]
+        },
+        {
+          "acronym": "FISC",
+          "full_name": "Subcommittee on Tax Matters",
+          "type": "subcommittee",
+          "parent_committee": "ECON",
+          "url": "https://www.europarl.europa.eu/committees/en/fisc/home",
+          "policy_areas": ["Taxation policy", "Tax avoidance", "Digital taxation", "Tax transparency"]
+        }
+      ],
+      "special_committees": [
+        {
+          "acronym": "EUDS",
+          "full_name": "Special Committee on the European Democracy Shield",
+          "type": "special",
+          "url": "https://www.europarl.europa.eu/committees/en/euds/home",
+          "mandate": "Democracy protection, foreign interference, and disinformation",
+          "term": "12 months",
+          "established": "2025-01"
+        },
+        {
+          "acronym": "HOUS",
+          "full_name": "Special Committee on the Housing Crisis in the European Union",
+          "type": "special",
+          "url": "https://www.europarl.europa.eu/committees/en/hous/home",
+          "mandate": "Housing crisis, affordable housing, and sustainable housing policy",
+          "term": "12 months",
+          "established": "2025-01"
+        }
+      ]
+    },
+    "political_groups": {
+      "total_groups": 8,
+      "total_meps": 720,
+      "pro_european_majority": ["EPP", "S&D", "Renew", "Greens/EFA"],
+      "cordon_sanitaire": "Pro-European majority excludes Patriots for Europe and Europe of Sovereign Nations from senior positions",
+      "groups": [
+        {
+          "acronym": "EPP",
+          "full_name": "Group of the European People's Party",
+          "meps": 188,
+          "percentage": 26.1,
+          "rank": 1,
+          "president": "Manfred Weber",
+          "president_country": "Germany",
+          "political_orientation": "Centre-right Christian democratic",
+          "eu_stance": "Pro-European",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "color": "Blue",
+          "ideology": ["Christian democracy", "Conservative liberalism", "Pro-Europeanism"]
+        },
+        {
+          "acronym": "S&D",
+          "full_name": "Progressive Alliance of Socialists and Democrats",
+          "meps": 136,
+          "percentage": 18.9,
+          "rank": 2,
+          "president": "Iratxe García",
+          "president_country": "Spain",
+          "political_orientation": "Centre-left social democratic",
+          "eu_stance": "Pro-European",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "color": "Red",
+          "ideology": ["Social democracy", "Progressivism", "Pro-Europeanism"]
+        },
+        {
+          "acronym": "PfE",
+          "full_name": "Patriots for Europe",
+          "meps": 84,
+          "percentage": 11.7,
+          "rank": 3,
+          "president": "Jordan Bardella",
+          "president_country": "France",
+          "president_party": "National Rally",
+          "political_orientation": "Right-wing to far-right nationalist",
+          "eu_stance": "Eurosceptic",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "formation_date": "2024-07",
+          "predecessor": "Identity and Democracy",
+          "key_members": [
+            "National Rally (France)",
+            "Fidesz (Hungary)",
+            "Freedom Party of Austria",
+            "ANO 2011 (Czech Republic)",
+            "Lega (Italy)",
+            "PVV (Netherlands)",
+            "Vox (Spain)"
+          ],
+          "ideology": ["National conservatism", "Right-wing populism", "Euroscepticism"]
+        },
+        {
+          "acronym": "ECR",
+          "full_name": "European Conservatives and Reformists Group",
+          "meps": 78,
+          "percentage": 10.8,
+          "rank": 4,
+          "co_chairs": [
+            {
+              "name": "Joachim Brudziński",
+              "country": "Poland"
+            },
+            {
+              "name": "Nicola Procaccini",
+              "country": "Italy"
+            }
+          ],
+          "political_orientation": "Right-wing conservative",
+          "eu_stance": "Soft Eurosceptic",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "key_members": [
+            "Brothers of Italy",
+            "Law and Justice (Poland)",
+            "Sweden Democrats",
+            "New Flemish Alliance (Belgium)"
+          ],
+          "ideology": ["Conservatism", "Soft Euroscepticism", "National conservatism"]
+        },
+        {
+          "acronym": "Renew",
+          "full_name": "Renew Europe Group",
+          "meps": 77,
+          "percentage": 10.7,
+          "rank": 5,
+          "president": "Valérie Hayer",
+          "president_country": "France",
+          "political_orientation": "Centrist liberal",
+          "eu_stance": "Pro-European",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "notes": "Suffered significant losses in 2024 elections",
+          "color": "Yellow",
+          "ideology": ["Liberalism", "Centrism", "Pro-Europeanism"]
+        },
+        {
+          "acronym": "Greens/EFA",
+          "full_name": "Greens/European Free Alliance",
+          "meps": 53,
+          "percentage": 7.4,
+          "rank": 6,
+          "co_chairs": [
+            {
+              "name": "Terry Reintke",
+              "country": "Germany"
+            },
+            {
+              "name": "Bas Eickhout",
+              "country": "Netherlands"
+            }
+          ],
+          "political_orientation": "Green politics, regionalist, progressive",
+          "eu_stance": "Pro-European",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "key_members": [
+            "German Greens (Bündnis 90/Die Grünen)",
+            "Volt Europa (5 seats)",
+            "Regionalist parties from Scotland and Catalonia"
+          ],
+          "color": "Green",
+          "ideology": ["Green politics", "Regionalism", "Progressivism", "Pro-Europeanism"]
+        },
+        {
+          "acronym": "The Left",
+          "full_name": "The Left in the European Parliament",
+          "alternative_name": "GUE/NGL",
+          "meps": 46,
+          "percentage": 6.4,
+          "rank": 7,
+          "co_chairs": [
+            {
+              "name": "Manon Aubry",
+              "country": "France"
+            },
+            {
+              "name": "Martin Schirdewan",
+              "country": "Germany"
+            }
+          ],
+          "political_orientation": "Left-wing democratic socialist",
+          "eu_stance": "Anti-austerity, critical of current EU policies",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "key_members": [
+            "La France Insoumise",
+            "Five Star Movement (Italy)",
+            "Podemos/Sumar (Spain)"
+          ],
+          "color": "Dark red",
+          "ideology": ["Democratic socialism", "Left-wing populism", "Anti-austerity"]
+        },
+        {
+          "acronym": "ESN",
+          "full_name": "Europe of Sovereign Nations Group",
+          "meps": 25,
+          "percentage": 3.5,
+          "rank": 8,
+          "co_chairs": [
+            {
+              "name": "René Aust",
+              "country": "Germany",
+              "party": "AfD"
+            },
+            {
+              "name": "Stanisław Tyszka",
+              "country": "Poland"
+            }
+          ],
+          "political_orientation": "Far-right ultranationalist",
+          "eu_stance": "Hard Eurosceptic",
+          "url": "https://www.europarl.europa.eu/groups/",
+          "formation_date": "2024-07",
+          "formation_reason": "Formed after AfD was expelled from Identity and Democracy group",
+          "key_members": [
+            "Alternative for Germany (AfD) - largest delegation",
+            "Confederation (Poland)",
+            "Revival (Bulgaria)"
+          ],
+          "ideology": ["Far-right politics", "Ultranationalism", "Hard Euroscepticism"]
+        }
+      ],
+      "non_attached_members": {
+        "description": "MEPs not affiliated with any political group, either by choice or because they don't meet the threshold for forming a group",
+        "minimum_group_formation": "25 MEPs from at least 7 member states"
+      }
+    },
+    "interparliamentary_delegations": {
+      "total": 48,
+      "term": "2024-2029",
+      "bureau_elections": "2024-09-30 to 2024-10-16",
+      "conference_chair": {
+        "name": "Andreas Schwab",
+        "political_group": "EPP",
+        "country": "Germany",
+        "since": "2025-01-21"
+      },
+      "url_list": "https://www.europarl.europa.eu/delegations/en/list/byname",
+      "categories": [
+        "Bilateral interparliamentary delegations",
+        "Joint Parliamentary Committees",
+        "Parliamentary Cooperation Committees",
+        "Multilateral parliamentary assemblies"
+      ],
+      "regions": [
+        {
+          "region": "Transatlantic Relations",
+          "delegations": [
+            {
+              "acronym": "D-US",
+              "full_name": "Delegation for Relations with the United States",
+              "type": "bilateral",
+              "members": 64,
+              "chair": "Brando Benifei",
+              "chair_political_group": "S&D",
+              "chair_country": "Italy",
+              "url": "https://www.europarl.europa.eu/delegations/en/d-us/home",
+              "special_structure": "Transatlantic Legislators' Dialogue",
+              "notes": "Largest delegation"
+            }
+          ]
+        },
+        {
+          "region": "Americas",
+          "delegations": [
+            {
+              "acronym": "D-MX",
+              "full_name": "EU-Mexico Joint Parliamentary Committee",
+              "type": "joint_parliamentary_committee",
+              "chair": "Antonio López-Istúriz White",
+              "chair_political_group": "EPP",
+              "chair_country": "Spain",
+              "url": "https://www.europarl.europa.eu/delegations/en/d-mx/home"
+            },
+            {
+              "acronym": "DLAT",
+              "full_name": "Euro-Latin America Parliamentary Assembly",
+              "type": "multilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dlat/home"
+            },
+            {
+              "acronym": "DSCA",
+              "full_name": "Delegation for Relations with Countries of Central America",
+              "type": "bilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dsca/home"
+            }
+          ]
+        },
+        {
+          "region": "Middle East and North Africa",
+          "delegations": [
+            {
+              "acronym": "DARP",
+              "full_name": "Delegation for Relations with the Arab Peninsula",
+              "type": "bilateral",
+              "chair": "Reinhold Lopatka",
+              "chair_political_group": "EPP",
+              "chair_country": "Austria",
+              "url": "https://www.europarl.europa.eu/delegations/en/darp/home",
+              "countries_covered": [
+                "Bahrain",
+                "Kuwait",
+                "Oman",
+                "Qatar",
+                "Saudi Arabia",
+                "United Arab Emirates"
+              ],
+              "notes": "Covers GCC countries"
+            },
+            {
+              "acronym": "DMAG",
+              "full_name": "Delegation for Relations with the Maghreb Countries and the Arab Maghreb Union",
+              "type": "bilateral",
+              "chair": "Ruggero Razza",
+              "chair_political_group": "ECR",
+              "chair_country": "Italy",
+              "url": "https://www.europarl.europa.eu/delegations/en/dmag/home",
+              "countries_covered": [
+                "Morocco",
+                "Tunisia",
+                "Algeria",
+                "Libya",
+                "Mauritania"
+              ],
+              "joint_committees": 3
+            }
+          ]
+        },
+        {
+          "region": "Asia",
+          "delegations": [
+            {
+              "acronym": "DCAS",
+              "full_name": "Delegation for Relations with the Countries of Central Asia",
+              "type": "bilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dcas/home",
+              "countries_covered": [
+                "Kazakhstan",
+                "Kyrgyzstan",
+                "Tajikistan",
+                "Turkmenistan",
+                "Uzbekistan"
+              ]
+            },
+            {
+              "acronym": "DSEA",
+              "full_name": "Delegation for Relations with the Countries of Southeast Asia and ASEAN",
+              "type": "bilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dsea/home"
+            },
+            {
+              "acronym": "DEPA",
+              "full_name": "Delegation for Relations with the Countries of East Asia",
+              "type": "bilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/depa/home"
+            }
+          ],
+          "notes": "Also includes separate delegations for China and Japan"
+        },
+        {
+          "region": "Eastern Partnership",
+          "delegations": [
+            {
+              "acronym": "D-UA",
+              "full_name": "EU-Ukraine Parliamentary Association Committee",
+              "type": "parliamentary_association_committee",
+              "url": "https://www.europarl.europa.eu/delegations/en/d-ua/home"
+            },
+            {
+              "acronym": "DSCA",
+              "full_name": "Delegation to the Euronest Parliamentary Assembly",
+              "type": "multilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dsca/home",
+              "includes": [
+                "EU-Armenia Parliamentary Partnership Committee",
+                "EU-Azerbaijan Parliamentary Cooperation Committee",
+                "EU-Georgia Parliamentary Association Committee"
+              ]
+            }
+          ]
+        },
+        {
+          "region": "Western Balkans",
+          "delegations": [
+            {
+              "acronym": "DSEE",
+              "full_name": "Delegation for Relations with Bosnia and Herzegovina and Kosovo",
+              "type": "bilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dsee/home",
+              "includes": [
+                "EU-Bosnia and Herzegovina Stabilisation and Association Parliamentary Committee",
+                "EU-Kosovo Stabilisation and Association Parliamentary Committee"
+              ]
+            },
+            {
+              "acronym": "D-ME",
+              "full_name": "EU-Montenegro Stabilisation and Association Parliamentary Committee",
+              "type": "stabilisation_association_committee",
+              "url": "https://www.europarl.europa.eu/delegations/en/d-me/home"
+            }
+          ],
+          "notes": "Also includes delegations for Albania, North Macedonia, and Serbia"
+        },
+        {
+          "region": "Multilateral Assemblies",
+          "delegations": [
+            {
+              "acronym": "DNAT",
+              "full_name": "Delegation to the NATO Parliamentary Assembly",
+              "type": "multilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dnat/home"
+            },
+            {
+              "acronym": "DPAP",
+              "full_name": "Delegation to the Parliamentary Assembly of the Union for the Mediterranean",
+              "type": "multilateral",
+              "url": "https://www.europarl.europa.eu/delegations/en/dpap/home"
+            }
+          ],
+          "notes": "Also includes delegations for Northern Cooperation, relations with Switzerland and Norway (including EU-Iceland Joint Parliamentary Committee and EEA Joint Parliamentary Committee), and Pan-African Parliament"
+        }
+      ],
+      "notable_delegations": {
+        "largest": "D-US (64 members)",
+        "newest_focus": "Eastern Partnership delegations reflecting EU's neighbourhood policy priorities"
+      }
+    },
+    "summary": {
+      "parliamentary_structure": {
+        "total_committees": 28,
+        "total_political_groups": 8,
+        "total_delegations": 48,
+        "total_meps": 720
+      },
+      "key_january_2025_changes": [
+        "SEDE upgraded from subcommittee to standing committee",
+        "SANT upgraded from subcommittee to standing committee",
+        "ENVI renamed to focus on climate and food safety",
+        "EUDS special committee established (democracy shield)",
+        "HOUS special committee established (housing crisis)"
+      ],
+      "political_composition": {
+        "pro_european_majority": 454,
+        "eurosceptic_groups": 187,
+        "percentage_pro_european": 63.1,
+        "largest_group": "EPP (188 MEPs)",
+        "new_groups_2024": ["Patriots for Europe", "Europe of Sovereign Nations"]
+      },
+      "geographic_reach": {
+        "interparliamentary_delegations": 48,
+        "regions_covered": [
+          "Transatlantic",
+          "Americas",
+          "Middle East and North Africa",
+          "Asia",
+          "Eastern Partnership",
+          "Western Balkans",
+          "Multilateral assemblies"
+        ]
+      }
+    }
+  }

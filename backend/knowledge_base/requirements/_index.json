@@ -1,0 +1,175 @@
+{
+  "generated_at": "2026-01-02T10:00:00.000000",
+  "total_clusters": 21,
+  "total_requirements": 2027,
+  "clusters": [
+    {
+      "id": 1,
+      "name": "GDPR Package (Data Protection)",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 49,
+      "requirements": 401,
+      "file": "01_gdpr_package_data_protection.json"
+    },
+    {
+      "id": 2,
+      "name": "Digital Services Act Package",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 4,
+      "requirements": 25,
+      "file": "02_digital_services_act_package.json"
+    },
+    {
+      "id": 3,
+      "name": "Digital Markets Act Package",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 1,
+      "requirements": 9,
+      "file": "03_digital_markets_act_package.json"
+    },
+    {
+      "id": 4,
+      "name": "AI Act Package",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 2,
+      "requirements": 35,
+      "file": "04_ai_act_package.json"
+    },
+    {
+      "id": 5,
+      "name": "NIS2 Directive (Cybersecurity)",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 5,
+      "requirements": 31,
+      "file": "05_nis2_directive_cybersecurity.json"
+    },
+    {
+      "id": 6,
+      "name": "European Green Deal Package",
+      "policy_area": "Environment and Climate Action",
+      "laws": 11,
+      "requirements": 46,
+      "file": "06_european_green_deal_package.json"
+    },
+    {
+      "id": 7,
+      "name": "Banking Union Package",
+      "policy_area": "Economic and Financial Affairs",
+      "laws": 22,
+      "requirements": 120,
+      "file": "07_banking_union_package.json"
+    },
+    {
+      "id": 8,
+      "name": "Capital Markets Union Package",
+      "policy_area": "Economic and Financial Affairs",
+      "laws": 47,
+      "requirements": 305,
+      "file": "08_capital_markets_union_package.json"
+    },
+    {
+      "id": 9,
+      "name": "Circular Economy Package",
+      "policy_area": "Environment and Climate Action",
+      "laws": 41,
+      "requirements": 122,
+      "file": "09_circular_economy_package.json"
+    },
+    {
+      "id": 10,
+      "name": "Geographical Indications Compliance",
+      "policy_area": "Agriculture",
+      "laws": 8,
+      "requirements": 25,
+      "file": "10_geographical_indications_compliance.json"
+    },
+    {
+      "id": 11,
+      "name": "Migration and Asylum Pact",
+      "policy_area": "Migration and Home Affairs",
+      "laws": 42,
+      "requirements": 132,
+      "file": "11_migration_and_asylum_pact.json"
+    },
+    {
+      "id": 12,
+      "name": "FinTech Startup Compliance",
+      "policy_area": "Economic and Financial Affairs",
+      "laws": 12,
+      "requirements": 94,
+      "file": "12_fintech_startup_compliance.json"
+    },
+    {
+      "id": 13,
+      "name": "HealthTech Startup Compliance",
+      "policy_area": "Health and Food Safety",
+      "laws": 31,
+      "requirements": 182,
+      "file": "13_healthtech_startup_compliance.json"
+    },
+    {
+      "id": 14,
+      "name": "Mobility & Transport Startup Compliance",
+      "policy_area": "Transport",
+      "laws": 12,
+      "requirements": 24,
+      "file": "14_mobility__transport_startup_compliance.json"
+    },
+    {
+      "id": 15,
+      "name": "Climate Tech Startup Compliance",
+      "policy_area": "Environment and Climate Action",
+      "laws": 18,
+      "requirements": 54,
+      "file": "15_climate_tech_startup_compliance.json"
+    },
+    {
+      "id": 16,
+      "name": "CleanTech Startup Funding & Compliance",
+      "policy_area": "Environment and Climate Action",
+      "laws": 21,
+      "requirements": 83,
+      "file": "16_cleantech_startup_funding__compliance.json"
+    },
+    {
+      "id": 17,
+      "name": "AI/ML Startup Compliance",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 2,
+      "requirements": 19,
+      "file": "17_aiml_startup_compliance.json"
+    },
+    {
+      "id": 18,
+      "name": "E-commerce & Platform Startup Compliance",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 5,
+      "requirements": 33,
+      "file": "18_e-commerce__platform_startup_compliance.json"
+    },
+    {
+      "id": 19,
+      "name": "Circular Economy Startup Compliance (EPR)",
+      "policy_area": "Environment and Climate Action",
+      "laws": 5,
+      "requirements": 23,
+      "file": "19_circular_economy_startup_compliance_epr.json"
+    },
+    {
+      "id": 20,
+      "name": "Food & AgTech Startup Compliance",
+      "policy_area": "Agriculture",
+      "laws": 63,
+      "requirements": 243,
+      "file": "20_food__agtech_startup_compliance.json"
+    },
+    {
+      "id": 21,
+      "name": "SaaS & B2B Startup Compliance",
+      "policy_area": "Digital Policy and Digital Economy",
+      "laws": 6,
+      "requirements": 21,
+      "file": "21_saas__b2b_startup_compliance.json"
+    }
+  ]
+}

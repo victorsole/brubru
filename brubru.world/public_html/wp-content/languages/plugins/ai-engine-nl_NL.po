@@ -1,0 +1,208 @@
+# Translation of Plugins - AI Engine - Stable (latest release) in Dutch
+# This file is distributed under the same license as the Plugins - AI Engine - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2025-09-17 09:34:39+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: nl\n"
+"Project-Id-Version: Plugins - AI Engine - Stable (latest release)\n"
+
+#: classes/rest/ai.php:214
+msgid "Magic Wand is not enabled."
+msgstr "Toverstaf is niet ingeschakeld."
+
+#: classes/rest.php:1500
+msgid "The media file cannot be found."
+msgstr "Het mediabestand kan niet worden gevonden."
+
+#: classes/rest.php:966
+msgid "The url is required."
+msgstr "De URL is vereist."
+
+#: classes/rest.php:884 classes/rest.php:904
+msgid "There is no post with this ID."
+msgstr "Er is geen bericht met dit ID."
+
+#: classes/rest.php:644
+msgid "Environment not found."
+msgstr "Omgeving niet gevonden."
+
+#: classes/modules/discussions.php:211
+msgid "Discussion"
+msgstr "Discussie"
+
+#: classes/modules/discussions.php:203 classes/modules/discussions.php:214
+#: app/i18n.js:622
+msgid "Untitled"
+msgstr "Zonder titel"
+
+#: classes/modules/discussions.php:187
+msgid "Conversation:"
+msgstr "Conversatie:"
+
+#: classes/modules/discussions.php:187 app/i18n.js:623
+msgid "Based on the following conversation, generate a concise and specific title for the discussion, strictly less than 64 characters. Focus on the main topic, avoiding unnecessary words such as articles, pronouns, or adjectives. Do not include any punctuation at the end. Do not include anything else than the title itself, only one sentence, no line breaks, just the title."
+msgstr "Maak op basis van het volgende gesprek een beknopte en specifieke titel voor de discussie, strikt minder dan 64 karakters. Richt je op het hoofdonderwerp en vermijd overbodige woorden zoals lidwoorden, voornaamwoorden of bijvoeglijke naamwoorden. Voeg geen interpunctie toe aan het einde. Voeg niets anders toe dan de titel zelf, slechts één zin, geen regeleinden, alleen de titel."
+
+#: classes/engines/core.php:404
+msgid "The last message must be a user message."
+msgstr "Het laatste bericht moet een gebruikersbericht zijn."
+
+#: classes/engines/core.php:333
+msgid "AI Engine: The model '%s' is not available."
+msgstr "AI Engine: het model '%s' is niet beschikbaar."
+
+#: classes/core.php:225
+msgid "Embeddings query cannot have an empty message. Please check that the conversation context is properly extracted."
+msgstr "Ingesloten query kan geen leeg bericht hebben. Controleer of de conversatie context goed is geëxtraheerd."
+
+#: classes/core.php:220
+msgid "Invalid query object after filtering. The mwai_ai_query filter must return a valid query object."
+msgstr "Ongeldig query object na filteren. Het mwai_ai_query filter moet een geldig query object retourneren."
+
+#: classes/api.php:418 classes/api.php:449 classes/api.php:480
+#: classes/api.php:515 classes/api.php:562 classes/api.php:596
+msgid "The message is required."
+msgstr "Het bericht is vereist."
+
+#: classes/api.php:190
+msgid "The botId and message are required."
+msgstr "Het botId en het bericht zijn vereist."
+
+#: classes/admin.php:166
+msgid "Generate Title"
+msgstr "Genereer titel"
+
+#: classes/admin.php:179 app/i18n.js:42
+msgid "Edit"
+msgstr "Bewerken"
+
+#. Description of the plugin
+#: ai-engine.php
+msgid "AI meets WordPress. Your site can now chat, write poetry, solve problems, and maybe make you coffee."
+msgstr "AI ontmoet WordPress. Je site kan nu chatten, gedichten schrijven, problemen oplossen en misschien koffie voor je zetten."
+
+#: classes/modules/tasks.php:105
+msgid "Every 5 Seconds"
+msgstr "Elke 5 seconden"
+
+#: classes/modules/tasks.php:104
+msgid "Every Minute"
+msgstr "Elke minuut"
+
+#: classes/admin.php:163
+msgid "Magic Wand"
+msgstr "Toverstaf"
+
+#: classes/admin.php:123 app/i18n.js:144
+msgid "Images"
+msgstr "Afbeeldingen"
+
+#: classes/admin.php:169 app/i18n.js:550
+msgid "Generate Excerpt"
+msgstr "Genereer samenvatting"
+
+#: classes/admin.php:115 app/i18n.js:143
+msgid "Content"
+msgstr "Inhoud"
+
+#: classes/admin.php:66 classes/admin.php:142 app/i18n.js:115
+msgid "Playground"
+msgstr "Speeltuin"
+
+#: common/news.php:101
+msgid "❌ Delete"
+msgstr "❌ verwijder"
+
+#: common/news.php:92
+msgid "👉 AI Engine at WordPress.org"
+msgstr "👉 AI Engine op WordPress.org"
+
+#: common/news.php:87
+msgid "<p style=\"font-size: 14px;\">Since the end of 2022, I worked a lot to craft <b>the perfect AI plugin for WordPress</b>. Since March 2023, it's perfectly stable and packed with features. You'll get chatbots, AI forms, easy model training, content and images generation, a template system that will allow you to create your personal assistants for various tasks and much more! Here it is: <a href=\"%s\" target=\"_blank\">AI Engine</a>. Believe me, you will enjoy this. Have fun, and let me know how it goes! 🥳</p>"
+msgstr "<p style=\"font-size: 14px;\">Sinds eind 2022 heb ik hard gewerkt aan <b>de perfecte AI plugin voor WordPress</b>. Vanaf maart 2023 is het perfect stabiel en vol met functies. Je krijgt chatbots, AI formulieren, eenvoudige modeltraining, het genereren van inhoud en afbeeldingen, een templatesysteem waarmee je je persoonlijke assistenten voor verschillende taken kunt maken en nog veel meer! Hier is het: <a href=\"%s\" target=\"_blank\">AI engine</a>. geloof me, je zult hiervan genieten. veel plezier, en laat me weten hoe het gaat! 🥳</p>"
+
+#: common/news.php:84
+msgid "<h2 style=\"margin: 0 0 10px 0\" class=\"title\">AI Engine by Meow Apps: The Power of AI into WordPress 💫</h2>"
+msgstr "<h2 style=\"margin: 0 0 10px 0\" class=\"title\">AI Engine door Meow Apps: de kracht van AI in WordPress 💫</h2>"
+
+#: common/ratings.php:120 app/i18n.js:141
+msgid "Hide"
+msgstr "Verberg"
+
+#: common/ratings.php:106
+msgid "✌️ Done!"
+msgstr "✌️ klaar!"
+
+#: common/ratings.php:95
+msgid "<h2 style=\"margin: 0\" class=\"title\">You have been using <b>%1$s</b> for some time now. Thank you! 💕</h2><p>If you have a minute, can you write a <b><a target=\"_blank\" href=\""
+msgstr "<h2 style=\"margin: 0\" class=\"title\">Je gebruikt <b>%1$s</b> al een tijdje. Dank je!</h2> 💕<p>Als je een minuutje hebt, kan je dan een <b><a target=\"_blank\" href=\""
+
+#. Plugin Name of the plugin
+#: ai-engine.php classes/admin.php:106
+msgid "AI Engine"
+msgstr "AI engine"
+
+#. Plugin URI of the plugin
+#: ai-engine.php
+msgid "https://wordpress.org/plugins/ai-engine/"
+msgstr "https://wordpress.org/plugins/ai-engine/"
+
+#: common/news.php:96 common/ratings.php:114
+msgid "⏰ Remind me later"
+msgstr "⏰ herinner mij er later aan"
+
+#. translators: %1$s is the version of the interface; %2$s is a file path.
+#: common/admin.php:211
+msgid "Thanks for using <a href=\"https://meowapps.com\">Meow Apps</a>! This is the Meow Admin %1$s <br /><i>Loaded from %2$s </i>"
+msgstr "Bedankt voor het gebruiken van <a href=\"https://meowapps.com\"> Meow Apps </a>! Dit is de Meow beheerder %1$s <br /> <i> geladen vanaf %2$s </i>"
+
+#: common/admin.php:176
+msgid "<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a cleaner admin. This option will be reset if a new Meow Apps plugin is installed.<br /><b>Once activated, an option will be added in your General settings to display it again.</b></small>"
+msgstr "<label>Verberg het menu <b>Meow Apps</b></label><br /><small>Verberg het menu Meow Apps en al zijn componenten, voor een schonere beheerder. Deze optie wordt gereset als een nieuwe Meow Apps plugin is geïnstalleerd. <br /><b>Na activering wordt er een optie toegevoegd aan je algemene instellingen om deze opnieuw weer te geven.</b></small>"
+
+#: common/admin.php:155 common/admin.php:156 app/i18n.js:212
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: common/admin.php:126
+msgid "Remove the license"
+msgstr "Verwijder de licentie"
+
+#: common/admin.php:119
+msgid "<p>It looks like you are using the free version of the plugin (<b>%s</b>) but a license for the Pro version was also found. The Pro version might have been replaced by the Free version during an update (might be caused by a temporarily issue). If it is the case, <b>please download it again</b> from the <a target=\"_blank\" href=\"https://meowapps.com\">Meow Store</a>. If you wish to continue using the free version and clear this message, click on this button."
+msgstr "<p>Het lijkt erop dat je de gratis versie van de plugin gebruikt (<b>%s</b>) maar er is ook een licentie voor de pro versie gevonden. De pro versie kan zijn vervangen door de gratis versie tijdens een update (kan worden veroorzaakt door een tijdelijk probleem). Als dit het geval is, <b>download het opnieuw</b> van de <a target=\"_blank\" href=\"https://meowapps.com\">Meow store</a>. Als je de gratis versie wil blijven gebruiken en dit bericht wil wissen, klik dan op deze knop."
+
+#: common/admin.php:88
+msgid "<a target=\"_blank\" href=\"https://meowapps.com\">Get the <u>Pro Version</u></a>"
+msgstr "<a target=\"_blank\" href=\"https://meowapps.com\">Verkrijg de <u>Pro Versie</u></a>"
+
+#: common/admin.php:88
+msgid "License Issue"
+msgstr "Licentieprobleem"
+
+#: common/admin.php:87
+msgid "Pro Version"
+msgstr "Pro versie"
+
+#: common/admin.php:84
+msgid "<a href=\"admin.php?page=%s_settings\">Settings</a>"
+msgstr "<a href=\"admin.php?page=%s_settings\">Instellingen</a>"
+
+#: classes/init.php:5
+msgid "Thanks for installing the Pro version of AI Engine :) However, the free version is still enabled. Please disable or uninstall it."
+msgstr "Bedankt voor het installeren van de Pro versie van AI Engine :) De gratis versie is echter nog steeds ingeschakeld. Schakel het uit of verwijder het."
+
+#. Author URI of the plugin
+#: ai-engine.php
+msgid "https://jordymeow.com"
+msgstr "https://jordymeow.com"
+
+#. Author of the plugin
+#: ai-engine.php
+msgid "Jordy Meow"
+msgstr "Jordy Meow"

@@ -1,0 +1,292 @@
+{
+  "dg_code": "MOVE",
+  "dg_name": "Directorate-General for Mobility & Transport",
+  "commissioner": {
+    "name": "Apostolos Tzitzikostas",
+    "title": "Commissioner"
+  },
+  "director_general": {
+    "name": "Magda Kopczynska",
+    "title": "Director-General",
+    "assistants": [
+      "Roxana Lesovici",
+      "Antoine Kedzierski",
+      "Hannah Herzig (includes MOVE.001 Tourism Sector)"
+    ]
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Vacant",
+      "title": "Deputy Director-General"
+    },
+    {
+      "name": "Maja Bakran Marcich",
+      "title": "Deputy Director-General"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "MOVE.01",
+      "name": "Strategy & Communication",
+      "head": "Marit Ruuda",
+      "deputy": "Joshua Salsby",
+      "note": "Includes HR Correspondent"
+    },
+    {
+      "code": "MOVE.A",
+      "name": "Policy, Coordination",
+      "director": "Mona Bjorklund",
+      "units": [
+        {
+          "code": "MOVE.A.1",
+          "name": "Coordination & Planning",
+          "head": "Gergely Sulyok",
+          "deputy": "Jakub Koniecki"
+        },
+        {
+          "code": "MOVE.A.2",
+          "name": "International Relations",
+          "head": "Stefano Paci (Acting)",
+          "deputy": "Stefano Paci"
+        },
+        {
+          "code": "MOVE.A.3",
+          "name": "Economic Analysis & Better Regulation",
+          "head": "Rolf Diemer",
+          "deputy": "Maria Cristina Mohora"
+        },
+        {
+          "code": "MOVE.A.4",
+          "name": "Legal Issues & Enforcement",
+          "head": "Barbara Jankovec",
+          "deputy": "Eliska Mamdaniova"
+        },
+        {
+          "code": "MOVE.A.5",
+          "name": "Security",
+          "head": "Carlos Bermejo Acosta",
+          "deputy": "Christopher Ross"
+        }
+      ]
+    },
+    {
+      "code": "MOVE.B",
+      "name": "Investment, Innovative & Sustainable Transport",
+      "director": "Eric Von Breska",
+      "units": [
+        {
+          "code": "MOVE.B.1",
+          "name": "Transport Networks",
+          "head": "Silke Brocks",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "MOVE.B.2",
+          "name": "Transport Investment",
+          "head": "Philippe Chantraine",
+          "deputy": "Ewa Ptaszynska"
+        },
+        {
+          "code": "MOVE.B.3",
+          "name": "Innovation & Research",
+          "head": "Isabelle Vandoorne (Acting)",
+          "deputy": "Isabelle Vandoorne"
+        },
+        {
+          "code": "MOVE.B.4",
+          "name": "Sustainable & Intelligent Transport",
+          "head": "Moumen Hamdouch",
+          "deputy": "Axel Volkery"
+        },
+        {
+          "code": "MOVE.B.5",
+          "name": "Social Aspects, Passenger Rights & Equal Opportunities",
+          "head": "Elisabeth Kotthaus",
+          "deputy": "Dominik Piotrowski"
+        }
+      ]
+    },
+    {
+      "code": "MOVE.C",
+      "name": "Land",
+      "director": "Kristian Schmidt",
+      "units": [
+        {
+          "code": "MOVE.C.1",
+          "name": "Road Transport",
+          "head": "Jean-Louis Colson",
+          "deputy": "Filip Negreanu Arboreanu"
+        },
+        {
+          "code": "MOVE.C.2",
+          "name": "Road Safety",
+          "head": "Claire Depre",
+          "deputy": "Vesna Valant"
+        },
+        {
+          "code": "MOVE.C.3",
+          "name": "Single European Rail Area",
+          "head": "Sandro Santamato",
+          "deputy": "Kathrin Obst"
+        },
+        {
+          "code": "MOVE.C.4",
+          "name": "Rail Safety & Interoperability",
+          "head": "Joachim Luecking",
+          "deputy": "Michaela Strohschneider"
+        }
+      ]
+    },
+    {
+      "code": "MOVE.D",
+      "name": "Waterborne",
+      "director": "Fotini Ioannidou",
+      "units": [
+        {
+          "code": "MOVE.D.1",
+          "name": "Maritime Transport & Logistics",
+          "head": "Annika Kroon",
+          "deputy": "Szymon Oscislowski"
+        },
+        {
+          "code": "MOVE.D.2",
+          "name": "Maritime Safety",
+          "head": "Barbara Sellier",
+          "deputy": "Andrei Mungiu-Patrascu"
+        },
+        {
+          "code": "MOVE.D.3",
+          "name": "Ports & Inland Navigation",
+          "head": "Torsten Klimke",
+          "deputy": "Jorgen Bjerre"
+        }
+      ]
+    },
+    {
+      "code": "MOVE.E",
+      "name": "Aviation",
+      "director": "Filip Cornelis",
+      "units": [
+        {
+          "code": "MOVE.E.1",
+          "name": "Aviation Policy",
+          "head": "Eddy Liegeois",
+          "deputy": "Ewa Oney"
+        },
+        {
+          "code": "MOVE.E.2",
+          "name": "Aviation Agreements",
+          "head": "Gzim Ocakoglu (Acting)",
+          "deputy": "Gzim Ocakoglu"
+        },
+        {
+          "code": "MOVE.E.3",
+          "name": "Single European Sky",
+          "head": "Maria De Las Flores Diaz Pulido",
+          "deputy": "Frederik Rasmussen"
+        },
+        {
+          "code": "MOVE.E.4",
+          "name": "Aviation Safety",
+          "head": "Christine Berg",
+          "deputy": "Peter Sorensen"
+        }
+      ]
+    },
+    {
+      "code": "MOVE.SRD",
+      "name": "Shared Resources",
+      "director": "Frederic Versini (Acting)",
+      "units": [
+        {
+          "code": "MOVE.SRD.1",
+          "name": "Assurance & Supervision",
+          "head": "Frederic Versini",
+          "deputy": "Philippe Cornu"
+        },
+        {
+          "code": "MOVE.SRD.2",
+          "name": "Information Management & Systems",
+          "head": "Dejan Dvorsek",
+          "deputy": "Luisa Guedes"
+        },
+        {
+          "code": "MOVE.SRD.3",
+          "name": "Budget & Financial Management",
+          "head": "Cristina Cuadra Garcia",
+          "deputy": "Anne-Laurence Voiseux"
+        }
+      ]
+    }
+  ],
+  "linked_agencies": [
+    {
+      "code": "CINEA",
+      "name": "European Climate, Infrastructure and Environment Executive Agency",
+      "director": "Paloma Aba Garrote",
+      "departments": [
+        {
+          "code": "CINEA.A",
+          "director": "Maria Novak",
+          "units": [
+            {
+              "code": "CINEA.A.A1",
+              "head": "Marc Vanderhaegen"
+            },
+            {
+              "code": "CINEA.A.2",
+              "head": "Joachim Wiemann"
+            },
+            {
+              "code": "CINEA.A.A4",
+              "head": "Daniela Rosca"
+            }
+          ]
+        },
+        {
+          "code": "CINEA.B",
+          "director": "Olivier Silla",
+          "units": [
+            {
+              "code": "CINEA.B.B1",
+              "head": "Morten Jensen"
+            },
+            {
+              "code": "CINEA.B.B2",
+              "head": "Lucie Zackova"
+            },
+            {
+              "code": "CINEA.B.B3",
+              "head": "Christian Faure"
+            }
+          ]
+        },
+        {
+          "code": "CINEA.C.C3",
+          "head": "Vacant"
+        }
+      ]
+    },
+    {
+      "code": "EMSA",
+      "name": "European Maritime Safety Agency"
+    },
+    {
+      "code": "SESAR3",
+      "name": "SESAR 3 Joint Undertaking"
+    },
+    {
+      "code": "EU-RAIL",
+      "name": "Europe's Rail Joint Undertaking"
+    },
+    {
+      "code": "ERA",
+      "name": "European Agency for Railways"
+    },
+    {
+      "code": "EASA",
+      "name": "European Union Aviation Safety Agency"
+    }
+  ],
+  "date_of_effect": "2025-11-01"
+}

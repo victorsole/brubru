@@ -1,0 +1,106 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "pt_BR"
+         },
+         "Preparing...": [
+            "Preparando..."
+         ],
+         "All jobs have been cancelled": [
+            "Todos os trabalhos foram cancelados"
+         ],
+         "There is no more jobs to cancel": [
+            "Não há mais trabalhos para cancelar"
+         ],
+         "The jobs cancellation has failed": [
+            "Falha no cancelamento dos trabalhos"
+         ],
+         "Cancel in-progress automatic jobs": [
+            "Cancele os trabalhos automáticos em andamento"
+         ],
+         "Domain name has been updated": [
+            "O nome de domínio foi atualizado"
+         ],
+         "Domain name update has been failed": [
+            "Falha ao atualizar nome de domínio"
+         ],
+         "Update domain name in language switcher settings": [
+            "Atualize o nome de domínio nas configurações do seletor de idioma"
+         ],
+         "Disclaimer: MySQL Disk Space": [
+            "Aviso: Espaço em Disco MySQL"
+         ],
+         "Cleaning and compressing the wp_icl_translate and wp_icl_translation_status tables reduces its data size, but does not automatically free up disk space in MySQL. To reclaim disk space, a table rebuild is required—a risky operation not performed automatically by this tool.": [
+            "Limpar e comprimir as tabelas wp_icl_translate e wp_icl_translation_status reduz seu tamanho de dados, mas não libera automaticamente espaço em disco no MySQL. Para recuperar espaço em disco, é necessária uma reconstrução da tabela—uma operação arriscada que não é realizada automaticamente por esta ferramenta."
+         ],
+         "Optimize translation tables": [
+            "Otimizar tabelas de tradução"
+         ],
+         "Previous State Migration": [
+            "Migração do estado anterior"
+         ],
+         "Translation Elements Migration": [
+            "Migração dos elementos de tradução"
+         ],
+         "Processed": [
+            "Processado"
+         ],
+         "Error": [
+            "Erro"
+         ],
+         "Success": [
+            "Sucesso"
+         ],
+         "Database tables optimization completed successfully.": [
+            "Otimização das tabelas do banco de dados concluída com sucesso."
+         ],
+         "Warning": [
+            "Aviso"
+         ],
+         "This process is resource-intensive and may take a significant amount of time. It is recommended to run this optimization during periods of low traffic.": [
+            "Este processo é intensivo em recursos e pode levar um tempo significativo. Recomenda-se executar esta otimização durante períodos de baixo tráfego."
+         ],
+         "Database Tables Optimization": [
+            "Otimização das tabelas do banco de dados"
+         ],
+         "Refresh license data to recognise license update": [
+            "Atualize os dados da licença para reconhecer a atualização da licença"
+         ],
+         "WPML License has been refreshed": [
+            "A licença do WPML foi atualizada"
+         ],
+         "Translate Everything Automatically is not active.": [
+            "Traduzir Tudo Automaticamente não está ativo."
+         ],
+         "Retry stuck automatic translations": [
+            "Tentar novamente as traduções automáticas travadas"
+         ],
+         "Resends translation jobs that couldn't be processed due to a temporary issue while Translate Everything Automatically was active.": [
+            "Reenvia os trabalhos de tradução que não puderam ser processados devido a um problema temporário enquanto o Traduzir Tudo Automaticamente estava ativo."
+         ],
+         "Checking for stuck translation jobs...": [
+            "Verificando trabalhos de tradução travados..."
+         ],
+         "Processing... %s stuck translation found so far": [
+            "Processando... %s tradução travada encontrada até agora",
+            "Processing... %s stuck translations found so far",
+            "Processando... %s traduções travadas encontradas até agora"
+         ],
+         "Something went wrong while checking for stuck translation jobs. Please <a>contact WPML support</a>.": [
+            "Algo deu errado ao verificar os trabalhos de tradução travados. Por favor, <a>entre em contato com o suporte do WPML</a>."
+         ],
+         "No stuck translation jobs found.": [
+            "Nenhum trabalho de tradução travado encontrado."
+         ],
+         "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard.": [
+            "%s trabalho de tradução travado encontrado. O WPML vai traduzi-lo automaticamente em segundo plano.\nVocê pode verificar o progresso no Painel de Tradução.",
+            "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard.",
+            "%s trabalhos de tradução travados encontrados. O WPML vai traduzi-los automaticamente em segundo plano.\nVocê pode verificar o progresso deles no Painel de Tradução."
+         ]
+      }
+   }
+}

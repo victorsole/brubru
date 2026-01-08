@@ -1,0 +1,506 @@
+/* frontend/src/components/tenders/bid_checklist.css */
+
+.bid-checklist {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.bid-checklist__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.bid-checklist__back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 8px;
+  color: #4a5568;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.bid-checklist__back:hover {
+  border-color: #3182ce;
+  color: #3182ce;
+}
+
+.bid-checklist__title-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.5rem;
+}
+
+.bid-checklist__tender-ref {
+  font-size: 0.9rem;
+  color: #718096;
+  margin: 0;
+}
+
+/* Progress Card */
+.bid-checklist__progress-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.bid-checklist__progress-main {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.bid-checklist__progress-circle {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.bid-checklist__progress-circle svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.bid-checklist__progress-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 3;
+}
+
+.bid-checklist__progress-fill {
+  fill: none;
+  stroke: #3182ce;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.bid-checklist__progress-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2c5282;
+}
+
+.bid-checklist__progress-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c5282;
+  margin: 0 0 0.5rem;
+}
+
+.bid-checklist__progress-info p {
+  font-size: 0.95rem;
+  color: #2c5282;
+  margin: 0;
+}
+
+.bid-checklist__progress-optional {
+  font-size: 0.85rem !important;
+  opacity: 0.8;
+  margin-top: 0.25rem !important;
+}
+
+.bid-checklist__help-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  color: #3182ce;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bid-checklist__help-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Filters */
+.bid-checklist__filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.bid-checklist__filter {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bid-checklist__filter:hover {
+  border-color: #3182ce;
+  color: #3182ce;
+}
+
+.bid-checklist__filter--active {
+  background: #ebf8ff;
+  border-color: #3182ce;
+  color: #3182ce;
+}
+
+/* Loading */
+.bid-checklist__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem;
+  color: #718096;
+}
+
+/* Sections */
+.bid-checklist__section {
+  margin-bottom: 2rem;
+}
+
+.bid-checklist__section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.5rem;
+}
+
+.bid-checklist__section-title .mdi {
+  font-size: 1.25rem;
+  color: #3182ce;
+}
+
+.bid-checklist__section-desc {
+  font-size: 0.9rem;
+  color: #718096;
+  margin: 0 0 1rem;
+}
+
+/* Categories */
+.bid-checklist__category {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.bid-checklist__category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: #f7fafc;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bid-checklist__category-header:hover {
+  background: #edf2f7;
+}
+
+.bid-checklist__category-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bid-checklist__category-left .mdi {
+  font-size: 1.25rem;
+  color: #3182ce;
+}
+
+.bid-checklist__category-name {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.bid-checklist__category-count {
+  padding: 0.125rem 0.5rem;
+  background: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #718096;
+}
+
+.bid-checklist__category-header > .mdi {
+  font-size: 1.25rem;
+  color: #718096;
+}
+
+.bid-checklist__category-items {
+  padding: 0.5rem;
+  background: white;
+}
+
+/* Checklist Items */
+.bid-checklist__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.bid-checklist__item:hover {
+  background: #f7fafc;
+}
+
+.bid-checklist__item--checked {
+  background: #f0fff4;
+}
+
+.bid-checklist__item--checked:hover {
+  background: #c6f6d5;
+}
+
+.bid-checklist__item-checkbox {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.bid-checklist__item-checkbox input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.bid-checklist__checkmark {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #cbd5e0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.bid-checklist__checkmark .mdi {
+  font-size: 1rem;
+  color: white;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s;
+}
+
+.bid-checklist__item-checkbox input:checked + .bid-checklist__checkmark {
+  background: #38a169;
+  border-color: #38a169;
+}
+
+.bid-checklist__item-checkbox input:checked + .bid-checklist__checkmark .mdi {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.bid-checklist__item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bid-checklist__item-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.bid-checklist__item-requirement {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1a202c;
+  flex: 1;
+}
+
+.bid-checklist__item--checked .bid-checklist__item-requirement {
+  color: #22543d;
+}
+
+.bid-checklist__item-badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.bid-checklist__item-badge--mandatory {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.bid-checklist__item-badge--optional {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.bid-checklist__item-document {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.85rem;
+  color: #4a5568;
+  margin: 0 0 0.25rem;
+}
+
+.bid-checklist__item-document .mdi {
+  color: #a0aec0;
+  font-size: 1rem;
+}
+
+.bid-checklist__item-authority {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: #718096;
+  margin: 0;
+}
+
+.bid-checklist__item-authority .mdi {
+  color: #a0aec0;
+  font-size: 1rem;
+}
+
+.bid-checklist__item-authority a {
+  color: #3182ce;
+  margin-left: 0.25rem;
+}
+
+.bid-checklist__item-help {
+  padding: 0.375rem;
+  background: none;
+  border: none;
+  color: #a0aec0;
+  cursor: pointer;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.bid-checklist__item-help:hover {
+  color: #3182ce;
+}
+
+.bid-checklist__item-help .mdi {
+  font-size: 1.25rem;
+}
+
+/* Footer */
+.bid-checklist__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
+}
+
+.bid-checklist__export-btn,
+.bid-checklist__submit-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bid-checklist__export-btn {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+}
+
+.bid-checklist__export-btn:hover {
+  border-color: #3182ce;
+  color: #3182ce;
+}
+
+.bid-checklist__submit-btn {
+  background: linear-gradient(135deg, #38a169 0%, #276749 100%);
+  border: none;
+  color: white;
+}
+
+.bid-checklist__submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bid-checklist__header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .bid-checklist__progress-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .bid-checklist__progress-main {
+    flex-direction: column;
+  }
+
+  .bid-checklist__filters {
+    flex-wrap: wrap;
+  }
+
+  .bid-checklist__item-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .bid-checklist__footer {
+    flex-direction: column;
+  }
+
+  .bid-checklist__export-btn,
+  .bid-checklist__submit-btn {
+    justify-content: center;
+  }
+}

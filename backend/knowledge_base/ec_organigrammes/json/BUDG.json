@@ -1,0 +1,413 @@
+{
+  "dg_code": "BUDG",
+  "dg_name": "Budget",
+  "full_name": "Directorate-General for Budget",
+  "date_of_effect": "2025-08-01",
+  "commissioner": {
+    "name": "Piotr Serafin",
+    "title": "Commissioner"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "Stéphanie Riso",
+      "position": "Director-General",
+      "assistants": [
+        {
+          "name": "Leena Groen",
+          "role": "Assistant"
+        },
+        {
+          "name": "Guido Gherbo",
+          "role": "Assistant"
+        }
+      ]
+    },
+    "deputy_director_general": {
+      "name": "Juan Casany Bernardo",
+      "position": "Deputy Director-General",
+      "responsibility": "Financial Rules, Controls & Reporting"
+    },
+    "advisers": [
+      {
+        "name": "Hors Classe Adviser",
+        "title": "Hors Classe Adviser",
+        "area": "Budget Transparency",
+        "role": "SG.EUR/BUHL",
+        "status": "vacant"
+      },
+      {
+        "name": "Principal Adviser",
+        "title": "Principal Adviser",
+        "area": "Own Resources & Member State Experts",
+        "role": "G. Heisig/Baldersheim",
+        "status": "vacant"
+      },
+      {
+        "name": "Principal Adviser",
+        "title": "Principal Adviser",
+        "area": "Audit, Recovery & New Programmes",
+        "role": "I. Pricopi/Popescu"
+      },
+      {
+        "name": "Principal Adviser",
+        "title": "Principal Adviser",
+        "area": "Legal, Sectoral Issues & Public Procurement Support",
+        "role": "G. Liedo/Ballerdick"
+      }
+    ],
+    "chief_risk_officer": {
+      "name": "Ilpo Athanasokolu",
+      "position": "Chief Risk Officer"
+    }
+  },
+  "units": {
+    "budg_01": {
+      "code": "BUDG.01",
+      "name": "Risk Management",
+      "description": "Risk management"
+    },
+    "budg_02": {
+      "code": "BUDG.02",
+      "name": "Communication & Coordination",
+      "description": "Communication & Coordination"
+    }
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "BUDG.A",
+      "name": "Programming",
+      "director": {
+        "name": "Lenka Filipova",
+        "position": "Director"
+      },
+      "units": {
+        "a1": {
+          "code": "BUDG.A.1",
+          "name": "Budgetary Architecture & Management Information System",
+          "head_of_unit": {
+            "name": "Desiglava Vilanova",
+            "deputy": null
+          }
+        },
+        "a2": {
+          "code": "BUDG.A.2",
+          "name": "SME and Structural Policies",
+          "head_of_unit": {
+            "name": "Ismael Grauwen",
+            "deputy": null
+          }
+        },
+        "a3": {
+          "code": "BUDG.A.3",
+          "name": "Internal Policies",
+          "head_of_unit": {
+            "name": "Mariapia Bellardi",
+            "deputy": null
+          }
+        },
+        "a4": {
+          "code": "BUDG.A.4",
+          "name": "External Policies",
+          "head_of_unit": {
+            "name": "Carola Grakau",
+            "deputy": null
+          }
+        },
+        "a5": {
+          "code": "BUDG.A.5",
+          "name": "Agriculture",
+          "head_of_unit": {
+            "name": "Bozalinda Birzei (acting)",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_b": {
+      "code": "BUDG.B",
+      "name": "Revenue and National, Financial and Legal Issues",
+      "director": {
+        "name": "Christine Carnbury",
+        "position": "Director"
+      },
+      "units": {
+        "b1": {
+          "code": "BUDG.B.1",
+          "name": "Legal, Financial Economics (I)",
+          "head_of_unit": {
+            "name": "Ledorado Aleiu Moronta",
+            "deputy": null
+          }
+        },
+        "b2": {
+          "code": "BUDG.B.2",
+          "name": "Own Resources: Statistics and Issues for Europe Platform (STEP)",
+          "head_of_unit": {
+            "name": "Caroline Vandenberghe",
+            "deputy": "Vandenberge"
+          }
+        },
+        "b3": {
+          "code": "BUDG.B.3",
+          "name": "Revenue Policy and Management",
+          "head_of_unit": {
+            "name": "Virgil Bana",
+            "deputy": null
+          }
+        },
+        "b4": {
+          "code": "BUDG.B.4",
+          "name": "Recovery, Budgeting, Checks and Sanctions",
+          "head_of_unit": {
+            "name": "Tomas Czesre",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_c": {
+      "code": "BUDG.C",
+      "name": "Treasury, Accounting, Financial Systems",
+      "director": {
+        "name": "Maria Beatriz Lima Miranda (2)",
+        "position": "Director"
+      },
+      "units": {
+        "c1": {
+          "code": "BUDG.C.1",
+          "name": "Treasury Management",
+          "head_of_unit": {
+            "name": "Juan Jose Lopez Llano",
+            "deputy": null
+          }
+        },
+        "c2": {
+          "code": "BUDG.C.2",
+          "name": "Accounting",
+          "head_of_unit": {
+            "name": "Ricardo Roselade",
+            "deputy": null
+          }
+        },
+        "c3": {
+          "code": "BUDG.C.3",
+          "name": "Management of Legal Systems and Advanced Partners",
+          "head_of_unit": {
+            "name": "Nicolas Cianu",
+            "deputy": null
+          }
+        },
+        "c4": {
+          "code": "BUDG.C.4",
+          "name": "Revenue Collection and Control",
+          "head_of_unit": {
+            "name": "Paola Scasi",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_d": {
+      "code": "BUDG.D",
+      "name": "Treasury, Accountancy, Financial Systems and Interests",
+      "director": {
+        "name": "Michael Schappe (acting)",
+        "position": "Director"
+      },
+      "units": {
+        "d1": {
+          "code": "BUDG.D.1",
+          "name": "Cohesion Policy Monitoring, Financial and Interests",
+          "head_of_unit": {
+            "name": "Alessandro Malzana",
+            "deputy": null
+          }
+        },
+        "d2": {
+          "code": "BUDG.D.2",
+          "name": "Agriculture, Marine and Fisheries with the European Court of Auditors",
+          "head_of_unit": {
+            "name": "Maria Panaourgola (acting)",
+            "deputy": null
+          }
+        },
+        "d3": {
+          "code": "BUDG.D.3",
+          "name": "Contacts Systems",
+          "head_of_unit": {
+            "name": "Iolanda Marsilai",
+            "deputy": null
+          },
+          "marker": "Deputy to director"
+        },
+        "d4": {
+          "code": "BUDG.D.4",
+          "name": "Financial Reporting and Data",
+          "head_of_unit": {
+            "name": "Elena Lazdescu",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_e": {
+      "code": "BUDG.E",
+      "name": "Audit and Internal Service",
+      "director": {
+        "name": "Michiel Garnaat",
+        "position": "Director"
+      },
+      "units": {
+        "e1": {
+          "code": "BUDG.E.1",
+          "name": "Monitoring, Continuous Accounting Framework",
+          "head_of_unit": {
+            "name": "Yana Angelova",
+            "deputy": null
+          }
+        },
+        "e2": {
+          "code": "BUDG.E.2",
+          "name": "Financial Rules: Direct Management",
+          "head_of_unit": {
+            "name": "Rosica Velakeva",
+            "deputy": null
+          }
+        },
+        "e3": {
+          "code": "BUDG.E.3",
+          "name": "Legal Affairs of Operations in Africa",
+          "head_of_unit": {
+            "name": "Olena Markkala (1)",
+            "deputy": null
+          }
+        },
+        "e4": {
+          "code": "BUDG.E.4",
+          "name": "Knowledge Management",
+          "head_of_unit": {
+            "name": "Algina Mandis (1)",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_f": {
+      "code": "BUDG.F",
+      "name": "Audit and Relation Operations",
+      "director": {
+        "name": "Karl Anian",
+        "position": "Director"
+      },
+      "units": {
+        "f1": {
+          "code": "BUDG.F.1",
+          "name": "Relation Guarantees, Accounting Framework - Continuity Operations",
+          "head_of_unit": {
+            "name": "Christian Markkela",
+            "deputy": null
+          }
+        },
+        "f2": {
+          "code": "BUDG.F.2",
+          "name": "Assets, Legal Continuity Committees, Financial Services & Info Reporting: Data Choice",
+          "head_of_unit": {
+            "name": "Marco Thelaroma",
+            "deputy": null
+          }
+        },
+        "f3": {
+          "code": "BUDG.F.3",
+          "name": "Support for Shared Actions, Finance Europe Affairs",
+          "head_of_unit": {
+            "name": "Ramon Trincarnosa",
+            "deputy": null
+          }
+        },
+        "f4": {
+          "code": "BUDG.F.4",
+          "name": "Investment",
+          "head_of_unit": {
+            "name": "Dimitris Papandreou (acting)",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_g": {
+      "code": "BUDG.G",
+      "name": "Indirect Management",
+      "director": {
+        "name": "Hans Parmentier (acting)",
+        "position": "Director"
+      },
+      "units": {
+        "g1": {
+          "code": "BUDG.G.1",
+          "name": "EU Compliance National, Internal Control Systems",
+          "head_of_unit": {
+            "name": "Marco Arandelli",
+            "deputy": null
+          }
+        },
+        "g2": {
+          "code": "BUDG.G.2",
+          "name": "Flood Service Management for Community Funds & European Social Systems",
+          "head_of_unit": {
+            "name": "Vincenza Deremer",
+            "deputy": null
+          }
+        },
+        "g3": {
+          "code": "BUDG.G.3",
+          "name": "Good Service Management, Accounting and Reporting - Track Office",
+          "head_of_unit": {
+            "name": "Cassus Cairo Sanborn",
+            "deputy": null
+          }
+        },
+        "g4": {
+          "code": "BUDG.G.4",
+          "name": "EU Compliance Tools and Infrastructure",
+          "head_of_unit": {
+            "name": "Marc Panormois",
+            "deputy": null
+          },
+          "marker": "Deputy to director"
+        }
+      }
+    },
+    "directorate_h": {
+      "code": "BUDG.H",
+      "name": "Accounting Systems, Internal Control Systems",
+      "director": {
+        "name": "Joanna Sanna",
+        "position": "Director"
+      },
+      "units": {
+        "h1": {
+          "code": "BUDG.H.1",
+          "name": "EU Climate, Nature, Environment, Animals and Forestry",
+          "head_of_unit": {
+            "name": "Stefano Actalini",
+            "deputy": null
+          }
+        },
+        "h2": {
+          "code": "BUDG.H.2",
+          "name": "Natural Growth Tax Focus on Regions and Accounting Systems",
+          "head_of_unit": {
+            "name": "Virginie Delezelle",
+            "deputy": null
+          }
+        }
+      }
+    }
+  },
+  "notes": [
+    "(1) The Chief Risk Officer (CRO) reports directly to the Commissioner in charge of budget",
+    "(2) The Chief Accountant of the Commission",
+    "(3) The Chief Economist and the HR Correspondent have a functional reporting line to the Director-General",
+    "(4) The Head of Unit of BUDG.C.4 leads the informal task force on communication and knowledge management in DG BUDG"
+  ]
+}

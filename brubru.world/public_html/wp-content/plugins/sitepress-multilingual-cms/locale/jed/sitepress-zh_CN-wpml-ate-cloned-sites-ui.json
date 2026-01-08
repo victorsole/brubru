@@ -1,0 +1,222 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "Close": [
+            ""
+         ],
+         "Please take a screenshot of this message and report this issue to <a>WPML support</a>.": [
+            ""
+         ],
+         "WPML has automatically unregistered your site as part of this wizard. After you close it, you’ll see a prompt to register the site again. This is expected, your content and translations are safe.": [
+            "WPML 已在此向导中自动取消注册您的网站。关闭向导后，您将看到提示再次注册该网站。这是预期的，您的内容和翻译是安全的。"
+         ],
+         "You’re all set": [
+            ""
+         ],
+         "This site is a copy of the original site %s and it doesn’t currently have any automatic translation credits.": [
+            "此网站是原始网站 %s 的副本，目前没有任何自动翻译额度。"
+         ],
+         "If you’d like to use automatic translation here in the future, you can either <a1>add credits</a1> or <a2>share them from the original site</a2>.": [
+            "如果您将来想在此处使用自动翻译，可以<a1>添加额度</a1>或<a2>从原始网站共享额度</a2>。"
+         ],
+         "There was an error checking for credits to share. Please take a screenshot of this message and report it in <a>WPML support</a>.": [
+            ""
+         ],
+         "To link %s and %s so they share automatic translation credits, follow these steps:": [
+            "要链接 %s 和 %s 以共享自动翻译额度，请按以下步骤操作："
+         ],
+         "Open <a>this link</a> to access the original site’s admin area. (You can’t access this screen by visiting %s directly.)": [
+            "打开<a>此链接</a>以访问原始网站的管理区域。（您无法通过直接访问 %s 来访问此页面。）"
+         ],
+         "Click <b>Copy migration code</b> on that page.": [
+            "在该页面上点击<b>复制迁移代码</b>。"
+         ],
+         "Paste the code below to complete the connection.": [
+            "将代码粘贴到下方以完成连接。"
+         ],
+         "Migration code": [
+            ""
+         ],
+         "Continue": [
+            ""
+         ],
+         "Go back": [
+            ""
+         ],
+         "Connect Automatic Translation Credits": [
+            "连接自动翻译额度"
+         ],
+         "WPML was unable to copy your site's translations, translation memory, and glossary to this new URL.": [
+            ""
+         ],
+         "Error with copying translation information to new URL": [
+            ""
+         ],
+         "This site and its copy on %s are now sharing automatic translation credits.": [
+            "此网站和其在 %s 上的副本现在正在共享自动翻译额度。"
+         ],
+         "Any credits you add to one site will be available on both. If you stop using this site, your credits will remain safe.": [
+            "您添加到一个网站的任何额度都将在两个网站上可用。如果您停止使用此网站，您的额度将保持安全。"
+         ],
+         "WPML was unable to connect your old and new URLs to share automatic translation credits.": [
+            ""
+         ],
+         "Error with sharing automatic translation credits": [
+            ""
+         ],
+         "The site on %s has %d credits for automatic translation. Do you want to share these credits with this new site %s?": [
+            "%s 上的网站有 %d 自动翻译额度。您想与这个新网站 %s 共享这些额度吗？"
+         ],
+         "The site on %s has a pay-as-you-go subscription for automatic translation. Do you want to share these credits between %s and this new location (%s)?": [
+            ""
+         ],
+         "Yes (recommended)": [
+            ""
+         ],
+         "In the next step, you’ll approve the use of same credits on both sites.": [
+            "在下一步中，您将批准在两个网站上使用相同的额度。"
+         ],
+         "No": [
+            ""
+         ],
+         "You’ll need to assign new credits or set up pay-as-you-go.": [
+            "您需要分配新的额度或设置按使用付费。"
+         ],
+         "What happens when you share credits between sites?": [
+            "在网站之间共享额度会发生什么？"
+         ],
+         "Translation credits for this site": [
+            ""
+         ],
+         "WPML detected a change in your site’s URL": [
+            "WPML 检测到您的网站 URL 发生了变化"
+         ],
+         "You can now continue translating content on this site as usual.": [
+            "您现在可以继续像往常一样在此网站上翻译内容。"
+         ],
+         "Just a reminder: there shouldn’t be another copy of this site running at %s. If there is, automatic translation won’t work correctly on that site.": [
+            "只是提醒一下：在 %s 上不应该有此网站的另一个副本在运行。如果有，自动翻译在那个网站上将无法正常工作。"
+         ],
+         "You indicated that the original site at %s is no longer active. This means:": [
+            "您表示原始网站 %s 已不再活跃。这意味着："
+         ],
+         "Automatic translation will no longer work on the old site": [
+            "自动翻译将不再在旧网站上工作"
+         ],
+         "Accessing the old site may trigger warnings on this site": [
+            "访问旧网站可能会在此网站上触发警告"
+         ],
+         "Please confirm:": [
+            "请确认："
+         ],
+         "I understand and confirm that <b>%s</b> is no longer in use.": [
+            "我理解并确认<b>%s</b>不再使用。"
+         ],
+         "Back": [
+            ""
+         ],
+         "Please Confirm": [
+            "请确认"
+         ],
+         "WPML was unable to update our records with your new URL.": [
+            ""
+         ],
+         "Error with moving translation information to new URL": [
+            ""
+         ],
+         "It looks like this site was previously at %s and is now running on %s.": [
+            "看起来这个网站之前位于 %s，现在运行在 %s 上。"
+         ],
+         "Is the original site still available at %s?": [
+            "原始网站在 %s 上是否仍然可用？"
+         ],
+         "Yes": [
+            "是"
+         ],
+         "The original site is still running and this is just a copy of the original site": [
+            "原始网站仍在运行，这只是原始网站的副本"
+         ],
+         "I moved the site to this new address and this is now the main site": [
+            "我将网站移到了这个新地址，这现在是主要网站"
+         ],
+         "WPML Detected a New Site Address": [
+            "WPML 检测到新的网站地址"
+         ],
+         "How to manage translations when migrating from development to production": [
+            "从开发环境迁移到生产环境时如何管理翻译"
+         ],
+         "Looks like this site is a copy of a different site, or moved to a different URL. Please contact your translation manager to update Translation Management plugin configuration.": [
+            "看起来这个网站是另一个网站的副本，或者已移动到不同的 URL。请联系您的翻译管理员更新翻译管理插件配置。"
+         ],
+         "Site Moved or Copied - Action Required": [
+            "网站已移动或复制 - 需要采取行动"
+         ],
+         "You or someone else moved this site to %s. Please keep in mind that:": [
+            "您或其他人已将此网站移动到 %s。请记住："
+         ],
+         "Translations that you do at %s will not appear on this site.": [
+            "您在 %s 上进行的翻译不会出现在此网站上。"
+         ],
+         "You cannot edit translations on this site.": [
+            "您无法在此网站上编辑翻译。"
+         ],
+         "The site at %s is using the same credits for automatic translation as this site.": [
+            "%s 上的网站正在使用与此网站相同的自动翻译额度。"
+         ],
+         "If you didn't intend to move this site to %s, you can <a>indicate that this site should be at %s</a>.": [
+            "如果您不打算将此网站移动到 %s，您可以<a>指明此网站应该位于 %s</a>。"
+         ],
+         "This site has moved to a new location": [
+            "此网站已移动到新位置"
+         ],
+         "If you prefer not to move this site, you can <a>mark it as a copy</a> and enable automatic translation for it.": [
+            "如果您不想移动此网站，您可以<a>将其标记为副本</a>并为其启用自动翻译。"
+         ],
+         "Moving the site back here will mean that you will be able to translate on this domain again, but you will not be able to update translations at %s.": [
+            "将网站移回此处意味着您将能够再次在此域名上进行翻译，但您将无法在 %s 上更新翻译。"
+         ],
+         "Yes - move back here": [
+            "是 - 移回此处"
+         ],
+         "No - keep the site on %s": [
+            "否 - 保持网站在 %s"
+         ],
+         "Are you sure that this site should run on %s and not %s?": [
+            "您确定此网站应该在 %s 而不是 %s 上运行吗？"
+         ],
+         "WPML noticed that your site is being accessed from a different domain or URL.": [
+            "WPML 注意到您的网站正从不同的域名或 URL 访问。"
+         ],
+         "To make sure everything continues working correctly, including automatic translation and site registration, we need to verify and update your site settings.": [
+            "为确保一切继续正常工作，包括自动翻译和网站注册，我们需要验证并更新您的网站设置。"
+         ],
+         "This will only take a moment.": [
+            "这只需要一小会儿。"
+         ],
+         "Start Migration": [
+            "开始迁移"
+         ],
+         "If you didn't change your main domain and only logged in through a secondary domain, select this option.": [
+            "如果您没有更改主域名，只是通过次要域名登录，请选择此选项。"
+         ],
+         "Something went wrong": [
+            "出现了问题"
+         ],
+         "I just logged in from a secondary domain": [
+            "我只是从次要域名登录"
+         ],
+         "You're all set!": [
+            "一切就绪！"
+         ],
+         "This domain is now registered as a secondary domain and WPML will recognize it correctly.": [
+            "此域名现已注册为次要域名，WPML 将正确识别它。"
+         ]
+      }
+   }
+}

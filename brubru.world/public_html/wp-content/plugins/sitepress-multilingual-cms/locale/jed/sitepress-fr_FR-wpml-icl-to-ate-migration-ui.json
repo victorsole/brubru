@@ -1,0 +1,258 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr"
+         },
+         "From:": [
+            "Langue source :"
+         ],
+         "--Choose language--": [
+            "--Choisir une langue--"
+         ],
+         "to:": [
+            "Langue cible :"
+         ],
+         "Select %s": [
+            "Sélectionne %s"
+         ],
+         "Set language pair(s) for Translator %s:": [
+            "Définir la/les combinaison(s) linguistique(s) pour le traducteur %s :"
+         ],
+         "+ Add more language pairs for this translator": [
+            "+ Ajouter plus de combinaisons linguistiques à ce traducteur"
+         ],
+         "Translation Memory was successfully copied to Advanced Translation Editor.": [
+            "La mémoire de traduction a été copiée avec succès vers l’éditeur de traduction avancée."
+         ],
+         "Deactivate ICanLocalize.com as Translation Service on this site": [
+            "Désactiver ICanLocalize.com comme service de traduction sur ce site"
+         ],
+         "Missing a translator? Or were new jobs since the last copy of the Translation Memory?": [
+            "Il vous manque un traducteur ? Ou de nouveaux travaux sont apparus depuis la dernière copie de mémoire de traduction ?"
+         ],
+         "Enter here your ICanLocalize authentication details.": [
+            "Saisissez ici vos informations d’authentification ICanLocalize."
+         ],
+         "API Token:": [
+            "Jeton API :"
+         ],
+         "Please enter valid value for ICL token.": [
+            "Veuillez saisir une valeur valide pour le jeton ICL."
+         ],
+         "Enter ICL API token here": [
+            "Saisir le jeton API ICL ici"
+         ],
+         "Submit": [
+            "Envoi"
+         ],
+         "Sign up": [
+            "S'inscrire"
+         ],
+         "to ICanLocalize to receive your API token.": [
+            "à ICanLocalize afin de recevoir votre jeton API."
+         ],
+         "Already have an account? Login and": [
+            "Vous avez déjà un compte ? Connectez-vous et"
+         ],
+         "get your token.": [
+            "recevez votre jeton."
+         ],
+         "Copy new Translation Memory to Advanced Translation Memory": [
+            "Copier la nouvelle mémoire de traduction dans la mémoire de traduction avancée"
+         ],
+         "Import translation memory": [
+            "Importer la mémoire de traduction"
+         ],
+         "ICanLocalize is already deactivated on this site": [
+            "ICanLocalize a déjà été désactivé sur ce site"
+         ],
+         "You can still import Translators or Copy Translation Memory to Advanced Translator Editor": [
+            "Vous pouvez toujours importer des traducteurs ou bien copier la mémoire de traduction dans l’éditeur de traduction avancée"
+         ],
+         "Move from ICanLocalize.com to Advanced Translation Editor": [
+            "Passer d'ICanLocalize.com à l'éditeur de traduction avancé"
+         ],
+         "Import translators": [
+            "Importer des traducteurs"
+         ],
+         "Come back": [
+            "Revenir"
+         ],
+         "Cancel": [
+            "Annuler"
+         ],
+         "Save": [
+            "Enregistrer"
+         ],
+         "Name": [
+            "Nom"
+         ],
+         "Language Pairs": [
+            "Combinaisons linguistiques"
+         ],
+         "Not supported pairs:": [
+            "Combinaisons non prises en charge :"
+         ],
+         "ICanLocalize.com deactivated": [
+            "ICanLocalize.com désactivé"
+         ],
+         "Translate memory is imported": [
+            "La mémoire de traduction est importée"
+         ],
+         "There is no translators in ICL": [
+            "Il n'y a pas de traducteurs dans ICL"
+         ],
+         "Translators saved": [
+            "Traducteurs enregistrés"
+         ],
+         "%s file upload failed.": [
+            "Le téléchargement du fichier %s a échoué."
+         ],
+         "Flag": [
+            "Drapeau"
+         ],
+         "Flag file": [
+            "Fichier de drapeau"
+         ],
+         "You just added  language. Next, select it as the site's default language or a translation language.": [
+            "Vous venez d'ajouter une langue. Ensuite, sélectionnez-la comme langue par défaut du site ou comme langue de traduction."
+         ],
+         "Language added": [
+            "Langue ajoutée"
+         ],
+         "The value \"%s\" already exists": [
+            "La valeur « %s » existe déjà"
+         ],
+         "Add a new language": [
+            "Ajouter une nouvelle langue"
+         ],
+         "Create a country-specific language by choosing the general language from the list below. Then, choose the country it should be localized for.": [
+            "Créez une langue spécifique à un pays en choisissant la langue générale dans la liste ci-dessous. Ensuite, choisissez le pays pour lequel elle doit être localisée."
+         ],
+         "By choosing a combination that already exists in the database, WPML can help fill out the necessary fields. Read more about <AddingACustomLanguageLink />.": [
+            "En choisissant une combinaison qui existe déjà dans la base de données, WPML peut vous aider à remplir les champs nécessaires. En savoir plus sur <AddingACustomLanguageLink />."
+         ],
+         "Cannot find?": [
+            "Vous ne trouvez pas ?"
+         ],
+         "Click here": [
+            "Cliquez ici"
+         ],
+         "The wrong format. It may contain only small letters and \"-\". E.g: \"fr\" , \"pt-br\", \"zh-hans\"": [
+            "Le format est incorrect. Il ne peut contenir que des lettres minuscules et « - ». Par exemple : « fr », « pt-br », « zh-hans »"
+         ],
+         "Language": [
+            "Langue"
+         ],
+         "Location": [
+            "Emplacement"
+         ],
+         "Code": [
+            "Code"
+         ],
+         "The language will not be supported by automatic translations": [
+            "La langue ne sera pas prise en charge par les traductions automatiques"
+         ],
+         "Language mapping": [
+            "Correspondance de langue"
+         ],
+         "Don't map this language": [
+            "Ne pas faire correspondre cette langue"
+         ],
+         "Default locale": [
+            "Locale par défaut"
+         ],
+         "The wrong format. It may contain only small letters and \"_\". E.g: \"de\" , \"de_DE\", \"zh_Hant_TW\"": [
+            "Le format est incorrect. Il ne peut contenir que des lettres minuscules et « _ ». Par exemple : « de », « de_DE », « zh_Hant_TW »"
+         ],
+         "hreflang": [
+            "hreflang"
+         ],
+         "Encode url?": [
+            "Encoder l'URL ?"
+         ],
+         "Flags must be:": [
+            "Les drapeaux doivent être :"
+         ],
+         "NO": [
+            "NON"
+         ],
+         "YES": [
+            "OUI"
+         ],
+         " (required)": [
+            " (requis)"
+         ],
+         "Please fill in the field": [
+            "Veuillez remplir le champ"
+         ],
+         "PNG, SVG, or JPG files": [
+            "Fichiers PNG, SVG ou JPG"
+         ],
+         "Save language": [
+            "Enregistrer la langue"
+         ],
+         "18 x 12 pixels": [
+            "18 x 12 pixels"
+         ],
+         "Read more about ": [
+            "En savoir plus sur "
+         ],
+         "The name of your language as it will appear on your site's language switcher.": [
+            "Le nom de votre langue tel qu'il apparaîtra dans le sélecteur de langue de votre site."
+         ],
+         "A unique value that identifies the language in the database and URL. Once saved, the language code cannot be changed.": [
+            "Une valeur unique qui identifie la langue dans la base de données et l'URL. Une fois enregistré, le code de langue ne peut pas être modifié."
+         ],
+         "If your custom language is similar to an existing language, you can use the existing language's spellcheck and automatic translation. For example, if your custom language is Swiss-German, you can map to German as the language to use for spellcheck and automatic translation. If you don't map your custom language to an existing language, spellcheck and automatic translation features will be unavailable in that language.": [
+            "Si votre langue personnalisée est similaire à une langue existante, vous pouvez utiliser la vérification orthographique et la traduction automatique de la langue existante. Par exemple, si votre langue personnalisée est le suisse-allemand, vous pouvez la faire correspondre à l'allemand comme langue à utiliser pour la vérification orthographique et la traduction automatique. Si vous ne faites pas correspondre votre langue personnalisée à une langue existante, les fonctionnalités de vérification orthographique et de traduction automatique ne seront pas disponibles dans cette langue."
+         ],
+         "The value WPML checks when loading translations from MO and PO files. The default locale is included in the filenames in your /wp-content/languages/ folder in your WordPress setup.": [
+            "La valeur que WPML vérifie lors du chargement des traductions à partir des fichiers MO et PO. La locale par défaut est incluse dans les noms de fichiers de votre dossier  /wp-content/languages/ dans votre installation WordPress."
+         ],
+         "Google uses the hreflang attribute to direct users to sites in their relevant language and location. Examples:": [
+            "Google utilise l'attribut hreflang pour diriger les utilisateurs vers des sites dans leur langue et leur emplacement pertinents. Exemples :"
+         ],
+         "All English-speaking users: en": [
+            "Tous les utilisateurs anglophones : en"
+         ],
+         "English for UK users: en-gb": [
+            "Anglais pour les utilisateurs du Royaume-Uni : en-gb"
+         ],
+         "English for US users: en-us": [
+            "Anglais pour les utilisateurs des États-Unis : en-us"
+         ],
+         "Determines if URLs in this language are encoded or use ASCII characters (if unsure, leave it as \"No\").": [
+            "Détermine si les URLs dans cette langue sont encodées ou utilisent des caractères ASCII (en cas de doute, laissez-le sur « Non »)."
+         ],
+         "adding a custom language": [
+            "ajout d'une langue personnalisée"
+         ],
+         "What are the languages of your site?": [
+            "Quelles sont les langues de votre site ?"
+         ],
+         "Default language": [
+            "Langue par défaut"
+         ],
+         "What is the current language of your website?": [
+            "Quelle est la langue actuelle de votre site web ?"
+         ],
+         "Translation languages": [
+            "Langues de traduction"
+         ],
+         "Which languages do you want to translate your site into?": [
+            "Dans quelles langues voulez-vous traduire votre site ?"
+         ],
+         "If you cannot find languages that you need in the list": [
+            "Si vous ne trouvez pas les langues dont vous avez besoin dans la liste"
+         ],
+         "create a custom language": [
+            "créer une langue personnalisée"
+         ]
+      }
+   }
+}

@@ -1,0 +1,243 @@
+{
+  "dg_code": "ENEST",
+  "dg_name": "Enlargement and Eastern Neighbourhood",
+  "commissioner": "Marta Kos",
+  "date_of_effect": "2025-11-01",
+  "director_general": {
+    "name": "Gert Jan Koopman",
+    "assistants": [
+      "Katarzyna Szczepanska",
+      "Aleksandra Tomczak"
+    ]
+  },
+  "deputy_director_general": {
+    "name": "Gert Jan Koopman (Acting)",
+    "responsibilities": "Overall coordination of the strategy for Security and Migration, and the Eastern Neighbourhood and Türkiye"
+  },
+  "principal_adviser": {
+    "name": "Andris Ķesteris",
+    "area": "Civil Society and Media"
+  },
+  "directorates": [
+    {
+      "code": "ENEST.01",
+      "name": "Strategic Coordination & Communication",
+      "director": "Natalie Pauwels",
+      "deputy": "Simeona Manova"
+    },
+    {
+      "code": "ENEST.A",
+      "name": "Enlargement Coordination, Strategy, & Investments",
+      "director": "Mathieu Bousquet",
+      "units": [
+        {
+          "code": "ENEST.A.1",
+          "name": "Enlargement Strategy & Coordination",
+          "head": "Thomas Hagleitner",
+          "deputy": "Giulio Venneri"
+        },
+        {
+          "code": "ENEST.A.2",
+          "name": "Strategic Programming & Performance",
+          "head": "Bernhard Windisch",
+          "deputy": "Hillen Francke"
+        },
+        {
+          "code": "ENEST.A.3",
+          "name": "Private Sector Engagement",
+          "head": "Hoa-Binh Adjemian",
+          "deputy": "Maurits-Jan Prinz"
+        },
+        {
+          "code": "ENEST.A.4",
+          "name": "IFIs & Investments",
+          "head": "Barbara Banki",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "ENEST.A.5",
+          "name": "Institution Building, TAIEX, Twinning",
+          "head": "Anna Vezyroglou",
+          "deputy": "Francisco Lopez Menchero"
+        }
+      ],
+      "adviser": {
+        "name": "Maria Asenius",
+        "area": "Economic Development"
+      }
+    },
+    {
+      "code": "ENEST.B",
+      "name": "Western Balkans",
+      "director": "Valentina Superti",
+      "units": [
+        {
+          "code": "ENEST.B.1",
+          "name": "Regional Strategy & Investments",
+          "head": "Christophe Galand",
+          "deputy": "Enrica Chiozza"
+        },
+        {
+          "code": "ENEST.B.2",
+          "name": "Serbia, Kosovo",
+          "head": "Jiri Plecity",
+          "deputy": "Julien Crampes"
+        },
+        {
+          "code": "ENEST.B.3",
+          "name": "Albania, North Macedonia",
+          "head": "Sigrid Brettel",
+          "deputy": "Hubert Duhot"
+        },
+        {
+          "code": "ENEST.B.4",
+          "name": "Montenegro, Bosnia and Herzegovina",
+          "head": "Barbara Jesus-Gimeno",
+          "deputy": "Heinke Veit"
+        }
+      ],
+      "adviser": {
+        "name": "Wojciech Kowalski",
+        "area": "Western Balkans"
+      },
+      "note": "This designation is without prejudice to positions on status and is in line with UNSCR 1244/1999 and the ICJ Opinion on the Kosovo Declaration of Independence"
+    },
+    {
+      "code": "ENEST.C",
+      "name": "Neighbourhood East & Türkiye",
+      "director": "Adrienn Kiraly",
+      "units": [
+        {
+          "code": "ENEST.C.1",
+          "name": "Regional Strategy & Investments",
+          "head": "Diana Jablonska",
+          "deputy": "Michael Voegele"
+        },
+        {
+          "code": "ENEST.C.2",
+          "name": "Moldova",
+          "head": "Allan Jones",
+          "deputy": "Septimiu Szabo"
+        },
+        {
+          "code": "ENEST.C.3",
+          "name": "Türkiye",
+          "head": "Antoine Colombani",
+          "deputy": "Katarzyna Marzec"
+        },
+        {
+          "code": "ENEST.C.4",
+          "name": "Georgia, South Caucasus, East",
+          "head": "David Cullen",
+          "deputy": "Isabelle Richard"
+        },
+        {
+          "code": "ENEST.C.DEL.TÜRKIYE",
+          "name": "Head of Unit (Operations)",
+          "head": "Maria Luisa Wyganowski"
+        }
+      ],
+      "adviser": {
+        "name": "Marta García Fidalgo",
+        "area": "Roma Policy"
+      }
+    },
+    {
+      "code": "ENEST.D",
+      "name": "Ukraine Service",
+      "director": "Anna Jarosz-Friis",
+      "units": [
+        {
+          "code": "ENEST.D.1",
+          "name": "Reconstruction & Accession",
+          "head": "Elena Visnar Malinovska",
+          "deputy": "Lukas Vesely"
+        },
+        {
+          "code": "ENEST.D.2",
+          "name": "Economic & Sectoral Policies",
+          "head": "Benoit Mesnard",
+          "deputy": "Peter Polajnar"
+        },
+        {
+          "code": "ENEST.D.3",
+          "name": "Governance, Rule of Law, Financial Assistance",
+          "head": "Wolfgang Nozar",
+          "deputy": "Helena Marrez"
+        },
+        {
+          "code": "ENEST.D.TF",
+          "name": "Secretariat of the Ukraine Donor Platform",
+          "head": "Simon O'Connor"
+        },
+        {
+          "code": "ENEST.D.DEL.UKRAINE",
+          "name": "Head of Unit (Operations)",
+          "head": "Stefan Schleuning"
+        }
+      ],
+      "note": "This function includes a specific direct reporting line to the President as regards the responsibilities linked to the Ukraine Service"
+    },
+    {
+      "code": "ENEST.R",
+      "name": "Resources",
+      "director": "Victoria Gil Casado",
+      "units": [
+        {
+          "code": "ENEST.R.1",
+          "name": "Resource Planning and IT",
+          "head": "Fanny Marchal",
+          "deputy": "Dimitar Djambazki"
+        },
+        {
+          "code": "ENEST.R.2",
+          "name": "Legal, Transparency, Security",
+          "head": "Nathalie Thiberge",
+          "deputy": "Mateja Munda"
+        },
+        {
+          "code": "ENEST.R.3",
+          "name": "Audit & Internal Control",
+          "head": "Christelle Goulard",
+          "deputy": "Aurora Palko"
+        },
+        {
+          "code": "ENEST.R.4",
+          "name": "Contracts & Finance",
+          "head": "Bernard San Emeterio",
+          "deputy": "Janina Mank"
+        }
+      ],
+      "hr_correspondent": {
+        "name": "Wivica Stagell"
+      },
+      "note": "The HR Correspondent, Wivica Stagell, and the Local Customer Support. The Chief Confidential Counsellor has a direct reporting line to the Member of the Commission responsible for Budget and Administration for all responsibilities defined in Commission Decision C(2023)8630."
+    },
+    {
+      "code": "COMMON_UNIT_INTPA_ENEST_MENA",
+      "name": "Risk Management",
+      "head": "Torsten Ewerbeck",
+      "deputy": "Celine Maertens"
+    }
+  ],
+  "seconded_managers": [
+    "Simon Mordue (seconded as Chief Diplomatic Adviser to the President's Cabinet)",
+    "Marlene Madsen (seconded as Deputy Head of Cabinet of Ms Virkkunen)",
+    "Vassilis Maragos (seconded as HoD Armenia)",
+    "Katarina Mathernova (seconded as HoD Ukraine)",
+    "Lawrence Meredith (seconded as HoD New Zealand)",
+    "Michael Miller (seconded as HoD Bangladesh)"
+  ],
+  "entities_with_staff_in_delegations": [
+    "ENEST.B.2",
+    "ENEST.B.3",
+    "ENEST.B.4",
+    "ENEST.C.2",
+    "ENEST.C.3",
+    "ENEST.C.4",
+    "ENEST.D.2",
+    "ENEST.D.3",
+    "ENEST.R.1",
+    "ENEST.R.4"
+  ]
+}

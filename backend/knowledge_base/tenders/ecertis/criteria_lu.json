@@ -1,0 +1,1943 @@
+{
+  "country_code": "lu",
+  "country_name": "Luxembourg",
+  "extraction_date": "2025-11-27T12:25:45.382659",
+  "criteria_count": 13,
+  "criteria": [
+    {
+      "Id": {
+        "value": "96daa7ce-8018-48d4-bf87-2a1cb723fd90"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Assets being administered by liquidator",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Are the assets of the economic operator being administered by a liquidator or by the court? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (3), letter b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "57ca9f04-d182-4853-a6f7-433f90978812"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "854d9c71-9b8d-47f4-982b-6342b397a7a2"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of non-registration of a judicial decision",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "5"
+              },
+              "FeeAmount": {
+                "value": 10.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://www.lbr.lu/mjrcs/jsp/IndexActionNotSecured.action?time=1531744910592"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Trade and Companies Register",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26206?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "8fda202a-0c37-41bb-9d7d-de3f49edbfcb"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Assets being administered by liquidator",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Are the assets of the economic operator being administered by a liquidator or by the court? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "aa0e45f8-1d7c-4bbb-b2a6-40e8d0b4de62"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Child labour and other forms of trafficking in human beings",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Money laundering or terrorist financing, as defined in Article 2 of Directive 2011/36/EU of the European Parliament and of the Council of 5 April 2011 on preventing and combating trafficking in human beings and protecting its victims, and replacing Council Framework Decision 2002/629/JHA (OJ L 101, 15.4.2011)",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (1), lettre f)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "8d825f9a-0385-4747-91b1-1f9cf5de27ab"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f0566a0e-d41c-40d8-a459-82beb9f7d649"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Extract of the criminal register No3",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://justice.public.lu/fr/organisation-justice/ministere-public/parquet-general.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Public Prosecutor's Office",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26210?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d789d01a-fe03-4ccd-9898-73f9cfa080d1"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Child labour and other forms of trafficking in human beings",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Money laundering or terrorist financing, as defined in Article 2 of Directive 2011/36/EU of the European Parliament and of the Council of 5 April 2011 on preventing and combating trafficking in human beings and protecting its victims, and replacing Council Framework Decision 2002/629/JHA (OJ L 101, 15.4.2011)",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "0a596b66-9b77-4703-aa80-1f4856e0da86"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Terrorist offences or offences linked to terrorist activities",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Terrorist offences or offences linked to terrorist activities, as defined in Articles 1 and 3 of Council Framework Decision of 13 June 2002 on combating terrorism (OJ L 164, 22.6.2002). This exclusion ground also includes inciting or aiding or abetting or attempting to commit an offence, as referred to in Article 4 of that Framework Decision",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (1), lettre d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "19aeb6f6-14a0-4483-80ee-6b0085a49a38"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f0566a0e-d41c-40d8-a459-82beb9f7d649"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Extract of the criminal register No3",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://justice.public.lu/fr/organisation-justice/ministere-public/parquet-general.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Public Prosecutor's Office",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26210?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d486fb70-86b3-4e75-97f2-0d71b5697c7d"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Terrorist offences or offences linked to terrorist activities",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Terrorist offences or offences linked to terrorist activities, as defined in Articles 1 and 3 of Council Framework Decision of 13 June 2002 on combating terrorism (OJ L 164, 22.6.2002). This exclusion ground also includes inciting or aiding or abetting or attempting to commit an offence, as referred to in Article 4 of that Framework Decision",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "87d879e5-a2cc-413d-a687-e3c0762c7f00"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+      },
+      "Name": {
+        "value": "Payment of social security contributions",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator breached its obligations relating to the payment social security contributions, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (2)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "f1a31fed-b8f6-4aff-84aa-8c5498f8e3a6"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "1cb1159a-4c21-45b4-ab18-5239b38b23a1"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate from the Centre of Information, Affiliation and Collection of Common Contributions of Social Security",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "5"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "http://www.ccss.lu"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Centre of Information, Affiliation and Collection of Common ",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26211?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "3 Months",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "7d85e333-bbab-49c0-be8d-c36d71a72f5e"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+        },
+        "Name": {
+          "value": "Payment of social security contributions",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator breached its obligations relating to the payment social security contributions, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "66ad82b6-fbe3-4ab6-8e44-46109883d53d"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Insolvency",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator the subject of insolvency or winding-up? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (3), letter b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "582ff8e0-c789-4006-9d76-5c33110b6733"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "854d9c71-9b8d-47f4-982b-6342b397a7a2"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of non-registration of a judicial decision",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "5"
+              },
+              "FeeAmount": {
+                "value": 10.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://www.lbr.lu/mjrcs/jsp/IndexActionNotSecured.action?time=1531744910592"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Trade and Companies Register",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26206?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "396f288a-e267-4c20-851a-ed4f7498f137"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Insolvency",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator the subject of insolvency or winding-up? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "4a4dd054-9942-408e-95cd-930b85a5a0e5"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Educational and professional qualifications",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The following educational and professional qualifications are held by the service provider or the contractor itself, and/or (depending on the requirements set out in the relevant notice or the procurement documents by its managerial staff.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "30 (2)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "2498f859-4fe8-441c-8260-fa032fc68abf"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "26dc57c0-4b3f-435d-ae40-4cc3b2083c58"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Authorisation of establishment",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {
+                "value": 24.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://meco.gouvernement.lu/fr.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Ministry of the Economy",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26209?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "07301031-2270-41af-8e7e-66fe0c777107"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Educational and professional qualifications",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The following educational and professional qualifications are held by the service provider or the contractor itself, and/or (depending on the requirements set out in the relevant notice or the procurement documents by its managerial staff.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "6a695fb4-fafb-4408-bff3-7fd2711dc14d"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Participation in a criminal organisation",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Participation in a criminal organisation, as defined in Article 2 of Council Framework Decision 2008/841/JHA of 24 October 2008 on the fight against organised crime",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (1), lettre a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "bcc25b0e-7fa2-4117-9e54-647778181b02"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f0566a0e-d41c-40d8-a459-82beb9f7d649"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Extract of the criminal register No3",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://justice.public.lu/fr/organisation-justice/ministere-public/parquet-general.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Public Prosecutor's Office",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26210?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "005eb9ed-1347-4ca3-bb29-9bc0db64e1ab"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Participation in a criminal organisation",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Participation in a criminal organisation, as defined in Article 2 of Council Framework Decision 2008/841/JHA of 24 October 2008 on the fight against organised crime",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "25d45bbb-3c4d-4336-89f9-606284f86ccc"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Corruption",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator itself or any person who is a member of its administrative, management or supervisory body or powers of representation, decision or control therein has been the subject of a conviction by final judgement for corruption, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable. Corruption, as defined in the relevant legislation.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "5"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (1), lettre b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "89174fef-c5f9-4edd-bc88-c0de84c2a45a"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f0566a0e-d41c-40d8-a459-82beb9f7d649"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Extract of the criminal register No3",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://justice.public.lu/fr/organisation-justice/ministere-public/parquet-general.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Public Prosecutor's Office",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26210?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "c27b7c4e-c837-4529-b867-ed55ce639db5"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Corruption",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator itself or any person who is a member of its administrative, management or supervisory body or powers of representation, decision or control therein has been the subject of a conviction by final judgement for corruption, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable. Corruption, as defined in the relevant legislation.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "5"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "a05bd29c-41af-4c0f-9ebe-f8c7cc2653be"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+      },
+      "Name": {
+        "value": "Payment of taxes",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator breached its obligations relating to the payment of taxes, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (2)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "9188fb37-1201-4448-b1a6-bac3bbede436"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "837ee510-74a4-4b58-9e12-740c4de89a55"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate from the Administration of Registration and Domains",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "2"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://pfi.public.lu/fr.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Administration of Registration, Domains and VAT",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26213?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "3 Months",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "aa289c39-00b9-4491-9196-347cde2b925d"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "36bf45de-304d-4a48-9de6-28c5555a87be"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate from the Administration of Direct Taxes",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "http://www.impotsdirects.public.lu/"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Administration of Direct Taxes",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26212?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "3 Months",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "b61bbeb7-690e-4a40-bc68-d6d4ecfaa3d4"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+        },
+        "Name": {
+          "value": "Payment of taxes",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator breached its obligations relating to the payment of taxes, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "a827a75a-f913-4104-888a-ba37021aeb30"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Fraud",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Fraud within the meaning of Article 1 of the Convention on the protection of the European Communities' financial interests (OJ C 316, 27.11.1995)",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (1), lettre c)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "770f899e-1801-4979-ab3a-40143d7ff129"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f0566a0e-d41c-40d8-a459-82beb9f7d649"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Extract of the criminal register No3",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://justice.public.lu/fr/organisation-justice/ministere-public/parquet-general.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Public Prosecutor's Office",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26210?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "297d2323-3ede-424e-94bc-a91561e6f320"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Fraud",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Fraud within the meaning of Article 1 of the Convention on the protection of the European Communities' financial interests (OJ C 316, 27.11.1995)",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "4323e43f-8e3d-4a84-adbc-1115d2142993"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Bankruptcy",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator bankrupt? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "29 (3), letter b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "cf284e78-32ba-4e72-bfd3-1a01e45d9812"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "854d9c71-9b8d-47f4-982b-6342b397a7a2"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of non-registration of a judicial decision",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "5"
+              },
+              "FeeAmount": {
+                "value": 10.0,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://www.lbr.lu/mjrcs/jsp/IndexActionNotSecured.action?time=1531744910592"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Trade and Companies Register",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26206?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d3732c09-7d62-4edc-a172-241da6636e7c"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Bankruptcy",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator bankrupt? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "1be307f3-db66-462a-a6c4-3cc3f3660af1"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Money laundering or terrorist financing",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator itself or any person who is a member of its administrative, management or supervisory body or has powers of representation, decision or control therein been the subject of a conviction by final judgement for money laundering or terrorist financing, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable? As defined in Article 1 of Directive 2005/60/EC of the European Parliament and of the Council of 26 October 2005 on the prevention of the use of the financial system for the purpose of money laundering and terrorist financing (OJ L 309, 25.11.2005, p. 15).",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "art 29 (1), lettre e)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "579f2fa5-5c23-4326-8dd5-532d52bec013"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f0566a0e-d41c-40d8-a459-82beb9f7d649"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Extract of the criminal register No3",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://justice.public.lu/fr/organisation-justice/ministere-public/parquet-general.html"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Public Prosecutor's Office",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26210?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "47112079-6fec-47a3-988f-e561668c3aef"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Money laundering or terrorist financing",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator itself or any person who is a member of its administrative, management or supervisory body or has powers of representation, decision or control therein been the subject of a conviction by final judgement for money laundering or terrorist financing, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable? As defined in Article 1 of Directive 2005/60/EC of the European Parliament and of the Council of 26 October 2005 on the prevention of the use of the financial system for the purpose of money laundering and terrorist financing (OJ L 309, 25.11.2005, p. 15).",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "d4692fed-23b6-47ef-ac5b-dc65a6b3b95f"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Suitability test"
+      },
+      "Name": {
+        "value": "Enrolment in a relevant professional register",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "It is enrolled in relevant professional registers kept in the Member State of its establishment as described in Annex XI of Directive 2014/24/EU; economic operators from certain Member States may have to comply with other requirements set out in that Annex.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Public Procurement Law 2018",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Public Procurement Law from the 8th April 2018",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "lu"
+          },
+          "Article": {
+            "value": "30 (2)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "http://www.marches.public.lu/fr/legislation"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "eaf2283c-08f9-4905-86a9-5ff3f873e000"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "6e3de453-0e9e-441e-a6ab-a72395677023"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Extract from trade and companies register",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": " ",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "2"
+              },
+              "FeeAmount": {
+                "value": 21.43,
+                "currencyID": "€"
+              },
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://www.lbr.lu/mjrcs/jsp/IndexActionNotSecured.action?time=1531744910592"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Trade and Companies Register",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "lu"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/26204?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "6ee55a59-6adb-4c3a-b89f-e62a7ad7be7f"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Suitability test"
+        },
+        "Name": {
+          "value": "Enrolment in a relevant professional register",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "It is enrolled in relevant professional registers kept in the Member State of its establishment as described in Annex XI of Directive 2014/24/EU; economic operators from certain Member States may have to comply with other requirements set out in that Annex.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    }
+  ]
+}

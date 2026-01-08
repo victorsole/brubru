@@ -1,0 +1,369 @@
+{
+  "cluster_id": 21,
+  "cluster_name": "SaaS & B2B Startup Compliance",
+  "policy_area": "Digital Policy and Digital Economy",
+  "description": "Data protection, security, and B2B software compliance essentials",
+  "applicability": "SaaS startups, B2B software, cloud services, enterprise software, data processors",
+  "extraction_date": "2026-01-01T12:54:04.531697",
+  "total_laws": 6,
+  "total_requirements": 21,
+  "requirements": [
+    {
+      "article": "Recital 4",
+      "requirement_text": "Due account should be taken of the divergent risk exposure of relevant entities, such as the criticality of the relevant entity, the risks to which it is exposed, the relevant entity's size and structure as well as the likelihood of occurrence of incidents and their severity, including their societal and economic impact, when complying with the technical and methodological requirements of cybersecurity risk-management measures set out in the Annex",
+      "applicable_entity": "DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "risk exposure",
+        "proportionality",
+        "technical requirements",
+        "cybersecurity risk-management"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 5",
+      "requirement_text": "Where relevant entities cannot implement some of the technical and the methodological requirements of the cybersecurity risk-management measures due to their size, those entities should be able to take other compensating measures that are suitable to achieve the purpose of those requirements",
+      "applicable_entity": "relevant entities (especially micro-sized entities)",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "compensating measures",
+        "proportionality",
+        "micro-sized entities",
+        "technical requirements"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 6",
+      "requirement_text": "Where a relevant entity considers it not appropriate, not applicable or not feasible for the relevant entity to apply certain technical and methodological requirements as provided for in the Annex to this Regulation, the relevant entity should in a comprehensible manner document its reasoning to that effect",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "documentation",
+        "reasoning",
+        "technical requirements",
+        "feasibility"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 9",
+      "requirement_text": "The relevant entities should establish a policy on the security of network and information systems as well as topic-specific policies, such as policies on access control, which should be coherent with the policy on the security of network and information systems",
+      "applicable_entity": "essential and important entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "security policy",
+        "network security",
+        "access control",
+        "information systems"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 9",
+      "requirement_text": "The policy on the security of network and information systems should be the highest-level document setting out the relevant entities' overall approach to their security of network and information systems and should be approved by the management bodies of the relevant entities",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "management approval",
+        "security policy",
+        "management bodies",
+        "network security"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 9",
+      "requirement_text": "The topic-specific policies should be approved by an appropriate level of management",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "management approval",
+        "topic-specific policies",
+        "security policies"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 11",
+      "requirement_text": "The relevant entities should establish and maintain an appropriate risk management framework",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "risk management framework",
+        "risk assessment",
+        "network security"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 11",
+      "requirement_text": "As a part of the risk management framework, the relevant entities should establish, implement and monitor a risk treatment plan",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "risk treatment plan",
+        "risk management",
+        "monitoring",
+        "implementation"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 12",
+      "requirement_text": "The relevant entities should monitor their network and information systems and should take actions to evaluate events, near misses and incidents",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "monitoring",
+        "incident detection",
+        "network security",
+        "events evaluation"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 14",
+      "requirement_text": "The relevant entities should establish a supply chain security policy which governs their relations with their direct suppliers and service providers",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "supply chain security",
+        "supplier relations",
+        "security policy",
+        "service providers"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 14",
+      "requirement_text": "These entities should specify in the contracts with their direct suppliers or service providers adequate security clauses, for example by requiring, where appropriate, cybersecurity risk-management measures according to Article 21(2) of Directive (EU) 2022/2555 or other similar legal requirements",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "contractual security clauses",
+        "supplier contracts",
+        "cybersecurity requirements",
+        "supply chain"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 15",
+      "requirement_text": "The relevant entities should regularly carry out security tests based on a dedicated policy and procedures to verify whether the cybersecurity risk-management measures are implemented and function properly",
+      "applicable_entity": "relevant entities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "security testing",
+        "penetration tests",
+        "vulnerability scanning",
+        "cybersecurity verification"
+      ],
+      "law_id": 4651,
+      "law_celex": "32024R2690",
+      "law_title": "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down rules for the application of Directive (EU) 2022/2555 as regards technical and methodological requirements of cybersecurity risk-management measures and further specification of the cases in which an incident is considered to be significant with regard to DNS service providers, TLD name registries, cloud computing service providers, data centre service providers, content delivery network providers, managed service providers, managed security service providers, providers of online market places, of online search engines and of social networking services platforms, and trust service providers (Text with EEA relevance)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Recital 71",
+      "requirement_text": "Controller should use appropriate mathematical or statistical procedures for the profiling, implement technical and organisational measures appropriate to ensure, in particular, that factors which result in inaccuracies in personal data are corrected and the risk of errors is minimised, secure personal data in a manner that takes account of the potential risks involved for the interests and rights of the data subject, and prevent, inter alia, discriminatory effects on natural persons on the basis of racial or ethnic origin, political opinion, religion or beliefs, trade union membership, genetic or health status or sexual orientation, or processing that results in measures having such an effect.",
+      "applicable_entity": "data controllers",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "profiling",
+        "technical measures",
+        "organisational measures",
+        "discrimination prevention",
+        "personal data security"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 41(3)",
+      "requirement_text": "The competent supervisory authority shall submit the draft requirements for accreditation of a body as referred to in paragraph 1 of this Article to the Board pursuant to the consistency mechanism referred to in Article 63.",
+      "applicable_entity": "competent supervisory authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "accreditation requirements",
+        "supervisory authority",
+        "consistency mechanism",
+        "Board submission"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 41(5)",
+      "requirement_text": "The competent supervisory authority shall revoke the accreditation of a body as referred to in paragraph 1 if the requirements for accreditation are not, or are no longer, met or where actions taken by the body infringe this Regulation.",
+      "applicable_entity": "competent supervisory authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "accreditation revocation",
+        "supervisory authority",
+        "accreditation requirements",
+        "regulation infringement"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 42(7)",
+      "requirement_text": "Certification shall be issued to a controller or processor for a maximum period of three years and may be renewed, under the same conditions, provided that the relevant criteria continue to be met. Certification shall be withdrawn, as applicable, by the certification bodies referred to in Article 43 or by the competent supervisory authority where the criteria for the certification are not or are no longer met.",
+      "applicable_entity": "certification bodies, competent supervisory authority",
+      "criticality": "critical",
+      "deadline_text": "maximum period of three years",
+      "keywords": [
+        "certification issuance",
+        "certification withdrawal",
+        "three years",
+        "certification criteria"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 43(6)",
+      "requirement_text": "The requirements referred to in paragraph 3 of this Article and the criteria referred to in Article 42(5) shall be made public by the supervisory authority in an easily accessible form. The supervisory authorities shall also transmit those requirements and criteria to the Board.",
+      "applicable_entity": "supervisory authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "public accessibility",
+        "requirements transmission",
+        "certification criteria",
+        "supervisory authority"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 57(1)(p)",
+      "requirement_text": "draft and publish the requirements for accreditation of a body for monitoring codes of conduct pursuant to Article 41 and of a certification body pursuant to Article 43",
+      "applicable_entity": "supervisory authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "accreditation requirements",
+        "codes of conduct",
+        "certification body",
+        "supervisory authority"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 64(6)",
+      "requirement_text": "The competent supervisory authority referred to in paragraph 1 shall not adopt its draft decision referred to in paragraph 1 within the period referred to in paragraph 3.",
+      "applicable_entity": "competent supervisory authority",
+      "criticality": "critical",
+      "deadline_text": "within the period referred to in paragraph 3",
+      "keywords": [
+        "draft decision",
+        "adoption prohibition",
+        "supervisory authority",
+        "time period"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 64(7)",
+      "requirement_text": "The competent supervisory authority referred to in paragraph 1 shall take utmost account of the opinion of the Board and shall, within two weeks after receiving the opinion, communicate to the Chair of the Board by electronic means whether it will maintain or amend its draft decision and, if any, the amended draft decision, using a standardised format.",
+      "applicable_entity": "competent supervisory authority",
+      "criticality": "critical",
+      "deadline_text": "within two weeks after receiving the opinion",
+      "keywords": [
+        "Board opinion",
+        "electronic communication",
+        "standardised format",
+        "draft decision",
+        "two weeks"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    },
+    {
+      "article": "Article 69(2)",
+      "requirement_text": "Without prejudice to requests by the Commission referred to in Article 70(1) and (2), the Board shall, in the performance of its tasks or the exercise of its powers, neither seek nor take instructions from anybody.",
+      "applicable_entity": "the Board",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Board independence",
+        "no instructions",
+        "task performance",
+        "power exercise"
+      ],
+      "law_id": 11607,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) (Official Journal of the European Union L 119 of 4 May 2016)",
+      "cluster_id": 21
+    }
+  ]
+}

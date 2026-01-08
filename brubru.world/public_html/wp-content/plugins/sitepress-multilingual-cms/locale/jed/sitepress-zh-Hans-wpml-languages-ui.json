@@ -1,0 +1,61 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "hide the translations instead.": [
+            "而不是隐藏翻译。"
+         ],
+         "Error happened! Please try again.": [
+            "发生错误！请重试。"
+         ],
+         "Cancel": [
+            "取消"
+         ],
+         "Choose Content to Automatically Translate into": [
+            "选择要自动翻译成的内容"
+         ],
+         "Save Changes and Enable Automatic Translation": [
+            "保存更改并启用自动翻译"
+         ],
+         "Cancel Language Changes": [
+            "取消语言更改"
+         ],
+         "Save": [
+            "保存"
+         ],
+         "Add new languages": [
+            "添加新语言"
+         ],
+         "Add new language": [
+            "添加新语言"
+         ],
+         "Never mind - don't add new languages": [
+            "没关系 - 不要添加新语言"
+         ],
+         "Never mind - don't add new language": [
+            "没关系 - 不要添加新语言"
+         ],
+         "Choose which content to translate into the new language": [
+            "选择要翻译成新语言的内容"
+         ],
+         "Automatically translate all my posts and pages, plus new content as I create it.": [
+            "自动翻译我的所有文章和页面，以及我创建的新内容。"
+         ],
+         "Only automatically translate new content.": [
+            "只自动翻译新内容。"
+         ],
+         "Which content do you want to translate into the new language?": [
+            "您想将哪些内容翻译成新语言？"
+         ],
+         "When you unpause automatic translation, this content will be <a>translated automatically</a>.": [
+            "取消自动翻译后，该内容将<a>自动翻译</a>。"
+         ],
+         "You can still translate existing content any time from the Translation Management Dashboard.": [
+            "您仍然可以随时从翻译管理控制面板翻译现有内容。"
+         ]
+      }
+   }
+}

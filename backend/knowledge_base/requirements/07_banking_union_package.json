@@ -1,0 +1,2064 @@
+{
+  "cluster_id": 7,
+  "cluster_name": "Banking Union Package",
+  "policy_area": "Economic and Financial Affairs",
+  "description": "Single Supervisory Mechanism and banking supervision framework",
+  "applicability": "Banks, credit institutions, financial supervisors",
+  "extraction_date": "2025-12-31T23:29:58.569117",
+  "total_laws": 22,
+  "total_requirements": 120,
+  "requirements": [
+    {
+      "article": "Recital 14",
+      "requirement_text": "The ECB and the competent authorities of Member States that are not participating Member States shall conclude a memorandum of understanding describing in general terms how they will cooperate with one another in the performance of their supervisory tasks under Union law in relation to the financial institutions referred to in this Regulation.",
+      "applicable_entity": "ECB and competent authorities of non-participating Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "memorandum of understanding",
+        "cooperation",
+        "supervisory tasks",
+        "non-participating Member States"
+      ],
+      "law_id": 11524,
+      "law_celex": "32013R1024",
+      "law_title": "Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 14",
+      "requirement_text": "The memorandum should be reviewed on a regular basis.",
+      "applicable_entity": "ECB and competent authorities of non-participating Member States",
+      "criticality": "important",
+      "deadline_text": "on a regular basis",
+      "keywords": [
+        "memorandum",
+        "regular review",
+        "cooperation"
+      ],
+      "law_id": 11524,
+      "law_celex": "32013R1024",
+      "law_title": "Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 16",
+      "requirement_text": "The ECB should be able to exercise supervisory tasks in relation to all credit institutions authorised in, and branches established in, participating Member States.",
+      "applicable_entity": "ECB",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "supervisory tasks",
+        "credit institutions",
+        "branches",
+        "participating Member States"
+      ],
+      "law_id": 11524,
+      "law_celex": "32013R1024",
+      "law_title": "Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 17",
+      "requirement_text": "When carrying out the tasks conferred on it, and without prejudice to the objective to ensure the safety and soundness of credit institutions, the ECB should have full regard to the diversity of credit institutions and their size and business models, as well as the systemic benefits of diversity in the banking industry of the Union.",
+      "applicable_entity": "ECB",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "diversity",
+        "credit institutions",
+        "size",
+        "business models",
+        "systemic benefits"
+      ],
+      "law_id": 11524,
+      "law_celex": "32013R1024",
+      "law_title": "Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 18",
+      "requirement_text": "The exercise of the ECB's tasks should contribute in particular to ensure that credit institutions fully internalise all costs caused by their activities so as to avoid moral hazard and the excessive risk taking arising from it.",
+      "applicable_entity": "ECB",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "internalise costs",
+        "moral hazard",
+        "excessive risk taking",
+        "credit institutions"
+      ],
+      "law_id": 11524,
+      "law_celex": "32013R1024",
+      "law_title": "Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 18",
+      "requirement_text": "It should take full account of the relevant macroeconomic conditions in Member States, in particular the stability of the supply of credit and facilitation of productive activities for the economy at large.",
+      "applicable_entity": "ECB",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "macroeconomic conditions",
+        "credit supply stability",
+        "productive activities"
+      ],
+      "law_id": 11524,
+      "law_celex": "32013R1024",
+      "law_title": "Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 20",
+      "requirement_text": "The ECB should therefore have the task of authorising credit institutions that are to be established in a participating Member State and should be respon",
+      "applicable_entity": "ECB",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "authorising",
+        "credit institutions",
+        "participating Member State"
+      ],
+      "law_id": 11524,
+      "law_celex": "32013R1024",
+      "law_title": "Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "When assessing the appropriateness of the risk weights referred to in Article 124(2), first subparagraph, of Regulation (EU) No 575/2013, the authorities designated in accordance with Article 124(1a) of that Regulation shall determine the loss experience as the ratio of losses to exposure value for exposures secured by mortgages on residential property and commercial immovable property",
+      "applicable_entity": "authorities designated in accordance with Article 124(1a) of Regulation (EU) No 575/2013",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "risk weights",
+        "loss experience",
+        "residential property",
+        "commercial immovable property",
+        "assessment"
+      ],
+      "law_id": 734,
+      "law_celex": "32023R0206",
+      "law_title": "Commission Delegated Regulation (EU) 2023/206 of 5 October 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the types of factors to be considered for the assessment of the appropriateness of risk weights for exposures secured by immovable property and the conditions to be taken into account for the assessment of the appropriateness of minimum loss given default values for exposures secured by immovable property (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "When assessing the appropriateness of the risk weights, the authorities shall determine the loss expectation as the best estimate of losses to be realised during a forward-looking horizon of at least one year, and, if so determined by that authority, up to three years",
+      "applicable_entity": "authorities designated in accordance with Article 124(1a) of Regulation (EU) No 575/2013",
+      "criticality": "critical",
+      "deadline_text": "forward-looking horizon of at least one year, and up to three years",
+      "keywords": [
+        "loss expectation",
+        "forward-looking horizon",
+        "best estimate",
+        "losses"
+      ],
+      "law_id": 734,
+      "law_celex": "32023R0206",
+      "law_title": "Commission Delegated Regulation (EU) 2023/206 of 5 October 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the types of factors to be considered for the assessment of the appropriateness of risk weights for exposures secured by immovable property and the conditions to be taken into account for the assessment of the appropriateness of minimum loss given default values for exposures secured by immovable property (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The loss expectation shall be determined as the average of the estimated losses for each year during the chosen forward-looking horizon",
+      "applicable_entity": "authorities designated in accordance with Article 124(1a) of Regulation (EU) No 575/2013",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "loss expectation",
+        "average",
+        "estimated losses",
+        "forward-looking horizon"
+      ],
+      "law_id": 734,
+      "law_celex": "32023R0206",
+      "law_title": "Commission Delegated Regulation (EU) 2023/206 of 5 October 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the types of factors to be considered for the assessment of the appropriateness of risk weights for exposures secured by immovable property and the conditions to be taken into account for the assessment of the appropriateness of minimum loss given default values for exposures secured by immovable property (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "The authorities shall determine the loss expectation by adjusting the loss experience upwards or downwards, or by keeping the loss experience unchanged",
+      "applicable_entity": "authorities designated in accordance with Article 124(1a) of Regulation (EU) No 575/2013",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "loss expectation",
+        "loss experience",
+        "adjusting",
+        "determination"
+      ],
+      "law_id": 734,
+      "law_celex": "32023R0206",
+      "law_title": "Commission Delegated Regulation (EU) 2023/206 of 5 October 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the types of factors to be considered for the assessment of the appropriateness of risk weights for exposures secured by immovable property and the conditions to be taken into account for the assessment of the appropriateness of minimum loss given default values for exposures secured by immovable property (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "When determining the loss expectation, the authorities shall reflect the forward-looking immovable property market developments during a forward-looking horizon of at least one year and, if so determined by that authority, up to three years",
+      "applicable_entity": "authorities designated in accordance with Article 124(1a) of Regulation (EU) No 575/2013",
+      "criticality": "critical",
+      "deadline_text": "forward-looking horizon of at least one year and up to three years",
+      "keywords": [
+        "forward-looking",
+        "immovable property market",
+        "developments",
+        "horizon"
+      ],
+      "law_id": 734,
+      "law_celex": "32023R0206",
+      "law_title": "Commission Delegated Regulation (EU) 2023/206 of 5 October 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the types of factors to be considered for the assessment of the appropriateness of risk weights for exposures secured by immovable property and the conditions to be taken into account for the assessment of the appropriateness of minimum loss given default values for exposures secured by immovable property (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(3)",
+      "requirement_text": "The loss expectation shall be based on all of the following: historical evolution and cyclical characteristics of the immovable property market, past and present structural characteristics, fundamental drivers of demand and supply, riskiness of exposures, expected evolution in prices and volatility, expected evolution in macroeconomic variables, time horizon, national specificities, and other relevant data indicators",
+      "applicable_entity": "authorities designated in accordance with Article 124(1a) of Regulation (EU) No 575/2013",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "loss expectation",
+        "historical evolution",
+        "structural characteristics",
+        "demand and supply",
+        "macroeconomic variables",
+        "national specificities"
+      ],
+      "law_id": 734,
+      "law_celex": "32023R0206",
+      "law_title": "Commission Delegated Regulation (EU) 2023/206 of 5 October 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the types of factors to be considered for the assessment of the appropriateness of risk weights for exposures secured by immovable property and the conditions to be taken into account for the assessment of the appropriateness of minimum loss given default values for exposures secured by immovable property (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(4)",
+      "requirement_text": "Where there is a lot of uncertainty as to the factors referred to in paragraph 3, point (e), the authorities shall consider a margin of prudence when determining the loss expectation",
+      "applicable_entity": "authorities designated in accordance with Article 124(1a) of Regulation (EU) No 575/2013",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "uncertainty",
+        "margin of prudence",
+        "loss expectation",
+        "determination"
+      ],
+      "law_id": 734,
+      "law_celex": "32023R0206",
+      "law_title": "Commission Delegated Regulation (EU) 2023/206 of 5 October 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the types of factors to be considered for the assessment of the appropriateness of risk weights for exposures secured by immovable property and the conditions to be taken into account for the assessment of the appropriateness of minimum loss given default values for exposures secured by immovable property (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the date of its publication in the Official Journal of the European Union",
+      "applicable_entity": "European Union institutions",
+      "criticality": "critical",
+      "deadline_text": "on the date of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "enter into force",
+        "publication",
+        "Official Journal",
+        "European Union"
+      ],
+      "law_id": 848,
+      "law_celex": "32013R0797",
+      "law_title": "Council Implementing Decision of 16 December 2013 implementing Council Regulation (EU) No 1024/2013 of 15 October 2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions (2013/797/EU)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "The competent authority to assess reports and give feedback to the whistleblower, and/or to follow up on reports concerning high-level ECB officials shall be the President, or where the high-level ECB official referred to in the report is the President, the Vice-President",
+      "applicable_entity": "European Central Bank",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "competent authority",
+        "whistleblowing",
+        "high-level ECB official",
+        "assessment",
+        "follow-up"
+      ],
+      "law_id": 1599,
+      "law_celex": "32020D1575",
+      "law_title": "Decision (EU) 2020/1575 of the European Central Bank of 27 October 2020 as regards the assessment of and follow-up on information on breaches reported through the whistleblowing tool where a person concerned is a high-level ECB official (ECB/2020/54)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "Reports concerning high-level ECB officials shall be followed up in accordance with Decision (EU) 2016/456 where such reports fall within the scope of that Decision",
+      "applicable_entity": "European Central Bank",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "reports",
+        "follow-up",
+        "Decision 2016/456",
+        "high-level ECB official",
+        "OLAF investigations"
+      ],
+      "law_id": 1599,
+      "law_celex": "32020D1575",
+      "law_title": "Decision (EU) 2020/1575 of the European Central Bank of 27 October 2020 as regards the assessment of and follow-up on information on breaches reported through the whistleblowing tool where a person concerned is a high-level ECB official (ECB/2020/54)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Reports that do not fall within the scope of Decision (EU) 2016/456 shall be followed up in accordance with Administrative Circular 01/2006 on internal administrative inquiries",
+      "applicable_entity": "European Central Bank",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "reports",
+        "follow-up",
+        "Administrative Circular 01/2006",
+        "internal administrative inquiries"
+      ],
+      "law_id": 1599,
+      "law_celex": "32020D1575",
+      "law_title": "Decision (EU) 2020/1575 of the European Central Bank of 27 October 2020 as regards the assessment of and follow-up on information on breaches reported through the whistleblowing tool where a person concerned is a high-level ECB official (ECB/2020/54)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "This Decision shall enter into force on the third day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "European Central Bank",
+      "criticality": "critical",
+      "deadline_text": "third day following publication in Official Journal",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal",
+        "third day"
+      ],
+      "law_id": 1599,
+      "law_celex": "32020D1575",
+      "law_title": "Decision (EU) 2020/1575 of the European Central Bank of 27 October 2020 as regards the assessment of and follow-up on information on breaches reported through the whistleblowing tool where a person concerned is a high-level ECB official (ECB/2020/54)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 162(1)",
+      "requirement_text": "Member States shall apply those provisions from 1 January 2014",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2014",
+      "keywords": [
+        "application",
+        "provisions",
+        "implementation",
+        "effective date"
+      ],
+      "law_id": 1642,
+      "law_celex": null,
+      "law_title": "Corrigendum to Directive 2013/36/EU of the European Parliament and of the Council of 26 June 2013 on access to the activity of credit institutions and the prudential supervision of credit institutions and investment firms, amending Directive 2002/87/EC and repealing Directives 2006/48/EC and 2006/49/EC (Official Journal of the European Union L 176 of 27 June 2013)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 162(6)",
+      "requirement_text": "Article 133 shall apply from 1 January 2014",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2014",
+      "keywords": [
+        "Article 133",
+        "application",
+        "derogation",
+        "effective date"
+      ],
+      "law_id": 1642,
+      "law_celex": null,
+      "law_title": "Corrigendum to Directive 2013/36/EU of the European Parliament and of the Council of 26 June 2013 on access to the activity of credit institutions and the prudential supervision of credit institutions and investment firms, amending Directive 2002/87/EC and repealing Directives 2006/48/EC and 2006/49/EC (Official Journal of the European Union L 176 of 27 June 2013)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General",
+      "requirement_text": "Comply with Directive 2013/36/EU of the European Parliament and of the Council of 26 June 2013 on access to the activity of credit institutions and the prudential supervision of credit institutions and investment firms, amending Directive 2002/87/EC and repealing Directives 2006/48/EC and 2006/49/EC (Text with EEA relevance)",
+      "applicable_entity": "Banks, credit institutions, financial supervisors",
+      "criticality": "important",
+      "deadline_text": null,
+      "keywords": [
+        "June",
+        "EEA",
+        "EC",
+        "Directive",
+        "EU"
+      ],
+      "law_id": 5433,
+      "law_celex": "32013L0036",
+      "law_title": "Directive 2013/36/EU of the European Parliament and of the Council of 26 June 2013 on access to the activity of credit institutions and the prudential supervision of credit institutions and investment firms, amending Directive 2002/87/EC and repealing Directives 2006/48/EC and 2006/49/EC (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 67(1)",
+      "requirement_text": "Member States shall apply measures from 26 June 2021",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "from 26 June 2021",
+      "keywords": [
+        "transposition",
+        "implementation",
+        "directive",
+        "member states"
+      ],
+      "law_id": 5043,
+      "law_celex": null,
+      "law_title": "Corrigendum to Directive (EU) 2019/2034 of the European Parliament and of the Council of 27 November 2019 on the prudential supervision of investment firms and amending Directives 2002/87/EC, 2009/65/EC, 2011/61/EU, 2013/36/EU, 2014/59/EU and 2014/65/EU (Official Journal of the European Union L 314 of 5 December 2019)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 67(1)",
+      "requirement_text": "Member States shall apply the measures necessary to comply with point (6) of Article 62 as regards Article 8a(3) of Directive 2013/36/EU",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 27 December 2020",
+      "keywords": [
+        "transposition",
+        "implementation",
+        "directive",
+        "member states",
+        "Article 8a",
+        "Directive 2013/36/EU"
+      ],
+      "law_id": 5043,
+      "law_celex": null,
+      "law_title": "Corrigendum to Directive (EU) 2019/2034 of the European Parliament and of the Council of 27 November 2019 on the prudential supervision of investment firms and amending Directives 2002/87/EC, 2009/65/EC, 2011/61/EU, 2013/36/EU, 2014/59/EU and 2014/65/EU (Official Journal of the European Union L 314 of 5 December 2019)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 67(1)",
+      "requirement_text": "Member States shall apply the measures necessary to comply with point (5) of Article 64",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "from 26 March 2020",
+      "keywords": [
+        "transposition",
+        "implementation",
+        "directive",
+        "member states",
+        "Article 64"
+      ],
+      "law_id": 5043,
+      "law_celex": null,
+      "law_title": "Corrigendum to Directive (EU) 2019/2034 of the European Parliament and of the Council of 27 November 2019 on the prudential supervision of investment firms and amending Directives 2002/87/EC, 2009/65/EC, 2011/61/EU, 2013/36/EU, 2014/59/EU and 2014/65/EU (Official Journal of the European Union L 314 of 5 December 2019)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 138 CRR",
+      "requirement_text": "EBA is required to refuse or revoke confirmation if the ECAI has used an unsolicited credit assessment to put pressure on the rated entity to place an order for a credit assessment or other services",
+      "applicable_entity": "European Banking Authority (EBA)",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "EBA",
+        "refuse",
+        "revoke",
+        "confirmation",
+        "unsolicited credit assessment",
+        "pressure",
+        "ECAI"
+      ],
+      "law_id": 5422,
+      "law_celex": null,
+      "law_title": "Decision of the European Banking Authority confirming that the unsolicited credit assessments of certain ECAIs do not differ in quality from their solicited credit assessments",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 11 CRA Regulation",
+      "requirement_text": "Credit rating agencies are required to submit data concerning their credit ratings to CEREP",
+      "applicable_entity": "credit rating agencies",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "credit rating agencies",
+        "submit data",
+        "CEREP",
+        "credit ratings"
+      ],
+      "law_id": 5422,
+      "law_celex": null,
+      "law_title": "Decision of the European Banking Authority confirming that the unsolicited credit assessments of certain ECAIs do not differ in quality from their solicited credit assessments",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "This Decision",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "Decision",
+        "enter into force",
+        "twentieth day",
+        "publication",
+        "Official Journal"
+      ],
+      "law_id": 5422,
+      "law_celex": null,
+      "law_title": "Decision of the European Banking Authority confirming that the unsolicited credit assessments of certain ECAIs do not differ in quality from their solicited credit assessments",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 7",
+      "requirement_text": "Competent authorities should use the handbook",
+      "applicable_entity": "competent authorities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "supervisory handbook",
+        "competent authorities",
+        "best practices"
+      ],
+      "law_id": 5903,
+      "law_celex": "32013R1022",
+      "law_title": "Regulation (EU) No 1022/2013 of the European Parliament and of the Council of 22 October 2013 amending Regulation (EU) No 1093/2010 establishing a European Supervisory Authority (European Banking Authority) as regards the conferral of specific tasks on the European Central Bank pursuant to Council Regulation (EU) No 1024/2013",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(2)(a)",
+      "requirement_text": "The Authority shall act within the powers conferred by this Regulation and within the scope of specified directives and regulations",
+      "applicable_entity": "European Banking Authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "EBA",
+        "powers",
+        "scope",
+        "directives",
+        "regulations"
+      ],
+      "law_id": 5903,
+      "law_celex": "32013R1022",
+      "law_title": "Regulation (EU) No 1022/2013 of the European Parliament and of the Council of 22 October 2013 amending Regulation (EU) No 1093/2010 establishing a European Supervisory Authority (European Banking Authority) as regards the conferral of specific tasks on the European Central Bank pursuant to Council Regulation (EU) No 1024/2013",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "SSM electronic applications, systems, platforms and services with medium or above medium criticality shall only be accessed and used if a user has been authenticated by means of an electronic certificate issued and managed by a certification authority accepted in accordance with the ESCB/SSM certificate acceptance framework, including by the ESCB-PKI certification authority.",
+      "applicable_entity": "users of SSM electronic applications, systems, platforms and services",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "authentication",
+        "electronic certificate",
+        "certification authority",
+        "ESCB/SSM certificate acceptance framework",
+        "ESCB-PKI"
+      ],
+      "law_id": 6391,
+      "law_celex": "32016D0188",
+      "law_title": "Decision (EU) 2016/188 of the European Central Bank of 11 December 2015 on the access and use of SSM electronic applications, systems, platforms and services by the European Central Bank and the national competent authorities of the Single Supervisory Mechanism (ECB/2015/47)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "The ESCB-PKI certification authority shall issue electronic certificates and provide other certification services to the competent authorities participating in the ESCB-PKI pursuant to Article 3 for their certificate subscribers and for the certificate subscribers of third parties working with them to enable them to securely access and use SSM electronic applications, systems, platforms and services.",
+      "applicable_entity": "ESCB-PKI certification authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "electronic certificates",
+        "certification services",
+        "competent authorities",
+        "certificate subscribers",
+        "third parties"
+      ],
+      "law_id": 6391,
+      "law_celex": "32016D0188",
+      "law_title": "Decision (EU) 2016/188 of the European Central Bank of 11 December 2015 on the access and use of SSM electronic applications, systems, platforms and services by the European Central Bank and the national competent authorities of the Single Supervisory Mechanism (ECB/2015/47)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "The participating competent authority shall be subject to the obligations set out in Articles 6, 7 and 12 of Decision ECB/2013/1 and shall submit a declaration to the Governing Council by which it confirms its participation and compliance with the obligations laid down in the Level 2 — Level 3 Agreement referred to in Article 4(2) of that Decision.",
+      "applicable_entity": "participating competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "competent authority",
+        "obligations",
+        "declaration",
+        "Governing Council",
+        "participation",
+        "compliance",
+        "Level 2 Level 3 Agreement"
+      ],
+      "law_id": 6391,
+      "law_celex": "32016D0188",
+      "law_title": "Decision (EU) 2016/188 of the European Central Bank of 11 December 2015 on the access and use of SSM electronic applications, systems, platforms and services by the European Central Bank and the national competent authorities of the Single Supervisory Mechanism (ECB/2015/47)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall assess the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach at all times, covering all requirements irrespective of their degree of materiality",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "IRB Approach",
+        "compliance assessment",
+        "credit institutions",
+        "investment firms"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall apply the same criteria to all aspects of the assessment of compliance with the requirements to use the IRB Approach, including initial applications, additional applications, material changes, notifications, ongoing reviews, and applications for return to less sophisticated approaches",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "assessment criteria",
+        "IRB Approach",
+        "material changes",
+        "ongoing review"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall apply the same methods for assessment to ensure consistent assessment of compliance with IRB Approach requirements throughout the Union",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "assessment methods",
+        "harmonisation",
+        "consistency",
+        "IRB Approach"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall verify compliance with the minimum criteria specified in this Regulation and any other relevant criteria necessary for assessing IRB Approach compliance",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "verification",
+        "minimum criteria",
+        "compliance",
+        "IRB Approach"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "In subsequent requests for permission based on approved sequential implementation plans, competent authorities shall base their assessment at least on the rules on use and experience test, assignment to grades or pools, rating systems and risk quantification",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "sequential implementation",
+        "use test",
+        "experience test",
+        "rating systems",
+        "risk quantification"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Where an institution has delegated tasks, activities or functions relating to rating systems to a third party or obtained rating systems from a third party vendor, competent authorities shall verify that all rating systems and related processes are assessed, adequate controls are implemented, full documentation is available, and the institution has sufficient in-house understanding",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "delegation",
+        "third party",
+        "rating systems",
+        "controls",
+        "documentation",
+        "in-house understanding"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall verify the appropriateness of the time limit for implementation of the roll-out plan, compliance with deadlines, and the necessity of changes to the roll-out plan",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "roll-out plan",
+        "implementation timeline",
+        "sequential implementation",
+        "deadlines"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall verify that all exposures covered by the roll-out plan have a defined and reasonable maximum timeframe for implementation of the IRB Approach",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exposures",
+        "roll-out plan",
+        "timeframe",
+        "IRB implementation"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall verify the robustness of the validation function, including independence from credit risk control unit, completeness, frequency and adequacy of methods and procedures, and soundness of the reporting process",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "validation function",
+        "independence",
+        "credit risk control",
+        "reporting process"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall verify that validation of performance of rating systems covering material portfolios and back-testing of all other rating systems is performed at least annually",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "at least annually",
+      "keywords": [
+        "validation",
+        "rating systems performance",
+        "back-testing",
+        "annual review",
+        "material portfolios"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall verify that all areas of the IRB Approach are effectively covered by internal audits and that annual reviews are performed to determine areas requiring more thorough reviews",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "annual reviews",
+      "keywords": [
+        "internal audit",
+        "IRB Approach",
+        "annual reviews",
+        "audit coverage"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General requirement",
+      "requirement_text": "Competent authorities shall verify that rating systems are incorporated in the relevant processes of the institution within the broader processes of risk management, credit approval and decision-making process as part of the use test",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "use test",
+        "rating systems",
+        "risk management",
+        "credit approval",
+        "decision-making process"
+      ],
+      "law_id": 6519,
+      "law_celex": "32022R0439",
+      "law_title": "Commission Delegated Regulation (EU) 2022/439 of 20 October 2021 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards for the specification of the assessment methodology competent authorities are to follow when assessing the compliance of credit institutions and investment firms with the requirements to use the Internal Ratings Based Approach (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Members of the management body of a significant supervised entity must fulfil fit and proper requirements at all times in accordance with Article 91 of Directive 2013/36/EU and any other applicable law",
+      "applicable_entity": "members of management bodies of significant supervised entities",
+      "criticality": "critical",
+      "deadline_text": "at all times",
+      "keywords": [
+        "fit and proper requirements",
+        "management body",
+        "significant supervised entity",
+        "Article 91",
+        "Directive 2013/36/EU"
+      ],
+      "law_id": 7508,
+      "law_celex": "32017D0935",
+      "law_title": "Decision (EU) 2017/935 of the European Central Bank of 16 November 2016 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper requirements (ECB/2016/42)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "The Governing Council delegates the power to adopt fit and proper decisions to the heads of work units nominated by the Executive Board in accordance with Article 5 of Decision (EU) 2017/933 (ECB/2016/40)",
+      "applicable_entity": "ECB Governing Council",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "delegation",
+        "fit and proper decisions",
+        "heads of work units",
+        "Executive Board",
+        "Governing Council"
+      ],
+      "law_id": 7508,
+      "law_celex": "32017D0935",
+      "law_title": "Decision (EU) 2017/935 of the European Central Bank of 16 November 2016 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper requirements (ECB/2016/42)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "The heads of work units shall adopt delegated decisions in accordance with this Decision and applicable law",
+      "applicable_entity": "heads of work units",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "delegated decisions",
+        "heads of work units",
+        "applicable law"
+      ],
+      "law_id": 7508,
+      "law_celex": "32017D0935",
+      "law_title": "Decision (EU) 2017/935 of the European Central Bank of 16 November 2016 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper requirements (ECB/2016/42)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "A fit and proper decision shall not be adopted by means of a delegated decision if the relevant supervised entity is the supervised entity at the highest level of consolidation within the participating Member States of a significant supervised group",
+      "applicable_entity": "heads of work units",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "fit and proper decision",
+        "delegated decision",
+        "highest level of consolidation",
+        "significant supervised group"
+      ],
+      "law_id": 7508,
+      "law_celex": "32017D0935",
+      "law_title": "Decision (EU) 2017/935 of the European Central Bank of 16 November 2016 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper requirements (ECB/2016/42)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "A fit and proper decision shall not be adopted by means of a delegated decision if the relevant supervised entity is the credit institution with the largest total value of assets in a significant supervised group, if this entity is different to that referred to in point (a)",
+      "applicable_entity": "heads of work units",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "fit and proper decision",
+        "delegated decision",
+        "credit institution",
+        "largest total value of assets",
+        "significant supervised group"
+      ],
+      "law_id": 7508,
+      "law_celex": "32017D0935",
+      "law_title": "Decision (EU) 2017/935 of the European Central Bank of 16 November 2016 on delegation of the power to adopt fit and proper decisions and the assessment of fit and proper requirements (ECB/2016/42)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "Risk factors that do not belong to a curve, surface or cube shall be assessed as modellable where specific criteria are met regarding verifiable prices over 12-month observation periods",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "12 months ending at the previous reporting reference date",
+      "keywords": [
+        "risk factors",
+        "modellability assessment",
+        "verifiable prices",
+        "observation period"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)(a)(i)",
+      "requirement_text": "The institution has identified for that risk factor the existence of at least 24 prices which are verifiable, have distinct observation dates and are considered representative of that risk factor",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "over an observation period of 12 months ending at the previous reporting reference date",
+      "keywords": [
+        "24 prices",
+        "verifiable prices",
+        "representative prices",
+        "distinct observation dates"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)(a)(ii)",
+      "requirement_text": "There has not been a period of 90 days or more in which there were less than four of the verifiable prices",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "90 days period within the 12-month observation period",
+      "keywords": [
+        "90 days",
+        "four verifiable prices",
+        "continuous availability"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)(b)",
+      "requirement_text": "The institution has identified for that risk factor the existence of at least 100 prices which are verifiable, have distinct observation dates and are considered representative of that risk factor",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "over the observation period of 12 months",
+      "keywords": [
+        "100 prices",
+        "verifiable prices",
+        "representative prices",
+        "alternative criterion"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(2)(a)",
+      "requirement_text": "The institution applies that shifted period consistently across all risk factors of the same type as the risk factor concerned",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "shifted period",
+        "consistent application",
+        "same type risk factors"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(2)(b)",
+      "requirement_text": "The institution applies that shifted period consistently over time",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "shifted period",
+        "consistent over time",
+        "temporal consistency"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(2)(c)",
+      "requirement_text": "The institution provides the competent authority with a detailed description of the application of that shifted period",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "competent authority",
+        "detailed description",
+        "shifted period",
+        "documentation"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "A price shall not be considered verifiable where it is obtained from transactions or quotations between two entities of the same group",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "same group",
+        "prohibition",
+        "verifiable prices",
+        "arm's length"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "A price shall not be considered verifiable where it is of negligible volume compared to usual volume reflective of current market conditions",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "negligible volume",
+        "market conditions",
+        "verifiable prices",
+        "prohibition"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "A price shall not be considered verifiable where it is obtained from quotations with bid-offer spreads that deviate substantially from spreads reflective of current market conditions",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "bid-offer spread",
+        "market conditions",
+        "substantial deviation",
+        "prohibition"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "A price shall not be considered verifiable where it is obtained from transactions conducted with the sole purpose of identifying sufficient verifiable prices",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "sole purpose",
+        "artificial transactions",
+        "verifiable prices",
+        "prohibition"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "A price shall not be considered verifiable where it is obtained from quotations committed with the sole purpose of identifying sufficient verifiable prices",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "sole purpose",
+        "artificial quotations",
+        "verifiable prices",
+        "prohibition"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "The observation date of a verifiable price shall be identical to the date on which the transaction was executed or to the date on which the bid and offer quotations were committed",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "observation date",
+        "transaction date",
+        "quotation date",
+        "identical"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "The observation dates of verifiable prices shall be recorded based on a consistent single time zone across all data sources",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "consistent time zone",
+        "observation dates",
+        "data sources",
+        "recording"
+      ],
+      "law_id": 7860,
+      "law_celex": "32022R2060",
+      "law_title": "Commission Delegated Regulation (EU) 2022/2060 of 14 June 2022 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards specifying the criteria for assessing the modellability of risk factors under the internal model approach (IMA) and specifying the frequency of that assessment under Article 325be(3) of that Regulation (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Ms Sabine LAUTENSCHLÄGER is appointed as Vice-Chair of the Supervisory Board of the European Central Bank",
+      "applicable_entity": "Council of the European Union",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "appointment",
+        "Vice-Chair",
+        "Supervisory Board",
+        "ECB"
+      ],
+      "law_id": 11291,
+      "law_celex": "32014R0077",
+      "law_title": "Council Implementing Decision of 11 February 2014 implementing Regulation (EU) No 1024/2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions (2014/77/EU)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall enter into force on the date of its publication in the Official Journal of the European Union",
+      "applicable_entity": "EU institutions",
+      "criticality": "critical",
+      "deadline_text": "on the date of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal"
+      ],
+      "law_id": 11291,
+      "law_celex": "32014R0077",
+      "law_title": "Council Implementing Decision of 11 February 2014 implementing Regulation (EU) No 1024/2013 conferring specific tasks on the European Central Bank concerning policies relating to the prudential supervision of credit institutions (2014/77/EU)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Competent authorities shall apply the same criteria and the same assessment methodology when verifying whether institutions comply with internal model requirements during application, use, and material extensions or changes phases",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "competent authorities",
+        "assessment methodology",
+        "internal models",
+        "market risk",
+        "verification"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Competent authorities shall evaluate the overall quality of solutions, systems and approaches implemented by institutions and request constant improvements and adaptations to changed circumstances",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "competent authorities",
+        "evaluation",
+        "quality",
+        "improvements",
+        "adaptations"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Competent authorities' assessment of institutional compliance shall comply with prescriptive assessment techniques",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "competent authorities",
+        "assessment",
+        "prescriptive techniques",
+        "compliance"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "All key tasks, activities or functions related to the internal model shall be conducted by the risk control unit despite any outsourcing",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "risk control unit",
+        "key tasks",
+        "internal model",
+        "outsourcing"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "The risk control unit shall implement adequate controls and perform quality and validation tests for any outsourced solution",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "risk control unit",
+        "controls",
+        "quality tests",
+        "validation tests",
+        "outsourced solutions"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Full documentation on controls and tests shall be available in all cases for outsourced solutions",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "documentation",
+        "controls",
+        "tests",
+        "outsourced solutions"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Competent authorities shall assess tools and IT solutions obtained from third party vendors in a manner similar to internally developed solutions",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "competent authorities",
+        "assessment",
+        "third party vendors",
+        "IT solutions"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Institutions shall perform internal validation of the model at least annually",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "at least annually",
+      "keywords": [
+        "institutions",
+        "internal validation",
+        "annual",
+        "model"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Annual validation shall focus on at least the main issues detected in previous validations or audit reviews, and on changes or new methodologies introduced in the alternative internal model",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "annual validation",
+        "main issues",
+        "previous validations",
+        "audit reviews",
+        "new methodologies"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Institutions shall have formal approval processes for new financial instruments and products and their introduction in the trading area",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "formal approval",
+        "new financial instruments",
+        "products",
+        "trading area"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General Requirement",
+      "requirement_text": "Institutions shall directly back-test their expected shortfall measures as part of the internal back-testing programme",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "back-test",
+        "expected shortfall measures",
+        "internal back-testing programme"
+      ],
+      "law_id": 14536,
+      "law_celex": "32024R1085",
+      "law_title": "Commission Delegated Regulation (EU) 2024/1085 of 13 March 2024 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards on the assessment methodology under which competent authorities verify an institution’s compliance with the requirements to use internal models for market risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Annex III to Implementing Regulation (EU) 2016/1799 is replaced by the text set out in the Annex to this Regulation",
+      "applicable_entity": "Member States and relevant institutions applying Implementing Regulation (EU) 2016/1799",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "mapping tables",
+        "credit risk assessments",
+        "external credit assessment institutions",
+        "credit quality steps",
+        "annex replacement"
+      ],
+      "law_id": 15380,
+      "law_celex": "32021R2005",
+      "law_title": "Commission Implementing Regulation (EU) 2021/2005 of 16 November 2021 laying down implementing technical standards amending Implementing Regulation (EU) 2016/1799 as regards the mapping tables specifying the correspondence between the credit risk assessments of external credit assessment institutions and the credit quality steps set out in Regulation (EU) No 575/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "applicable_entity": "All Member States",
+      "criticality": "critical",
+      "deadline_text": "on the twentieth day following that of its publication in the Official Journal of the European Union",
+      "keywords": [
+        "entry into force",
+        "publication",
+        "Official Journal"
+      ],
+      "law_id": 15380,
+      "law_celex": "32021R2005",
+      "law_title": "Commission Implementing Regulation (EU) 2021/2005 of 16 November 2021 laying down implementing technical standards amending Implementing Regulation (EU) 2016/1799 as regards the mapping tables specifying the correspondence between the credit risk assessments of external credit assessment institutions and the credit quality steps set out in Regulation (EU) No 575/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Regulation shall be binding in its entirety and directly applicable in all Member States",
+      "applicable_entity": "All Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "binding",
+        "directly applicable",
+        "Member States",
+        "regulation"
+      ],
+      "law_id": 15380,
+      "law_celex": "32021R2005",
+      "law_title": "Commission Implementing Regulation (EU) 2021/2005 of 16 November 2021 laying down implementing technical standards amending Implementing Regulation (EU) 2016/1799 as regards the mapping tables specifying the correspondence between the credit risk assessments of external credit assessment institutions and the credit quality steps set out in Regulation (EU) No 575/2013 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 312(2)",
+      "requirement_text": "Competent authorities must permit institutions to use Advanced Measurement Approaches (AMA) based on the institutions' own operational risk measurement systems where they meet all of the qualitative and quantitative standards, implying compliance of institutions with these requirements at all times.",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "at all times",
+      "keywords": [
+        "AMA",
+        "Advanced Measurement Approaches",
+        "operational risk",
+        "qualitative standards",
+        "quantitative standards"
+      ],
+      "law_id": 16851,
+      "law_celex": "32018R0959",
+      "law_title": "Commission Delegated Regulation (EU) 2018/959 of 14 March 2018 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards of the specification of the assessment methodology under which competent authorities permit institutions to use Advanced Measurement Approaches for operational risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 312(4)",
+      "requirement_text": "Competent authorities are required to assess compliance where an institution first applies to use AMA, where an institution applies to extend the AMA in accordance with the approved sequential implementation plan, where an institution applies to extend or change the AMA it has been granted permission to use, and where an institution applies to return to the use of less sophisticated approaches.",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "assessment",
+        "AMA",
+        "compliance",
+        "sequential implementation",
+        "applications"
+      ],
+      "law_id": 16851,
+      "law_celex": "32018R0959",
+      "law_title": "Commission Delegated Regulation (EU) 2018/959 of 14 March 2018 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards of the specification of the assessment methodology under which competent authorities permit institutions to use Advanced Measurement Approaches for operational risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 85(1) of Directive 2013/36/EU",
+      "requirement_text": "Institutions are required to articulate what constitutes operational risk for the purposes of implementing policies and processes to evaluate and manage the exposure to operational risk.",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "operational risk",
+        "policies",
+        "processes",
+        "risk management",
+        "exposure"
+      ],
+      "law_id": 16851,
+      "law_celex": "32018R0959",
+      "law_title": "Commission Delegated Regulation (EU) 2018/959 of 14 March 2018 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards of the specification of the assessment methodology under which competent authorities permit institutions to use Advanced Measurement Approaches for operational risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 321(a)",
+      "requirement_text": "An institution's internal operational risk measurement system has to be closely integrated into its day-to-day risk management processes.",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "internal operational risk measurement system",
+        "day-to-day risk management",
+        "integration"
+      ],
+      "law_id": 16851,
+      "law_celex": "32018R0959",
+      "law_title": "Commission Delegated Regulation (EU) 2018/959 of 14 March 2018 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards of the specification of the assessment methodology under which competent authorities permit institutions to use Advanced Measurement Approaches for operational risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 321(g)",
+      "requirement_text": "An institution's data flows and processes associated with the AMA measurement system are required to be transparent and accessible.",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data flows",
+        "processes",
+        "AMA measurement system",
+        "transparent",
+        "accessible"
+      ],
+      "law_id": 16851,
+      "law_celex": "32018R0959",
+      "law_title": "Commission Delegated Regulation (EU) 2018/959 of 14 March 2018 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards of the specification of the assessment methodology under which competent authorities permit institutions to use Advanced Measurement Approaches for operational risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 321",
+      "requirement_text": "The AMA framework of an institution is subject to internal validation and audit reviews in accordance with points (e) and (f).",
+      "applicable_entity": "institutions",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "AMA framework",
+        "internal validation",
+        "audit reviews",
+        "validation function"
+      ],
+      "law_id": 16851,
+      "law_celex": "32018R0959",
+      "law_title": "Commission Delegated Regulation (EU) 2018/959 of 14 March 2018 supplementing Regulation (EU) No 575/2013 of the European Parliament and of the Council with regard to regulatory technical standards of the specification of the assessment methodology under which competent authorities permit institutions to use Advanced Measurement Approaches for operational risk (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall be notified to the ECB.",
+      "applicable_entity": "Council of the European Union",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "notification",
+        "ECB",
+        "decision",
+        "shall be notified"
+      ],
+      "law_id": 305,
+      "law_celex": "32008D0571",
+      "law_title": "Council Decision of 8 July 2008 amending Decision 98/481/EC approving the external auditors of the European Central Bank (2008/571/EC)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3",
+      "requirement_text": "This Decision shall be published in the Official Journal of the European Union.",
+      "applicable_entity": "Council of the European Union",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "publication",
+        "Official Journal",
+        "European Union",
+        "shall be published"
+      ],
+      "law_id": 305,
+      "law_celex": "32008D0571",
+      "law_title": "Council Decision of 8 July 2008 amending Decision 98/481/EC approving the external auditors of the European Central Bank (2008/571/EC)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "The most relevant Union currencies shall be identified on the basis of the relative share of each currency in the CCP's average end-of-day open positions across all financial instruments cleared by the CCP, calculated over a period of one year.",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "calculated over a period of one year",
+      "keywords": [
+        "currency identification",
+        "CCP",
+        "open positions",
+        "annual calculation"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(2)",
+      "requirement_text": "The most relevant Union currencies shall be the three currencies with the highest relative share calculated in accordance with paragraph 1, provided that each individual share exceeds 10 %.",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "three currencies",
+        "highest share",
+        "10% threshold"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1(3)",
+      "requirement_text": "The calculation of the relative share of the currencies shall be calculated on an annual basis.",
+      "applicable_entity": "competent authorities",
+      "criticality": "critical",
+      "deadline_text": "annual basis",
+      "keywords": [
+        "annual calculation",
+        "currency share",
+        "relative share"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "After assessing that an application is complete as referred to in Article 17(3) of Regulation (EU) No 648/2012, the CCP's competent authority shall circulate a proposal for the written agreement under Article 18(5) of Regulation (EU) No 648/2012 to the members of the college determined in accordance with Article 18(2) of Regulation (EU) No 648/2012.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "written agreement",
+        "college members",
+        "proposal circulation"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "That written agreement shall include a process for annual review.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "written agreement",
+        "annual review",
+        "process"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "It shall also include an amendment process whereby changes may be initiated at any time by the CCP's competent authority or by other members of the college, subject to approval by the college.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "amendment process",
+        "college approval",
+        "changes"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(2)",
+      "requirement_text": "Where the members of the college referred to in paragraph 1 do not express any comments within 10 calendar days, the CCP's competent authority shall proceed with the adoption of the written agreement by the college and with the establishment of the college.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "within 10 calendar days",
+      "keywords": [
+        "10 calendar days",
+        "written agreement adoption",
+        "college establishment"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "Where the members of the college express comments regarding the proposal for the written agreement circulated pursuant to paragraph 1, they shall submit those comments together with a thorough explanation to the CCP's competent authority within 10 calendar days.",
+      "applicable_entity": "college members",
+      "criticality": "critical",
+      "deadline_text": "within 10 calendar days",
+      "keywords": [
+        "comments submission",
+        "thorough explanation",
+        "10 calendar days"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2(3)",
+      "requirement_text": "If relevant, the CCP's competent authority shall prepare a revised proposal and convene a meeting to agree on the final written agreement.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "revised proposal",
+        "meeting convene",
+        "final agreement"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "Where a request for information is made to a college by a competent authority of a Member State which is not a member of the college, the CCP's competent authority, after having consulted the college, shall decide on the most appropriate way to provide and request information to and from the authorities that are not members of the college.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "information request",
+        "college consultation",
+        "non-member authorities"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "Each member of the college shall designate one participant to attend the meetings of the college and may designate one alternate.",
+      "applicable_entity": "college members",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "participant designation",
+        "college meetings",
+        "alternate"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(3)",
+      "requirement_text": "Where the central bank of issue of one of the most relevant Union currencies corresponds to more than one central bank, the relevant central banks shall determine the single representative who will participate in the college.",
+      "applicable_entity": "central banks",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "single representative",
+        "central banks",
+        "college participation"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3(5)",
+      "requirement_text": "Where in accordance with this Article there is more than one participant from a college member, or there are more college members belonging to the same Member State than number of votes that can be exercised, that college member or those college members shall inform the college which participants shall exercise voting rights.",
+      "applicable_entity": "college members",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "voting rights",
+        "college inform",
+        "multiple participants"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(1)",
+      "requirement_text": "The CCP's competent authority shall ensure that the work of the college facilitates the tasks to be performed in accordance with Regulation (EU) No 648/2012.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "college work",
+        "task facilitation",
+        "regulation compliance"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(2)",
+      "requirement_text": "The college shall notify ESMA of any tasks that the college performs in accordance with paragraph 1.",
+      "applicable_entity": "college",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ESMA notification",
+        "college tasks",
+        "performance reporting"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(2)",
+      "requirement_text": "ESMA shall have a coordination role in monitoring the tasks performed by a college and shall ensure that its objectives are in line with those of other colleges as far as possible.",
+      "applicable_entity": "ESMA",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ESMA coordination",
+        "task monitoring",
+        "objective alignment"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(3)",
+      "requirement_text": "The CCP's competent authority, shall at least ensure that: (a) the objectives of any meeting or activity of the college are clearly identified; (b) the college meetings or activities remain effective, while ensuring that all college members are fully informed of the college activities that are relevant to them; (c) the timetable for meetings or activities of the college is defined so that their outcome provides assistance to the supervision of the CCP; (d) the CCP and other key stakeholders have a clear understanding of the role and functioning of the college; (e) the activities of the college are regularly reviewed and remedial action is taken if the college is not operating effectively; (f) the agenda is set for an annual crisis management planning meeting amongst members of the college in cooperation with the CCP if necessary.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "meeting objectives",
+        "effective meetings",
+        "timetable definition",
+        "stakeholder understanding",
+        "regular review",
+        "crisis management meeting"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(4)",
+      "requirement_text": "The CCP's competent authority shall act as a central point of contact for any matter related to the practical organisation of the college.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "central point of contact",
+        "practical organisation",
+        "college matters"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(4)",
+      "requirement_text": "The CCP's competent authority shall at least perform the following tasks: (a) draw-up, update and circulate the contact list of college members; (b) circulate the agenda as well as documentation for meetings or activities of the college; (c) record minutes of the meetings and formalise action points; (d) manage the college website or other electronic information-sharing mechanism, if any; (e) where practical, provide information and specialised teams where appropriate, to assist the college in its tasks; (f) share information in an appropriate manner among members of the college.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "contact list",
+        "agenda circulation",
+        "meeting minutes",
+        "website management",
+        "information sharing"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(5)",
+      "requirement_text": "The frequency of college meetings shall be determined by the CCP's competent authority having regard to the CCP's size, nature, scale and complexity, the systemic implications of the CCP across jurisdictions and currencies, the potential impacts of the activities of the CCP, external circumstances and potential requests by college members.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "meeting frequency",
+        "CCP characteristics",
+        "systemic implications"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(5)",
+      "requirement_text": "There shall be at least an annual meeting of the college and if deemed necessary by the CCP's competent authority, a meeting each time that a decision needs to be taken under Regulation (EU) No 648/2012.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "at least annual",
+      "keywords": [
+        "annual meeting",
+        "decision meetings",
+        "regulation decisions"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 4(5)",
+      "requirement_text": "The CCP's competent authority shall organise, periodically, meetings between members of the college and the senior management of the CCP.",
+      "applicable_entity": "CCP's competent authority",
+      "criticality": "critical",
+      "deadline_text": "periodically",
+      "keywords": [
+        "periodic meetings",
+        "senior management",
+        "college members"
+      ],
+      "law_id": 644,
+      "law_celex": "32013R0876",
+      "law_title": "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Regulation (EU) No 648/2012 of the European Parliament and of the Council with regard to regulatory technical standards on colleges for central counterparties (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 2",
+      "requirement_text": "This Decision shall take effect on the date of its notification",
+      "applicable_entity": "Council Decision",
+      "criticality": "critical",
+      "deadline_text": "on the date of its notification",
+      "keywords": [
+        "decision",
+        "take effect",
+        "notification",
+        "deadline"
+      ],
+      "law_id": 453,
+      "law_celex": "32018D1518",
+      "law_title": "Council Decision (EU) 2018/1518 of 9 October 2018 amending Decision 1999/70/EC concerning the external auditors of the national central banks, as regards the external auditors of Banco de España",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 3",
+      "requirement_text": "This Decision is addressed to the ECB",
+      "applicable_entity": "European Central Bank",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "decision",
+        "addressed",
+        "ECB",
+        "European Central Bank"
+      ],
+      "law_id": 453,
+      "law_celex": "32018D1518",
+      "law_title": "Council Decision (EU) 2018/1518 of 9 October 2018 amending Decision 1999/70/EC concerning the external auditors of the national central banks, as regards the external auditors of Banco de España",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Member States shall bring into force the laws, regulations and administrative provisions necessary to comply with this Directive by 31 December 2005 at the latest",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "by 31 December 2005 at the latest",
+      "keywords": [
+        "transposition",
+        "implementation",
+        "laws",
+        "regulations",
+        "administrative provisions"
+      ],
+      "law_id": 687,
+      "law_celex": "32005L0001",
+      "law_title": "Directive 2005/1/EC of the European Parliament and of the Council of 9 March 2005 amending Council Directives 73/239/EEC, 85/611/EEC, 91/675/EEC, 92/49/EEC and 93/6/EEC and Directives 94/19/EC, 98/78/EC, 2000/12/EC, 2001/34/EC, 2002/83/EC and 2002/87/EC in order to establish a new organisational structure for financial services committees (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Member States shall forthwith communicate to the Commission the text of the provisions of national law which they adopt in the field covered by this Directive",
+      "applicable_entity": "member states",
+      "criticality": "critical",
+      "deadline_text": "forthwith",
+      "keywords": [
+        "communication",
+        "national law",
+        "provisions",
+        "Commission"
+      ],
+      "law_id": 687,
+      "law_celex": "32005L0001",
+      "law_title": "Directive 2005/1/EC of the European Parliament and of the Council of 9 March 2005 amending Council Directives 73/239/EEC, 85/611/EEC, 91/675/EEC, 92/49/EEC and 93/6/EEC and Directives 94/19/EC, 98/78/EC, 2000/12/EC, 2001/34/EC, 2002/83/EC and 2002/87/EC in order to establish a new organisational structure for financial services committees (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 18",
+      "requirement_text": "The European Parliament should be given a period of three months from the first transmission of draft implementing measures to allow it to examine them and to give its opinion",
+      "applicable_entity": "Commission",
+      "criticality": "important",
+      "deadline_text": "three months from the first transmission",
+      "keywords": [
+        "European Parliament",
+        "draft implementing measures",
+        "examination",
+        "opinion"
+      ],
+      "law_id": 687,
+      "law_celex": "32005L0001",
+      "law_title": "Directive 2005/1/EC of the European Parliament and of the Council of 9 March 2005 amending Council Directives 73/239/EEC, 85/611/EEC, 91/675/EEC, 92/49/EEC and 93/6/EEC and Directives 94/19/EC, 98/78/EC, 2000/12/EC, 2001/34/EC, 2002/83/EC and 2002/87/EC in order to establish a new organisational structure for financial services committees (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Recital 18",
+      "requirement_text": "If, within that period, a resolution is passed by the European Parliament, the Commission will re-examine the draft measures",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "within that period",
+      "keywords": [
+        "resolution",
+        "European Parliament",
+        "re-examination",
+        "draft measures"
+      ],
+      "law_id": 687,
+      "law_celex": "32005L0001",
+      "law_title": "Directive 2005/1/EC of the European Parliament and of the Council of 9 March 2005 amending Council Directives 73/239/EEC, 85/611/EEC, 91/675/EEC, 92/49/EEC and 93/6/EEC and Directives 94/19/EC, 98/78/EC, 2000/12/EC, 2001/34/EC, 2002/83/EC and 2002/87/EC in order to establish a new organisational structure for financial services committees (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "General provision",
+      "requirement_text": "The implementing measures adopted should not modify the essential provisions of the Directives",
+      "applicable_entity": "Commission",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "implementing measures",
+        "essential provisions",
+        "modification prohibition"
+      ],
+      "law_id": 687,
+      "law_celex": "32005L0001",
+      "law_title": "Directive 2005/1/EC of the European Parliament and of the Council of 9 March 2005 amending Council Directives 73/239/EEC, 85/611/EEC, 91/675/EEC, 92/49/EEC and 93/6/EEC and Directives 94/19/EC, 98/78/EC, 2000/12/EC, 2001/34/EC, 2002/83/EC and 2002/87/EC in order to establish a new organisational structure for financial services committees (Text with EEA relevance)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Annex I, paragraph 4",
+      "requirement_text": "Each NCA may decide that entities referred to in paragraph 2 and established in its Member State report the information specified in template 9.1 or the information specified in template 9.1.1 from Annex IV to Implementing Regulation (EU) No 680/2014",
+      "applicable_entity": "entities referred to in paragraph 2 (as determined by NCA decision)",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "NCA",
+        "reporting",
+        "template 9.1",
+        "template 9.1.1",
+        "Implementing Regulation 680/2014"
+      ],
+      "law_id": 874,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2017/1538 of the European Central Bank of 25 August 2017 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2017/25) (Official Journal of the European Union L 240 of 19 September 2017)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Annex I, paragraph 4",
+      "requirement_text": "Each NCA may decide that entities referred to in paragraph 2 and established in its Member State report the information specified in template 11.1 or the information specified in template 11.2 from Annex IV to Implementing Regulation (EU) No 680/2014",
+      "applicable_entity": "entities referred to in paragraph 2 (as determined by NCA decision)",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "NCA",
+        "reporting",
+        "template 11.1",
+        "template 11.2",
+        "Implementing Regulation 680/2014"
+      ],
+      "law_id": 874,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2017/1538 of the European Central Bank of 25 August 2017 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2017/25) (Official Journal of the European Union L 240 of 19 September 2017)",
+      "cluster_id": 7
+    },
+    {
+      "article": "Annex I, paragraph 4",
+      "requirement_text": "Each NCA may decide that entities referred to in paragraph 2 and established in its Member State report the information specified in template 12.0 or the information specified in template 12.1 from Annex IV to Implementing Regulation (EU) No 680/2014",
+      "applicable_entity": "entities referred to in paragraph 2 (as determined by NCA decision)",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "NCA",
+        "reporting",
+        "template 12.0",
+        "template 12.1",
+        "Implementing Regulation 680/2014"
+      ],
+      "law_id": 874,
+      "law_celex": null,
+      "law_title": "Corrigendum to Regulation (EU) 2017/1538 of the European Central Bank of 25 August 2017 amending Regulation (EU) 2015/534 on reporting of supervisory financial information (ECB/2017/25) (Official Journal of the European Union L 240 of 19 September 2017)",
+      "cluster_id": 7
+    }
+  ]
+}

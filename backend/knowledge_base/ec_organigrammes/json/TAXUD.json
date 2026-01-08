@@ -1,0 +1,205 @@
+{
+  "dg_code": "TAXUD",
+  "dg_name": "Directorate-General for Taxation & Customs Union",
+  "commissioners": [
+    {
+      "name": "Maroš Šefčovič",
+      "title": "Commissioner"
+    },
+    {
+      "name": "Wopke Hoekstra",
+      "title": "Commissioner"
+    }
+  ],
+  "director_general": {
+    "name": "Gerassimos Thomas",
+    "title": "Director-General",
+    "policy_assistants": [
+      "Alina Marianeg De Lara",
+      "Satalia Brogan"
+    ],
+    "principal_adviser": {
+      "name": "Claes Bengtsson",
+      "role": "Strategy & Economic Analysis Coordination"
+    }
+  },
+  "special_adviser": {
+    "code": "TAXUD.HR",
+    "name": "HR Correspondent",
+    "head": "Fernando Pekowich"
+  },
+  "directorates": [
+    {
+      "code": "TAXUD.A",
+      "name": "Customs",
+      "director": "Matthias Petschke",
+      "units": [
+        {
+          "code": "TAXUD.A.1",
+          "name": "Customs Strategy",
+          "head": "Katrin Tammersalu",
+          "deputy": "Steven Welch"
+        },
+        {
+          "code": "TAXUD.A.2",
+          "name": "Customs Actions",
+          "head": "Manlio Araujo",
+          "deputy": "Giovanni Ventrell"
+        },
+        {
+          "code": "TAXUD.A.3",
+          "name": "Security & Safety Policy",
+          "head": "Fernando Piniella De Fernandez",
+          "deputy": "Luc Tytgat"
+        },
+        {
+          "code": "TAXUD.A.4",
+          "name": "Protection of Citizens & Merchants of IPR",
+          "head": "Luca Pinheiril Parallax",
+          "deputy": "Juan Martinez Castellon"
+        },
+        {
+          "code": "TAXUD.A.5",
+          "name": "International Coordination and Relations Agreement",
+          "head": "Marti Uibel",
+          "deputy": "Ken Schummeyer"
+        }
+      ]
+    },
+    {
+      "code": "TAXUD.B",
+      "name": "Vat, Dut & Other Customs & Taxation Policies",
+      "director": "Philippe Duponteil",
+      "units": [
+        {
+          "code": "TAXUD.B.1",
+          "name": "Principles & Data, Customs Background & Tariffs",
+          "head": "Frank Ceder Ricard",
+          "deputy": "Sophie Codex"
+        },
+        {
+          "code": "TAXUD.B.2",
+          "name": "Agriculture & Special Operations",
+          "head": "Convention",
+          "deputy": "Luis Albaladin"
+        },
+        {
+          "code": "TAXUD.B.3",
+          "name": "Customs Scheme",
+          "head": "Luca Sambelli",
+          "deputy": "Kirsten Lindenschmit"
+        },
+        {
+          "code": "TAXUD.B.4",
+          "name": "Taxation Systems & Digital, Government",
+          "head": "Kadir Colmau",
+          "deputy": "Hans Oppermann"
+        },
+        {
+          "code": "TAXUD.B.5",
+          "name": "Customs Tariff",
+          "head": "Lieck Sambelli",
+          "deputy": "Kirsten Lindenschmit"
+        }
+      ]
+    },
+    {
+      "code": "TAXUD.C",
+      "name": "Indirect Taxation & Tax Administration",
+      "director": "Maria Elena Scoppio",
+      "units": [
+        {
+          "code": "TAXUD.C.1",
+          "name": "Vat: Assis Tax Policy",
+          "head": "Arda Michala",
+          "deputy": "Vincent Korcz"
+        },
+        {
+          "code": "TAXUD.C.2",
+          "name": "Vat And Other Taxation",
+          "head": "David Gall",
+          "deputy": "Beatriz Landeckna"
+        },
+        {
+          "code": "TAXUD.C.3",
+          "name": "Managing Taxation & Other Market Tools",
+          "head": "Olivier Ronnell",
+          "deputy": "Vin"
+        },
+        {
+          "code": "TAXUD.C.4",
+          "name": "Vat Administrative Cooperation & Local Issues",
+          "head": "Valerie Leunin",
+          "deputy": "Maria Urecigallabari"
+        },
+        {
+          "code": "TAXUD.C.5",
+          "name": "Economic Analysis & Taxation of Exempts Sectors",
+          "head": "Agustuir Monko",
+          "deputy": "Antonieta Plance"
+        }
+      ]
+    },
+    {
+      "code": "TAXUD.D",
+      "name": "Direct Taxation, Tax Coordination, Economic Analysis & Assessment",
+      "director": "Benjamin Rangel",
+      "units": [
+        {
+          "code": "TAXUD.D.1",
+          "name": "Company Taxation Initiatives",
+          "head": "Kiki Manuranu"
+        },
+        {
+          "code": "TAXUD.D.2",
+          "name": "Direct Tax & Coordination",
+          "head": "Gaby Kokonics",
+          "deputy": "Fernando Limbanan"
+        },
+        {
+          "code": "TAXUD.D.3",
+          "name": "Economic Planning",
+          "head": "Ioann Mulanescu",
+          "deputy": "Agnieszka Brandes"
+        },
+        {
+          "code": "TAXUD.D.4",
+          "name": "Assessment",
+          "head": "Ioann Mulanescu",
+          "deputy": "Agnieszka Brandes"
+        }
+      ]
+    },
+    {
+      "code": "TAXUD.E",
+      "name": "Resources & General Affairs",
+      "director": "Claes Bengtsson (Acting)",
+      "units": [
+        {
+          "code": "TAXUD.E.1",
+          "name": "Finance, Public Procurement & Compliance",
+          "head": "Eric Owara"
+        },
+        {
+          "code": "TAXUD.E.2",
+          "name": "Information Technology Relations, Communication, Stakeholder & Inter-Institutional Relations, Coordination",
+          "head": "Carina Bleckede",
+          "deputy": "Yanthi Wellense"
+        },
+        {
+          "code": "TAXUD.E.3",
+          "name": "Management Of Procedures & Eu Trainings",
+          "head": "Adriella Mora"
+        }
+      ]
+    },
+    {
+      "code": "TAXUD.A.6",
+      "name": "Rules Of Origin And Customs Valuation",
+      "head": "Maria Anna Lima",
+      "deputy": "Ana Vilela Cerval"
+    }
+  ],
+  "seconded_managers": "Patrice Pillet - seconded to the Cabinet of Commissioner Hoekstra; Mariana Hrietcheva - seconded to ECA",
+  "date_of_effect": "2025-07-01"
+}

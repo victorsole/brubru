@@ -1,0 +1,123 @@
+/* Carousel Section */
+.carousel {
+  padding: 3rem 0;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel__container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel__track {
+  display: flex;
+  gap: 2rem;
+  animation: scroll 90s linear infinite;
+  width: fit-content;
+}
+
+/* Pause animation when hovering over the carousel */
+.carousel__track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+/* Card - 3D Flip Container */
+.carousel__card {
+  flex-shrink: 0;
+  width: 140px;
+  height: 140px;
+  perspective: 1000px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.carousel__card:hover {
+  transform: scale(1.05);
+}
+
+.carousel__card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.carousel__card--flipped .carousel__card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Front and Back Faces */
+.carousel__card-front,
+.carousel__card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Front - Image */
+.carousel__card-front {
+  background: white;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.carousel__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 15px;
+  display: block;
+}
+
+/* Back - Text */
+.carousel__card-back {
+  background: linear-gradient(135deg, #a8d5ba 0%, #7db99c 100%);
+  transform: rotateY(180deg);
+  padding: 1rem;
+}
+
+.carousel__message {
+  color: #1f2937;
+  font-size: 0.75rem;
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
+  font-weight: 600;
+  text-shadow: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .carousel__track {
+    gap: 1.5rem;
+    animation-duration: 70s;
+  }
+
+  .carousel__card {
+    width: 120px;
+    height: 120px;
+  }
+
+  .carousel__message {
+    font-size: 0.7rem;
+  }
+}

@@ -1,0 +1,102 @@
+/* frontend/src/components/admin/shared/admin_stats_card.css */
+
+.admin-stats-card {
+  background: white;
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.admin-stats-card:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  transform: translateY(-2px);
+}
+
+.admin-stats-card--clickable {
+  cursor: pointer;
+}
+
+.admin-stats-card--clickable:focus {
+  outline: 2px solid var(--color-primary, #003399);
+  outline-offset: 2px;
+}
+
+.admin-stats-card--success {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+.admin-stats-card--warning {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);
+}
+
+.admin-stats-card--error {
+  border-color: #ef4444;
+  background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+}
+
+.admin-stats-card__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  color: var(--color-primary, #003399);
+}
+
+.admin-stats-card--success .admin-stats-card__icon {
+  color: #10b981;
+}
+
+.admin-stats-card--warning .admin-stats-card__icon {
+  color: #f59e0b;
+}
+
+.admin-stats-card--error .admin-stats-card__icon {
+  color: #ef4444;
+}
+
+.admin-stats-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-stats-card__title {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-stats-card__value {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-primary, #1f2937);
+  line-height: 1.2;
+}
+
+.admin-stats-card__subtitle {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-stats-card {
+    padding: 1.25rem;
+  }
+
+  .admin-stats-card__icon {
+    font-size: 2rem;
+  }
+
+  .admin-stats-card__value {
+    font-size: 1.75rem;
+  }
+}

@@ -1,0 +1,578 @@
+{
+    "metadata": {
+      "title": "EU Member States Permanent Representations to the European Union",
+      "location": "Brussels, Belgium",
+      "total_member_states": 27,
+      "last_updated": "2025-11-06",
+      "description": "All EU member states maintain permanent representations in Brussels serving as diplomatic missions to EU institutions. Permanent Representatives serve as ambassadors and participate in COREPER.",
+      "sources": [
+        "https://op.europa.eu/en/web/who-is-who/organization/-/organization/REPRES_PERM/REPRES_PERM",
+        "https://www.consilium.europa.eu/"
+      ]
+    },
+    "coreper_system": {
+      "full_name": "Committee of Permanent Representatives",
+      "acronym": "COREPER",
+      "description": "The Council's main preparatory body composed of Permanent Representatives of member states",
+      "structure": {
+        "COREPER_II": {
+          "composition": "Permanent Representatives (Ambassadors)",
+          "role": "Prepares work for General Affairs Council, Foreign Affairs Council, Economic and Financial Affairs Council, and Justice and Home Affairs Council"
+        },
+        "COREPER_I": {
+          "composition": "Deputy Permanent Representatives",
+          "role": "Prepares work for sectoral Council configurations including Transport, Environment, Employment, Agriculture, Fisheries, Competitiveness, and Education"
+        }
+      },
+      "meeting_frequency": "Weekly meetings to prepare Council sessions",
+      "importance": "Key forum for negotiations and consensus-building at technical and political levels"
+    },
+    "permanent_representations": [
+      {
+        "country": "Austria",
+        "country_code": "AT",
+        "official_name": "Permanent Representation of Austria to the European Union",
+        "address": {
+          "street": "Avenue de Cortenbergh 30",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 234 51 00",
+          "email": "bruessel-ov@bmeia.gv.at",
+          "website": "https://www.bmeia.gv.at/en/oev-bruessel"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Belgium",
+        "country_code": "BE",
+        "official_name": "Permanent Representation of Belgium to the European Union",
+        "address": {
+          "street": "Rue Belliard 65",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 233 21 11",
+          "email": "info.belgoeurop@diplobel.fed.be",
+          "website": "https://europeanunion.diplomatie.belgium.be/en"
+        },
+        "representatives": {
+          "permanent_representative": {
+            "name": "Alexandre Brecx",
+            "title": "Permanent Representative",
+            "coreper": "COREPER II"
+          },
+          "deputy_permanent_representative": {
+            "name": "Sofia Smorscek",
+            "title": "Deputy Permanent Representative",
+            "coreper": "COREPER I"
+          }
+        }
+      },
+      {
+        "country": "Bulgaria",
+        "country_code": "BG",
+        "official_name": "Permanent Representation of the Republic of Bulgaria to the European Union",
+        "address": {
+          "street": "Square Marie-Louise 49",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 235 83 01",
+          "email": "rpeu@mfa.bg",
+          "website": "https://www.mfa.bg/en/embassies/belgiumpp"
+        },
+        "representatives": {
+          "permanent_representative": {
+            "name": "Rumen Alexandrov",
+            "title": "Ambassador, Permanent Representative"
+          }
+        }
+      },
+      {
+        "country": "Croatia",
+        "country_code": "HR",
+        "official_name": "Permanent Representation of the Republic of Croatia to the European Union",
+        "address": {
+          "street": "Rue d'Arlon 108",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 507 54 11",
+          "email": "hr.perm.rep@mvep.hr",
+          "website": "https://www.mvep.hr"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Cyprus",
+        "country_code": "CY",
+        "official_name": "Permanent Representation of the Republic of Cyprus to the European Union",
+        "address": {
+          "street": "Avenue de Cortenbergh 61",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 739 51 11",
+          "email": "cy.perm.rep@mfa.gov.cy",
+          "website": "https://www.mfa.gov.cy"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Czechia",
+        "country_code": "CZ",
+        "official_name": "Permanent Representation of the Czech Republic to the European Union",
+        "address": {
+          "street": "Rue Caroly 15",
+          "postal_code": "B-1050",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 213 91 11",
+          "email": "eu.brussels@embassy.mzv.cz",
+          "website": "https://www.mzv.cz/representation_brussels/en/"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Denmark",
+        "country_code": "DK",
+        "official_name": "Permanent Representation of Denmark to the European Union",
+        "address": {
+          "street": "Rue d'Arlon 73",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 233 08 11",
+          "email": "brurep@um.dk",
+          "website": "https://eu.um.dk/en"
+        },
+        "representatives": {
+          "permanent_representative": {
+            "name": "Carsten Grønbech-Jensen",
+            "title": "Ambassador, Permanent Representative",
+            "coreper": "COREPER II"
+          },
+          "deputy_permanent_representative": {
+            "name": "Søren Jacobsen",
+            "title": "Ambassador, Deputy Permanent Representative",
+            "coreper": "COREPER I"
+          }
+        }
+      },
+      {
+        "country": "Estonia",
+        "country_code": "EE",
+        "official_name": "Permanent Representation of Estonia to the European Union",
+        "address": {
+          "street": "Rue Guimard 11/13",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 227 39 10",
+          "email": "permrep.eu@mfa.ee",
+          "website": "https://www.estemb.be"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Finland",
+        "country_code": "FI",
+        "official_name": "Permanent Representation of Finland to the European Union",
+        "address": {
+          "street": "Avenue de Cortenbergh 80",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 287 84 11",
+          "email": "sanomat.eue@formin.fi",
+          "website": "https://www.finland.eu"
+        },
+        "representatives": {
+          "permanent_representative": {
+            "name": "Jori Arvonen",
+            "title": "Ambassador, Permanent Representative",
+            "coreper": "COREPER II"
+          },
+          "deputy_permanent_representative": {
+            "name": "Lauri Hirvonen",
+            "title": "Ambassador, Deputy Permanent Representative",
+            "coreper": "COREPER I"
+          }
+        }
+      },
+      {
+        "country": "France",
+        "country_code": "FR",
+        "official_name": "Permanent Representation of France to the European Union",
+        "address": {
+          "street": "Place de Louvain 14",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 229 82 11",
+          "email": "courrier.bruxelles-dfra@diplomatie.gouv.fr",
+          "website": "https://www.rpfrance.eu"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Germany",
+        "country_code": "DE",
+        "official_name": "Permanent Representation of the Federal Republic of Germany to the European Union",
+        "address": {
+          "street": "Rue Jacques de Lalaing 8-14",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 787 10 00",
+          "email": "info@bruessel-eu.diplo.de",
+          "website": "https://bruessel-eu.diplo.de/eu-en"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Greece",
+        "country_code": "EL",
+        "official_name": "Permanent Representation of Greece to the European Union",
+        "address": {
+          "street": "Rue Jacques de Lalaing 19-21",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 551 56 11",
+          "email": "admin@rp-grece.be",
+          "website": "https://www.mfa.gr/brussels/en/permanent-representation-eu/"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Hungary",
+        "country_code": "HU",
+        "official_name": "Permanent Representation of Hungary to the European Union",
+        "address": {
+          "street": "Rue de Trèves 92-98",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 234 12 00",
+          "website": "https://www.mfa.gov.hu/kulkepviselet/BRUSSELS_EU/en/"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Ireland",
+        "country_code": "IE",
+        "official_name": "Permanent Representation of Ireland to the European Union",
+        "address": {
+          "street": "Rue Froissart 50",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 230 85 80",
+          "email": "eujpd@dfa.ie",
+          "website": "https://www.ireland.ie/en/eu/brussels/"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Italy",
+        "country_code": "IT",
+        "official_name": "Permanent Representation of Italy to the European Union",
+        "address": {
+          "street": "Rue du Marteau 9",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 220 04 11",
+          "email": "rpue.pers.ue@esteri.it",
+          "website": "https://italiaue.esteri.it/en/"
+        },
+        "representatives": {
+          "permanent_representative": {
+            "name": "Vincenzo Celeste",
+            "title": "Ambassador, Permanent Representative"
+          }
+        }
+      },
+      {
+        "country": "Latvia",
+        "country_code": "LV",
+        "official_name": "Permanent Representation of Latvia to the European Union",
+        "address": {
+          "street": "Avenue des Arts 23",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 238 31 00",
+          "email": "permrep.eu@mfa.gov.lv",
+          "website": "https://www.mfa.gov.lv/en/brussels/"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Lithuania",
+        "country_code": "LT",
+        "official_name": "Permanent Representation of Lithuania to the European Union",
+        "address": {
+          "street": "Rue Belliard 41-43",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 771 01 40",
+          "email": "office@eu.mfa.lt",
+          "website": "https://www.eurep.mfa.lt"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Luxembourg",
+        "country_code": "LU",
+        "official_name": "Permanent Representation of Luxembourg to the European Union",
+        "address": {
+          "street": "Avenue Cortenbergh 75",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 737 56 00",
+          "email": "bruxelles.rpue@mae.etat.lu",
+          "website": "https://bruxelles-rpue.mae.lu/en.html"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Malta",
+        "country_code": "MT",
+        "official_name": "Permanent Representation of Malta to the European Union",
+        "address": {
+          "street": "Rue Archimède 25",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 343 01 95",
+          "email": "maltarep.eu@gov.mt",
+          "website": "https://www.doi.gov.mt"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Netherlands",
+        "country_code": "NL",
+        "official_name": "Permanent Representation of the Kingdom of the Netherlands to the European Union",
+        "address": {
+          "street": "Rue de Trèves 31-35",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 679 15 11",
+          "website": "https://www.netherlandsandyou.nl/web/pr-eu-brussels"
+        },
+        "representatives": {
+          "permanent_representative": {
+            "name": "Pieter Jan Kleiweg de Zwaan",
+            "title": "Ambassador, Permanent Representative"
+          }
+        }
+      },
+      {
+        "country": "Poland",
+        "country_code": "PL",
+        "official_name": "Permanent Representation of the Republic of Poland to the European Union",
+        "address": {
+          "street": "Rue Stevin 139",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 777 72 00",
+          "email": "Brussels.eu.careers@msz.gov.pl",
+          "website": "https://www.bruksela.ue.msz.gov.pl/en"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Portugal",
+        "country_code": "PT",
+        "official_name": "Permanent Representation of Portugal to the European Union",
+        "address": {
+          "street": "Avenue de Cortenbergh 12",
+          "postal_code": "B-1040",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 286 42 11",
+          "email": "Alice.ergin@mne.pt",
+          "website": "https://ue.missaoportugal.mne.gov.pt/en/"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Romania",
+        "country_code": "RO",
+        "official_name": "Permanent Representation of Romania to the European Union",
+        "address": {
+          "street": "Avenue de Cortenbergh 107",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 700 06 40",
+          "website": "https://ue.mae.ro/en"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Slovakia",
+        "country_code": "SK",
+        "official_name": "Permanent Representation of the Slovak Republic to the European Union",
+        "address": {
+          "street": "Avenue de Cortenbergh 79",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 743 68 11",
+          "email": "eu.brussels@mzv.sk",
+          "website": "https://www.mzv.sk"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Slovenia",
+        "country_code": "SI",
+        "official_name": "Permanent Representation of the Republic of Slovenia to the European Union",
+        "address": {
+          "street": "Boulevard du Régent 45-46",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 2 213 63 00",
+          "email": "brussels.representation@gov.si",
+          "website": "https://brussels.representation.si/"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Spain",
+        "country_code": "ES",
+        "official_name": "Permanent Representation of Spain to the European Union",
+        "address": {
+          "street": "Boulevard du Régent 52",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 509 86 11",
+          "email": "unidaddeapoyo@reper.maec.es",
+          "website": "https://www.exteriores.gob.es"
+        },
+        "representatives": {}
+      },
+      {
+        "country": "Sweden",
+        "country_code": "SE",
+        "official_name": "Permanent Representation of Sweden to the European Union",
+        "address": {
+          "street": "Square de Meeûs 30",
+          "postal_code": "B-1000",
+          "city": "Brussels",
+          "country": "Belgium"
+        },
+        "contact": {
+          "phone": "+32 (0)2 289 56 11",
+          "website": "https://www.government.se/sweden-in-the-eu/permanent-representation-of-sweden-to-the-eu/"
+        },
+        "representatives": {
+          "permanent_representative": {
+            "name": "Mikaela Kumlin Granit",
+            "title": "Ambassador, Permanent Representative",
+            "coreper": "COREPER II"
+          },
+          "deputy_permanent_representative": {
+            "name": "Åsa Webber",
+            "title": "Ambassador, Deputy Permanent Representative",
+            "coreper": "COREPER I"
+          }
+        }
+      }
+    ],
+    "statistics": {
+      "total_permanent_representations": 27,
+      "location": "Brussels, Belgium",
+      "representatives_documented": {
+        "permanent_representatives": 7,
+        "deputy_permanent_representatives": 4
+      },
+      "contact_information_available": {
+        "addresses": 27,
+        "phone_numbers": 27,
+        "email_addresses": 20,
+        "websites": 27
+      }
+    },
+    "geographical_clustering": {
+      "european_quarter": {
+        "description": "Most permanent representations are located in the European Quarter around Rue de la Loi/Wetstraat",
+        "key_streets": [
+          "Avenue de Cortenbergh",
+          "Rue Belliard",
+          "Rue d'Arlon",
+          "Rue de Trèves",
+          "Boulevard du Régent"
+        ]
+      }
+    },
+    "usage_notes": {
+      "diplomatic_protocol": "Permanent Representatives have ambassadorial status and represent their member state in EU decision-making",
+      "council_preparation": "COREPER meetings are essential for preparing Council of the European Union sessions and reaching compromises",
+      "national_coordination": "Permanent Representations coordinate between national capitals and EU institutions",
+      "advocacy_targeting": "These representations are key targets for EU-level lobbying and advocacy campaigns on behalf of member state interests"
+    }
+  }

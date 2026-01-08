@@ -1,0 +1,411 @@
+{
+    "year": 2026,
+    "institution": "European Parliament",
+    "calendar_type": "Parliamentary Activities Calendar",
+    "special_dates": {
+      "europe_day": {
+        "date": "2026-05-09",
+        "description": "Europe Day"
+      }
+    },
+    "activity_types": {
+      "plenary_session": "Plenary sessions (Article 229 TFEU)",
+      "committee_week": "Committee weeks",
+      "group_week": "Political group weeks",
+      "external_activities": "External parliamentary activities"
+    },
+    "months": {
+      "january": {
+        "month_number": 1,
+        "weeks": [
+          {
+            "week_number": 53,
+            "dates": "2025-12-29 to 2026-01-04",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 1,
+            "dates": "2026-01-05 to 2026-01-11",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 2,
+            "dates": "2026-01-12 to 2026-01-18",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 3,
+            "dates": "2026-01-19 to 2026-01-25",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 4,
+            "dates": "2026-01-26 to 2026-02-01",
+            "activity_type": "committee_week"
+          }
+        ]
+      },
+      "february": {
+        "month_number": 2,
+        "weeks": [
+          {
+            "week_number": 4,
+            "dates": "2026-01-26 to 2026-02-01",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 5,
+            "dates": "2026-02-02 to 2026-02-08",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 6,
+            "dates": "2026-02-09 to 2026-02-15",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 7,
+            "dates": "2026-02-16 to 2026-02-22",
+            "activity_type": "committee_week"
+          }
+        ]
+      },
+      "march": {
+        "month_number": 3,
+        "weeks": [
+          {
+            "week_number": 8,
+            "dates": "2026-02-23 to 2026-03-01",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 9,
+            "dates": "2026-03-02 to 2026-03-08",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 10,
+            "dates": "2026-03-09 to 2026-03-15",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 11,
+            "dates": "2026-03-16 to 2026-03-22",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 12,
+            "dates": "2026-03-23 to 2026-03-29",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          }
+        ]
+      },
+      "april": {
+        "month_number": 4,
+        "weeks": [
+          {
+            "week_number": 12,
+            "dates": "2026-03-23 to 2026-03-29",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 13,
+            "dates": "2026-03-30 to 2026-04-05",
+            "activity_type": "group_week"
+          },
+          {
+            "week_number": 14,
+            "dates": "2026-04-06 to 2026-04-12",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 15,
+            "dates": "2026-04-13 to 2026-04-19",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 16,
+            "dates": "2026-04-20 to 2026-04-26",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          }
+        ]
+      },
+      "may": {
+        "month_number": 5,
+        "weeks": [
+          {
+            "week_number": 16,
+            "dates": "2026-04-20 to 2026-04-26",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 17,
+            "dates": "2026-04-27 to 2026-05-03",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 18,
+            "dates": "2026-05-04 to 2026-05-10",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+            "special_note": "Contains Europe Day (May 9th)"
+          },
+          {
+            "week_number": 19,
+            "dates": "2026-05-11 to 2026-05-17",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 20,
+            "dates": "2026-05-18 to 2026-05-24",
+            "activity_type": "committee_week"
+          }
+        ]
+      },
+      "june": {
+        "month_number": 6,
+        "weeks": [
+          {
+            "week_number": 21,
+            "dates": "2026-05-25 to 2026-05-31",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 22,
+            "dates": "2026-06-01 to 2026-06-07",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 23,
+            "dates": "2026-06-08 to 2026-06-14",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 24,
+            "dates": "2026-06-15 to 2026-06-21",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 25,
+            "dates": "2026-06-22 to 2026-06-28",
+            "activity_type": "committee_week"
+          }
+        ]
+      },
+      "july": {
+        "month_number": 7,
+        "weeks": [
+          {
+            "week_number": 25,
+            "dates": "2026-06-22 to 2026-06-28",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 26,
+            "dates": "2026-06-29 to 2026-07-05",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 27,
+            "dates": "2026-07-06 to 2026-07-12",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 28,
+            "dates": "2026-07-13 to 2026-07-19",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 29,
+            "dates": "2026-07-20 to 2026-07-26",
+            "activity_type": "committee_week"
+          }
+        ]
+      },
+      "august": {
+        "month_number": 8,
+        "weeks": [
+          {
+            "week_number": 29,
+            "dates": "2026-07-20 to 2026-07-26",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 30,
+            "dates": "2026-07-27 to 2026-08-02",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 31,
+            "dates": "2026-08-03 to 2026-08-09",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 32,
+            "dates": "2026-08-10 to 2026-08-16",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 33,
+            "dates": "2026-08-17 to 2026-08-23",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 34,
+            "dates": "2026-08-24 to 2026-08-30",
+            "activity_type": "recess"
+          }
+        ]
+      },
+      "september": {
+        "month_number": 9,
+        "weeks": [
+          {
+            "week_number": 34,
+            "dates": "2026-08-24 to 2026-08-30",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 35,
+            "dates": "2026-08-31 to 2026-09-06",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 36,
+            "dates": "2026-09-07 to 2026-09-13",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 37,
+            "dates": "2026-09-14 to 2026-09-20",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 38,
+            "dates": "2026-09-21 to 2026-09-27",
+            "activity_type": "committee_week"
+          }
+        ]
+      },
+      "october": {
+        "month_number": 10,
+        "weeks": [
+          {
+            "week_number": 38,
+            "dates": "2026-09-21 to 2026-09-27",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 39,
+            "dates": "2026-09-28 to 2026-10-04",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 40,
+            "dates": "2026-10-05 to 2026-10-11",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 41,
+            "dates": "2026-10-12 to 2026-10-18",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 42,
+            "dates": "2026-10-19 to 2026-10-25",
+            "activity_type": "committee_week"
+          }
+        ]
+      },
+      "november": {
+        "month_number": 11,
+        "weeks": [
+          {
+            "week_number": 42,
+            "dates": "2026-10-19 to 2026-10-25",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 43,
+            "dates": "2026-10-26 to 2026-11-01",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 44,
+            "dates": "2026-11-02 to 2026-11-08",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 45,
+            "dates": "2026-11-09 to 2026-11-15",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 46,
+            "dates": "2026-11-16 to 2026-11-22",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 47,
+            "dates": "2026-11-23 to 2026-11-29",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          }
+        ]
+      },
+      "december": {
+        "month_number": 12,
+        "weeks": [
+          {
+            "week_number": 47,
+            "dates": "2026-11-23 to 2026-11-29",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 48,
+            "dates": "2026-11-30 to 2026-12-06",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 49,
+            "dates": "2026-12-07 to 2026-12-13",
+            "activity_type": "plenary_session",
+            "session_days": ["Monday", "Tuesday", "Wednesday", "Thursday"]
+          },
+          {
+            "week_number": 50,
+            "dates": "2026-12-14 to 2026-12-20",
+            "activity_type": "committee_week"
+          },
+          {
+            "week_number": 51,
+            "dates": "2026-12-21 to 2026-12-27",
+            "activity_type": "recess"
+          },
+          {
+            "week_number": 52,
+            "dates": "2026-12-28 to 2027-01-03",
+            "activity_type": "recess"
+          }
+        ]
+      }
+    },
+    "notes": {
+      "scrutiny_sessions": "The Conference of Presidents can schedule scrutiny sessions in group and committee weeks on Wednesday afternoon",
+      "article_229_tfeu": "EP session according to Article 229 of the Treaty on the Functioning of the European Union",
+      "calendar_flexibility": "Calendar is subject to changes by decision of the Conference of Presidents"
+    }
+  }

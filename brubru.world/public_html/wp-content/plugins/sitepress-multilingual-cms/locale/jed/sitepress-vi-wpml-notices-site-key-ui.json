@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "vi"
+         },
+         "Get a key for this site": [
+            "Nhận khóa cho trang web này"
+         ],
+         "Site key:": [
+            "Khóa trang web:"
+         ],
+         "Enter your site key here": [
+            "Nhập khóa trang web của bạn tại đây"
+         ],
+         "Registering...": [
+            "Đang đăng ký..."
+         ],
+         "Register": [
+            "Đăng ký"
+         ],
+         "A New Site Key Is Required": [
+            "Cần một khóa trang web mới"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "Để tiếp tục sử dụng các tính năng WPML như dịch tự động và cập nhật plugin, vui lòng đăng ký lại trang web của bạn. Đừng lo lắng, nội dung và bản dịch hiện có của bạn vẫn an toàn."
+         ],
+         "Site key registered successfully!": [
+            "Đăng ký khóa trang web thành công!"
+         ],
+         "Page will reload in %d seconds...": [
+            "Trang sẽ tải lại sau %d giây..."
+         ],
+         "Registration failed. Please try again.": [
+            "Đăng ký thất bại. Vui lòng thử lại."
+         ]
+      }
+   }
+}

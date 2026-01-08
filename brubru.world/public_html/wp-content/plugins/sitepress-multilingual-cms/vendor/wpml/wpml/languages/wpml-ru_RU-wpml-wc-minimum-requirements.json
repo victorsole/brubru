@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "ru"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "Ваш сайт теперь соответствует минимальным требованиям WPML"
+         ],
+         "Start WPML Setup": [
+            "Начать настройку WPML"
+         ],
+         "Need Help?": [
+            "Нужна помощь?"
+         ],
+         "Contact our support team": [
+            "Свяжитесь с нашей службой поддержки"
+         ],
+         " and we'll guide you through it step by step.": [
+            " и мы проведем вас через все этапы."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Ваш сайт не соответствует минимальным требованиям WPML"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "Убедитесь, что ваш сайт работает гладко с WPML, соответствуя этим простым минимальным требованиям."
+         ],
+         "Re-check Now": [
+            "Проверить еще раз"
+         ],
+         "Skip for now": [
+            "Пропустить пока"
+         ]
+      }
+   }
+}

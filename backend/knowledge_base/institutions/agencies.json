@@ -1,0 +1,2518 @@
+{
+    "metadata": {
+      "title": "EU Decentralized Agencies Organizational Structures",
+      "version": "2025.1",
+      "last_updated": "2025-11-19",
+      "coverage_period": "2020-2025",
+      "total_agencies": 30,
+      "language": "British English",
+      "naming_convention": "snake_case"
+    },
+    "agencies": {
+      "financial_economic": {
+        "esma": {
+          "full_name": "European Securities and Markets Authority",
+          "abbreviation": "ESMA",
+          "location": "Paris, France",
+          "website": "https://www.esma.europa.eu",
+          "established": "2011",
+          "executive_leadership": {
+            "chair": {
+              "name": "Verena Ross",
+              "position": "Chair"
+            },
+            "executive_director": {
+              "name": "Natasha Cazenave",
+              "position": "Executive Director"
+            }
+          },
+          "governance_bodies": {
+            "board_of_supervisors": {
+              "composition": "Chair + heads of National Competent Authorities",
+              "role": "Decision-making body"
+            },
+            "management_board": {
+              "role": "Administrative and budgetary oversight"
+            }
+          },
+          "organizational_structure": {
+            "standing_committees": [
+              {
+                "name": "CCP Supervisory Committee",
+                "focus": "Central counterparty supervision"
+              },
+              {
+                "name": "CCP Resolution Committee",
+                "focus": "Resolution planning"
+              },
+              {
+                "name": "Investment Management Standing Committee",
+                "focus": "UCITS, AIFMD, fund managers"
+              },
+              {
+                "name": "Investor Protection and Intermediaries Standing Committee",
+                "focus": "MiFID, investor protection"
+              },
+              {
+                "name": "Markets Standing Committee",
+                "focus": "Trading venues, market structures"
+              },
+              {
+                "name": "Post-Trading Standing Committee",
+                "focus": "Settlement, custody"
+              },
+              {
+                "name": "Risk Standing Committee",
+                "focus": "Market risk assessment"
+              },
+              {
+                "name": "ESMA Supervision and Policy Committee",
+                "focus": "Direct supervision coordination"
+              }
+            ],
+            "internal_departments": [
+              {
+                "name": "Governance & External Affairs",
+                "functions": ["Stakeholder engagement", "International relations"]
+              },
+              {
+                "name": "Legal & Compliance",
+                "functions": ["Legal advice", "Enforcement"]
+              },
+              {
+                "name": "Corporate Services",
+                "functions": ["Administrative support", "Facilities management"]
+              },
+              {
+                "name": "Finance & Procurement",
+                "functions": ["Budget management", "Procurement"]
+              },
+              {
+                "name": "ICT",
+                "functions": ["Information systems", "Cybersecurity"]
+              },
+              {
+                "name": "Human Resources",
+                "functions": ["Recruitment", "Staff development"]
+              },
+              {
+                "name": "Policy Divisions",
+                "sub_units": [
+                  "Investment Services",
+                  "Issuer Disclosure",
+                  "Market Infrastructures",
+                  "Credit Rating Agencies",
+                  "Data Analytics"
+                ]
+              }
+            ]
+          }
+        },
+        "eba": {
+          "full_name": "European Banking Authority",
+          "abbreviation": "EBA",
+          "location": "Paris, France",
+          "website": "https://www.eba.europa.eu",
+          "established": "2011",
+          "executive_leadership": {
+            "chairperson": {
+              "name": "José Manuel Campa",
+              "position": "Chairperson"
+            },
+            "executive_director": {
+              "name": "François-Louis Michaud",
+              "position": "Executive Director",
+              "mandate_renewed": "2025"
+            }
+          },
+          "organizational_structure": {
+            "departments": [
+              {
+                "name": "Prudential Regulation & Supervisory Policy",
+                "director": "Isabelle Vaillant",
+                "units": [
+                  {
+                    "name": "Supervisory Review, Recovery and Resolution",
+                    "focus": "SREP, crisis management"
+                  },
+                  {
+                    "name": "Liquidity, Leverage and Capital",
+                    "focus": "Capital requirements, buffers"
+                  },
+                  {
+                    "name": "Risk-Based Metrics",
+                    "focus": "Risk assessment frameworks"
+                  }
+                ]
+              },
+              {
+                "name": "Innovation, Conduct & Consumers",
+                "director": "Marilin Pikaro",
+                "units": [
+                  {
+                    "name": "Digital Finance & Innovation",
+                    "focus": "FinTech, crypto-assets"
+                  },
+                  {
+                    "name": "AML/CFT",
+                    "focus": "Anti-money laundering"
+                  },
+                  {
+                    "name": "Conduct, Payments & Consumers",
+                    "focus": "Consumer protection, PSD2"
+                  }
+                ]
+              },
+              {
+                "name": "Economic & Risk Analysis",
+                "director": "Kamil Liberadzki",
+                "units": [
+                  {
+                    "name": "Economic Analysis",
+                    "focus": "Macroeconomic assessment"
+                  },
+                  {
+                    "name": "Risk Analysis & Stress Testing",
+                    "focus": "EU-wide stress tests"
+                  },
+                  {
+                    "name": "ESG Risks",
+                    "focus": "Climate and environmental risks"
+                  }
+                ]
+              },
+              {
+                "name": "Data Analytics, Reporting & Transparency",
+                "director": "Meri Rimmanen",
+                "units": [
+                  {
+                    "name": "Reporting & Transparency",
+                    "focus": "COREP, FINREP"
+                  },
+                  {
+                    "name": "Statistics & Data Quality",
+                    "focus": "Data governance"
+                  }
+                ]
+              },
+              {
+                "name": "DORA Joint Oversight",
+                "director": "Marc Andries",
+                "note": "Joint ESAs function for Digital Operational Resilience Act",
+                "units": [
+                  {
+                    "name": "ICT Third-Party Risk Oversight",
+                    "focus": "Critical service providers"
+                  }
+                ]
+              },
+              {
+                "name": "Operations",
+                "director": "Peter Mihalik",
+                "units": [
+                  {
+                    "name": "Human Resources",
+                    "focus": "Recruitment, training"
+                  },
+                  {
+                    "name": "Finance & Procurement",
+                    "focus": "Budget execution"
+                  },
+                  {
+                    "name": "Information Technology",
+                    "focus": "Systems management"
+                  },
+                  {
+                    "name": "Corporate Support",
+                    "focus": "Administrative services"
+                  }
+                ]
+              }
+            ],
+            "support_functions": [
+              "Legal & Compliance",
+              "Governance & External Affairs",
+              "Accounting Office",
+              "Communications"
+            ]
+          }
+        },
+        "eiopa": {
+          "full_name": "European Insurance and Occupational Pensions Authority",
+          "abbreviation": "EIOPA",
+          "location": "Frankfurt, Germany",
+          "website": "https://www.eiopa.europa.eu",
+          "established": "2011",
+          "executive_leadership": {
+            "chairperson": {
+              "name": "Petra Hielkema",
+              "position": "Chairperson"
+            },
+            "executive_director": {
+              "name": "Fausto Parente",
+              "position": "Executive Director"
+            }
+          },
+          "organizational_structure": {
+            "departments": [
+              {
+                "name": "Corporate Affairs",
+                "head": "Susanne Rosenbaum",
+                "functions": ["Governance", "External relations", "Communications"]
+              },
+              {
+                "name": "Corporate Support",
+                "head": "Danny Janssen",
+                "functions": ["HR", "Finance", "ICT", "Facilities"]
+              },
+              {
+                "name": "Oversight",
+                "head": "Ana Teresa Moutinho",
+                "functions": ["Supervisory convergence", "Direct supervision"]
+              },
+              {
+                "name": "Policy & Supervisory Processes",
+                "head": "Patrick Hoedjes",
+                "functions": ["Policy development", "Solvency II", "IDD"]
+              },
+              {
+                "name": "Risks & Financial Stability",
+                "head": "Dimitris Zafeiris",
+                "functions": ["Risk assessment", "Stress testing", "Financial stability"]
+              },
+              {
+                "name": "Consumer Protection",
+                "head": "Valérie Mariatte-Wood",
+                "functions": ["Consumer rights", "Complaints", "Product oversight"]
+              }
+            ]
+          }
+        },
+        "esrb": {
+          "full_name": "European Systemic Risk Board",
+          "abbreviation": "ESRB",
+          "location": "Frankfurt, Germany (hosted by ECB)",
+          "website": "https://www.esrb.europa.eu",
+          "established": "2010",
+          "executive_leadership": {
+            "chair": {
+              "name": "Christine Lagarde",
+              "position": "Chair (ex officio as ECB President)"
+            },
+            "head_of_secretariat": {
+              "name": "Francesco Mazzaferro",
+              "position": "Head of Secretariat"
+            }
+          },
+          "organizational_structure": {
+            "governance_bodies": {
+              "general_board": {
+                "total_members": 69,
+                "voting_members": 39,
+                "composition": "ECB President, NCB Governors, Commission, ESA Chairs, NCAs"
+              },
+              "steering_committee": {
+                "role": "Prepares General Board meetings",
+                "members": "13"
+              },
+              "advisory_technical_committee": {
+                "role": "Technical advice, risk analysis"
+              },
+              "advisory_scientific_committee": {
+                "role": "Academic expertise"
+              }
+            },
+            "secretariat": {
+              "location": "ECB premises",
+              "head": "Francesco Mazzaferro",
+              "functions": ["Analysis", "Risk assessment", "Coordination"]
+            }
+          }
+        },
+        "eib": {
+          "full_name": "European Investment Bank",
+          "abbreviation": "EIB",
+          "location": "Luxembourg",
+          "website": "https://www.eib.org",
+          "established": "1958",
+          "executive_leadership": {
+            "president": {
+              "name": "Nadia Calviño",
+              "position": "President"
+            },
+            "management_committee": {
+              "members": 9,
+              "composition": "President + 9 Vice-Presidents"
+            }
+          },
+          "organizational_structure": {
+            "directorates": [
+              {
+                "name": "General Secretariat",
+                "director_general": "Barbara Balke",
+                "role": "Governance and coordination"
+              },
+              {
+                "name": "Legal Affairs",
+                "director_general": "José María Fernández Martín",
+                "role": "Legal services"
+              },
+              {
+                "name": "Human Resources",
+                "director_general": "Barbara Levéel",
+                "role": "HR management"
+              },
+              {
+                "name": "Operations Directorate",
+                "director_general": "Jean-Christophe Laloux",
+                "role": "Lending operations"
+              },
+              {
+                "name": "EIB Global",
+                "director_general": "Andrew McDowell",
+                "role": "Development finance"
+              },
+              {
+                "name": "Finance",
+                "director_general": "Cyril Rousseau",
+                "role": "Treasury and funding"
+              },
+              {
+                "name": "Projects Directorate",
+                "director_general": "Laura Piovesan",
+                "role": "Project appraisal"
+              },
+              {
+                "name": "Risk Management",
+                "director_general": "Román Escolano",
+                "role": "Risk assessment"
+              },
+              {
+                "name": "Compliance",
+                "director_general": "Roberto Garcia Piriz",
+                "role": "Compliance oversight"
+              },
+              {
+                "name": "Inspectorate General",
+                "inspector_general": "Monique Koning",
+                "role": "Investigation and fraud"
+              },
+              {
+                "name": "Chief Financial Controller",
+                "controller": "Oliver Russmann",
+                "role": "Financial control"
+              },
+              {
+                "name": "Internal Audit",
+                "head": "Séverine Beroard",
+                "role": "Audit function"
+              },
+              {
+                "name": "Portfolio Management",
+                "head": "Luca Lazzaroli",
+                "role": "Portfolio monitoring"
+              },
+              {
+                "name": "Information Systems",
+                "head": "Magí Clavé Badia",
+                "role": "IT infrastructure"
+              },
+              {
+                "name": "Ombudsperson",
+                "ombudsperson": "Bálint Balassa",
+                "role": "Complaints and transparency"
+              }
+            ]
+          }
+        }
+      },
+      "health_safety": {
+        "ema": {
+          "full_name": "European Medicines Agency",
+          "abbreviation": "EMA",
+          "location": "Amsterdam, Netherlands",
+          "website": "https://www.ema.europa.eu",
+          "established": "1995",
+          "executive_leadership": {
+            "management_board_chair": {
+              "name": "Rui Santos Ivo",
+              "position": "Chair of Management Board"
+            },
+            "executive_director": {
+              "name": "Emer Cooke",
+              "position": "Executive Director",
+              "mandate_extended": "2025"
+            }
+          },
+          "organizational_structure": {
+            "divisions": [
+              {
+                "name": "Human Medicines Division",
+                "departments": [
+                  {
+                    "name": "Research & Development Support",
+                    "head": "Enrica Alteri",
+                    "units": [
+                      "Scientific Evidence Generation",
+                      "Evaluation & Innovation Support"
+                    ]
+                  },
+                  {
+                    "name": "Evaluation",
+                    "head": "Zaïde Frias",
+                    "units": [
+                      "Therapeutic Areas I-IV",
+                      "Scientific & Regulatory Management",
+                      "Specialised Disciplines",
+                      "Procedure Management"
+                    ]
+                  },
+                  {
+                    "name": "Inspections, Pharmacovigilance & Committees",
+                    "head": "Fergus Sweeney",
+                    "units": [
+                      "Quality & Safety of Medicines",
+                      "Committees & Quality Assurance",
+                      "Pharmacovigilance"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Veterinary Medicines Division",
+                "head": "David Mackay",
+                "focus": "Animal health products"
+              },
+              {
+                "name": "Information Management Division",
+                "head": "Alexis Nolte",
+                "departments": [
+                  "Customer Advocacy",
+                  "Strategic Platforms",
+                  "IT Operations",
+                  "Core Services"
+                ]
+              },
+              {
+                "name": "Administration & Corporate Management",
+                "head": "Nerimantas Steikūnas",
+                "departments": [
+                  "Strategic Planning & Governance",
+                  "Finance",
+                  "Staff Relations"
+                ]
+              },
+              {
+                "name": "Stakeholders & Communication",
+                "head": "Melanie Carr",
+                "departments": [
+                  "Public Engagement",
+                  "Communication",
+                  "Corporate Stakeholders"
+                ]
+              }
+            ],
+            "scientific_committees": [
+              {
+                "abbreviation": "CHMP",
+                "full_name": "Committee for Medicinal Products for Human Use"
+              },
+              {
+                "abbreviation": "CVMP",
+                "full_name": "Committee for Medicinal Products for Veterinary Use"
+              },
+              {
+                "abbreviation": "PRAC",
+                "full_name": "Pharmacovigilance Risk Assessment Committee"
+              },
+              {
+                "abbreviation": "COMP",
+                "full_name": "Committee for Orphan Medicinal Products"
+              },
+              {
+                "abbreviation": "PDCO",
+                "full_name": "Paediatric Committee"
+              },
+              {
+                "abbreviation": "CAT",
+                "full_name": "Committee for Advanced Therapies"
+              },
+              {
+                "abbreviation": "HMPC",
+                "full_name": "Herbal Medicinal Products Committee"
+              }
+            ]
+          }
+        },
+        "ecdc": {
+          "full_name": "European Centre for Disease Prevention and Control",
+          "abbreviation": "ECDC",
+          "location": "Solna, Sweden",
+          "website": "https://www.ecdc.europa.eu",
+          "established": "2005",
+          "executive_leadership": {
+            "director": {
+              "name": "Dr Pamela Rendi-Wagner",
+              "position": "Director",
+              "appointed": "2024"
+            }
+          },
+          "organizational_structure": {
+            "restructure_date": "2020-01",
+            "units": [
+              {
+                "name": "Scientific Evidence & Communication",
+                "head": "Chief Scientist",
+                "departments": [
+                  "Science & Public Health Communication",
+                  "Scientific Evidence, Advice & Liaison",
+                  "Editorial Offices"
+                ]
+              },
+              {
+                "name": "Directly Transmitted & Vaccine-Preventable Diseases",
+                "departments": [
+                  "Respiratory Viruses Unit",
+                  "STI, Blood-borne Viruses & TB Unit",
+                  "Vaccine-Preventable Diseases & Immunisation Unit"
+                ]
+              },
+              {
+                "name": "One Health Related Diseases",
+                "departments": [
+                  "Antimicrobial Resistance & Healthcare-Associated Infections",
+                  "Food- and Water-borne, Vector-borne & Zoonotic Diseases"
+                ]
+              },
+              {
+                "name": "Surveillance, Preparedness & Response",
+                "departments": [
+                  "Emergency Preparedness",
+                  "Epidemic Intelligence",
+                  "EPIET/EUPHEM Fellowship Programme",
+                  "General Surveillance",
+                  "Microbiology Coordination & Bioinformatics",
+                  "Public Health Training"
+                ]
+              },
+              {
+                "name": "Digital Transformation Services",
+                "departments": [
+                  "Digital Governance",
+                  "Digital Solutions",
+                  "IT Operations"
+                ]
+              },
+              {
+                "name": "Resource Management Services",
+                "departments": [
+                  "Corporate Services",
+                  "Finance & Accounting",
+                  "Human Resources",
+                  "Legal Services",
+                  "Planning & Performance Management",
+                  "Procurement"
+                ]
+              }
+            ]
+          }
+        },
+        "efsa": {
+          "full_name": "European Food Safety Authority",
+          "abbreviation": "EFSA",
+          "location": "Parma, Italy",
+          "website": "https://www.efsa.europa.eu",
+          "established": "2002",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Dr Nikolaus Kriz",
+              "position": "Executive Director",
+              "appointed": "2023"
+            }
+          },
+          "organizational_structure": {
+            "departments": [
+              {
+                "name": "Communication & Partnerships (ENGAGE)",
+                "head": "Barbara Gallani",
+                "units": [
+                  "Communications Unit",
+                  "Engagement & External Relations",
+                  "Knowledge, Innovation & Partnership"
+                ]
+              },
+              {
+                "name": "Management Services (EMPOWER)",
+                "head": "Dirk Detken",
+                "units": [
+                  "Corporate Services",
+                  "Finance",
+                  "Human Capital",
+                  "Legal & Assurance"
+                ]
+              },
+              {
+                "name": "Risk Assessment Production (ASSESS)",
+                "head": "Guilhem de Seze",
+                "units": [
+                  "Biological Hazards, Animal Health & Welfare",
+                  "Feed & Contaminants",
+                  "Food Ingredients & Packaging",
+                  "Nutrition & Food Innovation",
+                  "Pesticide Peer Review",
+                  "Plant Health"
+                ]
+              },
+              {
+                "name": "Risk Assessment Services (ENABLE)",
+                "head": "Bénédicte Vagenende",
+                "units": [
+                  "Data Management & Analysis",
+                  "Front-Desk & Workforce Planning",
+                  "Methodology & Scientific Support"
+                ]
+              }
+            ]
+          }
+        },
+        "echa": {
+          "full_name": "European Chemicals Agency",
+          "abbreviation": "ECHA",
+          "location": "Helsinki, Finland",
+          "website": "https://echa.europa.eu",
+          "established": "2007",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Dr Sharon McGuinness",
+              "position": "Executive Director",
+              "appointed": "2023"
+            }
+          },
+          "organizational_structure": {
+            "directorates": [
+              {
+                "code": "A",
+                "name": "Cooperation",
+                "units": [
+                  "Communications",
+                  "Support & Enforcement"
+                ]
+              },
+              {
+                "code": "B",
+                "name": "Prioritisation & Integration",
+                "units": [
+                  "Chemistry Unit",
+                  "Data Management & Analysis",
+                  "Water & Alternative Methods",
+                  "Industrial Emissions & Screening"
+                ]
+              },
+              {
+                "code": "C",
+                "name": "Registration",
+                "units": [
+                  "Dossier Evaluation I",
+                  "Dossier Evaluation II",
+                  "Hazard Assessment III",
+                  "Hazard Assessment IV"
+                ]
+              },
+              {
+                "code": "D",
+                "name": "Risk Management",
+                "units": [
+                  "Risk Management Implementation",
+                  "Authorisation & Restrictions"
+                ]
+              },
+              {
+                "code": "E",
+                "name": "Governance, Strategy & Relations",
+                "units": [
+                  "Governance & Strategy",
+                  "Legal Affairs"
+                ]
+              },
+              {
+                "code": "I",
+                "name": "Information Systems",
+                "units": [
+                  "Productivity & Support",
+                  "Integrated Regulatory Systems"
+                ]
+              }
+            ],
+            "independent_functions": [
+              "Internal Audit",
+              "Board of Appeal Registry"
+            ]
+          }
+        },
+        "eu_osha": {
+          "full_name": "European Agency for Safety and Health at Work",
+          "abbreviation": "EU-OSHA",
+          "location": "Bilbao, Spain",
+          "website": "https://osha.europa.eu",
+          "established": "1994",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "William Cockburn Salazar",
+              "position": "Executive Director"
+            }
+          },
+          "organizational_structure": {
+            "units": [
+              {
+                "name": "Communication & Promotion",
+                "head": "Rory Harrington",
+                "activities": [
+                  "Healthy Workplaces Campaigns",
+                  "NAPO film series",
+                  "Awareness raising"
+                ]
+              },
+              {
+                "name": "Prevention & Research",
+                "head": "Vibe Westh",
+                "activities": [
+                  "ESENER surveys",
+                  "OSHwiki platform",
+                  "OiRA risk assessment tools",
+                  "Research projects"
+                ]
+              },
+              {
+                "name": "Resources & Services",
+                "head": "Donianzu Murgiondo",
+                "activities": [
+                  "Human resources",
+                  "Finance",
+                  "Procurement",
+                  "Facilities management"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "justice_security_migration": {
+        "europol": {
+          "full_name": "European Union Agency for Law Enforcement Cooperation",
+          "abbreviation": "Europol",
+          "location": "The Hague, Netherlands",
+          "website": "https://www.europol.europa.eu",
+          "established": "1999",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Catherine De Bolle",
+              "position": "Executive Director"
+            },
+            "deputy_executive_directors": [
+              {
+                "name": "Jean-Philippe Lecouffe",
+                "portfolio": "Operations Directorate"
+              },
+              {
+                "name": "Jürgen Ebner",
+                "portfolio": "Governance Directorate"
+              },
+              {
+                "name": "Andrei Lințǎ",
+                "portfolio": "Capabilities Directorate"
+              }
+            ]
+          },
+          "organizational_structure": {
+            "directorates": [
+              {
+                "name": "Operations Directorate",
+                "deputy_executive_director": "Jean-Philippe Lecouffe",
+                "centres": [
+                  {
+                    "name": "Operational & Analysis Centre",
+                    "focus": "Coordination of operations"
+                  },
+                  {
+                    "name": "European Serious Organised Crime Centre (ESOCC)",
+                    "focus": "Organised crime"
+                  },
+                  {
+                    "name": "European Cybercrime Centre (EC3)",
+                    "focus": "Cyber threats"
+                  },
+                  {
+                    "name": "European Counter Terrorism Centre (ECTC)",
+                    "focus": "Terrorism"
+                  },
+                  {
+                    "name": "European Financial & Economic Crime Centre (EFECC)",
+                    "focus": "Financial crime"
+                  }
+                ]
+              },
+              {
+                "name": "Governance Directorate",
+                "deputy_executive_director": "Jürgen Ebner",
+                "functions": [
+                  "Fundamental Rights",
+                  "Communications",
+                  "Legal Affairs",
+                  "Data Protection"
+                ]
+              },
+              {
+                "name": "Capabilities Directorate",
+                "deputy_executive_director": "Andrei Lințǎ",
+                "functions": [
+                  "IT Systems (SIENA, EIS)",
+                  "Training",
+                  "Innovation",
+                  "Knowledge Management"
+                ]
+              }
+            ]
+          }
+        },
+        "eurojust": {
+          "full_name": "European Union Agency for Criminal Justice Cooperation",
+          "abbreviation": "Eurojust",
+          "location": "The Hague, Netherlands",
+          "website": "https://www.eurojust.europa.eu",
+          "established": "2002",
+          "executive_leadership": {
+            "president": {
+              "name": "Michael Schmid",
+              "country": "Austria",
+              "position": "President"
+            },
+            "administrative_director": {
+              "name": "Vincent Jamin",
+              "position": "Administrative Director"
+            }
+          },
+          "organizational_structure": {
+            "governance": {
+              "college": {
+                "composition": "27 National Members (one per Member State)",
+                "role": "Decision-making body"
+              },
+              "executive_board": {
+                "members": 5,
+                "role": "Administrative oversight"
+              }
+            },
+            "departments": [
+              {
+                "name": "Operations Department",
+                "head": "Federica Curtol (ad interim)",
+                "units": [
+                  "Casework Unit",
+                  "Data Management Unit",
+                  "National Desks Support",
+                  "Secretariats (JITs, EJN, Genocide Network)"
+                ]
+              },
+              {
+                "name": "Resources Department",
+                "head": "Roberto Lenti",
+                "units": [
+                  "Budget, Finance & Planning",
+                  "Events & Logistics",
+                  "Human Resources",
+                  "Information Management",
+                  "Security"
+                ]
+              },
+              {
+                "name": "Corporate Department",
+                "units": [
+                  "Corporate Affairs",
+                  "Communications",
+                  "Institutional Affairs",
+                  "Legal Affairs"
+                ]
+              }
+            ],
+            "independent_functions": [
+              "Data Protection Officer",
+              "Accounting Officer",
+              "Planning, Programming & Reporting Office"
+            ]
+          }
+        },
+        "frontex": {
+          "full_name": "European Border and Coast Guard Agency",
+          "abbreviation": "Frontex",
+          "location": "Warsaw, Poland",
+          "website": "https://www.frontex.europa.eu",
+          "established": "2004 (expanded mandate 2019)",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Dr Hans Leijtens",
+              "position": "Executive Director"
+            },
+            "deputy_executive_directors": [
+              {
+                "name": "Dr Lars Gerdes",
+                "portfolio": "Operations"
+              },
+              {
+                "name": "Ms Aija Kalnaja",
+                "portfolio": "Capabilities"
+              },
+              {
+                "name": "Mr Uku Särekanno",
+                "portfolio": "Information Management"
+              }
+            ]
+          },
+          "organizational_structure": {
+            "restructure_date": "2023",
+            "divisions": [
+              {
+                "name": "Operational Management Division",
+                "deputy_ed": "Dr Lars Gerdes",
+                "units": [
+                  "Operational Management Unit",
+                  "Returns Unit",
+                  "Operational Response Unit",
+                  "Operational Planning Unit",
+                  "Operational Support Unit"
+                ]
+              },
+              {
+                "name": "Capabilities Division",
+                "deputy_ed": "Ms Aija Kalnaja",
+                "units": [
+                  "Personnel Unit",
+                  "Transform Unit",
+                  "Equipment & Logistics Unit"
+                ]
+              },
+              {
+                "name": "Information Management Division",
+                "deputy_ed": "Mr Uku Särekanno",
+                "units": [
+                  "Strategy Unit",
+                  "Security & Information Management Unit",
+                  "Risk Analysis & Standards Unit"
+                ]
+              },
+              {
+                "name": "Human Resources & Corporate Services",
+                "functions": [
+                  "HR management",
+                  "Finance",
+                  "Procurement",
+                  "Facilities"
+                ]
+              }
+            ],
+            "independent_offices": [
+              {
+                "name": "Fundamental Rights Office",
+                "head": "Jonas Grimheden",
+                "role": "Independent monitoring of fundamental rights"
+              },
+              {
+                "name": "Internal Audit",
+                "role": "Audit function"
+              },
+              {
+                "name": "Data Protection Office",
+                "role": "Data protection compliance"
+              }
+            ],
+            "standing_corps": {
+              "target": "10,000 officers by 2027",
+              "composition": "Statutory staff + Member State deployments"
+            }
+          }
+        },
+        "euaa": {
+          "full_name": "European Union Agency for Asylum",
+          "abbreviation": "EUAA",
+          "location": "Valletta, Malta",
+          "website": "https://euaa.europa.eu",
+          "established": "2022 (successor to EASO)",
+          "transition": "EASO transformed to EUAA on 19 January 2022",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Nina Gregori",
+              "position": "Executive Director"
+            },
+            "deputy_executive_director": {
+              "name": "Mikael Ribbenvik Cassar",
+              "position": "Deputy Executive Director"
+            }
+          },
+          "organizational_structure": {
+            "core_areas": [
+              {
+                "name": "Operations & Country Support",
+                "activities": "Deployment support in 10 Member States"
+              },
+              {
+                "name": "Asylum Information & Analysis",
+                "activities": [
+                  "Country of Origin Information (COI)",
+                  "Medical COI (MedCOI)",
+                  "Country Guidance"
+                ]
+              },
+              {
+                "name": "Training & Professional Development",
+                "activities": "European Asylum Curriculum"
+              },
+              {
+                "name": "Support to Dublin Procedure",
+                "activities": "Family reunification, transfers"
+              },
+              {
+                "name": "Resettlement Support",
+                "activities": "Resettlement and humanitarian admission"
+              },
+              {
+                "name": "Monitoring Function",
+                "established": "End 2023",
+                "activities": "Monitoring asylum systems"
+              },
+              {
+                "name": "External Cooperation & Third Country Support",
+                "activities": "Capacity building"
+              },
+              {
+                "name": "Quality Assurance & Standards",
+                "activities": "Quality control"
+              },
+              {
+                "name": "Corporate Services",
+                "activities": "Administration, HR, finance"
+              },
+              {
+                "name": "Legal & Compliance",
+                "activities": "Legal advice, compliance"
+              }
+            ],
+            "reserve_pool": {
+              "capacity": "500 national experts",
+              "purpose": "Emergency deployment"
+            },
+            "budget_2024": "EUR 180+ million"
+          }
+        },
+        "cepol": {
+          "full_name": "European Union Agency for Law Enforcement Training",
+          "abbreviation": "CEPOL",
+          "location": "Budapest, Hungary",
+          "website": "https://www.cepol.europa.eu",
+          "established": "2000 (Agency status 2005)",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Montserrat Marín López",
+              "position": "Executive Director"
+            }
+          },
+          "organizational_structure": {
+            "operational_units": [
+              {
+                "name": "EU Training Hub",
+                "head": "Peter Krajnyak",
+                "sub_units": [
+                  "Training Centre",
+                  "Knowledge Management Centre",
+                  "Knowledge Centre on Counter-Terrorism",
+                  "Knowledge Centre on Cross-Border Crime"
+                ]
+              },
+              {
+                "name": "Training & Research",
+                "head": "Vera Pavinska",
+                "activities": [
+                  "Training needs analysis",
+                  "Research coordination",
+                  "LEEd platform",
+                  "Exchange Programme"
+                ]
+              },
+              {
+                "name": "International Cooperation",
+                "head": "Alexandru Niculita",
+                "projects": [
+                  "CT INFLOW",
+                  "EUROMED Police",
+                  "TOPCOP",
+                  "WB PaCT"
+                ]
+              },
+              {
+                "name": "Strategic Planning & Directorate",
+                "note": "New unit established 2024"
+              }
+            ],
+            "corporate_services": [
+              "Human Resources",
+              "Finance",
+              "Legal & Data Protection Officer",
+              "Secretariat",
+              "Procurement",
+              "ICT",
+              "Project Coordination"
+            ]
+          }
+        },
+        "eu_lisa": {
+          "full_name": "European Union Agency for Operational Management of Large-Scale IT Systems",
+          "abbreviation": "eu-LISA",
+          "location": "Tallinn, Estonia (HQ); Strasbourg, France (Operational); St. Johann im Pongau, Austria (Backup)",
+          "website": "https://www.eulisa.europa.eu",
+          "established": "2011",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Tillmann Keber",
+              "position": "Executive Director"
+            },
+            "deputy_executive_director": {
+              "name": "Marili Männik",
+              "position": "Deputy Executive Director"
+            }
+          },
+          "organizational_structure": {
+            "portfolios": [
+              {
+                "name": "Operational Management",
+                "systems": [
+                  "SIS (Schengen Information System)",
+                  "VIS (Visa Information System)",
+                  "Eurodac",
+                  "ECRIS RI (European Criminal Records Information System)"
+                ]
+              },
+              {
+                "name": "Development & Innovation",
+                "systems_in_development": [
+                  "EES (Entry/Exit System - operational Oct 2025)",
+                  "ETIAS (European Travel Information and Authorisation System)",
+                  "ECRIS-TCN",
+                  "e-CODEX",
+                  "JITs Collaboration Platform"
+                ],
+                "interoperability_components": [
+                  "ESP (European Search Portal)",
+                  "CIR (Common Identity Repository)",
+                  "MID (Multiple Identity Detector)",
+                  "sBMS (Shared Biometric Matching Service)",
+                  "CRRS (Common Repository of Reports and Statistics)"
+                ]
+              },
+              {
+                "name": "Research & Innovation",
+                "activities": [
+                  "Biometrics research",
+                  "AI applications",
+                  "Proof-of-concept projects"
+                ]
+              },
+              {
+                "name": "Infrastructure & Networks",
+                "activities": [
+                  "Data centre management",
+                  "Network operations",
+                  "Cloud service provision"
+                ]
+              },
+              {
+                "name": "Direct Support to Operations",
+                "activities": [
+                  "24/7 operational centre",
+                  "CSIRT (Computer Security Incident Response Team)",
+                  "Service desk"
+                ]
+              },
+              {
+                "name": "Corporate Activities",
+                "functions": [
+                  "Governance",
+                  "Finance",
+                  "HR",
+                  "Legal & Data Protection",
+                  "Communications",
+                  "Security",
+                  "Internal IT",
+                  "Quality management"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "transport": {
+        "easa": {
+          "full_name": "European Union Aviation Safety Agency",
+          "abbreviation": "EASA",
+          "location": "Cologne, Germany",
+          "website": "https://www.easa.europa.eu",
+          "established": "2003",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Florian Guillermet",
+              "position": "Executive Director",
+              "appointed": "2024"
+            }
+          },
+          "organizational_structure": {
+            "restructure_date": "2014",
+            "directorates": [
+              {
+                "code": "ED",
+                "name": "Executive Directorate",
+                "functions": [
+                  "Quality & Internal Audit",
+                  "Legal Services",
+                  "Communications"
+                ]
+              },
+              {
+                "code": "CT",
+                "name": "Certification Directorate",
+                "organization": "By product category",
+                "activities": [
+                  "Type certification",
+                  "Environmental certification",
+                  "Design organisation approval"
+                ]
+              },
+              {
+                "code": "FS",
+                "name": "Flight Standards Directorate",
+                "units": [
+                  "Production & Maintenance",
+                  "Air Operations",
+                  "Aircrew",
+                  "Medical",
+                  "Flight Simulation Training Devices",
+                  "Aerodromes",
+                  "ATM/ANS",
+                  "U-space"
+                ]
+              },
+              {
+                "code": "SM/SSG",
+                "name": "Safety Management, Sustainability & Global Outreach",
+                "activities": [
+                  "Safety Risk Management",
+                  "European Plan for Aviation Safety (EPAS)",
+                  "International cooperation",
+                  "Climate change initiatives"
+                ]
+              },
+              {
+                "code": "RS",
+                "name": "Resources & Support Directorate",
+                "functions": [
+                  "Finance",
+                  "IT",
+                  "Human Resources",
+                  "Logistics"
+                ]
+              }
+            ],
+            "advisory_bodies": [
+              "Stakeholder Advisory Body",
+              "Rulemaking Board",
+              "Certification Board",
+              "Standardization Board",
+              "Board of Appeal"
+            ]
+          }
+        },
+        "era": {
+          "full_name": "European Union Agency for Railways",
+          "abbreviation": "ERA",
+          "location": "Valenciennes, France",
+          "website": "https://www.era.europa.eu",
+          "established": "2004",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Oana Gherghinescu",
+              "position": "Executive Director",
+              "appointed": "2025-06-01"
+            }
+          },
+          "organizational_structure": {
+            "units": [
+              {
+                "name": "Executive Office (EXO)",
+                "sub_units": [
+                  {
+                    "name": "Strategy & Planning (CAP)",
+                    "functions": [
+                      "Strategic planning",
+                      "Performance management"
+                    ]
+                  },
+                  {
+                    "name": "Budget & Financial Management",
+                    "functions": [
+                      "Budget execution",
+                      "Financial control"
+                    ]
+                  },
+                  {
+                    "name": "Internal Control & Risk Management",
+                    "functions": [
+                      "Risk assessment",
+                      "Compliance"
+                    ]
+                  },
+                  {
+                    "name": "Strategic Communication",
+                    "functions": [
+                      "External communications",
+                      "Stakeholder engagement"
+                    ]
+                  },
+                  {
+                    "name": "Governance & Coordination",
+                    "functions": [
+                      "Management Board support",
+                      "Inter-institutional relations"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "Planning & Approvals Delivery (PAD)",
+                "activities": [
+                  "Vehicle Authorisation",
+                  "Single Safety Certificates",
+                  "ERTMS Trackside Approval",
+                  "Business Helpdesk"
+                ]
+              },
+              {
+                "name": "Operational Data (OPD)",
+                "activities": [
+                  "TAF/TAP TSI implementation",
+                  "Agency Registers",
+                  "Linked Data Project",
+                  "Railway Factsheets"
+                ]
+              },
+              {
+                "name": "Railway Systems (RSY)",
+                "head": "Pio Guido",
+                "activities": [
+                  "TSI development",
+                  "ERTMS specifications",
+                  "FRMCS (Future Railway Mobile Communication System)"
+                ]
+              },
+              {
+                "name": "Stakeholder Relations, Academy & Communication (SAC)",
+                "activities": [
+                  "NSA coordination (28 National Safety Authorities)",
+                  "NIBs network",
+                  "ERA Academy",
+                  "Knowledge HUB"
+                ]
+              },
+              {
+                "name": "Research Unit",
+                "activities": [
+                  "Research coordination",
+                  "Innovation assessment",
+                  "Horizon Europe participation"
+                ]
+              }
+            ]
+          }
+        },
+        "emsa": {
+          "full_name": "European Maritime Safety Agency",
+          "abbreviation": "EMSA",
+          "location": "Lisbon, Portugal",
+          "website": "https://www.emsa.europa.eu",
+          "established": "2002",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Maja Markovčić Kostelac",
+              "position": "Executive Director"
+            }
+          },
+          "organizational_structure": {
+            "executive_office": {
+              "role": "Strategic coordination and oversight"
+            },
+            "departments": [
+              {
+                "name": "Sustainability & Technical Assistance",
+                "focus": [
+                  "Environmental protection",
+                  "Technical assistance to Member States",
+                  "Marine equipment",
+                  "Climate change",
+                  "Decarbonisation initiatives"
+                ]
+              },
+              {
+                "name": "Safety, Security & Surveillance",
+                "head": "Peter Kirov",
+                "focus": [
+                  "Ship safety",
+                  "Port State Control",
+                  "Security (piracy, terrorism)",
+                  "Maritime surveillance",
+                  "CISE network"
+                ]
+              },
+              {
+                "name": "Digital Services & Simplification",
+                "head": "Leendert Bal",
+                "focus": [
+                  "Digital maritime services",
+                  "SafeSeaNet",
+                  "Maritime Single Window",
+                  "CleanSeaNet satellite monitoring",
+                  "Oil recovery vessels coordination"
+                ]
+              },
+              {
+                "name": "Corporate Services",
+                "head": "Dominika Łempicka-Fichter",
+                "functions": [
+                  "Finance",
+                  "HR",
+                  "ICT",
+                  "Facilities",
+                  "Legal services"
+                ]
+              }
+            ],
+            "operational_services": {
+              "oil_recovery_vessels": 16,
+              "rov_service": "Since January 2023",
+              "cleanseanet": "Satellite monitoring service"
+            }
+          }
+        }
+      },
+      "environment_energy": {
+        "eea": {
+          "full_name": "European Environment Agency",
+          "abbreviation": "EEA",
+          "location": "Copenhagen, Denmark",
+          "website": "https://www.eea.europa.eu",
+          "established": "1990",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Leena Ylä-Mononen",
+              "position": "Executive Director"
+            }
+          },
+          "organizational_structure": {
+            "restructure_date": "2025-11-01",
+            "departments": [
+              {
+                "name": "Environment Department",
+                "head": "Martin Adams",
+                "units": [
+                  "Pollution & Health",
+                  "Freshwater & Marine",
+                  "Biodiversity & Nature"
+                ]
+              },
+              {
+                "name": "Climate Department",
+                "head": "Eva Jensen",
+                "units": [
+                  "Climate Neutrality, Energy & Mobility",
+                  "Climate Risk & Resilience",
+                  "GHG Reporting & Verification",
+                  "Secretariat to EU Scientific Advisory Board on Climate Change"
+                ]
+              },
+              {
+                "name": "Sustainability Department",
+                "head": "Riyong Kim",
+                "units": [
+                  "Sustainable & Fair Transitions",
+                  "Circular Economy, Finance & Indicators"
+                ]
+              },
+              {
+                "name": "Communications Department",
+                "head": "Katja Rosenbohm",
+                "units": [
+                  "Publishing & Web",
+                  "Communications, Stakeholders & Networks"
+                ]
+              },
+              {
+                "name": "Digital Department",
+                "head": "Karl Hamilton",
+                "units": [
+                  "ICT",
+                  "Data Management",
+                  "Earth Observation"
+                ]
+              },
+              {
+                "name": "Resources Department",
+                "head": "Søren B. Nielsen",
+                "units": [
+                  "Human Resources",
+                  "Finance",
+                  "Legal Assurance & Facilities"
+                ]
+              }
+            ],
+            "networks": {
+              "eionet": {
+                "full_name": "European Environment Information and Observation Network",
+                "members": "38 member and cooperating countries",
+                "components": [
+                  "National Focal Points",
+                  "European Topic Centres"
+                ]
+              }
+            }
+          }
+        },
+        "acer": {
+          "full_name": "Agency for the Cooperation of Energy Regulators",
+          "abbreviation": "ACER",
+          "location": "Ljubljana, Slovenia",
+          "website": "https://www.acer.europa.eu",
+          "established": "2011",
+          "executive_leadership": {
+            "director_ad_interim": {
+              "name": "Volker Zuleger",
+              "position": "Director ad interim"
+            },
+            "board_of_regulators_chair": {
+              "name": "Emmanuelle Wargon",
+              "country": "France",
+              "position": "Chair of Board of Regulators"
+            }
+          },
+          "organizational_structure": {
+            "departments": [
+              {
+                "name": "Electricity Department",
+                "head": "Christophe Gence-Creux",
+                "focus": [
+                  "Market integration",
+                  "Network codes",
+                  "Cross-border coordination"
+                ]
+              },
+              {
+                "name": "Energy System Needs Department",
+                "head": "Rafael Muruais Garcia",
+                "focus": [
+                  "Infrastructure planning",
+                  "ERAA (European Resource Adequacy Assessment)",
+                  "System adequacy"
+                ]
+              },
+              {
+                "name": "Gas, Hydrogen & Retail Department",
+                "head": "Csilla Bartok",
+                "focus": [
+                  "Gas markets",
+                  "Hydrogen markets",
+                  "Decarbonisation"
+                ]
+              },
+              {
+                "name": "Market Information & Transparency Department",
+                "head": "Karina Knaus",
+                "focus": [
+                  "Data collection",
+                  "Transparency requirements",
+                  "Market monitoring"
+                ]
+              },
+              {
+                "name": "Market Surveillance & Conduct Department",
+                "head": "Karin Lunning",
+                "focus": [
+                  "Wholesale market monitoring",
+                  "Market abuse detection",
+                  "Conduct supervision"
+                ]
+              },
+              {
+                "name": "REMIT Investigations Department",
+                "head": "Martin Godfried",
+                "focus": [
+                  "REMIT violations",
+                  "Cross-border investigations",
+                  "Enforcement coordination"
+                ]
+              },
+              {
+                "name": "Coordination, Operations & Legal Department",
+                "status": "Vacant",
+                "focus": [
+                  "Legal affairs",
+                  "Operational coordination",
+                  "Inter-departmental support"
+                ]
+              }
+            ],
+            "support_functions": [
+              "Strategy Delivery & Communications",
+              "HR & Facilities"
+            ]
+          }
+        }
+      },
+      "digital_cybersecurity": {
+        "enisa": {
+          "full_name": "European Union Agency for Cybersecurity",
+          "abbreviation": "ENISA",
+          "location": "Athens, Greece (HQ); Heraklion, Greece; Brussels, Belgium (office)",
+          "website": "https://www.enisa.europa.eu",
+          "established": "2004",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Juhan Lepassaar",
+              "position": "Executive Director"
+            },
+            "chief_operations_officer": {
+              "name": "Hans de Vries",
+              "position": "COO"
+            }
+          },
+          "organizational_structure": {
+            "restructure_date": "2024",
+            "operational_activities": [
+              {
+                "name": "Support for Policy Monitoring & Development",
+                "activities": [
+                  "EU Cybersecurity Index",
+                  "NIS2 reporting",
+                  "Policy analysis"
+                ]
+              },
+              {
+                "name": "Cybersecurity & Resilience of Critical Sectors",
+                "activities": [
+                  "NIS2 implementation support",
+                  "18 critical sectors coverage",
+                  "Sector-specific guidance"
+                ]
+              },
+              {
+                "name": "Capacity Building",
+                "activities": [
+                  "TREX (Training and Exercises)",
+                  "ECSF (EU Cybersecurity Skills Framework)",
+                  "Cyber exercises",
+                  "CTF competitions"
+                ]
+              },
+              {
+                "name": "Threat Landscape & Analysis",
+                "activities": [
+                  "Threat intelligence",
+                  "Annual threat landscape reports",
+                  "Situational awareness"
+                ]
+              },
+              {
+                "name": "Operational Cooperation & Situational Awareness",
+                "activities": [
+                  "EU CSIRTs Network coordination",
+                  "EU-CyCLONe",
+                  "Vulnerability Database"
+                ]
+              },
+              {
+                "name": "Cybersecurity Support Action/EU Cyber Reserve",
+                "budget": "€20M contribution agreement",
+                "activities": [
+                  "Rapid response teams",
+                  "Expert pools"
+                ]
+              },
+              {
+                "name": "Development & Maintenance of EU Cybersecurity Certification",
+                "activities": [
+                  "ECCF (European Common Criteria Framework)",
+                  "EUCC scheme",
+                  "EU5G scheme",
+                  "Future schemes"
+                ]
+              },
+              {
+                "name": "Market-Related Tasks",
+                "activities": [
+                  "CRA platform",
+                  "Market surveillance",
+                  "Innovation support"
+                ]
+              }
+            ],
+            "corporate_activities": [
+              "Corporate Services",
+              "HR & Organisational Development"
+            ],
+            "service_packages": [
+              "NIS (NIS Directive support)",
+              "TREX (Training & Exercises)",
+              "SITAW (Situational Awareness)",
+              "CERTI (Certification)",
+              "INDEX (EU Cybersecurity Index)"
+            ],
+            "resources": {
+              "staff": "128 posts (98 operational, 37 corporate FTEs)",
+              "budget_2025": "€26.4M operational + €20M cyber reserve"
+            }
+          }
+        },
+        "berec": {
+          "full_name": "Body of European Regulators for Electronic Communications",
+          "abbreviation": "BEREC",
+          "structure_note": "Two-pillar structure: BEREC (the Body) + BEREC Office (the Agency)",
+          "berec_body": {
+            "description": "Network of 27 National Regulatory Authorities",
+            "website": "https://www.berec.europa.eu",
+            "established": "2009",
+            "leadership_2025": {
+              "board_of_regulators_chair": {
+                "name": "Robert Mourik",
+                "country": "Ireland",
+                "position": "Chair 2025"
+              },
+              "contact_network_chair": {
+                "name": "Tom Boyce",
+                "country": "Ireland",
+                "position": "Chair 2025"
+              }
+            },
+            "working_groups_2025": [
+              "Networks & Markets",
+              "Fixed Network Evolution",
+              "Spectrum",
+              "Roaming",
+              "Digital Markets",
+              "Remedies & Market Monitoring",
+              "Sustainability",
+              "International Cooperation",
+              "End-Users",
+              "Open Internet",
+              "Cybersecurity & Resilience",
+              "Regulatory Framework"
+            ]
+          },
+          "berec_office": {
+            "full_name": "Agency for Support for BEREC",
+            "location": "Riga, Latvia",
+            "website": "https://www.berec.europa.eu",
+            "established": "2010",
+            "executive_leadership": {
+              "director": {
+                "name": "Dr Verena Weber",
+                "position": "Director",
+                "appointed": "2024-04"
+              }
+            },
+            "organizational_structure": {
+              "units": [
+                {
+                  "name": "Administration & Finance Unit",
+                  "functions": [
+                    "Human Resources",
+                    "Finance & Budget",
+                    "Legal services",
+                    "Facilities management"
+                  ]
+                },
+                {
+                  "name": "Operation Support Unit",
+                  "functions": [
+                    "Regulatory support",
+                    "Working Group support",
+                    "ICT services"
+                  ]
+                },
+                {
+                  "name": "Programme Management Unit",
+                  "functions": [
+                    "Work programme coordination",
+                    "Project management",
+                    "Reporting"
+                  ]
+                }
+              ],
+              "advisory_bodies": [
+                {
+                  "name": "BEREC Office Advisory Group (BAG)",
+                  "role": "Strategic advice"
+                },
+                {
+                  "name": "Expert Networking Groups (ENGs)",
+                  "role": "Technical expertise"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "social_labour_training": {
+        "eurofound": {
+          "full_name": "European Foundation for the Improvement of Living and Working Conditions",
+          "abbreviation": "Eurofound",
+          "location": "Dublin, Ireland",
+          "website": "https://www.eurofound.europa.eu",
+          "established": "1975",
+          "governance_model": "Tripartite (governments, employers, workers)",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Ivailo Kalfin",
+              "position": "Executive Director"
+            },
+            "deputy_director": {
+              "name": "Maria Jepsen",
+              "position": "Deputy Director"
+            }
+          },
+          "organizational_structure": {
+            "units": [
+              {
+                "code": "1",
+                "name": "Directorate",
+                "role": "Strategic leadership"
+              },
+              {
+                "code": "2",
+                "name": "Working Life Unit",
+                "head": "Barbara Gerstenberger",
+                "focus": [
+                  "Job quality",
+                  "European Working Conditions Survey",
+                  "Working time",
+                  "Work organisation"
+                ]
+              },
+              {
+                "code": "3",
+                "name": "Employment Unit",
+                "head": "Tadas Leončikas",
+                "focus": [
+                  "Labour market",
+                  "European Quality of Life Survey",
+                  "Employment policies"
+                ]
+              },
+              {
+                "code": "4",
+                "name": "Social Policies Unit",
+                "head": "Massimiliano Mascherini",
+                "focus": [
+                  "Youth employment",
+                  "NEETs",
+                  "Social inclusion",
+                  "Social innovation"
+                ]
+              },
+              {
+                "code": "5",
+                "name": "Information & Communication Unit",
+                "head": "Mary McCaughey",
+                "functions": [
+                  "Communications",
+                  "Publications",
+                  "Digital strategy"
+                ]
+              },
+              {
+                "code": "6",
+                "name": "Resources Unit",
+                "head": "Markus Grimmeisen",
+                "functions": [
+                  "HR",
+                  "Finance",
+                  "Internal control"
+                ]
+              },
+              {
+                "code": "7",
+                "name": "Organisational Support Unit",
+                "head": "Mattanja de Boer",
+                "functions": [
+                  "Procurement",
+                  "Performance reporting"
+                ]
+              },
+              {
+                "code": "8",
+                "name": "Brussels Liaison Office",
+                "role": "EU institutions liaison"
+              }
+            ]
+          }
+        },
+        "etf": {
+          "full_name": "European Training Foundation",
+          "abbreviation": "ETF",
+          "location": "Turin, Italy",
+          "website": "https://www.etf.europa.eu",
+          "established": "1990",
+          "executive_leadership": {
+            "director": {
+              "name": "Pilvi Torsti",
+              "position": "Director",
+              "appointed": "2023-04"
+            }
+          },
+          "organizational_structure": {
+            "functions": [
+              {
+                "name": "Operations Function",
+                "activities": [
+                  "Programme delivery",
+                  "Partner country engagement",
+                  "Western Balkans support",
+                  "Eastern Europe support",
+                  "Mediterranean support",
+                  "Central Asia support"
+                ]
+              },
+              {
+                "name": "Administration Function",
+                "activities": [
+                  "HR",
+                  "Finance",
+                  "Legal services",
+                  "Facilities"
+                ]
+              },
+              {
+                "name": "Corporate Performance Function",
+                "activities": [
+                  "Strategic planning",
+                  "Performance monitoring",
+                  "Quality assurance",
+                  "Risk management"
+                ]
+              },
+              {
+                "name": "Communication Function",
+                "activities": [
+                  "Stakeholder engagement",
+                  "Publications",
+                  "Events",
+                  "Digital communications"
+                ]
+              }
+            ],
+            "key_initiatives": [
+              {
+                "name": "Torino Process",
+                "description": "VET policy review methodology"
+              },
+              {
+                "name": "DARYA Project",
+                "description": "Digital skills for young people"
+              },
+              {
+                "name": "Green Skills Awards",
+                "description": "Recognition of green VET"
+              },
+              {
+                "name": "Ukrainian Resource Hub",
+                "description": "Support for Ukraine"
+              },
+              {
+                "name": "Network of Vocational Excellence",
+                "centres": "320+"
+              }
+            ]
+          }
+        },
+        "cedefop": {
+          "full_name": "European Centre for the Development of Vocational Training",
+          "abbreviation": "Cedefop",
+          "location": "Thessaloniki, Greece",
+          "website": "https://www.cedefop.europa.eu",
+          "established": "1975",
+          "governance_model": "Tripartite (governments, employers, workers)",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Jürgen Siebel",
+              "position": "Executive Director"
+            },
+            "deputy_director": {
+              "name": "Mara Brugia",
+              "position": "Deputy Director"
+            }
+          },
+          "organizational_structure": {
+            "departments": [
+              {
+                "name": "VET & Skills Department",
+                "head": "Antonio Ranieri",
+                "teams": [
+                  "VET for Adults & Apprenticeships",
+                  "VET for Youth, Teachers & Trainers",
+                  "Skills Intelligence & Foresight",
+                  "Skills & Workplaces",
+                  "Statistics & Indicators",
+                  "Supporting Policies"
+                ]
+              },
+              {
+                "name": "VET & Qualifications Department",
+                "head": "Loukas Zahilas",
+                "teams": [
+                  "Qualifications & Credentials",
+                  "VET Policies & Systems",
+                  {
+                    "name": "ReferNet",
+                    "coordinator": "Ioannis Katsikis",
+                    "description": "Network of national VET reference points"
+                  }
+                ]
+              },
+              {
+                "name": "Communication Department",
+                "head": "Maurizio Roncaccia",
+                "functions": [
+                  "Stakeholder engagement",
+                  "Content management",
+                  "Dissemination",
+                  "Evaluation",
+                  "Document management"
+                ]
+              },
+              {
+                "name": "Resources & Support Department",
+                "head": "Pascaline Descy",
+                "units": [
+                  "Facilities",
+                  "Human Resources",
+                  "Finance & Procurement",
+                  {
+                    "name": "ICT",
+                    "head": "Athanassios Siaperas"
+                  }
+                ]
+              }
+            ],
+            "cross_cutting": {
+              "climate_neutrality_coordinator": "Michalis Tanakidis"
+            }
+          }
+        }
+      },
+      "fundamental_rights_equality": {
+        "eige": {
+          "full_name": "European Institute for Gender Equality",
+          "abbreviation": "EIGE",
+          "location": "Vilnius, Lithuania",
+          "website": "https://eige.europa.eu",
+          "established": "2010",
+          "executive_leadership": {
+            "director": {
+              "name": "Carlien Scheele",
+              "position": "Director"
+            }
+          },
+          "organizational_structure": {
+            "units": [
+              {
+                "name": "Research & Policy Support Unit",
+                "head": "Maruša Gortnar",
+                "activities": [
+                  "Gender Mainstreaming",
+                  "Research & Statistics",
+                  "Gender Equality Index",
+                  "Gender-based Violence",
+                  "Technical Assistance"
+                ]
+              },
+              {
+                "name": "Outreach & Engagement Unit",
+                "head": "Dennis van der Veur",
+                "activities": [
+                  "Knowledge Management",
+                  "Stakeholder Relations",
+                  "Communications",
+                  "Resource Centre",
+                  "IPA coordination"
+                ]
+              },
+              {
+                "name": "Administration Unit",
+                "head": "Emmanuel Maurage",
+                "activities": [
+                  "Secretariat",
+                  "ICT & Facilities",
+                  "HR & Audit",
+                  "Finance & Procurement"
+                ]
+              }
+            ],
+            "key_outputs": [
+              "Gender Equality Index (annual)",
+              "Gender Statistics Database",
+              "Communications Lab"
+            ],
+            "staff": "Approximately 50-52 (26 TA, 14 CA, 4 SNE, 6 trainees)"
+          }
+        },
+        "fra": {
+          "full_name": "European Union Agency for Fundamental Rights",
+          "abbreviation": "FRA",
+          "location": "Vienna, Austria",
+          "website": "https://fra.europa.eu",
+          "established": "2007",
+          "executive_leadership": {
+            "director": {
+              "name": "Sirpa Rautio",
+              "position": "Director",
+              "appointed": "2024-03-01"
+            }
+          },
+          "organizational_structure": {
+            "units": [
+              {
+                "name": "Justice, Digital & Migration Unit",
+                "head": "Joanna Goodey",
+                "thematic_areas": [
+                  "Victims' rights",
+                  "Access to justice",
+                  "Hate crime",
+                  "Trafficking",
+                  "Digital rights",
+                  "Asylum & migration",
+                  "Racism in policing"
+                ]
+              },
+              {
+                "name": "Equality, Inclusion & Sustainability Unit",
+                "head": "Siobhán McInerney-Lankford",
+                "thematic_areas": [
+                  "Non-discrimination",
+                  "Equality",
+                  "Roma inclusion",
+                  "Persons with disabilities",
+                  "LGBTI rights",
+                  "Sustainability",
+                  "Social rights"
+                ]
+              },
+              {
+                "name": "Communications & Awareness Raising Unit",
+                "head": "Nicole Romain",
+                "activities": [
+                  "Media relations",
+                  "Publications",
+                  "Outreach",
+                  "Stakeholder engagement"
+                ]
+              },
+              {
+                "name": "Institutional Cooperation & EU Charter Unit",
+                "activities": [
+                  "EU institutions liaison",
+                  "International organisations",
+                  "NLOs network coordination",
+                  "Fundamental Rights Platform",
+                  "FRANET coordination"
+                ]
+              },
+              {
+                "name": "Administration Unit",
+                "head": "Xavier Català (ad interim)",
+                "functions": [
+                  "Finance & contracting",
+                  "Budget management",
+                  "Human Resources",
+                  "ICT & facilities",
+                  "Procurement"
+                ]
+              }
+            ],
+            "networks": {
+              "franet": {
+                "description": "Research network in all 27 Member States + UK + observers",
+                "role": "National-level fundamental rights data collection"
+              }
+            },
+            "staff": "Approximately 70 employees"
+          }
+        }
+      },
+      "space_innovation": {
+        "euspa": {
+          "full_name": "European Union Agency for the Space Programme",
+          "abbreviation": "EUSPA",
+          "former_name": "GSA (European GNSS Agency)",
+          "location": "Prague, Czech Republic (HQ); Madrid, Spain (GSC); France/Spain (GSMC)",
+          "website": "https://www.euspa.europa.eu",
+          "established": "2004 (renamed EUSPA 2021)",
+          "executive_leadership": {
+            "executive_director": {
+              "name": "Rodrigo da Costa",
+              "position": "Executive Director"
+            },
+            "chief_operations_officer": {
+              "name": "Pascal Claudel",
+              "position": "COO"
+            }
+          },
+          "organizational_structure": {
+            "departments": [
+              {
+                "code": "1",
+                "name": "Administration",
+                "head": "Patrick Hamilton"
+              },
+              {
+                "code": "2",
+                "name": "Security Accreditation",
+                "head": "Elisabetta Carrara",
+                "role": "SAB secretariat"
+              },
+              {
+                "code": "3",
+                "name": "Security Authority",
+                "head": "Stefano Iannitti"
+              },
+              {
+                "code": "4",
+                "name": "Security Operations & Monitoring/GSMC",
+                "head": "Philippe Rosius",
+                "activities": [
+                  "24/7 security monitoring",
+                  "PRS (Public Regulated Service)"
+                ]
+              },
+              {
+                "code": "5",
+                "name": "Secured Communications",
+                "head": "Juan Ramón López Caravantes",
+                "focus": "GOVSATCOM"
+              },
+              {
+                "code": "6",
+                "name": "Galileo Exploitation",
+                "head": "Guerric Pont"
+              },
+              {
+                "code": "7",
+                "name": "EGNOS Exploitation",
+                "head": "Jean-Marc Piéplu"
+              },
+              {
+                "code": "8",
+                "name": "Market, Downstream & Innovation",
+                "head": "Fiammetta Diani"
+              },
+              {
+                "code": "9",
+                "name": "Project Management Office & Quality",
+                "head": "Robert Greinacher"
+              },
+              {
+                "code": "10",
+                "name": "Finance",
+                "head": "Kate Szabo"
+              },
+              {
+                "code": "11",
+                "name": "Legal & Procurement",
+                "head": "Ezio Villa"
+              },
+              {
+                "code": "12",
+                "name": "Human Resources",
+                "head": "Martina Vondraskova"
+              },
+              {
+                "code": "13",
+                "name": "ICT, Facility Management & Logistics",
+                "head": "Stephan Wildeboer"
+              }
+            ],
+            "security_accreditation_board": {
+              "chair": "Philippe Bertrand",
+              "status": "Independent body",
+              "panels": [
+                "Galileo SAB Panel",
+                "EGNOS SAB Panel",
+                "Secure Communications SAB Panel",
+                "SST SAB Panel"
+              ]
+            },
+            "budget_2024": "€82.1M operational + €497.5M delegated commitments"
+          }
+        },
+        "eit": {
+          "full_name": "European Institute of Innovation and Technology",
+          "abbreviation": "EIT",
+          "location": "Budapest, Hungary",
+          "website": "https://eit.europa.eu",
+          "established": "2008",
+          "executive_leadership": {
+            "director": {
+              "name": "Martin Kern",
+              "position": "Director"
+            },
+            "governing_board_chair": {
+              "name": "Stefan Dobrev",
+              "position": "Chair of Governing Board"
+            }
+          },
+          "organizational_structure": {
+            "governance": {
+              "governing_board": {
+                "members": "15 independent members + 1 EC observer",
+                "chair": "Stefan Dobrev"
+              }
+            },
+            "headquarters_structure": {
+              "directors_office": {
+                "functions": [
+                  "Internal Control",
+                  "Internal Audit"
+                ]
+              },
+              "legal_section": {
+                "role": "Legal services"
+              },
+              "head_of_operations": {
+                "status": "Advertised 2023",
+                "units": [
+                  "Innovation Unit",
+                  "Education Unit",
+                  "Communication Unit"
+                ]
+              },
+              "administrative_unit": {
+                "functions": [
+                  "HR",
+                  "Finance",
+                  "Budgetary operations"
+                ]
+              }
+            },
+            "knowledge_innovation_communities": [
+              {
+                "name": "EIT Climate-KIC",
+                "established": 2010,
+                "focus": "Climate change",
+                "status": "Achieved financial sustainability"
+              },
+              {
+                "name": "EIT InnoEnergy",
+                "established": 2010,
+                "focus": "Sustainable energy",
+                "status": "Unicorn status 2023"
+              },
+              {
+                "name": "EIT Digital",
+                "established": 2010,
+                "focus": "Digital transformation",
+                "status": "Financially sustainable"
+              },
+              {
+                "name": "EIT Health",
+                "established": 2014,
+                "focus": "Healthcare innovation",
+                "note": "InnoStars HQ in Budapest"
+              },
+              {
+                "name": "EIT Raw Materials",
+                "established": 2014,
+                "focus": "Sustainable raw materials"
+              },
+              {
+                "name": "EIT Food",
+                "established": 2017,
+                "focus": "Sustainable food",
+                "partners": "100+",
+                "companies_incubated": "350+"
+              },
+              {
+                "name": "EIT Manufacturing",
+                "established": 2019,
+                "focus": "Manufacturing innovation",
+                "budget_2023_25": "€148M"
+              },
+              {
+                "name": "EIT Urban Mobility",
+                "established": 2019,
+                "focus": "Smart transport"
+              },
+              {
+                "name": "EIT Culture & Creativity",
+                "established": 2022,
+                "focus": "Cultural and creative sectors"
+              },
+              {
+                "name": "EIT Water",
+                "established": 2025,
+                "focus": "Water, marine and maritime"
+              }
+            ],
+            "key_programmes": [
+              "EIT-labelled degrees",
+              "Deep Tech Talent Initiative",
+              "CASSINI (space entrepreneurship)",
+              "Regional Innovation Scheme (RIS)",
+              "EIT Community Hubs"
+            ],
+            "budget_2021_2027": "€3 billion from Horizon Europe",
+            "staff": "49 HQ employees + 3,200+ partners across KICs (2,400+ partner organisations)"
+          }
+        }
+      }
+    },
+    "recent_organizational_changes": [
+      {
+        "period": "2020-2025",
+        "major_changes": [
+          "18 agencies appointed new Executive Directors/Directors",
+          "EASO transformed to EUAA (2022)",
+          "Frontex new organizational structure (2023)",
+          "ENISA reorganized (2024)",
+          "EEA restructured (Nov 2025)",
+          "COVID-19 enhanced mandates for EMA, ECDC",
+          "EBA added DORA oversight function (2024)",
+          "Multiple agencies added sustainability/climate units"
+        ]
+      }
+    ],
+    "common_structural_patterns": {
+      "tripartite_governance": [
+        "Eurofound",
+        "Cedefop",
+        "EU-OSHA"
+      ],
+      "management_boards": "Standard across most agencies (Member States + Commission)",
+      "independent_oversight": [
+        "Fundamental Rights Officers (Frontex, EUAA, EIGE)",
+        "Data Protection Officers (all agencies)"
+      ],
+      "scientific_committees": [
+        "EMA",
+        "EFSA",
+        "ECHA",
+        "FRA",
+        "EEA"
+      ],
+      "network_models": [
+        "BEREC",
+        "ReferNet (Cedefop)",
+        "EIONET (EEA)",
+        "FRANET (FRA)"
+      ]
+    }
+  }

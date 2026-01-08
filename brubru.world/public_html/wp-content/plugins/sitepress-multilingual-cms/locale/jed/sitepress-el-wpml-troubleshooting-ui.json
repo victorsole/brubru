@@ -1,0 +1,104 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Preparing...": [
+            "Προετοιμασία..."
+         ],
+         "All jobs have been cancelled": [
+            "Όλες οι εργασίες έχουν ακυρωθεί"
+         ],
+         "There is no more jobs to cancel": [
+            "Δεν υπάρχουν άλλες εργασίες για ακύρωση"
+         ],
+         "The jobs cancellation has failed": [
+            "Η ακύρωση των εργασιών απέτυχε"
+         ],
+         "Cancel in-progress automatic jobs": [
+            "Ακύρωση αυτόματων εργασιών σε εξέλιξη"
+         ],
+         "Domain name has been updated": [
+            "Το όνομα τομέα έχει ενημερωθεί"
+         ],
+         "Domain name update has been failed": [
+            "Η ενημέρωση του ονόματος τομέα απέτυχε"
+         ],
+         "Update domain name in language switcher settings": [
+            "Ενημέρωση ονόματος τομέα στις ρυθμίσεις εναλλαγής γλώσσας"
+         ],
+         "Disclaimer: MySQL Disk Space": [
+            "Αποποίηση ευθύνης: Χώρος στο δίσκο MySQL"
+         ],
+         "Cleaning and compressing the wp_icl_translate and wp_icl_translation_status tables reduces its data size, but does not automatically free up disk space in MySQL. To reclaim disk space, a table rebuild is required—a risky operation not performed automatically by this tool.": [
+            "Ο καθαρισμός και η συμπίεση των πινάκων wp_icl_translate και wp_icl_translation_status μειώνει το μέγεθος των δεδομένων τους, αλλά δεν απελευθερώνει αυτόματα χώρο στο δίσκο στη MySQL. Για την ανάκτηση χώρου στο δίσκο, απαιτείται ανακατασκευή του πίνακα—μια επικίνδυνη λειτουργία που δεν εκτελείται αυτόματα από αυτό το εργαλείο."
+         ],
+         "Optimize translation tables": [
+            "Βελτιστοποίηση πινάκων μετάφρασης"
+         ],
+         "Previous State Migration": [
+            "Μετάβαση προηγούμενης κατάστασης"
+         ],
+         "Translation Elements Migration": [
+            "Μετάβαση στοιχείων μετάφρασης"
+         ],
+         "Processed": [
+            "Επεξεργασμένα"
+         ],
+         "Error": [
+            "Σφάλμα"
+         ],
+         "Success": [
+            "Επιτυχία"
+         ],
+         "Database tables optimization completed successfully.": [
+            "Η βελτιστοποίηση των πινάκων της βάσης δεδομένων ολοκληρώθηκε με επιτυχία."
+         ],
+         "Warning": [
+            "Προειδοποίηση"
+         ],
+         "This process is resource-intensive and may take a significant amount of time. It is recommended to run this optimization during periods of low traffic.": [
+            "Αυτή η διαδικασία απαιτεί πολλούς πόρους και μπορεί να διαρκέσει σημαντικό χρονικό διάστημα. Συνιστάται να εκτελείτε αυτή τη βελτιστοποίηση κατά τη διάρκεια περιόδων χαμηλής κίνησης."
+         ],
+         "Database Tables Optimization": [
+            "Βελτιστοποίηση πινάκων βάσης δεδομένων"
+         ],
+         "Refresh license data to recognise license update": [
+            "Ανανέωση δεδομένων άδειας για αναγνώριση ενημέρωσης άδειας"
+         ],
+         "WPML License has been refreshed": [
+            "Η άδεια WPML έχει ανανεωθεί"
+         ],
+         "Translate Everything Automatically is not active.": [
+            "Η Αυτόματη Μετάφραση Όλων δεν είναι ενεργή."
+         ],
+         "Retry stuck automatic translations": [
+            "Επανάληψη κολλημένων αυτόματων μεταφράσεων"
+         ],
+         "Resends translation jobs that couldn't be processed due to a temporary issue while Translate Everything Automatically was active.": [
+            "Ξαναστέλνει εργασίες μετάφρασης που δεν μπόρεσαν να επεξεργαστούν λόγω προσωρινού προβλήματος ενώ η Αυτόματη Μετάφραση Όλων ήταν ενεργή."
+         ],
+         "Checking for stuck translation jobs...": [
+            "Έλεγχος για κολλημένες εργασίες μετάφρασης..."
+         ],
+         "Processing... %s stuck translation found so far": [
+            "Επεξεργασία... Βρέθηκε %s κολλημένη μετάφραση μέχρι στιγμής",
+            "Επεξεργασία... Βρέθηκαν %s κολλημένες μεταφράσεις μέχρι στιγμής"
+         ],
+         "Something went wrong while checking for stuck translation jobs. Please <a>contact WPML support</a>.": [
+            "Κάτι πήγε στραβά κατά τον έλεγχο για κολλημένες εργασίες μετάφρασης. Παρακαλώ <a>επικοινώνησε με την υποστήριξη του WPML</a>."
+         ],
+         "No stuck translation jobs found.": [
+            "Δεν βρέθηκαν κολλημένες εργασίες μετάφρασης."
+         ],
+         "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard.": [
+            "Βρέθηκε %s κολλημένη εργασία μετάφρασης. Το WPML θα τη μεταφράσει αυτόματα στο παρασκήνιο.\nΜπορείς να ελέγξεις την πρόοδο στον Πίνακα Ελέγχου Μεταφράσεων.",
+            "Βρέθηκαν %s κολλημένες εργασίες μετάφρασης. Το WPML θα τις μεταφράσει αυτόματα στο παρασκήνιο.\nΜπορείς να ελέγξεις την πρόοδό τους στον Πίνακα Ελέγχου Μεταφράσεων."
+         ]
+      }
+   }
+}

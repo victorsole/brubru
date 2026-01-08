@@ -1,0 +1,85 @@
+# Brubru Docker Compose
+# Local development and production deployment configuration
+
+version: '3.8'
+
+services:
+  # ===========================================
+  # Backend API (FastAPI)
+  # ===========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: brubru-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - DEVELOPMENT_MODE=false
+      # Database (set in .env or override)
+      - DATABASE_URL=${DATABASE_URL}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      # Security
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-https://brubru.beresol.eu}
+      # AI Services
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY}
+      # OAuth
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - LINKEDIN_CLIENT_ID=${LINKEDIN_CLIENT_ID}
+      - LINKEDIN_CLIENT_SECRET=${LINKEDIN_CLIENT_SECRET}
+      # Payments
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - STRIPE_YELLOW_MONTHLY_PRICE_ID=${STRIPE_YELLOW_MONTHLY_PRICE_ID}
+      - STRIPE_YELLOW_ANNUAL_PRICE_ID=${STRIPE_YELLOW_ANNUAL_PRICE_ID}
+      - STRIPE_BLUE_MONTHLY_PRICE_ID=${STRIPE_BLUE_MONTHLY_PRICE_ID}
+      - APP_URL=${APP_URL:-https://brubru.beresol.eu}
+      # External APIs
+      - TAVILY_API_KEY=${TAVILY_API_KEY}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    volumes:
+      # Persist knowledge base data (optional, for caching)
+      - brubru-cache:/app/cache
+    networks:
+      - brubru-network
+
+  # ===========================================
+  # Nginx Reverse Proxy (Production)
+  # ===========================================
+  nginx:
+    image: nginx:alpine
+    container_name: brubru-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - backend
+    networks:
+      - brubru-network
+
+volumes:
+  brubru-cache:
+
+networks:
+  brubru-network:
+    driver: bridge

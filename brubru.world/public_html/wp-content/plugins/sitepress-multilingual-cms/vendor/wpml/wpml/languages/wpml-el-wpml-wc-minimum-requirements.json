@@ -1,0 +1,39 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Your site now meets WPML's minimum requirements": [
+            "Ο ιστότοπός σας πλέον πληροί τις ελάχιστες απαιτήσεις του WPML"
+         ],
+         "Start WPML Setup": [
+            "Έναρξη εγκατάστασης WPML"
+         ],
+         "Need Help?": [
+            "Χρειάζεστε βοήθεια;?"
+         ],
+         "Contact our support team": [
+            "Επικοινωνήστε με την ομάδα υποστήριξής μας"
+         ],
+         " and we'll guide you through it step by step.": [
+            " και θα σας καθοδηγήσουμε βήμα προς βήμα."
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Ο ιστότοπός σας δεν πληροί τις ελάχιστες απαιτήσεις του WPML"
+         ],
+         "Ensure your site runs smoothly with WPML by meeting these simple minimum requirements.": [
+            "Διασφαλίστε την ομαλή λειτουργία του ιστότοπού σας με το WPML πληρώντας αυτές τις απλές ελάχιστες απαιτήσεις."
+         ],
+         "Re-check Now": [
+            "Επανέλεγχος τώρα"
+         ],
+         "Skip for now": [
+            "Παράλειψη προς το παρόν"
+         ]
+      }
+   }
+}

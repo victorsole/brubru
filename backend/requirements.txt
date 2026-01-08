@@ -1,0 +1,78 @@
+# FastAPI & Server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database & ORM
+sqlalchemy==2.0.25
+alembic==1.13.1
+psycopg2-binary==2.9.9  # PostgreSQL adapter
+supabase==2.3.0  # Supabase Python client
+
+# Pydantic (validation)
+pydantic==2.5.3
+pydantic-settings==2.1.0  # Compatible with pydantic 2.5.3
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0  # JWT tokens
+passlib[bcrypt]==1.7.4  # Password hashing
+python-dotenv==1.0.0
+stripe==10.0.0  # Stripe payment processing
+
+# AI SDKs
+anthropic==0.18.1  # Claude (primary)
+openai==1.12.0  # GPT-4 fallback (compatible with httpx 0.24.1)
+google-generativeai==0.8.0  # Gemini fallback
+google-cloud-translate==3.15.0  # Google Translate API
+
+# Hugging Face & Transformers
+transformers==4.36.0  # Hugging Face models
+huggingface-hub==0.34.4  # Hugging Face Hub client (required >=0.34.0 for transformers)
+torch==2.1.2  # PyTorch backend
+accelerate==0.25.0  # Efficient model loading
+bitsandbytes==0.41.3  # 8-bit quantization for smaller memory footprint
+sentencepiece==0.1.99  # Required for some models
+
+# LangChain & RAG
+langchain==0.1.0  # RAG orchestration (compatible with httpx 0.24.1 and pydantic 2.5.3)
+langchain-community==0.0.10  # Community integrations
+langchain-core==0.1.10  # Core langchain
+faiss-cpu==1.7.4  # Fast vector similarity search (use faiss-gpu for GPU)
+httpx==0.24.1  # Pin to version compatible with Supabase (<0.25.0)
+
+# Web Scraping
+aiohttp==3.9.3
+beautifulsoup4==4.12.3
+lxml==5.1.0
+tenacity==8.2.3  # Retry logic
+feedparser==6.0.11  # RSS/Atom feed parsing
+
+# Background Tasks & Scheduling
+apscheduler==3.10.4  # Background task scheduling for RSS feed polling
+
+# PDF Processing (Phase 1: Content Extraction)
+pypdf==4.0.1  # PDF text extraction
+pdfplumber==0.11.0  # Advanced PDF parsing with tables
+pikepdf==8.11.1  # PDF manipulation and metadata
+
+# DOCX Processing
+python-docx==1.1.0  # Word document parsing
+
+# Vector Database (Phase 2: Semantic Search)
+chromadb==0.4.22  # Vector database for semantic search
+sentence-transformers==2.3.1  # Embeddings for ChromaDB
+pgvector==0.2.4  # PostgreSQL vector extension for embeddings
+
+# XML Processing (Akoma Ntoso)
+lxml==5.1.0
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
+
+# Development
+pytest==7.4.4
+pytest-asyncio==0.23.3
+black==24.1.1
+flake8==7.0.0
+mypy==1.8.0

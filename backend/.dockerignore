@@ -1,0 +1,79 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env.local
+.env.development
+.env.test
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Build
+dist/
+build/
+*.whl
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+*.cache
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Database files (local development)
+*.db
+*.sqlite3
+
+# Documentation (not needed in container)
+docs/
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore
+
+# Tests (optional: include if you want to run tests in container)
+tests/
+*_test.py
+test_*.py
+
+# macOS
+.DS_Store
+
+# Jupyter notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Large ML model caches (will be downloaded at runtime if needed)
+models/
+.transformers/
+.huggingface/

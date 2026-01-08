@@ -1,0 +1,51 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "sv"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "Få fler funktioner med WPML:s avancerade översättningsredigerare"
+         ],
+         "Close banner": [
+            "Stäng banner"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "Du använder den klassiska översättningsredigeraren, ett äldre verktyg, och går miste om många funktioner och effektiviteten i vår avancerade översättningsredigerare:"
+         ],
+         "Translation Memory": [
+            "Översättningsminne"
+         ],
+         "HTML Protection": [
+            "HTML-skydd"
+         ],
+         "Glossary": [
+            "Ordlista"
+         ],
+         "Spellchecker": [
+            "Stavningskontroll"
+         ],
+         "AI Assistant": [
+            "AI-assistent"
+         ],
+         "Automatic Translation": [
+            "Automatisk översättning"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "Byt nu för en snabbare, bekvämare och mer pålitlig översättningsupplevelse."
+         ],
+         "Switch Now": [
+            "Byt nu"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "Läs mer om den avancerade översättningsredigeraren"
+         ],
+         "Learn More": [
+            "Läs mer"
+         ]
+      }
+   }
+}

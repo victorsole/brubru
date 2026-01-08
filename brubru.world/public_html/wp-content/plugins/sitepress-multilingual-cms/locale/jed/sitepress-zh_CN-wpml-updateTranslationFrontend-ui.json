@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "zh@Hans"
+         },
+         "Please wait, applying translation..": [
+            "请稍候，正在应用翻译……"
+         ],
+         "There was an error in applying translation.": [
+            "应用翻译时出现错误。"
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "有人正在审核此翻译。请稍后再试。"
+         ]
+      }
+   }
+}

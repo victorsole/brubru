@@ -1,0 +1,108 @@
+{
+  "dg_code": "DEFIS",
+  "dg_name": "Defence Industry and Space",
+  "full_name": "Directorate-General for Defence Industry and Space",
+  "date_of_effect": "2025-10-16",
+  "commissioner": {
+    "name": "Andrius Kubilius",
+    "title": "Commissioner"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "Timo Pesonen",
+      "position": "Director-General",
+      "assistants": [
+        {
+          "name": "Mana Pitterio",
+          "role": "Assistant to the DG - Indigo"
+        },
+        {
+          "name": "Giulio Schut",
+          "role": "Assistant to the DG - Versa"
+        }
+      ]
+    },
+    "deputy_director_general": {
+      "name": "Harald Ruijters (acting)",
+      "position": "Deputy Director-General"
+    },
+    "deputy_director_general_task_force": {
+      "name": "Harald Ruijters",
+      "position": "Deputy Director-General for Security Action for Europe (SAFE)",
+      "code": "DEFIS.TF"
+    },
+    "advisers": [
+      {
+        "name": "Christophe Morand",
+        "title": "Supervisor Adviser",
+        "area": "Delegation of Readiness and Contingency Deterrence-West"
+      },
+      {
+        "name": "Klaas Hoorweg (acting), Goekka Hurpitz (acting)",
+        "title": "Strategy",
+        "area": "Strategy Interinstitutional Relations and Solidarity",
+        "code": "DEFIS.01"
+      },
+      {
+        "name": "Hugo Parnhorster, Andreas Gabreacky",
+        "title": "Principal Advisers",
+        "area": "Principal Advisers"
+      }
+    ]
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "DEFIS.A",
+      "name": "Defence Policy",
+      "director": {
+        "name": "Fran\u00e7ois Arbauli (acting)",
+        "position": "Director"
+      }
+    },
+    "directorate_b": {
+      "code": "DEFIS.B",
+      "name": "Defence Industrial Programmes",
+      "director": {
+        "name": "Fran\u00e7ois Arbauli",
+        "position": "Director"
+      }
+    },
+    "directorate_c": {
+      "code": "DEFIS.C",
+      "name": "Space Policy Connected Space",
+      "director": {
+        "name": "Florian Kayahan",
+        "position": "Director"
+      }
+    },
+    "directorate_d": {
+      "code": "DEFIS.D",
+      "name": "Space Policy Satellite Navigation and Earth Observation",
+      "director": {
+        "name": "Pierre Delsaux",
+        "position": "Director"
+      }
+    },
+    "directorate_r": {
+      "code": "DEFIS.R",
+      "name": "General Affairs & Resources",
+      "director": {
+        "name": "Christos Bernon (acting)",
+        "position": "Director"
+      }
+    }
+  },
+  "task_force": {
+    "code": "DEFIS.TF.1",
+    "name": "Security",
+    "head": {
+      "name": "Tom Wurrenbers (acting), Castello Hurpitz (acting)",
+      "position": "Head"
+    }
+  },
+  "notes": [
+    "Deputy to the Director",
+    "Mirror Entity in Executive Agency",
+    "The HR correspondent has a functional reporting line to the Director-General"
+  ]
+}

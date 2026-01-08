@@ -1,0 +1,304 @@
+{
+  "dg_code": "HOME",
+  "dg_name": "Migration & HOME Affairs",
+  "commissioner": "Magnus Brunner",
+  "date_of_effect": "2025-10-01",
+  "director_general": {
+    "name": "Beate Gminder",
+    "assistants": [
+      "Ludovica Fabbri",
+      "Benedetta Fornaciari Da Passano",
+      "Laura Gornicio Iue",
+      "Enrique Ibanez"
+    ]
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Johannes Luchner",
+      "responsibilities": "Horizontal Affairs & Migration"
+    },
+    {
+      "name": "Olivier Onidi",
+      "responsibilities": "Schengen & Internal Security",
+      "additional_role": "Schengen Coordinator"
+    }
+  ],
+  "hr_correspondent": {
+    "name": "Sylvie Bares"
+  },
+  "advisers": [
+    {
+      "name": "Mari Juritsch",
+      "area": "Return Coordinator",
+      "role": "Principal Adviser"
+    },
+    {
+      "name": "Diane Schmitt",
+      "area": "Anti-Trafficking Coordinator",
+      "role": "Adviser"
+    },
+    {
+      "name": "Franz Lamplmair",
+      "area": "Migration Management"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "HOME.01",
+      "name": "Migration Management Coordination",
+      "director": "Nacira Boulehouat",
+      "deputy": "Alix Muller-Rappard",
+      "task_force": {
+        "name": "Task Force for Migration Management",
+        "head": "Nacira Boulehouat",
+        "members": [
+          "Andrea Baumann"
+        ]
+      }
+    },
+    {
+      "code": "HOME.A",
+      "name": "International & Horizontal Affairs",
+      "director": "Corinna Ullrich",
+      "units": [
+        {
+          "code": "HOME.A.1",
+          "name": "Policy Coordination & Interinstitutional Relations",
+          "head": "Charlotte Arwidi",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.A.2",
+          "name": "Communication",
+          "head": "Tina Zournatz",
+          "deputy": "Michael Palmer"
+        },
+        {
+          "code": "HOME.A.3",
+          "name": "International Affairs",
+          "head": "Pawel Busiakiewicz",
+          "deputy": "Alexandra Sa Carvalho"
+        },
+        {
+          "code": "HOME.A.4",
+          "name": "Legal Affairs",
+          "head": "Olivier Bergeau (Acting)",
+          "deputy": "Olivier Bergeau"
+        }
+      ]
+    },
+    {
+      "code": "HOME.B",
+      "name": "Schengen, Borders & Visa",
+      "director": "Henrik Nielsen",
+      "units": [
+        {
+          "code": "HOME.B.1",
+          "name": "Schengen & External Borders",
+          "head": "Angelina Gros Tchorbadjiska",
+          "deputy": "Denise Kwantes"
+        },
+        {
+          "code": "HOME.B.2",
+          "name": "Schengen Governance",
+          "head": "Tom Snels",
+          "deputy": "Wojtek Kalocinskii"
+        },
+        {
+          "code": "HOME.B.3",
+          "name": "Digital Schengen",
+          "head": "Marc Sulon",
+          "deputy": "Viera Ehret"
+        },
+        {
+          "code": "HOME.B.4",
+          "name": "Visa Policy",
+          "head": "Dimitrios Giotakos"
+        }
+      ]
+    },
+    {
+      "code": "HOME.C",
+      "name": "Migration & Asylum",
+      "director": "Michael Shotter",
+      "units": [
+        {
+          "code": "HOME.C.1",
+          "name": "Return & Readmission",
+          "head": "Silvena Pestana",
+          "deputy": "Serena Di Benedetto"
+        },
+        {
+          "code": "HOME.C.2",
+          "name": "Legal Pathways & Integration",
+          "head": "Anita Vella",
+          "deputy": "Silvio Grieco"
+        },
+        {
+          "code": "HOME.C.3",
+          "name": "Asylum",
+          "head": "Esther Pozo Vera",
+          "deputy": "Severine Wernert"
+        },
+        {
+          "code": "HOME.C.4",
+          "name": "Migration Management Response & Counter-Smuggling",
+          "head": "Simona Ardovino",
+          "deputy": "Krzysztof Nowaczek"
+        },
+        {
+          "code": "HOME.C.5",
+          "name": "Migration Management Preparedness",
+          "head": "Martin Taschner",
+          "deputy": "Ramona Toader"
+        }
+      ]
+    },
+    {
+      "code": "HOME.D",
+      "name": "Internal Security",
+      "director": "Floriana Sipala",
+      "notes": [
+        "The Counter-Terrorism Coordinator in the Commission is the Director of HOME.D",
+        "The European Commission Coordinator for the Fight against Drug Trafficking is located within the Director HOME.D team"
+      ],
+      "units": [
+        {
+          "code": "HOME.D.1",
+          "name": "Law Enforcement Cooperation",
+          "head": "Julian Siegl",
+          "deputy": "Julija Varnaite-Kamstra"
+        },
+        {
+          "code": "HOME.D.2",
+          "name": "Counter-Terrorism",
+          "head": "Martin Schiffer",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.D.3",
+          "name": "Prevention of Radicalisation",
+          "head": "Heike Buss (Acting)",
+          "deputy": "Heike Buss"
+        },
+        {
+          "code": "HOME.D.4",
+          "name": "Security in the Digital Age",
+          "head": "Monika Kopcheva",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.D.5",
+          "name": "Organised Crime & Drugs",
+          "head": "Jo De Cock"
+        }
+      ]
+    },
+    {
+      "code": "HOME.E",
+      "name": "Home Affairs Funds",
+      "director": "Silvia Marcellini",
+      "units": [
+        {
+          "code": "HOME.E.1",
+          "name": "Border & Compliance",
+          "head": "Amis Sijakovic",
+          "deputy": "Wietske Janssen-Norin"
+        },
+        {
+          "code": "HOME.E.2",
+          "name": "Asylum & Central Europe (I)",
+          "head": "Sergio Mesa",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.E.3",
+          "name": "North, West & Central Europe (II)",
+          "head": "Annick Faguer",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.E.4",
+          "name": "Actions & Procurement",
+          "head": "Paul Casajus",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.E.5",
+          "name": "Budget & Reporting",
+          "head": "Paul Szaszman",
+          "deputy": "Lukas Richterov"
+        }
+      ]
+    },
+    {
+      "code": "HOME.F",
+      "name": "Innovation & Audit",
+      "director": "Marta Cybula",
+      "units": [
+        {
+          "code": "HOME.F.1",
+          "name": "Border & Compliance",
+          "head": "Julija Amos",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.F.2",
+          "name": "Strategic & Security Research",
+          "head": "Natalia Prieto",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HOME.F.3",
+          "name": "Secure Society",
+          "head": "Vacant",
+          "deputy": "Vacant"
+        }
+      ]
+    }
+  ],
+  "agencies": [
+    {
+      "code": "EBCGA",
+      "name": "European Border and Coast Guard Agency",
+      "head": "Hans Leijtens"
+    },
+    {
+      "code": "EU-LISA",
+      "name": "European Union Agency for the Operational Management of Large-Scale IT Systems",
+      "head": "Marili Männik (Ad Interim)"
+    },
+    {
+      "code": "EUAA",
+      "name": "European Union Agency for Asylum",
+      "head": "Nina Gregori"
+    },
+    {
+      "code": "EUROPOL",
+      "name": "European Union Agency for Law Enforcement Cooperation",
+      "head": "Catherine De Bolle"
+    },
+    {
+      "code": "CEPOL",
+      "name": "European Union Agency for Law Enforcement Training",
+      "head": "Montserrat Marín"
+    },
+    {
+      "code": "EUDA",
+      "name": "European Union Drugs Agency",
+      "head": "Alexis Goosdeel"
+    }
+  ],
+  "seconded_managers": [
+    "Gosia Pearson, Head of Unit seconded to the Cabinet of Commissioner Brunner",
+    "Cathrin Bauer-Bulst, Head of Unit seconded to the Cabinet of Commissioner Brunner",
+    "Alexandra Cupsan-Catalin, Head of Unit seconded to the Cabinet of Executive Vice-President Virkkunen"
+  ],
+  "notes": [
+    "The Head of Task Force for Migration Management is the Head of Unit HOME.01",
+    "The Counter-Terrorism Coordinator in the Commission is the Director of HOME.D",
+    "The European Commission Coordinator for the Fight against Drug Trafficking is located within the Director HOME.D team",
+    "D: Deputy to the Director",
+    "A: Mirror entity in an Executive Agency"
+  ]
+}

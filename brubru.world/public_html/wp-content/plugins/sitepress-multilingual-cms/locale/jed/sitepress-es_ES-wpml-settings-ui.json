@@ -1,0 +1,52 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "es"
+         },
+         "You must use the Advanced Translation Editor if you want to translate your content automatically.": [
+            "Debe usar el Editor de traducción avanzado si desea traducir contenido de forma automática."
+         ],
+         "Synchronize translators and translation managers with ATE": [
+            "Sincronizar los traductores y los administradores de traducción con el Editor de traducción avanzado (ATE)"
+         ],
+         "Please try again in a few minutes. If the problem persists, please contact %sWPML support%s.": [
+            "Inténtelo de nuevo en unos minutos. Si el problema persiste, póngase en contacto con el %sSoporte de WPML%s."
+         ],
+         "Save": [
+            "Guardar"
+         ],
+         "Please confirm this translation setting": [
+            "Confirme esta configuración de traducción"
+         ],
+         "Your site is set to translate all content automatically. When you make <PostTypesNames /> translatable, WPML will automatically translate the %1$d existing item.": [
+            "Tu sitio está configurado para traducir todo el contenido automáticamente. Cuando hagas <PostTypesNames /> traducible, WPML traducirá automáticamente el elemento %1$d existente.",
+            "Tu sitio está configurado para traducir todo el contenido automáticamente. Cuando hagas traducible <PostTypesNames />, WPML traducirá automáticamente los elementos existentes en %1$d."
+         ],
+         "Your site is set to translate all content automatically. When you make <PostTypesNames /> translatable, WPML will automatically translate all future content.": [
+            "Su sitio está configurado para traducir todo el contenido automáticamente. Al establecer que <PostTypesNames /> sea traducible, WPML traducirá automáticamente todo el contenido futuro."
+         ],
+         "Are you OK with paying for this?": [
+            "¿Le parece bien pagar por esto?"
+         ],
+         "Cancel": [
+            "Cancelar"
+         ],
+         "Make translatable": [
+            "Hacer traducible"
+         ],
+         "Yes, translate <b>existing</b> and <b>future</b> content automatically": [
+            "Sí, traducir el contenido <b>existente</b> y <b>futuro</b> automáticamente"
+         ],
+         "Yes, but only translate <b>future</b> content automatically": [
+            "Sí, pero solo traducir el contenido <b>futuro</b> automáticamente"
+         ],
+         "Yes, translate <b>future</b> content automatically": [
+            "Sí, traducir el contenido <b>futuro</b> automáticamente"
+         ]
+      }
+   }
+}

@@ -1,0 +1,405 @@
+{
+  "cluster_id": 19,
+  "cluster_name": "Circular Economy Startup Compliance (EPR)",
+  "policy_area": "Environment",
+  "description": "Extended Producer Responsibility (EPR) and circular economy compliance",
+  "applicability": "Circular economy startups, product-as-service, reuse platforms, waste management, packaging producers",
+  "extraction_date": "2026-01-01T04:53:05.839340",
+  "total_laws": 5,
+  "total_requirements": 23,
+  "requirements": [
+    {
+      "article": "Article 1",
+      "requirement_text": "The product group footwear shall comprise all articles designed to protect or cover the foot, with an applied sole which comes into contact with the ground, including footwear covered by Annex II to Directive 94/11/EC and protective footwear covered by Council Directive 89/686/EEC, subject to specified exemptions.",
+      "applicable_entity": "EU Ecolabel certification bodies and applicants",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "product group",
+        "footwear",
+        "scope",
+        "definition"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 1(3)",
+      "requirement_text": "The product group shall not comprise footwear containing any electric or electronic components, footwear that is disposed of after a single use, socks with an applied sole, or toy footwear.",
+      "applicable_entity": "EU Ecolabel certification bodies and applicants",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "exclusions",
+        "electronic components",
+        "single use",
+        "toy footwear"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3",
+      "requirement_text": "In order to be awarded the EU Ecolabel, a product shall fall within the product group footwear as defined in Article 1 and shall comply with the ecological criteria and the related assessment and verification requirements set out in the Annex.",
+      "applicable_entity": "applicants for EU Ecolabel",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "EU Ecolabel",
+        "ecological criteria",
+        "compliance",
+        "assessment",
+        "verification"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 4",
+      "requirement_text": "The ecological criteria for the product group footwear and the related assessment and verification requirements shall be valid for six years from the date of adoption of this Decision.",
+      "applicable_entity": "EU Ecolabel certification bodies and applicants",
+      "criticality": "critical",
+      "deadline_text": "six years from 5 August 2016",
+      "keywords": [
+        "validity period",
+        "ecological criteria",
+        "six years"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 5",
+      "requirement_text": "For administrative purposes, the code number assigned to the product group footwear shall be 017.",
+      "applicable_entity": "EU Ecolabel certification bodies and administrative authorities",
+      "criticality": "important",
+      "deadline_text": "",
+      "keywords": [
+        "code number",
+        "017",
+        "administrative"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 7(2)",
+      "requirement_text": "Applications for the EU Ecolabel for products falling within the product group footwear submitted within two months of the date of adoption of this Decision may be based either on the criteria set out in Decision 2009/563/EC or on the criteria set out in this Decision. Applications shall be evaluated in accordance with the criteria on which they are based.",
+      "applicable_entity": "applicants for EU Ecolabel and certification bodies",
+      "criticality": "critical",
+      "deadline_text": "within two months of 5 August 2016",
+      "keywords": [
+        "transitional period",
+        "applications",
+        "two months",
+        "evaluation criteria"
+      ],
+      "law_id": 469,
+      "law_celex": "32016D1349",
+      "law_title": "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological criteria for the award of the EU Ecolabel for footwear (notified under document C(2016) 5028) (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 5(1) of Council Directive 75/442/EEC",
+      "requirement_text": "Member States shall take appropriate measures, in cooperation with other Member States where this is necessary or advisable, to establish an integrated and adequate network of disposal installations, taking account of the best available technology not involving excessive costs",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "disposal installations",
+        "network",
+        "waste disposal",
+        "best available technology"
+      ],
+      "law_id": 484,
+      "law_celex": "32006D0237",
+      "law_title": "Commission Decision of 22 June 2005 on the aid measures implemented by the Netherlands for AVR for dealing with hazardous waste (notified under document number C(2005) 1789) (Only the Dutch version is authentic) (Text with EEA relevance) (2006/237/EC)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 5(1) of Council Directive 75/442/EEC",
+      "requirement_text": "The network must enable the Community as a whole to become self-sufficient in waste disposal and the Member States to move towards that aim individually, taking into account geographical circumstances or the need for specialized installations for certain types of waste",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "self-sufficient",
+        "waste disposal",
+        "specialized installations",
+        "Community"
+      ],
+      "law_id": 484,
+      "law_celex": "32006D0237",
+      "law_title": "Commission Decision of 22 June 2005 on the aid measures implemented by the Netherlands for AVR for dealing with hazardous waste (notified under document number C(2005) 1789) (Only the Dutch version is authentic) (Text with EEA relevance) (2006/237/EC)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 5(2) of Council Directive 75/442/EEC",
+      "requirement_text": "The network must also enable waste to be disposed of in one of the nearest appropriate installations, by means of the most appropriate methods and technologies in order to ensure a high level of protection for the environment and public health",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "nearest appropriate installations",
+        "environmental protection",
+        "public health",
+        "waste disposal"
+      ],
+      "law_id": 484,
+      "law_celex": "32006D0237",
+      "law_title": "Commission Decision of 22 June 2005 on the aid measures implemented by the Netherlands for AVR for dealing with hazardous waste (notified under document number C(2005) 1789) (Only the Dutch version is authentic) (Text with EEA relevance) (2006/237/EC)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "Must comply with the rules on permit exemptions concerning the recovery of hazardous wastes as laid down in the draft Waste Management Licensing Exemptions (Amendment and Related Provisions) (England and Wales) Regulations 2006, the Waste Electrical and Electronic Equipment (Waste Management Licensing) (Northern Ireland) Regulations 2006 and the Waste Management Licensing Amendment (Scotland) Regulations 2006",
+      "applicable_entity": "United Kingdom",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "permit exemptions",
+        "hazardous waste",
+        "recovery",
+        "waste management licensing"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Regulation 18(1) of SI No 1056/1994",
+      "requirement_text": "Must register with the appropriate registration authority before carrying on an exempt activity involving the recovery or disposal of waste",
+      "applicable_entity": "establishments and undertakings",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "registration",
+        "exempt activity",
+        "recovery",
+        "disposal",
+        "waste"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2) of Directive 91/689/EEC",
+      "requirement_text": "Must ensure types and quantities of waste and methods of recovery comply with conditions laid down in Article 4 of Directive 2006/12/EC",
+      "applicable_entity": "establishments and undertakings recovering hazardous waste",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "waste types",
+        "quantities",
+        "recovery methods",
+        "compliance conditions"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2) of Directive 91/689/EEC",
+      "requirement_text": "Must list the types and maximum quantities of hazardous wastes and prescribe further requirements relating to the carrying out of storage activities",
+      "applicable_entity": "establishments and undertakings recovering hazardous waste",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "waste types",
+        "maximum quantities",
+        "hazardous waste",
+        "storage activities"
+      ],
+      "law_id": 553,
+      "law_celex": "32008L0350",
+      "law_title": "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ireland and Scotland concerning permit exemptions for undertakings and establishments recovering hazardous waste under Article 3 of Council Directive 91/689/EEC (notified under document number C(2008) 1212) (Only the English text is authentic) (Text with EEA relevance) (2008/350/EC)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 1(1)",
+      "requirement_text": "This Regulation establishes eco-design requirements for the placing on the market of electric mains-operated air conditioners with a rated capacity of ≤ 12 kW for cooling, or heating if the product has no cooling function, and comfort fans with an electric fan power input ≤ 125W.",
+      "applicable_entity": "manufacturers placing products on the market",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ecodesign requirements",
+        "air conditioners",
+        "comfort fans",
+        "placing on market"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(1)",
+      "requirement_text": "The ecodesign requirements for air conditioners and comfort fans are set out in Annex I.",
+      "applicable_entity": "manufacturers of air conditioners and comfort fans",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "ecodesign requirements",
+        "Annex I",
+        "air conditioners",
+        "comfort fans"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "From 1 January 2013: single duct and double duct air conditioners shall correspond to requirements as indicated in Annex I, point 2(a).",
+      "applicable_entity": "manufacturers of single duct and double duct air conditioners",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2013",
+      "keywords": [
+        "single duct",
+        "double duct",
+        "air conditioners",
+        "Annex I",
+        "point 2(a)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "From 1 January 2013: air conditioners, except single and double duct air conditioners, shall correspond to requirements as indicated in Annex I, point 2(b) and points 3(a), 3(b), 3(c).",
+      "applicable_entity": "manufacturers of air conditioners (except single and double duct)",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2013",
+      "keywords": [
+        "air conditioners",
+        "Annex I",
+        "point 2(b)",
+        "points 3(a), 3(b), 3(c)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "From 1 January 2013: single ducts and double ducts shall correspond to requirements as indicated in Annex I, points 3(a), 3(b), 3(d).",
+      "applicable_entity": "manufacturers of single duct and double duct air conditioners",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2013",
+      "keywords": [
+        "single duct",
+        "double duct",
+        "Annex I",
+        "points 3(a), 3(b), 3(d)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "From 1 January 2013: comfort fans shall correspond to requirements as indicated in Annex I, points 3(a), 3(b), 3(e).",
+      "applicable_entity": "manufacturers of comfort fans",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2013",
+      "keywords": [
+        "comfort fans",
+        "Annex I",
+        "points 3(a), 3(b), 3(e)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "From 1 January 2014: air conditioners shall correspond to ecodesign requirements as indicated in Annex I, point 2(c).",
+      "applicable_entity": "manufacturers of air conditioners",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2014",
+      "keywords": [
+        "air conditioners",
+        "ecodesign requirements",
+        "Annex I",
+        "point 2(c)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(2)",
+      "requirement_text": "From 1 January 2014: single duct and double duct air conditioners shall correspond to requirements as indicated in Annex I, point 2(d).",
+      "applicable_entity": "manufacturers of single duct and double duct air conditioners",
+      "criticality": "critical",
+      "deadline_text": "from 1 January 2014",
+      "keywords": [
+        "single duct",
+        "double duct",
+        "air conditioners",
+        "Annex I",
+        "point 2(d)"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 3(3)",
+      "requirement_text": "Compliance with ecodesign requirements shall be measured and calculated in accordance with requirements set out in Annex II.",
+      "applicable_entity": "manufacturers of air conditioners and comfort fans",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "compliance",
+        "ecodesign requirements",
+        "measured",
+        "calculated",
+        "Annex II"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    },
+    {
+      "article": "Article 4(1)",
+      "requirement_text": "The conformity assessment procedure referred to in Article 8 of Directive 2009/125/EC shall be the internal design control set out in Annex IV.",
+      "applicable_entity": "manufacturers of air conditioners and comfort fans",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "conformity assessment",
+        "internal design control",
+        "Annex IV",
+        "Directive 2009/125/EC"
+      ],
+      "law_id": 959,
+      "law_celex": "32012R0206",
+      "law_title": "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 2009/125/EC of the European Parliament and of the Council with regard to ecodesign requirements for air conditioners and comfort fans (Text with EEA relevance)",
+      "cluster_id": 19
+    }
+  ]
+}

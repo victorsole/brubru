@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "fr"
+         },
+         "Get a key for this site": [
+            "Obtenir une clé pour ce site"
+         ],
+         "Site key:": [
+            "Clé du site :"
+         ],
+         "Enter your site key here": [
+            "Saisissez votre clé de site ici"
+         ],
+         "Registering...": [
+            "Enregistrement..."
+         ],
+         "Register": [
+            "S'enregistrer"
+         ],
+         "A New Site Key Is Required": [
+            "Une nouvelle clé de site est requise"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "Pour continuer à utiliser les fonctionnalités de WPML comme la traduction automatique et les mises à jour des extensions, veuillez enregistrer à nouveau votre site. Ne vous inquiétez pas, votre contenu existant et vos traductions sont en sécurité."
+         ],
+         "Site key registered successfully!": [
+            "Clé de site enregistrée avec succès !"
+         ],
+         "Page will reload in %d seconds...": [
+            "La page se rechargera dans %d secondes..."
+         ],
+         "Registration failed. Please try again.": [
+            "L'enregistrement a échoué. Veuillez réessayer."
+         ]
+      }
+   }
+}

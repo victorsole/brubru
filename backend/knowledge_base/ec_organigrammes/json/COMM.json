@@ -1,0 +1,346 @@
+{
+  "dg_code": "COMM",
+  "dg_name": "Communication",
+  "full_name": "Directorate-General for Communication",
+  "date_of_effect": "2025-10-16",
+  "president": {
+    "name": "Ursula von der Leyen",
+    "title": "President"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "Dana Spinant",
+      "position": "Director-General"
+    },
+    "deputy_director_general": {
+      "name": "vacant",
+      "position": "Deputy Director-General"
+    },
+    "deputy_director_general_2": {
+      "name": "Sophia Eriksson Waterschoot",
+      "position": "Deputy Director-General"
+    },
+    "ec_chief_spokesperson": {
+      "name": "Paula Pinho",
+      "position": "EC Chief Spokesperson",
+      "note": "The EC Chief Spokesperson has an administrative reporting line to the Director General. The Spokesperson's Service is in charge of coordinating and delivering the political communication of the Commission under the direct political authority of the President"
+    },
+    "executive_communication_adviser": {
+      "name": "Jens Flosdorff",
+      "position": "Executive Communication Adviser"
+    },
+    "deputy_ec_chief_spokesperson": {
+      "name": "Arianna Podesta",
+      "position": "Deputy EC Chief Spokesperson",
+      "deputy": "Olof Gill"
+    },
+    "principal_advisers": [
+      {
+        "name": "Telmo Baltazar",
+        "title": "Principal Adviser",
+        "area": "Corporate Political Communication"
+      },
+      {
+        "name": "vacant",
+        "title": "Principal Adviser",
+        "area": "Relations with Stakeholders, Civil Society Movements and Outreach"
+      }
+    ],
+    "dga_assistants": [
+      {
+        "name": "Christelle Ritz",
+        "role": "Strategic Communication"
+      },
+      {
+        "name": "John Plecita Brunstein",
+        "role": "Digital Readiness"
+      }
+    ]
+  },
+  "spokesperson_service": {
+    "spokesperson_unit_2": {
+      "code": "COMM.SP.02",
+      "name": "Spokesperson's Service",
+      "head": "Pieter Valks"
+    }
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "COMM.A",
+      "name": "Political Communication",
+      "director": {
+        "name": "Sophia Eriksson Waterschoot (acting)",
+        "position": "Director"
+      },
+      "units": {
+        "a1": {
+          "code": "COMM.A.1",
+          "name": "Communication",
+          "head_of_unit": {
+            "name": "Gustavo Arranca",
+            "deputy": "Guillermo Werner"
+          }
+        },
+        "a2": {
+          "code": "COMM.A.2",
+          "name": "New Communication",
+          "head_of_unit": {
+            "name": "Cecilia Marmounou",
+            "deputy": null
+          }
+        },
+        "a3": {
+          "code": "COMM.A.3",
+          "name": "Editorial Communication",
+          "head_of_unit": {
+            "name": "Katarina Eivares",
+            "deputy": null
+          }
+        },
+        "a4": {
+          "code": "COMM.A.4",
+          "name": "Visitor",
+          "head_of_unit": {
+            "name": "Anneliese Zeller",
+            "deputy": null
+          }
+        },
+        "a5": {
+          "code": "COMM.A.5",
+          "name": "Structural Communication",
+          "head_of_unit": {
+            "name": "vacant",
+            "deputy": null
+          }
+        },
+        "a6": {
+          "code": "COMM.A.6",
+          "name": "Communication Campaign",
+          "head_of_unit": {
+            "name": "vacant",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_b": {
+      "code": "COMM.B",
+      "name": "Citizens Communication",
+      "director": {
+        "name": "Stephanie Resenoneu",
+        "position": "Director"
+      },
+      "units": {
+        "b1": {
+          "code": "COMM.B.1",
+          "name": "Europe Direct",
+          "head_of_unit": {
+            "name": "Patrizia Leboef",
+            "deputy": null
+          }
+        },
+        "b2": {
+          "code": "COMM.B.2",
+          "name": "Direct Network",
+          "head_of_unit": {
+            "name": "Joanna Strajewska-Polanka",
+            "deputy": null
+          }
+        },
+        "b3": {
+          "code": "COMM.B.3",
+          "name": "Public Dialogue & Citizens",
+          "head_of_unit": {
+            "name": "Gaetano Bilard-Wendol",
+            "deputy": null
+          }
+        },
+        "b4": {
+          "code": "COMM.B.4",
+          "name": "Visitors",
+          "head_of_unit": {
+            "name": "Gaetani Bilard-Wendol",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_c": {
+      "code": "COMM.C",
+      "name": "Representations & Communication in Member States",
+      "director": {
+        "name": "Richard Worskel",
+        "position": "Director"
+      },
+      "units": {
+        "c1": {
+          "code": "COMM.C.1",
+          "name": "Citizens Exchange",
+          "head_of_unit": {
+            "name": "Alejandro Loreman",
+            "deputy": null
+          }
+        },
+        "c2": {
+          "code": "COMM.C.2",
+          "name": "Direct Network",
+          "head_of_unit": {
+            "name": "Caro Martini",
+            "deputy": null
+          }
+        },
+        "c3": {
+          "code": "COMM.C.3",
+          "name": "Citizens Exchanges",
+          "head_of_unit": {
+            "name": "Beatrice Papakonstou",
+            "deputy": null
+          }
+        }
+      }
+    },
+    "directorate_d": {
+      "code": "COMM.D",
+      "name": "Communication Support Services",
+      "director": {
+        "name": "Fabriozide Rosa",
+        "position": "Director"
+      },
+      "units": {
+        "d1": {
+          "code": "COMM.D.1",
+          "name": "Events, Partering & Stakeholders",
+          "head_of_unit": {
+            "name": "vacant",
+            "deputy": null
+          }
+        },
+        "d2": {
+          "code": "COMM.D.2",
+          "name": "Digital Solutions & Data Talent",
+          "head_of_unit": {
+            "name": "Enzo Cordin",
+            "deputy": null
+          }
+        },
+        "d3": {
+          "code": "COMM.D.3",
+          "name": "Business Tools & Contract",
+          "head_of_unit": {
+            "name": "Stavros Kalakonoros",
+            "deputy": null
+          }
+        },
+        "d4": {
+          "code": "COMM.D.4",
+          "name": "Campus Resource & Digital Solutions",
+          "head_of_unit": {
+            "name": "Carlo Candolino",
+            "deputy": null
+          }
+        },
+        "d5": {
+          "code": "COMM.D.5",
+          "name": "Digital Solutions",
+          "head_of_unit": {
+            "name": "Stavros Kalakonoros",
+            "deputy": null
+          }
+        }
+      }
+    }
+  },
+  "representations_regional_representations": {
+    "representation_offices": [
+      {
+        "code": "REP.06",
+        "location": "Athens",
+        "head": "Petros Louris"
+      },
+      {
+        "code": "REP.18",
+        "location": "Paris",
+        "head": "Pierre Schatz"
+      },
+      {
+        "code": "REP.22",
+        "location": "Madrid",
+        "head": "Marga Pedro Lomaz"
+      },
+      {
+        "code": "REP.09",
+        "location": "Belgium",
+        "head": "Jordi Ayet Puigarnau"
+      },
+      {
+        "code": "REP.20",
+        "location": "Ittoria",
+        "head": "Pavis Commi"
+      },
+      {
+        "code": "REP.21",
+        "location": "Latvia",
+        "head": "Zane Zilverst"
+      },
+      {
+        "code": "REP.23",
+        "location": "Austria, Slovenia",
+        "head": "Julian Clausen Costa"
+      },
+      {
+        "code": "REP.10",
+        "location": "Germany",
+        "head": "Jakob Weinmaier"
+      },
+      {
+        "code": "REP.25",
+        "location": "Czech",
+        "head": "Michal Casarni"
+      },
+      {
+        "code": "REP.02",
+        "location": "Estonia",
+        "head": "Toomas Taluvo"
+      },
+      {
+        "code": "REP.13",
+        "location": "Ireland",
+        "head": "Atanasios Vergullus"
+      },
+      {
+        "code": "REP.01",
+        "location": "Croatia",
+        "head": "Branislav Grois (acting)"
+      },
+      {
+        "code": "REP.03",
+        "location": "Portugal",
+        "head": "Catarina Anambel"
+      },
+      {
+        "code": "REP.04",
+        "location": "Dublin",
+        "head": "Marco Comisio"
+      },
+      {
+        "code": "REP.07",
+        "location": "Bulgaria States (acting)",
+        "head": "Juan Andreas Icakus"
+      },
+      {
+        "code": "REP.11",
+        "location": "Vilnius",
+        "head": "Andrius Devassicus"
+      },
+      {
+        "code": "REP.12",
+        "location": "Digital Solutions",
+        "head": "Giulia Demaro"
+      }
+    ]
+  },
+  "notes": [
+    "The EC Chief Spokesperson has an administrative reporting line to the Director General. The Spokesperson's Service is in charge of coordinating and delivering the political communication of the Commission under the direct political authority of the President",
+    "COMM.SP.01 Spokesperson's Service has an administrative reporting line to the Director"
+  ]
+}

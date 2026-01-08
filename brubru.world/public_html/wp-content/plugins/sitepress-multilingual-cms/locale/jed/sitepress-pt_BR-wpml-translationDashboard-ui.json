@@ -1,0 +1,198 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n > 1);",
+            "lang": "pt_BR"
+         },
+         "Your pending automatic translations will be canceled.": [
+            "Suas traduções automáticas pendentes serão canceladas."
+         ],
+         "Save": [
+            "Salvar"
+         ],
+         "Go to the <a>Translation Management Dashboard</a> to translate your content.": [
+            "Vá para o <a>Painel de Gerenciamento de Tradução</a> para traduzir seu conteúdo."
+         ],
+         "Review the translations before publishing": [
+            "Revisar as traduções antes de publicar"
+         ],
+         "Publish translations and review them later": [
+            "Publicar traduções e revisá-las depois"
+         ],
+         "Publish translations without reviewing": [
+            "Publicar traduções sem revisar"
+         ],
+         "Translate Everything": [
+            "Traduzir Tudo"
+         ],
+         "WPML will automatically translate content that you publish or update": [
+            "O WPML traduzirá automaticamente o conteúdo que você publicar ou atualizar"
+         ],
+         "How do you want to translate this site?": [
+            "Como você deseja traduzir este site?"
+         ],
+         "Translate Some": [
+            "Traduzir Alguns"
+         ],
+         "I want to choose which content to translate": [
+            "Quero escolher qual conteúdo traduzir"
+         ],
+         "All Languages": [
+            "Todos os Idiomas"
+         ],
+         "Overwrite existing translations": [
+            "Sobrescrever traduções existentes"
+         ],
+         "Some of the content you want to translate is already translated": [
+            "Parte do conteúdo que você deseja traduzir já está traduzido"
+         ],
+         "What do you want to do with the content that’s already translated?": [
+            "O que você deseja fazer com o conteúdo que já está traduzido?"
+         ],
+         "Leave existing translations as is": [
+            "Deixar as traduções existentes como estão"
+         ],
+         "You chose to review translations before publishing.": [
+            "Você optou por revisar as traduções antes de publicar."
+         ],
+         "If you retranslate content that's already published, the changes will be applied directly to live pages or posts.": [
+            "Se você retraduzir conteúdo que já está publicado, as alterações serão aplicadas diretamente às páginas ou posts ativos."
+         ],
+         "This also updates the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "Isso também atualiza a memória de tradução do seu site. Leia mais sobre <a href=\"%s\" target=\"_blank\" >memória de tradução</a>"
+         ],
+         "Allows you to re-translate your content and update the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "Permite que você retraduza seu conteúdo e atualize a memória de tradução do seu site. Leia mais sobre <a href=\"%s\" target=\"_blank\" >memória de tradução</a>"
+         ],
+         "Allows your translators to re-translate your content and update the translation memory for your site. Read more about <a href=\"%s\" target=\"_blank\" >translation memory</a>": [
+            "Permite que seus tradutores retraduzeam seu conteúdo e atualizem a memória de tradução do seu site. Leia mais sobre <a href=\"%s\" target=\"_blank\" >memória de tradução</a>"
+         ],
+         "HINT: You can add a Note for translators in the table above with special instructions.": [
+            "DICA: Você pode adicionar uma Nota para tradutores na tabela acima com instruções especiais."
+         ],
+         "Translate automatically": [
+            "Traduzir automaticamente"
+         ],
+         "How do you want to translate?": [
+            "Como você deseja traduzir?"
+         ],
+         "Assign to a translator": [
+            "Atribuir a um tradutor"
+         ],
+         "Translate myself": [
+            "Traduzir eu mesmo"
+         ],
+         "You do not need translation credits to translate content yourself.": [
+            "Você não precisa de créditos de tradução para traduzir o conteúdo você mesmo."
+         ],
+         "You can only automatically translate content from your site's default language (English), to your site's other languages. Deselect content in your site's secondary languages to proceed.": [
+            "Você só pode traduzir automaticamente o conteúdo do idioma padrão do seu site (Inglês) para os outros idiomas do seu site. Desmarque o conteúdo nos idiomas secundários do seu site para prosseguir."
+         ],
+         "You can only automatically translate content from your primary language (%s) to other languages. Use the language switcher at the top of this page to switch to %s.": [
+            "Você só pode traduzir automaticamente o conteúdo do seu idioma principal (%s) para outros idiomas. Use o seletor de idiomas no topo desta página para mudar para %s."
+         ],
+         "Selected content includes items that were originally created in this language. Deselect these items to proceed.": [
+            "O conteúdo selecionado inclui itens que foram originalmente criados neste idioma. Desmarque esses itens para prosseguir."
+         ],
+         "Add to Translation Queue": [
+            "Adicionar à Fila de Tradução"
+         ],
+         "Select a post or page to translate": [
+            "Selecione um post ou página para traduzir"
+         ],
+         "Translate or duplicate content to at least one language": [
+            "Traduza ou duplique o conteúdo para pelo menos um idioma"
+         ],
+         "Choose how you want to translate your content": [
+            "Escolha como você deseja traduzir seu conteúdo"
+         ],
+         "Selected content is already translated": [
+            "O conteúdo selecionado já está traduzido"
+         ],
+         "Selected content includes items in a language other than your site's default language.": [
+            "O conteúdo selecionado inclui itens em um idioma diferente do idioma padrão do seu site."
+         ],
+         "Choose at least one translation action": [
+            "Escolha pelo menos uma ação de tradução"
+         ],
+         "Duplicate": [
+            "Duplicar"
+         ],
+         "Start translating and duplicating": [
+            "Começar a traduzir e duplicar"
+         ],
+         "Add to Translation Basket and duplicate": [
+            "Adicionar à Cesta de Tradução e duplicar"
+         ],
+         "Add to Translation Queue and duplicate": [
+            "Adicionar à Fila de Tradução e duplicar"
+         ],
+         "Start translating": [
+            "Começar a traduzir"
+         ],
+         "Add to Translation Basket": [
+            "Adicionar à Cesta de Tradução"
+         ],
+         "One more thing...": [
+            "Mais uma coisa..."
+         ],
+         "What would you like to do when your content has finished translating automatically?": [
+            "O que você gostaria de fazer quando seu conteúdo terminar de ser traduzido automaticamente?"
+         ],
+         "Save settings": [
+            "Salvar configurações"
+         ],
+         "This setting will apply to all future automatic translations. You can change this anytime in WPML → Settings.": [
+            "Esta configuração será aplicada a todas as futuras traduções automáticas. Você pode alterar isso a qualquer momento em WPML → Configurações."
+         ],
+         "Translate": [
+            "Traduzir"
+         ],
+         "Duplicate content": [
+            "Duplicar conteúdo"
+         ],
+         "Do nothing": [
+            "Não fazer nada"
+         ],
+         "You need credits to use automatic translation.": [
+            "Você precisa de créditos para usar a tradução automática."
+         ],
+         "Finish setting up %s on your site": [
+            "Termine de configurar %s no seu site"
+         ],
+         "You need to authenticate %s to send them content for translation. Visit the %s to finish the setup.": [
+            "Você precisa autenticar %s para enviar conteúdo para tradução. Visite o %s para concluir a configuração."
+         ],
+         "Connection Error. Please wait a minute and reload this page. If the problem continues, please <a>contact WPML support</a>.": [
+            "Erro de Conexão. Por favor, aguarde um minuto e recarregue esta página. Se o problema persistir, por favor <a>entre em contato com o suporte do WPML</a>."
+         ],
+         "Add a translator to use %s.": [
+            "Adicione um tradutor para usar %s."
+         ],
+         "To send content to %s for translation, go to the %s to add a translator on your site.": [
+            "Para enviar conteúdo para %s para tradução, vá para o %s para adicionar um tradutor no seu site."
+         ],
+         "Your selected automatic translation engines do not support the following language(s): %s. Read more about <a>choosing a translation engine</a>.": [
+            "Seus motores de tradução automática selecionados não suportam os seguintes idiomas: %s. Leia mais sobre <a>escolher um motor de tradução</a>."
+         ],
+         "Some of the selected content is already being translated. This will cancel any in-progress translations.": [
+            "Parte do conteúdo selecionado já está sendo traduzido. Isso cancelará qualquer tradução em andamento."
+         ],
+         "Any existing content (translations) will be overwritten when creating duplicates.": [
+            "Qualquer conteúdo existente (traduções) será sobrescrito ao criar duplicatas."
+         ],
+         "When duplicating content, please first duplicate parent pages to maintain the site's hierarchy.": [
+            "Ao duplicar conteúdo, por favor, primeiro duplique as páginas pai para manter a hierarquia do site."
+         ],
+         "To assign content to a translator, first <a href=\"%s\" target=\"_blank\">add a translator</a> or <a href=\"%s\" target=\"_blank\">connect to a translation service</a>.": [
+            "Para atribuir conteúdo a um tradutor, primeiro <a href=\"%s\" target=\"_blank\">adicione um tradutor</a> ou <a href=\"%s\" target=\"_blank\">conecte-se a um serviço de tradução</a>."
+         ],
+         "Translators Tab": [
+            "Aba de Tradutores"
+         ]
+      }
+   }
+}

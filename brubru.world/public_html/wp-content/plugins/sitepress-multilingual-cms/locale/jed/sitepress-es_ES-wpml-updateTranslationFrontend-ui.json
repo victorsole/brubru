@@ -1,0 +1,21 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "es"
+         },
+         "Please wait, applying translation..": [
+            "Por favor, espera, aplicando la traducción..."
+         ],
+         "There was an error in applying translation.": [
+            "Hubo un error al aplicar la traducción."
+         ],
+         "Someone is already reviewing this translation. Please try again later.": [
+            "Alguien ya está revisando esta traducción. Por favor, inténtalo de nuevo más tarde."
+         ]
+      }
+   }
+}

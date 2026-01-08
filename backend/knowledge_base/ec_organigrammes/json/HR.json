@@ -1,0 +1,336 @@
+{
+  "dg_code": "HR",
+  "dg_name": "Human Resources & Security",
+  "commissioner": "Piotr Serafin",
+  "date_of_effect": "2025-05-16",
+  "director_general": {
+    "name": "Stephen Quest",
+    "assistants": [
+      "Lucia Sirakova",
+      "Ana Handjiyska"
+    ]
+  },
+  "deputy_director_general": {
+    "name": "Christian Roques",
+    "responsibilities": "Operations"
+  },
+  "deputy_director_general_2": {
+    "name": "Ilkka Salmi",
+    "responsibilities": "Workplace & Wellbeing"
+  },
+  "chief_confidential_counsellor": {
+    "name": "Lene Maesager",
+    "note": "Has a direct reporting line to the Member of the Commission responsible for Budget and Administration for all responsibilities defined in Commission Decision C(2023)8630"
+  },
+  "hr_directorate": {
+    "code": "HR.DIO",
+    "name": "Diversity & Inclusion Office",
+    "principal_adviser": "Ana-Ivana Dizon",
+    "hr_strategic_foresight_and_innovation": "Henrik Hübner"
+  },
+  "units_without_directorate": [
+    {
+      "code": "HR.02",
+      "name": "Expertise and Selection",
+      "head": "Vacant",
+      "deputy": "Eveline Dimitrieva"
+    },
+    {
+      "code": "HR.01",
+      "name": "Planning & Policy Coordination",
+      "head": "Antoine Labay",
+      "deputy": "Vacant"
+    },
+    {
+      "code": "NERP5",
+      "name": "IT Applications Solutions & Business Process Efficiency",
+      "head": "Penna Pavlos"
+    },
+    {
+      "code": "HR.01",
+      "name": "Strategic Foresight and The Commission",
+      "head": "Paulo Silva-Guesdes",
+      "deputy": "Gavin Maculeavy"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "HR.A",
+      "name": "Organisation, Design & Development",
+      "director": "Vacant (Acting)",
+      "units": [
+        {
+          "code": "HR.A.1",
+          "name": "Learning & Development",
+          "head": "Loris De Juan Barbero (Acting)"
+        },
+        {
+          "code": "HR.A.2",
+          "name": "Capability, Allocation & Structures",
+          "head": "Irvi Jablonsky"
+        },
+        {
+          "code": "HR.A.3",
+          "name": "Organisational Development",
+          "head": "Vacant"
+        },
+        {
+          "code": "HR.A.4",
+          "name": "Strategic Communication",
+          "head": "Arno De Mayo"
+        },
+        {
+          "code": "HR.A.5",
+          "name": "HR Data & Analytics",
+          "head": "Daniela Cunha"
+        }
+      ]
+    },
+    {
+      "code": "HR.B",
+      "name": "Expertise, Recruitment & Mobility",
+      "director": "Vacant",
+      "units": [
+        {
+          "code": "HR.B.1",
+          "name": "Talent Attraction, Selection & Assessment",
+          "head": "Francesco Gambini-Lamberg",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HR.B.2",
+          "name": "Mobility and Interprofessionalism Talent",
+          "head": "Vacant",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HR.B.3",
+          "name": "Selection and Mobility, Other Agency",
+          "head": "Fabrizio Alonzi",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HR.B.4",
+          "name": "Centre for Psycho & HR Technology",
+          "head": "Mikko Aaltonen"
+        }
+      ]
+    },
+    {
+      "code": "HR.C",
+      "name": "Careers & Staff Development",
+      "director": "Marina Vlahović",
+      "units": [
+        {
+          "code": "HR.C.1",
+          "name": "Performance Management",
+          "head": "Tania Utreras"
+        },
+        {
+          "code": "HR.C.2",
+          "name": "Talent Spotting & Career Guidance",
+          "head": "Andrea Blas Linares"
+        },
+        {
+          "code": "HR.C.3",
+          "name": "Team Leader & Management Support",
+          "head": "Valérie Tambone"
+        },
+        {
+          "code": "HR.C.4",
+          "name": "Continuous Learning",
+          "head": "Monika Sonnteville"
+        },
+        {
+          "code": "HR.C.5",
+          "name": "Adviser",
+          "head": "Valérie Bergmann"
+        }
+      ]
+    },
+    {
+      "code": "HR.D",
+      "name": "Workplace & Wellbeing",
+      "director": "Sandrine Mwilter",
+      "units": [
+        {
+          "code": "HR.D.1",
+          "name": "Managing Workplace Health & Family Issues",
+          "head": "Robertamy Casit Albro",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HR.D.2",
+          "name": "Managing for Active & Hybrid State",
+          "head": "Paola Renata Amaraj",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "HR.D.3",
+          "name": "Wellbeing: Medical Service Structure",
+          "head": "Guillermo-Garcia Vara"
+        },
+        {
+          "code": "HR.D.4",
+          "name": "Psychological Counselling",
+          "head": "Vacant"
+        },
+        {
+          "code": "HR.D.5",
+          "name": "Medical",
+          "head": "Claus-Christoph-Giere Geier Dalen"
+        },
+        {
+          "code": "HR.D.6",
+          "name": "Medical Awareness, Other",
+          "head": "Vacant"
+        },
+        {
+          "code": "HR.D.7",
+          "name": "Health, Safety & Wellbeing",
+          "head": "Laurie Lebedew"
+        },
+        {
+          "code": "HR.D.8",
+          "name": "Adviser for Medical Policy Questions",
+          "head": "Vacant"
+        },
+        {
+          "code": "HR.D.9",
+          "name": "Wellbeing",
+          "head": "Anne-Louise Rademacher"
+        }
+      ]
+    },
+    {
+      "code": "HR.E",
+      "name": "HR for Specific Sites & Services",
+      "director": "Daniella Raillard",
+      "units": [
+        {
+          "code": "HR.E.1",
+          "name": "People, Sp & Integrations, Health Services",
+          "head": "James Gabay"
+        },
+        {
+          "code": "HR.E.2",
+          "name": "People, Social Legal, Social Security",
+          "head": "Vincent Juri"
+        },
+        {
+          "code": "HR.E.3",
+          "name": "Benefits: Families & Services",
+          "head": "Joana-Pereira Mello"
+        },
+        {
+          "code": "HR.E.4",
+          "name": "Legal & Social Services",
+          "head": "Stanislawa Denis Duwelskyi (Acting)",
+          "deputy": "Stanislawa Denis Duwelskyi"
+        },
+        {
+          "code": "HR.E.5",
+          "name": "Ethical Conduct",
+          "head": "Not shown"
+        }
+      ]
+    },
+    {
+      "code": "HR.F",
+      "name": "Finance, Legal, & Partnerships",
+      "director": "Christian Rasinski",
+      "units": [
+        {
+          "code": "HR.F.1",
+          "name": "Legal",
+          "head": "Thierry Demoison"
+        },
+        {
+          "code": "HR.F.2",
+          "name": "Deployment, Contracts & Internal Control",
+          "head": "Christina Watson",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "HR.F.3",
+          "name": "Supporting Capacities & External Organization",
+          "head": "Vacant",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "HR.F.4",
+          "name": "IT & Social Security",
+          "head": "Vacant",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "HR.F.5",
+          "name": "Ethical Conduct",
+          "head": "Not shown"
+        },
+        {
+          "code": "HR.F.6",
+          "name": "Appeals & Local Monitoring",
+          "head": "Laurent Robison"
+        },
+        {
+          "code": "HR.F.7",
+          "name": "Adviser Legal-Finance",
+          "head": "Jean-François Salomon"
+        }
+      ]
+    },
+    {
+      "code": "HR.IDOC",
+      "name": "Investigation & Disciplinary Office",
+      "director": "Valentina Nicola",
+      "units": [
+        {
+          "code": "HR.IDOC.1",
+          "name": "Investigation & Compliance",
+          "head": "Vacant",
+          "deputy": "Not shown"
+        },
+        {
+          "code": "HR.IDOC.2",
+          "name": "Disciplinary Procedures",
+          "head": "Vacant",
+          "deputy": "Not shown"
+        }
+      ]
+    },
+    {
+      "code": "HR.DS",
+      "name": "Security",
+      "director": "Petros Chamouridis",
+      "units": [
+        {
+          "code": "HR.DS.1",
+          "name": "Security Policy & Operations",
+          "head": "Guy-Ivan Timmermans"
+        },
+        {
+          "code": "HR.DS.2",
+          "name": "Physical & Analysis",
+          "head": "Petros Karanis"
+        },
+        {
+          "code": "HR.DS.3",
+          "name": "Document, Resources, Coordination & Infrastructure",
+          "head": "Not shown"
+        },
+        {
+          "code": "HR.DS.4",
+          "name": "Security Operations & Inspections",
+          "head": "Mariano Nipius"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "DG HR members of management staff seconded in the interest of the service: J. Escudero Bustamante & S. Alexandrova",
+    "Including the HR Correspondent, Wivica Stagell, and the Local Customer Support",
+    "The Chief Confidential Counsellor has a direct reporting line to the Member of the Commission responsible for Budget and Administration for all responsibilities defined in Commission Decision C(2023)8630",
+    "D: Deputy to the Director"
+  ]
+}

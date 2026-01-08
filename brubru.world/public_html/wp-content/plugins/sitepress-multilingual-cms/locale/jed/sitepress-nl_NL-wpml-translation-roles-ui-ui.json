@@ -1,0 +1,282 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl"
+         },
+         "From:": [
+            "Vanuit:"
+         ],
+         "--Choose language--": [
+            "--Taal selecteren--"
+         ],
+         "to:": [
+            "naar:"
+         ],
+         "Select %s": [
+            "Selecteer %s"
+         ],
+         "Set language pair(s) for Translator %s:": [
+            "Taalpaar(paren) instellen voor Vertaler %s:"
+         ],
+         "+ Add more language pairs for this translator": [
+            "+ Meer talenparen toevoegen voor deze vertaler"
+         ],
+         "First Name": [
+            "Voornaam"
+         ],
+         "Last Name": [
+            "Achternaam"
+         ],
+         "Role": [
+            "Rol"
+         ],
+         "(required)": [
+            "(verplicht)"
+         ],
+         "Select a role for the user": [
+            "Selecteer een rol voor de gebruiker"
+         ],
+         "Make sure that you have provided a correct email address e.g. name@domain.com": [
+            "Zorg ervoor dat u een correct e-mailadres heeft opgegeven, bijv. name@domain.com"
+         ],
+         "This field is required": [
+            "Dit veld is verplicht"
+         ],
+         "A translator can be any WordPress role.": [
+            "Een vertaler kan elke WordPress-rol hebben."
+         ],
+         "Username": [
+            "Gebruikersnaam"
+         ],
+         "Email": [
+            "E-mail"
+         ],
+         "Search": [
+            "Zoeken"
+         ],
+         "Cancel": [
+            "Annuleren"
+         ],
+         "Add Translation Manager": [
+            "Vertaalmanager toevoegen"
+         ],
+         "user": [
+            "gebruiker"
+         ],
+         "Editor": [
+            "Redacteur"
+         ],
+         "Select an existing %s and set as Translation Manager": [
+            "Selecteer een bestaande %s en stel in als Vertaalmanager"
+         ],
+         "Create a new %s and set as Translation Manager": [
+            "Maak een nieuwe %s aan en stel in als Vertaalmanager"
+         ],
+         "Add a Translation Manager": [
+            "Een Vertaalmanager toevoegen"
+         ],
+         "Select an existing user and set as Translator": [
+            "Selecteer een bestaande gebruiker en stel in als Vertaler"
+         ],
+         "Create a new user and set as Translator": [
+            "Maak een nieuwe gebruiker aan en stel in als Vertaler"
+         ],
+         "Set language pair(s)": [
+            "Taalpaar/paren instellen"
+         ],
+         "Previous": [
+            "Vorige"
+         ],
+         "Save": [
+            "Opslaan"
+         ],
+         "Add a Translator": [
+            "Een Vertaler toevoegen"
+         ],
+         "Edit language pair(s) for translator": [
+            "Taalpaar/paren voor vertaler bewerken"
+         ],
+         "Name": [
+            "Naam"
+         ],
+         "Language Pairs": [
+            "Taalcombinaties"
+         ],
+         "You can translate to and from all languages": [
+            "U kunt van en naar alle talen vertalen"
+         ],
+         "Edit language pair(s)": [
+            "Taalpaar/taalparen bewerken"
+         ],
+         "Delete language pair(s)": [
+            "Taalpaar/taalparen verwijderen"
+         ],
+         "%s file upload failed.": [
+            "%s bestand uploaden is mislukt."
+         ],
+         "Flag": [
+            "Vlag"
+         ],
+         "Flag file": [
+            "Bestand markeren"
+         ],
+         "You just added  language. Next, select it as the site's default language or a translation language.": [
+            "Je heeft zojuist een taal toegevoegd. Vervolgens selecteer je deze als de standaardtaal van de site, of als een vertaaltaal."
+         ],
+         "Language added": [
+            "Taal is toegevoegd"
+         ],
+         "The value \"%s\" already exists": [
+            "De waarde “%s” bestaat al"
+         ],
+         "Add a new language": [
+            "Voeg een nieuwe taal toe"
+         ],
+         "Create a country-specific language by choosing the general language from the list below. Then, choose the country it should be localized for.": [
+            "Maak een landspecifieke taal aan door de algemene taal uit de onderstaande lijst te kiezen. Kies vervolgens het land waarvoor de taal moet worden gelokaliseerd."
+         ],
+         "By choosing a combination that already exists in the database, WPML can help fill out the necessary fields. Read more about <AddingACustomLanguageLink />.": [
+            "Door een combinatie te kiezen die al in de database bestaat, kan WPML helpen met het invullen van de benodigde velden. Lees meer over <AddingACustomLanguageLink />."
+         ],
+         "Cannot find?": [
+            "Kun je het niet vinden?"
+         ],
+         "Click here": [
+            "Klik hier"
+         ],
+         "The wrong format. It may contain only small letters and \"-\". E.g: \"fr\" , \"pt-br\", \"zh-hans\"": [
+            "Het verkeerde formaat. Het mag alleen kleine letters en “-” bevatten. Bijv.: “fr”, “pt-br”, “zh-hans”"
+         ],
+         "Language": [
+            "Taal"
+         ],
+         "Location": [
+            "Locatie"
+         ],
+         "Code": [
+            "Code"
+         ],
+         "The language will not be supported by automatic translations": [
+            "De taal zal niet worden ondersteund door automatische vertalingen"
+         ],
+         "Language mapping": [
+            "Taaltoewijzing"
+         ],
+         "Don't map this language": [
+            "Deze taal niet toewijzen"
+         ],
+         "Default locale": [
+            "Standaard lokalisatie"
+         ],
+         "The wrong format. It may contain only small letters and \"_\". E.g: \"de\" , \"de_DE\", \"zh_Hant_TW\"": [
+            "Het verkeerde formaat. Het mag alleen kleine letters en “_” bevatten. Bijv.: “de”, “de_DE”, “zh_Hant_TW”"
+         ],
+         "hreflang": [
+            "hreflang"
+         ],
+         "Encode url?": [
+            "URL coderen?"
+         ],
+         "Flags must be:": [
+            "Vlaggen moeten zijn:"
+         ],
+         "NO": [
+            "NEE"
+         ],
+         "YES": [
+            "JA"
+         ],
+         " (required)": [
+            " (verplicht)"
+         ],
+         "Please fill in the field": [
+            "Vul het veld in"
+         ],
+         "PNG, SVG, or JPG files": [
+            "PNG-, SVG- of JPG-bestanden"
+         ],
+         "Save language": [
+            "Taal opslaan"
+         ],
+         "18 x 12 pixels": [
+            "18 x 12 pixels"
+         ],
+         "Read more about ": [
+            "Lees meer over "
+         ],
+         "The name of your language as it will appear on your site's language switcher.": [
+            "De naam van uw taal zoals deze zal verschijnen in de taalschakelaar van uw site."
+         ],
+         "A unique value that identifies the language in the database and URL. Once saved, the language code cannot be changed.": [
+            "Een unieke waarde die de taal identificeert in de database en URL. Eenmaal opgeslagen kan de taalcode niet worden gewijzigd."
+         ],
+         "If your custom language is similar to an existing language, you can use the existing language's spellcheck and automatic translation. For example, if your custom language is Swiss-German, you can map to German as the language to use for spellcheck and automatic translation. If you don't map your custom language to an existing language, spellcheck and automatic translation features will be unavailable in that language.": [
+            "Als uw aangepaste taal lijkt op een bestaande taal, kunt u de spellingscontrole en automatische vertaling van de bestaande taal gebruiken. Als uw aangepaste taal bijvoorbeeld Zwitserduits is, kunt u deze toewijzen aan Duits als de taal voor spellingscontrole en automatische vertaling. Als u uw aangepaste taal niet toewijst aan een bestaande taal, zijn de functies voor spellingscontrole en automatische vertaling niet beschikbaar in die taal."
+         ],
+         "The value WPML checks when loading translations from MO and PO files. The default locale is included in the filenames in your /wp-content/languages/ folder in your WordPress setup.": [
+            "De waarde die WPML controleert bij het laden van vertalingen uit MO- en PO-bestanden. De standaard lokalisatie is opgenomen in de bestandsnamen in uw /wp-content/languages/ map in uw WordPress-installatie."
+         ],
+         "Google uses the hreflang attribute to direct users to sites in their relevant language and location. Examples:": [
+            "Google gebruikt het hreflang-attribuut om gebruikers naar sites in hun relevante taal en locatie te leiden. Voorbeelden:"
+         ],
+         "All English-speaking users: en": [
+            "Alle Engelstalige gebruikers: en"
+         ],
+         "English for UK users: en-gb": [
+            "Engels voor Britse gebruikers: en-gb"
+         ],
+         "English for US users: en-us": [
+            "Engels voor Amerikaanse gebruikers: en-us"
+         ],
+         "Determines if URLs in this language are encoded or use ASCII characters (if unsure, leave it as \"No\").": [
+            "Bepaalt of URL's in deze taal gecodeerd zijn of ASCII-tekens gebruiken (bij twijfel, laat het op “Nee” staan)."
+         ],
+         "adding a custom language": [
+            "een aangepaste taal toevoegen"
+         ],
+         "What are the languages of your site?": [
+            "Wat zijn de talen van uw site?"
+         ],
+         "Default language": [
+            "Standaardtaal"
+         ],
+         "What is the current language of your website?": [
+            "Wat is de huidige taal van uw website?"
+         ],
+         "Translation languages": [
+            "Vertaaltalen"
+         ],
+         "Which languages do you want to translate your site into?": [
+            "In welke talen wilt u uw site vertalen?"
+         ],
+         "If you cannot find languages that you need in the list": [
+            "Als u de talen die u nodig hebt niet kunt vinden in de lijst"
+         ],
+         "create a custom language": [
+            "maak een aangepaste taal aan"
+         ],
+         "You can add a dedicated person to oversee everything translation-related on your site. %sTranslation Managers%s can add new local translators or professional translation services, create and assign translation jobs, review completed translations, and change translation-related settings.": [
+            "U kunt een toegewijde persoon toevoegen om toezicht te houden op alles wat met vertaling te maken heeft op uw site. %sVertaalmanagers%s kunnen nieuwe lokale vertalers of professionele vertaaldiensten toevoegen, vertaalopdrachten maken en toewijzen, voltooide vertalingen beoordelen en vertaalgerelateerde instellingen wijzigen."
+         ],
+         "Translation Managers": [
+            "Vertaalmanagers"
+         ],
+         "Note: All Administrators are automatically given Translation Manager privileges.": [
+            "Opmerking: Alle beheerders krijgen automatisch de rechten van Vertaalmanager."
+         ],
+         "%sLocal translators%s are users of your site that can log in and add, edit, and review your site's translations. Add a translator and their associated translation pairs to assign them translation jobs.": [
+            "%sLokale vertalers%s zijn gebruikers van uw site die kunnen inloggen en vertalingen van uw site kunnen toevoegen, bewerken en beoordelen. Voeg een vertaler en hun bijbehorende taalparen toe om hen vertaalopdrachten toe te wijzen."
+         ],
+         "You can %shire an experienced translator%s to review your automatic translations for perfect quality.": [
+            "U kunt %seen ervaren vertaler inhuren%s om uw automatische vertalingen te beoordelen voor perfecte kwaliteit."
+         ],
+         "Translators": [
+            "Vertalers"
+         ]
+      }
+   }
+}

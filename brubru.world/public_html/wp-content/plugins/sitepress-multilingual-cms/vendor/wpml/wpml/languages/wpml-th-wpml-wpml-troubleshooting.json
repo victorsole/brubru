@@ -1,0 +1,24 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "PostHog Integration": [
+            "การรวมระบบ PostHog"
+         ],
+         "PostHog is running on your site": [
+            "PostHog กำลังทำงานบนเว็บไซต์ของคุณ"
+         ],
+         "Enable PostHog to help us improve our product": [
+            "เปิดใช้งาน PostHog เพื่อช่วยเราปรับปรุงผลิตภัณฑ์ของเรา"
+         ],
+         "your PostHog session ID is: ": [
+            "รหัสเซสชัน PostHog ของคุณคือ: "
+         ]
+      }
+   }
+}

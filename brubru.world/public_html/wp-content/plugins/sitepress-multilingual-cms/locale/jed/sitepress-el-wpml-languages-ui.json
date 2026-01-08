@@ -1,0 +1,63 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "hide the translations instead.": [
+            "αποκρύψτε τις μεταφράσεις αντ' αυτού."
+         ],
+         "Error happened! Please try again.": [
+            "Παρουσιάστηκε σφάλμα! Παρακαλώ δοκιμάστε ξανά."
+         ],
+         "Cancel": [
+            "Ακύρωση"
+         ],
+         "Choose Content to Automatically Translate into": [
+            "Επιλέξτε Περιεχόμενο για Αυτόματη Μετάφραση σε"
+         ],
+         "Save Changes and Enable Automatic Translation": [
+            "Αποθήκευση Αλλαγών και Ενεργοποίηση Αυτόματης Μετάφρασης"
+         ],
+         "Cancel Language Changes": [
+            "Ακύρωση Αλλαγών Γλώσσας"
+         ],
+         "Save": [
+            "Αποθήκευση"
+         ],
+         "Add new languages": [
+            "Προσθήκη νέων γλωσσών"
+         ],
+         "Add new language": [
+            "Προσθήκη νέας γλώσσας"
+         ],
+         "Never mind - don't add new languages": [
+            "Άκυρο - μην προσθέσετε νέες γλώσσες"
+         ],
+         "Never mind - don't add new language": [
+            "Άκυρο - μην προσθέσετε νέα γλώσσα"
+         ],
+         "Choose which content to translate into the new language": [
+            "Επιλέξτε ποιο περιεχόμενο θα μεταφραστεί στη νέα γλώσσα"
+         ],
+         "Automatically translate all my posts and pages, plus new content as I create it.": [
+            "Αυτόματη μετάφραση όλων των αναρτήσεων και σελίδων μου, καθώς και νέου περιεχομένου καθώς το δημιουργώ."
+         ],
+         "Only automatically translate new content.": [
+            "Αυτόματη μετάφραση μόνο του νέου περιεχομένου."
+         ],
+         "Which content do you want to translate into the new language?": [
+            "Ποιο περιεχόμενο θέλετε να μεταφράσετε στη νέα γλώσσα;?"
+         ],
+         "When you unpause automatic translation, this content will be <a>translated automatically</a>.": [
+            "Όταν ξεπαγώσετε την αυτόματη μετάφραση, αυτό το περιεχόμενο θα <a>μεταφραστεί αυτόματα</a>."
+         ],
+         "You can still translate existing content any time from the Translation Management Dashboard.": [
+            "Μπορείτε ακόμα να μεταφράσετε υπάρχον περιεχόμενο οποιαδήποτε στιγμή από τον Πίνακα Ελέγχου Διαχείρισης Μεταφράσεων."
+         ]
+      }
+   }
+}

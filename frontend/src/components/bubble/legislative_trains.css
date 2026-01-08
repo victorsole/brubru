@@ -1,0 +1,325 @@
+.legislative-trains {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #ffffff;
+}
+
+.legislative-trains__loading,
+.legislative-trains__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  color: #666;
+  text-align: center;
+}
+
+.legislative-trains__empty svg {
+  color: #bbb;
+  margin-bottom: 1rem;
+}
+
+.legislative-trains__empty p {
+  margin: 0.5rem 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.legislative-trains__empty small {
+  font-size: 0.875rem;
+  color: #999;
+}
+
+/* Header */
+.legislative-trains__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+  background: linear-gradient(135deg, #0693E3 0%, #0066cc 100%);
+  color: white;
+}
+
+.legislative-trains__header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.legislative-trains__header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.legislative-trains__stats {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+/* Batch Analysis Bar */
+.legislative-trains__batch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #fff3cd;
+  border-bottom: 1px solid #ffc107;
+}
+
+.legislative-trains__batch-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  color: #856404;
+}
+
+.legislative-trains__batch-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.legislative-trains__batch-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.legislative-trains__batch-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.legislative-trains__batch-btn--cancel {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.legislative-trains__batch-btn--cancel:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.legislative-trains__batch-btn--analyze {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.legislative-trains__batch-btn--analyze:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Trains List */
+.legislative-trains__list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.legislative-trains__train {
+  margin-bottom: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.legislative-trains__train:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.legislative-trains__train-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.legislative-trains__train-header:hover {
+  background: #e9ecef;
+}
+
+.legislative-trains__train-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.legislative-trains__train-number {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #0693E3;
+}
+
+.legislative-trains__train-title h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.legislative-trains__train-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #666;
+}
+
+.legislative-trains__train-count {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Files List */
+.legislative-trains__files {
+  padding: 0.5rem;
+  background: #ffffff;
+}
+
+.legislative-trains__files-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #999;
+  font-size: 0.875rem;
+}
+
+.legislative-trains__file {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.legislative-trains__file:hover {
+  border-color: #0693E3;
+  box-shadow: 0 2px 6px rgba(6, 147, 227, 0.1);
+}
+
+.legislative-trains__file--selected {
+  background: #f0f7ff;
+  border-color: #0693E3;
+}
+
+.legislative-trains__file-checkbox {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 0.25rem;
+}
+
+.legislative-trains__file-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.legislative-trains__file-content {
+  flex: 1;
+  cursor: pointer;
+}
+
+.legislative-trains__file-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.legislative-trains__file-header svg {
+  color: #0693E3;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.legislative-trains__file-header h4 {
+  flex: 1;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #1a1a1a;
+}
+
+.legislative-trains__file-enriched {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  color: white;
+}
+
+.legislative-trains__file-description {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.legislative-trains__file-summary {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  background: #f0f7ff;
+  border-left: 3px solid #0693E3;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+
+.legislative-trains__file-summary strong {
+  color: #0693E3;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.legislative-trains__file-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legislative-trains__file-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+}
+
+.legislative-trains__file-policies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.legislative-trains__file-policy {
+  padding: 0.125rem 0.5rem;
+  background: #f0f0f0;
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  color: #666;
+}

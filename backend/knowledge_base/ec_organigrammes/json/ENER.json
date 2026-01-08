@@ -1,0 +1,298 @@
+{
+  "dg_code": "ENER",
+  "dg_name": "Energy",
+  "commissioner": "Dan Jørgensen",
+  "date_of_effect": "2025-01-10",
+  "director_general": {
+    "name": "Ditte Juul Jørgensen",
+    "assistants": [
+      "Julia Bernatonis",
+      "Jose Maria Barreiro"
+    ]
+  },
+  "principal_adviser": {
+    "name": "Tudor Constantinescu"
+  },
+  "adviser_for_policy_development": {
+    "name": "Ana Luisa De Castro"
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Mechthild Wörsdörfer",
+      "responsibilities": "General"
+    },
+    {
+      "name": "Massimo Garribba",
+      "responsibilities": "General",
+      "adviser_on_european_federations": {
+        "name": "Johann Makhorin"
+      }
+    }
+  ],
+  "ener_tfh": {
+    "name": "Task Force Housing (TFH)",
+    "deputy_director_general": "Matthew Baldwin",
+    "note": "The Housing Task Force directly reports to the Commissioner for the duration of the Commission mandate",
+    "partner_dg": {
+      "name": "Partner Housing Strategy and Coordination",
+      "head": "Stefan Hansen"
+    }
+  },
+  "agencies": [
+    {
+      "code": "ESA",
+      "name": "European Supply Agency",
+      "head": "Michael Huebel"
+    },
+    {
+      "code": "LUX",
+      "name": "Staff based in Luxembourg",
+      "units": [
+        "ENER.1 - Nuclear Materials and Fuel Market",
+        "ENER.01 - HR Correspondent and Internal Communication",
+        "ENER.SRO - Shared Resource Directorate Movsener"
+      ]
+    }
+  ],
+  "directorates": [
+    {
+      "code": "ENER.A",
+      "name": "Energy Policy, Strategy and Coordination",
+      "director": "Pierre Schellekens",
+      "units": [
+        {
+          "code": "ENER.A.1",
+          "name": "Energy Policy Coordination and Planning, Interinstitutional Relations and Governance",
+          "head": "Andreas Indrenius"
+        },
+        {
+          "code": "ENER.A.2",
+          "name": "Energy Transition and Outreach",
+          "head": "Margrietus C. Van Loon"
+        },
+        {
+          "code": "ENER.A.3",
+          "name": "Legal Affairs",
+          "head": "Claire M. Lajaunie"
+        },
+        {
+          "code": "ENER.A.4",
+          "name": "Energy Enforcement",
+          "head": "Antonis Lopez-Nicolas"
+        }
+      ]
+    },
+    {
+      "code": "ENER.B",
+      "name": "Just Transition, Consumers, Energy Efficiency and Innovation",
+      "director": "Rosalinde Van Der Vlies",
+      "units": [
+        {
+          "code": "ENER.B.1",
+          "name": "Consumers, Local Initiatives, Just Transition",
+          "head": "Karel De Gucht"
+        },
+        {
+          "code": "ENER.B.2",
+          "name": "Energy Efficiency, Policy and Financing",
+          "head": "Maarten B Notten"
+        },
+        {
+          "code": "ENER.B.3",
+          "name": "Buildings and Products",
+          "head": "Paula Arias Ortiz"
+        },
+        {
+          "code": "ENER.B.4",
+          "name": "Innovation, Competitiveness, Research and Innovation",
+          "head": "Vincent Berrutto"
+        },
+        {
+          "code": "ENER.B.5",
+          "name": "Adviser for Energy Transition and EU Governance",
+          "head": "Clara Malkassian"
+        },
+        {
+          "code": "ENER.B.6",
+          "name": "Adviser for Energy Investment and Financing",
+          "head": "Olivier Lonjou"
+        }
+      ]
+    },
+    {
+      "code": "ENER.C",
+      "name": "Green Transition and Energy System Integration Policy",
+      "director": "Lukasz Kolinski",
+      "units": [
+        {
+          "code": "ENER.C.1",
+          "name": "Energy and System Integration Policy",
+          "head": "Paola Garcia"
+        },
+        {
+          "code": "ENER.C.2",
+          "name": "Decarbonisation and Energy Sources",
+          "head": "Keith Whiriskey"
+        },
+        {
+          "code": "ENER.C.3",
+          "name": "Internal Energy Market",
+          "head": "Christof Lesener"
+        },
+        {
+          "code": "ENER.C.4",
+          "name": "Wholesale and Regional Cooperation",
+          "head": "Zachary Kalbac"
+        },
+        {
+          "code": "ENER.C.5",
+          "name": "Adviser for Grid Transition and Target Regulation",
+          "head": "Eric Willett"
+        },
+        {
+          "code": "ENER.C.6",
+          "name": "Adviser for Electricity and Renewable Energy Transition Mechanisms",
+          "head": "Laurent De Caunes"
+        }
+      ]
+    },
+    {
+      "code": "ENER.D",
+      "name": "Nuclear Energy, Safety and Nuclear Power Plant",
+      "director": "Jan Panek",
+      "units": [
+        {
+          "code": "ENER.D.1",
+          "name": "Nuclear Policy Coordination",
+          "head": "Andrej Ferber (Acting)"
+        },
+        {
+          "code": "ENER.D.2",
+          "name": "Radiation Protection and Nuclear Medicine",
+          "head": "Alicia Micol",
+          "deputy": "Simona Benedetti"
+        },
+        {
+          "code": "ENER.D.3",
+          "name": "Radiation Protection Standards",
+          "head": "Vacant"
+        },
+        {
+          "code": "ENER.D.4",
+          "name": "Data Management",
+          "head": "Evgeniia Felitscher",
+          "deputy": "Anastasije Alagic"
+        }
+      ]
+    },
+    {
+      "code": "ENER.E",
+      "name": "Euratom Safeguards",
+      "director": "Jan Panek",
+      "units": [
+        {
+          "code": "ENER.E.1",
+          "name": "Safeguards & Technology",
+          "head": "Ricardo Jarrard Llavona"
+        },
+        {
+          "code": "ENER.E.2",
+          "name": "Ministry of Support",
+          "head": "Susanna Santi"
+        },
+        {
+          "code": "ENER.E.3",
+          "name": "Inspections, Enrichment, Fabrication and Reprocessing Sites",
+          "head": "Louis Carlier"
+        },
+        {
+          "code": "ENER.E.4",
+          "name": "Inspections, Reactors, Associated Fuel Cycle and Other Installations Including Sources",
+          "head": "Thomas Jones"
+        },
+        {
+          "code": "ENER.E.5",
+          "name": "Nuclear Accountability and Material Qualification",
+          "head": "Alessandro Pecci"
+        }
+      ]
+    },
+    {
+      "code": "ENER.F",
+      "name": "Energy Security and Renewable Energy Sources",
+      "director": "Cristina Lobillo Borrero",
+      "units": [
+        {
+          "code": "ENER.F.1",
+          "name": "Integration of RES into Electricity and Point per Design",
+          "head": "Barbara Westermann"
+        },
+        {
+          "code": "ENER.F.2",
+          "name": "Security of Supply for the Member States and Sustainability Regulations",
+          "head": "Yolanda Garcia Mezquita"
+        },
+        {
+          "code": "ENER.F.3",
+          "name": "International Relations",
+          "head": "Dan Valerio"
+        },
+        {
+          "code": "ENER.F.4",
+          "name": "Energy Security & Safety",
+          "head": "Monica Scudger"
+        },
+        {
+          "code": "ENER.F.5",
+          "name": "Adviser for International and EU Industrial Options on Stu Clean Energy Issues",
+          "head": "Vacant"
+        }
+      ]
+    },
+    {
+      "code": "ENER.SRO",
+      "name": "Shared Resource Directorate Movsener",
+      "director": "Frédéric Versinnen (Acting)",
+      "units": [
+        {
+          "code": "ENER.SRO.1",
+          "name": "Assurance and Supervision",
+          "head": "Fredrik Wersand"
+        },
+        {
+          "code": "ENER.SRO.2",
+          "name": "Strategic Management and Compliance",
+          "head": "Michel Horsch"
+        },
+        {
+          "code": "ENER.SRO.3",
+          "name": "Budget and Financial Management and Compliance",
+          "head": "Vacant"
+        }
+      ]
+    }
+  ],
+  "agencies_details": [
+    {
+      "code": "ACER",
+      "name": "Agency for the Cooperation of Energy Regulators",
+      "director": "Christian Zinglersen"
+    },
+    {
+      "code": "FAE",
+      "name": "Fusion for Energy",
+      "director": "Joke Chaise"
+    }
+  ],
+  "seconded_managers_and_advisers": [
+    "Michael Hüebel seconded to the cabinet of Executive Vice-President Domínguez",
+    "Paula Pinho seconded to the Commission's Spokesperson's Service",
+    "Miguel Del Tetre seconded to the cabinet of Executive Vice-President Ribera Rodriguez"
+  ],
+  "notes": [
+    "BXL: Staff based in Brussels",
+    "LUX: Staff based in Luxembourg",
+    "D: Deputy to the Director",
+    "A: Mirror entity in Executive Agencies"
+  ]
+}

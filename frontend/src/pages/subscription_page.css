@@ -1,0 +1,519 @@
+/* frontend/src/pages/subscription_page.css */
+.subscription {
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+/* Hero Section */
+.subscription__hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: white;
+  text-align: center;
+  padding: 4rem 2rem;
+  overflow: hidden;
+}
+
+.subscription__hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  object-fit: cover;
+  opacity: 0.7;
+}
+
+.subscription__hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.subscription__hero-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.subscription__hero-logo {
+  width: 120px;
+  margin-bottom: 2rem;
+}
+
+.subscription__hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.subscription__hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.subscription__hero-description {
+  font-size: 1.125rem;
+  max-width: 700px;
+  color: #ffffff;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Pricing Cards */
+.subscription__pricing {
+  padding: 4rem 2rem;
+  background: #f8f9fa;
+}
+
+.subscription__pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.subscription__pricing-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.subscription__pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.subscription__pricing-card--featured {
+  border: 3px solid #fbbf24;
+  transform: scale(1.05);
+}
+
+.subscription__pricing-card--featured:hover {
+  transform: scale(1.05) translateY(-5px);
+}
+
+.subscription__pricing-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: #e5e7eb;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.subscription__pricing-badge--popular {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.subscription__pricing-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.subscription__pricing-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.subscription__pricing-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.subscription__pricing-amount {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.subscription__pricing-amount--custom {
+  font-size: 1.75rem;
+  color: #3b82f6;
+}
+
+.subscription__pricing-period {
+  color: #666;
+  margin-left: 0.5rem;
+  font-size: 1.125rem;
+}
+
+.subscription__pricing-savings {
+  color: #10b981;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.subscription__pricing-savings-amount {
+  font-weight: 700;
+}
+
+.subscription__pricing-note {
+  color: #666;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.subscription__pricing-description {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  min-height: 3rem;
+}
+
+.subscription__pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.subscription__pricing-features li {
+  padding: 0.625rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.subscription__pricing-features li:last-child {
+  border-bottom: none;
+}
+
+.subscription__pricing-button {
+  width: 100%;
+  padding: 0.875rem;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+  display: block;
+}
+
+/* Feature Comparison Table */
+.subscription__features {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+}
+
+.subscription__features-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.subscription__features-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 1.125rem;
+  margin-bottom: 3rem;
+}
+
+.subscription__features-table {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.subscription__features-header {
+  display: contents;
+}
+
+.subscription__features-col {
+  background: white;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.subscription__features-header .subscription__features-col {
+  background: #f8f9fa;
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.subscription__features-col--feature {
+  justify-content: flex-start;
+  text-align: left;
+  font-weight: 600;
+}
+
+.subscription__features-col--featured {
+  background: #fef3c7;
+}
+
+.subscription__features-header .subscription__features-col--featured {
+  background: #fbbf24;
+  color: #92400e;
+}
+
+.subscription__features-row {
+  display: contents;
+}
+
+/* Trust / Social Proof */
+.subscription__trust {
+  padding: 4rem 2rem;
+  background: #f8f9fa;
+  text-align: center;
+}
+
+.subscription__trust-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.subscription__trust-subtitle {
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.subscription__trust-logos {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.subscription__trust-logo {
+  max-width: 150px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.subscription__trust-logo:hover {
+  opacity: 1;
+}
+
+/* FAQ Section */
+.subscription__faq {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+}
+
+.subscription__faq-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.subscription__faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.subscription__faq-item {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #a8d5ba;
+}
+
+.subscription__faq-question {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #1f2937;
+}
+
+.subscription__faq-answer {
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* CTA Section */
+.subscription__cta {
+  position: relative;
+  padding: 6rem 2rem;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.subscription__cta-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  object-fit: cover;
+}
+
+.subscription__cta-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 51, 153, 0.6);
+  z-index: 1;
+}
+
+.subscription__cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.subscription__cta-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subscription__cta-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: white;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.subscription__cta-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.subscription__cta-contact {
+  color: white;
+  font-size: 1.125rem;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.subscription__cta-contact:hover {
+  opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .subscription__features-table {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  }
+
+  .subscription__features-col {
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .subscription__hero-title {
+    font-size: 2rem;
+  }
+
+  .subscription__hero-subtitle {
+    font-size: 1.25rem;
+  }
+
+  .subscription__hero-description {
+    font-size: 1rem;
+  }
+
+  .subscription__pricing-card--featured {
+    transform: none;
+  }
+
+  .subscription__pricing-card--featured:hover {
+    transform: translateY(-5px);
+  }
+
+  .subscription__pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .subscription__features-table {
+    grid-template-columns: 1fr;
+  }
+
+  .subscription__features-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    margin-bottom: 1rem;
+  }
+
+  .subscription__features-col {
+    padding: 0.75rem;
+  }
+
+  .subscription__features-col--feature::before {
+    content: "Feature: ";
+    font-weight: 700;
+    color: #666;
+  }
+
+  .subscription__trust-logos {
+    gap: 2rem;
+  }
+
+  .subscription__cta-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

@@ -1,0 +1,336 @@
+{
+  "cluster_id": 17,
+  "cluster_name": "AI/ML Startup Compliance",
+  "policy_area": "Digital Policy and Digital Economy",
+  "description": "AI Act compliance for machine learning startups and AI system providers",
+  "applicability": "AI/ML startups, algorithm developers, predictive analytics, computer vision, NLP, generative AI",
+  "extraction_date": "2026-01-01T03:33:02.339034",
+  "total_laws": 2,
+  "total_requirements": 19,
+  "requirements": [
+    {
+      "article": "Article 4(2)",
+      "requirement_text": "For the variables listed in the Annex that concern the households, information shall be collected for private households with at least one member aged 16 to 74 residing in the territory of the Member State.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "households",
+        "age requirements",
+        "variables"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 4(3)",
+      "requirement_text": "For the variables listed in the Annex that concern the individuals, information shall be collected for individuals aged 16 to 74 residing in the territory of the Member State.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "individuals",
+        "age requirements",
+        "variables"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 4(5)",
+      "requirement_text": "The data collection for the use of information and communication technologies domain shall be carried out for a sample of private households or a sample of persons belonging to private households as observation units.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data collection",
+        "sampling",
+        "households",
+        "observation units"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 7(1)",
+      "requirement_text": "Imputation, modelling or weighting shall be applied to the data where information is missing, invalid or inconsistent.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "data processing",
+        "imputation",
+        "data quality",
+        "missing data"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 8(1)",
+      "requirement_text": "Member States shall transmit the final data to the Commission (Eurostat) by 5 October 2024.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "by 5 October 2024",
+      "keywords": [
+        "data transmission",
+        "final data",
+        "deadline",
+        "Eurostat"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 8(2)",
+      "requirement_text": "The data shall be transmitted in the form of microdata files, including appropriate weights. The data shall be fully checked and validated, using the statistical data and metadata exchange standard through the Single Entry Point before the transmission. That data shall comply with the validation rules in accordance with the specification of variables based on the coding and filters as set out in the Annex.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "microdata",
+        "data validation",
+        "Single Entry Point",
+        "metadata exchange",
+        "validation rules"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 8(3)",
+      "requirement_text": "Member States shall provide the metadata to the Commission (Eurostat) in the standard metadata structure defined by the Commission (Eurostat) by 5 January 2025. They shall provide it through the Single Entry Point.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "by 5 January 2025",
+      "keywords": [
+        "metadata transmission",
+        "standard structure",
+        "Single Entry Point",
+        "deadline"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 9(1)",
+      "requirement_text": "Member States shall transmit to the Commission (Eurostat) an annual quality report on the use of information and communication technologies domain.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality report",
+        "annual report",
+        "ICT domain",
+        "transmission"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 9(3)",
+      "requirement_text": "The annual quality report shall be transmitted to the Commission (Eurostat) in accordance with the technical standards established by the Commission (Eurostat), by 5 January 2025.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "by 5 January 2025",
+      "keywords": [
+        "quality report",
+        "technical standards",
+        "deadline",
+        "transmission"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 9(4)",
+      "requirement_text": "The annual quality report shall be submitted through the Single Entry Point.",
+      "applicable_entity": "Member States",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "quality report",
+        "Single Entry Point",
+        "submission"
+      ],
+      "law_id": 263,
+      "law_celex": "32023R1484",
+      "law_title": "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the technical items of the data set, establishing the technical formats for transmission of information and specifying the arrangements and content of the quality reports on the organisation of a sample survey in the use of information and communication technologies domain for reference year 2024 pursuant to Regulation (EU) 2019/1700 of the European Parliament and of the Council (Text with EEA relevance)",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 1",
+      "requirement_text": "The European Artificial Intelligence Office shall be part of the administrative structure of the Directorate-General for Communication Networks, Content and Technology",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "European Artificial Intelligence Office",
+        "administrative structure",
+        "Directorate-General"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 2(1)",
+      "requirement_text": "The Office shall perform the tasks set out in Article 3 for the purposes of implementing and enforcing the forthcoming Regulation laying down harmonised rules on artificial intelligence",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "tasks",
+        "implementing",
+        "enforcing",
+        "AI regulation"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 2(3)(a)",
+      "requirement_text": "The Office shall work together with stakeholders, in particular experts from the scientific community and AI developers",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "stakeholders",
+        "scientific community",
+        "AI developers"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 2(3)(b)",
+      "requirement_text": "The Office shall collaborate with relevant Directorate-Generals and services of the Commission",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "collaborate",
+        "Directorate-Generals",
+        "Commission services"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 2(3)(c)",
+      "requirement_text": "The Office shall cooperate with all relevant bodies, offices and agencies of the Union, including the European High Performance Computing Joint Undertaking (EuroHPC JU)",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "cooperate",
+        "Union bodies",
+        "EuroHPC JU"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 2(3)(d)",
+      "requirement_text": "The Office shall cooperate with authorities and bodies of the Member States on behalf of the Commission",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "cooperate",
+        "Member States",
+        "authorities"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 3(2)(a)",
+      "requirement_text": "The Office shall be tasked with assisting the Commission in the preparation of relevant Commission Decisions, and of implementing and delegated acts",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "assist",
+        "Commission Decisions",
+        "implementing acts",
+        "delegated acts"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 3(2)(b)",
+      "requirement_text": "The Office shall be tasked with facilitating the uniform application of the forthcoming Regulation",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "uniform application",
+        "AI regulation"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    },
+    {
+      "article": "Article 3(2)(h)",
+      "requirement_text": "The Office shall be tasked with providing the Secretariat for the AI Board and its subgroups, and providing administrative support to the advisory forum and the scientific panel",
+      "applicable_entity": "European Artificial Intelligence Office",
+      "criticality": "critical",
+      "deadline_text": "",
+      "keywords": [
+        "Office",
+        "Secretariat",
+        "AI Board",
+        "advisory forum",
+        "scientific panel"
+      ],
+      "law_id": 833,
+      "law_celex": "32024D1459",
+      "law_title": "Commission Decision of 24 January 2024 establishing the European Artificial Intelligence Office",
+      "cluster_id": 17
+    }
+  ]
+}

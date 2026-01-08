@@ -1,0 +1,12 @@
+backend/
+backend/**
+*.py
+requirements.txt
+pyproject.toml
+poetry.lock
+.python-version
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example

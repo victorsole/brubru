@@ -1,0 +1,169 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "Sending for translation": [
+            "正在发送翻译"
+         ],
+         "This content is being automatically translated. If you want to do something different with it cancel translation jobs first.": [
+            "此内容正在自动翻译。如果您想对其进行不同的操作，请先取消翻译任务。"
+         ],
+         "Connecting to WPML’s Advanced Translation Editor": [
+            "正在连接到WPML的高级翻译编辑器"
+         ],
+         "Try again": [
+            "重试"
+         ],
+         "You don't have the rights to review this language": [
+            "您没有审核此语言的权限"
+         ],
+         "translations": [
+            "翻译"
+         ],
+         "left in the queue": [
+            "剩余在队列中"
+         ],
+         "Translation on hold": [
+            "翻译暂停"
+         ],
+         "No translations in the queue": [
+            "队列中没有翻译"
+         ],
+         "%d translations left": [
+            "还剩%d个翻译"
+         ],
+         "%d min remaining": [
+            "还剩%d分钟"
+         ],
+         "less than 1 min remaining": [
+            "剩余不到1分钟"
+         ],
+         "Automatic translation status": [
+            "自动翻译状态"
+         ],
+         "Translate Everything Automatically": [
+            "自动翻译所有内容"
+         ],
+         "Translate Everything Automatically is active": [
+            "自动翻译所有内容已激活"
+         ],
+         "Translate Everything Automatically is paused": [
+            "自动翻译所有内容已暂停"
+         ],
+         "Translate Everything Automatically is stopped": [
+            "自动翻译所有内容已停止"
+         ],
+         "Out of Credits for Automatic Translation": [
+            "自动翻译额度已用完"
+         ],
+         "You have <b>1</b> prepaid translation credit in your wpml.org account. Assign these credits to your site to start using automatic translation": [
+            "您在wpml.org账户中有<b>1</b>个预付费翻译额度。将这些额度分配给您的网站以开始使用自动翻译",
+            "您在wpml.org账户中有<b>%s</b>个预付费翻译额度。将这些额度分配给您的网站以开始使用自动翻译"
+         ],
+         "Preparing content for translation": [
+            "正在准备内容进行翻译"
+         ],
+         "Preparing more content for translation": [
+            "正在准备更多内容进行翻译"
+         ],
+         "An error occured, fix it to continue.": [
+            "发生错误，请修复以继续。"
+         ],
+         "There is an issue with automatic translation that needs your attention. Fix it to continue.": [
+            "自动翻译出现需要您注意的问题。请修复以继续。"
+         ],
+         "Your default language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "您的默认语言%s必须映射到支持的语言才能使用自动翻译。"
+         ],
+         "Your language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "您的语言%s必须映射到支持的语言才能使用自动翻译。",
+            "您网站上的以下语言必须映射到支持的语言才能使用自动翻译：%s"
+         ],
+         "Content in those languages: %s, cannot be automatically translated unless you map them to a language that's different from the default.": [
+            "这些语言的内容：%s，除非您将它们映射到与默认语言不同的语言，否则无法自动翻译。"
+         ],
+         "%d translation waiting for review": [
+            "%d个翻译等待审核",
+            "%d个翻译等待审核"
+         ],
+         "Account credits used": [
+            "已使用的账户点数"
+         ],
+         "Once you’ve used all your prepaid credits, we’ll invoice you for any additional credits you use after the end of the month": [
+            "一旦您用完所有预付点数，我们将在月底为您使用的任何额外点数开具发票"
+         ],
+         "Payment limit:": [
+            "支付限额："
+         ],
+         "%s credits": [
+            "%s点数"
+         ],
+         "Credits used:": [
+            "已使用点数："
+         ],
+         "Credits left:": [
+            "剩余点数："
+         ],
+         "The number of credit you will receive an invoice for at the end of the month. View your pay-as-you-go details in your site’s automatic translation settings.": [
+            "您将在月底收到发票的点数数量。在您网站的自动翻译设置中查看您的按需付费详情。"
+         ],
+         "Calculating": [
+            "正在计算"
+         ],
+         "Remaining prepaid credits that are assigned to this site on WPML.org.": [
+            "在WPML.org上分配给此网站的剩余预付点数。"
+         ],
+         "Prepaid credits left": [
+            "剩余预付点数"
+         ],
+         "Pay-as-you-go credits used": [
+            "已使用的按需付费点数"
+         ],
+         "Stop": [
+            "停止"
+         ],
+         "Fix it": [
+            "修复"
+         ],
+         "Assign credits now": [
+            "立即分配额度"
+         ],
+         "Resume": [
+            "恢复"
+         ],
+         "Refreshing translation status": [
+            "正在刷新翻译状态"
+         ],
+         "Read more about how to translate your content in the <a>Getting Started Guide</a>": [
+            "在<a>入门指南</a>中了解更多关于如何翻译您的内容的信息"
+         ],
+         "Let's Start Translating!": [
+            "让我们开始翻译吧！"
+         ],
+         "Choose your content from the Translation Dashboard below and create your first translation job!": [
+            "从下面的翻译仪表板中选择您的内容并创建您的第一个翻译工作！"
+         ],
+         "Change your <a>automatic translation settings</a> (in-progress translation jobs will be completed with the current settings).": [
+            "更改您的<a>自动翻译设置</a>（正在进行的翻译工作将使用当前设置完成）。"
+         ],
+         "Read more about translating your site automatically.": [
+            "阅读更多关于自动翻译您的网站的信息。"
+         ],
+         "Your site is being automatically translated!": [
+            "您的网站正在自动翻译！"
+         ],
+         "Calculating...": [
+            "正在计算..."
+         ],
+         "Do not close WP admin!": [
+            "请勿关闭WP管理页面！"
+         ],
+         "The number of translations": [
+            "翻译数量"
+         ]
+      }
+   }
+}

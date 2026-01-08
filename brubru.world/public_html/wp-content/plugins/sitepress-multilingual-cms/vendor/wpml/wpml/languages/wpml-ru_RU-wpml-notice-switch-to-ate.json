@@ -1,0 +1,51 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "ru"
+         },
+         "Get More Features with WPML's Advanced Translation Editor": [
+            "Получите больше возможностей с Расширенным редактором перевода WPML"
+         ],
+         "Close banner": [
+            "Закрыть баннер"
+         ],
+         "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:": [
+            "Вы используете Классический редактор перевода, устаревший инструмент, и упускаете множество функций и эффективность нашего Расширенного редактора перевода:"
+         ],
+         "Translation Memory": [
+            "Память переводов"
+         ],
+         "HTML Protection": [
+            "Защита HTML"
+         ],
+         "Glossary": [
+            "Глоссарий"
+         ],
+         "Spellchecker": [
+            "Проверка орфографии"
+         ],
+         "AI Assistant": [
+            "ИИ-помощник"
+         ],
+         "Automatic Translation": [
+            "Автоматический перевод"
+         ],
+         "Switch now for a faster, more convenient, and reliable translation experience.": [
+            "Переключитесь сейчас для более быстрого, удобного и надежного опыта перевода."
+         ],
+         "Switch Now": [
+            "Переключиться сейчас"
+         ],
+         "Learn more about Advanced Translation Editor": [
+            "Узнайте больше о Расширенном редакторе перевода"
+         ],
+         "Learn More": [
+            "Узнать больше"
+         ]
+      }
+   }
+}

@@ -1,0 +1,207 @@
+{
+  "dg_code": "MARE",
+  "dg_name": "Maritime Affairs and Fisheries",
+  "commissioner": "Costas Kadis",
+  "date_of_effect": "2025-11-01",
+  "director_general": {
+    "name": "Charlina Vitcheva",
+    "assistants": [
+      "Yasmin Schinasi Romeu",
+      "Francois Aubree"
+    ]
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Kestutis Sadauskas"
+    }
+  ],
+  "principal_adviser": {
+    "name": "Stefan De Keersmaecker",
+    "area": "Strategic Support for the European Oceans Pact"
+  },
+  "agencies": [
+    {
+      "code": "EFCA",
+      "name": "European Fisheries Control Agency",
+      "director": "Michael Huebel"
+    }
+  ],
+  "advisers": [
+    {
+      "name": "Isabelle Garzon",
+      "area": "International Affairs"
+    },
+    {
+      "name": "Vincent Faynel",
+      "deputy": "Luca Arnasson",
+      "area": "Sustainable Blue Economy/CINEA D.3"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "MARE.A",
+      "name": "Maritime Policy & Blue Economy",
+      "director": "Delilah Al Khudhairy",
+      "units": [
+        {
+          "code": "MARE.A.1",
+          "name": "Maritime Innovation, Marine Knowledge & Investment",
+          "head": "Andrea Stronchinesc",
+          "deputy": "Gwenaëlle Monget"
+        },
+        {
+          "code": "MARE.A.2",
+          "name": "Blue Economy Sectors, Aquaculture & Maritime Spatial Planning",
+          "head": "Felix Leinemann",
+          "deputy": "Anita Laura Del Cru Dueñas"
+        },
+        {
+          "code": "MARE.A.3",
+          "name": "Seabasin Strategies: Maritime Regional Cooperation & Marine Security",
+          "head": "Laurent Geoffroy",
+          "deputy": "Silvia Tagova"
+        },
+        {
+          "code": "MARE.A.4",
+          "name": "Economic Analysis, Markets & Impact Assessment",
+          "head": "Sven Langejuik",
+          "deputy": "Maria Caño Calvo Santos"
+        }
+      ]
+    },
+    {
+      "code": "MARE.B",
+      "name": "International Ocean Governance & Sustainable Fisheries",
+      "director": "Fernando Andresen Guimaraes",
+      "units": [
+        {
+          "code": "MARE.B.1",
+          "name": "Ocean Governance: Law of the Sea, Arctic Policy",
+          "head": "Raphaël Goulet",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "MARE.B.2",
+          "name": "Regional Fisheries, Management Organisations",
+          "head": "Vacant",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "MARE.B.3",
+          "name": "Sustainable Fisheries & Sustainable Fisheries Partnership Agreements (SFPA)",
+          "head": "Luis Molledo",
+          "deputy": "Viviane Rutto-Monnoyeur"
+        },
+        {
+          "code": "MARE.B.4",
+          "name": "Illegal, Unreported & Unregulated Fisheries Policy",
+          "head": "Roberto Cesari",
+          "deputy": "Paulina Nixdorff"
+        }
+      ]
+    },
+    {
+      "code": "MARE.C",
+      "name": "Fisheries Policy Atlantic, North Sea, Baltic & Outermost Regions",
+      "director": "Fabrizio Donatella",
+      "units": [
+        {
+          "code": "MARE.C.1",
+          "name": "Fisheries Management Atlantic, North Sea & Baltic-Sea",
+          "head": "Maja Kirchner",
+          "deputy": "Annemarie Keggelagers"
+        },
+        {
+          "code": "MARE.C.2",
+          "name": "Regional Support Atlantic, North Sea, Baltic Sea & Outermost Regions",
+          "head": "Vacant",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "MARE.C.3",
+          "name": "Scientific Advice & Data Collection",
+          "head": "Raluca Ivanescu",
+          "deputy": "Armand Peytamont"
+        },
+        {
+          "code": "MARE.C.4",
+          "name": "Data Management",
+          "head": "Evgeniia Reushcher",
+          "deputy": "Alessandra M'Qerqum"
+        }
+      ]
+    },
+    {
+      "code": "MARE.D",
+      "name": "Fisheries Policy Mediterranean & Black Sea",
+      "director": "Styllianos Mitollidis",
+      "units": [
+        {
+          "code": "MARE.D.1",
+          "name": "Fisheries Management Mediterranean & Black Sea",
+          "head": "Helena Vitalova",
+          "deputy": "Damiano Borck"
+        },
+        {
+          "code": "MARE.D.2",
+          "name": "Structural Support Mediterranean, Black Sea & Outermost Regions",
+          "head": "Ives Van Poede",
+          "deputy": "Domingos Diomara"
+        },
+        {
+          "code": "MARE.D.3",
+          "name": "CFP & Structural Support: Policy Development & Coordination",
+          "head": "Vacant",
+          "deputy": "Eoin Mac Aodh"
+        },
+        {
+          "code": "MARE.D.4",
+          "name": "Fisheries Control & Inspections",
+          "head": "Jerome Brocke",
+          "deputy": "Pablo Ganzetti"
+        }
+      ]
+    },
+    {
+      "code": "MARE.E",
+      "name": "General Affairs & Resources",
+      "director": "Jürgen Müller",
+      "units": [
+        {
+          "code": "MARE.E.1",
+          "name": "Budget, Audit & Public Procurement",
+          "head": "Andrew Mathisin",
+          "deputy": "Aikaterine Georgeva"
+        },
+        {
+          "code": "MARE.E.2",
+          "name": "Inter-Institutional Matters, Strategic Programming & Communication",
+          "head": "Charo Preciada",
+          "deputy": "Barbara Pelvoert"
+        },
+        {
+          "code": "MARE.E.3",
+          "name": "Performance, Audit, IT & Electronic Document Management",
+          "head": "Anna Pitko",
+          "deputy": "Zoltan Bolzinarte"
+        },
+        {
+          "code": "MARE.E.4",
+          "name": "Legal Affairs",
+          "head": "Martina Coppierhammer",
+          "deputy": "Vacant"
+        }
+      ]
+    },
+    {
+      "code": "MARE.C.5",
+      "name": "Management of Fisheries-Related with UK, Norway and Outermost Regions, External States",
+      "director": "Eva Maria Caballeira Fernandez",
+      "deputy": "Thomas Brogdeim"
+    }
+  ],
+  "notes": [
+    "D: Deputy to the Director",
+    "A: Mirror entity in Executive Agency"
+  ]
+}

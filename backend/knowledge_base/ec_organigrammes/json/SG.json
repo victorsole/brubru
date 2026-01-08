@@ -1,0 +1,484 @@
+{
+  "dg_code": "SG",
+  "dg_name": "Secretariat-General",
+  "president": {
+    "name": "Ursula von der Leyen",
+    "title": "President"
+  },
+  "secretary_general": {
+    "name": "Ilze Juhansone",
+    "title": "Secretary-General",
+    "policy_assistants": [
+      "Giulia Astuti"
+    ],
+    "hr_correspondent": "Csaba Gergely"
+  },
+  "deputy_secretaries_general": [
+    {
+      "name": "Pascal Leardini",
+      "title": "Deputy Secretary-General - Chief Operating Officer"
+    },
+    {
+      "name": "Nils Behrndt",
+      "title": "Deputy Secretary-General - Policy Coordination"
+    },
+    {
+      "name": "John Watson",
+      "title": "Deputy Secretary-General - Interinstitutional & External Relations"
+    }
+  ],
+  "independent_bodies": [
+    {
+      "name": "Regulatory Scrutiny Board",
+      "chair": "Rytis Martikonis",
+      "members": [
+        "Alexander Gemberg-Wiesike",
+        "Marek Havrda",
+        "Rolf Höijer",
+        "Philippe Mengal",
+        "Arianna Vannini"
+      ],
+      "note": "The Secretariat of the Independent Regulatory Scrutiny Board is provided by the Secretariat-General"
+    },
+    {
+      "name": "European Fiscal Board",
+      "chair": "Pieter Hasekamp",
+      "members": [
+        "Eckhard Janeba",
+        "George Kopits",
+        "Benedicta Marzinotto",
+        "Lucia Rodriguez"
+      ],
+      "note": "The Secretariat of the Independent European Fiscal Board is administratively attached to the Secretariat-General. The members of the Secretariat are selected by the Head of the Secretariat in agreement with the Chair of the Board; they shall take instructions only from the Board"
+    }
+  ],
+  "special_services": [
+    {
+      "name": "Mediation Service",
+      "mediator": "Flaminia Bussacchini",
+      "deputy_mediator": "Georgios Mezelas"
+    },
+    {
+      "name": "Protocol Service",
+      "head": "Pernilla Sjölin"
+    },
+    {
+      "code": "SG.EFB",
+      "name": "European Fiscal Board Secretariat",
+      "head": "Martin Larch"
+    }
+  ],
+  "principal_advisers": [
+    {
+      "name": "Michelle Sutton",
+      "role": "Data Protection Officer of the Commission"
+    },
+    {
+      "name": "Elies Messaoudi",
+      "role": "Commission Representative to COREPER I (with functional reporting line)"
+    },
+    {
+      "name": "Michael Gremminger",
+      "role": "Pre-Enlargement Policy Reviews"
+    },
+    {
+      "name": "Clara Martinez Alberola",
+      "role": "Relations with Western European Partners"
+    },
+    {
+      "name": "Vacant",
+      "role": "Rule of Law"
+    },
+    {
+      "name": "Vacant",
+      "role": "Multiannual Financial Framework: National and Regional Partnership Plans"
+    }
+  ],
+  "task_force": {
+    "name": "EU's Future Competitiveness",
+    "head": "Heinz Jansen"
+  },
+  "directorates": [
+    {
+      "code": "SG.A",
+      "name": "Corporate Governance, Transparency & Resources",
+      "director": "Tatjana Verrier",
+      "units": [
+        {
+          "code": "SG.A.1",
+          "name": "Corporate Governance & Business Continuity",
+          "head": "Benjamin Desurmont"
+        },
+        {
+          "code": "SG.A.2",
+          "name": "Document Management & Access to Documents",
+          "head": "Vacant"
+        },
+        {
+          "code": "SG.A.3",
+          "name": "Transparency & Ethics",
+          "head": "Dorthe Christensen"
+        },
+        {
+          "code": "SG.A.4",
+          "name": "HR Correspondent, Finance & Corporate Training",
+          "head": "Robert Andrecs"
+        },
+        {
+          "code": "SG.A.5",
+          "name": "Correspondence of the President",
+          "head": "Viviane D'Udekem D'Acoz"
+        },
+        {
+          "code": "SG.A.6",
+          "name": "Digital Solutions & Process Efficiency",
+          "head": "Vacant"
+        },
+        {
+          "code": "SG.A.1 ADV",
+          "name": "Adviser for Digital Transformation",
+          "head": "Peter Van Landegem"
+        }
+      ]
+    },
+    {
+      "code": "SG.B",
+      "name": "Decision-Making & Collegiality",
+      "director": "Martine Deprez",
+      "units": [
+        {
+          "code": "SG.B.1",
+          "name": "Oral Procedure & College Meetings",
+          "head": "Vacant"
+        },
+        {
+          "code": "SG.B.2",
+          "name": "Written, Empowerment & Delegation Procedures",
+          "head": "Blanca Llinas Teres"
+        },
+        {
+          "code": "SG.B.3",
+          "name": "GRI Secretariat",
+          "head": "Henning Klaus"
+        },
+        {
+          "code": "SG.B.4",
+          "name": "Working Methods & Decision-Making Process",
+          "head": "Irina Tanasescu"
+        }
+      ]
+    },
+    {
+      "code": "SG.C",
+      "name": "Simplification, Implementation & Enforcement",
+      "director": "Michael Wimmer",
+      "adviser": {
+        "name": "Beata Kolecka",
+        "role": "Foresight (C. ADV)"
+      },
+      "units": [
+        {
+          "code": "SG.C.1",
+          "name": "Work Programme & Foresight",
+          "head": "Vacant"
+        },
+        {
+          "code": "SG.C.2",
+          "name": "Better Regulation & Simplification",
+          "head": "Antonina Cipollone"
+        },
+        {
+          "code": "SG.C.3",
+          "name": "Implementation & Enforcement of EU Law",
+          "head": "Vacant"
+        },
+        {
+          "code": "SG.C.4",
+          "name": "Implementation Support",
+          "head": "Raquel Lucas"
+        },
+        {
+          "code": "SG.C.5",
+          "name": "MFF & Annual Management Cycle",
+          "head": "Christopher Becher"
+        }
+      ]
+    },
+    {
+      "code": "SG.D",
+      "name": "Prosperity & Competitiveness",
+      "director": "Elisa Roller",
+      "adviser": {
+        "name": "Vincenzo Baccaro",
+        "role": "Legal Adviser (D.3. ADV)"
+      },
+      "units": [
+        {
+          "code": "SG.D.1",
+          "name": "Single Market & Competition",
+          "head": "Stefan Fuehring"
+        },
+        {
+          "code": "SG.D.2",
+          "name": "Clean Transition & One Health",
+          "head": "Vesa Terävä"
+        },
+        {
+          "code": "SG.D.3",
+          "name": "Investment & Convergence",
+          "head": "Karola Maxianova"
+        },
+        {
+          "code": "SG.D.4",
+          "name": "Skills, Jobs & Social Affairs",
+          "head": "Raquel Cortes Herrera"
+        }
+      ]
+    },
+    {
+      "code": "SG.E",
+      "name": "Democracy, Security & Technological Innovation",
+      "director": "Vacant",
+      "units": [
+        {
+          "code": "SG.E.1",
+          "name": "Democracy, Rule of Law & Equality",
+          "head": "Marie Simonsen"
+        },
+        {
+          "code": "SG.E.2",
+          "name": "Migrations, Borders & Security",
+          "head": "Stephen Curzon"
+        },
+        {
+          "code": "SG.E.3",
+          "name": "Technological Sovereignty & Innovation",
+          "head": "Ioana Gligor"
+        },
+        {
+          "code": "SG.E.4",
+          "name": "Briefings",
+          "head": "Aleksandra Kulas"
+        }
+      ]
+    },
+    {
+      "code": "SG.F",
+      "name": "Western European Partners",
+      "director": "Richard Szostak",
+      "units": [
+        {
+          "code": "SG.F.1",
+          "name": "EU-UK Withdrawal Agreement",
+          "head": "Luiza Bara"
+        },
+        {
+          "code": "SG.F.2",
+          "name": "EU-UK Trade and Cooperation Agreement",
+          "head": "Nele Eichhorn"
+        },
+        {
+          "code": "SG.F.3",
+          "name": "EEA, Switzerland, Andorra, Monaco & San Marino",
+          "head": "Nicolas Von Lingen"
+        }
+      ]
+    },
+    {
+      "code": "SG.G",
+      "name": "External Relations",
+      "director": "Stefano Grassi",
+      "adviser": {
+        "name": "Florin Urseanu",
+        "role": "Preparedness and the EU Integrated Political Crisis Response (G. ADV)"
+      },
+      "units": [
+        {
+          "code": "SG.G.1",
+          "name": "Coordination of External Policies & Enlargement",
+          "head": "Ruudiger Boogert"
+        },
+        {
+          "code": "SG.G.2",
+          "name": "G7/G20, Global Issues & Partnerships",
+          "head": "Lauma Buka"
+        },
+        {
+          "code": "SG.G.3",
+          "name": "External Economic Policies",
+          "head": "Alejandro Cainzos"
+        },
+        {
+          "code": "SG.G.4",
+          "name": "Defence & Preparedness",
+          "head": "Diego De Ojeda Pardo"
+        }
+      ]
+    },
+    {
+      "code": "SG.H",
+      "name": "Interinstitutional Relations",
+      "director": "Enrico Forti",
+      "units": [
+        {
+          "code": "SG.H.1",
+          "name": "Relations with the EP & National Parliaments",
+          "head": "Detlev Clemens"
+        },
+        {
+          "code": "SG.H.2",
+          "name": "Council & EUCO, COREPER I + II",
+          "head": "Dragomir Iliev"
+        },
+        {
+          "code": "SG.H.3",
+          "name": "Institutional Affairs & Relations with EU Bodies",
+          "head": "Maria Olivan Aviles"
+        }
+      ]
+    },
+    {
+      "code": "SG.0.1",
+      "name": "Office of the Secretary-General",
+      "head": "Jeremie Charles"
+    }
+  ],
+  "reform_and_investment_task_force": {
+    "name": "Reform and Investment Task Force (SG REFORM)",
+    "director_general": "Céline Gauer",
+    "deputy_director_general": "Vacant",
+    "departments": [
+      {
+        "code": "A",
+        "name": "Technical Support Instrument (TSI)",
+        "director": "Judit Rozsa",
+        "units": [
+          {
+            "code": "A.1",
+            "name": "Budget & Finance",
+            "head": "Hristo Tomov"
+          },
+          {
+            "code": "A.2",
+            "name": "Public Finances",
+            "head": "Christoph Schwierz"
+          },
+          {
+            "code": "A.3",
+            "name": "Sustainable Competitiveness, Netherlands",
+            "head": "Kaspar Richter"
+          },
+          {
+            "code": "A.4",
+            "name": "Governance & Public Administration",
+            "head": "Kjartan Bjornsson"
+          },
+          {
+            "code": "A.5",
+            "name": "European Pillar of Social Rights, Hungary",
+            "head": "Cornelis Van Duin"
+          }
+        ]
+      },
+      {
+        "code": "B",
+        "name": "Recovery & Resilience I (RRF I)",
+        "director": "Marie Donnay",
+        "units": [
+          {
+            "code": "B.1",
+            "name": "Belgium, France, Sweden, Interinstitutional",
+            "head": "Francesco Carlucci"
+          },
+          {
+            "code": "B.2",
+            "name": "Czechia, Denmark, Croatia, Slovenia",
+            "head": "Veronica Vecchio"
+          },
+          {
+            "code": "B.3",
+            "name": "Italy",
+            "head": "Magdalena Morgese Borys"
+          },
+          {
+            "code": "B.4",
+            "name": "Communication & Performance Management",
+            "head": "Roxane Crestian"
+          }
+        ]
+      },
+      {
+        "code": "C",
+        "name": "Recovery & Resilience II (RRF II)",
+        "director": "Maria Teresa Fabregas Fernandez",
+        "units": [
+          {
+            "code": "C.1",
+            "name": "Finland, Malta, Spain",
+            "head": "Alexander Schwan"
+          },
+          {
+            "code": "C.2",
+            "name": "Romania, Estonia, Lithuania",
+            "head": "Laura Rinaldi"
+          },
+          {
+            "code": "C.3",
+            "name": "Cyprus, Luxembourg, Portugal",
+            "head": "Reka Horvath"
+          },
+          {
+            "code": "C.4",
+            "name": "Austria, Ireland, Slovakia",
+            "head": "Julia Brockhoff"
+          }
+        ]
+      },
+      {
+        "code": "D",
+        "name": "Recovery & Resilience III (RRF III)",
+        "director": "Johannes Luebking",
+        "units": [
+          {
+            "code": "D.1",
+            "name": "Germany, Greece",
+            "head": "Marta Wieczorek"
+          },
+          {
+            "code": "D.2",
+            "name": "Bulgaria, Latvia",
+            "head": "Vacant"
+          },
+          {
+            "code": "D.3",
+            "name": "Poland, Do No Significant Harm (DNSH)",
+            "head": "Georgiana Capraru Ianus"
+          },
+          {
+            "code": "D.4",
+            "name": "Access to Finance, European Semester",
+            "head": "Heinrich Wollny"
+          }
+        ]
+      },
+      {
+        "code": "0.1",
+        "name": "Legal Affairs & Coordination",
+        "head": "Luca Rossi"
+      }
+    ]
+  },
+  "coordinator_positions": [
+    "Coordinator on Combating Antisemitism and Fostering Jewish Life",
+    "Coordinator for the Dialogue with Churches, Religious Associations and Philosophical and Non-Confessional Organisations",
+    "Coordinator on Combating Anti-Muslim Hatred"
+  ],
+  "seconded_managers": [
+    "Martin Selmayr (EEAS) - Seconded Hors Classe Adviser",
+    "Jivka Petkova - Seconded Principal Adviser to Cabinet of the President",
+    "Vivian Loonela - Seconded Head of Unit to Cabinet Kallas",
+    "Aleksandra Kordecka - Seconded Head of Unit"
+  ],
+  "note": "Coordinating the European Semester Officers",
+  "date_of_effect": "2025-11-01"
+}

@@ -1,0 +1,266 @@
+{
+  "metadata": {
+    "title": "European Union Policy Areas Directory",
+    "total_policy_areas": 33,
+    "last_updated": "2025-11-06",
+    "description": "The EU organizes its work across 33 distinct policy areas, each managed through dedicated directorates-general and supported by specialized agencies.",
+    "sources": [
+      "https://commission.europa.eu/live-work-travel-eu/policies-and-initiatives_en",
+      "https://european-union.europa.eu/priorities-and-actions/actions-topic_en"
+    ],
+    "notes": "According to EUR-Lex, EU legislation is grouped into 32 policy fields, with cross-cutting initiatives like the European Green Deal spanning multiple domains."
+  },
+  "policy_categories": [
+    {
+      "category": "Core Economic and Market Policies",
+      "description": "Policies governing the internal market, competition, trade, and economic affairs",
+      "policy_areas": [
+        {
+          "name": "Single Market",
+          "url": "https://single-market-economy.ec.europa.eu/single-market_en",
+          "description": "Free movement of goods, services, capital, and people across EU member states"
+        },
+        {
+          "name": "Competition",
+          "url": "https://competition-policy.ec.europa.eu/",
+          "description": "Ensuring fair competition and preventing monopolies and cartels"
+        },
+        {
+          "name": "Trade and Economic Security",
+          "url": "https://policy.trade.ec.europa.eu/",
+          "description": "EU trade policy and international economic relations"
+        },
+        {
+          "name": "Economic and Financial Affairs",
+          "url": "https://economy-finance.ec.europa.eu/",
+          "description": "Economic policy coordination and financial stability"
+        },
+        {
+          "name": "Taxation",
+          "url": "https://taxation-customs.ec.europa.eu/taxation_en",
+          "description": "Tax policy coordination and cooperation across member states"
+        },
+        {
+          "name": "Customs",
+          "url": "https://taxation-customs.ec.europa.eu/customs_en",
+          "description": "Customs union and border control procedures"
+        },
+        {
+          "name": "Business and Industry",
+          "url": "https://single-market-economy.ec.europa.eu/",
+          "description": "Industrial policy and support for businesses"
+        }
+      ]
+    },
+    {
+      "category": "Sustainability and Environmental Policies",
+      "description": "Policies forming the core of the European Green Deal framework targeting climate neutrality by 2050",
+      "cross_cutting_initiative": "European Green Deal",
+      "policy_areas": [
+        {
+          "name": "Climate Action",
+          "url": "https://climate.ec.europa.eu/",
+          "description": "Policies to achieve climate neutrality by 2050"
+        },
+        {
+          "name": "Environment",
+          "url": "https://environment.ec.europa.eu/",
+          "description": "Environmental protection and biodiversity conservation"
+        },
+        {
+          "name": "Energy",
+          "url": "https://energy.ec.europa.eu/",
+          "description": "Energy policy, renewable energy, and energy security"
+        },
+        {
+          "name": "Transport",
+          "url": "https://transport.ec.europa.eu/",
+          "description": "Sustainable transport and mobility policies"
+        }
+      ]
+    },
+    {
+      "category": "Digital Transformation",
+      "description": "Policies driving digitalization under the Europe Fit for Digital Age agenda",
+      "policy_areas": [
+        {
+          "name": "Digital Policy and Digital Economy",
+          "url": "https://digital-strategy.ec.europa.eu/",
+          "description": "Overall digital strategy and digital economy initiatives"
+        },
+        {
+          "name": "Communication Networks, Content and Technology",
+          "url": "https://digital-strategy.ec.europa.eu/en/policies/connectivity",
+          "description": "Digital infrastructure, connectivity, and telecommunications"
+        }
+      ]
+    },
+    {
+      "category": "Agriculture and Natural Resources",
+      "description": "Policies implementing the Common Agricultural Policy and Common Fisheries Policy",
+      "policy_areas": [
+        {
+          "name": "Agriculture",
+          "url": "https://agriculture.ec.europa.eu/common-agricultural-policy_en",
+          "description": "Common Agricultural Policy supporting farmers and rural development"
+        },
+        {
+          "name": "Maritime Affairs and Fisheries",
+          "url": "https://oceans-and-fisheries.ec.europa.eu/",
+          "description": "Common Fisheries Policy and sustainable ocean management"
+        },
+        {
+          "name": "Food Safety",
+          "url": "https://food.ec.europa.eu/",
+          "description": "Food safety standards and regulations"
+        }
+      ]
+    },
+    {
+      "category": "Cohesion and Development",
+      "description": "Policies promoting regional development, research, education, and culture",
+      "policy_areas": [
+        {
+          "name": "Regional Policy",
+          "url": "https://ec.europa.eu/regional_policy/",
+          "description": "Cohesion policy reducing regional disparities"
+        },
+        {
+          "name": "Research and Innovation",
+          "url": "https://research-and-innovation.ec.europa.eu/",
+          "description": "Supporting research and innovation through programmes like Horizon Europe"
+        },
+        {
+          "name": "Education, Training and Youth",
+          "url": "https://education.ec.europa.eu/",
+          "description": "Education policy and programmes like Erasmus+"
+        },
+        {
+          "name": "Culture",
+          "url": "https://culture.ec.europa.eu/",
+          "description": "Cultural policy and cultural heritage protection"
+        }
+      ]
+    },
+    {
+      "category": "Social Policies",
+      "description": "Policies covering employment, health, and consumer rights",
+      "policy_areas": [
+        {
+          "name": "Employment and Social Affairs",
+          "url": "https://employment-social-affairs.ec.europa.eu/",
+          "description": "Employment policy, social rights, and labour market regulation"
+        },
+        {
+          "name": "Health",
+          "url": "https://health.ec.europa.eu/",
+          "description": "Public health policy and health systems cooperation"
+        },
+        {
+          "name": "Consumer Protection",
+          "url": "https://commission.europa.eu/live-work-travel-eu/consumer-protection_en",
+          "description": "Consumer rights and product safety"
+        }
+      ]
+    },
+    {
+      "category": "Justice and Home Affairs",
+      "description": "Policies on justice, migration, fundamental rights, and gender equality",
+      "policy_areas": [
+        {
+          "name": "Justice and Fundamental Rights",
+          "url": "https://commission.europa.eu/policies/justice-and-fundamental-rights_en",
+          "description": "Rule of law, fundamental rights, and judicial cooperation"
+        },
+        {
+          "name": "Migration and Home Affairs",
+          "url": "https://home-affairs.ec.europa.eu/",
+          "description": "Migration policy, asylum, and internal security"
+        },
+        {
+          "name": "Women's Rights and Gender Equality",
+          "url": null,
+          "description": "Gender equality and women's rights promotion"
+        }
+      ]
+    },
+    {
+      "category": "External Relations",
+      "description": "EU's foreign policy, development cooperation, and international partnerships",
+      "policy_areas": [
+        {
+          "name": "Foreign and Security Policy",
+          "url": "https://www.eeas.europa.eu/eeas/common-foreign-and-security-policy_en",
+          "description": "Common Foreign and Security Policy managed by the European External Action Service",
+          "managing_body": "European External Action Service (EEAS)"
+        },
+        {
+          "name": "Development and Cooperation",
+          "url": "https://international-partnerships.ec.europa.eu/policies_en",
+          "description": "International development and partnerships"
+        },
+        {
+          "name": "Neighbourhood and Enlargement",
+          "url": "https://neighbourhood-enlargement.ec.europa.eu/",
+          "description": "EU enlargement policy and neighbourhood relations"
+        },
+        {
+          "name": "Human Rights and Democracy",
+          "url": "https://www.eeas.europa.eu/eeas/human-rights-and-democracy_en",
+          "description": "Promotion of human rights and democracy worldwide"
+        },
+        {
+          "name": "Humanitarian Aid and Civil Protection",
+          "url": "https://civil-protection-humanitarian-aid.ec.europa.eu/",
+          "description": "Emergency response and humanitarian assistance"
+        }
+      ]
+    },
+    {
+      "category": "Emerging Strategic Areas",
+      "description": "New priority areas including defence, space, and statistics",
+      "policy_areas": [
+        {
+          "name": "Defence and Security",
+          "url": "https://defence-industry-space.ec.europa.eu/",
+          "description": "Defence industrial policy and security cooperation"
+        },
+        {
+          "name": "Space Policy",
+          "url": "https://defence-industry-space.ec.europa.eu/eu-space-policy_en",
+          "description": "EU space programmes and satellite infrastructure"
+        },
+        {
+          "name": "Statistics",
+          "url": "https://ec.europa.eu/eurostat/",
+          "description": "Official EU statistics provided by Eurostat",
+          "managing_body": "Eurostat"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_categories": 9,
+    "policy_areas_by_category": {
+      "Core Economic and Market Policies": 7,
+      "Sustainability and Environmental Policies": 4,
+      "Digital Transformation": 2,
+      "Agriculture and Natural Resources": 3,
+      "Cohesion and Development": 4,
+      "Social Policies": 3,
+      "Justice and Home Affairs": 3,
+      "External Relations": 5,
+      "Emerging Strategic Areas": 3
+    },
+    "cross_cutting_initiatives": [
+      {
+        "name": "European Green Deal",
+        "description": "Framework targeting climate neutrality by 2050, spanning multiple policy domains"
+      },
+      {
+        "name": "Europe Fit for Digital Age",
+        "description": "Digital transformation agenda across all sectors"
+      }
+    ]
+  }
+}

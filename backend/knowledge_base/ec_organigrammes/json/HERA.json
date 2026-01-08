@@ -1,0 +1,94 @@
+{
+    "organisation": "DG HERA",
+    "full_name": "Health Emergency Preparedness and Response Authority",
+    "commissioner": "Hadja Lahbib",
+    "date_of_effect": "2021-10-01",
+    "chart_date": "2025-07-16",
+    "leadership": {
+      "director_general": {
+        "name": "Florika FINK-HOOIJER",
+        "title": "Director-General of DG HERA"
+      },
+      "deputy_head": {
+        "name": "Laurent MUSCHEL",
+        "title": "Deputy Head of HERA"
+      },
+      "principal_adviser": {
+        "name": "Wolfgang PHILIPP",
+        "title": "Principal Adviser - Chief Science Officer"
+      },
+      "hr_correspondent": {
+        "name": "Virginie BENAULT",
+        "title": "HR Correspondent"
+      },
+      "assistants": [
+        {
+          "name": "Johannes SCHILLING",
+          "title": "Assistant to the Director General and Deputy Head of HERA"
+        },
+        {
+          "name": "Clement WILLIAMSON",
+          "title": "Assistant to the Director General and Deputy Head of HERA"
+        }
+      ]
+    },
+    "units": [
+      {
+        "code": "HERA.1",
+        "name": "Policy and Coordination",
+        "head_of_unit": {
+          "name": "Daphne VON BUXHOEVEDEN",
+          "title": "Head of Unit"
+        },
+        "responsibilities": [
+          "Hera policy priorities, legal, regulatory and quality",
+          "Coordination with Commission, EU agencies and Member States",
+          "International coordination",
+          "Industry and public-private engagement/partnerships"
+        ]
+      },
+      {
+        "code": "HERA.2",
+        "name": "Intelligence Gathering, Analysis and Innovation",
+        "head_of_unit": {
+          "name": "Cornelius SCHMALTZ",
+          "title": "Head of Unit"
+        },
+        "responsibilities": [
+          "Epidemic and supply intelligence",
+          "Threat assessment, surveillance and preparedness",
+          "Development and innovation",
+          "Tech-scanning, tech transfer",
+          "Expert groups, training and exercises"
+        ]
+      },
+      {
+        "code": "HERA.3",
+        "name": "Medical Countermeasures",
+        "head_of_unit": {
+          "name": "Olivier GIRARD",
+          "title": "Head of Unit"
+        },
+        "responsibilities": [
+          "Security intentional threats",
+          "Emerging diseases, influenza",
+          "Vaccines, pharmaceuticals and medical devices",
+          "Pharmaceutical infrastructure"
+        ]
+      },
+      {
+        "code": "HERA.4",
+        "name": "Emergency Office",
+        "head_of_unit": {
+          "name": "Anne SIMON",
+          "title": "Head of Unit"
+        },
+        "responsibilities": [
+          "Emergency deployments and Emergency manufacturing capacities",
+          "Coordination with Member States public health emergency structures; Commission and EU agencies",
+          "Vaccines, pharmaceuticals and medical devices",
+          "Emergency procurement and funding"
+        ]
+      }
+    ]
+  }

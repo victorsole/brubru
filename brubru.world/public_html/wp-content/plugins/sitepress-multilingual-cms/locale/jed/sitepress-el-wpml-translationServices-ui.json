@@ -1,0 +1,54 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "el"
+         },
+         "Connect this site to your %s account": [
+            "Συνδέστε αυτόν τον ιστότοπο στον λογαριασμό σας %s"
+         ],
+         "Error": [
+            "Σφάλμα"
+         ],
+         "« Use a different Translation Service": [
+            "« Χρησιμοποιήστε διαφορετική Υπηρεσία Μετάφρασης"
+         ],
+         "Authenticate": [
+            "Πιστοποίηση"
+         ],
+         "Visit <link_to_service /> to request an API Token. This token allows WPML to connect to <service_name /> to send and receive jobs.": [
+            "Επισκεφθείτε το <link_to_service /> για να ζητήσετε ένα API Token. Αυτό το token επιτρέπει στο WPML να συνδεθεί με το <service_name /> για την αποστολή και λήψη εργασιών."
+         ],
+         "Search translation services": [
+            "Αναζήτηση υπηρεσιών μετάφρασης"
+         ],
+         "Search": [
+            "Αναζήτηση"
+         ],
+         "Settings": [
+            "Ρυθμίσεις"
+         ],
+         "It’s not currently possible to connect a translation service when WPML is set to translate your site’s content automatically. To use a translation service, please change your translation mode on the <LinkToSettingsPage /> page.": [
+            "Προς το παρόν δεν είναι δυνατή η σύνδεση μιας υπηρεσίας μετάφρασης όταν το WPML έχει ρυθμιστεί να μεταφράζει αυτόματα το περιεχόμενο του ιστότοπού σας. Για να χρησιμοποιήσετε μια υπηρεσία μετάφρασης, παρακαλούμε αλλάξτε τη λειτουργία μετάφρασης στη σελίδα <LinkToSettingsPage />."
+         ],
+         "Documentation": [
+            "Τεκμηρίωση"
+         ],
+         "Activate": [
+            "Ενεργοποίηση"
+         ],
+         "Name": [
+            "Όνομα"
+         ],
+         "Description": [
+            "Περιγραφή"
+         ],
+         "Ranking": [
+            "Κατάταξη"
+         ]
+      }
+   }
+}

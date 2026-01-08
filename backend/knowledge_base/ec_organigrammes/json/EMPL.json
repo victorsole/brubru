@@ -1,0 +1,352 @@
+{
+  "dg_code": "EMPL",
+  "dg_name": "Employment, Social Affairs & Inclusion",
+  "executive_vice_president": "Roxana Mînzatu",
+  "date_of_effect": "2025-07-01",
+  "director_general": {
+    "name": "Mario Nava",
+    "assistants": [
+      "Franciska Barabas Komives",
+      "Shadin Viratham",
+      "Kim Henriksson"
+    ]
+  },
+  "hr_correspondent": {
+    "name": "Annick Van Damme"
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Stefan Olsson",
+      "responsibilities": "Jobs, Skills and Social Policies"
+    },
+    {
+      "name": "Andriana Sukova",
+      "responsibilities": "Funds, Fair Transition and Analysis"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "EMPL.A",
+      "name": "European Pillar of Social Rights, Strategy",
+      "director": "Denis Genton",
+      "units": [
+        {
+          "code": "EMPL.A.1",
+          "name": "Strategic, Legal and Interinstitutional Coordination",
+          "head": "Vacant"
+        },
+        {
+          "code": "EMPL.A.2",
+          "name": "Communication",
+          "head": "Carolien Peeters (Acting)",
+          "deputy": "Carolien Peeters"
+        },
+        {
+          "code": "EMPL.A.3",
+          "name": "Budget and Planning Cycle",
+          "head": "Miriam Fernandez Jutz",
+          "deputy": "Vladislava Glietz"
+        },
+        {
+          "code": "EMPL.A.4",
+          "name": "IT Strategy and Solutions",
+          "head": "Vacant (Acting)",
+          "deputy": "Loris Di Pietrantonio"
+        }
+      ]
+    },
+    {
+      "code": "EMPL.B",
+      "name": "Jobs and Skills",
+      "director": "Manuela Geleng",
+      "units": [
+        {
+          "code": "EMPL.B.1",
+          "name": "Future of Work, Youth Employment",
+          "head": "Chiara Riondino",
+          "deputy": "Agathe Demarle"
+        },
+        {
+          "code": "EMPL.B.2",
+          "name": "Union of Skills",
+          "head": "Ann Branch",
+          "deputy": "Julie Fionda"
+        },
+        {
+          "code": "EMPL.B.3",
+          "name": "Vocational Education and Training, Skills Portability, CEDEFOP",
+          "head": "Steven Engels",
+          "deputy": "Nathalie Vervang"
+        },
+        {
+          "code": "EMPL.B.4",
+          "name": "Professional Qualifications and Skills for Competitiveness",
+          "head": "Anna Banczyk",
+          "deputy": "Andrea Leruste"
+        },
+        {
+          "code": "EMPL.B.5",
+          "name": "Digital Solutions",
+          "head": "David Dion",
+          "deputy": "Andrei Luchici"
+        }
+      ]
+    },
+    {
+      "code": "EMPL.C",
+      "name": "Quality Jobs, Working Conditions and Social Dialogue",
+      "director": "Maria Luisa Cabral",
+      "units": [
+        {
+          "code": "EMPL.C.1",
+          "name": "Labour Law",
+          "head": "Adam Pokorny",
+          "deputy": "Arzela Aida"
+        },
+        {
+          "code": "EMPL.C.2",
+          "name": "Health and Safety at Work, EU-OSHA",
+          "head": "Charlotte Grevfors Ernoult",
+          "deputy": "Paula V. Somoano"
+        },
+        {
+          "code": "EMPL.C.3",
+          "name": "Social Dialogue",
+          "head": "Maria Luisa Llano-Cardenal",
+          "deputy": "Sven Matzke"
+        },
+        {
+          "code": "EMPL.C.4",
+          "name": "Spain, Malta",
+          "head": "Patricia Perez Gomez Delaunay",
+          "deputy": "Marian Raduţa"
+        },
+        {
+          "code": "EMPL.C.5",
+          "name": "Romania, Bulgaria",
+          "head": "Emmanuelle Grange",
+          "deputy": "Ana Maria Dobre"
+        }
+      ]
+    },
+    {
+      "code": "EMPL.D",
+      "name": "Social Rights and Inclusion",
+      "director": "Katarina Ivankovic-Knezevic",
+      "units": [
+        {
+          "code": "EMPL.D.1",
+          "name": "Social Policies, Child Guarantee, SPC",
+          "head": "Jiri Svarc",
+          "deputy": "Olivier Bontout"
+        },
+        {
+          "code": "EMPL.D.2",
+          "name": "Social Protection and Demography",
+          "head": "Dana Bachmann",
+          "deputy": "Valdis Zagorskis"
+        },
+        {
+          "code": "EMPL.D.3",
+          "name": "Poland, Czech Republic, Slovakia",
+          "head": "Emmanuelle Grange"
+        },
+        {
+          "code": "EMPL.D.4",
+          "name": "Germany, Austria, Slovenia, Croatia",
+          "head": "Patrick Paquet",
+          "deputy": "Michael Morass"
+        },
+        {
+          "code": "EMPL.D.5",
+          "name": "Finland, Latvia, Estonia, Lithuania",
+          "head": "Thomas Andreou",
+          "deputy": "Cinzia Masina"
+        }
+      ]
+    },
+    {
+      "code": "EMPL.E",
+      "name": "Labour Mobility and International Affairs",
+      "director": "Antoine Kasel",
+      "units": [
+        {
+          "code": "EMPL.E.1",
+          "name": "Labour Mobility, Public Employment Services, ELA",
+          "head": "David Dion",
+          "deputy": "Benoit Abeloos and Liejo"
+        },
+        {
+          "code": "EMPL.E.2",
+          "name": "Social Security Coordination",
+          "head": "Joerg Tagger",
+          "deputy": "Benoit Abeloos"
+        },
+        {
+          "code": "EMPL.E.3",
+          "name": "International Affairs, ETF",
+          "head": "Agnieszka Krolikowska",
+          "deputy": "Zinta Podniece"
+        },
+        {
+          "code": "EMPL.E.4",
+          "name": "Italy, Denmark, Sweden",
+          "head": "Adelina Dos Reis",
+          "deputy": "Leonardo Colucci"
+        },
+        {
+          "code": "EMPL.E.5",
+          "name": "Hungary, UK, Ireland, Portugal",
+          "head": "Laurent Sens",
+          "deputy": "Gregorio De Castro"
+        }
+      ]
+    },
+    {
+      "code": "EMPL.F",
+      "name": "Employment and Social Governance, Analysis",
+      "director": "Jeroen Jutte",
+      "units": [
+        {
+          "code": "EMPL.F.1",
+          "name": "European Semester, EMCO",
+          "head": "Katia Berti",
+          "deputy": "Anton Mangov"
+        },
+        {
+          "code": "EMPL.F.2",
+          "name": "Labour Market and Wages, EUROFOUND",
+          "head": "Nathalie Darnaut",
+          "deputy": "Imad Kanjou Auge"
+        },
+        {
+          "code": "EMPL.F.3",
+          "name": "Fair Green and Digital Transitions, Research",
+          "head": "Fabien Dell",
+          "deputy": "Filip Tanay"
+        },
+        {
+          "code": "EMPL.F.4",
+          "name": "Analysis and Statistics",
+          "head": "Elva Bova",
+          "deputy": "Katarina Jaksic"
+        },
+        {
+          "code": "EMPL.F.5",
+          "name": "Cyprus, Greece",
+          "head": "Cristiana Costinescu",
+          "deputy": "Matteo Duiella"
+        },
+        {
+          "code": "EMPL.F.6",
+          "name": "France, Netherlands, Belgium, Luxembourg",
+          "head": "Raymond Maes",
+          "deputy": "Dinos Alevizopoulos"
+        },
+        {
+          "code": "EMPL.F.7",
+          "name": "Adviser for Labour Mobility",
+          "head": "Raymond Maes"
+        }
+      ]
+    },
+    {
+      "code": "EMPL.G",
+      "name": "Funds: Programming and Implementation",
+      "director": "Ruth Paserman",
+      "units": [
+        {
+          "code": "EMPL.G.1",
+          "name": "European Social Fund +",
+          "head": "Christoph Nerlich",
+          "deputy": "Dora Krumova"
+        },
+        {
+          "code": "EMPL.G.2",
+          "name": "Social Climate Fund, European Globalisation Adjustment Fund, Social Innovation",
+          "head": "Raluca Painter",
+          "deputy": "Roxana Osiac"
+        },
+        {
+          "code": "EMPL.G.3",
+          "name": "Social and Inclusive Entrepreneurship",
+          "head": "Brigitte Fellahi-Brognaux",
+          "deputy": "Severin Strohal"
+        },
+        {
+          "code": "EMPL.G.4",
+          "name": "Financial Implementation and Procurement Centre",
+          "head": "Frank Siebern-Thomas",
+          "deputy": "Fabio Domanico"
+        },
+        {
+          "code": "EMPL.G.5",
+          "name": "Impact Assessment, Evaluation, Monitoring of Funds",
+          "head": "Federico Lucidi",
+          "deputy": "Johannes Ziemendorff"
+        }
+      ]
+    },
+    {
+      "code": "DAC",
+      "name": "Joint Audit Directorate for Cohesion",
+      "director": "Franck Sébert",
+      "note": "Joint Directorate with DG REGIO as specified in Commission Decision SEC(2021)186",
+      "units": [
+        {
+          "code": "DAC.1",
+          "name": "Audit I",
+          "head": "Ilse Van Den Abeele",
+          "deputy": "Jarosław Hawrysz"
+        },
+        {
+          "code": "DAC.2",
+          "name": "Audit II",
+          "head": "Vacant"
+        },
+        {
+          "code": "DAC.3",
+          "name": "Audit III",
+          "head": "Cendrine De Buggenoms",
+          "deputy": "Beatrice Stanciu"
+        },
+        {
+          "code": "DAC.4",
+          "name": "Audit IV",
+          "head": "Rafael Lopez Sanchez",
+          "deputy": "Olivia Jordan"
+        },
+        {
+          "code": "DAC.5",
+          "name": "Audit V",
+          "head": "Vacant"
+        },
+        {
+          "code": "DAC.6",
+          "name": "Audit VI",
+          "head": "Marcela Buzoi (Acting)",
+          "deputy": "Marcela Buzoi"
+        },
+        {
+          "code": "DAC.7",
+          "name": "Coordination, Relations with the ECA and OLAF",
+          "head": "Stanislav Ranguelov",
+          "deputy": "Jean-Noel Bonifait"
+        }
+      ]
+    }
+  ],
+  "advisers": [
+    {
+      "role": "Adviser for Labour Mobility",
+      "name": "Cristina Asturias",
+      "deputy": "Brian Debattista"
+    }
+  ],
+  "seconded_managers": [
+    "M. Alexandrova Andreeva - European Parliament",
+    "G. Calacean - President Cabinet",
+    "M. Uebe (cabinet of Vice-President Roxana Mînzatu)",
+    "R. Torppa (cabinet of Commissioner Maria Luís Albuquerque)"
+  ]
+}

@@ -1,0 +1,106 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "he"
+         },
+         "Preparing...": [
+            "מכין..."
+         ],
+         "All jobs have been cancelled": [
+            "כל העבודות בוטלו."
+         ],
+         "There is no more jobs to cancel": [
+            "אין עוד עבודות לביטול."
+         ],
+         "The jobs cancellation has failed": [
+            "ביטול העבודות נכשל."
+         ],
+         "Cancel in-progress automatic jobs": [
+            "בטל עבודות אוטומטיות שנמצאות בביצוע."
+         ],
+         "Domain name has been updated": [
+            "שם התחום עודכן"
+         ],
+         "Domain name update has been failed": [
+            "עדכון שם התחום נכשל"
+         ],
+         "Update domain name in language switcher settings": [
+            "עדכן את שם התחום בהגדרות מעביר השפה"
+         ],
+         "Disclaimer: MySQL Disk Space": [
+            "הצהרת ויתור: שטח דיסק MySQL"
+         ],
+         "Cleaning and compressing the wp_icl_translate and wp_icl_translation_status tables reduces its data size, but does not automatically free up disk space in MySQL. To reclaim disk space, a table rebuild is required—a risky operation not performed automatically by this tool.": [
+            "ניקוי ודחיסת הטבלאות wp_icl_translate ו-wp_icl_translation_status מקטינים את גודל הנתונים שלהן, אך אינם משחררים באופן אוטומטי שטח דיסק ב-MySQL. כדי לשחרר שטח דיסק, נדרשת בנייה מחדש של הטבלה - פעולה מסוכנת שאינה מבוצעת באופן אוטומטי על ידי כלי זה."
+         ],
+         "Optimize translation tables": [
+            "אופטימיזציה של טבלאות תרגום"
+         ],
+         "Previous State Migration": [
+            "העברת מצב קודם"
+         ],
+         "Translation Elements Migration": [
+            "העברת אלמנטי תרגום"
+         ],
+         "Processed": [
+            "עובד"
+         ],
+         "Error": [
+            "שגיאה"
+         ],
+         "Success": [
+            "הצלחה"
+         ],
+         "Database tables optimization completed successfully.": [
+            "אופטימיזציית טבלאות המסד נתונים הושלמה בהצלחה."
+         ],
+         "Warning": [
+            "אזהרה"
+         ],
+         "This process is resource-intensive and may take a significant amount of time. It is recommended to run this optimization during periods of low traffic.": [
+            "תהליך זה צורך משאבים רבים ועלול לקחת זמן רב. מומלץ לבצע אופטימיזציה זו בתקופות של תנועה נמוכה."
+         ],
+         "Database Tables Optimization": [
+            "אופטימיזציית טבלאות מסד נתונים"
+         ],
+         "Refresh license data to recognise license update": [
+            "רענו נתוני רישיון כדי לזהות את עדכון הרישיון"
+         ],
+         "WPML License has been refreshed": [
+            "הרישיון של WPML עבר ריענון"
+         ],
+         "Translate Everything Automatically is not active.": [
+            "תרגום אוטומטי של הכל אינו פעיל."
+         ],
+         "Retry stuck automatic translations": [
+            "נסה מחדש תרגומים אוטומטיים תקועים"
+         ],
+         "Resends translation jobs that couldn't be processed due to a temporary issue while Translate Everything Automatically was active.": [
+            "שולח מחדש משימות תרגום שלא ניתן היה לעבד בגלל בעיה זמנית בזמן שתרגום אוטומטי של הכל היה פעיל."
+         ],
+         "Checking for stuck translation jobs...": [
+            "בודק משימות תרגום תקועות..."
+         ],
+         "Processing... %s stuck translation found so far": [
+            "מעבד... נמצא %s תרגום תקוע עד כה",
+            "Processing... %s stuck translations found so far",
+            "מעבד... נמצאו %s תרגומים תקועים עד כה"
+         ],
+         "Something went wrong while checking for stuck translation jobs. Please <a>contact WPML support</a>.": [
+            "משהו השתבש בזמן בדיקת משימות תרגום תקועות. אנא <a>צור קשר עם התמיכה של WPML</a>."
+         ],
+         "No stuck translation jobs found.": [
+            "לא נמצאו משימות תרגום תקועות."
+         ],
+         "%s stuck translation job found. WPML will translate it automatically in the background.\nYou can check the progress in the Translation Dashboard.": [
+            "נמצאה %s משימת תרגום תקועה. WPML יתרגם אותה אוטומטית ברקע.\nתוכל לבדוק את ההתקדמות בלוח המחוונים של התרגום.",
+            "%s stuck translation jobs found. WPML will translate them automatically in the background.\nYou can check their progress in the Translation Dashboard.",
+            "נמצאו %s משימות תרגום תקועות. WPML יתרגם אותן אוטומטית ברקע.\nתוכל לבדוק את התקדמותן בלוח המחוונים של התרגום."
+         ]
+      }
+   }
+}

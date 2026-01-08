@@ -1,0 +1,1876 @@
+{
+  "timestamp": "2025-12-31T22:25:56.286097",
+  "dry_run": false,
+  "stats": {
+    "clusters_processed": 21,
+    "laws_validated": 585,
+    "laws_removed": 263,
+    "laws_kept": 322,
+    "laws_added": 76
+  },
+  "results": [
+    {
+      "cluster_id": 1,
+      "cluster_name": "GDPR Package (Data Protection)",
+      "original_count": 50,
+      "valid_count": 49,
+      "removed_count": 1,
+      "added_count": 0,
+      "removed_laws": [
+        [
+          null,
+          "Legal framework for the collection and use of personal data by Korean public aut",
+          "Korean law, not EU legislation and outside EU jurisdiction"
+        ]
+      ],
+      "added_laws": []
+    },
+    {
+      "cluster_id": 2,
+      "cluster_name": "Digital Services Act Package",
+      "original_count": 25,
+      "valid_count": 3,
+      "removed_count": 22,
+      "added_count": 1,
+      "removed_laws": [
+        [
+          null,
+          "Commission Decision of 27 October 2021 setting up the group of experts Disabilit",
+          "Commission Decision on Disability Platform - unrelated to digital services regulation, different type of platform"
+        ],
+        [
+          "32022D2245",
+          "Council Decision (CFSP) 2022/2245 of 14 November 2022 on an assistance measure u",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32023D2689",
+          "Council Decision (CFSP) 2023/2689 of 27 November 2023 amending Decision (CFSP) 2",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services despite policy area label"
+        ],
+        [
+          "32022D0636",
+          "Council Decision (CFSP) 2022/636 of 13 April 2022 amending Decision (CFSP) 2022/",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services despite policy area label"
+        ],
+        [
+          "32025R1467",
+          "Commission Implementing Regulation (EU) 2025/1467 of 18 July 2025 laying down ru",
+          "Health regulation about substances of human origin platform - different regulatory domain"
+        ],
+        [
+          "32023R0969",
+          "Regulation (EU) 2023/969 of the European Parliament and of the Council of 10 May",
+          "Justice cooperation platform for joint investigation teams - different regulatory domain"
+        ],
+        [
+          "32024R2690",
+          "Commission Implementing Regulation (EU) 2024/2690 of 17 October 2024 laying down",
+          "Cybersecurity regulation under NIS2 Directive - different regulatory framework than DSA"
+        ],
+        [
+          "32022R1610",
+          "Commission Implementing Regulation (EU) 2022/1610 of 13 September 2022 amending ",
+          "Trade regulation about hydraulic lifting platforms - completely unrelated to digital services"
+        ],
+        [
+          "32022D0471",
+          "Council Decision (CFSP) 2022/471 of 23 March 2022 amending Decision (CFSP) 2022/",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32022R2120",
+          "Commission Implementing Regulation (EU) 2022/2120 of 13 July 2022 laying down im",
+          "Crowdfunding regulation - different regulatory framework than DSA"
+        ],
+        [
+          "32022D0338",
+          "Council Decision (CFSP) 2022/338 of 28 February 2022 on an assistance measure un",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32023D0230",
+          "Council Decision (CFSP) 2023/230 of 2 February 2023 amending Decision (CFSP) 202",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32022R2115",
+          "Commission Delegated Regulation (EU) 2022/2115 of 13 July 2022 supplementing Reg",
+          "Crowdfunding regulation - different regulatory framework than DSA"
+        ],
+        [
+          null,
+          "Commission Decision of 7 May 2021 amending Decision 2017/C 31/12 establishing th",
+          "Animal Welfare Platform - completely unrelated to digital services regulation"
+        ],
+        [
+          "32022D0809",
+          "Council Decision (CFSP) 2022/809 of 23 May 2022 amending Decision (CFSP) 2022/33",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32022D1285",
+          "Council Decision (CFSP) 2022/1285 of 21 July 2022 amending Decision (CFSP) 2022/",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32022D1971",
+          "Council Decision (CFSP) 2022/1971 of 17 October 2022 amending Decision (CFSP) 20",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32023D0810",
+          "Council Decision (CFSP) 2023/810 of 13 April 2023 amending Decision (CFSP) 2022/",
+          "CFSP military decision about Ukrainian Armed Forces - completely unrelated to digital services"
+        ],
+        [
+          "32025R0416",
+          "Commission Delegated Regulation (EU) 2025/416 of 29 November 2024 supplementing ",
+          "Crypto-asset trading platform regulation - different regulatory framework than DSA"
+        ],
+        [
+          "32024R1160",
+          "Commission Implementing Regulation (EU) 2024/1160 of 19 April 2024 amending Impl",
+          "Regional policy regulation about STEP platform - different policy domain"
+        ],
+        [
+          null,
+          "Corrigendum to Council Decision (CFSP) 2022/338 of 28 February 2022 on an assist",
+          "Corrigendum to CFSP military decision - completely unrelated to digital services"
+        ],
+        [
+          "32021R2003",
+          "Commission Delegated Regulation (EU) 2021/2003 of 6 August 2021 supplementing Di",
+          "Energy regulation about renewable development platform - different policy domain"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32005D0752",
+          "Commission Decision of 24 October 2005 establishing an expert group on electroni"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 3,
+      "cluster_name": "Digital Markets Act Package",
+      "original_count": 1,
+      "valid_count": 1,
+      "removed_count": 0,
+      "added_count": 0,
+      "removed_laws": [],
+      "added_laws": []
+    },
+    {
+      "cluster_id": 4,
+      "cluster_name": "AI Act Package",
+      "original_count": 3,
+      "valid_count": 1,
+      "removed_count": 2,
+      "added_count": 0,
+      "removed_laws": [
+        [
+          "32022D2269",
+          "Council Decision (CFSP) 2022/2269 of 18 November 2022 on Union support for the i",
+          "CFSP decision focused on peace and security applications of AI, not regulation of AI systems or their providers/deployers. Different policy domain and scope."
+        ],
+        [
+          "32022D2349",
+          "Council Decision (EU) 2022/2349 of 21 November 2022 authorising the opening of n",
+          "Council decision authorizing negotiations for a Council of Europe convention, not EU regulation of AI systems. Different policy domain (Human Rights) and doesn't apply to AI system providers/deployers."
+        ]
+      ],
+      "added_laws": []
+    },
+    {
+      "cluster_id": 5,
+      "cluster_name": "NIS2 Directive (Cybersecurity)",
+      "original_count": 8,
+      "valid_count": 3,
+      "removed_count": 5,
+      "added_count": 2,
+      "removed_laws": [
+        [
+          "32025R90828",
+          "Corrigendum to Regulation (EU) 2024/2847 of the European Parliament and of the C",
+          "Cyber Resilience Act focuses on product cybersecurity requirements, not network and information security for essential/important entities covered by NIS2"
+        ],
+        [
+          "32025D1458",
+          "Council Implementing Decision (EU) 2025/1458 of 14 July 2025 authorising support",
+          "External relations decision for Moldova support, not related to NIS2's internal market cybersecurity requirements for EU entities"
+        ],
+        [
+          "32024R90780",
+          "Corrigendum to Regulation (EU) 2024/2847 of the European Parliament and of the C",
+          "Another corrigendum to Cyber Resilience Act, which addresses product cybersecurity rather than NIS2's network and information security scope"
+        ],
+        [
+          "32024R1366",
+          "Commission Delegated Regulation (EU) 2024/1366 of 11 March 2024 supplementing Re",
+          "Sector-specific electricity grid cybersecurity rules, different regulatory scope than NIS2's broader essential/important entities framework"
+        ],
+        [
+          "32025R1759",
+          "Commission Delegated Regulation (EU) 2025/1759 of 19 June 2025 correcting certai",
+          "Correction to electricity sector cybersecurity regulation, not related to NIS2's general network and information security requirements"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32023R1484",
+          "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the"
+        ],
+        [
+          "32005D0752",
+          "Commission Decision of 24 October 2005 establishing an expert group on electroni"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 6,
+      "cluster_name": "European Green Deal Package",
+      "original_count": 8,
+      "valid_count": 7,
+      "removed_count": 1,
+      "added_count": 4,
+      "removed_laws": [
+        [
+          "32023L1978",
+          "Commission Implementing Decision (EU) 2023/1978 of 21 September 2023 on the appl",
+          "Implementing decision on German procurement rules for renewable electricity - too narrow/country-specific, not part of the comprehensive Green Deal package"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32019R1783",
+          "Commission Regulation (EU) 2019/1783 of 1 October 2019 amending Regulation (EU) "
+        ],
+        [
+          "32014D0224",
+          "Commission Implementing Decision of 16 April 2014 on the transfer of assigned am"
+        ],
+        [
+          "32022R2448",
+          "Commission Implementing Regulation (EU) 2022/2448 of 13 December 2022 on establi"
+        ],
+        [
+          "32010R0205",
+          "Commission Decision of 31 March 2010 concerning the reporting questionnaire rela"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 7,
+      "cluster_name": "Banking Union Package",
+      "original_count": 50,
+      "valid_count": 17,
+      "removed_count": 33,
+      "added_count": 5,
+      "removed_laws": [
+        [
+          "32015R2015",
+          "Commission Implementing Regulation (EU) 2015/2015 of 11 November 2015 laying dow",
+          "Solvency II regulation for insurance companies, not banking supervision"
+        ],
+        [
+          "32020D1805",
+          "Commission Decision (EU) 2020/1805 of 27 November 2020 amending Decisions 2014/3",
+          "EU Ecolabel for textile products, completely unrelated to banking"
+        ],
+        [
+          "32018R1042",
+          "Commission Regulation (EU) 2018/1042 of 23 July 2018 amending Regulation (EU) No",
+          "Aviation regulation on flight crew, unrelated to banking"
+        ],
+        [
+          "32015L1480",
+          "Commission Directive (EU) 2015/1480 of 28 August 2015 amending several annexes t",
+          "Air quality assessment directive, unrelated to banking"
+        ],
+        [
+          "32020L0367",
+          "Commission Directive (EU) 2020/367 of 4 March 2020 amending Annex III to Directi",
+          "Environmental noise assessment directive, unrelated to banking"
+        ],
+        [
+          "32023R0502",
+          "Commission Delegated Regulation (EU) 2023/502 of 1 December 2022 amending Regula",
+          "Medical devices regulation, unrelated to banking"
+        ],
+        [
+          "32013H0473",
+          "Commission Recommendation of 24 September 2013 on the audits and assessments per",
+          "Medical devices audits recommendation, unrelated to banking"
+        ],
+        [
+          "32014R0568",
+          "Commission Delegated Regulation (EU) No 568/2014 of 18 February 2014 amending An",
+          "Construction products regulation, unrelated to banking"
+        ],
+        [
+          "32020R1501",
+          "Commission Implementing Decision (EU) 2020/1501 of 14 October 2020 on the assess",
+          "Aviation regulation exemption, unrelated to banking"
+        ],
+        [
+          "32020D0962",
+          "Commission Implementing Decision (EU) 2020/962 of 2 July 2020 amending Implement",
+          "Construction products assessment decision, unrelated to banking"
+        ],
+        [
+          "32025R90332",
+          "Corrigendum to Regulation (EU) 2024/2748 of the European Parliament and of the C",
+          "Construction products conformity assessment, unrelated to banking"
+        ],
+        [
+          "32024R1381",
+          "Commission Implementing Regulation (EU) 2024/1381 of 23 May 2024 laying down, pu",
+          "Health technology assessment regulation, unrelated to banking"
+        ],
+        [
+          "32020D1835",
+          "Commission Implementing Decision (EU) 2020/1835 of 3 December 2020 on the harmon",
+          "Harmonised standards for accreditation, general conformity assessment"
+        ],
+        [
+          null,
+          "Corrigendum to Commission Directive (EU) 2015/1480 of 28 August 2015 amending se",
+          "Air quality assessment corrigendum, unrelated to banking"
+        ],
+        [
+          "32025D1769",
+          "Commission Implementing Decision (EU) 2025/1769 of 27 August 2025 amending Imple",
+          "Construction products assessment documents, unrelated to banking"
+        ],
+        [
+          "32021D1183",
+          "Commission Implementing Decision (EU) 2021/1183 of 16 July 2021 amending Impleme",
+          "Construction products assessment documents, unrelated to banking"
+        ],
+        [
+          "32022R2572",
+          "Council Decision (EU) 2022/2572 of 19 December 2022 requesting the Commission to",
+          "Plant protection products study request, unrelated to banking"
+        ],
+        [
+          "32023R0823",
+          "Commission Implementing Regulation (EU) 2023/823 of 13 April 2023 laying down de",
+          "Tax information exchange equivalence rules, not banking supervision"
+        ],
+        [
+          "32013D0329",
+          "Commission Implementing Decision of 26 June 2013 providing the rules for the est",
+          "Health technology assessment network, unrelated to banking"
+        ],
+        [
+          "32016R1800",
+          "Commission Implementing Regulation (EU) 2016/1800 of 11 October 2016 laying down",
+          "Solvency II credit assessment for insurance, not banking supervision"
+        ],
+        [
+          "32018R0480",
+          "Commission Delegated Regulation (EU) 2018/480 of 4 December 2017 supplementing R",
+          "Investment funds regulation, not core banking supervision"
+        ],
+        [
+          "32023D1473",
+          "Commission Implementing Decision (EU) 2023/1473 of 17 July 2023 amending Impleme",
+          "Construction products assessment documents, unrelated to banking"
+        ],
+        [
+          "32023R0503",
+          "Commission Delegated Regulation (EU) 2023/503 of 1 December 2022 amending Regula",
+          "Medical devices regulation, unrelated to banking"
+        ],
+        [
+          null,
+          "Commission Recommendation of 10 October 2014 on the Data Protection Impact Asses",
+          "Smart grid data protection recommendation, unrelated to banking"
+        ],
+        [
+          "32018R2018",
+          "Commission Implementing Regulation (EU) 2018/2018 of 18 December 2018 laying dow",
+          "Plant health risk assessment, unrelated to banking"
+        ],
+        [
+          "32021R0017",
+          "Commission Implementing Regulation (EU) 2021/17 of 8 January 2021 establishing a",
+          "Veterinary medicines variations, unrelated to banking"
+        ],
+        [
+          "32013D0267",
+          "Council Decision of 13 May 2013 on the position to be taken on behalf of the Eur",
+          "Maritime safety assessment schemes, unrelated to banking"
+        ],
+        [
+          "32021R0842",
+          "Commission Implementing Regulation (EU) 2021/842 of 26 May 2021 amending Impleme",
+          "Chemical substances risk assessment, unrelated to banking"
+        ],
+        [
+          "32019R1957",
+          "Commission Implementing Decision (EU) 2019/1957 of 25 November 2019 on the asses",
+          "Aviation regulation assessment, unrelated to banking"
+        ],
+        [
+          "32019R1733",
+          "Commission implementing decision 2019/1733 of 15 October 2019 on the assessment ",
+          "Aviation regulation assessment, unrelated to banking"
+        ],
+        [
+          "32018R0990",
+          "Commission Delegated Regulation (EU) 2018/990 of 10 April 2018 amending and supp",
+          "Money market funds credit assessment, not core banking supervision"
+        ],
+        [
+          "32021D1845",
+          "Commission Decision (EU) 2021/1845 of 20 October 2021 amending Decision (EU) 201",
+          "EU Ecolabel for tourism, unrelated to banking"
+        ],
+        [
+          "32012R0562",
+          "Commission Implementing Regulation (EU) No 562/2012 of 27 June 2012 amending Com",
+          "Food enzymes risk assessment, unrelated to banking"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32008D0571",
+          "Council Decision of 8 July 2008 amending Decision 98/481/EC approving the extern"
+        ],
+        [
+          "32013R0876",
+          "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Re"
+        ],
+        [
+          "32018D1518",
+          "Council Decision (EU) 2018/1518 of 9 October 2018 amending Decision 1999/70/EC c"
+        ],
+        [
+          "32005L0001",
+          "Directive 2005/1/EC of the European Parliament and of the Council of 9 March 200"
+        ],
+        [
+          null,
+          "Corrigendum to Regulation (EU) 2017/1538 of the European Central Bank of 25 Augu"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 8,
+      "cluster_name": "Capital Markets Union Package",
+      "original_count": 49,
+      "valid_count": 45,
+      "removed_count": 4,
+      "added_count": 2,
+      "removed_laws": [
+        [
+          "32017R0493",
+          "Commission Implementing Regulation (EU) 2017/493 of 21 March 2017 on the release",
+          "Agricultural trade regulation about poultry import quotas, unrelated to capital markets"
+        ],
+        [
+          "32020R1987",
+          "Commission Delegated Regulation (EU) 2020/1987 of 14 July 2020 supplementing Reg",
+          "Agricultural regulation on tariff quotas for agricultural products, unrelated to capital markets"
+        ],
+        [
+          null,
+          "Corrigendum to Commission Implementing Regulation (EU) No 908/2014 of 6 August 2",
+          "Agricultural regulation corrigendum about paying agencies, unrelated to capital markets"
+        ],
+        [
+          "32020R0760",
+          "Commission Delegated Regulation (EU) 2020/760 of 17 December 2019 supplementing ",
+          "Agricultural regulation on import/export tariff quotas, unrelated to capital markets"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32013R0345",
+          "Regulation (EU) No 345/2013 of the European Parliament and of the Council of 17 "
+        ],
+        [
+          "32013R0876",
+          "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Re"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 9,
+      "cluster_name": "Circular Economy Package",
+      "original_count": 50,
+      "valid_count": 36,
+      "removed_count": 14,
+      "added_count": 5,
+      "removed_laws": [
+        [
+          null,
+          "Commission Opinion of 29 October 2015 relating to the plan for the disposal of r",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 2 June 2016 relating to the plan for the disposal of radio",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 7 November 2017 relating to the modified plan for the disp",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 12 August 2016 relating to the plan for the disposal of ra",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 27 September 2017 relating to the plan for the disposal of",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 26 February 2015 relating to the plan for the disposal of ",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 2 June 2016 relating to the plan for the disposal of radio",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 12 August 2016 relating to the plan for the disposal of ra",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 7 November 2017 relating to the plan for the disposal of r",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 7 November 2017 relating to the plan for the disposal of r",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 12 August 2016 relating to the plan for the disposal of ra",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission opinion of 26 January 2017 relating to the plan for the disposal of r",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 7 November 2017 relating to the plan for the disposal of r",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ],
+        [
+          null,
+          "Commission Opinion of 25 November 2015 relating to the modified plan for the dis",
+          "Radioactive waste disposal opinion - specific nuclear waste, not general circular economy"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32016D1349",
+          "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological "
+        ],
+        [
+          "32006D0237",
+          "Commission Decision of 22 June 2005 on the aid measures implemented by the Nethe"
+        ],
+        [
+          "32025R1988",
+          "Commission Regulation (EU) 2025/1988 of 2 October 2025 amending Annex XVII to Re"
+        ],
+        [
+          "32008L0350",
+          "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ire"
+        ],
+        [
+          "32012R0206",
+          "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 20"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 10,
+      "cluster_name": "Farm to Fork Strategy Package",
+      "original_count": 0,
+      "valid_count": 0,
+      "removed_count": 0,
+      "added_count": 0,
+      "removed_laws": [],
+      "added_laws": []
+    },
+    {
+      "cluster_id": 11,
+      "cluster_name": "Migration and Asylum Pact",
+      "original_count": 50,
+      "valid_count": 36,
+      "removed_count": 14,
+      "added_count": 6,
+      "removed_laws": [
+        [
+          "32021R0630",
+          "Commission Delegated Regulation (EU) 2021/630 of 16 February 2021 supplementing ",
+          "Border control posts for goods/products - customs/trade regulation, not migration/asylum"
+        ],
+        [
+          "32025R0065",
+          "Commission Delegated Regulation (EU) 2025/65 of 31 October 2024 amending Delegat",
+          "Health Entry Documents for goods consignments - trade/customs, not migration"
+        ],
+        [
+          "32023R1808",
+          "Commission Implementing Regulation (EU) 2023/1808 of 21 September 2023 setting o",
+          "Cross-border health threats planning - health policy, not migration/asylum"
+        ],
+        [
+          null,
+          "Corrigendum to Commission Implementing Regulation (EU) 2021/955 of 27 May 2021 l",
+          "Financial regulation on marketing rules for investment funds - unrelated to migration"
+        ],
+        [
+          "32021R0955",
+          "Commission Implementing Regulation (EU) 2021/955 of 27 May 2021 laying down impl",
+          "Financial regulation on investment fund marketing - unrelated to migration"
+        ],
+        [
+          "32021D0858",
+          "Commission Implementing Decision (EU) 2021/858 of 27 May 2021 amending Implement",
+          "Health alerts and passenger contact tracing - health policy, not migration"
+        ],
+        [
+          "32023R0182",
+          "Commission Delegated Regulation (EU) 2023/182 of 23 November 2022 correcting cer",
+          "Border control posts for goods/animals - customs/trade regulation"
+        ],
+        [
+          "32022D2536",
+          "Council Decision (EU) 2022/2536 of 12 December 2022 on the conclusion of the Agr",
+          "Cross-border cooperation in combating crime - security/justice, not migration/asylum"
+        ],
+        [
+          "32021R2305",
+          "Commission Delegated Regulation (EU) 2021/2305 of 21 October 2021 supplementing ",
+          "Border control posts for organic products - agriculture/trade regulation"
+        ],
+        [
+          "32024R1366",
+          "Commission Delegated Regulation (EU) 2024/1366 of 11 March 2024 supplementing Re",
+          "Cybersecurity for electricity flows - energy policy, unrelated to migration"
+        ],
+        [
+          "32023R2099",
+          "Commission Decision (EU) 2023/2099 of 28 September 2023 confirming the participa",
+          "Electronic exchange system for judicial cooperation - justice policy, not migration"
+        ],
+        [
+          "32022R2202",
+          "Commission Delegated Regulation (EU) 2022/2202 of 29 August 2022 supplementing R",
+          "Cross-border renewable energy projects - energy policy, unrelated to migration"
+        ],
+        [
+          "32020D0396",
+          "Commission Implementing Decision (EU) 2020/396 of 4 March 2020 on the proposed c",
+          "Citizens' initiative on EU voting rights - citizenship policy, not migration/asylum"
+        ],
+        [
+          "32022R0176",
+          "Commission Implementing Regulation (EU) 2022/176 of 9 February 2022 correcting c",
+          "Border control posts for animal products - agriculture/veterinary regulation"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32014L0036",
+          "Directive 2014/36/EU of the European Parliament and of the Council of 26 Februar"
+        ],
+        [
+          "32013L0032",
+          "Directive 2013/32/EU of the European Parliament and of the Council of 26 June 20"
+        ],
+        [
+          "32004L0082",
+          "Council Directive 2004/82/EC of 29 April 2004 on the obligation of carriers to c"
+        ],
+        [
+          "32025R0012",
+          "Regulation (EU) 2025/12 of the European Parliament and of the Council of 19 Dece"
+        ],
+        [
+          "32004L0081",
+          "Council Directive 2004/81/EC of 29 April 2004 on the residence permit issued to "
+        ],
+        [
+          "32020R0445",
+          "Commission Delegated Regulation (EU) 2020/445 of 15 October 2019 amending Annex "
+        ]
+      ]
+    },
+    {
+      "cluster_id": 12,
+      "cluster_name": "FinTech Startup Compliance",
+      "original_count": 50,
+      "valid_count": 9,
+      "removed_count": 41,
+      "added_count": 3,
+      "removed_laws": [
+        [
+          "32016R0009",
+          "Commission Implementing Regulation (EU) 2016/9 of 5 January 2016 on joint submis",
+          "REACH chemical regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32019R0961",
+          "Commission Implementing Decision (EU) 2019/961 of 7 June 2019 authorising a prov",
+          "REACH chemical restriction decision - unrelated to FinTech or financial services"
+        ],
+        [
+          "32021L0971",
+          "Commission Implementing Directive (EU) 2021/971 of 16 June 2021 amending Annex I",
+          "Agricultural seed marketing directive - unrelated to FinTech or financial services"
+        ],
+        [
+          "32021D1799",
+          "Council Decision (CFSP) 2021/1799 of 11 October 2021 amending Decision (CFSP) 20",
+          "CFSP decision on chemical weapons - unrelated to FinTech or financial services"
+        ],
+        [
+          "32023D0992",
+          "Council Decision (EU) 2023/992 of 16 May 2023 appointing 16 members of the Manag",
+          "European Chemicals Agency appointment - unrelated to FinTech or financial services"
+        ],
+        [
+          "32015R0830",
+          "Commission Regulation (EU) 2015/830 of 28 May 2015 amending Regulation (EC) No 1",
+          "REACH chemical regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32022R0326",
+          "Commission Implementing Decision (EU) 2022/326 of 24 February 2022 amending Impl",
+          "REACH chemical restriction decision - unrelated to FinTech or financial services"
+        ],
+        [
+          "32018R0524",
+          "Commission Implementing Regulation (EU) 2018/524 of 28 March 2018 amending Imple",
+          "Pesticide approval regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32022D0573",
+          "Council Decision (CFSP) 2022/573 of 7 April 2022 amending Decision (CFSP) 2019/5",
+          "CFSP decision on chemical weapons organization - unrelated to FinTech or financial services"
+        ],
+        [
+          "32020D1482",
+          "Council Decision (CFSP) 2020/1482 of 14 October 2020 amending Decision (CFSP) 20",
+          "CFSP decision on chemical weapons - unrelated to FinTech or financial services"
+        ],
+        [
+          "32015R1494",
+          "Commission Regulation (EU) 2015/1494 of 4 September 2015 amending Annex XVII to ",
+          "REACH chemical regulation on benzene - unrelated to FinTech or financial services"
+        ],
+        [
+          null,
+          "Corrigendum to Commission Regulation (EU) 2020/171 of 6 February 2020 amending A",
+          "REACH chemical regulation corrigendum - unrelated to FinTech or financial services"
+        ],
+        [
+          "32017D0674",
+          "Council Decision (EU) 2017/674 of 3 April 2017 establishing the position to be a",
+          "Rotterdam Convention on hazardous chemicals - unrelated to FinTech or financial services"
+        ],
+        [
+          "32019R0336",
+          "Commission Implementing Regulation (EU) 2019/336 of 27 February 2019 amending Re",
+          "Pesticide evaluation regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32020R1463",
+          "Council Implementing Regulation (EU) 2020/1463 of 12 October 2020 implementing R",
+          "Chemical weapons restrictive measures - unrelated to FinTech or financial services"
+        ],
+        [
+          "32018R0172",
+          "Commission Delegated Regulation (EU) 2018/172 of 28 November 2017 amending Annex",
+          "Hazardous chemicals export/import regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32020R2096",
+          "Commission Regulation (EU) 2020/2096 of 15 December 2020 amending Annex XVII to ",
+          "REACH chemical regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32018R1542",
+          "Council Regulation (EU) 2018/1542 of 15 October 2018 concerning restrictive meas",
+          "Chemical weapons restrictive measures - unrelated to FinTech or financial services"
+        ],
+        [
+          "32020R0433",
+          "Commission Implementing Decision (EU) 2020/433 of 12 March 2020 concerning the e",
+          "Biocidal product authorization - unrelated to FinTech or financial services"
+        ],
+        [
+          null,
+          "Council Decision (EU) 2023/992 of 16 May 2023 appointing 16 members of the Manag",
+          "European Chemicals Agency appointment - unrelated to FinTech or financial services"
+        ],
+        [
+          null,
+          "Corrigendum to Council Decision (CFSP) 2020/1482 of 14 October 2020 amending Dec",
+          "CFSP chemical weapons decision corrigendum - unrelated to FinTech or financial services"
+        ],
+        [
+          "32019D0668",
+          "Council Decision (EU) 2019/668 of 15 April 2019 on the position to be taken on b",
+          "Rotterdam Convention on hazardous chemicals - unrelated to FinTech or financial services"
+        ],
+        [
+          "32015D0259",
+          "Council Decision (CFSP) 2015/259 of 17 February 2015 in support of activities of",
+          "CFSP decision on chemical weapons organization - unrelated to FinTech or financial services"
+        ],
+        [
+          "32019D1092",
+          "Council Decision (CFSP) 2019/1092 of 26 June 2019 amending Decision (CFSP) 2017/",
+          "CFSP decision on chemical weapons in Libya - unrelated to FinTech or financial services"
+        ],
+        [
+          "32021R0007",
+          "Commission Implementing Decision (EU) 2021/7 of 5 January 2021 concerning the ex",
+          "Biocidal product authorization - unrelated to FinTech or financial services"
+        ],
+        [
+          "32021R0107",
+          "Commission Implementing Decision (EU) 2021/107 of 28 January 2021 concerning the",
+          "Biocidal product authorization - unrelated to FinTech or financial services"
+        ],
+        [
+          "32023R0689",
+          "Commission Implementing Regulation (EU) 2023/689 of 20 March 2023 amending Imple",
+          "Pesticide approval regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32020R0421",
+          "Commission Implementing Regulation (EU) 2020/421 of 18 March 2020 amending Imple",
+          "Pesticide approval regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32024R2961",
+          "Commission Implementing Decision (EU) 2024/2961 of 29 November 2024 concerning t",
+          "Biocidal product authorization - unrelated to FinTech or financial services"
+        ],
+        [
+          "32017L0774",
+          "Commission Directive (EU) 2017/774 of 3 May 2017 amending, for the purpose of ad",
+          "Toy safety directive on chemicals - unrelated to FinTech or financial services"
+        ],
+        [
+          "32023R1432",
+          "Commission Implementing Decision (EU) 2023/1432 of 7 July 2023 concerning the ex",
+          "Biocidal product authorization - unrelated to FinTech or financial services"
+        ],
+        [
+          "32024R1730",
+          "Commission Implementing Regulation (EU) 2024/1730 of 20 June 2024 concerning the",
+          "Feed additive authorization - unrelated to FinTech or financial services"
+        ],
+        [
+          "32023R1656",
+          "Commission Delegated Regulation (EU) 2023/1656 of 16 June 2023 amending Regulati",
+          "Hazardous chemicals export regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32016D0176",
+          "Commission Implementing Decision (EU) 2016/176 of 9 February 2016 terminating th",
+          "Anti-dumping decision on tartaric acid - unrelated to FinTech or financial services"
+        ],
+        [
+          "32023D0990",
+          "Council Decision (EU) 2023/990 of 25 April 2023 on the position to be taken on b",
+          "Rotterdam Convention on hazardous chemicals - unrelated to FinTech or financial services"
+        ],
+        [
+          "32019D2112",
+          "Council Decision (CFSP) 2019/2112 of 9 December 2019 amending Decision (CFSP) 20",
+          "CFSP decision on Syrian chemical weapons - unrelated to FinTech or financial services"
+        ],
+        [
+          "32017R1000",
+          "Commission Regulation (EU) 2017/1000 of 13 June 2017 amending Annex XVII to Regu",
+          "REACH regulation on chemicals - unrelated to FinTech or financial services"
+        ],
+        [
+          "32018R0588",
+          "Commission Regulation (EU) 2018/588 of 18 April 2018 amending Annex XVII to Regu",
+          "REACH regulation on chemicals - unrelated to FinTech or financial services"
+        ],
+        [
+          "32019R1701",
+          "Commission Delegated Regulation (EU) 2019/1701 of 23 July 2019 amending Annexes ",
+          "Hazardous chemicals export regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32021R2045",
+          "Commission Regulation (EU) 2021/2045 of 23 November 2021 amending Annex XIV to R",
+          "REACH chemical regulation - unrelated to FinTech or financial services"
+        ],
+        [
+          "32022R0586",
+          "Commission Regulation (EU) 2022/586 of 8 April 2022 amending Annex XIV to Regula",
+          "REACH chemical regulation - unrelated to FinTech or financial services"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32013R0876",
+          "Commission Delegated Regulation (EU) No 876/2013 of 28 May 2013 supplementing Re"
+        ],
+        [
+          "32005L0001",
+          "Directive 2005/1/EC of the European Parliament and of the Council of 9 March 200"
+        ],
+        [
+          "32018R0072",
+          "Commission Delegated Regulation (EU) 2018/72 of 4 October 2017 supplementing Reg"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 13,
+      "cluster_name": "HealthTech Startup Compliance",
+      "original_count": 32,
+      "valid_count": 27,
+      "removed_count": 5,
+      "added_count": 4,
+      "removed_laws": [
+        [
+          "32021R1240",
+          "Commission Decision (EU) 2021/1240 of 13 July 2021 on the compliance of the EU p",
+          "Relates to clinical trials portal for medicinal products, not medical devices or HealthTech startup compliance"
+        ],
+        [
+          "32021R1315",
+          "Commission Implementing Decision (EU) 2021/1315 of 6 August 2021 concerning the ",
+          "About biocidal products (Biobor JF), not medical devices or HealthTech compliance"
+        ],
+        [
+          "32023R2634",
+          "Commission Implementing Decision (EU) 2023/2634 of 27 November 2023 concerning t",
+          "About biocidal products (Biobor JF), not medical devices or HealthTech compliance"
+        ],
+        [
+          "32022R0020",
+          "Commission Implementing Regulation (EU) 2022/20 of 7 January 2022 laying down ru",
+          "About clinical trials cooperation procedures for medicinal products, not medical devices or HealthTech compliance"
+        ],
+        [
+          "32020R1043",
+          "Regulation (EU) 2020/1043 of the European Parliament and of the Council of 15 Ju",
+          "About clinical trials for genetically modified medicinal products, not medical devices or general HealthTech compliance"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32019D1765",
+          "Commission Implementing Decision 2019/1765 of 22 October 2019 providing the rule"
+        ],
+        [
+          null,
+          "Directive 2001/20/EC of the European Parliament and of the Council of 4 April 20"
+        ],
+        [
+          "32022R2306",
+          "Commission Implementing Decision (EU) 2022/2306 of 23 November 2022 granting der"
+        ],
+        [
+          "32018D0133",
+          "Commission Implementing Decision (EU) 2018/133 of 24 January 2018 amending Decis"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 14,
+      "cluster_name": "Mobility & Transport Startup Compliance",
+      "original_count": 9,
+      "valid_count": 9,
+      "removed_count": 0,
+      "added_count": 3,
+      "removed_laws": [],
+      "added_laws": [
+        [
+          "32007H0078",
+          "Commission recommendation of 22 December 2006 on safe and efficient in-vehicle i"
+        ],
+        [
+          "32023R2502",
+          "Commission Delegated Regulation (EU) 2023/2502 of 7 September 2023 amending Regu"
+        ],
+        [
+          "32013L0028",
+          "Commission Directive 2013/28/EU of 17 May 2013 amending Annex II to Directive 20"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 15,
+      "cluster_name": "Climate Tech Startup Compliance",
+      "original_count": 50,
+      "valid_count": 9,
+      "removed_count": 41,
+      "added_count": 9,
+      "removed_laws": [
+        [
+          "32017R1542",
+          "Commission Delegated Regulation (EU) 2017/1542 of 8 June 2017 amending Delegated",
+          "Insurance regulatory capital requirements, unrelated to climate tech or emissions trading"
+        ],
+        [
+          "32018R1782",
+          "Commission Implementing Decision (EU) 2018/1782 of 15 November 2018 allowing tar",
+          "Air navigation services performance targets, not related to carbon markets or climate tech startups"
+        ],
+        [
+          "32020D0188",
+          "Decision (EU) 2020/188 of the European Central Bank of 3 February 2020 on a seco",
+          "ECB asset purchase programme, unrelated to climate tech or emissions trading"
+        ],
+        [
+          "32022R2256",
+          "Commission Decision (EU) 2022/2256 of 15 November 2022 on the initiation of the ",
+          "Air navigation performance targets, not related to climate tech or carbon markets"
+        ],
+        [
+          "32008D0750",
+          "Council Decision of 15 September 2008 amending Decision 2003/77/EC laying down m",
+          "ECSC liquidation assets management, unrelated to climate tech or emissions trading"
+        ],
+        [
+          "32022R2425",
+          "Commission Decision (EU) 2022/2425 of 5 December 2022 on the consistency of the ",
+          "Air navigation performance targets for Malta, not related to climate tech or carbon markets"
+        ],
+        [
+          "32018D0193",
+          "Commission Implementing Decision (EU) 2018/193 of 7 February 2018 authorising la",
+          "Rabies vaccine testing authorization, completely unrelated to climate tech or carbon markets"
+        ],
+        [
+          "32013R0543",
+          "Commission Regulation (EU) No 543/2013 of 14 June 2013 on submission and publica",
+          "Electricity market data submission, not specifically about climate tech startups or carbon markets"
+        ],
+        [
+          "32016R0709",
+          "Commission Delegated Regulation (EU) 2016/709 of 26 January 2016 supplementing R",
+          "Banking regulation on liquid assets, unrelated to climate tech or emissions trading"
+        ],
+        [
+          null,
+          "Regulation (EU) 2019/1677 of the European Central Bank of 27 September 2019 amen",
+          "Money market statistics, unrelated to climate tech or carbon markets"
+        ],
+        [
+          "32021R0966",
+          "Commission Implementing Regulation (EU) 2021/966 of 11 June 2021 granting Cabo V",
+          "Trade preference derogation for tuna products, unrelated to climate tech or emissions"
+        ],
+        [
+          "32017R2330",
+          "Commission Implementing Regulation (EU) 2017/2330 of 14 December 2017 concerning",
+          "Feed additive authorization for animal feed, completely unrelated to climate tech"
+        ],
+        [
+          "32007R0119",
+          "Commission Regulation (EC) No 119/2007 of 8 February 2007 amending Regulation (E",
+          "Sugar market regulation amendment, unrelated to climate tech or carbon markets"
+        ],
+        [
+          "32020D1183",
+          "Commission Decision (EU) 2020/1183 of 25 February 2020 on State aid SA.34445 (20",
+          "State aid decision for bank asset transfer, unrelated to climate tech or emissions trading"
+        ],
+        [
+          "32019R1011",
+          "Commission Delegated Regulation (EU) 2019/1011 of 13 December 2018 amending Comm",
+          "SME growth markets registration conditions, not specific to climate tech startups"
+        ],
+        [
+          "32009L0133",
+          "Council Directive 2009/133/EC of 19 October 2009 on the common system of taxatio",
+          "Corporate taxation directive, not specific to climate tech or carbon markets"
+        ],
+        [
+          "32011R1074",
+          "Commission Implementing Regulation (EU) No 1074/2011 of 24 October 2011 concerni",
+          "Feed additive authorization for piglets, completely unrelated to climate tech"
+        ],
+        [
+          null,
+          "Commission Recommendation of 23 November 2011 on the revision of targets contain",
+          "Air navigation performance plan targets, not related to climate tech or carbon markets"
+        ],
+        [
+          "32020R0159",
+          "Commission Implementing Regulation (EU) 2020/159 of 5 February 2020 concerning t",
+          "Feed additive authorization, completely unrelated to climate tech or carbon markets"
+        ],
+        [
+          "32018R0276",
+          "Commission Implementing Regulation (EU) 2018/276 of 23 February 2018 amending Im",
+          "Structural and Investment Funds performance framework, not specific to climate tech"
+        ],
+        [
+          "32016R2145",
+          "Council Regulation (EU) 2016/2145 of 1 December 2016 amending Regulation (EU) No",
+          "Agricultural market aids and refunds, unrelated to climate tech or carbon markets"
+        ],
+        [
+          "32020D1494",
+          "Council Decision (EU) 2020/1494 of 12 October 2020 on the position to be taken o",
+          "TIR customs convention, unrelated to climate tech or emissions trading"
+        ],
+        [
+          "32025R1050",
+          "Commission Decision (EU) 2025/1050 of 19 May 2025 on the consistency of the perf",
+          "Air navigation performance targets, not related to climate tech or carbon markets"
+        ],
+        [
+          "32023R0825",
+          "Commission Implementing Regulation (EU) 2023/825 of 17 April 2023 extending the ",
+          "Anti-dumping duty on steel imports, unrelated to climate tech or carbon markets"
+        ],
+        [
+          "32022R0803",
+          "Commission Delegated Regulation (EU) 2022/803 of 16 February 2022 supplementing ",
+          "Financial markets data reporting fines procedure, not specific to climate tech"
+        ],
+        [
+          "32016D0423",
+          "Commission Implementing Decision (EU) 2016/423 of 18 March 2016 authorising cert",
+          "Rabies vaccine testing authorization, completely unrelated to climate tech"
+        ],
+        [
+          "32015R0514",
+          "Commission Delegated Regulation (EU) 2015/514 of 18 December 2014 on the informa",
+          "Alternative investment fund reporting to ESMA, not specific to climate tech"
+        ],
+        [
+          null,
+          "Corrigendum to Directive 2014/65/EU of the European Parliament and of the Counci",
+          "Financial instruments directive corrigendum, not specific to climate tech"
+        ],
+        [
+          null,
+          "Corrigendum to Regulation (EU) No 1308/2013 of the European Parliament and of th",
+          "Agricultural markets regulation corrigendum, unrelated to climate tech"
+        ],
+        [
+          "32023D0616",
+          "Commission Decision (EU) 2023/616 of 17 March 2023 amending Decision 2005/37/EC ",
+          "European Technical and Scientific Centre tasks, not specific to climate tech"
+        ],
+        [
+          "32022R0805",
+          "Commission Delegated Regulation (EU) 2022/805 of 16 February 2022 supplementing ",
+          "ESMA benchmark supervision fees, not specific to climate tech"
+        ],
+        [
+          "32013R1420",
+          "Commission Implementing Regulation (EU) No 1420/2013 of 17 December 2013 repeali",
+          "Fishery market regulations repeal, unrelated to climate tech"
+        ],
+        [
+          "32020R1781",
+          "Regulation (EU) 2020/1781 of the European Parliament and of the Council of 25 No",
+          "Baltic Sea fishing capacity reduction, unrelated to climate tech or carbon markets"
+        ],
+        [
+          "32023R0606",
+          "Regulation (EU) 2023/606 of the European Parliament and of the Council of 15 Mar",
+          "Long-term investment funds regulation, not specific to climate tech"
+        ],
+        [
+          "32019R0620",
+          "Commission Implementing Regulation (EU) 2019/620 of 17 April 2019 granting Cape ",
+          "Trade preference derogation for fish products, unrelated to climate tech"
+        ],
+        [
+          "32022R2255",
+          "Commission Decision (EU) 2022/2255 of 24 October 2022 on the initiation of the d",
+          "Air navigation performance targets, not related to climate tech or carbon markets"
+        ],
+        [
+          "32016R1768",
+          "Commission Implementing Regulation (EU) 2016/1768 of 4 October 2016 concerning t",
+          "Feed additive authorization, completely unrelated to climate tech"
+        ],
+        [
+          "32020R1302",
+          "Commission Delegated Regulation (EU) 2020/1302 of 14 July 2020 supplementing Reg",
+          "ESMA fees for third-country central counterparties, not specific to climate tech"
+        ],
+        [
+          "32023R1336",
+          "Commission Implementing Decision (EU) 2023/1336 of 16 June 2023 on corrective me",
+          "Air navigation corrective measures, not related to climate tech or carbon markets"
+        ],
+        [
+          "32007D0403",
+          "Commission Decision of 20 December 2006 declaring a concentration compatible wit",
+          "Merger control decision, not related to climate tech or carbon markets"
+        ],
+        [
+          "32023R2207",
+          "Commission Implementing Decision (EU) 2023/2207 of 13 October 2023 amending Impl",
+          "Financial market equivalence decision for Australia, not specific to climate tech"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32014D0224",
+          "Commission Implementing Decision of 16 April 2014 on the transfer of assigned am"
+        ],
+        [
+          "32021R0781",
+          "Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication"
+        ],
+        [
+          "32015L1814",
+          "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 Octob"
+        ],
+        [
+          "32023D0852",
+          "Decision (EU) 2023/852 of the European Parliament and of the Council of 19 April"
+        ],
+        [
+          "32013D0529",
+          "Decision No 529/2013/EU of the European Parliament and of the Council of 21 May "
+        ],
+        [
+          "32020R1044",
+          "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regul"
+        ],
+        [
+          "32016D1841",
+          "Council Decision (EU) 2016/1841 of 5 October 2016 on the conclusion, on behalf o"
+        ],
+        [
+          "32020R0022",
+          "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes"
+        ],
+        [
+          null,
+          "Commission Decision of 15 December 2020 instructing the central administrator to"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 16,
+      "cluster_name": "CleanTech Startup Funding & Compliance",
+      "original_count": 18,
+      "valid_count": 12,
+      "removed_count": 6,
+      "added_count": 9,
+      "removed_laws": [
+        [
+          "32019D1133",
+          "Council Decision (EU) 2019/1133 of 25 June 2019 on the position to be taken on b",
+          "Council decision on international partnership position - procedural/diplomatic, not regulatory for startups"
+        ],
+        [
+          "32023D0705",
+          "Commission Decision (EU) 2023/705 of 29 March 2023 amending Decisions (EU) 2017/",
+          "EU Ecolabel for tourist accommodation and cleaning services - too narrow sector-specific, not CleanTech startup focused"
+        ],
+        [
+          "32023D1573",
+          "Council Decision (EU) 2023/1573 of 14 July 2023 establishing the position to be ",
+          "Council decision on export credits position - trade/diplomatic matter, not domestic CleanTech regulation"
+        ],
+        [
+          "32019R0504",
+          "Decision (EU) 2019/504 of the European Parliament and of the Council of 19 March",
+          "Brexit-related amendment to energy efficiency directive - procedural adjustment, not substantive CleanTech regulation"
+        ],
+        [
+          "32019L0984",
+          "Decision (EU) 2019/984 of the European Parliament and of the Council of 5 June 2",
+          "Vehicle cab aerodynamic rules - transport sector specific, not CleanTech startup focused"
+        ],
+        [
+          "32023L1978",
+          "Commission Implementing Decision (EU) 2023/1978 of 21 September 2023 on the appl",
+          "German-specific procurement decision for electricity generation - too narrow and country-specific"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32014D0224",
+          "Commission Implementing Decision of 16 April 2014 on the transfer of assigned am"
+        ],
+        [
+          "32021R0781",
+          "Commission Implementing Decision (EU) 2021/781 of 10 May 2021 on the publication"
+        ],
+        [
+          "32015L1814",
+          "Decision (EU) 2015/1814 of the European Parliament and of the Council of 6 Octob"
+        ],
+        [
+          "32023D0852",
+          "Decision (EU) 2023/852 of the European Parliament and of the Council of 19 April"
+        ],
+        [
+          "32013D0529",
+          "Decision No 529/2013/EU of the European Parliament and of the Council of 21 May "
+        ],
+        [
+          "32020R1044",
+          "Commission Delegated Regulation (EU) 2020/1044 of 8 May 2020 supplementing Regul"
+        ],
+        [
+          "32025D1315",
+          "Council Decision (EU) 2025/1315 of 17 June 2025 on the position to be taken on b"
+        ],
+        [
+          "32016D1841",
+          "Council Decision (EU) 2016/1841 of 5 October 2016 on the conclusion, on behalf o"
+        ],
+        [
+          "32020R0022",
+          "Commission Delegated Regulation (EU) 2020/22 of 31 October 2019 amending Annexes"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 17,
+      "cluster_name": "AI/ML Startup Compliance",
+      "original_count": 3,
+      "valid_count": 1,
+      "removed_count": 2,
+      "added_count": 1,
+      "removed_laws": [
+        [
+          "32022D2269",
+          "Council Decision (CFSP) 2022/2269 of 18 November 2022 on Union support for the i",
+          "CFSP decision focused on peace and security applications, not startup compliance requirements"
+        ],
+        [
+          "32022D2349",
+          "Council Decision (EU) 2022/2349 of 21 November 2022 authorising the opening of n",
+          "Diplomatic decision about international negotiations, not regulatory compliance framework for AI startups"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32023R1484",
+          "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 18,
+      "cluster_name": "E-commerce & Platform Startup Compliance",
+      "original_count": 6,
+      "valid_count": 3,
+      "removed_count": 3,
+      "added_count": 2,
+      "removed_laws": [
+        [
+          "32025R1310",
+          "Commission Implementing Regulation (EU) 2025/1310 of 3 July 2025 laying down the",
+          "Statistical data collection regulation for ICT/e-commerce statistics - not compliance requirements for platforms"
+        ],
+        [
+          "32022R1344",
+          "Commission Implementing Regulation (EU) 2022/1344 of 1 August 2022 laying down t",
+          "Statistical data collection regulation for ICT/e-commerce statistics - not compliance requirements for platforms"
+        ],
+        [
+          "32020R1030",
+          "Commission Implementing Regulation (EU) 2020/1030 of 15 July 2020 laying down th",
+          "Statistical data collection regulation for ICT/e-commerce statistics - not compliance requirements for platforms"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32023R1484",
+          "Commission Implementing Regulation (EU) 2023/1484 of 18 July 2023 specifying the"
+        ],
+        [
+          "32005D0752",
+          "Commission Decision of 24 October 2005 establishing an expert group on electroni"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 19,
+      "cluster_name": "Circular Economy Startup Compliance (EPR)",
+      "original_count": 50,
+      "valid_count": 0,
+      "removed_count": 50,
+      "added_count": 5,
+      "removed_laws": [
+        [
+          "32014D0827",
+          "Council Decision 2014/827/CFSP of 21 November 2014 amending Joint Action 2008/85",
+          "CFSP military operation against piracy, completely unrelated to circular economy or EPR"
+        ],
+        [
+          "32013D0383",
+          "Council Decision 2013/383/CFSP of 15 July 2013 amending and extending the mandat",
+          "CFSP decision on EU Special Representative to African Union, unrelated to circular economy or EPR"
+        ],
+        [
+          "32014D0023",
+          "Council Decision 2014/23/CFSP of 20 January 2014 repealing Decision 2013/350/CFS",
+          "CFSP decision on EU Special Representative for Middle East, unrelated to circular economy or EPR"
+        ],
+        [
+          "32018D2007",
+          "Council Decision (CFSP) 2018/2007 of 17 December 2018 amending Joint Action 2008",
+          "CFSP military operation against piracy, completely unrelated to circular economy or EPR"
+        ],
+        [
+          "32019R1980",
+          "Commission Implementing Regulation (EU) 2019/1980 of 26 November 2019 amending R",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32015R2380",
+          "Commission Implementing Regulation (EU) 2015/2380 of 16 December 2015 amending R",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32023D0963",
+          "Council Decision (CFSP) 2023/963 of 15 May 2023 appointing the European Union Sp",
+          "CFSP decision appointing Special Representative for Gulf region, unrelated to circular economy or EPR"
+        ],
+        [
+          "32021R1892",
+          "Commission Implementing Regulation (EU) 2021/1892 of 27 October 2021 amending Re",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32025D1315",
+          "Council Decision (EU) 2025/1315 of 17 June 2025 on the position to be taken on b",
+          "Climate fund decision, while environmental, not specifically about EPR or circular economy compliance"
+        ],
+        [
+          "32016R0112",
+          "Commission Implementing Regulation (EU) 2016/112 of 27 January 2016 amending Reg",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32020R0449",
+          "Commission Implementing Regulation (EU) 2020/449 of 25 March 2020 amending Regul",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32013D0353",
+          "Council Decision 2013/353/CFSP of 2 July 2013 amending and extending the mandate",
+          "CFSP decision on Special Representative for South Caucasus, unrelated to circular economy or EPR"
+        ],
+        [
+          "32019R1098",
+          "Commission Implementing Regulation (EU) 2019/1098 of 26 June 2019 amending Regul",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32015R0139",
+          "Commission Implementing Regulation (EU) 2015/139 of 27 January 2015 amending Reg",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32011R1074",
+          "Commission Implementing Regulation (EU) No 1074/2011 of 24 October 2011 concerni",
+          "Feed additive authorization for piglets, unrelated to circular economy or EPR"
+        ],
+        [
+          "32018R0983",
+          "Commission Implementing Regulation (EU) 2018/983 of 11 July 2018 concerning the ",
+          "Feed additive authorization for porcine species, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022D2490",
+          "Council Decision (EU) 2022/2490 of 8 December 2022 authorising the European Comm",
+          "Council decision on negotiations with Tajikistan, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022R2302",
+          "Commission Implementing Regulation (EU) 2022/2302 of 23 November 2022 amending R",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32010D0569",
+          "Commission Decision of 23 June 2010 concerning tax aid granted by France to the ",
+          "State aid decision for fishing industry, unrelated to circular economy or EPR"
+        ],
+        [
+          null,
+          "Corrigendum to Commission Delegated Regulation (EU) 2020/1794 of 16 September 20",
+          "Organic farming regulation corrigendum, unrelated to circular economy or EPR"
+        ],
+        [
+          "32010D0110",
+          "Council Decision 2010/110/CFSP of 22 February 2010 extending the mandate of the ",
+          "CFSP decision on Special Representative for Sudan, unrelated to circular economy or EPR"
+        ],
+        [
+          null,
+          "Corrigendum to Commission Implementing Regulation (EU) 2021/2050 of 24 November ",
+          "Feed additive authorization for poultry, unrelated to circular economy or EPR"
+        ],
+        [
+          "32014D0244",
+          "Political and Security Committee Decision Atalanta/2/2014 of 29 April 2014 on th",
+          "Military operation decision against piracy, unrelated to circular economy or EPR"
+        ],
+        [
+          "32010D0465",
+          "Decision of the Council and the Representatives of the Governments of the Member",
+          "Air transport agreement with US, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022R0979",
+          "Commission Implementing Regulation (EU) 2022/979 of 22 June 2022 amending Regula",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022R1674",
+          "Commission Implementing Regulation (EU) 2022/1674 of 28 September 2022 amending ",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022D1625",
+          "Council Decision (CFSP) 2022/1625 of 20 September 2022 on the consequences of th",
+          "CFSP decision on civilian crisis management, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022R0475",
+          "Commission Implementing Regulation (EU) 2022/475 of 23 March 2022 amending Regul",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32023R1328",
+          "Commission Implementing Regulation (EU) 2023/1328 of 28 June 2023 amending Regul",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32013R0777",
+          "Commission Regulation (EU) No 777/2013 of 12 August 2013 amending Annexes II, II",
+          "Pesticide residue limits regulation, food safety related but not EPR or circular economy"
+        ],
+        [
+          null,
+          "Decision of the High Representative of the Union for Foreign Affairs and Securit",
+          "Data protection rules for External Action Service, unrelated to circular economy or EPR"
+        ],
+        [
+          "32014R0798",
+          "Commission Implementing Regulation (EU) No 798/2014 of 23 July 2014 amending Reg",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          null,
+          "Council Decision of 21 February 2023 appointing four representatives of Member S",
+          "Food Safety Authority management board appointment, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022R0923",
+          "Commission Delegated Regulation (EU) 2022/923 of 11 March 2022 correcting the Sw",
+          "Organic plant reproductive material regulation, while environmental, not about EPR or circular economy compliance for startups"
+        ],
+        [
+          "32015R0515",
+          "Commission Implementing Regulation (EU) 2015/515 of 25 March 2015 amending Regul",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32012D0174",
+          "Council Decision 2012/174/CFSP of 23 March 2012 amending Joint Action 2008/851/C",
+          "CFSP military operation against piracy, unrelated to circular economy or EPR"
+        ],
+        [
+          "32009D0758",
+          "Political and Security Committee Decision ATALANTA/7/2009 of 2 October 2009 amen",
+          "Military operation decision against piracy, unrelated to circular economy or EPR"
+        ],
+        [
+          "32020D2090",
+          "Decision (EU) 2020/2090 of the European Central Bank of 4 December 2020 amending",
+          "ECB decision on euro banknotes, unrelated to circular economy or EPR"
+        ],
+        [
+          "32022D0164",
+          "Political and Security Committee Decision (CFSP) 2022/164 of 3 February 2022 on ",
+          "Military operation decision on drug trafficking, unrelated to circular economy or EPR"
+        ],
+        [
+          "32011D0846",
+          "Political and Security Committee Decision ATALANTA/5/2011 of 16 December 2011 am",
+          "Military operation decision against piracy, unrelated to circular economy or EPR"
+        ],
+        [
+          null,
+          "Commission Opinion of 21 December 2011 relating to the plan for the disposal of ",
+          "Nuclear waste disposal opinion, while waste-related, specifically about radioactive waste not EPR/circular economy"
+        ],
+        [
+          "32022R0565",
+          "Commission Implementing Regulation (EU) 2022/565 of 7 April 2022 concerning the ",
+          "Feed additive authorization for dairy cows, unrelated to circular economy or EPR"
+        ],
+        [
+          "32024R2584",
+          "Commission Implementing Regulation (EU) 2024/2584 of 25 September 2024 amending ",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32018R0481",
+          "Commission Implementing Regulation (EU) 2018/481 of 21 March 2018 amending Regul",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          "32015D0485",
+          "Council Decision (CFSP) 2015/485 of 20 March 2015 extending the mandate of the E",
+          "CFSP decision on Special Representative in Kosovo, unrelated to circular economy or EPR"
+        ],
+        [
+          "32016D0713",
+          "Council Decision (CFSP) 2016/713 of 12 May 2016 amending Joint Action 2008/851/C",
+          "CFSP military operation against piracy, unrelated to circular economy or EPR"
+        ],
+        [
+          "32023R1490",
+          "Commission Regulation (EU) 2023/1490 of 19 July 2023 amending Regulation (EC) No",
+          "Cosmetic products regulation on hazardous substances, business/industry regulation but not EPR or circular economy"
+        ],
+        [
+          "32018R1064",
+          "Commission Implementing Regulation (EU) 2018/1064 of 25 July 2018 amending Regul",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ],
+        [
+          null,
+          "Commission Opinion of 7 November 2017 relating to the modified plan for the disp",
+          "Nuclear waste disposal opinion, while waste-related, specifically about radioactive waste not EPR/circular economy"
+        ],
+        [
+          "32021R2067",
+          "Commission Implementing Regulation (EU) 2021/2067 of 24 November 2021 amending R",
+          "Agricultural regulation on poultry prices, unrelated to circular economy or EPR"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32016D1349",
+          "Commission Decision (EU) 2016/1349 of 5 August 2016 establishing the ecological "
+        ],
+        [
+          "32006D0237",
+          "Commission Decision of 22 June 2005 on the aid measures implemented by the Nethe"
+        ],
+        [
+          "32025R1988",
+          "Commission Regulation (EU) 2025/1988 of 2 October 2025 amending Annex XVII to Re"
+        ],
+        [
+          "32008L0350",
+          "Commission Decision of 3 April 2008 on the rules of England, Wales, Northern Ire"
+        ],
+        [
+          "32012R0206",
+          "Commission Regulation (EU) No 206/2012 of 6 March 2012 implementing Directive 20"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 20,
+      "cluster_name": "Food & AgTech Startup Compliance",
+      "original_count": 50,
+      "valid_count": 48,
+      "removed_count": 2,
+      "added_count": 15,
+      "removed_laws": [
+        [
+          "32008L0043",
+          "Commission Directive 2008/43/EC of 4 April 2008 setting up, pursuant to Council ",
+          "Explosives identification system - completely unrelated to food/agriculture"
+        ],
+        [
+          "32023R0590",
+          "Commission Delegated Regulation (EU) 2023/590 of 12 January 2023 correcting the ",
+          "Animal establishment rules correction - not directly related to food/agtech startup compliance"
+        ]
+      ],
+      "added_laws": [
+        [
+          "32014R0200",
+          "Commission Implementing Regulation (EU) No 200/2014 of 3 March 2014 amending the"
+        ],
+        [
+          "32015H1381",
+          "Commission Recommendation (EU) 2015/1381 of 10 August 2015 on the monitoring of "
+        ],
+        [
+          "32016R0452",
+          "Commission Regulation (EU) 2016/452 of 29 March 2016 amending Annexes II and III"
+        ],
+        [
+          "32007R1243",
+          "Commission Regulation (EC) No 1243/2007 of 24 October 2007 amending Annex III to"
+        ],
+        [
+          "32018R1558",
+          "Commission Implementing Regulation (EU) 2018/1558 of 17 October 2018 concerning "
+        ],
+        [
+          "32018R0627",
+          "Commission Regulation (EU) 2018/627 of 20 April 2018 correcting certain language"
+        ],
+        [
+          "32022R0078",
+          "Commission Regulation (EU) 2022/78 of 19 January 2022 amending Annexes II and II"
+        ],
+        [
+          "32018R1555",
+          "Commission Regulation (EU) 2018/1555 of 17 October 2018 refusing to authorise ce"
+        ],
+        [
+          "32022R0860",
+          "Commission Regulation (EU) 2022/860 of 1 June 2022 amending Annex III to Regulat"
+        ],
+        [
+          "32014H0661",
+          "Commission Recommendation of 10 September 2014 on the monitoring of the presence"
+        ],
+        [
+          "32004R1935",
+          "Regulation (EC) No 1935/2004 of the European Parliament and of the Council of 27"
+        ],
+        [
+          "32025R0651",
+          "Commission Regulation (EU) 2025/651 of 2 April 2025 amending Regulation (EC) No "
+        ],
+        [
+          "32013R0818",
+          "Commission Regulation (EU) No 818/2013 of 28 August 2013 amending Annex III to R"
+        ],
+        [
+          "31998L0028",
+          "Commission Directive 98/28/EC of 29 April 1998 granting a derogation from certai"
+        ],
+        [
+          "32019R0988",
+          "Commission Regulation (EU) 2019/988 of 17 June 2019 correcting the French langua"
+        ]
+      ]
+    },
+    {
+      "cluster_id": 21,
+      "cluster_name": "SaaS & B2B Startup Compliance",
+      "original_count": 23,
+      "valid_count": 6,
+      "removed_count": 17,
+      "added_count": 0,
+      "removed_laws": [
+        [
+          "32019R1583",
+          "Commission Implementing Regulation (EU) 2019/1583 of 25 September 2019 amending ",
+          "Aviation security cybersecurity measures - sector-specific to aviation, not applicable to general SaaS/B2B startups"
+        ],
+        [
+          "32019D0165",
+          "Commission Decision (EU) 2019/165 of 1 February 2019 laying down internal rules ",
+          "Internal Commission rules for administrative proceedings - not applicable to private SaaS/B2B companies"
+        ],
+        [
+          null,
+          "Decision of the European Data Protection Supervisor of 15 May 2020 adopting the ",
+          "Internal EDPS procedural rules - not applicable to private companies"
+        ],
+        [
+          "32021R0887",
+          "Regulation (EU) 2021/887 of the European Parliament and of the Council of 20 May",
+          "Establishes cybersecurity competence centers - institutional framework, not direct compliance requirements for companies"
+        ],
+        [
+          null,
+          "Decision of the European Data Protection Supervisor (EDPS) of 14 October 2022 am",
+          "Internal EDPS procedural amendments - not applicable to private companies"
+        ],
+        [
+          "32025D1458",
+          "Council Implementing Decision (EU) 2025/1458 of 14 July 2025 authorising support",
+          "Specific support decision for Moldova - not a general compliance requirement for SaaS/B2B companies"
+        ],
+        [
+          null,
+          "European Data Protection Supervisor Decision of 2 April 2019 on internal rules c",
+          "Internal EDPS rules - not applicable to private companies"
+        ],
+        [
+          "32022R1409",
+          "Commission Implementing Regulation (EU) 2022/1409 of 18 August 2022 concerning t",
+          "Specific implementing regulation for a particular web service - not general SaaS/B2B compliance"
+        ],
+        [
+          "32023D0273",
+          "Council Decision (EU) 2023/273 of 30 January 2023 on the position to be adopted,",
+          "EEA agreement amendment regarding cybersecurity center - institutional, not direct compliance requirements"
+        ],
+        [
+          "32024R1366",
+          "Commission Delegated Regulation (EU) 2024/1366 of 11 March 2024 supplementing Re",
+          "Sector-specific cybersecurity rules for electricity flows - not applicable to general SaaS/B2B companies"
+        ],
+        [
+          "32020R0969",
+          "Commission Decision (EU) 2020/969 of 3 July 2020 laying down implementing rules ",
+          "Internal Commission rules for data protection officers - not applicable to private companies"
+        ],
+        [
+          "32022R1380",
+          "Commission Implementing Regulation (EU) 2022/1380 of 8 August 2022 laying down t",
+          "Specific rules for carrier verification queries - sector-specific, not general SaaS/B2B compliance"
+        ],
+        [
+          "32021R1093",
+          "Council Decision (EU) 2021/1093 of 28 June 2021 laying down implementing rules c",
+          "Internal Council rules for data protection officer - not applicable to private companies"
+        ],
+        [
+          "32025R1759",
+          "Commission Delegated Regulation (EU) 2025/1759 of 19 June 2025 correcting certai",
+          "Correction to electricity sector cybersecurity rules - not applicable to general SaaS/B2B companies"
+        ],
+        [
+          null,
+          "Decision of the Management Board of the European Union Agency for Cybersecurity ",
+          "Internal ENISA rules - not applicable to private companies"
+        ],
+        [
+          "32020D0655",
+          "Decision (EU) 2020/655 of the European Central Bank of 5 May 2020 adopting imple",
+          "Internal ECB data protection rules - not applicable to private companies"
+        ],
+        [
+          "32017R0443",
+          "Council Decision (EU) 2017/443 of 6 March 2017 establishing the position to be a",
+          "UN vehicle regulations with cyber security guidelines - automotive sector-specific, not general SaaS/B2B compliance"
+        ]
+      ],
+      "added_laws": []
+    }
+  ]
+}

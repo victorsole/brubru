@@ -1,0 +1,138 @@
+{
+  "dg_code": "ECFIN",
+  "dg_name": "Economic and Financial Affairs",
+  "full_name": "Directorate-General for Economic and Financial Affairs",
+  "date_of_effect": "2025-11-01",
+  "commissioner": {
+    "name": "Valdis Dombrovskis",
+    "title": "Commissioner"
+  },
+  "leadership": {
+    "director_general": {
+      "name": "Maarten Verwey",
+      "position": "Director-General",
+      "assistants": [
+        {
+          "name": "Gijuin Brussiganom",
+          "role": "Assistant"
+        },
+        {
+          "name": "Giulia Filippeschi",
+          "role": "Assistant"
+        }
+      ]
+    },
+    "deputy_director_generals": [
+      {
+        "name": "vacant",
+        "position": "Deputy Director-General",
+        "responsibility": "Investment and International"
+      },
+      {
+        "name": "Declan Costello",
+        "position": "Deputy Director-General",
+        "responsibility": "Coordination of Economic Policies of Member States"
+      }
+    ],
+    "principal_adviser": {
+      "name": "vacant",
+      "title": "Principal Adviser",
+      "area": "For Sustainable Growth and the European Semester",
+      "code": "IT AHEIT"
+    },
+    "advisers": [
+      {
+        "name": "vacant",
+        "title": "Principal Adviser",
+        "area": "EU Directora the EBRD"
+      },
+      {
+        "name": "vacant",
+        "title": "Principal Adviser",
+        "area": "For MFP, InvestEU & the Relations with ITI & RIS"
+      },
+      {
+        "name": "vacant",
+        "title": "Adviser",
+        "area": "On InvestEU and EIB Governance"
+      },
+      {
+        "name": "Charlotte van Hootonrik",
+        "title": "Adviser",
+        "area": "On Rural and Country-Specific"
+      }
+    ]
+  },
+  "directorates": {
+    "directorate_a": {
+      "code": "ECFIN.A",
+      "name": "Policy Coordination, Economic Architecture & Member State Communication",
+      "director": {
+        "name": "Sebastien Dauchy",
+        "position": "Director"
+      }
+    },
+    "directorate_b": {
+      "code": "ECFIN.B",
+      "name": "Investment, Growth & Structural Policies",
+      "director": {
+        "name": "Lorenzo Codogno",
+        "position": "Director"
+      }
+    },
+    "directorate_c": {
+      "code": "ECFIN.C",
+      "name": "Macroeconomic Policies",
+      "director": {
+        "name": "vacant",
+        "position": "Director"
+      }
+    },
+    "directorate_d": {
+      "code": "ECFIN.D",
+      "name": "International Economic and Financial Issues",
+      "director": {
+        "name": "Margit Molnar",
+        "position": "Director"
+      }
+    },
+    "directorate_e": {
+      "code": "ECFIN.E",
+      "name": "Economics of the Member States I",
+      "director": {
+        "name": "Stephanie Riso",
+        "position": "Director"
+      }
+    },
+    "directorate_f": {
+      "code": "ECFIN.F",
+      "name": "Economics of the Member States II",
+      "director": {
+        "name": "Valerio Spiriano",
+        "position": "Director"
+      }
+    },
+    "directorate_g": {
+      "code": "ECFIN.G",
+      "name": "Economics of the Member States III",
+      "director": {
+        "name": "Atanas Pekanov",
+        "position": "Director"
+      }
+    },
+    "directorate_h": {
+      "code": "ECFIN.H",
+      "name": "Resources & Performance Management",
+      "director": {
+        "name": "Stefanos Sinanidis",
+        "position": "Director"
+      }
+    }
+  },
+  "notes": [
+    "Deputy to the Director",
+    "Staff in FI Adaptations: S. Ruhnot - Adviser - Head of the economic and financial section in the EU delegation to China",
+    "Seconded Managers and Advisers: II Fin - seconded to the Cabinet of the President of the Council. II G Graise - seconded to the European Court of Auditors",
+    "In London: HII Staff in both Brussels and Luxembourg. DI Staff in both Brussels and Athens"
+  ]
+}

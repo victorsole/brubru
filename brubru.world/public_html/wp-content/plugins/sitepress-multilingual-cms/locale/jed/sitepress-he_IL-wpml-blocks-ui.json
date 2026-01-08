@@ -1,0 +1,186 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "he"
+         },
+         "Advanced": [
+            "מתקדם"
+         ],
+         "HTML anchor": [
+            "עוגן HTML"
+         ],
+         "Add a shortcut to this block when loading the page using the “#anchor” URL.": [
+            "הוסף קיצור דרך לבלוק זה בעת טעינת העמוד באמצעות כתובת ה-URL \"#anchor\"."
+         ],
+         "Additional CSS class(es)": [
+            "מחלקות CSS נוספות"
+         ],
+         "Separate multiple classes with spaces.": [
+            "הפרד בין מספר מחלקות באמצעות רווחים."
+         ],
+         "Color": [
+            "צבע"
+         ],
+         "px": [
+            "פיקסלים"
+         ],
+         "%": [
+            "%"
+         ],
+         "Dimensions": [
+            "מידות"
+         ],
+         "BLOCK": [
+            "בלוק"
+         ],
+         "Block margin": [
+            "שוליים של הבלוק"
+         ],
+         "Block padding": [
+            "ריפוד של הבלוק"
+         ],
+         "LANGUAGE": [
+            "שפה"
+         ],
+         "Language spacing": [
+            "מרווח בין שפות"
+         ],
+         "Language padding": [
+            "ריפוד של השפה"
+         ],
+         "Display": [
+            "תצוגה"
+         ],
+         "Show flag": [
+            "הצג דגל"
+         ],
+         "Show language name": [
+            "הצג שם שפה"
+         ],
+         "Display language name in": [
+            "הצג את שם השפה ב"
+         ],
+         "Style": [
+            "סגנון"
+         ],
+         "Flag settings": [
+            "הגדרות דגל"
+         ],
+         "Width": [
+            "רוחב"
+         ],
+         "Height": [
+            "גובה"
+         ],
+         "Spacing": [
+            "מרווח"
+         ],
+         "Allow wrapping to multiple lines": [
+            "אפשר גלישה למספר שורות"
+         ],
+         "Open on click": [
+            "פתח בלחיצה"
+         ],
+         "Show arrow": [
+            "הצג חץ"
+         ],
+         "Layout": [
+            "פריסה"
+         ],
+         "Justification": [
+            "יישור"
+         ],
+         "Orientation": [
+            "כיוון"
+         ],
+         "Typography": [
+            "טיפוגרפיה"
+         ],
+         "Background": [
+            "רקע"
+         ],
+         "Language Text": [
+            "טקסט שפה"
+         ],
+         "Language Background": [
+            "רקע שפה"
+         ],
+         "Current language text": [
+            "טקסט שפה נוכחית"
+         ],
+         "Current language background": [
+            "רקע שפה נוכחית"
+         ],
+         "Full name": [
+            "שם מלא"
+         ],
+         "Code": [
+            "קוד"
+         ],
+         "Justify items left": [
+            "יישר פריטים לשמאל"
+         ],
+         "Justify items center": [
+            "יישר פריטים למרכז"
+         ],
+         "Justify items right": [
+            "יישר פריטים לימין"
+         ],
+         "Justify items space between": [
+            "יישר פריטים עם רווח ביניהם"
+         ],
+         "Horizontal": [
+            "אופקי"
+         ],
+         "Vertical": [
+            "אנכי"
+         ],
+         "Normal": [
+            "רגיל"
+         ],
+         "Medium": [
+            "בינוני"
+         ],
+         "Large": [
+            "גדול"
+         ],
+         "X-Large": [
+            "גדול במיוחד"
+         ],
+         "Ab": [
+            "אב"
+         ],
+         "AB": [
+            "אב"
+         ],
+         "ab": [
+            "אב"
+         ],
+         "Small": [
+            "קטן"
+         ],
+         "Displays the WPML Language Switcher.": [
+            "מציג את מחליף השפות של WPML."
+         ],
+         "Language Switcher": [
+            "מחליף שפות"
+         ],
+         "displays the WPML Language Switcher": [
+            "מציג את מחליף השפות של WPML"
+         ],
+         "Displays the WPML Language Switcher. <br/> Learn <a>how to translate this block</a>.": [
+            "מציג את מחליף השפות של WPML. <br/> למד <a>כיצד לתרגם בלוק זה</a>."
+         ],
+         "Navigation Language Switcher": [
+            "מחליף שפות לניווט"
+         ],
+         "Reset all": [
+            "אפס הכל"
+         ]
+      }
+   }
+}

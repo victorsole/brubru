@@ -1,0 +1,339 @@
+{
+  "source_file": "form-type.gc",
+  "columns": [
+    {
+      "id": "code",
+      "use": "required"
+    },
+    {
+      "id": "Name",
+      "use": "optional"
+    },
+    {
+      "id": "bul_label",
+      "use": "optional"
+    },
+    {
+      "id": "spa_label",
+      "use": "optional"
+    },
+    {
+      "id": "ces_label",
+      "use": "optional"
+    },
+    {
+      "id": "dan_label",
+      "use": "optional"
+    },
+    {
+      "id": "deu_label",
+      "use": "optional"
+    },
+    {
+      "id": "est_label",
+      "use": "optional"
+    },
+    {
+      "id": "ell_label",
+      "use": "optional"
+    },
+    {
+      "id": "eng_label",
+      "use": "optional"
+    },
+    {
+      "id": "fra_label",
+      "use": "optional"
+    },
+    {
+      "id": "gle_label",
+      "use": "optional"
+    },
+    {
+      "id": "hrv_label",
+      "use": "optional"
+    },
+    {
+      "id": "ita_label",
+      "use": "optional"
+    },
+    {
+      "id": "lav_label",
+      "use": "optional"
+    },
+    {
+      "id": "lit_label",
+      "use": "optional"
+    },
+    {
+      "id": "hun_label",
+      "use": "optional"
+    },
+    {
+      "id": "mlt_label",
+      "use": "optional"
+    },
+    {
+      "id": "nld_label",
+      "use": "optional"
+    },
+    {
+      "id": "pol_label",
+      "use": "optional"
+    },
+    {
+      "id": "por_label",
+      "use": "optional"
+    },
+    {
+      "id": "ron_label",
+      "use": "optional"
+    },
+    {
+      "id": "slk_label",
+      "use": "optional"
+    },
+    {
+      "id": "slv_label",
+      "use": "optional"
+    },
+    {
+      "id": "fin_label",
+      "use": "optional"
+    },
+    {
+      "id": "swe_label",
+      "use": "optional"
+    }
+  ],
+  "items": [
+    {
+      "code": "bri",
+      "Name": "Business registration information",
+      "bul_label": "Информация за регистрацията на предприятие",
+      "ces_label": "Informace o registraci podniku",
+      "dan_label": "Information om virksomhedsregistrering",
+      "deu_label": "Angaben zur Unternehmensregistrierung",
+      "ell_label": "Στοιχεία καταχώρισης επιχειρήσεων",
+      "eng_label": "Business registration information",
+      "spa_label": "Información sobre el registro de empresas",
+      "est_label": "Ettevõtete registreerimisega seotud teave",
+      "fin_label": "Yritysrekisteritiedot",
+      "fra_label": "Informations relatives à l’enregistrement des entreprises",
+      "gle_label": "Eolas faoi chlárú gnó",
+      "hrv_label": "Informacije o registraciji poduzeća",
+      "hun_label": "Cégadatok",
+      "ita_label": "Informazioni sulla registrazione delle imprese",
+      "lit_label": "Įmonės registravimo informacija",
+      "lav_label": "Informācija par uzņēmumu reģistrāciju",
+      "mlt_label": "Informazzjoni dwar ir-reġistrazzjoni tan-negozju",
+      "nld_label": "Informatie over bedrijfsregistratie",
+      "pol_label": "Informacja o rejestracji działalności gospodarczej",
+      "por_label": "Informações do registo comercial",
+      "ron_label": "Informații privind statutul în Registrul Comerțului",
+      "slk_label": "Informácie o registrácii podniku",
+      "slv_label": "Podatki o registraciji podjetja",
+      "swe_label": "Bolagsregistreringsinformation"
+    },
+    {
+      "code": "competition",
+      "Name": "Competition",
+      "bul_label": "Състезателна процедура",
+      "ces_label": "Zadávání",
+      "dan_label": "Konkurrencevilkår",
+      "deu_label": "Wettbewerb",
+      "ell_label": "Διαγωνισμός",
+      "eng_label": "Competition",
+      "spa_label": "Licitación",
+      "est_label": "Hange",
+      "fin_label": "Kilpailu",
+      "fra_label": "Mise en concurrence",
+      "gle_label": "Iomaíocht",
+      "hrv_label": "Nadmetanje",
+      "hun_label": "Verseny",
+      "ita_label": "Gara",
+      "lit_label": "Konkursas",
+      "lav_label": "Konkurss",
+      "mlt_label": "Kompetizzjoni",
+      "nld_label": "Mededinging",
+      "pol_label": "Procedura konkurencyjna",
+      "por_label": "Concurso",
+      "ron_label": "Procedură concurențială",
+      "slk_label": "Súťaž",
+      "slv_label": "Javni razpis",
+      "swe_label": "Konkurrensutsättning"
+    },
+    {
+      "code": "completion",
+      "Name": "Completion",
+      "bul_label": "Приключване",
+      "ces_label": "Dokončení",
+      "dan_label": "Færdiggørelse",
+      "deu_label": "Abschlussbekanntmachung",
+      "ell_label": "Ολοκλήρωση",
+      "eng_label": "Completion",
+      "spa_label": "Finalización",
+      "est_label": "Lõpuleviimine",
+      "fin_label": "Toteutus",
+      "fra_label": "Achèvement",
+      "gle_label": "Cur i gcrích",
+      "hrv_label": "Izvršenje",
+      "hun_label": "Teljesítés",
+      "ita_label": "Completamento",
+      "lit_label": "Užbaigimas",
+      "lav_label": "Izpildīts",
+      "mlt_label": "Tlestija",
+      "nld_label": "Voltooiing",
+      "pol_label": "Zakończenie",
+      "por_label": "Conclusão",
+      "ron_label": "Încheiere",
+      "slk_label": "Dokončenie",
+      "slv_label": "Zaključek",
+      "swe_label": "Genomfört"
+    },
+    {
+      "code": "consultation",
+      "Name": "Consultation",
+      "bul_label": "Консултация",
+      "ces_label": "Konzultace",
+      "dan_label": "Høring",
+      "deu_label": "Vorankündigung",
+      "ell_label": "Διαβούλευση",
+      "eng_label": "Consultation",
+      "spa_label": "Consulta",
+      "est_label": "Konsulteerimine",
+      "fin_label": "Kartoitus",
+      "fra_label": "Consultation",
+      "gle_label": "Comhairliúchán",
+      "hrv_label": "Provjera",
+      "hun_label": "Konzultáció",
+      "ita_label": "Consultazione",
+      "lit_label": "Konsultacija",
+      "lav_label": "Apspriešanās",
+      "mlt_label": "Konsultazzjoni",
+      "nld_label": "Raadpleging",
+      "pol_label": "Konsultacje",
+      "por_label": "Consulta",
+      "ron_label": "Consultare",
+      "slk_label": "Konzultácia",
+      "slv_label": "Posvetovanje",
+      "swe_label": "Samråd"
+    },
+    {
+      "code": "cont-modif",
+      "Name": "Contract modification",
+      "bul_label": "Изменение на договор",
+      "ces_label": "Změna smlouvy",
+      "dan_label": "Kontraktændring",
+      "deu_label": "Auftragsänderung",
+      "ell_label": "Τροποποίηση σύμβασης",
+      "eng_label": "Contract modification",
+      "spa_label": "Modificación de contrato",
+      "est_label": "Lepingu muutmine",
+      "fin_label": "Sopimusmuutokset",
+      "fra_label": "Modification du marché",
+      "gle_label": "Mionathrú conartha",
+      "hrv_label": "Izmjena ugovora",
+      "hun_label": "Szerződésmódosítás",
+      "ita_label": "Modifica dell'appalto",
+      "lit_label": "Sutarties keitimas",
+      "lav_label": "Līguma grozījumi",
+      "mlt_label": "Modifika fil-kuntratt",
+      "nld_label": "Wijziging van een opdracht",
+      "pol_label": "Modyfikacja umowy",
+      "por_label": "Modificação do contrato",
+      "ron_label": "Modificări aduse contractului",
+      "slk_label": "Úprava zmluvy",
+      "slv_label": "Sprememba naročila",
+      "swe_label": "Ändring av kontrakt och ramavtal"
+    },
+    {
+      "code": "dir-awa-pre",
+      "Name": "Direct award preannouncement",
+      "bul_label": "Предварителна обява за пряко възлагане",
+      "ces_label": "Oznámení o záměru uzavřít smlouvu",
+      "dan_label": "Forudgående underretning om direkte tildeling",
+      "deu_label": "Vorankündigung – Direktvergabe",
+      "ell_label": "Προκοινοποίηση απευθείας ανάθεσης",
+      "eng_label": "Direct award preannouncement",
+      "spa_label": "Notificación previa de adjudicación directa",
+      "est_label": "Teavitamine kavandatavast otselepingust",
+      "fin_label": "Ennakkoilmoitus suorahankinnasta",
+      "fra_label": "Notification préalable d’attribution directe",
+      "gle_label": "Réamhfhógra maidir le dámhachtain dhíreach",
+      "hrv_label": "Prethodna obavijest o izravnoj dodjeli",
+      "hun_label": "Közvetlen odaítélés előzetes bejelentése",
+      "ita_label": "Preavviso di aggiudicazione diretta",
+      "lit_label": "Išankstinis skelbimas apie tiesioginį sutarties skyrimą",
+      "lav_label": "Tiešas piešķiršanas priekšpaziņojums",
+      "mlt_label": "Notifika minn qabel tal-għoti dirett",
+      "nld_label": "Vooraankondiging onderhandse gunning",
+      "pol_label": "Uprzednie zawiadomienie o bezpośrednim udzieleniu zamówienia",
+      "por_label": "Pré-anúncio de adjudicação direta",
+      "ron_label": "Notificare prealabilă a atribuirii directe",
+      "slk_label": "Predbežné oznámenie o zámere uzavrieť zmluvu",
+      "slv_label": "Predhodno obvestilo o neposredni dodelitvi",
+      "swe_label": "Frivillig förhandsinsyn"
+    },
+    {
+      "code": "planning",
+      "Name": "Planning",
+      "bul_label": "Планиране",
+      "ces_label": "Plánování",
+      "dan_label": "Planlægning",
+      "deu_label": "Planung",
+      "ell_label": "Σχεδιασμός",
+      "eng_label": "Planning",
+      "spa_label": "Planificación",
+      "est_label": "Kavandamine",
+      "fin_label": "Suunnittelu",
+      "fra_label": "Planification",
+      "gle_label": "Pleanáil",
+      "hrv_label": "Planiranje",
+      "hun_label": "Tervezés",
+      "ita_label": "Programmazione",
+      "lit_label": "Planuojamas pirkimas",
+      "lav_label": "Plānošana",
+      "mlt_label": "Ippjanar",
+      "nld_label": "Geplande opdracht",
+      "pol_label": "Plan zakupu",
+      "por_label": "Planeamento",
+      "ron_label": "Planificare",
+      "slk_label": "Plánovanie obstarávania",
+      "slv_label": "Načrtovanje",
+      "swe_label": "Planering"
+    },
+    {
+      "code": "result",
+      "Name": "Result",
+      "bul_label": "Резултат",
+      "ces_label": "Výsledek",
+      "dan_label": "Resultater",
+      "deu_label": "Ergebnis",
+      "ell_label": "Αποτέλεσμα",
+      "eng_label": "Result",
+      "spa_label": "Resultados",
+      "est_label": "Tulemus",
+      "fin_label": "Tulokset",
+      "fra_label": "Résultats",
+      "gle_label": "Toradh",
+      "hrv_label": "Rezultati",
+      "hun_label": "Eredmény",
+      "ita_label": "Risultati",
+      "lit_label": "Rezultatai",
+      "lav_label": "Rezultāts",
+      "mlt_label": "Riżultat",
+      "nld_label": "Resultaat",
+      "pol_label": "Wyniki",
+      "por_label": "Resultados",
+      "ron_label": "Rezultat",
+      "slk_label": "Výsledok",
+      "slv_label": "Rezultati",
+      "swe_label": "Resultat"
+    }
+  ],
+  "identification": {
+    "short_name": "FormType",
+    "version": "20250924-0"
+  }
+}

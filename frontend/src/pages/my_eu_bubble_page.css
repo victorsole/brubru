@@ -1,0 +1,186 @@
+.my-eu-bubble-page {
+  position: relative;
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  padding: 2rem;
+}
+
+/* Semi-transparent overlay when background image is present */
+.my-eu-bubble-page[style*="background-image"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.85);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Ensure all content sits above the overlay */
+.my-eu-bubble-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.my-eu-bubble-page__header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.my-eu-bubble-page__icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.my-eu-bubble-page__header-text {
+  flex: 1;
+}
+
+.my-eu-bubble-page h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.my-eu-bubble-page__subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+.my-eu-bubble-page__layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+  align-items: start;
+}
+
+.my-eu-bubble-page__main {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.my-eu-bubble-page__tabs {
+  display: flex;
+  border-bottom: 2px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.my-eu-bubble-page__tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.my-eu-bubble-page__tab:hover {
+  background: #e9ecef;
+  color: #1a1a1a;
+}
+
+.my-eu-bubble-page__tab--active {
+  background: white;
+  border-bottom-color: #0066cc;
+  color: #0066cc;
+}
+
+.my-eu-bubble-page__tab-icon {
+  font-size: 1.5rem;
+}
+
+.my-eu-bubble-page__tab-label {
+  font-weight: 600;
+}
+
+.my-eu-bubble-page__content {
+  background: white;
+}
+
+.my-eu-bubble-page__sidebar {
+  position: sticky;
+  top: 2rem;
+  height: calc(100vh - 120px);
+  overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .my-eu-bubble-page__layout {
+    grid-template-columns: 1fr 350px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .my-eu-bubble-page__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .my-eu-bubble-page__sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .my-eu-bubble-page {
+    padding: 1rem;
+  }
+
+  .my-eu-bubble-page__header {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .my-eu-bubble-page h1 {
+    font-size: 1.5rem;
+  }
+
+  .my-eu-bubble-page__subtitle {
+    font-size: 0.875rem;
+  }
+
+  .my-eu-bubble-page__icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .my-eu-bubble-page__tabs {
+    overflow-x: auto;
+  }
+
+  .my-eu-bubble-page__tab {
+    flex: 0 0 auto;
+    min-width: 100px;
+  }
+
+  .my-eu-bubble-page__tab-icon {
+    font-size: 1.25rem;
+  }
+
+  .my-eu-bubble-page__tab-label {
+    font-size: 0.75rem;
+  }
+}

@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-24T13:08:43+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Get More Features with WPML's Advanced Translation Editor"
+msgstr "Få fler funktioner med WPML:s avancerade översättningsredigerare"
+
+msgid "Close banner"
+msgstr "Stäng banner"
+
+msgid "You're using the Classic Translation Editor, an old legacy tool, and missing out on the many features and efficiency of our Advanced Translation Editor:"
+msgstr "Du använder den klassiska översättningsredigeraren, ett äldre verktyg, och går miste om många funktioner och effektiviteten i vår avancerade översättningsredigerare:"
+
+msgid "Translation Memory"
+msgstr "Översättningsminne"
+
+msgid "HTML Protection"
+msgstr "HTML-skydd"
+
+msgid "Glossary"
+msgstr "Ordlista"
+
+msgid "Spellchecker"
+msgstr "Stavningskontroll"
+
+msgid "AI Assistant"
+msgstr "AI-assistent"
+
+msgid "Automatic Translation"
+msgstr "Automatisk översättning"
+
+msgid "Switch now for a faster, more convenient, and reliable translation experience."
+msgstr "Byt nu för en snabbare, bekvämare och mer pålitlig översättningsupplevelse."
+
+msgid "Switch Now"
+msgstr "Byt nu"
+
+msgid "Learn more about Advanced Translation Editor"
+msgstr "Läs mer om den avancerade översättningsredigeraren"
+
+msgid "Learn More"
+msgstr "Läs mer"

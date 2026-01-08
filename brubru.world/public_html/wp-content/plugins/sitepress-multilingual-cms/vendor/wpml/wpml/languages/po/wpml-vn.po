@@ -1,0 +1,195 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-07-22T17:40:02+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: wpml\n"
+
+#: src/config-admin-pages.php:126
+msgid "Translation Dashboard"
+msgstr "Bảng điều khiển dịch thuật"
+
+#: src/config-admin-pages.php:311
+msgid "Automatic translation settings"
+msgstr "Cài đặt dịch tự động"
+
+#: src/config-admin-pages.php:353
+msgid "WPML Setup"
+msgstr "Cài đặt WPML"
+
+#: src/config-admin-pages.php:382
+msgid "WPML Support"
+msgstr "Hỗ trợ WPML"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:27
+msgid "Database Version"
+msgstr "Phiên bản cơ sở dữ liệu"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:36
+msgid "Your %sMySQL%s version must be at least %s. Alternatively, you can use %sMariaDb%s version %s or higher."
+msgstr "Phiên bản %sMySQL%s của bạn phải ít nhất là %s. Hoặc bạn có thể sử dụng phiên bản %sMariaDb%s %s trở lên."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/DatabaseVersionRequirement.php:53
+msgid "Contact your hosting provider to upgrade MySQL %s or higher."
+msgstr "Liên hệ với nhà cung cấp dịch vụ lưu trữ của bạn để nâng cấp MySQL lên phiên bản %s hoặc cao hơn."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:31
+msgid "PHP eval() Function"
+msgstr "Hàm eval() của PHP"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:39
+msgid "The PHP eval() function is disabled by the Suhosin extension. WPML requires this function when Suhosin is enabled."
+msgstr "Chức năng PHP eval() đã bị vô hiệu hóa bởi tiện ích mở rộng Suhosin. WPML yêu cầu chức năng này khi Suhosin được kích hoạt."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/EvalFunctionRequirement.php:47
+msgid "Contact your hosting provider to enable the eval() function in the Suhosin configuration or disable the Suhosin extension."
+msgstr "Liên hệ với nhà cung cấp dịch vụ lưu trữ của bạn để bật hàm eval() trong cấu hình Suhosin hoặc vô hiệu hóa phần mở rộng Suhosin."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:31
+msgid "libxml PHP Module"
+msgstr "Mô-đun PHP libxml"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:40
+msgid "WPML requires libxml PHP Module version %s or higher to process XML correctly using SimpleXML."
+msgstr "WPML yêu cầu Mô-đun PHP libxml phiên bản %s trở lên để xử lý XML chính xác bằng SimpleXML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/LibXmlVersionRequirement.php:49
+msgid "Contact your hosting provider to upgrade the libxml PHP Module."
+msgstr "Liên hệ với nhà cung cấp dịch vụ lưu trữ của bạn để nâng cấp Mô-đun PHP libxml."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:30
+msgid "Multibyte String Extension"
+msgstr "Phần mở rộng chuỗi đa byte"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:39
+msgid "The %sMultibyte String extension%s is required to handle non-Latin character sets in WPML."
+msgstr "%sTiện ích mở rộng Chuỗi đa byte%s là cần thiết để xử lý các bộ ký tự không phải tiếng Latin trong WPML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MbstringExtensionRequirement.php:49
+msgid "Contact your hosting provider to install the Multibyte String (mbstring) PHP extension."
+msgstr "Liên hệ với nhà cung cấp dịch vụ lưu trữ của bạn để cài đặt phần mở rộng PHP Chuỗi đa byte (mbstring)."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:55
+msgid "Memory limit"
+msgstr "Giới hạn bộ nhớ"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:65
+msgid "Your PHP memory limit is currently %s.  WPML requires at least %s to function properly."
+msgstr "Giới hạn bộ nhớ PHP hiện tại của bạn là %s. WPML yêu cầu ít nhất %s để hoạt động bình thường."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/MemoryLimitRequirement.php:80
+msgid "To increase the memory limit, add this to the top of your %swp-config.php%s file:"
+msgstr "Để tăng giới hạn bộ nhớ, hãy thêm dòng này vào đầu tệp %swp-config.php%s của bạn:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:25
+msgid "PHP Version"
+msgstr "Phiên bản PHP"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:34
+msgid "Your PHP version is outdated. WPML requires at least %s."
+msgstr "Phiên bản PHP của bạn đã lỗi thời. WPML yêu cầu ít nhất phiên bản %s."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/PHPVersionRequirement.php:44
+msgid "Contact your hosting provider to upgrade PHP to version %s or higher."
+msgstr "Liên hệ với nhà cung cấp dịch vụ lưu trữ của bạn để nâng cấp PHP lên phiên bản %s hoặc cao hơn."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:31
+msgid "WordPress REST API"
+msgstr "WordPress REST API"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:41
+msgid "The WordPress REST API must be enabled for WPML to work correctly."
+msgstr "WordPress REST API phải được kích hoạt để WPML hoạt động chính xác."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/RestEnabledRequirement.php:49
+msgid "Ensure the REST API endpoint %s is reachable and that the WordPress REST API is enabled."
+msgstr "Đảm bảo điểm cuối REST API %s có thể truy cập được và WordPress REST API đã được kích hoạt."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:31
+msgid "SimpleXML Extension"
+msgstr "Phần mở rộng SimpleXML"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:40
+msgid "The %sSimpleXML extension%s is required to use %sXLIFF files%s in WPML. The libxml PHP Module must also be version 2.7.8 or higher."
+msgstr "%sTiện ích mở rộng SimpleXML%s là cần thiết để sử dụng %stệp XLIFF%s trong WPML. Mô-đun PHP libxml cũng phải là phiên bản 2.7.8 hoặc cao hơn."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/SimpleXMLExtensionRequirement.php:55
+msgid "Contact your hosting provider to install the SimpleXML PHP extension."
+msgstr "Liên hệ với nhà cung cấp dịch vụ lưu trữ của bạn để cài đặt phần mở rộng PHP SimpleXML."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:39
+msgid "PHP Stack Size"
+msgstr "Kích thước ngăn xếp PHP"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:48
+msgid "WPML requires at least %s KB of PHP stack size on PHP 8.3 or higher."
+msgstr "WPML yêu cầu ít nhất %s KB kích thước ngăn xếp PHP trên PHP 8.3 trở lên."
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/StackSizeRequirement.php:58
+msgid "Add this to your %sphp.ini%s and restart your web server to set the required stack size:"
+msgstr "Thêm dòng này vào %sphp.ini%s của bạn và khởi động lại máy chủ web để thiết lập kích thước ngăn xếp cần thiết:"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:30
+msgid "WordPress Version"
+msgstr "Phiên bản WordPress"
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:39
+msgid "Your WordPress version is outdated. WPML requires at least %s. "
+msgstr "Phiên bản WordPress của bạn đã lỗi thời. WPML yêu cầu ít nhất phiên bản %s. "
+
+#: src/Core/Component/MinimumRequirements/Domain/Entity/WordPressVersionRequirement.php:50
+msgid "Please update your WordPress installation to version %s or higher."
+msgstr "Vui lòng cập nhật cài đặt WordPress của bạn lên phiên bản %s hoặc cao hơn."
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:20
+msgid "Error getting credits"
+msgstr "Lỗi khi lấy tín dụng"
+
+#: src/Legacy/Component/ATE/Application/Query/Account.php:39
+msgid "Error getting account balances"
+msgstr "Lỗi khi lấy số dư tài khoản"
+
+#: src/Legacy/Component/ATE/Application/Query/Glossary.php:26
+msgid "Error getting glossary data"
+msgstr "Lỗi khi lấy dữ liệu thuật ngữ"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:148
+msgid "Error fetching translation engines"
+msgstr "Lỗi khi tải công cụ dịch thuật"
+
+#: src/Legacy/Component/ATE/Application/Service/EnginesService.php:171
+msgid "Error fetching available formalities"
+msgstr "Lỗi khi tìm nạp các hình thức sẵn có"
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/ErrorMapper.php:32
+msgid "The jobs could not be created."
+msgstr "Không thể tạo được các công việc."
+
+#: src/Legacy/Component/Translation/Sender/ErrorMapper/UnsupportedLanguagesInTranslationService.php:43
+msgid "The selected translation service doesn't support the following languages: %s"
+msgstr "Dịch vụ dịch thuật đã chọn không hỗ trợ các ngôn ngữ sau: %s"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:310
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:311
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/DashboardController.php:312
+msgid "Other texts (Strings)"
+msgstr "Các văn bản khác (Chuỗi)"
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/SendToTranslation/SendToTranslationController.php:48
+msgid "The request data for SendToTranslation is not valid."
+msgstr "Dữ liệu yêu cầu cho SendToTranslation không hợp lệ."
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/SendToTranslation/SendToTranslationController.php:61
+msgid "An error occurred while sending the translation."
+msgstr "Đã xảy ra lỗi khi gửi bản dịch."
+
+#: src/UserInterface/Web/Core/Component/Dashboard/Application/Endpoint/TranslateEverything/EnableController.php:45
+msgid "In order to translate automatically, you first need to enable WPML's Advanced Translation Editor"
+msgstr "Để dịch tự động, trước tiên bạn cần kích hoạt Trình biên tập Dịch thuật Nâng cao của WPML"

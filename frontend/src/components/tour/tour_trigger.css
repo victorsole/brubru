@@ -1,0 +1,70 @@
+/* frontend/src/components/tour/tour_trigger.css */
+
+.tour-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  font-family: inherit;
+}
+
+.tour-trigger:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Button variant */
+.tour-trigger--button {
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #667eea;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tour-trigger--button:hover {
+  background: #f8fafc;
+  border-color: #667eea;
+}
+
+/* Icon variant */
+.tour-trigger--icon {
+  padding: 0.5rem;
+  background: transparent;
+  color: #94a3b8;
+  border-radius: 8px;
+}
+
+.tour-trigger--icon:hover {
+  background: #f1f5f9;
+  color: #667eea;
+}
+
+/* Link variant */
+.tour-trigger--link {
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  color: #667eea;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.tour-trigger--link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .tour-trigger--button span {
+    display: none;
+  }
+
+  .tour-trigger--button {
+    padding: 0.5rem;
+  }
+}

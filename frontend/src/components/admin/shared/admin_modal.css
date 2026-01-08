@@ -1,0 +1,135 @@
+/* frontend/src/components/admin/shared/admin_modal.css */
+
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000; /* Above header (1100) */
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.admin-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.admin-modal--small {
+  width: 100%;
+  max-width: 400px;
+}
+
+.admin-modal--medium {
+  width: 100%;
+  max-width: 600px;
+}
+
+.admin-modal--large {
+  width: 100%;
+  max-width: 900px;
+}
+
+.admin-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.admin-modal__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.admin-modal__close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-text-secondary, #6b7280);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.admin-modal__close:hover {
+  background-color: #f3f4f6;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.admin-modal__close:focus {
+  outline: 2px solid var(--color-primary, #003399);
+  outline-offset: 2px;
+}
+
+.admin-modal__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.admin-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  background: #f9fafb;
+  border-radius: 0 0 12px 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-modal {
+    max-height: 95vh;
+  }
+
+  .admin-modal--small,
+  .admin-modal--medium,
+  .admin-modal--large {
+    max-width: 100%;
+  }
+
+  .admin-modal__header,
+  .admin-modal__body,
+  .admin-modal__footer {
+    padding: 1rem;
+  }
+}

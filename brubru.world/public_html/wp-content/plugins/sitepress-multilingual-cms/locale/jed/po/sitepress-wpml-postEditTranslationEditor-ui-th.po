@@ -1,0 +1,93 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+"Language: th\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:116
+msgid "WPML Translation Editor"
+msgstr "โปรแกรมแปล WPML"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:123
+#: src/js/postEditTranslationEditor/components/SaveModal.js:22
+msgid "WordPress Editor"
+msgstr "ตัวแก้ไข WordPress"
+
+#: src/js/postEditTranslationEditor/components/PostTranslationEditorSettings.js:99
+#: src/js/postEditTranslationEditor/components/SaveModal.js:24
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:10
+msgid "Translation Dashboard"
+msgstr "แดชบอร์ดการแปล"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:100
+msgid ""
+"Also, switching back to WPML's Translation Editor later will require "
+"re-translating content that you translated with the WordPress editor."
+msgstr "นอกจากนี้ การสลับกลับไปใช้ตัวแก้ไขการแปลของ WPML ในภายหลังจะต้องแปลเนื้อหาที่คุณได้แปลด้วยตัวแก้ไขของ WordPress ใหม่อีกครั้ง."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:107
+msgid ""
+"This will overwrite content you translated with the WordPress Editor. If "
+"you switch now, you'll have to translate selected content again."
+msgstr "การดำเนินการนี้จะเขียนทับเนื้อหาที่คุณแปลด้วยตัวแก้ไขของ WordPress หากคุณสลับตอนนี้ คุณจะต้องแปลเนื้อหาที่เลือกไว้อีกครั้ง."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:35
+msgid "You are about to translate with the %s"
+msgstr "คุณกำลังจะแปลด้วย %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:41
+msgid ""
+"Translate with the WordPress Editor if you need different designs per "
+"language or if the content isn't compatible with WPML's Translation Editor."
+msgstr "แปลด้วยตัวแก้ไขของ WordPress หากคุณต้องการการออกแบบที่แตกต่างกันสำหรับแต่ละภาษา หรือหากเนื้อหาไม่สามารถใช้งานร่วมกับตัวแก้ไขการแปลของ WPML ได้."
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:51
+msgid "What do you want to translate?"
+msgstr "คุณต้องการแปลอะไร?"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:7
+msgid "I understand, switch to the WordPress Editor"
+msgstr "ฉันเข้าใจแล้ว เปลี่ยนไปใช้ตัวแก้ไข WordPress"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:75
+msgid "Apply"
+msgstr "นำไปใช้"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:76
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:8
+msgid "I understand, switch to %s"
+msgstr "ฉันเข้าใจแล้ว เปลี่ยนไปใช้ %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Only this %s"
+msgstr "เฉพาะ %s นี้"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:85
+msgid "Recommended"
+msgstr "แนะนำ"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:86
+msgid "All %s"
+msgstr "ทุก %s"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:87
+msgid "All the site's content"
+msgstr "เนื้อหาทั้งหมดของเว็บไซต์"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:9
+msgid "I understand, switch to Translation Dashboard"
+msgstr "เข้าใจแล้ว เปลี่ยนไปที่แดชบอร์ดการแปล"
+
+#: src/js/postEditTranslationEditor/components/SaveModal.js:97
+msgid ""
+"The WordPress Editor doesn't offer Automatic Translation, Translation "
+"Memory and other features that make translation easier."
+msgstr "ตัวแก้ไข WordPress ไม่มีการแปลอัตโนมัติ หน่วยความจำการแปล และคุณสมบัติอื่นๆ ที่ทำให้การแปลง่ายขึ้น."
+
+#: src/js/postEditTranslationEditor/components/showDashboardEditor.js:9
+msgid "Translate items in batch after reviewing the cost of AI translation"
+msgstr "แปลรายการเป็นชุดหลังจากตรวจสอบค่าใช้จ่ายในการแปลด้วย AI"

@@ -1,0 +1,61 @@
+/* Main Page Styles */
+
+.main-page {
+  display: flex;
+  flex: 1; /* Take up remaining space, pushing footer to bottom */
+  background-color: var(--color-background, #f8fafc);
+  color: var(--color-text, #111827);
+  overflow: hidden;
+}
+
+.main-page__sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.main-page__history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.main-page__history-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: 0;
+}
+
+.main-page__history-placeholder {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+.main-page__documents {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.main-page__main {
+  flex: 1;
+  transition: margin-left var(--transition-base);
+  margin-left: 0;
+}
+
+.main-page__main--sidebar-open {
+  margin-left: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+  .main-page__main {
+    margin-left: 0 !important;
+  }
+
+  .main-page__sidebar-content {
+    gap: var(--space-6);
+  }
+}

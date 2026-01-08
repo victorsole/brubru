@@ -1,0 +1,109 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages"
+         },
+         "What should happen with your automatically translated content?": [
+            "您希望如何处理自动翻译的内容？"
+         ],
+         "Wait for review": [
+            "等待审核"
+         ],
+         "You check and approve translations before publishing.": [
+            "您在发布前检查和批准翻译。"
+         ],
+         "Your translators check and approve translations before publishing.": [
+            "您的翻译人员在发布前检查和批准翻译。"
+         ],
+         "Publish and mark for review": [
+            "发布并标记为审核"
+         ],
+         "WPML publishes translations immediately but flags them for you to check at your convenience.": [
+            "WPML 会立即发布翻译，但会为您标记以便在方便时检查。"
+         ],
+         "WPML publishes translations immediately but flags them for your translators to check at their convenience.": [
+            "WPML 会立即发布翻译，但会为您的翻译人员标记以便他们在方便时检查。"
+         ],
+         "Publish without review": [
+            "发布无需审核"
+         ],
+         "The system publishes translations straight away, skipping the review process.": [
+            "系统会直接发布翻译，跳过审核过程。"
+         ],
+         "Automatic translation": [
+            "自动翻译"
+         ],
+         "What should happen with your automatically translated content": [
+            "您的自动翻译内容应该如何处理"
+         ],
+         "Save settings": [
+            "保存设置"
+         ],
+         "Translate drafts as I save them (consumes a bit more translation credits).": [
+            "在我保存草稿时翻译它们（会消耗更多翻译额度）。"
+         ],
+         "Do you want to translate drafts automatically?": [
+            "您想要自动翻译草稿吗？"
+         ],
+         "This feature is only available when you enable \"Translate Everything Automatically\" from the %sTranslation Dashboard%s.": [
+            "此功能仅在您从%s翻译仪表板%s启用 “自动翻译所有内容” 时可用。"
+         ],
+         "Don't translate drafts. Only translate when I publish content.": [
+            "不翻译草稿。仅在我发布内容时翻译。"
+         ],
+         "%d credits/word": [
+            "%d积分/字"
+         ],
+         "Informal": [
+            "非正式"
+         ],
+         "Automatic": [
+            "自动"
+         ],
+         "Formal": [
+            "正式"
+         ],
+         "Which translation engines do you want to use?": [
+            "您想使用哪些翻译引擎？"
+         ],
+         "Automatic translation engines differ in translation style and supported language pairs.\nIf your preferred translation engine does not support a language pair that you want to use, we fall back to your next preferred engine that does support it.\n": [
+            "自动翻译引擎在翻译风格和支持的语言对方面有所不同。\n如果您首选的翻译引擎不支持您想使用的语言对，我们会回退到您下一个支持该语言对的首选引擎。\n"
+         ],
+         "Drag & drop to sort from the most to the least preferred engine.": [
+            "拖放以从最喜欢到最不喜欢的引擎排序。"
+         ],
+         "Choose the tone of your automatic translations.": [
+            "选择您的自动翻译的语气。"
+         ],
+         "Read more": [
+            "阅读更多"
+         ],
+         "Learn more": [
+            "了解更多"
+         ],
+         "On": [
+            "开启"
+         ],
+         "Off": [
+            "关闭"
+         ],
+         "Could not load translation engines": [
+            "无法加载翻译引擎"
+         ],
+         "Could not update engine": [
+            "无法更新引擎"
+         ],
+         "Could not save review mode": [
+            "无法保存审核模式"
+         ],
+         "Could not save translate everything drafts": [
+            "无法保存翻译所有内容的草稿"
+         ],
+         "Settings saved successfully": [
+            "设置保存成功"
+         ]
+      }
+   }
+}

@@ -1,0 +1,254 @@
+{
+  "dg_code": "JUST",
+  "dg_name": "Justice & Consumers",
+  "commissioners": [
+    "Michael McGrath",
+    "Hadja Lahbib"
+  ],
+  "date_of_effect": "2025-10-16",
+  "director_general": {
+    "name": "Ana Gallego",
+    "assistants": [
+      "Rosalba Striani",
+      "Julien Brugerolle"
+    ]
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Ana Gallego (Acting)",
+      "responsibilities": "Digital Transition, Justice and Consumers"
+    },
+    {
+      "name": "Irena Moozova",
+      "responsibilities": "International Dimension of Justice Policies, Rule of Law and Equality"
+    }
+  ],
+  "hr_correspondent": {
+    "name": "Maria Luisa Janschek"
+  },
+  "principal_adviser": {
+    "name": "Vacant",
+    "area": "Strategies for the Development of Justice Policies"
+  },
+  "eppo_team": {
+    "note": "EPPO has become operational and financially independent from the Commission as from June 2021. However, the EPPO is still logistically linked to DG JUST in its handling of certain IT applications, such as those related to staff management, until it becomes IT independent from the Commission"
+  },
+  "directorates": [
+    {
+      "code": "JUST.01",
+      "name": "International Affairs and Data Flows",
+      "director": "Louisa Klingvall (Acting)",
+      "deputy": "Louisa Klingvall"
+    },
+    {
+      "code": "JUST.A",
+      "name": "Justice Policies",
+      "director": "Peter Csonka (Acting)",
+      "deputy": "Peter Csonka",
+      "units": [
+        {
+          "code": "JUST.A.1",
+          "name": "Digital Transition & Judicial Training",
+          "head": "Dirk Staudenmayer",
+          "deputy": "I. Mazilescu"
+        },
+        {
+          "code": "JUST.A.2",
+          "name": "Civil Justice",
+          "head": "Andreas Stein",
+          "deputy": "P. Lindholm"
+        },
+        {
+          "code": "JUST.A.3",
+          "name": "Company Law",
+          "head": "Dan Dionisie",
+          "deputy": "R. Sauer"
+        },
+        {
+          "code": "JUST.A.4",
+          "name": "Criminal Justice",
+          "head": "Peter Csonka",
+          "deputy": "I. Breit"
+        },
+        {
+          "code": "JUST.A.5",
+          "name": "Criminal Procedural Law",
+          "head": "Despina Vassiliadou",
+          "deputy": "T. Schroeter"
+        }
+      ],
+      "notes": [
+        "Unit JUST.A.5 - Victims' Rights Coordinator"
+      ]
+    },
+    {
+      "code": "JUST.B",
+      "name": "Consumers",
+      "director": "Isabelle Perignon",
+      "deputy": "Pinuccia Contino",
+      "units": [
+        {
+          "code": "JUST.B.1",
+          "name": "Consumer Policy & Sustainability",
+          "head": "Daniela Bankier",
+          "deputy": "J. Hoskova"
+        },
+        {
+          "code": "JUST.B.2",
+          "name": "Consumer Law",
+          "head": "Maria-Myrto Kanellopoulou",
+          "deputy": "M. Prieditis"
+        },
+        {
+          "code": "JUST.B.3",
+          "name": "Consumer Enforcement & Redress",
+          "head": "Angelo Grieco (Acting)",
+          "deputy": "A. Grieco"
+        },
+        {
+          "code": "JUST.B.4",
+          "name": "Product Safety & Rapid Alert System",
+          "head": "Pinuccia Contino",
+          "deputy": "E. Sinkovic"
+        }
+      ]
+    },
+    {
+      "code": "JUST.C",
+      "name": "Rule of Law, Fundamental Rights & Democracy",
+      "director": "Julien Mousnier",
+      "deputy": "Marie-Hélène Boulanger",
+      "units": [
+        {
+          "code": "JUST.C.1",
+          "name": "Rule of Law",
+          "head": "Florian Geyer",
+          "deputy": "N. Bel"
+        },
+        {
+          "code": "JUST.C.2",
+          "name": "Fundamental Rights Policy",
+          "head": "Ingrid Bellander Todino",
+          "deputy": "Vacant"
+        },
+        {
+          "code": "JUST.C.3",
+          "name": "Data Protection",
+          "head": "Olivier Micol",
+          "deputy": "K. Mojzesowicz"
+        },
+        {
+          "code": "JUST.C.4",
+          "name": "Democracy, Anti-Corruption, Union Citizenship & Free Movement",
+          "head": "Marie-Hélène Boulanger",
+          "deputy": "M. Mosshammer"
+        }
+      ],
+      "notes": [
+        "Unit JUST.C.2 - Coordinator for the Rights of the Child"
+      ]
+    },
+    {
+      "code": "JUST.D",
+      "name": "Equality & Non-Discrimination",
+      "director": "Ana Carla Pereira",
+      "deputy": "Karen Vandekerckhove",
+      "units": [
+        {
+          "code": "JUST.D.1",
+          "name": "Non-Discrimination: LGBTIQ, Age, Horizontal Matters",
+          "head": "Susanne Knoefel",
+          "deputy": "C. Dedeu Fontcuberta"
+        },
+        {
+          "code": "JUST.D.2",
+          "name": "Non-Discrimination: Anti-Racism & Roma Coordination",
+          "head": "Szabolcs Schmidt",
+          "deputy": "Z. Dorazilova"
+        },
+        {
+          "code": "JUST.D.3",
+          "name": "Gender Equality",
+          "head": "Karen Vandekerckhove",
+          "deputy": "K. Lenzing"
+        },
+        {
+          "code": "JUST.D.4",
+          "name": "Disability",
+          "head": "Lucie Davoine (Acting)",
+          "deputy": "L. Davoine"
+        }
+      ],
+      "notes": [
+        "Unit JUST.D.2 - Coordinator on Combating Racism"
+      ]
+    },
+    {
+      "code": "JUST.H",
+      "name": "Horizontal Affairs",
+      "director": "Carlo Pettinelli",
+      "deputy": "Maija Laurila",
+      "units": [
+        {
+          "code": "JUST.H.1",
+          "name": "Planning, Better Regulation & Enforcement",
+          "head": "Maija Laurila",
+          "deputy": "B. Kedzierski"
+        },
+        {
+          "code": "JUST.H.2",
+          "name": "Inter-Institutional Relations & Communication",
+          "head": "Giles Goodall",
+          "deputy": "M. Soltys"
+        },
+        {
+          "code": "JUST.H.3",
+          "name": "Budget, Programmes & Financial Management",
+          "head": "Maria Tomassetti",
+          "deputy": "V. Setti"
+        },
+        {
+          "code": "JUST.H.4",
+          "name": "IT, Document & Knowledge Management",
+          "head": "Cristian Nicolau",
+          "deputy": "M. Labunet"
+        }
+      ]
+    }
+  ],
+  "agencies": [
+    {
+      "code": "EUROJUST",
+      "name": "European Union Agency for Criminal Justice Cooperation"
+    },
+    {
+      "code": "FRA",
+      "name": "European Union Agency for Fundamental Rights"
+    },
+    {
+      "code": "EIGE",
+      "name": "European Institute for Gender Equality"
+    },
+    {
+      "code": "EISMEA",
+      "name": "European Innovation Council and SMEs Executive Agency",
+      "unit": "EISMEA.I.03 - SMP / Consumers",
+      "head": "Gilda Capuano"
+    },
+    {
+      "code": "EACEA",
+      "name": "Education, Audiovisual and Culture Executive Agency",
+      "unit": "EACEA.B.3 - Citizens and EU Values",
+      "head": "Godelieve Dutrieux",
+      "deputy": "S. Kisevic"
+    }
+  ],
+  "notes": [
+    "D: Deputy to the Director",
+    "A: Mirror entity in an Executive Agency",
+    "Unit JUST.A.5 - Victims' Rights Coordinator",
+    "Unit JUST.C.2 - Coordinator for the Rights of the Child",
+    "Unit JUST.D.2 - Coordinator on Combating Racism",
+    "SMP: Single Market Programme"
+  ]
+}

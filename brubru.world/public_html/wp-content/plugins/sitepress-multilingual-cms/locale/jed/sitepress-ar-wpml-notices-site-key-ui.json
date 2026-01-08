@@ -1,0 +1,42 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);",
+            "lang": "ar"
+         },
+         "Get a key for this site": [
+            "احصل على مفتاح لهذا الموقع"
+         ],
+         "Site key:": [
+            "مفتاح الموقع:"
+         ],
+         "Enter your site key here": [
+            "أدخل مفتاح موقعك هنا"
+         ],
+         "Registering...": [
+            "جارٍ التسجيل..."
+         ],
+         "Register": [
+            "تسجيل"
+         ],
+         "A New Site Key Is Required": [
+            "مطلوب مفتاح موقع جديد"
+         ],
+         "To continue using WPML features like automatic translation and plugin updates, please register your site again. Don’t worry, your existing content and translations are safe.": [
+            "لمواصلة استخدام ميزات WPML مثل الترجمة التلقائية وتحديثات الإضافات، يرجى إعادة تسجيل موقعك. لا تقلق، المحتوى والترجمات الحالية في أمان."
+         ],
+         "Site key registered successfully!": [
+            "تم تسجيل مفتاح الموقع بنجاح!"
+         ],
+         "Page will reload in %d seconds...": [
+            "ستتم إعادة تحميل الصفحة خلال %d ثانية..."
+         ],
+         "Registration failed. Please try again.": [
+            "فشل التسجيل. يرجى المحاولة مرة أخرى."
+         ]
+      }
+   }
+}

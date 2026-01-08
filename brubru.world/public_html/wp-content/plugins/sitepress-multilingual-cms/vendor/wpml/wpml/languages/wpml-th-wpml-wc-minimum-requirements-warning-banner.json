@@ -1,0 +1,15 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=1; plural=0;",
+            "lang": "th"
+         },
+         "Your site doesn't meet WPML's minimum requirements": [
+            "เว็บไซต์ของคุณไม่ตรงตามข้อกำหนดขั้นต่ำของ WPML"
+         ]
+      }
+   }
+}

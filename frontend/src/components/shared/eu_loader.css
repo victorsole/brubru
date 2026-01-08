@@ -1,0 +1,55 @@
+/* EU Star Circle Loader Styles */
+
+.eu-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-6);
+}
+
+.eu-loader__spinner {
+  animation: euStarRotate 2s linear infinite;
+}
+
+.eu-loader__circle {
+  stroke-dasharray: 283;
+  stroke-dashoffset: 70;
+  animation: euCircleDash 1.5s ease-in-out infinite;
+}
+
+.eu-loader__star {
+  animation: euStarPulse 1s ease-in-out infinite;
+}
+
+.eu-loader__message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes euCircleDash {
+  0% {
+    stroke-dashoffset: 283;
+  }
+  50% {
+    stroke-dashoffset: 70;
+  }
+  100% {
+    stroke-dashoffset: 283;
+  }
+}
+
+@keyframes euStarPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
+}

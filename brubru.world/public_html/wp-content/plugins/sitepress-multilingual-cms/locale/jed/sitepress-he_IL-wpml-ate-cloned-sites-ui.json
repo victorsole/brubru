@@ -1,0 +1,222 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "he"
+         },
+         "Close": [
+            ""
+         ],
+         "Please take a screenshot of this message and report this issue to <a>WPML support</a>.": [
+            ""
+         ],
+         "WPML has automatically unregistered your site as part of this wizard. After you close it, you’ll see a prompt to register the site again. This is expected, your content and translations are safe.": [
+            "WPML ביטל את רישום האתר שלך באופן אוטומטי כחלק מהאשף הזה. לאחר שתסגור אותו, תראה הנחיה לרשום את האתר מחדש. זה צפוי, התוכן והתרגומים שלך בטוחים."
+         ],
+         "You’re all set": [
+            ""
+         ],
+         "This site is a copy of the original site %s and it doesn’t currently have any automatic translation credits.": [
+            "אתר זה הוא העתק של האתר המקורי %s וכרגע אין לו קרדיטים לתרגום אוטומטי."
+         ],
+         "If you’d like to use automatic translation here in the future, you can either <a1>add credits</a1> or <a2>share them from the original site</a2>.": [
+            "אם תרצה להשתמש בתרגום אוטומטי כאן בעתיד, תוכל או <a1>להוסיף קרדיטים</a1> או <a2>לשתף אותם מהאתר המקורי</a2>."
+         ],
+         "There was an error checking for credits to share. Please take a screenshot of this message and report it in <a>WPML support</a>.": [
+            ""
+         ],
+         "To link %s and %s so they share automatic translation credits, follow these steps:": [
+            "כדי לקשר בין %s ל-%s כך שישתפו קרדיטים לתרגום אוטומטי, עקוב אחר השלבים הבאים:"
+         ],
+         "Open <a>this link</a> to access the original site’s admin area. (You can’t access this screen by visiting %s directly.)": [
+            "פתח <a>קישור זה</a> כדי לגשת לאזור הניהול של האתר המקורי. (לא ניתן לגשת למסך זה על ידי ביקור ישיר ב-%s.)"
+         ],
+         "Click <b>Copy migration code</b> on that page.": [
+            "לחץ על <b>העתק קוד העברה</b> בעמוד זה."
+         ],
+         "Paste the code below to complete the connection.": [
+            "הדבק את הקוד למטה כדי להשלים את החיבור."
+         ],
+         "Migration code": [
+            ""
+         ],
+         "Continue": [
+            ""
+         ],
+         "Go back": [
+            ""
+         ],
+         "Connect Automatic Translation Credits": [
+            "חבר קרדיטים לתרגום אוטומטי"
+         ],
+         "WPML was unable to copy your site's translations, translation memory, and glossary to this new URL.": [
+            ""
+         ],
+         "Error with copying translation information to new URL": [
+            ""
+         ],
+         "This site and its copy on %s are now sharing automatic translation credits.": [
+            "אתר זה והעותק שלו ב-%s משתפים כעת קרדיטים לתרגום אוטומטי."
+         ],
+         "Any credits you add to one site will be available on both. If you stop using this site, your credits will remain safe.": [
+            "כל קרדיט שתוסיף לאתר אחד יהיה זמין בשניהם. אם תפסיק להשתמש באתר זה, הקרדיטים שלך יישארו בטוחים."
+         ],
+         "WPML was unable to connect your old and new URLs to share automatic translation credits.": [
+            ""
+         ],
+         "Error with sharing automatic translation credits": [
+            ""
+         ],
+         "The site on %s has %d credits for automatic translation. Do you want to share these credits with this new site %s?": [
+            "לאתר ב-%s יש %d קרדיטים לתרגום אוטומטי. האם אתה רוצה לשתף קרדיטים אלה עם האתר החדש הזה %s?"
+         ],
+         "The site on %s has a pay-as-you-go subscription for automatic translation. Do you want to share these credits between %s and this new location (%s)?": [
+            ""
+         ],
+         "Yes (recommended)": [
+            ""
+         ],
+         "In the next step, you’ll approve the use of same credits on both sites.": [
+            "בשלב הבא, תאשר את השימוש באותם קרדיטים בשני האתרים."
+         ],
+         "No": [
+            ""
+         ],
+         "You’ll need to assign new credits or set up pay-as-you-go.": [
+            "תצטרך להקצות קרדיטים חדשים או להגדיר תשלום לפי שימוש."
+         ],
+         "What happens when you share credits between sites?": [
+            "מה קורה כשאתה משתף קרדיטים בין אתרים?"
+         ],
+         "Translation credits for this site": [
+            ""
+         ],
+         "WPML detected a change in your site’s URL": [
+            "WPML זיהה שינוי בכתובת האתר שלך"
+         ],
+         "You can now continue translating content on this site as usual.": [
+            "כעת תוכל להמשיך לתרגם תוכן באתר זה כרגיל."
+         ],
+         "Just a reminder: there shouldn’t be another copy of this site running at %s. If there is, automatic translation won’t work correctly on that site.": [
+            "רק תזכורת: לא אמור להיות עותק נוסף של אתר זה פועל ב-%s. אם יש, תרגום אוטומטי לא יעבוד כראוי באותו אתר."
+         ],
+         "You indicated that the original site at %s is no longer active. This means:": [
+            "ציינת שהאתר המקורי ב-%s אינו פעיל יותר. המשמעות היא:"
+         ],
+         "Automatic translation will no longer work on the old site": [
+            "תרגום אוטומטי לא יעבוד יותר באתר הישן"
+         ],
+         "Accessing the old site may trigger warnings on this site": [
+            "גישה לאתר הישן עלולה לגרום לאזהרות באתר זה"
+         ],
+         "Please confirm:": [
+            "אנא אשר:"
+         ],
+         "I understand and confirm that <b>%s</b> is no longer in use.": [
+            "אני מבין ומאשר ש-<b>%s</b> אינו בשימוש יותר."
+         ],
+         "Back": [
+            ""
+         ],
+         "Please Confirm": [
+            "אנא אשר"
+         ],
+         "WPML was unable to update our records with your new URL.": [
+            ""
+         ],
+         "Error with moving translation information to new URL": [
+            ""
+         ],
+         "It looks like this site was previously at %s and is now running on %s.": [
+            "נראה שאתר זה היה קודם ב-%s וכעת פועל ב-%s."
+         ],
+         "Is the original site still available at %s?": [
+            "האם האתר המקורי עדיין זמין ב-%s?"
+         ],
+         "Yes": [
+            ""
+         ],
+         "The original site is still running and this is just a copy of the original site": [
+            "האתר המקורי עדיין פועל וזהו רק עותק של האתר המקורי"
+         ],
+         "I moved the site to this new address and this is now the main site": [
+            "העברתי את האתר לכתובת החדשה הזו וזהו כעת האתר הראשי"
+         ],
+         "WPML Detected a New Site Address": [
+            "WPML זיהה כתובת אתר חדשה"
+         ],
+         "How to manage translations when migrating from development to production": [
+            "כיצד לנהל תרגומים בעת העברה מפיתוח לייצור"
+         ],
+         "Looks like this site is a copy of a different site, or moved to a different URL. Please contact your translation manager to update Translation Management plugin configuration.": [
+            ""
+         ],
+         "Site Moved or Copied - Action Required": [
+            ""
+         ],
+         "You or someone else moved this site to %s. Please keep in mind that:": [
+            ""
+         ],
+         "Translations that you do at %s will not appear on this site.": [
+            ""
+         ],
+         "You cannot edit translations on this site.": [
+            ""
+         ],
+         "The site at %s is using the same credits for automatic translation as this site.": [
+            ""
+         ],
+         "If you didn't intend to move this site to %s, you can <a>indicate that this site should be at %s</a>.": [
+            ""
+         ],
+         "This site has moved to a new location": [
+            ""
+         ],
+         "If you prefer not to move this site, you can <a>mark it as a copy</a> and enable automatic translation for it.": [
+            ""
+         ],
+         "Moving the site back here will mean that you will be able to translate on this domain again, but you will not be able to update translations at %s.": [
+            ""
+         ],
+         "Yes - move back here": [
+            ""
+         ],
+         "No - keep the site on %s": [
+            ""
+         ],
+         "Are you sure that this site should run on %s and not %s?": [
+            ""
+         ],
+         "WPML noticed that your site is being accessed from a different domain or URL.": [
+            "WPML שם לב שהגישה לאתר שלך מתבצעת מדומיין או כתובת URL שונים."
+         ],
+         "To make sure everything continues working correctly, including automatic translation and site registration, we need to verify and update your site settings.": [
+            "כדי להבטיח שהכל ימשיך לעבוד כראוי, כולל תרגום אוטומטי ורישום האתר, עלינו לאמת ולעדכן את הגדרות האתר שלך."
+         ],
+         "This will only take a moment.": [
+            "זה ייקח רק רגע."
+         ],
+         "Start Migration": [
+            "התחל העברה"
+         ],
+         "If you didn't change your main domain and only logged in through a secondary domain, select this option.": [
+            "אם לא שינית את הדומיין הראשי שלך ורק התחברת דרך דומיין משני, בחר באפשרות זו."
+         ],
+         "Something went wrong": [
+            "משהו השתבש"
+         ],
+         "I just logged in from a secondary domain": [
+            "פשוט התחברתי מדומיין משני"
+         ],
+         "You're all set!": [
+            "הכל מוכן!"
+         ],
+         "This domain is now registered as a secondary domain and WPML will recognize it correctly.": [
+            "דומיין זה כעת רשום כדומיין משני ו-WPML יזהה אותו כראוי."
+         ]
+      }
+   }
+}

@@ -1,0 +1,140 @@
+// frontend/src/components/amendator/document_viewer.tsx
+import './document_viewer.css';
+
+interface DocumentViewerProps {
+  selectedText?: string;
+  loadedDocument?: LoadedDocument | null;
+}
+
+export interface LoadedDocument {
+  document_id: string;
+  filename: string;
+  text: string;
+  metadata: {
+    title?: string;
+    celex?: string;
+    [key: string]: any;
+  };
+  structure?: {
+    legislative_structure?: {
+      elements?: Array<{
+        type: 'recital' | 'article' | 'article_title' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
+        number?: string;
+        letter?: string;
+        roman?: string;
+        text: string;
+        level: number;
+        article_number?: string;
+        point_number?: string;
+        paragraph_letter?: string;
+        title?: string;
+      }>;
+      articles?: Array<{
+        number: string;
+        text: string;
+        full_text: string;
+      }>;
+      recitals?: Array<{
+        number: string;
+        text: string;
+      }>;
+      chapters?: Array<{
+        number: string;
+        text: string;
+      }>;
+    };
+  };
+}
+
+export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerProps) => {
+  // If no document loaded, show empty state
+  if (!loadedDocument) {
+    return (
+      <div className="document-viewer">
+        <div className="document-viewer__content">
+          <div className="document-viewer__empty">
+            <span className="document-viewer__empty-icon">📄</span>
+            <p className="document-viewer__empty-text">No document loaded</p>
+            <p className="document-viewer__empty-hint">
+              Upload a document or paste a EUR-Lex URL to get started
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // If selected text, show it
+  if (selectedText) {
+    return (
+      <div className="document-viewer">
+        <div className="document-viewer__content">
+          <div className="document-viewer__selected">
+            <h3 className="document-viewer__selected-title">Selected Text</h3>
+            <div className="document-viewer__selected-content">{selectedText}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Display loaded document
+  const articles = loadedDocument.structure?.legislative_structure?.articles || [];
+  const recitals = loadedDocument.structure?.legislative_structure?.recitals || [];
+  const title = loadedDocument.metadata.title || loadedDocument.filename;
+
+  return (
+    <div className="document-viewer">
+      <div className="document-viewer__content">
+        <h1 className="document-viewer__doc-title">{title}</h1>
+
+        {loadedDocument.metadata.celex && (
+          <div className="document-viewer__metadata">
+            <span className="document-viewer__metadata-label">CELEX:</span>
+            <span className="document-viewer__metadata-value">{loadedDocument.metadata.celex}</span>
+          </div>
+        )}
+
+        {/* Display Recitals if available */}
+        {recitals.length > 0 && (
+          <div className="document-viewer__recitals">
+            <h2 className="document-viewer__section-title">Recitals</h2>
+            {recitals.map((recital) => (
+              <div key={recital.number} className="document-viewer__recital">
+                <span className="document-viewer__recital-number">({recital.number})</span>
+                <p className="document-viewer__recital-text">{recital.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Display Articles if available */}
+        {articles.length > 0 ? (
+          articles.map((article) => (
+            <div key={article.number} className="document-viewer__article">
+              <h3 className="document-viewer__article-title">
+                Article {article.number}
+              </h3>
+              <p className="document-viewer__paragraph">{article.full_text || article.text}</p>
+            </div>
+          ))
+        ) : (
+          /* Display plain text if no structure detected */
+          <div className="document-viewer__plain-text">
+            {loadedDocument.text.split('\n\n').map((paragraph, idx) => (
+              <p key={idx} className="document-viewer__paragraph">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        )}
+
+        <div className="document-viewer__footer">
+          <p className="document-viewer__footer-text">
+            Document loaded: {loadedDocument.filename}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};

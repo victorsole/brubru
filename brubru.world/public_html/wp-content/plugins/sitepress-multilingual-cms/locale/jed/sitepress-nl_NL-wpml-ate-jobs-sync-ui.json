@@ -1,0 +1,174 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=2; plural=(n != 1);",
+            "lang": "nl"
+         },
+         "Sending for translation": [
+            "Verzenden voor vertaling"
+         ],
+         "This content is being automatically translated. If you want to do something different with it cancel translation jobs first.": [
+            "Deze inhoud wordt automatisch vertaald. Als u iets anders wilt doen, annuleer dan eerst de vertaalopdrachten."
+         ],
+         "Connecting to WPML’s Advanced Translation Editor": [
+            "Verbinden met WPML's Geavanceerde Vertaaleditor"
+         ],
+         "Try again": [
+            "Opnieuw proberen"
+         ],
+         "You don't have the rights to review this language": [
+            "U heeft geen rechten om deze taal te beoordelen"
+         ],
+         "translations": [
+            "vertalingen"
+         ],
+         "left in the queue": [
+            "resterend in de wachtrij"
+         ],
+         "Translation on hold": [
+            "Vertaling in de wacht"
+         ],
+         "No translations in the queue": [
+            "Geen vertalingen in de wachtrij"
+         ],
+         "%d translations left": [
+            "%d vertalingen resterend"
+         ],
+         "%d min remaining": [
+            "%d min resterend"
+         ],
+         "less than 1 min remaining": [
+            "minder dan 1 min resterend"
+         ],
+         "Automatic translation status": [
+            "Status automatische vertaling"
+         ],
+         "Translate Everything Automatically": [
+            "Vertaal Alles Automatisch"
+         ],
+         "Translate Everything Automatically is active": [
+            "Vertaal Alles Automatisch is actief"
+         ],
+         "Translate Everything Automatically is paused": [
+            "Vertaal Alles Automatisch is gepauzeerd"
+         ],
+         "Translate Everything Automatically is stopped": [
+            "Alles Automatisch Vertalen is gestopt"
+         ],
+         "Out of Credits for Automatic Translation": [
+            "Geen Krediet meer voor Automatische Vertaling"
+         ],
+         "You have <b>1</b> prepaid translation credit in your wpml.org account. Assign these credits to your site to start using automatic translation": [
+            "U heeft <b>1</b> vooruitbetaald vertaalkrediet in uw wpml.org account. Wijs deze kredieten toe aan uw site om automatische vertaling te beginnen gebruiken",
+            "U heeft <b>%s</b> vooruitbetaalde vertaalkredieten in uw wpml.org account. Wijs deze kredieten toe aan uw site om automatische vertaling te beginnen gebruiken"
+         ],
+         "Preparing content for translation": [
+            "Inhoud voorbereiden voor vertaling"
+         ],
+         "Preparing more content for translation": [
+            "Meer inhoud voorbereiden voor vertaling"
+         ],
+         "An error occured, fix it to continue.": [
+            "Er is een fout opgetreden, los het op om door te gaan."
+         ],
+         "There is an issue with automatic translation that needs your attention. Fix it to continue.": [
+            "Er is een probleem met de automatische vertaling dat uw aandacht vereist. Los het op om door te gaan."
+         ],
+         "Your default language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "Uw standaardtaal, %s, moet worden gekoppeld aan een ondersteunde taal om automatische vertaling te kunnen gebruiken."
+         ],
+         "Your language, %s, must be mapped to a supported language in order to use automatic translation.": [
+            "Je taal, %s, moet worden gekoppeld aan een ondersteunde taal om automatische vertaling te kunnen gebruiken.",
+            "De volgende talen op je site moeten worden gekoppeld aan een ondersteunde taal om automatische vertaling te kunnen gebruiken: %s"
+         ],
+         "Content in those languages: %s, cannot be automatically translated unless you map them to a language that's different from the default.": [
+            "Inhoud in deze talen: %s, kan niet automatisch worden vertaald tenzij u ze koppelt aan een taal die verschilt van de standaardtaal."
+         ],
+         "%d translation waiting for review": [
+            "%d vertaling wacht op beoordeling",
+            "%d vertalingen wachten op beoordeling"
+         ],
+         "Account credits used": [
+            "Gebruikte accounttegoeden"
+         ],
+         "Once you’ve used all your prepaid credits, we’ll invoice you for any additional credits you use after the end of the month": [
+            "Zodra u al uw vooruitbetaalde tegoeden heeft gebruikt, zullen we u factureren voor eventuele extra tegoeden die u gebruikt na het einde van de maand"
+         ],
+         "Payment limit:": [
+            "Betalingslimiet:"
+         ],
+         "%s credits": [
+            "%s tegoeden"
+         ],
+         "Credits used:": [
+            "Gebruikte tegoeden:"
+         ],
+         "Credits left:": [
+            "Resterende tegoeden:"
+         ],
+         "The number of credit you will receive an invoice for at the end of the month. View your pay-as-you-go details in your site’s automatic translation settings.": [
+            "Het aantal tegoeden waarvoor u aan het einde van de maand een factuur ontvangt. Bekijk uw pay-as-you-go details in de automatische vertaalinstellingen van uw site."
+         ],
+         "Calculating": [
+            "Berekenen"
+         ],
+         "Remaining prepaid credits that are assigned to this site on WPML.org.": [
+            "Resterende vooruitbetaalde tegoeden die aan deze site zijn toegewezen op WPML.org."
+         ],
+         "Prepaid credits left": [
+            "Resterende vooruitbetaalde tegoeden"
+         ],
+         "Pay-as-you-go credits used": [
+            "Gebruikte pay-as-you-go tegoeden"
+         ],
+         "Your site doesn't meet WPML's minimum requirements": [
+            "Je site voldoet niet aan de minimale vereisten van WPML"
+         ],
+         "Fix it": [
+            "Oplossen"
+         ],
+         "Stop": [
+            "Stoppen"
+         ],
+         "Assign credits now": [
+            "Wijs nu kredieten toe"
+         ],
+         "Resume": [
+            "Hervatten"
+         ],
+         "Refreshing translation status": [
+            "Vertalingsstatus vernieuwen"
+         ],
+         "Read more about how to translate your content in the <a>Getting Started Guide</a>": [
+            "Lees meer over hoe u uw inhoud kunt vertalen in de <a>Aan de slag gids</a>"
+         ],
+         "Let's Start Translating!": [
+            "Laten we beginnen met vertalen!"
+         ],
+         "Choose your content from the Translation Dashboard below and create your first translation job!": [
+            "Kies uw inhoud uit het Vertaaldashboard hieronder en maak uw eerste vertaalopdracht!"
+         ],
+         "Change your <a>automatic translation settings</a> (in-progress translation jobs will be completed with the current settings).": [
+            "Wijzig uw <a>automatische vertaalinstellingen</a> (lopende vertaalopdrachten worden voltooid met de huidige instellingen)."
+         ],
+         "Read more about translating your site automatically.": [
+            "Lees meer over het automatisch vertalen van uw site."
+         ],
+         "Your site is being automatically translated!": [
+            "Uw site wordt automatisch vertaald!"
+         ],
+         "Calculating...": [
+            "Berekenen..."
+         ],
+         "Do not close WP admin!": [
+            "Sluit WP-beheer niet af!"
+         ],
+         "The number of translations": [
+            "Het aantal vertalingen"
+         ]
+      }
+   }
+}

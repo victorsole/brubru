@@ -1,0 +1,5598 @@
+{
+  "country_code": "es",
+  "country_name": "Spain",
+  "extraction_date": "2025-11-27T11:51:46.907124",
+  "criteria_count": 41,
+  "criteria": [
+    {
+      "Id": {
+        "value": "0d7de154-14b4-4e94-a857-a2cfb57230ca"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+      },
+      "Name": {
+        "value": "Payment of social security contributions",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator breached its obligations relating to the payment social security contributions, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "146",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "b4f23589-4037-4112-9cd9-e51e4687abae"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "6c96d86b-49bb-410d-ad2d-c2cc64f95f02"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of Tax Obligations Compliance.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "The certificate is electronically signed and its authenticity is guaranteed by a verification code printed on its bottom.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "http://www.agenciatributaria.es/"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "The Tax Agency.",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21260?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "6 Months before time limit of request to participate or submission of tender",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Id": {
+                "value": "5ca69652-ba11-438b-84fc-63d99d021268"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of Social Security Obligations Compliance.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "The certificate includes two numeric codes on the bottom that guantee authenticity. The certificate includes expedition date so validity depends on wether the contracting authority accepts it or not.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "http://www.seg-social.es/Internet_1/index.htm"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "General Treasury of Social Security.",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15280?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Id": {
+                "value": "1170b254-67a8-43a4-a822-90de8cbe4f8b"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of Accredited Services Economic Operator",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "According to article 70.1 of Consolidated Text of Public Sector Procurement Act, passed by Royal Legislative Decree 3/2011, November 14th, accreditation have permanent validity as long as economic operator maintain conditions and circumstances under what they were granted.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "2"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15284?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "Id": {
+                "value": "abd4242e-aa92-4d10-9944-2fc6e7107b74"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "Certificate of Accredited Works Economic Operator.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "According to article 70.1 of Consolidated Text of Public Sector Procurement Act, passed by Royal Legislative Decree 3/2011, November 14th, accreditation have permanent validity as long as economic operator maintain conditions and circumstances under what they were granted.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15282?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "7d85e333-bbab-49c0-be8d-c36d71a72f5e"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to the payment of taxes or social security contributions"
+        },
+        "Name": {
+          "value": "Payment of social security contributions",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator breached its obligations relating to the payment social security contributions, both in the country in which it is established and in Member State of the contracting authority or contracting entity if other than the country of establishment?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "9213cdbf-866c-42b5-a3fa-997d21126756"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Breaching of obligations in the fields of environmental law",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator has to its knowledge, breached its obligations in the field of environmental law.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "9"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 a) b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "5563ef65-f435-4232-86e9-7a376136bb48"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "a80ddb62-d25b-4e4e-ae22-3968460dc0a9"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Breaching of obligations in the fields of environmental law",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator has to its knowledge, breached its obligations in the field of environmental law.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "9"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "7a32ca91-46f5-4d8f-8c50-0f133cd11cdf"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Guilty of grave professional misconduct",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator  guilty of grave professional misconduct? Where applicable, see definitions in national law, the relevant notice or the procurement documents",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "07a8dc1c-5e31-44c6-a730-011b0b98dad4"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "514d3fde-1e3e-4dcd-b02a-9f984d5bbda3"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Guilty of grave professional misconduct",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator  guilty of grave professional misconduct? Where applicable, see definitions in national law, the relevant notice or the procurement documents",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "f27992be-ec9f-4af4-8411-6c19e60c2804"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Conflict of interest due to its participation in the procurement procedure",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator aware of any conflict of interest as indicated in national law, the relevant notice or the procurement documents due to its participation in the procurement procedure?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 g)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "37a9791a-26d2-42f1-9d98-dbfcbd36853d"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "b1b5ac18-f393-4280-9659-1367943c1a2e"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Conflict of interest due to its participation in the procurement procedure",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator aware of any conflict of interest as indicated in national law, the relevant notice or the procurement documents due to its participation in the procurement procedure?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "d59f2614-c3bd-4e15-af1a-3a0adb83aa32"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Specific average turnover",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Its specific average yearly turnover in the business area covered by the contract for the number of years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 87.1.a) 87.2",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d3dfb714-f558-4512-bbc5-e456fa2339de"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Specific average turnover",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Its specific average yearly turnover in the business area covered by the contract for the number of years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "3b41590a-6bb5-4bc7-bc88-58fe8ada3d0c"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Other economic or financial requirements",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Concerning the other economic or financial requirements, if any, that may have been specified in the relevant notice or the procurement documents, the economic operator declares that:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 87.1.c) d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "ab0e7f2e-6418-40e2-8870-6713123e41ad"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Other economic or financial requirements",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Concerning the other economic or financial requirements, if any, that may have been specified in the relevant notice or the procurement documents, the economic operator declares that:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "0e6cc73f-92af-451b-a791-ff2468b8c9a6"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "For service contracts: performance of services of the specified type",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "For public service contracts only: During the reference period, the economic operator has provided the following main services of the type specified. Contracting authorities may require up to three years and allow experience dating from more than three years.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "90.1a) / 90.1 d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "5e506c16-26ab-4e32-bb78-b27f87dc0565"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "For service contracts: performance of services of the specified type",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "For public service contracts only: During the reference period, the economic operator has provided the following main services of the type specified. Contracting authorities may require up to three years and allow experience dating from more than three years.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "d881ad5f-4415-4d5b-a533-0b432bdd25ac"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "For supply contracts: samples, descriptions or photographs without certification of authenticity",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "For public supply contracts: The economic operator will supply the required samples, descriptions or photographs of the products to be supplied, which do not need to be accompanied by certifications of authenticity.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 89.1.e) / Article 89.1 e)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "140b4363-5f33-43cc-af9b-ae36c8933549"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "f8e980c8-82ee-4343-95fa-3ccda030ceab"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "For supply contracts: samples, descriptions or photographs without certification of authenticity ",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificates should only be provided if requested by the contracting authority together with samples, photographs or descriptions.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/22482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "bdf0601d-2480-4250-b870-658d0ee95be6"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "For supply contracts: samples, descriptions or photographs without certification of authenticity",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "For public supply contracts: The economic operator will supply the required samples, descriptions or photographs of the products to be supplied, which do not need to be accompanied by certifications of authenticity.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "fdcaf009-f4af-45de-9815-d26203f53418"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Guilty of misrepresentation, withheld information, unable to provide required documents and obtained confidential information of this procedure",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Can the economic operator confirm that it has not been guilty of serious misrepresentation in supplying the information required for the verification of the absence of grounds for exclusion or the fulfilment of the selection criteria, it has not withheld such information, it has been able, without delay, to submit the supporting documents required by a contracting authority or contracting entity, and it has not undertaken to unduly influence the decision making process of the contracting authority or contracting entity, to obtain confidential information that may confer upon it undue advantages in the procurement procedure or to negligently provide misleading information that may have a material influence on decisions concerning exclusion, selection or award?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "5"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1.e)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "696a75b2-6107-428f-8b74-82affb67e184"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Guilty of misrepresentation, withheld information, unable to provide required documents and obtained confidential information of this procedure",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Can the economic operator confirm that it has not been guilty of serious misrepresentation in supplying the information required for the verification of the absence of grounds for exclusion or the fulfilment of the selection criteria, it has not withheld such information, it has been able, without delay, to submit the supporting documents required by a contracting authority or contracting entity, and it has not undertaken to unduly influence the decision making process of the contracting authority or contracting entity, to obtain confidential information that may confer upon it undue advantages in the procurement procedure or to negligently provide misleading information that may have a material influence on decisions concerning exclusion, selection or award?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "5"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "ce2e6e69-032a-431e-aeec-ea470eebcdc7"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Analogous situation like bankruptcy under national law",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator in in any analogous situation like bankruptcy arising from a similar procedure under national laws and regulations? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "4"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 c)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "7eec07b3-9595-4cd2-957c-4dbd88174c8f"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "087ae737-a60e-46d1-b1c5-309e1da659ee"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "38873765-23bb-41ec-b94f-670d123c2795"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "daffa2a9-9f8f-4568-8be8-7b8bf306d096"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Analogous situation like bankruptcy under national law",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator in in any analogous situation like bankruptcy arising from a similar procedure under national laws and regulations? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "4"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "285f30de-4e5a-4ada-b99a-b0dfd08ef8ef"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Financial ratio",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Concerning the financial ratios specified in the relevant notice, the procurement documents or the ESPD, the economic operator declares that the actual values for the required ratios are as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 87.1. c) ",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "e4d37adc-08cd-4f4d-a8d8-32b62b0a1f46"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Financial ratio",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Concerning the financial ratios specified in the relevant notice, the procurement documents or the ESPD, the economic operator declares that the actual values for the required ratios are as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "5e1ae00b-7e3c-42c9-a8e5-eb5f295d3453"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Professional risk indemnity insurance",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The insured amount in its professional risk indemnity insurance is the following:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "871b) - 87.2 - 87.3b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "7604bd40-4462-4086-8763-a50da51a869c"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Professional risk indemnity insurance",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The insured amount in its professional risk indemnity insurance is the following:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "130ee914-1a52-4e39-9f51-fbdaf464f7d8"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Quality assurance schemes and environmental management standards"
+      },
+      "Name": {
+        "value": "Certificates by independent bodies about environmental management systems or standards",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Will the economic operator be able to produce certificates drawn up by independent bodies attesting that the economic operator complies with the required environmental management systems or standards?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "5"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "94",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "8ed65e48-fd0d-444f-97bd-4f58da632999"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Quality assurance schemes and environmental management standards"
+        },
+        "Name": {
+          "value": "Certificates by independent bodies about environmental management systems or standards",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Will the economic operator be able to produce certificates drawn up by independent bodies attesting that the economic operator complies with the required environmental management systems or standards?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "5"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "808a74d0-1065-4a57-a919-065910fed267"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Breaching of obligations in the fields of social law",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator has to its knowledge, breached its obligations in the field of social law.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "6"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 d)) / Article 71.1 d))",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "8c6cfbe4-7111-4d11-a04e-0948ebcf9273"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "a261a395-ed17-4939-9c75-b9ff1109ca6e"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Breaching of obligations in the fields of social law",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator has to its knowledge, breached its obligations in the field of social law.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "6"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "ceca5dbc-a8f7-44f5-ba77-4d6270079d2a"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Bankruptcy",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator bankrupt? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 d))",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "a35a9abd-f8d7-4377-918d-978a1d76c387"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d3732c09-7d62-4edc-a172-241da6636e7c"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Bankruptcy",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator bankrupt? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "be7e2135-a94e-4d42-a1cd-e32b1e679d1a"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Assets being administered by liquidator",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Are the assets of the economic operator being administered by a liquidator or by the court? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "71.1.c) / Article 71.1 c)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "1ccd8683-3594-4192-be22-f33526054d68"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "8fda202a-0c37-41bb-9d7d-de3f49edbfcb"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Assets being administered by liquidator",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Are the assets of the economic operator being administered by a liquidator or by the court? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "ba47ad32-d0e4-42ea-976f-7c5120061d5d"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Agreements with other economic operators aimed at distorting competition",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator entered into agreements with other economic operators aimed at distorting competition?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "819ca68b-5459-4e6e-85ed-300044d4b597"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "56d13e3d-76e8-4f23-8af6-13e60a2ee356"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Agreements with other economic operators aimed at distorting competition",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator entered into agreements with other economic operators aimed at distorting competition?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "d187c254-bd87-4c56-ae1c-a5e3e8d82259"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Suitability test"
+      },
+      "Name": {
+        "value": "For service contracts: authorisation of particular organisation needed",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is a particular membership of a particular organisation needed in order to be able to perform the service in question in the country of establishment of the economic operator?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "67",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "9eeb6d5c-0eb8-48e8-a4c5-5087a7c095a4"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Suitability test"
+        },
+        "Name": {
+          "value": "For service contracts: authorisation of particular organisation needed",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is a particular membership of a particular organisation needed in order to be able to perform the service in question in the country of establishment of the economic operator?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "d7b5475d-760d-4fe8-8b16-4762c7d1e055"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Environmental management measures",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator will be able to apply the following environmental management measures when performing the contract:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 88.1.d) / Article 90.1. f) ",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "9460457e-b43d-48a9-acd1-615de6ddd33e"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Environmental management measures",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator will be able to apply the following environmental management measures when performing the contract:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "9fb2eaa2-b62e-4507-b562-96ac7c52a444"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Participation in a criminal organisation",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Participation in a criminal organisation, as defined in Article 2 of Council Framework Decision 2008/841/JHA of 24 October 2008 on the fight against organised crime",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Art 71.1.a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "d2c65062-7f4d-4b79-aa73-50f25facf167"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "69168628-496f-43cd-959f-f9fc5a5e4583"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "c1ca5d8f-7c94-4083-8ba2-7bb21e9aea8c"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "005eb9ed-1347-4ca3-bb29-9bc0db64e1ab"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Participation in a criminal organisation",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Participation in a criminal organisation, as defined in Article 2 of Council Framework Decision 2008/841/JHA of 24 October 2008 on the fight against organised crime",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "3c9441c6-afdc-4e75-9f06-a98efcd3411b"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Corruption",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator itself or any person who is a member of its administrative, management or supervisory body or powers of representation, decision or control therein has been the subject of a conviction by final judgement for corruption, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable. Corruption, as defined in the relevant legislation.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "5"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "43ba4234-e0c6-4204-bb02-38b2bdcda775"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "5bf4292b-2907-469e-8cf2-050cb21b62d1"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "da4183c8-5eb0-40ce-95c4-2f3fa8f52fd0"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "c27b7c4e-c837-4529-b867-ed55ce639db5"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Corruption",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator itself or any person who is a member of its administrative, management or supervisory body or powers of representation, decision or control therein has been the subject of a conviction by final judgement for corruption, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable. Corruption, as defined in the relevant legislation.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "5"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "1d9206b6-d4b3-4ffa-8368-047b45566d4f"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Arrangement with creditors",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is the economic operator in arrangement with creditors? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "4"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 c)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "3fc84ee1-c792-44f8-a98a-5f8c96043981"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "68918c7a-f5bc-4a1a-a62f-ad8983600d48"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Arrangement with creditors",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is the economic operator in arrangement with creditors? This information needs not be given if exclusion of economic operators in this case has been made mandatory under the applicable national law without any possibility of derogation where the economic operator is nevertheless able to perform the contract.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "4"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "cfb50f62-e5aa-42f3-b1d4-ab048e3ab14b"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Suitability test"
+      },
+      "Name": {
+        "value": "For service contracts: membership of particular organisation needed",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Is a particular membership of a particular organisation needed in order to be able to perform the service in question in the country of establishment of the economic operator?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "67",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "73f10e36-ed7a-412e-995c-aa76463e3776"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Suitability test"
+        },
+        "Name": {
+          "value": "For service contracts: membership of particular organisation needed",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Is a particular membership of a particular organisation needed in order to be able to perform the service in question in the country of establishment of the economic operator?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "e542e147-0998-4f02-8091-f0e1951ab9d6"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Number of managerial staff",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator’s number of managerial staff for the last three years were as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "88.1e) - 90.1g) / Article 88.1 b)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "a2fc9ab7-37f7-4782-81ea-4b1a8a163c16"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "a4a1b43c-0604-44dc-b649-22c6eb180418"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Number of managerial staff",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "The contents of the declaration and the documents, if required, may vary depending on the case.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/22481?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "6346959b-e097-4ea1-89cd-d1b4c131ea4d"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Number of managerial staff",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator’s number of managerial staff for the last three years were as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "ad88f3c0-1dc6-4b12-a353-c01a05772103"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Average annual manpower",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator’s average annual manpower for the last three years were as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "88.1 e) - 90.1g) / Article 88.1 e) / Article 90.1.g) ",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "1f49b3f0-d50f-43f6-8b30-4bafab108b9b"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Average annual manpower",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator’s average annual manpower for the last three years were as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "2030612a-6d1c-4f58-867e-32129d51093c"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Child labour and other forms of trafficking in human beings",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Money laundering or terrorist financing, as defined in Article 2 of Directive 2011/36/EU of the European Parliament and of the Council of 5 April 2011 on preventing and combating trafficking in human beings and protecting its victims, and replacing Council Framework Decision 2002/629/JHA (OJ L 101, 15.4.2011)",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "71.1.a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "a5052f99-5f1a-4f6d-a290-f630c7452d39"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "9c54c8d6-5691-4a5c-bfe9-a768b6e10d36"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "1af22f1e-d2e6-42f1-bc93-8207333d1219"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d789d01a-fe03-4ccd-9898-73f9cfa080d1"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Child labour and other forms of trafficking in human beings",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Money laundering or terrorist financing, as defined in Article 2 of Directive 2011/36/EU of the European Parliament and of the Council of 5 April 2011 on preventing and combating trafficking in human beings and protecting its victims, and replacing Council Framework Decision 2002/629/JHA (OJ L 101, 15.4.2011)",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "c3c2ac1c-977b-4a6c-b745-2234cd4f0e36"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Breaching of obligations in the fields of labour law",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator has to its knowledge, breached its obligations in the field of labour law.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "7"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "71.1d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "c8c52474-adad-4958-965e-a5597fb2092f"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "a34b70d6-c43d-4726-9a88-8e2b438424bf"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Breaching of obligations in the fields of labour law",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator has to its knowledge, breached its obligations in the field of labour law.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "7"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "f237fc72-9c7d-406b-8164-58685eaeda0f"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Other exclusion grounds"
+      },
+      "Name": {
+        "value": "Purely national exclusion grounds",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Do the purely national grounds of exclusion, which are specified in the relevant notice or in the procurement documents, apply?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.1 f) / Article 71.2 a) / Article 71.2 b) / Article 71.2 c) / Article 71.2 d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "89d09df5-3a53-4ec5-9daa-e76081ec46b2"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "63adb07d-db1b-4ef0-a14e-a99785cf8cf6"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Other exclusion grounds"
+        },
+        "Name": {
+          "value": "Purely national exclusion grounds",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Do the purely national grounds of exclusion, which are specified in the relevant notice or in the procurement documents, apply?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "131d5a56-13ee-4254-834a-6bf06507ea8a"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Average yearly turnover",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Its average yearly turnover for the number of years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 87.1.a) ",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "b16cb9fc-6cb7-4585-9302-9533b415cf48"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Average yearly turnover",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Its average yearly turnover for the number of years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "1f9a918d-e679-4251-a6e5-89f298adf6e1"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Set up of economic operator",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "In case the information concerning turnover (general or specific) is not available for the entire period required, please state the date on which the economic operator was set up or started trading:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 87.1.a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "77f481ce-ffb6-483f-8e2b-c78db5e68292"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Set up of economic operator",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "In case the information concerning turnover (general or specific) is not available for the entire period required, please state the date on which the economic operator was set up or started trading:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "cfe3e4f6-9b9c-46dc-bb23-b35af1933df9"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Fraud",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Fraud within the meaning of Article 1 of the Convention on the protection of the European Communities' financial interests (OJ C 316, 27.11.1995)",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Art 71.1.a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "4b809079-3e85-4fe5-8270-7c41dffe8769"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "a085bfdc-6f99-4225-bfe5-51292e08dec9"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "00332805-c3d7-4bc1-a86f-77600697c807"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "297d2323-3ede-424e-94bc-a91561e6f320"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Fraud",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Fraud within the meaning of Article 1 of the Convention on the protection of the European Communities' financial interests (OJ C 316, 27.11.1995)",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "7294308d-c74d-4a23-8157-ca28847887e2"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Money laundering or terrorist financing",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator itself or any person who is a member of its administrative, management or supervisory body or has powers of representation, decision or control therein been the subject of a conviction by final judgement for money laundering or terrorist financing, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable? As defined in Article 1 of Directive 2005/60/EC of the European Parliament and of the Council of 26 October 2005 on the prevention of the use of the financial system for the purpose of money laundering and terrorist financing (OJ L 309, 25.11.2005, p. 15).",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "71.1.a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "f5ed01c3-17a1-4f49-be36-ac84ae102eab"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "682883d6-d1b5-47d6-acb6-a0d34216a409"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "fbb3f4a2-9027-40fc-9a4f-b81da373cc2c"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "47112079-6fec-47a3-988f-e561668c3aef"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Money laundering or terrorist financing",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator itself or any person who is a member of its administrative, management or supervisory body or has powers of representation, decision or control therein been the subject of a conviction by final judgement for money laundering or terrorist financing, by a conviction rendered at the most five years ago or in which an exclusion period set out directly in the conviction continues to be applicable? As defined in Article 1 of Directive 2005/60/EC of the European Parliament and of the Council of 26 October 2005 on the prevention of the use of the financial system for the purpose of money laundering and terrorist financing (OJ L 309, 25.11.2005, p. 15).",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "798721a2-a72c-40a2-ae7b-7b2692e4776c"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "Specific yearly turnover",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Its specific yearly turnover in the business area covered by the contract for the number of financial years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 87.1. a) 87.2",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "074f6031-55f9-4e99-b9a4-c4363e8bc315"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "Specific yearly turnover",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Its specific yearly turnover in the business area covered by the contract for the number of financial years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "3c64fff3-5e9f-4166-b363-c8f9dd297da9"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Educational and professional qualifications",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The following educational and professional qualifications are held by the service provider or the contractor itself, and/or (depending on the requirements set out in the relevant notice or the procurement documents by its managerial staff.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "88.1c) - 90.1e) / Article 88.1.c)  / Article 90.1 e)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "07301031-2270-41af-8e7e-66fe0c777107"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Educational and professional qualifications",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The following educational and professional qualifications are held by the service provider or the contractor itself, and/or (depending on the requirements set out in the relevant notice or the procurement documents by its managerial staff.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "50cca4f0-badf-4004-ba12-cf2bb88bba08"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Tools, plant or technical equipment",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The following tools, plant or technical equipment will be available to it for performing the contract:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "88.1 f) - 90.1 h)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "c2254392-a39f-44af-b093-a232de02320d"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "0ae857a4-e758-47ac-b8df-2305e19f3b1a"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "cc18c023-211d-484d-a32e-52f3f970285f"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Tools, plant or technical equipment",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The following tools, plant or technical equipment will be available to it for performing the contract:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "0c740871-fec0-4b24-abc5-0f27fabb6084"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Quality assurance schemes and environmental management standards"
+      },
+      "Name": {
+        "value": "Certificates by independent bodies about quality assurance standards",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Will the economic operator be able to produce certificates drawn up by independent bodies attesting that the economic operator complies with the required quality assurance standards, including accessibility for disabled persons?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "93",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d726bac9-e153-4e75-bfca-c5385587766d"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Quality assurance schemes and environmental management standards"
+        },
+        "Name": {
+          "value": "Certificates by independent bodies about quality assurance standards",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Will the economic operator be able to produce certificates drawn up by independent bodies attesting that the economic operator complies with the required quality assurance standards, including accessibility for disabled persons?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "67377927-21d5-4f67-be4b-024edd713a66"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Criminal convictions"
+      },
+      "Name": {
+        "value": "Terrorist offences or offences linked to terrorist activities",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Terrorist offences or offences linked to terrorist activities, as defined in Articles 1 and 3 of Council Framework Decision of 13 June 2002 on combating terrorism (OJ L 164, 22.6.2002). This exclusion ground also includes inciting or aiding or abetting or attempting to commit an offence, as referred to in Article 4 of that Framework Decision",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "71.1.a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "f3868555-b6ee-47d8-97d9-7ec1945819bd"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "f638b99c-d7be-4c60-af67-3852d458a9d1"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "9cc82f4e-2c2d-4f4e-8a03-e2563ddeb090"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "d486fb70-86b3-4e75-97f2-0d71b5697c7d"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Criminal convictions"
+        },
+        "Name": {
+          "value": "Terrorist offences or offences linked to terrorist activities",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Terrorist offences or offences linked to terrorist activities, as defined in Articles 1 and 3 of Council Framework Decision of 13 June 2002 on combating terrorism (OJ L 164, 22.6.2002). This exclusion ground also includes inciting or aiding or abetting or attempting to commit an offence, as referred to in Article 4 of that Framework Decision",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "98ddf43d-260b-41bc-9009-02b725589769"
+      },
+      "TypeCode": {
+        "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+      },
+      "Name": {
+        "value": "Early termination, damages or other comparable sanctions",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Has the economic operator experienced that a prior public contract, a prior contract with a contracting entity or a prior concession contract was terminated early, or that damages or other comparable sanctions were imposed in connection with that prior contract?",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 71.2 d)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "6a2cd33f-315c-4120-b676-4c243c6d64c9"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "8a7dccf2-b203-4272-b82c-010ab0647464"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Self declaration of not being in a procurement ban situation.",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Some text",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "3"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21960?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Only for the specified tender ",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "3293e92b-7f3e-42f1-bee6-a7641bb04251"
+        },
+        "TypeCode": {
+          "value": "Exclusion Ground: Grounds related to insolvency, conflicts of interests or professional misconduct"
+        },
+        "Name": {
+          "value": "Early termination, damages or other comparable sanctions",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Has the economic operator experienced that a prior public contract, a prior contract with a contracting entity or a prior concession contract was terminated early, or that damages or other comparable sanctions were imposed in connection with that prior contract?",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "b330fcf2-bb1e-47e8-8275-8270d021eb36"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Economic and financial standing"
+      },
+      "Name": {
+        "value": "General yearly turnover",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "Its general yearly turnover for the number of financial years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "87.1a) / Article 87.1.a)",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "87de295f-3a2b-4112-967e-7e39700139cf"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "c6c37a37-f987-41fd-8fe2-ba10b1e04f7a"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR NATURAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for natural person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/15482?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Id": {
+            "value": "70b413dc-d455-4a3a-9ef0-4def65cf2297"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "44eded25-59e2-48da-9d26-b66d5fb4ba3d"
+              },
+              "TypeCode": {
+                "value": "Certificate"
+              },
+              "Name": {
+                "value": "ROLECE CERTIFICATE FOR LEGAL PERSON",
+                "languageID": "en"
+              },
+              "Description": {
+                "value": "Certificate for legal person. It may have three different forms: signed XML with all the information, zip file with everything needed to visualize certificate and pdf file to help visualize the certificate.",
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "4"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "EvidenceIssuerParty": [
+                {
+                  "WebsiteURI": {
+                    "value": "https://registrodelicitadores.gob.es"
+                  },
+                  "PartyName": [
+                    {
+                      "Name": {
+                        "value": "Spanish Economic Operators Registry (ROLECE)",
+                        "languageID": "en"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/21262?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "499efc97-2ac1-4af2-9e84-323c2ca67747"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Economic and financial standing"
+        },
+        "Name": {
+          "value": "General yearly turnover",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "Its general yearly turnover for the number of financial years required in the relevant notice, the procurement documents or the ESPD is as follows:",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "decfcf76-6ff3-4516-a3de-45cf669ec0e4"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Technicians or technical bodies for quality control",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "It can call upon the following technicians or technical bodies, especially those responsible for quality control. For technicians or technical bodies not belonging directly to the economic operator's undertaking but on whose capacities the economic operator relies as set out under Part II, Section C, separate ESPD forms must be filled in.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "2"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "88.1b) - 89.1b) - 90.1b) / Article 88.1.b)  / Article 89.1. b) c) d) / Article 90.1. b) c) ",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "3aaca389-4a7b-406b-a4b9-080845d127e7"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Technicians or technical bodies for quality control",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "It can call upon the following technicians or technical bodies, especially those responsible for quality control. For technicians or technical bodies not belonging directly to the economic operator's undertaking but on whose capacities the economic operator relies as set out under Part II, Section C, separate ESPD forms must be filled in.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "2"
+        }
+      }
+    },
+    {
+      "Id": {
+        "value": "0066a1bc-cbb6-462d-b824-337e94f3c873"
+      },
+      "TypeCode": {
+        "value": "Selection Criteria: Technical and professional ability"
+      },
+      "Name": {
+        "value": "Subcontracting proportion",
+        "languageID": "en"
+      },
+      "Description": {
+        "value": "The economic operator intends possibly to subcontract the following proportion (i.e. percentage) of the contract. Please note that if the economic operator has decided to subcontract a part of the contract and relies on the subcontractor’s capacities to perform that part, then please fill in a separate ESPD for such subcontractors, see Part II, Section C above.",
+        "languageID": "en"
+      },
+      "DomainID": {
+        "value": "eproc"
+      },
+      "VersionID": {
+        "value": "3"
+      },
+      "LegislationReference": [
+        {
+          "Title": {
+            "value": "Act on Public Sector Contracts.",
+            "languageID": "en"
+          },
+          "Description": {
+            "value": "Act 9/2017, of 8 November, on Public Sector Contracts, transposing Directives 2014/23/EU and 2014/24/EU, of the European Parliament, of 26 February 2014, into Spanish law",
+            "languageID": "en"
+          },
+          "JurisdictionLevelCode": {
+            "value": "es"
+          },
+          "Article": {
+            "value": "Article 215.1 and 2",
+            "languageID": "en"
+          },
+          "URI": {
+            "value": "https://www.boe.es/buscar/pdf/2017/BOE-A-2017-12902-consolidado.pdf"
+          }
+        }
+      ],
+      "RequirementGroup": [
+        {
+          "Id": {
+            "value": "5f2f0628-9304-46e4-ad4a-fedf24f44508"
+          },
+          "TypeOfEvidence": [
+            {
+              "Id": {
+                "value": "b2d018cc-99eb-4266-b120-d98602ae9d8d"
+              },
+              "TypeCode": {
+                "value": "Self-declaration"
+              },
+              "Name": {
+                "value": "Subcontracting proportion",
+                "languageID": "en"
+              },
+              "Description": {
+                "languageID": "en"
+              },
+              "VersionID": {
+                "value": "1"
+              },
+              "FeeAmount": {},
+              "EvidenceIntendedUse": {
+                "description": {
+                  "value": "All areas"
+                }
+              },
+              "AddresseeDescription": {
+                "value": "For all entities"
+              },
+              "JurisdictionLevelCode": [
+                {
+                  "value": "es"
+                }
+              ],
+              "EvidenceDocumentReference": [
+                {
+                  "Attachment": {
+                    "ExternalReference": {
+                      "URI": {
+                        "value": "https://ec.europa.eu/tools/ecertis/#/evidence/detail/22320?lang=en"
+                      }
+                    }
+                  },
+                  "ValidityPeriod": {
+                    "description": [
+                      {
+                        "value": "Not limited",
+                        "languageID": "en"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ParentCriterion": {
+        "Id": {
+          "value": "612a1625-118d-4ea4-a6db-413184e7c0a8"
+        },
+        "TypeCode": {
+          "value": "Selection Criteria: Technical and professional ability"
+        },
+        "Name": {
+          "value": "Subcontracting proportion",
+          "languageID": "en"
+        },
+        "Description": {
+          "value": "The economic operator intends possibly to subcontract the following proportion (i.e. percentage) of the contract. Please note that if the economic operator has decided to subcontract a part of the contract and relies on the subcontractor’s capacities to perform that part, then please fill in a separate ESPD for such subcontractors, see Part II, Section C above.",
+          "languageID": "en"
+        },
+        "DomainID": {
+          "value": "eproc"
+        },
+        "VersionID": {
+          "value": "3"
+        }
+      }
+    }
+  ]
+}

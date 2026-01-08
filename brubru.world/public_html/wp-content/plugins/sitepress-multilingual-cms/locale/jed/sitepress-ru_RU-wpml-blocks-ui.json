@@ -1,0 +1,186 @@
+{
+   "domain": "messages",
+   "locale_data": {
+      "messages": {
+         "": {
+            "domain": "messages",
+            "plural_forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);",
+            "lang": "ru"
+         },
+         "Advanced": [
+            "Расширенные"
+         ],
+         "HTML anchor": [
+            "HTML-якорь"
+         ],
+         "Add a shortcut to this block when loading the page using the “#anchor” URL.": [
+            "Добавьте ярлык для этого блока при загрузке страницы, используя URL “#anchor”."
+         ],
+         "Additional CSS class(es)": [
+            "Дополнительный CSS-класс(ы)"
+         ],
+         "Separate multiple classes with spaces.": [
+            "Разделяйте несколько классов пробелами."
+         ],
+         "Color": [
+            "Цвет"
+         ],
+         "px": [
+            "px"
+         ],
+         "%": [
+            "%"
+         ],
+         "Dimensions": [
+            "Размеры"
+         ],
+         "BLOCK": [
+            "БЛОК"
+         ],
+         "Block margin": [
+            "Отступ блока"
+         ],
+         "Block padding": [
+            "Внутренний отступ блока"
+         ],
+         "LANGUAGE": [
+            "ЯЗЫК"
+         ],
+         "Language spacing": [
+            "Интервал языка"
+         ],
+         "Language padding": [
+            "Отступ языка"
+         ],
+         "Display": [
+            "Отображение"
+         ],
+         "Show flag": [
+            "Показать флаг"
+         ],
+         "Show language name": [
+            "Показать название языка"
+         ],
+         "Display language name in": [
+            "Отображать название языка в"
+         ],
+         "Style": [
+            "Стиль"
+         ],
+         "Flag settings": [
+            "Настройки флага"
+         ],
+         "Width": [
+            "Ширина"
+         ],
+         "Height": [
+            "Высота"
+         ],
+         "Spacing": [
+            "Интервал"
+         ],
+         "Allow wrapping to multiple lines": [
+            "Разрешить перенос на несколько строк"
+         ],
+         "Open on click": [
+            "Открыть при нажатии"
+         ],
+         "Show arrow": [
+            "Показать стрелку"
+         ],
+         "Layout": [
+            "Макет"
+         ],
+         "Justification": [
+            "Выравнивание"
+         ],
+         "Orientation": [
+            "Ориентация"
+         ],
+         "Typography": [
+            "Типография"
+         ],
+         "Background": [
+            "Фон"
+         ],
+         "Language Text": [
+            "Текст языка"
+         ],
+         "Language Background": [
+            "Фон языка"
+         ],
+         "Current language text": [
+            "Текст текущего языка"
+         ],
+         "Current language background": [
+            "Фон текущего языка"
+         ],
+         "Full name": [
+            "Полное название"
+         ],
+         "Code": [
+            "Код"
+         ],
+         "Justify items left": [
+            "Выровнять элементы по левому краю"
+         ],
+         "Justify items center": [
+            "Выровнять элементы по центру"
+         ],
+         "Justify items right": [
+            "Выровнять элементы по правому краю"
+         ],
+         "Justify items space between": [
+            "Выровнять элементы с пространством между"
+         ],
+         "Horizontal": [
+            "Горизонтальный"
+         ],
+         "Vertical": [
+            "Вертикальный"
+         ],
+         "Normal": [
+            "Обычный"
+         ],
+         "Medium": [
+            "Средний"
+         ],
+         "Large": [
+            "Большой"
+         ],
+         "X-Large": [
+            "Очень большой"
+         ],
+         "Ab": [
+            "Ab"
+         ],
+         "AB": [
+            "AB"
+         ],
+         "ab": [
+            "ab"
+         ],
+         "Small": [
+            "Маленький"
+         ],
+         "Displays the WPML Language Switcher.": [
+            "Отображает переключатель языков WPML."
+         ],
+         "Language Switcher": [
+            "Переключатель языков"
+         ],
+         "displays the WPML Language Switcher": [
+            "отображает переключатель языков WPML"
+         ],
+         "Displays the WPML Language Switcher. <br/> Learn <a>how to translate this block</a>.": [
+            "Отображает переключатель языков WPML. <br/> Узнайте, <a>как перевести этот блок</a>."
+         ],
+         "Navigation Language Switcher": [
+            "Навигационный переключатель языков"
+         ],
+         "Reset all": [
+            "Сбросить все"
+         ]
+      }
+   }
+}

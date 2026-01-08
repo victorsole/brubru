@@ -1,0 +1,437 @@
+/* frontend/src/components/eu_comply/compliance_report.css */
+
+.compliance-report {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.compliance-report__header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.compliance-report__header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.5rem;
+}
+
+.compliance-report__cluster-name {
+  font-size: 1.1rem;
+  color: #718096;
+}
+
+/* Summary */
+.compliance-report__summary {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.compliance-report__score-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.compliance-report__score-value {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.compliance-report__score-label {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.compliance-report__stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.compliance-report__stat-card {
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.compliance-report__stat-card .mdi {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.compliance-report__stat-card.status-met {
+  background: #c6f6d5;
+  border: 2px solid #9ae6b4;
+  color: #22543d;
+}
+
+.compliance-report__stat-card.status-partial {
+  background: #fef5e7;
+  border: 2px solid #f6ad55;
+  color: #7c2d12;
+}
+
+.compliance-report__stat-card.status-gap {
+  background: #fed7d7;
+  border: 2px solid #fc8181;
+  color: #742a2a;
+}
+
+.compliance-report__stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.compliance-report__stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Filters */
+.compliance-report__filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.compliance-report__filter-btn {
+  padding: 0.75rem 1.5rem;
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.compliance-report__filter-btn .mdi {
+  font-size: 1.25rem;
+}
+
+.compliance-report__filter-btn:hover {
+  background: white;
+  border-color: #cbd5e0;
+}
+
+.compliance-report__filter-btn.active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+/* Findings */
+.compliance-report__findings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.compliance-report__finding {
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+}
+
+.compliance-report__finding.status-met {
+  background: #c6f6d5;
+  border: 2px solid #9ae6b4;
+}
+
+.compliance-report__finding.status-partial {
+  background: #fef5e7;
+  border: 2px solid #f6ad55;
+}
+
+.compliance-report__finding.status-gap {
+  background: #fed7d7;
+  border: 2px solid #fc8181;
+}
+
+.compliance-report__finding.status-na {
+  background: #e2e8f0;
+  border: 2px solid #cbd5e0;
+}
+
+.compliance-report__finding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.compliance-report__finding-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.compliance-report__finding-status .mdi {
+  font-size: 1.75rem;
+}
+
+.compliance-report__finding.status-met .mdi {
+  color: #22543d;
+}
+
+.compliance-report__finding.status-partial .mdi {
+  color: #7c2d12;
+}
+
+.compliance-report__finding.status-gap .mdi {
+  color: #742a2a;
+}
+
+.compliance-report__finding-article {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #2d3748;
+}
+
+.compliance-report__finding-criticality {
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.compliance-report__finding-criticality.criticality-critical {
+  background: #742a2a;
+  color: white;
+}
+
+.compliance-report__finding-criticality.criticality-important {
+  background: #7c2d12;
+  color: white;
+}
+
+.compliance-report__finding-criticality.criticality-recommended {
+  background: #2d3748;
+  color: white;
+}
+
+.compliance-report__finding-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.compliance-report__finding-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.compliance-report__finding-toggle .mdi {
+  font-size: 1.5rem;
+  color: #4a5568;
+}
+
+.compliance-report__finding-requirement {
+  font-size: 1rem;
+  color: #2d3748;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.compliance-report__finding-deadline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #744210;
+}
+
+.compliance-report__finding-deadline .mdi {
+  font-size: 1.25rem;
+}
+
+/* Finding Details */
+.compliance-report__finding-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.compliance-report__evidence,
+.compliance-report__gap,
+.compliance-report__recommendation {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+}
+
+.compliance-report__evidence h4,
+.compliance-report__gap h4,
+.compliance-report__recommendation h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 0.75rem;
+}
+
+.compliance-report__evidence h4 .mdi,
+.compliance-report__gap h4 .mdi,
+.compliance-report__recommendation h4 .mdi {
+  font-size: 1.25rem;
+  color: #667eea;
+}
+
+.compliance-report__evidence p,
+.compliance-report__gap p,
+.compliance-report__recommendation p {
+  font-size: 0.95rem;
+  color: #4a5568;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.compliance-report__evidence-source {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #718096;
+  font-style: italic;
+}
+
+.compliance-report__actions {
+  margin-top: 1rem;
+}
+
+.compliance-report__ask-chatbot-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.compliance-report__ask-chatbot-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.compliance-report__ask-chatbot-btn .mdi {
+  font-size: 1.25rem;
+}
+
+.compliance-report__confidence {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #718096;
+  text-align: right;
+}
+
+/* No Findings */
+.compliance-report__no-findings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #718096;
+}
+
+.compliance-report__no-findings .mdi {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Footer */
+.compliance-report__footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 2rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.compliance-report__export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: #2d3748;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.compliance-report__export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(45, 55, 72, 0.3);
+}
+
+.compliance-report__export-btn .mdi {
+  font-size: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .compliance-report__summary {
+    grid-template-columns: 1fr;
+  }
+
+  .compliance-report__stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .compliance-report {
+    padding: 1.5rem;
+  }
+
+  .compliance-report__stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .compliance-report__filters {
+    flex-direction: column;
+  }
+
+  .compliance-report__filter-btn {
+    justify-content: center;
+  }
+}
