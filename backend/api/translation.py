@@ -1,7 +1,7 @@
 # backend/api/translation.py
 from fastapi import APIRouter, HTTPException
-from backend.schemas.translation_schemas import TranslationRequest, TranslationResponse
-from backend.services.translation_service import translation_service
+from schemas.translation_schemas import TranslationRequest, TranslationResponse
+from services.translation_service import translation_service
 
 router = APIRouter(prefix="/api/translate", tags=["Translation"])
 

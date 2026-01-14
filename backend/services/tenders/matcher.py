@@ -5,7 +5,7 @@ Matches EU tenders to user profiles based on multiple criteria.
 Produces scored matches stored in the database for user review.
 
 Usage:
-    from backend.services.tenders.matcher import TenderMatcher
+    from services.tenders.matcher import TenderMatcher
 
     matcher = TenderMatcher(db)
     matches = await matcher.match_all_users()

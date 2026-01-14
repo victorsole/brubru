@@ -447,8 +447,8 @@ async def index_tender_from_db(tender_id: int) -> bool:
     Returns:
         True if successful
     """
-    from backend.core.database import SessionLocal
-    from backend.models.tender import Tender
+    from core.database import SessionLocal
+    from models.tender import Tender
 
     db = SessionLocal()
     try:
@@ -483,8 +483,8 @@ async def reindex_all_tenders() -> Dict[str, int]:
     Returns:
         Statistics dict
     """
-    from backend.core.database import SessionLocal
-    from backend.models.tender import Tender
+    from core.database import SessionLocal
+    from models.tender import Tender
 
     db = SessionLocal()
     try:

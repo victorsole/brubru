@@ -7,9 +7,9 @@ Helper functions and dependencies for admin-only endpoints.
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from backend.core.database import get_db
-from backend.models.user import User
-from backend.api.auth import get_current_user
+from core.database import get_db
+from models.user import User
+from api.auth import get_current_user
 
 
 def get_current_admin_user(

@@ -12,8 +12,8 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 
-from backend.core.database import SessionLocal
-from backend.models.newsletter import (
+from core.database import SessionLocal
+from models.newsletter import (
     NewsletterSource,
     NewsletterContent,
 )

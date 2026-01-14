@@ -99,7 +99,7 @@ class TEDClient(BaseAPIClient):
         """
         # Get API key from settings if not provided
         if api_key is None:
-            from backend.core.config import settings
+            from core.config import settings
             api_key = settings.TENDERATOR_TED_API_KEY
 
         self.ted_api_key = api_key

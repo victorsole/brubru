@@ -5,7 +5,7 @@ Extracts and structures requirements from tender notices for ESPD checklist gene
 Maps requirements to ESPD Part III (Exclusion) and Part IV (Selection).
 
 Usage:
-    from backend.services.tenders.hf_tender_requirements import extract_tender_requirements
+    from services.tenders.hf_tender_requirements import extract_tender_requirements
 
     requirements = await extract_tender_requirements(tender_xml)
     # [

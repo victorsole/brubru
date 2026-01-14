@@ -5,7 +5,7 @@ Semantic search over EU tenders using BGE-M3 embeddings.
 Supports all 24 EU languages for multilingual queries.
 
 Usage:
-    from backend.services.tenders.hf_tender_search import semantic_tender_search
+    from services.tenders.hf_tender_search import semantic_tender_search
 
     results = await semantic_tender_search(
         "services de cybersécurité pour institutions européennes",

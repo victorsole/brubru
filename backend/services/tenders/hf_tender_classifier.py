@@ -5,7 +5,7 @@ Zero-shot classification of tenders into business sectors.
 Uses BART-large-MNLI for classification aligned with CPV divisions.
 
 Usage:
-    from backend.services.tenders.hf_tender_classifier import classify_tender_sector
+    from services.tenders.hf_tender_classifier import classify_tender_sector
 
     sectors = await classify_tender_sector(
         "Cloud Infrastructure Services",

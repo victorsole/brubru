@@ -5,7 +5,7 @@ Generates notifications for tender matches and digests.
 Integrates with the main notification service and email system.
 
 Usage:
-    from backend.services.tenders.tender_notifications import TenderNotificationService
+    from services.tenders.tender_notifications import TenderNotificationService
 
     service = TenderNotificationService(db)
     await service.send_match_notifications(user_id)

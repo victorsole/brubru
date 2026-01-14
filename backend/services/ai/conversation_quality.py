@@ -12,10 +12,10 @@ from sqlalchemy import func, case
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-from backend.core.database import SessionLocal
-from backend.models.chat_analytics import ChatAnalytics
-from backend.models.knowledge_gap import KnowledgeGap
-from backend.models.feedback import FeedbackSubmission
+from core.database import SessionLocal
+from models.chat_analytics import ChatAnalytics
+from models.knowledge_gap import KnowledgeGap
+from models.feedback import FeedbackSubmission
 
 logger = logging.getLogger(__name__)
 

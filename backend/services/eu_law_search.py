@@ -5,7 +5,7 @@ Full-text search service for EU laws using PostgreSQL.
 Provides fast, ranked search across 28K+ EU legal documents.
 
 Usage:
-    from backend.services.eu_law_search import EULawSearchService
+    from services.eu_law_search import EULawSearchService
 
     search = EULawSearchService(db)
 
@@ -29,7 +29,7 @@ from typing import Optional
 from sqlalchemy import and_, or_, func, desc, text
 from sqlalchemy.orm import Session
 
-from backend.models.eu_law import EULaw
+from models.eu_law import EULaw
 
 logger = logging.getLogger(__name__)
 

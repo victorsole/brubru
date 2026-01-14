@@ -7,7 +7,7 @@ Strategy:
 2. Fall back to EUR-Lex web API if not found locally
 
 Usage:
-    from backend.services.parsers.eurlex_fetcher import EurlexFetcher
+    from services.parsers.eurlex_fetcher import EurlexFetcher
 
     fetcher = EurlexFetcher(db_session)
 
@@ -189,7 +189,7 @@ class EurlexFetcher:
 
         try:
             # Import here to avoid circular imports
-            from backend.models.eu_law import EULaw
+            from models.eu_law import EULaw
 
             # Query database
             law = self.db.query(EULaw).filter(EULaw.celex == celex).first()
@@ -340,7 +340,7 @@ class EurlexFetcher:
             return []
 
         try:
-            from backend.models.eu_law import EULaw
+            from models.eu_law import EULaw
 
             # Build query
             db_query = self.db.query(EULaw)

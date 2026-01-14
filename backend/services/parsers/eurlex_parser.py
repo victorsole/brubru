@@ -7,7 +7,7 @@ Handles both Official Journal (OJ) and consolidated versions.
 Based on LegalViz parsers.js implementation.
 
 Usage:
-    from backend.services.parsers.eurlex_parser import EurlexParser, parse_eurlex_html
+    from services.parsers.eurlex_parser import EurlexParser, parse_eurlex_html
 
     parser = EurlexParser()
     result = parser.parse_html(html_content)

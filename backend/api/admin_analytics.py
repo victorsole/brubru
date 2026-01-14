@@ -11,12 +11,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, case, and_
 from sqlalchemy.orm import Session
 
-from backend.core.database import get_db
-from backend.api.admin_auth import get_current_admin_user
-from backend.models.chat_analytics import ChatAnalytics
-from backend.models.knowledge_gap import KnowledgeGap
-from backend.models.feedback import FeedbackSubmission
-from backend.services.ai.conversation_quality import get_conversation_quality_service
+from core.database import get_db
+from api.admin_auth import get_current_admin_user
+from models.chat_analytics import ChatAnalytics
+from models.knowledge_gap import KnowledgeGap
+from models.feedback import FeedbackSubmission
+from services.ai.conversation_quality import get_conversation_quality_service
 
 router = APIRouter(prefix="/api/admin/analytics", tags=["admin-analytics"])
 

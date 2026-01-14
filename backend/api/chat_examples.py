@@ -13,10 +13,10 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from backend.core.database import get_db
-from backend.models.chat_example_prompt import ChatExamplePrompt
-from backend.api.admin_auth import get_current_admin_user
-from backend.models.user import User
+from core.database import get_db
+from models.chat_example_prompt import ChatExamplePrompt
+from api.admin_auth import get_current_admin_user
+from models.user import User
 
 
 public_router = APIRouter(prefix="/api/chat/examples", tags=["Chat Examples"])

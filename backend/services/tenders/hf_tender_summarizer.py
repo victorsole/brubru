@@ -5,7 +5,7 @@ Generates executive summaries of EU procurement tenders using BART.
 Extracts key information for quick SME decision-making.
 
 Usage:
-    from backend.services.tenders.hf_tender_summarizer import summarize_tender
+    from services.tenders.hf_tender_summarizer import summarize_tender
 
     summary = await summarize_tender(tender_dict)
     # {

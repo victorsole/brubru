@@ -847,7 +847,7 @@ async def refresh_rss_feeds(
     This adds new feeds and updates existing ones.
     """
     try:
-        from backend.scripts.seed_rss_feeds import seed_rss_feeds
+        from scripts.seed_rss_feeds import seed_rss_feeds
 
         logger.info(f"User {current_user.email} triggered RSS feed refresh")
 
@@ -916,8 +916,8 @@ async def refresh_legislative_trains(
         )
 
     try:
-        from backend.services.scrapers.legislative_train_scheduler import LegislativeTrainScheduler
-        from backend.core.database import SessionLocal
+        from services.scrapers.legislative_train_scheduler import LegislativeTrainScheduler
+        from core.database import SessionLocal
         import asyncio
 
         logger.info(f"User {current_user.email} triggered legislative train refresh")
@@ -944,7 +944,7 @@ async def refresh_legislative_trains(
             db = SessionLocal()
 
             try:
-                from backend.services.scrapers.legislative_train_scraper import LegislativeTrainScraper
+                from services.scrapers.legislative_train_scraper import LegislativeTrainScraper
 
                 # Create scraper instance
                 scraper = LegislativeTrainScraper()
@@ -969,7 +969,7 @@ async def refresh_legislative_trains(
                 legislative_train_job["total_carriages"] = len(carriages_data)
 
                 # Save to database
-                from backend.models.legislative_train import LegislativeTrain, LegislativeCarriage
+                from models.legislative_train import LegislativeTrain, LegislativeCarriage
 
                 legislative_train_job["current_step"] = "Saving to database..."
                 legislative_train_job["progress"] = 50

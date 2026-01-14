@@ -5,7 +5,7 @@ AI-powered explanation of award criteria for bidding strategy.
 Helps SMEs understand how to position their bids.
 
 Usage:
-    from backend.services.tenders.hf_award_explainer import explain_award_criteria
+    from services.tenders.hf_award_explainer import explain_award_criteria
 
     advice = await explain_award_criteria(tender_dict)
     # {

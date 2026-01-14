@@ -14,13 +14,13 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_, and_
 
-from backend.core.database import get_db
-from backend.models.user import User
-from backend.models.rss_feed import RSSFeed
-from backend.models.rss_entry import RSSEntry
-from backend.models.user_feed_subscription import UserFeedSubscription
-from backend.models.feedback import AdminActivityLog, SystemSettings
-from backend.api.admin_auth import get_current_admin_user
+from core.database import get_db
+from models.user import User
+from models.rss_feed import RSSFeed
+from models.rss_entry import RSSEntry
+from models.user_feed_subscription import UserFeedSubscription
+from models.feedback import AdminActivityLog, SystemSettings
+from api.admin_auth import get_current_admin_user
 from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
@@ -505,7 +505,7 @@ async def get_system_stats(
     ).scalar()
 
     # Feedback statistics
-    from backend.models.feedback import FeedbackSubmission
+    from models.feedback import FeedbackSubmission
     total_feedback = db.query(func.count(FeedbackSubmission.id)).scalar()
     unresolved_feedback = db.query(func.count(FeedbackSubmission.id)).filter(
         FeedbackSubmission.status.in_(['new', 'in_review', 'in_progress'])

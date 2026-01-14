@@ -5,7 +5,7 @@ import os
 import json
 import html
 from pathlib import Path
-from backend.core.config import settings
+from core.config import settings
 
 class TranslationService:
     """

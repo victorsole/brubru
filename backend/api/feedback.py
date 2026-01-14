@@ -14,14 +14,14 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
 
-from backend.core.database import get_db
-from backend.models.user import User
-from backend.models.feedback import (
+from core.database import get_db
+from models.user import User
+from models.feedback import (
     FeedbackSubmission,
     FeedbackComment,
     AdminActivityLog
 )
-from backend.schemas.feedback_schemas import (
+from schemas.feedback_schemas import (
     FeedbackCreate,
     FeedbackUpdate,
     FeedbackResponse,
@@ -32,8 +32,8 @@ from backend.schemas.feedback_schemas import (
     ChatFeedbackCreate,
     ChatFeedbackResponse
 )
-from backend.api.auth import get_current_user
-from backend.api.admin_auth import get_current_admin_user
+from api.auth import get_current_user
+from api.admin_auth import get_current_admin_user
 
 logger = logging.getLogger(__name__)
 

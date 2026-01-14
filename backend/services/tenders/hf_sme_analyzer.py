@@ -5,7 +5,7 @@ AI-powered analysis of tender suitability for SMEs.
 Uses Legal LLM (Saul-7B) to analyze requirements and identify barriers/opportunities.
 
 Usage:
-    from backend.services.tenders.hf_sme_analyzer import analyze_sme_suitability
+    from services.tenders.hf_sme_analyzer import analyze_sme_suitability
 
     analysis = await analyze_sme_suitability(tender_dict)
     # {
