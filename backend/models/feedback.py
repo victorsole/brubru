@@ -10,7 +10,7 @@ from sqlalchemy import Column, String, Text, Boolean, DateTime, ForeignKey, TIME
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 
-from backend.core.database import Base
+from core.database import Base
 
 
 class FeedbackSubmission(Base):

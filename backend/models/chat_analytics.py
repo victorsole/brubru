@@ -11,7 +11,7 @@ from sqlalchemy import Column, String, Text, Boolean, DateTime, Integer, Float, 
 from sqlalchemy.dialects.postgresql import UUID, ARRAY
 from sqlalchemy.orm import relationship
 
-from backend.core.database import Base
+from core.database import Base
 
 
 class ChatAnalytics(Base):
