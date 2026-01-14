@@ -9,9 +9,9 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from typing import Optional
 
-from ..core.database import get_db
-from ..core.config import settings
-from ..models.user import User
+from core.database import get_db
+from core.config import settings
+from models.user import User
 from .auth import get_current_user as get_current_user_strict
 
 # Optional OAuth2 scheme for development

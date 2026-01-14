@@ -309,7 +309,7 @@ class TenderFetcher:
         # Reverse lookup: 3-letter to 2-letter
         country_2 = None
         if country_3:
-            from ..services.tenders.ted_client import COUNTRY_CODE_MAP
+            from services.tenders.ted_client import COUNTRY_CODE_MAP
             country_2 = next((k for k, v in COUNTRY_CODE_MAP.items() if v == country_3), country_3[:2] if len(country_3) == 3 else country_3)
 
         # AU (buyer name) is multilingual

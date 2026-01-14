@@ -24,10 +24,10 @@ from fastapi import APIRouter, HTTPException, Query, Depends, status
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, or_, func
 
-from ..models.user import User
-from ..models.user_document import UserDocument
-from ..models.amendment import Amendment
-from ..schemas.user_document_schemas import (
+from models.user import User
+from models.user_document import UserDocument
+from models.amendment import Amendment
+from schemas.user_document_schemas import (
     UserDocumentCreate,
     UserDocumentUpdate,
     UserDocumentResponse,
@@ -40,8 +40,8 @@ from ..schemas.user_document_schemas import (
     StrategyCreate,
     NoteCreate,
 )
-from ..core.database import get_db
-from ..api.auth_optional import get_current_user_dev as get_current_user
+from core.database import get_db
+from api.auth_optional import get_current_user_dev as get_current_user
 
 logger = logging.getLogger(__name__)
 

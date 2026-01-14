@@ -10,13 +10,13 @@ from typing import Dict, List, Optional
 from datetime import datetime
 import asyncio
 
-from ..core.database import get_db
-from ..models.user import User
-from ..models.eu_law import LawCluster, ClusterLaw, LawRequirement, EULaw
+from core.database import get_db
+from models.user import User
+from models.eu_law import LawCluster, ClusterLaw, LawRequirement, EULaw
 from .admin_auth import get_current_admin_user
-from ..services.compliance.requirement_extractor import RequirementExtractor
-from ..services.embeddings import VectorSearchService
-from ..services.ai import create_chatbot
+from services.compliance.requirement_extractor import RequirementExtractor
+from services.embeddings import VectorSearchService
+from services.ai import create_chatbot
 
 router = APIRouter()
 
@@ -147,7 +147,7 @@ async def run_extraction_with_tracking(cluster_id: int):
     Run requirement extraction with progress tracking.
     Updates extraction_jobs dict with progress.
     """
-    from ..core.database import SessionLocal
+    from core.database import SessionLocal
 
     db = SessionLocal()
 
@@ -254,7 +254,7 @@ async def build_semantic_index(
 
 async def build_index_background(cluster_id: int):
     """Build vector search index in background."""
-    from ..core.database import SessionLocal
+    from core.database import SessionLocal
 
     db = SessionLocal()
     try:
@@ -351,7 +351,7 @@ async def get_available_models(
     """
     Get list of available AI models for requirement extraction.
     """
-    from ..services.compliance.hf_requirement_extractor import HuggingFaceRequirementExtractor
+    from services.compliance.hf_requirement_extractor import HuggingFaceRequirementExtractor
 
     models = HuggingFaceRequirementExtractor.MODELS
 
@@ -440,7 +440,7 @@ async def run_extraction_with_model(
     Run requirement extraction with specified model.
     Tracks progress in extraction_jobs dict.
     """
-    from ..core.database import SessionLocal
+    from core.database import SessionLocal
 
     db = SessionLocal()
 

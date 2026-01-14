@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 import uuid
 
-from ..core.database import Base
+from core.database import Base
 
 
 class Notification(Base):

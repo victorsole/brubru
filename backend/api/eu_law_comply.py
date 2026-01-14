@@ -14,17 +14,17 @@ import tempfile
 import os
 from pathlib import Path
 
-from ..core.database import get_db
-from ..core.config import settings
-from ..models.user import User
-from ..models.eu_law import LawCluster, EULaw, LawRequirement, ClusterLaw
-from ..models.compliance import (
+from core.database import get_db
+from core.config import settings
+from models.user import User
+from models.eu_law import LawCluster, EULaw, LawRequirement, ClusterLaw
+from models.compliance import (
     ComplianceAnalysis, GapFinding, AnalysisExport, ComplianceAction
 )
-from ..models.user_document import UserDocument
-from ..api.auth import get_current_user
-from ..services.compliance import GapAnalyzer
-from ..services.compliance.report_exporter import ReportExporter
+from models.user_document import UserDocument
+from api.auth import get_current_user
+from services.compliance import GapAnalyzer
+from services.compliance.report_exporter import ReportExporter
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ async def run_compliance_analysis_task(
 
     This runs asynchronously after the API returns to the user.
     """
-    from ..core.database import SessionLocal
+    from core.database import SessionLocal
 
     db = SessionLocal()
 
@@ -365,7 +365,7 @@ async def search_laws(
 
     Returns list of laws matching criteria.
     """
-    from ..services.eu_law_search import EULawSearchService
+    from services.eu_law_search import EULawSearchService
 
     try:
         # Check user tier
@@ -416,7 +416,7 @@ async def get_law_by_celex(
 
     Returns detailed law information with parsed content.
     """
-    from ..services.parsers import EurlexFetcher
+    from services.parsers import EurlexFetcher
 
     try:
         # Check user tier
@@ -477,7 +477,7 @@ async def get_law_stats(
 
     Returns counts by policy area, document type, and year.
     """
-    from ..services.eu_law_search import EULawSearchService
+    from services.eu_law_search import EULawSearchService
 
     try:
         if current_user.subscription_tier not in ['yellow', 'blue']:

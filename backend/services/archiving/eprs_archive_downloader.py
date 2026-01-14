@@ -39,10 +39,10 @@ from dataclasses import dataclass, asdict
 import json
 from pathlib import Path
 
-from ..api_clients.eprs_archive_client import EPRSArchiveClient, get_eprs_archive_client, EPRSPublicationType
-from ..document_processing.eprs_enricher import EPRSContentEnricher
-from ..indexing.eprs_indexer import EPRSIndexer, get_eprs_indexer
-from ...schemas.scrapers.scraper_schemas import (
+from services.api_clients.eprs_archive_client import EPRSArchiveClient, get_eprs_archive_client, EPRSPublicationType
+from services.document_processing.eprs_enricher import EPRSContentEnricher
+from services.indexing.eprs_indexer import EPRSIndexer, get_eprs_indexer
+from schemas.scrapers.scraper_schemas import (
     EPRSPublication,
     EPRSExtractionResult,
     EPRSPublicationType as SchemaPublicationType

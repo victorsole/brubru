@@ -11,7 +11,7 @@ from sqlalchemy.sql import func
 import uuid
 import json
 
-from ..core.database import Base
+from core.database import Base
 
 
 class User(Base):

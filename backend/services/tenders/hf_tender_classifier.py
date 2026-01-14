@@ -18,7 +18,7 @@ import logging
 from typing import List, Dict, Any, Optional
 from functools import lru_cache
 
-from ..ai.huggingface_service import get_huggingface_service
+from services.ai.huggingface_service import get_huggingface_service
 
 logger = logging.getLogger(__name__)
 

@@ -19,7 +19,7 @@ import json
 import chromadb
 from chromadb.config import Settings
 
-from ..vector_db.hf_embedding_function import get_hf_embedding_function
+from services.vector_db.hf_embedding_function import get_hf_embedding_function
 
 logger = logging.getLogger(__name__)
 

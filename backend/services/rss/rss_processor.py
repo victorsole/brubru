@@ -14,16 +14,23 @@ Features:
 - AI-powered content enrichment
 """
 
+# Ensure /app is in path for Cloud Run
+import sys
+import os
+_app_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if _app_dir not in sys.path:
+    sys.path.insert(0, _app_dir)
+
 import logging
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, or_
 
-from ...models.rss_feed import RSSFeed
-from ...models.rss_entry import RSSEntry
+from models.rss_feed import RSSFeed
+from models.rss_entry import RSSEntry
 from .rss_aggregator import RSSAggregator, AggregatedFeedEntry
-from ..ai.content_analyzer import ContentAnalyzer
+from services.ai.content_analyzer import ContentAnalyzer
 
 logger = logging.getLogger(__name__)
 

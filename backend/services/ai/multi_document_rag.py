@@ -17,10 +17,10 @@ import asyncio
 from sqlalchemy import or_, and_, func
 from sqlalchemy.orm import Session
 
-from ..embeddings.embedding_service import EmbeddingService, get_embedding_service
-from ..ai.huggingface_service import get_huggingface_service
-from ...core.database import SessionLocal
-from ...models.eu_law import EULaw, LawCluster, ClusterLaw
+from services.embeddings.embedding_service import EmbeddingService, get_embedding_service
+from services.ai.huggingface_service import get_huggingface_service
+from core.database import SessionLocal
+from models.eu_law import EULaw, LawCluster, ClusterLaw
 
 logger = logging.getLogger(__name__)
 

@@ -20,12 +20,12 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException, Query, Depends, status
 from pydantic import BaseModel, Field, HttpUrl
 
-from ..services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
-from ..services.scrapers.eurlex_scraper import EURLexScraper
-from ..services.scrapers.oeil_scraper import OEILScraper
-from ..services.scrapers.iate_scraper import IATEScraper
-from ..services.cache.api_cache import APICache, get_or_set
-from ..schemas.scrapers.scraper_schemas import (
+from services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
+from services.scrapers.eurlex_scraper import EURLexScraper
+from services.scrapers.oeil_scraper import OEILScraper
+from services.scrapers.iate_scraper import IATEScraper
+from services.cache.api_cache import APICache, get_or_set
+from schemas.scrapers.scraper_schemas import (
     MEP, LegislativeDocument, LegislativeProcedure,
     TerminologyEntry, PublicationMetadata, SPARQLQueryResult
 )

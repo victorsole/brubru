@@ -18,8 +18,8 @@ from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, or_
 
-from ..models.user_document import UserDocument
-from ..models.rss_entry import RSSEntry
+from models.user_document import UserDocument
+from models.rss_entry import RSSEntry
 from .scrapers.oeil_scraper import OEILScraper
 from .ai.content_analyzer import ContentAnalyzer
 

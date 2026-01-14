@@ -23,12 +23,12 @@ from dataclasses import dataclass, field
 from enum import Enum
 import asyncio
 
-from ..api_clients.european_parliament_client import EuropeanParliamentClient
-from ..api_clients.eurlex_client import EURLexClient
-from ..api_clients.publications_office_client import PublicationsOfficeClient
-from ..api_clients.iate_client import IATEClient
-from ..api_clients.data_europa_client import DataEuropaClient
-from ..rss.rss_aggregator import RSSAggregator
+from services.api_clients.european_parliament_client import EuropeanParliamentClient
+from services.api_clients.eurlex_client import EURLexClient
+from services.api_clients.publications_office_client import PublicationsOfficeClient
+from services.api_clients.iate_client import IATEClient
+from services.api_clients.data_europa_client import DataEuropaClient
+from services.rss.rss_aggregator import RSSAggregator
 
 logger = logging.getLogger(__name__)
 

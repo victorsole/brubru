@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 from .base_scraper import BaseScraper
-from ..api_clients.oeil_client import OEILClient
+from services.api_clients.oeil_client import OEILClient
 
 logger = logging.getLogger(__name__)
 

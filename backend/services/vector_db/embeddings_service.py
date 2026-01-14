@@ -17,8 +17,8 @@ from typing import List, Optional, Dict, Any, Tuple
 from openai import AsyncOpenAI
 import asyncio
 
-from ...core.config import settings
-from ..cache.api_cache import APICache
+from core.config import settings
+from services.cache.api_cache import APICache
 
 logger = logging.getLogger(__name__)
 

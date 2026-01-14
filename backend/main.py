@@ -4,24 +4,31 @@ Brubru FastAPI Application
 Main application entry point with FastAPI + SQLAlchemy + Supabase integration.
 """
 
+# Ensure /app is in Python path for Cloud Run deployment
+import sys
+import os
+app_dir = os.path.dirname(os.path.abspath(__file__))
+if app_dir not in sys.path:
+    sys.path.insert(0, app_dir)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from .core.config import settings
-from .core.database import init_db
-from .services.rss.rss_scheduler import start_scheduler, stop_scheduler
+from core.config import settings
+from core.database import init_db
+from services.rss.rss_scheduler import start_scheduler, stop_scheduler
 
 # Import routers
-from .api import (
+from api import (
     chat, documents, auth, subscriptions, my_eu_bubble, rss_feeds,
     user_documents, legislative_tracking, notifications, export, personalization,
     feedback, admin_panel, translation, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
     user_preferences, admin_analytics
 )
-from .api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
-# from .api import ai
+from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
+# from api import ai
 
 
 @asynccontextmanager

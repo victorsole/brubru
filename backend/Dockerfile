@@ -10,7 +10,8 @@ FROM python:3.11-slim as base
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONPATH=/app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -42,6 +43,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # ============================================
 FROM base as production
 
+# Explicitly set PYTHONPATH for module resolution
+ENV PYTHONPATH=/app
+
 # Copy installed dependencies from previous stage
 COPY --from=dependencies /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=dependencies /usr/local/bin /usr/local/bin
@@ -49,24 +53,18 @@ COPY --from=dependencies /usr/local/bin /usr/local/bin
 # Copy application code
 COPY --chown=brubru:brubru . /app
 
+# Create .pth file to add /app to Python path permanently
+RUN echo "/app" > /usr/local/lib/python3.11/site-packages/brubru.pth
+
 # Switch to non-root user
 USER brubru
 
 # Expose port
 EXPOSE 8000
 
-# Health check
+# Health check (Cloud Run uses its own health checks, this is for local Docker)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+    CMD curl -f http://localhost:${PORT:-8000}/health || exit 1
 
-# Run the application
-# Using uvicorn with optimal production settings
-CMD ["uvicorn", "main:app", \
-    "--host", "0.0.0.0", \
-    "--port", "8000", \
-    "--workers", "2", \
-    "--limit-concurrency", "100", \
-    "--limit-max-requests", "10000", \
-    "--access-log", \
-    "--proxy-headers", \
-    "--forwarded-allow-ips", "*"]
+# Run the application using start.py which properly sets up Python path
+CMD ["python", "start.py"]

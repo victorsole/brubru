@@ -19,22 +19,22 @@ from typing import List, Dict, Any, Optional, Set, Tuple
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 
-from ..search.hybrid_search import HybridSearch, get_hybrid_search
-from ..indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
-from ..indexing.eprs_indexer import EPRSIndexer, get_eprs_indexer  # Phase 2: EPRS search
-from ..matching.eprs_matcher import EPRSMatcher, get_eprs_matcher  # Phase 3: Auto-matching
+from services.search.hybrid_search import HybridSearch, get_hybrid_search
+from services.indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
+from services.indexing.eprs_indexer import EPRSIndexer, get_eprs_indexer  # Phase 2: EPRS search
+from services.matching.eprs_matcher import EPRSMatcher, get_eprs_matcher  # Phase 3: Auto-matching
 from .ai_summary_generator import AISummaryGenerator, get_ai_summary_generator  # Phase 5: AI summaries
 from .freshness_detector import FreshnessDetector, get_freshness_detector  # Phase 5: Freshness detection
 from .tender_context_provider import TenderContextProvider, get_tender_context_provider, TenderIntent, TenderContextData  # Phase 8: Tender chat
-from ..api_clients.eurlex_client import EURLexClient
-from ..api_clients.oeil_client import OEILClient
-from ..api_clients.european_parliament_client import EuropeanParliamentClient
-from ..api_clients.tavily_client import TavilyClient, get_tavily_client, TavilySearchResponse
-# from ..scrapers.rss_manager import RSSManager  # TODO: Fix - RSSManager doesn't exist
-from ...knowledge_base.reference_data import ReferenceDataService, get_reference_data_service
-from ...knowledge_base.knowledge_loader import KnowledgeLoader, get_knowledge_loader
-from ...models.legislative_train import LegislativeTrain, LegislativeCarriage
-from ...core.database import SessionLocal
+from services.api_clients.eurlex_client import EURLexClient
+from services.api_clients.oeil_client import OEILClient
+from services.api_clients.european_parliament_client import EuropeanParliamentClient
+from services.api_clients.tavily_client import TavilyClient, get_tavily_client, TavilySearchResponse
+# from services.scrapers.rss_manager import RSSManager  # TODO: Fix - RSSManager doesn't exist
+from knowledge_base.reference_data import ReferenceDataService, get_reference_data_service
+from knowledge_base.knowledge_loader import KnowledgeLoader, get_knowledge_loader
+from models.legislative_train import LegislativeTrain, LegislativeCarriage
+from core.database import SessionLocal
 
 logger = logging.getLogger(__name__)
 
@@ -772,7 +772,7 @@ class ContextBuilder:
         Returns:
             List of committee information dictionaries
         """
-        from ..scrapers.european_parliament_scraper import EuropeanParliamentScraper
+        from services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
 
         committee_data = []
         scraper = None
@@ -1086,7 +1086,7 @@ class ContextBuilder:
         Returns:
             List of relevant EU laws with full text
         """
-        from ..law_database.law_indexer import get_law_indexer
+        from services.law_database.law_indexer import get_law_indexer
 
         laws = []
 

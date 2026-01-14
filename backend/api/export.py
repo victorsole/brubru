@@ -12,10 +12,10 @@ from sqlalchemy.orm import Session
 from io import BytesIO
 import json
 
-from ..core.database import get_db
-from ..models.user import User
+from core.database import get_db
+from models.user import User
 from .auth_optional import get_current_user_dev as get_current_user
-from ..services.export_service import ExportService
+from services.export_service import ExportService
 
 router = APIRouter(prefix="/api/export", tags=["Data Export"])
 

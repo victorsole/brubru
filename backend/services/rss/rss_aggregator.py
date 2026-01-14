@@ -22,13 +22,13 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 import asyncio
 
-from ..api_clients.european_parliament_client import EuropeanParliamentClient
-from ..api_clients.eurlex_client import EURLexClient
-from ..api_clients.oeil_client import OEILClient
-from ..api_clients.council_rss_client import CouncilRSSClient
-from ..api_clients.think_tank_rss_client import ThinkTankRSSClient
-from ..api_clients.news_rss_client import NewsRSSClient
-from ..api_clients.base_rss_client import RSSEntry
+from services.api_clients.european_parliament_client import EuropeanParliamentClient
+from services.api_clients.eurlex_client import EURLexClient
+from services.api_clients.oeil_client import OEILClient
+from services.api_clients.council_rss_client import CouncilRSSClient
+from services.api_clients.think_tank_rss_client import ThinkTankRSSClient
+from services.api_clients.news_rss_client import NewsRSSClient
+from services.api_clients.base_rss_client import RSSEntry
 
 logger = logging.getLogger(__name__)
 

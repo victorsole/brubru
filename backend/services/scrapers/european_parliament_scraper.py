@@ -18,8 +18,8 @@ from typing import Any, Dict, List, Optional
 from bs4 import BeautifulSoup
 
 from .base_scraper import BaseScraper, ScraperError
-from ...schemas.scrapers.scraper_schemas import MEP, PoliticalGroup, SearchResult
-from ..api_clients.european_parliament_client import EuropeanParliamentClient
+from schemas.scrapers.scraper_schemas import MEP, PoliticalGroup, SearchResult
+from services.api_clients.european_parliament_client import EuropeanParliamentClient
 
 logger = logging.getLogger(__name__)
 

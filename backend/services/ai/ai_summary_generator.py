@@ -37,7 +37,7 @@ from datetime import datetime
 from dataclasses import dataclass
 import anthropic
 
-from ...core.config import settings
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 

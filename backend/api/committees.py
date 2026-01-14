@@ -9,7 +9,7 @@ from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 
-from ..services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
+from services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
 
 logger = logging.getLogger(__name__)
 

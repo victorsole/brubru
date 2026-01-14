@@ -44,7 +44,7 @@ class RequirementExtractor:
     """Extracts legal requirements from EU law text using AI."""
 
     def __init__(self, db: Session):
-        from ..core.config import settings
+        from core.config import settings
         import anthropic
         self.db = db
         self.client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
@@ -60,7 +60,7 @@ class RequirementExtractor:
 
         Returns dict with cluster info and extracted requirements.
         """
-        from ..models.eu_law import LawCluster, ClusterLaw, EULaw, LawRequirement
+        from models.eu_law import LawCluster, ClusterLaw, EULaw, LawRequirement
 
         # Get cluster
         cluster = self.db.query(LawCluster).filter(LawCluster.id == cluster_id).first()
@@ -267,7 +267,7 @@ If no clear requirements found, return empty array: []"""
 
     def _load_existing_requirements(self, cluster: "LawCluster") -> Dict[str, Any]:
         """Load existing requirements from database."""
-        from ..models.eu_law import LawRequirement, EULaw
+        from models.eu_law import LawRequirement, EULaw
 
         requirements = self.db.query(LawRequirement, EULaw).join(
             EULaw, LawRequirement.law_id == EULaw.id
@@ -316,7 +316,7 @@ If no clear requirements found, return empty array: []"""
 
     def _save_to_database(self, cluster: "LawCluster", requirements: List[Dict[str, Any]]):
         """Save requirements to database."""
-        from ..models.eu_law import LawRequirement
+        from models.eu_law import LawRequirement
         from datetime import datetime
 
         # Delete existing requirements for this cluster
@@ -366,8 +366,8 @@ async def extract_all_clusters(
     dry_run: bool = False
 ):
     """Extract requirements from all clusters (or specific cluster)."""
-    from ..core.database import SessionLocal
-    from ..models.eu_law import LawCluster
+    from core.database import SessionLocal
+    from models.eu_law import LawCluster
 
     db = SessionLocal()
     extractor = RequirementExtractor(db)

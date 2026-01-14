@@ -21,9 +21,9 @@ from sqlalchemy.orm import Session
 
 from .xml_parser import get_xml_parser
 from .policy_classifier import get_policy_classifier
-from ...core.database import SessionLocal
-from ...models.eu_law import EULaw, LawCluster, ClusterLaw
-from ...knowledge_base.knowledge_loader import get_knowledge_loader
+from core.database import SessionLocal
+from models.eu_law import EULaw, LawCluster, ClusterLaw
+from knowledge_base.knowledge_loader import get_knowledge_loader
 
 logger = logging.getLogger(__name__)
 

@@ -24,9 +24,9 @@ from dataclasses import dataclass
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from ...core.database import SessionLocal
-from ...models.tender import Tender, TenderProfile, TenderMatch
-from ...services.tenders.tender_service import TenderService
+from core.database import SessionLocal
+from models.tender import Tender, TenderProfile, TenderMatch
+from services.tenders.tender_service import TenderService
 
 logger = logging.getLogger(__name__)
 

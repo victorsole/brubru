@@ -21,7 +21,7 @@ from datetime import datetime
 from typing import Optional, List, Dict, Any, Tuple
 from pathlib import Path
 
-from ...schemas.scrapers.scraper_schemas import (
+from schemas.scrapers.scraper_schemas import (
     EPRSPublication,
     EPRSPublicationType,
     EPRSExtractionResult,

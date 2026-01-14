@@ -18,7 +18,7 @@ import anthropic
 from openai import AsyncOpenAI
 import openai
 
-from ...core.config import settings
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 

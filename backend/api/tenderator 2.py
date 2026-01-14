@@ -1338,6 +1338,98 @@ async def update_match(
         )
 
 
+# ============================================================================
+# EU Procurement Law Integration
+# ============================================================================
+
+@router.get(
+    "/legal-framework",
+    summary="Get EU procurement legal framework",
+    description="Get relevant EU laws for public procurement"
+)
+async def get_procurement_legal_framework(
+    sector: Optional[str] = None,
+    current_user: User = Depends(require_blue_tier),
+    db: Session = Depends(get_db)
+):
+    """
+    Get EU procurement directives and regulations relevant to tenders.
+
+    Query Parameters:
+    - sector: Filter by sector (utilities, defence, concessions, general)
+
+    Returns key EU procurement laws with their requirements.
+    """
+    from services.eu_law_search import EULawSearchService
+
+    try:
+        search_service = EULawSearchService(db)
+
+        # Core EU procurement CELEX numbers
+        procurement_laws = {
+            'general': [
+                '32014L0024',  # Public Procurement Directive
+                '32014L0025',  # Utilities Directive
+            ],
+            'utilities': [
+                '32014L0025',  # Utilities Directive
+            ],
+            'defence': [
+                '32009L0081',  # Defence Procurement Directive
+            ],
+            'concessions': [
+                '32014L0023',  # Concessions Directive
+            ],
+            'remedies': [
+                '32007L0066',  # Remedies Directive
+                '31989L0665',  # Review Procedures Directive
+            ],
+            'eforms': [
+                '32019R1780',  # eForms Regulation
+            ],
+        }
+
+        # Select relevant laws
+        if sector and sector in procurement_laws:
+            celex_list = procurement_laws[sector]
+        else:
+            # Return all core procurement laws
+            celex_list = list(set(
+                procurement_laws['general'] +
+                procurement_laws['remedies'] +
+                procurement_laws['eforms']
+            ))
+
+        # Fetch law details
+        laws = []
+        for celex in celex_list:
+            result = search_service.get_by_celex(celex)
+            if result:
+                laws.append(result.to_dict())
+
+        # Also search for recent procurement-related laws
+        recent = search_service.search(
+            query='public procurement',
+            doc_type='Regulation',
+            year_from=2020,
+            limit=5
+        )
+
+        return {
+            'core_laws': laws,
+            'recent_updates': [r.to_dict() for r in recent.results],
+            'sector': sector or 'all',
+            'total_core': len(laws),
+        }
+
+    except Exception as e:
+        logger.error(f"Error getting procurement legal framework: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve legal framework: {str(e)}"
+        )
+
+
 @router.get(
     "/{tender_id}/legal-requirements",
     summary="Get legal requirements for tender",

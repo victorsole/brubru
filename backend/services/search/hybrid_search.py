@@ -21,7 +21,7 @@ from collections import Counter
 import re
 
 from .semantic_search import SemanticSearch, SearchResult, SearchResponse, get_semantic_search
-from ..vector_db.vector_store import VectorStore
+from services.vector_db.vector_store import VectorStore
 
 logger = logging.getLogger(__name__)
 

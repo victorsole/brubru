@@ -10,10 +10,10 @@ import stripe
 from datetime import datetime, timedelta
 from typing import Optional
 
-from ..core.config import settings
-from ..core.database import get_db
-from ..models.user import User
-from ..api.auth import get_current_user
+from core.config import settings
+from core.database import get_db
+from models.user import User
+from api.auth import get_current_user
 
 # Initialize Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY

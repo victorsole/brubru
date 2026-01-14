@@ -24,9 +24,9 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, func
 
-from ..models.user import User
-from ..models.amendment import Amendment
-from ..schemas.amendment_schemas import (
+from models.user import User
+from models.amendment import Amendment
+from schemas.amendment_schemas import (
     AmendmentCreate,
     AmendmentUpdate,
     AmendmentResponse,
@@ -34,9 +34,9 @@ from ..schemas.amendment_schemas import (
     AmendmentBatchCreate,
     AmendmentStats,
 )
-from ..core.database import get_db
-from ..api.auth_optional import get_current_user_dev as get_current_user
-from ..services.amendator.amendment_export_service import get_export_service
+from core.database import get_db
+from api.auth_optional import get_current_user_dev as get_current_user
+from services.amendator.amendment_export_service import get_export_service
 
 logger = logging.getLogger(__name__)
 
@@ -510,7 +510,7 @@ async def get_law_for_amendment(
     Returns articles, recitals, and annexes that can be amended.
     If article is specified, returns just that article's content.
     """
-    from ..services.parsers import EurlexFetcher
+    from services.parsers import EurlexFetcher
 
     try:
         fetcher = EurlexFetcher(db=db)
@@ -589,7 +589,7 @@ async def resolve_citations(
     - Finding related legislation
     """
     import re
-    from ..services.eu_law_search import EULawSearchService
+    from services.eu_law_search import EULawSearchService
 
     try:
         # Extract CELEX patterns

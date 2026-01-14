@@ -12,9 +12,9 @@ import asyncio
 import logging
 from datetime import datetime
 
-from ..services.scrapers.legislative_train_scraper import LegislativeTrainScraper
-from ..core.database import SessionLocal
-from ..models.legislative_train import LegislativeTrain, LegislativeCarriage, CarriageStatusEnum
+from services.scrapers.legislative_train_scraper import LegislativeTrainScraper
+from core.database import SessionLocal
+from models.legislative_train import LegislativeTrain, LegislativeCarriage, CarriageStatusEnum
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

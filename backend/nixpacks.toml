@@ -1,0 +1,6 @@
+# Nixpacks configuration for Railway
+[variables]
+PYTHONPATH = "/app"
+
+[start]
+cmd = "python start.py"

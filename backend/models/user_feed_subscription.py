@@ -11,7 +11,7 @@ from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 import uuid
 
-from ..core.database import Base
+from core.database import Base
 
 
 class UserFeedSubscription(Base):

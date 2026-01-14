@@ -18,7 +18,7 @@ from datetime import datetime, date, timedelta
 from enum import Enum
 import httpx
 
-from ..api_clients.base_api_client import BaseAPIClient, AuthType, ResponseFormat
+from services.api_clients.base_api_client import BaseAPIClient, AuthType, ResponseFormat
 
 logger = logging.getLogger(__name__)
 

@@ -20,10 +20,10 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 import asyncio
 
-from ..services.ai_service import AIService, ChatMessage, get_ai_service
-from ..services.ai.context_builder import get_context_builder
-from ..services.ai.citation_tracker import CitationTracker
-from ..services.ai.hybrid_legal_assistant import HybridLegalAssistant, get_hybrid_assistant
+from services.ai_service import AIService, ChatMessage, get_ai_service
+from services.ai.context_builder import get_context_builder
+from services.ai.citation_tracker import CitationTracker
+from services.ai.hybrid_legal_assistant import HybridLegalAssistant, get_hybrid_assistant
 
 logger = logging.getLogger(__name__)
 
@@ -532,8 +532,8 @@ async def debug_mep_linking():
     4. Returns all internal state for inspection
     """
     try:
-        from ..services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
-        from ..services.ai_service import get_ai_service
+        from services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
+        from services.ai_service import get_ai_service
 
         result = {
             'timestamp': datetime.now().isoformat(),

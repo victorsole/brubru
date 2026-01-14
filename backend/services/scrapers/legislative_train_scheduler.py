@@ -16,8 +16,8 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from sqlalchemy.orm import Session
 
-from ...core.database import SessionLocal
-from ...models.legislative_train import (
+from core.database import SessionLocal
+from models.legislative_train import (
     LegislativeTrain,
     LegislativeCarriage,
     UserCarriageTrack,

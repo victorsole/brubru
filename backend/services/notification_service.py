@@ -18,11 +18,11 @@ from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, or_, desc
 
-from ..models.notification import Notification
-from ..models.user import User
-from ..models.rss_entry import RSSEntry
-from ..models.user_feed_subscription import UserFeedSubscription
-from ..models.user_document import UserDocument
+from models.notification import Notification
+from models.user import User
+from models.rss_entry import RSSEntry
+from models.user_feed_subscription import UserFeedSubscription
+from models.user_document import UserDocument
 
 logger = logging.getLogger(__name__)
 

@@ -13,9 +13,9 @@ from langchain.chains import LLMChain
 from sqlalchemy.orm import Session
 from openai import OpenAI
 
-from ...core.config import settings
-from ...models.eu_law import LawRequirement, EULaw, LawCluster
-from ..embeddings import VectorSearchService
+from core.config import settings
+from models.eu_law import LawRequirement, EULaw, LawCluster
+from services.embeddings import VectorSearchService
 
 logger = logging.getLogger(__name__)
 

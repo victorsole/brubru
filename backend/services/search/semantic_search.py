@@ -17,8 +17,8 @@ from typing import List, Dict, Any, Optional, Set
 from datetime import datetime
 from dataclasses import dataclass
 
-from ..vector_db.vector_store import VectorStore, get_vector_store
-from ..embeddings.embedding_service import EmbeddingService, get_embedding_service
+from services.vector_db.vector_store import VectorStore, get_vector_store
+from services.embeddings.embedding_service import EmbeddingService, get_embedding_service
 
 logger = logging.getLogger(__name__)
 

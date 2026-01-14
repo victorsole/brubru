@@ -9,8 +9,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
-from ..core.database import get_db
-from ..models.user import User
+from core.database import get_db
+from models.user import User
 from .auth import get_current_user
 
 router = APIRouter(prefix="/api/user", tags=["user-preferences"])

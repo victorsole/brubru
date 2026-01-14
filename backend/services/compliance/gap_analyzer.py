@@ -18,9 +18,9 @@ from sqlalchemy.orm import Session
 from openai import OpenAI
 import numpy as np
 
-from ...core.config import settings
-from ...models.eu_law import LawRequirement
-from ...models.compliance import ComplianceAnalysis, GapFinding
+from core.config import settings
+from models.eu_law import LawRequirement
+from models.compliance import ComplianceAnalysis, GapFinding
 from .document_processor import DocumentProcessor
 
 logger = logging.getLogger(__name__)

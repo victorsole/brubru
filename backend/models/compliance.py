@@ -17,7 +17,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from pgvector.sqlalchemy import Vector
-from ..core.database import Base
+from core.database import Base
 
 
 class ComplianceAnalysis(Base):

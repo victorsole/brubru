@@ -22,9 +22,9 @@ from typing import Any, Dict, List, Optional
 from pathlib import Path
 
 from .base_scraper import BaseScraper
-from ..api_clients.think_tank_rss_client import ThinkTankRSSClient
-from ..document_processing import EPRSContentEnricher, PDFProcessor
-from ...schemas.scrapers.scraper_schemas import EPRSPublication, EPRSExtractionResult
+from services.api_clients.think_tank_rss_client import ThinkTankRSSClient
+from services.document_processing import EPRSContentEnricher, PDFProcessor
+from schemas.scrapers.scraper_schemas import EPRSPublication, EPRSExtractionResult
 
 logger = logging.getLogger(__name__)
 

@@ -22,7 +22,7 @@ import json
 import re
 from typing import Dict, Any, Optional, List
 
-from ..ai.huggingface_service import get_huggingface_service
+from services.ai.huggingface_service import get_huggingface_service
 
 logger = logging.getLogger(__name__)
 

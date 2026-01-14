@@ -14,13 +14,13 @@ import logging
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 
-from ...schemas.scrapers.legislative_train_schemas import (
+from schemas.scrapers.legislative_train_schemas import (
     LegislativeCarriage,
     EnrichedCarriage,
     EPRSBriefingReference
 )
 from .oeil_scraper import OEILScraper
-from ..matching.eprs_matcher import get_eprs_matcher
+from services.matching.eprs_matcher import get_eprs_matcher
 
 logger = logging.getLogger(__name__)
 

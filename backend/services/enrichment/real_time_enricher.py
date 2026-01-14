@@ -18,10 +18,10 @@ from typing import List, Dict, Any, Optional, Set
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 
-from ..indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
-from ...api_clients.eurlex_client import EURLexClient
-from ...api_clients.oeil_client import OEILClient
-from ...api_clients.european_parliament_client import EuropeanParliamentClient
+from services.indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
+from api_clients.eurlex_client import EURLexClient
+from api_clients.oeil_client import OEILClient
+from api_clients.european_parliament_client import EuropeanParliamentClient
 
 logger = logging.getLogger(__name__)
 

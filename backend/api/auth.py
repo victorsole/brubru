@@ -13,10 +13,10 @@ from passlib.context import CryptContext
 import httpx
 import hashlib
 
-from ..core.database import get_db
-from ..core.config import settings
-from ..models.user import User
-from ..schemas.auth_schemas import (
+from core.database import get_db
+from core.config import settings
+from models.user import User
+from schemas.auth_schemas import (
     UserCreate, UserLogin, UserResponse, Token, UserUpdate,
     GoogleAuthRequest, LinkedInAuthRequest, LinkedInCallbackRequest
 )

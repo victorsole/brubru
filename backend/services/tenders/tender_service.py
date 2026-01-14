@@ -30,7 +30,7 @@ from .ted_client import TEDClient, NoticeType, ProcedureType
 from .ted_sparql_client import TEDSPARQLClient
 from .eforms_parser import EFormsParser
 from .sme_scorer import SMEScorer, SMEProfile, SMECategory
-from ...models.tender import Tender, TenderProfile, TenderMatch, TenderFetchJob
+from models.tender import Tender, TenderProfile, TenderMatch, TenderFetchJob
 
 logger = logging.getLogger(__name__)
 

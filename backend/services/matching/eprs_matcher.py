@@ -17,8 +17,8 @@ from typing import List, Dict, Any, Optional, Set
 from datetime import datetime, timedelta
 import re
 
-from ..indexing.eprs_indexer import EPRSIndexer, get_eprs_indexer
-from ...schemas.scrapers.scraper_schemas import EPRSPublication
+from services.indexing.eprs_indexer import EPRSIndexer, get_eprs_indexer
+from schemas.scrapers.scraper_schemas import EPRSPublication
 
 logger = logging.getLogger(__name__)
 

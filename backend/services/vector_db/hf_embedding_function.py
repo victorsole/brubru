@@ -17,7 +17,7 @@ from typing import List
 from chromadb import Documents, EmbeddingFunction, Embeddings
 import numpy as np
 
-from ..embeddings.embedding_service import EmbeddingService, get_embedding_service
+from services.embeddings.embedding_service import EmbeddingService, get_embedding_service
 
 logger = logging.getLogger(__name__)
 

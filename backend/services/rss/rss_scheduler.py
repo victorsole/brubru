@@ -23,7 +23,7 @@ from sqlalchemy.orm import Session
 
 from .rss_aggregator import RSSAggregator
 from .rss_processor import RSSProcessor
-from ...core.database import SessionLocal
+from core.database import SessionLocal
 
 logger = logging.getLogger(__name__)
 

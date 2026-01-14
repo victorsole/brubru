@@ -27,10 +27,10 @@ import anthropic
 from .ai.context_builder import ContextBuilder, get_context_builder, SOURCE_TIERS
 from .ai.multi_provider_service import MultiProviderService, get_multi_provider_service
 from .ai.conversation_memory import get_conversation_memory_service
-from ..core.config import settings
-from ..core.database import SessionLocal
-from ..models.knowledge_gap import KnowledgeGap, MissingDataType
-from ..models.chat_analytics import ChatAnalytics
+from core.config import settings
+from core.database import SessionLocal
+from models.knowledge_gap import KnowledgeGap, MissingDataType
+from models.chat_analytics import ChatAnalytics
 
 logger = logging.getLogger(__name__)
 
@@ -1081,8 +1081,8 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         Returns:
             List of document content blocks for Claude
         """
-        from ..services.storage.document_storage import get_document_storage
-        from ..services.pdf_processor import get_pdf_processor
+        from services.storage.document_storage import get_document_storage
+        from services.pdf_processor import get_pdf_processor
 
         documents = []
         storage = get_document_storage()

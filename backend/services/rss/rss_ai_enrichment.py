@@ -15,8 +15,8 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 from sqlalchemy.orm import Session
 
-from ..ai.huggingface_service import get_huggingface_service
-from ...models.rss_entry import RSSEntry
+from services.ai.huggingface_service import get_huggingface_service
+from models.rss_entry import RSSEntry
 
 logger = logging.getLogger(__name__)
 

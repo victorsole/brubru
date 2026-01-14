@@ -17,9 +17,8 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, HTTPException, Query, Depends, status, Body
-from pydantic import BaseModel, Field, HttpUrl, field_validator
+from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy.orm import Session
-from uuid import UUID
 
 from services.rss.rss_aggregator import RSSAggregator
 from services.rss.rss_processor import RSSProcessor
@@ -54,14 +53,6 @@ class RSSFeedInfo(BaseModel):
     total_entries: int = 0
     update_frequency_minutes: int = 60
 
-    @field_validator('id', mode='before')
-    @classmethod
-    def convert_uuid_to_str(cls, v):
-        """Convert UUID to string if necessary"""
-        if isinstance(v, UUID):
-            return str(v)
-        return v
-
     class Config:
         from_attributes = True
 
@@ -79,14 +70,6 @@ class RSSEntryInfo(BaseModel):
     institution: Optional[str] = None
     policy_area: Optional[str] = None
     is_featured: bool = False
-
-    @field_validator('id', 'feed_id', mode='before')
-    @classmethod
-    def convert_uuid_to_str(cls, v):
-        """Convert UUID to string if necessary"""
-        if isinstance(v, UUID):
-            return str(v)
-        return v
 
     class Config:
         from_attributes = True

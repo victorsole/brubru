@@ -9,10 +9,10 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from typing import List, Dict
 
-from ..core.database import get_db
-from ..models.user import User
-from ..api.auth import get_current_user
-from ..schemas.subscription_schemas import (
+from core.database import get_db
+from models.user import User
+from api.auth import get_current_user
+from schemas.subscription_schemas import (
     SubscriptionTier, UsageStats, UpgradeRequest, FeatureAccessResponse
 )
 

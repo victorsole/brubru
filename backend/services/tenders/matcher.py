@@ -20,7 +20,7 @@ from enum import Enum
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 
-from ...models.tender import Tender, TenderProfile, TenderMatch
+from models.tender import Tender, TenderProfile, TenderMatch
 
 logger = logging.getLogger(__name__)
 

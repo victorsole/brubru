@@ -331,7 +331,7 @@ def get_tavily_client() -> Optional[TavilyClient]:
     global _tavily_client
 
     if _tavily_client is None:
-        from ...core.config import settings
+        from core.config import settings
 
         if settings.TAVILY_API_KEY and settings.TAVILY_ENABLED:
             _tavily_client = TavilyClient(

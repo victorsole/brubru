@@ -23,7 +23,7 @@ import openai
 import anthropic
 
 from .huggingface_service import get_huggingface_service
-from ...core.config import settings
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 

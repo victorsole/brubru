@@ -14,18 +14,27 @@ from .config import settings
 
 
 # Create SQLAlchemy engine
-# Use NullPool for serverless environments, or QueuePool for long-running servers
-# Supabase Session mode has strict connection limits, so we keep pool very small
-engine = create_engine(
-    settings.DATABASE_URL,
-    poolclass=NullPool if settings.ENVIRONMENT == "production" else None,
-    echo=settings.DEBUG,  # Log SQL queries in debug mode
-    pool_pre_ping=True,  # Verify connections before using
-    pool_size=5,  # Increased pool size for concurrent requests
-    max_overflow=5,  # Allow more overflow connections
-    pool_recycle=300,  # Recycle connections after 5 minutes
-    pool_timeout=30,  # Timeout for getting connection from pool
-)
+# Use NullPool for serverless environments (Cloud Run), or QueuePool for long-running servers
+# NullPool doesn't support pool-related arguments
+if settings.ENVIRONMENT == "production":
+    # Serverless: NullPool (no connection pooling, each request gets fresh connection)
+    engine = create_engine(
+        settings.DATABASE_URL,
+        poolclass=NullPool,
+        echo=False,  # Disable SQL logging in production
+        pool_pre_ping=True,  # Verify connections before using
+    )
+else:
+    # Development: Use connection pooling
+    engine = create_engine(
+        settings.DATABASE_URL,
+        echo=settings.DEBUG,  # Log SQL queries in debug mode
+        pool_pre_ping=True,  # Verify connections before using
+        pool_size=5,  # Pool size for concurrent requests
+        max_overflow=5,  # Allow overflow connections
+        pool_recycle=300,  # Recycle connections after 5 minutes
+        pool_timeout=30,  # Timeout for getting connection from pool
+    )
 
 # SessionLocal class for database sessions
 SessionLocal = sessionmaker(

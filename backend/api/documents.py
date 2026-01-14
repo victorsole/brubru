@@ -12,13 +12,13 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from ..services.storage.document_storage import get_document_storage
-from ..services.document_processing.pdf_processor import PDFProcessor
-from ..services.document_processing.docx_processor import get_docx_processor
-from ..services.document_processing.url_parser import get_url_parser
-from ..services.api_clients.eurlex_client import EURLexClient
-from ..services.scrapers.eurlex_scraper import get_eurlex_scraper
-from ..services.parsers.eurlex_parser import EurlexParser
+from services.storage.document_storage import get_document_storage
+from services.document_processing.pdf_processor import PDFProcessor
+from services.document_processing.docx_processor import get_docx_processor
+from services.document_processing.url_parser import get_url_parser
+from services.api_clients.eurlex_client import EURLexClient
+from services.scrapers.eurlex_scraper import get_eurlex_scraper
+from services.parsers.eurlex_parser import EurlexParser
 
 logger = logging.getLogger(__name__)
 

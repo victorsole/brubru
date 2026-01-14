@@ -18,10 +18,10 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, desc
 
-from ...models.tender import Tender, TenderProfile, TenderMatch
-from ...models.user import User
-from ...models.notification import Notification
-from ..notification_service import NotificationService
+from models.tender import Tender, TenderProfile, TenderMatch
+from models.user import User
+from models.notification import Notification
+from services.notification_service import NotificationService
 
 logger = logging.getLogger(__name__)
 

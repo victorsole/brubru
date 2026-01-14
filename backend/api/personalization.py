@@ -8,9 +8,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from typing import Dict
 
-from ..api.auth import get_current_user
-from ..models.user import User
-from ..services.personalization.greeting_service import generate_personalized_greeting
+from api.auth import get_current_user
+from models.user import User
+from services.personalization.greeting_service import generate_personalized_greeting
 
 
 router = APIRouter(prefix="/personalization", tags=["personalization"])

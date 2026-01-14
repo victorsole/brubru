@@ -16,8 +16,8 @@ import logging
 from typing import List
 from chromadb import Documents, EmbeddingFunction, Embeddings
 
-from ..embeddings.embedding_service import EmbeddingService, get_embedding_service
-from ...core.config import settings
+from services.embeddings.embedding_service import EmbeddingService, get_embedding_service
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 

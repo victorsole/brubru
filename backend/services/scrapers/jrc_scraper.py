@@ -15,7 +15,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from .base_scraper import BaseScraper
-from ..api_clients.jrc_client import JRCClient
+from services.api_clients.jrc_client import JRCClient
 
 logger = logging.getLogger(__name__)
 

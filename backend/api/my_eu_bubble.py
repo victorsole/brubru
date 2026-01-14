@@ -25,13 +25,13 @@ from fastapi import APIRouter, HTTPException, Query, Depends, status
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_, or_, func
 
-from ..models.user import User
-from ..models.rss_feed import RSSFeed
-from ..models.rss_entry import RSSEntry
-from ..models.user_feed_subscription import UserFeedSubscription
-from ..models.user_feed_read import UserFeedRead
-from ..models.user_saved_entry import UserSavedEntry
-from ..schemas.rss_schemas import (
+from models.user import User
+from models.rss_feed import RSSFeed
+from models.rss_entry import RSSEntry
+from models.user_feed_subscription import UserFeedSubscription
+from models.user_feed_read import UserFeedRead
+from models.user_saved_entry import UserSavedEntry
+from schemas.rss_schemas import (
     RSSEntryResponse,
     RSSEntryListResponse,
     UserFeedSubscriptionCreate,
@@ -44,8 +44,8 @@ from ..schemas.rss_schemas import (
     FeedStatsResponse,
     UserEngagementStats,
 )
-from ..core.database import get_db
-from ..api.auth_optional import get_current_user_dev as get_current_user
+from core.database import get_db
+from api.auth_optional import get_current_user_dev as get_current_user
 
 logger = logging.getLogger(__name__)
 
@@ -1225,7 +1225,7 @@ async def enrich_entries_with_ai(
     """
     try:
         import asyncio
-        from ..services.rss.rss_ai_enrichment import RSSAIEnricher
+        from services.rss.rss_ai_enrichment import RSSAIEnricher
 
         logger.info(f"User {current_user.email} triggered AI enrichment (last {hours}h, limit {limit})")
 
@@ -1275,7 +1275,7 @@ async def get_legislative_trains(
     Returns trains with statistics and optionally their legislative files.
     """
     try:
-        from ..models.legislative_train import LegislativeTrain, LegislativeCarriage
+        from models.legislative_train import LegislativeTrain, LegislativeCarriage
 
         # Fetch all trains ordered by priority
         trains = db.query(LegislativeTrain).order_by(LegislativeTrain.priority_number).all()
@@ -1345,7 +1345,7 @@ async def get_legislative_file(
     Includes AI-enriched data, status history, and cross-references.
     """
     try:
-        from ..models.legislative_train import LegislativeCarriage
+        from models.legislative_train import LegislativeCarriage
 
         # Find carriage by file_id
         carriage = db.query(LegislativeCarriage).filter(
@@ -1429,8 +1429,8 @@ async def analyze_legislative_file(
     - Entity extraction (MEPs, committees, legislation)
     """
     try:
-        from ..models.legislative_train import LegislativeCarriage
-        from ..services.ai.legislative_file_ai_service import get_legislative_file_ai_service
+        from models.legislative_train import LegislativeCarriage
+        from services.ai.legislative_file_ai_service import get_legislative_file_ai_service
 
         # Find carriage
         carriage = db.query(LegislativeCarriage).filter(
@@ -1518,8 +1518,8 @@ async def analyze_legislative_files_batch(
     Allows users to select which files to enrich with AI.
     """
     try:
-        from ..models.legislative_train import LegislativeCarriage
-        from ..services.ai.legislative_file_ai_service import get_legislative_file_ai_service
+        from models.legislative_train import LegislativeCarriage
+        from services.ai.legislative_file_ai_service import get_legislative_file_ai_service
 
         logger.info(f"Batch analyzing {len(file_ids)} legislative files")
 

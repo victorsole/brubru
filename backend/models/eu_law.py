@@ -7,7 +7,7 @@ SQLAlchemy models for storing EU legal documents from LEG_2025-11.
 from sqlalchemy import Column, Integer, String, Text, Date, TIMESTAMP, ARRAY, JSON, Boolean, Index
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import TSVECTOR
-from ..core.database import Base
+from core.database import Base
 
 
 class EULaw(Base):

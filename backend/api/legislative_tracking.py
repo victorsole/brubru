@@ -10,10 +10,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
-from ..core.database import get_db
-from ..models.user import User
+from core.database import get_db
+from models.user import User
 from .auth_optional import get_current_user_dev as get_current_user
-from ..services.legislative_tracker import LegislativeTracker
+from services.legislative_tracker import LegislativeTracker
 
 router = APIRouter(prefix="/api/legislation", tags=["Legislative Tracking"])
 

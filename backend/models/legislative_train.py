@@ -11,7 +11,7 @@ from datetime import datetime
 import uuid
 import enum
 
-from ..core.database import Base
+from core.database import Base
 
 
 class CarriageStatusEnum(str, enum.Enum):

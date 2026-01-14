@@ -19,8 +19,8 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 from dataclasses import asdict
 
-from ...schemas.scrapers.scraper_schemas import EPRSPublication, EPRSExtractionResult
-from ..vector_db.vector_store import VectorStore, get_vector_store
+from schemas.scrapers.scraper_schemas import EPRSPublication, EPRSExtractionResult
+from services.vector_db.vector_store import VectorStore, get_vector_store
 from .document_chunker import DocumentChunker, DocumentChunk
 
 logger = logging.getLogger(__name__)

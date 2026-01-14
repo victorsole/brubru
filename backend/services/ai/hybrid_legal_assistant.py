@@ -21,10 +21,10 @@ from datetime import datetime
 import asyncio
 
 from .huggingface_service import get_huggingface_service
-from ..ai_service import AIService, ChatMessage, ChatResponse, get_ai_service
+from services.ai_service import AIService, ChatMessage, ChatResponse, get_ai_service
 from .context_builder import ContextBuilder, get_context_builder
 from .multi_document_rag import MultiDocumentRAG, get_multi_document_rag
-from ...core.config import settings
+from core.config import settings
 
 logger = logging.getLogger(__name__)
 

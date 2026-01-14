@@ -19,10 +19,10 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import select, and_
 
-from ..models.user_document import UserDocument
-from ..models.user_feed_read import UserFeedRead
-from ..models.user_saved_entry import UserSavedEntry
-from ..models.rss_entry import RSSEntry
+from models.user_document import UserDocument
+from models.user_feed_read import UserFeedRead
+from models.user_saved_entry import UserSavedEntry
+from models.rss_entry import RSSEntry
 
 logger = logging.getLogger(__name__)
 

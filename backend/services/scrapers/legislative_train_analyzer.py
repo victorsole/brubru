@@ -12,13 +12,13 @@ from collections import defaultdict, Counter
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from ...models.legislative_train import (
+from models.legislative_train import (
     LegislativeTrain,
     LegislativeCarriage,
     CarriageStatusEnum,
     CarriageStatusHistory
 )
-from ...schemas.scrapers.legislative_train_schemas import (
+from schemas.scrapers.legislative_train_schemas import (
     TrainStatistics,
     CommitteeWorkload,
     BlockedFileAlert,

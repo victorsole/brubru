@@ -20,9 +20,9 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 from openai import OpenAI
 
-from ...core.config import settings
-from ...models.eu_law import EULaw, LawRequirement, LawCluster
-from ...core.database import SessionLocal
+from core.config import settings
+from models.eu_law import EULaw, LawRequirement, LawCluster
+from core.database import SessionLocal
 
 logger = logging.getLogger(__name__)
 
@@ -118,7 +118,7 @@ class RequirementExtractor:
             return 0
             
         # Get laws in cluster
-        from ...models.eu_law import ClusterLaw
+        from models.eu_law import ClusterLaw
         cluster_laws = self.db.query(ClusterLaw).filter(
             ClusterLaw.cluster_id == cluster_id
         ).limit(max_laws if max_laws else 1000).all()

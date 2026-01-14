@@ -27,12 +27,12 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
 from pydantic import BaseModel, Field
 
-from ..core.database import get_db
-from ..models.user import User
-from ..models.tender import Tender, TenderProfile, TenderMatch, TenderFetchJob, TenderatorSettings as TenderatorSettingsModel
-from ..services.tenders.tender_service import TenderService
-from ..services.tenders.matcher import TenderMatcher
-from ..services.tenders.tender_notifications import TenderNotificationService
+from core.database import get_db
+from models.user import User
+from models.tender import Tender, TenderProfile, TenderMatch, TenderFetchJob, TenderatorSettings as TenderatorSettingsModel
+from services.tenders.tender_service import TenderService
+from services.tenders.matcher import TenderMatcher
+from services.tenders.tender_notifications import TenderNotificationService
 from .admin_auth import get_current_admin_user
 
 logger = logging.getLogger(__name__)

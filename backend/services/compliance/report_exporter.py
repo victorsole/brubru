@@ -20,8 +20,8 @@ try:
 except ImportError:
     DOCX_AVAILABLE = False
 
-from ...models.compliance import ComplianceAnalysis, GapFinding
-from ...models.eu_law import LawRequirement, LawCluster, EULaw
+from models.compliance import ComplianceAnalysis, GapFinding
+from models.eu_law import LawRequirement, LawCluster, EULaw
 
 logger = logging.getLogger(__name__)
 

@@ -20,8 +20,8 @@ from datetime import datetime, timedelta
 from dataclasses import dataclass
 from anthropic import AsyncAnthropic
 
-from ...scrapers.rss_manager import RSSManager
-from ..indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
+from scrapers.rss_manager import RSSManager
+from services.indexing.metadata_extractor import MetadataExtractor, get_metadata_extractor
 
 logger = logging.getLogger(__name__)
 

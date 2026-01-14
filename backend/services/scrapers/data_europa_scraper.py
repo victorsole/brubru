@@ -15,8 +15,8 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from .base_scraper import BaseScraper
-from ..api_clients.data_europa_client import DataEuropaClient
-from ...schemas.scrapers.scraper_schemas import OpenDataPortalDataset
+from services.api_clients.data_europa_client import DataEuropaClient
+from schemas.scrapers.scraper_schemas import OpenDataPortalDataset
 
 logger = logging.getLogger(__name__)
 

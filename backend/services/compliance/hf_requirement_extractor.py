@@ -12,8 +12,8 @@ from typing import List, Dict, Optional
 from datetime import datetime
 from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
-from ...core.config import settings
-from ...models.eu_law import EULaw, LawRequirement
+from core.config import settings
+from models.eu_law import EULaw, LawRequirement
 
 logger = logging.getLogger(__name__)
 

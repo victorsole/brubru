@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 from .base_scraper import BaseScraper
-from ..api_clients.council_rss_client import CouncilRSSClient
+from services.api_clients.council_rss_client import CouncilRSSClient
 
 logger = logging.getLogger(__name__)
 

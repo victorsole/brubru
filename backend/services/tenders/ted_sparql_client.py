@@ -18,7 +18,7 @@ from enum import Enum
 from functools import lru_cache
 import asyncio
 
-from ..api_clients.base_sparql_client import BaseSPARQLClient, SPARQLQuery, SPARQLQueryType
+from services.api_clients.base_sparql_client import BaseSPARQLClient, SPARQLQuery, SPARQLQueryType
 
 logger = logging.getLogger(__name__)
 

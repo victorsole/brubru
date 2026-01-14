@@ -1,0 +1,57 @@
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+.eggs/
+venv/
+.venv/
+env/
+
+# Environment files (secrets loaded via Cloud Run env vars)
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+tests/
+
+# Build artifacts
+dist/
+build/
+*.whl
+
+# Logs
+*.log
+logs/
+
+# Documentation
+docs/
+*.md
+
+# Large ML caches (downloaded at runtime)
+models/
+.transformers/
+.huggingface/
+
+# macOS
+.DS_Store
+
+# Jupyter
+*.ipynb
+.ipynb_checkpoints/

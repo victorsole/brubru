@@ -10,15 +10,15 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from uuid import UUID
 
-from ..core.database import get_db
-from ..models.user import User
-from ..models.legislative_train import (
+from core.database import get_db
+from models.user import User
+from models.legislative_train import (
     LegislativeTrain,
     LegislativeCarriage,
     UserCarriageTrack,
     CarriageStatusEnum
 )
-from ..schemas.scrapers.legislative_train_schemas import (
+from schemas.scrapers.legislative_train_schemas import (
     LegislativeTrain as TrainSchema,
     LegislativeCarriage as CarriageSchema,
     EnrichedCarriage,
@@ -31,9 +31,9 @@ from ..schemas.scrapers.legislative_train_schemas import (
     BlockedFileAlert,
     TimelinePrediction
 )
-from ..services.scrapers.legislative_train_scraper import LegislativeTrainScraper
-from ..services.scrapers.legislative_train_enricher import LegislativeTrainEnricher
-from ..services.scrapers.legislative_train_analyzer import LegislativeTrainAnalyzer
+from services.scrapers.legislative_train_scraper import LegislativeTrainScraper
+from services.scrapers.legislative_train_enricher import LegislativeTrainEnricher
+from services.scrapers.legislative_train_analyzer import LegislativeTrainAnalyzer
 from .auth import get_current_user
 
 import logging

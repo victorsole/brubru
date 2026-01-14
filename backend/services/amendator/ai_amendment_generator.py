@@ -18,7 +18,7 @@ from datetime import datetime
 from dataclasses import dataclass
 from anthropic import AsyncAnthropic
 
-from ..ai.context_builder import ContextBuilder, get_context_builder
+from services.ai.context_builder import ContextBuilder, get_context_builder
 
 logger = logging.getLogger(__name__)
 

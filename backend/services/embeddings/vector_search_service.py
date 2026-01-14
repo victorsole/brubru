@@ -12,7 +12,7 @@ import numpy as np
 import faiss
 from sqlalchemy.orm import Session
 
-from ...models.eu_law import EULaw, LawRequirement
+from models.eu_law import EULaw, LawRequirement
 from .embedding_service import get_embedding_service
 
 logger = logging.getLogger(__name__)
@@ -159,7 +159,7 @@ class VectorSearchService:
 
         # Query laws
         if cluster_id:
-            from ...models.eu_law import ClusterLaw
+            from models.eu_law import ClusterLaw
             cluster_law_ids = self.db.query(ClusterLaw.law_id).filter(
                 ClusterLaw.cluster_id == cluster_id
             ).all()

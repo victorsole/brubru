@@ -19,8 +19,8 @@ from typing import Any, Dict, List, Optional
 from urllib.parse import urlencode
 
 from .base_scraper import BaseScraper, ScraperError
-from ...schemas.scrapers.scraper_schemas import LegislativeDocument, DocumentType
-from ..api_clients.eurlex_client import EURLexClient
+from schemas.scrapers.scraper_schemas import LegislativeDocument, DocumentType
+from services.api_clients.eurlex_client import EURLexClient
 
 logger = logging.getLogger(__name__)
 
