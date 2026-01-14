@@ -1,32 +1,42 @@
 """
 Embedding Service
 
-Generates vector embeddings for EU laws and requirements using Hugging Face models.
-Supports semantic search and similarity matching for compliance analysis.
+Generates vector embeddings for EU laws and requirements.
+Uses OpenAI embeddings API (light) or Hugging Face models (if torch available).
 """
 
 import logging
 import numpy as np
 import asyncio
 from typing import List, Dict, Optional, Union
-from sentence_transformers import SentenceTransformer
-import torch
 
 from core.config import settings
 from models.eu_law import EULaw, LawRequirement
 
 logger = logging.getLogger(__name__)
 
+# Try to import torch/sentence_transformers (optional - heavy dependencies)
+try:
+    from sentence_transformers import SentenceTransformer
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    logger.info("torch/sentence_transformers not available - using OpenAI embeddings")
+
+# OpenAI for API-based embeddings
+try:
+    import openai
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
+
 
 class EmbeddingService:
     """
     Service for generating and managing embeddings for semantic search.
 
-    Uses sentence-transformers with Hugging Face models for:
-    - Law text embeddings
-    - Requirement text embeddings
-    - Semantic similarity search
-    - RAG retrieval
+    Uses OpenAI embeddings API (light/fast) or sentence-transformers (if torch available).
     """
 
     def __init__(self, model_name: str = None):
@@ -34,19 +44,29 @@ class EmbeddingService:
         Initialize embedding service.
 
         Args:
-            model_name: HF model to use (defaults to settings.HF_EMBEDDING_MODEL)
+            model_name: Model to use (HF model or OpenAI model name)
         """
-        self.model_name = model_name or settings.HF_EMBEDDING_MODEL
+        self.use_openai = not TORCH_AVAILABLE and OPENAI_AVAILABLE
         self.model = None
-        self.device = self._get_device()
-        self.embedding_dim = None
+        self.device = "cpu"
 
-        logger.info(f"Initializing EmbeddingService with model: {self.model_name}")
-        logger.info(f"Using device: {self.device}")
+        if self.use_openai:
+            self.model_name = "text-embedding-3-small"
+            self.embedding_dim = 1536
+            self.openai_client = openai.OpenAI(api_key=settings.OPENAI_API_KEY)
+            logger.info("Using OpenAI embeddings API (light mode)")
+        else:
+            self.model_name = model_name or getattr(settings, 'HF_EMBEDDING_MODEL', 'all-MiniLM-L6-v2')
+            self.embedding_dim = None
+            self.device = self._get_device()
+            logger.info(f"Using local model: {self.model_name} on {self.device}")
 
     def _get_device(self) -> str:
         """Determine best available device for embeddings."""
-        if settings.HF_DEVICE != "cpu":
+        if not TORCH_AVAILABLE:
+            return "cpu"
+
+        if hasattr(settings, 'HF_DEVICE') and settings.HF_DEVICE != "cpu":
             return settings.HF_DEVICE
 
         if torch.cuda.is_available():
@@ -58,6 +78,9 @@ class EmbeddingService:
 
     def load_model(self):
         """Load the embedding model (lazy loading)."""
+        if self.use_openai:
+            return  # OpenAI doesn't need model loading
+
         if self.model is None:
             logger.info(f"Loading embedding model: {self.model_name}")
 
@@ -66,14 +89,12 @@ class EmbeddingService:
                     self.model_name,
                     device=self.device
                 )
-
-                # Get embedding dimension
                 self.embedding_dim = self.model.get_sentence_embedding_dimension()
-                logger.info(f"Model loaded successfully. Embedding dimension: {self.embedding_dim}")
+                logger.info(f"Model loaded. Embedding dimension: {self.embedding_dim}")
 
             except Exception as e:
                 logger.error(f"Failed to load model: {str(e)}")
-                logger.info("Falling back to default model: all-MiniLM-L6-v2")
+                logger.info("Falling back to all-MiniLM-L6-v2")
                 self.model_name = "all-MiniLM-L6-v2"
                 self.model = SentenceTransformer(self.model_name, device=self.device)
                 self.embedding_dim = self.model.get_sentence_embedding_dimension()
@@ -88,6 +109,13 @@ class EmbeddingService:
         Returns:
             Embedding vector as numpy array
         """
+        if self.use_openai:
+            response = self.openai_client.embeddings.create(
+                input=text,
+                model=self.model_name
+            )
+            return np.array(response.data[0].embedding)
+
         if self.model is None:
             self.load_model()
 
@@ -105,6 +133,14 @@ class EmbeddingService:
         Returns:
             Array of embeddings (shape: [len(texts), embedding_dim])
         """
+        if self.use_openai:
+            # OpenAI API supports batch embedding
+            response = self.openai_client.embeddings.create(
+                input=texts,
+                model=self.model_name
+            )
+            return np.array([d.embedding for d in response.data])
+
         if self.model is None:
             self.load_model()
 

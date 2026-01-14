@@ -7,15 +7,22 @@ Supports multiple models with automatic fallback and cost tracking.
 
 import json
 import logging
-import torch
 from typing import List, Dict, Optional
 from datetime import datetime
-from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
 
 from core.config import settings
 from models.eu_law import EULaw, LawRequirement
 
 logger = logging.getLogger(__name__)
+
+# Optional imports for local model support (heavy dependencies)
+try:
+    import torch
+    from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    logger.info("torch/transformers not available - local models disabled, using API only")
 
 
 class HuggingFaceRequirementExtractor:
@@ -71,7 +78,11 @@ class HuggingFaceRequirementExtractor:
             use_local: Override settings.HF_USE_LOCAL
         """
         self.model_id = model_id
-        self.use_local = use_local if use_local is not None else settings.HF_USE_LOCAL
+        # Force API mode if torch not available
+        if not TORCH_AVAILABLE:
+            self.use_local = False
+        else:
+            self.use_local = use_local if use_local is not None else getattr(settings, 'HF_USE_LOCAL', False)
 
         if model_id not in self.MODELS:
             logger.warning(f"Unknown model {model_id}, falling back to saul-7b")
@@ -87,7 +98,7 @@ class HuggingFaceRequirementExtractor:
         self.total_tokens = 0
         self.total_cost = 0.0
 
-        if self.use_local:
+        if self.use_local and TORCH_AVAILABLE:
             self._load_local_model()
         else:
             logger.info(f"Using Hugging Face Inference API for {self.model_name}")

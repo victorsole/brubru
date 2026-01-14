@@ -1,0 +1,61 @@
+# FastAPI & Server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database & ORM
+sqlalchemy==2.0.25
+alembic==1.13.1
+psycopg2-binary==2.9.9
+supabase==2.3.0
+
+# Pydantic (validation)
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+stripe==10.0.0
+
+# AI SDKs (API-based, no local models)
+anthropic==0.18.1
+openai==1.12.0
+google-generativeai==0.8.0
+google-cloud-translate==3.15.0
+
+# Hugging Face Hub (API only, no torch)
+huggingface-hub==0.34.4
+
+# LangChain & RAG (lighter)
+langchain==0.1.0
+langchain-community==0.0.10
+langchain-core==0.1.10
+httpx==0.24.1
+
+# Web Scraping
+aiohttp==3.9.3
+beautifulsoup4==4.12.3
+lxml==5.1.0
+tenacity==8.2.3
+feedparser==6.0.11
+
+# Background Tasks
+apscheduler==3.10.4
+
+# PDF Processing
+pypdf==4.0.1
+pdfplumber==0.11.0
+pikepdf==8.11.1
+
+# DOCX Processing
+python-docx==1.1.0
+
+# Vector Database (use API-based embeddings)
+chromadb==0.4.22
+pgvector==0.2.4
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
