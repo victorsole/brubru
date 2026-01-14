@@ -26,11 +26,14 @@ RUN pip install --no-cache-dir -r requirements-light.txt
 # Copy application code
 COPY . /app
 
-# Set PYTHONPATH after copying code
+# Make entrypoint executable
+RUN chmod +x /app/entrypoint.sh
+
+# Set PYTHONPATH
 ENV PYTHONPATH=/app
 
 # Expose port
 EXPOSE 8000
 
-# Run with explicit PYTHONPATH
-CMD ["sh", "-c", "PYTHONPATH=/app python /app/start.py"]
+# Use entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]
