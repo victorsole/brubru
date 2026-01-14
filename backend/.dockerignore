@@ -74,6 +74,6 @@ test_*.py
 .ipynb_checkpoints/
 
 # Large ML model caches (will be downloaded at runtime if needed)
-models/
+# NOTE: Do NOT add "models/" here - that's the SQLAlchemy ORM models directory!
 .transformers/
 .huggingface/
