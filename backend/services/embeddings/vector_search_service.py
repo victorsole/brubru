@@ -2,6 +2,7 @@
 Vector Search Service
 
 Fast semantic search using FAISS for requirements and laws.
+Falls back to numpy-based search if faiss is not available.
 """
 
 import logging
@@ -9,13 +10,20 @@ import pickle
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 import numpy as np
-import faiss
 from sqlalchemy.orm import Session
 
 from models.eu_law import EULaw, LawRequirement
 from .embedding_service import get_embedding_service
 
 logger = logging.getLogger(__name__)
+
+# Optional faiss import (heavy dependency)
+try:
+    import faiss
+    FAISS_AVAILABLE = True
+except ImportError:
+    FAISS_AVAILABLE = False
+    logger.info("faiss not available - using numpy-based vector search (slower but functional)")
 
 
 class VectorSearchService:
@@ -37,9 +45,13 @@ class VectorSearchService:
         self.db = db
         self.embedding_service = get_embedding_service()
 
-        # FAISS indexes
-        self.requirement_index: Optional[faiss.Index] = None
-        self.law_index: Optional[faiss.Index] = None
+        # FAISS indexes (or numpy arrays if faiss not available)
+        self.requirement_index = None
+        self.law_index = None
+
+        # Numpy fallback storage
+        self.requirement_embeddings: Optional[np.ndarray] = None
+        self.law_embeddings: Optional[np.ndarray] = None
 
         # ID mappings (FAISS uses sequential IDs, we map to database IDs)
         self.requirement_id_map: List[int] = []  # [faiss_id] -> db_id
@@ -68,13 +80,22 @@ class VectorSearchService:
         map_file = self.cache_dir / f"requirements_cluster_{cluster_id or 'all'}.map"
 
         # Try loading from cache
-        if not force_rebuild and cache_file.exists() and map_file.exists():
-            logger.info(f"Loading requirement index from cache: {cache_file}")
+        np_cache_file = self.cache_dir / f"requirements_cluster_{cluster_id or 'all'}.npy"
+        if not force_rebuild and map_file.exists():
+            logger.info(f"Loading requirement index from cache...")
             try:
-                self.requirement_index = faiss.read_index(str(cache_file))
                 with open(map_file, 'rb') as f:
                     self.requirement_id_map = pickle.load(f)
-                logger.info(f"Loaded index with {len(self.requirement_id_map)} requirements")
+
+                if FAISS_AVAILABLE and cache_file.exists():
+                    self.requirement_index = faiss.read_index(str(cache_file))
+                    logger.info(f"Loaded FAISS index with {len(self.requirement_id_map)} requirements")
+                elif np_cache_file.exists():
+                    self.requirement_embeddings = np.load(str(np_cache_file))
+                    logger.info(f"Loaded numpy index with {len(self.requirement_id_map)} requirements")
+                else:
+                    raise FileNotFoundError("No cache file found")
+
                 return len(self.requirement_id_map)
             except Exception as e:
                 logger.warning(f"Failed to load cache: {e}. Rebuilding index.")
@@ -98,26 +119,34 @@ class VectorSearchService:
         texts = [req.requirement_text for req in requirements]
         embeddings = self.embedding_service.encode_texts(texts)
 
-        # Create FAISS index
+        # Create index
         dimension = embeddings.shape[1]
-        logger.info(f"Creating FAISS index with dimension {dimension}")
-
-        # Use IndexFlatIP (Inner Product) for cosine similarity
-        # Note: sentence-transformers embeddings are normalized, so IP = cosine similarity
-        self.requirement_index = faiss.IndexFlatIP(dimension)
+        logger.info(f"Creating index with dimension {dimension}")
 
         # Normalize embeddings for cosine similarity
-        faiss.normalize_L2(embeddings)
-
-        # Add to index
-        self.requirement_index.add(embeddings.astype(np.float32))
+        norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+        norms[norms == 0] = 1  # Avoid division by zero
+        embeddings = embeddings / norms
 
         # Build ID mapping
         self.requirement_id_map = [req.id for req in requirements]
 
-        # Save to cache
-        logger.info(f"Saving index to cache: {cache_file}")
-        faiss.write_index(self.requirement_index, str(cache_file))
+        if FAISS_AVAILABLE:
+            # Use FAISS for fast search
+            self.requirement_index = faiss.IndexFlatIP(dimension)
+            self.requirement_index.add(embeddings.astype(np.float32))
+
+            # Save to cache
+            logger.info(f"Saving index to cache: {cache_file}")
+            faiss.write_index(self.requirement_index, str(cache_file))
+        else:
+            # Store embeddings for numpy-based search
+            self.requirement_embeddings = embeddings.astype(np.float32)
+
+            # Save numpy embeddings to cache
+            np_cache_file = self.cache_dir / f"requirements_cluster_{cluster_id or 'all'}.npy"
+            np.save(str(np_cache_file), self.requirement_embeddings)
+
         with open(map_file, 'wb') as f:
             pickle.dump(self.requirement_id_map, f)
 
@@ -143,13 +172,22 @@ class VectorSearchService:
         map_file = self.cache_dir / f"laws_cluster_{cluster_id or 'all'}.map"
 
         # Try loading from cache
-        if not force_rebuild and cache_file.exists() and map_file.exists():
-            logger.info(f"Loading law index from cache: {cache_file}")
+        np_cache_file = self.cache_dir / f"laws_cluster_{cluster_id or 'all'}.npy"
+        if not force_rebuild and map_file.exists():
+            logger.info(f"Loading law index from cache...")
             try:
-                self.law_index = faiss.read_index(str(cache_file))
                 with open(map_file, 'rb') as f:
                     self.law_id_map = pickle.load(f)
-                logger.info(f"Loaded index with {len(self.law_id_map)} laws")
+
+                if FAISS_AVAILABLE and cache_file.exists():
+                    self.law_index = faiss.read_index(str(cache_file))
+                    logger.info(f"Loaded FAISS index with {len(self.law_id_map)} laws")
+                elif np_cache_file.exists():
+                    self.law_embeddings = np.load(str(np_cache_file))
+                    logger.info(f"Loaded numpy index with {len(self.law_id_map)} laws")
+                else:
+                    raise FileNotFoundError("No cache file found")
+
                 return len(self.law_id_map)
             except Exception as e:
                 logger.warning(f"Failed to load cache: {e}. Rebuilding index.")
@@ -181,24 +219,34 @@ class VectorSearchService:
 
         embeddings = np.array(embeddings_list)
 
-        # Create FAISS index
+        # Create index
         dimension = embeddings.shape[1]
-        logger.info(f"Creating FAISS index with dimension {dimension}")
+        logger.info(f"Creating index with dimension {dimension}")
 
-        self.law_index = faiss.IndexFlatIP(dimension)
-
-        # Normalize embeddings
-        faiss.normalize_L2(embeddings)
-
-        # Add to index
-        self.law_index.add(embeddings.astype(np.float32))
+        # Normalize embeddings for cosine similarity
+        norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+        norms[norms == 0] = 1  # Avoid division by zero
+        embeddings = embeddings / norms
 
         # Build ID mapping
         self.law_id_map = [law.id for law in laws]
 
-        # Save to cache
-        logger.info(f"Saving index to cache: {cache_file}")
-        faiss.write_index(self.law_index, str(cache_file))
+        if FAISS_AVAILABLE:
+            # Use FAISS for fast search
+            self.law_index = faiss.IndexFlatIP(dimension)
+            self.law_index.add(embeddings.astype(np.float32))
+
+            # Save to cache
+            logger.info(f"Saving index to cache: {cache_file}")
+            faiss.write_index(self.law_index, str(cache_file))
+        else:
+            # Store embeddings for numpy-based search
+            self.law_embeddings = embeddings.astype(np.float32)
+
+            # Save numpy embeddings to cache
+            np_cache_file = self.cache_dir / f"laws_cluster_{cluster_id or 'all'}.npy"
+            np.save(str(np_cache_file), self.law_embeddings)
+
         with open(map_file, 'wb') as f:
             pickle.dump(self.law_id_map, f)
 
@@ -225,11 +273,14 @@ class VectorSearchService:
             List of dicts with requirement data and scores
         """
         # Ensure index is built
-        if self.requirement_index is None:
+        if self.requirement_index is None and self.requirement_embeddings is None:
             logger.info("Requirement index not loaded, building...")
             self.build_requirement_index(cluster_id=cluster_id)
 
-        if self.requirement_index is None or self.requirement_index.ntotal == 0:
+        # Check if we have data
+        has_data = (FAISS_AVAILABLE and self.requirement_index is not None and self.requirement_index.ntotal > 0) or \
+                   (self.requirement_embeddings is not None and len(self.requirement_embeddings) > 0)
+        if not has_data:
             logger.warning("No requirements indexed")
             return []
 
@@ -238,14 +289,25 @@ class VectorSearchService:
         query_embedding = query_embedding.reshape(1, -1).astype(np.float32)
 
         # Normalize for cosine similarity
-        faiss.normalize_L2(query_embedding)
+        norm = np.linalg.norm(query_embedding)
+        if norm > 0:
+            query_embedding = query_embedding / norm
 
         # Search
-        scores, indices = self.requirement_index.search(query_embedding, top_k)
+        if FAISS_AVAILABLE and self.requirement_index is not None:
+            scores, indices = self.requirement_index.search(query_embedding, top_k)
+            scores = scores[0]
+            indices = indices[0]
+        else:
+            # Numpy-based cosine similarity search
+            similarities = np.dot(self.requirement_embeddings, query_embedding.T).flatten()
+            top_indices = np.argsort(similarities)[::-1][:top_k]
+            scores = similarities[top_indices]
+            indices = top_indices
 
         # Build results
         results = []
-        for score, idx in zip(scores[0], indices[0]):
+        for score, idx in zip(scores, indices):
             if score < min_score:
                 continue
 
@@ -288,11 +350,14 @@ class VectorSearchService:
             List of dicts with law data and scores
         """
         # Ensure index is built
-        if self.law_index is None:
+        if self.law_index is None and self.law_embeddings is None:
             logger.info("Law index not loaded, building...")
             self.build_law_index(cluster_id=cluster_id)
 
-        if self.law_index is None or self.law_index.ntotal == 0:
+        # Check if we have data
+        has_data = (FAISS_AVAILABLE and self.law_index is not None and self.law_index.ntotal > 0) or \
+                   (self.law_embeddings is not None and len(self.law_embeddings) > 0)
+        if not has_data:
             logger.warning("No laws indexed")
             return []
 
@@ -301,14 +366,25 @@ class VectorSearchService:
         query_embedding = query_embedding.reshape(1, -1).astype(np.float32)
 
         # Normalize for cosine similarity
-        faiss.normalize_L2(query_embedding)
+        norm = np.linalg.norm(query_embedding)
+        if norm > 0:
+            query_embedding = query_embedding / norm
 
         # Search
-        scores, indices = self.law_index.search(query_embedding, top_k)
+        if FAISS_AVAILABLE and self.law_index is not None:
+            scores, indices = self.law_index.search(query_embedding, top_k)
+            scores = scores[0]
+            indices = indices[0]
+        else:
+            # Numpy-based cosine similarity search
+            similarities = np.dot(self.law_embeddings, query_embedding.T).flatten()
+            top_indices = np.argsort(similarities)[::-1][:top_k]
+            scores = similarities[top_indices]
+            indices = top_indices
 
         # Build results
         results = []
-        for score, idx in zip(scores[0], indices[0]):
+        for score, idx in zip(scores, indices):
             if score < min_score:
                 continue
 
