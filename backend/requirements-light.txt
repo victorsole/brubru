@@ -12,6 +12,7 @@ supabase==2.3.0
 # Pydantic (validation)
 pydantic==2.5.3
 pydantic-settings==2.1.0
+email-validator==2.1.0  # Required for pydantic EmailStr
 
 # Authentication & Security
 python-jose[cryptography]==3.3.0
@@ -62,3 +63,4 @@ redis==5.0.1
 # Utilities
 python-dateutil==2.8.2
 pytz==2024.1
+numpy==1.26.3  # Required for embeddings and vector operations
