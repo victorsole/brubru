@@ -35,11 +35,13 @@ import './styles/globals.css';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
-console.log('Environment variables loaded:');
-console.log('VITE_GOOGLE_CLIENT_ID:', import.meta.env.VITE_GOOGLE_CLIENT_ID);
-console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
-console.log('VITE_LINKEDIN_CLIENT_ID:', import.meta.env.VITE_LINKEDIN_CLIENT_ID);
-console.log('All env vars:', import.meta.env);
+// Only log environment variables in development mode
+if (import.meta.env.DEV) {
+  console.log('Environment variables loaded:');
+  console.log('VITE_GOOGLE_CLIENT_ID:', import.meta.env.VITE_GOOGLE_CLIENT_ID);
+  console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+  console.log('VITE_LINKEDIN_CLIENT_ID:', import.meta.env.VITE_LINKEDIN_CLIENT_ID);
+}
 
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);

@@ -5,7 +5,7 @@
  * Part of My EU Bubble - Phase 3: Frontend
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Icon from '@mdi/react';
 import { mdiFileDocument, mdiFileEdit, mdiNewspaper, mdiStar } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
@@ -23,7 +23,7 @@ export const DashboardTab = () => {
     fetchDocumentStats,
   } = useBubble();
   const { user } = useAuth();
-  const [hasLoadedRef] = useState({ current: false });
+  const hasLoadedRef = useRef(false);
 
   useEffect(() => {
     // Prevent duplicate loads

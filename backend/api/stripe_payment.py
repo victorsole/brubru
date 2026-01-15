@@ -14,6 +14,7 @@ from core.config import settings
 from core.database import get_db
 from models.user import User
 from api.auth import get_current_user
+from schemas.subscription_schemas import UpgradeRequest
 
 # Initialize Stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -31,16 +32,21 @@ PRICE_IDS = {
 
 @router.post("/create-checkout-session")
 async def create_checkout_session(
-    tier: str,
-    billing_period: str,
+    request: UpgradeRequest,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
     Create Stripe Checkout Session for subscription upgrade
-    """
 
-    # Validate tier and billing period
+    Accepts JSON body with:
+    - tier: "yellow" or "blue"
+    - billing_period: "monthly" or "annual"
+    """
+    tier = request.tier
+    billing_period = request.billing_period
+
+    # Validate tier (already validated by Pydantic, but keep for clarity)
     if tier not in ["yellow", "blue"]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
