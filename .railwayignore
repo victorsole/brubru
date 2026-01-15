@@ -1,0 +1,43 @@
+# Frontend (deployed separately to SiteGround)
+frontend/
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+env/
+
+# Build artifacts
+dist/
+build/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment files
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docs
+docs/
+
+# Logs
+*.log
+
+# Git
+.git/
+
+# Other large directories
+uploads/
+mockups/

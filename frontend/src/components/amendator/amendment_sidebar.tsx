@@ -5,6 +5,8 @@ import type { Amendment } from '../../pages/amendator_page';
 import { getAmendmentTypeLabel, getStructureLevelLabel } from '../../utils/amendment_formatter';
 import './amendment_sidebar.css';
 
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
+
 interface AmendmentSidebarProps {
   amendments: Amendment[];
   onSelectAmendment: (amendment: Amendment) => void;
@@ -60,7 +62,7 @@ export const AmendmentSidebar = ({
     setIsExporting(true);
     try {
       // Call backend export API
-      const response = await fetch(`http://localhost:8000/api/amendments/export/${documentId}`, {
+      const response = await fetch(`${API_BASE}/amendments/export/${documentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

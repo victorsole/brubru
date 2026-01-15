@@ -177,10 +177,20 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
+    const requestUrl = error.config?.url || '';
+
+    // Don't retry auth endpoints - they handle their own errors
+    const isAuthEndpoint = requestUrl.includes('/api/auth/');
+
+    // Don't retry if we've already retried this request
+    const hasRetried = error.config?._hasRetried;
+
+    if (error.response?.status === 401 && !isAuthEndpoint && !hasRetried) {
       // Try to refresh token
       try {
         await useAuth.getState().refreshToken();
+        // Mark as retried to prevent infinite loop
+        error.config._hasRetried = true;
         // Retry original request
         return axios(error.config);
       } catch (refreshError) {

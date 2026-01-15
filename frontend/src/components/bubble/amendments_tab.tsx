@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/use_auth';
 import './amendments_tab.css';
 
+const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
+
 interface Amendment {
   id: string;
   document_id: string;
@@ -40,7 +42,7 @@ export const AmendmentsTab = () => {
     setIsLoading(true);
     try {
       console.log('🔍 Fetching amendments from API...');
-      const response = await fetch('/api/amendments', {
+      const response = await fetch(`${API_BASE}/amendments`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -69,7 +71,7 @@ export const AmendmentsTab = () => {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      const response = await fetch(`/api/amendments/${id}`, {
+      const response = await fetch(`${API_BASE}/amendments/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

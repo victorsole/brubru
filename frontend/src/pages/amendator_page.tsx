@@ -11,6 +11,8 @@ import type { AISuggestion } from '../components/amendator/ai_assistant_sidebar'
 import type { LoadedDocument } from '../components/amendator/document_viewer';
 import './amendator_page.css';
 
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
+
 // Amendment Types (based on European Parliament specification)
 export type AmendmentType = 'modification' | 'suppression' | 'addition';
 export type AmendmentStatus = 'candidate' | 'tabled' | 'withdrawn';
@@ -129,7 +131,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
       const amendmentsArray = Array.from(cellAmendments.values());
 
       // Call batch API endpoint
-      const response = await fetch('http://localhost:8000/api/amendments/batch', {
+      const response = await fetch(`${API_BASE}/amendments/batch`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

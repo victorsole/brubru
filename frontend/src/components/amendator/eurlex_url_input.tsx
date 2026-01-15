@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import './eurlex_url_input.css';
 
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
+
 interface EURLexURLInputProps {
   onDocumentFetched: (document: FetchedDocument) => void;
 }
@@ -68,7 +70,7 @@ export const EURLexURLInput = ({ onDocumentFetched }: EURLexURLInputProps) => {
 
     try {
       // Fetch document from EUR-Lex
-      const response = await fetch('http://localhost:8000/api/documents/fetch-eurlex', {
+      const response = await fetch(`${API_BASE}/documents/fetch-eurlex`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -8,6 +8,8 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
+const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
+
 // Types
 export interface LegislativeFile {
   id: string;
@@ -108,7 +110,7 @@ export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => 
 
     try {
       const response = await axios.get<{ trains: LegislativeTrain[] }>(
-        '/api/bubble/legislative-trains?include_files=true'
+        `${API_BASE}/bubble/legislative-trains?include_files=true`
       );
 
       set({
@@ -127,7 +129,7 @@ export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => 
 
     try {
       const response = await axios.get<LegislativeFileDetail>(
-        `/api/bubble/legislative-files/${fileId}`
+        `${API_BASE}/bubble/legislative-files/${fileId}`
       );
 
       set({
@@ -145,7 +147,7 @@ export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => 
     set({ isAnalyzing: true });
 
     try {
-      await axios.post(`/api/bubble/legislative-files/${fileId}/analyze`);
+      await axios.post(`${API_BASE}/bubble/legislative-files/${fileId}/analyze`);
 
       // Refresh the file detail if it's currently selected
       const currentFile = get().selectedFile;
@@ -169,7 +171,7 @@ export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => 
     set({ isAnalyzing: true });
 
     try {
-      await axios.post('/api/bubble/legislative-files/analyze-batch', fileIds);
+      await axios.post(`${API_BASE}/bubble/legislative-files/analyze-batch`, fileIds);
 
       // Refresh trains to update enrichment status
       await get().fetchTrains();

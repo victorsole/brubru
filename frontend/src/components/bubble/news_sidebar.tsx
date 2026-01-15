@@ -11,6 +11,8 @@ import { mdiRefresh, mdiCog, mdiChevronDown, mdiChevronUp, mdiDatabaseRefresh, m
 import { useBubble } from '../../hooks/use_bubble';
 import './news_sidebar.css';
 
+const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
+
 export const NewsSidebar = () => {
   const {
     feedEntries,
@@ -93,7 +95,7 @@ export const NewsSidebar = () => {
   const handleRefreshFeedsDatabase = async () => {
     setIsRefreshingFeeds(true);
     try {
-      const response = await fetch('/api/bubble/admin/refresh-feeds', {
+      const response = await fetch(`${API_BASE}/bubble/admin/refresh-feeds`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -123,7 +125,7 @@ export const NewsSidebar = () => {
     setTrainStatus('Starting...');
 
     try {
-      const response = await fetch('/api/bubble/admin/refresh-legislative-trains', {
+      const response = await fetch(`${API_BASE}/bubble/admin/refresh-legislative-trains`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -132,7 +134,7 @@ export const NewsSidebar = () => {
         // Start polling for progress
         const pollInterval = setInterval(async () => {
           try {
-            const statusResponse = await fetch('/api/bubble/admin/legislative-trains-status');
+            const statusResponse = await fetch(`${API_BASE}/bubble/admin/legislative-trains-status`);
             if (statusResponse.ok) {
               const status = await statusResponse.json();
               setTrainProgress(status.progress);
@@ -191,7 +193,7 @@ export const NewsSidebar = () => {
   const handleFetchNewEntries = async () => {
     setIsFetchingEntries(true);
     try {
-      const response = await fetch('/api/bubble/admin/fetch-entries', {
+      const response = await fetch(`${API_BASE}/bubble/admin/fetch-entries`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -217,7 +219,7 @@ export const NewsSidebar = () => {
   const handleAIEnrichment = async () => {
     setIsEnrichingAI(true);
     try {
-      const response = await fetch('/api/bubble/admin/enrich-entries-ai?hours=24&limit=50', {
+      const response = await fetch(`${API_BASE}/bubble/admin/enrich-entries-ai?hours=24&limit=50`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
