@@ -5,7 +5,10 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  min-width: 0; /* Allow flex item to shrink */
+  max-width: 100%;
   background-color: var(--color-background);
+  overflow: hidden;
 }
 
 /* Document Loader Section */
@@ -60,6 +63,8 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  min-width: 0; /* Allow flex item to shrink */
+  max-width: 100%;
 }
 
 /* Table Header */
@@ -108,6 +113,8 @@
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  min-width: 0; /* Allow flex item to shrink */
+  max-width: 100%;
 }
 
 /* Column Headers Row */
@@ -120,6 +127,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  min-width: 0; /* Allow grid to shrink */
 }
 
 .two-column-layout__header-cell {
@@ -128,6 +136,9 @@
   font-weight: var(--font-weight-bold);
   text-align: center;
   border-right: 1px solid rgba(255, 255, 255, 0.2);
+  min-width: 0; /* Allow grid cells to shrink below content size */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .two-column-layout__header-cell--original {
@@ -152,6 +163,7 @@
   border-bottom: 1px solid var(--color-border);
   min-height: 60px;
   transition: background-color var(--transition-fast);
+  min-width: 0; /* Allow grid to shrink */
 }
 
 .two-column-layout__row:hover {
@@ -199,6 +211,8 @@
   gap: var(--space-2);
   border-right: 1px solid var(--color-border);
   min-height: 60px;
+  min-width: 0; /* Allow grid cells to shrink below content size */
+  overflow: hidden;
 }
 
 .two-column-layout__cell--original {
@@ -304,6 +318,8 @@
   line-height: var(--line-height-relaxed);
   white-space: pre-wrap;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 0; /* Allow text to shrink in flex container */
 }
 
 .two-column-layout__text--suppressed {

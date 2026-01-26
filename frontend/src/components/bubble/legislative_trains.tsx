@@ -7,7 +7,7 @@
 
 import { useEffect } from 'react';
 import Icon from '@mdi/react';
-import { mdiTrain, mdiFileDocument, mdiRobotOutline, mdiCheckCircle, mdiChevronDown, mdiChevronUp } from '@mdi/js';
+import { mdiTrain, mdiFileDocument, mdiRobotOutline, mdiCheckCircle, mdiChevronDown, mdiChevronUp, mdiStar, mdiStarOutline } from '@mdi/js';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import './legislative_trains.css';
@@ -19,19 +19,58 @@ export const LegislativeTrains = () => {
     isLoadingTrains,
     selectedFileIds,
     isAnalyzing,
+    trackedFiles,
+    isTracking,
     fetchTrains,
     fetchFileDetail,
+    fetchTrackedFiles,
     toggleFileSelection,
     analyzeBatch,
     clearFileSelection,
+    trackFile,
+    untrackFile,
   } = useLegislativeTrains();
 
   const [expandedTrainIds, setExpandedTrainIds] = useState<string[]>([]);
 
   useEffect(() => {
-    // Fetch trains on mount
+    // Fetch trains and tracked files on mount
     fetchTrains();
+    fetchTrackedFiles();
   }, []);
+
+  // Check if a file is tracked
+  const isFileTracked = (fileId: string, oeilRef?: string) => {
+    return trackedFiles.some(
+      (tf) => tf.file_id === fileId || (oeilRef && tf.oeil_procedure_ref === oeilRef)
+    );
+  };
+
+  // Handle track/untrack - supports both procedure ref and carriage ID
+  const handleTrackToggle = async (e: React.MouseEvent, file: { id: string; file_id: string; oeil_procedure_ref?: string }) => {
+    e.stopPropagation();
+    if (isTracking) return;
+
+    const tracked = isFileTracked(file.file_id, file.oeil_procedure_ref);
+    const useCarriageId = !file.oeil_procedure_ref;
+    const identifier = file.oeil_procedure_ref || file.id || file.file_id;
+
+    try {
+      if (tracked) {
+        // Untrack - use procedure ref if available, otherwise carriage ID
+        const trackedFile = trackedFiles.find(
+          (tf) => tf.file_id === file.file_id || tf.oeil_procedure_ref === file.oeil_procedure_ref
+        );
+        if (trackedFile) {
+          await untrackFile(trackedFile.oeil_procedure_ref || trackedFile.file_id, !trackedFile.oeil_procedure_ref);
+        }
+      } else {
+        await trackFile(identifier, useCarriageId);
+      }
+    } catch (error) {
+      console.error('Failed to toggle tracking:', error);
+    }
+  };
 
   const toggleTrain = (trainId: string) => {
     setExpandedTrainIds(prev =>
@@ -152,6 +191,8 @@ export const LegislativeTrains = () => {
                   const isSelected = selectedFileIds.includes(file.file_id);
                   const isEnriched = file.ai_summary && file.ai_policy_classifications;
 
+                  const fileIsTracked = isFileTracked(file.file_id, (file as any).oeil_procedure_ref);
+
                   return (
                     <div
                       key={file.id}
@@ -182,6 +223,15 @@ export const LegislativeTrains = () => {
                               <Icon path={mdiRobotOutline} size={0.6} />
                             </span>
                           )}
+                          {/* Track button */}
+                          <button
+                            className={`legislative-trains__file-track ${fileIsTracked ? 'legislative-trains__file-track--active' : ''}`}
+                            onClick={(e) => handleTrackToggle(e, { id: file.id, file_id: file.file_id, oeil_procedure_ref: (file as any).oeil_procedure_ref })}
+                            disabled={isTracking}
+                            title={fileIsTracked ? 'Stop tracking' : 'Track this file'}
+                          >
+                            <Icon path={fileIsTracked ? mdiStar : mdiStarOutline} size={0.7} />
+                          </button>
                         </div>
 
                         {file.description && (

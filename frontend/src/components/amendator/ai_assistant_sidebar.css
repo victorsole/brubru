@@ -296,6 +296,14 @@
   cursor: not-allowed;
 }
 
+.ai-sidebar__hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-2);
+  text-align: center;
+  font-style: italic;
+}
+
 /* AI Suggestion */
 .ai-sidebar__suggestion {
   background-color: var(--color-gray-50);
@@ -351,12 +359,15 @@
 /* Suggestion Actions */
 .ai-sidebar__suggestion-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
   margin-top: var(--space-3);
+  justify-content: center;
 }
 
 .ai-sidebar__suggestion-actions button {
-  flex: 1;
+  flex: 0 1 auto;
+  min-width: 80px;
 }
 
 /* Responsive Design */

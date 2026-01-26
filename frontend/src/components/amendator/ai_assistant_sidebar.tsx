@@ -5,6 +5,8 @@ import type { LegislativeElement } from './two_column_layout';
 import { FeedbackInvitation } from '../shared/feedback_invitation';
 import './ai_assistant_sidebar.css';
 
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
+
 interface AIAssistantSidebarProps {
   isOpen: boolean;
   onToggle: () => void;
@@ -44,7 +46,12 @@ export const AIAssistantSidebar = ({
 
   const handleAISuggest = async () => {
     if (!selectedElement) {
-      alert('Please select a row in the amendment table first');
+      alert('Please select a legislative element (article, recital, etc.) in the document viewer first. Then enter your policy position and click AI Suggest.');
+      return;
+    }
+
+    if (!policyText.trim()) {
+      alert('Please enter your policy position or goals in the text area above.');
       return;
     }
 
@@ -52,25 +59,60 @@ export const AIAssistantSidebar = ({
     setAiSuggestion(null);
 
     try {
-      // TODO: Replace with actual API call
-      // Simulating API call for now
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Build element position string
+      let elementPosition = '';
+      if (selectedElement.type === 'recital') {
+        elementPosition = `Recital ${selectedElement.number}`;
+      } else if (selectedElement.type === 'article') {
+        elementPosition = `Article ${selectedElement.number}`;
+      } else if (selectedElement.type === 'article_title') {
+        elementPosition = `Article ${selectedElement.number} Title`;
+      } else if (selectedElement.type === 'point') {
+        elementPosition = `Point ${selectedElement.number}`;
+      } else if (selectedElement.type === 'paragraph') {
+        elementPosition = `Paragraph (${selectedElement.letter})`;
+      } else if (selectedElement.type === 'subparagraph') {
+        elementPosition = `Subparagraph (${selectedElement.roman})`;
+      } else if (selectedElement.type === 'chapter') {
+        elementPosition = `Chapter ${selectedElement.number}`;
+      }
 
-      // Mock AI suggestion
-      const mockSuggestion: AISuggestion = {
-        amendment_type: 'modification',
+      // Get auth token
+      const token = localStorage.getItem('access_token');
+
+      // Build query params
+      const params = new URLSearchParams({
+        policy_position: policyText.trim(),
         original_text: selectedElement.text,
-        proposed_text: selectedElement.text.replace(
-          /children/gi,
-          'minors under 18 years of age'
-        ),
-        justification: 'This amendment strengthens child protection by providing a more precise legal definition, aligning with your policy position on enhanced data privacy for minors.',
-      };
+        element_type: selectedElement.type,
+        element_position: elementPosition,
+      });
 
-      setAiSuggestion(mockSuggestion);
+      // Call real AI suggestion endpoint
+      const response = await fetch(`${API_BASE}/amendments/suggest?${params.toString()}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to generate AI suggestion');
+      }
+
+      const suggestion = await response.json();
+
+      setAiSuggestion({
+        amendment_type: suggestion.amendment_type,
+        original_text: selectedElement.text,
+        proposed_text: suggestion.proposed_text,
+        justification: suggestion.justification,
+      });
     } catch (error) {
       console.error('AI suggestion error:', error);
-      alert('Failed to generate AI suggestion');
+      alert(error instanceof Error ? error.message : 'Failed to generate AI suggestion');
     } finally {
       setIsLoading(false);
     }
@@ -127,7 +169,7 @@ export const AIAssistantSidebar = ({
         onClick={onToggle}
         aria-label={t('ai.openAssistant')}
       >
-        <span className="ai-sidebar__toggle-icon">▶</span>
+        <span className="ai-sidebar__toggle-icon mdi mdi-chevron-right"></span>
         <span className="ai-sidebar__toggle-text">{t('ai.assistant')}</span>
       </button>
     );
@@ -141,7 +183,7 @@ export const AIAssistantSidebar = ({
         onClick={onToggle}
         aria-label={t('ai.closeAssistant')}
       >
-        ✕
+        <span className="mdi mdi-close"></span>
       </button>
       {/* Content */}
       <div className="ai-sidebar__content">
@@ -177,7 +219,7 @@ export const AIAssistantSidebar = ({
           <div className="ai-sidebar__section">
             <h3 className="ai-sidebar__section-title">{t('ai.uploadDocs')}</h3>
             <label className="ai-sidebar__upload-button button button-sm button-secondary">
-              📎 {t('ai.uploadButton')}
+              <span className="mdi mdi-paperclip"></span> {t('ai.uploadButton')}
               <input
                 type="file"
                 multiple
@@ -191,14 +233,14 @@ export const AIAssistantSidebar = ({
               <div className="ai-sidebar__documents">
                 {uploadedDocuments.map((doc, index) => (
                   <div key={index} className="ai-sidebar__document">
-                    <span className="ai-sidebar__document-icon">📄</span>
+                    <span className="ai-sidebar__document-icon mdi mdi-file-document"></span>
                     <span className="ai-sidebar__document-name">{doc.name}</span>
                     <button
                       className="ai-sidebar__document-remove"
                       onClick={() => handleRemoveDocument(index)}
                       aria-label="Remove document"
                     >
-                      ✕
+                      <span className="mdi mdi-close"></span>
                     </button>
                   </div>
                 ))}
@@ -233,15 +275,18 @@ export const AIAssistantSidebar = ({
           <button
             className="button button-primary ai-sidebar__suggest-button"
             onClick={handleAISuggest}
-            disabled={!selectedElement || isLoading}
+            disabled={isLoading}
           >
-            {isLoading ? `🤖 ${t('ai.thinking')}` : `🤖 ${t('ai.suggest')}`}
+            <span className="mdi mdi-robot"></span> {isLoading ? t('ai.thinking') : t('ai.suggest')}
           </button>
+          {!selectedElement && (
+            <p className="ai-sidebar__hint">Select a legislative element in the document to enable AI suggestions</p>
+          )}
 
           {/* AI Suggestion */}
           {aiSuggestion && (
             <div className="ai-sidebar__suggestion">
-              <h3 className="ai-sidebar__suggestion-title">💡 {t('ai.suggestion')}</h3>
+              <h3 className="ai-sidebar__suggestion-title"><span className="mdi mdi-lightbulb"></span> {t('ai.suggestion')}</h3>
 
               <div className="ai-sidebar__suggestion-content">
                 <div className="ai-sidebar__suggestion-field">
@@ -268,19 +313,19 @@ export const AIAssistantSidebar = ({
                   className="button button-sm button-success"
                   onClick={handleAccept}
                 >
-                  ✓ {t('ai.accept')}
+                  <span className="mdi mdi-check"></span> {t('ai.accept')}
                 </button>
                 <button
                   className="button button-sm button-secondary"
                   onClick={handleModify}
                 >
-                  ✎ {t('ai.modify')}
+                  <span className="mdi mdi-pencil"></span> {t('ai.modify')}
                 </button>
                 <button
                   className="button button-sm button-danger"
                   onClick={handleReject}
                 >
-                  ✕ {t('ai.reject')}
+                  <span className="mdi mdi-close"></span> {t('ai.reject')}
                 </button>
               </div>
             </div>

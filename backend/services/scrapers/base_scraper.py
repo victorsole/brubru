@@ -3,6 +3,10 @@ Base Scraper Class
 
 All EU institutional scrapers inherit from this base class.
 Provides common functionality for HTTP requests, rate limiting, caching, and error handling.
+
+ENHANCED (January 2025):
+- Optional integration with ScraperCoordinator for centralized rate limiting
+- Cross-scraper coordination when multiple scrapers hit the same domain
 """
 
 import asyncio
@@ -25,6 +29,12 @@ from tenacity import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+def _extract_domain(url: str) -> str:
+    """Extract domain from URL"""
+    parsed = urlparse(url)
+    return parsed.netloc or parsed.path.split('/')[0]
 
 
 class ScraperError(Exception):
@@ -59,7 +69,8 @@ class BaseScraper(ABC):
         cache_ttl: int = 3600,
         timeout: int = 30,
         max_retries: int = 3,
-        user_agent: str = "Brubru/1.0 (EU Policy Intelligence; +https://brubru.world)"
+        user_agent: str = "Brubru/1.0 (EU Policy Intelligence; +https://brubru.world)",
+        use_coordinator: bool = True
     ):
         """
         Initialize base scraper.
@@ -72,6 +83,7 @@ class BaseScraper(ABC):
             timeout: Request timeout in seconds (default: 30)
             max_retries: Maximum retry attempts (default: 3)
             user_agent: User-Agent string for requests
+            use_coordinator: Whether to use centralized ScraperCoordinator (default: True)
         """
         self.base_url = base_url
         self.name = name
@@ -80,10 +92,21 @@ class BaseScraper(ABC):
         self.timeout = ClientTimeout(total=timeout)
         self.max_retries = max_retries
         self.user_agent = user_agent
+        self.use_coordinator = use_coordinator
 
-        # Rate limiting
+        # Rate limiting (local fallback when coordinator not used)
         self._last_request_time: Optional[float] = None
         self._request_lock = asyncio.Lock()
+
+        # Coordinator for centralized rate limiting
+        self._coordinator = None
+        if use_coordinator:
+            try:
+                from .scraper_coordinator import get_coordinator
+                self._coordinator = get_coordinator()
+            except ImportError:
+                logger.warning(f"{name}: ScraperCoordinator not available, using local rate limiting")
+                self.use_coordinator = False
 
         # Caching (in-memory for now, can be replaced with Redis)
         self._cache: Dict[str, Dict[str, Any]] = {}
@@ -97,7 +120,8 @@ class BaseScraper(ABC):
             "total_bytes": 0,
         }
 
-        logger.info(f"Initialized {self.name} scraper for {self.base_url}")
+        coordinator_status = "with coordinator" if self._coordinator else "local rate limiting"
+        logger.info(f"Initialized {self.name} scraper for {self.base_url} ({coordinator_status})")
 
     async def _rate_limit(self):
         """Enforce rate limiting between requests"""
@@ -174,8 +198,12 @@ class BaseScraper(ABC):
             if cached_data is not None:
                 return cached_data
 
-        # Rate limiting
-        await self._rate_limit()
+        # Rate limiting - use coordinator if available, otherwise local
+        domain = _extract_domain(url)
+        if self._coordinator:
+            await self._coordinator.acquire(domain)
+        else:
+            await self._rate_limit()
 
         # Prepare headers
         request_headers = {
@@ -190,6 +218,9 @@ class BaseScraper(ABC):
         if headers:
             request_headers.update(headers)
 
+        # Track request timing for coordinator
+        start_time = asyncio.get_event_loop().time()
+
         # Make request
         try:
             async with aiohttp.ClientSession(timeout=self.timeout) as session:
@@ -202,6 +233,16 @@ class BaseScraper(ABC):
                     self.stats['requests_made'] += 1
                     self.stats['total_bytes'] += len(content)
 
+                    # Record success with coordinator
+                    if self._coordinator:
+                        elapsed_ms = (asyncio.get_event_loop().time() - start_time) * 1000
+                        self._coordinator.record_request(
+                            domain,
+                            success=True,
+                            response_time_ms=elapsed_ms,
+                            bytes_received=len(content)
+                        )
+
                     # Cache the response
                     if use_cache:
                         self._save_to_cache(cache_key, content)
@@ -211,18 +252,47 @@ class BaseScraper(ABC):
 
         except aiohttp.ClientResponseError as e:
             self.stats['errors'] += 1
+            if self._coordinator:
+                elapsed_ms = (asyncio.get_event_loop().time() - start_time) * 1000
+                self._coordinator.record_request(
+                    domain,
+                    success=False,
+                    response_time_ms=elapsed_ms,
+                    error_message=f"HTTP {e.status}: {e.message}"
+                )
             logger.error(f"{self.name}: HTTP error {e.status} for {url}: {e.message}")
             raise ScraperError(f"HTTP {e.status}: {e.message}") from e
 
         except asyncio.TimeoutError as e:
             self.stats['errors'] += 1
+            if self._coordinator:
+                elapsed_ms = (asyncio.get_event_loop().time() - start_time) * 1000
+                self._coordinator.record_request(
+                    domain,
+                    success=False,
+                    response_time_ms=elapsed_ms,
+                    error_message="Request timeout"
+                )
             logger.error(f"{self.name}: Timeout fetching {url}")
             raise ScraperError(f"Request timeout for {url}") from e
 
         except Exception as e:
             self.stats['errors'] += 1
+            if self._coordinator:
+                elapsed_ms = (asyncio.get_event_loop().time() - start_time) * 1000
+                self._coordinator.record_request(
+                    domain,
+                    success=False,
+                    response_time_ms=elapsed_ms,
+                    error_message=str(e)
+                )
             logger.error(f"{self.name}: Unexpected error fetching {url}: {e}")
             raise ScraperError(f"Failed to fetch {url}: {str(e)}") from e
+
+        finally:
+            # Release coordinator slot
+            if self._coordinator:
+                self._coordinator.release(domain)
 
     def _parse_html(self, html: str) -> BeautifulSoup:
         """Parse HTML content with BeautifulSoup"""
@@ -234,18 +304,67 @@ class BaseScraper(ABC):
 
     def get_stats(self) -> Dict[str, Any]:
         """Return scraper statistics"""
-        return {
+        stats = {
             'name': self.name,
             'base_url': self.base_url,
             'stats': self.stats,
             'cache_size': len(self._cache),
             'rate_limit_delay': self.rate_limit_delay,
+            'using_coordinator': self._coordinator is not None,
         }
+
+        # Include coordinator health if available
+        if self._coordinator:
+            domain = _extract_domain(self.base_url)
+            stats['coordinator_health'] = self._coordinator.get_domain_health(domain)
+
+        return stats
+
+    def get_coordinator_health(self) -> Optional[Dict[str, Any]]:
+        """
+        Get health status from the centralized coordinator.
+
+        Returns:
+            Health dictionary if coordinator is available, None otherwise
+        """
+        if self._coordinator:
+            return self._coordinator.get_all_health()
+        return None
 
     def clear_cache(self):
         """Clear all cached data"""
         self._cache.clear()
         logger.info(f"{self.name}: Cache cleared")
+
+    def create_batch_result(self) -> 'ScrapeBatchResult':
+        """
+        Create a new batch result for tracking scraping operations.
+
+        Returns:
+            ScrapeBatchResult instance for this scraper
+        """
+        from schemas.scrapers.base_schemas import ScrapeBatchResult, DataSource
+
+        # Map scraper names to DataSource enum
+        source_map = {
+            'EUR-Lex': DataSource.EUR_LEX,
+            'EuropeanParliament': DataSource.EUROPEAN_PARLIAMENT,
+            'OEIL': DataSource.OEIL,
+            'Council': DataSource.COUNCIL,
+            'ThinkTank': DataSource.EPRS,
+            'JRC': DataSource.JRC,
+            'data.europa.eu': DataSource.DATA_EUROPA,
+            'LegislativeTrain': DataSource.LEGISLATIVE_TRAIN,
+            'WhoIsWho': DataSource.WHO_IS_WHO,
+            'EuropeanCommission': DataSource.EUROPEAN_COMMISSION,
+        }
+
+        source = source_map.get(self.name, DataSource.OTHER)
+
+        return ScrapeBatchResult(
+            source=source,
+            scraper_name=self.name
+        )
 
     # Abstract methods that must be implemented by subclasses
 

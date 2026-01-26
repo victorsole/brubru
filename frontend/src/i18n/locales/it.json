@@ -1,0 +1,230 @@
+{
+  "header": {
+    "main": "Principale",
+    "amendator": "Amendator",
+    "myEuBubble": "La Mia Bolla UE",
+    "euLawComply": "Conformita UE",
+    "tenderator": "Tenderator",
+    "profile": "Profilo",
+    "adminPanel": "Pannello Admin",
+    "viewProfile": "Visualizza Profilo",
+    "subscription": "Abbonamento",
+    "takeTour": "Fai un tour",
+    "logOut": "Esci"
+  },
+  "main": {
+    "chatHistory": "Cronologia Chat",
+    "previousConversations": "Le conversazioni precedenti appariranno qui"
+  },
+  "chat": {
+    "welcome": "Benvenuto su Brubru",
+    "tagline": "Il tuo compagno IA multiagente per navigare nella bolla UE a Bruxelles",
+    "startConversation": "Avvia una conversazione per analizzare la legislazione UE, elaborare campagne di advocacy o ricevere indicazioni sulle procedure del Parlamento Europeo.",
+    "tryAsking": "Prova a chiedere:",
+    "example1": "Qual e lo stato della legge sull'IA?",
+    "example2": "Mostrami gli emendamenti recenti sul GDPR",
+    "example3": "Chi sono gli eurodeputati della commissione ENVI?",
+    "example4": "Trova la legislazione sull'adeguamento del carbonio alle frontiere",
+    "placeholder": "Chiedi informazioni sulla legislazione UE, procedure o analisi politiche...",
+    "send": "Invia",
+    "stream": "Trasmetti",
+    "cancel": "Annulla",
+    "errorMessage": "Mi dispiace, ho riscontrato un errore nell'elaborazione della tua richiesta. Per favore riprova.",
+    "failedResponse": "Impossibile ottenere una risposta. Per favore riprova."
+  },
+  "docs": {
+    "title": "Documenti",
+    "noDocuments": "Nessun documento caricato",
+    "documentsUploaded": "Documenti caricati",
+    "dragDrop": "Trascina e rilascia i file qui o clicca per sfogliare",
+    "supported": "Supportati: PDF, Word, Testo, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "maxSize": "Max 10MB per file",
+    "tooLarge": "e troppo grande. La dimensione massima e 10MB."
+  },
+  "bubble": {
+    "title": "La Mia Bolla UE",
+    "subtitle": "Il tuo dashboard personalizzato di intelligence politica UE",
+    "dashboard": "Dashboard",
+    "documents": "Documenti",
+    "amendments": "Emendamenti",
+    "analytics": "Analitiche"
+  },
+  "amendments": {
+    "title": "Emendamenti",
+    "noAmendments": "Nessun emendamento ancora",
+    "createFirst": "Crea il tuo primo emendamento usando l'editor sulla destra",
+    "tabled": "Presentato",
+    "candidate": "Candidato",
+    "withdrawn": "Ritirato",
+    "exporting": "Esportazione...",
+    "exported": "Esportato!",
+    "exportAll": "Esporta Tutto"
+  },
+  "ai": {
+    "openAssistant": "Apri Assistente IA",
+    "assistant": "IA",
+    "analyzing": "Analizzando...",
+    "foundAmendment": "Ho trovato un emendamento per te!",
+    "selectRow": "Seleziona una riga e ti suggeriro un emendamento",
+    "policyPosition": "La Tua Posizione Politica:",
+    "policyPlaceholder": "Incolla la tua posizione politica o gli obiettivi chiave qui...\n\nEsempio: 'Vogliamo rafforzare la protezione dei dati dei minori, garantire il consenso dei genitori per i minori di 16 anni e aumentare i requisiti di trasparenza per i responsabili del trattamento dei dati.'",
+    "uploadDocs": "Carica Documenti di Politica:",
+    "uploadButton": "Carica Documenti",
+    "currentlySelected": "Attualmente Selezionato:",
+    "clickRow": "Clicca su una riga nella tabella degli emendamenti per selezionarla",
+    "thinking": "Pensando...",
+    "suggest": "Suggerisci Emendamento con IA",
+    "suggestion": "Suggerimento IA:",
+    "type": "Tipo:",
+    "proposedText": "Testo Proposto:",
+    "justification": "Giustificazione:",
+    "accept": "Accetta",
+    "modify": "Modifica",
+    "reject": "Rifiuta"
+  },
+  "profile": {
+    "title": "Impostazioni Profilo",
+    "subscription": "Abbonamento",
+    "upgrade": "Aggiorna",
+    "amendmentsMonth": "Emendamenti questo mese",
+    "unlimited": "illimitato",
+    "apiCalls": "Chiamate API questo mese",
+    "renewsOn": "Rinnovo abbonamento",
+    "personalInfo": "Informazioni Personali",
+    "email": "Email",
+    "emailNote": "L'email non puo essere modificata",
+    "fullName": "Nome Completo",
+    "organisation": "Organizzazione",
+    "country": "Paese",
+    "selectCountry": "Seleziona paese",
+    "saving": "Salvataggio...",
+    "saveChanges": "Salva Modifiche",
+    "saved": "Salvato",
+    "policyInterests": "Interessi Politici",
+    "policyDescription": "Seleziona le tue aree di interesse. Brubru usera queste preferenze per personalizzare la tua esperienza e dare priorita ai contenuti rilevanti.",
+    "feedback": "Feedback e Supporto",
+    "feedbackDescription": "Aiutaci a migliorare Brubru condividendo i tuoi feedback, segnalando bug o richiedendo nuove funzionalita. Il tuo contributo e inestimabile per migliorare la nostra piattaforma.",
+    "accountSettings": "Impostazioni Account",
+    "accountCreated": "Account creato",
+    "lastLogin": "Ultimo accesso",
+    "deleteWarning": "Elimina il tuo account e tutti i dati associati. Questa azione non puo essere annullata.",
+    "deleteAccount": "Elimina Account"
+  },
+  "subscription": {
+    "hero": {
+      "title": "Scegli il Tuo Piano Brubru",
+      "subtitle": "Potente intelligence politica UE per ogni professionista",
+      "description": "Che tu sia un professionista dell'advocacy, un assistente di eurodeputato o un esperto di politiche, abbiamo un piano adatto alle tue esigenze."
+    },
+    "white": {
+      "name": "Base",
+      "price": "0 EUR",
+      "period": "/mese",
+      "description": "Strumenti essenziali per iniziare con il monitoraggio delle politiche UE",
+      "button": "Inizia"
+    },
+    "yellow": {
+      "name": "Professionale",
+      "price": "79 EUR",
+      "period": "/mese",
+      "annualPrice": "o 790 EUR/anno",
+      "annualSavings": "(risparmia 158 EUR)",
+      "description": "IA avanzata e emendamenti illimitati per professionisti dell'advocacy",
+      "button": "Passa a Professionale",
+      "popular": "Piu Popolare"
+    },
+    "blue": {
+      "name": "Aziendale",
+      "price": "Prezzo personalizzato",
+      "period": "",
+      "description": "Soluzioni su misura per team e organizzazioni con requisiti specifici",
+      "button": "Contattaci",
+      "contactEmail": "helloberesol@gmail.com",
+      "minUsers": "5+ utenti"
+    },
+    "features": {
+      "title": "Confronto Funzionalita",
+      "subtitle": "Scopri cosa include ogni piano",
+      "white": {
+        "chat": "Chat IA base",
+        "amendments": "5 emendamenti al mese",
+        "searches": "5 ricerche salvate",
+        "support": "Supporto comunitario",
+        "exports": "Esportazioni base (XML, HTML)",
+        "watermark": "Filigrana Brubru sulle esportazioni"
+      },
+      "yellow": {
+        "chat": "Chat IA avanzata",
+        "amendments": "Emendamenti illimitati",
+        "searches": "Ricerche salvate illimitate",
+        "support": "Supporto email (risposta 48h)",
+        "exports": "Tutti i formati di esportazione (PDF, Word, XML, HTML)",
+        "watermark": "Senza filigrana",
+        "priority": "Tempi di risposta prioritari",
+        "rss": "Avvisi feed RSS",
+        "personalization": "Saluto personalizzato"
+      },
+      "blue": {
+        "everything": "Tutto in Professionale, piu:",
+        "multiUser": "Account team multi-utente",
+        "support": "Supporto dedicato (risposta 24h)",
+        "customDomain": "Specializzazione dominio personalizzata",
+        "whiteLabel": "Opzioni white-label",
+        "sla": "Accordo sul Livello di Servizio (SLA)",
+        "training": "Onboarding e formazione",
+        "api": "Accesso API",
+        "preferences": "Preferenze utente avanzate"
+      }
+    },
+    "faq": {
+      "title": "Domande Frequenti",
+      "q1": "Quali metodi di pagamento accettate?",
+      "a1": "Accettiamo tutte le principali carte di credito, carte di debito e bonifici bancari tramite Stripe. I clienti aziendali possono organizzare la fatturazione.",
+      "q2": "Posso cambiare piano in seguito?",
+      "a2": "Si, puoi passare a un piano superiore in qualsiasi momento. I downgrade entrano in vigore alla fine del ciclo di fatturazione corrente.",
+      "q3": "Qual e la vostra politica di rimborso?",
+      "a3": "Offriamo una garanzia di rimborso di 14 giorni per i piani annuali. I piani mensili possono essere cancellati in qualsiasi momento.",
+      "q4": "Offrite una prova gratuita?",
+      "a4": "Il nostro livello Base e gratuito per sempre con 5 emendamenti al mese. Puoi provare le funzionalita Professionali con una prova di 14 giorni.",
+      "q5": "Come funziona il prezzo Aziendale?",
+      "a5": "Il prezzo aziendale e personalizzato in base alla dimensione del team, ai requisiti delle funzionalita e al volume di utilizzo. Contattaci per un preventivo su misura.",
+      "q6": "Cosa succede se supero il limite di emendamenti?",
+      "a6": "Gli utenti del livello Base sono limitati a 5 emendamenti al mese. Per crearne di piu, passa a Professionale per emendamenti illimitati."
+    },
+    "trust": {
+      "title": "Affidabile per i professionisti delle politiche in tutta Europa",
+      "subtitle": "Unisciti alle organizzazioni che gia usano Brubru"
+    },
+    "cta": {
+      "title": "Pronto per iniziare?",
+      "subtitle": "Unisciti ai professionisti delle politiche che usano Brubru per navigare nel panorama UE",
+      "button": "Inizia Gratis",
+      "contact": "O contattaci per Aziendale"
+    }
+  },
+  "euLawComply": {
+    "history": "Cronologia Analisi",
+    "completed": "Completato",
+    "processing": "In elaborazione",
+    "failed": "Fallito",
+    "loadingHistory": "Caricamento cronologia...",
+    "retry": "Riprova",
+    "noAnalyses": "Nessuna analisi di conformita ancora",
+    "runFirstAnalysis": "Esegui la tua prima analisi di conformita per iniziare",
+    "refresh": "Aggiorna",
+    "refreshing": "Aggiornamento..."
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "success": "Successo",
+    "save": "Salva",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "edit": "Modifica",
+    "search": "Cerca",
+    "filter": "Filtra",
+    "close": "Chiudi",
+    "open": "Apri"
+  }
+}

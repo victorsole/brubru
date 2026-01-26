@@ -23,7 +23,7 @@ export interface FetchedDocument {
   structure?: {
     legislative_structure?: {
       elements?: Array<{
-        type: 'recital' | 'article' | 'article_title' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
+        type: 'recital' | 'article' | 'article_title' | 'article_intro' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
         number?: string;
         letter?: string;
         roman?: string;
@@ -138,20 +138,20 @@ export const EURLexURLInput = ({ onDocumentFetched }: EURLexURLInputProps) => {
           onClick={handleFetch}
           disabled={isFetching || !url.trim()}
         >
-          {isFetching ? 'Fetching...' : success ? '✓ Loaded!' : 'Load Document'}
+          {isFetching ? 'Fetching...' : success ? <><span className="mdi mdi-check"></span> Loaded!</> : 'Load Document'}
         </button>
       </div>
 
       {error && (
         <div className="eurlex-url-input__error">
-          <span className="eurlex-url-input__error-icon">⚠️</span>
+          <span className="eurlex-url-input__error-icon mdi mdi-alert"></span>
           {error}
         </div>
       )}
 
       {success && (
         <div className="eurlex-url-input__success">
-          <span className="eurlex-url-input__success-icon">✓</span>
+          <span className="eurlex-url-input__success-icon mdi mdi-check-circle"></span>
           Document loaded successfully!
         </div>
       )}

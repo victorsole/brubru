@@ -142,6 +142,74 @@ class PDFProcessor:
             extract_sections=extract_sections
         )
 
+    async def process_pdf_from_bytes(
+        self,
+        content: bytes,
+        extract_tables: bool = False,
+        extract_sections: bool = True
+    ) -> dict:
+        """
+        Process PDF from bytes content.
+
+        Args:
+            content: PDF file content as bytes
+            extract_tables: Extract tables from PDF
+            extract_sections: Parse document structure
+
+        Returns:
+            Dict with extracted content (compatible with document storage)
+        """
+        import tempfile
+        import uuid
+
+        logger.info(f"Processing PDF from bytes ({len(content)} bytes)")
+
+        # Save bytes to temporary file
+        temp_filename = f"upload_{uuid.uuid4().hex}.pdf"
+        temp_path = self.download_dir / temp_filename
+
+        try:
+            temp_path.write_bytes(content)
+
+            # Process the file
+            pdf_content = await self.process_pdf_from_file(
+                temp_path,
+                extract_tables=extract_tables,
+                extract_sections=extract_sections
+            )
+
+            # Convert PDFContent dataclass to dict for JSON storage
+            return {
+                'text': pdf_content.full_text,
+                'metadata': {
+                    'title': pdf_content.metadata.title,
+                    'author': pdf_content.metadata.author,
+                    'subject': pdf_content.metadata.subject,
+                    'page_count': pdf_content.metadata.page_count,
+                    'file_size_bytes': pdf_content.metadata.file_size_bytes,
+                    'language': pdf_content.metadata.language,
+                    'keywords': pdf_content.metadata.keywords or [],
+                },
+                'sections': [
+                    {
+                        'heading': s.heading,
+                        'content': s.content,
+                        'page_number': s.page_number,
+                        'level': s.level
+                    }
+                    for s in pdf_content.sections
+                ],
+                'tables': pdf_content.tables,
+                'references': pdf_content.references,
+                'word_count': pdf_content.word_count,
+                'quality': pdf_content.extraction_quality
+            }
+
+        finally:
+            # Clean up temporary file
+            if temp_path.exists():
+                temp_path.unlink()
+
     async def process_pdf_from_file(
         self,
         pdf_path: Path,

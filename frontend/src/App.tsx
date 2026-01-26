@@ -1,5 +1,5 @@
 // frontend/src/App.tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { RoutePresence, AnimatedPage } from './components/animations/page_transition';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -9,8 +9,7 @@ import { Footer } from './components/shared/footer';
 import { CookieConsent } from './components/shared/cookie_consent';
 import { TourProvider } from './components/tour';
 import { ProtectedRoute } from './components/auth/protected_route';
-import { translationService } from './services/translation_service';
-import i18n from './i18n/config'; // Initialize i18n
+import './i18n/config'; // Initialize i18n
 
 // Pages
 import { LandingPage } from './pages/landing_page';
@@ -46,26 +45,6 @@ if (import.meta.env.DEV) {
 export const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { isAuthenticated } = useAuth();
-
-  // Initialize translations on mount
-  useEffect(() => {
-    const initializeTranslations = async () => {
-      const currentLanguage = i18n.language || 'en';
-
-      // If the detected language is not English, load its translations
-      if (currentLanguage !== 'en') {
-        try {
-          await translationService.loadTranslations(currentLanguage);
-        } catch (error) {
-          console.error('Failed to initialize translations:', error);
-          // Fall back to English if loading fails
-          await i18n.changeLanguage('en');
-        }
-      }
-    };
-
-    initializeTranslations();
-  }, []);
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>

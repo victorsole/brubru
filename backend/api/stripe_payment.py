@@ -166,7 +166,7 @@ async def stripe_webhook(
 
     # If webhook secret is not configured, skip verification (development only)
     if not settings.STRIPE_WEBHOOK_SECRET:
-        print("⚠️  WARNING: STRIPE_WEBHOOK_SECRET not set. Webhook verification disabled!")
+        print("[WARN] STRIPE_WEBHOOK_SECRET not set. Webhook verification disabled!")
         import json
         event = json.loads(payload)
     else:
@@ -179,7 +179,7 @@ async def stripe_webhook(
         except stripe.error.SignatureVerificationError:
             raise HTTPException(status_code=400, detail="Invalid signature")
 
-    print(f"📥 Received Stripe webhook: {event['type']}")
+    print(f"[WEBHOOK] Received Stripe webhook: {event['type']}")
 
     # Handle different event types
     if event["type"] == "checkout.session.completed":
@@ -205,21 +205,21 @@ async def handle_checkout_completed(session, db: Session):
     user_id = session["metadata"]["user_id"]
     tier = session["metadata"]["tier"]
 
-    print(f"✅ Checkout completed for user {user_id}, tier: {tier}")
+    print(f"[OK] Checkout completed for user {user_id}, tier: {tier}")
 
     user = db.query(User).filter(User.id == user_id).first()
     if user:
         user.subscription_tier = tier
         user.stripe_subscription_id = session.get("subscription")
         db.commit()
-        print(f"✅ User {user.email} upgraded to {tier} tier")
+        print(f"[OK] User {user.email} upgraded to {tier} tier")
 
 
 async def handle_subscription_updated(subscription, db: Session):
     """Handle subscription updates"""
     customer_id = subscription["customer"]
 
-    print(f"🔄 Subscription updated for customer {customer_id}")
+    print(f"[UPDATE] Subscription updated for customer {customer_id}")
 
     user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
     if user:
@@ -230,7 +230,7 @@ async def handle_subscription_updated(subscription, db: Session):
         # Check if subscription is active
         if subscription["status"] not in ["active", "trialing"]:
             user.subscription_tier = "white"
-            print(f"⚠️  Subscription inactive for {user.email}, downgraded to white")
+            print(f"[WARN] Subscription inactive for {user.email}, downgraded to white")
 
         db.commit()
 
@@ -239,7 +239,7 @@ async def handle_subscription_deleted(subscription, db: Session):
     """Handle subscription cancellation"""
     customer_id = subscription["customer"]
 
-    print(f"❌ Subscription deleted for customer {customer_id}")
+    print(f"[CANCEL] Subscription deleted for customer {customer_id}")
 
     user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
     if user:
@@ -247,14 +247,14 @@ async def handle_subscription_deleted(subscription, db: Session):
         user.subscription_expires_at = None
         user.stripe_subscription_id = None
         db.commit()
-        print(f"✅ User {user.email} downgraded to white tier")
+        print(f"[OK] User {user.email} downgraded to white tier")
 
 
 async def handle_payment_succeeded(invoice, db: Session):
     """Handle successful payment"""
     customer_id = invoice["customer"]
 
-    print(f"💰 Payment succeeded for customer {customer_id}")
+    print(f"[PAYMENT] Payment succeeded for customer {customer_id}")
 
     user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
     if user:
@@ -263,16 +263,16 @@ async def handle_payment_succeeded(invoice, db: Session):
             period_end = invoice["lines"]["data"][0]["period"]["end"]
             user.subscription_expires_at = datetime.fromtimestamp(period_end)
             db.commit()
-            print(f"✅ Subscription extended for {user.email} until {user.subscription_expires_at}")
+            print(f"[OK] Subscription extended for {user.email} until {user.subscription_expires_at}")
 
 
 async def handle_payment_failed(invoice, db: Session):
     """Handle failed payment"""
     customer_id = invoice["customer"]
 
-    print(f"⚠️  Payment failed for customer {customer_id}")
+    print(f"[WARN] Payment failed for customer {customer_id}")
 
     user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
     if user:
         # TODO: Send email notification to user
-        print(f"⚠️  Payment failed for {user.email} - notification should be sent")
+        print(f"[WARN] Payment failed for {user.email} - notification should be sent")

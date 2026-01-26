@@ -7,10 +7,11 @@ import { EURLexURLInput } from './eurlex_url_input';
 import type { FetchedDocument } from './eurlex_url_input';
 import { AmendatorDocumentUpload } from './amendator_document_upload';
 import type { UploadedDocument } from './amendator_document_upload';
+import { TrackedFilesLoader } from './tracked_files_loader';
 import './two_column_layout.css';
 
 export interface LegislativeElement {
-  type: 'recital' | 'article' | 'article_title' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
+  type: 'recital' | 'article' | 'article_title' | 'article_intro' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
   number?: string;
   letter?: string;
   roman?: string;
@@ -18,6 +19,7 @@ export interface LegislativeElement {
   level: number;
   article_number?: string;
   point_number?: string;
+  paragraph_number?: string;
   paragraph_letter?: string;
   title?: string;
 }
@@ -98,12 +100,18 @@ export const TwoColumnLayout = ({
         return `(${element.number})`;
       case 'article':
         return `Article ${element.number}`;
+      case 'article_title':
+        return `Article ${element.number}`;
+      case 'article_intro':
+        return ''; // No prefix for intro text
       case 'point':
         return `${element.number}.`;
       case 'paragraph':
-        return `(${element.letter})`;
+        // Paragraph number can be "(1)", "(a)", or just "1"
+        return element.number || '';
       case 'subparagraph':
-        return `(${element.roman})`;
+        // Subparagraph number is Roman numeral like "i", "ii"
+        return element.number ? `${element.number}.` : '';
       case 'chapter':
         return '';
       default:
@@ -117,17 +125,17 @@ export const TwoColumnLayout = ({
     } else if (element.type === 'article') {
       return `Article ${element.number}`;
     } else if (element.type === 'article_title') {
-      return `Article ${element.article_number}, title`;
+      return `Article ${element.article_number || element.number}, title`;
+    } else if (element.type === 'article_intro') {
+      return `Article ${element.article_number || element.number}, introductory part`;
     } else if (element.type === 'point') {
       return `Article ${element.article_number}, point ${element.number}`;
     } else if (element.type === 'paragraph') {
-      if (element.point_number) {
-        return `Article ${element.article_number}, point ${element.point_number}, paragraph (${element.letter})`;
-      } else {
-        return `Article ${element.article_number}, paragraph (${element.letter})`;
-      }
+      // Paragraph number can be "(1)", "(a)", or "1"
+      return `Article ${element.article_number}, paragraph ${element.number}`;
     } else if (element.type === 'subparagraph') {
-      return `Subparagraph (${element.roman})`;
+      // Subparagraph has article_number and paragraph_number
+      return `Article ${element.article_number}, paragraph ${element.paragraph_number}, point ${element.number}`;
     } else if (element.type === 'chapter') {
       return `Chapter ${element.number}`;
     }
@@ -236,6 +244,10 @@ export const TwoColumnLayout = ({
         <div className="two-column-layout__document-loader">
           <div className="two-column-layout__loader-container">
             <h2 className="two-column-layout__loader-title">Load Legislative Document</h2>
+            <TrackedFilesLoader onDocumentFetched={handleDocumentFetched} />
+            <div className="two-column-layout__divider">
+              <span className="two-column-layout__divider-text">OR</span>
+            </div>
             <EURLexURLInput onDocumentFetched={handleDocumentFetched} />
             <div className="two-column-layout__divider">
               <span className="two-column-layout__divider-text">OR</span>

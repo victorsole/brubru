@@ -161,7 +161,7 @@ class UserDocument(Base):
             action_plan=self.action_plan,
             timeline=self.timeline,
             stakeholders=self.stakeholders,
-            metadata=self.metadata,
+            doc_metadata=self.doc_metadata,
             is_private=self.is_private,
             version=self.version + 1,
             parent_document_id=self.id

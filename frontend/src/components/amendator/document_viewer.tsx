@@ -18,7 +18,7 @@ export interface LoadedDocument {
   structure?: {
     legislative_structure?: {
       elements?: Array<{
-        type: 'recital' | 'article' | 'article_title' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
+        type: 'recital' | 'article' | 'article_title' | 'article_intro' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
         number?: string;
         letter?: string;
         roman?: string;

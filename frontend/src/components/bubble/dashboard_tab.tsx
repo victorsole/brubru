@@ -11,6 +11,7 @@ import { mdiFileDocument, mdiFileEdit, mdiNewspaper, mdiStar } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
 import { useAuth } from '../../hooks/use_auth';
 import { TenderatorWidget } from './tenderator_widget';
+import { LegislativeUpdatesWidget } from './legislative_updates_widget';
 import './dashboard_tab.css';
 
 export const DashboardTab = () => {
@@ -163,9 +164,10 @@ export const DashboardTab = () => {
         </div>
       </div>
 
-      {/* Tenderator Widget */}
+      {/* Widget Row */}
       <div className="dashboard-tab__widget-row">
         <TenderatorWidget />
+        <LegislativeUpdatesWidget />
       </div>
 
       {/* Two Column Layout */}

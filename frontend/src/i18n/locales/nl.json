@@ -1,0 +1,230 @@
+{
+  "header": {
+    "main": "Hoofd",
+    "amendator": "Amendator",
+    "myEuBubble": "Mijn EU Bubbel",
+    "euLawComply": "EU Wetgeving Naleving",
+    "tenderator": "Tenderator",
+    "profile": "Profiel",
+    "adminPanel": "Beheer Paneel",
+    "viewProfile": "Bekijk Profiel",
+    "subscription": "Abonnement",
+    "takeTour": "Doe een rondleiding",
+    "logOut": "Uitloggen"
+  },
+  "main": {
+    "chatHistory": "Chat Geschiedenis",
+    "previousConversations": "Eerdere gesprekken verschijnen hier"
+  },
+  "chat": {
+    "welcome": "Welkom bij Brubru",
+    "tagline": "Jouw AI multi-agent metgezel voor het navigeren door de EU-bubbel in Brussel",
+    "startConversation": "Start een gesprek om EU-wetgeving te analyseren, belangenbehartigingscampagnes te strategiseren of begeleiding te krijgen over procedures van het Europees Parlement.",
+    "tryAsking": "Probeer te vragen:",
+    "example1": "Wat is de status van de AI-wet?",
+    "example2": "Toon me recente amendementen op GDPR",
+    "example3": "Wie zijn de Europarlementariers in de ENVI-commissie?",
+    "example4": "Vind wetgeving over koolstofgrenscorrectie",
+    "placeholder": "Vraag over EU-wetgeving, procedures of beleidsanalyse...",
+    "send": "Verstuur",
+    "stream": "Stream",
+    "cancel": "Annuleer",
+    "errorMessage": "Sorry, ik ben een fout tegengekomen bij het verwerken van je verzoek. Probeer het opnieuw.",
+    "failedResponse": "Kon geen antwoord krijgen. Probeer het opnieuw."
+  },
+  "docs": {
+    "title": "Documenten",
+    "noDocuments": "Geen documenten geupload",
+    "documentsUploaded": "Documenten geupload",
+    "dragDrop": "Sleep bestanden hierheen of klik om te bladeren",
+    "supported": "Ondersteund: PDF, Word, Tekst, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "maxSize": "Max 10MB per bestand",
+    "tooLarge": "is te groot. Maximale grootte is 10MB."
+  },
+  "bubble": {
+    "title": "Mijn EU Bubbel",
+    "subtitle": "Jouw gepersonaliseerde EU-beleidsintelligentie dashboard",
+    "dashboard": "Dashboard",
+    "documents": "Documenten",
+    "amendments": "Amendementen",
+    "analytics": "Analyses"
+  },
+  "amendments": {
+    "title": "Amendementen",
+    "noAmendments": "Nog geen amendementen",
+    "createFirst": "Maak je eerste amendement met de editor rechts",
+    "tabled": "Ingediend",
+    "candidate": "Kandidaat",
+    "withdrawn": "Ingetrokken",
+    "exporting": "Exporteren...",
+    "exported": "Geexporteerd!",
+    "exportAll": "Alles Exporteren"
+  },
+  "ai": {
+    "openAssistant": "Open AI Assistent",
+    "assistant": "AI",
+    "analyzing": "Analyseren...",
+    "foundAmendment": "Ik heb een amendement voor je gevonden!",
+    "selectRow": "Selecteer een rij en ik stel een amendement voor",
+    "policyPosition": "Jouw Beleidspositie:",
+    "policyPlaceholder": "Plak hier je beleidspositie of belangrijkste doelen...\n\nVoorbeeld: 'We willen de gegevensbescherming voor kinderen versterken, ouderlijke toestemming voor kinderen onder de 16 garanderen en de transparantievereisten voor gegevensverwerkers verhogen.'",
+    "uploadDocs": "Upload Beleidsdocumenten:",
+    "uploadButton": "Documenten Uploaden",
+    "currentlySelected": "Momenteel Geselecteerd:",
+    "clickRow": "Klik op een rij in de amendementtabel om deze te selecteren",
+    "thinking": "Nadenken...",
+    "suggest": "AI Amendement Suggereren",
+    "suggestion": "AI Suggestie:",
+    "type": "Type:",
+    "proposedText": "Voorgestelde Tekst:",
+    "justification": "Rechtvaardiging:",
+    "accept": "Accepteren",
+    "modify": "Wijzigen",
+    "reject": "Afwijzen"
+  },
+  "profile": {
+    "title": "Profiel Instellingen",
+    "subscription": "Abonnement",
+    "upgrade": "Upgraden",
+    "amendmentsMonth": "Amendementen deze maand",
+    "unlimited": "onbeperkt",
+    "apiCalls": "API-aanroepen deze maand",
+    "renewsOn": "Abonnement verlengt",
+    "personalInfo": "Persoonlijke Informatie",
+    "email": "E-mail",
+    "emailNote": "E-mail kan niet worden gewijzigd",
+    "fullName": "Volledige Naam",
+    "organisation": "Organisatie",
+    "country": "Land",
+    "selectCountry": "Selecteer land",
+    "saving": "Opslaan...",
+    "saveChanges": "Wijzigingen Opslaan",
+    "saved": "Opgeslagen",
+    "policyInterests": "Beleidsinteresses",
+    "policyDescription": "Selecteer je interessegebieden. Brubru gebruikt deze voorkeuren om je ervaring te personaliseren en relevante content te prioriteren.",
+    "feedback": "Feedback & Ondersteuning",
+    "feedbackDescription": "Help ons Brubru te verbeteren door je feedback te delen, bugs te melden of nieuwe functies aan te vragen. Je input is van onschatbare waarde voor het verbeteren van ons platform.",
+    "accountSettings": "Account Instellingen",
+    "accountCreated": "Account aangemaakt",
+    "lastLogin": "Laatste login",
+    "deleteWarning": "Verwijder je account en alle bijbehorende gegevens. Deze actie kan niet ongedaan worden gemaakt.",
+    "deleteAccount": "Account Verwijderen"
+  },
+  "subscription": {
+    "hero": {
+      "title": "Kies Je Brubru Plan",
+      "subtitle": "Krachtige EU-beleidsintelligentie voor elke professional",
+      "description": "Of je nu een advocacy professional, assistent van een Europarlementarier of beleidsexpert bent, we hebben een plan dat bij je past."
+    },
+    "white": {
+      "name": "Basis",
+      "price": "0 EUR",
+      "period": "/maand",
+      "description": "Essentiele tools om te beginnen met EU-beleidsmonitoring",
+      "button": "Aan de Slag"
+    },
+    "yellow": {
+      "name": "Professioneel",
+      "price": "79 EUR",
+      "period": "/maand",
+      "annualPrice": "of 790 EUR/jaar",
+      "annualSavings": "(bespaar 158 EUR)",
+      "description": "Geavanceerde AI en onbeperkte amendementen voor advocacy professionals",
+      "button": "Upgraden naar Professioneel",
+      "popular": "Meest Populair"
+    },
+    "blue": {
+      "name": "Enterprise",
+      "price": "Aangepaste prijzen",
+      "period": "",
+      "description": "Oplossingen op maat voor teams en organisaties met specifieke vereisten",
+      "button": "Neem Contact Op",
+      "contactEmail": "helloberesol@gmail.com",
+      "minUsers": "5+ gebruikers"
+    },
+    "features": {
+      "title": "Functievergelijking",
+      "subtitle": "Bekijk wat elk plan bevat",
+      "white": {
+        "chat": "Basis AI-chat",
+        "amendments": "5 amendementen per maand",
+        "searches": "5 opgeslagen zoekopdrachten",
+        "support": "Community ondersteuning",
+        "exports": "Basis exports (XML, HTML)",
+        "watermark": "Brubru watermerk op exports"
+      },
+      "yellow": {
+        "chat": "Geavanceerde AI-chat",
+        "amendments": "Onbeperkte amendementen",
+        "searches": "Onbeperkte opgeslagen zoekopdrachten",
+        "support": "E-mail ondersteuning (48u respons)",
+        "exports": "Alle exportformaten (PDF, Word, XML, HTML)",
+        "watermark": "Geen watermerk",
+        "priority": "Prioritaire responstijden",
+        "rss": "RSS-feed meldingen",
+        "personalization": "Gepersonaliseerde begroeting"
+      },
+      "blue": {
+        "everything": "Alles in Professioneel, plus:",
+        "multiUser": "Multi-user teamaccounts",
+        "support": "Toegewijde ondersteuning (24u respons)",
+        "customDomain": "Aangepaste domeinspecialisatie",
+        "whiteLabel": "White-label opties",
+        "sla": "Service Level Agreement (SLA)",
+        "training": "Onboarding & training",
+        "api": "API-toegang",
+        "preferences": "Geavanceerde gebruikersvoorkeuren"
+      }
+    },
+    "faq": {
+      "title": "Veelgestelde Vragen",
+      "q1": "Welke betaalmethoden accepteren jullie?",
+      "a1": "We accepteren alle grote creditcards, debitcards en bankoverschrijvingen via Stripe. Enterprise klanten kunnen facturatie regelen.",
+      "q2": "Kan ik later van plan wisselen?",
+      "a2": "Ja, je kunt op elk moment upgraden. Downgrades gaan in aan het einde van je huidige factureringscyclus.",
+      "q3": "Wat is jullie terugbetalingsbeleid?",
+      "a3": "We bieden een 14-dagen geld-terug-garantie voor jaarplannen. Maandplannen kunnen op elk moment worden opgezegd.",
+      "q4": "Bieden jullie een gratis proefperiode?",
+      "a4": "Ons Basis niveau is voor altijd gratis met 5 amendementen per maand. Je kunt Professionele functies uitproberen met een 14-dagen proefperiode.",
+      "q5": "Hoe werkt Enterprise-prijsstelling?",
+      "a5": "Enterprise-prijsstelling is aangepast op basis van teamgrootte, functievereisten en gebruiksvolume. Neem contact met ons op voor een offerte op maat.",
+      "q6": "Wat gebeurt er als ik mijn amendementlimiet overschrijd?",
+      "a6": "Gebruikers van het Basis niveau zijn beperkt tot 5 amendementen per maand. Om meer te maken, upgrade naar Professioneel voor onbeperkte amendementen."
+    },
+    "trust": {
+      "title": "Vertrouwd door beleidsprofessionals in heel Europa",
+      "subtitle": "Sluit je aan bij organisaties die Brubru al gebruiken"
+    },
+    "cta": {
+      "title": "Klaar om te beginnen?",
+      "subtitle": "Sluit je aan bij beleidsprofessionals die Brubru gebruiken om door het EU-landschap te navigeren",
+      "button": "Gratis Beginnen",
+      "contact": "Of neem contact op voor Enterprise"
+    }
+  },
+  "euLawComply": {
+    "history": "Analyse Geschiedenis",
+    "completed": "Voltooid",
+    "processing": "Verwerken",
+    "failed": "Mislukt",
+    "loadingHistory": "Geschiedenis laden...",
+    "retry": "Opnieuw proberen",
+    "noAnalyses": "Nog geen nalevingsanalyses",
+    "runFirstAnalysis": "Voer je eerste nalevingsanalyse uit om te beginnen",
+    "refresh": "Vernieuwen",
+    "refreshing": "Vernieuwen..."
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fout",
+    "success": "Succes",
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "search": "Zoeken",
+    "filter": "Filteren",
+    "close": "Sluiten",
+    "open": "Openen"
+  }
+}

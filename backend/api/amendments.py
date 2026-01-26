@@ -37,6 +37,7 @@ from schemas.amendment_schemas import (
 from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
 from services.amendator.amendment_export_service import get_export_service
+from services.amendator.amendment_linker import get_amendment_linker
 
 logger = logging.getLogger(__name__)
 
@@ -86,6 +87,10 @@ async def create_amendment(
             status=amendment.status,
         )
 
+        # Auto-link to tracked carriage if CELEX matches
+        linker = get_amendment_linker(db)
+        linker.auto_link_amendment(new_amendment)
+
         db.add(new_amendment)
         db.commit()
         db.refresh(new_amendment)
@@ -119,6 +124,7 @@ async def create_amendments_batch(
     """
     try:
         created_amendments = []
+        linker = get_amendment_linker(db)
 
         for amendment_data in batch.amendments:
             new_amendment = Amendment(
@@ -139,6 +145,8 @@ async def create_amendments_batch(
                 amendment_number=amendment_data.amendment_number,
                 status=amendment_data.status,
             )
+            # Auto-link to tracked carriage if CELEX matches
+            linker.auto_link_amendment(new_amendment)
             db.add(new_amendment)
             created_amendments.append(new_amendment)
 
@@ -168,6 +176,8 @@ async def create_amendments_batch(
 )
 async def list_amendments(
     document_id: Optional[str] = Query(None, description="Filter by document ID"),
+    carriage_id: Optional[UUID] = Query(None, description="Filter by linked carriage ID"),
+    celex: Optional[str] = Query(None, description="Filter by CELEX number"),
     status: Optional[str] = Query(None, description="Filter by status"),
     amendment_type: Optional[str] = Query(None, description="Filter by amendment type"),
     page: int = Query(1, ge=1, description="Page number"),
@@ -185,6 +195,13 @@ async def list_amendments(
         # Apply filters
         if document_id:
             query = query.where(Amendment.document_id == document_id)
+        if carriage_id:
+            query = query.where(Amendment.carriage_id == carriage_id)
+        if celex:
+            # Match both 'celex' and 'eurlex-celex' formats
+            query = query.where(
+                (Amendment.document_id == celex) | (Amendment.document_id == f'eurlex-{celex}')
+            )
         if status:
             query = query.where(Amendment.status == status)
         if amendment_type:
@@ -197,6 +214,12 @@ async def list_amendments(
         count_query = select(func.count()).select_from(Amendment).where(Amendment.user_id == current_user.id)
         if document_id:
             count_query = count_query.where(Amendment.document_id == document_id)
+        if carriage_id:
+            count_query = count_query.where(Amendment.carriage_id == carriage_id)
+        if celex:
+            count_query = count_query.where(
+                (Amendment.document_id == celex) | (Amendment.document_id == f'eurlex-{celex}')
+            )
         if status:
             count_query = count_query.where(Amendment.status == status)
         if amendment_type:
@@ -629,4 +652,108 @@ async def resolve_citations(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to resolve citations: {str(e)}"
+        )
+
+
+# ============================================================================
+# AI Amendment Suggestion Endpoint
+# ============================================================================
+
+@router.post(
+    "/suggest",
+    summary="AI-powered amendment suggestion",
+    description="Generate an amendment suggestion based on policy position and selected legislative text"
+)
+async def suggest_amendment(
+    policy_position: str = Query(..., description="User's policy position or goals"),
+    original_text: str = Query(..., description="The legislative text to amend"),
+    element_type: str = Query(..., description="Type of element: recital, article, point, etc."),
+    element_position: str = Query(..., description="Position reference, e.g., 'Recital 1', 'Article 3'"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Generate an AI-powered amendment suggestion.
+
+    The AI will:
+    1. Analyse the user's policy position
+    2. Understand the original legislative text
+    3. Suggest modifications that align with the policy goals
+    4. Provide a justification for the amendment
+    """
+    from services.ai.multi_provider_service import MultiProviderService
+
+    try:
+        ai_service = MultiProviderService()
+
+        system_prompt = """You are an expert EU legislative drafter helping to create amendments to EU legislation.
+
+Your task is to suggest an amendment to a legislative text based on the user's policy position.
+
+IMPORTANT GUIDELINES:
+1. Keep amendments focused and minimal - change only what is necessary to achieve the policy goal
+2. Use proper EU legislative language and terminology
+3. Ensure the amendment is legally coherent and fits the context
+4. The proposed text should be a MODIFIED version of the original, not entirely new text
+5. For modifications, use strikethrough-style notation for deletions and bold for additions when explaining
+
+Respond in this EXACT JSON format:
+{
+  "amendment_type": "modification" | "suppression" | "addition",
+  "proposed_text": "The full amended text",
+  "justification": "A brief justification explaining why this amendment serves the policy goal (2-3 sentences)"
+}"""
+
+        user_message = f"""Policy Position: {policy_position}
+
+Legislative Element: {element_position} ({element_type})
+
+Original Text:
+{original_text}
+
+Please suggest an amendment that aligns this legislative text with the policy position."""
+
+        response = await ai_service.generate(
+            system_prompt=system_prompt,
+            messages=[{"role": "user", "content": user_message}],
+            max_tokens=2000,
+            temperature=0.7
+        )
+
+        # Parse the JSON response
+        import json
+        import re
+
+        response_text = response.message.strip()
+
+        # Extract JSON from response (handle markdown code blocks)
+        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response_text)
+        if json_match:
+            response_text = json_match.group(1)
+
+        # Try to parse JSON
+        try:
+            suggestion = json.loads(response_text)
+        except json.JSONDecodeError:
+            # If JSON parsing fails, try to extract structured data
+            suggestion = {
+                "amendment_type": "modification",
+                "proposed_text": response_text,
+                "justification": "AI-generated amendment based on your policy position."
+            }
+
+        return {
+            "amendment_type": suggestion.get("amendment_type", "modification"),
+            "original_text": original_text,
+            "proposed_text": suggestion.get("proposed_text", response_text),
+            "justification": suggestion.get("justification", ""),
+            "ai_provider": response.provider,
+            "ai_model": response.model
+        }
+
+    except Exception as e:
+        logger.error(f"Error generating amendment suggestion: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate amendment suggestion: {str(e)}"
         )

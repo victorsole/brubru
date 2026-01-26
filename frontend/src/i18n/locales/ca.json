@@ -1,0 +1,230 @@
+{
+  "header": {
+    "main": "Principal",
+    "amendator": "Amendator",
+    "myEuBubble": "La Meva Bombolla UE",
+    "euLawComply": "Compliment UE",
+    "tenderator": "Tenderator",
+    "profile": "Perfil",
+    "adminPanel": "Panell d'Admin",
+    "viewProfile": "Veure Perfil",
+    "subscription": "Subscripcio",
+    "takeTour": "Fer un tour",
+    "logOut": "Tancar Sessio"
+  },
+  "main": {
+    "chatHistory": "Historial de Xat",
+    "previousConversations": "Les converses anteriors apareixeran aqui"
+  },
+  "chat": {
+    "welcome": "Benvingut a Brubru",
+    "tagline": "El teu company IA multiagent per navegar la bombolla de la UE a Brussel-les",
+    "startConversation": "Inicia una conversa per analitzar legislacio de la UE, dissenyar campanyes d'advocacy o rebre orientacio sobre procediments del Parlament Europeu.",
+    "tryAsking": "Prova a preguntar:",
+    "example1": "Quin es l'estat de la Llei d'IA?",
+    "example2": "Mostra'm esmenes recents sobre GDPR",
+    "example3": "Qui son els eurodiputats del comite ENVI?",
+    "example4": "Troba legislacio sobre ajust de carboni a frontera",
+    "placeholder": "Pregunta sobre legislacio de la UE, procediments o analisi de politiques...",
+    "send": "Enviar",
+    "stream": "Transmetre",
+    "cancel": "Cancel-lar",
+    "errorMessage": "Ho sento, he trobat un error processant la teva sol-licitud. Si us plau, torna-ho a provar.",
+    "failedResponse": "Error en obtenir resposta. Si us plau, torna-ho a provar."
+  },
+  "docs": {
+    "title": "Documents",
+    "noDocuments": "No hi ha documents pujats",
+    "documentsUploaded": "Documents pujats",
+    "dragDrop": "Arrossega i deixa anar fitxers aqui o fes clic per explorar",
+    "supported": "Compatibles: PDF, Word, Text, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "maxSize": "Maxim 10MB per fitxer",
+    "tooLarge": "es massa gran. La mida maxima es 10MB."
+  },
+  "bubble": {
+    "title": "La Meva Bombolla UE",
+    "subtitle": "El teu panell d'intelligencia politica de la UE personalitzat",
+    "dashboard": "Panell",
+    "documents": "Documents",
+    "amendments": "Esmenes",
+    "analytics": "Analitiques"
+  },
+  "amendments": {
+    "title": "Esmenes",
+    "noAmendments": "Sense esmenes encara",
+    "createFirst": "Crea la teva primera esmena usant l'editor de la dreta",
+    "tabled": "Presentada",
+    "candidate": "Candidata",
+    "withdrawn": "Retirada",
+    "exporting": "Exportant...",
+    "exported": "Exportat!",
+    "exportAll": "Exportar Tot"
+  },
+  "ai": {
+    "openAssistant": "Obrir Assistent IA",
+    "assistant": "IA",
+    "analyzing": "Analitzant...",
+    "foundAmendment": "He trobat una esmena per a tu!",
+    "selectRow": "Selecciona una fila i et suggerire una esmena",
+    "policyPosition": "La Teva Posicio Politica:",
+    "policyPlaceholder": "Enganxa la teva posicio politica o objectius clau aqui...\n\nExemple: 'Volem reforcar la proteccio de dades dels menors, assegurar el consentiment parental per a menors de 16 anys i augmentar els requisits de transparencia per als processadors de dades.'",
+    "uploadDocs": "Pujar Documents de Politica:",
+    "uploadButton": "Pujar Documents",
+    "currentlySelected": "Seleccionat Actualment:",
+    "clickRow": "Fes clic a una fila de la taula d'esmenes per seleccionar-la",
+    "thinking": "Pensant...",
+    "suggest": "Suggerir Esmena amb IA",
+    "suggestion": "Suggeriment d'IA:",
+    "type": "Tipus:",
+    "proposedText": "Text Proposat:",
+    "justification": "Justificacio:",
+    "accept": "Acceptar",
+    "modify": "Modificar",
+    "reject": "Rebutjar"
+  },
+  "profile": {
+    "title": "Configuracio del Perfil",
+    "subscription": "Subscripcio",
+    "upgrade": "Millorar",
+    "amendmentsMonth": "Esmenes aquest mes",
+    "unlimited": "il-limitat",
+    "apiCalls": "Crides API aquest mes",
+    "renewsOn": "La subscripcio es renova",
+    "personalInfo": "Informacio Personal",
+    "email": "Correu electronic",
+    "emailNote": "El correu no es pot canviar",
+    "fullName": "Nom Complet",
+    "organisation": "Organitzacio",
+    "country": "Pais",
+    "selectCountry": "Seleccionar pais",
+    "saving": "Desant...",
+    "saveChanges": "Desar Canvis",
+    "saved": "Desat",
+    "policyInterests": "Interessos Politics",
+    "policyDescription": "Selecciona les teves arees d'interes. Brubru usara aquestes preferencies per personalitzar la teva experiencia i prioritzar contingut rellevant.",
+    "feedback": "Comentaris i Suport",
+    "feedbackDescription": "Ajuda'ns a millorar Brubru compartint els teus comentaris, reportant errors o sol-licitant noves funcions. La teva opinio es inavaluable per millorar la nostra plataforma.",
+    "accountSettings": "Configuracio del Compte",
+    "accountCreated": "Compte creat",
+    "lastLogin": "Ultim inici de sessio",
+    "deleteWarning": "Elimina el teu compte i totes les dades associades. Aquesta accio no es pot desfer.",
+    "deleteAccount": "Eliminar Compte"
+  },
+  "subscription": {
+    "hero": {
+      "title": "Tria el teu Pla Brubru",
+      "subtitle": "Intelligencia politica de la UE potent per a cada professional",
+      "description": "Tant si ets un professional de l'advocacy, assistent d'eurodiputat o expert en politiques, tenim un pla que s'adapta a les teves necessitats."
+    },
+    "white": {
+      "name": "Basic",
+      "price": "0 EUR",
+      "period": "/mes",
+      "description": "Eines essencials per comencar amb el seguiment de politiques de la UE",
+      "button": "Comencar"
+    },
+    "yellow": {
+      "name": "Professional",
+      "price": "79 EUR",
+      "period": "/mes",
+      "annualPrice": "o 790 EUR/any",
+      "annualSavings": "(estalvia 158 EUR)",
+      "description": "IA avancada i esmenes il-limitades per a professionals de l'advocacy",
+      "button": "Millorar a Professional",
+      "popular": "Mes Popular"
+    },
+    "blue": {
+      "name": "Empresarial",
+      "price": "Preu personalitzat",
+      "period": "",
+      "description": "Solucions a mida per a equips i organitzacions amb requisits especifics",
+      "button": "Contacta'ns",
+      "contactEmail": "helloberesol@gmail.com",
+      "minUsers": "5+ usuaris"
+    },
+    "features": {
+      "title": "Comparacio de Funcions",
+      "subtitle": "Mira el que inclou cada pla",
+      "white": {
+        "chat": "Xat IA basic",
+        "amendments": "5 esmenes al mes",
+        "searches": "5 cerques desades",
+        "support": "Suport comunitari",
+        "exports": "Exportacions basiques (XML, HTML)",
+        "watermark": "Marca d'aigua Brubru a les exportacions"
+      },
+      "yellow": {
+        "chat": "Xat IA avancat",
+        "amendments": "Esmenes il-limitades",
+        "searches": "Cerques desades il-limitades",
+        "support": "Suport per email (resposta 48h)",
+        "exports": "Tots els formats d'exportacio (PDF, Word, XML, HTML)",
+        "watermark": "Sense marca d'aigua",
+        "priority": "Temps de resposta prioritaris",
+        "rss": "Alertes de feeds RSS",
+        "personalization": "Salutacio personalitzada"
+      },
+      "blue": {
+        "everything": "Tot en Professional, mes:",
+        "multiUser": "Comptes d'equip multiusuari",
+        "support": "Suport dedicat (resposta 24h)",
+        "customDomain": "Especialitzacio de domini personalitzada",
+        "whiteLabel": "Opcions de marca blanca",
+        "sla": "Acord de Nivell de Servei (SLA)",
+        "training": "Incorporacio i formacio",
+        "api": "Acces API",
+        "preferences": "Preferencies d'usuari avancades"
+      }
+    },
+    "faq": {
+      "title": "Preguntes Frequents",
+      "q1": "Quins metodes de pagament accepteu?",
+      "a1": "Acceptem totes les principals targetes de credit, debit i transferencies bancaries a traves de Stripe. Els clients empresarials poden sol-licitar facturacio.",
+      "q2": "Puc canviar el meu pla despres?",
+      "a2": "Si, pots millorar el teu pla en qualsevol moment. Les rebaixes de pla entren en vigor al final del cicle de facturacio actual.",
+      "q3": "Quina es la vostra politica de reemborsament?",
+      "a3": "Oferim una garantia de devolucio de diners de 14 dies per a plans anuals. Els plans mensuals es poden cancel-lar en qualsevol moment.",
+      "q4": "Oferiu prova gratuita?",
+      "a4": "El nostre nivell Basic es gratuit per sempre amb 5 esmenes al mes. Pots provar les funcions Professionals amb una prova de 14 dies.",
+      "q5": "Com funciona el preu Empresarial?",
+      "a5": "El preu empresarial es personalitza segons la mida de l'equip, requisits de funcions i volum d'us. Contacta'ns per una cotitzacio a mida.",
+      "q6": "Que passa si excedeixo el meu limit d'esmenes?",
+      "a6": "Els usuaris del nivell Basic estan limitats a 5 esmenes al mes. Per crear mes, millora a Professional per esmenes il-limitades."
+    },
+    "trust": {
+      "title": "De confianca per a professionals de politiques a tot Europa",
+      "subtitle": "Uneix-te a les organitzacions que ja usen Brubru"
+    },
+    "cta": {
+      "title": "A punt per comencar?",
+      "subtitle": "Uneix-te als professionals de politiques que usen Brubru per navegar el panorama de la UE",
+      "button": "Comencar Gratis",
+      "contact": "O contacta'ns per Empresarial"
+    }
+  },
+  "euLawComply": {
+    "history": "Historial d'Analisis",
+    "completed": "Completat",
+    "processing": "Processant",
+    "failed": "Fallit",
+    "loadingHistory": "Carregant historial...",
+    "retry": "Reintentar",
+    "noAnalyses": "Sense analisis de compliment encara",
+    "runFirstAnalysis": "Executa la teva primera analisi de compliment per comencar",
+    "refresh": "Actualitzar",
+    "refreshing": "Actualitzant..."
+  },
+  "common": {
+    "loading": "Carregant...",
+    "error": "Error",
+    "success": "Exit",
+    "save": "Desar",
+    "cancel": "Cancel-lar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "search": "Cercar",
+    "filter": "Filtrar",
+    "close": "Tancar",
+    "open": "Obrir"
+  }
+}

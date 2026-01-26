@@ -266,6 +266,46 @@
   color: white;
 }
 
+/* Track button */
+.legislative-trains__file-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.legislative-trains__file-track:hover:not(:disabled) {
+  background: #fff8e1;
+  border-color: #ffc107;
+  color: #f57c00;
+}
+
+.legislative-trains__file-track--active {
+  background: #fff8e1;
+  border-color: #ffc107;
+  color: #ffc107;
+}
+
+.legislative-trains__file-track--active:hover:not(:disabled) {
+  background: #ffecb3;
+  color: #f57c00;
+}
+
+.legislative-trains__file-track:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .legislative-trains__file-description {
   margin: 0 0 0.5rem 0;
   font-size: 0.875rem;

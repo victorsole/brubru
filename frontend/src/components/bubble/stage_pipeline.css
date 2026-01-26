@@ -1,0 +1,197 @@
+/**
+ * Stage Pipeline Styles
+ */
+
+.stage-pipeline {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.stage-pipeline__track {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+}
+
+.stage-pipeline__stage-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+}
+
+.stage-pipeline__stage-wrapper:first-child {
+  align-items: flex-start;
+}
+
+.stage-pipeline__stage-wrapper:last-child {
+  align-items: flex-end;
+}
+
+/* Connector line between stages */
+.stage-pipeline__connector {
+  position: absolute;
+  top: 16px;
+  left: -50%;
+  width: 100%;
+  height: 3px;
+  background: #e0e0e0;
+  z-index: 0;
+}
+
+.stage-pipeline__connector--active {
+  background: linear-gradient(90deg, #0693E3, #4da6ff);
+}
+
+/* Stage node and label container */
+.stage-pipeline__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+}
+
+/* Stage node (circle) */
+.stage-pipeline__node {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0e0e0;
+  color: #999;
+  transition: all 0.3s;
+}
+
+.stage-pipeline__stage--completed .stage-pipeline__node {
+  background: #0693E3;
+  color: white;
+}
+
+.stage-pipeline__stage--current .stage-pipeline__node {
+  background: #0693E3;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(6, 147, 227, 0.2);
+  animation: pulse 2s infinite;
+}
+
+.stage-pipeline__stage--blocked .stage-pipeline__node {
+  background: #f44336;
+  box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.2);
+}
+
+.stage-pipeline__stage--pending .stage-pipeline__node {
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  color: #ccc;
+}
+
+/* Stage label */
+.stage-pipeline__label {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #999;
+  text-align: center;
+}
+
+.stage-pipeline__stage--completed .stage-pipeline__label,
+.stage-pipeline__stage--current .stage-pipeline__label {
+  color: #333;
+  font-weight: 600;
+}
+
+.stage-pipeline__stage--blocked .stage-pipeline__label {
+  color: #f44336;
+}
+
+/* Blocked indicator */
+.stage-pipeline__blocked-indicator {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.125rem 0.375rem;
+  background: #f44336;
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 600;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Withdrawn state */
+.stage-pipeline__withdrawn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+}
+
+.stage-pipeline__withdrawn-label {
+  color: #757575;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Compact mode */
+.stage-pipeline--compact {
+  padding: 0.5rem 0;
+}
+
+.stage-pipeline--compact .stage-pipeline__node {
+  width: 24px;
+  height: 24px;
+}
+
+.stage-pipeline--compact .stage-pipeline__connector {
+  top: 12px;
+  height: 2px;
+}
+
+.stage-pipeline--compact .stage-pipeline__label {
+  font-size: 0.6875rem;
+  margin-top: 0.375rem;
+}
+
+.stage-pipeline--compact .stage-pipeline__blocked-indicator {
+  top: -6px;
+  font-size: 0.5rem;
+  padding: 0.0625rem 0.25rem;
+}
+
+/* Pulse animation for current stage */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(6, 147, 227, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(6, 147, 227, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(6, 147, 227, 0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .stage-pipeline__node {
+    width: 28px;
+    height: 28px;
+  }
+
+  .stage-pipeline__connector {
+    top: 14px;
+  }
+
+  .stage-pipeline__label {
+    font-size: 0.6875rem;
+  }
+}

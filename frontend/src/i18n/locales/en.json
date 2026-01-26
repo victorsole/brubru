@@ -1,0 +1,230 @@
+{
+  "header": {
+    "main": "Main",
+    "amendator": "Amendator",
+    "myEuBubble": "My EU Bubble",
+    "euLawComply": "EU Law Comply",
+    "tenderator": "Tenderator",
+    "profile": "Profile",
+    "adminPanel": "Admin Panel",
+    "viewProfile": "View Profile",
+    "subscription": "Subscription",
+    "takeTour": "Take a tour",
+    "logOut": "Log Out"
+  },
+  "main": {
+    "chatHistory": "Chat History",
+    "previousConversations": "Previous conversations will appear here"
+  },
+  "chat": {
+    "welcome": "Welcome to Brubru",
+    "tagline": "Your AI multiagent companion for navigating the EU bubble in Brussels",
+    "startConversation": "Start a conversation to analyse EU legislation, strategise advocacy campaigns, or get guidance on European Parliament procedures.",
+    "tryAsking": "Try asking:",
+    "example1": "What's the status of the AI Act?",
+    "example2": "Show me recent amendments on GDPR",
+    "example3": "Who are the MEPs on the ENVI committee?",
+    "example4": "Find legislation about carbon border adjustment",
+    "placeholder": "Ask about EU legislation, procedures, or policy analysis...",
+    "send": "Send",
+    "stream": "Stream",
+    "cancel": "Cancel",
+    "errorMessage": "Sorry, I encountered an error processing your request. Please try again.",
+    "failedResponse": "Failed to get response. Please try again."
+  },
+  "docs": {
+    "title": "Documents",
+    "noDocuments": "No documents uploaded",
+    "documentsUploaded": "Documents uploaded",
+    "dragDrop": "Drag & drop files here or click to browse",
+    "supported": "Supported: PDF, Word, Text, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "maxSize": "Max 10MB per file",
+    "tooLarge": "is too large. Maximum size is 10MB."
+  },
+  "bubble": {
+    "title": "My EU Bubble",
+    "subtitle": "Your personalised EU policy intelligence dashboard",
+    "dashboard": "Dashboard",
+    "documents": "Documents",
+    "amendments": "Amendments",
+    "analytics": "Analytics"
+  },
+  "amendments": {
+    "title": "Amendments",
+    "noAmendments": "No amendments yet",
+    "createFirst": "Create your first amendment using the editor on the right",
+    "tabled": "Tabled",
+    "candidate": "Candidate",
+    "withdrawn": "Withdrawn",
+    "exporting": "Exporting...",
+    "exported": "Exported!",
+    "exportAll": "Export All"
+  },
+  "ai": {
+    "openAssistant": "Open AI Assistant",
+    "assistant": "AI",
+    "analyzing": "Analyzing...",
+    "foundAmendment": "I found an amendment for you!",
+    "selectRow": "Select a row and I'll suggest an amendment",
+    "policyPosition": "Your Policy Position:",
+    "policyPlaceholder": "Paste your policy position or key goals here...\n\nExample: 'We want to strengthen data protection for children, ensure parental consent for under-16s, and increase transparency requirements for data processors.'",
+    "uploadDocs": "Upload Policy Documents:",
+    "uploadButton": "Upload Documents",
+    "currentlySelected": "Currently Selected:",
+    "clickRow": "Click a row in the amendment table to select it",
+    "thinking": "Thinking...",
+    "suggest": "AI Suggest Amendment",
+    "suggestion": "AI Suggestion:",
+    "type": "Type:",
+    "proposedText": "Proposed Text:",
+    "justification": "Justification:",
+    "accept": "Accept",
+    "modify": "Modify",
+    "reject": "Reject"
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "subscription": "Subscription",
+    "upgrade": "Upgrade",
+    "amendmentsMonth": "Amendments this month",
+    "unlimited": "unlimited",
+    "apiCalls": "API calls this month",
+    "renewsOn": "Subscription renews",
+    "personalInfo": "Personal Information",
+    "email": "Email",
+    "emailNote": "Email cannot be changed",
+    "fullName": "Full Name",
+    "organisation": "Organisation",
+    "country": "Country",
+    "selectCountry": "Select country",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "saved": "Saved",
+    "policyInterests": "Policy Interests",
+    "policyDescription": "Select your areas of interest. Brubru will use these preferences to personalise your experience and prioritise relevant content.",
+    "feedback": "Feedback & Support",
+    "feedbackDescription": "Help us improve Brubru by sharing your feedback, reporting bugs, or requesting new features. Your input is invaluable in making our platform better.",
+    "accountSettings": "Account Settings",
+    "accountCreated": "Account created",
+    "lastLogin": "Last login",
+    "deleteWarning": "Delete your account and all associated data. This action cannot be undone.",
+    "deleteAccount": "Delete Account"
+  },
+  "subscription": {
+    "hero": {
+      "title": "Choose Your Brubru Plan",
+      "subtitle": "Powerful EU policy intelligence for every professional",
+      "description": "Whether you're an advocacy professional, MEP assistant, or policy expert, we have a plan that fits your needs."
+    },
+    "white": {
+      "name": "Basic",
+      "price": "€0",
+      "period": "/month",
+      "description": "Essential tools to get started with EU policy monitoring",
+      "button": "Get Started"
+    },
+    "yellow": {
+      "name": "Professional",
+      "price": "€79",
+      "period": "/month",
+      "annualPrice": "or €790/year",
+      "annualSavings": "(save €158)",
+      "description": "Advanced AI and unlimited amendments for professional advocates",
+      "button": "Upgrade to Professional",
+      "popular": "Most Popular"
+    },
+    "blue": {
+      "name": "Enterprise",
+      "price": "Custom pricing",
+      "period": "",
+      "description": "Tailored solutions for teams and organisations with custom requirements",
+      "button": "Contact Us",
+      "contactEmail": "helloberesol@gmail.com",
+      "minUsers": "5+ users"
+    },
+    "features": {
+      "title": "Feature Comparison",
+      "subtitle": "See what's included in each plan",
+      "white": {
+        "chat": "Basic AI chat",
+        "amendments": "5 amendments per month",
+        "searches": "5 saved searches",
+        "support": "Community support",
+        "exports": "Basic exports (XML, HTML)",
+        "watermark": "Brubru watermark on exports"
+      },
+      "yellow": {
+        "chat": "Advanced AI chat",
+        "amendments": "Unlimited amendments",
+        "searches": "Unlimited saved searches",
+        "support": "Email support (48h response)",
+        "exports": "All export formats (PDF, Word, XML, HTML)",
+        "watermark": "No watermark",
+        "priority": "Priority response times",
+        "rss": "RSS feed alerts",
+        "personalization": "Personalised greeting"
+      },
+      "blue": {
+        "everything": "Everything in Professional, plus:",
+        "multiUser": "Multi-user team accounts",
+        "support": "Dedicated support (24h response)",
+        "customDomain": "Custom domain specialisation",
+        "whiteLabel": "White-label options",
+        "sla": "Service Level Agreement (SLA)",
+        "training": "Onboarding & training",
+        "api": "API access",
+        "preferences": "Advanced user preferences"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "What payment methods do you accept?",
+      "a1": "We accept all major credit cards, debit cards, and bank transfers through Stripe. Enterprise clients can arrange invoicing.",
+      "q2": "Can I change my plan later?",
+      "a2": "Yes, you can upgrade your plan at any time. Downgrades take effect at the end of your current billing cycle.",
+      "q3": "What is your refund policy?",
+      "a3": "We offer a 14-day money-back guarantee for annual plans. Monthly plans can be cancelled at any time.",
+      "q4": "Do you offer a free trial?",
+      "a4": "Our Basic tier is free forever with 5 amendments per month. You can try Professional features with a 14-day trial.",
+      "q5": "How does Enterprise pricing work?",
+      "a5": "Enterprise pricing is customised based on team size, feature requirements, and usage volume. Contact us for a tailored quote.",
+      "q6": "What happens if I exceed my amendment limit?",
+      "a6": "Basic tier users are limited to 5 amendments per month. To create more, upgrade to Professional for unlimited amendments."
+    },
+    "trust": {
+      "title": "Trusted by policy professionals across Europe",
+      "subtitle": "Join organisations already using Brubru"
+    },
+    "cta": {
+      "title": "Ready to get started?",
+      "subtitle": "Join policy professionals using Brubru to navigate the EU landscape",
+      "button": "Start Free",
+      "contact": "Or contact us for Enterprise"
+    }
+  },
+  "euLawComply": {
+    "history": "Analysis History",
+    "completed": "Completed",
+    "processing": "Processing",
+    "failed": "Failed",
+    "loadingHistory": "Loading history...",
+    "retry": "Retry",
+    "noAnalyses": "No compliance analyses yet",
+    "runFirstAnalysis": "Run your first compliance analysis to get started",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing..."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "open": "Open"
+  }
+}

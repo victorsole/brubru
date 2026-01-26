@@ -13,6 +13,8 @@
   transition: margin-left var(--transition-base);
   margin-left: 0;
   overflow: hidden;
+  min-width: 0; /* Allow flex item to shrink */
+  max-width: 100%;
 }
 
 .amendator-page__main--sidebar-open {

@@ -1,0 +1,230 @@
+{
+  "header": {
+    "main": "Principal",
+    "amendator": "Amendator",
+    "myEuBubble": "Ma Bulle UE",
+    "euLawComply": "Conformite UE",
+    "tenderator": "Tenderator",
+    "profile": "Profil",
+    "adminPanel": "Panneau Admin",
+    "viewProfile": "Voir le Profil",
+    "subscription": "Abonnement",
+    "takeTour": "Faire une visite",
+    "logOut": "Deconnexion"
+  },
+  "main": {
+    "chatHistory": "Historique des Discussions",
+    "previousConversations": "Les conversations precedentes apparaitront ici"
+  },
+  "chat": {
+    "welcome": "Bienvenue sur Brubru",
+    "tagline": "Votre compagnon IA multiagent pour naviguer dans la bulle europeenne a Bruxelles",
+    "startConversation": "Demarrez une conversation pour analyser la legislation europeenne, elaborer des campagnes de plaidoyer ou obtenir des conseils sur les procedures du Parlement europeen.",
+    "tryAsking": "Essayez de demander:",
+    "example1": "Quel est le statut de la loi sur l'IA?",
+    "example2": "Montrez-moi les amendements recents sur le RGPD",
+    "example3": "Qui sont les eurodeputes de la commission ENVI?",
+    "example4": "Trouvez la legislation sur l'ajustement carbone aux frontieres",
+    "placeholder": "Posez vos questions sur la legislation europeenne, les procedures ou l'analyse politique...",
+    "send": "Envoyer",
+    "stream": "Diffuser",
+    "cancel": "Annuler",
+    "errorMessage": "Desole, j'ai rencontre une erreur lors du traitement de votre demande. Veuillez reessayer.",
+    "failedResponse": "Echec de la reponse. Veuillez reessayer."
+  },
+  "docs": {
+    "title": "Documents",
+    "noDocuments": "Aucun document telecharge",
+    "documentsUploaded": "Documents telecharges",
+    "dragDrop": "Glissez-deposez des fichiers ici ou cliquez pour parcourir",
+    "supported": "Pris en charge: PDF, Word, Texte, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "maxSize": "Max 10Mo par fichier",
+    "tooLarge": "est trop volumineux. La taille maximale est de 10Mo."
+  },
+  "bubble": {
+    "title": "Ma Bulle UE",
+    "subtitle": "Votre tableau de bord personnalise d'intelligence politique europeenne",
+    "dashboard": "Tableau de bord",
+    "documents": "Documents",
+    "amendments": "Amendements",
+    "analytics": "Analyses"
+  },
+  "amendments": {
+    "title": "Amendements",
+    "noAmendments": "Pas encore d'amendements",
+    "createFirst": "Creez votre premier amendement avec l'editeur a droite",
+    "tabled": "Depose",
+    "candidate": "Candidat",
+    "withdrawn": "Retire",
+    "exporting": "Exportation...",
+    "exported": "Exporte!",
+    "exportAll": "Tout Exporter"
+  },
+  "ai": {
+    "openAssistant": "Ouvrir l'Assistant IA",
+    "assistant": "IA",
+    "analyzing": "Analyse...",
+    "foundAmendment": "J'ai trouve un amendement pour vous!",
+    "selectRow": "Selectionnez une ligne et je vous suggererai un amendement",
+    "policyPosition": "Votre Position Politique:",
+    "policyPlaceholder": "Collez votre position politique ou vos objectifs cles ici...\n\nExemple: 'Nous voulons renforcer la protection des donnees des enfants, assurer le consentement parental pour les moins de 16 ans et augmenter les exigences de transparence pour les sous-traitants.'",
+    "uploadDocs": "Telecharger des Documents de Politique:",
+    "uploadButton": "Telecharger des Documents",
+    "currentlySelected": "Actuellement Selectionne:",
+    "clickRow": "Cliquez sur une ligne du tableau des amendements pour la selectionner",
+    "thinking": "Reflexion...",
+    "suggest": "Suggestion d'Amendement IA",
+    "suggestion": "Suggestion IA:",
+    "type": "Type:",
+    "proposedText": "Texte Propose:",
+    "justification": "Justification:",
+    "accept": "Accepter",
+    "modify": "Modifier",
+    "reject": "Rejeter"
+  },
+  "profile": {
+    "title": "Parametres du Profil",
+    "subscription": "Abonnement",
+    "upgrade": "Ameliorer",
+    "amendmentsMonth": "Amendements ce mois",
+    "unlimited": "illimite",
+    "apiCalls": "Appels API ce mois",
+    "renewsOn": "Renouvellement de l'abonnement",
+    "personalInfo": "Informations Personnelles",
+    "email": "Email",
+    "emailNote": "L'email ne peut pas etre modifie",
+    "fullName": "Nom Complet",
+    "organisation": "Organisation",
+    "country": "Pays",
+    "selectCountry": "Selectionner le pays",
+    "saving": "Enregistrement...",
+    "saveChanges": "Enregistrer les Modifications",
+    "saved": "Enregistre",
+    "policyInterests": "Interets Politiques",
+    "policyDescription": "Selectionnez vos domaines d'interet. Brubru utilisera ces preferences pour personnaliser votre experience et prioriser le contenu pertinent.",
+    "feedback": "Retours et Support",
+    "feedbackDescription": "Aidez-nous a ameliorer Brubru en partageant vos retours, signalant des bugs ou demandant de nouvelles fonctionnalites. Votre avis est inestimable pour ameliorer notre plateforme.",
+    "accountSettings": "Parametres du Compte",
+    "accountCreated": "Compte cree",
+    "lastLogin": "Derniere connexion",
+    "deleteWarning": "Supprimez votre compte et toutes les donnees associees. Cette action ne peut pas etre annulee.",
+    "deleteAccount": "Supprimer le Compte"
+  },
+  "subscription": {
+    "hero": {
+      "title": "Choisissez Votre Forfait Brubru",
+      "subtitle": "Intelligence politique europeenne puissante pour chaque professionnel",
+      "description": "Que vous soyez un professionnel du plaidoyer, un assistant de depute europeen ou un expert en politique, nous avons un forfait adapte a vos besoins."
+    },
+    "white": {
+      "name": "Basique",
+      "price": "0 EUR",
+      "period": "/mois",
+      "description": "Outils essentiels pour debuter avec le suivi de la politique europeenne",
+      "button": "Commencer"
+    },
+    "yellow": {
+      "name": "Professionnel",
+      "price": "79 EUR",
+      "period": "/mois",
+      "annualPrice": "ou 790 EUR/an",
+      "annualSavings": "(economisez 158 EUR)",
+      "description": "IA avancee et amendements illimites pour les professionnels du plaidoyer",
+      "button": "Passer a Professionnel",
+      "popular": "Le Plus Populaire"
+    },
+    "blue": {
+      "name": "Entreprise",
+      "price": "Tarification personnalisee",
+      "period": "",
+      "description": "Solutions sur mesure pour les equipes et organisations avec des exigences specifiques",
+      "button": "Contactez-nous",
+      "contactEmail": "helloberesol@gmail.com",
+      "minUsers": "5+ utilisateurs"
+    },
+    "features": {
+      "title": "Comparaison des Fonctionnalites",
+      "subtitle": "Decouvrez ce qui est inclus dans chaque forfait",
+      "white": {
+        "chat": "Chat IA basique",
+        "amendments": "5 amendements par mois",
+        "searches": "5 recherches enregistrees",
+        "support": "Support communautaire",
+        "exports": "Exports basiques (XML, HTML)",
+        "watermark": "Filigrane Brubru sur les exports"
+      },
+      "yellow": {
+        "chat": "Chat IA avance",
+        "amendments": "Amendements illimites",
+        "searches": "Recherches enregistrees illimitees",
+        "support": "Support par email (reponse 48h)",
+        "exports": "Tous les formats d'export (PDF, Word, XML, HTML)",
+        "watermark": "Sans filigrane",
+        "priority": "Delais de reponse prioritaires",
+        "rss": "Alertes de flux RSS",
+        "personalization": "Salutation personnalisee"
+      },
+      "blue": {
+        "everything": "Tout dans Professionnel, plus:",
+        "multiUser": "Comptes d'equipe multi-utilisateurs",
+        "support": "Support dedie (reponse 24h)",
+        "customDomain": "Specialisation de domaine personnalisee",
+        "whiteLabel": "Options en marque blanche",
+        "sla": "Accord de Niveau de Service (SLA)",
+        "training": "Integration et formation",
+        "api": "Acces API",
+        "preferences": "Preferences utilisateur avancees"
+      }
+    },
+    "faq": {
+      "title": "Questions Frequemment Posees",
+      "q1": "Quels modes de paiement acceptez-vous?",
+      "a1": "Nous acceptons toutes les principales cartes de credit, cartes de debit et virements bancaires via Stripe. Les clients entreprise peuvent organiser la facturation.",
+      "q2": "Puis-je changer de forfait plus tard?",
+      "a2": "Oui, vous pouvez passer a un forfait superieur a tout moment. Les reductions de forfait prennent effet a la fin de votre cycle de facturation actuel.",
+      "q3": "Quelle est votre politique de remboursement?",
+      "a3": "Nous offrons une garantie de remboursement de 14 jours pour les forfaits annuels. Les forfaits mensuels peuvent etre annules a tout moment.",
+      "q4": "Offrez-vous un essai gratuit?",
+      "a4": "Notre niveau Basique est gratuit pour toujours avec 5 amendements par mois. Vous pouvez essayer les fonctionnalites Professionnelles avec un essai de 14 jours.",
+      "q5": "Comment fonctionne la tarification Entreprise?",
+      "a5": "La tarification entreprise est personnalisee en fonction de la taille de l'equipe, des exigences fonctionnelles et du volume d'utilisation. Contactez-nous pour un devis sur mesure.",
+      "q6": "Que se passe-t-il si je depasse ma limite d'amendements?",
+      "a6": "Les utilisateurs du niveau Basique sont limites a 5 amendements par mois. Pour en creer plus, passez a Professionnel pour des amendements illimites."
+    },
+    "trust": {
+      "title": "Approuve par les professionnels des politiques a travers l'Europe",
+      "subtitle": "Rejoignez les organisations qui utilisent deja Brubru"
+    },
+    "cta": {
+      "title": "Pret a commencer?",
+      "subtitle": "Rejoignez les professionnels des politiques qui utilisent Brubru pour naviguer dans le paysage europeen",
+      "button": "Commencer Gratuitement",
+      "contact": "Ou contactez-nous pour Entreprise"
+    }
+  },
+  "euLawComply": {
+    "history": "Historique des Analyses",
+    "completed": "Termine",
+    "processing": "En cours",
+    "failed": "Echoue",
+    "loadingHistory": "Chargement de l'historique...",
+    "retry": "Reessayer",
+    "noAnalyses": "Aucune analyse de conformite pour le moment",
+    "runFirstAnalysis": "Executez votre premiere analyse de conformite pour commencer",
+    "refresh": "Actualiser",
+    "refreshing": "Actualisation..."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succes",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "close": "Fermer",
+    "open": "Ouvrir"
+  }
+}

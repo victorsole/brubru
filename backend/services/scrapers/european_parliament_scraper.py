@@ -19,6 +19,10 @@ from bs4 import BeautifulSoup
 
 from .base_scraper import BaseScraper, ScraperError
 from schemas.scrapers.scraper_schemas import MEP, PoliticalGroup, SearchResult
+from schemas.scrapers.ep_schemas import (
+    EPVoteResult, EPMeeting, EPSpeech, EPParliamentaryQuestion,
+    EPProcedureEvent, EPDecision, EPMepDeclaration
+)
 from services.api_clients.european_parliament_client import EuropeanParliamentClient
 
 logger = logging.getLogger(__name__)
@@ -566,6 +570,265 @@ class EuropeanParliamentScraper(BaseScraper):
             return entries
         except Exception as e:
             logger.error(f"Failed to fetch RSS feed: {str(e)}")
+            return []
+
+    # =========================================================================
+    # NEW: EP Open Data API v2 Methods
+    # =========================================================================
+
+    async def get_meetings(
+        self,
+        meeting_type: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        limit: int = 100
+    ) -> List[EPMeeting]:
+        """
+        Get parliamentary meetings (plenary sessions, committee meetings)
+
+        Args:
+            meeting_type: Filter by type (plenary-sitting, committee-meeting)
+            start_date: Filter from this date
+            end_date: Filter until this date
+            limit: Maximum results
+
+        Returns:
+            List of EPMeeting objects
+        """
+        if not self.use_api:
+            raise NotImplementedError("Meetings require API client")
+
+        try:
+            logger.info(f"Fetching meetings via scraper (type={meeting_type})")
+            return await self.api_client.get_meetings(
+                meeting_type=meeting_type,
+                start_date=start_date,
+                end_date=end_date,
+                limit=limit
+            )
+        except Exception as e:
+            logger.error(f"Failed to fetch meetings: {str(e)}")
+            return []
+
+    async def get_vote_results(
+        self,
+        sitting_id: str
+    ) -> List[EPVoteResult]:
+        """
+        Get vote results from a specific meeting/sitting
+
+        Args:
+            sitting_id: Meeting/sitting identifier
+
+        Returns:
+            List of EPVoteResult objects
+        """
+        if not self.use_api:
+            raise NotImplementedError("Vote results require API client")
+
+        try:
+            logger.info(f"Fetching vote results for sitting: {sitting_id}")
+            return await self.api_client.get_meeting_vote_results(sitting_id)
+        except Exception as e:
+            logger.error(f"Failed to fetch vote results: {str(e)}")
+            return []
+
+    async def get_meeting_decisions(
+        self,
+        sitting_id: str
+    ) -> List[EPDecision]:
+        """
+        Get decisions from a specific meeting/sitting
+
+        Args:
+            sitting_id: Meeting/sitting identifier
+
+        Returns:
+            List of EPDecision objects
+        """
+        if not self.use_api:
+            raise NotImplementedError("Decisions require API client")
+
+        try:
+            logger.info(f"Fetching decisions for sitting: {sitting_id}")
+            return await self.api_client.get_meeting_decisions(sitting_id)
+        except Exception as e:
+            logger.error(f"Failed to fetch decisions: {str(e)}")
+            return []
+
+    async def get_procedure_events(
+        self,
+        procedure_reference: str
+    ) -> List[EPProcedureEvent]:
+        """
+        Get events timeline for a legislative procedure
+
+        First looks up the procedure by reference, then fetches events.
+
+        Args:
+            procedure_reference: Procedure reference (e.g., 2025/0102(COD))
+
+        Returns:
+            List of EPProcedureEvent objects
+        """
+        if not self.use_api:
+            raise NotImplementedError("Procedure events require API client")
+
+        try:
+            logger.info(f"Fetching procedure events for: {procedure_reference}")
+
+            # First, find the procedure to get its process ID
+            procedure = await self.api_client.get_procedure_by_reference(procedure_reference)
+
+            if not procedure:
+                logger.warning(f"Procedure not found: {procedure_reference}")
+                return []
+
+            process_id = procedure.get("identifier") or procedure.get("id")
+            if not process_id:
+                logger.warning(f"No process ID found for: {procedure_reference}")
+                return []
+
+            return await self.api_client.get_procedure_events(process_id)
+
+        except Exception as e:
+            logger.error(f"Failed to fetch procedure events: {str(e)}")
+            return []
+
+    async def get_speeches(
+        self,
+        mep_id: Optional[str] = None,
+        text: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        limit: int = 50
+    ) -> List[EPSpeech]:
+        """
+        Search MEP speeches/interventions
+
+        Args:
+            mep_id: Filter by MEP identifier
+            text: Search in speech text
+            start_date: Filter from date
+            end_date: Filter until date
+            limit: Maximum results
+
+        Returns:
+            List of EPSpeech objects
+        """
+        if not self.use_api:
+            raise NotImplementedError("Speeches require API client")
+
+        try:
+            logger.info(f"Fetching speeches (mep={mep_id}, text={text})")
+            return await self.api_client.get_speeches(
+                mep_id=mep_id,
+                text=text,
+                start_date=start_date,
+                end_date=end_date,
+                limit=limit
+            )
+        except Exception as e:
+            logger.error(f"Failed to fetch speeches: {str(e)}")
+            return []
+
+    async def get_parliamentary_questions(
+        self,
+        author_mep_id: Optional[str] = None,
+        text: Optional[str] = None,
+        addressee: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        limit: int = 50
+    ) -> List[EPParliamentaryQuestion]:
+        """
+        Search parliamentary questions
+
+        Args:
+            author_mep_id: Filter by author MEP
+            text: Search in question text
+            addressee: Filter by addressee (Commission, Council)
+            start_date: Filter from date
+            end_date: Filter until date
+            limit: Maximum results
+
+        Returns:
+            List of EPParliamentaryQuestion objects
+        """
+        if not self.use_api:
+            raise NotImplementedError("Parliamentary questions require API client")
+
+        try:
+            logger.info(f"Fetching parliamentary questions (author={author_mep_id})")
+            return await self.api_client.get_parliamentary_questions(
+                author_mep_id=author_mep_id,
+                text=text,
+                addressee=addressee,
+                start_date=start_date,
+                end_date=end_date,
+                limit=limit
+            )
+        except Exception as e:
+            logger.error(f"Failed to fetch parliamentary questions: {str(e)}")
+            return []
+
+    async def get_mep_declarations(
+        self,
+        mep_id: Optional[str] = None,
+        limit: int = 50
+    ) -> List[EPMepDeclaration]:
+        """
+        Get MEP declarations of financial interests
+
+        Args:
+            mep_id: Filter by MEP identifier
+            limit: Maximum results
+
+        Returns:
+            List of EPMepDeclaration objects
+        """
+        if not self.use_api:
+            raise NotImplementedError("MEP declarations require API client")
+
+        try:
+            logger.info(f"Fetching MEP declarations (mep={mep_id})")
+            return await self.api_client.get_mep_declarations(
+                mep_id=mep_id,
+                limit=limit
+            )
+        except Exception as e:
+            logger.error(f"Failed to fetch MEP declarations: {str(e)}")
+            return []
+
+    async def get_current_meps(
+        self,
+        country: Optional[str] = None,
+        political_group: Optional[str] = None,
+        limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        """
+        Get current MEPs (as of today)
+
+        Args:
+            country: Filter by country code
+            political_group: Filter by political group
+            limit: Maximum results
+
+        Returns:
+            List of current MEPs
+        """
+        if not self.use_api:
+            raise NotImplementedError("Current MEPs require API client")
+
+        try:
+            logger.info("Fetching current MEPs")
+            return await self.api_client.get_current_meps(
+                country=country,
+                political_group=political_group,
+                limit=limit
+            )
+        except Exception as e:
+            logger.error(f"Failed to fetch current MEPs: {str(e)}")
             return []
 
     async def close(self):

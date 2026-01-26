@@ -35,12 +35,13 @@
 
 ### What Brubru Does
 
-- **🤖 AI Chat:** Context-aware conversational interface powered by Anthropic Claude and OpenAI GPT-4
-- **📝 Amendator:** Professional legislative amendment authoring tool (Akoma Ntoso XML compliant)
-- **📰 My EU Bubble:** Personalized RSS feed aggregation from 15+ EU institutional sources
-- **✅ EU Law Comply:** Automated compliance checking and gap analysis for EU regulations
-- **📊 Legislative Tracking:** Real-time monitoring of EU legislative procedures and timelines
-- **🌍 Multilingual:** Full support for all 23 official EU languages
+- **AI Chat:** Context-aware conversational interface powered by Anthropic Claude and OpenAI GPT-4
+- **Amendator:** Professional legislative amendment authoring tool (Akoma Ntoso XML compliant)
+- **My EU Bubble:** Personalized RSS feed aggregation from 15+ EU institutional sources
+- **EU Law Comply:** Automated compliance checking and gap analysis for EU regulations
+- **Legislative Tracking:** Real-time monitoring of EU legislative procedures and timelines
+- **Document Generator:** AI-powered generation of position papers, MEP briefings, and talking points
+- **Multilingual:** Full support for all 23 official EU languages
 
 ---
 
@@ -131,7 +132,31 @@ Real-time monitoring of EU legislative procedures.
 - Voting schedules
 - Timeline visualization
 
-### 6. **Admin Panel** (Restricted Access)
+### 6. **Document Generator** (AI-Powered Advocacy Documents)
+
+Generate professional EU advocacy documents using AI, powered by Anthropic Claude.
+
+**Document Types:**
+- **Position Papers** - Structured policy positions with executive summary, background, key asks, and recommendations
+- **MEP Briefings** - Concise briefings optimized for busy MEPs with clear asks and voting recommendations
+- **Talking Points** - Quick-reference bullet points for meetings and calls
+
+**Features:**
+- Step-by-step wizard interface
+- Link documents to EU legislation (CELEX numbers) or procedures
+- Add policy areas and custom tags
+- Multiple key asks with article references
+- Stakeholder identification
+- Markdown-rendered preview with professional formatting
+- Copy to clipboard or save to document repository
+- Export capabilities
+
+**API Endpoints:**
+- `POST /api/generate/position-paper` - Generate position paper
+- `POST /api/generate/mep-briefing` - Generate MEP briefing
+- `POST /api/generate/talking-points` - Generate talking points
+
+### 7. **Admin Panel** (Restricted Access)
 
 Backend management system accessible exclusively to Beresol team (helloberesol@gmail.com).
 
@@ -270,6 +295,7 @@ brubru/
 │   │   ├── eu_law_comply.py         # Compliance analysis
 │   │   ├── legislative_train.py     # Legislative Train tracking
 │   │   ├── documents.py             # Document upload & management
+│   │   ├── generate.py              # AI document generation
 │   │   ├── rss_feeds.py             # RSS feed configuration
 │   │   └── admin_panel.py           # Admin dashboard
 │   │
@@ -727,4 +753,4 @@ For licensing inquiries, contact helloberesol@gmail.com.
 
 **Brubru** - Empowering strategic advocacy in the EU bubble
 
-*Built with ❤️ in Brussels by Beresol BV*
+*Built with care in Brussels by Beresol BV*

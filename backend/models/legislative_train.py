@@ -2,6 +2,11 @@
 Legislative Train Database Models
 
 SQLAlchemy models for Legislative Train Schedule data.
+
+ENHANCED (January 2025):
+- LegislativePackage model for package hierarchy
+- Timeline support in LegislativeCarriage
+- Text type and spotlight tags
 """
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, JSON, Text, ForeignKey, Enum as SQLEnum
@@ -21,8 +26,24 @@ class CarriageStatusEnum(str, enum.Enum):
     TABLED = "tabled"
     CLOSE_TO_ADOPTION = "close_to_adoption"
     COMPLETED = "completed"
+    ADOPTED = "adopted"
     BLOCKED = "blocked"
     WITHDRAWN = "withdrawn"
+
+
+class TextTypeEnum(str, enum.Enum):
+    """Legislative text type"""
+    LEGISLATIVE = "legislative"
+    NON_LEGISLATIVE = "non_legislative"
+    UNKNOWN = "unknown"
+
+
+class CarriageSourceEnum(str, enum.Enum):
+    """Source of the legislative carriage data"""
+    LEGISLATIVE_TRAIN = "legislative_train"  # From EC Legislative Train Schedule
+    OEIL_DIRECT = "oeil_direct"  # Directly from OEIL/EP (not in Legislative Train)
+    EP_OPENDATA = "ep_opendata"  # From EP Open Data API
+    EURLEX = "eurlex"  # From EUR-Lex RSS feeds
 
 
 class LegislativeTrain(Base):
@@ -38,20 +59,89 @@ class LegislativeTrain(Base):
     name = Column(String, nullable=False)
     description = Column(Text)
     commission_term = Column(String, default="2024-2029")
+    theme_slug = Column(String)  # URL slug for this priority
 
     # Statistics (computed from carriages)
     total_files = Column(Integer, default=0)
     files_by_status = Column(JSON, default={})  # {"announced": 15, "tabled": 72, ...}
 
     # Metadata
+    url = Column(String)
     created_at = Column(DateTime, default=datetime.now, nullable=False)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
 
     # Relationships
     carriages = relationship("LegislativeCarriage", back_populates="train", cascade="all, delete-orphan")
+    packages = relationship("LegislativePackage", back_populates="train", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<LegislativeTrain {self.priority_number}: {self.name}>"
+
+
+class LegislativePackage(Base):
+    """
+    Package within the Legislative Train (NEW in 2025).
+
+    Packages are thematic groupings that can have sub-packages.
+    Example: "Vision for Agriculture and Food" contains sub-packages
+    like "Sustainable food systems" and "Animal welfare".
+    """
+    __tablename__ = "legislative_packages"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    train_id = Column(UUID(as_uuid=True), ForeignKey("legislative_trains.id"), nullable=True)
+
+    # Identifiers
+    slug = Column(String, unique=True, nullable=False)  # e.g., "package-vision-for-agriculture"
+    name = Column(String, nullable=False)
+    description = Column(Text)
+
+    # Hierarchy
+    parent_id = Column(UUID(as_uuid=True), ForeignKey("legislative_packages.id"), nullable=True)
+    parent_slug = Column(String)
+    is_sub_package = Column(Boolean, default=False)
+
+    # Status counts
+    status_announced = Column(Integer, default=0)
+    status_tabled = Column(Integer, default=0)
+    status_blocked = Column(Integer, default=0)
+    status_close_to_adoption = Column(Integer, default=0)
+    status_adopted = Column(Integer, default=0)
+    status_withdrawn = Column(Integer, default=0)
+    total_files = Column(Integer, default=0)
+
+    # Filter metadata
+    ec_priorities = Column(ARRAY(String), default=[])
+    ep_committees = Column(ARRAY(String), default=[])
+
+    # URLs
+    url = Column(String)
+
+    # Metadata
+    scraped_at = Column(DateTime, default=datetime.now)
+    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=False)
+
+    # Relationships
+    train = relationship("LegislativeTrain", back_populates="packages")
+    parent = relationship("LegislativePackage", remote_side=[id], backref="sub_packages")
+    carriages = relationship("LegislativeCarriage", back_populates="package", cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"<LegislativePackage {self.slug}: {self.name}>"
+
+    @property
+    def status_counts(self):
+        """Return status counts as a dictionary"""
+        return {
+            "announced": self.status_announced,
+            "tabled": self.status_tabled,
+            "blocked": self.status_blocked,
+            "close_to_adoption": self.status_close_to_adoption,
+            "adopted": self.status_adopted,
+            "withdrawn": self.status_withdrawn,
+            "total": self.total_files
+        }
 
 
 class LegislativeCarriage(Base):
@@ -64,9 +154,14 @@ class LegislativeCarriage(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     train_id = Column(UUID(as_uuid=True), ForeignKey("legislative_trains.id"), nullable=True)
+    package_id = Column(UUID(as_uuid=True), ForeignKey("legislative_packages.id"), nullable=True)
 
     # External IDs
-    file_id = Column(String, unique=True, nullable=False)  # Legislative Train internal ID
+    file_id = Column(String, unique=True, nullable=False)  # Legislative Train internal ID/slug
+    package_slug = Column(String)  # Parent package slug for easy reference
+
+    # Data source tracking
+    source = Column(SQLEnum(CarriageSourceEnum), default=CarriageSourceEnum.LEGISLATIVE_TRAIN)
 
     # Basic info
     title = Column(String, nullable=False)
@@ -78,6 +173,14 @@ class LegislativeCarriage(Base):
     days_in_current_status = Column(Integer)
     is_blocked = Column(Boolean, default=False)  # True if 9+ months no progress
 
+    # NEW: Timeline (monthly status snapshots)
+    timeline = Column(JSON, default=[])  # [{year, month, status, is_current}, ...]
+
+    # NEW: Text type and spotlight
+    text_type = Column(SQLEnum(TextTypeEnum), default=TextTypeEnum.UNKNOWN)
+    spotlight_tags = Column(ARRAY(String), default=[])
+    is_recently_updated = Column(Boolean, default=False)
+
     # Cross-references
     oeil_procedure_ref = Column(String)  # "2021/0106(COD)"
     celex_numbers = Column(ARRAY(String), default=[])
@@ -88,6 +191,10 @@ class LegislativeCarriage(Base):
     opinion_committees = Column(ARRAY(String), default=[])
     committees = Column(ARRAY(String), default=[])
     rapporteur_mep_id = Column(String)
+
+    # NEW: Filter metadata
+    ec_priority_ids = Column(ARRAY(String), default=[])
+    related_themes = Column(ARRAY(String), default=[])
 
     # Enrichment data
     oeil_procedure_data = Column(JSON)
@@ -104,6 +211,9 @@ class LegislativeCarriage(Base):
     ai_entities = Column(JSON, default=[])  # Extracted MEPs, committees, legislation
     ai_policy_classifications = Column(JSON, default=[])  # {"label": "...", "score": 0.9}
 
+    # URLs
+    url = Column(String)
+
     # Temporal data
     scraped_at = Column(DateTime, default=datetime.now)
     first_seen = Column(DateTime, default=datetime.now)
@@ -114,6 +224,7 @@ class LegislativeCarriage(Base):
 
     # Relationships
     train = relationship("LegislativeTrain", back_populates="carriages")
+    package = relationship("LegislativePackage", back_populates="carriages")
     user_tracks = relationship("UserCarriageTrack", back_populates="carriage", cascade="all, delete-orphan")
 
     def __repr__(self):

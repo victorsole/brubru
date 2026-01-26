@@ -95,7 +95,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
         formData.append('file', file);
 
         // Upload file
-        const uploadResponse = await fetch(`${API_BASE_URL}/api/uploads/upload`, {
+        const uploadResponse = await fetch(`${API_BASE_URL}/api/documents/upload`, {
           method: 'POST',
           body: formData,
         });
@@ -109,7 +109,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
 
         // Fetch processed content
         const contentResponse = await fetch(
-          `${API_BASE_URL}/api/uploads/${uploadedDoc.document_id}/content`
+          `${API_BASE_URL}/api/documents/${uploadedDoc.document_id}/content`
         );
 
         if (!contentResponse.ok) {
@@ -161,7 +161,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
         onDrop={handleDrop}
       >
         <div className="amendator-document-upload__dropzone-content">
-          <span className="amendator-document-upload__icon">📄</span>
+          <span className="amendator-document-upload__icon mdi mdi-file-document-outline"></span>
           <p className="amendator-document-upload__dropzone-text">
             Drag & drop files here
           </p>
@@ -200,7 +200,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
                     className="amendator-document-upload__remove-button"
                     onClick={() => handleRemoveFile(index)}
                   >
-                    ✕
+                    <span className="mdi mdi-close"></span>
                   </button>
                 )}
                 {uploadProgress[file.name] && (
@@ -220,7 +220,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
       {/* Error Message */}
       {error && (
         <div className="amendator-document-upload__error">
-          <span className="amendator-document-upload__error-icon">⚠️</span>
+          <span className="amendator-document-upload__error-icon mdi mdi-alert"></span>
           {error}
         </div>
       )}

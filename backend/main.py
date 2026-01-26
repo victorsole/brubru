@@ -23,9 +23,9 @@ from services.rss.rss_scheduler import start_scheduler, stop_scheduler
 from api import (
     chat, documents, auth, subscriptions, my_eu_bubble, rss_feeds,
     user_documents, legislative_tracking, notifications, export, personalization,
-    feedback, admin_panel, translation, committees, amendments, legislative_train,
+    feedback, admin_panel, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
-    user_preferences, admin_analytics
+    user_preferences, admin_analytics, generate
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -38,35 +38,35 @@ async def lifespan(app: FastAPI):
     Runs on startup and shutdown.
     """
     # Startup
-    print("🚀 Starting Brubru backend...")
-    print(f"📊 Environment: {settings.ENVIRONMENT}")
+    print("[START] Starting Brubru backend...")
+    print(f"[INFO] Environment: {settings.ENVIRONMENT}")
 
     # Initialize database tables (non-fatal if fails)
     try:
         init_db()
-        print("✅ Database initialized")
+        print("[OK] Database initialized")
     except Exception as e:
-        print(f"⚠️  Database connection failed (non-fatal): {str(e)}")
-        print("   The backend will start without database functionality.")
+        print(f"[WARN] Database connection failed (non-fatal): {str(e)}")
+        print("       The backend will start without database functionality.")
 
     # Start RSS feed scheduler (for My EU Bubble)
     try:
         start_scheduler()
-        print("✅ RSS feed scheduler started")
+        print("[OK] RSS feed scheduler started")
     except Exception as e:
-        print(f"⚠️  RSS scheduler failed to start (non-fatal): {str(e)}")
+        print(f"[WARN] RSS scheduler failed to start (non-fatal): {str(e)}")
 
     yield
 
     # Shutdown
-    print("👋 Shutting down Brubru backend...")
+    print("[STOP] Shutting down Brubru backend...")
 
     # Stop RSS feed scheduler
     try:
         stop_scheduler()
-        print("✅ RSS feed scheduler stopped")
+        print("[OK] RSS feed scheduler stopped")
     except Exception as e:
-        print(f"⚠️  RSS scheduler shutdown error: {str(e)}")
+        print(f"[WARN] RSS scheduler shutdown error: {str(e)}")
 
 
 # Create FastAPI app
@@ -128,7 +128,6 @@ app.include_router(personalization.router, prefix="/api", tags=["Personalization
 app.include_router(feedback.router, tags=["Feedback"])
 app.include_router(admin_panel.router, tags=["Admin Panel"])
 app.include_router(admin_eu_comply.router, prefix="/api/admin/eu-comply", tags=["Admin EU Comply"])
-app.include_router(translation.router, tags=["Translation"])
 app.include_router(committees.router, tags=["Committees"])
 app.include_router(chat_examples_public_router)
 app.include_router(chat_examples_admin_router)
@@ -138,6 +137,7 @@ app.include_router(tenderator.router, tags=["Tenderator"])
 app.include_router(admin_tenders.router, tags=["Admin Tenders"])
 app.include_router(user_preferences.router, tags=["User Preferences"])
 app.include_router(admin_analytics.router, tags=["Admin Analytics"])
+app.include_router(generate.router, tags=["Document Generation"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 

@@ -24,6 +24,7 @@ from models.legislative_train import (
     CarriageStatusEnum,
     CarriageStatusHistory
 )
+from services.notification_service import NotificationService
 from .legislative_train_scraper import LegislativeTrainScraper
 from .legislative_train_enricher import LegislativeTrainEnricher
 
@@ -391,13 +392,105 @@ class LegislativeTrainScheduler:
         new_status: str
     ):
         """Notify users tracking this carriage of status change"""
-        # Would integrate with notification service
-        logger.info(f"Would notify users of status change: {carriage.title}")
+        try:
+            notification_service = NotificationService(db)
+
+            # Find users tracking this carriage
+            tracking_users = db.query(UserCarriageTrack).filter(
+                UserCarriageTrack.carriage_id == carriage.id,
+                UserCarriageTrack.is_active == True
+            ).all()
+
+            if tracking_users:
+                for track in tracking_users:
+                    # Create notification for each tracking user
+                    notification_service.create_notification(
+                        user_id=str(track.user_id),
+                        notification_type="status_change",
+                        title=f"Status Update: {carriage.title[:80]}",
+                        message=f"Status changed from {old_status} to {new_status}",
+                        priority="high",
+                        action_url=f"/bubble?tab=legislative-trains&file={carriage.file_id}",
+                        metadata={
+                            "carriage_id": str(carriage.id),
+                            "file_id": carriage.file_id,
+                            "old_status": old_status,
+                            "new_status": new_status,
+                            "oeil_ref": carriage.oeil_procedure_ref
+                        },
+                        related_entity_type="legislative_carriage",
+                        related_entity_id=str(carriage.id)
+                    )
+
+                logger.info(f"Notified {len(tracking_users)} users of status change: {carriage.title}")
+
+            # Also notify users who have amendments linked to this carriage (Priority #4 Integration)
+            amendment_notifications = await notification_service.generate_amendment_context_notifications(
+                carriage_id=str(carriage.id),
+                change_type="status_change",
+                change_data={
+                    "title": carriage.title,
+                    "old_status": old_status,
+                    "new_status": new_status,
+                    "procedure_ref": carriage.oeil_procedure_ref
+                }
+            )
+            if amendment_notifications:
+                logger.info(f"Sent {len(amendment_notifications)} amendment context notifications for status change")
+
+        except Exception as e:
+            logger.error(f"Failed to notify status change: {e}")
 
     async def _notify_blocking(self, db: Session, carriage: LegislativeCarriage):
         """Notify users that tracked file is now blocked"""
-        # Would integrate with notification service
-        logger.warning(f"Would notify users of blocking: {carriage.title}")
+        try:
+            notification_service = NotificationService(db)
+
+            # Find users tracking this carriage
+            tracking_users = db.query(UserCarriageTrack).filter(
+                UserCarriageTrack.carriage_id == carriage.id,
+                UserCarriageTrack.is_active == True
+            ).all()
+
+            if tracking_users:
+                for track in tracking_users:
+                    # Create notification for each user
+                    notification_service.create_notification(
+                        user_id=str(track.user_id),
+                        notification_type="status_change",
+                        title=f"⚠️ File Blocked: {carriage.title[:80]}",
+                        message=f"This file has been stuck in {carriage.current_status} for {carriage.days_in_current_status} days and appears blocked.",
+                        priority="urgent",
+                        action_url=f"/bubble?tab=legislative-trains&file={carriage.file_id}",
+                        metadata={
+                            "carriage_id": str(carriage.id),
+                            "file_id": carriage.file_id,
+                            "current_status": str(carriage.current_status),
+                            "days_blocked": carriage.days_in_current_status,
+                            "oeil_ref": carriage.oeil_procedure_ref
+                        },
+                        related_entity_type="legislative_carriage",
+                        related_entity_id=str(carriage.id)
+                    )
+
+                logger.warning(f"Notified {len(tracking_users)} users of blocking: {carriage.title}")
+
+            # Also notify users who have amendments linked to this carriage (Priority #4 Integration)
+            amendment_notifications = await notification_service.generate_amendment_context_notifications(
+                carriage_id=str(carriage.id),
+                change_type="blocking_detected",
+                change_data={
+                    "title": carriage.title,
+                    "current_status": str(carriage.current_status),
+                    "days_blocked": carriage.days_in_current_status,
+                    "procedure_ref": carriage.oeil_procedure_ref
+                }
+            )
+            if amendment_notifications:
+                logger.warning(f"Sent {len(amendment_notifications)} amendment context notifications for blocking")
+
+        except Exception as e:
+            logger.error(f"Failed to notify blocking: {e}")
 
 
 # Global instance

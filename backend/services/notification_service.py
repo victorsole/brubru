@@ -23,6 +23,8 @@ from models.user import User
 from models.rss_entry import RSSEntry
 from models.user_feed_subscription import UserFeedSubscription
 from models.user_document import UserDocument
+from models.legislative_train import LegislativeCarriage
+from models.amendment import Amendment
 
 logger = logging.getLogger(__name__)
 
@@ -254,6 +256,138 @@ class NotificationService:
 
         logger.info(f"Generated {len(notifications)} deadline notifications")
         return notifications
+
+    async def generate_amendment_context_notifications(
+        self,
+        carriage_id: str,
+        change_type: str,
+        change_data: Dict[str, Any]
+    ) -> List[Notification]:
+        """
+        Generate notifications for users with amendments linked to a carriage that changed.
+
+        This is called when a tracked legislative file changes status, has new events,
+        or other significant updates. Users who have drafted amendments for this file
+        are notified so they can review and update their amendments if needed.
+
+        Args:
+            carriage_id: Legislative carriage UUID
+            change_type: Type of change (status_change, new_event, blocking_detected)
+            change_data: Change information dict containing:
+                - title: File title
+                - old_status: Previous status (if status change)
+                - new_status: New status (if status change)
+                - procedure_ref: OEIL procedure reference
+                - event_description: Description of the event
+
+        Returns:
+            List of created notifications
+        """
+        logger.info(f"Generating amendment context notifications for carriage {carriage_id}")
+
+        notifications = []
+
+        try:
+            # Find all amendments linked to this carriage
+            stmt = select(Amendment).where(Amendment.carriage_id == carriage_id)
+            amendments = self.db.execute(stmt).scalars().all()
+
+            if not amendments:
+                logger.info(f"No amendments linked to carriage {carriage_id}")
+                return notifications
+
+            # Get unique user IDs that have amendments for this file
+            user_ids = set(str(a.user_id) for a in amendments if a.user_id)
+
+            # Get the carriage details for the notification message
+            carriage_stmt = select(LegislativeCarriage).where(LegislativeCarriage.id == carriage_id)
+            carriage = self.db.execute(carriage_stmt).scalar_one_or_none()
+
+            file_title = change_data.get('title') or (carriage.title if carriage else 'Tracked file')
+            procedure_ref = change_data.get('procedure_ref') or (carriage.oeil_procedure_ref if carriage else None)
+
+            # Build notification message based on change type
+            if change_type == 'status_change':
+                old_status = change_data.get('old_status', 'unknown').replace('_', ' ')
+                new_status = change_data.get('new_status', 'unknown').replace('_', ' ')
+                title = f"Status Update: {file_title[:60]}..."
+                message = f"Status changed from '{old_status}' to '{new_status}'. You have amendments for this file - review them for relevance."
+                priority = "high"
+            elif change_type == 'blocking_detected':
+                title = f"File Blocked: {file_title[:60]}..."
+                message = f"This legislative file has been blocked. Your amendments may need revision."
+                priority = "urgent"
+            elif change_type == 'new_event':
+                event_desc = change_data.get('event_description', 'New activity detected')
+                title = f"New Event: {file_title[:60]}..."
+                message = f"{event_desc}. Review your amendments for this file."
+                priority = "normal"
+            else:
+                title = f"Update: {file_title[:60]}..."
+                message = f"There's an update on this file. You have amendments that may be affected."
+                priority = "normal"
+
+            # Create notification for each user with amendments
+            for user_id in user_ids:
+                # Check if we've already sent a similar notification recently
+                if not self._has_recent_amendment_context_notification(user_id, carriage_id, change_type):
+                    notification = self.create_notification(
+                        user_id=user_id,
+                        notification_type=f"amendment_context_{change_type}",
+                        title=title,
+                        message=message,
+                        priority=priority,
+                        action_url=f"/bubble?tab=amendments",
+                        metadata={
+                            "carriage_id": carriage_id,
+                            "procedure_ref": procedure_ref,
+                            "change_type": change_type,
+                            "amendment_count": len([a for a in amendments if str(a.user_id) == user_id]),
+                            **change_data
+                        },
+                        related_entity_type="legislative_carriage",
+                        related_entity_id=carriage_id
+                    )
+                    notifications.append(notification)
+
+        except Exception as e:
+            logger.error(f"Failed to generate amendment context notifications: {e}")
+
+        logger.info(f"Generated {len(notifications)} amendment context notifications")
+        return notifications
+
+    def _has_recent_amendment_context_notification(
+        self,
+        user_id: str,
+        carriage_id: str,
+        change_type: str,
+        hours: int = 24
+    ) -> bool:
+        """
+        Check if user already received an amendment context notification recently.
+
+        Args:
+            user_id: User UUID
+            carriage_id: Carriage UUID
+            change_type: Type of change
+            hours: Recent time window in hours
+
+        Returns:
+            True if recent notification exists
+        """
+        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=hours)
+
+        stmt = select(Notification).where(
+            and_(
+                Notification.user_id == user_id,
+                Notification.notification_type == f"amendment_context_{change_type}",
+                Notification.related_entity_id == carriage_id,
+                Notification.created_at >= cutoff_time
+            )
+        )
+
+        notifications = self.db.execute(stmt).scalars().all()
+        return len(notifications) > 0
 
     def get_user_notifications(
         self,

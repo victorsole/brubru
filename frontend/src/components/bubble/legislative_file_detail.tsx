@@ -9,6 +9,9 @@
  * - Cross-references (OEIL, CELEX, EUR-Lex)
  */
 
+import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import Icon from '@mdi/react';
 import {
   mdiClose,
@@ -18,19 +21,87 @@ import {
   mdiAccountGroup,
   mdiCalendar,
   mdiLinkVariant,
+  mdiAccountTieOutline,
+  mdiChevronDown,
+  mdiChevronUp,
+  mdiPencilOutline,
+  mdiPlus,
 } from '@mdi/js';
+import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
+import { StagePipeline } from './stage_pipeline';
+import { TrackFileButton } from '../shared/track_file_button';
 import './legislative_file_detail.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+interface Amendment {
+  id: string;
+  element_type: string;
+  position_text: string;
+  amendment_type: string;
+  status: string;
+  created_at: string;
+}
+
 export const LegislativeFileDetail = () => {
+  const navigate = useNavigate();
   const {
     selectedFile,
     isLoadingFileDetail,
     isAnalyzing,
+    keyPlayers,
+    isLoadingKeyPlayers,
+    timelineEvents,
+    isLoadingTimeline,
     analyzeFile,
     closeFileDetail,
+    fetchKeyPlayers,
+    fetchTimeline,
   } = useLegislativeTrains();
 
+  // Amendments state
+  const [amendments, setAmendments] = useState<Amendment[]>([]);
+  const [isLoadingAmendments, setIsLoadingAmendments] = useState(false);
+  const [isAmendmentsExpanded, setIsAmendmentsExpanded] = useState(true);
+
+  // Fetch amendments for the carriage
+  const fetchAmendments = async (carriageId: string) => {
+    setIsLoadingAmendments(true);
+    try {
+      const response = await axios.get(`${API_BASE}/api/legislative-train/carriages/${carriageId}/amendments`);
+      setAmendments(response.data.amendments || []);
+    } catch (error) {
+      console.error('Failed to fetch amendments:', error);
+      setAmendments([]);
+    } finally {
+      setIsLoadingAmendments(false);
+    }
+  };
+
+  // Fetch key players, timeline, and amendments when file is selected
+  useEffect(() => {
+    if (selectedFile?.id) {
+      fetchKeyPlayers(selectedFile.id);
+      fetchTimeline(selectedFile.id);
+      fetchAmendments(selectedFile.id);
+    }
+  }, [selectedFile?.id]);
+
+  // Collapsible sections state
+  const [isActorsExpanded, setIsActorsExpanded] = useState(true);
+
+  // Filter out invalid/placeholder key players
+  const validKeyPlayers = useMemo(() => {
+    const placeholders = ['commission dg', 'commissioner', 'dg', 'n/a', 'unknown'];
+    return keyPlayers.filter(player => {
+      const name = player.name?.trim().toLowerCase() || '';
+      if (!name || name.length < 3) return false;
+      return !placeholders.includes(name);
+    });
+  }, [keyPlayers]);
+
+  // Don't render if no file selected
   if (!selectedFile) return null;
 
   const handleAnalyze = async () => {
@@ -55,7 +126,8 @@ export const LegislativeFileDetail = () => {
     return statusMap[status] || '#9e9e9e';
   };
 
-  return (
+  // Use portal to render at document.body level, escaping parent stacking contexts
+  return createPortal(
     <div className="legislative-file-modal">
       <div className="legislative-file-modal__overlay" onClick={closeFileDetail} />
       <div className="legislative-file-modal__content">
@@ -65,13 +137,21 @@ export const LegislativeFileDetail = () => {
             <Icon path={mdiFileDocument} size={1.2} />
             <h2>{selectedFile.title}</h2>
           </div>
-          <button
-            className="legislative-file-modal__close"
-            onClick={closeFileDetail}
-            title="Close"
-          >
-            <Icon path={mdiClose} size={0.9} />
-          </button>
+          <div className="legislative-file-modal__header-right">
+            {selectedFile.oeil_procedure_ref && (
+              <TrackFileButton
+                procedureRef={selectedFile.oeil_procedure_ref}
+                variant="button"
+              />
+            )}
+            <button
+              className="legislative-file-modal__close"
+              onClick={closeFileDetail}
+              title="Close"
+            >
+              <Icon path={mdiClose} size={0.9} />
+            </button>
+          </div>
         </div>
 
         {isLoadingFileDetail ? (
@@ -80,9 +160,15 @@ export const LegislativeFileDetail = () => {
           </div>
         ) : (
           <div className="legislative-file-modal__body">
+            {/* Stage Pipeline */}
+            <div className="legislative-file-detail__section legislative-file-detail__section--pipeline">
+              <h3>Legislative Progress</h3>
+              <StagePipeline currentStatus={selectedFile.current_status} />
+            </div>
+
             {/* Status */}
             <div className="legislative-file-detail__section">
-              <h3>Status</h3>
+              <h3>Current Status</h3>
               <div className="legislative-file-detail__status-row">
                 <span
                   className="legislative-file-detail__status"
@@ -100,6 +186,57 @@ export const LegislativeFileDetail = () => {
                 )}
               </div>
             </div>
+
+            {/* Key Actors - Collapsible */}
+            {(validKeyPlayers.length > 0 || isLoadingKeyPlayers) && (
+              <div className="legislative-file-detail__section legislative-file-detail__section--collapsible">
+                <button
+                  className="legislative-file-detail__section-header legislative-file-detail__section-header--clickable"
+                  onClick={() => setIsActorsExpanded(!isActorsExpanded)}
+                >
+                  <div className="legislative-file-detail__section-header-left">
+                    <Icon path={mdiAccountTieOutline} size={0.9} />
+                    <h3>Key Actors {validKeyPlayers.length > 0 && `(${validKeyPlayers.length})`}</h3>
+                  </div>
+                  <Icon
+                    path={isActorsExpanded ? mdiChevronUp : mdiChevronDown}
+                    size={0.9}
+                    className="legislative-file-detail__collapse-icon"
+                  />
+                </button>
+                {isActorsExpanded && (
+                  <>
+                    {isLoadingKeyPlayers ? (
+                      <div className="legislative-file-detail__loading-inline">Loading...</div>
+                    ) : (
+                      <div className="legislative-file-detail__actors">
+                        {validKeyPlayers.map((player, idx) => (
+                          <div key={idx} className="legislative-file-detail__actor">
+                            {player.photo_url && (
+                              <img
+                                src={player.photo_url}
+                                alt={player.name}
+                                className="legislative-file-detail__actor-photo"
+                              />
+                            )}
+                            <div className="legislative-file-detail__actor-info">
+                              <div className="legislative-file-detail__actor-name">
+                                {player.name}
+                              </div>
+                              <div className="legislative-file-detail__actor-role">
+                                {player.role}
+                                {player.political_group && ` (${player.political_group})`}
+                                {player.country && `, ${player.country}`}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
 
             {/* Description */}
             {selectedFile.description && (
@@ -196,7 +333,7 @@ export const LegislativeFileDetail = () => {
                   <div className="legislative-file-detail__reference">
                     <strong>OEIL Procedure:</strong>
                     <a
-                      href={`https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=${selectedFile.oeil_procedure_ref}`}
+                      href={`https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${selectedFile.oeil_procedure_ref}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -221,26 +358,131 @@ export const LegislativeFileDetail = () => {
               </div>
             </div>
 
-            {/* Temporal Data */}
+            {/* Key Events Timeline */}
             <div className="legislative-file-detail__section legislative-file-detail__section--meta">
               <div className="legislative-file-detail__section-header">
                 <Icon path={mdiCalendar} size={0.9} />
-                <h3>Timeline</h3>
+                <h3>Key Events</h3>
               </div>
               <div className="legislative-file-detail__timeline">
-                {selectedFile.first_seen && (
-                  <div className="legislative-file-detail__timeline-item">
-                    <strong>First Seen:</strong>
-                    <span>{new Date(selectedFile.first_seen).toLocaleDateString()}</span>
+                {isLoadingTimeline ? (
+                  <div className="legislative-file-detail__loading-small">Loading events...</div>
+                ) : timelineEvents.length > 0 ? (
+                  <div className="legislative-file-detail__events">
+                    {timelineEvents.map((event, idx) => (
+                      <div key={idx} className="legislative-file-detail__event">
+                        <div className="legislative-file-detail__event-date">
+                          {new Date(event.date).toLocaleDateString('en-GB', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </div>
+                        <div className="legislative-file-detail__event-content">
+                          <div className="legislative-file-detail__event-type">
+                            {event.event_type}
+                          </div>
+                          {event.description && (
+                            <div className="legislative-file-detail__event-desc">
+                              {event.description}
+                            </div>
+                          )}
+                          {event.result && (
+                            <div className="legislative-file-detail__event-result">
+                              Result: {event.result}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                )}
-                {selectedFile.last_updated && (
-                  <div className="legislative-file-detail__timeline-item">
-                    <strong>Last Updated:</strong>
-                    <span>{new Date(selectedFile.last_updated).toLocaleDateString()}</span>
+                ) : (
+                  <div className="legislative-file-detail__timeline-basic">
+                    {selectedFile.first_seen && (
+                      <div className="legislative-file-detail__timeline-item">
+                        <strong>First Seen:</strong>
+                        <span>{new Date(selectedFile.first_seen).toLocaleDateString()}</span>
+                      </div>
+                    )}
+                    {selectedFile.last_updated && (
+                      <div className="legislative-file-detail__timeline-item">
+                        <strong>Last Updated:</strong>
+                        <span>{new Date(selectedFile.last_updated).toLocaleDateString()}</span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Amendments Section */}
+            <div className="legislative-file-detail__section legislative-file-detail__section--collapsible">
+              <button
+                className="legislative-file-detail__section-header legislative-file-detail__section-header--clickable"
+                onClick={() => setIsAmendmentsExpanded(!isAmendmentsExpanded)}
+              >
+                <div className="legislative-file-detail__section-header-left">
+                  <Icon path={mdiPencilOutline} size={0.9} />
+                  <h3>Your Amendments {amendments.length > 0 && `(${amendments.length})`}</h3>
+                </div>
+                <Icon
+                  path={isAmendmentsExpanded ? mdiChevronUp : mdiChevronDown}
+                  size={0.9}
+                  className="legislative-file-detail__collapse-icon"
+                />
+              </button>
+              {isAmendmentsExpanded && (
+                <>
+                  {isLoadingAmendments ? (
+                    <div className="legislative-file-detail__loading-inline">Loading amendments...</div>
+                  ) : amendments.length === 0 ? (
+                    <div className="legislative-file-detail__amendments-empty">
+                      <p>No amendments drafted yet for this file.</p>
+                      <button
+                        className="legislative-file-detail__draft-btn"
+                        onClick={() => {
+                          closeFileDetail();
+                          navigate('/amendator');
+                        }}
+                      >
+                        <Icon path={mdiPlus} size={0.8} />
+                        Draft Amendment
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="legislative-file-detail__amendments">
+                      {amendments.map((amendment) => (
+                        <div key={amendment.id} className="legislative-file-detail__amendment">
+                          <div className="legislative-file-detail__amendment-header">
+                            <span className={`legislative-file-detail__amendment-type legislative-file-detail__amendment-type--${amendment.amendment_type}`}>
+                              {amendment.amendment_type}
+                            </span>
+                            <span className={`legislative-file-detail__amendment-status legislative-file-detail__amendment-status--${amendment.status}`}>
+                              {amendment.status}
+                            </span>
+                          </div>
+                          <div className="legislative-file-detail__amendment-position">
+                            {amendment.position_text || `${amendment.element_type}`}
+                          </div>
+                          <div className="legislative-file-detail__amendment-date">
+                            Created {new Date(amendment.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      ))}
+                      <button
+                        className="legislative-file-detail__draft-btn legislative-file-detail__draft-btn--more"
+                        onClick={() => {
+                          closeFileDetail();
+                          navigate('/amendator');
+                        }}
+                      >
+                        <Icon path={mdiPencilOutline} size={0.8} />
+                        Draft More Amendments
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
 
             {/* AI Analyze Button */}
@@ -259,6 +501,7 @@ export const LegislativeFileDetail = () => {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

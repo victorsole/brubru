@@ -531,15 +531,15 @@ def slack_alert_callback(alert_data: Dict):
     Args:
         alert_data: Alert information dict
     """
-    level_emoji = {
-        'info': 'ℹ️',
-        'warning': '⚠️',
-        'critical': '🚨',
-        'exceeded': '🛑'
+    level_prefix = {
+        'info': '[INFO]',
+        'warning': '[WARN]',
+        'critical': '[CRITICAL]',
+        'exceeded': '[EXCEEDED]'
     }
 
     message = (
-        f"{level_emoji.get(alert_data['level'], '📊')} "
+        f"{level_prefix.get(alert_data['level'], '[QUOTA]')} "
         f"API Quota Alert: {alert_data['api_name']}\n"
         f"Usage: {alert_data['usage']}/{alert_data['limit']} "
         f"({alert_data['percentage']:.1f}%)\n"

@@ -77,7 +77,7 @@ class EURLexClient(BaseAPIClient):
     SOAP_ENDPOINT = "https://eur-lex.europa.eu/EURLexWebService"
     RSS_BASE = "https://eur-lex.europa.eu/EN/rss"
 
-    # Common RSS Feeds
+    # Legacy RSS Feeds (may be deprecated)
     RSS_FEEDS = {
         "official_journal": f"{RSS_BASE}/rss_oj.xml",
         "competition": f"{RSS_BASE}/rss_competition.xml",
@@ -86,6 +86,17 @@ class EURLexClient(BaseAPIClient):
         "consumer_protection": f"{RSS_BASE}/rss_consumer.xml",
         "digital_economy": f"{RSS_BASE}/rss_digital.xml",
         "transport": f"{RSS_BASE}/rss_transport.xml",
+    }
+
+    # Predefined RSS Feeds (Official - January 2026)
+    # These are the official EUR-Lex predefined RSS feeds that are actively maintained
+    PREDEFINED_RSS_FEEDS = {
+        "parliament_council_legislation": f"{BASE_URL}/EN/display-feed.rss?rssId=162",
+        "court_caselaw_all": f"{BASE_URL}/EN/display-feed.rss?rssId=163",
+        "court_ecj_caselaw": f"{BASE_URL}/EN/display-feed.rss?rssId=164",
+        "commission_proposals": f"{BASE_URL}/EN/display-feed.rss?rssId=161",
+        "official_journal_l": f"{BASE_URL}/EN/display-feed.rss?rssId=222",
+        "official_journal_c": f"{BASE_URL}/EN/display-feed.rss?rssId=221",
     }
 
     def __init__(
@@ -551,6 +562,205 @@ class EURLexClient(BaseAPIClient):
 
         feed_url = self.RSS_FEEDS[feed_name]
         return await self.rss_client.fetch_feed(feed_url, since=since)
+
+    # =========================================================================
+    # Predefined RSS Feed Methods (Added January 2026)
+    # =========================================================================
+
+    async def get_predefined_rss_feed(
+        self,
+        feed_name: str,
+        since: Optional[datetime] = None
+    ) -> RSSFeed:
+        """
+        Fetch a predefined EUR-Lex RSS feed.
+
+        Args:
+            feed_name: Feed name from PREDEFINED_RSS_FEEDS dict:
+                - 'parliament_council_legislation': All EP and Council acts
+                - 'commission_proposals': COM documents and proposals
+                - 'official_journal_l': OJ L series (legislation)
+                - 'official_journal_c': OJ C series (information)
+                - 'court_caselaw_all': All CJEU case law
+                - 'court_ecj_caselaw': European Court of Justice case law
+            since: Only get entries after this date
+
+        Returns:
+            RSS feed with entries
+        """
+        if feed_name not in self.PREDEFINED_RSS_FEEDS:
+            valid_feeds = list(self.PREDEFINED_RSS_FEEDS.keys())
+            raise ValueError(f"Unknown feed: {feed_name}. Valid feeds: {valid_feeds}")
+
+        feed_url = self.PREDEFINED_RSS_FEEDS[feed_name]
+        return await self.rss_client.fetch_feed(feed_url, since=since)
+
+    async def get_latest_legislation(
+        self,
+        since: Optional[datetime] = None,
+        days: int = 7
+    ) -> List[Dict[str, Any]]:
+        """
+        Get latest Parliament and Council legislation from RSS feed.
+
+        Args:
+            since: Only get entries after this date
+            days: If since not provided, get entries from last N days
+
+        Returns:
+            List of legislation items with CELEX numbers
+        """
+        import re
+
+        if not since:
+            since = datetime.now() - timedelta(days=days)
+
+        logger.info(f"Fetching latest legislation since {since.date()}")
+
+        try:
+            feed = await self.get_predefined_rss_feed(
+                "parliament_council_legislation",
+                since=since
+            )
+
+            entries = []
+            for entry in feed.entries:
+                # Extract CELEX from title (format: "CELEX:32026R0147: Title...")
+                celex_match = re.search(r'CELEX:(\d+[A-Z]+\d+)', entry.title)
+                celex = celex_match.group(1) if celex_match else None
+
+                # Clean title (remove CELEX prefix)
+                title = entry.title
+                if celex:
+                    title = re.sub(r'^CELEX:\d+[A-Z]+\d+:\s*', '', title)
+
+                # Determine document type from CELEX
+                doc_type = None
+                if celex:
+                    type_code = re.search(r'\d{5}([A-Z]+)', celex)
+                    if type_code:
+                        type_map = {
+                            'R': 'Regulation',
+                            'L': 'Directive',
+                            'D': 'Decision',
+                            'H': 'Recommendation',
+                            'C': 'Declaration',
+                        }
+                        doc_type = type_map.get(type_code.group(1), type_code.group(1))
+
+                entries.append({
+                    "celex": celex,
+                    "title": title,
+                    "link": entry.link,
+                    "published": entry.published,
+                    "doc_type": doc_type,
+                    "creator": getattr(entry, 'creator', None),
+                    "summary": entry.summary,
+                })
+
+            logger.info(f"Found {len(entries)} legislation entries")
+            return entries
+
+        except Exception as e:
+            logger.error(f"Failed to fetch latest legislation: {str(e)}")
+            return []
+
+    async def get_latest_commission_proposals(
+        self,
+        since: Optional[datetime] = None,
+        days: int = 7
+    ) -> List[Dict[str, Any]]:
+        """
+        Get latest Commission proposals and related documents.
+
+        Args:
+            since: Only get entries after this date
+            days: If since not provided, get entries from last N days
+
+        Returns:
+            List of proposal items with CELEX numbers
+        """
+        import re
+
+        if not since:
+            since = datetime.now() - timedelta(days=days)
+
+        logger.info(f"Fetching Commission proposals since {since.date()}")
+
+        try:
+            feed = await self.get_predefined_rss_feed(
+                "commission_proposals",
+                since=since
+            )
+
+            entries = []
+            for entry in feed.entries:
+                # Extract CELEX from title
+                celex_match = re.search(r'CELEX:(\d+[A-Z]+\d+)', entry.title)
+                celex = celex_match.group(1) if celex_match else None
+
+                # Extract COM number if present
+                com_match = re.search(r'COM\((\d{4})\)(\d+)', entry.title)
+                com_number = f"COM({com_match.group(1)}){com_match.group(2)}" if com_match else None
+
+                # Clean title
+                title = entry.title
+                if celex:
+                    title = re.sub(r'^CELEX:\d+[A-Z]+\d+:\s*', '', title)
+
+                entries.append({
+                    "celex": celex,
+                    "com_number": com_number,
+                    "title": title,
+                    "link": entry.link,
+                    "published": entry.published,
+                    "summary": entry.summary,
+                })
+
+            logger.info(f"Found {len(entries)} Commission proposal entries")
+            return entries
+
+        except Exception as e:
+            logger.error(f"Failed to fetch Commission proposals: {str(e)}")
+            return []
+
+    async def get_all_predefined_feeds(
+        self,
+        since: Optional[datetime] = None,
+        days: int = 7
+    ) -> Dict[str, RSSFeed]:
+        """
+        Fetch all predefined RSS feeds at once.
+
+        Args:
+            since: Only get entries after this date
+            days: If since not provided, get entries from last N days
+
+        Returns:
+            Dictionary with feed names as keys and RSSFeed objects as values
+        """
+        import asyncio
+
+        if not since:
+            since = datetime.now() - timedelta(days=days)
+
+        logger.info(f"Fetching all predefined EUR-Lex feeds since {since.date()}")
+
+        tasks = {}
+        for feed_name in self.PREDEFINED_RSS_FEEDS:
+            tasks[feed_name] = self.get_predefined_rss_feed(feed_name, since=since)
+
+        results = await asyncio.gather(*tasks.values(), return_exceptions=True)
+
+        feeds = {}
+        for feed_name, result in zip(tasks.keys(), results):
+            if isinstance(result, Exception):
+                logger.error(f"Failed to fetch {feed_name}: {result}")
+                feeds[feed_name] = None
+            else:
+                feeds[feed_name] = result
+
+        return feeds
 
     async def search_by_keyword(
         self,

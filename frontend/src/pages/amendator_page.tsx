@@ -9,6 +9,7 @@ import { AmendmentSidebar } from '../components/amendator/amendment_sidebar';
 import { AIAssistantSidebar } from '../components/amendator/ai_assistant_sidebar';
 import type { AISuggestion } from '../components/amendator/ai_assistant_sidebar';
 import type { LoadedDocument } from '../components/amendator/document_viewer';
+import { LegislativeContextBanner } from '../components/amendator/legislative_context_banner';
 import './amendator_page.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
@@ -222,6 +223,14 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               {isSaving ? 'Saving...' : 'Save Amendments'}
             </button>
           </div>
+        )}
+
+        {/* Legislative Context Banner - shows tracking info when document is tracked */}
+        {loadedDocument && (
+          <LegislativeContextBanner
+            documentId={loadedDocument.document_id}
+            celex={loadedDocument.metadata?.celex}
+          />
         )}
 
         {/* Two-Column Amendment Table */}

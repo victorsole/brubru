@@ -1005,47 +1005,117 @@ class ContextBuilder:
         entities: ExtractedEntities
     ) -> List[Dict[str, Any]]:
         """
-        Fetch relevant Legislative Train files (EC priorities tracking).
+        Fetch relevant legislative files from all sources.
+
+        Sources:
+        - Legislative Train Schedule (EC priorities)
+        - OEIL (Legislative Observatory) - direct procedure imports
+        - EUR-Lex RSS feeds - legislation and proposals
 
         Looks for:
         - Mentions of EC priorities (1-7)
         - Policy area matches
         - Blocked files (if query mentions "blocked" or "stuck")
-        - Commission President priorities
+        - Recent/new legislation (if query mentions "new", "recent", "latest")
         - Specific train/carriage references
+        - CELEX numbers or procedure references
 
         Args:
             query: User query
             entities: Extracted entities
 
         Returns:
-            List of relevant legislative train files with status
+            List of relevant legislative files with status and source
         """
+        from datetime import datetime, timedelta
+        from models.legislative_train import CarriageSourceEnum
+
         try:
             db = SessionLocal()
             train_files = []
             query_lower = query.lower()
 
-            # Simple, fast query - just search in title (most relevant)
-            # Only use the main query keywords
-            search_term = f'%{query_lower[:50]}%'  # Limit search term length
+            # Check if user is asking about recent/new legislation
+            is_recent_query = any(term in query_lower for term in [
+                'new', 'recent', 'latest', 'last week', 'today', 'yesterday',
+                'just added', 'newly', 'fresh', 'update', 'sync'
+            ])
 
-            carriages_query = db.query(LegislativeCarriage, LegislativeTrain).join(
-                LegislativeTrain,
-                LegislativeCarriage.train_id == LegislativeTrain.id,
-                isouter=True
-            ).filter(
-                LegislativeCarriage.title.ilike(search_term)
-            ).order_by(
-                LegislativeCarriage.last_updated.desc()
-            ).limit(5)  # Reduced limit for faster response
+            # Check if asking about specific sources
+            is_oeil_query = 'oeil' in query_lower or 'legislative observatory' in query_lower
+            is_eurlex_query = 'eur-lex' in query_lower or 'eurlex' in query_lower or 'celex' in query_lower
 
-            results = carriages_query.all()
+            results = []
+
+            if is_recent_query:
+                # Fetch recently added files (last 7 days)
+                seven_days_ago = datetime.utcnow() - timedelta(days=7)
+                recent_query = db.query(LegislativeCarriage, LegislativeTrain).join(
+                    LegislativeTrain,
+                    LegislativeCarriage.train_id == LegislativeTrain.id,
+                    isouter=True
+                ).filter(
+                    LegislativeCarriage.first_seen >= seven_days_ago
+                ).order_by(
+                    LegislativeCarriage.first_seen.desc()
+                ).limit(10)
+                results = recent_query.all()
+
+            elif is_oeil_query:
+                # Fetch OEIL-sourced files
+                oeil_query = db.query(LegislativeCarriage, LegislativeTrain).join(
+                    LegislativeTrain,
+                    LegislativeCarriage.train_id == LegislativeTrain.id,
+                    isouter=True
+                ).filter(
+                    LegislativeCarriage.source == CarriageSourceEnum.OEIL_DIRECT
+                ).order_by(
+                    LegislativeCarriage.last_updated.desc()
+                ).limit(10)
+                results = oeil_query.all()
+
+            elif is_eurlex_query:
+                # Fetch EUR-Lex sourced files
+                eurlex_query = db.query(LegislativeCarriage, LegislativeTrain).join(
+                    LegislativeTrain,
+                    LegislativeCarriage.train_id == LegislativeTrain.id,
+                    isouter=True
+                ).filter(
+                    LegislativeCarriage.source == CarriageSourceEnum.EURLEX
+                ).order_by(
+                    LegislativeCarriage.last_updated.desc()
+                ).limit(10)
+                results = eurlex_query.all()
+
+            else:
+                # Standard title search
+                search_term = f'%{query_lower[:50]}%'
+                carriages_query = db.query(LegislativeCarriage, LegislativeTrain).join(
+                    LegislativeTrain,
+                    LegislativeCarriage.train_id == LegislativeTrain.id,
+                    isouter=True
+                ).filter(
+                    LegislativeCarriage.title.ilike(search_term)
+                ).order_by(
+                    LegislativeCarriage.last_updated.desc()
+                ).limit(5)
+                results = carriages_query.all()
 
             # Format results
             for carriage, train in results:
+                # Determine source label
+                source_label = 'Legislative Train'
+                if carriage.source:
+                    source_map = {
+                        'legislative_train': 'Legislative Train',
+                        'oeil_direct': 'OEIL (Legislative Observatory)',
+                        'eurlex': 'EUR-Lex',
+                        'ep_opendata': 'EP Open Data'
+                    }
+                    source_label = source_map.get(carriage.source.value, carriage.source.value)
+
                 train_files.append({
-                    'train_name': train.name if train else 'Unknown',
+                    'train_name': train.name if train else source_label,
                     'train_priority': train.priority_number if train else None,
                     'file_title': carriage.title,
                     'current_status': carriage.current_status.value if hasattr(carriage.current_status, 'value') else str(carriage.current_status),
@@ -1053,16 +1123,19 @@ class ContextBuilder:
                     'is_blocked': carriage.is_blocked,
                     'committees': carriage.committees or [],
                     'oeil_ref': carriage.oeil_procedure_ref,
+                    'celex_numbers': carriage.celex_numbers or [],
+                    'source': source_label,
+                    'first_seen': carriage.first_seen.isoformat() if carriage.first_seen else None,
                     'description': carriage.description[:300] if carriage.description else None
                 })
 
             db.close()
 
-            logger.debug(f"Found {len(train_files)} Legislative Train files for query")
+            logger.debug(f"Found {len(train_files)} legislative files for query")
             return train_files
 
         except Exception as e:
-            logger.error(f"Failed to fetch legislative train files: {str(e)}")
+            logger.error(f"Failed to fetch legislative files: {str(e)}")
             return []
 
     async def _fetch_eu_laws_from_database(
@@ -1559,23 +1632,31 @@ class ContextBuilder:
 
                 sections.append("")
 
-        # Legislative Train Schedule (EC priorities tracking)
+        # Legislative Files (from all sources: Legislative Train, OEIL, EUR-Lex)
         if context_data.legislative_train_files:
-            sections.append(f"\nLEGISLATIVE TRAIN SCHEDULE ({len(context_data.legislative_train_files)} files):")
-            sections.append("European Commission priorities (2024-2029) - Live tracking of legislative files.")
+            sections.append(f"\nLEGISLATIVE FILES ({len(context_data.legislative_train_files)} files):")
+            sections.append("Sources: Legislative Train (EC priorities), OEIL (EP procedures), EUR-Lex (adopted legislation)")
             for file in context_data.legislative_train_files:
-                sections.append(f"\n- Priority {file['train_priority']}: {file['train_name']}")
+                # Show source and priority if available
+                if file.get('train_priority'):
+                    sections.append(f"\n- Priority {file['train_priority']}: {file['train_name']}")
+                else:
+                    sections.append(f"\n- Source: {file.get('source', 'Unknown')}")
                 sections.append(f"  File: {file['file_title']}")
                 sections.append(f"  Status: {file['current_status']}")
-                if file['is_blocked']:
-                    sections.append(f"  ⚠️  BLOCKED - {file['days_in_current_status']} days in current status")
-                else:
+                if file.get('is_blocked'):
+                    sections.append(f"  [!] BLOCKED - {file['days_in_current_status']} days in current status")
+                elif file.get('days_in_current_status'):
                     sections.append(f"  Days in current status: {file['days_in_current_status']}")
-                if file['committees']:
+                if file.get('first_seen'):
+                    sections.append(f"  Added to Brubru: {file['first_seen'][:10]}")
+                if file.get('committees'):
                     sections.append(f"  Committees: {', '.join(file['committees'][:3])}")
-                if file['oeil_ref']:
+                if file.get('oeil_ref'):
                     sections.append(f"  OEIL procedure: {file['oeil_ref']}")
-                if file['description']:
+                if file.get('celex_numbers'):
+                    sections.append(f"  CELEX: {', '.join(file['celex_numbers'][:3])}")
+                if file.get('description'):
                     sections.append(f"  Description: {file['description']}")
             sections.append("")
 

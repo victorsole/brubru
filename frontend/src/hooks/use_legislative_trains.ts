@@ -27,6 +27,50 @@ export interface LegislativeFile {
   last_updated?: string;
 }
 
+export interface TrackedFile {
+  id: string;
+  carriage_id: string;  // Database UUID for untracking
+  file_id: string;      // Slug for detail endpoint
+  title: string;
+  current_status: string;
+  previous_status?: string;
+  oeil_procedure_ref?: string;
+  celex_numbers?: string[];  // For loading in Amendator
+  lead_committee?: string;
+  tracked_since: string;
+  last_updated?: string;
+  is_blocked?: boolean;
+  days_in_current_status?: number;
+}
+
+export interface LegislativeChange {
+  file_id: string;
+  title: string;
+  change_type: 'status_change' | 'new_document' | 'blocking';
+  old_value?: string;
+  new_value?: string;
+  changed_at: string;
+  description?: string;
+}
+
+export interface KeyPlayer {
+  name: string;
+  role: string;
+  political_group?: string;
+  country?: string;
+  mep_id?: string;
+  photo_url?: string;
+}
+
+export interface TimelineEvent {
+  date: string;
+  event_type: string;
+  description?: string;
+  summary?: string;
+  result?: string;
+  documents?: Array<{ url: string; title?: string }>;
+}
+
 export interface LegislativeTrain {
   id: string;
   priority_number: number;
@@ -79,11 +123,20 @@ interface LegislativeTrainState {
   trains: LegislativeTrain[];
   selectedFile: LegislativeFileDetail | null;
   selectedFileIds: string[];  // For batch AI analysis
+  trackedFiles: TrackedFile[];
+  recentChanges: LegislativeChange[];
+  keyPlayers: KeyPlayer[];
+  timelineEvents: TimelineEvent[];
 
   // Loading states
   isLoadingTrains: boolean;
   isLoadingFileDetail: boolean;
   isAnalyzing: boolean;
+  isLoadingTrackedFiles: boolean;
+  isLoadingChanges: boolean;
+  isLoadingKeyPlayers: boolean;
+  isLoadingTimeline: boolean;
+  isTracking: boolean;
 
   // Actions
   fetchTrains: () => Promise<void>;
@@ -93,6 +146,14 @@ interface LegislativeTrainState {
   toggleFileSelection: (fileId: string) => void;
   clearFileSelection: () => void;
   closeFileDetail: () => void;
+
+  // Tracked files actions
+  fetchTrackedFiles: () => Promise<void>;
+  fetchRecentChanges: (hours?: number) => Promise<void>;
+  trackFile: (identifier: string, byCarriageId?: boolean) => Promise<void>;
+  untrackFile: (identifier: string, byCarriageId?: boolean) => Promise<void>;
+  fetchKeyPlayers: (carriageId: string) => Promise<void>;
+  fetchTimeline: (carriageId: string) => Promise<void>;
 }
 
 export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => ({
@@ -100,9 +161,18 @@ export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => 
   trains: [],
   selectedFile: null,
   selectedFileIds: [],
+  trackedFiles: [],
+  recentChanges: [],
+  keyPlayers: [],
+  timelineEvents: [],
   isLoadingTrains: false,
   isLoadingFileDetail: false,
   isAnalyzing: false,
+  isLoadingTrackedFiles: false,
+  isLoadingChanges: false,
+  isLoadingKeyPlayers: false,
+  isLoadingTimeline: false,
+  isTracking: false,
 
   // Fetch all trains with their files
   fetchTrains: async () => {
@@ -208,5 +278,131 @@ export const useLegislativeTrains = create<LegislativeTrainState>((set, get) => 
   // Close file detail modal
   closeFileDetail: () => {
     set({ selectedFile: null });
+  },
+
+  // Fetch user's tracked files
+  fetchTrackedFiles: async () => {
+    set({ isLoadingTrackedFiles: true });
+
+    try {
+      const response = await axios.get<{ tracked_files: TrackedFile[] }>(
+        `${API_BASE}/legislative-train/tracked`
+      );
+
+      set({
+        trackedFiles: response.data.tracked_files || [],
+        isLoadingTrackedFiles: false,
+      });
+    } catch (error) {
+      console.error('Failed to fetch tracked files:', error);
+      set({ isLoadingTrackedFiles: false });
+    }
+  },
+
+  // Fetch recent changes for tracked files
+  fetchRecentChanges: async (_hours: number = 168) => {
+    set({ isLoadingChanges: true });
+
+    try {
+      // Note: Changes endpoint not yet implemented in legislative-train API
+      // For now, return empty array
+      set({
+        recentChanges: [],
+        isLoadingChanges: false,
+      });
+    } catch (error) {
+      console.error('Failed to fetch recent changes:', error);
+      set({ isLoadingChanges: false });
+    }
+  },
+
+  // Track a legislative file - supports both procedure ref and carriage ID
+  trackFile: async (identifier: string, byCarriageId: boolean = false) => {
+    set({ isTracking: true });
+
+    try {
+      if (byCarriageId) {
+        // Track by carriage UUID
+        await axios.post(`${API_BASE}/legislative-train/track/${identifier}`);
+      } else {
+        // Track by procedure reference
+        await axios.post(
+          `${API_BASE}/legislative-train/track/by-procedure?procedure_ref=${encodeURIComponent(identifier)}`
+        );
+      }
+
+      // Refresh tracked files
+      await get().fetchTrackedFiles();
+
+      set({ isTracking: false });
+    } catch (error) {
+      console.error('Failed to track file:', error);
+      set({ isTracking: false });
+      throw error;
+    }
+  },
+
+  // Untrack a legislative file - supports both procedure ref and carriage ID
+  untrackFile: async (identifier: string, byCarriageId: boolean = false) => {
+    set({ isTracking: true });
+
+    try {
+      if (byCarriageId) {
+        // Untrack by carriage UUID
+        await axios.delete(`${API_BASE}/legislative-train/track/${identifier}`);
+      } else {
+        // Untrack by procedure reference
+        await axios.delete(
+          `${API_BASE}/legislative-train/track/by-procedure?procedure_ref=${encodeURIComponent(identifier)}`
+        );
+      }
+
+      // Refresh tracked files
+      await get().fetchTrackedFiles();
+
+      set({ isTracking: false });
+    } catch (error) {
+      console.error('Failed to untrack file:', error);
+      set({ isTracking: false });
+      throw error;
+    }
+  },
+
+  // Fetch key players for a carriage
+  fetchKeyPlayers: async (carriageId: string) => {
+    set({ isLoadingKeyPlayers: true });
+
+    try {
+      const response = await axios.get<{ key_players: KeyPlayer[] }>(
+        `${API_BASE}/legislative-train/carriages/${carriageId}/key-players`
+      );
+
+      set({
+        keyPlayers: response.data.key_players || [],
+        isLoadingKeyPlayers: false,
+      });
+    } catch (error) {
+      console.error('Failed to fetch key players:', error);
+      set({ isLoadingKeyPlayers: false });
+    }
+  },
+
+  // Fetch timeline events for a carriage
+  fetchTimeline: async (carriageId: string) => {
+    set({ isLoadingTimeline: true });
+
+    try {
+      const response = await axios.get<{ timeline: TimelineEvent[] }>(
+        `${API_BASE}/legislative-train/carriages/${carriageId}/timeline`
+      );
+
+      set({
+        timelineEvents: response.data.timeline || [],
+        isLoadingTimeline: false,
+      });
+    } catch (error) {
+      console.error('Failed to fetch timeline:', error);
+      set({ isLoadingTimeline: false });
+    }
   },
 }));

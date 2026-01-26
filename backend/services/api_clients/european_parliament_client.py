@@ -21,6 +21,11 @@ from enum import Enum
 
 from .base_api_client import BaseAPIClient, AuthType, ResponseFormat
 from .base_rss_client import BaseRSSClient, RSSFeed
+from schemas.scrapers.ep_schemas import (
+    EPVoteResult, EPMepVote, EPDecision, EPMeeting,
+    EPSpeech, EPParliamentaryQuestion, EPProcedureEvent,
+    EPMepDeclaration, EPVotingRecord, EPProcedureTimeline
+)
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +81,7 @@ class EuropeanParliamentClient(BaseAPIClient):
 
     # API Endpoints (v2 REST API)
     BASE_URL = "https://data.europarl.europa.eu/api/v2"
-    ODP_SPARQL = "https://data.europarl.europa.eu/sparql"  # Legacy
+    SPARQL_URL = "https://data.europarl.europa.eu/sparql"  # Separate from REST API
     MEP_REGISTRY_URL = "https://www.europarl.europa.eu/meps/en"  # Legacy
     RSS_BASE_URL = "https://www.europarl.europa.eu/rss"
 
@@ -133,6 +138,28 @@ class EuropeanParliamentClient(BaseAPIClient):
 
         logger.info("Initialized European Parliament API client")
 
+    async def _execute_sparql(self, query: str) -> Dict[str, Any]:
+        """
+        DEPRECATED: EP SPARQL endpoint was converted to a frontend app in 2024.
+
+        The direct SPARQL endpoint is no longer available. Use REST API v2 methods:
+        - get_mep_list() for MEPs
+        - get_procedures() for procedures
+        - get_meetings() for sessions
+
+        Args:
+            query: SPARQL query string
+
+        Returns:
+            Empty results dict (SPARQL no longer available)
+        """
+        logger.warning(
+            "EP SPARQL endpoint no longer provides direct SPARQL access. "
+            "Use REST API v2 methods instead (get_mep_list, get_procedures, etc.)"
+        )
+        # Return empty results to avoid breaking existing code
+        return {"results": {"bindings": []}}
+
     async def search_documents(
         self,
         query: str,
@@ -185,13 +212,7 @@ class EuropeanParliamentClient(BaseAPIClient):
         """
 
         try:
-            response = await self.get(
-                "sparql",
-                params={"query": sparql_query},
-                response_format=ResponseFormat.JSON
-            )
-
-            results = response.json()
+            results = await self._execute_sparql(sparql_query)
             documents = []
 
             if "results" in results and "bindings" in results["results"]:
@@ -315,13 +336,7 @@ class EuropeanParliamentClient(BaseAPIClient):
         """
 
         try:
-            response = await self.get(
-                "sparql",
-                params={"query": sparql_query},
-                response_format=ResponseFormat.JSON
-            )
-
-            results = response.json()
+            results = await self._execute_sparql(sparql_query)
 
             if "results" in results and "bindings" in results["results"]:
                 if results["results"]["bindings"]:
@@ -379,13 +394,7 @@ class EuropeanParliamentClient(BaseAPIClient):
         sparql_query += "\n}\nORDER BY ?code"
 
         try:
-            response = await self.get(
-                "sparql",
-                params={"query": sparql_query},
-                response_format=ResponseFormat.JSON
-            )
-
-            results = response.json()
+            results = await self._execute_sparql(sparql_query)
             committees = []
 
             if "results" in results and "bindings" in results["results"]:
@@ -446,13 +455,7 @@ class EuropeanParliamentClient(BaseAPIClient):
         """
 
         try:
-            response = await self.get(
-                "sparql",
-                params={"query": sparql_query},
-                response_format=ResponseFormat.JSON
-            )
-
-            results = response.json()
+            results = await self._execute_sparql(sparql_query)
             sessions = []
 
             if "results" in results and "bindings" in results["results"]:
@@ -625,6 +628,666 @@ class EuropeanParliamentClient(BaseAPIClient):
             traceback.print_exc()
             return []
 
+    # =========================================================================
+    # Meetings & Vote Results (NEW - EP Open Data API v2)
+    # =========================================================================
+
+    async def get_meetings(
+        self,
+        meeting_type: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        limit: int = 100,
+        offset: int = 0
+    ) -> List[EPMeeting]:
+        """
+        Get parliamentary meetings (plenary sessions, committee meetings)
+
+        Args:
+            meeting_type: Filter by type (plenary-sitting, committee-meeting)
+            start_date: Filter meetings from this date
+            end_date: Filter meetings until this date
+            limit: Maximum results (default: 100, max: 500)
+            offset: Pagination offset
+
+        Returns:
+            List of EPMeeting objects
+        """
+        logger.info(f"Fetching meetings via REST API (type={meeting_type})")
+
+        params = {
+            "limit": min(limit, 500),
+            "offset": offset
+        }
+
+        if meeting_type:
+            params["activity-type"] = meeting_type
+        if start_date:
+            params["start-date"] = start_date.strftime("%Y-%m-%d")
+        if end_date:
+            params["end-date"] = end_date.strftime("%Y-%m-%d")
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                "/meetings",
+                params=params,
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            meetings = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for item in data:
+                    try:
+                        meeting_date = None
+                        date_str = item.get("activityDate") or item.get("date")
+                        if date_str:
+                            meeting_date = datetime.fromisoformat(date_str.replace("Z", "")).date()
+
+                        meetings.append(EPMeeting(
+                            meeting_id=item.get("identifier") or item.get("id", ""),
+                            meeting_type=item.get("activityType") or item.get("type", "unknown"),
+                            date=meeting_date or datetime.now().date(),
+                            location=item.get("hadLocation") or item.get("location"),
+                            title=item.get("label") or item.get("title"),
+                            has_vote_results=bool(item.get("hasVoteResults")),
+                            has_decisions=bool(item.get("hasDecisions")),
+                            source_url=f"https://data.europarl.europa.eu/api/v2/meetings/{item.get('identifier', '')}"
+                        ))
+                    except Exception as e:
+                        logger.warning(f"Failed to parse meeting: {str(e)}")
+                        continue
+
+            logger.info(f"✓ Found {len(meetings)} meetings")
+            return meetings
+
+        except Exception as e:
+            logger.error(f"Meetings fetch failed: {str(e)}")
+            return []
+
+    async def get_meeting_vote_results(
+        self,
+        sitting_id: str
+    ) -> List[EPVoteResult]:
+        """
+        Get vote results from a specific meeting/sitting
+
+        Args:
+            sitting_id: Meeting/sitting identifier
+
+        Returns:
+            List of EPVoteResult objects
+        """
+        logger.info(f"Fetching vote results for sitting: {sitting_id}")
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                f"/meetings/{sitting_id}/vote-results",
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            votes = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for item in data:
+                    try:
+                        vote_date = None
+                        date_str = item.get("voteDate") or item.get("activityDate")
+                        if date_str:
+                            vote_date = datetime.fromisoformat(date_str.replace("Z", "")).date()
+
+                        votes.append(EPVoteResult(
+                            vote_id=item.get("identifier") or item.get("id"),
+                            sitting_id=sitting_id,
+                            sitting_date=vote_date or datetime.now().date(),
+                            title=item.get("label") or item.get("title"),
+                            procedure_reference=item.get("isAboutSubjectMatter") or item.get("procedureReference"),
+                            document_reference=item.get("hadDocumentReferred") or item.get("documentReference"),
+                            result=item.get("decisionOutcome") or item.get("result", "unknown"),
+                            votes_for=item.get("numberVotesFor") or item.get("votesFor"),
+                            votes_against=item.get("numberVotesAgainst") or item.get("votesAgainst"),
+                            abstentions=item.get("numberAbstentions") or item.get("abstentions"),
+                            vote_type=item.get("voteType"),
+                            source_url=f"https://data.europarl.europa.eu/api/v2/meetings/{sitting_id}/vote-results"
+                        ))
+                    except Exception as e:
+                        logger.warning(f"Failed to parse vote result: {str(e)}")
+                        continue
+
+            logger.info(f"✓ Found {len(votes)} vote results")
+            return votes
+
+        except Exception as e:
+            logger.error(f"Vote results fetch failed: {str(e)}")
+            return []
+
+    async def get_meeting_decisions(
+        self,
+        sitting_id: str
+    ) -> List[EPDecision]:
+        """
+        Get decisions from a specific meeting/sitting
+
+        Args:
+            sitting_id: Meeting/sitting identifier
+
+        Returns:
+            List of EPDecision objects
+        """
+        logger.info(f"Fetching decisions for sitting: {sitting_id}")
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                f"/meetings/{sitting_id}/decisions",
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            decisions = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for item in data:
+                    try:
+                        decision_date = None
+                        date_str = item.get("decisionDate") or item.get("activityDate")
+                        if date_str:
+                            decision_date = datetime.fromisoformat(date_str.replace("Z", "")).date()
+
+                        decisions.append(EPDecision(
+                            decision_id=item.get("identifier") or item.get("id"),
+                            sitting_id=sitting_id,
+                            sitting_date=decision_date or datetime.now().date(),
+                            decision_type=item.get("decisionType") or item.get("type", "unknown"),
+                            title=item.get("label") or item.get("title"),
+                            description=item.get("description"),
+                            procedure_reference=item.get("isAboutSubjectMatter"),
+                            outcome=item.get("decisionOutcome"),
+                            source_url=f"https://data.europarl.europa.eu/api/v2/meetings/{sitting_id}/decisions"
+                        ))
+                    except Exception as e:
+                        logger.warning(f"Failed to parse decision: {str(e)}")
+                        continue
+
+            logger.info(f"✓ Found {len(decisions)} decisions")
+            return decisions
+
+        except Exception as e:
+            logger.error(f"Decisions fetch failed: {str(e)}")
+            return []
+
+    # =========================================================================
+    # Procedure Events (NEW - EP Open Data API v2)
+    # =========================================================================
+
+    async def get_procedure_by_reference(
+        self,
+        procedure_reference: str
+    ) -> Optional[Dict[str, Any]]:
+        """
+        Get procedure details by reference (e.g., 2025/0102(COD))
+
+        Args:
+            procedure_reference: Procedure reference number
+
+        Returns:
+            Procedure data or None
+        """
+        logger.info(f"Fetching procedure: {procedure_reference}")
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            # Search procedures with the reference
+            response = await self.get(
+                "/procedures",
+                params={"text": procedure_reference, "limit": 10},
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            data = results.get("data", results) if isinstance(results, dict) else results
+
+            if isinstance(data, list):
+                for proc in data:
+                    # Check if reference matches
+                    proc_ref = proc.get("procedureReference") or proc.get("notation") or ""
+                    if procedure_reference in proc_ref or proc_ref in procedure_reference:
+                        return proc
+
+            return None
+
+        except Exception as e:
+            logger.error(f"Procedure fetch failed: {str(e)}")
+            return None
+
+    async def get_procedure_events(
+        self,
+        process_id: str
+    ) -> List[EPProcedureEvent]:
+        """
+        Get events timeline for a legislative procedure
+
+        Args:
+            process_id: EP internal process identifier
+
+        Returns:
+            List of EPProcedureEvent objects
+        """
+        logger.info(f"Fetching procedure events for: {process_id}")
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                f"/procedures/{process_id}/events",
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            events = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for item in data:
+                    try:
+                        event_date = None
+                        date_str = item.get("activityDate") or item.get("date")
+                        if date_str:
+                            event_date = datetime.fromisoformat(date_str.replace("Z", "")).date()
+
+                        events.append(EPProcedureEvent(
+                            event_id=item.get("identifier") or item.get("id"),
+                            procedure_reference=item.get("isAboutSubjectMatter") or process_id,
+                            event_date=event_date or datetime.now().date(),
+                            event_type=item.get("activityType") or item.get("type", "unknown"),
+                            title=item.get("label") or item.get("title"),
+                            description=item.get("description"),
+                            institution=item.get("wasGeneratedBy"),
+                            outcome=item.get("decisionOutcome"),
+                            source_url=f"https://data.europarl.europa.eu/api/v2/procedures/{process_id}/events"
+                        ))
+                    except Exception as e:
+                        logger.warning(f"Failed to parse procedure event: {str(e)}")
+                        continue
+
+            logger.info(f"✓ Found {len(events)} procedure events")
+            return events
+
+        except Exception as e:
+            logger.error(f"Procedure events fetch failed: {str(e)}")
+            return []
+
+    # =========================================================================
+    # Speeches (NEW - EP Open Data API v2)
+    # =========================================================================
+
+    async def get_speeches(
+        self,
+        mep_id: Optional[str] = None,
+        text: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        language: str = "en",
+        limit: int = 50,
+        offset: int = 0
+    ) -> List[EPSpeech]:
+        """
+        Search MEP speeches/interventions
+
+        Args:
+            mep_id: Filter by MEP identifier
+            text: Search in speech text
+            start_date: Filter from date
+            end_date: Filter until date
+            language: Language filter (default: en)
+            limit: Maximum results
+            offset: Pagination offset
+
+        Returns:
+            List of EPSpeech objects
+        """
+        logger.info(f"Fetching speeches (mep={mep_id}, text={text})")
+
+        params = {
+            "limit": min(limit, 500),
+            "offset": offset,
+            "language": language
+        }
+
+        if mep_id:
+            params["author"] = mep_id
+        if text:
+            params["text"] = text
+        if start_date:
+            params["start-date"] = start_date.strftime("%Y-%m-%d")
+        if end_date:
+            params["end-date"] = end_date.strftime("%Y-%m-%d")
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                "/speeches",
+                params=params,
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            speeches = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for item in data:
+                    try:
+                        speech_date = None
+                        date_str = item.get("activityDate") or item.get("date")
+                        if date_str:
+                            speech_date = datetime.fromisoformat(date_str.replace("Z", "")).date()
+
+                        speeches.append(EPSpeech(
+                            speech_id=item.get("identifier") or item.get("id", ""),
+                            mep_id=item.get("hasAuthor") or item.get("author") or mep_id or "",
+                            mep_name=item.get("authorLabel"),
+                            meeting_id=item.get("wasGeneratedBy"),
+                            meeting_date=speech_date,
+                            title=item.get("label") or item.get("title"),
+                            text=item.get("text"),
+                            language=item.get("language", language),
+                            video_url=item.get("mediaUrl"),
+                            source_url=f"https://data.europarl.europa.eu/api/v2/speeches/{item.get('identifier', '')}"
+                        ))
+                    except Exception as e:
+                        logger.warning(f"Failed to parse speech: {str(e)}")
+                        continue
+
+            logger.info(f"✓ Found {len(speeches)} speeches")
+            return speeches
+
+        except Exception as e:
+            logger.error(f"Speeches fetch failed: {str(e)}")
+            return []
+
+    # =========================================================================
+    # Parliamentary Questions (NEW - EP Open Data API v2)
+    # =========================================================================
+
+    async def get_parliamentary_questions(
+        self,
+        author_mep_id: Optional[str] = None,
+        text: Optional[str] = None,
+        addressee: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        language: str = "en",
+        limit: int = 50,
+        offset: int = 0
+    ) -> List[EPParliamentaryQuestion]:
+        """
+        Search parliamentary questions
+
+        Args:
+            author_mep_id: Filter by author MEP
+            text: Search in question text
+            addressee: Filter by addressee (Commission, Council)
+            start_date: Filter from date
+            end_date: Filter until date
+            language: Language filter
+            limit: Maximum results
+            offset: Pagination offset
+
+        Returns:
+            List of EPParliamentaryQuestion objects
+        """
+        logger.info(f"Fetching parliamentary questions (author={author_mep_id}, text={text})")
+
+        params = {
+            "limit": min(limit, 500),
+            "offset": offset,
+            "language": language
+        }
+
+        if author_mep_id:
+            params["author"] = author_mep_id
+        if text:
+            params["text"] = text
+        if addressee:
+            params["addressee"] = addressee
+        if start_date:
+            params["start-date"] = start_date.strftime("%Y-%m-%d")
+        if end_date:
+            params["end-date"] = end_date.strftime("%Y-%m-%d")
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                "/parliamentary-questions",
+                params=params,
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            questions = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for item in data:
+                    try:
+                        submit_date = None
+                        date_str = item.get("dateDocument") or item.get("date")
+                        if date_str:
+                            submit_date = datetime.fromisoformat(date_str.replace("Z", "")).date()
+
+                        questions.append(EPParliamentaryQuestion(
+                            question_id=item.get("identifier") or item.get("id", ""),
+                            question_reference=item.get("notation") or item.get("reference"),
+                            question_type=item.get("workType") or item.get("type", "written"),
+                            author_mep_ids=[item.get("hasAuthor")] if item.get("hasAuthor") else [],
+                            author_names=[item.get("authorLabel")] if item.get("authorLabel") else [],
+                            addressee=item.get("hasAddressee") or item.get("addressee", "Commission"),
+                            title=item.get("label") or item.get("title", ""),
+                            text=item.get("text"),
+                            language=item.get("language", language),
+                            date_submitted=submit_date,
+                            source_url=f"https://data.europarl.europa.eu/api/v2/parliamentary-questions/{item.get('identifier', '')}"
+                        ))
+                    except Exception as e:
+                        logger.warning(f"Failed to parse question: {str(e)}")
+                        continue
+
+            logger.info(f"✓ Found {len(questions)} parliamentary questions")
+            return questions
+
+        except Exception as e:
+            logger.error(f"Parliamentary questions fetch failed: {str(e)}")
+            return []
+
+    # =========================================================================
+    # MEP Declarations (NEW - EP Open Data API v2)
+    # =========================================================================
+
+    async def get_mep_declarations(
+        self,
+        mep_id: Optional[str] = None,
+        limit: int = 50,
+        offset: int = 0
+    ) -> List[EPMepDeclaration]:
+        """
+        Get MEP declarations of financial interests
+
+        Args:
+            mep_id: Filter by MEP identifier
+            limit: Maximum results
+            offset: Pagination offset
+
+        Returns:
+            List of EPMepDeclaration objects
+        """
+        logger.info(f"Fetching MEP declarations (mep={mep_id})")
+
+        params = {
+            "limit": min(limit, 500),
+            "offset": offset
+        }
+
+        if mep_id:
+            params["author"] = mep_id
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                "/meps-declarations",
+                params=params,
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            declarations = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for item in data:
+                    try:
+                        decl_date = None
+                        date_str = item.get("dateDocument") or item.get("date")
+                        if date_str:
+                            decl_date = datetime.fromisoformat(date_str.replace("Z", "")).date()
+
+                        declarations.append(EPMepDeclaration(
+                            declaration_id=item.get("identifier") or item.get("id"),
+                            mep_id=item.get("hasAuthor") or mep_id or "",
+                            mep_name=item.get("authorLabel"),
+                            declaration_type=item.get("workType") or "financial_interests",
+                            date_declared=decl_date,
+                            content=item,
+                            source_url=f"https://data.europarl.europa.eu/api/v2/meps-declarations/{item.get('identifier', '')}"
+                        ))
+                    except Exception as e:
+                        logger.warning(f"Failed to parse declaration: {str(e)}")
+                        continue
+
+            logger.info(f"✓ Found {len(declarations)} MEP declarations")
+            return declarations
+
+        except Exception as e:
+            logger.error(f"MEP declarations fetch failed: {str(e)}")
+            return []
+
+    # =========================================================================
+    # Current MEPs (NEW - EP Open Data API v2)
+    # =========================================================================
+
+    async def get_current_meps(
+        self,
+        country: Optional[str] = None,
+        political_group: Optional[str] = None,
+        limit: int = 100,
+        offset: int = 0
+    ) -> List[Dict[str, Any]]:
+        """
+        Get current MEPs (as of today)
+
+        Args:
+            country: Filter by country code
+            political_group: Filter by political group
+            limit: Maximum results
+            offset: Pagination offset
+
+        Returns:
+            List of current MEPs
+        """
+        logger.info("Fetching current MEPs via REST API")
+
+        params = {
+            "limit": min(limit, 500),
+            "offset": offset
+        }
+
+        if country:
+            params["country-of-representation"] = country
+        if political_group:
+            params["political-group"] = political_group
+
+        headers = {
+            "User-Agent": "Brubru-API-Client-1.0.0",
+            "Accept": "application/ld+json"
+        }
+
+        try:
+            response = await self.get(
+                "/meps/show-current",
+                params=params,
+                headers=headers,
+                response_format=ResponseFormat.JSON
+            )
+
+            results = response.json()
+            meps = []
+
+            data = results.get("data", results) if isinstance(results, dict) else results
+            if isinstance(data, list):
+                for mep_data in data:
+                    meps.append({
+                        "id": mep_data.get("identifier", mep_data.get("id")),
+                        "name": mep_data.get("label", ""),
+                        "given_name": mep_data.get("givenName", ""),
+                        "family_name": mep_data.get("familyName", ""),
+                        "country": mep_data.get("countryOfRepresentation"),
+                        "political_group": mep_data.get("hasPoliticalGroup"),
+                        "type": mep_data.get("type", "Person")
+                    })
+
+            logger.info(f"✓ Found {len(meps)} current MEPs")
+            return meps
+
+        except Exception as e:
+            logger.error(f"Current MEPs fetch failed: {str(e)}")
+            return []
+
     async def get_latest_news(
         self,
         hours: int = 24,
@@ -679,13 +1342,9 @@ class EuropeanParliamentClient(BaseAPIClient):
             True if healthy
         """
         try:
-            # Try to fetch a simple SPARQL query
-            response = await self.get(
-                "sparql",
-                params={"query": "ASK { ?s ?p ?o } LIMIT 1"},
-                response_format=ResponseFormat.JSON
-            )
-            return response.status_code == 200
+            # Use REST API v2 to check health (SPARQL no longer available)
+            meps = await self.get_mep_list(limit=1)
+            return len(meps) > 0
         except Exception as e:
             logger.error(f"Health check failed: {str(e)}")
             return False

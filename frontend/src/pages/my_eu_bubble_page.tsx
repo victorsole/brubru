@@ -2,18 +2,19 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
-import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain } from '@mdi/js';
+import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline } from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { DocumentsTab } from '../components/bubble/documents_tab';
 import { AmendmentsTab } from '../components/bubble/amendments_tab';
 import { AnalyticsTab } from '../components/bubble/analytics_tab';
 import { LegislativeTrackerTab } from '../components/bubble/legislative_tracker_tab';
+import { MyTrackedFilesTab } from '../components/bubble/my_tracked_files_tab';
 import { NewsSidebar } from '../components/bubble/news_sidebar';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import './my_eu_bubble_page.css';
 
-type TabType = 'dashboard' | 'documents' | 'amendments' | 'analytics' | 'legislative';
+type TabType = 'dashboard' | 'my_files' | 'documents' | 'amendments' | 'analytics' | 'legislative';
 
 export const MyEUBubblePage = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ export const MyEUBubblePage = () => {
 
   const tabs = [
     { id: 'dashboard' as TabType, label: t('bubble.dashboard'), icon: mdiViewDashboard },
+    { id: 'my_files' as TabType, label: 'My Files', icon: mdiStarOutline },
     { id: 'documents' as TabType, label: t('bubble.documents'), icon: mdiFileDocument },
     { id: 'amendments' as TabType, label: t('bubble.amendments'), icon: mdiFileEdit },
     { id: 'legislative' as TabType, label: 'Legislative Tracker', icon: mdiTrain },
@@ -32,6 +34,8 @@ export const MyEUBubblePage = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardTab />;
+      case 'my_files':
+        return <MyTrackedFilesTab />;
       case 'documents':
         return <DocumentsTab />;
       case 'amendments':

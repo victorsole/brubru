@@ -61,16 +61,21 @@ export const AmendmentSidebar = ({
 
     setIsExporting(true);
     try {
+      // Get auth token
+      const token = localStorage.getItem('access_token');
+
       // Call backend export API
       const response = await fetch(`${API_BASE}/amendments/export/${documentId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
         },
       });
 
       if (!response.ok) {
-        throw new Error('Failed to export amendments');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to export amendments');
       }
 
       // Get the blob from response
@@ -187,7 +192,7 @@ export const AmendmentSidebar = ({
           onClick={handleExport}
           disabled={isExporting || amendments.length === 0}
         >
-          {isExporting ? t('amendments.exporting') : exportSuccess ? `✓ ${t('amendments.exported')}` : t('amendments.exportAll')}
+          {isExporting ? t('amendments.exporting') : exportSuccess ? <><span className="mdi mdi-check"></span> {t('amendments.exported')}</> : t('amendments.exportAll')}
         </button>
       </div>
     </div>

@@ -1,0 +1,201 @@
+/* Tracked Files Loader for Amendator */
+
+.tracked-files-loader {
+  padding: 1.5rem;
+  background: var(--bg-secondary, #f8f9fa);
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.tracked-files-loader__header {
+  margin-bottom: 1rem;
+}
+
+.tracked-files-loader__title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.tracked-files-loader__hint {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary, #666);
+}
+
+.tracked-files-loader__search {
+  margin-bottom: 1rem;
+}
+
+.tracked-files-loader__search-input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 6px;
+  background: var(--bg-primary, #fff);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tracked-files-loader__search-input:focus {
+  outline: none;
+  border-color: var(--primary-color, #0066cc);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.tracked-files-loader__error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: 6px;
+  color: #c62828;
+  font-size: 0.875rem;
+}
+
+.tracked-files-loader__error-icon {
+  flex-shrink: 0;
+}
+
+.tracked-files-loader__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.tracked-files-loader__loading,
+.tracked-files-loader__empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary, #666);
+  font-size: 0.875rem;
+}
+
+.tracked-files-loader__empty-hint {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted, #999);
+}
+
+.tracked-files-loader__item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem;
+  background: var(--bg-primary, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 6px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tracked-files-loader__item:hover {
+  border-color: var(--primary-color, #0066cc);
+}
+
+.tracked-files-loader__item--selected {
+  border-color: var(--primary-color, #0066cc);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.tracked-files-loader__item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tracked-files-loader__item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+}
+
+.tracked-files-loader__status {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: 3px;
+}
+
+.tracked-files-loader__status.status--adopted {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.tracked-files-loader__status.status--tabled {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.tracked-files-loader__status.status--blocked {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.tracked-files-loader__status.status--withdrawn {
+  background: #fafafa;
+  color: #757575;
+}
+
+.tracked-files-loader__status.status--announced {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.tracked-files-loader__committee {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #666);
+  font-weight: 500;
+}
+
+.tracked-files-loader__item-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary, #1a1a1a);
+  line-height: 1.3;
+  /* Truncate long titles */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tracked-files-loader__item-ref {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted, #999);
+  font-family: monospace;
+}
+
+.tracked-files-loader__load-button {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+}
+
+/* Scrollbar styling */
+.tracked-files-loader__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tracked-files-loader__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tracked-files-loader__list::-webkit-scrollbar-thumb {
+  background: var(--border-color, #e0e0e0);
+  border-radius: 3px;
+}
+
+.tracked-files-loader__list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted, #999);
+}

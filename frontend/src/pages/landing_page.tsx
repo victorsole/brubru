@@ -68,20 +68,20 @@ export const LandingPage = () => {
         <div className="landing__pricing-grid">
           {/* White Tier */}
           <div className="landing__pricing-card">
-            <div className="landing__pricing-badge">🤍 WHITE</div>
+            <div className="landing__pricing-badge"><span className="mdi mdi-heart-outline"></span> WHITE</div>
             <h3>Basic</h3>
             <div className="landing__pricing-price">
               <span className="landing__pricing-amount">€0</span>
               <span className="landing__pricing-period">/month</span>
             </div>
             <ul className="landing__pricing-features">
-              <li>✓ Basic AI chat</li>
-              <li>✓ Search EU legislation</li>
-              <li>✓ View MEP profiles and Parliament data</li>
-              <li>✓ 5 amendments/month</li>
-              <li>✓ Save up to 5 searches</li>
-              <li>✗ Watermark on exports</li>
-              <li>✗ No PDF/Word downloads (XML/HTML only)</li>
+              <li><span className="mdi mdi-check"></span> Basic AI chat</li>
+              <li><span className="mdi mdi-check"></span> Search EU legislation</li>
+              <li><span className="mdi mdi-check"></span> View MEP profiles and Parliament data</li>
+              <li><span className="mdi mdi-check"></span> 5 amendments/month</li>
+              <li><span className="mdi mdi-check"></span> Save up to 5 searches</li>
+              <li><span className="mdi mdi-close"></span> Watermark on exports</li>
+              <li><span className="mdi mdi-close"></span> No PDF/Word downloads (XML/HTML only)</li>
             </ul>
             <Link to="/signup" className="btn btn--outline">
               Start Free
@@ -91,7 +91,7 @@ export const LandingPage = () => {
           {/* Yellow Tier */}
           <div className="landing__pricing-card landing__pricing-card--featured">
             <div className="landing__pricing-badge landing__pricing-badge--popular">
-              💛 YELLOW • MOST POPULAR
+              <span className="mdi mdi-heart landing__pricing-badge-icon--yellow"></span> YELLOW • MOST POPULAR
             </div>
             <h3>Professional</h3>
             <div className="landing__pricing-price">
@@ -102,17 +102,17 @@ export const LandingPage = () => {
               or €790/year (save €158)
             </p>
             <ul className="landing__pricing-features">
-              <li>✓ Everything in White</li>
-              <li>✓ Unlimited amendments</li>
-              <li>✓ Advanced AI</li>
-              <li>✓ Priority response time</li>
-              <li>✓ No watermark</li>
-              <li>✓ PDF/Word downloads</li>
-              <li>✓ Save unlimited searches</li>
-              <li>✓ Advanced search & filters</li>
-              <li>✓ Custom RSS alerts</li>
-              <li>✓ Email support (48h response)</li>
-              <li>✓ API access (1,000 calls/month)</li>
+              <li><span className="mdi mdi-check"></span> Everything in White</li>
+              <li><span className="mdi mdi-check"></span> Unlimited amendments</li>
+              <li><span className="mdi mdi-check"></span> Advanced AI</li>
+              <li><span className="mdi mdi-check"></span> Priority response time</li>
+              <li><span className="mdi mdi-check"></span> No watermark</li>
+              <li><span className="mdi mdi-check"></span> PDF/Word downloads</li>
+              <li><span className="mdi mdi-check"></span> Save unlimited searches</li>
+              <li><span className="mdi mdi-check"></span> Advanced search & filters</li>
+              <li><span className="mdi mdi-check"></span> Custom RSS alerts</li>
+              <li><span className="mdi mdi-check"></span> Email support (48h response)</li>
+              <li><span className="mdi mdi-check"></span> API access (1,000 calls/month)</li>
             </ul>
             <Link to="/signup?tier=yellow" className="btn btn--primary">
               Start 14-Day Trial
@@ -121,21 +121,21 @@ export const LandingPage = () => {
 
           {/* Blue Tier */}
           <div className="landing__pricing-card">
-            <div className="landing__pricing-badge">💙 BLUE</div>
+            <div className="landing__pricing-badge"><span className="mdi mdi-heart landing__pricing-badge-icon--blue"></span> BLUE</div>
             <h3>Enterprise</h3>
             <div className="landing__pricing-price">
               <span className="landing__pricing-amount" style={{ fontSize: '1.5rem' }}>Custom pricing</span>
             </div>
             <p className="landing__pricing-note">5+ users - Contact us for a tailored quote</p>
             <ul className="landing__pricing-features">
-              <li>✓ Everything in Yellow</li>
-              <li>✓ Multi-user teams (5+)</li>
-              <li><strong>✓ Domain specialisation</strong></li>
+              <li><span className="mdi mdi-check"></span> Everything in Yellow</li>
+              <li><span className="mdi mdi-check"></span> Multi-user teams (5+)</li>
+              <li><strong><span className="mdi mdi-check"></span> Domain specialisation</strong></li>
               <li>&nbsp;&nbsp;&nbsp;(agriculture, transport, etc.)</li>
-              <li>✓ Custom knowledge base</li>
-              <li>✓ Dedicated account manager</li>
-              <li>✓ Priority support</li>
-              <li>✓ Onboarding & training</li>
+              <li><span className="mdi mdi-check"></span> Custom knowledge base</li>
+              <li><span className="mdi mdi-check"></span> Dedicated account manager</li>
+              <li><span className="mdi mdi-check"></span> Priority support</li>
+              <li><span className="mdi mdi-check"></span> Onboarding & training</li>
             </ul>
             <a href="mailto:helloberesol@gmail.com" className="btn btn--outline">
               Contact Us

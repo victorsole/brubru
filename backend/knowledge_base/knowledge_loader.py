@@ -1116,6 +1116,20 @@ class KnowledgeLoader:
             'position paper': 'public_affairs_industry',
             'brief': 'public_affairs_industry',
             'briefing': 'public_affairs_industry',
+            # Brubru Features
+            'brubru': 'brubru_features',
+            'tracked files': 'brubru_features',
+            'track file': 'brubru_features',
+            'my eu bubble': 'brubru_features',
+            'legislative train': 'brubru_features',
+            'oeil sync': 'brubru_features',
+            'eurlex sync': 'brubru_features',
+            'eur-lex sync': 'brubru_features',
+            'celex': 'brubru_features',
+            'procedure reference': 'brubru_features',
+            'data sources': 'brubru_features',
+            'amendator': 'brubru_features',
+            'load from tracked': 'brubru_features',
         }
 
         # Check direct mapping

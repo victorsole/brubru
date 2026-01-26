@@ -1,5 +1,14 @@
 /* Header Component Styles */
 
+/* Navigation Icon Color Variables */
+:root {
+  --nav-color-main: #0693e3;
+  --nav-color-bubble: #9b51e0;
+  --nav-color-amendator: #059669;
+  --nav-color-comply: #9ca3af;
+  --nav-color-tender: #d97706;
+}
+
 .header {
   width: 100%;
   background-color: var(--color-secondary);
@@ -89,6 +98,163 @@
   background-color: var(--color-accent-blue);
   animation: slideInUnderline 0.3s ease-out;
   transform-origin: left;
+}
+
+/* Icon Navigation Buttons */
+.header__nav-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0 8px;
+  border-radius: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.header__nav-icon-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header__nav-icon-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover state - expand and show label */
+.header__nav-icon-btn:hover {
+  width: auto;
+  padding: 0 16px;
+  gap: 8px;
+  background-color: var(--color-gray-50);
+}
+
+.header__nav-icon-btn:hover svg {
+  transform: scale(1.1);
+}
+
+.header__nav-icon-btn:hover .header__nav-icon-label {
+  opacity: 1;
+  max-width: 120px;
+  animation: navLabelSlideIn 0.3s ease-out forwards;
+}
+
+/* Active state - colored icon with underline */
+.header__nav-icon-btn--active {
+  color: inherit;
+}
+
+.header__nav-icon-btn--active::after {
+  content: '';
+  position: absolute;
+  bottom: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  animation: slideInUnderline 0.3s ease-out;
+}
+
+/* Color variants */
+.header__nav-icon-btn--blue:hover,
+.header__nav-icon-btn--blue.header__nav-icon-btn--active {
+  color: var(--nav-color-main);
+}
+
+.header__nav-icon-btn--blue:hover {
+  background-color: rgba(6, 147, 227, 0.08);
+}
+
+.header__nav-icon-btn--blue.header__nav-icon-btn--active::after {
+  background-color: var(--nav-color-main);
+}
+
+.header__nav-icon-btn--purple:hover,
+.header__nav-icon-btn--purple.header__nav-icon-btn--active {
+  color: var(--nav-color-bubble);
+}
+
+.header__nav-icon-btn--purple:hover {
+  background-color: rgba(155, 81, 224, 0.08);
+}
+
+.header__nav-icon-btn--purple.header__nav-icon-btn--active::after {
+  background-color: var(--nav-color-bubble);
+}
+
+.header__nav-icon-btn--green:hover,
+.header__nav-icon-btn--green.header__nav-icon-btn--active {
+  color: var(--nav-color-amendator);
+}
+
+.header__nav-icon-btn--green:hover {
+  background-color: rgba(5, 150, 105, 0.08);
+}
+
+.header__nav-icon-btn--green.header__nav-icon-btn--active::after {
+  background-color: var(--nav-color-amendator);
+}
+
+.header__nav-icon-btn--silver:hover,
+.header__nav-icon-btn--silver.header__nav-icon-btn--active {
+  color: var(--nav-color-comply);
+}
+
+.header__nav-icon-btn--silver:hover {
+  background-color: rgba(156, 163, 175, 0.08);
+}
+
+.header__nav-icon-btn--silver.header__nav-icon-btn--active::after {
+  background-color: var(--nav-color-comply);
+}
+
+.header__nav-icon-btn--gold:hover,
+.header__nav-icon-btn--gold.header__nav-icon-btn--active {
+  color: var(--nav-color-tender);
+}
+
+.header__nav-icon-btn--gold:hover {
+  background-color: rgba(217, 119, 6, 0.08);
+}
+
+.header__nav-icon-btn--gold.header__nav-icon-btn--active::after {
+  background-color: var(--nav-color-tender);
+}
+
+/* Animation keyframes */
+@keyframes navLabelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUnderline {
+  from {
+    transform: translateX(-50%) scaleX(0);
+  }
+  to {
+    transform: translateX(-50%) scaleX(1);
+  }
 }
 
 .header__actions {
@@ -308,5 +474,26 @@
   .header__user-dropdown {
     min-width: 200px;
     right: -8px;
+  }
+
+  /* Mobile icon buttons */
+  .header__nav-icon-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0 6px;
+  }
+
+  .header__nav-icon-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .header__nav-icon-btn:hover {
+    padding: 0 12px;
+  }
+
+  .header__nav-icon-btn--active::after {
+    bottom: -12px;
+    width: 20px;
   }
 }

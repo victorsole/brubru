@@ -2,9 +2,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Icon from '@mdi/react';
+import {
+  mdiChatProcessingOutline,
+  mdiGlassMugVariant,
+  mdiFileEditOutline,
+  mdiScaleBalance,
+  mdiPiggyBankOutline
+} from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
-import { translationService } from '../../services/translation_service';
+import { SUPPORTED_LANGUAGES, LANGUAGE_NAMES } from '../../i18n/config';
+import type { SupportedLanguage } from '../../i18n/config';
 import { useTour } from '../tour';
+import { NotificationDropdown } from './notification_dropdown';
 import './header.css';
 
 export const Header = () => {
@@ -64,16 +74,13 @@ export const Header = () => {
   };
 
   const handleLanguageChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLanguage = event.target.value;
-    console.log('🔄 Header: Language change requested to:', newLanguage);
-    console.log('📍 Current language:', i18n.language);
+    const newLanguage = event.target.value as SupportedLanguage;
     setIsLoadingLanguage(true);
 
     try {
-      await translationService.changeLanguage(newLanguage);
-      console.log('✅ Header: Language change complete');
+      await i18n.changeLanguage(newLanguage);
     } catch (error) {
-      console.error('❌ Header: Failed to change language:', error);
+      console.error('[ERROR] Failed to change language:', error);
     } finally {
       setIsLoadingLanguage(false);
     }
@@ -94,38 +101,27 @@ export const Header = () => {
         </div>
 
         <nav className="header__nav">
-          <Link
-            to="/main"
-            className={`header__nav-link ${isActive('/main') ? 'header__nav-link--active' : ''}`}
-          >
-            {t('header.main')}
-          </Link>
-          <Link
-            to="/my-eu-bubble"
-            className={`header__nav-link ${isActive('/my-eu-bubble') ? 'header__nav-link--active' : ''}`}
-          >
-            {t('header.myEuBubble')}
-          </Link>
-          <Link
-            to="/amendator"
-            className={`header__nav-link ${isActive('/amendator') ? 'header__nav-link--active' : ''}`}
-          >
-            {t('header.amendator')}
-          </Link>
-          <Link
-            to="/eulawcomply"
-            className={`header__nav-link ${isActive('/eulawcomply') ? 'header__nav-link--active' : ''}`}
-          >
-            {t('header.euLawComply')}
-          </Link>
-          {hasBlueAccess && (
-            <Link
-              to="/tenderator"
-              className={`header__nav-link ${isActive('/tenderator') ? 'header__nav-link--active' : ''}`}
-            >
-              {t('header.tenderator')}
-            </Link>
-          )}
+          {[
+            { path: '/main', icon: mdiChatProcessingOutline, labelKey: 'header.main', color: 'blue' },
+            { path: '/my-eu-bubble', icon: mdiGlassMugVariant, labelKey: 'header.myEuBubble', color: 'purple' },
+            { path: '/amendator', icon: mdiFileEditOutline, labelKey: 'header.amendator', color: 'green' },
+            { path: '/eulawcomply', icon: mdiScaleBalance, labelKey: 'header.euLawComply', color: 'silver' },
+            { path: '/tenderator', icon: mdiPiggyBankOutline, labelKey: 'header.tenderator', color: 'gold', requiresBlue: true },
+          ].map((item) => {
+            if (item.requiresBlue && !hasBlueAccess) return null;
+            const active = isActive(item.path);
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`header__nav-icon-btn header__nav-icon-btn--${item.color}${active ? ' header__nav-icon-btn--active' : ''}`}
+                aria-label={t(item.labelKey)}
+              >
+                <Icon path={item.icon} size={1} />
+                <span className="header__nav-icon-label">{t(item.labelKey)}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="header__actions">
@@ -137,47 +133,29 @@ export const Header = () => {
               disabled={isLoadingLanguage}
               aria-label="Select language"
             >
-              <option value="bg">Български (Bulgarian)</option>
-              <option value="hr">Hrvatski (Croatian)</option>
-              <option value="cs">Čeština (Czech)</option>
-              <option value="da">Dansk (Danish)</option>
-              <option value="nl">Nederlands (Dutch)</option>
-              <option value="en">English</option>
-              <option value="et">Eesti (Estonian)</option>
-              <option value="fi">Suomi (Finnish)</option>
-              <option value="fr">Français (French)</option>
-              <option value="de">Deutsch (German)</option>
-              <option value="el">Ελληνικά (Greek)</option>
-              <option value="hu">Magyar (Hungarian)</option>
-              <option value="ga">Gaeilge (Irish)</option>
-              <option value="it">Italiano (Italian)</option>
-              <option value="lv">Latviešu (Latvian)</option>
-              <option value="lt">Lietuvių (Lithuanian)</option>
-              <option value="mt">Malti (Maltese)</option>
-              <option value="pl">Polski (Polish)</option>
-              <option value="pt">Português (Portuguese)</option>
-              <option value="ro">Română (Romanian)</option>
-              <option value="sk">Slovenčina (Slovak)</option>
-              <option value="sl">Slovenščina (Slovenian)</option>
-              <option value="es">Español (Spanish)</option>
-              <option value="sv">Svenska (Swedish)</option>
-              <option value="ca">Català (Catalan)</option>
+              {SUPPORTED_LANGUAGES.map((lang) => (
+                <option key={lang} value={lang}>
+                  {LANGUAGE_NAMES[lang]}
+                </option>
+              ))}
             </select>
           </div>
 
           {user && (
-            <div className="header__user" ref={dropdownRef}>
-              <button
-                className="header__user-button"
-                onClick={() => setShowDropdown(!showDropdown)}
-                aria-label="User menu"
-              >
-                <img
-                  src="/assets/brubru_icon.png"
-                  alt="User"
-                  className="header__user-icon"
-                />
-              </button>
+            <>
+              <NotificationDropdown />
+              <div className="header__user" ref={dropdownRef}>
+                <button
+                  className="header__user-button"
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  aria-label="User menu"
+                >
+                  <img
+                    src="/assets/brubru_icon.png"
+                    alt="User"
+                    className="header__user-icon"
+                  />
+                </button>
 
               {showDropdown && (
                 <div className="header__user-dropdown">
@@ -226,7 +204,8 @@ export const Header = () => {
                   </button>
                 </div>
               )}
-            </div>
+              </div>
+            </>
           )}
         </div>
       </div>

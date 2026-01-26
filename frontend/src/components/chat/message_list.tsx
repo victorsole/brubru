@@ -112,7 +112,7 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
     const procedurePattern = /\b(\d{4}\/\d{4}\([A-Z]{2,5}\))\b/g;
     return text.replace(
       procedurePattern,
-      '<a href="https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=$1" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--procedure">$1</a>'
+      '<a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=$1" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--procedure">$1</a>'
     );
   };
 
@@ -202,18 +202,18 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
     );
   };
 
-  const getCitationIcon = (type: string): string => {
+  const getCitationIconClass = (type: string): string => {
     switch (type) {
       case 'legislation':
-        return '📜';
+        return 'mdi mdi-script-text';
       case 'procedure':
-        return '⚖️';
+        return 'mdi mdi-scale-balance';
       case 'mep':
-        return '👤';
+        return 'mdi mdi-account';
       case 'news':
-        return '📰';
+        return 'mdi mdi-newspaper';
       default:
-        return '📄';
+        return 'mdi mdi-file-document';
     }
   };
 
@@ -257,7 +257,7 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
             {/* Context Indicator */}
             {message.role === 'assistant' && message.contextsUsed !== undefined && message.contextsUsed > 0 && (
               <div className="message-list__context-indicator">
-                <span className="message-list__context-icon">🔍</span>
+                <span className="message-list__context-icon mdi mdi-magnify"></span>
                 <span>Used {message.contextsUsed} EU document{message.contextsUsed > 1 ? 's' : ''}</span>
                 {message.searchTimeMs && (
                   <span className="message-list__context-time">
@@ -286,8 +286,7 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
                     {message.citations.map((citation) => (
                       <div key={citation.id} className="message-list__citation">
                         <div className="message-list__citation-header">
-                          <span className="message-list__citation-icon">
-                            {getCitationIcon(citation.type)}
+                          <span className={`message-list__citation-icon ${getCitationIconClass(citation.type)}`}>
                           </span>
                           <span className="message-list__citation-number">[{citation.id}]</span>
                           <span className="message-list__citation-type">
@@ -331,7 +330,7 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
             {/* Token Usage (optional metadata) */}
             {message.role === 'assistant' && message.tokensUsed && (
               <div className="message-list__metadata">
-                <span>🔢 {message.tokensUsed} tokens</span>
+                <span><span className="mdi mdi-counter"></span> {message.tokensUsed} tokens</span>
               </div>
             )}
 

@@ -31,6 +31,7 @@ from models.rss_feed import RSSFeed
 from models.rss_entry import RSSEntry
 from .rss_aggregator import RSSAggregator, AggregatedFeedEntry
 from services.ai.content_analyzer import ContentAnalyzer
+from services.notification_service import NotificationService
 
 logger = logging.getLogger(__name__)
 
@@ -247,6 +248,7 @@ class RSSProcessor:
             Statistics (new, duplicates)
         """
         stats = {"new": 0, "duplicates": 0}
+        new_entry_ids = []  # Collect IDs for notification generation
 
         for agg_entry in entries:
             try:
@@ -284,13 +286,53 @@ class RSSProcessor:
 
                 # Add to database
                 self.db.add(entry)
+                self.db.flush()  # Get ID for notification
+                new_entry_ids.append(str(entry.id))
                 stats["new"] += 1
 
             except Exception as e:
                 logger.error(f"Failed to process entry '{agg_entry.title}': {str(e)}")
                 continue
 
+        # Generate notifications for new entries
+        if new_entry_ids:
+            self._generate_notifications_for_entries(new_entry_ids)
+
         return stats
+
+    def _generate_notifications_for_entries(self, entry_ids: List[str]):
+        """
+        Generate notifications for newly added RSS entries.
+
+        Args:
+            entry_ids: List of new entry UUIDs
+        """
+        try:
+            notification_service = NotificationService(self.db)
+
+            for entry_id in entry_ids:
+                try:
+                    # This is sync but NotificationService methods work synchronously
+                    # The generate_rss_entry_notifications is async but we call it in a fire-and-forget manner
+                    import asyncio
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                        # Schedule as a task if event loop is already running
+                        asyncio.create_task(
+                            notification_service.generate_rss_entry_notifications(entry_id)
+                        )
+                    else:
+                        # Run synchronously if no event loop
+                        loop.run_until_complete(
+                            notification_service.generate_rss_entry_notifications(entry_id)
+                        )
+                except Exception as e:
+                    logger.warning(f"Failed to generate notification for entry {entry_id}: {e}")
+
+            logger.info(f"Triggered notifications for {len(entry_ids)} new RSS entries")
+
+        except Exception as e:
+            logger.error(f"Failed to generate RSS notifications: {e}")
 
     def _is_duplicate(self, feed_id, agg_entry: AggregatedFeedEntry) -> bool:
         """

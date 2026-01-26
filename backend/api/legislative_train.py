@@ -16,7 +16,8 @@ from models.legislative_train import (
     LegislativeTrain,
     LegislativeCarriage,
     UserCarriageTrack,
-    CarriageStatusEnum
+    CarriageStatusEnum,
+    CarriageSourceEnum
 )
 from schemas.scrapers.legislative_train_schemas import (
     LegislativeTrain as TrainSchema,
@@ -34,6 +35,9 @@ from schemas.scrapers.legislative_train_schemas import (
 from services.scrapers.legislative_train_scraper import LegislativeTrainScraper
 from services.scrapers.legislative_train_enricher import LegislativeTrainEnricher
 from services.scrapers.legislative_train_analyzer import LegislativeTrainAnalyzer
+from services.scrapers.oeil_scraper import OEILScraper
+from services.api_clients.eurlex_client import EURLexClient
+from services.api_clients.european_parliament_client import EuropeanParliamentClient
 from .auth import get_current_user
 
 import logging
@@ -110,7 +114,7 @@ async def get_carriages(
     committee: Optional[str] = Query(None, description="Filter by committee"),
     is_blocked: Optional[bool] = Query(None, description="Filter blocked files"),
     policy_areas: Optional[str] = Query(None, description="Filter by policy areas (comma-separated)"),
-    limit: int = Query(50, ge=1, le=200),
+    limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db)
 ) -> CarriageListResponse:
@@ -311,8 +315,8 @@ async def predict_carriage_timeline(
 
 @router.post(
     "/track/{carriage_id}",
-    summary="Track legislative file",
-    description="Subscribe to status updates for a legislative file"
+    summary="Track legislative file by ID",
+    description="Subscribe to status updates for a legislative file by carriage UUID"
 )
 async def track_carriage(
     carriage_id: UUID,
@@ -357,6 +361,66 @@ async def track_carriage(
         raise HTTPException(status_code=500, detail="Failed to track file")
 
 
+@router.post(
+    "/track/by-procedure",
+    summary="Track legislative file by procedure reference",
+    description="Subscribe to status updates using OEIL procedure reference (e.g., 2021/0106(COD))"
+)
+async def track_carriage_by_procedure(
+    procedure_ref: str = Query(..., description="OEIL procedure reference"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Track a legislative file by OEIL procedure reference"""
+    try:
+        # Find carriage by procedure reference
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.oeil_procedure_ref == procedure_ref
+        ).first()
+
+        if not carriage:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No legislative file found for procedure: {procedure_ref}"
+            )
+
+        # Check if already tracking
+        existing = db.query(UserCarriageTrack).filter(
+            UserCarriageTrack.user_id == current_user.id,
+            UserCarriageTrack.carriage_id == carriage.id
+        ).first()
+
+        if existing:
+            return {
+                "message": "Already tracking this file",
+                "carriage_id": str(carriage.id),
+                "procedure_ref": procedure_ref
+            }
+
+        # Create tracking record
+        track = UserCarriageTrack(
+            user_id=current_user.id,
+            carriage_id=carriage.id
+        )
+
+        db.add(track)
+        db.commit()
+
+        return {
+            "message": "Now tracking legislative file",
+            "carriage_id": str(carriage.id),
+            "procedure_ref": procedure_ref,
+            "title": carriage.title
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to track carriage by procedure: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to track file")
+
+
 @router.delete(
     "/track/{carriage_id}",
     summary="Untrack legislative file",
@@ -390,30 +454,1263 @@ async def untrack_carriage(
         raise HTTPException(status_code=500, detail="Failed to untrack file")
 
 
+@router.delete(
+    "/track/by-procedure",
+    summary="Untrack legislative file by procedure reference",
+    description="Unsubscribe from status updates using OEIL procedure reference"
+)
+async def untrack_carriage_by_procedure(
+    procedure_ref: str = Query(..., description="OEIL procedure reference"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Stop tracking a legislative file by OEIL procedure reference"""
+    try:
+        # Find carriage by procedure reference
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.oeil_procedure_ref == procedure_ref
+        ).first()
+
+        if not carriage:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No legislative file found for procedure: {procedure_ref}"
+            )
+
+        # Find tracking record
+        track = db.query(UserCarriageTrack).filter(
+            UserCarriageTrack.user_id == current_user.id,
+            UserCarriageTrack.carriage_id == carriage.id
+        ).first()
+
+        if not track:
+            raise HTTPException(status_code=404, detail="Not tracking this file")
+
+        db.delete(track)
+        db.commit()
+
+        return {
+            "message": "Stopped tracking legislative file",
+            "procedure_ref": procedure_ref
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to untrack carriage by procedure: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to untrack file")
+
+
 @router.get(
     "/tracked",
-    response_model=List[CarriageSchema],
     summary="Get tracked files",
     description="Get all legislative files tracked by current user"
 )
 async def get_tracked_carriages(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
-) -> List[CarriageSchema]:
-    """Get user's tracked legislative files"""
+):
+    """Get user's tracked legislative files with tracking metadata"""
     try:
+        from datetime import datetime, timezone
+
+        # Get tracks with carriage data
         tracks = db.query(UserCarriageTrack).filter(
             UserCarriageTrack.user_id == current_user.id
         ).all()
 
-        carriage_ids = [t.carriage_id for t in tracks]
+        tracked_files = []
+        for track in tracks:
+            carriage = db.query(LegislativeCarriage).filter(
+                LegislativeCarriage.id == track.carriage_id
+            ).first()
 
-        carriages = db.query(LegislativeCarriage).filter(
-            LegislativeCarriage.id.in_(carriage_ids)
-        ).all()
+            if carriage:
+                # Use days_in_current_status from model, or calculate from last_updated
+                days_in_status = carriage.days_in_current_status
+                if days_in_status is None and carriage.last_updated:
+                    delta = datetime.now(timezone.utc) - carriage.last_updated.replace(tzinfo=timezone.utc)
+                    days_in_status = delta.days
 
-        return [CarriageSchema.model_validate(c) for c in carriages]
+                tracked_files.append({
+                    "id": str(track.id),
+                    "carriage_id": str(carriage.id),
+                    "file_id": carriage.file_id,  # String slug for detail endpoint
+                    "title": carriage.title,
+                    "current_status": carriage.current_status.value if carriage.current_status else "unknown",
+                    "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                    "celex_numbers": carriage.celex_numbers,  # For loading in Amendator
+                    "lead_committee": carriage.committees[0] if carriage.committees else None,
+                    "tracked_since": track.tracked_since.isoformat() if track.tracked_since else None,
+                    "last_updated": carriage.last_updated.isoformat() if carriage.last_updated else None,
+                    "is_blocked": carriage.is_blocked,
+                    "days_in_current_status": days_in_status
+                })
+
+        return {"tracked_files": tracked_files}
 
     except Exception as e:
         logger.error(f"Failed to get tracked carriages: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to retrieve tracked files")
+
+
+# ===== EUR-Lex Integration Endpoints =====
+
+@router.get(
+    "/carriages/{carriage_id}/eurlex",
+    summary="Get EUR-Lex documents for carriage",
+    description="Fetch EUR-Lex document metadata and relationships for a legislative file's CELEX numbers"
+)
+async def get_carriage_eurlex_data(
+    carriage_id: UUID,
+    include_relationships: bool = Query(True, description="Include document relationships"),
+    db: Session = Depends(get_db)
+):
+    """
+    Get EUR-Lex document data for a carriage.
+
+    Uses the CELLAR SPARQL API to fetch:
+    - Document metadata (title, date, type, author)
+    - Document relationships (amendments, repeals, implementations)
+    """
+    try:
+        # Get carriage
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.id == carriage_id
+        ).first()
+
+        if not carriage:
+            raise HTTPException(status_code=404, detail="Carriage not found")
+
+        if not carriage.celex_numbers:
+            return {
+                "carriage_id": str(carriage_id),
+                "eurlex_documents": [],
+                "message": "No CELEX numbers found for this carriage"
+            }
+
+        # Initialize EUR-Lex client
+        eurlex_client = EURLexClient()
+
+        eurlex_docs = []
+
+        try:
+            for celex in carriage.celex_numbers[:5]:  # Limit to 5 CELEX numbers
+                doc_data = {
+                    "celex": celex,
+                    "url": f"https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:{celex}"
+                }
+
+                # Fetch metadata via SPARQL
+                metadata = await eurlex_client.get_document_by_celex(celex)
+                if metadata:
+                    doc_data["title"] = metadata.get("title")
+                    doc_data["date"] = metadata.get("date")
+                    doc_data["type"] = metadata.get("type")
+                    doc_data["subject"] = metadata.get("subject")
+                    doc_data["author"] = metadata.get("author")
+                    doc_data["uri"] = metadata.get("uri")
+
+                # Fetch relationships
+                if include_relationships:
+                    relationships = await eurlex_client.get_document_relationships(celex)
+                    if relationships:
+                        doc_data["relationships"] = {
+                            "amended_by": relationships.get("amended_by", []),
+                            "amends": relationships.get("amends", []),
+                            "repealed_by": relationships.get("repealed_by", []),
+                            "repeals": relationships.get("repeals", []),
+                            "implemented_by": relationships.get("implemented_by", [])
+                        }
+
+                eurlex_docs.append(doc_data)
+
+        finally:
+            await eurlex_client.close()
+
+        return {
+            "carriage_id": str(carriage_id),
+            "carriage_title": carriage.title,
+            "eurlex_documents": eurlex_docs,
+            "total_documents": len(eurlex_docs)
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get EUR-Lex data: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve EUR-Lex data")
+
+
+@router.get(
+    "/eurlex/{celex}",
+    summary="Get EUR-Lex document by CELEX",
+    description="Fetch EUR-Lex document metadata and relationships directly by CELEX number"
+)
+async def get_eurlex_document(
+    celex: str,
+    include_relationships: bool = Query(True, description="Include document relationships"),
+    language: str = Query("en", description="Language code for title")
+):
+    """
+    Get EUR-Lex document by CELEX number.
+
+    CELEX format: [sector][year][type][number] (e.g., "32024R1689" for AI Act)
+    """
+    try:
+        eurlex_client = EURLexClient()
+
+        try:
+            # Fetch metadata
+            metadata = await eurlex_client.get_document_by_celex(celex, language)
+
+            if not metadata:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Document not found for CELEX: {celex}"
+                )
+
+            doc_data = {
+                "celex": celex,
+                "url": f"https://eur-lex.europa.eu/legal-content/{language.upper()}/ALL/?uri=CELEX:{celex}",
+                "title": metadata.get("title"),
+                "date": metadata.get("date"),
+                "type": metadata.get("type"),
+                "subject": metadata.get("subject"),
+                "author": metadata.get("author"),
+                "uri": metadata.get("uri"),
+                "language": language
+            }
+
+            # Fetch relationships
+            if include_relationships:
+                relationships = await eurlex_client.get_document_relationships(celex)
+                if relationships:
+                    doc_data["relationships"] = relationships
+
+        finally:
+            await eurlex_client.close()
+
+        return doc_data
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get EUR-Lex document: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve EUR-Lex document")
+
+
+@router.get(
+    "/eurlex/{celex}/related",
+    summary="Get related EUR-Lex documents",
+    description="Find documents that amend, repeal, or implement the specified document"
+)
+async def get_eurlex_related_documents(
+    celex: str
+):
+    """
+    Get documents related to a CELEX number.
+
+    Returns all documents that:
+    - Amend this document
+    - Are amended by this document
+    - Repeal this document
+    - Are repealed by this document
+    - Implement this document
+    """
+    try:
+        eurlex_client = EURLexClient()
+
+        try:
+            relationships = await eurlex_client.get_document_relationships(celex)
+
+            if not relationships or all(not v for v in relationships.values()):
+                return {
+                    "celex": celex,
+                    "relationships": {},
+                    "total_related": 0,
+                    "message": "No related documents found"
+                }
+
+            total_related = sum(len(v) for v in relationships.values() if isinstance(v, list))
+
+        finally:
+            await eurlex_client.close()
+
+        return {
+            "celex": celex,
+            "relationships": relationships,
+            "total_related": total_related
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get related documents: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve related documents")
+
+
+# ===== OEIL Integration Endpoints =====
+
+@router.get(
+    "/carriages/{carriage_id}/oeil",
+    summary="Get OEIL procedure data for carriage",
+    description="Fetch full OEIL procedure data including key players, events, forecasts, and documents"
+)
+async def get_carriage_oeil_data(
+    carriage_id: UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Get OEIL procedure data for a carriage.
+
+    Returns the full OEIL procedure including:
+    - Basic info (title, status, subjects)
+    - Key players (rapporteur, shadow rapporteurs, committees, Commission DG)
+    - Key events (legislative timeline)
+    - Forecasts (upcoming events)
+    - Documentation (EP, Commission, Council documents)
+    - Additional info (EUR-Lex links, related procedures)
+    """
+    try:
+        # Get carriage
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.id == carriage_id
+        ).first()
+
+        if not carriage:
+            raise HTTPException(status_code=404, detail="Carriage not found")
+
+        if not carriage.oeil_procedure_ref:
+            return {
+                "carriage_id": str(carriage_id),
+                "oeil_procedure": None,
+                "message": "No OEIL procedure reference found for this carriage"
+            }
+
+        # Initialize OEIL scraper
+        oeil_scraper = OEILScraper()
+
+        try:
+            # Fetch procedure data
+            procedure = await oeil_scraper.get_procedure(carriage.oeil_procedure_ref)
+
+            if not procedure:
+                return {
+                    "carriage_id": str(carriage_id),
+                    "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                    "oeil_procedure": None,
+                    "message": f"Could not fetch OEIL procedure {carriage.oeil_procedure_ref}"
+                }
+
+            return {
+                "carriage_id": str(carriage_id),
+                "carriage_title": carriage.title,
+                "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                "oeil_procedure": procedure
+            }
+
+        finally:
+            await oeil_scraper.close()
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get OEIL data: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve OEIL data")
+
+
+@router.get(
+    "/carriages/{carriage_id}/key-players",
+    summary="Get key players for carriage",
+    description="Get rapporteur, shadow rapporteurs, committees, and Commission DG for a legislative file"
+)
+async def get_carriage_key_players(
+    carriage_id: UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Get key players for a carriage from OEIL.
+
+    Returns a flat array of key players:
+    - Rapporteur with photo and political group
+    - Shadow rapporteurs
+    - Commissioner (if available)
+    """
+    try:
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.id == carriage_id
+        ).first()
+
+        if not carriage:
+            raise HTTPException(status_code=404, detail="Carriage not found")
+
+        if not carriage.oeil_procedure_ref:
+            return {
+                "carriage_id": str(carriage_id),
+                "key_players": [],
+                "message": "No OEIL procedure reference found"
+            }
+
+        oeil_scraper = OEILScraper()
+
+        try:
+            procedure = await oeil_scraper.get_procedure(carriage.oeil_procedure_ref)
+
+            if not procedure or not isinstance(procedure, dict):
+                return {
+                    "carriage_id": str(carriage_id),
+                    "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                    "key_players": [],
+                    "message": "Could not fetch OEIL procedure"
+                }
+
+            # Extract key players section from OEIL
+            oeil_key_players = procedure.get("key_players", {})
+
+            # Transform nested OEIL structure into flat array
+            key_players_list = []
+
+            # Extract rapporteur from committee_responsible
+            committee_responsible = oeil_key_players.get("committee_responsible")
+            if isinstance(committee_responsible, dict):
+                rapporteur = committee_responsible.get("rapporteur")
+                committee_code = committee_responsible.get("code", "")
+
+                if isinstance(rapporteur, dict) and rapporteur.get("name"):
+                    key_players_list.append({
+                        "name": rapporteur.get("name"),
+                        "role": f"Rapporteur ({committee_code})" if committee_code else "Rapporteur",
+                        "political_group": rapporteur.get("political_group"),
+                        "country": rapporteur.get("country"),
+                        "mep_id": rapporteur.get("mep_id"),
+                        "photo_url": rapporteur.get("photo_url"),
+                    })
+
+                # Extract shadow rapporteurs
+                shadows = committee_responsible.get("shadow_rapporteurs", [])
+                for shadow in shadows:
+                    if isinstance(shadow, dict) and shadow.get("name"):
+                        key_players_list.append({
+                            "name": shadow.get("name"),
+                            "role": f"Shadow Rapporteur ({committee_code})" if committee_code else "Shadow Rapporteur",
+                            "political_group": shadow.get("political_group"),
+                            "country": shadow.get("country"),
+                            "mep_id": shadow.get("mep_id"),
+                            "photo_url": shadow.get("photo_url"),
+                        })
+
+            # Extract rapporteurs from opinion committees
+            for committee in oeil_key_players.get("committees_opinion", []):
+                if isinstance(committee, dict):
+                    rapporteur = committee.get("rapporteur")
+                    committee_code = committee.get("code", "")
+
+                    if isinstance(rapporteur, dict) and rapporteur.get("name"):
+                        key_players_list.append({
+                            "name": rapporteur.get("name"),
+                            "role": f"Opinion Rapporteur ({committee_code})" if committee_code else "Opinion Rapporteur",
+                            "political_group": rapporteur.get("political_group"),
+                            "country": rapporteur.get("country"),
+                            "mep_id": rapporteur.get("mep_id"),
+                            "photo_url": rapporteur.get("photo_url"),
+                        })
+
+            # Add Commission DG if available and has meaningful content
+            commission_dg = oeil_key_players.get("commission_dg")
+            if commission_dg and isinstance(commission_dg, str) and len(commission_dg.strip()) > 2:
+                dg_str = commission_dg.strip()
+                key_players_list.append({
+                    "name": dg_str,
+                    "role": "European Commission",
+                    "political_group": None,
+                    "country": None,
+                    "mep_id": None,
+                    "photo_url": None,
+                })
+
+            # Add Commissioner if available and has meaningful content
+            commissioner = oeil_key_players.get("commissioner")
+            if commissioner and isinstance(commissioner, str) and len(commissioner.strip()) > 2:
+                commissioner_str = commissioner.strip()
+
+                # Detect if this is a portfolio name vs actual Commissioner name
+                is_portfolio = (
+                    commissioner_str.lower().endswith('commissioner') or
+                    len(commissioner_str.split()) == 1 or
+                    commissioner_str.lower() in ['justice', 'internal market', 'digital', 'trade',
+                                                  'environment', 'health', 'transport', 'energy']
+                )
+
+                if is_portfolio:
+                    # Portfolio only - format as "Commissioner for X"
+                    portfolio = commissioner_str.replace(' Commissioner', '').replace('Commissioner', '').strip()
+                    if portfolio and len(portfolio) > 2:
+                        display_name = f"Commissioner for {portfolio}"
+                        key_players_list.append({
+                            "name": display_name,
+                            "role": "European Commission",
+                            "political_group": None,
+                            "country": None,
+                            "mep_id": None,
+                            "photo_url": None,
+                        })
+                    # Skip if portfolio is empty or too short
+                else:
+                    # Actual name
+                    key_players_list.append({
+                        "name": commissioner_str,
+                        "role": "Commissioner",
+                        "political_group": None,
+                        "country": None,
+                        "mep_id": None,
+                        "photo_url": None,
+                    })
+
+            return {
+                "carriage_id": str(carriage_id),
+                "carriage_title": carriage.title,
+                "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                "key_players": key_players_list,
+            }
+
+        finally:
+            await oeil_scraper.close()
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get key players: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve key players")
+
+
+@router.get(
+    "/carriages/{carriage_id}/timeline",
+    summary="Get legislative timeline for carriage",
+    description="Get key events and milestones from OEIL for a legislative file"
+)
+async def get_carriage_timeline(
+    carriage_id: UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Get legislative timeline (key events) for a carriage.
+
+    Returns chronological list of events:
+    - Commission proposal
+    - Committee votes
+    - Plenary readings
+    - Council positions
+    - Final act adoption
+    """
+    try:
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.id == carriage_id
+        ).first()
+
+        if not carriage:
+            raise HTTPException(status_code=404, detail="Carriage not found")
+
+        if not carriage.oeil_procedure_ref:
+            return {
+                "carriage_id": str(carriage_id),
+                "timeline": [],
+                "message": "No OEIL procedure reference found"
+            }
+
+        oeil_scraper = OEILScraper()
+
+        try:
+            procedure = await oeil_scraper.get_procedure(carriage.oeil_procedure_ref)
+
+            if not procedure or not isinstance(procedure, dict):
+                return {
+                    "carriage_id": str(carriage_id),
+                    "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                    "timeline": [],
+                    "message": "Could not fetch OEIL procedure"
+                }
+
+            # Extract key events
+            key_events = procedure.get("key_events", {})
+            events = key_events.get("events", []) if isinstance(key_events, dict) else []
+
+            return {
+                "carriage_id": str(carriage_id),
+                "carriage_title": carriage.title,
+                "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                "timeline": events,
+                "total_events": len(events)
+            }
+
+        finally:
+            await oeil_scraper.close()
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get timeline: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve timeline")
+
+
+@router.get(
+    "/carriages/{carriage_id}/forecasts",
+    summary="Get forecasts for carriage",
+    description="Get upcoming/foreseen events from OEIL for a legislative file"
+)
+async def get_carriage_forecasts(
+    carriage_id: UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Get forecasts (upcoming events) for a carriage.
+
+    Returns foreseen events:
+    - Committee votes
+    - Plenary sessions
+    - Council meetings
+    """
+    try:
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.id == carriage_id
+        ).first()
+
+        if not carriage:
+            raise HTTPException(status_code=404, detail="Carriage not found")
+
+        if not carriage.oeil_procedure_ref:
+            return {
+                "carriage_id": str(carriage_id),
+                "forecasts": [],
+                "message": "No OEIL procedure reference found"
+            }
+
+        oeil_scraper = OEILScraper()
+
+        try:
+            procedure = await oeil_scraper.get_procedure(carriage.oeil_procedure_ref)
+
+            if not procedure or not isinstance(procedure, dict):
+                return {
+                    "carriage_id": str(carriage_id),
+                    "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                    "forecasts": [],
+                    "message": "Could not fetch OEIL procedure"
+                }
+
+            # Extract forecasts
+            forecasts_section = procedure.get("forecasts", {})
+            forecasts = forecasts_section.get("forecasts", []) if isinstance(forecasts_section, dict) else []
+
+            return {
+                "carriage_id": str(carriage_id),
+                "carriage_title": carriage.title,
+                "oeil_procedure_ref": carriage.oeil_procedure_ref,
+                "forecasts": forecasts,
+                "total_forecasts": len(forecasts)
+            }
+
+        finally:
+            await oeil_scraper.close()
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get forecasts: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve forecasts")
+
+
+@router.get(
+    "/oeil/{procedure_ref}",
+    summary="Get OEIL procedure by reference",
+    description="Fetch full OEIL procedure data directly by procedure reference"
+)
+async def get_oeil_procedure(
+    procedure_ref: str
+):
+    """
+    Get OEIL procedure by reference.
+
+    Procedure reference format: YYYY/NNNN(XXX)
+    Example: 2024/0176(COD)
+    """
+    try:
+        oeil_scraper = OEILScraper()
+
+        try:
+            procedure = await oeil_scraper.get_procedure(procedure_ref)
+
+            if not procedure:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Procedure not found: {procedure_ref}"
+                )
+
+            return {
+                "procedure_ref": procedure_ref,
+                "procedure": procedure
+            }
+
+        finally:
+            await oeil_scraper.close()
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to get OEIL procedure: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve OEIL procedure")
+
+
+# ===== Active Procedures Search (EP Open Data + OEIL) =====
+
+@router.get(
+    "/procedures/search",
+    summary="Search active EU legislative procedures",
+    description="Search for ongoing legislative procedures from EP Open Data API and OEIL"
+)
+async def search_active_procedures(
+    query: Optional[str] = Query(None, description="Search text in procedure title/reference"),
+    limit: int = Query(50, ge=1, le=200, description="Maximum results"),
+    offset: int = Query(0, ge=0, description="Pagination offset")
+):
+    """
+    Search active EU legislative procedures.
+
+    This searches the EP Open Data API for procedures, providing access to
+    ongoing legislation beyond the Legislative Train (Commission priorities).
+
+    Returns procedures with:
+    - Procedure reference (e.g., 2024/0176(COD))
+    - Title and status
+    - Type (ordinary legislative, consultation, etc.)
+    """
+    try:
+        ep_client = EuropeanParliamentClient()
+
+        try:
+            # Get procedures from EP Open Data API
+            procedures = await ep_client.get_procedures(limit=limit, offset=offset)
+
+            # Filter by query if provided
+            if query:
+                query_lower = query.lower()
+                procedures = [
+                    p for p in procedures
+                    if query_lower in p.get("label", "").lower()
+                    or query_lower in p.get("reference", "").lower()
+                ]
+
+            return {
+                "procedures": procedures,
+                "total": len(procedures),
+                "limit": limit,
+                "offset": offset,
+                "source": "ep_opendata"
+            }
+
+        finally:
+            await ep_client.close()
+
+    except Exception as e:
+        logger.error(f"Failed to search procedures: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to search procedures")
+
+
+@router.post(
+    "/track/oeil",
+    summary="Track an OEIL procedure directly",
+    description="Create a carriage entry from an OEIL procedure reference and track it"
+)
+async def track_oeil_procedure(
+    procedure_ref: str = Query(..., description="OEIL procedure reference (e.g., 2024/0176(COD))"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Track an OEIL procedure that's not in the Legislative Train.
+
+    This endpoint:
+    1. Fetches full procedure data from OEIL
+    2. Creates a new LegislativeCarriage entry (source=oeil_direct)
+    3. Creates a UserCarriageTrack for the current user
+
+    Use this to track ongoing legislation that isn't in the Commission's
+    Legislative Train priorities.
+    """
+    try:
+        # Check if carriage already exists for this procedure ref
+        existing = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.oeil_procedure_ref == procedure_ref
+        ).first()
+
+        if existing:
+            # Carriage exists, just track it
+            existing_track = db.query(UserCarriageTrack).filter(
+                UserCarriageTrack.user_id == current_user.id,
+                UserCarriageTrack.carriage_id == existing.id
+            ).first()
+
+            if existing_track:
+                return {
+                    "message": "Already tracking this procedure",
+                    "carriage_id": str(existing.id),
+                    "procedure_ref": procedure_ref
+                }
+
+            # Create tracking entry
+            track = UserCarriageTrack(
+                user_id=current_user.id,
+                carriage_id=existing.id
+            )
+            db.add(track)
+            db.commit()
+
+            return {
+                "message": "Now tracking procedure",
+                "carriage_id": str(existing.id),
+                "procedure_ref": procedure_ref,
+                "title": existing.title
+            }
+
+        # Fetch full OEIL procedure data
+        oeil_scraper = OEILScraper()
+
+        try:
+            procedure = await oeil_scraper.get_procedure(procedure_ref)
+
+            if not procedure or isinstance(procedure, dict) and procedure.get("error"):
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Procedure not found in OEIL: {procedure_ref}"
+                )
+
+            # Extract basic info from OEIL data
+            basic_info = procedure.get("basic_info", {})
+            key_players = procedure.get("key_players", {})
+
+            title = basic_info.get("title") or f"Procedure {procedure_ref}"
+            status = basic_info.get("status", "")
+
+            # Map OEIL status to our status enum
+            status_mapping = {
+                "awaiting": CarriageStatusEnum.TABLED,
+                "committee": CarriageStatusEnum.TABLED,
+                "plenary": CarriageStatusEnum.CLOSE_TO_ADOPTION,
+                "completed": CarriageStatusEnum.COMPLETED,
+                "adopted": CarriageStatusEnum.ADOPTED,
+                "rejected": CarriageStatusEnum.WITHDRAWN,
+                "withdrawn": CarriageStatusEnum.WITHDRAWN,
+            }
+
+            carriage_status = CarriageStatusEnum.ANNOUNCED  # default
+            status_lower = status.lower()
+            for key, enum_val in status_mapping.items():
+                if key in status_lower:
+                    carriage_status = enum_val
+                    break
+
+            # Extract committee info
+            committee_responsible = key_players.get("committee_responsible", {})
+            lead_committee = committee_responsible.get("code") if isinstance(committee_responsible, dict) else None
+
+            # Create new carriage
+            file_id = f"oeil-{procedure_ref.replace('/', '-').replace('(', '-').replace(')', '')}"
+
+            carriage = LegislativeCarriage(
+                file_id=file_id,
+                title=title,
+                description=basic_info.get("title"),  # OEIL often has extended title in description
+                current_status=carriage_status,
+                source=CarriageSourceEnum.OEIL_DIRECT,
+                oeil_procedure_ref=procedure_ref,
+                oeil_procedure_data=procedure,
+                lead_committee=lead_committee,
+            )
+
+            db.add(carriage)
+            db.flush()  # Get the ID
+
+            # Create tracking entry
+            track = UserCarriageTrack(
+                user_id=current_user.id,
+                carriage_id=carriage.id
+            )
+            db.add(track)
+            db.commit()
+
+            return {
+                "message": "Created and tracking new OEIL procedure",
+                "carriage_id": str(carriage.id),
+                "procedure_ref": procedure_ref,
+                "title": title,
+                "status": carriage_status.value,
+                "source": "oeil_direct"
+            }
+
+        finally:
+            await oeil_scraper.close()
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to track OEIL procedure: {str(e)}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to track procedure: {str(e)}")
+
+
+# ===== Amendment Cross-Reference Endpoints (Priority #4) =====
+
+@router.get(
+    "/carriages/{carriage_id}/amendments",
+    summary="Get amendments for carriage",
+    description="Get all user amendments linked to a specific legislative file"
+)
+async def get_carriage_amendments(
+    carriage_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get amendments linked to a specific carriage"""
+    from services.amendator.amendment_linker import get_amendment_linker
+
+    try:
+        linker = get_amendment_linker(db)
+        amendments = linker.get_amendments_for_carriage(carriage_id, current_user.id)
+
+        return {
+            "carriage_id": str(carriage_id),
+            "amendments": [a.to_dict() for a in amendments],
+            "count": len(amendments)
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get amendments for carriage: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve amendments")
+
+
+@router.get(
+    "/tracked/amendment-counts",
+    summary="Get amendment counts for tracked files",
+    description="Get the number of amendments for each tracked legislative file"
+)
+async def get_tracked_amendment_counts(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get amendment counts for all tracked files"""
+    from services.amendator.amendment_linker import get_amendment_linker
+
+    try:
+        linker = get_amendment_linker(db)
+        counts = linker.count_amendments_by_carriage(current_user.id)
+
+        return {
+            "amendment_counts": counts
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get amendment counts: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve amendment counts")
+
+
+# ===== CELEX Enrichment Endpoint =====
+
+@router.post(
+    "/carriages/{carriage_id}/enrich-celex",
+    summary="Fetch and populate CELEX numbers from OEIL",
+    description="Fetches CELEX numbers from OEIL procedure data and updates the carriage"
+)
+async def enrich_carriage_celex(
+    carriage_id: UUID,
+    force: bool = Query(False, description="Force re-enrichment even if CELEX exists"),
+    db: Session = Depends(get_db)
+):
+    """
+    Fetch CELEX numbers from OEIL and update the carriage.
+
+    This endpoint:
+    1. Gets the carriage's OEIL procedure reference
+    2. Scrapes OEIL for EUR-Lex document links
+    3. Extracts CELEX numbers from those links
+    4. Updates the carriage in the database
+    5. Returns the CELEX numbers
+    """
+    import re
+
+    try:
+        # Get carriage
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.id == carriage_id
+        ).first()
+
+        if not carriage:
+            raise HTTPException(status_code=404, detail="Carriage not found")
+
+        # If already has CELEX and not forcing re-enrichment, return cached
+        if carriage.celex_numbers and len(carriage.celex_numbers) > 0 and not force:
+            return {
+                "carriage_id": str(carriage_id),
+                "celex_numbers": carriage.celex_numbers,
+                "source": "cached",
+                "message": "CELEX numbers already present"
+            }
+
+        if not carriage.oeil_procedure_ref:
+            raise HTTPException(
+                status_code=400,
+                detail="No OEIL procedure reference available to fetch CELEX"
+            )
+
+        # Initialize OEIL scraper
+        oeil_scraper = OEILScraper()
+        celex_numbers = []
+
+        try:
+            # Fetch full procedure data from OEIL
+            procedure = await oeil_scraper.get_procedure(carriage.oeil_procedure_ref)
+
+            if procedure:
+                # Extract CELEX from additional_info
+                additional = procedure.get("additional_info", {})
+                if additional:
+                    # Check eurlex_links
+                    eurlex_links = additional.get("eurlex_links", [])
+                    for link in eurlex_links:
+                        url = link.get("url", "") if isinstance(link, dict) else str(link)
+                        # Extract CELEX from URL patterns (case-insensitive)
+                        # Pattern 1: uri=celex:52025PC0986 or CELEX:52025PC0986
+                        celex_match = re.search(r'[Cc][Ee][Ll][Ee][Xx][=:](\d+[A-Z]+\d+)', url)
+                        if celex_match:
+                            celex_numbers.append(celex_match.group(1))
+                        else:
+                            # Pattern 2: /52025PC0986/ in path
+                            celex_match = re.search(r'/(\d{5}[A-Z]{1,4}\d{3,4})/', url)
+                            if celex_match:
+                                celex_numbers.append(celex_match.group(1))
+                            else:
+                                # Pattern 3: ?celex=52025PC0986
+                                celex_match = re.search(r'[?&]celex=(\d+[A-Z]+\d+)', url, re.IGNORECASE)
+                                if celex_match:
+                                    celex_numbers.append(celex_match.group(1))
+
+                    # Check direct celex_number field
+                    if additional.get("celex_number"):
+                        celex_numbers.append(additional.get("celex_number"))
+
+                # Also check documentation section
+                documentation = procedure.get("documentation", {})
+                if documentation:
+                    for doc_type in ["commission", "ep_committee", "council"]:
+                        docs = documentation.get(doc_type, [])
+                        for doc in docs:
+                            if isinstance(doc, dict):
+                                url = doc.get("url", "")
+                                # Case-insensitive CELEX extraction
+                                celex_match = re.search(r'[Cc][Ee][Ll][Ee][Xx][=:](\d+[A-Z]+\d+)', url)
+                                if celex_match:
+                                    celex_numbers.append(celex_match.group(1))
+                                else:
+                                    celex_match = re.search(r'/(\d{5}[A-Z]{1,4}\d{3,4})/', url)
+                                    if celex_match:
+                                        celex_numbers.append(celex_match.group(1))
+
+            # Deduplicate
+            celex_numbers = list(set(celex_numbers))
+
+            # If no CELEX found in OEIL data, scrape OEIL page for COM document number
+            if not celex_numbers and carriage.oeil_procedure_ref:
+                try:
+                    import aiohttp
+                    logger.info(f"OEIL had no CELEX, scraping OEIL page for COM number: {carriage.oeil_procedure_ref}")
+
+                    # Fetch OEIL page directly to find COM document number
+                    oeil_url = f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={carriage.oeil_procedure_ref}"
+
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(
+                            oeil_url,
+                            timeout=aiohttp.ClientTimeout(total=30)
+                        ) as resp:
+                            if resp.status == 200:
+                                html = await resp.text()
+                                # Look for COM(year)number pattern
+                                com_matches = re.findall(r'COM\((\d{4})\)(\d+)', html)
+                                if com_matches:
+                                    # Get the first COM document (usually the main proposal)
+                                    year, number = com_matches[0]
+                                    potential_celex = f"5{year}PC{number.zfill(4)}"
+
+                                    # Verify this CELEX exists via SPARQL
+                                    sparql_query = f"""
+                                    PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+                                    SELECT ?celex WHERE {{
+                                        ?doc cdm:resource_legal_id_celex ?celex .
+                                        FILTER(STR(?celex) = "{potential_celex}")
+                                    }}
+                                    LIMIT 1
+                                    """
+
+                                    async with session.get(
+                                        "https://publications.europa.eu/webapi/rdf/sparql",
+                                        params={"query": sparql_query, "format": "application/json"},
+                                        timeout=aiohttp.ClientTimeout(total=30)
+                                    ) as sparql_resp:
+                                        if sparql_resp.status == 200:
+                                            sparql_result = await sparql_resp.json()
+                                            bindings = sparql_result.get("results", {}).get("bindings", [])
+                                            if bindings:
+                                                celex_numbers.append(potential_celex)
+                                                logger.info(f"Found CELEX from COM number: {potential_celex}")
+                except Exception as scrape_err:
+                    logger.warning(f"OEIL page scrape fallback failed: {scrape_err}")
+
+            if celex_numbers:
+                # Update carriage in database
+                carriage.celex_numbers = celex_numbers
+                db.commit()
+
+                logger.info(f"Enriched carriage {carriage_id} with CELEX: {celex_numbers}")
+
+                return {
+                    "carriage_id": str(carriage_id),
+                    "celex_numbers": celex_numbers,
+                    "source": "oeil+eurlex_sparql",
+                    "message": f"Found {len(celex_numbers)} CELEX number(s)"
+                }
+            else:
+                return {
+                    "carriage_id": str(carriage_id),
+                    "celex_numbers": [],
+                    "source": "oeil+eurlex_sparql",
+                    "message": "No CELEX numbers found in OEIL or EUR-Lex"
+                }
+
+        finally:
+            await oeil_scraper.close()
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to enrich carriage CELEX: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch CELEX: {str(e)}")
+
+
+# ===== OEIL Sync Endpoints =====
+
+@router.post(
+    "/sync/oeil",
+    summary="Sync OEIL XML feeds",
+    description="Fetch latest procedures from OEIL XML feeds and add to database"
+)
+async def sync_oeil_feeds(
+    days: int = Query(default=7, ge=1, le=30, description="Days to look back"),
+    force: bool = Query(default=False, description="Update existing entries"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Sync OEIL XML feeds to database.
+
+    Fetches from:
+    - latest-procedures: New legislative procedures (COD, INI, RSP, etc.)
+    - latest-information-documents: COM/SWD documents
+    - latest-committees-reports-tabled: Committee reports
+
+    Requires Blue tier subscription.
+    """
+    # Check user tier
+    if current_user.subscription_tier not in ['blue', 'admin']:
+        raise HTTPException(
+            status_code=403,
+            detail="OEIL sync requires Blue tier subscription"
+        )
+
+    try:
+        from services.scrapers.oeil_sync_service import OEILSyncService
+
+        logger.info(f"[SYNC] User {current_user.email} triggered OEIL sync (days={days}, force={force})")
+
+        service = OEILSyncService(db=db)
+        result = await service.sync_all(
+            procedures_days=days,
+            documents_days=days,
+            reports_days=30,
+            skip_existing=not force
+        )
+
+        logger.info(
+            f"[SYNC] Complete: added={result['added']}, "
+            f"updated={result['updated']}, skipped={result['skipped']}"
+        )
+
+        return {
+            "status": "success",
+            "added": result['added'],
+            "updated": result['updated'],
+            "skipped": result['skipped'],
+            "errors": result['errors'],
+            "items": result['items'][:50]  # Limit response size
+        }
+
+    except Exception as e:
+        logger.error(f"[SYNC] Failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
+
+
+# ===== EUR-Lex Sync Endpoints =====
+
+@router.post(
+    "/sync/eurlex",
+    summary="Sync EUR-Lex RSS feeds",
+    description="Fetch latest legislation and proposals from EUR-Lex RSS feeds and add to database"
+)
+async def sync_eurlex_feeds(
+    days: int = Query(default=7, ge=1, le=30, description="Days to look back"),
+    force: bool = Query(default=False, description="Update existing entries"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Sync EUR-Lex RSS feeds to database.
+
+    Fetches from:
+    - parliament_council_legislation: EP and Council adopted acts
+    - commission_proposals: COM documents and proposals
+
+    Requires Blue tier subscription.
+    """
+    # Check user tier
+    if current_user.subscription_tier not in ['blue', 'admin']:
+        raise HTTPException(
+            status_code=403,
+            detail="EUR-Lex sync requires Blue tier subscription"
+        )
+
+    try:
+        from services.scrapers.eurlex_sync_service import EURLexSyncService
+
+        logger.info(f"[SYNC] User {current_user.email} triggered EUR-Lex sync (days={days}, force={force})")
+
+        service = EURLexSyncService(db=db)
+        result = await service.sync_all(
+            legislation_days=days,
+            proposals_days=days,
+            skip_existing=not force
+        )
+
+        logger.info(
+            f"[SYNC] Complete: added={result['added']}, "
+            f"updated={result['updated']}, skipped={result['skipped']}"
+        )
+
+        return {
+            "status": "success",
+            "added": result['added'],
+            "updated": result['updated'],
+            "skipped": result['skipped'],
+            "errors": result['errors'],
+            "items": result['items'][:50]  # Limit response size
+        }
+
+    except Exception as e:
+        logger.error(f"[SYNC] Failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")

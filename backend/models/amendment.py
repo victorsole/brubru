@@ -27,6 +27,10 @@ class Amendment(Base):
     # User relationship
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
 
+    # Legislative carriage link (Priority #4: Amendator-Legislative Train Integration)
+    carriage_id = Column(UUID(as_uuid=True), ForeignKey("legislative_carriages.id", ondelete="SET NULL"), nullable=True, index=True)
+    procedure_reference = Column(String(50), nullable=True, index=True)  # "2021/0106(COD)" format
+
     # Document reference
     document_id = Column(String(255), nullable=False, index=True)
     document_filename = Column(String(500), nullable=True)
@@ -60,6 +64,7 @@ class Amendment(Base):
 
     # Relationships
     user = relationship("User", backref="amendments")
+    carriage = relationship("LegislativeCarriage", backref="amendments")
 
     def __repr__(self):
         return f"<Amendment(id={self.id}, type={self.amendment_type}, position={self.position_text})>"
@@ -69,6 +74,8 @@ class Amendment(Base):
         return {
             'id': str(self.id),
             'user_id': str(self.user_id),
+            'carriage_id': str(self.carriage_id) if self.carriage_id else None,
+            'procedure_reference': self.procedure_reference,
             'document_id': self.document_id,
             'document_filename': self.document_filename,
             'element_index': self.element_index,

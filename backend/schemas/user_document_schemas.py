@@ -183,7 +183,7 @@ class UserDocumentCreate(UserDocumentBase):
     stakeholders: Optional[List[str]] = None
 
     # Metadata
-    metadata: Optional[Dict[str, Any]] = None
+    doc_metadata: Optional[Dict[str, Any]] = None
 
 
 class UserDocumentUpdate(BaseModel):
@@ -206,7 +206,7 @@ class UserDocumentUpdate(BaseModel):
     action_plan: Optional[str] = None
     timeline: Optional[str] = None
     stakeholders: Optional[List[str]] = None
-    metadata: Optional[Dict[str, Any]] = None
+    doc_metadata: Optional[Dict[str, Any]] = None
 
 
 class UserDocumentResponse(UserDocumentBase):
@@ -232,7 +232,7 @@ class UserDocumentResponse(UserDocumentBase):
     stakeholders: Optional[List[str]] = None
 
     # Metadata
-    metadata: Optional[Dict[str, Any]] = None
+    doc_metadata: Optional[Dict[str, Any]] = None
     version: int
     parent_document_id: Optional[UUID] = None
     view_count: int

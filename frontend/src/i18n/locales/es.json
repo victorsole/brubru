@@ -1,0 +1,230 @@
+{
+  "header": {
+    "main": "Principal",
+    "amendator": "Amendator",
+    "myEuBubble": "Mi Burbuja UE",
+    "euLawComply": "Cumplimiento UE",
+    "tenderator": "Tenderator",
+    "profile": "Perfil",
+    "adminPanel": "Panel de Admin",
+    "viewProfile": "Ver Perfil",
+    "subscription": "Suscripcion",
+    "takeTour": "Hacer un tour",
+    "logOut": "Cerrar Sesion"
+  },
+  "main": {
+    "chatHistory": "Historial de Chat",
+    "previousConversations": "Las conversaciones anteriores apareceran aqui"
+  },
+  "chat": {
+    "welcome": "Bienvenido a Brubru",
+    "tagline": "Tu companero IA multiagente para navegar la burbuja de la UE en Bruselas",
+    "startConversation": "Inicia una conversacion para analizar legislacion de la UE, disenar campanas de advocacy o recibir orientacion sobre procedimientos del Parlamento Europeo.",
+    "tryAsking": "Prueba a preguntar:",
+    "example1": "Cual es el estado de la Ley de IA?",
+    "example2": "Muestrame enmiendas recientes sobre GDPR",
+    "example3": "Quienes son los eurodiputados del comite ENVI?",
+    "example4": "Encuentra legislacion sobre ajuste de carbono en frontera",
+    "placeholder": "Pregunta sobre legislacion de la UE, procedimientos o analisis de politicas...",
+    "send": "Enviar",
+    "stream": "Transmitir",
+    "cancel": "Cancelar",
+    "errorMessage": "Lo siento, he encontrado un error procesando tu solicitud. Por favor, intentalo de nuevo.",
+    "failedResponse": "Error al obtener respuesta. Por favor, intentalo de nuevo."
+  },
+  "docs": {
+    "title": "Documentos",
+    "noDocuments": "No hay documentos subidos",
+    "documentsUploaded": "Documentos subidos",
+    "dragDrop": "Arrastra y suelta archivos aqui o haz clic para explorar",
+    "supported": "Compatibles: PDF, Word, Texto, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "maxSize": "Maximo 10MB por archivo",
+    "tooLarge": "es demasiado grande. El tamano maximo es 10MB."
+  },
+  "bubble": {
+    "title": "Mi Burbuja UE",
+    "subtitle": "Tu panel de inteligencia politica de la UE personalizado",
+    "dashboard": "Panel",
+    "documents": "Documentos",
+    "amendments": "Enmiendas",
+    "analytics": "Analiticas"
+  },
+  "amendments": {
+    "title": "Enmiendas",
+    "noAmendments": "Sin enmiendas aun",
+    "createFirst": "Crea tu primera enmienda usando el editor de la derecha",
+    "tabled": "Presentada",
+    "candidate": "Candidata",
+    "withdrawn": "Retirada",
+    "exporting": "Exportando...",
+    "exported": "Exportado!",
+    "exportAll": "Exportar Todo"
+  },
+  "ai": {
+    "openAssistant": "Abrir Asistente IA",
+    "assistant": "IA",
+    "analyzing": "Analizando...",
+    "foundAmendment": "He encontrado una enmienda para ti!",
+    "selectRow": "Selecciona una fila y te sugerire una enmienda",
+    "policyPosition": "Tu Posicion Politica:",
+    "policyPlaceholder": "Pega tu posicion politica u objetivos clave aqui...\n\nEjemplo: 'Queremos reforzar la proteccion de datos de los menores, asegurar el consentimiento parental para menores de 16 anos y aumentar los requisitos de transparencia para los procesadores de datos.'",
+    "uploadDocs": "Subir Documentos de Politica:",
+    "uploadButton": "Subir Documentos",
+    "currentlySelected": "Seleccionado Actualmente:",
+    "clickRow": "Haz clic en una fila de la tabla de enmiendas para seleccionarla",
+    "thinking": "Pensando...",
+    "suggest": "Sugerir Enmienda con IA",
+    "suggestion": "Sugerencia de IA:",
+    "type": "Tipo:",
+    "proposedText": "Texto Propuesto:",
+    "justification": "Justificacion:",
+    "accept": "Aceptar",
+    "modify": "Modificar",
+    "reject": "Rechazar"
+  },
+  "profile": {
+    "title": "Configuracion del Perfil",
+    "subscription": "Suscripcion",
+    "upgrade": "Mejorar",
+    "amendmentsMonth": "Enmiendas este mes",
+    "unlimited": "ilimitado",
+    "apiCalls": "Llamadas API este mes",
+    "renewsOn": "La suscripcion se renueva",
+    "personalInfo": "Informacion Personal",
+    "email": "Correo electronico",
+    "emailNote": "El correo no se puede cambiar",
+    "fullName": "Nombre Completo",
+    "organisation": "Organizacion",
+    "country": "Pais",
+    "selectCountry": "Seleccionar pais",
+    "saving": "Guardando...",
+    "saveChanges": "Guardar Cambios",
+    "saved": "Guardado",
+    "policyInterests": "Intereses Politicos",
+    "policyDescription": "Selecciona tus areas de interes. Brubru usara estas preferencias para personalizar tu experiencia y priorizar contenido relevante.",
+    "feedback": "Comentarios y Soporte",
+    "feedbackDescription": "Ayudanos a mejorar Brubru compartiendo tus comentarios, reportando errores o solicitando nuevas funciones. Tu opinion es invaluable para mejorar nuestra plataforma.",
+    "accountSettings": "Configuracion de Cuenta",
+    "accountCreated": "Cuenta creada",
+    "lastLogin": "Ultimo inicio de sesion",
+    "deleteWarning": "Elimina tu cuenta y todos los datos asociados. Esta accion no se puede deshacer.",
+    "deleteAccount": "Eliminar Cuenta"
+  },
+  "subscription": {
+    "hero": {
+      "title": "Elige tu Plan Brubru",
+      "subtitle": "Inteligencia politica de la UE potente para cada profesional",
+      "description": "Ya seas un profesional de advocacy, asistente de eurodiputado o experto en politicas, tenemos un plan que se adapta a tus necesidades."
+    },
+    "white": {
+      "name": "Basico",
+      "price": "0 EUR",
+      "period": "/mes",
+      "description": "Herramientas esenciales para comenzar con el seguimiento de politicas de la UE",
+      "button": "Comenzar"
+    },
+    "yellow": {
+      "name": "Profesional",
+      "price": "79 EUR",
+      "period": "/mes",
+      "annualPrice": "o 790 EUR/ano",
+      "annualSavings": "(ahorra 158 EUR)",
+      "description": "IA avanzada y enmiendas ilimitadas para profesionales del advocacy",
+      "button": "Mejorar a Profesional",
+      "popular": "Mas Popular"
+    },
+    "blue": {
+      "name": "Empresarial",
+      "price": "Precio personalizado",
+      "period": "",
+      "description": "Soluciones a medida para equipos y organizaciones con requisitos especificos",
+      "button": "Contactanos",
+      "contactEmail": "helloberesol@gmail.com",
+      "minUsers": "5+ usuarios"
+    },
+    "features": {
+      "title": "Comparacion de Funciones",
+      "subtitle": "Mira lo que incluye cada plan",
+      "white": {
+        "chat": "Chat IA basico",
+        "amendments": "5 enmiendas al mes",
+        "searches": "5 busquedas guardadas",
+        "support": "Soporte comunitario",
+        "exports": "Exportaciones basicas (XML, HTML)",
+        "watermark": "Marca de agua Brubru en exportaciones"
+      },
+      "yellow": {
+        "chat": "Chat IA avanzado",
+        "amendments": "Enmiendas ilimitadas",
+        "searches": "Busquedas guardadas ilimitadas",
+        "support": "Soporte por email (respuesta 48h)",
+        "exports": "Todos los formatos de exportacion (PDF, Word, XML, HTML)",
+        "watermark": "Sin marca de agua",
+        "priority": "Tiempos de respuesta prioritarios",
+        "rss": "Alertas de feeds RSS",
+        "personalization": "Saludo personalizado"
+      },
+      "blue": {
+        "everything": "Todo en Profesional, mas:",
+        "multiUser": "Cuentas de equipo multiusuario",
+        "support": "Soporte dedicado (respuesta 24h)",
+        "customDomain": "Especializacion de dominio personalizada",
+        "whiteLabel": "Opciones de marca blanca",
+        "sla": "Acuerdo de Nivel de Servicio (SLA)",
+        "training": "Incorporacion y formacion",
+        "api": "Acceso API",
+        "preferences": "Preferencias de usuario avanzadas"
+      }
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": "Que metodos de pago aceptais?",
+      "a1": "Aceptamos todas las principales tarjetas de credito, debito y transferencias bancarias a traves de Stripe. Los clientes empresariales pueden solicitar facturacion.",
+      "q2": "Puedo cambiar mi plan despues?",
+      "a2": "Si, puedes mejorar tu plan en cualquier momento. Las rebajas de plan entran en vigor al final del ciclo de facturacion actual.",
+      "q3": "Cual es vuestra politica de reembolso?",
+      "a3": "Ofrecemos una garantia de devolucion de dinero de 14 dias para planes anuales. Los planes mensuales se pueden cancelar en cualquier momento.",
+      "q4": "Ofreceis prueba gratuita?",
+      "a4": "Nuestro nivel Basico es gratuito para siempre con 5 enmiendas al mes. Puedes probar las funciones Profesionales con una prueba de 14 dias.",
+      "q5": "Como funciona el precio Empresarial?",
+      "a5": "El precio empresarial se personaliza segun el tamano del equipo, requisitos de funciones y volumen de uso. Contactanos para una cotizacion a medida.",
+      "q6": "Que pasa si excedo mi limite de enmiendas?",
+      "a6": "Los usuarios del nivel Basico estan limitados a 5 enmiendas al mes. Para crear mas, mejora a Profesional para enmiendas ilimitadas."
+    },
+    "trust": {
+      "title": "De confianza para profesionales de politicas en toda Europa",
+      "subtitle": "Unete a las organizaciones que ya usan Brubru"
+    },
+    "cta": {
+      "title": "Listo para comenzar?",
+      "subtitle": "Unete a los profesionales de politicas que usan Brubru para navegar el panorama de la UE",
+      "button": "Comenzar Gratis",
+      "contact": "O contactanos para Empresarial"
+    }
+  },
+  "euLawComply": {
+    "history": "Historial de Analisis",
+    "completed": "Completado",
+    "processing": "Procesando",
+    "failed": "Fallido",
+    "loadingHistory": "Cargando historial...",
+    "retry": "Reintentar",
+    "noAnalyses": "Sin analisis de cumplimiento aun",
+    "runFirstAnalysis": "Ejecuta tu primer analisis de cumplimiento para comenzar",
+    "refresh": "Actualizar",
+    "refreshing": "Actualizando..."
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Exito",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "close": "Cerrar",
+    "open": "Abrir"
+  }
+}

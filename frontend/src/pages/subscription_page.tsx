@@ -56,7 +56,7 @@ export const SubscriptionPage = () => {
           {/* White Tier - Basic */}
           <div className="subscription__pricing-card">
             <div className="subscription__pricing-header">
-              <div className="subscription__pricing-badge">🤍 WHITE</div>
+              <div className="subscription__pricing-badge"><span className="mdi mdi-heart-outline"></span> WHITE</div>
               <h3 className="subscription__pricing-name">{t('subscription.white.name')}</h3>
               <div className="subscription__pricing-price">
                 <span className="subscription__pricing-amount">{t('subscription.white.price')}</span>
@@ -66,12 +66,12 @@ export const SubscriptionPage = () => {
             </div>
 
             <ul className="subscription__pricing-features">
-              <li>✓ {t('subscription.features.white.chat')}</li>
-              <li>✓ {t('subscription.features.white.amendments')}</li>
-              <li>✓ {t('subscription.features.white.searches')}</li>
-              <li>✓ {t('subscription.features.white.support')}</li>
-              <li>✓ {t('subscription.features.white.exports')}</li>
-              <li>⚠ {t('subscription.features.white.watermark')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.white.chat')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.white.amendments')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.white.searches')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.white.support')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.white.exports')}</li>
+              <li><span className="mdi mdi-alert"></span> {t('subscription.features.white.watermark')}</li>
             </ul>
 
             <Link to="/signup" className="subscription__pricing-button button button-outline">
@@ -82,7 +82,7 @@ export const SubscriptionPage = () => {
           {/* Yellow Tier - Professional */}
           <div className="subscription__pricing-card subscription__pricing-card--featured">
             <div className="subscription__pricing-badge subscription__pricing-badge--popular">
-              💛 YELLOW • {t('subscription.yellow.popular').toUpperCase()}
+              <span className="mdi mdi-heart subscription__pricing-badge-icon--yellow"></span> YELLOW • {t('subscription.yellow.popular').toUpperCase()}
             </div>
             <div className="subscription__pricing-header">
               <h3 className="subscription__pricing-name">{t('subscription.yellow.name')}</h3>
@@ -97,15 +97,15 @@ export const SubscriptionPage = () => {
             </div>
 
             <ul className="subscription__pricing-features">
-              <li>✓ {t('subscription.features.yellow.chat')}</li>
-              <li>✓ {t('subscription.features.yellow.amendments')}</li>
-              <li>✓ {t('subscription.features.yellow.searches')}</li>
-              <li>✓ {t('subscription.features.yellow.priority')}</li>
-              <li>✓ {t('subscription.features.yellow.watermark')}</li>
-              <li>✓ {t('subscription.features.yellow.exports')}</li>
-              <li>✓ {t('subscription.features.yellow.rss')}</li>
-              <li>✓ {t('subscription.features.yellow.personalization')}</li>
-              <li>✓ {t('subscription.features.yellow.support')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.chat')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.amendments')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.searches')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.priority')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.watermark')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.exports')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.rss')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.personalization')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.yellow.support')}</li>
             </ul>
 
             <button
@@ -120,7 +120,7 @@ export const SubscriptionPage = () => {
           {/* Blue Tier - Enterprise */}
           <div className="subscription__pricing-card">
             <div className="subscription__pricing-header">
-              <div className="subscription__pricing-badge">💙 BLUE</div>
+              <div className="subscription__pricing-badge"><span className="mdi mdi-heart subscription__pricing-badge-icon--blue"></span> BLUE</div>
               <h3 className="subscription__pricing-name">{t('subscription.blue.name')}</h3>
               <div className="subscription__pricing-price">
                 <span className="subscription__pricing-amount subscription__pricing-amount--custom">
@@ -133,23 +133,22 @@ export const SubscriptionPage = () => {
 
             <ul className="subscription__pricing-features">
               <li><strong>{t('subscription.features.blue.everything')}</strong></li>
-              <li>✓ {t('subscription.features.blue.multiUser')}</li>
-              <li>✓ {t('subscription.features.blue.customDomain')}</li>
-              <li>✓ {t('subscription.features.blue.whiteLabel')}</li>
-              <li>✓ {t('subscription.features.blue.sla')}</li>
-              <li>✓ {t('subscription.features.blue.training')}</li>
-              <li>✓ {t('subscription.features.blue.api')}</li>
-              <li>✓ {t('subscription.features.blue.preferences')}</li>
-              <li>✓ {t('subscription.features.blue.support')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.multiUser')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.customDomain')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.whiteLabel')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.sla')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.training')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.api')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.preferences')}</li>
+              <li><span className="mdi mdi-check"></span> {t('subscription.features.blue.support')}</li>
             </ul>
 
-            <button
-              onClick={() => handleUpgrade('blue', 'monthly')}
+            <a
+              href="mailto:helloberesol@gmail.com?subject=Brubru%20Blue%20-%20How%20Can%20I%20Get%20More%20Information%3F"
               className="subscription__pricing-button button button-outline"
-              disabled={loading === 'blue-monthly'}
             >
-              {loading === 'blue-monthly' ? 'Loading...' : t('subscription.blue.button')}
-            </button>
+              {t('subscription.blue.button')}
+            </a>
           </div>
         </div>
       </section>

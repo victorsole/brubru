@@ -12,15 +12,245 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
+import httpx
+import re
+
 from services.storage.document_storage import get_document_storage
 from services.document_processing.pdf_processor import PDFProcessor
 from services.document_processing.docx_processor import get_docx_processor
 from services.document_processing.url_parser import get_url_parser
 from services.api_clients.eurlex_client import EURLexClient
 from services.scrapers.eurlex_scraper import get_eurlex_scraper
-from services.parsers.eurlex_parser import EurlexParser
+from services.parsers.eurlex_parser import EurlexParser, parse_com_document_text, parse_article_structure
+from core.database import SessionLocal
+from models.legislative_train import LegislativeCarriage
 
 logger = logging.getLogger(__name__)
+
+
+def expand_articles_to_elements(articles, recitals=None) -> List[dict]:
+    """
+    Expand parsed articles into flat elements for the Amendator UI.
+
+    Each paragraph and subparagraph becomes a separate amendable cell.
+    """
+    elements = []
+
+    # Add recitals first
+    if recitals:
+        for recital in recitals:
+            elements.append({
+                'type': 'recital',
+                'number': recital.number if hasattr(recital, 'number') else str(recital.get('number', '')),
+                'text': recital.text if hasattr(recital, 'text') else recital.get('text', ''),
+                'level': 0
+            })
+
+    # Add articles - expand into separate amendable elements
+    for article in articles:
+        article_number = article.number if hasattr(article, 'number') else article.get('number', '')
+        article_title = article.title if hasattr(article, 'title') else article.get('title', '')
+        article_intro = article.intro_text if hasattr(article, 'intro_text') else article.get('intro_text', '')
+        article_paragraphs = article.paragraphs if hasattr(article, 'paragraphs') else article.get('paragraphs', [])
+        article_text = article.text if hasattr(article, 'text') else article.get('text', '')
+
+        # 1. Article title element (if article has a title)
+        if article_title:
+            elements.append({
+                'type': 'article_title',
+                'number': article_number,
+                'text': article_title,
+                'article_number': article_number,
+                'level': 0
+            })
+
+        # 2. Article intro text (text before first paragraph)
+        if article_intro:
+            elements.append({
+                'type': 'article_intro',
+                'number': article_number,
+                'text': article_intro,
+                'article_number': article_number,
+                'level': 0
+            })
+
+        # 3. Each paragraph as separate element
+        for para in article_paragraphs:
+            para_number = para.number if hasattr(para, 'number') else para.get('number', '')
+            para_text = para.text if hasattr(para, 'text') else para.get('text', '')
+            para_subparagraphs = para.subparagraphs if hasattr(para, 'subparagraphs') else para.get('subparagraphs', [])
+
+            elements.append({
+                'type': 'paragraph',
+                'number': para_number,
+                'text': para_text,
+                'article_number': article_number,
+                'level': 1
+            })
+
+            # 4. Each subparagraph as separate element
+            for subpara in para_subparagraphs:
+                subpara_number = subpara.number if hasattr(subpara, 'number') else subpara.get('number', '')
+                subpara_text = subpara.text if hasattr(subpara, 'text') else subpara.get('text', '')
+
+                elements.append({
+                    'type': 'subparagraph',
+                    'number': subpara_number,
+                    'text': subpara_text,
+                    'article_number': article_number,
+                    'paragraph_number': para_number,
+                    'level': 2
+                })
+
+        # If no paragraphs were extracted, add the full article text
+        if not article_paragraphs and not article_intro:
+            text = article_text if article_text else f"Article {article_number}"
+            elements.append({
+                'type': 'article',
+                'number': article_number,
+                'text': text,
+                'title': article_title,
+                'level': 0
+            })
+
+    return elements
+
+
+def parse_text_as_legislative(text: str, celex: str = "") -> Optional[dict]:
+    """
+    Try to parse plain text as legislative document structure.
+
+    Returns legislative_structure dict if successful, None if text doesn't look legislative.
+    """
+    if not text or len(text) < 500:
+        return None
+
+    # Check if this looks like legislative text (has Article patterns)
+    article_pattern = re.compile(r'(?:^|\n)\s*Article\s+(\d+[a-z]?)\b', re.IGNORECASE)
+    article_matches = list(article_pattern.finditer(text))
+
+    if len(article_matches) < 2:
+        # Doesn't look like legislative text
+        return None
+
+    # Try to parse using COM document parser (handles both proposals and general legislative text)
+    try:
+        parsed = parse_com_document_text(text, celex)
+
+        if parsed.articles:
+            elements = expand_articles_to_elements(parsed.articles, parsed.recitals)
+
+            if elements:
+                return {
+                    'elements': elements,
+                    'title': parsed.title or '',
+                    'celex': celex,
+                    'source': 'uploaded-document'
+                }
+    except Exception as e:
+        logger.warning(f"Failed to parse text as legislative: {str(e)}")
+
+    return None
+
+
+def is_waf_blocked(html_content: Optional[str]) -> bool:
+    """Check if the response is a WAF challenge page."""
+    if not html_content:
+        return True
+    if len(html_content) < 3000 and 'awsWafCookieDomainList' in html_content:
+        return True
+    if 'challenge.js' in html_content and 'AwsWafIntegration' in html_content:
+        return True
+    return False
+
+
+def build_ep_regdata_url(celex: str, language: str = "EN") -> Optional[str]:
+    """
+    Build European Parliament RegData URL for COM documents.
+
+    CELEX format for COM documents: 5YYYYPCnnnn (e.g., 52025PC0543)
+    RegData URL format: https://www.europarl.europa.eu/RegData/docs_autres_institutions/
+                        commission_europeenne/com/YYYY/nnnn/COM_COM(YYYY)nnnn_EN.pdf
+    """
+    # Match COM document CELEX: 5YYYYPCnnnn
+    match = re.match(r'^5(\d{4})PC(\d+)$', celex)
+    if not match:
+        return None
+
+    year = match.group(1)
+    number = match.group(2).zfill(4)  # Pad to 4 digits
+
+    return (
+        f"https://www.europarl.europa.eu/RegData/docs_autres_institutions/"
+        f"commission_europeenne/com/{year}/{number}/COM_COM({year}){number}_{language}.pdf"
+    )
+
+
+def get_title_from_tracked_files(celex: str) -> Optional[str]:
+    """
+    Look up document title from tracked legislative files by CELEX number.
+    """
+    try:
+        db = SessionLocal()
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.celex_numbers.contains([celex])
+        ).first()
+        db.close()
+
+        if carriage:
+            return carriage.title
+        return None
+    except Exception as e:
+        logger.debug(f"Could not look up title for {celex}: {str(e)}")
+        return None
+
+
+async def fetch_com_document_from_ep(celex: str, language: str = "EN") -> Optional[dict]:
+    """
+    Fetch COM document PDF from European Parliament RegData as fallback.
+
+    Returns processed document content or None if not available.
+    """
+    url = build_ep_regdata_url(celex, language)
+    if not url:
+        logger.debug(f"CELEX {celex} is not a COM document, skipping EP RegData fallback")
+        return None
+
+    logger.info(f"Trying EP RegData fallback for {celex}: {url}")
+
+    try:
+        # First verify the URL returns a PDF
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.head(url)
+
+            if response.status_code != 200:
+                logger.warning(f"EP RegData returned {response.status_code} for {celex}")
+                return None
+
+        # Process the PDF from URL
+        pdf_processor = PDFProcessor()
+        pdf_content = await pdf_processor.process_pdf_from_url(url)
+
+        if pdf_content and pdf_content.full_text:
+            logger.info(f"Successfully processed {pdf_content.word_count} words from EP RegData for {celex}")
+            return {
+                'text': pdf_content.full_text,
+                'metadata': {
+                    'title': pdf_content.metadata.title,
+                    'author': pdf_content.metadata.author,
+                    'page_count': pdf_content.metadata.page_count,
+                },
+                'word_count': pdf_content.word_count,
+                'quality': pdf_content.extraction_quality,
+                'source': 'EP-RegData',
+                'source_url': url
+            }
+
+        return None
+
+    except Exception as e:
+        logger.error(f"Failed to fetch from EP RegData for {celex}: {str(e)}")
+        return None
 
 router = APIRouter(prefix="/api/documents")
 
@@ -218,9 +448,17 @@ async def fetch_eurlex_document(request: FetchEURLexRequest) -> JSONResponse:
 
         # Fetch HTML and parse legislative structure
         legislative_structure = None
+        ep_regdata_fallback_used = False
+
         try:
             eurlex_client = EURLexClient()
             html_content = await eurlex_client.get_document_html(celex, request.language)
+            await eurlex_client.close()
+
+            # Check if WAF blocked the request
+            if is_waf_blocked(html_content):
+                logger.warning(f"EUR-Lex WAF blocked request for {celex}, trying EP RegData fallback")
+                html_content = None
 
             if html_content:
                 parser = EurlexParser()
@@ -238,16 +476,60 @@ async def fetch_eurlex_document(request: FetchEURLexRequest) -> JSONResponse:
                         'level': 0
                     })
 
-                # Add articles
+                # Add articles - expand into separate amendable elements
                 for article in parsed.articles:
-                    # Add article title/header
-                    elements.append({
-                        'type': 'article',
-                        'number': article.number,
-                        'text': article.title or f"Article {article.number}",
-                        'title': article.title,
-                        'level': 0
-                    })
+                    # 1. Article title element (if article has a title)
+                    if article.title:
+                        elements.append({
+                            'type': 'article_title',
+                            'number': article.number,
+                            'text': article.title,
+                            'article_number': article.number,
+                            'level': 0
+                        })
+
+                    # 2. Article intro text (text before first paragraph)
+                    if article.intro_text:
+                        elements.append({
+                            'type': 'article_intro',
+                            'number': article.number,
+                            'text': article.intro_text,
+                            'article_number': article.number,
+                            'level': 0
+                        })
+
+                    # 3. Each paragraph as separate element
+                    for para in article.paragraphs:
+                        # Add the paragraph itself
+                        elements.append({
+                            'type': 'paragraph',
+                            'number': para.number,
+                            'text': para.text,
+                            'article_number': article.number,
+                            'level': 1
+                        })
+
+                        # 4. Each subparagraph as separate element
+                        for subpara in para.subparagraphs:
+                            elements.append({
+                                'type': 'subparagraph',
+                                'number': subpara.number,
+                                'text': subpara.text,
+                                'article_number': article.number,
+                                'paragraph_number': para.number,
+                                'level': 2
+                            })
+
+                    # If no paragraphs were extracted, add the full article text
+                    if not article.paragraphs and not article.intro_text:
+                        article_text = article.text if article.text else f"Article {article.number}"
+                        elements.append({
+                            'type': 'article',
+                            'number': article.number,
+                            'text': article_text,
+                            'title': article.title,
+                            'level': 0
+                        })
 
                 if elements:
                     legislative_structure = {
@@ -257,22 +539,125 @@ async def fetch_eurlex_document(request: FetchEURLexRequest) -> JSONResponse:
                     }
                     logger.info(f"Parsed {len(parsed.recitals)} recitals and {len(parsed.articles)} articles from {celex}")
 
-            await eurlex_client.close()
         except Exception as e:
-            logger.warning(f"Failed to parse legislative structure: {str(e)}")
+            logger.warning(f"Failed to parse legislative structure from EUR-Lex: {str(e)}")
+
+        # Fallback to EP RegData for COM documents if EUR-Lex failed
+        if not legislative_structure:
+            ep_fallback = await fetch_com_document_from_ep(celex, request.language)
+            if ep_fallback:
+                ep_regdata_fallback_used = True
+                fallback_text = ep_fallback.get('text', '')
+                text = fallback_text or text
+
+                # Parse the COM document text to extract recitals and articles
+                if fallback_text:
+                    parsed = parse_com_document_text(fallback_text, celex)
+
+                    # Convert parsed document to frontend format
+                    elements = []
+
+                    # Add recitals
+                    for recital in parsed.recitals:
+                        elements.append({
+                            'type': 'recital',
+                            'number': recital.number,
+                            'text': recital.text,
+                            'level': 0
+                        })
+
+                    # Add articles - expand into separate amendable elements
+                    for article in parsed.articles:
+                        # 1. Article title element (if article has a title)
+                        if article.title:
+                            elements.append({
+                                'type': 'article_title',
+                                'number': article.number,
+                                'text': article.title,
+                                'article_number': article.number,
+                                'level': 0
+                            })
+
+                        # 2. Article intro text (text before first paragraph)
+                        if article.intro_text:
+                            elements.append({
+                                'type': 'article_intro',
+                                'number': article.number,
+                                'text': article.intro_text,
+                                'article_number': article.number,
+                                'level': 0
+                            })
+
+                        # 3. Each paragraph as separate element
+                        for para in article.paragraphs:
+                            elements.append({
+                                'type': 'paragraph',
+                                'number': para.number,
+                                'text': para.text,
+                                'article_number': article.number,
+                                'level': 1
+                            })
+
+                            # 4. Each subparagraph as separate element
+                            for subpara in para.subparagraphs:
+                                elements.append({
+                                    'type': 'subparagraph',
+                                    'number': subpara.number,
+                                    'text': subpara.text,
+                                    'article_number': article.number,
+                                    'paragraph_number': para.number,
+                                    'level': 2
+                                })
+
+                        # If no paragraphs were extracted, add the full article text
+                        if not article.paragraphs and not article.intro_text:
+                            article_text = article.text if article.text else f"Article {article.number}"
+                            elements.append({
+                                'type': 'article',
+                                'number': article.number,
+                                'text': article_text,
+                                'title': article.title,
+                                'level': 0
+                            })
+
+                    if elements:
+                        # Get title from parsed document, EP fallback, or document_data
+                        fallback_title = parsed.title or ep_fallback.get('metadata', {}).get('title') or document_data.get('title', '')
+
+                        legislative_structure = {
+                            'elements': elements,
+                            'title': fallback_title,
+                            'celex': celex,
+                            'source': 'EP-RegData (PDF)'
+                        }
+                        logger.info(f"Parsed {len(parsed.recitals)} recitals and {len(parsed.articles)} articles from EP RegData PDF for {celex}")
+
+        # Get title - prefer parsed title, fall back to scraper title, then tracked files
+        document_title = ''
+        if legislative_structure and legislative_structure.get('title'):
+            document_title = legislative_structure.get('title')
+        if not document_title:
+            document_title = document_data.get('title', '')
+        if not document_title or document_title == 'Unknown Title':
+            tracked_title = get_title_from_tracked_files(celex)
+            if tracked_title:
+                document_title = tracked_title
+                # Also update the legislative_structure title if it exists
+                if legislative_structure:
+                    legislative_structure['title'] = tracked_title
 
         # Build response
         response_data = {
             'document_id': document_id,
-            'filename': f"{celex}.html",
+            'filename': f"{celex}.pdf" if ep_regdata_fallback_used else f"{celex}.html",
             'text': text,
             'metadata': {
                 'celex': celex,
-                'title': document_data.get('title', ''),
+                'title': document_title,
                 'date': str(document_data.get('date_published', '')) if document_data.get('date_published') else '',
                 'type': document_data.get('document_type', ''),
                 'language': request.language,
-                'source': 'EUR-Lex',
+                'source': 'EP-RegData' if ep_regdata_fallback_used else 'EUR-Lex',
                 'subjects': document_data.get('subjects', [])
             },
             'structure': {'legislative_structure': legislative_structure} if legislative_structure else None,
@@ -347,6 +732,10 @@ async def get_document_metadata(document_id: str) -> JSONResponse:
 async def get_document_content(document_id: str) -> JSONResponse:
     """
     Get document full content (text, structure, metadata).
+
+    For uploaded legislative documents, this will automatically detect and parse
+    the document structure (articles, paragraphs, subparagraphs) so each element
+    can be individually amended in the Amendator UI.
     """
     try:
         storage = get_document_storage()
@@ -362,15 +751,25 @@ async def get_document_content(document_id: str) -> JSONResponse:
             )
 
         processed = document['processed_content']
+        text = processed.get('text', '')
+        structure = processed.get('structure')
+
+        # If no legislative_structure exists, try to detect and parse legislative text
+        if not structure or not structure.get('legislative_structure'):
+            legislative_structure = parse_text_as_legislative(text)
+
+            if legislative_structure:
+                structure = {'legislative_structure': legislative_structure}
+                logger.info(f"Detected and parsed legislative structure in uploaded document {document_id}")
 
         return JSONResponse(
             status_code=200,
             content={
                 'document_id': document['document_id'],
                 'filename': document['filename'],
-                'text': processed.get('text', ''),
+                'text': text,
                 'metadata': processed.get('metadata', {}),
-                'structure': processed.get('structure'),
+                'structure': structure,
                 'tables': processed.get('tables'),
                 'quality': processed.get('quality', 'unknown')
             }

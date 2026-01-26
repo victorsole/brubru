@@ -1,0 +1,120 @@
+/**
+ * Track File Button Styles
+ */
+
+.track-file-button__wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.track-file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-family: inherit;
+}
+
+.track-file-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Icon variant */
+.track-file-button--icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  color: #999;
+  border-radius: 50%;
+}
+
+.track-file-button--icon:hover {
+  background: #f5f5f5;
+  color: #0693E3;
+}
+
+.track-file-button--icon.track-file-button--tracked {
+  color: #ffc107;
+}
+
+.track-file-button--icon.track-file-button--tracked:hover {
+  background: #fff8e1;
+}
+
+/* Compact variant */
+.track-file-button--compact {
+  padding: 0.25rem 0.5rem;
+  background: #f5f5f5;
+  color: #666;
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.track-file-button--compact:hover {
+  background: #e3f2fd;
+  color: #0693E3;
+}
+
+.track-file-button--compact.track-file-button--tracked {
+  background: #fff8e1;
+  color: #f57c00;
+}
+
+.track-file-button--compact.track-file-button--tracked:hover {
+  background: #ffecb3;
+}
+
+/* Full button variant */
+.track-file-button--full {
+  padding: 0.5rem 1rem;
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.track-file-button--full:hover {
+  background: #e3f2fd;
+  color: #0693E3;
+  border-color: #0693E3;
+}
+
+.track-file-button--full.track-file-button--tracked {
+  background: #fff8e1;
+  color: #f57c00;
+  border-color: #ffc107;
+}
+
+.track-file-button--full.track-file-button--tracked:hover {
+  background: #ffecb3;
+}
+
+/* Error message */
+.track-file-button__error {
+  font-size: 0.6875rem;
+  color: #f44336;
+  text-align: center;
+}
+
+/* Loading spin animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.track-file-button svg[spin="true"] {
+  animation: spin 1s linear infinite;
+}

@@ -6,7 +6,11 @@
  */
 
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import Icon from '@mdi/react';
+import { mdiRobotOutline } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
+import { DocumentGeneratorWizard } from './document_generator_wizard';
 import './documents_tab.css';
 
 export const DocumentsTab = () => {
@@ -22,6 +26,7 @@ export const DocumentsTab = () => {
   const [filterType, setFilterType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showGeneratorWizard, setShowGeneratorWizard] = useState(false);
 
   useEffect(() => {
     fetchDocuments({
@@ -68,12 +73,21 @@ export const DocumentsTab = () => {
       {/* Header */}
       <div className="documents-tab__header">
         <h2>My Documents</h2>
-        <button
-          className="documents-tab__create-btn"
-          onClick={() => setShowCreateModal(true)}
-        >
-          + Create Document
-        </button>
+        <div className="documents-tab__header-actions">
+          <button
+            className="documents-tab__generate-btn"
+            onClick={() => setShowGeneratorWizard(true)}
+          >
+            <Icon path={mdiRobotOutline} size={0.9} />
+            Generate with AI
+          </button>
+          <button
+            className="documents-tab__create-btn"
+            onClick={() => setShowCreateModal(true)}
+          >
+            + Create Document
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -165,8 +179,8 @@ export const DocumentsTab = () => {
         )}
       </div>
 
-      {/* Create Modal */}
-      {showCreateModal && (
+      {/* Create Modal - rendered via portal to escape stacking context */}
+      {showCreateModal && createPortal(
         <div className="documents-tab__modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="documents-tab__modal" onClick={(e) => e.stopPropagation()}>
             <div className="documents-tab__modal-header">
@@ -239,8 +253,21 @@ export const DocumentsTab = () => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
+
+      {/* Document Generator Wizard */}
+      <DocumentGeneratorWizard
+        isOpen={showGeneratorWizard}
+        onClose={() => setShowGeneratorWizard(false)}
+        onDocumentGenerated={() => {
+          fetchDocuments({
+            document_type: filterType !== 'all' ? filterType : undefined,
+            search: searchQuery || undefined,
+          });
+        }}
+      />
     </div>
   );
 };
