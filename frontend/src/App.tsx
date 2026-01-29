@@ -163,7 +163,7 @@ export const App = () => {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute showPreview={false}>
                 <>
                   <Header />
                   <AnimatedPage>
@@ -177,7 +177,7 @@ export const App = () => {
           <Route
             path="/subscription"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute showPreview={false}>
                 <>
                   <Header />
                   <AnimatedPage>
@@ -205,7 +205,7 @@ export const App = () => {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute showPreview={false}>
                 <>
                   <Header />
                   <AnimatedPage>
