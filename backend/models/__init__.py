@@ -13,8 +13,27 @@ from .user_saved_entry import UserSavedEntry
 from .user_document import UserDocument
 from .notification import Notification
 from .chat_example_prompt import ChatExamplePrompt
+from .legislative_train import LegislativeTrain, LegislativeCarriage
 from .amendment import Amendment
 from .tender import Tender, TenderProfile, TenderMatch, TenderFetchJob
+from .committee_work import (
+    CommitteeWorkItem,
+    UserCommitteeWorkTrack,
+    CommitteeWorkStatusHistory,
+    ProcedureTypeEnum,
+    CommitteeRoleEnum,
+    CommitteeWorkStatusEnum,
+)
+from .public_consultation import (
+    PublicConsultation,
+    ConsultationDocument,
+    UserConsultationTrack,
+    UserConsultationInput,
+    ConsultationStatusHistory,
+    ConsultationTypeEnum,
+    ConsultationStatusEnum,
+    DocumentTypeEnum,
+)
 
 __all__ = [
     "User",
@@ -26,9 +45,25 @@ __all__ = [
     "UserDocument",
     "Notification",
     "ChatExamplePrompt",
+    "LegislativeTrain",
+    "LegislativeCarriage",
     "Amendment",
     "Tender",
     "TenderProfile",
     "TenderMatch",
     "TenderFetchJob",
+    "CommitteeWorkItem",
+    "UserCommitteeWorkTrack",
+    "CommitteeWorkStatusHistory",
+    "ProcedureTypeEnum",
+    "CommitteeRoleEnum",
+    "CommitteeWorkStatusEnum",
+    "PublicConsultation",
+    "ConsultationDocument",
+    "UserConsultationTrack",
+    "UserConsultationInput",
+    "ConsultationStatusHistory",
+    "ConsultationTypeEnum",
+    "ConsultationStatusEnum",
+    "DocumentTypeEnum",
 ]

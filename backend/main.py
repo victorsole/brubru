@@ -25,7 +25,7 @@ from api import (
     user_documents, legislative_tracking, notifications, export, personalization,
     feedback, admin_panel, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
-    user_preferences, admin_analytics, generate
+    user_preferences, admin_analytics, generate, committee_work, public_consultations
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -129,6 +129,8 @@ app.include_router(feedback.router, tags=["Feedback"])
 app.include_router(admin_panel.router, tags=["Admin Panel"])
 app.include_router(admin_eu_comply.router, prefix="/api/admin/eu-comply", tags=["Admin EU Comply"])
 app.include_router(committees.router, tags=["Committees"])
+app.include_router(committee_work.router, tags=["Committee Work"])
+app.include_router(public_consultations.router, tags=["Public Consultations"])
 app.include_router(chat_examples_public_router)
 app.include_router(chat_examples_admin_router)
 app.include_router(amendments.router, tags=["Amendments"])

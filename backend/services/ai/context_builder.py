@@ -33,7 +33,12 @@ from services.api_clients.tavily_client import TavilyClient, get_tavily_client, 
 # from services.scrapers.rss_manager import RSSManager  # TODO: Fix - RSSManager doesn't exist
 from knowledge_base.reference_data import ReferenceDataService, get_reference_data_service
 from knowledge_base.knowledge_loader import KnowledgeLoader, get_knowledge_loader
+from knowledge_base.beresol_knowledge_loader import BeresolKnowledgeLoader, get_beresol_knowledge_loader
 from models.legislative_train import LegislativeTrain, LegislativeCarriage
+from models.committee_work import CommitteeWorkItem, ProcedureTypeEnum
+from models.public_consultation import PublicConsultation, ConsultationStatusEnum
+from knowledge_base.ep_committees import EP_COMMITTEE_BY_CODE
+from knowledge_base.ec_consultations import DGS, PolicyArea, get_dg_full_name
 from core.database import SessionLocal
 
 logger = logging.getLogger(__name__)
@@ -70,6 +75,16 @@ SOURCE_TIERS = {
     'tavily': 5,
     'tender': 4,
     'tender_match': 4,
+
+    # Beresol open reports/monitors (Tier 4 - curated analysis from Brubru's company)
+    'beresol_report': 4,
+    'beresol_monitor': 4,
+
+    # EP Committee Work in Progress (Tier 4 - curated EP committee data)
+    'committee_work': 4,
+
+    # EC Public Consultations (Tier 3 - official EC "Have Your Say" portal)
+    'public_consultation': 3,
 }
 
 
@@ -130,6 +145,15 @@ class ContextData:
     # Real-time web search (Tavily)
     web_search_results: List[Dict[str, Any]]
 
+    # Beresol open reports and monitors (Brubru's company)
+    beresol_content: List[Dict[str, Any]]
+
+    # EP Committee Work in Progress items
+    committee_work_items: List[Dict[str, Any]]
+
+    # EC Public Consultations (Have Your Say portal)
+    public_consultations: List[Dict[str, Any]]
+
     # Metadata
     query: str
     search_time_ms: float
@@ -167,6 +191,7 @@ class ContextBuilder:
         freshness_detector: Optional[FreshnessDetector] = None,  # Phase 5: Freshness detection
         tender_context_provider: Optional[TenderContextProvider] = None,  # Phase 8: Tender chat
         tavily_client: Optional[TavilyClient] = None,  # Real-time web search
+        beresol_loader: Optional[BeresolKnowledgeLoader] = None,  # Beresol open reports
         max_search_results: int = 5,
         max_live_api_calls: int = 3,
         rss_lookback_days: int = 7,
@@ -212,6 +237,7 @@ class ContextBuilder:
         self.freshness_detector = freshness_detector or get_freshness_detector()  # Phase 5
         self.tender_context_provider = tender_context_provider or get_tender_context_provider()  # Phase 8
         self.tavily_client = tavily_client or get_tavily_client()  # Real-time web search
+        self.beresol_loader = beresol_loader or get_beresol_knowledge_loader()  # Beresol reports
         self.max_search_results = max_search_results
         self.max_live_api_calls = max_live_api_calls
         self.rss_lookback_days = rss_lookback_days
@@ -370,6 +396,18 @@ class ContextBuilder:
         else:
             tasks.append(empty_result())
 
+        # Beresol open reports and monitors (Brubru's company)
+        if self.beresol_loader:
+            tasks.append(self._fetch_beresol_content(query=user_message))
+        else:
+            tasks.append(empty_result())
+
+        # EP Committee Work in Progress items
+        tasks.append(self._fetch_committee_work_items(query=user_message, entities=entities))
+
+        # Phase 9: Fetch EC Public Consultations (Have Your Say portal)
+        tasks.append(self._fetch_public_consultations(query=user_message, entities=entities))
+
         # Execute all tasks concurrently
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -405,6 +443,15 @@ class ContextBuilder:
         # Unpack web search results (index 11)
         web_search_results = results[11] if not isinstance(results[11], Exception) else []
 
+        # Unpack Beresol content (index 12)
+        beresol_content = results[12] if not isinstance(results[12], Exception) else []
+
+        # Unpack Committee Work items (index 13)
+        committee_work_items = results[13] if not isinstance(results[13], Exception) else []
+
+        # Unpack Public Consultations (index 14)
+        public_consultations = results[14] if not isinstance(results[14], Exception) else []
+
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
 
@@ -424,7 +471,10 @@ class ContextBuilder:
             len(eprs_publications) +  # Phase 2
             len(local_eu_laws) +  # Local laws
             tender_source_count +  # Phase 8: Tender data
-            len(web_search_results)  # Tavily web search
+            len(web_search_results) +  # Tavily web search
+            len(beresol_content) +  # Beresol open reports
+            len(committee_work_items) +  # EP Committee Work
+            len(public_consultations)  # EC Public Consultations
         )
 
         context_data = ContextData(
@@ -442,6 +492,9 @@ class ContextBuilder:
             ai_generated_briefings=ai_generated_briefings,  # Phase 5
             local_eu_laws=local_eu_laws,  # Local laws
             web_search_results=web_search_results,  # Tavily web search
+            beresol_content=beresol_content,  # Beresol open reports
+            committee_work_items=committee_work_items,  # EP Committee Work
+            public_consultations=public_consultations,  # EC Public Consultations
             tender_context=tender_context,  # Phase 8: Tender data
             reference_data_context=reference_data_context,
             query=user_message,
@@ -457,7 +510,9 @@ class ContextBuilder:
             f"{len(legislative_train_files)} LT files, {len(recent_rss_entries)} RSS, "
             f"{len(internal_knowledge)} internal, {len(eprs_publications)} EPRS, "
             f"{len(local_eu_laws)} local laws, {tender_source_count} tenders, "
-            f"{len(web_search_results)} web) in {search_time:.2f}ms"
+            f"{len(web_search_results)} web, {len(beresol_content)} beresol, "
+            f"{len(committee_work_items)} committee work, "
+            f"{len(public_consultations)} consultations) in {search_time:.2f}ms"
         )
 
         return context_data
@@ -1138,6 +1193,261 @@ class ContextBuilder:
             logger.error(f"Failed to fetch legislative files: {str(e)}")
             return []
 
+    async def _fetch_committee_work_items(
+        self,
+        query: str,
+        entities: ExtractedEntities
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch relevant EP Committee Work in Progress items.
+
+        Looks for:
+        - Committee codes mentioned in query (AFET, LIBE, etc.)
+        - Procedure references (2025/0580(CNS))
+        - Procedure types (COD, CNS, APP, etc.)
+        - Keywords in titles
+
+        Args:
+            query: User query
+            entities: Extracted entities
+
+        Returns:
+            List of relevant committee work items
+        """
+        from sqlalchemy import or_
+
+        try:
+            db = SessionLocal()
+            work_items = []
+            query_lower = query.lower()
+
+            # Check for committee mentions
+            committee_mentions = []
+            for code in EP_COMMITTEE_BY_CODE.keys():
+                if code.lower() in query_lower:
+                    committee_mentions.append(code)
+
+            # Check for procedure type mentions
+            procedure_type_mentions = []
+            type_keywords = {
+                'ordinary legislative': ProcedureTypeEnum.COD,
+                'codecision': ProcedureTypeEnum.COD,
+                'cod': ProcedureTypeEnum.COD,
+                'consultation': ProcedureTypeEnum.CNS,
+                'cns': ProcedureTypeEnum.CNS,
+                'consent': ProcedureTypeEnum.APP,
+                'app': ProcedureTypeEnum.APP,
+                'own-initiative': ProcedureTypeEnum.INI,
+                'ini': ProcedureTypeEnum.INI,
+            }
+            for keyword, proc_type in type_keywords.items():
+                if keyword in query_lower and proc_type not in procedure_type_mentions:
+                    procedure_type_mentions.append(proc_type)
+
+            # Build query
+            base_query = db.query(CommitteeWorkItem)
+
+            # If specific committees mentioned, filter by those
+            if committee_mentions or entities.committee_codes:
+                all_committees = list(set(committee_mentions + entities.committee_codes))
+                base_query = base_query.filter(
+                    CommitteeWorkItem.committee_code.in_(all_committees)
+                )
+
+            # If procedure types mentioned, filter by those
+            if procedure_type_mentions:
+                base_query = base_query.filter(
+                    CommitteeWorkItem.procedure_type.in_(procedure_type_mentions)
+                )
+
+            # If procedure references mentioned, add those
+            if entities.procedure_references:
+                base_query = base_query.filter(
+                    or_(
+                        CommitteeWorkItem.procedure_ref.in_(entities.procedure_references),
+                        CommitteeWorkItem.committee_code.in_(committee_mentions) if committee_mentions else True
+                    )
+                )
+
+            # Order by relevance score then last updated
+            base_query = base_query.order_by(
+                CommitteeWorkItem.relevance_score.desc(),
+                CommitteeWorkItem.last_updated.desc()
+            )
+
+            # Limit results
+            results = base_query.limit(10).all()
+
+            # Format results
+            for item in results:
+                committee_info = EP_COMMITTEE_BY_CODE.get(item.committee_code)
+                committee_name = committee_info.name if committee_info else item.committee_code
+
+                work_items.append({
+                    'source_type': 'committee_work',
+                    'procedure_ref': item.procedure_ref,
+                    'committee_code': item.committee_code,
+                    'committee_name': committee_name,
+                    'title': item.title,
+                    'procedure_type': item.procedure_type.value if item.procedure_type else 'INI',
+                    'committee_role': item.committee_role.value if item.committee_role else 'lead',
+                    'relevance_score': item.relevance_score,
+                    'rapporteur': item.rapporteur_name,
+                    'status': item.status.value if item.status else 'unknown',
+                    'oeil_url': item.oeil_url,
+                    'ep_page_url': item.ep_page_url,
+                    'last_updated': item.last_updated.isoformat() if item.last_updated else None,
+                    'description': item.description[:300] if item.description else None
+                })
+
+            db.close()
+
+            logger.debug(f"Found {len(work_items)} committee work items for query")
+            return work_items
+
+        except Exception as e:
+            logger.error(f"Failed to fetch committee work items: {str(e)}")
+            return []
+
+    async def _fetch_public_consultations(
+        self,
+        query: str,
+        entities: ExtractedEntities
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch relevant EC Public Consultations from Have Your Say portal.
+
+        Looks for:
+        - DG codes mentioned in query (GROW, CLIMA, etc.)
+        - Policy area keywords
+        - Consultation-related keywords
+        - Open consultations with upcoming deadlines
+
+        Args:
+            query: User query
+            entities: Extracted entities
+
+        Returns:
+            List of relevant public consultations
+        """
+        from sqlalchemy import or_, and_
+        from datetime import datetime, timedelta
+
+        try:
+            db = SessionLocal()
+            consultations = []
+            query_lower = query.lower()
+
+            # Check for consultation-related keywords
+            consultation_keywords = [
+                'consultation', 'have your say', 'public consultation',
+                'feedback', 'participate', 'contribute', 'stakeholder',
+                'ec consultation', 'european commission consultation'
+            ]
+            is_consultation_query = any(kw in query_lower for kw in consultation_keywords)
+
+            # Check for DG mentions
+            dg_mentions = []
+            for dg in DGS:
+                if dg['code'].lower() in query_lower or dg['name'].lower() in query_lower:
+                    dg_mentions.append(dg['code'])
+
+            # Also check extracted DG codes from entities
+            if entities.dg_codes:
+                dg_mentions.extend(entities.dg_codes)
+            dg_mentions = list(set(dg_mentions))
+
+            # Check for policy area mentions
+            policy_area_mentions = []
+            for area in PolicyArea:
+                if area.value in query_lower or area.name.lower() in query_lower:
+                    policy_area_mentions.append(area.value)
+
+            # Also check entities for policy areas
+            if entities.policy_areas:
+                policy_area_mentions.extend(entities.policy_areas)
+            policy_area_mentions = list(set(policy_area_mentions))
+
+            # Build query
+            base_query = db.query(PublicConsultation)
+
+            # Prioritise open consultations
+            base_query = base_query.filter(
+                PublicConsultation.status == ConsultationStatusEnum.OPEN
+            )
+
+            # If DGs mentioned, filter by those
+            if dg_mentions:
+                base_query = base_query.filter(
+                    PublicConsultation.dg_responsible.in_(dg_mentions)
+                )
+
+            # If policy areas mentioned, filter by those
+            if policy_area_mentions:
+                # policy_areas is a JSONB array, need to use contains
+                area_conditions = []
+                for area in policy_area_mentions:
+                    area_conditions.append(
+                        PublicConsultation.policy_areas.contains([area])
+                    )
+                if area_conditions:
+                    base_query = base_query.filter(or_(*area_conditions))
+
+            # Order by deadline (soonest first) then by relevance score
+            base_query = base_query.order_by(
+                PublicConsultation.end_date.asc().nulls_last(),
+                PublicConsultation.relevance_score.desc()
+            )
+
+            # Limit results
+            results = base_query.limit(8).all()
+
+            # If no results but it's a consultation query, try without filters
+            if not results and is_consultation_query:
+                fallback_query = db.query(PublicConsultation).filter(
+                    PublicConsultation.status == ConsultationStatusEnum.OPEN
+                ).order_by(
+                    PublicConsultation.end_date.asc().nulls_last()
+                ).limit(5)
+                results = fallback_query.all()
+
+            # Format results
+            now = datetime.now()
+            for item in results:
+                days_remaining = None
+                is_closing_soon = False
+                if item.end_date:
+                    days_remaining = (item.end_date - now).days
+                    is_closing_soon = days_remaining <= 7 and days_remaining >= 0
+
+                consultations.append({
+                    'source_type': 'public_consultation',
+                    'consultation_id': item.consultation_id,
+                    'title': item.title,
+                    'description': item.description[:400] if item.description else None,
+                    'dg_responsible': item.dg_responsible,
+                    'dg_name': get_dg_full_name(item.dg_responsible) if item.dg_responsible else None,
+                    'consultation_type': item.consultation_type.value if item.consultation_type else 'public_consultation',
+                    'status': item.status.value if item.status else 'open',
+                    'policy_areas': item.policy_areas or [],
+                    'start_date': item.start_date.isoformat() if item.start_date else None,
+                    'end_date': item.end_date.isoformat() if item.end_date else None,
+                    'days_remaining': days_remaining,
+                    'is_closing_soon': is_closing_soon,
+                    'feedback_count': item.feedback_count,
+                    'portal_url': item.portal_url,
+                    'relevance_score': item.relevance_score
+                })
+
+            db.close()
+
+            logger.debug(f"Found {len(consultations)} public consultations for query")
+            return consultations
+
+        except Exception as e:
+            logger.error(f"Failed to fetch public consultations: {str(e)}")
+            return []
+
     async def _fetch_eu_laws_from_database(
         self,
         query: str,
@@ -1377,6 +1687,81 @@ class ContextBuilder:
             # Don't fail context building if web search fails
 
         return web_results
+
+    async def _fetch_beresol_content(
+        self,
+        query: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch relevant content from Beresol open reports and monitors.
+
+        Beresol is Brubru's company. Their open reports provide in-depth
+        analysis on EU policy topics that can enhance AI responses.
+
+        IMPORTANT: When referencing Beresol content, always mention:
+        - Source: "Beresol Open Report" or "Beresol Monitor"
+        - Link: https://beresol.eu/public-affairs
+
+        Args:
+            query: User query
+
+        Returns:
+            List of relevant Beresol content items
+        """
+        beresol_results = []
+
+        if not self.beresol_loader:
+            return beresol_results
+
+        try:
+            # Get relevant content from Beresol knowledge bundle
+            content_items = self.beresol_loader.get_relevant_content_for_query(
+                query=query,
+                max_reports=2,
+                max_content_length=3000
+            )
+
+            for item in content_items:
+                if item.get('type') == 'beresol_report':
+                    beresol_results.append({
+                        'type': 'beresol_report',
+                        'id': item['id'],
+                        'title': item['title'],
+                        'subtitle': item.get('subtitle', ''),
+                        'author': item['author'],
+                        'date': item.get('date'),
+                        'policy_area': item['policy_area'],
+                        'executive_summary': item.get('executive_summary', ''),
+                        'key_findings': item.get('key_findings', ''),
+                        'content_excerpt': item.get('content_excerpt', ''),
+                        'keywords': item.get('keywords', []),
+                        'source': item['source'],
+                        'publisher': item['publisher'],
+                        'source_url': item['source_url'],
+                        'attribution_note': item['attribution_note']
+                    })
+                elif item.get('type') == 'beresol_monitor':
+                    beresol_results.append({
+                        'type': 'beresol_monitor',
+                        'id': item['id'],
+                        'name': item['name'],
+                        'description': item['description'],
+                        'policy_area': item['policy_area'],
+                        'keywords': item.get('keywords', []),
+                        'source': item['source'],
+                        'publisher': item['publisher'],
+                        'source_url': item['source_url'],
+                        'attribution_note': item['attribution_note']
+                    })
+
+            if beresol_results:
+                logger.debug(f"Found {len(beresol_results)} relevant Beresol items for query")
+
+        except Exception as e:
+            logger.error(f"Failed to fetch Beresol content: {str(e)}")
+            # Don't fail context building if Beresol fetch fails
+
+        return beresol_results
 
     def _build_reference_data_context(
         self,
@@ -1779,6 +2164,104 @@ class ContextBuilder:
                     sections.append(f"  Source: {result['url']}")
                     sections.append("")
 
+        # Beresol open reports and monitors (Brubru's company)
+        if context_data.beresol_content:
+            sections.append(f"\nBERESOL OPEN REPORTS & MONITORS ({len(context_data.beresol_content)} items):")
+            sections.append("IMPORTANT: These are open reports and monitors published by Beresol, Brubru's company.")
+            sections.append("When referencing this content, mention it comes from Beresol: https://beresol.eu/public-affairs\n")
+
+            for item in context_data.beresol_content:
+                if item.get('type') == 'beresol_report':
+                    sections.append(f"OPEN REPORT: {item['title']}")
+                    if item.get('subtitle'):
+                        sections.append(f"  Subtitle: {item['subtitle']}")
+                    sections.append(f"  Author: {item['author']}")
+                    if item.get('date'):
+                        sections.append(f"  Date: {item['date']}")
+                    sections.append(f"  Policy Area: {item['policy_area']}")
+
+                    if item.get('executive_summary'):
+                        sections.append(f"\n  Executive Summary:")
+                        sections.append(f"  {item['executive_summary'][:800]}...")
+
+                    if item.get('key_findings'):
+                        sections.append(f"\n  Key Findings:")
+                        sections.append(f"  {item['key_findings'][:500]}...")
+
+                    if item.get('content_excerpt'):
+                        sections.append(f"\n  Content Excerpt:")
+                        sections.append(f"  {item['content_excerpt'][:1500]}...")
+
+                    if item.get('keywords'):
+                        sections.append(f"\n  Keywords: {', '.join(item['keywords'][:10])}")
+
+                    sections.append(f"\n  Source: {item['source']}")
+                    sections.append(f"  Full report: {item['source_url']}")
+                    sections.append("")
+
+                elif item.get('type') == 'beresol_monitor':
+                    sections.append(f"MONITOR: {item['name']}")
+                    sections.append(f"  Description: {item['description']}")
+                    sections.append(f"  Policy Area: {item['policy_area']}")
+                    if item.get('keywords'):
+                        sections.append(f"  Keywords: {', '.join(item['keywords'][:8])}")
+                    sections.append(f"  Source: {item['source']}")
+                    sections.append(f"  More info: {item['source_url']}")
+                    sections.append("")
+
+        # EP Committee Work in Progress
+        if context_data.committee_work_items:
+            sections.append(f"\nEP COMMITTEE WORK IN PROGRESS ({len(context_data.committee_work_items)} items):")
+            sections.append("Source: European Parliament committee work-in-progress pages")
+            sections.append("Note: COD (ordinary legislative) procedures have highest relevance (100), INI (own-initiative) lowest (40)\n")
+
+            for item in context_data.committee_work_items:
+                sections.append(f"- {item['title']}")
+                sections.append(f"  Committee: {item['committee_name']} ({item['committee_code']})")
+                sections.append(f"  Procedure: {item['procedure_ref']} ({item['procedure_type']})")
+                sections.append(f"  Role: {item['committee_role']}, Relevance: {item['relevance_score']}")
+                if item.get('rapporteur'):
+                    sections.append(f"  Rapporteur: {item['rapporteur']}")
+                sections.append(f"  Status: {item['status']}")
+                if item.get('oeil_url'):
+                    sections.append(f"  OEIL: {item['oeil_url']}")
+                if item.get('description'):
+                    sections.append(f"  Description: {item['description'][:200]}...")
+                sections.append("")
+
+        # EC Public Consultations (Have Your Say portal)
+        if context_data.public_consultations:
+            sections.append(f"\nEC PUBLIC CONSULTATIONS ({len(context_data.public_consultations)} items):")
+            sections.append("Source: European Commission 'Have Your Say' portal")
+            sections.append("Note: Shows open consultations where citizens and stakeholders can participate in EU policy-making\n")
+
+            for item in context_data.public_consultations:
+                sections.append(f"- {item['title']}")
+                sections.append(f"  Type: {item['consultation_type']}, Status: {item['status']}")
+                if item.get('dg_name'):
+                    sections.append(f"  DG: {item['dg_name']} ({item['dg_responsible']})")
+                if item.get('policy_areas'):
+                    sections.append(f"  Policy Areas: {', '.join(item['policy_areas'][:3])}")
+                if item.get('end_date'):
+                    deadline_info = f"  Deadline: {item['end_date'][:10]}"
+                    if item.get('days_remaining') is not None:
+                        if item['days_remaining'] < 0:
+                            deadline_info += " (CLOSED)"
+                        elif item['days_remaining'] == 0:
+                            deadline_info += " (TODAY!)"
+                        elif item['days_remaining'] <= 7:
+                            deadline_info += f" ({item['days_remaining']} days left - CLOSING SOON!)"
+                        else:
+                            deadline_info += f" ({item['days_remaining']} days left)"
+                    sections.append(deadline_info)
+                if item.get('feedback_count', 0) > 0:
+                    sections.append(f"  Responses received: {item['feedback_count']}")
+                if item.get('description'):
+                    sections.append(f"  Description: {item['description'][:200]}...")
+                if item.get('portal_url'):
+                    sections.append(f"  Have Your Say: {item['portal_url']}")
+                sections.append("")
+
         # Reference data (calendars, institutions)
         if context_data.reference_data_context:
             sections.append("\nREFERENCE DATA:")
@@ -1897,6 +2380,36 @@ class ContextBuilder:
                     'source': 'tavily',
                     'source_tier': get_source_tier('web_search'),
                     'last_verified': result.get('published_date')
+                })
+
+        # Add Beresol content (Tier 4 - curated analysis from Brubru's company)
+        for item in context_data.beresol_content:
+            if item.get('type') == 'beresol_report':
+                citations.append({
+                    'type': 'beresol_report',
+                    'title': item['title'],
+                    'author': item['author'],
+                    'url': item['source_url'],
+                    'date': item.get('date'),
+                    'policy_area': item['policy_area'],
+                    'source': item['source'],
+                    'publisher': item['publisher'],
+                    'source_tier': get_source_tier('beresol_report'),
+                    'last_verified': item.get('date'),
+                    'note': 'Open report published by Beresol, Brubru\'s company'
+                })
+            elif item.get('type') == 'beresol_monitor':
+                citations.append({
+                    'type': 'beresol_monitor',
+                    'title': item['name'],
+                    'url': item['source_url'],
+                    'description': item['description'],
+                    'policy_area': item['policy_area'],
+                    'source': item['source'],
+                    'publisher': item['publisher'],
+                    'source_tier': get_source_tier('beresol_monitor'),
+                    'last_verified': None,
+                    'note': 'Monitor published by Beresol, Brubru\'s company'
                 })
 
         # Phase 8: Add tender citations (Tier 4 - official but domain-specific)

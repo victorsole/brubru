@@ -24,11 +24,15 @@ import {
   mdiStarOutline,
   mdiLoading,
   mdiPencilOutline,
+  mdiAccountTieOutline,
+  mdiFilterVariant,
 } from '@mdi/js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
+import { useCommitteeWork, PROCEDURE_TYPE_INFO, STATUS_INFO } from '../../hooks/use_committee_work';
+import type { CommitteeWorkItem } from '../../hooks/use_committee_work';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import './my_tracked_files_tab.css';
 
@@ -55,7 +59,19 @@ export const MyTrackedFilesTab = () => {
     isTracking,
   } = useLegislativeTrains();
 
+  // Committee Work hook
+  const {
+    items: committeeWorkItems,
+    committees,
+    isLoadingItems: isLoadingCommitteeWork,
+    fetchItems: fetchCommitteeWorkItems,
+    fetchCommittees,
+    filters: committeeFilters,
+    setFilters: setCommitteeFilters,
+  } = useCommitteeWork();
+
   const hasLoadedRef = useRef(false);
+  const [activeTab, setActiveTab] = useState<'legislative' | 'committee'>('legislative');
   const [amendmentCounts, setAmendmentCounts] = useState<Record<string, number>>({});
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -91,14 +107,21 @@ export const MyTrackedFilesTab = () => {
       await fetchTrackedFiles();
       await fetchRecentChanges(168); // Last 7 days
       await fetchAmendmentCounts();
+      // Load committee work data
+      await fetchCommittees();
+      await fetchCommitteeWorkItems();
     };
 
     loadData();
   }, []);
 
   const handleRefresh = async () => {
-    await fetchTrackedFiles();
-    await fetchRecentChanges(168);
+    if (activeTab === 'legislative') {
+      await fetchTrackedFiles();
+      await fetchRecentChanges(168);
+    } else {
+      await fetchCommitteeWorkItems();
+    }
   };
 
   const handleUntrack = async (file: TrackedFile) => {
@@ -316,78 +339,104 @@ export const MyTrackedFilesTab = () => {
       {/* Header */}
       <div className="my-tracked-files-tab__header">
         <div className="my-tracked-files-tab__header-left">
-          <h2>My Tracked Files</h2>
+          <h2>My Files</h2>
           <p className="my-tracked-files-tab__subtitle">
-            {trackedFiles.length} file{trackedFiles.length !== 1 ? 's' : ''} tracked
+            {activeTab === 'legislative'
+              ? `${trackedFiles.length} file${trackedFiles.length !== 1 ? 's' : ''} tracked`
+              : `${committeeWorkItems.length} committee work items`
+            }
           </p>
         </div>
         <div className="my-tracked-files-tab__header-actions">
           <button
             className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
             onClick={handleRefresh}
-            disabled={isLoadingTrackedFiles}
+            disabled={isLoadingTrackedFiles || isLoadingCommitteeWork}
           >
             <Icon path={mdiRefresh} size={0.8} />
             Refresh
           </button>
-          <button
-            className="my-tracked-files-tab__btn my-tracked-files-tab__btn--primary"
-            onClick={handleOpenAddModal}
-          >
-            <Icon path={mdiPlus} size={0.8} />
-            Track File
-          </button>
+          {activeTab === 'legislative' && (
+            <button
+              className="my-tracked-files-tab__btn my-tracked-files-tab__btn--primary"
+              onClick={handleOpenAddModal}
+            >
+              <Icon path={mdiPlus} size={0.8} />
+              Track File
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Recent Changes Section */}
-      {recentChanges.length > 0 && (
-        <div className="my-tracked-files-tab__changes">
-          <h3 className="my-tracked-files-tab__section-title">
-            <Icon path={mdiHistory} size={0.9} />
-            Recent Changes (Last 7 days)
-          </h3>
-          <div className="my-tracked-files-tab__changes-list">
-            {recentChanges.slice(0, 5).map((change, idx) => (
-              <div key={idx} className="my-tracked-files-tab__change-item">
-                <div
-                  className="my-tracked-files-tab__change-icon"
-                  data-type={change.change_type}
-                >
-                  <Icon path={getChangeIcon(change.change_type)} size={0.8} />
-                </div>
-                <div className="my-tracked-files-tab__change-content">
-                  <div className="my-tracked-files-tab__change-title">
-                    {change.title}
+      {/* Tab Navigation */}
+      <div className="my-tracked-files-tab__tabs">
+        <button
+          className={`my-tracked-files-tab__tab ${activeTab === 'legislative' ? 'my-tracked-files-tab__tab--active' : ''}`}
+          onClick={() => setActiveTab('legislative')}
+        >
+          <Icon path={mdiFileDocumentOutline} size={0.8} />
+          Legislative Train
+        </button>
+        <button
+          className={`my-tracked-files-tab__tab ${activeTab === 'committee' ? 'my-tracked-files-tab__tab--active' : ''}`}
+          onClick={() => setActiveTab('committee')}
+        >
+          <Icon path={mdiAccountGroupOutline} size={0.8} />
+          Committee Work
+        </button>
+      </div>
+
+      {/* Legislative Files Tab Content */}
+      {activeTab === 'legislative' && (
+        <>
+          {/* Recent Changes Section */}
+          {recentChanges.length > 0 && (
+            <div className="my-tracked-files-tab__changes">
+              <h3 className="my-tracked-files-tab__section-title">
+                <Icon path={mdiHistory} size={0.9} />
+                Recent Changes (Last 7 days)
+              </h3>
+              <div className="my-tracked-files-tab__changes-list">
+                {recentChanges.slice(0, 5).map((change, idx) => (
+                  <div key={idx} className="my-tracked-files-tab__change-item">
+                    <div
+                      className="my-tracked-files-tab__change-icon"
+                      data-type={change.change_type}
+                    >
+                      <Icon path={getChangeIcon(change.change_type)} size={0.8} />
+                    </div>
+                    <div className="my-tracked-files-tab__change-content">
+                      <div className="my-tracked-files-tab__change-title">
+                        {change.title}
+                      </div>
+                      <div className="my-tracked-files-tab__change-description">
+                        {change.change_type === 'status_change' && (
+                          <>
+                            Status changed: {change.old_value?.replace(/_/g, ' ')} →{' '}
+                            <strong>{change.new_value?.replace(/_/g, ' ')}</strong>
+                          </>
+                        )}
+                        {change.change_type === 'new_document' && change.description}
+                        {change.change_type === 'blocking' && 'File blocked - no progress for 9+ months'}
+                      </div>
+                    </div>
+                    <div className="my-tracked-files-tab__change-time">
+                      {formatTimeAgo(change.changed_at)}
+                    </div>
                   </div>
-                  <div className="my-tracked-files-tab__change-description">
-                    {change.change_type === 'status_change' && (
-                      <>
-                        Status changed: {change.old_value?.replace(/_/g, ' ')} →{' '}
-                        <strong>{change.new_value?.replace(/_/g, ' ')}</strong>
-                      </>
-                    )}
-                    {change.change_type === 'new_document' && change.description}
-                    {change.change_type === 'blocking' && 'File blocked - no progress for 9+ months'}
-                  </div>
-                </div>
-                <div className="my-tracked-files-tab__change-time">
-                  {formatTimeAgo(change.changed_at)}
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
 
-      {/* Tracked Files List */}
-      <div className="my-tracked-files-tab__files">
-        <h3 className="my-tracked-files-tab__section-title">
-          <Icon path={mdiFileDocumentOutline} size={0.9} />
-          Tracked Legislative Files
-        </h3>
+          {/* Tracked Files List */}
+          <div className="my-tracked-files-tab__files">
+            <h3 className="my-tracked-files-tab__section-title">
+              <Icon path={mdiFileDocumentOutline} size={0.9} />
+              Tracked Legislative Files
+            </h3>
 
-        {isLoadingTrackedFiles ? (
+            {isLoadingTrackedFiles ? (
           <div className="my-tracked-files-tab__loading">
             Loading tracked files...
           </div>
@@ -422,7 +471,55 @@ export const MyTrackedFilesTab = () => {
             ))}
           </div>
         )}
-      </div>
+          </div>
+        </>
+      )}
+
+      {/* Committee Work Tab Content */}
+      {activeTab === 'committee' && (
+        <div className="my-tracked-files-tab__committee-work">
+          {/* Committee Filter */}
+          <div className="my-tracked-files-tab__committee-filter">
+            <Icon path={mdiFilterVariant} size={0.8} />
+            <select
+              value={committeeFilters.committee_code || ''}
+              onChange={(e) => setCommitteeFilters({ ...committeeFilters, committee_code: e.target.value || undefined })}
+            >
+              <option value="">All Committees ({committeeWorkItems.length})</option>
+              {committees.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.code} - {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Committee Work Items List */}
+          {isLoadingCommitteeWork ? (
+            <div className="my-tracked-files-tab__loading">
+              <Icon path={mdiLoading} size={1} spin />
+              Loading committee work items...
+            </div>
+          ) : committeeWorkItems.length === 0 ? (
+            <div className="my-tracked-files-tab__empty">
+              <Icon path={mdiAccountGroupOutline} size={2} color="#ccc" />
+              <h4>No committee work items</h4>
+              <p>
+                {committeeFilters.committee_code
+                  ? `No items found for ${committeeFilters.committee_code}`
+                  : 'Select a committee to view work in progress'
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="my-tracked-files-tab__committee-list">
+              {committeeWorkItems.map((item) => (
+                <CommitteeWorkCard key={item.id} item={item} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Add File Modal - Search and Track (uses portal to escape stacking context) */}
       {showAddModal && createPortal(
@@ -736,6 +833,91 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
         <span className="tracked-file-card__tracked-since">
           Tracking since {new Date(file.tracked_since).toLocaleDateString()}
         </span>
+      </div>
+    </div>
+  );
+};
+
+// Committee Work Card Component
+interface CommitteeWorkCardProps {
+  item: CommitteeWorkItem;
+}
+
+const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
+  const procedureInfo = PROCEDURE_TYPE_INFO[item.procedure_type] || { name: item.procedure_type, color: '#6b7280', score: 0 };
+  const statusInfo = STATUS_INFO[item.status] || { name: item.status, color: '#9ca3af' };
+
+  const oeilUrl = item.oeil_url || (item.procedure_ref
+    ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.procedure_ref)}`
+    : null
+  );
+
+  return (
+    <div className="committee-work-card">
+      <div className="committee-work-card__header">
+        <span
+          className="committee-work-card__committee"
+          title={`${item.committee_code} - ${item.committee_role}`}
+        >
+          {item.committee_code}
+        </span>
+        <span
+          className="committee-work-card__procedure-type"
+          style={{ backgroundColor: procedureInfo.color }}
+          title={procedureInfo.name}
+        >
+          {item.procedure_type}
+        </span>
+        <span
+          className="committee-work-card__status"
+          style={{ backgroundColor: statusInfo.color }}
+        >
+          {statusInfo.name}
+        </span>
+      </div>
+
+      <h4 className="committee-work-card__title">
+        {item.title}
+      </h4>
+
+      <div className="committee-work-card__meta">
+        <span className="committee-work-card__ref">
+          {item.procedure_ref}
+        </span>
+        {item.rapporteur_name && (
+          <span className="committee-work-card__rapporteur">
+            <Icon path={mdiAccountTieOutline} size={0.6} />
+            {item.rapporteur_name}
+          </span>
+        )}
+        <span className="committee-work-card__relevance" title="Relevance score">
+          Score: {item.relevance_score}
+        </span>
+      </div>
+
+      <div className="committee-work-card__actions">
+        {oeilUrl && (
+          <a
+            href={oeilUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="committee-work-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            View in OEIL
+          </a>
+        )}
+        {item.ep_page_url && (
+          <a
+            href={item.ep_page_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="committee-work-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            EP Page
+          </a>
+        )}
       </div>
     </div>
   );
