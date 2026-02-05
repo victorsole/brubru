@@ -1,0 +1,4431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brubru - Business Plan | Beresol BV</title>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    /* ============================================
+       BRUBRU DESIGN SYSTEM
+       Adobe Caslon Pro + Brubru brand tokens
+       ============================================ */
+
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../frontend/public/New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../frontend/public/New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../frontend/public/New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --color-primary: #0693e3;
+      --color-primary-dark: #0066cc;
+      --color-accent-blue: #0693e3;
+      --color-accent-purple: #9b51e0;
+      --color-accent-green: #059669;
+      --color-accent-gold: #d97706;
+      --color-accent-red: #dc2626;
+      --color-accent-orange: #f97316;
+      --color-accent-silver: #9ca3af;
+
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-500: #6b7280;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+
+      --color-text: #111827;
+      --color-text-secondary: #6b7280;
+      --color-text-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-secondary: #f9fafb;
+      --color-background: #ffffff;
+
+      --gradient-primary: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+      --gradient-dark: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+
+      --font-family: 'Adobe Caslon Pro', Georgia, 'Times New Roman', serif;
+      --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--color-text);
+      background: var(--color-gray-50);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    body.locked { overflow: hidden; }
+
+    /* ============================================
+       PASSWORD GATE
+       ============================================ */
+
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-gray-900);
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .gate--hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .gate__bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('brubru_mainlogo.png');
+      background-size: 40%;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: blur(28px) saturate(0.7);
+      opacity: 0.15;
+      transform: scale(1.2);
+      animation: gatePulse 6s ease-in-out infinite;
+    }
+
+    @keyframes gatePulse {
+      0%, 100% { opacity: 0.12; transform: scale(1.2); }
+      50% { opacity: 0.2; transform: scale(1.25); }
+    }
+
+    .gate__card {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-2xl);
+      backdrop-filter: blur(20px);
+      max-width: 440px;
+      width: 90%;
+      animation: gateCardIn 0.8s ease-out;
+    }
+
+    @keyframes gateCardIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .gate__logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 2rem;
+      filter: drop-shadow(0 0 20px rgba(6,147,227,0.3));
+      animation: gateLogoFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes gateLogoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .gate__prompt {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .gate__prompt em {
+      color: white;
+      font-style: normal;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gate__input-wrap {
+      display: flex;
+      gap: 0;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: border-color 0.25s;
+    }
+
+    .gate__input-wrap:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(6,147,227,0.2);
+    }
+
+    .gate__input {
+      flex: 1;
+      padding: 0.85rem 1.25rem;
+      background: rgba(255,255,255,0.06);
+      border: none;
+      color: white;
+      font-family: var(--font-family);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .gate__input::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+
+    .gate__btn {
+      padding: 0.85rem 1.5rem;
+      background: var(--gradient-primary);
+      border: none;
+      color: white;
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: filter 0.2s;
+      white-space: nowrap;
+    }
+
+    .gate__btn:hover { filter: brightness(1.15); }
+
+    .gate__error {
+      color: var(--color-accent-red);
+      font-size: 0.8rem;
+      margin-top: 0.75rem;
+      height: 1.2em;
+      transition: opacity 0.25s;
+      opacity: 0;
+    }
+
+    .gate__error--visible { opacity: 1; }
+
+    .gate__hint {
+      color: rgba(255,255,255,0.25);
+      font-size: 0.7rem;
+      margin-top: 1.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* ============================================
+       SCROLL REVEAL ANIMATIONS
+       ============================================ */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal--visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+    .reveal-delay-4 { transition-delay: 0.32s; }
+    .reveal-delay-5 { transition-delay: 0.40s; }
+    .reveal-delay-6 { transition-delay: 0.48s; }
+    .reveal-delay-7 { transition-delay: 0.56s; }
+    .reveal-delay-8 { transition-delay: 0.64s; }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal-scale--visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-left--visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-right--visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ============================================
+       HEADER
+       ============================================ */
+
+    .header {
+      background: var(--gradient-primary);
+      color: white;
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -60%;
+      left: 20%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 50%;
+    }
+
+    .header__brand {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      z-index: 1;
+    }
+
+    .header__logo {
+      width: 72px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header__logo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .header__title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .header__subtitle {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-top: 0.15rem;
+    }
+
+    .header__meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 1;
+    }
+
+    .header__badge {
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.15);
+      border-radius: 24px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s ease;
+    }
+
+    a.header__badge:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* ============================================
+       NAVIGATION
+       ============================================ */
+
+    .nav-tabs {
+      background: white;
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.25rem;
+      border: none;
+      background: transparent;
+      color: var(--color-text-secondary);
+      font-family: var(--font-family);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-tab:hover {
+      color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+
+    .nav-tab--active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+
+    .nav-tab--active .mdi {
+      animation: tabIconPop 0.35s ease;
+    }
+
+    @keyframes tabIconPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .nav-tab .mdi { font-size: 1.2rem; }
+
+    /* ============================================
+       MAIN LAYOUT
+       ============================================ */
+
+    .main {
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section { display: none; }
+    .section--active { display: block; animation: fadeIn 0.3s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       SECTION HEADER
+       ============================================ */
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-header__title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-gray-900);
+      margin-bottom: 0.25rem;
+    }
+
+    .section-header__subtitle {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ============================================
+       METRIC CARDS
+       ============================================ */
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .metric-grid--3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .metric-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .metric-card:hover .metric-card__icon {
+      transform: scale(1.1) rotate(-3deg);
+      transition: transform 0.3s ease;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .metric-card--blue::before { background: var(--color-primary); }
+    .metric-card--green::before { background: var(--color-accent-green); }
+    .metric-card--purple::before { background: var(--color-accent-purple); }
+    .metric-card--gold::before { background: var(--color-accent-gold); }
+    .metric-card--red::before { background: var(--color-accent-red); }
+    .metric-card--orange::before { background: var(--color-accent-orange); }
+
+    .metric-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .metric-card--blue .metric-card__icon { background: rgba(6,147,227,0.1); color: var(--color-primary); }
+    .metric-card--green .metric-card__icon { background: rgba(5,150,105,0.1); color: var(--color-accent-green); }
+    .metric-card--purple .metric-card__icon { background: rgba(155,81,224,0.1); color: var(--color-accent-purple); }
+    .metric-card--gold .metric-card__icon { background: rgba(217,119,6,0.1); color: var(--color-accent-gold); }
+    .metric-card--red .metric-card__icon { background: rgba(220,38,38,0.1); color: var(--color-accent-red); }
+    .metric-card--orange .metric-card__icon { background: rgba(249,115,22,0.1); color: var(--color-accent-orange); }
+
+    .metric-card__label {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .metric-card__value {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .metric-card__detail {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-top: 0.5rem;
+    }
+
+    .metric-card__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .metric-card__badge--green { background: rgba(5,150,105,0.1); color: var(--color-accent-green); }
+    .metric-card__badge--blue { background: rgba(6,147,227,0.1); color: var(--color-primary); }
+    .metric-card__badge--gold { background: rgba(217,119,6,0.1); color: var(--color-accent-gold); }
+
+    /* ============================================
+       CONTENT CARDS
+       ============================================ */
+
+    .card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 1.5rem;
+    }
+
+    .card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .card__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card__title .mdi { color: var(--color-primary); }
+
+    .card__subtitle {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.15rem;
+    }
+
+    /* ============================================
+       TWO / THREE COLUMN LAYOUTS
+       ============================================ */
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-2-1 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ============================================
+       FEATURE CARDS
+       ============================================ */
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: var(--shadow-xl);
+      border-color: rgba(6,147,227,0.15);
+    }
+
+    .feature-card:hover .feature-card__icon {
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card__icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .feature-card__tier {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card__desc {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-card__stats {
+      display: flex;
+      gap: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-gray-100);
+    }
+
+    .feature-card__stat {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    .feature-card__stat strong {
+      color: var(--color-text);
+      font-size: 0.85rem;
+    }
+
+    /* ============================================
+       TABLES
+       ============================================ */
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .data-table th {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--color-gray-50);
+    }
+
+    .data-table td {
+      font-size: 0.85rem;
+    }
+
+    .data-table tr:hover td {
+      background: var(--color-gray-50);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ============================================
+       BADGES
+       ============================================ */
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .badge--green { background: rgba(5,150,105,0.1); color: var(--color-accent-green); }
+    .badge--red { background: rgba(220,38,38,0.1); color: var(--color-accent-red); }
+    .badge--gold { background: rgba(217,119,6,0.1); color: var(--color-accent-gold); }
+    .badge--blue { background: rgba(6,147,227,0.1); color: var(--color-primary); }
+    .badge--purple { background: rgba(155,81,224,0.1); color: var(--color-accent-purple); }
+    .badge--gray { background: var(--color-gray-100); color: var(--color-text-secondary); }
+
+    /* ============================================
+       BAR CHART
+       ============================================ */
+
+    .bar-chart {
+      height: 280px;
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      padding: 1rem 0;
+      border-bottom: 2px solid var(--color-border);
+      position: relative;
+    }
+
+    .bar-chart__group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .bar-chart__stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 36px;
+    }
+
+    .bar-chart__bar {
+      width: 100%;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .bar-chart__bar:hover {
+      opacity: 0.8;
+      transform: scaleY(1.03);
+    }
+
+    .bar-chart__bar--blue { background: var(--color-primary); }
+    .bar-chart__bar--gold { background: var(--color-accent-gold); }
+    .bar-chart__bar--green { background: var(--color-accent-green); }
+    .bar-chart__bar--purple { background: var(--color-accent-purple); }
+
+    .bar-chart__label {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+    }
+
+    .bar-chart__value {
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    /* ============================================
+       DONUT CHART
+       ============================================ */
+
+    .donut-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+    }
+
+    .donut-chart {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .donut-chart::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      right: 28px;
+      bottom: 28px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .donut-center__value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .donut-center__label {
+      font-size: 0.65rem;
+      color: var(--color-text-muted);
+    }
+
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .donut-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .donut-legend-color {
+      width: 14px;
+      height: 14px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+    }
+
+    .donut-legend-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .donut-legend-value {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================
+       TIMELINE
+       ============================================ */
+
+    .timeline-track {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+      padding-top: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .timeline-track::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--color-gray-200);
+      border-radius: 2px;
+    }
+
+    .timeline-milestone {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .timeline-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-gray-200);
+      border: 4px solid white;
+      box-shadow: 0 0 0 2px var(--color-gray-200);
+      z-index: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .timeline-dot--active {
+      background: var(--color-primary);
+      box-shadow: 0 0 0 2px var(--color-primary), 0 0 0 6px rgba(6,147,227,0.2);
+    }
+
+    .timeline-dot--complete {
+      background: var(--color-accent-green);
+      box-shadow: 0 0 0 2px var(--color-accent-green);
+    }
+
+    .timeline-content {
+      text-align: center;
+      max-width: 140px;
+    }
+
+    .timeline-label {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.15rem;
+    }
+
+    .timeline-value {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .timeline-target {
+      font-size: 0.75rem;
+      color: var(--color-accent-green);
+      margin-top: 0.15rem;
+    }
+
+    /* ============================================
+       PRICING CARDS
+       ============================================ */
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-md);
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .pricing-card--featured {
+      border-color: var(--color-primary);
+    }
+
+    .pricing-card--featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.15rem 0.75rem;
+      background: var(--color-primary);
+      color: white;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .pricing-card__dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-bottom: 0.75rem;
+    }
+
+    .pricing-card__name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
+    .pricing-card__target {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .pricing-card__price {
+      margin-bottom: 0.5rem;
+    }
+
+    .pricing-card__amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .pricing-card__period {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
+    .pricing-card__margin {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      background: rgba(5,150,105,0.1);
+      color: var(--color-accent-green);
+      border-radius: var(--radius-sm);
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .pricing-card__features {
+      list-style: none;
+    }
+
+    .pricing-card__feature {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    .pricing-card__feature .mdi { color: var(--color-accent-green); font-size: 1.1rem; }
+
+    .pricing-card__feature--disabled { color: var(--color-text-muted); }
+    .pricing-card__feature--disabled .mdi { color: var(--color-text-muted); }
+
+    /* ============================================
+       COMPETITIVE MATRIX
+       ============================================ */
+
+    .comp-matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    .comp-matrix th {
+      padding: 0.6rem 0.5rem;
+      text-align: center;
+      background: var(--color-gray-50);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-text-muted);
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .comp-matrix th:first-child {
+      text-align: left;
+    }
+
+    .comp-matrix td {
+      padding: 0.6rem 0.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .comp-matrix td:first-child {
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .comp-matrix tr:first-child td {
+      background: rgba(6,147,227,0.04);
+      font-weight: 600;
+    }
+
+    .comp-matrix tr:first-child td:first-child {
+      color: var(--color-primary);
+    }
+
+    .comp-check { color: var(--color-accent-green); }
+    .comp-cross { color: var(--color-text-muted); }
+    .comp-partial { color: var(--color-accent-gold); }
+
+    /* ============================================
+       SCENARIO CARDS
+       ============================================ */
+
+    .scenario-card {
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      border-left: 4px solid;
+    }
+
+    .scenario-card--bear {
+      background: rgba(220,38,38,0.04);
+      border-color: var(--color-accent-red);
+    }
+
+    .scenario-card--base {
+      background: rgba(6,147,227,0.04);
+      border-color: var(--color-primary);
+    }
+
+    .scenario-card--bull {
+      background: rgba(5,150,105,0.04);
+      border-color: var(--color-accent-green);
+    }
+
+    .scenario-card__label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .scenario-card--bear .scenario-card__label { color: var(--color-accent-red); }
+    .scenario-card--base .scenario-card__label { color: var(--color-primary); }
+    .scenario-card--bull .scenario-card__label { color: var(--color-accent-green); }
+
+    .scenario-card__value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .scenario-card__detail {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    .scenario-card__note {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================
+       TEAM CARDS
+       ============================================ */
+
+    .team-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-md);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .team-card:hover .team-card__avatar {
+      transform: scale(1.08);
+      box-shadow: 0 4px 20px rgba(6,147,227,0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .team-card__avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2rem;
+      color: white;
+      overflow: hidden;
+    }
+
+    .team-card__avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .team-card__name {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .team-card__role {
+      font-size: 0.85rem;
+      color: var(--color-primary);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .team-card__bio {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       KEY HIRE ROWS
+       ============================================ */
+
+    .hire-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .hire-row:last-child { border-bottom: none; }
+
+    .hire-row__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .hire-row__info { flex: 1; }
+
+    .hire-row__title {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .hire-row__detail {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    .hire-row__timing {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    /* ============================================
+       RISK TABLE
+       ============================================ */
+
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .risk-table th,
+    .risk-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .risk-table th {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      background: var(--color-gray-50);
+    }
+
+    .risk-table td {
+      font-size: 0.85rem;
+    }
+
+    /* ============================================
+       CALL TO ACTION
+       ============================================ */
+
+    .cta-section {
+      background: var(--gradient-primary);
+      border-radius: var(--radius-xl);
+      padding: 3rem;
+      text-align: center;
+      color: white;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .cta-section__title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .cta-section__subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      position: relative;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: var(--radius-lg);
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      border: none;
+    }
+
+    .cta-btn--primary {
+      background: white;
+      color: var(--color-primary);
+    }
+
+    .cta-btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .cta-btn--secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .cta-btn--secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+
+    .footer {
+      padding: 1.5rem 2rem;
+      background: white;
+      border-top: 1px solid var(--color-border);
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-size: 0.8rem;
+    }
+
+    /* ============================================
+       LEGEND
+       ============================================ */
+
+    .legend {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot--blue { background: var(--color-primary); }
+    .legend-dot--gold { background: var(--color-accent-gold); }
+    .legend-dot--green { background: var(--color-accent-green); }
+    .legend-dot--purple { background: var(--color-accent-purple); }
+
+    /* ============================================
+       PROGRESS BARS
+       ============================================ */
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0;
+    }
+
+    .progress-row__label {
+      width: 120px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .progress-row__bar {
+      flex: 1;
+      height: 8px;
+      background: var(--color-gray-100);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-row__fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-row__fill--blue { background: var(--color-primary); }
+    .progress-row__fill--green { background: var(--color-accent-green); }
+    .progress-row__fill--purple { background: var(--color-accent-purple); }
+
+    .progress-row__value {
+      width: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* ============================================
+       QUOTE / CALLOUT
+       ============================================ */
+
+    .callout {
+      background: var(--color-gray-50);
+      border-left: 4px solid var(--color-primary);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+      margin: 1rem 0;
+    }
+
+    .callout__text {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--color-gray-700);
+      line-height: 1.6;
+    }
+
+    .callout__attribution {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================
+       DATA SOURCE GRID
+       ============================================ */
+
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+    }
+
+    .source-chip {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--color-gray-200);
+      transition: all 0.2s;
+    }
+
+    .source-chip:hover {
+      background: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .source-chip .mdi {
+      font-size: 1rem;
+      color: var(--color-primary);
+    }
+
+    /* ============================================
+       PRODUCT DETAIL PANEL
+       ============================================ */
+
+    .product-cards {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-md);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-align: center;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .product-card:hover .product-card__logo {
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
+    }
+
+    .product-card--active {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-lg), 0 0 0 3px rgba(6,147,227,0.12);
+    }
+
+    .product-card--active::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid var(--color-primary);
+    }
+
+    .product-card__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      margin: 0 auto 0.5rem;
+    }
+
+    .product-card__logo {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      margin: 0 auto 0.5rem;
+      display: block;
+    }
+
+    .product-card__name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .product-card__tier-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .product-detail {
+      display: none;
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--color-gray-200);
+      animation: fadeIn 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      background: white;
+    }
+
+    .product-detail__bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center top;
+      filter: blur(18px) saturate(1.3);
+      opacity: 0.12;
+      transform: scale(1.15);
+      z-index: 0;
+    }
+
+    .product-detail__header,
+    .product-detail__stat-grid,
+    .product-detail__body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .product-detail--active {
+      display: block;
+    }
+
+    .product-detail__header {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+
+    .product-detail__icon {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .product-detail__title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .product-detail__tagline {
+      font-size: 0.95rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.15rem;
+    }
+
+    .product-detail__body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .product-detail__section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .product-detail__list {
+      list-style: none;
+    }
+
+    .product-detail__list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.35rem 0;
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.4;
+    }
+
+    .product-detail__list li .mdi {
+      color: var(--color-primary);
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .product-detail__stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .product-detail__stat {
+      text-align: center;
+      padding: 0.75rem;
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+    }
+
+    .product-detail__stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .product-detail__stat-label {
+      font-size: 0.7rem;
+      color: var(--color-text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .product-detail__sub-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: var(--color-gray-50);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-detail__sub-feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .product-detail__sub-feature-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .product-detail__sub-feature-desc {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.1rem;
+      line-height: 1.4;
+    }
+
+    /* ============================================
+       FEEDBACK SYSTEM
+       ============================================ */
+
+    .feedback-loop-badge {
+      padding: 0.6rem 1rem;
+      background: linear-gradient(135deg, rgba(220,38,38,0.1) 0%, rgba(249,115,22,0.1) 100%);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--color-accent-red);
+      position: relative;
+      animation: loopPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes loopPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.15); }
+      50% { box-shadow: 0 0 0 6px rgba(220,38,38,0); }
+    }
+
+    .feedback-channels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .fb-channel {
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .fb-channel:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .fb-channel--chat { background: rgba(6,147,227,0.04); border-left: 3px solid var(--color-primary); }
+    .fb-channel--bubble { background: rgba(155,81,224,0.04); border-left: 3px solid var(--color-accent-purple); }
+    .fb-channel--form { background: rgba(5,150,105,0.04); border-left: 3px solid var(--color-accent-green); }
+    .fb-channel--passive { background: rgba(217,119,6,0.04); border-left: 3px solid var(--color-accent-gold); }
+
+    .fb-channel__header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .fb-channel--chat .fb-channel__header { color: var(--color-primary); }
+    .fb-channel--bubble .fb-channel__header { color: var(--color-accent-purple); }
+    .fb-channel--form .fb-channel__header { color: var(--color-accent-green); }
+    .fb-channel--passive .fb-channel__header { color: var(--color-accent-gold); }
+
+    .fb-channel__body {
+      font-size: 0.72rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .fb-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 12px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin: 0.25rem 0.15rem 0.25rem 0;
+    }
+
+    .fb-action--pos { background: rgba(5,150,105,0.1); color: var(--color-accent-green); }
+    .fb-action--neg { background: rgba(220,38,38,0.1); color: var(--color-accent-red); }
+    .fb-action--hall { background: rgba(217,119,6,0.1); color: var(--color-accent-gold); }
+
+    /* Process items */
+    .fb-process-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .fb-process-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.6rem;
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.6);
+      transition: transform 0.25s, background 0.25s;
+    }
+
+    .fb-process-item:hover {
+      transform: translateX(4px);
+      background: rgba(255,255,255,0.9);
+    }
+
+    .fb-process-item__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .fb-process-item__title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      margin-bottom: 0.15rem;
+    }
+
+    .fb-process-item__desc {
+      font-size: 0.72rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Improvement loops */
+    .fb-loops {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .fb-loop {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.6rem;
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.5);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .fb-loop:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .fb-loop__number {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-accent-green);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .fb-loop__title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
+    .fb-loop__desc {
+      font-size: 0.72rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       ARCHITECTURE DIAGRAM
+       ============================================ */
+
+    .arch-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .arch-layer {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      position: relative;
+    }
+
+    .arch-layer__label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+      opacity: 0.6;
+    }
+
+    .arch-layer__nodes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+    }
+
+    .arch-node {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: var(--radius-md);
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative;
+    }
+
+    .arch-node:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .arch-node .mdi { font-size: 1.1rem; }
+
+    .arch-node__text { white-space: nowrap; }
+
+    .arch-node__sub {
+      font-size: 0.65rem;
+      font-weight: 400;
+      opacity: 0.7;
+      white-space: nowrap;
+    }
+
+    .arch-layer--user { background: rgba(6,147,227,0.04); }
+    .arch-layer--api { background: rgba(5,150,105,0.04); }
+    .arch-layer--services { background: rgba(155,81,224,0.04); }
+    .arch-layer--data { background: rgba(217,119,6,0.04); }
+
+    .arch-node--user { background: rgba(6,147,227,0.1); color: var(--color-primary); }
+    .arch-node--api { background: rgba(5,150,105,0.1); color: var(--color-accent-green); }
+    .arch-node--ai { background: rgba(155,81,224,0.12); color: var(--color-accent-purple); }
+    .arch-node--scraper { background: rgba(5,150,105,0.1); color: var(--color-accent-green); }
+    .arch-node--compliance { background: rgba(156,163,175,0.12); color: var(--color-gray-700); }
+    .arch-node--predictions { background: rgba(249,115,22,0.1); color: var(--color-accent-orange); }
+    .arch-node--tenders { background: rgba(217,119,6,0.1); color: var(--color-accent-gold); }
+    .arch-node--db { background: rgba(6,147,227,0.1); color: var(--color-primary); }
+    .arch-node--vector { background: rgba(155,81,224,0.1); color: var(--color-accent-purple); }
+    .arch-node--knowledge { background: rgba(5,150,105,0.1); color: var(--color-accent-green); }
+    .arch-node--external { background: rgba(217,119,6,0.1); color: var(--color-accent-gold); }
+
+    .arch-layer--user .arch-layer__label { color: var(--color-primary); }
+    .arch-layer--api .arch-layer__label { color: var(--color-accent-green); }
+    .arch-layer--services .arch-layer__label { color: var(--color-accent-purple); }
+    .arch-layer--data .arch-layer__label { color: var(--color-accent-gold); }
+
+    .arch-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 28px;
+      position: relative;
+    }
+
+    .arch-connector__line {
+      width: 2px;
+      flex: 1;
+      background: var(--color-gray-300);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arch-connector__line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-primary);
+      animation: connectorPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes connectorPulse {
+      0% { top: -100%; }
+      50% { top: 100%; }
+      100% { top: 100%; }
+    }
+
+    .arch-connector__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.5); opacity: 1; }
+    }
+
+    /* Architecture stagger animations */
+    .arch-anim {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: archSlideIn 0.5s ease forwards;
+    }
+
+    .arch-anim-1 { animation-delay: 0.1s; }
+    .arch-anim-2 { animation-delay: 0.25s; }
+    .arch-anim-3 { animation-delay: 0.4s; }
+    .arch-anim-4 { animation-delay: 0.55s; }
+    .arch-anim-5 { animation-delay: 0.7s; }
+    .arch-anim-6 { animation-delay: 0.85s; }
+    .arch-anim-7 { animation-delay: 1.0s; }
+
+    @keyframes archSlideIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       AI ORCHESTRATION FLOW
+       ============================================ */
+
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .flow-step {
+      width: 100%;
+      position: relative;
+      padding-left: 2.5rem;
+    }
+
+    .flow-step__badge {
+      position: absolute;
+      left: 0;
+      top: 0.75rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flow-step__card {
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .flow-step__card:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .flow-step__card--blue { background: rgba(6,147,227,0.05); border-left: 3px solid var(--color-primary); }
+    .flow-step__card--purple { background: rgba(155,81,224,0.05); border-left: 3px solid var(--color-accent-purple); }
+    .flow-step__card--green { background: rgba(5,150,105,0.05); border-left: 3px solid var(--color-accent-green); }
+    .flow-step__card--gold { background: rgba(217,119,6,0.05); border-left: 3px solid var(--color-accent-gold); }
+
+    .flow-step__icon {
+      font-size: 1.3rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .flow-step__card--blue .flow-step__icon { color: var(--color-primary); }
+    .flow-step__card--purple .flow-step__icon { color: var(--color-accent-purple); }
+    .flow-step__card--green .flow-step__icon { color: var(--color-accent-green); }
+    .flow-step__card--gold .flow-step__icon { color: var(--color-accent-gold); }
+
+    .flow-step__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .flow-step__desc {
+      font-size: 0.8rem;
+      color: var(--color-text-secondary);
+    }
+
+    .flow-arrow {
+      display: flex;
+      justify-content: center;
+      padding: 0.3rem 0;
+      color: var(--color-gray-300);
+      font-size: 1.4rem;
+      animation: arrowBounce 1.5s ease-in-out infinite;
+    }
+
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50% { transform: translateY(4px); opacity: 1; }
+    }
+
+    /* Context sources pills */
+    .flow-sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.75rem;
+    }
+
+    .flow-source {
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      opacity: 0;
+      animation: sourcePop 0.3s ease forwards;
+    }
+
+    .flow-source--s1 { background: rgba(6,147,227,0.1); color: var(--color-primary); animation-delay: 0.2s; }
+    .flow-source--s2 { background: rgba(5,150,105,0.1); color: var(--color-accent-green); animation-delay: 0.3s; }
+    .flow-source--s3 { background: rgba(217,119,6,0.1); color: var(--color-accent-gold); animation-delay: 0.4s; }
+    .flow-source--s4 { background: rgba(155,81,224,0.1); color: var(--color-accent-purple); animation-delay: 0.5s; }
+    .flow-source--s5 { background: rgba(249,115,22,0.1); color: var(--color-accent-orange); animation-delay: 0.6s; }
+    .flow-source--s6 { background: rgba(220,38,38,0.1); color: var(--color-accent-red); animation-delay: 0.7s; }
+    .flow-source--s7 { background: rgba(6,147,227,0.1); color: var(--color-primary-dark); animation-delay: 0.8s; }
+    .flow-source--s8 { background: rgba(156,163,175,0.12); color: var(--color-gray-700); animation-delay: 0.9s; }
+
+    @keyframes sourcePop {
+      from { opacity: 0; transform: scale(0.7); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Provider bars */
+    .flow-providers {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .flow-provider {
+      display: grid;
+      grid-template-columns: 20px 60px 56px 1fr auto;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      transition: background 0.2s;
+    }
+
+    .flow-provider:hover { background: rgba(0,0,0,0.03); }
+
+    .flow-provider--active { background: rgba(5,150,105,0.05); }
+
+    .flow-provider__rank {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--color-gray-200);
+      color: var(--color-gray-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 700;
+    }
+
+    .flow-provider--active .flow-provider__rank {
+      background: var(--color-accent-green);
+      color: white;
+    }
+
+    .flow-provider__name { font-weight: 700; }
+    .flow-provider--active .flow-provider__name { color: var(--color-accent-green); }
+
+    .flow-provider__cost {
+      font-size: 0.65rem;
+      color: var(--color-text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .flow-provider__bar {
+      height: 6px;
+      background: var(--color-gray-100);
+      border-radius: 3px;
+      overflow: hidden;
+      min-width: 80px;
+    }
+
+    .flow-provider__fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--color-accent-green);
+      animation: barGrow 1s ease forwards;
+      transform-origin: left;
+    }
+
+    .flow-provider__fill--blue { background: var(--color-primary); }
+    .flow-provider__fill--gold { background: var(--color-accent-gold); }
+    .flow-provider__fill--gray { background: var(--color-gray-500); }
+
+    @keyframes barGrow {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .flow-provider__label {
+      font-size: 0.65rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+
+    /* Flow stagger animations */
+    .flow-anim {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: archSlideIn 0.4s ease forwards;
+    }
+
+    .flow-anim-1 { animation-delay: 0.15s; }
+    .flow-anim-2 { animation-delay: 0.3s; }
+    .flow-anim-3 { animation-delay: 0.45s; }
+    .flow-anim-4 { animation-delay: 0.6s; }
+    .flow-anim-5 { animation-delay: 0.75s; }
+    .flow-anim-6 { animation-delay: 0.9s; }
+    .flow-anim-7 { animation-delay: 1.05s; }
+
+    /* Flow outputs */
+    .flow-outputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+      margin-top: 0.75rem;
+    }
+
+    .flow-output {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-accent-gold);
+      padding: 0.3rem 0.5rem;
+      background: rgba(217,119,6,0.05);
+      border-radius: var(--radius-sm);
+    }
+
+    .flow-output .mdi { font-size: 0.9rem; }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+
+    @media (max-width: 1024px) {
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+      .grid-2, .grid-3, .grid-2-1 { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+      .source-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-cards { grid-template-columns: repeat(3, 1fr); }
+      .product-detail__body { grid-template-columns: 1fr; }
+      .product-detail__stat-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .metric-grid { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; gap: 1rem; text-align: center; padding: 1.5rem; }
+      .main { padding: 1rem; }
+      .nav-tabs { padding: 0 0.5rem; }
+      .nav-tab { padding: 0.75rem 0.75rem; font-size: 0.75rem; }
+      .timeline-track { flex-direction: column; padding-left: 2rem; }
+      .timeline-track::before { width: 4px; height: 100%; top: 0; left: 12px; }
+      .timeline-milestone { flex-direction: row; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+      .timeline-content { text-align: left; }
+      .source-grid { grid-template-columns: 1fr; }
+      .comp-matrix { font-size: 0.7rem; }
+      .comp-matrix th, .comp-matrix td { padding: 0.4rem 0.3rem; }
+      .product-cards { grid-template-columns: repeat(2, 1fr); }
+      .feedback-channels { grid-template-columns: 1fr; }
+      .arch-layer__nodes { flex-direction: column; }
+      .arch-node { font-size: 0.7rem; }
+      .arch-node__sub { display: none; }
+      .flow-provider { grid-template-columns: 20px 50px 48px 1fr; }
+      .flow-provider__label { display: none; }
+      .flow-outputs { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================
+       PRINT STYLES
+       Used for PDF export via Chrome headless
+       or browser Ctrl+P / Cmd+P
+       ============================================ */
+
+    @media print {
+      /* Remove password gate */
+      .gate { display: none !important; }
+      body.locked { overflow: visible !important; }
+
+      /* Show ALL sections (tabs) */
+      .section { display: block !important; animation: none !important; }
+
+      /* Show ALL product details (remove page-break-inside:avoid -- details are too tall for a single page) */
+      .product-detail {
+        display: block !important;
+        animation: none !important;
+        overflow: visible !important;
+        page-break-inside: auto;
+        page-break-before: auto;
+        margin-bottom: 2rem;
+      }
+      .product-cards { display: none !important; }
+
+      /* Hide tab navigation (not needed in PDF) */
+      .nav-tabs { display: none !important; }
+
+      /* Page setup */
+      @page {
+        size: A4;
+        margin: 15mm 18mm;
+      }
+
+      body {
+        background: white !important;
+        font-size: 10pt;
+        line-height: 1.5;
+        color: #111827 !important;
+      }
+
+      .container { max-width: 100% !important; padding: 0 !important; }
+
+      /* Page breaks */
+      .section { page-break-before: always; }
+      .section:first-of-type { page-break-before: avoid; }
+      .section-header { page-break-after: avoid; }
+      h2, h3 { page-break-after: avoid; }
+      table, .metric-grid, .grid-2, .grid-3 { page-break-inside: avoid; }
+
+      /* Remove shadows and borders for clean print */
+      .metric-card, .feature-card, .product-detail, .pricing-card, .team-card, .source-card {
+        box-shadow: none !important;
+        border: 1px solid #d1d5db !important;
+      }
+
+      /* Remove all animations */
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      /* Remove blurred backgrounds (they print badly) */
+      .product-detail__bg { display: none !important; }
+
+      /* Ensure product detail internals are visible */
+      .product-detail__header,
+      .product-detail__stat-grid,
+      .product-detail__body {
+        position: relative !important;
+        z-index: 1 !important;
+      }
+      .product-detail__body {
+        grid-template-columns: 1fr !important;
+      }
+      .product-detail__stat-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+
+      /* Remove hover effects */
+      .metric-card:hover, .feature-card:hover, .product-card:hover,
+      .pricing-card:hover, .team-card:hover, .source-card:hover {
+        transform: none !important;
+      }
+
+      /* Remove scroll-reveal opacity (show everything) */
+      .reveal, .reveal-scale, .reveal-left, .reveal-right {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      /* Ensure gradient text is printable */
+      .hero__title, .section-header__title {
+        -webkit-text-fill-color: #111827 !important;
+        background: none !important;
+        color: #111827 !important;
+      }
+
+      /* Architecture diagram connectors -- simplify for print */
+      .arch-connector { display: none !important; }
+      .flow-arrow { display: none !important; }
+
+      /* Print-friendly links */
+      a { color: #0066cc !important; text-decoration: underline !important; }
+
+      /* Ensure tables are readable */
+      .comp-matrix { font-size: 8pt; }
+      .comp-matrix th, .comp-matrix td { padding: 4px 6px; }
+
+      /* Section titles as print headers */
+      .section-header__title {
+        font-size: 18pt !important;
+        border-bottom: 2px solid #0693e3;
+        padding-bottom: 6px;
+        margin-bottom: 12px;
+      }
+
+      .section-header__subtitle {
+        font-size: 10pt !important;
+        color: #6b7280 !important;
+      }
+
+      /* Footer for print */
+      .hero { padding: 1.5rem 0 !important; }
+      .hero__title { font-size: 24pt !important; }
+      .hero__subtitle { font-size: 11pt !important; }
+      .hero__company { font-size: 9pt !important; }
+    }
+  </style>
+</head>
+<body class="locked">
+
+  <!-- ========== PASSWORD GATE ========== -->
+  <div class="gate" id="gate">
+    <div class="gate__bg"></div>
+    <div class="gate__card">
+      <img src="brubru_mainlogo.png" alt="Brubru" class="gate__logo">
+      <p class="gate__prompt">You should be <em>open to invest</em> to enter</p>
+      <form onsubmit="return checkPassword(event)">
+        <div class="gate__input-wrap">
+          <input type="text" class="gate__input" id="gateInput" placeholder="Type the passphrase..." autocomplete="off" autofocus>
+          <button type="submit" class="gate__btn">Enter</button>
+        </div>
+      </form>
+      <div class="gate__error" id="gateError">Incorrect passphrase. Try again.</div>
+      <div class="gate__hint"><a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: border-color 0.2s;">Beresol BV</a> -- Confidential</div>
+    </div>
+  </div>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="header__brand">
+      <div class="header__logo">
+        <img src="brubru_mainlogo.png" alt="Brubru Logo" class="header__logo-image">
+      </div>
+      <div>
+        <div class="header__title">Brubru</div>
+        <div class="header__subtitle">AI-Powered Strategic Advocacy for EU Policy</div>
+      </div>
+    </div>
+    <div class="header__meta">
+      <a href="brubru_business_plan.pdf" download="Brubru_Business_Plan_2026.pdf" class="header__badge" style="text-decoration:none;color:inherit;cursor:pointer;">
+        <span class="mdi mdi-file-document-outline"></span>
+        Business Plan
+        <span class="mdi mdi-download" style="font-size:0.9rem;opacity:0.7;"></span>
+      </a>
+      <div class="header__badge">
+        <span class="mdi mdi-calendar"></span>
+        February 2026
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav-tabs" id="navTabs">
+    <button class="nav-tab nav-tab--active" onclick="showSection('overview', this)">
+      <span class="mdi mdi-view-dashboard-outline"></span> Overview
+    </button>
+    <button class="nav-tab" onclick="showSection('product', this)">
+      <span class="mdi mdi-cube-outline"></span> Product
+    </button>
+    <button class="nav-tab" onclick="showSection('market', this)">
+      <span class="mdi mdi-earth"></span> Market
+    </button>
+    <button class="nav-tab" onclick="showSection('competitive', this)">
+      <span class="mdi mdi-sword-cross"></span> Competitive
+    </button>
+    <button class="nav-tab" onclick="showSection('business', this)">
+      <span class="mdi mdi-currency-eur"></span> Business Model
+    </button>
+    <button class="nav-tab" onclick="showSection('technology', this)">
+      <span class="mdi mdi-chip"></span> Technology
+    </button>
+    <button class="nav-tab" onclick="showSection('financials', this)">
+      <span class="mdi mdi-chart-line"></span> Financials
+    </button>
+    <button class="nav-tab" onclick="showSection('team', this)">
+      <span class="mdi mdi-account-group"></span> Team & Roadmap
+    </button>
+  </nav>
+
+  <main class="main">
+
+    <!-- ========================================
+         SECTION 1: OVERVIEW
+         ======================================== -->
+    <section id="overview" class="section section--active">
+      <div class="section-header reveal">
+        <div class="section-header__title">Executive Summary</div>
+        <div class="section-header__subtitle">AI-native advocacy platform for the EUR 3-5B EU public affairs market</div>
+      </div>
+
+      <div class="metric-grid reveal">
+        <div class="metric-card metric-card--blue">
+          <div class="metric-card__icon"><span class="mdi mdi-cube-outline"></span></div>
+          <div class="metric-card__label">Product Status</div>
+          <div class="metric-card__value">Built</div>
+          <div class="metric-card__badge metric-card__badge--green">
+            <span class="mdi mdi-check-circle"></span> 8 core features live
+          </div>
+        </div>
+        <div class="metric-card metric-card--green">
+          <div class="metric-card__icon"><span class="mdi mdi-database-outline"></span></div>
+          <div class="metric-card__label">Data Sources</div>
+          <div class="metric-card__value">15+</div>
+          <div class="metric-card__badge metric-card__badge--blue">
+            <span class="mdi mdi-spider-web"></span> 29 scrapers
+          </div>
+        </div>
+        <div class="metric-card metric-card--purple">
+          <div class="metric-card__icon"><span class="mdi mdi-percent-outline"></span></div>
+          <div class="metric-card__label">Gross Margin</div>
+          <div class="metric-card__value">90-94%</div>
+          <div class="metric-card__badge metric-card__badge--green">
+            <span class="mdi mdi-trending-up"></span> Software economics
+          </div>
+        </div>
+        <div class="metric-card metric-card--gold">
+          <div class="metric-card__icon"><span class="mdi mdi-target"></span></div>
+          <div class="metric-card__label">Break-Even</div>
+          <div class="metric-card__value">23 subs</div>
+          <div class="metric-card__detail">20 Yellow + 3 Blue = EUR 3,377 MRR</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout__text">
+          "EU policy professionals spend EUR 500-1,000/day on work that AI can now produce in minutes.
+          Brubru encodes 17 years of Brussels expertise into software -- analyst-grade work at software costs."
+        </div>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-alert-circle-outline"></span> The Problem</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>Pain Point</th><th>Time Lost</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Monitoring 15+ EU sources daily</td><td>2-4 hrs/day</td><td>EUR 500-1K/day</td></tr>
+              <tr><td>Drafting a position paper</td><td>3-5 days</td><td>EUR 5K-15K</td></tr>
+              <tr><td>Compliance gap analysis</td><td>2-4 weeks</td><td>EUR 20K-50K</td></tr>
+              <tr><td>Understanding a new dossier's procedure</td><td>1-2 days</td><td>EUR 2K-4K</td></tr>
+              <tr><td>Finding relevant EU tenders</td><td>1-2 hrs/day</td><td>Missed EUR 100K+ opps</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-lightbulb-outline"></span> The Solution</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>Brubru Feature</th><th>Replaces</th><th>Time Saved</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>My EU Bubble</td><td>Manual monitoring</td><td><span class="badge badge--green">80%</span></td></tr>
+              <tr><td>Document Generator</td><td>Manual drafting</td><td><span class="badge badge--green">90%</span></td></tr>
+              <tr><td>EU Law Comply</td><td>Compliance consultants</td><td><span class="badge badge--green">85%</span></td></tr>
+              <tr><td>Brubru Chat</td><td>Senior consultant Q&A</td><td><span class="badge badge--green">70%</span></td></tr>
+              <tr><td>Tenderator</td><td>Manual tender search</td><td><span class="badge badge--green">75%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-trophy-outline"></span> Why Now -- Three Converging Forces</div>
+        <div class="grid-3 reveal-scale" style="margin-top: 1rem; margin-bottom: 0;">
+          <div style="padding: 1.25rem; background: rgba(6,147,227,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-primary);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Regulatory Wave</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">AI Act, MiCA, CSRD, NIS2, DORA, Packaging Regulation -- unprecedented compliance deadlines in 2026-2028.</div>
+          </div>
+          <div style="padding: 1.25rem; background: rgba(155,81,224,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-accent-purple);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-accent-purple); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">AI Threshold</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">LLMs now produce analyst-grade regulatory work. For the first time, AI can draft position papers a professional would use.</div>
+          </div>
+          <div style="padding: 1.25rem; background: rgba(5,150,105,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-accent-green);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-accent-green); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Market Vacancy</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">US has FiscalNote ($1.5B), legal AI has Harvey ($3B+). EU policy intelligence has zero purpose-built AI platforms.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 2: PRODUCT
+         ======================================== -->
+    <section id="product" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Product Suite</div>
+        <div class="section-header__subtitle">Five integrated modules covering the full EU advocacy workflow. Click any module to explore.</div>
+      </div>
+
+      <!-- Product selector cards -->
+      <div class="product-cards reveal">
+        <div class="product-card product-card--active" onclick="showProduct('chat', this)">
+          <img src="brubru_icon_colours.png" alt="Brubru Chat" class="product-card__logo">
+          <div class="product-card__name">Brubru Chat</div>
+          <div class="product-card__tier-label" style="color: var(--color-accent-green);">All tiers</div>
+        </div>
+        <div class="product-card" onclick="showProduct('bubble', this)">
+          <img src="brubru_myeububble.png" alt="My EU Bubble" class="product-card__logo">
+          <div class="product-card__name">My EU Bubble</div>
+          <div class="product-card__tier-label" style="color: var(--color-accent-green);">All tiers</div>
+        </div>
+        <div class="product-card" onclick="showProduct('amendator', this)">
+          <img src="brubru_amendator.png" alt="Amendator" class="product-card__logo">
+          <div class="product-card__name">Amendator</div>
+          <div class="product-card__tier-label" style="color: var(--color-accent-gold);">Yellow+</div>
+        </div>
+        <div class="product-card" onclick="showProduct('comply', this)">
+          <img src="brubru_eulawcomply.png" alt="EU Law Comply" class="product-card__logo">
+          <div class="product-card__name">EU Law Comply</div>
+          <div class="product-card__tier-label" style="color: var(--color-accent-gold);">Yellow+</div>
+        </div>
+        <div class="product-card" onclick="showProduct('tenderator', this)">
+          <img src="brubru_tenderator.png" alt="Tenderator" class="product-card__logo">
+          <div class="product-card__name">Tenderator</div>
+          <div class="product-card__tier-label" style="color: var(--color-primary);">Blue only</div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Brubru Chat ===== -->
+      <div id="detail-chat" class="product-detail product-detail--active">
+        <div class="product-detail__bg" style="background-image: url('brubru_icon_colours.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);">
+            <span class="mdi mdi-chat-processing-outline"></span>
+          </div>
+          <div>
+            <div class="product-detail__title">Brubru Chat</div>
+            <div class="product-detail__tagline">Context-aware AI policy advisor with deep EU institutional knowledge</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">4</div>
+            <div class="product-detail__stat-label">AI providers (fallback chain)</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">18</div>
+            <div class="product-detail__stat-label">Specialised AI services</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">15+</div>
+            <div class="product-detail__stat-label">Context sources injected</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Core Capabilities</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> Natural language queries about EU legislation, procedures, and institutional dynamics</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Strategic advocacy guidance: who to talk to, which arguments work, how to position</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Document uploads (PDF, DOCX) for contextual analysis and summarisation</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Citation tracking with verifiable source references to official EU documents</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Multi-turn conversation memory with quality scoring</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Beresol Knowledge Bundle: 11 policy reports + 7 live monitors as context</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Context Sources Injected Per Query</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-database-outline"></span> Legislative procedure status from OEIL (21,600+ procedures)</li>
+              <li><span class="mdi mdi-train"></span> Legislative Train Schedule (490+ Commission priority files)</li>
+              <li><span class="mdi mdi-book-open-variant"></span> EPRS Think Tank research briefings matched by procedure reference</li>
+              <li><span class="mdi mdi-account-group-outline"></span> EP Committee Work in Progress (26 committees tracked)</li>
+              <li><span class="mdi mdi-comment-question-outline"></span> EC Public Consultations from "Have Your Say" portal</li>
+              <li><span class="mdi mdi-file-document-multiple-outline"></span> Beresol open reports on AI Act, CBAM, Mercosur, and 8 more topics</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">AI Provider Chain</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle"></span> <strong>Mistral</strong> (primary) -- $0.20/M tokens, cost-effective for all queries</li>
+              <li><span class="mdi mdi-numeric-2-circle"></span> <strong>Claude Sonnet</strong> (fallback) -- $3/M tokens, complex reasoning</li>
+              <li><span class="mdi mdi-numeric-3-circle"></span> <strong>GPT-4 Turbo</strong> (fallback) -- $10/M tokens, high availability</li>
+              <li><span class="mdi mdi-numeric-4-circle"></span> <strong>Gemini 1.5 Pro</strong> (fallback) -- $1.25/M tokens, last resort</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: My EU Bubble ===== -->
+      <div id="detail-bubble" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_myeububble.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(155,81,224,0.1); color: var(--color-accent-purple);">
+            <span class="mdi mdi-glass-mug-variant"></span>
+          </div>
+          <div>
+            <div class="product-detail__title">My EU Bubble</div>
+            <div class="product-detail__tagline">Personalised intelligence dashboard -- monitor, track, predict, and generate from one place</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">33+</div>
+            <div class="product-detail__stat-label">RSS feeds from EU sources</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">26</div>
+            <div class="product-detail__stat-label">EP committees tracked</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">8</div>
+            <div class="product-detail__stat-label">Dashboard tabs</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Dashboard Tabs</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-rss"></span> <strong>News Feed</strong> -- 33+ RSS feeds from EP, Commission, Council, EPRS, OEIL, and general EU news</li>
+              <li><span class="mdi mdi-train"></span> <strong>Legislative Train</strong> -- 490+ priority files from the Commission's work programme with status tracking</li>
+              <li><span class="mdi mdi-file-document-outline"></span> <strong>My Files</strong> -- Tracked legislation, saved entries, bookmarked collections</li>
+              <li><span class="mdi mdi-briefcase-outline"></span> <strong>Committee Work</strong> -- Work-in-progress procedures across 26 EP committees (COD, APP, CNS, NLE, INI)</li>
+              <li><span class="mdi mdi-comment-question-outline"></span> <strong>EC Consultations</strong> -- Open, closed, and outcome-published consultations from "Have Your Say" portal</li>
+              <li><span class="mdi mdi-chart-bar"></span> <strong>Analytics</strong> -- Reading patterns, topic interests, engagement metrics</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Core Capabilities</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> Subscribe/unsubscribe from any RSS feed based on policy interests</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Track/untrack legislative files, committee work items, and consultations</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Filter by category, source, date, committee code, or procedure type</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Stage pipeline visualisation for legislative progress (announced > adopted)</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Configurable email alerts for tracked items</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Integrated Sub-Modules</div>
+            <div class="product-detail__sub-feature">
+              <div class="product-detail__sub-feature-icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);">
+                <span class="mdi mdi-file-document-edit-outline"></span>
+              </div>
+              <div>
+                <div class="product-detail__sub-feature-title">Document Generator</div>
+                <div class="product-detail__sub-feature-desc">
+                  AI-powered advocacy documents through a step-by-step wizard. Produces <strong>position papers</strong> (executive summary, background, key asks, recommendations),
+                  <strong>MEP briefings</strong> (optimised for busy MEPs with clear asks and voting recommendations), and <strong>talking points</strong> (bullet-format for meetings).
+                  Link to EU legislation via CELEX numbers, add policy areas, identify stakeholders. Minutes instead of days.
+                </div>
+              </div>
+            </div>
+            <div class="product-detail__sub-feature">
+              <div class="product-detail__sub-feature-icon" style="background: rgba(249,115,22,0.1); color: var(--color-accent-orange);">
+                <span class="mdi mdi-chart-timeline-variant-shimmer"></span>
+              </div>
+              <div>
+                <div class="product-detail__sub-feature-title">Predictions Engine</div>
+                <div class="product-detail__sub-feature-desc">
+                  AI legislative forecasting with 11 backend services. <strong>Timeline prediction</strong> (survival analysis on historical durations),
+                  <strong>outcome prediction</strong> (multi-feature analysis of procedure, committee, political dynamics),
+                  <strong>EP plenary vote forecast</strong> (9 political groups, 720 MEPs),
+                  <strong>Council vote</strong> (QMV calculator, 27 member states, blocking minority detection -- Blue tier),
+                  <strong>resolution leading indicators</strong> (INL/INI/RSP resolutions that preceded legislation).
+                  Yellow: 10/month. Blue: unlimited.
+                </div>
+              </div>
+            </div>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">RSS Source Categories</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-account-tie"></span> European Parliament (committee feeds, plenary, press releases)</li>
+              <li><span class="mdi mdi-domain"></span> European Commission (DG-specific publications and speeches)</li>
+              <li><span class="mdi mdi-bank"></span> Council of the EU (positions, working group outputs)</li>
+              <li><span class="mdi mdi-eye-outline"></span> OEIL Legislative Observatory (procedure updates)</li>
+              <li><span class="mdi mdi-book-open-variant"></span> EPRS Think Tank (research briefings and studies)</li>
+              <li><span class="mdi mdi-newspaper-variant-outline"></span> General EU news (EurActiv, Politico Europe, etc.)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Amendator ===== -->
+      <div id="detail-amendator" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_amendator.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(5,150,105,0.1); color: var(--color-accent-green);">
+            <span class="mdi mdi-file-edit-outline"></span>
+          </div>
+          <div>
+            <div class="product-detail__title">Amendator</div>
+            <div class="product-detail__tagline">XML-first legislative amendment editor modelled on the European Parliament's AT4AM system</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">XML</div>
+            <div class="product-detail__stat-label">Akoma Ntoso compliant</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">4</div>
+            <div class="product-detail__stat-label">Export formats</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">3</div>
+            <div class="product-detail__stat-label">Workflow statuses</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">How It Works</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle-outline"></span> Load any EU legislative text via EUR-Lex CELEX number or URL</li>
+              <li><span class="mdi mdi-numeric-2-circle-outline"></span> Two-column layout displays original text alongside your proposed changes</li>
+              <li><span class="mdi mdi-numeric-3-circle-outline"></span> Click on any article, paragraph, recital, or annex to propose an amendment</li>
+              <li><span class="mdi mdi-numeric-4-circle-outline"></span> AI drafting: describe changes in natural language, Brubru produces legal text</li>
+              <li><span class="mdi mdi-numeric-5-circle-outline"></span> Track changes visualisation: <strong>bold</strong> for additions, <s>strikethrough</s> for deletions</li>
+              <li><span class="mdi mdi-numeric-6-circle-outline"></span> Export in XML, HTML, PDF, or Word format</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Amendment Workflow</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-circle-outline"></span> <strong>Candidate</strong> -- Draft amendment, still being refined</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Tabled</strong> -- Officially submitted for consideration</li>
+              <li><span class="mdi mdi-close-circle-outline"></span> <strong>Withdrawn</strong> -- Pulled from consideration</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Technical Compliance</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Akoma Ntoso XML</strong> -- OASIS LegalDocumentML standard used by EU institutions</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Automatic position references (Article X, paragraph Y, point (a))</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Handles both OJ (Official Journal) and COM (Commission) document formats</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Supports recitals, articles, annexes, and transitional provisions</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Link amendments to Legislative Train carriages for tracking</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Why It Matters</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-alert-circle-outline"></span> Legislative formatting is arcane -- get it wrong and amendments are rejected on procedural grounds</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> No other tool combines AT4AM-style editing with AI drafting assistance</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> EP's own AT4AM is internal-only -- not available to external stakeholders who draft amendments for MEPs</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Tier Access</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-circle-outline" style="color: var(--color-gray-500);"></span> <strong>White:</strong> 5 amendments per month, XML + HTML export, watermark</li>
+              <li><span class="mdi mdi-circle" style="color: var(--color-accent-gold);"></span> <strong>Yellow:</strong> Unlimited amendments, all export formats, no watermark</li>
+              <li><span class="mdi mdi-circle" style="color: var(--color-primary);"></span> <strong>Blue:</strong> Everything + white-label export support</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: EU Law Comply ===== -->
+      <div id="detail-comply" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_eulawcomply.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(156,163,175,0.15); color: var(--color-accent-silver);">
+            <span class="mdi mdi-scale-balance"></span>
+          </div>
+          <div>
+            <div class="product-detail__title">EU Law Comply</div>
+            <div class="product-detail__tagline">Automated compliance gap analysis against EU regulations with severity-rated action plans</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">0-100%</div>
+            <div class="product-detail__stat-label">Compliance scoring</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">4</div>
+            <div class="product-detail__stat-label">Report export formats</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">2-phase</div>
+            <div class="product-detail__stat-label">Semantic + LLM analysis</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">How It Works</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle-outline"></span> Upload organisational documents (PDF, DOCX, or TXT)</li>
+              <li><span class="mdi mdi-numeric-2-circle-outline"></span> Select relevant EU law clusters (AI Act, GDPR, NIS2, CSRD, MiCA, DORA, etc.)</li>
+              <li><span class="mdi mdi-numeric-3-circle-outline"></span> AI extracts text and identifies regulatory requirements using HuggingFace ML models</li>
+              <li><span class="mdi mdi-numeric-4-circle-outline"></span> Two-phase gap analysis: semantic search matches requirements, then LLM refines findings</li>
+              <li><span class="mdi mdi-numeric-5-circle-outline"></span> Receive gap analysis with severity ratings: missing, partial, unclear, or compliant</li>
+              <li><span class="mdi mdi-numeric-6-circle-outline"></span> Export detailed report with action plan timeline (PDF, Word, HTML, JSON)</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Law Clusters Available</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> AI Act (2024/1689) -- Risk classification, conformity, transparency</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> GDPR -- Data protection, DPO requirements, transfers</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> NIS2 -- Cybersecurity risk management, incident reporting</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> CSRD -- Corporate sustainability reporting</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> MiCA -- Crypto-asset regulation</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> DORA -- Digital operational resilience (financial services)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Report Contents</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-gauge"></span> <strong>Overall compliance score</strong> (0-100%) with colour-coded indicator</li>
+              <li><span class="mdi mdi-format-list-checks"></span> <strong>Gap summary</strong> -- count of missing, partial, unclear, and compliant items</li>
+              <li><span class="mdi mdi-file-find-outline"></span> <strong>Detailed findings</strong> per requirement with severity rating and evidence</li>
+              <li><span class="mdi mdi-lightbulb-outline"></span> <strong>Recommended actions</strong> prioritised by criticality and deadline</li>
+              <li><span class="mdi mdi-timeline-clock-outline"></span> <strong>Action plan timeline</strong> with visual Gantt-style prioritisation</li>
+              <li><span class="mdi mdi-history"></span> <strong>Usage history</strong> -- track compliance improvements over time</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Market Context</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-alert-circle-outline"></span> Traditional compliance assessments cost EUR 20,000-50,000 and take 2-4 weeks</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> Brubru produces a first-pass analysis in minutes at a fraction of the cost</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> Unprecedented wave of compliance deadlines (AI Act, NIS2, DORA) in 2025-2027</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Tier Access</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-circle-outline" style="color: var(--color-gray-500);"></span> <strong>White:</strong> Not available -- upgrade trigger</li>
+              <li><span class="mdi mdi-circle" style="color: var(--color-accent-gold);"></span> <strong>Yellow:</strong> Limited analyses per month</li>
+              <li><span class="mdi mdi-circle" style="color: var(--color-primary);"></span> <strong>Blue:</strong> Full access, unlimited analyses, priority processing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Tenderator ===== -->
+      <div id="detail-tenderator" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_tenderator.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(217,119,6,0.1); color: var(--color-accent-gold);">
+            <span class="mdi mdi-piggy-bank-outline"></span>
+          </div>
+          <div>
+            <div class="product-detail__title">Tenderator</div>
+            <div class="product-detail__tagline">AI-powered EU public procurement intelligence -- Blue tier exclusive</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">800K+</div>
+            <div class="product-detail__stat-label">TED notices per year</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">6</div>
+            <div class="product-detail__stat-label">ML-powered services</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">SPARQL</div>
+            <div class="product-detail__stat-label">Market analytics engine</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Core Features</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-account-cog-outline"></span> <strong>Organisation Profile</strong> -- Set up CPV codes, geographic preferences, capacity, and past experience</li>
+              <li><span class="mdi mdi-target"></span> <strong>AI-Matched Feed</strong> -- Tenders scored by relevance to your profile, updated daily from TED</li>
+              <li><span class="mdi mdi-star-circle-outline"></span> <strong>SME Suitability Scoring</strong> -- Multi-criteria weighted analysis of your fit for each tender</li>
+              <li><span class="mdi mdi-format-list-checks"></span> <strong>Bid Checklist</strong> -- Auto-generated checklist of requirements, eligibility criteria, and deadlines</li>
+              <li><span class="mdi mdi-calendar-month"></span> <strong>Tender Calendar</strong> -- Visual calendar of submission deadlines across all tracked tenders</li>
+              <li><span class="mdi mdi-magnify"></span> <strong>Tender Detail</strong> -- Full notice with AI-extracted requirements, estimated value, and award criteria</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Data Sources</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-database-outline"></span> <strong>TED (Tenders Electronic Daily)</strong> -- Official EU procurement database via SPARQL + eForms API</li>
+              <li><span class="mdi mdi-file-xml-box"></span> <strong>eForms XML</strong> -- Structured procurement notices with CPV codes, lots, and award criteria</li>
+              <li><span class="mdi mdi-certificate-outline"></span> <strong>eCertis</strong> -- Procurement criteria across 27 EU member states</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">AI/ML Services (HuggingFace)</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-robot-outline"></span> <strong>Tender Classifier</strong> -- Categorise tenders by sector, type, and complexity</li>
+              <li><span class="mdi mdi-text-box-search-outline"></span> <strong>Tender Summariser</strong> -- Compress multi-page notices into actionable summaries</li>
+              <li><span class="mdi mdi-magnify"></span> <strong>Tender Search</strong> -- Full-text semantic search across all indexed notices</li>
+              <li><span class="mdi mdi-chart-box-outline"></span> <strong>SME Analyser</strong> -- Assess small business suitability against tender requirements</li>
+              <li><span class="mdi mdi-clipboard-check-outline"></span> <strong>Requirement Extractor</strong> -- Pull eligibility and technical requirements from notices</li>
+              <li><span class="mdi mdi-trophy-outline"></span> <strong>Award Explainer</strong> -- Interpret award criteria weighting and evaluation methodology</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Market Analytics (SPARQL)</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-chart-line"></span> Procurement spending trends by sector, geography, and contracting authority</li>
+              <li><span class="mdi mdi-chart-bar"></span> Award history analysis for competitive intelligence</li>
+              <li><span class="mdi mdi-map-marker-multiple-outline"></span> Geographic distribution of opportunities matching your profile</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Why Blue Tier Exclusive</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-information-outline"></span> Tenderator is the primary upgrade trigger from Yellow to Blue</li>
+              <li><span class="mdi mdi-information-outline"></span> Higher compute cost per user (ML inference + SPARQL queries)</li>
+              <li><span class="mdi mdi-information-outline"></span> Enterprise-grade feature justifying EUR 599/month positioning</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workflow visualisation -->
+      <div class="card reveal">
+        <div class="card__title"><span class="mdi mdi-arrow-right-bold-circle-outline"></span> The Advocacy Workflow</div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1.25rem; flex-wrap: wrap;">
+          <div style="padding: 0.6rem 1rem; background: rgba(6,147,227,0.1); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-primary);">
+            <span class="mdi mdi-chat-processing-outline"></span> Analyse
+          </div>
+          <span class="mdi mdi-chevron-right" style="color: var(--color-text-muted);"></span>
+          <div style="padding: 0.6rem 1rem; background: rgba(155,81,224,0.1); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-accent-purple);">
+            <span class="mdi mdi-glass-mug-variant"></span> Monitor
+          </div>
+          <span class="mdi mdi-chevron-right" style="color: var(--color-text-muted);"></span>
+          <div style="padding: 0.6rem 1rem; background: rgba(5,150,105,0.1); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-accent-green);">
+            <span class="mdi mdi-file-edit-outline"></span> Draft
+          </div>
+          <span class="mdi mdi-chevron-right" style="color: var(--color-text-muted);"></span>
+          <div style="padding: 0.6rem 1rem; background: rgba(156,163,175,0.15); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-gray-500);">
+            <span class="mdi mdi-scale-balance"></span> Comply
+          </div>
+          <span class="mdi mdi-chevron-right" style="color: var(--color-text-muted);"></span>
+          <div style="padding: 0.6rem 1rem; background: rgba(217,119,6,0.1); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-accent-gold);">
+            <span class="mdi mdi-piggy-bank-outline"></span> Bid
+          </div>
+          <span class="mdi mdi-chevron-right" style="color: var(--color-text-muted);"></span>
+          <div class="feedback-loop-badge">
+            <span class="mdi mdi-restore"></span> Improve
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 0.75rem; font-size: 0.8rem; color: var(--color-text-muted);">
+          Each module is useful alone. Together they create compounding lock-in across the full advocacy lifecycle.<br>
+          The feedback loop ensures the system improves with every interaction.
+        </div>
+      </div>
+
+      <!-- ===== FEEDBACK SYSTEM ===== -->
+      <div class="card reveal" style="margin-top: 1.5rem; overflow: visible;">
+        <div class="card__title"><span class="mdi mdi-message-reply-text-outline"></span> Feedback System -- The Improvement Engine</div>
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.5rem; margin-bottom: 1.5rem;">
+          Every user interaction generates structured signals that systematically improve Brubru's AI quality, data coverage, and product roadmap.
+        </p>
+
+        <!-- Feedback flow diagram -->
+        <div class="flow-diagram">
+
+          <!-- COLLECT -->
+          <div class="flow-step flow-anim flow-anim-1">
+            <div class="flow-step__badge" style="background: var(--color-primary);">1</div>
+            <div class="flow-step__card flow-step__card--blue">
+              <div class="flow-step__icon"><span class="mdi mdi-inbox-arrow-down-outline"></span></div>
+              <div class="flow-step__title">Collect -- 4 Feedback Channels</div>
+              <div class="flow-step__desc">Feedback is captured at every touchpoint with minimal friction.</div>
+              <div class="feedback-channels" style="margin-top: 0.75rem;">
+                <div class="fb-channel fb-channel--chat">
+                  <div class="fb-channel__header">
+                    <span class="mdi mdi-chat-processing-outline"></span>
+                    <strong>Brubru Chat</strong>
+                  </div>
+                  <div class="fb-channel__body">
+                    Three-button inline feedback on every AI response:<br>
+                    <span class="fb-action fb-action--pos"><span class="mdi mdi-medal-outline"></span> Helpful</span>
+                    <span class="fb-action fb-action--neg"><span class="mdi mdi-emoticon-confused-outline"></span> Not helpful</span>
+                    <span class="fb-action fb-action--hall"><span class="mdi mdi-alert-circle-outline"></span> Hallucination</span><br>
+                    Hallucination reports include optional correction text for precision.
+                  </div>
+                </div>
+                <div class="fb-channel fb-channel--bubble">
+                  <div class="fb-channel__header">
+                    <span class="mdi mdi-glass-mug-variant"></span>
+                    <strong>My EU Bubble</strong>
+                  </div>
+                  <div class="fb-channel__body">
+                    Feedback invitation cards embedded in the dashboard. Card and sidebar variants. Links to structured form or direct email to hello@beresol.eu.
+                  </div>
+                </div>
+                <div class="fb-channel fb-channel--form">
+                  <div class="fb-channel__header">
+                    <span class="mdi mdi-form-textbox"></span>
+                    <strong>General Feedback Form</strong>
+                  </div>
+                  <div class="fb-channel__body">
+                    Accessible from Amendator, EU Law Comply, and Tenderator. Structured fields: type (bug, feature request, general), title, description, category, affected feature, screenshot URL. Auto-captures browser and device metadata.
+                  </div>
+                </div>
+                <div class="fb-channel fb-channel--passive">
+                  <div class="fb-channel__header">
+                    <span class="mdi mdi-chart-timeline-variant"></span>
+                    <strong>Passive Analytics</strong>
+                  </div>
+                  <div class="fb-channel__body">
+                    Every AI interaction automatically logs: provider used, tokens consumed, response time, sources cited, context tiers, and knowledge gap indicators. No user action required.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-arrow flow-anim flow-anim-2"><span class="mdi mdi-chevron-down"></span></div>
+
+          <!-- PROCESS -->
+          <div class="flow-step flow-anim flow-anim-3">
+            <div class="flow-step__badge" style="background: var(--color-accent-purple);">2</div>
+            <div class="flow-step__card flow-step__card--purple">
+              <div class="flow-step__icon"><span class="mdi mdi-cog-transfer-outline"></span></div>
+              <div class="flow-step__title">Process -- Where Feedback Lives</div>
+              <div class="flow-step__desc">Feedback is stored, scored, and surfaced for action across three systems.</div>
+              <div class="fb-process-grid" style="margin-top: 0.75rem;">
+                <div class="fb-process-item">
+                  <div class="fb-process-item__icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);"><span class="mdi mdi-database"></span></div>
+                  <div>
+                    <div class="fb-process-item__title">feedback_submissions</div>
+                    <div class="fb-process-item__desc">Central table storing all feedback with type, priority (low/medium/high/critical), status (new > in_review > in_progress > resolved), admin notes, assignment, and full audit trail via admin_activity_log.</div>
+                  </div>
+                </div>
+                <div class="fb-process-item">
+                  <div class="fb-process-item__icon" style="background: rgba(155,81,224,0.1); color: var(--color-accent-purple);"><span class="mdi mdi-speedometer"></span></div>
+                  <div>
+                    <div class="fb-process-item__title">Conversation Quality Service</div>
+                    <div class="fb-process-item__desc">Automated scoring (0-10) per conversation. Weighted signals: positive feedback (+2.0), negative (-1.0), hallucination report (-3.0), knowledge gap (-1.0), follow-up engagement (+0.5), high-tier sources (+0.5 each). Ratings: Excellent (9-10), Good (7-8), Neutral (4-6), Poor (2-3), Critical (0-1).</div>
+                  </div>
+                </div>
+                <div class="fb-process-item">
+                  <div class="fb-process-item__icon" style="background: rgba(220,38,38,0.1); color: var(--color-accent-red);"><span class="mdi mdi-magnify-close"></span></div>
+                  <div>
+                    <div class="fb-process-item__title">Knowledge Gap Tracker</div>
+                    <div class="fb-process-item__desc">When the AI cannot answer, the gap is categorised by missing data type (legislation, procedure, MEP, date, statistic, document) and root cause (not_indexed, not_fetched, not_exists, outdated). Each gap is tracked until resolved.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-arrow flow-anim flow-anim-4"><span class="mdi mdi-chevron-down"></span></div>
+
+          <!-- IMPROVE -->
+          <div class="flow-step flow-anim flow-anim-5">
+            <div class="flow-step__badge" style="background: var(--color-accent-green);">3</div>
+            <div class="flow-step__card flow-step__card--green">
+              <div class="flow-step__icon"><span class="mdi mdi-trending-up"></span></div>
+              <div class="flow-step__title">Improve -- Systematic Quality Loops</div>
+              <div class="flow-step__desc">Feedback drives five concrete improvement loops that compound over time.</div>
+              <div class="fb-loops" style="margin-top: 0.75rem;">
+                <div class="fb-loop">
+                  <div class="fb-loop__number">1</div>
+                  <div>
+                    <div class="fb-loop__title">Knowledge Base Expansion</div>
+                    <div class="fb-loop__desc">Knowledge gaps (not_indexed, not_fetched) trigger new scraper runs or source additions. When a gap is marked as not_exists, the topic is flagged for future data partnerships. Resolved gaps include resolution notes for institutional memory.</div>
+                  </div>
+                </div>
+                <div class="fb-loop">
+                  <div class="fb-loop__number">2</div>
+                  <div>
+                    <div class="fb-loop__title">Context Builder Tuning</div>
+                    <div class="fb-loop__desc">Source tier usage analytics reveal which data sources produce the highest-quality answers. High-tier sources (Tier 1-2: OEIL, EUR-Lex) boost quality scores by +0.5 each. Under-performing sources are deprioritised or replaced.</div>
+                  </div>
+                </div>
+                <div class="fb-loop">
+                  <div class="fb-loop__number">3</div>
+                  <div>
+                    <div class="fb-loop__title">Hallucination Suppression</div>
+                    <div class="fb-loop__desc">Hallucination reports carry the highest negative weight (-3.0). Patterns in flagged responses reveal prompt weaknesses, insufficient context injection, or source gaps. Correction text from users provides ground truth for targeted fixes.</div>
+                  </div>
+                </div>
+                <div class="fb-loop">
+                  <div class="fb-loop__number">4</div>
+                  <div>
+                    <div class="fb-loop__title">Provider Optimisation</div>
+                    <div class="fb-loop__desc">Chat analytics track quality and cost per AI provider. If Mistral's quality drops on specific query types, the fallback chain routing is adjusted. Response time, token usage, and user satisfaction are correlated per provider to optimise the cost-quality tradeoff.</div>
+                  </div>
+                </div>
+                <div class="fb-loop">
+                  <div class="fb-loop__number">5</div>
+                  <div>
+                    <div class="fb-loop__title">Product Roadmap Prioritisation</div>
+                    <div class="fb-loop__desc">Feature requests and bug reports flow into the admin panel with filtering by type, priority, and category. Aggregate statistics (by_status, by_type, by_priority) surface the most impactful improvements. The admin assigns, tracks, and resolves each item through a full lifecycle.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-arrow flow-anim flow-anim-6"><span class="mdi mdi-chevron-down"></span></div>
+
+          <!-- ADMIN DASHBOARD -->
+          <div class="flow-step flow-anim flow-anim-7">
+            <div class="flow-step__badge" style="background: var(--color-accent-gold);">4</div>
+            <div class="flow-step__card flow-step__card--gold">
+              <div class="flow-step__icon"><span class="mdi mdi-view-dashboard-outline"></span></div>
+              <div class="flow-step__title">Admin Dashboard -- Command Centre</div>
+              <div class="flow-step__desc">All feedback, analytics, and quality metrics converge in the admin panel.</div>
+              <div class="flow-outputs" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="flow-output"><span class="mdi mdi-comment-text-outline"></span> Feedback management</div>
+                <div class="flow-output"><span class="mdi mdi-chart-bar"></span> Chat analytics</div>
+                <div class="flow-output"><span class="mdi mdi-alert-outline"></span> Hallucination reports</div>
+                <div class="flow-output"><span class="mdi mdi-magnify-close"></span> Knowledge gaps</div>
+                <div class="flow-output"><span class="mdi mdi-speedometer"></span> Quality scores</div>
+                <div class="flow-output"><span class="mdi mdi-account-check-outline"></span> Assignment tracking</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 3: MARKET
+         ======================================== -->
+    <section id="market" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Market Opportunity</div>
+        <div class="section-header__subtitle">EUR 3-5B EU public affairs market with zero AI-native competitors</div>
+      </div>
+
+      <div class="metric-grid metric-grid--3 reveal">
+        <div class="metric-card metric-card--blue">
+          <div class="metric-card__icon"><span class="mdi mdi-earth"></span></div>
+          <div class="metric-card__label">Total Addressable Market</div>
+          <div class="metric-card__value">EUR 3-5B</div>
+          <div class="metric-card__detail">EU lobbying + consultancies + in-house teams</div>
+        </div>
+        <div class="metric-card metric-card--purple">
+          <div class="metric-card__icon"><span class="mdi mdi-target"></span></div>
+          <div class="metric-card__label">Serviceable Market</div>
+          <div class="metric-card__value">EUR 1.2-2B</div>
+          <div class="metric-card__detail">40% of work addressable by software</div>
+        </div>
+        <div class="metric-card metric-card--green">
+          <div class="metric-card__icon"><span class="mdi mdi-flag-outline"></span></div>
+          <div class="metric-card__label">Year 1 Target</div>
+          <div class="metric-card__value">EUR 130K</div>
+          <div class="metric-card__detail">0.01% of SAM -- massive headroom</div>
+        </div>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-account-multiple-outline"></span> Primary Segments (Year 1)</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>Segment</th><th>Count</th><th>WTP</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Independent consultants</td><td>~5,000</td><td>Medium</td><td><span class="badge badge--gold">Yellow</span></td></tr>
+              <tr><td>SME trade associations</td><td>~2,000</td><td>Med-High</td><td><span class="badge badge--gold">Yellow</span> <span class="badge badge--blue">Blue</span></td></tr>
+              <tr><td>Corporate gov. affairs</td><td>~1,500</td><td>High</td><td><span class="badge badge--blue">Blue</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-account-group-outline"></span> Secondary Segments (Year 2-3)</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>Segment</th><th>Count</th><th>Tier</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Law firms (EU regulatory)</td><td>~500</td><td><span class="badge badge--blue">Blue</span></td></tr>
+              <tr><td>NGOs with EU advocacy</td><td>~1,000</td><td><span class="badge badge--gold">Yellow</span></td></tr>
+              <tr><td>National perm. representations</td><td>27</td><td><span class="badge badge--blue">Enterprise</span></td></tr>
+              <tr><td>EU institutions (internal)</td><td>7 bodies</td><td><span class="badge badge--purple">Custom</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-chart-bar"></span> Market Size Breakdown</div>
+        <div style="margin-top: 1rem;">
+          <div class="progress-row">
+            <div class="progress-row__label">Lobbying (declared)</div>
+            <div class="progress-row__bar"><div class="progress-row__fill progress-row__fill--blue" style="width: 62%;"></div></div>
+            <div class="progress-row__value">EUR 3.1B</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-row__label">In-house teams</div>
+            <div class="progress-row__bar"><div class="progress-row__fill progress-row__fill--purple" style="width: 30%;"></div></div>
+            <div class="progress-row__value">EUR 1.5B</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-row__label">Consultancies</div>
+            <div class="progress-row__bar"><div class="progress-row__fill progress-row__fill--green" style="width: 16%;"></div></div>
+            <div class="progress-row__value">EUR 800M</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-row__label">Law firms</div>
+            <div class="progress-row__bar"><div class="progress-row__fill progress-row__fill--blue" style="width: 10%;"></div></div>
+            <div class="progress-row__value">EUR 500M</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-row__label">Trade associations</div>
+            <div class="progress-row__bar"><div class="progress-row__fill progress-row__fill--purple" style="width: 6%;"></div></div>
+            <div class="progress-row__value">EUR 300M</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 4: COMPETITIVE
+         ======================================== -->
+    <section id="competitive" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Competitive Landscape</div>
+        <div class="section-header__subtitle">Empty category -- no AI-native EU policy platform exists</div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-table"></span> Competitive Matrix</div>
+        <div style="overflow-x: auto; margin-top: 1rem;">
+          <table class="comp-matrix reveal">
+            <thead>
+              <tr>
+                <th style="width: 140px;">Competitor</th>
+                <th>EU Focus</th>
+                <th>AI Native</th>
+                <th>Amendments</th>
+                <th>Compliance</th>
+                <th>Tenders</th>
+                <th>Predictions</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Brubru</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Deep</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> XML</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td>EUR 79-599</td>
+              </tr>
+              <tr>
+                <td>ChatGPT/Claude</td>
+                <td><span class="mdi mdi-close comp-cross"></span> None</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>$20/mo</td>
+              </tr>
+              <tr>
+                <td>Harvey AI</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Partial</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Enterprise</td>
+              </tr>
+              <tr>
+                <td>FiscalNote</td>
+                <td><span class="mdi mdi-close comp-cross"></span> US only</td>
+                <td><span class="mdi mdi-minus comp-partial"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span></td>
+                <td>Enterprise</td>
+              </tr>
+              <tr>
+                <td>Traditional consultancy</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Manual</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Manual</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>EUR 10K+/mo</td>
+              </tr>
+              <tr>
+                <td>EUR-Lex / OEIL</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Free (raw)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-shield-check-outline"></span> Defensibility Timeline</div>
+        <div class="timeline-track reveal" style="margin-top: 0.5rem;">
+          <div class="timeline-milestone">
+            <div class="timeline-dot timeline-dot--active"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 1</div>
+              <div class="timeline-value">First mover</div>
+              <div class="timeline-target">Domain expertise</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 2</div>
+              <div class="timeline-value">Data network</div>
+              <div class="timeline-target">User interactions improve AI</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 3</div>
+              <div class="timeline-value">Switching costs</div>
+              <div class="timeline-target">Amendments, files, history</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 4</div>
+              <div class="timeline-value">Institutional</div>
+              <div class="timeline-target">EU body partnerships</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-chart-scatter-plot-hexbin"></span> Comparable Transactions</div>
+        <table class="data-table" style="margin-top: 1rem;">
+          <thead>
+            <tr><th>Company</th><th>Domain</th><th>Last Round</th><th>Valuation</th><th>ARR at Round</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Harvey AI</td><td>Legal AI</td><td>Series D (2025)</td><td>$3B+</td><td>$100M+</td></tr>
+            <tr><td>FiscalNote</td><td>US political intel</td><td>IPO (2022)</td><td>$1.5B</td><td>$100M+</td></tr>
+            <tr><td>Luminance</td><td>Legal AI</td><td>Series C (2024)</td><td>~$1B</td><td>~$30M</td></tr>
+            <tr><td>Quorum</td><td>US political intel</td><td>Series B (2021)</td><td>~$200M</td><td>~$20M</td></tr>
+            <tr><td>Legit.ai</td><td>Compliance AI</td><td>Series A (2024)</td><td>~$50M</td><td>~$5M</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 5: BUSINESS MODEL
+         ======================================== -->
+    <section id="business" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Business Model</div>
+        <div class="section-header__subtitle">Freemium SaaS with 90-94% gross margins and agency upside</div>
+      </div>
+
+      <div class="pricing-grid reveal">
+        <div class="pricing-card">
+          <div class="pricing-card__dot" style="background: var(--color-gray-300); border: 2px solid var(--color-text-muted);"></div>
+          <div class="pricing-card__name">White (Free)</div>
+          <div class="pricing-card__target">Trial users, students, explorers</div>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">EUR 0</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+          <div class="pricing-card__margin">Cost: EUR 2/user</div>
+          <ul class="pricing-card__features">
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Basic AI chat</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> 5 amendments/month</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> My EU Bubble (full)</li>
+            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> EU Law Comply</li>
+            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Predictions</li>
+            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator</li>
+          </ul>
+        </div>
+
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-card__dot" style="background: var(--color-accent-gold);"></div>
+          <div class="pricing-card__name">Yellow</div>
+          <div class="pricing-card__target">Individual consultants, lobbyists</div>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">EUR 79</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+          <div class="pricing-card__margin">Margin: EUR 71/user (90%)</div>
+          <ul class="pricing-card__features">
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Advanced multi-provider AI</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Unlimited amendments</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> All export formats</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> EU Law Comply (limited)</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Predictions (10/month)</li>
+            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator</li>
+          </ul>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card__dot" style="background: var(--color-primary);"></div>
+          <div class="pricing-card__name">Blue (Enterprise)</div>
+          <div class="pricing-card__target">Teams, organisations, enterprises</div>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">EUR 599</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+          <div class="pricing-card__margin">Margin: EUR 564/user (94%)</div>
+          <ul class="pricing-card__features">
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Everything in Yellow</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Unlimited predictions</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Council QMV analysis</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Tenderator (full)</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> 5+ team seats, SLA</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> 24/7 priority support</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-chart-donut"></span> Unit Economics</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>Metric</th><th>Yellow</th><th>Blue</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Monthly price</td><td>EUR 79</td><td>EUR 599</td></tr>
+              <tr><td>Cost / user</td><td>EUR 8</td><td>EUR 35</td></tr>
+              <tr><td><strong>Gross margin</strong></td><td><strong style="color: var(--color-accent-green);">EUR 71 (90%)</strong></td><td><strong style="color: var(--color-accent-green);">EUR 564 (94%)</strong></td></tr>
+              <tr><td>Monthly churn</td><td>5%</td><td>2%</td></tr>
+              <tr><td>Avg. lifetime</td><td>20 months</td><td>50 months</td></tr>
+              <tr><td><strong>LTV</strong></td><td><strong>EUR 1,420</strong></td><td><strong>EUR 28,200</strong></td></tr>
+              <tr><td>Target CAC (3:1)</td><td>EUR 473</td><td>EUR 9,400</td></tr>
+              <tr><td>Max payback</td><td>7 months</td><td>17 months</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-briefcase-outline"></span> Agency Model (Parallel)</div>
+          <div class="card__subtitle">Sell finished deliverables at consulting prices, produced at software cost</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>Deliverable</th><th>Price</th><th>AI %</th><th>Margin</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Position paper</td><td>EUR 3,000</td><td>~80%</td><td><span class="badge badge--green">~70%</span></td></tr>
+              <tr><td>Stakeholder mapping</td><td>EUR 5,000</td><td>~80%</td><td><span class="badge badge--green">~70%</span></td></tr>
+              <tr><td>Amendment package</td><td>EUR 8,000</td><td>~80%</td><td><span class="badge badge--green">~75%</span></td></tr>
+              <tr><td>Compliance assessment</td><td>EUR 15,000</td><td>~70%</td><td><span class="badge badge--green">~60%</span></td></tr>
+              <tr><td>Consultation response</td><td>EUR 2,000</td><td>~85%</td><td><span class="badge badge--green">~80%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 6: TECHNOLOGY
+         ======================================== -->
+    <section id="technology" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Technology & Data Infrastructure</div>
+        <div class="section-header__subtitle">29 scrapers, 18 AI services, 4-provider fallback chain, 25+ database models</div>
+      </div>
+
+      <div class="metric-grid reveal">
+        <div class="metric-card metric-card--blue">
+          <div class="metric-card__icon"><span class="mdi mdi-api"></span></div>
+          <div class="metric-card__label">API Endpoints</div>
+          <div class="metric-card__value">150+</div>
+          <div class="metric-card__detail">34 router modules</div>
+        </div>
+        <div class="metric-card metric-card--green">
+          <div class="metric-card__icon"><span class="mdi mdi-spider-web"></span></div>
+          <div class="metric-card__label">Data Scrapers</div>
+          <div class="metric-card__value">29</div>
+          <div class="metric-card__detail">15+ EU institutional sources</div>
+        </div>
+        <div class="metric-card metric-card--purple">
+          <div class="metric-card__icon"><span class="mdi mdi-brain"></span></div>
+          <div class="metric-card__label">AI Services</div>
+          <div class="metric-card__value">18</div>
+          <div class="metric-card__detail">RAG, legal, predictions, generation</div>
+        </div>
+        <div class="metric-card metric-card--gold">
+          <div class="metric-card__icon"><span class="mdi mdi-database-outline"></span></div>
+          <div class="metric-card__label">Database Models</div>
+          <div class="metric-card__value">25+</div>
+          <div class="metric-card__detail">15 migrations applied</div>
+        </div>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-layers-outline"></span> Tech Stack</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>Layer</th><th>Technology</th><th>Why</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Frontend</td><td>React 18 + TypeScript + Vite 7</td><td>Modern, fast, typed</td></tr>
+              <tr><td>Backend</td><td>FastAPI + SQLAlchemy 2.0</td><td>Async, ideal for AI</td></tr>
+              <tr><td>Database</td><td>PostgreSQL 15+ (Supabase)</td><td>Relational + JSONB</td></tr>
+              <tr><td>AI (primary)</td><td>Mistral small-latest</td><td>15x cheaper than Claude</td></tr>
+              <tr><td>Search</td><td>BM25 + Semantic (hybrid)</td><td>Best of both worlds</td></tr>
+              <tr><td>Vector DB</td><td>ChromaDB</td><td>Lightweight, sufficient</td></tr>
+              <tr><td>ML</td><td>HuggingFace</td><td>Open-source, no API lock-in</td></tr>
+              <tr><td>Payments</td><td>Stripe</td><td>Industry standard</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-robot-outline"></span> AI Provider Chain</div>
+          <table class="data-table" style="margin-top: 1rem;">
+            <thead>
+              <tr><th>#</th><th>Provider</th><th>Cost/M input</th><th>Use</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="badge badge--green">1</span></td><td><strong>Mistral</strong></td><td>$0.20</td><td>Default (all requests)</td></tr>
+              <tr><td><span class="badge badge--blue">2</span></td><td>Claude Sonnet</td><td>$3.00</td><td>Complex reasoning</td></tr>
+              <tr><td><span class="badge badge--gold">3</span></td><td>GPT-4 Turbo</td><td>$10.00</td><td>High availability</td></tr>
+              <tr><td><span class="badge badge--gray">4</span></td><td>Gemini 1.5 Pro</td><td>$1.25</td><td>Last resort</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(5,150,105,0.05); border-radius: var(--radius-md); font-size: 0.8rem; color: var(--color-accent-green); font-weight: 600;">
+            <span class="mdi mdi-information-outline"></span> Mistral is 15x cheaper than Claude with comparable quality for EU policy questions.
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ARCHITECTURE DIAGRAM ===== -->
+      <div class="card reveal" style="overflow: visible;">
+        <div class="card__title"><span class="mdi mdi-sitemap-outline"></span> System Architecture</div>
+        <div class="arch-diagram" style="margin-top: 1.5rem;">
+
+          <!-- User layer -->
+          <div class="arch-layer arch-layer--user arch-anim arch-anim-1">
+            <div class="arch-layer__label">Users</div>
+            <div class="arch-layer__nodes">
+              <div class="arch-node arch-node--user"><span class="mdi mdi-monitor"></span><span class="arch-node__text">Browser (React 18 + TypeScript + Vite 7)</span></div>
+            </div>
+          </div>
+
+          <div class="arch-connector arch-anim arch-anim-2"><div class="arch-connector__line"></div><div class="arch-connector__dot"></div></div>
+
+          <!-- API layer -->
+          <div class="arch-layer arch-layer--api arch-anim arch-anim-3">
+            <div class="arch-layer__label">API Gateway</div>
+            <div class="arch-layer__nodes">
+              <div class="arch-node arch-node--api"><span class="mdi mdi-api"></span><span class="arch-node__text">FastAPI</span><span class="arch-node__sub">34 routers, 150+ endpoints</span></div>
+              <div class="arch-node arch-node--api"><span class="mdi mdi-shield-lock-outline"></span><span class="arch-node__text">Auth</span><span class="arch-node__sub">JWT + OAuth (Google, LinkedIn)</span></div>
+              <div class="arch-node arch-node--api"><span class="mdi mdi-credit-card-outline"></span><span class="arch-node__text">Stripe</span><span class="arch-node__sub">Subscriptions & billing</span></div>
+            </div>
+          </div>
+
+          <div class="arch-connector arch-anim arch-anim-4"><div class="arch-connector__line"></div><div class="arch-connector__dot"></div></div>
+
+          <!-- Services layer -->
+          <div class="arch-layer arch-layer--services arch-anim arch-anim-5">
+            <div class="arch-layer__label">Service Layer</div>
+            <div class="arch-layer__nodes">
+              <div class="arch-node arch-node--ai"><span class="mdi mdi-brain"></span><span class="arch-node__text">AI Engine</span><span class="arch-node__sub">18 services, 4 providers</span></div>
+              <div class="arch-node arch-node--scraper"><span class="mdi mdi-spider-web"></span><span class="arch-node__text">Scrapers</span><span class="arch-node__sub">29 EU data scrapers</span></div>
+              <div class="arch-node arch-node--compliance"><span class="mdi mdi-scale-balance"></span><span class="arch-node__text">Compliance</span><span class="arch-node__sub">Gap analysis + scoring</span></div>
+              <div class="arch-node arch-node--predictions"><span class="mdi mdi-chart-timeline-variant-shimmer"></span><span class="arch-node__text">Predictions</span><span class="arch-node__sub">11 forecasting services</span></div>
+              <div class="arch-node arch-node--tenders"><span class="mdi mdi-piggy-bank-outline"></span><span class="arch-node__text">Tenders</span><span class="arch-node__sub">TED SPARQL + ML</span></div>
+            </div>
+          </div>
+
+          <div class="arch-connector arch-anim arch-anim-6"><div class="arch-connector__line"></div><div class="arch-connector__dot"></div></div>
+
+          <!-- Data layer -->
+          <div class="arch-layer arch-layer--data arch-anim arch-anim-7">
+            <div class="arch-layer__label">Data Layer</div>
+            <div class="arch-layer__nodes">
+              <div class="arch-node arch-node--db"><span class="mdi mdi-database"></span><span class="arch-node__text">PostgreSQL</span><span class="arch-node__sub">25+ models, 15 migrations</span></div>
+              <div class="arch-node arch-node--vector"><span class="mdi mdi-vector-combine"></span><span class="arch-node__text">ChromaDB</span><span class="arch-node__sub">Vector search + embeddings</span></div>
+              <div class="arch-node arch-node--knowledge"><span class="mdi mdi-bookshelf"></span><span class="arch-node__text">Knowledge Base</span><span class="arch-node__sub">11 reports, 7 monitors</span></div>
+              <div class="arch-node arch-node--external"><span class="mdi mdi-earth"></span><span class="arch-node__text">EU Sources</span><span class="arch-node__sub">15+ institutional APIs</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== AI ORCHESTRATION FLOW ===== -->
+      <div class="card reveal" style="overflow: visible; margin-top: 1.5rem;">
+        <div class="card__title"><span class="mdi mdi-transit-connection-variant"></span> AI Orchestration -- Query Flow</div>
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.5rem;">How a user query is processed through context injection, provider selection, and response generation.</p>
+
+        <div class="flow-diagram" style="margin-top: 1.5rem;">
+
+          <!-- Step 1: User query -->
+          <div class="flow-step flow-anim flow-anim-1">
+            <div class="flow-step__badge" style="background: var(--color-primary);">1</div>
+            <div class="flow-step__card flow-step__card--blue">
+              <div class="flow-step__icon"><span class="mdi mdi-message-text-outline"></span></div>
+              <div class="flow-step__title">User Query</div>
+              <div class="flow-step__desc">Natural language question about EU policy</div>
+            </div>
+          </div>
+
+          <div class="flow-arrow flow-anim flow-anim-2"><span class="mdi mdi-chevron-down"></span></div>
+
+          <!-- Step 2: Context Builder -->
+          <div class="flow-step flow-anim flow-anim-3">
+            <div class="flow-step__badge" style="background: var(--color-accent-purple);">2</div>
+            <div class="flow-step__card flow-step__card--purple">
+              <div class="flow-step__icon"><span class="mdi mdi-puzzle-outline"></span></div>
+              <div class="flow-step__title">Context Builder</div>
+              <div class="flow-step__desc">Injects relevant data from 15+ sources</div>
+              <div class="flow-sources">
+                <span class="flow-source flow-source--s1">OEIL</span>
+                <span class="flow-source flow-source--s2">EUR-Lex</span>
+                <span class="flow-source flow-source--s3">Leg. Train</span>
+                <span class="flow-source flow-source--s4">EPRS</span>
+                <span class="flow-source flow-source--s5">Committees</span>
+                <span class="flow-source flow-source--s6">Consultations</span>
+                <span class="flow-source flow-source--s7">Beresol Reports</span>
+                <span class="flow-source flow-source--s8">User Files</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-arrow flow-anim flow-anim-4"><span class="mdi mdi-chevron-down"></span></div>
+
+          <!-- Step 3: Provider Chain -->
+          <div class="flow-step flow-anim flow-anim-5">
+            <div class="flow-step__badge" style="background: var(--color-accent-green);">3</div>
+            <div class="flow-step__card flow-step__card--green">
+              <div class="flow-step__icon"><span class="mdi mdi-swap-vertical-circle-outline"></span></div>
+              <div class="flow-step__title">Multi-Provider Fallback Chain</div>
+              <div class="flow-step__desc">Automatic failover for resilience and cost optimisation</div>
+              <div class="flow-providers">
+                <div class="flow-provider flow-provider--active">
+                  <div class="flow-provider__rank">1</div>
+                  <div class="flow-provider__name">Mistral</div>
+                  <div class="flow-provider__cost">$0.20/M</div>
+                  <div class="flow-provider__bar"><div class="flow-provider__fill" style="width: 95%;"></div></div>
+                  <div class="flow-provider__label">Primary -- 95% of requests</div>
+                </div>
+                <div class="flow-provider">
+                  <div class="flow-provider__rank">2</div>
+                  <div class="flow-provider__name">Claude</div>
+                  <div class="flow-provider__cost">$3.00/M</div>
+                  <div class="flow-provider__bar"><div class="flow-provider__fill flow-provider__fill--blue" style="width: 3%;"></div></div>
+                  <div class="flow-provider__label">Fallback -- complex reasoning</div>
+                </div>
+                <div class="flow-provider">
+                  <div class="flow-provider__rank">3</div>
+                  <div class="flow-provider__name">GPT-4</div>
+                  <div class="flow-provider__cost">$10.00/M</div>
+                  <div class="flow-provider__bar"><div class="flow-provider__fill flow-provider__fill--gold" style="width: 1.5%;"></div></div>
+                  <div class="flow-provider__label">Fallback -- high availability</div>
+                </div>
+                <div class="flow-provider">
+                  <div class="flow-provider__rank">4</div>
+                  <div class="flow-provider__name">Gemini</div>
+                  <div class="flow-provider__cost">$1.25/M</div>
+                  <div class="flow-provider__bar"><div class="flow-provider__fill flow-provider__fill--gray" style="width: 0.5%;"></div></div>
+                  <div class="flow-provider__label">Last resort</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-arrow flow-anim flow-anim-6"><span class="mdi mdi-chevron-down"></span></div>
+
+          <!-- Step 4: Quality + Response -->
+          <div class="flow-step flow-anim flow-anim-7">
+            <div class="flow-step__badge" style="background: var(--color-accent-gold);">4</div>
+            <div class="flow-step__card flow-step__card--gold">
+              <div class="flow-step__icon"><span class="mdi mdi-check-decagram-outline"></span></div>
+              <div class="flow-step__title">Quality Scoring & Response</div>
+              <div class="flow-step__desc">Citation verification, hallucination check, confidence score</div>
+              <div class="flow-outputs">
+                <div class="flow-output"><span class="mdi mdi-message-reply-text-outline"></span> Contextual answer</div>
+                <div class="flow-output"><span class="mdi mdi-link-variant"></span> Source citations</div>
+                <div class="flow-output"><span class="mdi mdi-speedometer"></span> Confidence score</div>
+                <div class="flow-output"><span class="mdi mdi-history"></span> Conversation memory</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="card reveal" style="margin-top: 1.5rem;">
+        <div class="card__title"><span class="mdi mdi-database-search-outline"></span> EU Institutional Data Sources (29 Scrapers)</div>
+        <div class="source-grid reveal" style="margin-top: 1rem;">
+          <div class="source-chip"><span class="mdi mdi-gavel"></span> EUR-Lex</div>
+          <div class="source-chip"><span class="mdi mdi-eye-outline"></span> OEIL (21,600+)</div>
+          <div class="source-chip"><span class="mdi mdi-train"></span> Legislative Train</div>
+          <div class="source-chip"><span class="mdi mdi-account-tie"></span> European Parliament</div>
+          <div class="source-chip"><span class="mdi mdi-domain"></span> European Commission</div>
+          <div class="source-chip"><span class="mdi mdi-bank"></span> Council of the EU</div>
+          <div class="source-chip"><span class="mdi mdi-book-open-variant"></span> EPRS Think Tank</div>
+          <div class="source-chip"><span class="mdi mdi-briefcase-outline"></span> Committee Work (26)</div>
+          <div class="source-chip"><span class="mdi mdi-comment-question-outline"></span> Public Consultations</div>
+          <div class="source-chip"><span class="mdi mdi-file-sign"></span> TED Tenders</div>
+          <div class="source-chip"><span class="mdi mdi-account-search"></span> Who's Who</div>
+          <div class="source-chip"><span class="mdi mdi-translate"></span> IATE (24 langs)</div>
+          <div class="source-chip"><span class="mdi mdi-flask-outline"></span> JRC Research</div>
+          <div class="source-chip"><span class="mdi mdi-help-circle-outline"></span> AssistEU</div>
+          <div class="source-chip"><span class="mdi mdi-format-text"></span> EU Style Guide</div>
+          <div class="source-chip"><span class="mdi mdi-open-in-new"></span> Data Europa</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 7: FINANCIALS
+         ======================================== -->
+    <section id="financials" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Financial Projections</div>
+        <div class="section-header__subtitle">Break-even at month 8, EUR 10K MRR by month 12, EUR 45K cash accumulated</div>
+      </div>
+
+      <div class="metric-grid reveal">
+        <div class="metric-card metric-card--blue">
+          <div class="metric-card__icon"><span class="mdi mdi-cash-multiple"></span></div>
+          <div class="metric-card__label">Cash Position</div>
+          <div class="metric-card__value">EUR 10K</div>
+          <div class="metric-card__badge metric-card__badge--blue"><span class="mdi mdi-information-outline"></span> Pre-revenue</div>
+        </div>
+        <div class="metric-card metric-card--green">
+          <div class="metric-card__icon"><span class="mdi mdi-timer-sand"></span></div>
+          <div class="metric-card__label">Runway (Platform)</div>
+          <div class="metric-card__value">87 mo</div>
+          <div class="metric-card__badge metric-card__badge--green"><span class="mdi mdi-shield-check"></span> Sustainable base</div>
+        </div>
+        <div class="metric-card metric-card--purple">
+          <div class="metric-card__icon"><span class="mdi mdi-server-outline"></span></div>
+          <div class="metric-card__label">Monthly Burn</div>
+          <div class="metric-card__value">EUR 115</div>
+          <div class="metric-card__detail">Platform costs only (no salary)</div>
+        </div>
+        <div class="metric-card metric-card--gold">
+          <div class="metric-card__icon"><span class="mdi mdi-bullseye-arrow"></span></div>
+          <div class="metric-card__label">M12 Target MRR</div>
+          <div class="metric-card__value">EUR 10K</div>
+          <div class="metric-card__detail">55 Yellow + 10 Blue</div>
+        </div>
+      </div>
+
+      <div class="grid-2-1 reveal">
+        <div class="card">
+          <div class="card__header">
+            <div class="card__title"><span class="mdi mdi-chart-bar"></span> 12-Month Revenue Projection</div>
+            <div class="legend">
+              <div class="legend-item"><div class="legend-dot legend-dot--gold"></div> Yellow</div>
+              <div class="legend-item"><div class="legend-dot legend-dot--blue"></div> Blue</div>
+            </div>
+          </div>
+          <div class="bar-chart">
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">0</div>
+              <div class="bar-chart__stack"><div class="bar-chart__bar bar-chart__bar--gold" style="height: 2px;"></div></div>
+              <div class="bar-chart__label">M1</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">0</div>
+              <div class="bar-chart__stack"><div class="bar-chart__bar bar-chart__bar--gold" style="height: 2px;"></div></div>
+              <div class="bar-chart__label">M2</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">158</div>
+              <div class="bar-chart__stack"><div class="bar-chart__bar bar-chart__bar--gold" style="height: 8px;"></div></div>
+              <div class="bar-chart__label">M3</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">395</div>
+              <div class="bar-chart__stack"><div class="bar-chart__bar bar-chart__bar--gold" style="height: 18px;"></div></div>
+              <div class="bar-chart__label">M4</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">711</div>
+              <div class="bar-chart__stack"><div class="bar-chart__bar bar-chart__bar--gold" style="height: 32px;"></div></div>
+              <div class="bar-chart__label">M5</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">2.0K</div>
+              <div class="bar-chart__stack">
+                <div class="bar-chart__bar bar-chart__bar--blue" style="height: 40px;"></div>
+                <div class="bar-chart__bar bar-chart__bar--gold" style="height: 28px;"></div>
+              </div>
+              <div class="bar-chart__label">M6</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">3.0K</div>
+              <div class="bar-chart__stack">
+                <div class="bar-chart__bar bar-chart__bar--blue" style="height: 55px;"></div>
+                <div class="bar-chart__bar bar-chart__bar--gold" style="height: 38px;"></div>
+              </div>
+              <div class="bar-chart__label">M7</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">4.0K</div>
+              <div class="bar-chart__stack">
+                <div class="bar-chart__bar bar-chart__bar--blue" style="height: 70px;"></div>
+                <div class="bar-chart__bar bar-chart__bar--gold" style="height: 48px;"></div>
+              </div>
+              <div class="bar-chart__label">M8</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">5.2K</div>
+              <div class="bar-chart__stack">
+                <div class="bar-chart__bar bar-chart__bar--blue" style="height: 85px;"></div>
+                <div class="bar-chart__bar bar-chart__bar--gold" style="height: 62px;"></div>
+              </div>
+              <div class="bar-chart__label">M9</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">6.4K</div>
+              <div class="bar-chart__stack">
+                <div class="bar-chart__bar bar-chart__bar--blue" style="height: 100px;"></div>
+                <div class="bar-chart__bar bar-chart__bar--gold" style="height: 78px;"></div>
+              </div>
+              <div class="bar-chart__label">M10</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">8.3K</div>
+              <div class="bar-chart__stack">
+                <div class="bar-chart__bar bar-chart__bar--blue" style="height: 130px;"></div>
+                <div class="bar-chart__bar bar-chart__bar--gold" style="height: 95px;"></div>
+              </div>
+              <div class="bar-chart__label">M11</div>
+            </div>
+            <div class="bar-chart__group">
+              <div class="bar-chart__value">10.3K</div>
+              <div class="bar-chart__stack">
+                <div class="bar-chart__bar bar-chart__bar--blue" style="height: 160px;"></div>
+                <div class="bar-chart__bar bar-chart__bar--gold" style="height: 115px;"></div>
+              </div>
+              <div class="bar-chart__label">M12</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-chart-pie"></span> Revenue Mix (M12)</div>
+          <div class="donut-container" style="flex-direction: column;">
+            <div class="donut-chart" style="background: conic-gradient(var(--color-primary) 0deg 208deg, var(--color-accent-gold) 208deg 360deg);">
+              <div class="donut-center">
+                <div class="donut-center__value">EUR 10.3K</div>
+                <div class="donut-center__label">MRR</div>
+              </div>
+            </div>
+            <div class="donut-legend" style="flex-direction: row; gap: 1.5rem;">
+              <div class="donut-legend-item">
+                <div class="donut-legend-color" style="background: var(--color-primary);"></div>
+                <div>
+                  <div class="donut-legend-label">Blue</div>
+                  <div class="donut-legend-value">EUR 5,990 (58%)</div>
+                </div>
+              </div>
+              <div class="donut-legend-item">
+                <div class="donut-legend-color" style="background: var(--color-accent-gold);"></div>
+                <div>
+                  <div class="donut-legend-label">Yellow</div>
+                  <div class="donut-legend-value">EUR 4,345 (42%)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-chart-multiple"></span> 12-Month Scenario Analysis</div>
+        <div class="grid-3 reveal-scale" style="margin-top: 1rem; margin-bottom: 0;">
+          <div class="scenario-card scenario-card--bear">
+            <div class="scenario-card__label">Bear Case (50%)</div>
+            <div class="scenario-card__value">EUR 5,365</div>
+            <div class="scenario-card__detail">500 free, 30 Yellow, 5 Blue</div>
+            <div class="scenario-card__note">Sustainable but slow growth</div>
+          </div>
+          <div class="scenario-card scenario-card--base">
+            <div class="scenario-card__label">Base Case (Target)</div>
+            <div class="scenario-card__value">EUR 10,730</div>
+            <div class="scenario-card__detail">1,000 free, 60 Yellow, 10 Blue</div>
+            <div class="scenario-card__note">Seed-fundable metrics</div>
+          </div>
+          <div class="scenario-card scenario-card--bull">
+            <div class="scenario-card__label">Bull Case (150%)</div>
+            <div class="scenario-card__value">EUR 16,095</div>
+            <div class="scenario-card__detail">1,500 free, 90 Yellow, 15 Blue</div>
+            <div class="scenario-card__note">Strong Series A candidate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-scale-balance"></span> Break-Even Analysis</div>
+        <div class="grid-3 reveal-scale" style="margin-top: 1rem; margin-bottom: 0;">
+          <div style="text-align: center; padding: 1.5rem; background: var(--color-gray-50); border-radius: var(--radius-lg);">
+            <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-accent-gold);">48</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">Yellow subscribers only</div>
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">EUR 3,792 MRR</div>
+          </div>
+          <div style="text-align: center; padding: 1.5rem; background: var(--color-gray-50); border-radius: var(--radius-lg);">
+            <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-primary);">6</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">Blue subscribers only</div>
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">EUR 3,594 MRR</div>
+          </div>
+          <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, rgba(6,147,227,0.06), rgba(217,119,6,0.06)); border-radius: var(--radius-lg); border: 2px solid var(--color-primary);">
+            <div style="font-size: 2.5rem; font-weight: 700; color: var(--color-accent-green);">20+3</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">Balanced mix (target)</div>
+            <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.25rem;">EUR 3,377 MRR</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 8: TEAM & ROADMAP
+         ======================================== -->
+    <section id="team" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Team, Roadmap & Risks</div>
+        <div class="section-header__subtitle">Solo founder with deep domain expertise, clear hiring plan, and structured risk mitigation</div>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="team-card">
+          <div class="team-card__avatar"><img src="victor.JPG" alt="Victor Sole"></div>
+          <div class="team-card__name">Victor Sole</div>
+          <div class="team-card__role">Founder & CEO</div>
+          <div class="team-card__bio">
+            7+ years at the European Parliament. 10+ years EU policy advisory (trade, digital, regulatory affairs).
+            Full-stack developer who built the entire Brubru platform -- frontend, backend, AI pipelines, 29 scrapers.
+            Fluent in 6 languages (EN, ES, CA, FR, IT, NL). Based in Brussels.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-account-plus-outline"></span> Key Hires</div>
+          <div class="hire-row">
+            <div class="hire-row__icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);">
+              <span class="mdi mdi-handshake-outline"></span>
+            </div>
+            <div class="hire-row__info">
+              <div class="hire-row__title">Head of Sales / BD</div>
+              <div class="hire-row__detail">Convert Brussels network into paying customers</div>
+            </div>
+            <div class="hire-row__timing">Month 3</div>
+          </div>
+          <div class="hire-row">
+            <div class="hire-row__icon" style="background: rgba(5,150,105,0.1); color: var(--color-accent-green);">
+              <span class="mdi mdi-code-tags"></span>
+            </div>
+            <div class="hire-row__info">
+              <div class="hire-row__title">Junior Developer</div>
+              <div class="hire-row__detail">Scale features, reduce bus factor</div>
+            </div>
+            <div class="hire-row__timing">Month 6</div>
+          </div>
+          <div class="hire-row">
+            <div class="hire-row__icon" style="background: rgba(155,81,224,0.1); color: var(--color-accent-purple);">
+              <span class="mdi mdi-headset"></span>
+            </div>
+            <div class="hire-row__info">
+              <div class="hire-row__title">Customer Success</div>
+              <div class="hire-row__detail">Onboarding, retention, upsell</div>
+            </div>
+            <div class="hire-row__timing">Month 9</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-map-marker-path"></span> Growth Milestones</div>
+        <div class="timeline-track reveal">
+          <div class="timeline-milestone">
+            <div class="timeline-dot timeline-dot--complete"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Now</div>
+              <div class="timeline-value">Product Built</div>
+              <div class="timeline-target">EUR 10K cash</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot timeline-dot--active"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Q1 2026</div>
+              <div class="timeline-value">Launch</div>
+              <div class="timeline-target">First 10 customers</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Q2 2026</div>
+              <div class="timeline-value">Break-even</div>
+              <div class="timeline-target">EUR 3K MRR</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Q3 2026</div>
+              <div class="timeline-value">Scale</div>
+              <div class="timeline-target">EUR 7K MRR + first hire</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Q4 2026</div>
+              <div class="timeline-value">Seed-ready</div>
+              <div class="timeline-target">EUR 10K MRR + 50 customers</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">2027</div>
+              <div class="timeline-value">Expand</div>
+              <div class="timeline-target">UK + national markets</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-alert-circle-outline"></span> Risk Assessment</div>
+          <table class="risk-table" style="margin-top: 0.75rem;">
+            <thead>
+              <tr><th>Risk</th><th>P</th><th>I</th><th>Mitigation</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Low conversion rate</td>
+                <td><span class="badge badge--gold">Med</span></td>
+                <td><span class="badge badge--red">High</span></td>
+                <td style="font-size: 0.8rem;">Improve onboarding, feature gates</td>
+              </tr>
+              <tr>
+                <td>Single founder</td>
+                <td><span class="badge badge--red">High</span></td>
+                <td><span class="badge badge--red">High</span></td>
+                <td style="font-size: 0.8rem;">Document everything, hire early</td>
+              </tr>
+              <tr>
+                <td>Free user costs</td>
+                <td><span class="badge badge--gold">Med</span></td>
+                <td><span class="badge badge--gold">Med</span></td>
+                <td style="font-size: 0.8rem;">Cap at 500 users, reduce limits</td>
+              </tr>
+              <tr>
+                <td>AI cost spike</td>
+                <td><span class="badge badge--green">Low</span></td>
+                <td><span class="badge badge--gold">Med</span></td>
+                <td style="font-size: 0.8rem;">4-provider chain, Mistral primary</td>
+              </tr>
+              <tr>
+                <td>Generic AI competitors</td>
+                <td><span class="badge badge--gold">Med</span></td>
+                <td><span class="badge badge--gold">Med</span></td>
+                <td style="font-size: 0.8rem;">Domain depth is the moat</td>
+              </tr>
+              <tr>
+                <td>Slow enterprise sales</td>
+                <td><span class="badge badge--red">High</span></td>
+                <td><span class="badge badge--gold">Med</span></td>
+                <td style="font-size: 0.8rem;">Parallel SaaS + agency model</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card__title"><span class="mdi mdi-cash-check"></span> Seed Round (Target M12-18)</div>
+          <table class="data-table" style="margin-top: 0.75rem;">
+            <thead>
+              <tr><th>Parameter</th><th>Target</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Round size</td><td><strong>EUR 500K - 1M</strong></td></tr>
+              <tr><td>Valuation</td><td>EUR 3-5M pre-money</td></tr>
+              <tr><td>Instrument</td><td>SAFE or equity</td></tr>
+              <tr><td>Use: Engineering</td><td>40% (EUR 200K)</td></tr>
+              <tr><td>Use: Sales & Marketing</td><td>35% (EUR 175K)</td></tr>
+              <tr><td>Use: Operations</td><td>15% (EUR 75K)</td></tr>
+              <tr><td>Use: Buffer</td><td>10% (EUR 50K)</td></tr>
+              <tr><td>Runway with seed</td><td>18-24 months</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <div class="cta-section">
+      <div class="cta-section__title">The EU's First AI-Native Policy Platform</div>
+      <div class="cta-section__subtitle">
+        17 years of Brussels expertise encoded into software. 29 data scrapers, 18 AI services, 8 product features.
+        Ready to transform how EU policy professionals work.
+      </div>
+      <div class="cta-buttons">
+        <a href="https://brubru.beresol.eu" class="cta-btn cta-btn--primary">
+          <span class="mdi mdi-rocket-launch"></span> Try Brubru
+        </a>
+        <a href="mailto:hello@beresol.eu" class="cta-btn cta-btn--secondary">
+          <span class="mdi mdi-email-outline"></span> Contact Founder
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <strong>Brubru Business Plan</strong> -- Beresol BV
+    <br>
+    <small>February 2026 | Brussels, Belgium | hello@beresol.eu</small>
+  </footer>
+
+  <script>
+    /* ============================
+       PASSWORD GATE
+       ============================ */
+    function checkPassword(e) {
+      e.preventDefault();
+      var val = document.getElementById('gateInput').value.trim().toLowerCase();
+      if (val === 'open to invest') {
+        document.getElementById('gate').classList.add('gate--hidden');
+        document.body.classList.remove('locked');
+        initRevealObserver();
+        animateCounters();
+      } else {
+        var err = document.getElementById('gateError');
+        err.classList.add('gate__error--visible');
+        document.getElementById('gateInput').select();
+        setTimeout(function() { err.classList.remove('gate__error--visible'); }, 2500);
+      }
+      return false;
+    }
+
+    /* ============================
+       SECTION NAVIGATION
+       ============================ */
+    function showSection(sectionId, btn) {
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('section--active'); });
+      document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('nav-tab--active'); });
+      document.getElementById(sectionId).classList.add('section--active');
+      btn.classList.add('nav-tab--active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      /* Re-observe new section's reveal elements */
+      setTimeout(function() { reReveal(sectionId); }, 50);
+    }
+
+    function showProduct(productId, btn) {
+      document.querySelectorAll('.product-detail').forEach(function(d) { d.classList.remove('product-detail--active'); });
+      document.querySelectorAll('.product-card').forEach(function(c) { c.classList.remove('product-card--active'); });
+      document.getElementById('detail-' + productId).classList.add('product-detail--active');
+      btn.classList.add('product-card--active');
+    }
+
+    /* ============================
+       SCROLL-REVEAL OBSERVER
+       ============================ */
+    var revealObserver;
+
+    function initRevealObserver() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right').forEach(function(el) {
+          el.classList.add(el.classList.contains('reveal') ? 'reveal--visible' :
+            el.classList.contains('reveal-scale') ? 'reveal-scale--visible' :
+            el.classList.contains('reveal-left') ? 'reveal-left--visible' : 'reveal-right--visible');
+        });
+        return;
+      }
+
+      revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var el = entry.target;
+            var cls = el.classList.contains('reveal') ? 'reveal--visible' :
+              el.classList.contains('reveal-scale') ? 'reveal-scale--visible' :
+              el.classList.contains('reveal-left') ? 'reveal-left--visible' : 'reveal-right--visible';
+            el.classList.add(cls);
+            revealObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right').forEach(function(el) {
+        revealObserver.observe(el);
+      });
+    }
+
+    function reReveal(sectionId) {
+      var section = document.getElementById(sectionId);
+      if (!section || !revealObserver) return;
+      section.querySelectorAll('.reveal:not(.reveal--visible), .reveal-scale:not(.reveal-scale--visible), .reveal-left:not(.reveal-left--visible), .reveal-right:not(.reveal-right--visible)').forEach(function(el) {
+        revealObserver.observe(el);
+      });
+    }
+
+    /* ============================
+       NUMBER COUNTER ANIMATION
+       ============================ */
+    function animateCounters() {
+      document.querySelectorAll('[data-count]').forEach(function(el) {
+        var target = parseFloat(el.getAttribute('data-count'));
+        var suffix = el.getAttribute('data-suffix') || '';
+        var prefix = el.getAttribute('data-prefix') || '';
+        var duration = 1200;
+        var start = performance.now();
+        function tick(now) {
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = Math.round(target * eased);
+          el.textContent = prefix + current.toLocaleString() + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      });
+    }
+  </script>
+</body>
+</html>
