@@ -122,15 +122,6 @@ export const AmendmentSidebar = ({
         <span className="amendment-grid__count">{amendments.length}</span>
       </div>
 
-      {/* Brubru Amendator Mascot - Shows empty bag when no amendments, full bag when amendments exist */}
-      <div className="amendment-grid__mascot">
-        <img
-          src={amendments.length === 0 ? '/assets/brubru_amendator_nochips.png' : '/assets/brubru_amendator.png'}
-          alt={amendments.length === 0 ? t('amendments.noAmendments') : t('amendments.title')}
-          className={`amendment-grid__mascot-image ${amendments.length === 0 ? 'breathe' : 'bounce wiggle'}`}
-        />
-      </div>
-
       {amendments.length === 0 ? (
         <div className="amendment-grid__empty">
           <p>{t('amendments.noAmendments')}</p>

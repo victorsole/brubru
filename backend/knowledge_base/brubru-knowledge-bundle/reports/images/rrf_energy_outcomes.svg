@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#059669"/>
+      <stop offset="100%" style="stop-color:#34d399"/>
+    </linearGradient>
+    <linearGradient id="solarGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="480" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerGreen)"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="white">REPowerEU: Energy Transition Outcomes</text>
+  <text x="450" y="50" text-anchor="middle" font-size="11" fill="#d1fae5">€184 billion in energy investments | Reducing Russian energy dependence</text>
+
+  <!-- Left column: Russian energy reduction -->
+  <g transform="translate(40, 95)">
+    <rect width="400" height="290" rx="10" fill="white" filter="url(#shadow)"/>
+    <text x="200" y="30" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">Reduction in Russian Energy Imports</text>
+
+    <!-- Gas -->
+    <g transform="translate(20, 55)">
+      <text x="0" y="15" font-size="11" font-weight="500" fill="#1e293b">Natural Gas</text>
+
+      <text x="0" y="40" font-size="9" fill="#64748b">2021</text>
+      <rect x="50" y="28" width="270" height="18" rx="3" fill="#dc2626"/>
+      <text x="330" y="41" font-size="10" font-weight="600" fill="#dc2626">45%</text>
+
+      <text x="0" y="65" font-size="9" fill="#64748b">2024</text>
+      <rect x="50" y="53" width="114" height="18" rx="3" fill="#22c55e"/>
+      <text x="174" y="66" font-size="10" font-weight="600" fill="#22c55e">19%</text>
+
+      <rect x="260" y="45" width="95" height="28" rx="4" fill="#dcfce7"/>
+      <text x="307" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#16a34a">-65%</text>
+    </g>
+
+    <!-- Oil -->
+    <g transform="translate(20, 130)">
+      <text x="0" y="15" font-size="11" font-weight="500" fill="#1e293b">Crude Oil</text>
+
+      <text x="0" y="40" font-size="9" fill="#64748b">2021</text>
+      <rect x="50" y="28" width="162" height="18" rx="3" fill="#dc2626"/>
+      <text x="222" y="41" font-size="10" font-weight="600" fill="#dc2626">27%</text>
+
+      <text x="0" y="65" font-size="9" fill="#64748b">2024</text>
+      <rect x="50" y="53" width="18" height="18" rx="3" fill="#22c55e"/>
+      <text x="78" y="66" font-size="10" font-weight="600" fill="#22c55e">3%</text>
+
+      <rect x="260" y="45" width="95" height="28" rx="4" fill="#dcfce7"/>
+      <text x="307" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#16a34a">-89%</text>
+    </g>
+
+    <!-- Coal -->
+    <g transform="translate(20, 205)">
+      <text x="0" y="15" font-size="11" font-weight="500" fill="#1e293b">Coal</text>
+
+      <text x="0" y="40" font-size="9" fill="#64748b">2021</text>
+      <rect x="50" y="28" width="150" height="18" rx="3" fill="#dc2626"/>
+      <text x="210" y="41" font-size="10" font-weight="600" fill="#dc2626">Active</text>
+
+      <text x="0" y="65" font-size="9" fill="#64748b">2024</text>
+      <rect x="50" y="53" width="0" height="18" rx="3" fill="#22c55e"/>
+      <text x="60" y="66" font-size="10" font-weight="600" fill="#22c55e">0%</text>
+
+      <rect x="260" y="45" width="95" height="28" rx="4" fill="#dcfce7"/>
+      <text x="307" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#16a34a">BANNED</text>
+    </g>
+  </g>
+
+  <!-- Right column: Solar growth -->
+  <g transform="translate(460, 95)">
+    <rect width="400" height="290" rx="10" fill="white" filter="url(#shadow)"/>
+    <text x="200" y="30" text-anchor="middle" font-size="14" font-weight="600" fill="#1e293b">EU Solar Capacity Growth</text>
+
+    <!-- Solar capacity visualization -->
+    <g transform="translate(30, 60)">
+      <!-- 2021 bar -->
+      <rect x="40" y="100" width="100" height="110" rx="6" fill="#fef3c7"/>
+      <text x="90" y="85" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b">2021</text>
+      <text x="90" y="160" text-anchor="middle" font-size="24" font-weight="700" fill="#f59e0b">138</text>
+      <text x="90" y="180" text-anchor="middle" font-size="11" fill="#92400e">GW</text>
+
+      <!-- Arrow -->
+      <path d="M160 155 L200 155" stroke="#22c55e" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#22c55e"/>
+        </marker>
+      </defs>
+
+      <!-- 2024 bar -->
+      <rect x="220" y="0" width="100" height="210" rx="6" fill="url(#solarGrad)"/>
+      <text x="270" y="-15" text-anchor="middle" font-size="12" font-weight="600" fill="#1e293b">2024</text>
+      <text x="270" y="100" text-anchor="middle" font-size="24" font-weight="700" fill="white">338</text>
+      <text x="270" y="120" text-anchor="middle" font-size="11" fill="white">GW</text>
+
+      <!-- Growth indicator -->
+      <rect x="120" y="220" width="100" height="35" rx="5" fill="#dcfce7"/>
+      <text x="170" y="243" text-anchor="middle" font-size="14" font-weight="700" fill="#16a34a">+145%</text>
+    </g>
+
+    <!-- Milestone note -->
+    <text x="200" y="275" text-anchor="middle" font-size="10" fill="#64748b">2024: First year solar exceeded coal</text>
+    <text x="200" y="288" text-anchor="middle" font-size="10" fill="#64748b">in EU electricity generation</text>
+  </g>
+
+  <!-- Bottom: Key deliverables -->
+  <g transform="translate(40, 400)">
+    <rect width="820" height="70" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="20" y="25" font-size="12" font-weight="600" fill="#1e293b">Expected RRF Energy Deliverables by 2026</text>
+
+    <g transform="translate(20, 40)">
+      <rect x="0" y="0" width="145" height="22" rx="4" fill="#dbeafe"/>
+      <text x="72" y="15" text-anchor="middle" font-size="10" font-weight="500" fill="#1e40af">100+ GW renewables</text>
+    </g>
+
+    <g transform="translate(175, 40)">
+      <rect x="0" y="0" width="145" height="22" rx="4" fill="#fef3c7"/>
+      <text x="72" y="15" text-anchor="middle" font-size="10" font-weight="500" fill="#92400e">33.4M MWh saved</text>
+    </g>
+
+    <g transform="translate(330, 40)">
+      <rect x="0" y="0" width="145" height="22" rx="4" fill="#dcfce7"/>
+      <text x="72" y="15" text-anchor="middle" font-size="10" font-weight="500" fill="#166534">14,000 km grid lines</text>
+    </g>
+
+    <g transform="translate(485, 40)">
+      <rect x="0" y="0" width="145" height="22" rx="4" fill="#f3e8ff"/>
+      <text x="72" y="15" text-anchor="middle" font-size="10" font-weight="500" fill="#7c3aed">13M smart meters</text>
+    </g>
+
+    <g transform="translate(640, 40)">
+      <rect x="0" y="0" width="160" height="22" rx="4" fill="#fce7f3"/>
+      <text x="80" y="15" text-anchor="middle" font-size="10" font-weight="500" fill="#be185d">2M heating systems</text>
+    </g>
+  </g>
+</svg>

@@ -60,7 +60,7 @@ export const Footer = ({ isSidebarOpen }: FooterProps) => {
                 About
               </Link>
               <a
-                href="mailto:helloberesol@gmail.com"
+                href="mailto:hello@beresol.eu"
                 className="footer__link"
               >
                 Contact

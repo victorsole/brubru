@@ -1,10 +1,11 @@
 /* Legislative Context Banner - Shows tracking info in Amendator */
 
 .legislative-context-banner {
-  margin-bottom: 1rem;
-  padding: 0.875rem 1rem;
+  margin-bottom: 0;
+  padding: 0.75rem;
   border-radius: 8px;
   border: 1px solid;
+  font-size: 0.8125rem;
 }
 
 .legislative-context-banner--not-tracked {

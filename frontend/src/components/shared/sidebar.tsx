@@ -7,9 +7,10 @@ interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
   children: ReactNode;
+  width?: number;
 }
 
-export const Sidebar = ({ isOpen, onToggle, children }: SidebarProps) => {
+export const Sidebar = ({ isOpen, onToggle, children, width }: SidebarProps) => {
   // Auto-collapse on mobile by default
   useEffect(() => {
     const handleResize = () => {
@@ -40,7 +41,10 @@ export const Sidebar = ({ isOpen, onToggle, children }: SidebarProps) => {
       </button>
 
       {/* Sidebar */}
-      <aside className={`sidebar ${isOpen ? 'sidebar--open' : 'sidebar--closed'}`}>
+      <aside
+        className={`sidebar ${isOpen ? 'sidebar--open' : 'sidebar--closed'}`}
+        style={width ? { '--sidebar-width': `${width}px` } as React.CSSProperties : undefined}
+      >
         <div className="sidebar__content">
           {children}
         </div>

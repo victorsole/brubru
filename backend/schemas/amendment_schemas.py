@@ -5,7 +5,7 @@ Pydantic schemas for amendment validation and serialization.
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from uuid import UUID
 
@@ -83,3 +83,36 @@ class AmendmentStats(BaseModel):
     by_status: dict[str, int]
     by_type: dict[str, int]
     by_document: dict[str, int]
+
+
+# --- AI Batch Suggestion Schemas ---
+
+class ElementSummary(BaseModel):
+    """Summary of a legislative element for AI analysis"""
+    position: str = Field(..., description="Human-readable position, e.g. 'Article 5', 'Recital 3'")
+    element_type: str = Field(..., description="Type: recital, article, point, paragraph, etc.")
+    text: str = Field(..., description="Legislative text content (may be truncated)")
+
+
+class BatchSuggestionRequest(BaseModel):
+    """Request for document-wide AI amendment suggestions"""
+    policy_position: str = Field(..., description="User's policy goals or position")
+    supporting_context: Optional[str] = Field(None, description="Extracted text from uploaded supporting documents")
+    elements: List[ElementSummary] = Field(..., description="Key legislative elements to analyse")
+    max_suggestions: Optional[int] = Field(default=None, ge=1, description="Maximum suggestions (determined by subscription tier if not set)")
+
+
+class BatchSuggestionItem(BaseModel):
+    """A single AI-generated amendment suggestion"""
+    element_position: str = Field(..., description="Which element this applies to, e.g. 'Article 5'")
+    amendment_type: str = Field(..., description="modification, suppression, or addition")
+    original_text: str = Field(..., description="Original text of the element")
+    proposed_text: str = Field(..., description="AI-proposed amended text")
+    justification: str = Field(..., description="Why this amendment serves the policy goal")
+
+
+class BatchSuggestionResponse(BaseModel):
+    """Response containing multiple AI amendment suggestions"""
+    suggestions: List[BatchSuggestionItem]
+    ai_provider: str
+    ai_model: str

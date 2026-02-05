@@ -20,7 +20,7 @@ def get_current_admin_user(
     Dependency to verify user is an admin.
 
     Only allows users with role='admin' to access protected endpoints.
-    Currently, only helloberesol@gmail.com has admin access.
+    Currently, only hello@beresol.eu has admin access.
 
     Usage:
         @router.get("/admin/endpoint")

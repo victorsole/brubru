@@ -536,6 +536,27 @@ Good: "**Summary:** The ordinary legislative procedure (OLP) is the EU's main la
 
 Would you like me to elaborate on any stage, or explain how this differs from special legislative procedures?"
 
+ACTIONABLE FOLLOW-UPS (Phase D3):
+Always end your response with 1-2 specific, actionable follow-up suggestions. These should be concrete next steps the user can take with Brubru, not generic offers to help.
+
+Rules:
+- Make follow-ups SPECIFIC to the topic just discussed
+- Phrase them as offers: "Would you like me to..." or "I can also..."
+- Suggest things Brubru can actually do: identify MEPs, find legislation, draft amendments, analyse procedures, compare policy positions
+- Never end with just "Let me know if you have any questions" - that is too generic
+
+Example 7 - Good follow-ups:
+User: "What committees deal with agriculture policy?"
+Good answer ending: "Would you like me to identify the current MEPs on the AGRI committee, or find ongoing legislative procedures in this area?"
+
+Example 8 - Follow-ups after document analysis:
+User: "Here is my position paper on food supply chains"
+Good answer ending: "I can identify the specific MEPs on AGRI and ENVI who have spoken on short supply chains, or help you draft targeted amendments to the relevant legislation. Which would be most useful?"
+
+Example 9 - Follow-ups after factual question:
+User: "Who is the Director-General of DG AGRI?"
+Good answer ending: "Would you like me to outline the current legislative priorities of DG AGRI, or find recent policy proposals from this directorate?"
+
 Remember: You have access to comprehensive EU data. When information IS in your context, answer confidently. When it is NOT, be honest about the limitation rather than guessing."""
 
     def _build_messages(
@@ -1106,52 +1127,53 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 filename = doc_meta.get('filename', 'document')
 
                 if content_type == 'application/pdf':
-                    # Check if PDF exceeds Claude's 100-page limit
-                    if pdf_processor.should_extract_text(file_path):
-                        # PDF is too large - extract text using pdfminer.six
-                        result = pdf_processor.extract_text(file_path)
+                    # Always extract text from PDFs for multi-provider compatibility
+                    # (Mistral, OpenAI, Gemini only support text content blocks)
+                    result = pdf_processor.extract_text(file_path)
 
-                        if result['success']:
-                            text = result['text']
-                            page_count = result['page_count']
-                            documents.append({
-                                'type': 'text',
-                                'text': f"**Document: {filename}** ({page_count} pages, text extracted)\n\n{text[:200000]}"  # Limit to 200k chars
-                            })
-                            logger.info(f"Successfully extracted {len(text)} chars from large PDF: {filename}")
-                        else:
-                            logger.error(f"Failed to extract text from large PDF: {result.get('error')}")
-                            documents.append({
-                                'type': 'text',
-                                'text': f"**Document: {filename}** - Error: Could not process this PDF"
-                            })
-                    else:
-                        # PDF is small enough - send as native document
-                        with open(file_path, 'rb') as f:
-                            file_content = f.read()
-
+                    if result['success']:
+                        text = result['text']
+                        page_count = result['page_count']
                         documents.append({
-                            'type': 'document',
-                            'source': {
-                                'type': 'base64',
-                                'media_type': 'application/pdf',
-                                'data': base64.standard_b64encode(file_content).decode('utf-8')
-                            }
+                            'type': 'text',
+                            'text': f"**Document: {filename}** ({page_count} pages)\n\n{text[:200000]}"
                         })
-                        page_count = pdf_processor.get_page_count(file_path)
-                        logger.info(f"Loaded PDF document as native: {filename} ({page_count} pages, {len(file_content)} bytes)")
+                        logger.info(f"Extracted {len(text)} chars from PDF: {filename} ({page_count} pages)")
+                    else:
+                        logger.error(f"Failed to extract text from PDF: {result.get('error')}")
+                        documents.append({
+                            'type': 'text',
+                            'text': f"**Document: {filename}** - Error: Could not extract text from this PDF"
+                        })
 
                 elif content_type in ['application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword']:
-                    # For DOCX, extract text if processed
+                    # For DOCX, extract text from processed content
                     if doc_meta.get('has_processed_content'):
                         processed = doc_meta['processed_content']
                         text = processed.get('text', '')
                         if text:
                             documents.append({
                                 'type': 'text',
-                                'text': f"**Document: {filename}**\n\n{text[:100000]}"  # Limit to 100k chars
+                                'text': f"**Document: {filename}**\n\n{text[:100000]}"
                             })
                             logger.info(f"Loaded DOCX as text: {filename} ({len(text)} chars)")
+                    else:
+                        # Fallback: try processing DOCX on the fly
+                        try:
+                            from services.document_processing.docx_processor import get_docx_processor
+                            docx_proc = get_docx_processor()
+                            with open(file_path, 'rb') as f:
+                                docx_bytes = f.read()
+                            result = docx_proc.process_docx_from_bytes(docx_bytes, filename=filename)
+                            text = result.get('text', '') if result else ''
+                            if text:
+                                documents.append({
+                                    'type': 'text',
+                                    'text': f"**Document: {filename}**\n\n{text[:100000]}"
+                                })
+                                logger.info(f"Loaded DOCX via fallback processing: {filename} ({len(text)} chars)")
+                        except Exception as docx_err:
+                            logger.error(f"DOCX fallback processing failed: {docx_err}")
 
                 elif content_type.startswith('text/'):
                     # Text files - send as text block

@@ -1,12 +1,12 @@
 // frontend/src/pages/amendator_page.tsx
 import { useState } from 'react';
 import Icon from '@mdi/react';
-import { mdiContentSave } from '@mdi/js';
+import { mdiContentSave, mdiFileEditOutline, mdiRobotOutline } from '@mdi/js';
 import { Sidebar } from '../components/shared/sidebar';
-import type { LegislativeElement, CellAmendment } from '../components/amendator/two_column_layout';
+import type { LegislativeElement, CellAmendment, PendingAIAmendment } from '../components/amendator/two_column_layout';
 import { TwoColumnLayout } from '../components/amendator/two_column_layout';
 import { AmendmentSidebar } from '../components/amendator/amendment_sidebar';
-import { AIAssistantSidebar } from '../components/amendator/ai_assistant_sidebar';
+import { AIAssistantPanel } from '../components/amendator/ai_assistant_sidebar';
 import type { AISuggestion } from '../components/amendator/ai_assistant_sidebar';
 import type { LoadedDocument } from '../components/amendator/document_viewer';
 import { LegislativeContextBanner } from '../components/amendator/legislative_context_banner';
@@ -57,6 +57,8 @@ export interface Amendment {
   group?: string; // Committee or political group
 }
 
+type SidebarTab = 'amendments' | 'ai';
+
 interface AmendatorPageProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
@@ -65,16 +67,11 @@ interface AmendatorPageProps {
 export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPageProps) => {
   const [selectedAmendment, setSelectedAmendment] = useState<Amendment | null>(null);
   const [loadedDocument, setLoadedDocument] = useState<LoadedDocument | null>(null);
-  const [isAISidebarOpen, setIsAISidebarOpen] = useState(() => {
-    // Start closed on mobile to not cover content
-    if (typeof window !== 'undefined') {
-      return window.innerWidth > 767;
-    }
-    return true;
-  });
+  const [activeTab, setActiveTab] = useState<SidebarTab>('amendments');
   const [selectedElement, setSelectedElement] = useState<LegislativeElement | null>(null);
   const [elementIndex, setElementIndex] = useState<number | null>(null);
   const [cellAmendments, setCellAmendments] = useState<Map<number, CellAmendment>>(new Map());
+  const [pendingAmendments, setPendingAmendments] = useState<PendingAIAmendment[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
@@ -96,10 +93,6 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const toggleAISidebar = () => {
-    setIsAISidebarOpen(!isAISidebarOpen);
-  };
-
   const handleSelectAmendment = (amendment: Amendment) => {
     setSelectedAmendment(amendment);
   };
@@ -111,6 +104,8 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
   const handleElementSelected = (element: LegislativeElement, index: number) => {
     setSelectedElement(element);
     setElementIndex(index);
+    // Auto-switch to AI tab when an element is selected
+    setActiveTab('ai');
   };
 
   const handleAmendmentsChange = (amendments: Map<number, CellAmendment>) => {
@@ -178,29 +173,111 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
   };
 
   const handleAISuggestionAccepted = (suggestion: AISuggestion) => {
-    // Apply AI suggestion to the selected element
-    if (elementIndex !== null) {
-      // This will be passed down to TwoColumnLayout to update the amendment
-      // For now, we'll just log it
-      console.log('AI Suggestion accepted for element', elementIndex, suggestion);
-      // TODO: Update the element text in TwoColumnLayout
-    }
+    const pending: PendingAIAmendment = {
+      elementIndex: elementIndex ?? undefined,
+      elementPosition: suggestion.element_position,
+      amendmentType: suggestion.amendment_type,
+      proposedText: suggestion.proposed_text,
+      justification: suggestion.justification,
+    };
+    setPendingAmendments([pending]);
+    // Switch to amendments tab to show the result
+    setActiveTab('amendments');
+  };
+
+  const handleBatchSuggestionsAccepted = (suggestions: AISuggestion[]) => {
+    const pending: PendingAIAmendment[] = suggestions.map(s => ({
+      elementPosition: s.element_position,
+      amendmentType: s.amendment_type,
+      proposedText: s.proposed_text,
+      justification: s.justification,
+    }));
+    setPendingAmendments(pending);
+    setActiveTab('amendments');
+  };
+
+  const handlePendingAmendmentsProcessed = () => {
+    setPendingAmendments([]);
+  };
+
+  // Determine mascot state based on context
+  const getMascotSrc = () => {
+    if (amendments.length > 0) return '/assets/brubru_amendator.png';
+    return '/assets/brubru_amendator_nochips.png';
+  };
+
+  const getMascotClass = () => {
+    if (amendments.length > 0) return 'bounce wiggle';
+    return 'breathe';
   };
 
   return (
     <div className="amendator-page">
-      {/* Right Sidebar: Saved Amendments */}
-      <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar}>
-        <AmendmentSidebar
-          amendments={amendments}
-          onSelectAmendment={handleSelectAmendment}
-          selectedAmendmentId={selectedAmendment?.id}
-          documentId={loadedDocument?.document_id}
-        />
+      {/* Unified Left Sidebar */}
+      <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} width={360}>
+        <div className="amendator-sidebar">
+          {/* Mascot */}
+          <div className="amendator-sidebar__mascot">
+            <img
+              src={getMascotSrc()}
+              alt="Brubru Amendator"
+              className={`amendator-sidebar__mascot-image ${getMascotClass()}`}
+            />
+          </div>
+
+          {/* Legislative Context Banner - shows tracking info when document is loaded */}
+          {loadedDocument && (
+            <LegislativeContextBanner
+              documentId={loadedDocument.document_id}
+              celex={loadedDocument.metadata?.celex}
+            />
+          )}
+
+          {/* Tab Switcher */}
+          <div className="amendator-sidebar__tabs">
+            <button
+              className={`amendator-sidebar__tab ${activeTab === 'amendments' ? 'amendator-sidebar__tab--active' : ''}`}
+              onClick={() => setActiveTab('amendments')}
+            >
+              <Icon path={mdiFileEditOutline} size={0.8} />
+              <span className="amendator-sidebar__tab-label">Amendments</span>
+              {amendments.length > 0 && (
+                <span className="amendator-sidebar__tab-badge">{amendments.length}</span>
+              )}
+            </button>
+            <button
+              className={`amendator-sidebar__tab ${activeTab === 'ai' ? 'amendator-sidebar__tab--active' : ''}`}
+              onClick={() => setActiveTab('ai')}
+            >
+              <Icon path={mdiRobotOutline} size={0.8} />
+              <span className="amendator-sidebar__tab-label">AI Assistant</span>
+            </button>
+          </div>
+
+          {/* Tab Content - both panels stay mounted to preserve state */}
+          <div className="amendator-sidebar__content">
+            <div style={{ display: activeTab === 'amendments' ? 'contents' : 'none' }}>
+              <AmendmentSidebar
+                amendments={amendments}
+                onSelectAmendment={handleSelectAmendment}
+                selectedAmendmentId={selectedAmendment?.id}
+                documentId={loadedDocument?.document_id}
+              />
+            </div>
+            <div style={{ display: activeTab === 'ai' ? 'contents' : 'none' }}>
+              <AIAssistantPanel
+                selectedElement={selectedElement}
+                loadedDocument={loadedDocument}
+                onSuggestionAccepted={handleAISuggestionAccepted}
+                onBatchSuggestionsAccepted={handleBatchSuggestionsAccepted}
+              />
+            </div>
+          </div>
+        </div>
       </Sidebar>
 
       {/* Main Content Area */}
-      <main className={`amendator-page__main ${isSidebarOpen ? 'amendator-page__main--sidebar-open' : ''} ${isAISidebarOpen ? 'amendator-page__main--ai-sidebar-open' : ''}`}>
+      <main className={`amendator-page__main ${isSidebarOpen ? 'amendator-page__main--sidebar-open' : ''}`}>
         {/* Save Amendments Bar */}
         {loadedDocument && cellAmendments.size > 0 && (
           <div className="amendator-page__save-bar">
@@ -225,28 +302,14 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
           </div>
         )}
 
-        {/* Legislative Context Banner - shows tracking info when document is tracked */}
-        {loadedDocument && (
-          <LegislativeContextBanner
-            documentId={loadedDocument.document_id}
-            celex={loadedDocument.metadata?.celex}
-          />
-        )}
-
         {/* Two-Column Amendment Table */}
         <TwoColumnLayout
           loadedDocument={loadedDocument}
           onDocumentLoaded={handleDocumentLoaded}
           onElementSelected={handleElementSelected}
           onAmendmentsChange={handleAmendmentsChange}
-        />
-
-        {/* Right Sidebar: AI Assistant */}
-        <AIAssistantSidebar
-          isOpen={isAISidebarOpen}
-          onToggle={toggleAISidebar}
-          selectedElement={selectedElement}
-          onSuggestionAccepted={handleAISuggestionAccepted}
+          pendingAmendments={pendingAmendments}
+          onPendingAmendmentsProcessed={handlePendingAmendmentsProcessed}
         />
       </main>
     </div>

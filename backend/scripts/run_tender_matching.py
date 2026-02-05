@@ -6,7 +6,7 @@ This creates TenderMatch records linking tenders to users based on their prefere
 
 Usage:
     python -m backend.scripts.run_tender_matching
-    python -m backend.scripts.run_tender_matching --email helloberesol@gmail.com
+    python -m backend.scripts.run_tender_matching --email hello@beresol.eu
     python -m backend.scripts.run_tender_matching --profile-id 1
 """
 

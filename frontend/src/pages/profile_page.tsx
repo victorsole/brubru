@@ -129,8 +129,8 @@ export const ProfilePage = () => {
       <div className="profile-page__container">
         <h1>{t('profile.title')}</h1>
 
-        {/* Admin Panel Button - Only for helloberesol@gmail.com */}
-        {user?.email === 'helloberesol@gmail.com' && (
+        {/* Admin Panel Button - Only for hello@beresol.eu */}
+        {user?.email === 'hello@beresol.eu' && (
           <div className="profile-page__admin-section">
             <Link to="/admin" className="btn btn--primary btn--admin">
               <svg className="profile-page__admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">

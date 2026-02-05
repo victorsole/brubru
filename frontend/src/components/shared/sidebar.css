@@ -1,11 +1,12 @@
 /* Sidebar Component Styles */
 
 .sidebar {
+  --sidebar-width: 300px;
   position: fixed;
   top: 73px; /* Height of header */
   left: 0;
   bottom: 0;
-  width: 300px;
+  width: var(--sidebar-width);
   background-color: var(--color-surface);
   border-right: 1px solid var(--color-border);
   overflow-y: auto;
@@ -85,9 +86,17 @@
   }
 }
 
+/* Tablet: sidebar collapses by default */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .sidebar {
+    --sidebar-width: 320px;
+  }
+}
+
 @media (max-width: 767px) {
   .sidebar {
-    width: 280px;
+    width: 85vw;
+    max-width: 360px;
     top: 120px; /* Adjusted for mobile header height */
   }
 

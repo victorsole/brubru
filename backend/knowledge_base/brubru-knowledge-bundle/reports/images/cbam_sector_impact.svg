@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerTeal" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0d9488"/>
+      <stop offset="100%" style="stop-color:#2dd4bf"/>
+    </linearGradient>
+    <linearGradient id="steelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#64748b"/>
+      <stop offset="100%" style="stop-color:#475569"/>
+    </linearGradient>
+    <linearGradient id="aluGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#94a3b8"/>
+      <stop offset="100%" style="stop-color:#64748b"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="480" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerTeal)"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="white">CBAM Sector Coverage and Price Impact</text>
+  <text x="450" y="50" text-anchor="middle" font-size="11" fill="#ccfbf1">Six carbon-intensive sectors | €45-50 billion annual imports by 2034</text>
+
+  <!-- Left: Import values by sector -->
+  <g transform="translate(40, 95)">
+    <rect width="400" height="320" rx="10" fill="white" filter="url(#shadow)"/>
+    <text x="200" y="28" text-anchor="middle" font-size="13" font-weight="600" fill="#1e293b">EU Import Value by Sector (2024)</text>
+
+    <!-- Iron & Steel -->
+    <g transform="translate(20, 50)">
+      <rect x="0" y="0" width="360" height="38" rx="4" fill="#f1f5f9"/>
+      <rect x="0" y="0" width="330" height="38" rx="4" fill="url(#steelGrad)"/>
+      <text x="15" y="24" font-size="11" font-weight="600" fill="white">Iron &amp; Steel</text>
+      <text x="345" y="24" font-size="12" font-weight="700" fill="#475569">€45.2B</text>
+    </g>
+
+    <!-- Aluminium -->
+    <g transform="translate(20, 95)">
+      <rect x="0" y="0" width="360" height="38" rx="4" fill="#f1f5f9"/>
+      <rect x="0" y="0" width="134" height="38" rx="4" fill="url(#aluGrad)"/>
+      <text x="15" y="24" font-size="11" font-weight="600" fill="white">Aluminium</text>
+      <text x="345" y="24" font-size="12" font-weight="700" fill="#64748b">€18.3B</text>
+    </g>
+
+    <!-- Fertilisers -->
+    <g transform="translate(20, 140)">
+      <rect x="0" y="0" width="360" height="38" rx="4" fill="#f1f5f9"/>
+      <rect x="0" y="0" width="60" height="38" rx="4" fill="#22c55e"/>
+      <text x="15" y="24" font-size="11" font-weight="600" fill="white">Fertilisers</text>
+      <text x="345" y="24" font-size="12" font-weight="700" fill="#16a34a">€8.1B</text>
+    </g>
+
+    <!-- Electricity -->
+    <g transform="translate(20, 185)">
+      <rect x="0" y="0" width="360" height="38" rx="4" fill="#f1f5f9"/>
+      <rect x="0" y="0" width="10" height="38" rx="4" fill="#f59e0b"/>
+      <text x="25" y="24" font-size="11" font-weight="600" fill="#1e293b">Electricity</text>
+      <text x="345" y="24" font-size="12" font-weight="700" fill="#d97706">€1.2B</text>
+    </g>
+
+    <!-- Cement -->
+    <g transform="translate(20, 230)">
+      <rect x="0" y="0" width="360" height="38" rx="4" fill="#f1f5f9"/>
+      <rect x="0" y="0" width="4" height="38" rx="2" fill="#8b5cf6"/>
+      <text x="20" y="24" font-size="11" font-weight="600" fill="#1e293b">Cement</text>
+      <text x="345" y="24" font-size="12" font-weight="700" fill="#7c3aed">€0.4B</text>
+    </g>
+
+    <!-- Hydrogen -->
+    <g transform="translate(20, 275)">
+      <rect x="0" y="0" width="360" height="38" rx="4" fill="#f1f5f9"/>
+      <rect x="0" y="0" width="2" height="38" rx="1" fill="#06b6d4"/>
+      <text x="20" y="24" font-size="11" font-weight="600" fill="#1e293b">Hydrogen</text>
+      <text x="345" y="24" font-size="12" font-weight="700" fill="#0891b2">€0.1B</text>
+    </g>
+  </g>
+
+  <!-- Right: Price impact at €80/tonne -->
+  <g transform="translate(460, 95)">
+    <rect width="400" height="320" rx="10" fill="white" filter="url(#shadow)"/>
+    <text x="200" y="28" text-anchor="middle" font-size="13" font-weight="600" fill="#1e293b">Price Impact at €80/tonne CO₂</text>
+
+    <!-- Steel impact -->
+    <g transform="translate(20, 55)">
+      <rect x="0" y="0" width="360" height="80" rx="6" fill="#fef2f2"/>
+      <rect x="0" y="0" width="6" height="80" rx="3" fill="#dc2626"/>
+      <text x="20" y="25" font-size="12" font-weight="600" fill="#1e293b">Steel Products</text>
+      <text x="20" y="45" font-size="10" fill="#64748b">Embedded emissions: 1.8-2.0 t CO₂/t</text>
+      <text x="280" y="35" text-anchor="middle" font-size="20" font-weight="700" fill="#dc2626">+15-20%</text>
+      <text x="280" y="55" text-anchor="middle" font-size="10" fill="#991b1b">€144-160/tonne</text>
+      <text x="20" y="70" font-size="9" fill="#64748b">Hot-rolled coil: +18-22% vs EU production</text>
+    </g>
+
+    <!-- Aluminium impact -->
+    <g transform="translate(20, 145)">
+      <rect x="0" y="0" width="360" height="80" rx="6" fill="#fef2f2"/>
+      <rect x="0" y="0" width="6" height="80" rx="3" fill="#dc2626"/>
+      <text x="20" y="25" font-size="12" font-weight="600" fill="#1e293b">Primary Aluminium</text>
+      <text x="20" y="45" font-size="10" fill="#64748b">Embedded emissions: 9-11 t CO₂/t</text>
+      <text x="280" y="35" text-anchor="middle" font-size="20" font-weight="700" fill="#dc2626">+30-45%</text>
+      <text x="280" y="55" text-anchor="middle" font-size="10" fill="#991b1b">€720-880/tonne</text>
+      <text x="20" y="70" font-size="9" fill="#64748b">Coal-powered sources (China, India) most affected</text>
+    </g>
+
+    <!-- Fertilisers impact -->
+    <g transform="translate(20, 235)">
+      <rect x="0" y="0" width="360" height="70" rx="6" fill="#fff7ed"/>
+      <rect x="0" y="0" width="6" height="70" rx="3" fill="#f97316"/>
+      <text x="20" y="25" font-size="12" font-weight="600" fill="#1e293b">Nitrogen Fertilisers</text>
+      <text x="20" y="45" font-size="10" fill="#64748b">Embedded emissions: 2.5-6.0 t CO₂/t</text>
+      <text x="280" y="35" text-anchor="middle" font-size="20" font-weight="700" fill="#f97316">+20-35%</text>
+      <text x="280" y="55" text-anchor="middle" font-size="10" fill="#c2410c">€200-480/tonne</text>
+    </g>
+  </g>
+
+  <!-- Bottom note -->
+  <g transform="translate(40, 430)">
+    <rect width="820" height="40" rx="6" fill="#dcfce7"/>
+    <text x="410" y="18" text-anchor="middle" font-size="10" font-weight="600" fill="#166534">Hydro-powered aluminium (Norway, Iceland) faces minimal impact | Actual emissions data can significantly reduce CBAM liability</text>
+    <text x="410" y="32" text-anchor="middle" font-size="9" fill="#166534">Certificate prices track weekly ETS auction average | Carbon prices paid abroad are deductible</text>
+  </g>
+</svg>

@@ -238,7 +238,7 @@ export const SubprocessorsPage = () => {
             If you have questions about our subprocessors or data processing practices:
           </p>
           <p>
-            <strong>Email:</strong> <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a><br />
+            <strong>Email:</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a><br />
             <strong>Subject:</strong> "Subprocessor Inquiry"
           </p>
         </section>

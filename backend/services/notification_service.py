@@ -593,3 +593,146 @@ class NotificationService:
 
         notifications = self.db.execute(stmt).scalars().all()
         return len(notifications) > 0
+
+    # ===== Committee Work Notifications =====
+
+    async def generate_committee_work_status_notification(
+        self,
+        user_id: str,
+        work_item_id: str,
+        old_status: str,
+        new_status: str,
+        work_item_data: Dict[str, Any]
+    ) -> Optional[Notification]:
+        """
+        Generate notification for committee work item status change.
+
+        Args:
+            user_id: User UUID
+            work_item_id: Committee work item UUID
+            old_status: Previous status
+            new_status: New status
+            work_item_data: Work item information (title, procedure_ref, committee_code)
+
+        Returns:
+            Created notification or None if duplicate exists
+        """
+        logger.info(f"Generating committee work status notification for user {user_id}")
+
+        # Check for recent duplicate
+        if self._has_recent_committee_work_notification(
+            user_id, work_item_id, 'status_change'
+        ):
+            logger.debug(f"Skipping duplicate notification for {work_item_id}")
+            return None
+
+        title = f"Status Update: {work_item_data.get('title', 'Committee Work Item')[:80]}"
+        message = (
+            f"Status changed from '{old_status}' to '{new_status}' for "
+            f"{work_item_data.get('procedure_ref', 'procedure')} "
+            f"({work_item_data.get('committee_code', '')})."
+        )
+
+        notification = self.create_notification(
+            user_id=user_id,
+            notification_type="committee_work_status_change",
+            title=title,
+            message=message,
+            priority="high",
+            action_url=f"/bubble?tab=files&view=committee-work&id={work_item_id}",
+            metadata={
+                "work_item_id": work_item_id,
+                "procedure_ref": work_item_data.get('procedure_ref'),
+                "committee_code": work_item_data.get('committee_code'),
+                "old_status": old_status,
+                "new_status": new_status
+            },
+            related_entity_type="committee_work_item",
+            related_entity_id=work_item_id
+        )
+
+        return notification
+
+    async def generate_committee_work_rapporteur_notification(
+        self,
+        user_id: str,
+        work_item_id: str,
+        rapporteur_name: str,
+        work_item_data: Dict[str, Any]
+    ) -> Optional[Notification]:
+        """
+        Generate notification when rapporteur is assigned/changed.
+
+        Args:
+            user_id: User UUID
+            work_item_id: Committee work item UUID
+            rapporteur_name: New rapporteur name
+            work_item_data: Work item information
+
+        Returns:
+            Created notification or None if duplicate exists
+        """
+        logger.info(f"Generating rapporteur notification for user {user_id}")
+
+        # Check for recent duplicate
+        if self._has_recent_committee_work_notification(
+            user_id, work_item_id, 'rapporteur_change'
+        ):
+            return None
+
+        title = f"Rapporteur Assigned: {work_item_data.get('title', 'Work Item')[:60]}"
+        message = f"{rapporteur_name} has been assigned as rapporteur for {work_item_data.get('procedure_ref', 'procedure')}."
+
+        notification = self.create_notification(
+            user_id=user_id,
+            notification_type="committee_work_rapporteur_change",
+            title=title,
+            message=message,
+            priority="normal",
+            action_url=f"/bubble?tab=files&view=committee-work&id={work_item_id}",
+            metadata={
+                "work_item_id": work_item_id,
+                "procedure_ref": work_item_data.get('procedure_ref'),
+                "committee_code": work_item_data.get('committee_code'),
+                "rapporteur_name": rapporteur_name
+            },
+            related_entity_type="committee_work_item",
+            related_entity_id=work_item_id
+        )
+
+        return notification
+
+    def _has_recent_committee_work_notification(
+        self,
+        user_id: str,
+        work_item_id: str,
+        notification_type: str,
+        hours: int = 24
+    ) -> bool:
+        """
+        Check if user already received committee work notification recently.
+
+        Prevents notification spam for the same work item.
+
+        Args:
+            user_id: User UUID
+            work_item_id: Work item UUID
+            notification_type: Type of notification (status_change, rapporteur_change)
+            hours: Recent time window in hours (default 24)
+
+        Returns:
+            True if recent notification exists
+        """
+        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=hours)
+
+        stmt = select(Notification).where(
+            and_(
+                Notification.user_id == user_id,
+                Notification.notification_type == f"committee_work_{notification_type}",
+                Notification.related_entity_id == work_item_id,
+                Notification.created_at >= cutoff_time
+            )
+        )
+
+        result = self.db.execute(stmt).scalars().all()
+        return len(result) > 0

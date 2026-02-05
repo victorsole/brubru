@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="chartBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f9ff"/>
+      <stop offset="100%" style="stop-color:#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="barGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9"/>
+      <stop offset="100%" style="stop-color:#0284c7"/>
+    </linearGradient>
+    <linearGradient id="bar2025" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316"/>
+      <stop offset="100%" style="stop-color:#ea580c"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="420" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-size="18" font-weight="700" fill="#0c4a6e">Western Mediterranean MAP: Fishing Effort Reductions</text>
+  <text x="450" y="55" text-anchor="middle" font-size="11" fill="#64748b">Maximum fishing days permitted under Regulation (EU) 2019/1022</text>
+
+  <!-- Chart Area -->
+  <rect x="80" y="80" width="780" height="280" fill="url(#chartBg)" rx="8"/>
+
+  <!-- Y-axis -->
+  <line x1="120" y1="100" x2="120" y2="340" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="70" y="110" text-anchor="middle" font-size="10" fill="#64748b">250</text>
+  <line x1="115" y1="105" x2="120" y2="105" stroke="#cbd5e1"/>
+  <text x="70" y="165" text-anchor="middle" font-size="10" fill="#64748b">200</text>
+  <line x1="115" y1="160" x2="820" y2="160" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+  <text x="70" y="220" text-anchor="middle" font-size="10" fill="#64748b">150</text>
+  <line x1="115" y1="215" x2="820" y2="215" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+  <text x="70" y="275" text-anchor="middle" font-size="10" fill="#64748b">100</text>
+  <line x1="115" y1="270" x2="820" y2="270" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+  <text x="70" y="330" text-anchor="middle" font-size="10" fill="#64748b">50</text>
+  <line x1="115" y1="325" x2="820" y2="325" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+  <text x="40" y="220" text-anchor="middle" font-size="10" fill="#475569" transform="rotate(-90, 40, 220)">Fishing Days</text>
+
+  <!-- X-axis -->
+  <line x1="120" y1="340" x2="820" y2="340" stroke="#cbd5e1" stroke-width="1"/>
+
+  <!-- Bars -->
+  <!-- 2019 Baseline -->
+  <rect x="145" y="116" width="70" height="224" fill="url(#barGrad)" rx="4" filter="url(#shadow)"/>
+  <text x="180" y="108" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">220</text>
+  <text x="180" y="360" text-anchor="middle" font-size="10" fill="#475569">2019</text>
+  <text x="180" y="372" text-anchor="middle" font-size="8" fill="#94a3b8">Baseline</text>
+
+  <!-- 2020 -->
+  <rect x="235" y="138" width="70" height="202" fill="url(#barGrad)" rx="4" filter="url(#shadow)"/>
+  <text x="270" y="130" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">198</text>
+  <text x="270" y="360" text-anchor="middle" font-size="10" fill="#475569">2020</text>
+  <text x="270" y="372" text-anchor="middle" font-size="8" fill="#94a3b8">-10%</text>
+
+  <!-- 2021 -->
+  <rect x="325" y="156" width="70" height="184" fill="url(#barGrad)" rx="4" filter="url(#shadow)"/>
+  <text x="360" y="148" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">182</text>
+  <text x="360" y="360" text-anchor="middle" font-size="10" fill="#475569">2021</text>
+  <text x="360" y="372" text-anchor="middle" font-size="8" fill="#94a3b8">-17.5%</text>
+
+  <!-- 2022 -->
+  <rect x="415" y="176" width="70" height="164" fill="url(#barGrad)" rx="4" filter="url(#shadow)"/>
+  <text x="450" y="168" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">165</text>
+  <text x="450" y="360" text-anchor="middle" font-size="10" fill="#475569">2022</text>
+  <text x="450" y="372" text-anchor="middle" font-size="8" fill="#94a3b8">-25%</text>
+
+  <!-- 2023 -->
+  <rect x="505" y="196" width="70" height="144" fill="url(#barGrad)" rx="4" filter="url(#shadow)"/>
+  <text x="540" y="188" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">145</text>
+  <text x="540" y="360" text-anchor="middle" font-size="10" fill="#475569">2023</text>
+  <text x="540" y="372" text-anchor="middle" font-size="8" fill="#94a3b8">-34%</text>
+
+  <!-- 2024 -->
+  <rect x="595" y="215" width="70" height="125" fill="url(#barGrad)" rx="4" filter="url(#shadow)"/>
+  <text x="630" y="207" text-anchor="middle" font-size="11" font-weight="600" fill="#0369a1">130</text>
+  <text x="630" y="360" text-anchor="middle" font-size="10" fill="#475569">2024</text>
+  <text x="630" y="372" text-anchor="middle" font-size="8" fill="#94a3b8">-40%</text>
+
+  <!-- 2025 - Two options -->
+  <!-- Without compensation -->
+  <rect x="695" y="311" width="30" height="29" fill="#dc2626" rx="4" filter="url(#shadow)"/>
+  <text x="710" y="306" text-anchor="middle" font-size="9" font-weight="600" fill="#dc2626">27</text>
+
+  <!-- With compensation -->
+  <rect x="735" y="221" width="30" height="119" fill="url(#bar2025)" rx="4" filter="url(#shadow)"/>
+  <text x="750" y="213" text-anchor="middle" font-size="9" font-weight="600" fill="#ea580c">~120</text>
+
+  <text x="730" y="360" text-anchor="middle" font-size="10" fill="#475569">2025</text>
+  <text x="730" y="372" text-anchor="middle" font-size="8" fill="#94a3b8">Permanent</text>
+
+  <!-- Legend for 2025 -->
+  <g transform="translate(685, 380)">
+    <rect x="0" y="0" width="12" height="12" fill="#dc2626" rx="2"/>
+    <text x="16" y="10" font-size="8" fill="#64748b">No comp.</text>
+    <rect x="60" y="0" width="12" height="12" fill="#f97316" rx="2"/>
+    <text x="76" y="10" font-size="8" fill="#64748b">With comp.</text>
+  </g>
+
+  <!-- Annotation Arrow -->
+  <path d="M770 200 Q800 180 830 200" fill="none" stroke="#f97316" stroke-width="2" marker-end="url(#arrowMarker)"/>
+  <defs>
+    <marker id="arrowMarker" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#f97316"/>
+    </marker>
+  </defs>
+
+  <!-- Info Box -->
+  <g transform="translate(770, 100)">
+    <rect x="0" y="0" width="100" height="90" rx="6" fill="white" filter="url(#shadow)"/>
+    <text x="50" y="18" text-anchor="middle" font-size="9" font-weight="600" fill="#0c4a6e">2025 Reduction</text>
+    <line x1="10" y1="25" x2="90" y2="25" stroke="#e2e8f0"/>
+    <text x="10" y="42" font-size="8" fill="#64748b">Spain/France:</text>
+    <text x="90" y="42" text-anchor="end" font-size="9" font-weight="600" fill="#dc2626">-66%</text>
+    <text x="10" y="58" font-size="8" fill="#64748b">Italy/France:</text>
+    <text x="90" y="58" text-anchor="end" font-size="9" font-weight="600" fill="#f97316">-38%</text>
+    <text x="10" y="78" font-size="7" fill="#94a3b8">*Compensation allows</text>
+    <text x="10" y="86" font-size="7" fill="#94a3b8">near-2024 levels</text>
+  </g>
+
+  <!-- Transitional / Permanent Phase Marker -->
+  <line x1="665" y1="90" x2="665" y2="350" stroke="#94a3b8" stroke-width="1" stroke-dasharray="6,3"/>
+  <text x="400" y="398" text-anchor="middle" font-size="10" fill="#0369a1" font-weight="500">← Transitional Phase (2020-2024)</text>
+  <text x="750" y="398" text-anchor="middle" font-size="10" fill="#ea580c" font-weight="500">Permanent →</text>
+</svg>

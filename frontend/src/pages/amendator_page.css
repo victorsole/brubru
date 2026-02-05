@@ -18,11 +18,7 @@
 }
 
 .amendator-page__main--sidebar-open {
-  margin-left: 300px;
-}
-
-.amendator-page__main--ai-sidebar-open {
-  /* AI sidebar is included in the flex layout, no margin needed */
+  margin-left: 360px;
 }
 
 /* Save Amendments Bar */
@@ -81,7 +77,138 @@
   cursor: not-allowed;
 }
 
-/* Responsive Design */
+/* --- Unified Sidebar --- */
+
+.amendator-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--space-3);
+}
+
+/* Mascot */
+.amendator-sidebar__mascot {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2) 0;
+}
+
+.amendator-sidebar__mascot-image {
+  width: 120px;
+  height: auto;
+  transition: transform var(--transition-base);
+}
+
+.amendator-sidebar__mascot-image:hover {
+  transform: scale(1.05);
+}
+
+/* Tab Switcher */
+.amendator-sidebar__tabs {
+  display: flex;
+  gap: var(--space-2);
+  padding: 0 var(--space-1);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: var(--space-3);
+}
+
+.amendator-sidebar__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.amendator-sidebar__tab:hover {
+  background-color: var(--color-gray-50);
+  color: var(--color-text);
+}
+
+.amendator-sidebar__tab--active {
+  background-color: #059669;
+  color: white;
+  border-color: #059669;
+}
+
+.amendator-sidebar__tab--active:hover {
+  background-color: #047857;
+  color: white;
+}
+
+.amendator-sidebar__tab-label {
+  font-size: var(--font-size-sm);
+}
+
+.amendator-sidebar__tab-badge {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-full);
+  min-width: 20px;
+  text-align: center;
+}
+
+.amendator-sidebar__tab:not(.amendator-sidebar__tab--active) .amendator-sidebar__tab-badge {
+  background-color: var(--color-accent-blue);
+  color: white;
+}
+
+/* Tab Content */
+.amendator-sidebar__content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* Scrollbar for tab content */
+.amendator-sidebar__content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.amendator-sidebar__content::-webkit-scrollbar-track {
+  background: var(--color-gray-50);
+}
+
+.amendator-sidebar__content::-webkit-scrollbar-thumb {
+  background: var(--color-gray-300);
+  border-radius: var(--radius-full);
+}
+
+.amendator-sidebar__content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-400);
+}
+
+/* --- Responsive Design --- */
+
+/* Tablet */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .amendator-page__main--sidebar-open {
+    margin-left: 320px;
+  }
+
+  .amendator-sidebar__mascot-image {
+    width: 90px;
+  }
+
+  .amendator-sidebar__tab-label {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Mobile */
 @media (max-width: 767px) {
   .amendator-page {
     overflow: visible;
@@ -95,13 +222,18 @@
     flex-direction: column;
   }
 
-  .amendator-page__main--ai-sidebar-open {
-    /* AI sidebar slides in from right on mobile */
-  }
-
   .amendator-page__save-bar {
     padding: var(--space-2) var(--space-3);
     flex-wrap: wrap;
     gap: var(--space-2);
+  }
+
+  .amendator-sidebar__mascot-image {
+    width: 80px;
+  }
+
+  .amendator-sidebar__tab {
+    padding: var(--space-2);
+    font-size: var(--font-size-xs);
   }
 }

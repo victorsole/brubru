@@ -2,16 +2,17 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { LegislativeElement } from './two_column_layout';
+import type { LoadedDocument } from './document_viewer';
 import { FeedbackInvitation } from '../shared/feedback_invitation';
 import './ai_assistant_sidebar.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
 
-interface AIAssistantSidebarProps {
-  isOpen: boolean;
-  onToggle: () => void;
+interface AIAssistantPanelProps {
   selectedElement: LegislativeElement | null;
+  loadedDocument: LoadedDocument | null;
   onSuggestionAccepted: (suggestion: AISuggestion) => void;
+  onBatchSuggestionsAccepted?: (suggestions: AISuggestion[]) => void;
 }
 
 export interface AISuggestion {
@@ -19,25 +20,135 @@ export interface AISuggestion {
   original_text: string;
   proposed_text: string;
   justification: string;
+  element_position?: string;
 }
 
-export const AIAssistantSidebar = ({
-  isOpen,
-  onToggle,
+interface UploadedDoc {
+  file: File;
+  extractedText: string | null;
+  isUploading: boolean;
+  error: string | null;
+}
+
+export const AIAssistantPanel = ({
   selectedElement,
+  loadedDocument,
   onSuggestionAccepted,
-}: AIAssistantSidebarProps) => {
+  onBatchSuggestionsAccepted,
+}: AIAssistantPanelProps) => {
   const { t } = useTranslation();
   const [policyText, setPolicyText] = useState('');
-  const [uploadedDocuments, setUploadedDocuments] = useState<File[]>([]);
+  const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDoc[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState<AISuggestion | null>(null);
+  const [batchSuggestions, setBatchSuggestions] = useState<AISuggestion[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      setUploadedDocuments(prev => [...prev, ...Array.from(files)]);
+  // Get supporting context from uploaded documents
+  const getSupportingContext = (): string | null => {
+    const texts = uploadedDocuments
+      .filter(d => d.extractedText)
+      .map(d => d.extractedText!);
+    return texts.length > 0 ? texts.join('\n\n---\n\n') : null;
+  };
+
+  // Extract key elements from loaded document for batch mode
+  const getDocumentElements = (): Array<{ position: string; element_type: string; text: string }> => {
+    if (!loadedDocument?.structure?.legislative_structure?.elements) return [];
+
+    const elements = loadedDocument.structure.legislative_structure.elements;
+    const keyElements: Array<{ position: string; element_type: string; text: string }> = [];
+
+    for (const elem of elements) {
+      // Only include articles and recitals (skip titles, intros, chapters)
+      if (!['article', 'recital', 'point', 'paragraph'].includes(elem.type)) continue;
+
+      let position = '';
+      if (elem.type === 'recital') position = `Recital ${elem.number || ''}`;
+      else if (elem.type === 'article') position = `Article ${elem.number || ''}`;
+      else if (elem.type === 'point') position = `Point ${elem.number || ''}`;
+      else if (elem.type === 'paragraph') position = `Paragraph (${elem.letter || ''})`;
+
+      keyElements.push({
+        position: position.trim(),
+        element_type: elem.type,
+        text: elem.text.substring(0, 300),
+      });
+
+      // Send up to 50 elements; backend will determine suggestion count by tier
+      if (keyElements.length >= 50) break;
     }
+
+    return keyElements;
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    for (const file of Array.from(files)) {
+      const newDoc: UploadedDoc = {
+        file,
+        extractedText: null,
+        isUploading: true,
+        error: null,
+      };
+      setUploadedDocuments(prev => [...prev, newDoc]);
+
+      try {
+        // Upload to backend for text extraction
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const token = localStorage.getItem('access_token');
+        const uploadResponse = await fetch(`${API_BASE}/documents/upload`, {
+          method: 'POST',
+          headers: {
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+          },
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Upload failed');
+        }
+
+        const uploadResult = await uploadResponse.json();
+
+        // Fetch extracted text
+        const contentResponse = await fetch(`${API_BASE}/documents/${uploadResult.document_id}/content`, {
+          headers: {
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+          },
+        });
+
+        if (!contentResponse.ok) {
+          throw new Error('Could not extract text');
+        }
+
+        const contentResult = await contentResponse.json();
+        const extractedText = contentResult.text || '';
+
+        setUploadedDocuments(prev =>
+          prev.map(d =>
+            d.file === file
+              ? { ...d, extractedText, isUploading: false }
+              : d
+          )
+        );
+      } catch (error) {
+        setUploadedDocuments(prev =>
+          prev.map(d =>
+            d.file === file
+              ? { ...d, isUploading: false, error: 'Failed to process' }
+              : d
+          )
+        );
+      }
+    }
+
+    // Reset input
+    event.target.value = '';
   };
 
   const handleRemoveDocument = (index: number) => {
@@ -45,74 +156,114 @@ export const AIAssistantSidebar = ({
   };
 
   const handleAISuggest = async () => {
-    if (!selectedElement) {
-      alert('Please select a legislative element (article, recital, etc.) in the document viewer first. Then enter your policy position and click AI Suggest.');
-      return;
-    }
+    setErrorMessage(null);
 
-    if (!policyText.trim()) {
-      alert('Please enter your policy position or goals in the text area above.');
+    // Determine mode: targeted (element selected) vs document-wide (no element)
+    const isTargetedMode = !!selectedElement;
+    const hasDocument = !!loadedDocument;
+
+    // Validate: need at least a document loaded OR an element selected
+    if (!isTargetedMode && !hasDocument) {
+      setErrorMessage('Please load a legislative document first.');
       return;
     }
 
     setIsLoading(true);
     setAiSuggestion(null);
+    setBatchSuggestions([]);
+
+    const token = localStorage.getItem('access_token');
+    const supportingContext = getSupportingContext();
 
     try {
-      // Build element position string
-      let elementPosition = '';
-      if (selectedElement.type === 'recital') {
-        elementPosition = `Recital ${selectedElement.number}`;
-      } else if (selectedElement.type === 'article') {
-        elementPosition = `Article ${selectedElement.number}`;
-      } else if (selectedElement.type === 'article_title') {
-        elementPosition = `Article ${selectedElement.number} Title`;
-      } else if (selectedElement.type === 'point') {
-        elementPosition = `Point ${selectedElement.number}`;
-      } else if (selectedElement.type === 'paragraph') {
-        elementPosition = `Paragraph (${selectedElement.letter})`;
-      } else if (selectedElement.type === 'subparagraph') {
-        elementPosition = `Subparagraph (${selectedElement.roman})`;
-      } else if (selectedElement.type === 'chapter') {
-        elementPosition = `Chapter ${selectedElement.number}`;
+      if (isTargetedMode) {
+        // --- TARGETED MODE: Suggest for specific element ---
+        let elementPosition = '';
+        if (selectedElement!.type === 'recital') {
+          elementPosition = `Recital ${selectedElement!.number}`;
+        } else if (selectedElement!.type === 'article') {
+          elementPosition = `Article ${selectedElement!.number}`;
+        } else if (selectedElement!.type === 'article_title') {
+          elementPosition = `Article ${selectedElement!.number} Title`;
+        } else if (selectedElement!.type === 'point') {
+          elementPosition = `Point ${selectedElement!.number}`;
+        } else if (selectedElement!.type === 'paragraph') {
+          elementPosition = `Paragraph (${selectedElement!.letter})`;
+        } else if (selectedElement!.type === 'subparagraph') {
+          elementPosition = `Subparagraph (${selectedElement!.roman})`;
+        } else if (selectedElement!.type === 'chapter') {
+          elementPosition = `Chapter ${selectedElement!.number}`;
+        }
+
+        const params = new URLSearchParams({
+          policy_position: policyText.trim() || 'Analyse this element and suggest improvements',
+          original_text: selectedElement!.text,
+          element_type: selectedElement!.type,
+          element_position: elementPosition,
+          ...(supportingContext && { supporting_context: supportingContext }),
+        });
+
+        const response = await fetch(`${API_BASE}/amendments/suggest?${params.toString()}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Failed to generate AI suggestion');
+        }
+
+        const suggestion = await response.json();
+        setAiSuggestion({
+          amendment_type: suggestion.amendment_type,
+          original_text: selectedElement!.text,
+          proposed_text: suggestion.proposed_text,
+          justification: suggestion.justification,
+          element_position: elementPosition,
+        });
+      } else {
+        // --- DOCUMENT-WIDE MODE: Analyse key elements ---
+        const elements = getDocumentElements();
+        if (elements.length === 0) {
+          setErrorMessage('No legislative elements found in the document.');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE}/amendments/suggest-batch`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` }),
+          },
+          body: JSON.stringify({
+            policy_position: policyText.trim() || 'Analyse this legislation and suggest the most impactful amendments',
+            supporting_context: supportingContext,
+            elements,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.detail || 'Failed to generate suggestions');
+        }
+
+        const result = await response.json();
+        const suggestions: AISuggestion[] = (result.suggestions || []).map((s: any) => ({
+          amendment_type: s.amendment_type,
+          original_text: s.original_text,
+          proposed_text: s.proposed_text,
+          justification: s.justification,
+          element_position: s.element_position,
+        }));
+
+        setBatchSuggestions(suggestions);
       }
-
-      // Get auth token
-      const token = localStorage.getItem('access_token');
-
-      // Build query params
-      const params = new URLSearchParams({
-        policy_position: policyText.trim(),
-        original_text: selectedElement.text,
-        element_type: selectedElement.type,
-        element_position: elementPosition,
-      });
-
-      // Call real AI suggestion endpoint
-      const response = await fetch(`${API_BASE}/amendments/suggest?${params.toString()}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` }),
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || 'Failed to generate AI suggestion');
-      }
-
-      const suggestion = await response.json();
-
-      setAiSuggestion({
-        amendment_type: suggestion.amendment_type,
-        original_text: selectedElement.text,
-        proposed_text: suggestion.proposed_text,
-        justification: suggestion.justification,
-      });
     } catch (error) {
       console.error('AI suggestion error:', error);
-      alert(error instanceof Error ? error.message : 'Failed to generate AI suggestion');
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to generate AI suggestion');
     } finally {
       setIsLoading(false);
     }
@@ -136,208 +287,232 @@ export const AIAssistantSidebar = ({
     setAiSuggestion(null);
   };
 
-  const getMascotImage = () => {
-    if (isLoading) {
-      return {
-        src: '/assets/brubru_myeububble.png',
-        alt: 'Brubru is analyzing your policy position...',
-        className: 'pulse',
-      };
+  const handleAcceptBatchItem = (index: number) => {
+    const suggestion = batchSuggestions[index];
+    if (suggestion) {
+      onSuggestionAccepted(suggestion);
+      setBatchSuggestions(prev => prev.filter((_, i) => i !== index));
     }
-
-    if (aiSuggestion) {
-      return {
-        src: '/assets/brubru_amendator.png',
-        alt: 'Brubru has an amendment suggestion for you!',
-        className: 'bounce wiggle',
-      };
-    }
-
-    return {
-      src: '/assets/brubru_amendator_nochips.png',
-      alt: 'Upload your policy documents to get started',
-      className: 'breathe',
-    };
   };
 
-  const mascot = getMascotImage();
+  const handleRejectBatchItem = (index: number) => {
+    setBatchSuggestions(prev => prev.filter((_, i) => i !== index));
+  };
 
-  if (!isOpen) {
-    return (
-      <button
-        className="ai-sidebar__toggle ai-sidebar__toggle--collapsed"
-        onClick={onToggle}
-        aria-label={t('ai.openAssistant')}
-      >
-        <span className="ai-sidebar__toggle-icon mdi mdi-chevron-right"></span>
-        <span className="ai-sidebar__toggle-text">{t('ai.assistant')}</span>
-      </button>
-    );
-  }
+  const handleAcceptAll = () => {
+    if (onBatchSuggestionsAccepted && batchSuggestions.length > 0) {
+      onBatchSuggestionsAccepted(batchSuggestions);
+      setBatchSuggestions([]);
+    }
+  };
+
+  const isDocumentLoaded = !!loadedDocument;
+  const canSuggest = isDocumentLoaded || !!selectedElement;
 
   return (
-    <div className={`ai-sidebar ${isOpen ? 'ai-sidebar--open' : ''}`}>
-      {/* Mobile Close Button */}
+    <div className="ai-panel">
+      {/* Policy Input */}
+      <div className="ai-panel__section">
+        <h3 className="ai-panel__section-title">{t('ai.policyPosition')}</h3>
+        <textarea
+          className="ai-panel__textarea"
+          placeholder={t('ai.policyPlaceholder')}
+          value={policyText}
+          onChange={(e) => setPolicyText(e.target.value)}
+          rows={5}
+        />
+      </div>
+
+      {/* Document Upload */}
+      <div className="ai-panel__section">
+        <h3 className="ai-panel__section-title">{t('ai.uploadDocs')}</h3>
+        <label className="ai-panel__upload-button button button-sm button-secondary">
+          <span className="mdi mdi-paperclip"></span> {t('ai.uploadButton')}
+          <input
+            type="file"
+            multiple
+            accept=".pdf,.doc,.docx,.txt"
+            onChange={handleFileUpload}
+            style={{ display: 'none' }}
+          />
+        </label>
+
+        {uploadedDocuments.length > 0 && (
+          <div className="ai-panel__documents">
+            {uploadedDocuments.map((doc, index) => (
+              <div key={index} className={`ai-panel__document ${doc.error ? 'ai-panel__document--error' : ''}`}>
+                <span className="ai-panel__document-icon mdi mdi-file-document"></span>
+                <span className="ai-panel__document-name">{doc.file.name}</span>
+                {doc.isUploading && <span className="ai-panel__document-status">Processing...</span>}
+                {doc.extractedText && <span className="ai-panel__document-status ai-panel__document-status--ok">Ready</span>}
+                {doc.error && <span className="ai-panel__document-status ai-panel__document-status--error">{doc.error}</span>}
+                <button
+                  className="ai-panel__document-remove"
+                  onClick={() => handleRemoveDocument(index)}
+                  aria-label="Remove document"
+                >
+                  <span className="mdi mdi-close"></span>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Selected Element */}
+      <div className="ai-panel__section">
+        <h3 className="ai-panel__section-title">{t('ai.currentlySelected')}</h3>
+        {selectedElement ? (
+          <div className="ai-panel__selected">
+            <div className="ai-panel__selected-type">
+              {selectedElement.type === 'recital' && `Recital ${selectedElement.number}`}
+              {selectedElement.type === 'article' && `Article ${selectedElement.number}`}
+              {selectedElement.type === 'point' && `Point ${selectedElement.number}`}
+              {selectedElement.type === 'paragraph' && `Paragraph (${selectedElement.letter})`}
+              {selectedElement.type === 'subparagraph' && `Subparagraph (${selectedElement.roman})`}
+            </div>
+            <div className="ai-panel__selected-text">
+              {selectedElement.text.substring(0, 100)}...
+            </div>
+          </div>
+        ) : (
+          <p className="ai-panel__no-selection">
+            {isDocumentLoaded
+              ? 'No element selected - AI will analyse the full document'
+              : t('ai.clickRow')}
+          </p>
+        )}
+      </div>
+
+      {/* Error Message */}
+      {errorMessage && (
+        <div className="ai-panel__error">
+          <span className="mdi mdi-alert-circle"></span>
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
+      {/* AI Suggest Button */}
       <button
-        className="ai-sidebar__close-mobile"
-        onClick={onToggle}
-        aria-label={t('ai.closeAssistant')}
+        className="button button-primary ai-panel__suggest-button"
+        onClick={handleAISuggest}
+        disabled={isLoading || !canSuggest}
       >
-        <span className="mdi mdi-close"></span>
+        <span className="mdi mdi-robot"></span>
+        {isLoading
+          ? t('ai.thinking')
+          : selectedElement
+            ? t('ai.suggest')
+            : 'Analyse Document'}
       </button>
-      {/* Content */}
-      <div className="ai-sidebar__content">
-          {/* Brubru Mascot */}
-          <div className="ai-sidebar__mascot-container">
-            <img
-              src={mascot.src}
-              alt={mascot.alt}
-              className={`ai-sidebar__mascot ${mascot.className}`}
-            />
-            <p className="ai-sidebar__mascot-message">
-              {isLoading
-                ? t('ai.analyzing')
-                : aiSuggestion
-                ? t('ai.foundAmendment')
-                : t('ai.selectRow')}
-            </p>
-          </div>
+      {!canSuggest && (
+        <p className="ai-panel__hint">Load a legislative document to enable AI analysis</p>
+      )}
+      {canSuggest && !selectedElement && !isLoading && (
+        <p className="ai-panel__hint">Tip: select a specific element for targeted suggestions, or let the AI analyse the full document</p>
+      )}
 
-          {/* Policy Input */}
-          <div className="ai-sidebar__section">
-            <h3 className="ai-sidebar__section-title">{t('ai.policyPosition')}</h3>
-            <textarea
-              className="ai-sidebar__textarea"
-              placeholder={t('ai.policyPlaceholder')}
-              value={policyText}
-              onChange={(e) => setPolicyText(e.target.value)}
-              rows={6}
-            />
-          </div>
-
-          {/* Document Upload */}
-          <div className="ai-sidebar__section">
-            <h3 className="ai-sidebar__section-title">{t('ai.uploadDocs')}</h3>
-            <label className="ai-sidebar__upload-button button button-sm button-secondary">
-              <span className="mdi mdi-paperclip"></span> {t('ai.uploadButton')}
-              <input
-                type="file"
-                multiple
-                accept=".pdf,.doc,.docx,.txt"
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-              />
-            </label>
-
-            {uploadedDocuments.length > 0 && (
-              <div className="ai-sidebar__documents">
-                {uploadedDocuments.map((doc, index) => (
-                  <div key={index} className="ai-sidebar__document">
-                    <span className="ai-sidebar__document-icon mdi mdi-file-document"></span>
-                    <span className="ai-sidebar__document-name">{doc.name}</span>
-                    <button
-                      className="ai-sidebar__document-remove"
-                      onClick={() => handleRemoveDocument(index)}
-                      aria-label="Remove document"
-                    >
-                      <span className="mdi mdi-close"></span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Selected Element */}
-          <div className="ai-sidebar__section">
-            <h3 className="ai-sidebar__section-title">{t('ai.currentlySelected')}</h3>
-            {selectedElement ? (
-              <div className="ai-sidebar__selected">
-                <div className="ai-sidebar__selected-type">
-                  {selectedElement.type === 'recital' && `Recital ${selectedElement.number}`}
-                  {selectedElement.type === 'article' && `Article ${selectedElement.number}`}
-                  {selectedElement.type === 'point' && `Point ${selectedElement.number}`}
-                  {selectedElement.type === 'paragraph' && `Paragraph (${selectedElement.letter})`}
-                  {selectedElement.type === 'subparagraph' && `Subparagraph (${selectedElement.roman})`}
-                </div>
-                <div className="ai-sidebar__selected-text">
-                  {selectedElement.text.substring(0, 100)}...
-                </div>
-              </div>
-            ) : (
-              <p className="ai-sidebar__no-selection">
-                {t('ai.clickRow')}
-              </p>
-            )}
-          </div>
-
-          {/* AI Suggest Button */}
-          <button
-            className="button button-primary ai-sidebar__suggest-button"
-            onClick={handleAISuggest}
-            disabled={isLoading}
-          >
-            <span className="mdi mdi-robot"></span> {isLoading ? t('ai.thinking') : t('ai.suggest')}
-          </button>
-          {!selectedElement && (
-            <p className="ai-sidebar__hint">Select a legislative element in the document to enable AI suggestions</p>
+      {/* Single Suggestion (Targeted Mode) */}
+      {aiSuggestion && (
+        <div className="ai-panel__suggestion">
+          <h3 className="ai-panel__suggestion-title"><span className="mdi mdi-lightbulb"></span> {t('ai.suggestion')}</h3>
+          {aiSuggestion.element_position && (
+            <div className="ai-panel__suggestion-position">{aiSuggestion.element_position}</div>
           )}
 
-          {/* AI Suggestion */}
-          {aiSuggestion && (
-            <div className="ai-sidebar__suggestion">
-              <h3 className="ai-sidebar__suggestion-title"><span className="mdi mdi-lightbulb"></span> {t('ai.suggestion')}</h3>
+          <div className="ai-panel__suggestion-content">
+            <div className="ai-panel__suggestion-field">
+              <strong>{t('ai.type')}</strong> {aiSuggestion.amendment_type}
+            </div>
 
-              <div className="ai-sidebar__suggestion-content">
-                <div className="ai-sidebar__suggestion-field">
-                  <strong>{t('ai.type')}</strong> {aiSuggestion.amendment_type}
-                </div>
-
-                <div className="ai-sidebar__suggestion-field">
-                  <strong>{t('ai.proposedText')}</strong>
-                  <div className="ai-sidebar__suggestion-text">
-                    {aiSuggestion.proposed_text}
-                  </div>
-                </div>
-
-                <div className="ai-sidebar__suggestion-field">
-                  <strong>{t('ai.justification')}</strong>
-                  <div className="ai-sidebar__suggestion-justification">
-                    {aiSuggestion.justification}
-                  </div>
-                </div>
-              </div>
-
-              <div className="ai-sidebar__suggestion-actions">
-                <button
-                  className="button button-sm button-success"
-                  onClick={handleAccept}
-                >
-                  <span className="mdi mdi-check"></span> {t('ai.accept')}
-                </button>
-                <button
-                  className="button button-sm button-secondary"
-                  onClick={handleModify}
-                >
-                  <span className="mdi mdi-pencil"></span> {t('ai.modify')}
-                </button>
-                <button
-                  className="button button-sm button-danger"
-                  onClick={handleReject}
-                >
-                  <span className="mdi mdi-close"></span> {t('ai.reject')}
-                </button>
+            <div className="ai-panel__suggestion-field">
+              <strong>{t('ai.proposedText')}</strong>
+              <div className="ai-panel__suggestion-text">
+                {aiSuggestion.proposed_text}
               </div>
             </div>
-          )}
 
-          {/* Feedback Section */}
-          <FeedbackInvitation
-            featureName="Amendator"
-            featureDescription="Help us improve Amendator. Your feedback on the AI assistant and amendment tools is valuable."
-            variant="sidebar"
-          />
+            <div className="ai-panel__suggestion-field">
+              <strong>{t('ai.justification')}</strong>
+              <div className="ai-panel__suggestion-justification">
+                {aiSuggestion.justification}
+              </div>
+            </div>
+          </div>
+
+          <div className="ai-panel__suggestion-actions">
+            <button className="button button-sm button-success" onClick={handleAccept}>
+              <span className="mdi mdi-check"></span> {t('ai.accept')}
+            </button>
+            <button className="button button-sm button-secondary" onClick={handleModify}>
+              <span className="mdi mdi-pencil"></span> {t('ai.modify')}
+            </button>
+            <button className="button button-sm button-danger" onClick={handleReject}>
+              <span className="mdi mdi-close"></span> {t('ai.reject')}
+            </button>
+          </div>
         </div>
+      )}
+
+      {/* Batch Suggestions (Document-Wide Mode) */}
+      {batchSuggestions.length > 0 && (
+        <div className="ai-panel__batch">
+          <div className="ai-panel__batch-header">
+            <h3 className="ai-panel__suggestion-title">
+              <span className="mdi mdi-lightbulb"></span> {batchSuggestions.length} Suggestions
+            </h3>
+            {onBatchSuggestionsAccepted && (
+              <button className="button button-sm button-success" onClick={handleAcceptAll}>
+                Accept All
+              </button>
+            )}
+          </div>
+
+          <div className="ai-panel__batch-list">
+            {batchSuggestions.map((suggestion, index) => (
+              <div key={index} className="ai-panel__batch-item">
+                <div className="ai-panel__batch-item-header">
+                  <span className="ai-panel__batch-item-position">{suggestion.element_position}</span>
+                  <span className={`ai-panel__batch-item-type ai-panel__batch-item-type--${suggestion.amendment_type}`}>
+                    {suggestion.amendment_type}
+                  </span>
+                </div>
+
+                <div className="ai-panel__batch-item-text">
+                  {suggestion.proposed_text.substring(0, 150)}
+                  {suggestion.proposed_text.length > 150 ? '...' : ''}
+                </div>
+
+                <div className="ai-panel__batch-item-justification">
+                  {suggestion.justification}
+                </div>
+
+                <div className="ai-panel__batch-item-actions">
+                  <button
+                    className="button button-sm button-success"
+                    onClick={() => handleAcceptBatchItem(index)}
+                  >
+                    <span className="mdi mdi-check"></span> Accept
+                  </button>
+                  <button
+                    className="button button-sm button-danger"
+                    onClick={() => handleRejectBatchItem(index)}
+                  >
+                    <span className="mdi mdi-close"></span> Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Feedback Section */}
+      <FeedbackInvitation
+        featureName="Amendator"
+        featureDescription="Help us improve Amendator. Your feedback on the AI assistant and amendment tools is valuable."
+        variant="sidebar"
+      />
     </div>
   );
 };

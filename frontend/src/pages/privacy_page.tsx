@@ -30,7 +30,7 @@ export const PrivacyPage = () => {
             <strong>Beresol BV</strong><br />
             Brussels, Belgium<br />
             European Union<br />
-            Email: <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a>
+            Email: <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a>
           </p>
         </section>
 
@@ -203,7 +203,7 @@ export const PrivacyPage = () => {
           </p>
 
           <p className="policy-page__note">
-            To exercise any of these rights, contact us at <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a>.
+            To exercise any of these rights, contact us at <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a>.
             We will respond within 30 days.
           </p>
         </section>
@@ -276,7 +276,7 @@ export const PrivacyPage = () => {
             For privacy-related questions, concerns, or to exercise your rights under GDPR:
           </p>
           <p>
-            <strong>Email:</strong> <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a><br />
+            <strong>Email:</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a><br />
             <strong>Subject Line:</strong> "Privacy Inquiry" or "GDPR Request"
           </p>
           <p>

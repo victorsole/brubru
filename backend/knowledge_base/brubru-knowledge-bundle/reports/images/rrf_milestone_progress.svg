@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 450" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="450" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerPurple)"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="white">RRF Milestone Achievement by Policy Pillar</text>
+  <text x="450" y="50" text-anchor="middle" font-size="11" fill="#ddd6fe">2,586 of 6,985 milestones fulfilled (37%) | August 2025</text>
+
+  <!-- Chart area -->
+  <g transform="translate(60, 100)">
+    <!-- Y-axis labels -->
+    <text x="-10" y="20" text-anchor="end" font-size="10" fill="#64748b">50%</text>
+    <text x="-10" y="90" text-anchor="end" font-size="10" fill="#64748b">40%</text>
+    <text x="-10" y="160" text-anchor="end" font-size="10" fill="#64748b">30%</text>
+    <text x="-10" y="230" text-anchor="end" font-size="10" fill="#64748b">20%</text>
+
+    <!-- Grid lines -->
+    <line x1="0" y1="20" x2="780" y2="20" stroke="#e2e8f0" stroke-dasharray="4"/>
+    <line x1="0" y1="90" x2="780" y2="90" stroke="#e2e8f0" stroke-dasharray="4"/>
+    <line x1="0" y1="160" x2="780" y2="160" stroke="#e2e8f0" stroke-dasharray="4"/>
+    <line x1="0" y1="230" x2="780" y2="230" stroke="#e2e8f0" stroke-dasharray="4"/>
+
+    <!-- Baseline -->
+    <line x1="0" y1="250" x2="780" y2="250" stroke="#94a3b8" stroke-width="2"/>
+
+    <!-- Bars -->
+    <!-- Health: 46% -->
+    <g transform="translate(20, 0)">
+      <rect x="0" y="68" width="80" height="182" rx="4" fill="#22c55e" filter="url(#shadow)"/>
+      <text x="40" y="58" text-anchor="middle" font-size="14" font-weight="700" fill="#16a34a">46%</text>
+      <text x="40" y="270" text-anchor="middle" font-size="9" fill="#1e293b">Health &amp;</text>
+      <text x="40" y="282" text-anchor="middle" font-size="9" fill="#1e293b">Resilience</text>
+      <text x="40" y="298" text-anchor="middle" font-size="8" fill="#64748b">1,152/2,503</text>
+    </g>
+
+    <!-- Smart Growth: 41% -->
+    <g transform="translate(130, 0)">
+      <rect x="0" y="88" width="80" height="162" rx="4" fill="#3b82f6" filter="url(#shadow)"/>
+      <text x="40" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#2563eb">41%</text>
+      <text x="40" y="270" text-anchor="middle" font-size="9" fill="#1e293b">Smart/Sust.</text>
+      <text x="40" y="282" text-anchor="middle" font-size="9" fill="#1e293b">Growth</text>
+      <text x="40" y="298" text-anchor="middle" font-size="8" fill="#64748b">1,346/3,305</text>
+    </g>
+
+    <!-- Gender: 40% -->
+    <g transform="translate(240, 0)">
+      <rect x="0" y="92" width="80" height="158" rx="4" fill="#8b5cf6" filter="url(#shadow)"/>
+      <text x="40" y="82" text-anchor="middle" font-size="14" font-weight="700" fill="#7c3aed">40%</text>
+      <text x="40" y="270" text-anchor="middle" font-size="9" fill="#1e293b">Gender</text>
+      <text x="40" y="282" text-anchor="middle" font-size="9" fill="#1e293b">Equality</text>
+      <text x="40" y="298" text-anchor="middle" font-size="8" fill="#64748b">102/253</text>
+    </g>
+
+    <!-- Next Gen: 39% -->
+    <g transform="translate(350, 0)">
+      <rect x="0" y="96" width="80" height="154" rx="4" fill="#ec4899" filter="url(#shadow)"/>
+      <text x="40" y="86" text-anchor="middle" font-size="14" font-weight="700" fill="#db2777">39%</text>
+      <text x="40" y="270" text-anchor="middle" font-size="9" fill="#1e293b">Next</text>
+      <text x="40" y="282" text-anchor="middle" font-size="9" fill="#1e293b">Generation</text>
+      <text x="40" y="298" text-anchor="middle" font-size="8" fill="#64748b">259/665</text>
+    </g>
+
+    <!-- Cohesion: 37% -->
+    <g transform="translate(460, 0)">
+      <rect x="0" y="104" width="80" height="146" rx="4" fill="#f59e0b" filter="url(#shadow)"/>
+      <text x="40" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#d97706">37%</text>
+      <text x="40" y="270" text-anchor="middle" font-size="9" fill="#1e293b">Territorial</text>
+      <text x="40" y="282" text-anchor="middle" font-size="9" fill="#1e293b">Cohesion</text>
+      <text x="40" y="298" text-anchor="middle" font-size="8" fill="#64748b">1,064/2,888</text>
+    </g>
+
+    <!-- Digital: 35% -->
+    <g transform="translate(570, 0)">
+      <rect x="0" y="112" width="80" height="138" rx="4" fill="#06b6d4" filter="url(#shadow)"/>
+      <text x="40" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#0891b2">35%</text>
+      <text x="40" y="270" text-anchor="middle" font-size="9" fill="#1e293b">Digital</text>
+      <text x="40" y="282" text-anchor="middle" font-size="9" fill="#1e293b">Transform.</text>
+      <text x="40" y="298" text-anchor="middle" font-size="8" fill="#64748b">877/2,464</text>
+    </g>
+
+    <!-- Green: 34% -->
+    <g transform="translate(680, 0)">
+      <rect x="0" y="116" width="80" height="134" rx="4" fill="#84cc16" filter="url(#shadow)"/>
+      <text x="40" y="106" text-anchor="middle" font-size="14" font-weight="700" fill="#65a30d">34%</text>
+      <text x="40" y="270" text-anchor="middle" font-size="9" fill="#1e293b">Green</text>
+      <text x="40" y="282" text-anchor="middle" font-size="9" fill="#1e293b">Transition</text>
+      <text x="40" y="298" text-anchor="middle" font-size="8" fill="#64748b">1,080/3,214</text>
+    </g>
+  </g>
+
+  <!-- Warning note -->
+  <g transform="translate(60, 415)">
+    <rect width="780" height="28" rx="5" fill="#fef3c7"/>
+    <text x="20" y="18" font-size="10" font-weight="600" fill="#92400e">Warning: 70% of milestones backloaded to final 14 months. Green Transition pillar (€275B climate spending) shows lowest completion rate.</text>
+  </g>
+</svg>

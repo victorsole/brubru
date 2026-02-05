@@ -1,0 +1,137 @@
+{
+  "dg_code": "AGRI",
+  "dg_name": "Agriculture and Rural Development",
+  "commissioner": "Christophe Hansen",
+  "date_of_effect": "2025-06-01",
+  "director_general": {
+    "name": "Elisabeth Werner",
+    "assistants": [
+      "Ana Brncic"
+    ]
+  },
+  "deputy_directors_general": [
+    {
+      "name": "Mihail Dumitru",
+      "responsibilities": "Directorates B, C and D (Sustainability, CAP Strategic Plans)"
+    },
+    {
+      "name": "Pierre Bascou",
+      "responsibilities": "Directorates E and G (Markets, International Affairs)"
+    },
+    {
+      "name": "Diego Canga Fano",
+      "responsibilities": "Directorates F, H and I (Outreach, Assurance, Resources)"
+    }
+  ],
+  "directorates": [
+    {
+      "code": "AGRI.A",
+      "name": "Strategy & Policy Analysis",
+      "units": [
+        {
+          "code": "AGRI.A.3",
+          "name": "Policy Performance",
+          "head": "Sophie Helaine"
+        },
+        {
+          "code": "AGRI.A.4",
+          "name": "Data Governance",
+          "head": "Pierluigi Londero"
+        }
+      ]
+    },
+    {
+      "code": "AGRI.B",
+      "name": "Sustainability",
+      "director": "Ulferdus Schilthuis"
+    },
+    {
+      "code": "AGRI.C",
+      "name": "CAP Strategic Plans I"
+    },
+    {
+      "code": "AGRI.D",
+      "name": "CAP Strategic Plans II",
+      "director": "Mario Milouchev",
+      "units": [
+        {
+          "code": "AGRI.D.4",
+          "name": "Belgium, France, Luxembourg, Netherlands",
+          "head": "Petr Lapka"
+        }
+      ]
+    },
+    {
+      "code": "AGRI.E",
+      "name": "Markets",
+      "units": [
+        {
+          "code": "AGRI.E.1",
+          "name": "Governance of the Agri-Food Markets",
+          "head": "Fabien Santini"
+        },
+        {
+          "code": "AGRI.E.2",
+          "name": "Wine, Spirits and Horticultural Products",
+          "head": "Mauro Poinelli"
+        },
+        {
+          "code": "AGRI.E.3",
+          "name": "Animal Products",
+          "head": "Brigitte Misonne"
+        },
+        {
+          "code": "AGRI.E.4",
+          "name": "Arable Crops and Olive Oil",
+          "head": "Koen Dillen"
+        }
+      ]
+    },
+    {
+      "code": "AGRI.F",
+      "name": "Outreach, Research & Geographical Indications",
+      "units": [
+        {
+          "code": "AGRI.F.1",
+          "name": "External Communication and Promotion Policy",
+          "head": "Cristina Rueda Catry"
+        },
+        {
+          "code": "AGRI.F.2",
+          "name": "Research and Innovation",
+          "head": "Kerstin Rosenow"
+        }
+      ]
+    },
+    {
+      "code": "AGRI.G",
+      "name": "International Affairs"
+    },
+    {
+      "code": "AGRI.H",
+      "name": "Assurance and Audit"
+    },
+    {
+      "code": "AGRI.I",
+      "name": "Financing, Financial Management"
+    },
+    {
+      "code": "AGRI.R",
+      "name": "Resources",
+      "units": [
+        {
+          "code": "AGRI.R.3",
+          "name": "Digital Solutions",
+          "head": "Horea-Silviu Todoran"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Deputy Director-General Mihail Dumitru oversees Directorates B, C and D (Sustainability and CAP Strategic Plans).",
+    "Deputy Director-General Pierre Bascou oversees Directorates E and G (Markets and International Affairs).",
+    "Deputy Director-General Diego Canga Fano oversees Directorates F, H and I (Outreach, Assurance and Resources).",
+    "Elisabeth Werner succeeded Wolfgang Burtscher as Director-General on 1 June 2025.",
+    "Commissioner Christophe Hansen oversees agriculture and food policy."
+  ]
+}

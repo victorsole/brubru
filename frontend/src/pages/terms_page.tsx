@@ -117,7 +117,7 @@ export const TermsPage = () => {
           <h3>4.3 Refunds</h3>
           <p>
             We offer a <strong>14-day money-back guarantee</strong> for first-time paid subscriptions.
-            To request a refund, contact us at <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a>
+            To request a refund, contact us at <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a>
             within 14 days of your initial payment.
           </p>
           <p>
@@ -317,7 +317,7 @@ export const TermsPage = () => {
           <h3>11.1 Informal Resolution</h3>
           <p>
             Before filing a claim, you agree to contact us at
-            <a href="mailto:helloberesol@gmail.com" className="policy-page__link"> helloberesol@gmail.com</a>
+            <a href="mailto:hello@beresol.eu" className="policy-page__link"> hello@beresol.eu</a>
             {' '}to resolve the dispute informally. We will attempt to resolve within 60 days.
           </p>
 
@@ -428,7 +428,7 @@ export const TermsPage = () => {
             For questions about these Terms:
           </p>
           <p>
-            <strong>Email:</strong> <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a><br />
+            <strong>Email:</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a><br />
             <strong>Subject:</strong> "Terms of Service Inquiry"
           </p>
         </section>

@@ -2,9 +2,15 @@
 Multi-Provider AI Service with Fallback Chain
 
 Provides resilient AI chat with automatic failover:
-  Anthropic Claude (primary) → OpenAI GPT-4 (fallback) → Google Gemini (second fallback)
+  Mistral (primary) → Claude (fallback 1) → GPT-4 (fallback 2) → Gemini (fallback 3)
 
 Each provider implements the same interface, allowing seamless switching.
+
+Provider priority is based on cost-effectiveness:
+  - Mistral Small 3: $0.20/1M input, $0.60/1M output (15x cheaper than Claude)
+  - Claude Sonnet 4: $3.00/1M input, $15.00/1M output
+  - GPT-4 Turbo: $10.00/1M input, $30.00/1M output
+  - Gemini 1.5 Pro: $1.25/1M input, $5.00/1M output
 """
 
 import logging
@@ -19,6 +25,13 @@ from openai import AsyncOpenAI
 import openai
 
 from core.config import settings
+
+# Optional Mistral import
+try:
+    from mistralai import Mistral
+    MISTRAL_AVAILABLE = True
+except ImportError:
+    MISTRAL_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -59,8 +72,81 @@ class AIProvider(ABC):
         pass
 
 
+class MistralProvider(AIProvider):
+    """Mistral AI provider (primary - most cost-effective)"""
+
+    MODEL = "mistral-small-latest"  # $0.20/1M input, $0.60/1M output
+
+    def __init__(self, api_key: Optional[str] = None):
+        self.api_key = api_key or getattr(settings, 'MISTRAL_API_KEY', None)
+        self.client = None
+
+        if self.api_key and MISTRAL_AVAILABLE:
+            try:
+                self.client = Mistral(api_key=self.api_key)
+            except Exception as e:
+                logger.warning(f"Failed to initialise Mistral client: {e}")
+
+    @property
+    def name(self) -> str:
+        return "Mistral"
+
+    @property
+    def is_available(self) -> bool:
+        return bool(self.api_key and self.client and MISTRAL_AVAILABLE)
+
+    async def generate(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.7
+    ) -> ProviderResponse:
+        if not self.is_available:
+            raise RuntimeError("Mistral provider not configured")
+
+        # Convert messages to Mistral format
+        mistral_messages = [{"role": "system", "content": system_prompt}]
+
+        for msg in messages:
+            # Handle multi-modal content (documents)
+            if isinstance(msg.get("content"), list):
+                # Simplify - extract text content only
+                text_parts = []
+                for block in msg["content"]:
+                    if block.get("type") == "text":
+                        text_parts.append(block.get("text", ""))
+                mistral_messages.append({
+                    "role": msg["role"],
+                    "content": "\n".join(text_parts)
+                })
+            else:
+                mistral_messages.append({
+                    "role": msg["role"],
+                    "content": msg["content"]
+                })
+
+        # Use async chat completion
+        response = await self.client.chat.complete_async(
+            model=self.MODEL,
+            messages=mistral_messages,
+            max_tokens=max_tokens,
+            temperature=temperature
+        )
+
+        content = response.choices[0].message.content if response.choices else ""
+        tokens = response.usage.total_tokens if response.usage else 0
+
+        return ProviderResponse(
+            message=content,
+            tokens_used=tokens,
+            model=self.MODEL,
+            provider=self.name
+        )
+
+
 class AnthropicProvider(AIProvider):
-    """Anthropic Claude provider (primary)"""
+    """Anthropic Claude provider (fallback 1)"""
 
     MODEL = "claude-sonnet-4-20250514"
 
@@ -106,7 +192,7 @@ class AnthropicProvider(AIProvider):
 
 
 class OpenAIProvider(AIProvider):
-    """OpenAI GPT-4 provider (first fallback)"""
+    """OpenAI GPT-4 provider (fallback 2)"""
 
     MODEL = "gpt-4-turbo-preview"
 
@@ -176,7 +262,7 @@ class OpenAIProvider(AIProvider):
 
 
 class GeminiProvider(AIProvider):
-    """Google Gemini provider (second fallback)"""
+    """Google Gemini provider (fallback 3)"""
 
     MODEL = "gemini-1.5-pro"
 
@@ -275,7 +361,13 @@ class MultiProviderService:
     """
     Orchestrates AI providers with automatic fallback.
 
-    Order: Anthropic → OpenAI → Gemini
+    Order: Mistral → Claude → OpenAI → Gemini
+
+    Priority based on cost-effectiveness:
+      - Mistral Small 3: $0.20/$0.60 per 1M tokens (primary)
+      - Claude Sonnet 4: $3.00/$15.00 per 1M tokens (fallback 1)
+      - GPT-4 Turbo: $10.00/$30.00 per 1M tokens (fallback 2)
+      - Gemini 1.5 Pro: $1.25/$5.00 per 1M tokens (fallback 3)
 
     Usage:
         service = MultiProviderService()
@@ -284,27 +376,38 @@ class MultiProviderService:
 
     def __init__(
         self,
+        mistral_key: Optional[str] = None,
         anthropic_key: Optional[str] = None,
         openai_key: Optional[str] = None,
         gemini_key: Optional[str] = None
     ):
         self.providers: List[AIProvider] = []
 
-        # Initialise providers in priority order
+        # Initialise providers in priority order (cost-effectiveness)
+
+        # 1. Mistral (primary - most cost-effective)
+        mistral = MistralProvider(mistral_key)
+        if mistral.is_available:
+            self.providers.append(mistral)
+            logger.info("Mistral provider available (primary - $0.20/1M input)")
+
+        # 2. Claude (fallback 1)
         anthropic = AnthropicProvider(anthropic_key)
         if anthropic.is_available:
             self.providers.append(anthropic)
-            logger.info("Anthropic provider available (primary)")
+            logger.info("Anthropic provider available (fallback 1)")
 
+        # 3. OpenAI (fallback 2)
         openai_provider = OpenAIProvider(openai_key)
         if openai_provider.is_available:
             self.providers.append(openai_provider)
-            logger.info("OpenAI provider available (fallback 1)")
+            logger.info("OpenAI provider available (fallback 2)")
 
+        # 4. Gemini (fallback 3)
         gemini = GeminiProvider(gemini_key)
         if gemini.is_available:
             self.providers.append(gemini)
-            logger.info("Gemini provider available (fallback 2)")
+            logger.info("Gemini provider available (fallback 3)")
 
         if not self.providers:
             raise RuntimeError("No AI providers configured. Set at least one API key.")

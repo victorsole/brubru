@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="capGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+    <linearGradient id="cohesionGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="otherGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="420" fill="#fafafa"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerBlue)"/>
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="white">Ukraine EU Budget Impact: €136 Billion Over 7 Years</text>
+  <text x="450" y="52" text-anchor="middle" font-size="11" fill="#bfdbfe">Projected net transfers under baseline scenario | Source: Bruegel (2024)</text>
+
+  <!-- Main visualization area -->
+
+  <!-- Large donut chart on left -->
+  <g transform="translate(220, 240)">
+    <!-- CAP - 62% (223 degrees) -->
+    <path d="M0,-120 A120,120 0 1,1 -103.9,-60 L-69.3,-40 A80,80 0 1,0 0,-80 Z" fill="url(#capGrad)" filter="url(#shadow)"/>
+
+    <!-- Cohesion - 24% (86 degrees) -->
+    <path d="M-103.9,-60 A120,120 0 0,1 -103.9,60 L-69.3,40 A80,80 0 0,0 -69.3,-40 Z" fill="url(#cohesionGrad)" filter="url(#shadow)"/>
+
+    <!-- Other - 14% (50 degrees) -->
+    <path d="M-103.9,60 A120,120 0 0,1 0,-120 L0,-80 A80,80 0 0,0 -69.3,40 Z" fill="url(#otherGrad)" filter="url(#shadow)"/>
+
+    <!-- Center circle -->
+    <circle cx="0" cy="0" r="60" fill="white"/>
+    <text x="0" y="-8" text-anchor="middle" font-size="24" font-weight="700" fill="#1e293b">€136B</text>
+    <text x="0" y="12" text-anchor="middle" font-size="10" fill="#64748b">Net Transfers</text>
+    <text x="0" y="26" text-anchor="middle" font-size="9" fill="#94a3b8">(7-year MFF)</text>
+  </g>
+
+  <!-- Legend and breakdown on right -->
+  <g transform="translate(420, 100)">
+    <!-- CAP -->
+    <rect x="0" y="0" width="420" height="80" rx="8" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="8" height="80" rx="4" fill="#22c55e"/>
+    <text x="25" y="28" font-size="14" font-weight="600" fill="#1e293b">Common Agricultural Policy</text>
+    <text x="25" y="48" font-size="11" fill="#64748b">Direct payments, rural development, market support</text>
+    <text x="380" y="35" text-anchor="end" font-size="24" font-weight="700" fill="#22c55e">€85B</text>
+    <text x="380" y="55" text-anchor="end" font-size="12" fill="#16a34a">62%</text>
+    <text x="25" y="68" font-size="9" fill="#94a3b8">Ukraine would become largest CAP recipient, surpassing France</text>
+
+    <!-- Cohesion -->
+    <rect x="0" y="95" width="420" height="80" rx="8" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="95" width="8" height="80" rx="4" fill="#3b82f6"/>
+    <text x="25" y="123" font-size="14" font-weight="600" fill="#1e293b">Cohesion Policy</text>
+    <text x="25" y="143" font-size="11" fill="#64748b">ERDF, ESF+, Cohesion Fund (capped at 2.3% GDP)</text>
+    <text x="380" y="130" text-anchor="end" font-size="24" font-weight="700" fill="#3b82f6">€32B</text>
+    <text x="380" y="150" text-anchor="end" font-size="12" fill="#1d4ed8">24%</text>
+    <text x="25" y="163" font-size="9" fill="#94a3b8">Without cap, would theoretically qualify for €190B</text>
+
+    <!-- Other + Contributions -->
+    <rect x="0" y="190" width="200" height="80" rx="8" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="190" width="8" height="80" rx="4" fill="#8b5cf6"/>
+    <text x="25" y="218" font-size="13" font-weight="600" fill="#1e293b">Other Programmes</text>
+    <text x="25" y="238" font-size="10" fill="#64748b">Horizon, Erasmus+, etc.</text>
+    <text x="175" y="225" text-anchor="end" font-size="20" font-weight="700" fill="#8b5cf6">€7B</text>
+    <text x="175" y="245" text-anchor="end" font-size="11" fill="#7c3aed">5%</text>
+
+    <rect x="215" y="190" width="205" height="80" rx="8" fill="#fef2f2" filter="url(#shadow)"/>
+    <rect x="215" y="190" width="8" height="80" rx="4" fill="#ef4444"/>
+    <text x="240" y="218" font-size="13" font-weight="600" fill="#1e293b">UA Contributions</text>
+    <text x="240" y="238" font-size="10" fill="#64748b">To EU budget</text>
+    <text x="395" y="225" text-anchor="end" font-size="20" font-weight="700" fill="#ef4444">-€14B</text>
+    <text x="395" y="245" text-anchor="end" font-size="11" fill="#dc2626">deducted</text>
+  </g>
+
+  <!-- Bottom comparison -->
+  <g transform="translate(50, 370)">
+    <rect width="800" height="40" rx="6" fill="white" filter="url(#shadow)"/>
+    <text x="20" y="26" font-size="11" font-weight="600" fill="#1e293b">Comparison:</text>
+    <text x="120" y="26" font-size="10" fill="#64748b">Poland (current): €7.1B/year net</text>
+    <line x1="290" y1="10" x2="290" y2="30" stroke="#e2e8f0"/>
+    <text x="310" y="26" font-size="10" fill="#64748b">Ukraine (projected): €18-19B/year net</text>
+    <line x1="520" y1="10" x2="520" y2="30" stroke="#e2e8f0"/>
+    <text x="540" y="26" font-size="10" fill="#64748b">Share of EU GDP: 0.13%</text>
+    <rect x="700" y="8" width="85" height="24" rx="4" fill="#dcfce7"/>
+    <text x="742" y="24" text-anchor="middle" font-size="9" font-weight="600" fill="#16a34a">MANAGEABLE</text>
+  </g>
+</svg>

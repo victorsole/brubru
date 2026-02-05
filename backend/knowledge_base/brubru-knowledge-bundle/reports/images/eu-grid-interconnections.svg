@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="mapBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0f9ff"/>
+      <stop offset="100%" style="stop-color:#e0f2fe"/>
+    </linearGradient>
+    <linearGradient id="seaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#bfdbfe"/>
+      <stop offset="100%" style="stop-color:#93c5fd"/>
+    </linearGradient>
+    <filter id="countryShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.15"/>
+    </filter>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto">
+      <polygon points="0 0, 6 2, 0 4" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Background / Sea -->
+  <rect width="900" height="550" fill="url(#seaGrad)"/>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="900" height="60" fill="white" fill-opacity="0.9"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1a3d26">EU Electricity Grid Interconnections</text>
+  <text x="450" y="48" text-anchor="middle" font-size="11" fill="#64748b">Focus: Iberian Peninsula interconnection deficit with Continental Europe</text>
+
+  <!-- Simplified country shapes -->
+  <!-- UK -->
+  <path d="M280 140 L300 120 L310 140 L320 130 L330 150 L320 180 L310 200 L290 210 L280 190 L270 170 Z"
+        fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="300" y="170" text-anchor="middle" font-size="10" fill="#475569">UK</text>
+
+  <!-- France -->
+  <path d="M340 180 L400 160 L440 180 L450 220 L440 280 L400 300 L350 290 L330 250 L340 210 Z"
+        fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="390" y="230" text-anchor="middle" font-size="12" font-weight="500" fill="#475569">FRANCE</text>
+
+  <!-- Spain - highlighted as affected -->
+  <path d="M220 300 L320 280 L350 290 L360 340 L340 400 L280 420 L220 400 L200 360 L210 320 Z"
+        fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#countryShadow)"/>
+  <text x="280" y="355" text-anchor="middle" font-size="14" font-weight="600" fill="#92400e">SPAIN</text>
+  <text x="280" y="372" text-anchor="middle" font-size="9" fill="#b45309">25 GW lost</text>
+
+  <!-- Portugal - highlighted as affected -->
+  <path d="M180 310 L210 300 L220 320 L215 380 L200 400 L180 390 L175 350 Z"
+        fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#countryShadow)"/>
+  <text x="195" y="355" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">PT</text>
+  <text x="195" y="368" text-anchor="middle" font-size="8" fill="#b45309">6 GW</text>
+
+  <!-- Germany -->
+  <path d="M440 140 L500 130 L520 160 L510 220 L470 230 L450 220 L440 180 Z"
+        fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="480" y="180" text-anchor="middle" font-size="11" fill="#475569">GERMANY</text>
+
+  <!-- Belgium/Netherlands -->
+  <path d="M400 140 L430 135 L440 160 L420 170 L400 160 Z"
+        fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="420" y="155" text-anchor="middle" font-size="8" fill="#475569">BE/NL</text>
+
+  <!-- Italy -->
+  <path d="M480 250 L510 240 L530 270 L520 320 L500 360 L480 350 L470 300 L475 260 Z"
+        fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="500" y="290" text-anchor="middle" font-size="10" fill="#475569">ITALY</text>
+
+  <!-- Switzerland -->
+  <path d="M440 230 L470 225 L475 250 L450 255 L440 245 Z"
+        fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="458" y="242" text-anchor="middle" font-size="7" fill="#475569">CH</text>
+
+  <!-- Poland -->
+  <path d="M520 130 L580 120 L600 150 L590 190 L550 200 L520 180 Z"
+        fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="560" y="160" text-anchor="middle" font-size="10" fill="#475569">POLAND</text>
+
+  <!-- Morocco -->
+  <path d="M200 440 L280 430 L300 460 L280 490 L220 500 L190 480 Z"
+        fill="#d1fae5" stroke="#10b981" stroke-width="1" filter="url(#countryShadow)"/>
+  <text x="245" y="470" text-anchor="middle" font-size="10" fill="#047857">MOROCCO</text>
+
+  <!-- INTERCONNECTION LINES -->
+
+  <!-- France-Spain current (weak) - THE PROBLEM -->
+  <g>
+    <line x1="350" y1="295" x2="330" y2="305" stroke="#ef4444" stroke-width="4" stroke-dasharray="8,4"/>
+    <circle cx="340" cy="300" r="20" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,2"/>
+    <text x="340" y="265" text-anchor="middle" font-size="9" font-weight="600" fill="#dc2626">BOTTLENECK</text>
+    <text x="340" y="277" text-anchor="middle" font-size="8" fill="#dc2626">2.8 GW only</text>
+  </g>
+
+  <!-- Bay of Biscay (planned) -->
+  <g>
+    <path d="M290 290 Q250 220 370 200" fill="none" stroke="#22c55e" stroke-width="3" stroke-dasharray="6,3"/>
+    <circle cx="310" cy="240" r="4" fill="#22c55e"/>
+    <text x="260" y="235" text-anchor="middle" font-size="8" fill="#16a34a">Bay of Biscay</text>
+    <text x="260" y="245" text-anchor="middle" font-size="7" fill="#16a34a">(2028) +5 GW</text>
+  </g>
+
+  <!-- France-Germany -->
+  <line x1="420" y1="190" x2="460" y2="180" stroke="#3b82f6" stroke-width="4"/>
+
+  <!-- France-Belgium -->
+  <line x1="400" y1="170" x2="410" y2="155" stroke="#3b82f6" stroke-width="3"/>
+
+  <!-- Germany-Poland -->
+  <line x1="510" y1="165" x2="540" y2="160" stroke="#3b82f6" stroke-width="3"/>
+
+  <!-- France-Italy -->
+  <line x1="450" y1="260" x2="475" y2="265" stroke="#3b82f6" stroke-width="3"/>
+
+  <!-- France-Switzerland -->
+  <line x1="440" y1="240" x2="450" y2="238" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Morocco-Spain submarine cable -->
+  <g>
+    <path d="M240 420 Q230 430 235 445" fill="none" stroke="#10b981" stroke-width="3"/>
+    <circle cx="237" cy="432" r="3" fill="#10b981"/>
+    <text x="200" y="428" text-anchor="middle" font-size="7" fill="#047857">900 MW</text>
+    <text x="200" y="438" text-anchor="middle" font-size="6" fill="#047857">emergency</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(620, 90)">
+    <rect x="0" y="0" width="250" height="200" rx="8" fill="white" fill-opacity="0.95" filter="url(#countryShadow)"/>
+    <text x="125" y="25" text-anchor="middle" font-size="12" font-weight="600" fill="#1a3d26">Interconnection Capacity</text>
+
+    <!-- Legend items -->
+    <line x1="20" y1="50" x2="60" y2="50" stroke="#3b82f6" stroke-width="4"/>
+    <text x="70" y="54" font-size="10" fill="#475569">Strong connection (&gt;5 GW)</text>
+
+    <line x1="20" y1="75" x2="60" y2="75" stroke="#ef4444" stroke-width="4" stroke-dasharray="8,4"/>
+    <text x="70" y="79" font-size="10" fill="#475569">Weak/bottleneck (&lt;3 GW)</text>
+
+    <line x1="20" y1="100" x2="60" y2="100" stroke="#22c55e" stroke-width="3" stroke-dasharray="6,3"/>
+    <text x="70" y="104" font-size="10" fill="#475569">Planned infrastructure</text>
+
+    <rect x="20" y="120" width="40" height="20" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+    <text x="70" y="134" font-size="10" fill="#475569">Affected area (blackout)</text>
+
+    <!-- Stats -->
+    <line x1="10" y1="155" x2="240" y2="155" stroke="#e2e8f0"/>
+    <text x="125" y="175" text-anchor="middle" font-size="9" fill="#64748b">Iberian interconnection: 2.8-3.4%</text>
+    <text x="125" y="190" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="600">EU 2030 target: 15%</text>
+  </g>
+
+  <!-- Key infrastructure note -->
+  <g transform="translate(620, 310)">
+    <rect x="0" y="0" width="250" height="120" rx="8" fill="white" fill-opacity="0.95" filter="url(#countryShadow)"/>
+    <text x="125" y="22" text-anchor="middle" font-size="11" font-weight="600" fill="#1a3d26">Key Projects Underway</text>
+
+    <circle cx="25" cy="45" r="6" fill="#22c55e"/>
+    <text x="40" y="49" font-size="9" fill="#475569" font-weight="500">Bay of Biscay (2028)</text>
+    <text x="40" y="61" font-size="8" fill="#64748b">Bilbao-Bordeaux: +5 GW | €2.2B</text>
+
+    <circle cx="25" cy="80" r="6" fill="#94a3b8"/>
+    <text x="40" y="84" font-size="9" fill="#475569" font-weight="500">Trans-Pyrenean Links</text>
+    <text x="40" y="96" font-size="8" fill="#64748b">Navarra-Landes (2036)</text>
+    <text x="40" y="108" font-size="8" fill="#64748b">Aragón-Atlantic Pyrenees (2041)</text>
+  </g>
+
+  <!-- Pyrenees label -->
+  <text x="350" y="310" text-anchor="middle" font-size="8" fill="#78716c" font-style="italic">Pyrenees Mountains</text>
+</svg>

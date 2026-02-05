@@ -18,7 +18,7 @@ export const ContactPage = () => {
         <section className="policy-page__section">
           <h2>General Inquiries</h2>
           <div className="policy-page__contact-box">
-            <p><strong>Email:</strong> <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a></p>
+            <p><strong>Email:</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a></p>
             <p><strong>Website:</strong> <a href="https://brubru.beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">brubru.beresol.eu</a></p>
             <p><strong>Company:</strong> <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">Beresol BV</a></p>
           </div>
@@ -40,7 +40,7 @@ export const ContactPage = () => {
             <h3>Yellow Tier (Professional) Users</h3>
             <p>
               Email support with 48-hour response time during business days.
-              Send your inquiries to <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a>
+              Send your inquiries to <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a>
               with "Yellow Support" in the subject line.
             </p>
           </div>
@@ -50,7 +50,7 @@ export const ContactPage = () => {
             <p>
               Priority 24/7 support with dedicated account manager.
               Contact your assigned account manager directly or email
-              <a href="mailto:helloberesol@gmail.com" className="policy-page__link"> helloberesol@gmail.com</a>
+              <a href="mailto:hello@beresol.eu" className="policy-page__link"> hello@beresol.eu</a>
               with "Blue Priority" in the subject line for immediate escalation.
             </p>
           </div>
@@ -63,7 +63,7 @@ export const ContactPage = () => {
             multi-user accounts, white-label solutions, and dedicated training sessions.
           </p>
           <p>
-            <strong>Contact our sales team:</strong> <a href="mailto:helloberesol@gmail.com?subject=Enterprise%20Inquiry" className="policy-page__link">helloberesol@gmail.com</a>
+            <strong>Contact our sales team:</strong> <a href="mailto:hello@beresol.eu?subject=Enterprise%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
           </p>
           <p className="policy-page__note">
             Please include information about your organization, team size, and specific requirements
@@ -79,7 +79,7 @@ export const ContactPage = () => {
             please reach out to us.
           </p>
           <p>
-            <strong>Partnership inquiries:</strong> <a href="mailto:helloberesol@gmail.com?subject=Partnership%20Opportunity" className="policy-page__link">helloberesol@gmail.com</a>
+            <strong>Partnership inquiries:</strong> <a href="mailto:hello@beresol.eu?subject=Partnership%20Opportunity" className="policy-page__link">hello@beresol.eu</a>
           </p>
         </section>
 
@@ -90,7 +90,7 @@ export const ContactPage = () => {
             please contact our communications team.
           </p>
           <p>
-            <strong>Press contact:</strong> <a href="mailto:helloberesol@gmail.com?subject=Press%20Inquiry" className="policy-page__link">helloberesol@gmail.com</a>
+            <strong>Press contact:</strong> <a href="mailto:hello@beresol.eu?subject=Press%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
           </p>
         </section>
 
@@ -101,7 +101,7 @@ export const ContactPage = () => {
             We take data protection seriously and are committed to transparency.
           </p>
           <p>
-            <strong>Privacy inquiries:</strong> <a href="mailto:helloberesol@gmail.com?subject=Privacy%20Inquiry" className="policy-page__link">helloberesol@gmail.com</a>
+            <strong>Privacy inquiries:</strong> <a href="mailto:hello@beresol.eu?subject=Privacy%20Inquiry" className="policy-page__link">hello@beresol.eu</a>
           </p>
           <p>
             For detailed information about our data practices, please review our <a href="/privacy" className="policy-page__link">Privacy Policy</a>.
@@ -115,7 +115,7 @@ export const ContactPage = () => {
             continuously improve Brubru.
           </p>
           <p>
-            <strong>Feedback email:</strong> <a href="mailto:helloberesol@gmail.com?subject=Bug%20Report" className="policy-page__link">helloberesol@gmail.com</a>
+            <strong>Feedback email:</strong> <a href="mailto:hello@beresol.eu?subject=Bug%20Report" className="policy-page__link">hello@beresol.eu</a>
           </p>
           <p className="policy-page__note">
             Please include as much detail as possible: steps to reproduce (for bugs), expected vs. actual behavior,

@@ -1,7 +1,7 @@
 """
 Upgrade Beresol account to Blue tier
 
-This script upgrades helloberesol@gmail.com to Blue tier with all features.
+This script upgrades hello@beresol.eu to Blue tier with all features.
 Run from project root: python backend/scripts/upgrade_beresol_to_blue.py
 """
 
@@ -17,7 +17,7 @@ load_dotenv(env_path)
 
 
 def upgrade_beresol_account():
-    """Upgrade helloberesol@gmail.com to Blue tier"""
+    """Upgrade hello@beresol.eu to Blue tier"""
 
     # Create database connection
     DATABASE_URL = os.getenv("DATABASE_URL")
@@ -32,12 +32,12 @@ def upgrade_beresol_account():
             # Check if user exists
             result = conn.execute(
                 text("SELECT id, email, subscription_tier FROM users WHERE email = :email"),
-                {"email": "helloberesol@gmail.com"}
+                {"email": "hello@beresol.eu"}
             )
             user = result.fetchone()
 
             if not user:
-                print("❌ User helloberesol@gmail.com not found in database")
+                print("❌ User hello@beresol.eu not found in database")
                 print("Please log in with Google OAuth first to create the account")
                 return
 
@@ -61,7 +61,7 @@ def upgrade_beresol_account():
                     "role": "admin",
                     "expires_at": expiry_date,
                     "updated_at": datetime.utcnow(),
-                    "email": "helloberesol@gmail.com"
+                    "email": "hello@beresol.eu"
                 }
             )
             conn.commit()
@@ -69,7 +69,7 @@ def upgrade_beresol_account():
             # Verify update
             result = conn.execute(
                 text("SELECT email, subscription_tier, role, subscription_expires_at FROM users WHERE email = :email"),
-                {"email": "helloberesol@gmail.com"}
+                {"email": "hello@beresol.eu"}
             )
             updated_user = result.fetchone()
 

@@ -35,11 +35,21 @@ export interface CellAmendment {
   insertAfter?: number;
 }
 
+export interface PendingAIAmendment {
+  elementIndex?: number;
+  elementPosition?: string;
+  amendmentType: 'modification' | 'suppression' | 'addition';
+  proposedText: string;
+  justification?: string;
+}
+
 interface TwoColumnLayoutProps {
   loadedDocument: LoadedDocument | null;
   onDocumentLoaded: (document: LoadedDocument) => void;
   onElementSelected?: (element: LegislativeElement, index: number) => void;
   onAmendmentsChange?: (amendments: Map<number, CellAmendment>) => void;
+  pendingAmendments?: PendingAIAmendment[];
+  onPendingAmendmentsProcessed?: () => void;
 }
 
 export const TwoColumnLayout = ({
@@ -47,6 +57,8 @@ export const TwoColumnLayout = ({
   onDocumentLoaded,
   onElementSelected,
   onAmendmentsChange,
+  pendingAmendments,
+  onPendingAmendmentsProcessed,
 }: TwoColumnLayoutProps) => {
   const [showDocumentLoader, setShowDocumentLoader] = useState(!loadedDocument);
   const [elements, setElements] = useState<LegislativeElement[]>([]);
@@ -69,6 +81,56 @@ export const TwoColumnLayout = ({
       onAmendmentsChange(amendments);
     }
   }, [amendments, onAmendmentsChange]);
+
+  // Process pending AI amendments from parent
+  useEffect(() => {
+    if (!pendingAmendments || pendingAmendments.length === 0 || elements.length === 0) return;
+
+    const newAmendments = new Map(amendments);
+    let applied = false;
+
+    for (const pending of pendingAmendments) {
+      let targetIndex: number | null = null;
+
+      // Find the target element by index or position string
+      if (pending.elementIndex !== undefined && pending.elementIndex !== null) {
+        targetIndex = pending.elementIndex;
+      } else if (pending.elementPosition) {
+        // Match by position string (e.g., "Article 5", "Recital 3")
+        const pos = pending.elementPosition.toLowerCase().trim();
+        for (let i = 0; i < elements.length; i++) {
+          const elemPos = getElementPosition(elements[i]).toLowerCase().trim();
+          if (elemPos === pos || elemPos.startsWith(pos)) {
+            targetIndex = i;
+            break;
+          }
+        }
+      }
+
+      if (targetIndex !== null && targetIndex >= 0 && targetIndex < elements.length) {
+        const element = elements[targetIndex];
+        const amendment: CellAmendment = {
+          elementIndex: targetIndex,
+          elementType: element.type,
+          elementNumber: element.number || element.letter || element.roman || '',
+          amendmentType: pending.amendmentType,
+          originalText: element.text,
+          proposedText: pending.proposedText,
+          position: getElementPosition(element),
+        };
+        newAmendments.set(targetIndex, amendment);
+        applied = true;
+      }
+    }
+
+    if (applied) {
+      setAmendments(newAmendments);
+    }
+
+    if (onPendingAmendmentsProcessed) {
+      onPendingAmendmentsProcessed();
+    }
+  }, [pendingAmendments]);
 
   const handleDocumentFetched = (document: FetchedDocument) => {
     const loadedDoc: LoadedDocument = {

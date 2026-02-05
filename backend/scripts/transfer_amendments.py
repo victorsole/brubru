@@ -100,8 +100,8 @@ if __name__ == "__main__":
     print("🔧 Amendment Transfer Script")
     print("=" * 50)
 
-    # Transfer all amendments to helloberesol@gmail.com
-    success = transfer_from_all_users_to_target("helloberesol@gmail.com")
+    # Transfer all amendments to hello@beresol.eu
+    success = transfer_from_all_users_to_target("hello@beresol.eu")
 
     if success:
         print("\n✅ Transfer complete! Refresh your Dashboard to see the amendments.")

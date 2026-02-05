@@ -6,7 +6,7 @@
 
 **Developed by:** [Beresol BV](https://beresol.eu)
 **Website:** [https://brubru.beresol.eu](https://brubru.beresol.eu)
-**Contact:** helloberesol@gmail.com
+**Contact:** hello@beresol.eu
 **GitHub:** [https://github.com/victorsole/brubru](https://github.com/victorsole/brubru)
 
 ---
@@ -60,9 +60,10 @@ AI-powered conversational assistant for EU policy analysis with deep institution
 - Citation tracking with source references
 
 **AI Models:**
-- Primary: Anthropic Claude (Sonnet 4, Opus 4)
-- Fallback: OpenAI GPT-4, GPT-3.5-turbo
-- Legal Specialist: Saul-7B (Hugging Face)
+- Primary: Mistral Small 3 (cost-effective, $0.20/1M input tokens)
+- Fallback 1: Anthropic Claude (Sonnet 4, Opus 4)
+- Fallback 2: OpenAI GPT-4 Turbo
+- Fallback 3: Google Gemini 1.5 Pro
 - Embeddings: BAAI/bge-m3 (multilingual)
 
 ### 2. **Amendator** (Legislative Amendment Editor)
@@ -123,14 +124,48 @@ Real-time monitoring of EU legislative procedures.
 **Data Sources:**
 - OEIL Legislative Observatory (21,600+ procedures)
 - Legislative Train Schedule (490 priority files)
+- EP Committee Work In Progress (26 committees)
 - European Parliament calendar
 - Council working groups
 
 **Tracking Features:**
 - Procedure status updates
-- Committee assignments
+- Committee assignments and work-in-progress files
 - Voting schedules
 - Timeline visualization
+- Track files from Legislative Train or by OEIL procedure reference
+
+**Committee Work Integration:**
+All 26 EP standing committees' work-in-progress data is scraped and integrated into the AI chatbot context. Ask about any committee (e.g., "What is INTA working on?") to get current legislative procedures.
+
+### 5.1 **Predictions** (My EU Bubble Feature)
+
+AI-powered legislative outcome predictions available in the My EU Bubble "Predictions" tab.
+
+**Prediction Types:**
+- **Timeline Prediction** - Estimated days/quarters until adoption
+- **Outcome Prediction** - Likely final outcome (adopted, blocked, withdrawn)
+- **EP Vote Prediction** - Plenary vote outcome with political group breakdown
+- **Council Risk Assessment** - QMV analysis and blocking minority detection
+- **Resolution Leading Indicators** - Historical resolution votes as predictive signals
+
+**EP Political Group Breakdown:**
+Shows predicted position (FOR/AGAINST/ABSTENTION) and confidence for all 9 EP groups:
+- EPP, S&D, PfE, ECR, Renew, Greens/EFA, The Left, NI, ESN
+
+**Council QMV Calculator:**
+- 55% of states threshold (15/27)
+- 65% population threshold
+- Blocking minority detection (4+ states, 35%+ population)
+- Swing state identification
+
+**Resolution Leading Indicators:**
+EP resolutions (INL, INI, RSP) that preceded legislation are displayed with vote statistics, showing historical support levels as predictive signals.
+
+**Access:**
+- White tier: Locked (upgrade CTA)
+- Yellow tier: 10 predictions/month
+- Blue tier: Unlimited predictions + Council analysis
 
 ### 6. **Document Generator** (AI-Powered Advocacy Documents)
 
@@ -158,7 +193,7 @@ Generate professional EU advocacy documents using AI, powered by Anthropic Claud
 
 ### 7. **Admin Panel** (Restricted Access)
 
-Backend management system accessible exclusively to Beresol team (helloberesol@gmail.com).
+Backend management system accessible exclusively to Beresol team (hello@beresol.eu).
 
 **Capabilities:**
 - User management and subscription administration
@@ -189,10 +224,11 @@ Backend management system accessible exclusively to Beresol team (helloberesol@g
 - **Task Scheduling:** APScheduler (RSS feed updates)
 
 ### AI & ML Services
-- **Primary AI:** Anthropic Claude (Sonnet 4, Opus 4)
-- **Secondary AI:** OpenAI GPT-4, GPT-3.5-turbo
+- **Primary AI:** Mistral Small 3 (cost-effective at $0.20/1M tokens)
+- **Fallback 1:** Anthropic Claude (Sonnet 4, Opus 4)
+- **Fallback 2:** OpenAI GPT-4 Turbo
+- **Fallback 3:** Google Gemini 1.5 Pro
 - **Embeddings:** Hugging Face (BAAI/bge-m3 multilingual)
-- **Legal Models:** Saul-7B (legal document analysis)
 - **RAG Framework:** LangChain + ChromaDB
 - **Vector Database:** FAISS (CPU) / pgvector (PostgreSQL)
 
@@ -382,9 +418,11 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_KEY=your-supabase-anon-key
 SUPABASE_SERVICE_KEY=your-service-role-key
 
-# AI Services
-ANTHROPIC_API_KEY=your-anthropic-key
-OPENAI_API_KEY=your-openai-key
+# AI Services (in fallback order)
+MISTRAL_API_KEY=your-mistral-key        # Primary (get from console.mistral.ai)
+ANTHROPIC_API_KEY=your-anthropic-key    # Fallback 1
+OPENAI_API_KEY=your-openai-key          # Fallback 2
+GOOGLE_GEMINI_API_KEY=your-gemini-key   # Fallback 3 (optional)
 
 # OAuth (optional)
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -615,9 +653,11 @@ SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_KEY=your-anon-key
 SUPABASE_SERVICE_KEY=your-service-key
 
-# AI Services
-ANTHROPIC_API_KEY=your-anthropic-key
-OPENAI_API_KEY=your-openai-key
+# AI Services (in fallback order)
+MISTRAL_API_KEY=your-mistral-key        # Primary
+ANTHROPIC_API_KEY=your-anthropic-key    # Fallback 1
+OPENAI_API_KEY=your-openai-key          # Fallback 2
+GOOGLE_GEMINI_API_KEY=your-gemini-key   # Fallback 3 (optional)
 
 # OAuth
 GOOGLE_CLIENT_ID=your-google-client-id
@@ -690,6 +730,11 @@ No code changes required - SQLAlchemy handles database abstraction.
 - **Phase 6:** Compliance checker (EU Law Comply)
 - **Phase 7:** Subscription system (Stripe integration)
 - **Phase 8:** Multi-language support (i18next, 23 languages)
+- **Phase 14:** Predictions (Feb 2026)
+  - Timeline and outcome predictions
+  - EP political group vote breakdown
+  - Council QMV calculator and blocking minority analysis
+  - Resolution leading indicators
 
 ### 🔄 Current Phase
 - **Phase 13:** AI Context Injection (hybrid legal assistant)
@@ -699,12 +744,10 @@ No code changes required - SQLAlchemy handles database abstraction.
 
 ### 🚀 Planned Future Features
 - Real-time collaboration (WebSocket support)
-- Amendment success prediction (ML model training)
-- Voting pattern analysis (historical voting data)
-- Advanced analytics (usage patterns, success metrics)
-- Integration with EP systems (direct submission)
 - Fine-tuned models (LORA adapters for EU context)
 - Multi-language amendment validation
+- Integration with EP systems (direct submission)
+- Advanced analytics (usage patterns, success metrics)
 
 ---
 
@@ -728,7 +771,7 @@ This project is proprietary software owned by Beresol BV. All rights reserved.
 
 The Brubru trademark is registered with the European Union Intellectual Property Office (EUIPO).
 
-For licensing inquiries, contact helloberesol@gmail.com.
+For licensing inquiries, contact hello@beresol.eu.
 
 ---
 
@@ -745,7 +788,7 @@ For licensing inquiries, contact helloberesol@gmail.com.
 ## Contact
 
 - **Website:** [https://brubru.beresol.eu](https://brubru.beresol.eu)
-- **Email:** helloberesol@gmail.com
+- **Email:** hello@beresol.eu
 - **Company:** [Beresol BV](https://beresol.eu)
 - **GitHub:** [https://github.com/victorsole/brubru](https://github.com/victorsole/brubru)
 

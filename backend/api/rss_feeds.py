@@ -651,6 +651,137 @@ async def refresh_feed(
 
 
 # ============================================================================
+# On-Demand AI Enrichment
+# ============================================================================
+
+class EnrichmentResponse(BaseModel):
+    """Response for on-demand AI enrichment"""
+    entry_id: str
+    enriched: bool
+    policy_areas: List[str] = []
+    entities: Dict[str, Any] = {}
+    sentiment: Optional[str] = None
+    celex_numbers: List[str] = []
+    procedures: List[str] = []
+    message: str
+
+
+@router.post(
+    "/entries/{entry_id}/enrich",
+    response_model=EnrichmentResponse,
+    summary="Enrich entry with AI",
+    description="On-demand AI enrichment for RSS entry (policy areas, entities, sentiment)"
+)
+async def enrich_entry(
+    entry_id: str,
+    db: Session = Depends(get_db)
+) -> EnrichmentResponse:
+    """
+    On-demand AI enrichment for RSS entry.
+
+    This endpoint triggers AI analysis only when explicitly requested,
+    saving API costs by not enriching all entries automatically.
+
+    **Enrichment includes:**
+    - Policy area classification
+    - Entity extraction (people, organizations, places)
+    - CELEX number detection
+    - Legislative procedure detection
+    - Sentiment analysis
+    """
+    try:
+        # Get entry
+        entry = db.query(RSSEntry).filter(RSSEntry.id == entry_id).first()
+
+        if not entry:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Entry {entry_id} not found"
+            )
+
+        # Check if already enriched
+        if entry.is_processed and entry.policy_area:
+            return EnrichmentResponse(
+                entry_id=entry_id,
+                enriched=False,
+                policy_areas=[entry.policy_area] if entry.policy_area else [],
+                entities=entry.ai_extracted_entities or {},
+                sentiment=entry.ai_sentiment,
+                celex_numbers=[],
+                procedures=[],
+                message="Entry already enriched"
+            )
+
+        # Initialize content analyzer
+        try:
+            from services.ai.content_analyzer import ContentAnalyzer
+            analyzer = ContentAnalyzer()
+        except Exception as e:
+            logger.error(f"Failed to initialize ContentAnalyzer: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="AI enrichment service unavailable"
+            )
+
+        # Get content to analyze
+        content = entry.content or entry.summary or entry.title
+        title = entry.title or ""
+
+        # Run AI enrichment
+        try:
+            # Policy area classification
+            policy_areas = analyzer.classify_policy_areas(title, content)
+
+            # Entity extraction
+            entities = analyzer.extract_entities(title, content)
+
+            # CELEX detection (regex-based, no AI cost)
+            celex_numbers = analyzer.detect_celex_numbers(content)
+
+            # Procedure detection (regex-based, no AI cost)
+            procedures = analyzer.detect_procedures(content)
+
+            # Sentiment analysis
+            sentiment = analyzer.analyze_sentiment(title, content)
+
+            # Update entry in database
+            entry.policy_area = policy_areas[0] if policy_areas else None
+            entry.ai_extracted_entities = entities
+            entry.ai_sentiment = sentiment
+            entry.is_processed = True
+            db.commit()
+
+            logger.info(f"Enriched entry {entry_id}: {len(policy_areas)} policy areas, {len(entities)} entities")
+
+            return EnrichmentResponse(
+                entry_id=entry_id,
+                enriched=True,
+                policy_areas=policy_areas,
+                entities=entities,
+                sentiment=sentiment,
+                celex_numbers=celex_numbers,
+                procedures=procedures,
+                message="Entry enriched successfully"
+            )
+
+        except Exception as e:
+            logger.error(f"AI enrichment failed for entry {entry_id}: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"AI enrichment failed: {str(e)}"
+            )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to enrich entry {entry_id}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to enrich entry: {str(e)}"
+        )
+
+
+# ============================================================================
 # Health Check
 # ============================================================================
 

@@ -25,7 +25,7 @@ export const FeedbackInvitation = ({
   const mailtoBody = encodeURIComponent(
     `Hi Beresol team,\n\nI would like to share my feedback on ${featureName}:\n\n[Please write your feedback here]\n\nThank you!`
   );
-  const mailtoLink = `mailto:helloberesol@gmail.com?subject=${mailtoSubject}&body=${mailtoBody}`;
+  const mailtoLink = `mailto:hello@beresol.eu?subject=${mailtoSubject}&body=${mailtoBody}`;
 
   // Default description if not provided
   const description = featureDescription ||
@@ -71,7 +71,7 @@ export const FeedbackInvitation = ({
       )}
 
       <p className="feedback-invitation__footer">
-        Your email will be sent to our team at helloberesol@gmail.com
+        Your email will be sent to our team at hello@beresol.eu
       </p>
     </section>
   );

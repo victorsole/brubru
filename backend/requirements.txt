@@ -20,9 +20,10 @@ python-dotenv==1.0.0
 stripe==10.0.0  # Stripe payment processing
 
 # AI SDKs
-anthropic==0.18.1  # Claude (primary)
-openai==1.12.0  # GPT-4 fallback (compatible with httpx 0.24.1)
-google-generativeai==0.8.0  # Gemini fallback
+mistralai>=1.0.0  # Mistral (primary - cost-effective)
+anthropic>=0.77.0  # Claude (fallback 1)
+openai>=2.0.0  # GPT-4 (fallback 2)
+google-generativeai>=0.8.0  # Gemini (fallback 3)
 google-cloud-translate==3.15.0  # Google Translate API
 
 # Hugging Face & Transformers
@@ -62,6 +63,10 @@ python-docx==1.1.0  # Word document parsing
 chromadb==0.4.22  # Vector database for semantic search
 sentence-transformers==2.3.1  # Embeddings for ChromaDB
 pgvector==0.2.4  # PostgreSQL vector extension for embeddings
+
+# ML Models (Phase 2: Predictions)
+xgboost==2.0.3  # Gradient boosting for timeline/outcome prediction
+scikit-learn==1.4.0  # ML utilities, preprocessing, metrics
 
 # XML Processing (Akoma Ntoso)
 lxml==5.1.0

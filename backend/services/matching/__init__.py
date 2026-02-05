@@ -1,13 +1,21 @@
 """
 Matching Services
 
-Phase 3: Intelligent Matching
-Automatic linking between EU data sources and their explanatory materials.
+Services for matching and linking different data sources.
 """
 
-from .eprs_matcher import EPRSMatcher, get_eprs_matcher
+from .resolution_legislation_matcher import (
+    ResolutionLegislationMatcher,
+    ResolutionIndicator,
+    get_resolution_matcher,
+    find_resolutions_for_legislation,
+    find_related_resolutions_by_similarity,
+)
 
 __all__ = [
-    'EPRSMatcher',
-    'get_eprs_matcher',
+    "ResolutionLegislationMatcher",
+    "ResolutionIndicator",
+    "get_resolution_matcher",
+    "find_resolutions_for_legislation",
+    "find_related_resolutions_by_similarity",
 ]

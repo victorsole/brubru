@@ -184,3 +184,50 @@
     font-size: 0.75rem;
   }
 }
+
+/* ========================================
+   PREDICTIONS TAB SPECIAL STYLING
+   ======================================== */
+
+/* Predictions tab gradient border when active */
+.my-eu-bubble-page__tab--predictions.my-eu-bubble-page__tab--active {
+  background: white;
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, #0693e3, #06b6d4) 1;
+}
+
+/* Gradient text for predictions tab label when active */
+.my-eu-bubble-page__tab-label--gradient {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: linear-gradient(135deg, #0693e3 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient icon styling */
+.my-eu-bubble-page__tab-icon--gradient {
+  color: #0693e3;
+}
+
+.my-eu-bubble-page__tab-icon--gradient svg {
+  fill: url(#predictionGradient);
+}
+
+/* Sparkle animation */
+.my-eu-bubble-page__sparkle {
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}

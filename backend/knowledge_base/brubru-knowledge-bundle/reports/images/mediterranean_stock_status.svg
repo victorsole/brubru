@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 450" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0369a1"/>
+      <stop offset="100%" style="stop-color:#0284c7"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="450" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerGrad)"/>
+  <text x="450" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="white">Mediterranean Demersal Fish Stock Status (2024)</text>
+  <text x="450" y="52" text-anchor="middle" font-size="11" fill="#bae6fd">Based on STECF-24-10 Assessment | F/Fmsy and B/Bmsy indicators</text>
+
+  <!-- Legend -->
+  <g transform="translate(30, 90)">
+    <rect width="840" height="40" rx="6" fill="white" filter="url(#cardShadow)"/>
+    <circle cx="80" cy="20" r="8" fill="#dc2626"/>
+    <text x="95" y="24" font-size="10" fill="#475569">Critical (F/Fmsy &gt;2, B&lt;Blim)</text>
+    <circle cx="250" cy="20" r="8" fill="#f97316"/>
+    <text x="265" y="24" font-size="10" fill="#475569">Overfished (F/Fmsy &gt;1.5)</text>
+    <circle cx="420" cy="20" r="8" fill="#eab308"/>
+    <text x="435" y="24" font-size="10" fill="#475569">Improving (trending positive)</text>
+    <circle cx="590" cy="20" r="8" fill="#22c55e"/>
+    <text x="605" y="24" font-size="10" fill="#475569">Sustainable (F/Fmsy &lt;1)</text>
+    <circle cx="760" cy="20" r="8" fill="#3b82f6"/>
+    <text x="775" y="24" font-size="10" fill="#475569">Recovered</text>
+  </g>
+
+  <!-- Species Cards -->
+  <!-- Row 1 -->
+  <!-- European Hake - Critical -->
+  <g transform="translate(30, 150)">
+    <rect width="200" height="130" rx="8" fill="white" filter="url(#cardShadow)"/>
+    <rect width="200" height="6" rx="3" fill="#dc2626"/>
+    <circle cx="30" cy="40" r="18" fill="#fef2f2"/>
+    <text x="30" y="45" text-anchor="middle" font-size="20">🐟</text>
+    <text x="60" y="35" font-size="12" font-weight="600" fill="#1e293b">European Hake</text>
+    <text x="60" y="50" font-size="9" fill="#64748b" font-style="italic">Merluccius merluccius</text>
+    <line x1="15" y1="65" x2="185" y2="65" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">F/Fmsy:</text>
+    <text x="65" y="82" font-size="10" font-weight="600" fill="#dc2626">1.7 - 8.5x</text>
+    <text x="20" y="100" font-size="9" fill="#64748b">Biomass:</text>
+    <text x="65" y="100" font-size="10" font-weight="600" fill="#dc2626">&lt;10% target</text>
+    <rect x="15" y="108" width="170" height="16" rx="3" fill="#fef2f2"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" font-weight="600" fill="#dc2626">CRITICAL - Below Blim</text>
+  </g>
+
+  <!-- Norway Lobster GSA 6 - Overfished -->
+  <g transform="translate(245, 150)">
+    <rect width="200" height="130" rx="8" fill="white" filter="url(#cardShadow)"/>
+    <rect width="200" height="6" rx="3" fill="#f97316"/>
+    <circle cx="30" cy="40" r="18" fill="#fff7ed"/>
+    <text x="30" y="45" text-anchor="middle" font-size="20">🦞</text>
+    <text x="60" y="35" font-size="12" font-weight="600" fill="#1e293b">Norway Lobster</text>
+    <text x="60" y="50" font-size="9" fill="#64748b">GSA 6 (Northern Spain)</text>
+    <line x1="15" y1="65" x2="185" y2="65" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">F/Fmsy:</text>
+    <text x="65" y="82" font-size="10" font-weight="600" fill="#f97316">&gt;2.0x</text>
+    <text x="20" y="100" font-size="9" fill="#64748b">Biomass:</text>
+    <text x="65" y="100" font-size="10" font-weight="600" fill="#f97316">Below Blim</text>
+    <rect x="15" y="108" width="170" height="16" rx="3" fill="#fff7ed"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" font-weight="600" fill="#ea580c">OVERFISHED</text>
+  </g>
+
+  <!-- Blue/Red Shrimp - Overfished -->
+  <g transform="translate(460, 150)">
+    <rect width="200" height="130" rx="8" fill="white" filter="url(#cardShadow)"/>
+    <rect width="200" height="6" rx="3" fill="#f97316"/>
+    <circle cx="30" cy="40" r="18" fill="#fff7ed"/>
+    <text x="30" y="45" text-anchor="middle" font-size="20">🦐</text>
+    <text x="60" y="35" font-size="12" font-weight="600" fill="#1e293b">Blue & Red Shrimp</text>
+    <text x="60" y="50" font-size="9" fill="#64748b">GSAs 1-2 (Alboran Sea)</text>
+    <line x1="15" y1="65" x2="185" y2="65" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">F/Fmsy:</text>
+    <text x="65" y="82" font-size="10" font-weight="600" fill="#f97316">&gt;1.5x</text>
+    <text x="20" y="100" font-size="9" fill="#64748b">Biomass:</text>
+    <text x="65" y="100" font-size="10" font-weight="600" fill="#f97316">Below Blim</text>
+    <rect x="15" y="108" width="170" height="16" rx="3" fill="#fff7ed"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" font-weight="600" fill="#ea580c">OVERFISHED</text>
+  </g>
+
+  <!-- Giant Red Shrimp - Improving -->
+  <g transform="translate(675, 150)">
+    <rect width="200" height="130" rx="8" fill="white" filter="url(#cardShadow)"/>
+    <rect width="200" height="6" rx="3" fill="#eab308"/>
+    <circle cx="30" cy="40" r="18" fill="#fefce8"/>
+    <text x="30" y="45" text-anchor="middle" font-size="20">🦐</text>
+    <text x="60" y="35" font-size="12" font-weight="600" fill="#1e293b">Giant Red Shrimp</text>
+    <text x="60" y="50" font-size="9" fill="#64748b">Strait of Sicily</text>
+    <line x1="15" y1="65" x2="185" y2="65" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">F/Fmsy:</text>
+    <text x="65" y="82" font-size="10" font-weight="600" fill="#ca8a04">&lt;1.0x</text>
+    <text x="20" y="100" font-size="9" fill="#64748b">Biomass:</text>
+    <text x="65" y="100" font-size="10" font-weight="600" fill="#ca8a04">Near Bmsy</text>
+    <rect x="15" y="108" width="170" height="16" rx="3" fill="#fefce8"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" font-weight="600" fill="#a16207">IMPROVING ↑</text>
+  </g>
+
+  <!-- Row 2 -->
+  <!-- Deep-water Rose Shrimp - Sustainable -->
+  <g transform="translate(137, 300)">
+    <rect width="200" height="130" rx="8" fill="white" filter="url(#cardShadow)"/>
+    <rect width="200" height="6" rx="3" fill="#22c55e"/>
+    <circle cx="30" cy="40" r="18" fill="#f0fdf4"/>
+    <text x="30" y="45" text-anchor="middle" font-size="20">🦐</text>
+    <text x="60" y="35" font-size="12" font-weight="600" fill="#1e293b">Deep-water Shrimp</text>
+    <text x="60" y="50" font-size="9" fill="#64748b">Multiple GSAs</text>
+    <line x1="15" y1="65" x2="185" y2="65" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">F/Fmsy:</text>
+    <text x="65" y="82" font-size="10" font-weight="600" fill="#16a34a">&lt;1.0x ✓</text>
+    <text x="20" y="100" font-size="9" fill="#64748b">Biomass:</text>
+    <text x="65" y="100" font-size="10" font-weight="600" fill="#16a34a">Above Bmsy</text>
+    <rect x="15" y="108" width="170" height="16" rx="3" fill="#f0fdf4"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" font-weight="600" fill="#15803d">SUSTAINABLE</text>
+  </g>
+
+  <!-- Norway Lobster GSA 5,10 - Sustainable -->
+  <g transform="translate(352, 300)">
+    <rect width="200" height="130" rx="8" fill="white" filter="url(#cardShadow)"/>
+    <rect width="200" height="6" rx="3" fill="#22c55e"/>
+    <circle cx="30" cy="40" r="18" fill="#f0fdf4"/>
+    <text x="30" y="45" text-anchor="middle" font-size="20">🦞</text>
+    <text x="60" y="35" font-size="12" font-weight="600" fill="#1e293b">Norway Lobster</text>
+    <text x="60" y="50" font-size="9" fill="#64748b">GSAs 5, 10 (Balearic/Tyrrh.)</text>
+    <line x1="15" y1="65" x2="185" y2="65" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">F/Fmsy:</text>
+    <text x="65" y="82" font-size="10" font-weight="600" fill="#16a34a">&lt;1.0x ✓</text>
+    <text x="20" y="100" font-size="9" fill="#64748b">Biomass:</text>
+    <text x="65" y="100" font-size="10" font-weight="600" fill="#16a34a">Above Bmsy</text>
+    <rect x="15" y="108" width="170" height="16" rx="3" fill="#f0fdf4"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" font-weight="600" fill="#15803d">SUSTAINABLE</text>
+  </g>
+
+  <!-- Red Mullet - Recovered -->
+  <g transform="translate(567, 300)">
+    <rect width="200" height="130" rx="8" fill="white" filter="url(#cardShadow)"/>
+    <rect width="200" height="6" rx="3" fill="#3b82f6"/>
+    <circle cx="30" cy="40" r="18" fill="#eff6ff"/>
+    <text x="30" y="45" text-anchor="middle" font-size="20">🐟</text>
+    <text x="60" y="35" font-size="12" font-weight="600" fill="#1e293b">Red Mullet</text>
+    <text x="60" y="50" font-size="9" fill="#64748b">GSAs 9, 10, 16, 22, 24</text>
+    <line x1="15" y1="65" x2="185" y2="65" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">F/Fmsy:</text>
+    <text x="65" y="82" font-size="10" font-weight="600" fill="#2563eb">&lt;1.0x ✓</text>
+    <text x="20" y="100" font-size="9" fill="#64748b">Biomass:</text>
+    <text x="65" y="100" font-size="10" font-weight="600" fill="#2563eb">Above Bmsy</text>
+    <rect x="15" y="108" width="170" height="16" rx="3" fill="#eff6ff"/>
+    <text x="100" y="119" text-anchor="middle" font-size="8" font-weight="600" fill="#1d4ed8">RECOVERED ★</text>
+  </g>
+</svg>

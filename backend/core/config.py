@@ -32,10 +32,11 @@ class Settings(BaseSettings):
     DATABASE_URL: str  # PostgreSQL connection string
 
     # AI Services
-    ANTHROPIC_API_KEY: str
-    OPENAI_API_KEY: str
+    MISTRAL_API_KEY: str | None = None  # Mistral (primary - cost-effective)
+    ANTHROPIC_API_KEY: str  # Claude (fallback 1)
+    OPENAI_API_KEY: str  # GPT-4 (fallback 2)
     OPENAI_ORG_ID: str | None = None
-    GOOGLE_GEMINI_API_KEY: str | None = None  # Gemini fallback
+    GOOGLE_GEMINI_API_KEY: str | None = None  # Gemini (fallback 3)
 
     # Hugging Face
     HUGGINGFACE_API_KEY: str | None = None  # Optional, for Inference API

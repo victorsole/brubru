@@ -129,7 +129,7 @@ export const AboutPage = () => {
             or want to discuss custom enterprise solutions, please do not hesitate to reach out.
           </p>
           <ul>
-            <li><strong>Email:</strong> <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a></li>
+            <li><strong>Email:</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a></li>
             <li><strong>Website:</strong> <a href="https://brubru.beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">brubru.beresol.eu</a></li>
             <li><strong>Company Website:</strong> <a href="https://beresol.eu" target="_blank" rel="noopener noreferrer" className="policy-page__link">beresol.eu</a></li>
           </ul>

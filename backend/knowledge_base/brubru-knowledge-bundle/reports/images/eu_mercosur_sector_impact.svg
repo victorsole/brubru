@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700">
+  <defs>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#134D28;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B6B9C;stop-opacity:1" />
+    </linearGradient>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1000" height="700" fill="#f8fafc"/>
+  
+  <!-- Header -->
+  <rect x="0" y="0" width="1000" height="70" fill="url(#headerGrad)"/>
+  <text x="500" y="42" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">SECTOR IMPACT ASSESSMENT: EU AGRI-FOOD</text>
+  
+  <!-- Legend -->
+  <g transform="translate(50, 90)">
+    <rect x="0" y="0" width="20" height="20" rx="4" fill="#059669"/>
+    <text x="28" y="15" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">Offensive (net benefit)</text>
+    
+    <rect x="180" y="0" width="20" height="20" rx="4" fill="#D97706"/>
+    <text x="208" y="15" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">Neutral (balanced)</text>
+    
+    <rect x="340" y="0" width="20" height="20" rx="4" fill="#DC2626"/>
+    <text x="368" y="15" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">Defensive (challenges)</text>
+  </g>
+  
+  <!-- Sector Cards -->
+  
+  <!-- BEEF -->
+  <g transform="translate(50, 130)">
+    <rect x="0" y="0" width="440" height="160" rx="12" fill="white" filter="url(#dropShadow)"/>
+    <rect x="0" y="0" width="440" height="40" rx="12" fill="#DC2626"/>
+    <rect x="0" y="28" width="440" height="12" fill="#DC2626"/>
+    <text x="20" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">🥩 BEEF</text>
+    <text x="420" y="27" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="end">DEFENSIVE</text>
+    
+    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Quota:</text>
+    <text x="70" y="65" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">99,000 tonnes (1.5% of EU consumption)</text>
+    
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Tariff:</text>
+    <text x="70" y="85" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">7.5% (vs standard 40-45%)</text>
+    
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ GI protection for EU premium beef</text>
+    <text x="20" y="128" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Quota limits total volume</text>
+    <text x="20" y="148" font-family="Arial, sans-serif" font-size="11" fill="#DC2626">✗ Price pressure on domestic producers</text>
+  </g>
+  
+  <!-- POULTRY -->
+  <g transform="translate(510, 130)">
+    <rect x="0" y="0" width="440" height="160" rx="12" fill="white" filter="url(#dropShadow)"/>
+    <rect x="0" y="0" width="440" height="40" rx="12" fill="#D97706"/>
+    <rect x="0" y="28" width="440" height="12" fill="#D97706"/>
+    <text x="20" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">🍗 POULTRY</text>
+    <text x="420" y="27" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="end">NEUTRAL</text>
+    
+    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Quota:</text>
+    <text x="70" y="65" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">180,000 tonnes (1.3% of EU consumption)</text>
+    
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Tariff:</text>
+    <text x="70" y="85" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">Duty-free within quota</text>
+    
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Quota below current imports (293k tonnes)</text>
+    <text x="20" y="128" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ EU exports 2.1M tonnes globally</text>
+    <text x="20" y="148" font-family="Arial, sans-serif" font-size="11" fill="#DC2626">✗ Animal welfare standard gaps</text>
+  </g>
+  
+  <!-- SUGAR -->
+  <g transform="translate(50, 310)">
+    <rect x="0" y="0" width="440" height="160" rx="12" fill="white" filter="url(#dropShadow)"/>
+    <rect x="0" y="0" width="440" height="40" rx="12" fill="#D97706"/>
+    <rect x="0" y="28" width="440" height="12" fill="#D97706"/>
+    <text x="20" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">🍬 SUGAR</text>
+    <text x="420" y="27" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="end">NEUTRAL</text>
+    
+    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Quota:</text>
+    <text x="70" y="65" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">180,000 tonnes (1.1% of EU production)</text>
+    
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Note:</text>
+    <text x="70" y="85" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">No NEW quota for Brazil (existing WTO quota)</text>
+    
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ No additional market opening for Brazil</text>
+    <text x="20" y="128" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Specialty sugars excluded</text>
+    <text x="20" y="148" font-family="Arial, sans-serif" font-size="11" fill="#DC2626">✗ Duty-free access expands for existing quota</text>
+  </g>
+  
+  <!-- ETHANOL -->
+  <g transform="translate(510, 310)">
+    <rect x="0" y="0" width="440" height="160" rx="12" fill="white" filter="url(#dropShadow)"/>
+    <rect x="0" y="0" width="440" height="40" rx="12" fill="#DC2626"/>
+    <rect x="0" y="28" width="440" height="12" fill="#DC2626"/>
+    <text x="20" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">⛽ ETHANOL</text>
+    <text x="420" y="27" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="end">DEFENSIVE</text>
+    
+    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Industrial:</text>
+    <text x="90" y="65" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">450,000 tonnes duty-free</text>
+    
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Fuel:</text>
+    <text x="90" y="85" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">200,000 tonnes (phased tariff reduction)</text>
+    
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Industrial/fuel quotas separated</text>
+    <text x="20" y="128" font-family="Arial, sans-serif" font-size="11" fill="#DC2626">✗ Brazilian sugarcane ethanol cost advantage</text>
+    <text x="20" y="148" font-family="Arial, sans-serif" font-size="11" fill="#DC2626">✗ Competition for EU biofuel producers</text>
+  </g>
+  
+  <!-- WINE -->
+  <g transform="translate(50, 490)">
+    <rect x="0" y="0" width="440" height="160" rx="12" fill="white" filter="url(#dropShadow)"/>
+    <rect x="0" y="0" width="440" height="40" rx="12" fill="#059669"/>
+    <rect x="0" y="28" width="440" height="12" fill="#059669"/>
+    <text x="20" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">🍷 WINE &amp; SPIRITS</text>
+    <text x="420" y="27" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="end">OFFENSIVE</text>
+    
+    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">Current tariffs:</text>
+    <text x="110" y="65" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">17-35% (to be eliminated)</text>
+    
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">GIs protected:</text>
+    <text x="110" y="85" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">350+ European geographical indications</text>
+    
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Full tariff elimination on wines</text>
+    <text x="20" y="128" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Cognac, Champagne, Rioja protected</text>
+    <text x="20" y="148" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Access to 260M consumer market</text>
+  </g>
+  
+  <!-- DAIRY -->
+  <g transform="translate(510, 490)">
+    <rect x="0" y="0" width="440" height="160" rx="12" fill="white" filter="url(#dropShadow)"/>
+    <rect x="0" y="0" width="440" height="40" rx="12" fill="#059669"/>
+    <rect x="0" y="28" width="440" height="12" fill="#059669"/>
+    <text x="20" y="27" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">🧀 DAIRY</text>
+    <text x="420" y="27" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="end">OFFENSIVE</text>
+    
+    <text x="20" y="65" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">EU cheese quota:</text>
+    <text x="130" y="65" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">30,000 tonnes duty-free to Mercosur</text>
+    
+    <text x="20" y="85" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#134D28">GIs protected:</text>
+    <text x="130" y="85" font-family="Arial, sans-serif" font-size="12" fill="#1f2937">Parmigiano, Gorgonzola, Roquefort, etc.</text>
+    
+    <text x="20" y="110" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Export opportunities for premium cheese</text>
+    <text x="20" y="128" font-family="Arial, sans-serif" font-size="11" fill="#059669">✓ Strong GI protection prevents imitation</text>
+    <text x="20" y="148" font-family="Arial, sans-serif" font-size="11" fill="#D97706">○ Limited Mercosur quotas for milk powder</text>
+  </g>
+  
+  <!-- Footer -->
+  <rect x="0" y="670" width="1000" height="30" fill="#134D28"/>
+  <text x="500" y="690" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">© 2025 Beresol | Source: European Commission DG Trade, Beresol analysis | Open Report #2</text>
+</svg>

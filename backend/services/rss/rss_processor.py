@@ -49,19 +49,21 @@ class RSSProcessor:
     - Update feed statistics
     """
 
-    def __init__(self, db_session: Session, enable_ai_enrichment: bool = True):
+    def __init__(self, db_session: Session, enable_ai_enrichment: bool = False):
         """
         Initialize RSS processor.
 
         Args:
             db_session: SQLAlchemy database session
-            enable_ai_enrichment: Enable AI-powered content enrichment
+            enable_ai_enrichment: Enable AI-powered content enrichment (default: False to save API costs)
+                                  AI enrichment should be done on-demand when users view entries.
         """
         self.db = db_session
         self.aggregator = RSSAggregator()
         self.enable_ai_enrichment = enable_ai_enrichment
 
         # Initialize AI content analyzer if enabled
+        # NOTE: Default is now False - AI enrichment is done on-demand to save API costs
         if self.enable_ai_enrichment:
             try:
                 self.content_analyzer = ContentAnalyzer()
@@ -72,7 +74,7 @@ class RSSProcessor:
                 self.content_analyzer = None
         else:
             self.content_analyzer = None
-            logger.info("Initialized RSS Processor without AI enrichment")
+            logger.info("Initialized RSS Processor without AI enrichment (on-demand mode)")
 
     async def process_all_feeds(
         self,

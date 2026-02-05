@@ -33,6 +33,9 @@ from schemas.amendment_schemas import (
     AmendmentListResponse,
     AmendmentBatchCreate,
     AmendmentStats,
+    BatchSuggestionRequest,
+    BatchSuggestionResponse,
+    BatchSuggestionItem,
 )
 from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
@@ -669,6 +672,7 @@ async def suggest_amendment(
     original_text: str = Query(..., description="The legislative text to amend"),
     element_type: str = Query(..., description="Type of element: recital, article, point, etc."),
     element_position: str = Query(..., description="Position reference, e.g., 'Recital 1', 'Article 3'"),
+    supporting_context: Optional[str] = Query(None, description="Extracted text from supporting documents"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -704,8 +708,14 @@ Respond in this EXACT JSON format:
   "justification": "A brief justification explaining why this amendment serves the policy goal (2-3 sentences)"
 }"""
 
-        user_message = f"""Policy Position: {policy_position}
+        supporting_section = ""
+        if supporting_context:
+            # Truncate to avoid excessive token usage
+            ctx = supporting_context[:3000]
+            supporting_section = f"\n\nSupporting Document Context:\n{ctx}\n"
 
+        user_message = f"""Policy Position: {policy_position}
+{supporting_section}
 Legislative Element: {element_position} ({element_type})
 
 Original Text:
@@ -756,4 +766,138 @@ Please suggest an amendment that aligns this legislative text with the policy po
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to generate amendment suggestion: {str(e)}"
+        )
+
+
+@router.post(
+    "/suggest-batch",
+    response_model=BatchSuggestionResponse,
+    summary="Document-wide AI amendment suggestions",
+    description="Analyse multiple legislative elements and suggest the most impactful amendments"
+)
+async def suggest_batch_amendments(
+    request: BatchSuggestionRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Generate AI-powered amendment suggestions for an entire document.
+
+    The AI will:
+    1. Analyse all provided legislative elements
+    2. Consider the user's policy position and any supporting document context
+    3. Identify the most impactful elements to amend
+    4. Return up to max_suggestions amendment suggestions
+    """
+    from services.ai.multi_provider_service import MultiProviderService
+    import json
+    import re
+
+    # Determine max_suggestions based on subscription tier
+    tier = current_user.subscription_tier or 'white'
+    if tier in ('blue', 'admin'):
+        # Blue/Admin: unlimited - suggest for as many elements as provided
+        tier_max = len(request.elements)
+    elif tier == 'yellow':
+        tier_max = 15
+    else:
+        # White tier
+        tier_max = 5
+
+    # Use the lower of user-requested and tier-allowed, or tier default if not specified
+    max_suggestions = min(request.max_suggestions, tier_max) if request.max_suggestions else tier_max
+
+    try:
+        ai_service = MultiProviderService()
+
+        # Build elements summary for the prompt
+        elements_text = ""
+        for i, elem in enumerate(request.elements):
+            elements_text += f"\n{i+1}. {elem.position} ({elem.element_type}):\n{elem.text}\n"
+
+        system_prompt = f"""You are an expert EU legislative drafter. You will analyse a set of legislative elements and suggest the most impactful amendments based on the user's policy position.
+
+IMPORTANT GUIDELINES:
+1. Identify the {max_suggestions} most strategically important elements to amend
+2. Prioritise articles over recitals (articles have legal force)
+3. Keep each amendment focused and minimal - change only what is necessary
+4. Use proper EU legislative language and terminology
+5. Ensure amendments are legally coherent
+6. Each proposed_text should be a MODIFIED version of the original, not entirely new text
+7. For suppressions, set proposed_text to empty string ""
+
+Respond in this EXACT JSON format (an array of objects):
+[
+  {{
+    "element_position": "Article 5",
+    "amendment_type": "modification",
+    "original_text": "The original text...",
+    "proposed_text": "The amended text...",
+    "justification": "Brief justification (2-3 sentences)"
+  }}
+]
+
+Return ONLY the JSON array, no additional text."""
+
+        supporting_section = ""
+        if request.supporting_context:
+            ctx = request.supporting_context[:4000]
+            supporting_section = f"\n\nSupporting Document Context (user's policy document):\n{ctx}\n"
+
+        user_message = f"""Policy Position: {request.policy_position}
+{supporting_section}
+Legislative Elements to Analyse:
+{elements_text}
+
+Please identify the {max_suggestions} most impactful amendments to align this legislation with the policy position. Return your suggestions as a JSON array."""
+
+        response = await ai_service.generate(
+            system_prompt=system_prompt,
+            messages=[{"role": "user", "content": user_message}],
+            max_tokens=4000,
+            temperature=0.7
+        )
+
+        # Parse the JSON response
+        response_text = response.message.strip()
+
+        # Extract JSON from markdown code blocks if present
+        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response_text)
+        if json_match:
+            response_text = json_match.group(1)
+
+        # Try to parse JSON array
+        try:
+            suggestions_raw = json.loads(response_text)
+            if not isinstance(suggestions_raw, list):
+                suggestions_raw = [suggestions_raw]
+        except json.JSONDecodeError:
+            logger.warning(f"Failed to parse batch suggestion JSON: {response_text[:200]}")
+            suggestions_raw = []
+
+        # Build element lookup for original text
+        element_lookup = {elem.position: elem.text for elem in request.elements}
+
+        suggestions = []
+        for item in suggestions_raw[:max_suggestions]:
+            pos = item.get("element_position", "")
+            suggestions.append(BatchSuggestionItem(
+                element_position=pos,
+                amendment_type=item.get("amendment_type", "modification"),
+                original_text=item.get("original_text", element_lookup.get(pos, "")),
+                proposed_text=item.get("proposed_text", ""),
+                justification=item.get("justification", "")
+            ))
+
+        return BatchSuggestionResponse(
+            suggestions=suggestions,
+            ai_provider=response.provider,
+            ai_model=response.model
+        )
+
+    except Exception as e:
+        logger.error(f"Error generating batch amendment suggestions: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate amendment suggestions: {str(e)}"
         )

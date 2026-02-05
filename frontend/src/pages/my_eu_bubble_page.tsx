@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
-import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal } from '@mdi/js';
+import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation } from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { DocumentsTab } from '../components/bubble/documents_tab';
@@ -12,11 +12,12 @@ import { LegislativeTrackerTab } from '../components/bubble/legislative_tracker_
 import { MyTrackedFilesTab } from '../components/bubble/my_tracked_files_tab';
 import { ECConsultationsTab } from '../components/bubble/ec_consultations_tab';
 import { ConsultationsCTA } from '../components/bubble/consultations_cta';
+import { PredictionsTab } from '../components/bubble/predictions_tab';
 import { NewsSidebar } from '../components/bubble/news_sidebar';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import './my_eu_bubble_page.css';
 
-type TabType = 'dashboard' | 'my_files' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
+type TabType = 'dashboard' | 'my_files' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
 
 export const MyEUBubblePage = () => {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export const MyEUBubblePage = () => {
   const tabs = [
     { id: 'dashboard' as TabType, label: t('bubble.dashboard'), icon: mdiViewDashboard },
     { id: 'my_files' as TabType, label: 'My Files', icon: mdiStarOutline },
+    { id: 'predictions' as TabType, label: t('bubble.tabs.predictions', 'Predictions'), icon: mdiCrystalBall, isPredictions: true },
     { id: 'consultations' as TabType, label: t('bubble.tabs.consultations', 'EC Consultations'), icon: mdiCalendarCollapseHorizontal },
     { id: 'documents' as TabType, label: t('bubble.documents'), icon: mdiFileDocument },
     { id: 'amendments' as TabType, label: t('bubble.amendments'), icon: mdiFileEdit },
@@ -39,6 +41,8 @@ export const MyEUBubblePage = () => {
         return <DashboardTab />;
       case 'my_files':
         return <MyTrackedFilesTab />;
+      case 'predictions':
+        return <PredictionsTab />;
       case 'consultations':
         // Show CTA for White tier users, full tab for Yellow+ tiers
         if (!user || user.subscription_tier === 'white') {
@@ -73,6 +77,16 @@ export const MyEUBubblePage = () => {
         backgroundAttachment: 'fixed'
       } : undefined}
     >
+      {/* SVG gradient definition for Predictions tab */}
+      <svg width="0" height="0" style={{ position: 'absolute' }}>
+        <defs>
+          <linearGradient id="predictionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={{ stopColor: '#0693e3' }} />
+            <stop offset="100%" style={{ stopColor: '#06b6d4' }} />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <div className="my-eu-bubble-page__header">
         <img
           src="/assets/brubru_myeububble.png"
@@ -92,20 +106,30 @@ export const MyEUBubblePage = () => {
         <div className="my-eu-bubble-page__main">
           {/* Tab Navigation */}
           <nav className="my-eu-bubble-page__tabs">
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                className={`my-eu-bubble-page__tab ${
-                  activeTab === tab.id ? 'my-eu-bubble-page__tab--active' : ''
-                }`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <span className="my-eu-bubble-page__tab-icon">
-                  <Icon path={tab.icon} size={1} color="#0693E3" />
-                </span>
-                <span className="my-eu-bubble-page__tab-label">{tab.label}</span>
-              </button>
-            ))}
+            {tabs.map(tab => {
+              const isActive = activeTab === tab.id;
+              const isPredictionsTab = 'isPredictions' in tab && tab.isPredictions;
+
+              return (
+                <button
+                  key={tab.id}
+                  className={`my-eu-bubble-page__tab ${
+                    isActive ? 'my-eu-bubble-page__tab--active' : ''
+                  } ${isPredictionsTab ? 'my-eu-bubble-page__tab--predictions' : ''}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  <span className={`my-eu-bubble-page__tab-icon ${isPredictionsTab && isActive ? 'my-eu-bubble-page__tab-icon--gradient' : ''}`}>
+                    <Icon path={tab.icon} size={1} color={isPredictionsTab && isActive ? 'url(#predictionGradient)' : '#0693E3'} />
+                  </span>
+                  <span className={`my-eu-bubble-page__tab-label ${isPredictionsTab && isActive ? 'my-eu-bubble-page__tab-label--gradient' : ''}`}>
+                    {isPredictionsTab && isActive && (
+                      <Icon path={mdiCreation} size={0.6} className="my-eu-bubble-page__sparkle" />
+                    )}
+                    {tab.label}
+                  </span>
+                </button>
+              );
+            })}
           </nav>
 
           {/* Tab Content */}

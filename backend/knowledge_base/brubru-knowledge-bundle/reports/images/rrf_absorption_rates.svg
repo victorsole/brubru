@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22c55e"/>
+      <stop offset="100%" style="stop-color:#16a34a"/>
+    </linearGradient>
+    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fbbf24"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#dc2626"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="480" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerBlue)"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="white">RRF Absorption Rates by Member State</text>
+  <text x="450" y="50" text-anchor="middle" font-size="11" fill="#bfdbfe">€366 billion disbursed of €650 billion total | August 2025</text>
+
+  <!-- Total progress indicator -->
+  <g transform="translate(40, 90)">
+    <rect width="820" height="60" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="20" y="25" font-size="12" font-weight="600" fill="#1e293b">Overall RRF Progress</text>
+    <rect x="20" y="35" width="680" height="16" rx="4" fill="#e2e8f0"/>
+    <rect x="20" y="35" width="381" height="16" rx="4" fill="url(#headerBlue)"/>
+    <text x="710" y="47" font-size="14" font-weight="700" fill="#1e40af">56%</text>
+    <text x="760" y="47" font-size="11" fill="#64748b">disbursed</text>
+  </g>
+
+  <!-- Country bars -->
+  <g transform="translate(40, 170)">
+    <!-- France -->
+    <g transform="translate(0, 0)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">France</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="460" height="22" rx="4" fill="url(#greenGrad)"/>
+      <text x="570" y="15" font-size="11" font-weight="600" fill="white">76.7%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€30.8B / €40.3B</text>
+    </g>
+
+    <!-- Italy -->
+    <g transform="translate(0, 35)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">Italy</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="432" height="22" rx="4" fill="url(#greenGrad)"/>
+      <text x="540" y="15" font-size="11" font-weight="600" fill="white">72%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€140.4B / €194.4B</text>
+    </g>
+
+    <!-- Germany -->
+    <g transform="translate(0, 70)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">Germany</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="391" height="22" rx="4" fill="url(#greenGrad)"/>
+      <text x="500" y="15" font-size="11" font-weight="600" fill="white">65.2%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€18.3B / €28.0B</text>
+    </g>
+
+    <!-- Spain -->
+    <g transform="translate(0, 105)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">Spain</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="336" height="22" rx="4" fill="url(#yellowGrad)"/>
+      <text x="444" y="15" font-size="11" font-weight="600" fill="#1e293b">56%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€45.2B / €80.7B</text>
+    </g>
+
+    <!-- Greece -->
+    <g transform="translate(0, 140)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">Greece</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="300" height="22" rx="4" fill="url(#yellowGrad)"/>
+      <text x="408" y="15" font-size="11" font-weight="600" fill="#1e293b">50%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€17.8B / €35.6B</text>
+    </g>
+
+    <!-- Romania -->
+    <g transform="translate(0, 175)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">Romania</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="199" height="22" rx="4" fill="url(#redGrad)"/>
+      <text x="307" y="15" font-size="11" font-weight="600" fill="white">33.1%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€9.6B / €29.0B</text>
+    </g>
+
+    <!-- Hungary -->
+    <g transform="translate(0, 210)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">Hungary</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="53" height="22" rx="4" fill="url(#redGrad)"/>
+      <text x="161" y="15" font-size="11" font-weight="600" fill="#dc2626">8.8%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€0.9B / €10.4B</text>
+      <rect x="200" y="2" width="90" height="18" rx="3" fill="#fef2f2"/>
+      <text x="245" y="14" text-anchor="middle" font-size="8" fill="#dc2626">Rule of law block</text>
+    </g>
+
+    <!-- Sweden -->
+    <g transform="translate(0, 245)">
+      <text x="0" y="14" font-size="12" font-weight="500" fill="#1e293b">Sweden</text>
+      <rect x="100" y="0" width="600" height="22" rx="4" fill="#e2e8f0"/>
+      <rect x="100" y="0" width="6" height="22" rx="4" fill="url(#redGrad)"/>
+      <text x="120" y="15" font-size="11" font-weight="600" fill="#dc2626">~1%</text>
+      <text x="710" y="15" font-size="10" fill="#64748b">€0.0B / €3.3B</text>
+      <rect x="170" y="2" width="105" height="18" rx="3" fill="#fef2f2"/>
+      <text x="222" y="14" text-anchor="middle" font-size="8" fill="#dc2626">First request Dec 2024</text>
+    </g>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(40, 435)">
+    <rect width="820" height="35" rx="6" fill="white" filter="url(#shadow)"/>
+    <rect x="20" y="10" width="16" height="16" rx="3" fill="url(#greenGrad)"/>
+    <text x="45" y="22" font-size="10" fill="#1e293b">Above 60% (On track)</text>
+    <rect x="180" y="10" width="16" height="16" rx="3" fill="url(#yellowGrad)"/>
+    <text x="205" y="22" font-size="10" fill="#1e293b">40-60% (At risk)</text>
+    <rect x="320" y="10" width="16" height="16" rx="3" fill="url(#redGrad)"/>
+    <text x="345" y="22" font-size="10" fill="#1e293b">Below 40% (High risk)</text>
+    <text x="500" y="22" font-size="10" fill="#64748b">|</text>
+    <text x="520" y="22" font-size="10" fill="#64748b">Deadline: August 31, 2026</text>
+  </g>
+</svg>

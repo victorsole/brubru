@@ -297,7 +297,7 @@ export const CookiesPage = () => {
             If you have questions about our use of cookies:
           </p>
           <p>
-            <strong>Email:</strong> <a href="mailto:helloberesol@gmail.com" className="policy-page__link">helloberesol@gmail.com</a><br />
+            <strong>Email:</strong> <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a><br />
             <strong>Subject:</strong> "Cookie Policy Inquiry"
           </p>
         </section>

@@ -137,7 +137,7 @@ export const LandingPage = () => {
               <li><span className="mdi mdi-check"></span> Priority support</li>
               <li><span className="mdi mdi-check"></span> Onboarding & training</li>
             </ul>
-            <a href="mailto:helloberesol@gmail.com" className="btn btn--outline">
+            <a href="mailto:hello@beresol.eu" className="btn btn--outline">
               Contact Us
             </a>
           </div>

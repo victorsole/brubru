@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 450" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="450" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerBlue)"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="white">Global Reactions to CBAM</text>
+  <text x="450" y="50" text-anchor="middle" font-size="11" fill="#bfdbfe">Third-country responses: WTO challenges, retaliation threats, and adaptation strategies</text>
+
+  <!-- Country cards -->
+  <!-- China -->
+  <g transform="translate(40, 95)">
+    <rect width="260" height="150" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect width="260" height="8" rx="4" fill="#dc2626"/>
+    <text x="130" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">China</text>
+    <text x="130" y="52" text-anchor="middle" font-size="10" fill="#dc2626">WTO Challenge Filed</text>
+    <line x1="20" y1="62" x2="240" y2="62" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">• WTO consultation request (Oct 2024)</text>
+    <text x="20" y="97" font-size="9" fill="#64748b">• Reviewing rare earth export restrictions</text>
+    <text x="20" y="112" font-size="9" fill="#64748b">• Accelerating domestic ETS development</text>
+    <text x="20" y="127" font-size="9" fill="#64748b">• Redirecting exports to non-EU markets</text>
+    <rect x="170" y="110" width="75" height="22" rx="4" fill="#fef2f2"/>
+    <text x="207" y="125" text-anchor="middle" font-size="9" font-weight="600" fill="#dc2626">Adversarial</text>
+  </g>
+
+  <!-- United States -->
+  <g transform="translate(320, 95)">
+    <rect width="260" height="150" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect width="260" height="8" rx="4" fill="#f59e0b"/>
+    <text x="130" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">United States</text>
+    <text x="130" y="52" text-anchor="middle" font-size="10" fill="#d97706">Retaliatory Measures Studied</text>
+    <line x1="20" y1="62" x2="240" y2="62" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">• Trump admin announced tariff study</text>
+    <text x="20" y="97" font-size="9" fill="#64748b">• Bipartisan US carbon border bill proposed</text>
+    <text x="20" y="112" font-size="9" fill="#64748b">• Steel/aluminium tariffs already in place</text>
+    <text x="20" y="127" font-size="9" fill="#64748b">• No mutual recognition framework</text>
+    <rect x="170" y="110" width="75" height="22" rx="4" fill="#fef3c7"/>
+    <text x="207" y="125" text-anchor="middle" font-size="9" font-weight="600" fill="#d97706">Competitive</text>
+  </g>
+
+  <!-- India -->
+  <g transform="translate(600, 95)">
+    <rect width="260" height="150" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect width="260" height="8" rx="4" fill="#dc2626"/>
+    <text x="130" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">India</text>
+    <text x="130" y="52" text-anchor="middle" font-size="10" fill="#dc2626">WTO Dispute Filed</text>
+    <line x1="20" y1="62" x2="240" y2="62" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">• WTO dispute filed (Mar 2025)</text>
+    <text x="20" y="97" font-size="9" fill="#64748b">• €3B steel decarbonisation support</text>
+    <text x="20" y="112" font-size="9" fill="#64748b">• Exploring domestic carbon pricing</text>
+    <text x="20" y="127" font-size="9" fill="#64748b">• Dual-track: legal + adaptation</text>
+    <rect x="170" y="110" width="75" height="22" rx="4" fill="#fef2f2"/>
+    <text x="207" y="125" text-anchor="middle" font-size="9" font-weight="600" fill="#dc2626">Adversarial</text>
+  </g>
+
+  <!-- Turkey -->
+  <g transform="translate(40, 265)">
+    <rect width="260" height="140" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect width="260" height="8" rx="4" fill="#22c55e"/>
+    <text x="130" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">Turkey</text>
+    <text x="130" y="52" text-anchor="middle" font-size="10" fill="#16a34a">Adaptation Strategy</text>
+    <line x1="20" y1="62" x2="240" y2="62" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">• €2.5B decarbonisation investment</text>
+    <text x="20" y="97" font-size="9" fill="#64748b">• Bilateral objections raised</text>
+    <text x="20" y="112" font-size="9" fill="#64748b">• Largest steel exporter to EU (18%)</text>
+    <rect x="170" y="100" width="75" height="22" rx="4" fill="#dcfce7"/>
+    <text x="207" y="115" text-anchor="middle" font-size="9" font-weight="600" fill="#16a34a">Adaptive</text>
+  </g>
+
+  <!-- Russia -->
+  <g transform="translate(320, 265)">
+    <rect width="260" height="140" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect width="260" height="8" rx="4" fill="#64748b"/>
+    <text x="130" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">Russia</text>
+    <text x="130" y="52" text-anchor="middle" font-size="10" fill="#64748b">Effectively Excluded</text>
+    <line x1="20" y1="62" x2="240" y2="62" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">• WTO panel request (Dec 2024)</text>
+    <text x="20" y="97" font-size="9" fill="#64748b">• Sanctions + CBAM = double barrier</text>
+    <text x="20" y="112" font-size="9" fill="#64748b">• Pre-war: 15% of EU steel imports</text>
+    <rect x="170" y="100" width="75" height="22" rx="4" fill="#f1f5f9"/>
+    <text x="207" y="115" text-anchor="middle" font-size="9" font-weight="600" fill="#64748b">Excluded</text>
+  </g>
+
+  <!-- Global adaptation -->
+  <g transform="translate(600, 265)">
+    <rect width="260" height="140" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect width="260" height="8" rx="4" fill="#3b82f6"/>
+    <text x="130" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b">Global Adaptation</text>
+    <text x="130" y="52" text-anchor="middle" font-size="10" fill="#2563eb">€15+ Billion Investments</text>
+    <line x1="20" y1="62" x2="240" y2="62" stroke="#e2e8f0"/>
+    <text x="20" y="82" font-size="9" fill="#64748b">• Indonesia, Vietnam: carbon tax studies</text>
+    <text x="20" y="97" font-size="9" fill="#64748b">• UK, Canada, Japan: similar schemes</text>
+    <text x="20" y="112" font-size="9" fill="#64748b">• Major producers investing in green tech</text>
+    <rect x="170" y="100" width="75" height="22" rx="4" fill="#dbeafe"/>
+    <text x="207" y="115" text-anchor="middle" font-size="9" font-weight="600" fill="#2563eb">Converging</text>
+  </g>
+</svg>

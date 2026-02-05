@@ -1,0 +1,9 @@
+export { GoldMetricCard } from './GoldMetricCard';
+export { GoldPriceChart } from './GoldPriceChart';
+export { GoldMarketOverview } from './GoldMarketOverview';
+export { CentralBankReservesMap } from './CentralBankReservesMap';
+export { GoldETFsTable } from './GoldETFsTable';
+export { TokenizedGoldSection } from './TokenizedGoldSection';
+export { GoldRegulationsSection } from './GoldRegulationsSection';
+export { GoldMiningProduction } from './GoldMiningProduction';
+export { GoldDataSources } from './GoldDataSources';

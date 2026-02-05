@@ -144,7 +144,7 @@ export const SubscriptionPage = () => {
             </ul>
 
             <a
-              href="mailto:helloberesol@gmail.com?subject=Brubru%20Blue%20-%20How%20Can%20I%20Get%20More%20Information%3F"
+              href="mailto:hello@beresol.eu?subject=Brubru%20Blue%20-%20How%20Can%20I%20Get%20More%20Information%3F"
               className="subscription__pricing-button button button-outline"
             >
               {t('subscription.blue.button')}

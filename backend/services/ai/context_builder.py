@@ -777,37 +777,51 @@ class ContextBuilder:
         self,
         mep_names: List[str]
     ) -> List[Dict[str, Any]]:
-        """Fetch MEP profiles from European Parliament API"""
+        """Fetch MEP profiles from European Parliament scraper (includes email/phone)"""
+        from services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
+
         profiles = []
+        scraper = None
 
-        for name in mep_names:
-            try:
-                # Search for MEP by name
-                search_results = await self.parliament_client.search_meps(name=name)
+        try:
+            scraper = EuropeanParliamentScraper()
 
-                if search_results:
-                    mep = search_results[0]  # Take first match
-                    mep_id = mep.get('id', '')
+            for name in mep_names:
+                try:
+                    # Search for MEP by name using scraper
+                    search_results = await scraper.search_meps(name)
 
-                    # Get detailed profile
-                    if mep_id:
-                        details = await self.parliament_client.get_mep_details(mep_id)
+                    if search_results:
+                        mep = search_results[0]  # Take first match
+                        mep_id = mep.mep_id
 
-                        profiles.append({
-                            'id': mep_id,
-                            'name': details.get('fullName', name),
-                            'country': details.get('country', ''),
-                            'party': details.get('nationalPoliticalGroup', ''),
-                            'group': details.get('politicalGroup', ''),
-                            'committees': details.get('committees', []),
-                            'bio': details.get('biography', '')[:500],  # Excerpt
-                            'url': f"https://www.europarl.europa.eu/meps/en/{mep_id}"
-                        })
+                        # Get detailed profile (includes email, phone, committees)
+                        if mep_id:
+                            details = await scraper.get_mep_details(mep_id)
 
-                        logger.debug(f"Fetched MEP profile: {name}")
+                            profiles.append({
+                                'id': mep_id,
+                                'name': mep.full_name,
+                                'country': mep.country or '',
+                                'party': mep.national_party or '',
+                                'group': mep.political_group.name if mep.political_group else '',
+                                'committees': details.get('committees', []),
+                                'delegations': details.get('delegations', []),
+                                'email': details.get('email', ''),
+                                'phone': details.get('phone', ''),
+                                'url': f"https://www.europarl.europa.eu/meps/en/{mep_id}"
+                            })
 
-            except Exception as e:
-                logger.error(f"Failed to fetch MEP {name}: {str(e)}")
+                            logger.debug(f"Fetched MEP profile: {name}")
+
+                except Exception as e:
+                    logger.error(f"Failed to fetch MEP {name}: {str(e)}")
+
+        except Exception as e:
+            logger.error(f"Failed to initialize EP scraper: {str(e)}")
+        finally:
+            if scraper:
+                await scraper.close()
 
         return profiles
 
@@ -882,6 +896,9 @@ class ContextBuilder:
         """
         Fetch European Commission personnel information from organigrammes.
 
+        Includes director-general, deputy DGs, directorate directors, and unit heads
+        with standard EC email format (firstname.lastname@ec.europa.eu).
+
         Args:
             dg_codes: List of DG codes (e.g., ['GROW', 'CLIMA'])
 
@@ -890,26 +907,77 @@ class ContextBuilder:
         """
         personnel_data = []
 
+        def _generate_ec_email(name: str) -> str:
+            """Generate standard EC email from name (firstname.lastname@ec.europa.eu)"""
+            if not name or name in ('Not shown', 'Vacant', 'Unknown'):
+                return ''
+            parts = name.strip().split()
+            if len(parts) < 2:
+                return ''
+            first = parts[0].lower().replace('é', 'e').replace('è', 'e').replace('ë', 'e').replace('ö', 'o').replace('ü', 'u').replace('ñ', 'n').replace('á', 'a').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ç', 'c')
+            last = parts[-1].lower().replace('é', 'e').replace('è', 'e').replace('ë', 'e').replace('ö', 'o').replace('ü', 'u').replace('ñ', 'n').replace('á', 'a').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ç', 'c')
+            return f"{first}.{last}@ec.europa.eu"
+
         for dg_code in dg_codes:
             try:
-                # Get DG structure summary
-                summary = self.knowledge_loader.get_dg_structure_summary(dg_code)
+                # Get full organigramme (not just summary)
+                org = self.knowledge_loader.get_dg_organigramme(dg_code)
 
-                if summary:
-                    personnel_data.append({
-                        'dg_code': summary['dg_code'],
-                        'dg_name': summary['dg_name'],
-                        'executive_vice_president': summary.get('executive_vice_president'),
-                        'director_general': summary['director_general'],
-                        'deputy_directors_general': summary['deputy_directors_general'],
-                        'num_directorates': summary['num_directorates'],
-                        'num_units': summary['num_units'],
-                        'num_agencies': summary.get('num_agencies', 0)
-                    })
-
-                    logger.debug(f"Fetched EC personnel for DG {dg_code}")
-                else:
+                if not org:
                     logger.warning(f"No organigramme data found for DG {dg_code}")
+                    continue
+
+                # Director-General
+                dg_info = org.get('director_general', {})
+                dg_name = dg_info.get('name') if isinstance(dg_info, dict) else None
+
+                # Deputy DGs
+                deputy_dgs = []
+                for ddg in org.get('deputy_directors_general', []):
+                    if 'name' in ddg:
+                        deputy_dgs.append({
+                            'name': ddg['name'],
+                            'responsibilities': ddg.get('responsibilities', ''),
+                            'email': _generate_ec_email(ddg['name'])
+                        })
+
+                # Directorate directors and unit heads
+                directorates = []
+                for directorate in org.get('directorates', []):
+                    dir_data = {
+                        'code': directorate.get('code', ''),
+                        'name': directorate.get('name', ''),
+                        'director': directorate.get('director', ''),
+                        'director_email': _generate_ec_email(directorate.get('director', '')),
+                        'units': []
+                    }
+
+                    for unit in directorate.get('units', []):
+                        head_name = unit.get('head', '')
+                        if head_name and head_name not in ('Not shown', 'Vacant'):
+                            dir_data['units'].append({
+                                'code': unit.get('code', ''),
+                                'name': unit.get('name', ''),
+                                'head': head_name,
+                                'head_email': _generate_ec_email(head_name)
+                            })
+
+                    directorates.append(dir_data)
+
+                personnel_data.append({
+                    'dg_code': dg_code.upper(),
+                    'dg_name': org.get('dg_name', ''),
+                    'commissioner': org.get('commissioner', org.get('executive_vice_president', '')),
+                    'director_general': dg_name,
+                    'director_general_email': _generate_ec_email(dg_name) if dg_name else '',
+                    'deputy_directors_general': deputy_dgs,
+                    'directorates': directorates,
+                    'num_directorates': len(org.get('directorates', [])),
+                    'num_units': sum(len(d.get('units', [])) for d in org.get('directorates', [])),
+                    'num_agencies': len(org.get('agencies', []))
+                })
+
+                logger.debug(f"Fetched EC personnel for DG {dg_code}")
 
             except Exception as e:
                 logger.error(f"Failed to fetch EC personnel for DG {dg_code}: {str(e)}")
@@ -1947,11 +2015,17 @@ class ContextBuilder:
             sections.append(f"\nMEPs INVOLVED ({len(context_data.mep_profiles)}):")
             for mep in context_data.mep_profiles:
                 sections.append(f"- {mep['name']} ({mep['country']}, {mep['group']})")
-                sections.append(f"  Party: {mep['party']}")
-                if mep['committees']:
-                    sections.append(f"  Committees: {', '.join(mep['committees'][:3])}")
-                sections.append(f"  Bio: {mep['bio'][:200]}...")
-                sections.append(f"  URL: {mep['url']}")
+                if mep.get('party'):
+                    sections.append(f"  National Party: {mep['party']}")
+                if mep.get('committees'):
+                    sections.append(f"  Committees: {', '.join(mep['committees'][:5])}")
+                if mep.get('delegations'):
+                    sections.append(f"  Delegations: {', '.join(mep['delegations'][:3])}")
+                if mep.get('email'):
+                    sections.append(f"  Email: {mep['email']}")
+                if mep.get('phone'):
+                    sections.append(f"  Phone: {mep['phone']}")
+                sections.append(f"  Profile: {mep['url']}")
                 sections.append("")
 
         # Committee information
@@ -1993,27 +2067,53 @@ class ContextBuilder:
             for personnel in context_data.ec_personnel:
                 sections.append(f"- {personnel['dg_name']} ({personnel['dg_code']})")
 
-                if personnel.get('executive_vice_president'):
-                    sections.append(f"  Executive Vice-President: {personnel['executive_vice_president']}")
+                if personnel.get('commissioner'):
+                    sections.append(f"  Commissioner: {personnel['commissioner']}")
 
                 if personnel.get('director_general'):
+                    dg_email = personnel.get('director_general_email', '')
                     sections.append(f"  Director-General: {personnel['director_general']}")
+                    if dg_email:
+                        sections.append(f"    Email: {dg_email}")
 
                 if personnel.get('deputy_directors_general'):
                     sections.append(f"\n  Deputy Directors-General ({len(personnel['deputy_directors_general'])}):")
                     for ddg in personnel['deputy_directors_general']:
                         ddg_name = ddg.get('name', 'Unknown')
                         ddg_resp = ddg.get('responsibilities', '')
+                        ddg_email = ddg.get('email', '')
                         if ddg_resp:
                             sections.append(f"    - {ddg_name} - {ddg_resp}")
                         else:
                             sections.append(f"    - {ddg_name}")
+                        if ddg_email:
+                            sections.append(f"      Email: {ddg_email}")
 
-                sections.append(f"\n  Structure:")
-                sections.append(f"    - {personnel['num_directorates']} Directorates")
-                sections.append(f"    - {personnel['num_units']} Units")
-                if personnel.get('num_agencies', 0) > 0:
-                    sections.append(f"    - {personnel['num_agencies']} Agencies")
+                # Directorate directors and unit heads
+                if personnel.get('directorates'):
+                    sections.append(f"\n  Key Directorates and Contacts:")
+                    for directorate in personnel['directorates']:
+                        dir_name = directorate.get('name', '')
+                        dir_code = directorate.get('code', '')
+                        director = directorate.get('director', '')
+                        dir_email = directorate.get('director_email', '')
+
+                        if director:
+                            sections.append(f"    {dir_code} - {dir_name}")
+                            sections.append(f"      Director: {director}")
+                            if dir_email:
+                                sections.append(f"      Email: {dir_email}")
+                        else:
+                            sections.append(f"    {dir_code} - {dir_name}")
+
+                        # Show unit heads (up to 5 per directorate)
+                        for unit in directorate.get('units', [])[:5]:
+                            unit_head = unit.get('head', '')
+                            unit_email = unit.get('head_email', '')
+                            if unit_head:
+                                sections.append(f"      {unit['code']} {unit['name']}: {unit_head}")
+                                if unit_email:
+                                    sections.append(f"        Email: {unit_email}")
 
                 sections.append("")
 

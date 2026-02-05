@@ -47,7 +47,53 @@
     "dashboard": "Dashboard",
     "documents": "Documents",
     "amendments": "Amendments",
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "tabs": {
+      "consultations": "EC Public Consultations",
+      "predictions": "Predictions"
+    },
+    "consultations": {
+      "title": "EC Public Consultations",
+      "subtitle": "Participate in EU policy-making through the \"Have Your Say\" portal",
+      "status": "Status",
+      "dg": "DG",
+      "policyArea": "Policy Area",
+      "policyAreas": "Policy Areas",
+      "allDGs": "All DGs",
+      "allAreas": "All Areas",
+      "search": "Search consultations...",
+      "clearFilters": "Clear filters",
+      "noResults": "No consultations found",
+      "closingSoon": "Closing Soon",
+      "deadline": "Deadline",
+      "noDeadline": "No deadline",
+      "responses": "responses",
+      "track": "Track",
+      "untrack": "Untrack",
+      "tracked": "Tracked",
+      "view": "View",
+      "openPortal": "Open in Have Your Say",
+      "openInPortal": "Open in Have Your Say",
+      "description": "Description",
+      "documents": "Documents",
+      "relatedLegislation": "Related Legislation",
+      "lastUpdated": "Last updated",
+      "outcomePublished": "Outcome Published",
+      "cta": {
+        "title": "EC Public Consultations",
+        "description": "Participate in EU policy-making with AI-powered assistance. Track consultations, receive deadline reminders, and generate personalised response proposals.",
+        "feature1Title": "Track Open Consultations",
+        "feature1Desc": "Monitor all EC public consultations in your policy areas. Get notified about deadlines and new opportunities to participate.",
+        "feature2Title": "Deadline Reminders",
+        "feature2Desc": "Receive reminders 7 days, 3 days, and 1 day before consultation deadlines. Never miss an opportunity to have your say.",
+        "feature3Title": "AI-Powered Proposals",
+        "feature3Desc": "Generate personalised response proposals based on your documents and position papers. (Blue tier)",
+        "feature4Title": "Outcome Analysis",
+        "feature4Desc": "Track consultation outcomes and see how well they align with your submitted positions. (Blue tier)",
+        "upgrade": "Upgrade to Yellow",
+        "note": "Yellow tier unlocks tracking and notifications. Blue tier adds AI proposals and alignment analysis."
+      }
+    }
   },
   "amendments": {
     "title": "Amendments",
@@ -139,7 +185,7 @@
       "period": "",
       "description": "Tailored solutions for teams and organisations with custom requirements",
       "button": "Contact Us",
-      "contactEmail": "helloberesol@gmail.com",
+      "contactEmail": "hello@beresol.eu",
       "minUsers": "5+ users"
     },
     "features": {
@@ -225,6 +271,9 @@
     "search": "Search",
     "filter": "Filter",
     "close": "Close",
-    "open": "Open"
+    "open": "Open",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {{current}} of {{total}}"
   }
 }

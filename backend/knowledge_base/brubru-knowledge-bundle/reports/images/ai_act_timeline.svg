@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="headerPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#a78bfa"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="400" fill="#f8fafc"/>
+
+  <!-- Header -->
+  <rect width="900" height="70" fill="url(#headerPurple)"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="white">AI Act Implementation Timeline</text>
+  <text x="450" y="50" text-anchor="middle" font-size="11" fill="#ddd6fe">Phased compliance obligations from August 2024 to August 2027</text>
+
+  <!-- Timeline base -->
+  <g transform="translate(50, 150)">
+    <!-- Timeline line -->
+    <line x1="0" y1="50" x2="800" y2="50" stroke="#e2e8f0" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Progress line (to current date) -->
+    <line x1="0" y1="50" x2="280" y2="50" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- August 2024 - Entry into force -->
+    <g transform="translate(0, 0)">
+      <circle cx="0" cy="50" r="12" fill="#22c55e" stroke="white" stroke-width="3"/>
+      <text x="0" y="30" text-anchor="middle" font-size="10" font-weight="600" fill="#1e293b">Aug 2024</text>
+      <rect x="-50" y="75" width="100" height="50" rx="6" fill="white" filter="url(#shadow)"/>
+      <text x="0" y="95" text-anchor="middle" font-size="9" font-weight="600" fill="#22c55e">Entry into</text>
+      <text x="0" y="108" text-anchor="middle" font-size="9" font-weight="600" fill="#22c55e">Force</text>
+      <text x="0" y="120" text-anchor="middle" font-size="8" fill="#64748b">Complete</text>
+    </g>
+
+    <!-- February 2025 - Prohibitions -->
+    <g transform="translate(160, 0)">
+      <circle cx="0" cy="50" r="12" fill="#22c55e" stroke="white" stroke-width="3"/>
+      <text x="0" y="30" text-anchor="middle" font-size="10" font-weight="600" fill="#1e293b">Feb 2025</text>
+      <rect x="-55" y="75" width="110" height="50" rx="6" fill="white" filter="url(#shadow)"/>
+      <text x="0" y="95" text-anchor="middle" font-size="9" font-weight="600" fill="#dc2626">Prohibited</text>
+      <text x="0" y="108" text-anchor="middle" font-size="9" font-weight="600" fill="#dc2626">Practices</text>
+      <text x="0" y="120" text-anchor="middle" font-size="8" fill="#64748b">In effect</text>
+    </g>
+
+    <!-- August 2025 - GPAI -->
+    <g transform="translate(320, 0)">
+      <circle cx="0" cy="50" r="12" fill="#f59e0b" stroke="white" stroke-width="3"/>
+      <text x="0" y="30" text-anchor="middle" font-size="10" font-weight="600" fill="#1e293b">Aug 2025</text>
+      <rect x="-55" y="75" width="110" height="50" rx="6" fill="#fef3c7" filter="url(#shadow)"/>
+      <text x="0" y="95" text-anchor="middle" font-size="9" font-weight="600" fill="#d97706">GPAI Model</text>
+      <text x="0" y="108" text-anchor="middle" font-size="9" font-weight="600" fill="#d97706">Obligations</text>
+      <text x="0" y="120" text-anchor="middle" font-size="8" fill="#92400e">8 months</text>
+    </g>
+
+    <!-- August 2026 - High Risk -->
+    <g transform="translate(520, 0)">
+      <circle cx="0" cy="50" r="14" fill="#f97316" stroke="white" stroke-width="3"/>
+      <text x="0" y="30" text-anchor="middle" font-size="10" font-weight="600" fill="#1e293b">Aug 2026</text>
+      <rect x="-55" y="75" width="110" height="60" rx="6" fill="#ffedd5" filter="url(#shadow)"/>
+      <text x="0" y="95" text-anchor="middle" font-size="9" font-weight="700" fill="#c2410c">HIGH-RISK AI</text>
+      <text x="0" y="108" text-anchor="middle" font-size="9" font-weight="600" fill="#c2410c">Obligations</text>
+      <text x="0" y="123" text-anchor="middle" font-size="8" fill="#92400e">Major deadline</text>
+    </g>
+
+    <!-- August 2027 - Full enforcement -->
+    <g transform="translate(720, 0)">
+      <circle cx="0" cy="50" r="14" fill="#3b82f6" stroke="white" stroke-width="3"/>
+      <text x="0" y="30" text-anchor="middle" font-size="10" font-weight="600" fill="#1e293b">Aug 2027</text>
+      <rect x="-55" y="75" width="110" height="60" rx="6" fill="#dbeafe" filter="url(#shadow)"/>
+      <text x="0" y="95" text-anchor="middle" font-size="9" font-weight="700" fill="#1d4ed8">Full</text>
+      <text x="0" y="108" text-anchor="middle" font-size="9" font-weight="600" fill="#1d4ed8">Enforcement</text>
+      <text x="0" y="123" text-anchor="middle" font-size="8" fill="#1e40af">Annex I systems</text>
+    </g>
+
+    <!-- Current marker -->
+    <g transform="translate(280, 0)">
+      <polygon points="0,35 -8,20 8,20" fill="#7c3aed"/>
+      <text x="0" y="12" text-anchor="middle" font-size="9" font-weight="600" fill="#7c3aed">NOW</text>
+    </g>
+  </g>
+
+  <!-- Bottom status cards -->
+  <g transform="translate(50, 300)">
+    <rect x="0" y="0" width="250" height="70" rx="8" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="6" height="70" rx="3" fill="#22c55e"/>
+    <text x="20" y="22" font-size="11" font-weight="600" fill="#1e293b">Completed</text>
+    <text x="20" y="40" font-size="9" fill="#64748b">AI Act in force, prohibitions active</text>
+    <text x="20" y="55" font-size="9" fill="#64748b">AI Office operational (~140 staff)</text>
+
+    <rect x="275" y="0" width="250" height="70" rx="8" fill="white" filter="url(#shadow)"/>
+    <rect x="275" y="0" width="6" height="70" rx="3" fill="#f59e0b"/>
+    <text x="295" y="22" font-size="11" font-weight="600" fill="#1e293b">In Progress</text>
+    <text x="295" y="40" font-size="9" fill="#64748b">12/27 national authorities designated</text>
+    <text x="295" y="55" font-size="9" fill="#64748b">Standards development ongoing</text>
+
+    <rect x="550" y="0" width="250" height="70" rx="8" fill="white" filter="url(#shadow)"/>
+    <rect x="550" y="0" width="6" height="70" rx="3" fill="#ef4444"/>
+    <text x="570" y="22" font-size="11" font-weight="600" fill="#1e293b">At Risk</text>
+    <text x="570" y="40" font-size="9" fill="#64748b">Harmonised standards delayed</text>
+    <text x="570" y="55" font-size="9" fill="#64748b">Classification disputes unresolved</text>
+  </g>
+</svg>
