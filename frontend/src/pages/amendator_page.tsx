@@ -10,6 +10,7 @@ import { AIAssistantPanel } from '../components/amendator/ai_assistant_sidebar';
 import type { AISuggestion } from '../components/amendator/ai_assistant_sidebar';
 import type { LoadedDocument } from '../components/amendator/document_viewer';
 import { LegislativeContextBanner } from '../components/amendator/legislative_context_banner';
+import { useAuth } from '../hooks/use_auth';
 import './amendator_page.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
@@ -127,10 +128,12 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
       const amendmentsArray = Array.from(cellAmendments.values());
 
       // Call batch API endpoint
+      const token = useAuth.getState().token;
       const response = await fetch(`${API_BASE}/amendments/batch`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
         },
         body: JSON.stringify({
           document_id: loadedDocument.document_id,

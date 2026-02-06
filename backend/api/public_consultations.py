@@ -225,6 +225,16 @@ async def get_consultations(
             query = query.filter(PublicConsultation.status == status.value)
             filters_applied['status'] = status.value
 
+            # When filtering for "open", exclude consultations whose deadline has passed
+            if status.value == 'open':
+                today = date.today()
+                query = query.filter(
+                    or_(
+                        PublicConsultation.end_date >= today,
+                        PublicConsultation.end_date.is_(None)
+                    )
+                )
+
         if consultation_type:
             query = query.filter(PublicConsultation.consultation_type == consultation_type.value)
             filters_applied['consultation_type'] = consultation_type.value

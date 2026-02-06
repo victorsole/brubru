@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { LegislativeElement } from './two_column_layout';
 import type { LoadedDocument } from './document_viewer';
 import { FeedbackInvitation } from '../shared/feedback_invitation';
+import { useAuth } from '../../hooks/use_auth';
 import './ai_assistant_sidebar.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
@@ -100,7 +101,7 @@ export const AIAssistantPanel = ({
         const formData = new FormData();
         formData.append('file', file);
 
-        const token = localStorage.getItem('access_token');
+        const token = useAuth.getState().token;
         const uploadResponse = await fetch(`${API_BASE}/documents/upload`, {
           method: 'POST',
           headers: {
@@ -172,7 +173,7 @@ export const AIAssistantPanel = ({
     setAiSuggestion(null);
     setBatchSuggestions([]);
 
-    const token = localStorage.getItem('access_token');
+    const token = useAuth.getState().token;
     const supportingContext = getSupportingContext();
 
     try {

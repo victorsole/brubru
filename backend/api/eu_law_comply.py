@@ -4,7 +4,7 @@ EU Law Comply API Endpoints
 Handles compliance checking, gap analysis, and requirement extraction for EU laws.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, func
 from typing import List, Optional
@@ -511,9 +511,9 @@ async def get_law_stats(
 
 @router.post("/analyze")
 async def create_compliance_analysis(
-    cluster_id: int,
+    cluster_id: int = Form(...),
     documents: List[UploadFile] = File(...),
-    analysis_name: Optional[str] = None,
+    analysis_name: Optional[str] = Form(None),
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)

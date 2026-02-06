@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Amendment } from '../../pages/amendator_page';
 import { getAmendmentTypeLabel, getStructureLevelLabel } from '../../utils/amendment_formatter';
+import { useAuth } from '../../hooks/use_auth';
 import './amendment_sidebar.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
@@ -62,7 +63,7 @@ export const AmendmentSidebar = ({
     setIsExporting(true);
     try {
       // Get auth token
-      const token = localStorage.getItem('access_token');
+      const token = useAuth.getState().token;
 
       // Call backend export API
       const response = await fetch(`${API_BASE}/amendments/export/${documentId}`, {

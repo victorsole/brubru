@@ -7,6 +7,7 @@ import { ComplianceReport } from '../components/eu_comply/compliance_report';
 import { ActionPlanTimeline } from '../components/eu_comply/action_plan_timeline';
 import { UsageHistory } from '../components/eu_comply/usage_history';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
+import { useAuth } from '../hooks/use_auth';
 import './eu_comply_page.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -132,7 +133,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
       const response = await fetch(`${API_BASE_URL}/api/eu-law-comply/analyze`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${useAuth.getState().token}`,
         },
         body: formData,
       });
@@ -141,9 +142,38 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
         throw new Error('Analysis failed');
       }
 
-      const result: ComplianceAnalysis = await response.json();
-      setAnalysisResult(result);
-      setViewState('results');
+      const initialResult = await response.json();
+
+      // The backend runs analysis asynchronously - poll until completed
+      const analysisId = initialResult.id;
+      const token = useAuth.getState().token;
+      let attempts = 0;
+      const maxAttempts = 60; // 2 minutes max
+
+      while (attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        attempts++;
+
+        const pollResponse = await fetch(`${API_BASE_URL}/api/eu-law-comply/analysis/${analysisId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!pollResponse.ok) continue;
+
+        const pollResult = await pollResponse.json();
+
+        if (pollResult.status === 'completed') {
+          setAnalysisResult(pollResult);
+          setViewState('results');
+          return;
+        } else if (pollResult.status === 'failed') {
+          throw new Error('Analysis failed on the server');
+        }
+      }
+
+      throw new Error('Analysis timed out');
     } catch (error) {
       console.error('Compliance analysis error:', error);
       alert('Failed to analyze compliance. Please try again.');
@@ -186,7 +216,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
       const response = await fetch(`${API_BASE_URL}/api/eu-law-comply/analysis/${analysisId}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${useAuth.getState().token}`,
         },
       });
 
@@ -355,7 +385,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
             />
 
             <ActionPlanTimeline
-              gapFindings={analysisResult.gap_findings.filter(
+              gapFindings={(analysisResult.gap_findings || []).filter(
                 f => f.status === 'gap' || f.status === 'partial'
               )}
             />

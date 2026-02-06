@@ -1,6 +1,7 @@
 // frontend/src/components/eu_comply/compliance_report.tsx
 import { useState } from 'react';
 import type { ComplianceAnalysis, GapFinding } from '../../pages/eu_comply_page';
+import { useAuth } from '../../hooks/use_auth';
 import './compliance_report.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -77,7 +78,7 @@ export const ComplianceReport = ({ analysis, onAskChatbot }: ComplianceReportPro
       const response = await fetch(`${API_BASE_URL}/api/eu-law-comply/analysis/${analysis.id}/export`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${useAuth.getState().token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ format: 'docx' }),
