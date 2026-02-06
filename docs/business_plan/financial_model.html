@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brubru - Financial Model & Investment Overview</title>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    /* ============================================
+       BRUBRU DESIGN SYSTEM
+       Authentic Brubru aesthetics with Adobe Caslon Pro
+       Based on brubru.beresol.eu design tokens
+       ============================================ */
+
+    /* Adobe Caslon Pro Font (The New Yorker typography) */
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      /* Brubru Brand Colors */
+      --color-primary: #0693e3;
+      --color-primary-dark: #0066cc;
+      --color-accent-blue: #0693e3;
+      --color-accent-purple: #9b51e0;
+      --color-accent-green: #059669;
+      --color-accent-gold: #d97706;
+      --color-accent-red: #dc2626;
+
+      /* Neutral Grays */
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-500: #6b7280;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+
+      /* Semantic Colors */
+      --color-text: #111827;
+      --color-text-secondary: #6b7280;
+      --color-text-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-secondary: #f9fafb;
+      --color-background: #ffffff;
+      --color-background-gradient: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+
+      /* Brubru Signature Gradient */
+      --gradient-primary: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+
+      /* Spacing */
+      --space-1: 0.25rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-5: 1.25rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+
+      /* Typography - Adobe Caslon Pro */
+      --font-family: 'Adobe Caslon Pro', Georgia, 'Times New Roman', serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.8125rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.25rem;
+      --font-size-xl: 1.5rem;
+      --font-size-2xl: 2rem;
+      --font-size-3xl: 2.25rem;
+      --font-size-4xl: 2.625rem;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+      /* Border Radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.375rem;
+      --radius-lg: 0.5rem;
+      --radius-xl: 0.75rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--color-text);
+      background: var(--color-background-gradient);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* ============================================
+       HEADER
+       ============================================ */
+
+    .header {
+      background: var(--gradient-primary);
+      color: white;
+      padding: var(--space-6) var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header__brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .header__logo {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header__logo-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .header__title {
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+    }
+
+    .header__subtitle {
+      font-size: var(--font-size-sm);
+      opacity: 0.9;
+    }
+
+    .header__badge {
+      padding: var(--space-2) var(--space-4);
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+    }
+
+    /* ============================================
+       NAVIGATION TABS
+       ============================================ */
+
+    .nav-tabs {
+      background: white;
+      border-bottom: 1px solid var(--color-border);
+      padding: 0 var(--space-8);
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-5);
+      border: none;
+      background: transparent;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-tab:hover {
+      color: var(--color-primary);
+    }
+
+    .nav-tab--active {
+      color: var(--color-primary);
+      border-bottom-color: var(--color-primary);
+    }
+
+    .nav-tab .mdi {
+      font-size: 1.25rem;
+    }
+
+    /* ============================================
+       MAIN CONTENT
+       ============================================ */
+
+    .main {
+      padding: var(--space-8);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section--active {
+      display: block;
+    }
+
+    /* ============================================
+       METRIC CARDS
+       ============================================ */
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-5);
+      margin-bottom: var(--space-8);
+    }
+
+    .metric-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-5);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .metric-card--blue::before { background: var(--color-primary); }
+    .metric-card--green::before { background: var(--color-accent-green); }
+    .metric-card--purple::before { background: var(--color-accent-purple); }
+    .metric-card--gold::before { background: var(--color-accent-gold); }
+
+    .metric-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: var(--space-3);
+    }
+
+    .metric-card--blue .metric-card__icon {
+      background: rgba(6, 102, 204, 0.1);
+      color: var(--color-primary);
+    }
+
+    .metric-card--green .metric-card__icon {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--color-accent-green);
+    }
+
+    .metric-card--purple .metric-card__icon {
+      background: rgba(155, 81, 224, 0.1);
+      color: var(--color-accent-purple);
+    }
+
+    .metric-card--gold .metric-card__icon {
+      background: rgba(217, 119, 6, 0.1);
+      color: var(--color-accent-gold);
+    }
+
+    .metric-card__label {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-1);
+    }
+
+    .metric-card__value {
+      font-size: var(--font-size-3xl);
+      font-weight: 700;
+    }
+
+    .metric-card__change {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      margin-top: var(--space-2);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+    }
+
+    .metric-card__change--up {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--color-accent-green);
+    }
+
+    .metric-card__change--target {
+      background: rgba(6, 102, 204, 0.1);
+      color: var(--color-primary);
+    }
+
+    /* ============================================
+       CHARTS & GRAPHS
+       ============================================ */
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-5);
+      margin-bottom: var(--space-6);
+    }
+
+    .chart-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-md);
+    }
+
+    .chart-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-5);
+    }
+
+    .chart-card__title {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .chart-card__title .mdi {
+      color: var(--color-primary);
+    }
+
+    .chart-card__legend {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .legend-dot--blue { background: var(--color-primary); }
+    .legend-dot--green { background: var(--color-accent-green); }
+    .legend-dot--gold { background: var(--color-accent-gold); }
+    .legend-dot--purple { background: var(--color-accent-purple); }
+
+    /* Revenue Chart */
+    .revenue-chart {
+      height: 300px;
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-3);
+      padding: var(--space-4) 0;
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .chart-bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .chart-bar-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 40px;
+    }
+
+    .chart-bar {
+      width: 100%;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .chart-bar:hover {
+      opacity: 0.8;
+      transform: scaleY(1.02);
+    }
+
+    .chart-bar--blue { background: var(--color-primary); }
+    .chart-bar--gold { background: var(--color-accent-gold); }
+
+    .chart-label {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    .chart-value {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    /* Donut Chart */
+    .donut-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-6);
+      padding: var(--space-4);
+    }
+
+    .donut-chart {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--color-primary) 0deg 216deg,
+        var(--color-accent-gold) 216deg 288deg,
+        var(--color-accent-green) 288deg 360deg
+      );
+      position: relative;
+    }
+
+    .donut-chart::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      right: 30px;
+      bottom: 30px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .donut-center__value {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .donut-center__label {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    .donut-legend {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .donut-legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .donut-legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: var(--radius-sm);
+    }
+
+    .donut-legend-info {
+      flex: 1;
+    }
+
+    .donut-legend-label {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+    }
+
+    .donut-legend-value {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================
+       PRICING TABLE
+       ============================================ */
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+      margin-bottom: var(--space-8);
+    }
+
+    .pricing-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-md);
+      border: 2px solid transparent;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .pricing-card--featured {
+      border-color: var(--color-primary);
+    }
+
+    .pricing-card--featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: var(--space-1) var(--space-3);
+      background: var(--color-primary);
+      color: white;
+      border-radius: 12px;
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+    }
+
+    .pricing-card__tier {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .pricing-card__tier-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pricing-card__tier-dot--white {
+      background: var(--color-border);
+      border: 2px solid var(--color-text-muted);
+    }
+
+    .pricing-card__tier-dot--yellow {
+      background: var(--color-accent-gold);
+    }
+
+    .pricing-card__tier-dot--blue {
+      background: var(--color-primary);
+    }
+
+    .pricing-card__tier-name {
+      font-weight: 700;
+      font-size: var(--font-size-lg);
+    }
+
+    .pricing-card__price {
+      margin-bottom: var(--space-4);
+    }
+
+    .pricing-card__amount {
+      font-size: var(--font-size-4xl);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .pricing-card__period {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+
+    .pricing-card__margin {
+      display: inline-block;
+      padding: var(--space-1) var(--space-2);
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--color-accent-green);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+    }
+
+    .pricing-card__features {
+      list-style: none;
+    }
+
+    .pricing-card__feature {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) 0;
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      border-bottom: 1px solid var(--color-secondary);
+    }
+
+    .pricing-card__feature:last-child {
+      border-bottom: none;
+    }
+
+    .pricing-card__feature .mdi {
+      color: var(--color-accent-green);
+    }
+
+    .pricing-card__feature--disabled {
+      color: var(--color-text-muted);
+    }
+
+    .pricing-card__feature--disabled .mdi {
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================
+       UNIT ECONOMICS
+       ============================================ */
+
+    .economics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-5);
+      margin-bottom: var(--space-6);
+    }
+
+    .economics-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-md);
+    }
+
+    .economics-card__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+    }
+
+    .economics-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .economics-card__icon--blue {
+      background: rgba(6, 102, 204, 0.1);
+      color: var(--color-primary);
+    }
+
+    .economics-card__icon--gold {
+      background: rgba(217, 119, 6, 0.1);
+      color: var(--color-accent-gold);
+    }
+
+    .economics-card__title {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+    }
+
+    .economics-card__subtitle {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+
+    .economics-row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--color-secondary);
+    }
+
+    .economics-row:last-child {
+      border-bottom: none;
+    }
+
+    .economics-row__label {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+    }
+
+    .economics-row__value {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+    }
+
+    .economics-row__value--highlight {
+      color: var(--color-primary);
+      font-size: var(--font-size-base);
+    }
+
+    .economics-row__value--green {
+      color: var(--color-accent-green);
+    }
+
+    /* LTV:CAC Gauge */
+    .gauge-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6);
+    }
+
+    .gauge {
+      position: relative;
+      width: 200px;
+      height: 100px;
+      overflow: hidden;
+    }
+
+    .gauge-bg {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 180deg,
+        var(--color-accent-red) 0deg,
+        var(--color-accent-gold) 60deg,
+        var(--color-accent-green) 120deg,
+        var(--color-accent-green) 180deg
+      );
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .gauge-mask {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .gauge-needle {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 4px;
+      height: 80px;
+      background: var(--color-text);
+      border-radius: 2px;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .gauge-center {
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
+      background: var(--color-text);
+      border-radius: 50%;
+    }
+
+    .gauge-value {
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .gauge-value__number {
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      color: var(--color-accent-green);
+    }
+
+    .gauge-value__label {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+    }
+
+    /* ============================================
+       MILESTONES TIMELINE
+       ============================================ */
+
+    .timeline {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-md);
+      margin-bottom: var(--space-6);
+    }
+
+    .timeline__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+
+    .timeline__title {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+    }
+
+    .timeline__track {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+      padding-top: var(--space-4);
+    }
+
+    .timeline__track::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--color-border);
+      border-radius: 2px;
+    }
+
+    .timeline__milestone {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .timeline__dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-border);
+      border: 4px solid white;
+      box-shadow: 0 0 0 2px var(--color-border);
+      z-index: 1;
+      margin-bottom: var(--space-3);
+    }
+
+    .timeline__dot--active {
+      background: var(--color-primary);
+      box-shadow: 0 0 0 2px var(--color-primary);
+    }
+
+    .timeline__dot--complete {
+      background: var(--color-accent-green);
+      box-shadow: 0 0 0 2px var(--color-accent-green);
+    }
+
+    .timeline__content {
+      text-align: center;
+      max-width: 150px;
+    }
+
+    .timeline__label {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-1);
+    }
+
+    .timeline__value {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+    }
+
+    .timeline__target {
+      font-size: var(--font-size-xs);
+      color: var(--color-accent-green);
+      margin-top: var(--space-1);
+    }
+
+    /* ============================================
+       RISKS TABLE
+       ============================================ */
+
+    .risks-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-md);
+    }
+
+    .risks-card__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-5);
+    }
+
+    .risks-card__title {
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+    }
+
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .risk-table th,
+    .risk-table td {
+      padding: var(--space-3) var(--space-4);
+      text-align: left;
+      border-bottom: 1px solid var(--color-secondary);
+    }
+
+    .risk-table th {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+    }
+
+    .risk-table td {
+      font-size: var(--font-size-sm);
+    }
+
+    .risk-badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+    }
+
+    .risk-badge--high {
+      background: rgba(220, 38, 38, 0.1);
+      color: var(--color-accent-red);
+    }
+
+    .risk-badge--medium {
+      background: rgba(217, 119, 6, 0.1);
+      color: var(--color-accent-gold);
+    }
+
+    .risk-badge--low {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--color-accent-green);
+    }
+
+    /* ============================================
+       CTA SECTION
+       ============================================ */
+
+    .cta-section {
+      background: var(--gradient-primary);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      text-align: center;
+      color: white;
+      margin-top: var(--space-8);
+    }
+
+    .cta-section__title {
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      margin-bottom: var(--space-3);
+    }
+
+    .cta-section__subtitle {
+      font-size: var(--font-size-base);
+      opacity: 0.9;
+      margin-bottom: var(--space-6);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-section__buttons {
+      display: flex;
+      gap: var(--space-4);
+      justify-content: center;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-6);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-base);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .cta-btn--primary {
+      background: white;
+      color: var(--color-primary);
+      border: none;
+    }
+
+    .cta-btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .cta-btn--secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .cta-btn--secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* ============================================
+       FOOTER
+       ============================================ */
+
+    .footer {
+      padding: var(--space-6) var(--space-8);
+      background: white;
+      border-top: 1px solid var(--color-border);
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+
+    @media (max-width: 1024px) {
+      .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .chart-row {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .economics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: var(--space-4);
+        text-align: center;
+      }
+
+      .nav-tabs {
+        overflow-x: auto;
+        padding: 0 var(--space-4);
+      }
+
+      .timeline__track {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: var(--space-6);
+      }
+
+      .timeline__track::before {
+        width: 4px;
+        height: 100%;
+        top: 0;
+        left: 12px;
+      }
+
+      .timeline__milestone {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--space-4);
+        margin-bottom: var(--space-4);
+      }
+
+      .timeline__content {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header__brand">
+      <div class="header__logo">
+        <img src="brubru_mainlogo.png" alt="Brubru Logo" class="header__logo-image">
+      </div>
+      <div>
+        <div class="header__title">Brubru</div>
+        <div class="header__subtitle">AI-Powered EU Policy Intelligence</div>
+      </div>
+    </div>
+    <div class="header__badge">
+      <span class="mdi mdi-chart-line"></span>
+      Financial Model - January 2026
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="nav-tabs">
+    <button class="nav-tab nav-tab--active" onclick="showSection('overview')">
+      <span class="mdi mdi-view-dashboard-outline"></span>
+      Overview
+    </button>
+    <button class="nav-tab" onclick="showSection('pricing')">
+      <span class="mdi mdi-currency-eur"></span>
+      Pricing & Revenue
+    </button>
+    <button class="nav-tab" onclick="showSection('economics')">
+      <span class="mdi mdi-chart-donut"></span>
+      Unit Economics
+    </button>
+    <button class="nav-tab" onclick="showSection('roadmap')">
+      <span class="mdi mdi-road-variant"></span>
+      Roadmap & Risks
+    </button>
+  </nav>
+
+  <main class="main">
+    <!-- Overview Section -->
+    <section id="overview" class="section section--active">
+      <!-- Key Metrics -->
+      <div class="metric-grid">
+        <div class="metric-card metric-card--blue">
+          <div class="metric-card__icon">
+            <span class="mdi mdi-cash-multiple"></span>
+          </div>
+          <div class="metric-card__label">Cash Position</div>
+          <div class="metric-card__value">EUR 10,000</div>
+          <div class="metric-card__change metric-card__change--target">
+            <span class="mdi mdi-target"></span>
+            Pre-revenue stage
+          </div>
+        </div>
+
+        <div class="metric-card metric-card--green">
+          <div class="metric-card__icon">
+            <span class="mdi mdi-timer-sand"></span>
+          </div>
+          <div class="metric-card__label">Runway (Platform Only)</div>
+          <div class="metric-card__value">87 mo</div>
+          <div class="metric-card__change metric-card__change--up">
+            <span class="mdi mdi-shield-check"></span>
+            Sustainable base
+          </div>
+        </div>
+
+        <div class="metric-card metric-card--purple">
+          <div class="metric-card__icon">
+            <span class="mdi mdi-server"></span>
+          </div>
+          <div class="metric-card__label">Monthly Platform Cost</div>
+          <div class="metric-card__value">EUR 115</div>
+          <div class="metric-card__change metric-card__change--up">
+            <span class="mdi mdi-arrow-down"></span>
+            Lean infrastructure
+          </div>
+        </div>
+
+        <div class="metric-card metric-card--gold">
+          <div class="metric-card__icon">
+            <span class="mdi mdi-bullseye-arrow"></span>
+          </div>
+          <div class="metric-card__label">Break-even Target</div>
+          <div class="metric-card__value">EUR 3K</div>
+          <div class="metric-card__change metric-card__change--target">
+            <span class="mdi mdi-calendar"></span>
+            Month 6 goal
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-row">
+        <div class="chart-card">
+          <div class="chart-card__header">
+            <div class="chart-card__title">
+              <span class="mdi mdi-chart-bar"></span>
+              12-Month Revenue Projection
+            </div>
+            <div class="chart-card__legend">
+              <div class="legend-item">
+                <div class="legend-dot legend-dot--gold"></div>
+                Yellow Tier
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot legend-dot--blue"></div>
+                Blue Tier
+              </div>
+            </div>
+          </div>
+          <div class="revenue-chart">
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 0</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--gold" style="height: 2px;"></div>
+              </div>
+              <div class="chart-label">M1</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 0</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--gold" style="height: 2px;"></div>
+              </div>
+              <div class="chart-label">M2</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 158</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--gold" style="height: 10px;"></div>
+              </div>
+              <div class="chart-label">M3</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 395</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--gold" style="height: 24px;"></div>
+              </div>
+              <div class="chart-label">M4</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 711</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--gold" style="height: 42px;"></div>
+              </div>
+              <div class="chart-label">M5</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 1.2K</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--blue" style="height: 35px;"></div>
+                <div class="chart-bar chart-bar--gold" style="height: 35px;"></div>
+              </div>
+              <div class="chart-label">M6</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 1.9K</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--blue" style="height: 55px;"></div>
+                <div class="chart-bar chart-bar--gold" style="height: 55px;"></div>
+              </div>
+              <div class="chart-label">M7</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 2.6K</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--blue" style="height: 75px;"></div>
+                <div class="chart-bar chart-bar--gold" style="height: 75px;"></div>
+              </div>
+              <div class="chart-label">M8</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 3.3K</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--blue" style="height: 95px;"></div>
+                <div class="chart-bar chart-bar--gold" style="height: 95px;"></div>
+              </div>
+              <div class="chart-label">M9</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 4K</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--blue" style="height: 115px;"></div>
+                <div class="chart-bar chart-bar--gold" style="height: 115px;"></div>
+              </div>
+              <div class="chart-label">M10</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 4.7K</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--blue" style="height: 135px;"></div>
+                <div class="chart-bar chart-bar--gold" style="height: 135px;"></div>
+              </div>
+              <div class="chart-label">M11</div>
+            </div>
+            <div class="chart-bar-group">
+              <div class="chart-value">EUR 5.5K</div>
+              <div class="chart-bar-stack">
+                <div class="chart-bar chart-bar--blue" style="height: 155px;"></div>
+                <div class="chart-bar chart-bar--gold" style="height: 155px;"></div>
+              </div>
+              <div class="chart-label">M12</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card__header">
+            <div class="chart-card__title">
+              <span class="mdi mdi-chart-pie"></span>
+              Revenue Mix (M12)
+            </div>
+          </div>
+          <div class="donut-container">
+            <div class="donut-chart">
+              <div class="donut-center">
+                <div class="donut-center__value">EUR 5.5K</div>
+                <div class="donut-center__label">MRR Target</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="donut-legend-item">
+                <div class="donut-legend-color" style="background: var(--color-primary);"></div>
+                <div class="donut-legend-info">
+                  <div class="donut-legend-label">Blue Tier</div>
+                  <div class="donut-legend-value">EUR 2,995 (60%)</div>
+                </div>
+              </div>
+              <div class="donut-legend-item">
+                <div class="donut-legend-color" style="background: var(--color-accent-gold);"></div>
+                <div class="donut-legend-info">
+                  <div class="donut-legend-label">Yellow Tier</div>
+                  <div class="donut-legend-value">EUR 2,370 (40%)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section">
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-card__tier">
+            <div class="pricing-card__tier-dot pricing-card__tier-dot--white"></div>
+            <span class="pricing-card__tier-name">White (Free)</span>
+          </div>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">EUR 0</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+          <div class="pricing-card__margin">Cost: EUR 2/user</div>
+          <ul class="pricing-card__features">
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              Basic AI chat (GPT-3.5)
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              5 amendments/month
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              XML, HTML exports
+            </li>
+            <li class="pricing-card__feature pricing-card__feature--disabled">
+              <span class="mdi mdi-close"></span>
+              EU Law Comply
+            </li>
+            <li class="pricing-card__feature pricing-card__feature--disabled">
+              <span class="mdi mdi-close"></span>
+              Tenderator
+            </li>
+          </ul>
+        </div>
+
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-card__tier">
+            <div class="pricing-card__tier-dot pricing-card__tier-dot--yellow"></div>
+            <span class="pricing-card__tier-name">Yellow (Professional)</span>
+          </div>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">EUR 79</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+          <div class="pricing-card__margin">Margin: EUR 71/user (90%)</div>
+          <ul class="pricing-card__features">
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              Advanced AI chat (GPT-4)
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              Unlimited amendments
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              All export formats
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              EU Law Comply (Limited)
+            </li>
+            <li class="pricing-card__feature pricing-card__feature--disabled">
+              <span class="mdi mdi-close"></span>
+              Tenderator
+            </li>
+          </ul>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card__tier">
+            <div class="pricing-card__tier-dot pricing-card__tier-dot--blue"></div>
+            <span class="pricing-card__tier-name">Blue (Enterprise)</span>
+          </div>
+          <div class="pricing-card__price">
+            <span class="pricing-card__amount">EUR 599</span>
+            <span class="pricing-card__period">/month</span>
+          </div>
+          <div class="pricing-card__margin">Margin: EUR 564/user (94%)</div>
+          <ul class="pricing-card__features">
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              Premium AI (GPT-4 Turbo)
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              Unlimited everything
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              EU Law Comply (Full)
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              Tenderator Access
+            </li>
+            <li class="pricing-card__feature">
+              <span class="mdi mdi-check"></span>
+              Team Access + SLA
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Break-even Analysis -->
+      <div class="chart-card">
+        <div class="chart-card__header">
+          <div class="chart-card__title">
+            <span class="mdi mdi-scale-balance"></span>
+            Break-even Analysis
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); padding: var(--space-4);">
+          <div style="text-align: center; padding: var(--space-5); background: var(--color-secondary); border-radius: var(--radius-lg);">
+            <div style="font-size: var(--font-size-4xl); font-weight: 700; color: var(--color-accent-gold);">48</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Yellow subscribers only</div>
+            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2);">EUR 3,792 MRR</div>
+          </div>
+          <div style="text-align: center; padding: var(--space-5); background: var(--color-secondary); border-radius: var(--radius-lg);">
+            <div style="font-size: var(--font-size-4xl); font-weight: 700; color: var(--color-primary);">6</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Blue subscribers only</div>
+            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2);">EUR 3,594 MRR</div>
+          </div>
+          <div style="text-align: center; padding: var(--space-5); background: linear-gradient(135deg, rgba(6, 102, 204, 0.1), rgba(217, 119, 6, 0.1)); border-radius: var(--radius-lg); border: 2px solid var(--color-primary);">
+            <div style="font-size: var(--font-size-4xl); font-weight: 700; color: var(--color-accent-green);">20+3</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Balanced mix (recommended)</div>
+            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2);">EUR 3,377 MRR</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unit Economics Section -->
+    <section id="economics" class="section">
+      <div class="economics-grid">
+        <div class="economics-card">
+          <div class="economics-card__header">
+            <div class="economics-card__icon economics-card__icon--gold">
+              <span class="mdi mdi-star-circle"></span>
+            </div>
+            <div>
+              <div class="economics-card__title">Yellow Tier Economics</div>
+              <div class="economics-card__subtitle">Professional Individual</div>
+            </div>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Monthly Price</span>
+            <span class="economics-row__value">EUR 79</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">AI Cost</span>
+            <span class="economics-row__value">EUR 6</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Infrastructure</span>
+            <span class="economics-row__value">EUR 1</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Support</span>
+            <span class="economics-row__value">EUR 1</span>
+          </div>
+          <div class="economics-row" style="background: rgba(5, 150, 105, 0.05); margin: var(--space-2) calc(-1 * var(--space-6)); padding: var(--space-3) var(--space-6);">
+            <span class="economics-row__label" style="font-weight: 600;">Gross Margin</span>
+            <span class="economics-row__value economics-row__value--green" style="font-size: var(--font-size-lg);">EUR 71 (90%)</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Est. Churn (monthly)</span>
+            <span class="economics-row__value">5%</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Avg. Lifetime</span>
+            <span class="economics-row__value">20 months</span>
+          </div>
+          <div class="economics-row" style="background: rgba(6, 102, 204, 0.05); margin: var(--space-2) calc(-1 * var(--space-6)); padding: var(--space-3) var(--space-6);">
+            <span class="economics-row__label" style="font-weight: 600;">LTV</span>
+            <span class="economics-row__value economics-row__value--highlight" style="font-size: var(--font-size-lg);">EUR 1,420</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Target CAC (3:1 ratio)</span>
+            <span class="economics-row__value">EUR 473</span>
+          </div>
+        </div>
+
+        <div class="economics-card">
+          <div class="economics-card__header">
+            <div class="economics-card__icon economics-card__icon--blue">
+              <span class="mdi mdi-domain"></span>
+            </div>
+            <div>
+              <div class="economics-card__title">Blue Tier Economics</div>
+              <div class="economics-card__subtitle">Enterprise Team</div>
+            </div>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Monthly Price</span>
+            <span class="economics-row__value">EUR 599</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">AI Cost</span>
+            <span class="economics-row__value">EUR 25</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Infrastructure</span>
+            <span class="economics-row__value">EUR 5</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Support</span>
+            <span class="economics-row__value">EUR 5</span>
+          </div>
+          <div class="economics-row" style="background: rgba(5, 150, 105, 0.05); margin: var(--space-2) calc(-1 * var(--space-6)); padding: var(--space-3) var(--space-6);">
+            <span class="economics-row__label" style="font-weight: 600;">Gross Margin</span>
+            <span class="economics-row__value economics-row__value--green" style="font-size: var(--font-size-lg);">EUR 564 (94%)</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Est. Churn (monthly)</span>
+            <span class="economics-row__value">2%</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Avg. Lifetime</span>
+            <span class="economics-row__value">50 months</span>
+          </div>
+          <div class="economics-row" style="background: rgba(6, 102, 204, 0.05); margin: var(--space-2) calc(-1 * var(--space-6)); padding: var(--space-3) var(--space-6);">
+            <span class="economics-row__label" style="font-weight: 600;">LTV</span>
+            <span class="economics-row__value economics-row__value--highlight" style="font-size: var(--font-size-lg);">EUR 28,200</span>
+          </div>
+          <div class="economics-row">
+            <span class="economics-row__label">Target CAC (3:1 ratio)</span>
+            <span class="economics-row__value">EUR 9,400</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- LTV:CAC Ratio -->
+      <div class="chart-card">
+        <div class="chart-card__header">
+          <div class="chart-card__title">
+            <span class="mdi mdi-gauge"></span>
+            Target LTV:CAC Ratio
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6);">
+          <div style="text-align: center; padding: var(--space-6);">
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: var(--space-2);">Yellow Tier</div>
+            <div style="font-size: 4rem; font-weight: 700; color: var(--color-accent-green);">3:1</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">EUR 1,420 LTV / EUR 473 CAC</div>
+            <div style="margin-top: var(--space-4); padding: var(--space-2) var(--space-4); background: rgba(5, 150, 105, 0.1); border-radius: var(--radius-md); display: inline-block;">
+              <span style="font-size: var(--font-size-sm); color: var(--color-accent-green); font-weight: 600;">
+                <span class="mdi mdi-check-circle"></span> Healthy ratio
+              </span>
+            </div>
+          </div>
+          <div style="text-align: center; padding: var(--space-6);">
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-muted); margin-bottom: var(--space-2);">Blue Tier</div>
+            <div style="font-size: 4rem; font-weight: 700; color: var(--color-accent-green);">3:1</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">EUR 28,200 LTV / EUR 9,400 CAC</div>
+            <div style="margin-top: var(--space-4); padding: var(--space-2) var(--space-4); background: rgba(5, 150, 105, 0.1); border-radius: var(--radius-md); display: inline-block;">
+              <span style="font-size: var(--font-size-sm); color: var(--color-accent-green); font-weight: 600;">
+                <span class="mdi mdi-check-circle"></span> Enterprise-ready
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="section">
+      <!-- Timeline -->
+      <div class="timeline">
+        <div class="timeline__header">
+          <span class="mdi mdi-map-marker-path" style="font-size: 1.5rem; color: var(--color-primary);"></span>
+          <span class="timeline__title">Growth Milestones</span>
+        </div>
+        <div class="timeline__track">
+          <div class="timeline__milestone">
+            <div class="timeline__dot timeline__dot--active"></div>
+            <div class="timeline__content">
+              <div class="timeline__label">Now</div>
+              <div class="timeline__value">Pre-revenue</div>
+              <div class="timeline__target">EUR 10K cash</div>
+            </div>
+          </div>
+          <div class="timeline__milestone">
+            <div class="timeline__dot"></div>
+            <div class="timeline__content">
+              <div class="timeline__label">Month 3</div>
+              <div class="timeline__value">First Customers</div>
+              <div class="timeline__target">10 Yellow, 1 Blue</div>
+            </div>
+          </div>
+          <div class="timeline__milestone">
+            <div class="timeline__dot"></div>
+            <div class="timeline__content">
+              <div class="timeline__label">Month 6</div>
+              <div class="timeline__value">Break-even</div>
+              <div class="timeline__target">EUR 3K MRR</div>
+            </div>
+          </div>
+          <div class="timeline__milestone">
+            <div class="timeline__dot"></div>
+            <div class="timeline__content">
+              <div class="timeline__label">Month 12</div>
+              <div class="timeline__value">Scale</div>
+              <div class="timeline__target">EUR 10K MRR</div>
+            </div>
+          </div>
+          <div class="timeline__milestone">
+            <div class="timeline__dot"></div>
+            <div class="timeline__content">
+              <div class="timeline__label">Month 18</div>
+              <div class="timeline__value">Seed Ready</div>
+              <div class="timeline__target">EUR 15K MRR</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Risk Matrix -->
+      <div class="risks-card">
+        <div class="risks-card__header">
+          <span class="mdi mdi-alert-circle-outline" style="font-size: 1.5rem; color: var(--color-accent-gold);"></span>
+          <span class="risks-card__title">Risk Assessment</span>
+        </div>
+        <table class="risk-table">
+          <thead>
+            <tr>
+              <th>Risk</th>
+              <th>Probability</th>
+              <th>Impact</th>
+              <th>Mitigation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Free users cost too much</td>
+              <td><span class="risk-badge risk-badge--medium">Medium</span></td>
+              <td><span class="risk-badge risk-badge--high">High</span></td>
+              <td>Cap free tier at 500 users; reduce to 2 amendments</td>
+            </tr>
+            <tr>
+              <td>Low conversion rate</td>
+              <td><span class="risk-badge risk-badge--medium">Medium</span></td>
+              <td><span class="risk-badge risk-badge--high">High</span></td>
+              <td>Improve onboarding; add feature gates</td>
+            </tr>
+            <tr>
+              <td>AI costs spike</td>
+              <td><span class="risk-badge risk-badge--low">Low</span></td>
+              <td><span class="risk-badge risk-badge--medium">Medium</span></td>
+              <td>Multi-provider fallback; usage caps</td>
+            </tr>
+            <tr>
+              <td>Single founder dependency</td>
+              <td><span class="risk-badge risk-badge--high">High</span></td>
+              <td><span class="risk-badge risk-badge--high">High</span></td>
+              <td>Document processes; build recurring revenue</td>
+            </tr>
+            <tr>
+              <td>EU regulation changes</td>
+              <td><span class="risk-badge risk-badge--low">Low</span></td>
+              <td><span class="risk-badge risk-badge--medium">Medium</span></td>
+              <td>Core value prop is regulatory intelligence</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Scenario Planning -->
+      <div class="chart-card" style="margin-top: var(--space-6);">
+        <div class="chart-card__header">
+          <div class="chart-card__title">
+            <span class="mdi mdi-chart-multiple"></span>
+            12-Month Scenario Planning
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); padding: var(--space-4);">
+          <div style="padding: var(--space-5); background: rgba(220, 38, 38, 0.05); border-radius: var(--radius-lg); border-left: 4px solid var(--color-accent-red);">
+            <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-accent-red); margin-bottom: var(--space-3);">Bear Case (50%)</div>
+            <div style="font-size: var(--font-size-2xl); font-weight: 700; margin-bottom: var(--space-2);">EUR 5,365</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">500 free, 30 Yellow, 5 Blue</div>
+            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2);">Sustainable but slow growth</div>
+          </div>
+          <div style="padding: var(--space-5); background: rgba(6, 102, 204, 0.05); border-radius: var(--radius-lg); border-left: 4px solid var(--color-primary);">
+            <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-primary); margin-bottom: var(--space-3);">Base Case (Target)</div>
+            <div style="font-size: var(--font-size-2xl); font-weight: 700; margin-bottom: var(--space-2);">EUR 10,730</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">1,000 free, 60 Yellow, 10 Blue</div>
+            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2);">Seed-fundable metrics</div>
+          </div>
+          <div style="padding: var(--space-5); background: rgba(5, 150, 105, 0.05); border-radius: var(--radius-lg); border-left: 4px solid var(--color-accent-green);">
+            <div style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-accent-green); margin-bottom: var(--space-3);">Bull Case (150%)</div>
+            <div style="font-size: var(--font-size-2xl); font-weight: 700; margin-bottom: var(--space-2);">EUR 16,095</div>
+            <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">1,500 free, 90 Yellow, 15 Blue</div>
+            <div style="font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: var(--space-2);">Strong Series A candidate</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <div class="cta-section__title">Ready to Transform EU Policy Work?</div>
+      <div class="cta-section__subtitle">
+        Brubru combines AI intelligence with deep EU institutional knowledge to help policy professionals work smarter, not harder.
+      </div>
+      <div class="cta-section__buttons">
+        <a href="https://brubru.beresol.eu" class="cta-btn cta-btn--primary">
+          <span class="mdi mdi-rocket-launch"></span>
+          Try Brubru Free
+        </a>
+        <a href="mailto:hello@beresol.eu" class="cta-btn cta-btn--secondary">
+          <span class="mdi mdi-email-outline"></span>
+          Contact Founder
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <strong>Brubru Financial Model</strong>
+    <br>
+    <small>January 2026 | Beresol BV | hello@beresol.eu</small>
+  </footer>
+
+  <script>
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('section--active');
+      });
+
+      // Deactivate all tabs
+      document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('nav-tab--active');
+      });
+
+      // Show selected section
+      document.getElementById(sectionId).classList.add('section--active');
+
+      // Activate clicked tab
+      event.target.closest('.nav-tab').classList.add('nav-tab--active');
+    }
+  </script>
+</body>
+</html>
