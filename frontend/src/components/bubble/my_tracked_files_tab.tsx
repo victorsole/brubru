@@ -26,6 +26,7 @@ import {
   mdiPencilOutline,
   mdiAccountTieOutline,
   mdiFilterVariant,
+  mdiTextBoxCheckOutline,
 } from '@mdi/js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -33,6 +34,9 @@ import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
 import { useCommitteeWork, PROCEDURE_TYPE_INFO, STATUS_INFO } from '../../hooks/use_committee_work';
 import type { CommitteeWorkItem } from '../../hooks/use_committee_work';
+import { useTextsAdopted } from '../../hooks/use_texts_adopted';
+import type { TextAdopted as TextAdoptedType } from '../../hooks/use_texts_adopted';
+import { TextAdoptedCard } from './text_adopted_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import './my_tracked_files_tab.css';
 
@@ -70,8 +74,17 @@ export const MyTrackedFilesTab = () => {
     setFilters: setCommitteeFilters,
   } = useCommitteeWork();
 
+  // Texts Adopted hook
+  const {
+    items: textsAdoptedItems,
+    isLoadingItems: isLoadingTextsAdopted,
+    fetchItems: fetchTextsAdoptedItems,
+    filters: textsAdoptedFilters,
+    setFilters: setTextsAdoptedFilters,
+  } = useTextsAdopted();
+
   const hasLoadedRef = useRef(false);
-  const [activeTab, setActiveTab] = useState<'legislative' | 'committee'>('legislative');
+  const [activeTab, setActiveTab] = useState<'legislative' | 'committee' | 'texts_adopted'>('legislative');
   const [amendmentCounts, setAmendmentCounts] = useState<Record<string, number>>({});
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -110,6 +123,8 @@ export const MyTrackedFilesTab = () => {
       // Load committee work data
       await fetchCommittees();
       await fetchCommitteeWorkItems();
+      // Load texts adopted data
+      await fetchTextsAdoptedItems();
     };
 
     loadData();
@@ -119,8 +134,10 @@ export const MyTrackedFilesTab = () => {
     if (activeTab === 'legislative') {
       await fetchTrackedFiles();
       await fetchRecentChanges(168);
-    } else {
+    } else if (activeTab === 'committee') {
       await fetchCommitteeWorkItems();
+    } else {
+      await fetchTextsAdoptedItems();
     }
   };
 
@@ -343,7 +360,9 @@ export const MyTrackedFilesTab = () => {
           <p className="my-tracked-files-tab__subtitle">
             {activeTab === 'legislative'
               ? `${trackedFiles.length} file${trackedFiles.length !== 1 ? 's' : ''} tracked`
-              : `${committeeWorkItems.length} committee work items`
+              : activeTab === 'committee'
+              ? `${committeeWorkItems.length} committee work items`
+              : `${textsAdoptedItems.length} adopted texts`
             }
           </p>
         </div>
@@ -351,7 +370,7 @@ export const MyTrackedFilesTab = () => {
           <button
             className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
             onClick={handleRefresh}
-            disabled={isLoadingTrackedFiles || isLoadingCommitteeWork}
+            disabled={isLoadingTrackedFiles || isLoadingCommitteeWork || isLoadingTextsAdopted}
           >
             <Icon path={mdiRefresh} size={0.8} />
             Refresh
@@ -383,6 +402,13 @@ export const MyTrackedFilesTab = () => {
         >
           <Icon path={mdiAccountGroupOutline} size={0.8} />
           Committee Work
+        </button>
+        <button
+          className={`my-tracked-files-tab__tab ${activeTab === 'texts_adopted' ? 'my-tracked-files-tab__tab--active' : ''}`}
+          onClick={() => setActiveTab('texts_adopted')}
+        >
+          <Icon path={mdiTextBoxCheckOutline} size={0.8} />
+          Texts Adopted
         </button>
       </div>
 
@@ -515,6 +541,87 @@ export const MyTrackedFilesTab = () => {
             <div className="my-tracked-files-tab__committee-list">
               {committeeWorkItems.map((item) => (
                 <CommitteeWorkCard key={item.id} item={item} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Texts Adopted Tab Content */}
+      {activeTab === 'texts_adopted' && (
+        <div className="my-tracked-files-tab__texts-adopted">
+          {/* Filters */}
+          <div className="my-tracked-files-tab__texts-adopted-filters">
+            <div className="my-tracked-files-tab__texts-adopted-filter">
+              <Icon path={mdiFilterVariant} size={0.8} />
+              <select
+                value={textsAdoptedFilters.parliamentary_term || ''}
+                onChange={(e) => setTextsAdoptedFilters({
+                  ...textsAdoptedFilters,
+                  parliamentary_term: e.target.value ? parseInt(e.target.value) : undefined
+                })}
+              >
+                <option value="">All Terms</option>
+                <option value="10">Term 10 (2024-2029)</option>
+                <option value="9">Term 9 (2019-2024)</option>
+                <option value="8">Term 8 (2014-2019)</option>
+                <option value="7">Term 7 (2009-2014)</option>
+                <option value="6">Term 6 (2004-2009)</option>
+                <option value="5">Term 5 (1999-2004)</option>
+                <option value="4">Term 4 (1994-1999)</option>
+              </select>
+            </div>
+            <div className="my-tracked-files-tab__texts-adopted-filter">
+              <select
+                value={textsAdoptedFilters.text_type || ''}
+                onChange={(e) => setTextsAdoptedFilters({
+                  ...textsAdoptedFilters,
+                  text_type: e.target.value ? e.target.value as TextAdoptedType['text_type'] : undefined
+                })}
+              >
+                <option value="">All Types</option>
+                <option value="resolution">Resolution</option>
+                <option value="legislative_resolution">Legislative Resolution</option>
+                <option value="decision">Decision</option>
+                <option value="recommendation">Recommendation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div className="my-tracked-files-tab__texts-adopted-search">
+              <Icon path={mdiMagnify} size={0.8} />
+              <input
+                type="text"
+                placeholder="Search texts..."
+                value={textsAdoptedFilters.search || ''}
+                onChange={(e) => setTextsAdoptedFilters({
+                  ...textsAdoptedFilters,
+                  search: e.target.value || undefined
+                })}
+              />
+            </div>
+          </div>
+
+          {/* Items List */}
+          {isLoadingTextsAdopted ? (
+            <div className="my-tracked-files-tab__loading">
+              <Icon path={mdiLoading} size={1} spin />
+              Loading adopted texts...
+            </div>
+          ) : textsAdoptedItems.length === 0 ? (
+            <div className="my-tracked-files-tab__empty">
+              <Icon path={mdiTextBoxCheckOutline} size={2} color="#ccc" />
+              <h4>No adopted texts found</h4>
+              <p>
+                {textsAdoptedFilters.search || textsAdoptedFilters.text_type || textsAdoptedFilters.parliamentary_term
+                  ? 'Try adjusting your filters'
+                  : 'Sync texts adopted data to populate this tab'
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="my-tracked-files-tab__texts-adopted-list">
+              {textsAdoptedItems.map((item) => (
+                <TextAdoptedCard key={item.id} item={item} />
               ))}
             </div>
           )}

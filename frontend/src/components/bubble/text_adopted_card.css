@@ -1,0 +1,148 @@
+/* Text Adopted Card - February 2026 */
+
+.text-adopted-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.text-adopted-card:hover {
+  border-color: #b91c1c;
+  box-shadow: 0 2px 8px rgba(185, 28, 28, 0.08);
+}
+
+.text-adopted-card__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.text-adopted-card__type {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.text-adopted-card__term {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.text-adopted-card__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-adopted-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.text-adopted-card__ref {
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.text-adopted-card__date {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.text-adopted-card__procedure {
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: #0066cc;
+  background: #eff6ff;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.text-adopted-card__details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.text-adopted-card__committees {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.text-adopted-card__rapporteur {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.text-adopted-card__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.text-adopted-card__action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: #4b5563;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.text-adopted-card__action-btn:hover {
+  background: #f9fafb;
+  color: #1f2937;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .text-adopted-card {
+    padding: 0.75rem;
+  }
+
+  .text-adopted-card__title {
+    font-size: 0.85rem;
+  }
+
+  .text-adopted-card__actions {
+    flex-wrap: wrap;
+  }
+}

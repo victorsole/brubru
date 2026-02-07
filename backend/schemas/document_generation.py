@@ -108,6 +108,34 @@ class GenerateTalkingPointsRequest(BaseModel):
     language: str = Field("EN")
 
 
+class GenerateResolutionRequest(BaseModel):
+    """Request to generate a European Parliament Resolution draft"""
+    # Topic
+    topic: str = Field(..., description="Title/topic of the resolution (e.g., 'The situation of human rights in Iran')")
+
+    # Context for recitals
+    context_description: str = Field(
+        ...,
+        description="Background context for generating 'whereas' recitals (A., B., C., ...)"
+    )
+
+    # Key demands for resolution points (optional - AI infers from context if not provided)
+    key_demands: Optional[List[str]] = Field(
+        None,
+        max_length=10,
+        description="Key demands (each becomes a numbered resolution point with an active verb). Optional - AI infers from context."
+    )
+
+    # Optional fields
+    procedure_reference: Optional[str] = Field(None, description="Procedure reference if known (e.g., 2025/2500(RSP))")
+    additional_references: Optional[List[str]] = Field(
+        None,
+        description="Specific treaties, regulations, or previous resolutions to cite in 'having regard to' section"
+    )
+
+    language: str = Field("EN", description="Output language code")
+
+
 class GeneratedDocument(BaseModel):
     """Response containing generated document"""
     document_type: str = Field(..., description="Type of document generated")

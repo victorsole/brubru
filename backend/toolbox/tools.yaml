@@ -1,0 +1,246 @@
+# MCP Toolbox for Databases - Brubru Configuration
+#
+# Defines the PostgreSQL data source and SQL tools for the AI chatbot.
+# Run with: toolbox --tools-file toolbox/tools.yaml
+#
+# Environment variables:
+#   POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DATABASE, POSTGRES_USER, POSTGRES_PASSWORD
+#   OR set DATABASE_URL and parse it in the application layer.
+
+# -------------------------------------------------------------------
+# Data Source: PostgreSQL (Supabase or any standard PostgreSQL)
+# -------------------------------------------------------------------
+kind: sources
+name: brubru-pg
+type: postgres
+host: ${POSTGRES_HOST:127.0.0.1}
+port: ${POSTGRES_PORT:5432}
+database: ${POSTGRES_DATABASE:postgres}
+user: ${POSTGRES_USER:postgres}
+password: ${POSTGRES_PASSWORD}
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Search EU legislation by keyword
+# -------------------------------------------------------------------
+kind: tools
+name: search_eu_laws
+type: postgres-sql
+source: brubru-pg
+description: >
+  Search EU legislation by keyword in title. Returns matching laws with
+  CELEX number, title, document type, date, and policy area.
+  Use for general legislation queries like "AI Act", "GDPR", "emissions".
+parameters:
+  - name: keyword
+    type: string
+    description: The search keyword to find in legislation titles
+statement: |
+  SELECT celex, title, doc_type, date, policy_area, oj_reference
+  FROM eu_laws
+  WHERE title ILIKE '%' || $1 || '%'
+  ORDER BY date DESC NULLS LAST
+  LIMIT 20
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Get specific law by CELEX number
+# -------------------------------------------------------------------
+kind: tools
+name: get_law_by_celex
+type: postgres-sql
+source: brubru-pg
+description: >
+  Retrieve a specific EU law by its CELEX number.
+  CELEX numbers look like "32024R1689" (AI Act) or "32016R0679" (GDPR).
+parameters:
+  - name: celex_number
+    type: string
+    description: The CELEX number of the law (e.g. "32024R1689")
+statement: |
+  SELECT celex, title, doc_type, date, policy_area, oj_reference,
+         legal_basis, subject_matter, is_primary_legislation
+  FROM eu_laws
+  WHERE celex = $1
+  LIMIT 1
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Search legislative carriages (EC legislative train files)
+# -------------------------------------------------------------------
+kind: tools
+name: search_legislative_carriages
+type: postgres-sql
+source: brubru-pg
+description: >
+  Search European Commission legislative train files (carriages) by keyword
+  or OEIL procedure reference. Shows title, status, committee, and procedure ref.
+  Use for questions about ongoing EU legislative proposals.
+parameters:
+  - name: keyword
+    type: string
+    description: Search keyword for title or OEIL procedure reference (e.g. "AI Act" or "2021/0106(COD)")
+statement: |
+  SELECT title, current_status, oeil_procedure_ref, lead_committee,
+         ai_summary, policy_areas, url, last_updated
+  FROM legislative_carriages
+  WHERE title ILIKE '%' || $1 || '%'
+     OR oeil_procedure_ref ILIKE '%' || $1 || '%'
+  ORDER BY last_updated DESC NULLS LAST
+  LIMIT 15
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Get recent RSS news entries
+# -------------------------------------------------------------------
+kind: tools
+name: get_recent_rss_entries
+type: postgres-sql
+source: brubru-pg
+description: >
+  Get the most recent EU news entries from RSS feeds. Returns title,
+  summary, source institution, policy area, and publication date.
+  Covers European Parliament, Council, Commission, and other EU sources.
+parameters:
+  - name: keyword
+    type: string
+    description: Optional keyword to filter by title (use '%' for all entries)
+statement: |
+  SELECT re.title, re.summary, re.institution, re.policy_area,
+         re.published_at, re.link, rf.title AS feed_name
+  FROM rss_entries re
+  JOIN rss_feeds rf ON re.feed_id = rf.id
+  WHERE re.published_at > NOW() - INTERVAL '7 days'
+    AND (re.title ILIKE '%' || $1 || '%' OR $1 = '%')
+  ORDER BY re.published_at DESC
+  LIMIT 15
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Search EP committee work items
+# -------------------------------------------------------------------
+kind: tools
+name: search_committee_work
+type: postgres-sql
+source: brubru-pg
+description: >
+  Search European Parliament committee work-in-progress items.
+  Filter by committee code (AFET, LIBE, ENVI, etc.), procedure type
+  (COD, CNS, APP, INI), or keyword in title.
+parameters:
+  - name: keyword
+    type: string
+    description: Search keyword for title, committee code, or procedure reference
+statement: |
+  SELECT procedure_ref, committee_code, title, procedure_type,
+         status, rapporteur_name, relevance_score,
+         description, oeil_url, last_updated
+  FROM committee_work_items
+  WHERE title ILIKE '%' || $1 || '%'
+     OR committee_code ILIKE $1
+     OR procedure_ref ILIKE '%' || $1 || '%'
+  ORDER BY relevance_score DESC, last_updated DESC NULLS LAST
+  LIMIT 15
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Search public consultations
+# -------------------------------------------------------------------
+kind: tools
+name: search_consultations
+type: postgres-sql
+source: brubru-pg
+description: >
+  Search European Commission public consultations from the "Have Your Say"
+  portal. Filter by keyword, DG responsible, or status. Prioritises open
+  consultations with upcoming deadlines.
+parameters:
+  - name: keyword
+    type: string
+    description: Search keyword for title, DG code, or policy area
+statement: |
+  SELECT title, consultation_type, status, dg_responsible,
+         policy_areas, start_date, end_date, feedback_count,
+         portal_url, description
+  FROM public_consultations
+  WHERE title ILIKE '%' || $1 || '%'
+     OR dg_responsible ILIKE $1
+     OR $1 = ANY(policy_areas)
+  ORDER BY
+    CASE WHEN status = 'open' THEN 0 ELSE 1 END,
+    end_date ASC NULLS LAST
+  LIMIT 15
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Get recently adopted EP texts
+# -------------------------------------------------------------------
+kind: tools
+name: get_texts_adopted
+type: postgres-sql
+source: brubru-pg
+description: >
+  Get recently adopted texts from the European Parliament plenary.
+  Includes resolutions, legislative resolutions, decisions, and
+  recommendations. Filter by keyword or text type.
+parameters:
+  - name: keyword
+    type: string
+    description: Search keyword for title (use '%' for all recent texts)
+statement: |
+  SELECT ta_reference, title, text_type, procedure_ref,
+         adoption_date, committees, rapporteur_name,
+         vote_results, source_url
+  FROM texts_adopted
+  WHERE title ILIKE '%' || $1 || '%' OR $1 = '%'
+  ORDER BY adoption_date DESC
+  LIMIT 15
+
+---
+
+# -------------------------------------------------------------------
+# Tool: Get user's tracked legislative files
+# -------------------------------------------------------------------
+kind: tools
+name: get_user_tracked_files
+type: postgres-sql
+source: brubru-pg
+description: >
+  Get all legislative files tracked by a specific user. Shows the
+  carriage title, status, procedure reference, and tracking metadata.
+parameters:
+  - name: user_id
+    type: string
+    description: The UUID of the user
+statement: |
+  SELECT lc.title, lc.current_status, lc.oeil_procedure_ref,
+         lc.lead_committee, lc.ai_summary, lc.policy_areas,
+         uct.tracked_since, uct.notes
+  FROM user_carriage_tracks uct
+  JOIN legislative_carriages lc ON uct.carriage_id = lc.id
+  WHERE uct.user_id = $1::uuid
+  ORDER BY uct.tracked_since DESC
+
+---
+
+# -------------------------------------------------------------------
+# Toolset: Group all tools for the chatbot
+# -------------------------------------------------------------------
+kind: toolsets
+name: brubru_chatbot
+tools:
+  - search_eu_laws
+  - get_law_by_celex
+  - search_legislative_carriages
+  - get_recent_rss_entries
+  - search_committee_work
+  - search_consultations
+  - get_texts_adopted
+  - get_user_tracked_files

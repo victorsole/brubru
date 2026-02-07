@@ -29,13 +29,6 @@
       "year": 2019,
       "source_file": "L_2019187EN.01004101.xml"
     },
-    "EU": {
-      "celex": "31907R2006",
-      "full_title": "Commission Implementing Decision (EU) 2019/1194 of 5 July 2019 on the identification of 4-tert-butylphenol (PTBP) as a substance of very high concern pursuant to Article 57(f) of Regulation (EC) No 19",
-      "type": "Regulation",
-      "year": 2019,
-      "source_file": "L_2019187EN.01004101.xml"
-    },
     "PGI": {
       "celex": "32010R0402",
       "full_title": "Commission Regulation (EU) No 402/2010 of 10 May 2010 entering a name in the register of protected designations of origin and protected geographical indications (Pintadeau de la Drôme (PGI))",
@@ -4634,6 +4627,13 @@
       "type": "Regulation",
       "year": 2016,
       "full_name": "General Data Protection Regulation"
+    },
+    "NZIA": {
+      "celex": "32024R1735",
+      "full_title": "Regulation (EU) 2024/1735 establishing a framework of measures for strengthening Europe's net-zero technology products manufacturing ecosystem (Net Zero Industry Act)",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Net Zero Industry Act"
     },
     "AI Act": {
       "celex": "32024R1689",

@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     OPENAI_ORG_ID: str | None = None
     GOOGLE_GEMINI_API_KEY: str | None = None  # Gemini (fallback 3)
 
+    # MCP Toolbox for Databases
+    TOOLBOX_URL: str = "http://localhost:5000"  # GenAI Toolbox server URL
+
     # Hugging Face
     HUGGINGFACE_API_KEY: str | None = None  # Optional, for Inference API
     HF_DEFAULT_MODEL: str = "Equall/Saul-7B-Instruct-v1"  # Default legal LLM

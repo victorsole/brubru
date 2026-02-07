@@ -26,7 +26,7 @@ from api import (
     feedback, admin_panel, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
-    predictions
+    predictions, texts_adopted
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -57,10 +57,26 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] RSS scheduler failed to start (non-fatal): {str(e)}")
 
+    # Connect to MCP Toolbox for Databases (non-fatal if unavailable)
+    try:
+        from services.toolbox_service import get_toolbox_service
+        toolbox = get_toolbox_service()
+        await toolbox.connect()
+    except Exception as e:
+        print(f"[WARN] MCP Toolbox connection failed (non-fatal): {str(e)}")
+
     yield
 
     # Shutdown
     print("[STOP] Shutting down Brubru backend...")
+
+    # Close MCP Toolbox connection
+    try:
+        from services.toolbox_service import get_toolbox_service
+        toolbox = get_toolbox_service()
+        await toolbox.close()
+    except Exception as e:
+        print(f"[WARN] MCP Toolbox shutdown error: {str(e)}")
 
     # Stop RSS feed scheduler
     try:
@@ -131,6 +147,7 @@ app.include_router(admin_panel.router, tags=["Admin Panel"])
 app.include_router(admin_eu_comply.router, prefix="/api/admin/eu-comply", tags=["Admin EU Comply"])
 app.include_router(committees.router, tags=["Committees"])
 app.include_router(committee_work.router, tags=["Committee Work"])
+app.include_router(texts_adopted.router, tags=["Texts Adopted"])
 app.include_router(public_consultations.router, tags=["Public Consultations"])
 app.include_router(chat_examples_public_router)
 app.include_router(chat_examples_admin_router)

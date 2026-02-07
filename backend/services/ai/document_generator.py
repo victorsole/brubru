@@ -18,6 +18,7 @@ from schemas.document_generation import (
     GeneratePositionPaperRequest,
     GenerateMEPBriefingRequest,
     GenerateTalkingPointsRequest,
+    GenerateResolutionRequest,
     GeneratedDocument,
     KeyAsk,
 )
@@ -288,6 +289,84 @@ Make messages punchy and impactful.
 Prepare for pushback.
 """
 
+    RESOLUTION_PROMPT = """Generate a European Parliament Resolution in the exact official EP format.
+
+TOPIC/TITLE: {topic}
+
+CONTEXT FOR RECITALS: {context_description}
+
+KEY DEMANDS:
+{key_demands_formatted}
+
+ADDITIONAL REFERENCES TO CITE: {additional_references}
+
+{style_guidelines}
+
+You MUST produce the resolution in the following EXACT structure and formatting:
+
+---
+
+**European Parliament resolution on {topic}**
+
+**The European Parliament,**
+
+-- having regard to [relevant Treaty articles, e.g., Articles 2 and 3 of the Treaty on European Union],
+
+-- having regard to [relevant existing EU legislation, e.g., Regulation (EU) 2024/... on ...],
+
+-- having regard to [previous EP resolutions on the subject, with dates],
+
+-- having regard to [relevant Commission communications, proposals, or reports],
+
+-- having regard to [relevant international instruments, UN resolutions, or conventions if applicable],
+
+-- having regard to Rule 132(2) of its Rules of Procedure,
+
+[Generate 5-10 "having regard to" references. Use real, plausible treaty articles and legislation names relevant to the topic. Each starts with a lowercase "-- having regard to" and ends with a comma.]
+
+A.  whereas [first contextual statement establishing the situation];
+
+B.  whereas [second contextual statement with relevant facts or data];
+
+C.  whereas [third contextual statement linking to EU values or competences];
+
+[Generate 5-10 lettered recitals (A. through J. approximately). Each starts with "whereas" (lowercase) and ends with a semicolon. They establish the factual and legal context for the resolution. Base them on the context_description provided.]
+
+1.  Calls on [the Commission/Council/Member States] to [specific action from key demands];
+
+2.  Urges [institution] to [specific action];
+
+3.  Condemns [if applicable, strong negative statement];
+
+4.  Expresses [concern/solidarity/support] regarding [issue];
+
+5.  Welcomes [positive development if any];
+
+6.  Stresses that [important principle];
+
+7.  Requests [the Commission] to [specific technical/legislative request];
+
+8.  Emphasises [key policy point];
+
+[Generate numbered resolution points based on the key_demands provided. Each point MUST start with an active verb in the third person singular: Calls, Urges, Condemns, Expresses, Welcomes, Stresses, Requests, Emphasises, Proposes, Underlines, Recalls, Notes, Considers, Insists, Invites, Deplores, Regrets, Recommends, Reiterates, Demands, Takes note of. End each with a semicolon except the last two.]
+
+[Second-to-last point]:  Instructs its President to forward this resolution to the Council, the Commission[, the Vice-President of the Commission / High Representative of the Union for Foreign Affairs and Security Policy][, the governments and parliaments of the Member States][, and any other relevant addressees].
+
+CRITICAL FORMATTING RULES:
+1. "Having regard to" lines start with "-- having regard to" (two dashes, space, lowercase h)
+2. Recital letters are uppercase followed by a period and TWO spaces: "A.  whereas"
+3. Resolution points are numbers followed by a period and TWO spaces: "1.  Calls"
+4. "whereas" is ALWAYS lowercase at the start of recitals
+5. Active verbs at the start of resolution points are ALWAYS capitalised
+6. Each "having regard to" line ends with a COMMA
+7. Each recital ends with a SEMICOLON
+8. Each resolution point ends with a SEMICOLON except the final point which ends with a PERIOD
+9. The final point about forwarding to institutions always ends with a period
+10. Do NOT use markdown headers (##) within the resolution body -- this is a single continuous document
+11. Use markdown bold (**) only for the title and "The European Parliament," opening
+12. Generate at least as many resolution points as there are key demands, plus 2-3 standard procedural points
+"""
+
     def __init__(
         self,
         max_tokens: int = 4000,
@@ -458,6 +537,52 @@ Prepare for pushback.
         return GeneratedDocument(
             document_type="talking_points",
             title=f"Talking Points: Meeting with {request.meeting_with}",
+            content=content,
+            sections=sections,
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=legislative_context,
+            editable_sections=list(sections.keys())
+        )
+
+    async def generate_resolution(
+        self,
+        request: GenerateResolutionRequest,
+        legislative_context: Optional[Dict[str, Any]] = None
+    ) -> GeneratedDocument:
+        """
+        Generate a European Parliament Resolution draft.
+
+        Args:
+            request: Resolution generation request
+            legislative_context: Optional additional context
+
+        Returns:
+            Generated document
+        """
+        logger.info(f"Generating EP resolution on: {request.topic}")
+
+        key_demands_formatted = "\n".join([
+            f"- {demand}" for demand in request.key_demands
+        ]) if request.key_demands else "Infer appropriate demands and resolution points based on the topic and context"
+        additional_references = "\n".join([
+            f"- {ref}" for ref in request.additional_references
+        ]) if request.additional_references else "Infer appropriate references based on the topic"
+
+        prompt = self.RESOLUTION_PROMPT.format(
+            topic=request.topic,
+            context_description=request.context_description,
+            key_demands_formatted=key_demands_formatted,
+            additional_references=additional_references,
+            style_guidelines=self.EU_STYLE_GUIDELINES
+        )
+
+        content = await self._generate(prompt)
+        sections = self._parse_sections(content)
+
+        return GeneratedDocument(
+            document_type="resolution",
+            title=f"EP Resolution on {request.topic}",
             content=content,
             sections=sections,
             word_count=len(content.split()),

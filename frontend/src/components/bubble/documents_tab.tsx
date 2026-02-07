@@ -10,6 +10,7 @@ import { createPortal } from 'react-dom';
 import Icon from '@mdi/react';
 import { mdiRobotOutline } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
+import { useAuth } from '../../hooks/use_auth';
 import { DocumentGeneratorWizard } from './document_generator_wizard';
 import './documents_tab.css';
 
@@ -23,6 +24,10 @@ export const DocumentsTab = () => {
     selectDocument,
   } = useBubble();
 
+  const { user } = useAuth();
+  const userTier = user?.subscription_tier || 'white';
+  const canUseResolution = userTier === 'yellow' || userTier === 'blue';
+
   const [filterType, setFilterType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -35,22 +40,53 @@ export const DocumentsTab = () => {
     });
   }, [filterType, searchQuery]);
 
+  const [createType, setCreateType] = useState('note');
+
+  const RESOLUTION_TEMPLATE = `**European Parliament resolution on [topic]**
+
+**The European Parliament,**
+
+-- having regard to Articles 2 and 3 of the Treaty on European Union,
+
+-- having regard to Rule 132(2) of its Rules of Procedure,
+
+A.  whereas [first contextual statement];
+
+B.  whereas [second contextual statement];
+
+C.  whereas [third contextual statement];
+
+1.  Calls on [the Commission/Council/Member States] to [specific action];
+
+2.  Urges [institution] to [specific action];
+
+3.  Stresses that [important principle];
+
+4.  Instructs its President to forward this resolution to the Council, the Commission, the Vice-President of the Commission / High Representative of the Union for Foreign Affairs and Security Policy, and the governments and parliaments of the Member States.
+`;
+
   const handleCreateDocument = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
+    const selectedType = formData.get('type') as string;
+    const isResolution = selectedType === 'resolution';
+
+    const userTags = (formData.get('tags') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [];
+
     const document = {
-      document_type: formData.get('type') as 'amendment' | 'analysis' | 'strategy' | 'note',
+      document_type: (isResolution ? 'note' : selectedType) as 'amendment' | 'analysis' | 'strategy' | 'note',
       title: formData.get('title') as string,
       content: formData.get('content') as string,
       policy_areas: (formData.get('policy_areas') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
-      tags: (formData.get('tags') as string)?.split(',').map(s => s.trim()).filter(Boolean) || [],
+      tags: isResolution ? ['resolution', ...userTags] : userTags,
     };
 
     try {
       const form = e.currentTarget;
       await createDocument(document);
       form.reset();
+      setCreateType('note');
       setShowCreateModal(false);
     } catch (error) {
       console.error('Failed to create document:', error);
@@ -182,21 +218,29 @@ export const DocumentsTab = () => {
 
       {/* Create Modal - rendered via portal to escape stacking context */}
       {showCreateModal && createPortal(
-        <div className="documents-tab__modal-overlay" onClick={() => setShowCreateModal(false)}>
+        <div className="documents-tab__modal-overlay" onClick={() => { setShowCreateModal(false); setCreateType('note'); }}>
           <div className="documents-tab__modal" onClick={(e) => e.stopPropagation()}>
             <div className="documents-tab__modal-header">
               <h3>Create Document</h3>
-              <button onClick={() => setShowCreateModal(false)}>×</button>
+              <button onClick={() => { setShowCreateModal(false); setCreateType('note'); }}>×</button>
             </div>
 
             <form onSubmit={handleCreateDocument}>
               <div className="documents-tab__form-group">
                 <label>Document Type *</label>
-                <select name="type" required>
+                <select
+                  name="type"
+                  required
+                  value={createType}
+                  onChange={(e) => setCreateType(e.target.value)}
+                >
                   <option value="note">Note</option>
                   <option value="amendment">Amendment</option>
                   <option value="analysis">Analysis</option>
                   <option value="strategy">Strategy</option>
+                  {canUseResolution && (
+                    <option value="resolution">EP Resolution</option>
+                  )}
                 </select>
               </div>
 
@@ -206,16 +250,18 @@ export const DocumentsTab = () => {
                   type="text"
                   name="title"
                   required
-                  placeholder="Enter document title"
+                  placeholder={createType === 'resolution' ? 'e.g., EP Resolution on the situation in Sudan' : 'Enter document title'}
                 />
               </div>
 
               <div className="documents-tab__form-group">
-                <label>Content</label>
+                <label>{createType === 'resolution' ? 'Resolution Text' : 'Content'}</label>
                 <textarea
                   name="content"
-                  rows={6}
-                  placeholder="Enter document content"
+                  rows={createType === 'resolution' ? 12 : 6}
+                  placeholder={createType === 'resolution' ? 'Write or paste your resolution text following the EP format...' : 'Enter document content'}
+                  defaultValue={createType === 'resolution' ? RESOLUTION_TEMPLATE : ''}
+                  key={createType}
                 />
               </div>
 
@@ -241,7 +287,7 @@ export const DocumentsTab = () => {
                 <button
                   type="button"
                   className="documents-tab__modal-btn documents-tab__modal-btn--secondary"
-                  onClick={() => setShowCreateModal(false)}
+                  onClick={() => { setShowCreateModal(false); setCreateType('note'); }}
                 >
                   Cancel
                 </button>

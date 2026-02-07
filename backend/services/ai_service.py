@@ -15,9 +15,11 @@ Features:
 
 import logging
 import asyncio
+import json
 import os
 import re
 import base64
+from pathlib import Path
 from typing import List, Dict, Any, Optional, AsyncGenerator
 from datetime import datetime
 from dataclasses import dataclass
@@ -29,6 +31,7 @@ from .ai.multi_provider_service import MultiProviderService, get_multi_provider_
 from .ai.conversation_memory import get_conversation_memory_service
 from core.config import settings
 from core.database import SessionLocal
+from knowledge_base.ep_committees import EP_COMMITTEE_CODES
 from models.knowledge_gap import KnowledgeGap, MissingDataType
 from models.chat_analytics import ChatAnalytics
 
@@ -883,13 +886,37 @@ Please answer using the EU context provided above. Include citations [1], [2], e
         if links_removed > 0:
             logger.info(f"Removed {links_removed} incorrect committee links for legislation acronyms")
 
+        # STEP 1b: Remove committee links where the code is NOT a real EP committee
+        # Catches cases like [NZIA](https://www.europarl.europa.eu/committees/en/NZIA/home)
+        # where NZIA is not one of the 26 real EP committees
+        fake_committee_pattern = r'\[([A-Z][A-Za-z0-9 ]+?)\]\(https://www\.europarl\.europa\.eu/committees/en/([A-Z]+)/[^\)]+\)'
+
+        def remove_fake_committee_link(match):
+            nonlocal links_removed
+            link_text = match.group(1)
+            committee_code = match.group(2)
+            if committee_code not in EP_COMMITTEE_CODES:
+                links_removed += 1
+                return link_text  # Strip the link, keep the text
+            return match.group(0)  # Keep valid committee links
+
+        text = re.sub(fake_committee_pattern, remove_fake_committee_link, text)
+
+        if links_removed > 0:
+            logger.info(f"Total removed incorrect committee links: {links_removed}")
+
         # STEP 2: Add correct EUR-Lex hyperlinks
         # Sort acronyms by length (longest first) to avoid partial matches
         # e.g., "AI Act" before "AI"
+        # Skip short acronyms (<=2 chars) and pure numbers to avoid false positives
         sorted_acronyms = sorted(acronyms_db.keys(), key=len, reverse=True)
 
         links_added = 0
         for acronym in sorted_acronyms:
+            # Skip very short or numeric-only entries that cause false matches
+            if len(acronym) <= 2 or acronym.isdigit():
+                continue
+
             leg_info = acronyms_db[acronym]
             celex = leg_info['celex']
 
@@ -949,8 +976,10 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                     'type': 'search_result',
                     'title': doc['metadata'].get('title', 'Untitled'),
                     'url': doc['metadata'].get('url', ''),
-                    'source': doc.get('collection', ''),
-                    'score': str(doc.get('score', 0))
+                    'metadata': {
+                        'source': doc.get('collection', ''),
+                        'score': str(doc.get('score', 0)),
+                    }
                 })
 
         # Add legislation
@@ -959,9 +988,11 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 citations.append({
                     'type': 'legislation',
                     'title': leg.get('title', ''),
-                    'celex': leg.get('celex', ''),
                     'url': leg.get('url', ''),
-                    'date': leg.get('date', '')
+                    'metadata': {
+                        'celex': leg.get('celex', ''),
+                        'date': leg.get('date', ''),
+                    }
                 })
 
         # Add procedures
@@ -970,9 +1001,11 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                 citations.append({
                     'type': 'procedure',
                     'title': proc.get('title', ''),
-                    'reference': proc.get('reference', ''),
                     'url': proc.get('url', ''),
-                    'stage': proc.get('stage', '')
+                    'metadata': {
+                        'reference': proc.get('reference', ''),
+                        'stage': proc.get('stage', ''),
+                    }
                 })
 
         # Add MEP profiles
@@ -982,8 +1015,10 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                     'type': 'mep',
                     'title': mep.get('name', ''),
                     'url': mep.get('profile_url', ''),
-                    'country': mep.get('country', ''),
-                    'group': mep.get('political_group', '')
+                    'metadata': {
+                        'country': mep.get('country', ''),
+                        'group': mep.get('political_group', ''),
+                    }
                 })
 
         # Add committee info
@@ -993,8 +1028,14 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                     'type': 'committee',
                     'title': f"{committee.get('name', '')} ({committee.get('code', '')})",
                     'url': committee.get('url', ''),
-                    'members': str(committee.get('member_count', 0))
+                    'metadata': {
+                        'members': str(committee.get('member_count', 0)),
+                    }
                 })
+
+        # Add sequential id fields so frontend can match [1], [2] markers
+        for i, citation in enumerate(citations):
+            citation['id'] = i + 1
 
         return citations
 

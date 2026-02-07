@@ -98,21 +98,25 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
     handleFeedback(messageId, 'hallucination', messageContent, hallucinationText);
   };
 
-  // Link CELEX numbers to EUR-Lex
+  // Link CELEX numbers to EUR-Lex (only in text content, not inside HTML tags/attributes)
   const linkCelexNumbers = (text: string): string => {
-    const celexPattern = /\b([0-9]{5}[A-Z][0-9]{4,})\b/g;
     return text.replace(
-      celexPattern,
-      '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:$1" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--celex">$1</a>'
+      /(<[^>]*>)|(\b[0-9]{5}[A-Z][0-9]{4,}\b)/g,
+      (_match, htmlTag, celex) => {
+        if (htmlTag) return htmlTag; // Return HTML tags unchanged
+        return `<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:${celex}" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--celex">${celex}</a>`;
+      }
     );
   };
 
-  // Link procedure references to OEIL
+  // Link procedure references to OEIL (only in text content, not inside HTML tags/attributes)
   const linkProcedureReferences = (text: string): string => {
-    const procedurePattern = /\b(\d{4}\/\d{4}\([A-Z]{2,5}\))\b/g;
     return text.replace(
-      procedurePattern,
-      '<a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=$1" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--procedure">$1</a>'
+      /(<[^>]*>)|(\b\d{4}\/\d{4}\([A-Z]{2,5}\)\b)/g,
+      (_match, htmlTag, procRef) => {
+        if (htmlTag) return htmlTag; // Return HTML tags unchanged
+        return `<a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${procRef}" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--procedure">${procRef}</a>`;
+      }
     );
   };
 
@@ -124,20 +128,33 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
   };
 
   // Link committee codes (ENVI, ITRE, etc.) to EP committee pages
+  // Only links codes that match real EP committees
+  const EP_COMMITTEE_CODES = new Set([
+    'AFET', 'DROI', 'SEDE', 'DEVE', 'INTA', 'BUDG', 'CONT', 'ECON',
+    'FISC', 'EMPL', 'ENVI', 'SANT', 'ITRE', 'IMCO', 'TRAN', 'REGI',
+    'AGRI', 'PECH', 'CULT', 'JURI', 'LIBE', 'AFCO', 'FEMM', 'PETI',
+    'EUDS', 'HOUS',
+  ]);
+
   const linkCommitteeCodes = (text: string): string => {
-    // Match committee codes (4-letter uppercase codes)
-    // Look for patterns like "ENVI committee" or "(ENVI)" but avoid matching inside words
-    const committeePattern = /\b([A-Z]{4})\s+(?:committee|Committee)\b/g;
+    // Match "CODE committee" pattern (only in text content, not inside HTML tags)
     let result = text.replace(
-      committeePattern,
-      '<a href="https://www.europarl.europa.eu/committees/en/$1/home" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--committee">$1 committee</a>'
+      /(<[^>]*>)|(\b([A-Z]{4})\s+(?:committee|Committee)\b)/g,
+      (match, htmlTag, _full, code) => {
+        if (htmlTag) return htmlTag;
+        if (!code || !EP_COMMITTEE_CODES.has(code)) return match;
+        return `<a href="https://www.europarl.europa.eu/committees/en/${code}/home" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--committee">${code} committee</a>`;
+      }
     );
 
     // Also match standalone committee codes in parentheses: (ENVI)
-    const standalonePattern = /\(([A-Z]{4})\)/g;
     result = result.replace(
-      standalonePattern,
-      '(<a href="https://www.europarl.europa.eu/committees/en/$1/home" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--committee">$1</a>)'
+      /(<[^>]*>)|(\(([A-Z]{4})\))/g,
+      (match, htmlTag, _full, code) => {
+        if (htmlTag) return htmlTag;
+        if (!code || !EP_COMMITTEE_CODES.has(code)) return match;
+        return `(<a href="https://www.europarl.europa.eu/committees/en/${code}/home" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--committee">${code}</a>)`;
+      }
     );
 
     return result;

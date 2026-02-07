@@ -16,6 +16,7 @@ import {
   mdiFileDocumentOutline,
   mdiAccountTie,
   mdiMessageText,
+  mdiScriptTextOutline,
   mdiArrowLeft,
   mdiArrowRight,
   mdiCheck,
@@ -30,7 +31,7 @@ import './document_generator_wizard.css';
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
 // Types
-type DocumentType = 'position_paper' | 'mep_briefing' | 'talking_points';
+type DocumentType = 'position_paper' | 'mep_briefing' | 'talking_points' | 'resolution';
 type PositionStance = 'support' | 'support_with_amendments' | 'oppose' | 'neutral';
 type DocumentTone = 'constructive' | 'critical' | 'technical' | 'diplomatic';
 type OrganisationType = 'company' | 'industry_association' | 'ngo' | 'think_tank' | 'law_firm' | 'consultancy';
@@ -79,6 +80,13 @@ const DOCUMENT_TYPES = [
     icon: mdiMessageText,
     color: '#7b1fa2',
   },
+  {
+    id: 'resolution' as DocumentType,
+    title: 'EP Resolution',
+    description: 'European Parliament resolution with having regards, whereas recitals, and numbered resolution points',
+    icon: mdiScriptTextOutline,
+    color: '#b91c1c',
+  },
 ];
 
 export const DocumentGeneratorWizard = ({
@@ -87,6 +95,8 @@ export const DocumentGeneratorWizard = ({
   onDocumentGenerated,
 }: DocumentGeneratorWizardProps) => {
   const { token, user } = useAuth();
+  const userTier = user?.subscription_tier || 'white';
+  const canUseResolution = userTier === 'yellow' || userTier === 'blue';
 
   // Wizard state
   const [step, setStep] = useState(1);
@@ -124,6 +134,12 @@ export const DocumentGeneratorWizard = ({
   const [keyMessages, setKeyMessages] = useState<string[]>(['']);
   const [meetingKeyAsks, setMeetingKeyAsks] = useState<string[]>(['']);
 
+  // Form state - Resolution
+  const [resolutionTopic, setResolutionTopic] = useState('');
+  const [contextDescription, setContextDescription] = useState('');
+  const [keyDemands, setKeyDemands] = useState<string[]>(['']);
+  const [additionalReferences, setAdditionalReferences] = useState<string[]>([]);
+
   // Reset wizard
   const resetWizard = () => {
     setStep(1);
@@ -153,6 +169,10 @@ export const DocumentGeneratorWizard = ({
     setTopic('');
     setKeyMessages(['']);
     setMeetingKeyAsks(['']);
+    setResolutionTopic('');
+    setContextDescription('');
+    setKeyDemands(['']);
+    setAdditionalReferences([]);
   };
 
   const handleClose = () => {
@@ -250,6 +270,16 @@ export const DocumentGeneratorWizard = ({
           key_asks: meetingKeyAsks.filter(a => a.trim()),
           organisation_name: organisationName,
         };
+      } else if (selectedType === 'resolution') {
+        endpoint = '/generate/resolution';
+        const filteredRefs = additionalReferences.filter(r => r.trim());
+        payload = {
+          topic: resolutionTopic,
+          context_description: contextDescription,
+          key_demands: keyDemands.filter(d => d.trim()).length > 0 ? keyDemands.filter(d => d.trim()) : undefined,
+          procedure_reference: procedureReference || undefined,
+          additional_references: filteredRefs.length > 0 ? filteredRefs : undefined,
+        };
       }
 
       const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -296,6 +326,9 @@ export const DocumentGeneratorWizard = ({
       if (selectedType === 'talking_points') {
         return meetingWith.trim() && meetingPurpose.trim() && topic.trim() && organisationName.trim();
       }
+      if (selectedType === 'resolution') {
+        return resolutionTopic.trim() && contextDescription.trim();
+      }
     }
     return true;
   };
@@ -338,18 +371,21 @@ export const DocumentGeneratorWizard = ({
             <div className="doc-generator__step">
               <h3>What would you like to generate?</h3>
               <div className="doc-generator__type-grid">
-                {DOCUMENT_TYPES.map((type) => (
-                  <div
-                    key={type.id}
-                    className={`doc-generator__type-card ${selectedType === type.id ? 'selected' : ''}`}
-                    onClick={() => setSelectedType(type.id)}
-                    style={{ borderColor: selectedType === type.id ? type.color : undefined }}
-                  >
-                    <Icon path={type.icon} size={2} color={type.color} />
-                    <h4>{type.title}</h4>
-                    <p>{type.description}</p>
-                  </div>
-                ))}
+                {DOCUMENT_TYPES.map((type) => {
+                  const isLocked = type.id === 'resolution' && !canUseResolution;
+                  return (
+                    <div
+                      key={type.id}
+                      className={`doc-generator__type-card ${selectedType === type.id ? 'selected' : ''} ${isLocked ? 'doc-generator__type-card--locked' : ''}`}
+                      onClick={() => !isLocked && setSelectedType(type.id)}
+                      style={{ borderColor: selectedType === type.id ? type.color : undefined }}
+                    >
+                      <Icon path={type.icon} size={2} color={isLocked ? '#9ca3af' : type.color} />
+                      <h4>{type.title}</h4>
+                      <p>{isLocked ? 'Yellow or Blue tier required' : type.description}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -683,6 +719,96 @@ export const DocumentGeneratorWizard = ({
                   ))}
                   {meetingKeyAsks.length < 3 && (
                     <button type="button" onClick={() => addListItem(meetingKeyAsks, setMeetingKeyAsks, 3)} className="doc-generator__add-btn">+ Add ask</button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && selectedType === 'resolution' && (
+            <div className="doc-generator__step">
+              <h3>EP Resolution Details</h3>
+              <div className="doc-generator__form">
+                <div className="doc-generator__form-group">
+                  <label>Resolution Topic / Title *</label>
+                  <input
+                    type="text"
+                    value={resolutionTopic}
+                    onChange={(e) => setResolutionTopic(e.target.value)}
+                    placeholder="e.g., The situation of human rights in Iran"
+                  />
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Procedure Reference</label>
+                  <input
+                    type="text"
+                    value={procedureReference}
+                    onChange={(e) => setProcedureReference(e.target.value)}
+                    placeholder="e.g., 2025/2500(RSP)"
+                  />
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Context Description (for "whereas" recitals) *</label>
+                  <textarea
+                    value={contextDescription}
+                    onChange={(e) => setContextDescription(e.target.value)}
+                    placeholder="Describe the situation, background facts, and context that should form the basis of the recitals..."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Key Demands (up to 10)</label>
+                  <p className="doc-generator__form-hint">
+                    Optional. Each demand becomes a numbered resolution point. Leave empty and the AI will infer from the context.
+                  </p>
+                  {keyDemands.map((demand, index) => (
+                    <div key={index} className="doc-generator__list-item">
+                      <input
+                        type="text"
+                        value={demand}
+                        onChange={(e) => updateListItem(keyDemands, setKeyDemands, index, e.target.value)}
+                        placeholder={`Demand ${index + 1}: e.g., Ban the export of surveillance technology`}
+                      />
+                      {keyDemands.length > 1 && (
+                        <button type="button" onClick={() => removeListItem(keyDemands, setKeyDemands, index)} className="doc-generator__remove-btn">×</button>
+                      )}
+                    </div>
+                  ))}
+                  {keyDemands.length < 10 && (
+                    <button type="button" onClick={() => addListItem(keyDemands, setKeyDemands, 10)} className="doc-generator__add-btn">+ Add demand</button>
+                  )}
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Additional References (optional)</label>
+                  <p className="doc-generator__form-hint">
+                    Specific treaties, regulations, or prior resolutions to cite. The AI will also infer references automatically.
+                  </p>
+                  {additionalReferences.length === 0 ? (
+                    <button type="button" onClick={() => setAdditionalReferences([''])} className="doc-generator__add-btn">+ Add reference</button>
+                  ) : (
+                    <>
+                      {additionalReferences.map((ref, index) => (
+                        <div key={index} className="doc-generator__list-item">
+                          <input
+                            type="text"
+                            value={ref}
+                            onChange={(e) => updateListItem(additionalReferences, setAdditionalReferences, index, e.target.value)}
+                            placeholder={`e.g., Regulation (EU) 2024/1689 (AI Act)`}
+                          />
+                          <button type="button" onClick={() => {
+                            const updated = additionalReferences.filter((_, i) => i !== index);
+                            setAdditionalReferences(updated);
+                          }} className="doc-generator__remove-btn">×</button>
+                        </div>
+                      ))}
+                      {additionalReferences.length < 5 && (
+                        <button type="button" onClick={() => addListItem(additionalReferences, setAdditionalReferences, 5)} className="doc-generator__add-btn">+ Add reference</button>
+                      )}
+                    </>
                   )}
                 </div>
               </div>

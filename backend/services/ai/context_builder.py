@@ -154,6 +154,9 @@ class ContextData:
     # EC Public Consultations (Have Your Say portal)
     public_consultations: List[Dict[str, Any]]
 
+    # MCP Toolbox supplementary results
+    toolbox_results: List[Dict[str, Any]]
+
     # Metadata
     query: str
     search_time_ms: float
@@ -192,11 +195,11 @@ class ContextBuilder:
         tender_context_provider: Optional[TenderContextProvider] = None,  # Phase 8: Tender chat
         tavily_client: Optional[TavilyClient] = None,  # Real-time web search
         beresol_loader: Optional[BeresolKnowledgeLoader] = None,  # Beresol open reports
-        max_search_results: int = 5,
-        max_live_api_calls: int = 3,
+        max_search_results: int = 10,
+        max_live_api_calls: int = 5,
         rss_lookback_days: int = 7,
-        max_internal_knowledge_results: int = 3,
-        max_eprs_results: int = 3,  # Phase 2: Max EPRS publications
+        max_internal_knowledge_results: int = 5,
+        max_eprs_results: int = 5,  # Phase 2: Max EPRS publications
         auto_include_explainers: bool = True,  # Phase 3: Auto-inject EPRS explainers
         enable_ai_summaries: bool = True,  # Phase 5: Generate AI summaries when no EPRS briefing
         enable_freshness_check: bool = True,  # Phase 5: Check for outdated briefings
@@ -408,6 +411,9 @@ class ContextBuilder:
         # Phase 9: Fetch EC Public Consultations (Have Your Say portal)
         tasks.append(self._fetch_public_consultations(query=user_message, entities=entities))
 
+        # MCP Toolbox supplementary DB queries (non-blocking)
+        tasks.append(self._fetch_via_toolbox(query=user_message, entities=entities))
+
         # Execute all tasks concurrently
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -452,6 +458,9 @@ class ContextBuilder:
         # Unpack Public Consultations (index 14)
         public_consultations = results[14] if not isinstance(results[14], Exception) else []
 
+        # Unpack MCP Toolbox results (index 15)
+        toolbox_results = results[15] if not isinstance(results[15], Exception) else []
+
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
 
@@ -474,7 +483,8 @@ class ContextBuilder:
             len(web_search_results) +  # Tavily web search
             len(beresol_content) +  # Beresol open reports
             len(committee_work_items) +  # EP Committee Work
-            len(public_consultations)  # EC Public Consultations
+            len(public_consultations) +  # EC Public Consultations
+            len(toolbox_results)  # MCP Toolbox supplementary
         )
 
         context_data = ContextData(
@@ -495,6 +505,7 @@ class ContextBuilder:
             beresol_content=beresol_content,  # Beresol open reports
             committee_work_items=committee_work_items,  # EP Committee Work
             public_consultations=public_consultations,  # EC Public Consultations
+            toolbox_results=toolbox_results,  # MCP Toolbox supplementary
             tender_context=tender_context,  # Phase 8: Tender data
             reference_data_context=reference_data_context,
             query=user_message,
@@ -512,7 +523,8 @@ class ContextBuilder:
             f"{len(local_eu_laws)} local laws, {tender_source_count} tenders, "
             f"{len(web_search_results)} web, {len(beresol_content)} beresol, "
             f"{len(committee_work_items)} committee work, "
-            f"{len(public_consultations)} consultations) in {search_time:.2f}ms"
+            f"{len(public_consultations)} consultations, "
+            f"{len(toolbox_results)} toolbox) in {search_time:.2f}ms"
         )
 
         return context_data
@@ -1865,10 +1877,68 @@ class ContextBuilder:
 
         return None
 
+    async def _fetch_via_toolbox(
+        self,
+        query: str,
+        entities: ExtractedEntities
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch supplementary data via MCP Toolbox for Databases.
+
+        Calls relevant Toolbox tools based on extracted entities.
+        Returns results that supplement (not replace) existing context sources.
+        Gracefully returns empty list if Toolbox is unavailable.
+        """
+        from services.toolbox_service import get_toolbox_service
+
+        toolbox = get_toolbox_service()
+        if not toolbox.available:
+            return []
+
+        results = []
+
+        try:
+            # Search for texts adopted if the query mentions resolutions or plenary
+            resolution_keywords = ['resolution', 'adopted', 'plenary', 'vote', 'voted']
+            if any(kw in query.lower() for kw in resolution_keywords):
+                texts = await toolbox.get_texts_adopted(keyword=query.split()[0])
+                if texts:
+                    for item in texts[:5]:
+                        results.append({
+                            'source_type': 'toolbox_texts_adopted',
+                            'title': item.get('title', ''),
+                            'ta_reference': item.get('ta_reference', ''),
+                            'text_type': item.get('text_type', ''),
+                            'adoption_date': str(item.get('adoption_date', '')),
+                            'procedure_ref': item.get('procedure_ref', ''),
+                        })
+
+            # Search carriages by procedure reference if detected
+            if entities.procedure_references:
+                for ref in entities.procedure_references[:2]:
+                    carriages = await toolbox.search_legislative_carriages(keyword=ref)
+                    if carriages:
+                        for item in carriages[:3]:
+                            results.append({
+                                'source_type': 'toolbox_carriage',
+                                'title': item.get('title', ''),
+                                'status': item.get('current_status', ''),
+                                'oeil_ref': item.get('oeil_procedure_ref', ''),
+                                'committee': item.get('lead_committee', ''),
+                                'summary': (item.get('ai_summary', '') or '')[:500],
+                            })
+
+            logger.debug(f"Toolbox returned {len(results)} supplementary results")
+
+        except Exception as e:
+            logger.warning(f"Toolbox fetch failed: {e}")
+
+        return results
+
     def format_context_for_ai(
         self,
         context_data: ContextData,
-        max_length: int = 8000
+        max_length: int = 32000
     ) -> str:
         """
         Format context data into structured text for AI consumption.
@@ -1941,7 +2011,7 @@ class ContextBuilder:
             for i, doc in enumerate(context_data.relevant_documents[:5], 1):
                 title = doc['metadata'].get('title', 'Untitled')
                 doc_type = doc['metadata'].get('type', doc['collection'])
-                text_excerpt = doc['text'][:200] + "..." if len(doc['text']) > 200 else doc['text']
+                text_excerpt = doc['text'][:500] + "..." if len(doc['text']) > 500 else doc['text']
 
                 sections.append(f"{i}. [{doc_type}] {title}")
                 sections.append(f"   Excerpt: {text_excerpt}")
@@ -1956,7 +2026,7 @@ class ContextBuilder:
                 sections.append(f"  Type: {leg['type']}")
                 sections.append(f"  Date: {leg['date']}")
                 sections.append(f"  Status: {leg['status']}")
-                sections.append(f"  Excerpt: {leg['text_excerpt'][:300]}...")
+                sections.append(f"  Excerpt: {leg['text_excerpt'][:800]}...")
                 sections.append(f"  URL: {leg['url']}")
 
                 # Phase 3: Auto-included EPRS explainers (jargon translators)
@@ -2148,7 +2218,7 @@ class ContextBuilder:
         # Recent RSS updates
         if context_data.recent_rss_entries:
             sections.append(f"\nRECENT UPDATES ({len(context_data.recent_rss_entries)} RSS entries):")
-            for entry in context_data.recent_rss_entries[:5]:
+            for entry in context_data.recent_rss_entries[:10]:
                 sections.append(f"- {entry['published']}: {entry['title']}")
                 sections.append(f"  {entry['summary']}")
                 sections.append(f"  Source: {entry['source']} | {entry['link']}")
@@ -2160,7 +2230,7 @@ class ContextBuilder:
             for item in context_data.internal_knowledge:
                 sections.append(f"- {item['title']}")
                 sections.append(f"  Type: {item['type']}")
-                sections.append(f"  {item['content'][:500]}...")
+                sections.append(f"  {item['content'][:1000]}...")
                 sections.append("")
 
         # Phase 2: EPRS Publications (plain-language explainers)
@@ -2171,7 +2241,7 @@ class ContextBuilder:
             for pub in context_data.eprs_publications:
                 sections.append(f"- {pub['title']}")
                 sections.append(f"  Type: {pub['publication_type']}")
-                sections.append(f"  Excerpt: {pub['text'][:300]}...")
+                sections.append(f"  Excerpt: {pub['text'][:800]}...")
                 if pub.get('related_celex'):
                     sections.append(f"  Explains legislation: {', '.join(pub['related_celex'][:3])}")
                 if pub.get('related_procedures'):
@@ -2234,7 +2304,7 @@ class ContextBuilder:
                 # Show text excerpt
                 excerpt = law.get('text_excerpt', '')
                 if excerpt:
-                    sections.append(f"  Excerpt: {excerpt[:500]}...")
+                    sections.append(f"  Excerpt: {excerpt[:1000]}...")
 
                 # Indicate full text is available
                 full_text_len = len(law.get('full_text', ''))
@@ -2260,7 +2330,7 @@ class ContextBuilder:
                     sections.append(f"- {result['title']}")
                     if result.get('published_date'):
                         sections.append(f"  Published: {result['published_date']}")
-                    sections.append(f"  {result['content'][:300]}...")
+                    sections.append(f"  {result['content'][:500]}...")
                     sections.append(f"  Source: {result['url']}")
                     sections.append("")
 
@@ -2282,15 +2352,15 @@ class ContextBuilder:
 
                     if item.get('executive_summary'):
                         sections.append(f"\n  Executive Summary:")
-                        sections.append(f"  {item['executive_summary'][:800]}...")
+                        sections.append(f"  {item['executive_summary'][:1500]}...")
 
                     if item.get('key_findings'):
                         sections.append(f"\n  Key Findings:")
-                        sections.append(f"  {item['key_findings'][:500]}...")
+                        sections.append(f"  {item['key_findings'][:1000]}...")
 
                     if item.get('content_excerpt'):
                         sections.append(f"\n  Content Excerpt:")
-                        sections.append(f"  {item['content_excerpt'][:1500]}...")
+                        sections.append(f"  {item['content_excerpt'][:2500]}...")
 
                     if item.get('keywords'):
                         sections.append(f"\n  Keywords: {', '.join(item['keywords'][:10])}")
@@ -2326,7 +2396,7 @@ class ContextBuilder:
                 if item.get('oeil_url'):
                     sections.append(f"  OEIL: {item['oeil_url']}")
                 if item.get('description'):
-                    sections.append(f"  Description: {item['description'][:200]}...")
+                    sections.append(f"  Description: {item['description'][:400]}...")
                 sections.append("")
 
         # EC Public Consultations (Have Your Say portal)
@@ -2357,9 +2427,33 @@ class ContextBuilder:
                 if item.get('feedback_count', 0) > 0:
                     sections.append(f"  Responses received: {item['feedback_count']}")
                 if item.get('description'):
-                    sections.append(f"  Description: {item['description'][:200]}...")
+                    sections.append(f"  Description: {item['description'][:400]}...")
                 if item.get('portal_url'):
                     sections.append(f"  Have Your Say: {item['portal_url']}")
+                sections.append("")
+
+        # MCP Toolbox supplementary results
+        if context_data.toolbox_results:
+            sections.append(f"\nSUPPLEMENTARY DATABASE RESULTS ({len(context_data.toolbox_results)} items):")
+            sections.append("Source: MCP Toolbox for Databases\n")
+            for item in context_data.toolbox_results:
+                source_type = item.get('source_type', 'unknown')
+                if source_type == 'toolbox_texts_adopted':
+                    sections.append(f"- [Adopted Text] {item.get('title', '')}")
+                    sections.append(f"  Reference: {item.get('ta_reference', '')}, Type: {item.get('text_type', '')}")
+                    if item.get('adoption_date'):
+                        sections.append(f"  Adopted: {item['adoption_date'][:10]}")
+                    if item.get('procedure_ref'):
+                        sections.append(f"  Procedure: {item['procedure_ref']}")
+                elif source_type == 'toolbox_carriage':
+                    sections.append(f"- [Legislative File] {item.get('title', '')}")
+                    sections.append(f"  Status: {item.get('status', '')}, Committee: {item.get('committee', '')}")
+                    if item.get('oeil_ref'):
+                        sections.append(f"  OEIL: {item['oeil_ref']}")
+                    if item.get('summary'):
+                        sections.append(f"  Summary: {item['summary'][:400]}")
+                else:
+                    sections.append(f"- {item.get('title', str(item))}")
                 sections.append("")
 
         # Reference data (calendars, institutions)

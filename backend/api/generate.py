@@ -20,6 +20,7 @@ from schemas.document_generation import (
     GeneratePositionPaperRequest,
     GenerateMEPBriefingRequest,
     GenerateTalkingPointsRequest,
+    GenerateResolutionRequest,
     GeneratedDocument,
     ExportDocumentRequest,
 )
@@ -216,6 +217,65 @@ async def generate_talking_points(
 
     except Exception as e:
         logger.error(f"Error generating talking points: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/resolution", response_model=GeneratedDocument)
+async def generate_resolution(
+    request: GenerateResolutionRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+) -> JSONResponse:
+    """
+    Generate a European Parliament Resolution draft.
+
+    Creates a resolution following the exact EP format:
+    opening, having regards, whereas recitals, numbered resolution points,
+    and closing instruction to the President.
+    """
+    try:
+        logger.info(f"User {current_user.id} generating EP resolution on: {request.topic}")
+
+        generator = get_document_generator()
+        document = await generator.generate_resolution(request=request)
+
+        # Save to user documents as note with resolution tags
+        user_doc = UserDocument(
+            user_id=current_user.id,
+            document_type="note",
+            title=document.title,
+            content=document.content,
+            procedure_reference=request.procedure_reference,
+            policy_areas=[],
+            tags=["resolution", "generated"],
+            doc_metadata={
+                "generated": True,
+                "generator_version": "1.0",
+                "topic": request.topic,
+                "key_demands": request.key_demands or [],
+            }
+        )
+        db.add(user_doc)
+        db.commit()
+
+        logger.info(f"EP resolution generated and saved: {user_doc.id}")
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "document_type": document.document_type,
+                "title": document.title,
+                "content": document.content,
+                "sections": document.sections,
+                "word_count": document.word_count,
+                "language": document.language,
+                "document_id": str(user_doc.id),
+                "editable_sections": document.editable_sections,
+            }
+        )
+
+    except Exception as e:
+        logger.error(f"Error generating EP resolution: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
