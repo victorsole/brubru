@@ -12,7 +12,6 @@ Priority #3: Position Paper Generator
 import logging
 from typing import Optional, Dict, Any, List
 from datetime import datetime
-import anthropic
 
 from core.config import settings
 from schemas.document_generation import (
@@ -22,6 +21,7 @@ from schemas.document_generation import (
     GeneratedDocument,
     KeyAsk,
 )
+from services.ai.multi_provider_service import get_multi_provider_service
 
 logger = logging.getLogger(__name__)
 
@@ -290,28 +290,23 @@ Prepare for pushback.
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
-        model: str = "claude-sonnet-4-20250514",
         max_tokens: int = 4000,
         temperature: float = 0.4
     ):
         """
         Initialize Document Generator.
 
+        Uses MultiProviderService for resilient AI generation with fallback chain.
+
         Args:
-            api_key: Anthropic API key
-            model: Claude model to use
             max_tokens: Maximum response length
             temperature: Sampling temperature
         """
-        self.api_key = api_key or settings.ANTHROPIC_API_KEY
-        self.model = model
         self.max_tokens = max_tokens
         self.temperature = temperature
+        self.provider_service = get_multi_provider_service()
 
-        self.client = anthropic.Anthropic(api_key=self.api_key)
-
-        logger.info(f"Initialized Document Generator (model: {model})")
+        logger.info(f"Initialized Document Generator (multi-provider: {self.provider_service.primary_provider})")
 
     async def generate_position_paper(
         self,
@@ -473,7 +468,7 @@ Prepare for pushback.
 
     async def _generate(self, prompt: str) -> str:
         """
-        Call Claude API to generate content.
+        Generate content using the multi-provider fallback chain.
 
         Args:
             prompt: The generation prompt
@@ -482,16 +477,14 @@ Prepare for pushback.
             Generated text content
         """
         try:
-            response = self.client.messages.create(
-                model=self.model,
+            response = await self.provider_service.generate(
+                system_prompt="You are an expert EU public affairs consultant who writes professional advocacy documents.",
+                messages=[{"role": "user", "content": prompt}],
                 max_tokens=self.max_tokens,
-                temperature=self.temperature,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
+                temperature=self.temperature
             )
 
-            return response.content[0].text
+            return response.message
 
         except Exception as e:
             logger.error(f"Document generation failed: {str(e)}")
@@ -537,12 +530,9 @@ Prepare for pushback.
 _document_generator: Optional[DocumentGenerator] = None
 
 
-def get_document_generator(model: str = "claude-sonnet-4-20250514") -> DocumentGenerator:
+def get_document_generator() -> DocumentGenerator:
     """
     Get global Document Generator instance.
-
-    Args:
-        model: Claude model to use
 
     Returns:
         DocumentGenerator instance
@@ -550,6 +540,6 @@ def get_document_generator(model: str = "claude-sonnet-4-20250514") -> DocumentG
     global _document_generator
 
     if _document_generator is None:
-        _document_generator = DocumentGenerator(model=model)
+        _document_generator = DocumentGenerator()
 
     return _document_generator

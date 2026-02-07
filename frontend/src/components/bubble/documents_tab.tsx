@@ -48,9 +48,10 @@ export const DocumentsTab = () => {
     };
 
     try {
+      const form = e.currentTarget;
       await createDocument(document);
+      form.reset();
       setShowCreateModal(false);
-      e.currentTarget.reset();
     } catch (error) {
       console.error('Failed to create document:', error);
     }
