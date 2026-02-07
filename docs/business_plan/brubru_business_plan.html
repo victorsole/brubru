@@ -1004,6 +1004,13 @@
       margin-top: 0.15rem;
     }
 
+    .timeline-feature {
+      font-size: 0.68rem;
+      color: var(--color-accent-purple);
+      margin-top: 0.2rem;
+      font-style: italic;
+    }
+
     /* ============================================
        PRICING CARDS
        ============================================ */
@@ -2375,6 +2382,211 @@
     .flow-output .mdi { font-size: 0.9rem; }
 
     /* ============================================
+       COMPETITIVE IMPLEMENTATION STRATEGY
+       ============================================ */
+
+    .impl-intro {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+      margin: 0.75rem 0 1.25rem 0;
+    }
+
+    .impl-intro strong {
+      color: var(--color-text);
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .phase-card {
+      background: var(--color-gray-50);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      border-left: 4px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .phase-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .phase-card--1 { border-left-color: var(--color-accent-green); }
+    .phase-card--2 { border-left-color: var(--color-primary); }
+    .phase-card--3 { border-left-color: var(--color-accent-purple); }
+    .phase-card--4 { border-left-color: var(--color-accent-gold); }
+
+    .phase-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-card__label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .phase-card--1 .phase-card__label { color: var(--color-accent-green); }
+    .phase-card--2 .phase-card__label { color: var(--color-primary); }
+    .phase-card--3 .phase-card__label { color: var(--color-accent-purple); }
+    .phase-card--4 .phase-card__label { color: var(--color-accent-gold); }
+
+    .phase-card__effort {
+      font-size: 0.65rem;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    .phase-card__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-card__items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .phase-card__items li {
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+      padding: 0.2rem 0;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+    }
+
+    .phase-card__items li .mdi {
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+
+    .phase-card__items li strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .insight-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .insight-item {
+      background: var(--color-gray-50);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      position: relative;
+    }
+
+    .insight-item__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .insight-item__title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .insight-item__desc {
+      font-size: 0.78rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .reuse-callout {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.06) 100%);
+      border: 1px solid rgba(5,150,105,0.15);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .reuse-callout__icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: rgba(5,150,105,0.1);
+      color: var(--color-accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .reuse-callout__text {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .reuse-callout__text strong {
+      color: var(--color-text);
+    }
+
+    .priority-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+    }
+
+    .priority-table th,
+    .priority-table td {
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-gray-100);
+      font-size: 0.8rem;
+    }
+
+    .priority-table th {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--color-gray-50);
+    }
+
+    .priority-table td:first-child {
+      font-weight: 700;
+      color: var(--color-primary);
+      white-space: nowrap;
+      width: 2rem;
+    }
+
+    .priority-table tr:hover td {
+      background: var(--color-gray-50);
+    }
+
+    .priority-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ============================================
        RESPONSIVE
        ============================================ */
 
@@ -2387,6 +2599,8 @@
       .product-cards { grid-template-columns: repeat(3, 1fr); }
       .product-detail__body { grid-template-columns: 1fr; }
       .product-detail__stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .phase-grid { grid-template-columns: repeat(2, 1fr); }
+      .insight-strip { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
@@ -2411,6 +2625,10 @@
       .flow-provider { grid-template-columns: 20px 50px 48px 1fr; }
       .flow-provider__label { display: none; }
       .flow-outputs { grid-template-columns: 1fr; }
+      .phase-grid { grid-template-columns: 1fr; }
+      .reuse-callout { flex-direction: column; text-align: center; }
+      .priority-table th:nth-child(4), .priority-table td:nth-child(4),
+      .priority-table th:nth-child(6), .priority-table td:nth-child(6) { display: none; }
     }
 
     /* ============================================
@@ -2462,6 +2680,11 @@
       .section-header { page-break-after: avoid; }
       h2, h3 { page-break-after: avoid; }
       table, .metric-grid, .grid-2, .grid-3 { page-break-inside: avoid; }
+      .phase-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.75rem; }
+      .phase-card { border: 1px solid #d1d5db !important; }
+      .insight-strip { grid-template-columns: repeat(3, 1fr) !important; }
+      .insight-item { border: 1px solid #e5e7eb; }
+      .reuse-callout { border: 1px solid #d1d5db !important; }
 
       /* Remove shadows and borders for clean print */
       .metric-card, .feature-card, .product-detail, .pricing-card, .team-card, .source-card {
@@ -3435,7 +3658,7 @@
               <tr>
                 <th style="width: 140px;">Competitor</th>
                 <th>EU Focus</th>
-                <th>AI Native</th>
+                <th>AI Chat</th>
                 <th>Amendments</th>
                 <th>Compliance</th>
                 <th>Tenders</th>
@@ -3455,9 +3678,49 @@
                 <td>EUR 79-599</td>
               </tr>
               <tr>
+                <td>Dixit</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Brussels</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Analysis</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Mid-range</td>
+              </tr>
+              <tr>
+                <td>POLITICO Pro</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> 100+ reporters</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>EUR 7K-50K+</td>
+              </tr>
+              <tr>
+                <td>SAVOIRR</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>FiscalNote EUIT</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Brussels</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Generic</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span></td>
+                <td>EUR 10K-30K</td>
+              </tr>
+              <tr>
                 <td>Moonlit.ai</td>
                 <td><span class="mdi mdi-check-bold comp-check"></span> 16+ MS</td>
-                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Luna</td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
@@ -3465,7 +3728,27 @@
                 <td>Enterprise</td>
               </tr>
               <tr>
-                <td>ChatGPT/Claude</td>
+                <td>LEOS</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Institutions</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> AKN XML</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Free (internal)</td>
+              </tr>
+              <tr>
+                <td>Cogrant</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Grants only</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>ChatGPT / Claude</td>
                 <td><span class="mdi mdi-close comp-cross"></span> None</td>
                 <td><span class="mdi mdi-check-bold comp-check"></span></td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
@@ -3473,26 +3756,6 @@
                 <td><span class="mdi mdi-close comp-cross"></span></td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
                 <td>$20/mo</td>
-              </tr>
-              <tr>
-                <td>Harvey AI</td>
-                <td><span class="mdi mdi-minus comp-partial"></span> Partial</td>
-                <td><span class="mdi mdi-check-bold comp-check"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-minus comp-partial"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td>Enterprise</td>
-              </tr>
-              <tr>
-                <td>FiscalNote</td>
-                <td><span class="mdi mdi-close comp-cross"></span> US only</td>
-                <td><span class="mdi mdi-minus comp-partial"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-minus comp-partial"></span></td>
-                <td>Enterprise</td>
               </tr>
               <tr>
                 <td>Traditional consultancy</td>
@@ -3503,16 +3766,6 @@
                 <td><span class="mdi mdi-close comp-cross"></span></td>
                 <td><span class="mdi mdi-close comp-cross"></span></td>
                 <td>EUR 10K+/mo</td>
-              </tr>
-              <tr>
-                <td>EUR-Lex / OEIL</td>
-                <td><span class="mdi mdi-check-bold comp-check"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td><span class="mdi mdi-close comp-cross"></span></td>
-                <td>Free (raw)</td>
               </tr>
             </tbody>
           </table>
@@ -4201,31 +4454,35 @@
             <div class="timeline-content">
               <div class="timeline-label">Now</div>
               <div class="timeline-value">Product Built</div>
-              <div class="timeline-target">EUR 10K cash</div>
+              <div class="timeline-target">25 models, 29 scrapers, 8 features</div>
+              <div class="timeline-feature">EUR 10K cash, ready to launch</div>
             </div>
           </div>
           <div class="timeline-milestone">
             <div class="timeline-dot timeline-dot--active"></div>
             <div class="timeline-content">
               <div class="timeline-label">Q1 2026</div>
-              <div class="timeline-value">Launch</div>
+              <div class="timeline-value">Launch + Quick Wins</div>
               <div class="timeline-target">First 10 customers</div>
+              <div class="timeline-feature">P1 daily briefings, P2 dashboards, P8 grant AI, P4 ROI</div>
             </div>
           </div>
           <div class="timeline-milestone">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
               <div class="timeline-label">Q2 2026</div>
-              <div class="timeline-value">Break-even</div>
+              <div class="timeline-value">Break-even + Compete</div>
               <div class="timeline-target">EUR 3K MRR</div>
+              <div class="timeline-feature">P3 amendment analysis, P7 MEP social monitoring</div>
             </div>
           </div>
           <div class="timeline-milestone">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
               <div class="timeline-label">Q3 2026</div>
-              <div class="timeline-value">Scale</div>
+              <div class="timeline-value">Scale + Expand</div>
               <div class="timeline-target">EUR 7K MRR + first hire</div>
+              <div class="timeline-feature">P5 Stakeholder CRM (720+ MEPs), P6 collaborative editing</div>
             </div>
           </div>
           <div class="timeline-milestone">
@@ -4234,14 +4491,16 @@
               <div class="timeline-label">Q4 2026</div>
               <div class="timeline-value">Seed-ready</div>
               <div class="timeline-target">EUR 10K MRR + 50 customers</div>
+              <div class="timeline-feature">P9 national parliaments (FR, DE), full CRM rollout</div>
             </div>
           </div>
           <div class="timeline-milestone">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
               <div class="timeline-label">2027</div>
-              <div class="timeline-value">GrantBru + Agency</div>
-              <div class="timeline-target">All EU funding, ISO 27001, AI-native agency</div>
+              <div class="timeline-value">Institutional + GrantBru</div>
+              <div class="timeline-target">ISO 27001, AI-native agency</div>
+              <div class="timeline-feature">P10 LEOS interop, institutional pilots, all EU funding</div>
             </div>
           </div>
           <div class="timeline-milestone">
@@ -4250,7 +4509,199 @@
               <div class="timeline-label">2028</div>
               <div class="timeline-value">27 Member States</div>
               <div class="timeline-target">National legal frameworks, local to national</div>
+              <div class="timeline-feature">Full multi-level governance, 5+ national parliaments</div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Competitive Implementation Strategy -->
+      <div class="card reveal">
+        <div class="card__title"><span class="mdi mdi-sword-cross"></span> Competitive Implementation Strategy</div>
+        <p class="impl-intro">
+          Analysis of <strong>12 direct competitors</strong> (Dixit, POLITICO Pro, SAVOIRR, FiscalNote EUIT, Moonlit.ai, LEOS, Cogrant, DeHavilland, Policy-Insider.AI, Polpo, Quorum, Euractiv Pro) identified <strong>10 emulation priorities</strong> ranked by competitive impact. Deep codebase audit reveals <strong>25 backend models, 29 scrapers, and 8 feature modules</strong> already built -- significantly accelerating delivery.
+        </p>
+
+        <div class="phase-grid">
+          <div class="phase-card phase-card--1">
+            <div class="phase-card__header">
+              <span class="phase-card__label">Phase 1: Quick Wins</span>
+              <span class="phase-card__effort">Mo 1-3 | 8-12 wks</span>
+            </div>
+            <div class="phase-card__title">Retention + Activation</div>
+            <ul class="phase-card__items">
+              <li><span class="mdi mdi-email-fast-outline"></span> <strong>P1</strong> AI daily/weekly briefing emails</li>
+              <li><span class="mdi mdi-view-dashboard-outline"></span> <strong>P2</strong> Thematic dashboards (8 policy areas)</li>
+              <li><span class="mdi mdi-file-document-edit-outline"></span> <strong>P8</strong> Grant proposal AI drafting</li>
+              <li><span class="mdi mdi-chart-bar"></span> <strong>P4</strong> Advocacy activity logging + ROI</li>
+            </ul>
+          </div>
+
+          <div class="phase-card phase-card--2">
+            <div class="phase-card__header">
+              <span class="phase-card__label">Phase 2: Compete</span>
+              <span class="phase-card__effort">Mo 4-6 | 8-11 wks</span>
+            </div>
+            <div class="phase-card__title">Counter Top Threats</div>
+            <ul class="phase-card__items">
+              <li><span class="mdi mdi-file-compare"></span> <strong>P3</strong> Amendment analysis view</li>
+              <li><span class="mdi mdi-account-voice"></span> <strong>P7</strong> MEP social media monitoring</li>
+            </ul>
+          </div>
+
+          <div class="phase-card phase-card--3">
+            <div class="phase-card__header">
+              <span class="phase-card__label">Phase 3: Expand</span>
+              <span class="phase-card__effort">Mo 7-12 | 18-26 wks</span>
+            </div>
+            <div class="phase-card__title">Platform Expansion</div>
+            <ul class="phase-card__items">
+              <li><span class="mdi mdi-account-group-outline"></span> <strong>P5</strong> Stakeholder CRM (720+ MEPs)</li>
+              <li><span class="mdi mdi-account-multiple-outline"></span> <strong>P6</strong> Collaborative amendment editing</li>
+              <li><span class="mdi mdi-bank-outline"></span> <strong>P9</strong> National parliament monitoring</li>
+            </ul>
+          </div>
+
+          <div class="phase-card phase-card--4">
+            <div class="phase-card__header">
+              <span class="phase-card__label">Phase 4: Institutional</span>
+              <span class="phase-card__effort">Mo 12-18 | 6-10 wks</span>
+            </div>
+            <div class="phase-card__title">Government Adoption</div>
+            <ul class="phase-card__items">
+              <li><span class="mdi mdi-handshake-outline"></span> <strong>P10</strong> LEOS interoperability</li>
+              <li><span class="mdi mdi-shield-check-outline"></span> AKN4EU compliance certification</li>
+              <li><span class="mdi mdi-domain"></span> Institutional pilot programme</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reuse-callout">
+          <div class="reuse-callout__icon"><span class="mdi mdi-recycle-variant"></span></div>
+          <div class="reuse-callout__text">
+            <strong>Infrastructure advantage:</strong> Existing newsletter pipeline (5 models + notifier), Tenderator UI (6 components), Document Generator (multi-provider AI), and FeedbackComment threading pattern save an estimated <strong>4+ weeks</strong> vs building from scratch. Total: <strong>40-59 developer-weeks</strong> across 18 months. Solo founder: 15-18 months. 2-person team: 8-10 months. 3-person team (post-funding): 5-7 months.
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <div class="card__title"><span class="mdi mdi-target"></span> Top 10 Emulation Priorities</div>
+        <table class="priority-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Priority</th>
+              <th>Learn From</th>
+              <th>Timeline</th>
+              <th>Feature Area</th>
+              <th>Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>P1</td>
+              <td><strong>AI daily/weekly briefing emails</strong></td>
+              <td>POLITICO Pro, Policy-Insider.AI</td>
+              <td><span class="badge badge--green">Short</span></td>
+              <td>Platform</td>
+              <td>High retention (daily habit)</td>
+            </tr>
+            <tr>
+              <td>P2</td>
+              <td><strong>Pre-configured thematic dashboards</strong></td>
+              <td>Euractiv, POLITICO Pro</td>
+              <td><span class="badge badge--green">Short</span></td>
+              <td>My EU Bubble</td>
+              <td>Faster onboarding</td>
+            </tr>
+            <tr>
+              <td>P3</td>
+              <td><strong>Amendment analysis view</strong></td>
+              <td>Dixit</td>
+              <td><span class="badge badge--green">Short</span></td>
+              <td>Amendator</td>
+              <td>Counter #1 threat</td>
+            </tr>
+            <tr>
+              <td>P4</td>
+              <td><strong>Advocacy activity logging + ROI</strong></td>
+              <td>Quorum, FiscalNote</td>
+              <td><span class="badge badge--gold">Short-Mid</span></td>
+              <td>Platform</td>
+              <td>Enterprise selling point</td>
+            </tr>
+            <tr>
+              <td>P5</td>
+              <td><strong>Stakeholder CRM</strong></td>
+              <td>Dixit, DeHavilland, Quorum</td>
+              <td><span class="badge badge--blue">Mid-Long</span></td>
+              <td>New module</td>
+              <td>Closes #1 feature gap</td>
+            </tr>
+            <tr>
+              <td>P6</td>
+              <td><strong>Collaborative amendment editing</strong></td>
+              <td>LEOS, FiscalNote</td>
+              <td><span class="badge badge--purple">Mid</span></td>
+              <td>Amendator</td>
+              <td>Blue tier essential</td>
+            </tr>
+            <tr>
+              <td>P7</td>
+              <td><strong>MEP social media monitoring</strong></td>
+              <td>Dixit, DeHavilland, Polpo</td>
+              <td><span class="badge badge--purple">Mid</span></td>
+              <td>My EU Bubble</td>
+              <td>Real-time intelligence</td>
+            </tr>
+            <tr>
+              <td>P8</td>
+              <td><strong>Grant proposal AI drafting</strong></td>
+              <td>Cogrant</td>
+              <td><span class="badge badge--purple">Mid</span></td>
+              <td>Tenderator</td>
+              <td>GrantBru parity</td>
+            </tr>
+            <tr>
+              <td>P9</td>
+              <td><strong>National parliament monitoring</strong></td>
+              <td>Policy-Insider.AI, Polpo</td>
+              <td><span class="badge badge--blue">Mid-Long</span></td>
+              <td>My EU Bubble</td>
+              <td>Multi-level governance</td>
+            </tr>
+            <tr>
+              <td>P10</td>
+              <td><strong>LEOS interoperability</strong></td>
+              <td>LEOS</td>
+              <td><span class="badge badge--gray">Long</span></td>
+              <td>Amendator</td>
+              <td>Institutional adoption</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="insight-strip">
+          <div class="insight-item">
+            <div class="insight-item__icon" style="background: rgba(220,38,38,0.1); color: var(--color-accent-red);">
+              <span class="mdi mdi-account-alert-outline"></span>
+            </div>
+            <div class="insight-item__title">Stakeholder CRM gap is universal</div>
+            <div class="insight-item__desc">Dixit, DeHavilland, POLITICO Pro, Quorum, SAVOIRR -- nearly every competitor has a contact database. Brubru is the only serious platform without one. #1 new feature priority.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-item__icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);">
+              <span class="mdi mdi-clock-check-outline"></span>
+            </div>
+            <div class="insight-item__title">Retention comes from daily habits</div>
+            <div class="insight-item__desc">POLITICO Pro's 91% renewal comes from morning briefings. Brubru needs a "daily touch" -- AI-generated morning emails summarising overnight changes to tracked files.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-item__icon" style="background: rgba(155,81,224,0.1); color: var(--color-accent-purple);">
+              <span class="mdi mdi-link-variant"></span>
+            </div>
+            <div class="insight-item__title">Missing step: Engage</div>
+            <div class="insight-item__desc">Brubru covers monitor, analyse, draft, comply, predict, bid. But misses <strong>engage</strong> -- contacting officials, tracking interactions. Adding it closes the full advocacy loop.</div>
           </div>
         </div>
       </div>
