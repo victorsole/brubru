@@ -303,17 +303,12 @@ async def get_user_feeds(
 
         feed_ids = [f[0] for f in subscribed_feeds]
 
-        if not feed_ids:
-            return RSSEntryListResponse(
-                entries=[],
-                total=0,
-                limit=limit,
-                offset=offset,
-                has_more=False
-            )
-
         # Build query for entries
-        query = db.query(RSSEntry).filter(RSSEntry.feed_id.in_(feed_ids))
+        # If user has subscriptions, filter by them; otherwise show all feeds
+        if feed_ids:
+            query = db.query(RSSEntry).filter(RSSEntry.feed_id.in_(feed_ids))
+        else:
+            query = db.query(RSSEntry)
 
         # Apply filters
         if sources:
@@ -791,7 +786,8 @@ async def get_available_sources(
     db: Session = Depends(get_db)
 ) -> List[str]:
     """
-    Get list of unique sources (institutions) from RSS entries in user's subscribed feeds.
+    Get list of unique sources (institutions) from RSS entries.
+    If user has feed subscriptions, filters by subscribed feeds; otherwise shows all.
     Used to populate the source filter dropdown.
     """
     try:
@@ -805,16 +801,14 @@ async def get_available_sources(
 
         feed_ids = [f[0] for f in subscribed_feeds]
 
-        if not feed_ids:
-            return []
+        # Get unique institutions from entries (filtered by subscriptions if any)
+        source_query = db.query(RSSEntry.institution).distinct().filter(
+            RSSEntry.institution.isnot(None)
+        )
+        if feed_ids:
+            source_query = source_query.filter(RSSEntry.feed_id.in_(feed_ids))
 
-        # Get unique institutions from entries in subscribed feeds
-        sources = db.query(RSSEntry.institution).distinct().filter(
-            and_(
-                RSSEntry.feed_id.in_(feed_ids),
-                RSSEntry.institution.isnot(None)
-            )
-        ).all()
+        sources = source_query.all()
 
         # Extract source names and sort
         source_list = sorted([s[0] for s in sources if s[0]])
