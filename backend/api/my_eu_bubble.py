@@ -847,31 +847,44 @@ async def refresh_rss_feeds(
     This adds new feeds and updates existing ones.
     """
     try:
-        from scripts.seed_rss_feeds import seed_rss_feeds
+        from scripts.seed_rss_feeds import seed_rss_feeds, EU_RSS_FEEDS
+        from core.database import SessionLocal
 
         logger.info(f"User {current_user.email} triggered RSS feed refresh")
 
-        # Run seed in a separate thread to avoid blocking
-        import threading
+        # Run seed synchronously using the request's db session for reliability
+        added = 0
+        updated = 0
 
-        def run_seed():
-            try:
-                seed_rss_feeds()
-                logger.info("RSS feed refresh completed successfully")
-            except Exception as e:
-                logger.error(f"RSS feed refresh failed: {str(e)}")
+        for feed_data in EU_RSS_FEEDS:
+            existing_feed = db.query(RSSFeed).filter(
+                RSSFeed.url == feed_data["url"]
+            ).first()
 
-        thread = threading.Thread(target=run_seed)
-        thread.start()
+            if existing_feed:
+                for key, value in feed_data.items():
+                    setattr(existing_feed, key, value)
+                updated += 1
+            else:
+                new_feed = RSSFeed(**feed_data)
+                db.add(new_feed)
+                added += 1
+
+        db.commit()
+
+        total = db.query(RSSFeed).count()
+        logger.info(f"RSS feed refresh completed: {added} added, {updated} updated, {total} total")
 
         return {
-            "message": "RSS feed refresh started",
-            "status": "processing",
-            "note": "This may take a few moments. Refresh your feed list to see new sources."
+            "message": f"RSS feed refresh completed: {added} added, {updated} updated",
+            "status": "completed",
+            "total_feeds": total,
+            "note": "Refresh your feed list to see new sources."
         }
 
     except Exception as e:
-        logger.error(f"Failed to start RSS feed refresh: {str(e)}")
+        logger.error(f"Failed to refresh feeds: {str(e)}")
+        db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to refresh feeds: {str(e)}"
