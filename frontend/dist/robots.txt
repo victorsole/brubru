@@ -1,0 +1,12 @@
+# Brubru - AI Companion for EU Advocacy
+# https://brubru.beresol.eu
+
+User-agent: *
+Allow: /
+
+# Disallow OAuth callbacks and admin areas
+Disallow: /auth/
+Disallow: /admin
+
+# Sitemap location
+Sitemap: https://brubru.beresol.eu/sitemap.xml
