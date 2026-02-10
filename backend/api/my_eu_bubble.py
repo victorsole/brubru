@@ -1225,33 +1225,50 @@ async def enrich_entries_with_ai(
     """
     try:
         import asyncio
+        import threading
         from services.rss.rss_ai_enrichment import RSSAIEnricher
 
         logger.info(f"User {current_user.email} triggered AI enrichment (last {hours}h, limit {limit})")
 
-        # Run enrichment asynchronously
-        enricher = RSSAIEnricher()
-        stats = await enricher.enrich_recent_entries(
-            db=db,
-            hours=hours,
-            only_without_summary=True,
-            limit=limit
-        )
+        # Run enrichment in a background thread with its own DB session
+        # (the request's db session can't be used after the response is sent)
+        def run_enrichment():
+            try:
+                from core.database import SessionLocal
+                enricher = RSSAIEnricher()
+                bg_db = SessionLocal()
+                try:
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    stats = loop.run_until_complete(
+                        enricher.enrich_recent_entries(
+                            db=bg_db,
+                            hours=hours,
+                            only_without_summary=True,
+                            limit=limit
+                        )
+                    )
+                    loop.close()
+                    logger.info(f"AI enrichment completed: {stats}")
+                finally:
+                    bg_db.close()
+            except Exception as e:
+                logger.error(f"AI enrichment failed: {str(e)}")
 
-        logger.info(f"AI enrichment completed: {stats}")
+        thread = threading.Thread(target=run_enrichment)
+        thread.start()
 
         return {
-            "message": f"AI enrichment completed successfully",
-            "status": "completed",
-            "stats": stats,
-            "note": f"Processed {stats['processed']} entries, enriched {stats['enriched']}, failed {stats['failed']}"
+            "message": "AI enrichment started",
+            "status": "processing",
+            "note": f"Enriching entries from last {hours} hours (limit {limit}). This may take a few minutes."
         }
 
     except Exception as e:
-        logger.error(f"AI enrichment failed: {str(e)}")
+        logger.error(f"Failed to start AI enrichment: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to enrich entries: {str(e)}"
+            detail=f"Failed to start enrichment: {str(e)}"
         )
 
 
