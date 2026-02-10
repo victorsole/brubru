@@ -9,11 +9,18 @@ Usage:
 """
 
 import sys
-sys.path.insert(0, '/Users/victorsole/Documents/GitHub/brubru')
+import os
+
+# Support both running standalone and being imported from the API
+# When imported from API (e.g. FastAPI endpoint), cwd is already backend/
+# When run standalone, we need to add the backend dir to path
+backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
 
 from sqlalchemy.orm import Session
-from backend.core.database import SessionLocal
-from backend.models.rss_feed import RSSFeed
+from core.database import SessionLocal
+from models.rss_feed import RSSFeed
 import logging
 
 logging.basicConfig(level=logging.INFO)
