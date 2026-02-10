@@ -1114,105 +1114,102 @@ async def fetch_rss_entries(
     """
     Fetch latest RSS entries from all active feeds.
     This populates the feed with fresh content.
+    Runs synchronously to surface errors (46 feeds, ~30s).
     """
     try:
-        import asyncio
         import feedparser
 
         logger.info(f"User {current_user.email} triggered RSS entry fetch")
 
-        # Run fetching in a separate thread with its own DB session
-        import threading
-        from core.database import SessionLocal
+        # Get all active feeds
+        feeds = db.query(RSSFeed).filter(RSSFeed.is_active == True).all()
+        logger.info(f"Found {len(feeds)} active feeds to fetch")
+        total_entries = 0
+        feeds_processed = 0
+        feeds_failed = 0
 
-        def run_fetch():
-            bg_db = SessionLocal()
+        for feed in feeds:
             try:
-                # Get all active feeds
-                feeds = bg_db.query(RSSFeed).filter(RSSFeed.is_active == True).all()
-                total_entries = 0
+                # Fetch feed
+                parsed = feedparser.parse(
+                    feed.url,
+                    agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                )
 
-                for feed in feeds:
-                    try:
-                        # Fetch feed
-                        parsed = feedparser.parse(
-                            feed.url,
-                            agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                        )
+                entries_added = 0
 
-                        entries_added = 0
+                # Process latest 10 entries
+                for entry in parsed.entries[:10]:
+                    title = entry.get('title', 'Untitled')
+                    link = entry.get('link', '')
+                    summary = entry.get('summary', entry.get('description', ''))
 
-                        # Process latest 10 entries
-                        for entry in parsed.entries[:10]:
-                            title = entry.get('title', 'Untitled')
-                            link = entry.get('link', '')
-                            summary = entry.get('summary', entry.get('description', ''))
+                    if not link:
+                        continue
 
-                            # Check if entry already exists
-                            existing = bg_db.query(RSSEntry).filter(RSSEntry.link == link).first()
-                            if existing:
-                                continue
+                    # Check if entry already exists
+                    existing = db.query(RSSEntry).filter(RSSEntry.link == link).first()
+                    if existing:
+                        continue
 
-                            # Parse published date
-                            published_date = None
-                            if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                                published_date = datetime(*entry.published_parsed[:6])
+                    # Parse published date
+                    published_date = None
+                    if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                        published_date = datetime(*entry.published_parsed[:6])
 
-                            # Create entry
-                            new_entry = RSSEntry(
-                                feed_id=feed.id,
-                                title=title,
-                                link=link,
-                                summary=summary,
-                                content=summary,
-                                published_at=published_date,
-                                institution=feed.source,
-                                categories=[feed.category] if feed.category else []
-                            )
+                    # Create entry
+                    new_entry = RSSEntry(
+                        feed_id=feed.id,
+                        title=title,
+                        link=link,
+                        summary=summary,
+                        content=summary,
+                        published_at=published_date,
+                        institution=feed.source,
+                        categories=[feed.category] if feed.category else []
+                    )
 
-                            bg_db.add(new_entry)
-                            entries_added += 1
+                    db.add(new_entry)
+                    entries_added += 1
 
-                        bg_db.commit()
+                db.commit()
 
-                        # Update feed stats
-                        feed.last_fetched_at = datetime.now()
-                        feed.total_entries += entries_added
-                        feed.fetch_success_count += 1
-                        bg_db.commit()
+                # Update feed stats
+                feed.last_fetched_at = datetime.now()
+                feed.total_entries = (feed.total_entries or 0) + entries_added
+                feed.fetch_success_count = (feed.fetch_success_count or 0) + 1
+                db.commit()
 
-                        total_entries += entries_added
-                        logger.info(f"Added {entries_added} entries from {feed.name}")
-
-                    except Exception as e:
-                        logger.error(f"Error fetching {feed.name}: {str(e)}")
-                        bg_db.rollback()
-                        try:
-                            feed.fetch_error_count += 1
-                            feed.last_error = str(e)
-                            feed.last_error_at = datetime.now()
-                            bg_db.commit()
-                        except Exception:
-                            bg_db.rollback()
-
-                logger.info(f"RSS entry fetch completed. Total entries added: {total_entries}")
+                total_entries += entries_added
+                feeds_processed += 1
+                if entries_added > 0:
+                    logger.info(f"Added {entries_added} entries from {feed.name}")
 
             except Exception as e:
-                logger.error(f"RSS entry fetch failed: {str(e)}")
-            finally:
-                bg_db.close()
+                logger.error(f"Error fetching {feed.name}: {str(e)}")
+                db.rollback()
+                feeds_failed += 1
+                try:
+                    feed.fetch_error_count = (feed.fetch_error_count or 0) + 1
+                    feed.last_error = str(e)
+                    feed.last_error_at = datetime.now()
+                    db.commit()
+                except Exception:
+                    db.rollback()
 
-        thread = threading.Thread(target=run_fetch)
-        thread.start()
+        logger.info(f"RSS entry fetch completed. Added: {total_entries}, Processed: {feeds_processed}, Failed: {feeds_failed}")
 
         return {
-            "message": "RSS entry fetch started",
-            "status": "processing",
-            "note": "Fetching latest entries from all feeds. This may take a minute. Refresh the page to see new content."
+            "message": f"RSS entry fetch completed: {total_entries} new entries from {feeds_processed} feeds",
+            "status": "completed",
+            "total_entries_added": total_entries,
+            "feeds_processed": feeds_processed,
+            "feeds_failed": feeds_failed,
+            "note": "Refresh the page to see new content."
         }
 
     except Exception as e:
-        logger.error(f"Failed to start RSS entry fetch: {str(e)}")
+        logger.error(f"Failed to fetch RSS entries: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to fetch entries: {str(e)}"
