@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Icon from '@mdi/react';
 import { mdiRefresh, mdiCog, mdiChevronDown, mdiChevronUp, mdiDatabaseRefresh, mdiTrain, mdiDownload, mdiRobotOutline } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
+import { useAuth } from '../../hooks/use_auth';
 import './news_sidebar.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
@@ -24,6 +25,8 @@ export const NewsSidebar = () => {
     markAsRead,
     saveEntry,
   } = useBubble();
+
+  const { token } = useAuth();
 
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
@@ -97,7 +100,7 @@ export const NewsSidebar = () => {
     try {
       const response = await fetch(`${API_BASE}/bubble/admin/refresh-feeds`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }) },
       });
 
       if (response.ok) {
@@ -127,14 +130,16 @@ export const NewsSidebar = () => {
     try {
       const response = await fetch(`${API_BASE}/bubble/admin/refresh-legislative-trains`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }) },
       });
 
       if (response.ok) {
         // Start polling for progress
         const pollInterval = setInterval(async () => {
           try {
-            const statusResponse = await fetch(`${API_BASE}/bubble/admin/legislative-trains-status`);
+            const statusResponse = await fetch(`${API_BASE}/bubble/admin/legislative-trains-status`, {
+              headers: { ...(token && { Authorization: `Bearer ${token}` }) },
+            });
             if (statusResponse.ok) {
               const status = await statusResponse.json();
               setTrainProgress(status.progress);
@@ -195,7 +200,7 @@ export const NewsSidebar = () => {
     try {
       const response = await fetch(`${API_BASE}/bubble/admin/fetch-entries`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }) },
       });
 
       if (response.ok) {
@@ -221,7 +226,7 @@ export const NewsSidebar = () => {
     try {
       const response = await fetch(`${API_BASE}/bubble/admin/enrich-entries-ai?hours=24&limit=50`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }) },
       });
 
       if (response.ok) {

@@ -363,7 +363,8 @@ class MetadataExtractor:
             'Climate Change': ['climate change', 'global warming', 'paris agreement', 'net zero'],
             'Migration': ['migration', 'asylum', 'refugee', 'border control'],
             'Energy Transition': ['energy transition', 'renewable energy', 'decarbonization'],
-            'Agriculture': ['common agricultural policy', 'cap ', 'farm to fork'],
+            'Agriculture': ['agriculture', 'agricultural', 'agrifood', 'agri-food', 'farming',
+                            'common agricultural policy', 'cap ', 'farm to fork', 'rural development'],
             'Trade Policy': ['trade agreement', 'wto', 'trade policy'],
             'Financial Regulation': ['banking union', 'financial regulation', 'fintech'],
             'Competition Policy': ['antitrust', 'merger', 'state aid', 'competition law']

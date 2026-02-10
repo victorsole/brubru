@@ -9,10 +9,23 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from '@mdi/react';
 import { mdiRobotOutline } from '@mdi/js';
+import { marked } from 'marked';
 import { useBubble } from '../../hooks/use_bubble';
 import { useAuth } from '../../hooks/use_auth';
 import { DocumentGeneratorWizard } from './document_generator_wizard';
 import './documents_tab.css';
+
+/** Strip markdown syntax for plain-text card excerpts */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')   // **bold**
+    .replace(/\*(.*?)\*/g, '$1')        // *italic*
+    .replace(/^--\s*/gm, '\u2014 ')     // -- dashes
+    .replace(/^#+\s*/gm, '')            // # headings
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // [links](url)
+    .replace(/`([^`]+)`/g, '$1')        // `code`
+    .trim();
+}
 
 export const DocumentsTab = () => {
   const {
@@ -32,6 +45,7 @@ export const DocumentsTab = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showGeneratorWizard, setShowGeneratorWizard] = useState(false);
+  const [viewingDocument, setViewingDocument] = useState<typeof documents[0] | null>(null);
 
   useEffect(() => {
     fetchDocuments({
@@ -174,7 +188,7 @@ C.  whereas [third contextual statement];
 
                   {doc.content && (
                     <p className="documents-tab__card-excerpt">
-                      {doc.content.slice(0, 150)}...
+                      {stripMarkdown(doc.content).slice(0, 150)}...
                     </p>
                   )}
 
@@ -199,7 +213,7 @@ C.  whereas [third contextual statement];
                 <div className="documents-tab__card-actions">
                   <button
                     className="documents-tab__action-btn"
-                    onClick={() => selectDocument(doc)}
+                    onClick={() => { selectDocument(doc); setViewingDocument(doc); }}
                   >
                     View
                   </button>
@@ -299,6 +313,51 @@ C.  whereas [third contextual statement];
                 </button>
               </div>
             </form>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* View Document Modal - rendered via portal to escape stacking context */}
+      {viewingDocument && createPortal(
+        <div className="documents-tab__modal-overlay" onClick={() => setViewingDocument(null)}>
+          <div className="documents-tab__view-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="documents-tab__modal-header">
+              <div>
+                <span className="documents-tab__view-badge" data-type={viewingDocument.document_type}>
+                  {viewingDocument.document_type}
+                </span>
+                <h3>{viewingDocument.title}</h3>
+              </div>
+              <button onClick={() => setViewingDocument(null)}>×</button>
+            </div>
+
+            <div className="documents-tab__view-meta">
+              <span>{new Date(viewingDocument.updated_at).toLocaleDateString()}</span>
+              <span>•</span>
+              <span>{viewingDocument.word_count || 0} words</span>
+              {viewingDocument.policy_areas && viewingDocument.policy_areas.length > 0 && (
+                <>
+                  <span>•</span>
+                  {viewingDocument.policy_areas.map((area, idx) => (
+                    <span key={idx} className="documents-tab__tag">{area}</span>
+                  ))}
+                </>
+              )}
+            </div>
+
+            <div className="documents-tab__view-content">
+              {viewingDocument.content ? (
+                <div
+                  className="markdown-content"
+                  dangerouslySetInnerHTML={{
+                    __html: marked.parse(viewingDocument.content) as string,
+                  }}
+                />
+              ) : (
+                <p className="documents-tab__view-empty">No content</p>
+              )}
+            </div>
           </div>
         </div>,
         document.body

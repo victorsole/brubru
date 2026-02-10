@@ -93,6 +93,78 @@ def get_source_tier(source_type: str) -> int:
     return SOURCE_TIERS.get(source_type, 4)  # Default to Tier 4
 
 
+# Policy topic keywords -> DG codes mapping
+# Used to resolve "who should I contact about X?" queries to real EC personnel
+POLICY_TO_DG = {
+    'agriculture': ['AGRI'],
+    'agrifood': ['AGRI', 'SANTE'],
+    'agri-food': ['AGRI', 'SANTE'],
+    'food': ['AGRI', 'SANTE'],
+    'farming': ['AGRI'],
+    'rural': ['AGRI'],
+    'fisheries': ['MARE'],
+    'maritime': ['MARE'],
+    'climate': ['CLIMA'],
+    'environment': ['ENV', 'CLIMA'],
+    'green deal': ['ENV', 'CLIMA'],
+    'digital': ['CNECT'],
+    'technology': ['CNECT'],
+    'telecom': ['CNECT'],
+    'cyber': ['CNECT'],
+    'trade': ['TRADE'],
+    'tariff': ['TRADE', 'TAXUD'],
+    'health': ['SANTE'],
+    'pharmaceutical': ['SANTE'],
+    'transport': ['MOVE'],
+    'mobility': ['MOVE'],
+    'energy': ['ENER'],
+    'nuclear': ['ENER'],
+    'competition': ['COMP'],
+    'antitrust': ['COMP'],
+    'state aid': ['COMP'],
+    'internal market': ['GROW'],
+    'industry': ['GROW'],
+    'sme': ['GROW'],
+    'defence': ['DEFIS'],
+    'space': ['DEFIS'],
+    'budget': ['BUDG'],
+    'financial': ['FISMA', 'ECFIN'],
+    'banking': ['FISMA'],
+    'economy': ['ECFIN'],
+    'euro': ['ECFIN'],
+    'tax': ['TAXUD'],
+    'customs': ['TAXUD'],
+    'employment': ['EMPL'],
+    'social': ['EMPL'],
+    'education': ['EAC'],
+    'culture': ['EAC'],
+    'youth': ['EAC'],
+    'research': ['RTD'],
+    'innovation': ['RTD'],
+    'regional': ['REGIO'],
+    'cohesion': ['REGIO'],
+    'migration': ['HOME'],
+    'asylum': ['HOME'],
+    'security': ['HOME'],
+    'justice': ['JUST'],
+    'fundamental rights': ['JUST'],
+    'enlargement': ['NEAR'],
+    'neighbourhood': ['NEAR'],
+    'humanitarian': ['ECHO'],
+    'development': ['INTPA'],
+    'international partnerships': ['INTPA'],
+}
+
+# Contact-intent phrases that trigger broader DG code detection
+CONTACT_INTENT_PHRASES = [
+    'who should i contact', 'who to contact', 'who to talk to',
+    'who is responsible', 'who is in charge', 'who handles',
+    'who deals with', 'contact person', 'point of contact',
+    'who can i reach', 'who works on', 'who do i contact',
+    'who should i reach out to', 'who should i write to',
+]
+
+
 @dataclass
 class ExtractedEntities:
     """Entities extracted from user query"""
@@ -371,6 +443,18 @@ class ContextBuilder:
                 tasks.append(empty_result())
 
             # EC personnel
+            # Safety net: if contact-intent detected but no DG codes found,
+            # do a broader keyword scan to ensure we fetch real people
+            if not entities.dg_codes:
+                query_lower = user_message.lower()
+                is_contact_query = any(kw in query_lower for kw in CONTACT_INTENT_PHRASES)
+                if is_contact_query:
+                    for keyword, dg_list in POLICY_TO_DG.items():
+                        if re.search(r'\b' + re.escape(keyword) + r'\b', query_lower):
+                            entities.dg_codes.extend(
+                                dg for dg in dg_list if dg not in entities.dg_codes
+                            )
+
             if entities.dg_codes:
                 tasks.append(self._fetch_ec_personnel(entities.dg_codes[:self.max_live_api_calls]))
             else:
@@ -596,6 +680,17 @@ class ContextBuilder:
                 context_keywords = ['COMMISSION', 'DIRECTOR', 'GENERAL', 'DIRECTORATE']
                 if any(keyword in text_upper for keyword in context_keywords):
                     dg_codes.append(word)
+
+        # Pattern 3: Map policy/topic keywords to DG codes
+        # Catches queries like "who should I contact about agrifood?" -> AGRI, SANTE
+        # Uses word boundaries to avoid false positives (e.g. "euro" in "European",
+        # "culture" in "agriculture")
+        text_lower = text.lower()
+        for keyword, dg_list in POLICY_TO_DG.items():
+            if re.search(r'\b' + re.escape(keyword) + r'\b', text_lower):
+                for dg in dg_list:
+                    if dg not in dg_codes:
+                        dg_codes.append(dg)
 
         return list(set(dg_codes))  # Remove duplicates
 
