@@ -18,12 +18,15 @@ import './documents_tab.css';
 /** Strip markdown syntax for plain-text card excerpts */
 function stripMarkdown(text: string): string {
   return text
+    .replace(/```[\w]*\n?/g, '')        // ```markdown / ``` code fences
     .replace(/\*\*(.*?)\*\*/g, '$1')   // **bold**
     .replace(/\*(.*?)\*/g, '$1')        // *italic*
     .replace(/^--\s*/gm, '\u2014 ')     // -- dashes
     .replace(/^#+\s*/gm, '')            // # headings
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // [links](url)
     .replace(/`([^`]+)`/g, '$1')        // `code`
+    .replace(/^\d+\.\s+/gm, '')         // 1. numbered lists
+    .replace(/^[-*]\s+/gm, '')          // - bullet lists
     .trim();
 }
 
@@ -351,7 +354,9 @@ C.  whereas [third contextual statement];
                 <div
                   className="markdown-content"
                   dangerouslySetInnerHTML={{
-                    __html: marked.parse(viewingDocument.content) as string,
+                    __html: marked.parse(
+                      viewingDocument.content.replace(/^```[\w]*\n?/, '').replace(/\n?```\s*$/, '')
+                    ) as string,
                   }}
                 />
               ) : (
