@@ -1127,13 +1127,15 @@ async def fetch_rss_entries(
 
         logger.info(f"User {current_user.email} triggered RSS entry fetch")
 
-        # Run fetching in a separate thread
+        # Run fetching in a separate thread with its own DB session
         import threading
+        from core.database import SessionLocal
 
         def run_fetch():
+            bg_db = SessionLocal()
             try:
                 # Get all active feeds
-                feeds = db.query(RSSFeed).filter(RSSFeed.is_active == True).all()
+                feeds = bg_db.query(RSSFeed).filter(RSSFeed.is_active == True).all()
                 total_entries = 0
 
                 for feed in feeds:
@@ -1153,7 +1155,7 @@ async def fetch_rss_entries(
                             summary = entry.get('summary', entry.get('description', ''))
 
                             # Check if entry already exists
-                            existing = db.query(RSSEntry).filter(RSSEntry.link == link).first()
+                            existing = bg_db.query(RSSEntry).filter(RSSEntry.link == link).first()
                             if existing:
                                 continue
 
@@ -1174,31 +1176,37 @@ async def fetch_rss_entries(
                                 categories=[feed.category] if feed.category else []
                             )
 
-                            db.add(new_entry)
+                            bg_db.add(new_entry)
                             entries_added += 1
 
-                        db.commit()
+                        bg_db.commit()
 
                         # Update feed stats
                         feed.last_fetched_at = datetime.now()
                         feed.total_entries += entries_added
                         feed.fetch_success_count += 1
-                        db.commit()
+                        bg_db.commit()
 
                         total_entries += entries_added
                         logger.info(f"Added {entries_added} entries from {feed.name}")
 
                     except Exception as e:
                         logger.error(f"Error fetching {feed.name}: {str(e)}")
-                        feed.fetch_error_count += 1
-                        feed.last_error = str(e)
-                        feed.last_error_at = datetime.now()
-                        db.commit()
+                        bg_db.rollback()
+                        try:
+                            feed.fetch_error_count += 1
+                            feed.last_error = str(e)
+                            feed.last_error_at = datetime.now()
+                            bg_db.commit()
+                        except Exception:
+                            bg_db.rollback()
 
                 logger.info(f"RSS entry fetch completed. Total entries added: {total_entries}")
 
             except Exception as e:
                 logger.error(f"RSS entry fetch failed: {str(e)}")
+            finally:
+                bg_db.close()
 
         thread = threading.Thread(target=run_fetch)
         thread.start()
