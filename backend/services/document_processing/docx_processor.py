@@ -294,8 +294,10 @@ class DOCXProcessor:
 
         # Patterns for legislative elements
         recital_pattern = re.compile(r'^\((\d+)\)\s*(.*)', re.DOTALL)
-        article_num_pattern = re.compile(r'^Article\s+(\d+[a-z]?)\s*$', re.IGNORECASE)
-        article_title_pattern = re.compile(r'^[A-Z][A-Za-z\s,\-\']+$')  # Article title (Title Case or ALL CAPS)
+        # Match "Article X" with optional title on same line (e.g. "Article 1 - Subject matter")
+        article_num_pattern = re.compile(r'^Article\s+(\d+[a-z]?)(?:\s*[-–—.:]\s*(.+))?$', re.IGNORECASE)
+        # Standalone article title line (Title Case or ALL CAPS, only if no title captured above)
+        article_title_pattern = re.compile(r'^[A-Z][A-Za-z\s,\-\']+$')
         point_pattern = re.compile(r'^(\d+)\.\s+(.*)', re.DOTALL)
         paragraph_pattern = re.compile(r'^\(([a-z])\)\s+(.*)', re.DOTALL)
         subparagraph_pattern = re.compile(r'^\(([ivxl]+)\)\s+(.*)', re.DOTALL)
@@ -306,6 +308,7 @@ class DOCXProcessor:
         current_point = None
         current_paragraph = None
         current_element_text = []
+        current_article_text = []  # Accumulate article body text
 
         paragraphs = doc.paragraphs
 
@@ -366,12 +369,17 @@ class DOCXProcessor:
                     elements.append(current_recital)
                     current_recital = None
 
+                # Finalize previous article body text
+                if current_article and current_article_text:
+                    current_article['text'] = ' '.join(current_article_text).strip()
+
                 # Start new article
+                inline_title = (article_num_match.group(2) or '').strip()
                 current_article = {
                     'type': 'article',
                     'number': article_num_match.group(1),
-                    'text': text,
-                    'title': '',
+                    'text': '',  # Will be populated with body text
+                    'title': inline_title,
                     'content': [],
                     'level': 0
                 }
@@ -380,10 +388,11 @@ class DOCXProcessor:
                 current_point = None
                 current_paragraph = None
                 current_element_text = []
+                current_article_text = []
                 continue
 
-            # Check for Article title (next line after Article number)
-            if current_article and not current_article.get('title') and article_title_pattern.match(text):
+            # Check for Article title (next line after Article number, only if no inline title)
+            if current_article and not current_article.get('title') and not current_article_text and article_title_pattern.match(text):
                 current_article['title'] = text
                 title_element = {
                     'type': 'article_title',
@@ -404,10 +413,11 @@ class DOCXProcessor:
                     elements.append(current_recital)
                     current_recital = None
 
+                point_text = point_match.group(2).strip()
                 point_element = {
                     'type': 'point',
                     'number': point_match.group(1),
-                    'text': point_match.group(2).strip(),
+                    'text': point_text,
                     'article_number': current_article['number'],
                     'level': 1
                 }
@@ -415,6 +425,8 @@ class DOCXProcessor:
                 elements.append(point_element)
                 current_point = point_element
                 current_paragraph = None
+                # Accumulate for article body text
+                current_article_text.append(point_text)
                 continue
 
             # Check for Paragraph ((a), (b), (c))
@@ -427,19 +439,25 @@ class DOCXProcessor:
                     elements.append(current_recital)
                     current_recital = None
 
+                para_text = paragraph_match.group(2).strip()
                 paragraph_element = {
                     'type': 'paragraph',
                     'letter': paragraph_match.group(1),
-                    'text': paragraph_match.group(2).strip(),
+                    'text': para_text,
                     'level': 2 if current_point else 1
                 }
 
                 if current_point:
                     paragraph_element['point_number'] = current_point['number']
                     paragraph_element['article_number'] = current_article['number'] if current_article else None
+                elif current_article:
+                    paragraph_element['article_number'] = current_article['number']
 
                 elements.append(paragraph_element)
                 current_paragraph = paragraph_element
+                # Accumulate for article body text
+                if current_article:
+                    current_article_text.append(para_text)
                 continue
 
             # Check for Subparagraph ((i), (ii), (iii))
@@ -452,10 +470,11 @@ class DOCXProcessor:
                     elements.append(current_recital)
                     current_recital = None
 
+                sub_text = subparagraph_match.group(2).strip()
                 subparagraph_element = {
                     'type': 'subparagraph',
                     'roman': subparagraph_match.group(1),
-                    'text': subparagraph_match.group(2).strip(),
+                    'text': sub_text,
                     'level': 3
                 }
 
@@ -467,17 +486,27 @@ class DOCXProcessor:
                     subparagraph_element['article_number'] = current_article['number']
 
                 elements.append(subparagraph_element)
+                # Accumulate for article body text
+                if current_article:
+                    current_article_text.append(sub_text)
                 continue
 
             # If we're in a recital and this doesn't match any pattern, it's continuation
             if current_recital:
                 current_element_text.append(text)
+            # If we're in an article with no structured sub-elements yet, accumulate body text
+            elif current_article:
+                current_article_text.append(text)
 
         # Save last recital if exists
         if current_recital:
             current_recital['text'] = ' '.join(current_element_text).strip()
             recitals.append(current_recital)
             elements.append(current_recital)
+
+        # Finalize last article body text
+        if current_article and current_article_text:
+            current_article['text'] = ' '.join(current_article_text).strip()
 
         return {
             'elements': elements,

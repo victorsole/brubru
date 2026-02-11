@@ -59,21 +59,39 @@ export const AIAssistantPanel = ({
 
     const elements = loadedDocument.structure.legislative_structure.elements;
     const keyElements: Array<{ position: string; element_type: string; text: string }> = [];
+    let currentArticleNumber = '';
 
     for (const elem of elements) {
-      // Only include articles and recitals (skip titles, intros, chapters)
+      // Track current article number for sub-element context
+      if (elem.type === 'article') {
+        currentArticleNumber = elem.number || '';
+      }
+
+      // Only include articles, recitals, points, and paragraphs
       if (!['article', 'recital', 'point', 'paragraph'].includes(elem.type)) continue;
 
       let position = '';
-      if (elem.type === 'recital') position = `Recital ${elem.number || ''}`;
-      else if (elem.type === 'article') position = `Article ${elem.number || ''}`;
-      else if (elem.type === 'point') position = `Point ${elem.number || ''}`;
-      else if (elem.type === 'paragraph') position = `Paragraph (${elem.letter || ''})`;
+      if (elem.type === 'recital') {
+        position = `Recital ${elem.number || ''}`;
+      } else if (elem.type === 'article') {
+        position = `Article ${elem.number || ''}`;
+      } else if (elem.type === 'point') {
+        // Include parent article context
+        const artNum = (elem as any).article_number || currentArticleNumber;
+        position = artNum ? `Article ${artNum}, Point ${elem.number || ''}` : `Point ${elem.number || ''}`;
+      } else if (elem.type === 'paragraph') {
+        const artNum = (elem as any).article_number || currentArticleNumber;
+        position = artNum ? `Article ${artNum}, Paragraph (${elem.letter || ''})` : `Paragraph (${elem.letter || ''})`;
+      }
+
+      // Skip articles with no body text (just the heading "Article X")
+      const elemText = elem.text || '';
+      if (elem.type === 'article' && elemText.length < 20) continue;
 
       keyElements.push({
         position: position.trim(),
         element_type: elem.type,
-        text: elem.text.substring(0, 300),
+        text: elemText.substring(0, 300),
       });
 
       // Send up to 50 elements; backend will determine suggestion count by tier
