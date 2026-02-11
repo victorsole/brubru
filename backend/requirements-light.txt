@@ -21,7 +21,7 @@ python-dotenv==1.0.0
 stripe==10.0.0
 
 # AI SDKs (API-based, no local models)
-mistralai>=1.0.0
+mistralai==1.9.11  # Pinned: >=1.10 adds opentelemetry deps that conflict with chromadb
 anthropic>=0.77.0
 openai>=2.0.0
 google-generativeai>=0.8.0
@@ -58,6 +58,17 @@ python-docx==1.1.0
 # Vector Database (use API-based embeddings)
 chromadb==0.4.22
 pgvector==0.2.4
+
+# OpenTelemetry (pinned to prevent pip backtracking; required by chromadb)
+opentelemetry-api==1.27.0
+opentelemetry-sdk==1.27.0
+opentelemetry-proto==1.27.0
+opentelemetry-exporter-otlp-proto-common==1.27.0
+opentelemetry-exporter-otlp-proto-grpc==1.27.0
+opentelemetry-semantic-conventions==0.48b0
+opentelemetry-instrumentation==0.48b0
+opentelemetry-instrumentation-fastapi==0.48b0
+opentelemetry-instrumentation-asgi==0.48b0
 
 # Caching
 redis==5.0.1
