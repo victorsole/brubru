@@ -11,6 +11,8 @@ import { useAuth } from '../hooks/use_auth';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import './tenderator_page.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 // Award criterion extracted from eForms XML
 export interface AwardCriterion {
   type?: string;
@@ -122,7 +124,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
       };
 
       // Fetch profile
-      const profileRes = await fetch('/api/tenders/profile/me', { headers });
+      const profileRes = await fetch(`${API_URL}/api/tenders/profile/me`, { headers });
       if (profileRes.status === 403) {
         setHasBlueAccess(false);
         setIsLoading(false);
@@ -137,7 +139,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
       }
 
       // Fetch stats
-      const statsRes = await fetch('/api/tenders/statistics/me', { headers });
+      const statsRes = await fetch(`${API_URL}/api/tenders/statistics/me`, { headers });
       if (statsRes.ok) {
         const statsData = await statsRes.json();
         setUserStats(statsData);
@@ -169,7 +171,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
 
   const handleSaveMatch = async (matchId: number) => {
     try {
-      const response = await fetch(`/api/tenders/matches/${matchId}/save`, {
+      const response = await fetch(`${API_URL}/api/tenders/matches/${matchId}/save`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -187,7 +189,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
 
   const handleDismissMatch = async (matchId: number) => {
     try {
-      const response = await fetch(`/api/tenders/matches/${matchId}/dismiss`, {
+      const response = await fetch(`${API_URL}/api/tenders/matches/${matchId}/dismiss`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -4,6 +4,8 @@ import type { TenderProfile } from '../../pages/tenderator_page';
 import { useAuth } from '../../hooks/use_auth';
 import './tender_profile_setup.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 // CPV top-level categories
 const CPV_CATEGORIES = [
   { code: '03', name: 'Agricultural, farming, fishing, forestry' },
@@ -169,7 +171,7 @@ export const TenderProfileSetup = ({ existingProfile, onProfileSaved, onBack }: 
         is_active: true,
       };
 
-      const response = await fetch('/api/tenders/profile', {
+      const response = await fetch(`${API_URL}/api/tenders/profile`, {
         method: isUpdate ? 'PUT' : 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
