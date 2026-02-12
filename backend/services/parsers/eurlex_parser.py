@@ -727,9 +727,12 @@ class EurlexParser:
             # Find "Whereas:" marker
             whereas_match = re.search(r'\bWhereas\s*:', proposal_text, re.IGNORECASE)
             if whereas_match:
-                # Find where articles start
+                # Find where articles start (same broadened enacting formula as _extract_articles_com)
                 articles_start = re.search(
-                    r'(?:HAVE|HAS)\s+ADOPTED\s+THIS\s+(?:REGULATION|DIRECTIVE|DECISION)|\bArticle\s+1\b',
+                    r'(?:HAVE|HAS)\s+ADOPTED\s+(?:THIS\s+)?(?:REGULATION|DIRECTIVE|DECISION|THE\s+FOLLOWING\s+(?:REGULATION|DIRECTIVE|DECISION))'
+                    r'|(?:HAVE|HAS)\s+DECIDED\s+AS\s+FOLLOWS'
+                    r'|HEREBY\s+DECIDE[SD]?'
+                    r'|\bArticle\s+1\b',
                     proposal_text,
                     re.IGNORECASE
                 )
@@ -779,12 +782,21 @@ class EurlexParser:
         proposal_start_pos, proposal_text = self._find_proposal_section()
 
         # First try: text-based extraction from proposal section
-        # Find "HAS ADOPTED" or "Article 1" in proposal text
+        # Find "HAS ADOPTED" or similar enacting formula in proposal text
+        # Covers: HAS ADOPTED THIS REGULATION/DIRECTIVE/DECISION,
+        # HAVE ADOPTED THIS..., HAS DECIDED AS FOLLOWS, HEREBY DECIDES,
+        # HAS ADOPTED THE FOLLOWING REGULATION, etc.
         adopted_match = re.search(
-            r'(?:HAVE|HAS)\s+ADOPTED\s+THIS\s+(?:REGULATION|DIRECTIVE|DECISION)',
+            r'(?:HAVE|HAS)\s+ADOPTED\s+(?:THIS\s+)?(?:REGULATION|DIRECTIVE|DECISION|THE\s+FOLLOWING\s+(?:REGULATION|DIRECTIVE|DECISION))'
+            r'|(?:HAVE|HAS)\s+DECIDED\s+AS\s+FOLLOWS'
+            r'|HEREBY\s+DECIDE[SD]?',
             proposal_text,
             re.IGNORECASE
         )
+
+        # Fallback: if no enacting formula found, try to find "Article 1" directly
+        if not adopted_match:
+            adopted_match = re.search(r'(?:^|\n)\s*Article\s+1\b', proposal_text, re.IGNORECASE)
 
         articles_start_in_proposal = adopted_match.end() if adopted_match else 0
         articles_text = proposal_text[articles_start_in_proposal:]

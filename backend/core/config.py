@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables"""
 
     model_config = ConfigDict(
-        env_file=".env",
+        env_file=("../.env", ".env"),
         case_sensitive=True,
         extra='ignore'  # Ignore extra fields in .env
     )
@@ -70,6 +70,13 @@ class Settings(BaseSettings):
     STRIPE_YELLOW_ANNUAL_PRICE_ID: str
     STRIPE_BLUE_MONTHLY_PRICE_ID: str
     APP_URL: str = "http://localhost:5173"
+
+    # Email (Gmail SMTP via Google Workspace)
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str | None = None  # hello@beresol.eu
+    SMTP_PASSWORD: str | None = None  # App Password from Google Workspace
+    SMTP_FROM_NAME: str = "Brubru by Beresol"
 
     # CORS
     ALLOWED_ORIGINS: str = "http://localhost:3000"

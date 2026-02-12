@@ -225,12 +225,6 @@ class AmendmentExportService:
         # Clear existing content
         cell.text = ''
 
-        # Set background color
-        bg_color = None
-        shading_elm = OxmlElement('w:shd')
-        shading_elm.set(qn('w:fill'), bg_color or 'FFFFFF')
-        cell._element.get_or_add_tcPr().append(shading_elm)
-
         # Get paragraph
         paragraph = cell.paragraphs[0]
 

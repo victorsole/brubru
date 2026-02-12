@@ -53,7 +53,7 @@ export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerP
       <div className="document-viewer">
         <div className="document-viewer__content">
           <div className="document-viewer__empty">
-            <span className="document-viewer__empty-icon">📄</span>
+            <span className="document-viewer__empty-icon mdi mdi-file-document-outline"></span>
             <p className="document-viewer__empty-text">No document loaded</p>
             <p className="document-viewer__empty-hint">
               Upload a document or paste a EUR-Lex URL to get started

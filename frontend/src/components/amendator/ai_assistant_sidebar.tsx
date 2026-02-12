@@ -44,6 +44,8 @@ export const AIAssistantPanel = ({
   const [aiSuggestion, setAiSuggestion] = useState<AISuggestion | null>(null);
   const [batchSuggestions, setBatchSuggestions] = useState<AISuggestion[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState('');
 
   // Get supporting context from uploaded documents
   const getSupportingContext = (): string | null => {
@@ -76,12 +78,14 @@ export const AIAssistantPanel = ({
       } else if (elem.type === 'article') {
         position = `Article ${elem.number || ''}`;
       } else if (elem.type === 'point') {
-        // Include parent article context
+        // Include parent article context - match getElementPosition() format
         const artNum = (elem as any).article_number || currentArticleNumber;
-        position = artNum ? `Article ${artNum}, Point ${elem.number || ''}` : `Point ${elem.number || ''}`;
+        position = artNum ? `Article ${artNum}, point ${elem.number || ''}` : `Point ${elem.number || ''}`;
       } else if (elem.type === 'paragraph') {
+        // Match getElementPosition() format: uses element.number, not elem.letter
         const artNum = (elem as any).article_number || currentArticleNumber;
-        position = artNum ? `Article ${artNum}, Paragraph (${elem.letter || ''})` : `Paragraph (${elem.letter || ''})`;
+        const paraId = elem.number || elem.letter || '';
+        position = artNum ? `Article ${artNum}, paragraph ${paraId}` : `Paragraph ${paraId}`;
       }
 
       // Skip articles with no body text (just the heading "Article X")
@@ -93,9 +97,6 @@ export const AIAssistantPanel = ({
         element_type: elem.type,
         text: elemText.substring(0, 300),
       });
-
-      // Send up to 50 elements; backend will determine suggestion count by tier
-      if (keyElements.length >= 50) break;
     }
 
     return keyElements;
@@ -290,20 +291,29 @@ export const AIAssistantPanel = ({
 
   const handleAccept = () => {
     if (aiSuggestion) {
-      onSuggestionAccepted(aiSuggestion);
+      if (isEditing) {
+        // Accept the edited version
+        onSuggestionAccepted({ ...aiSuggestion, proposed_text: editedText });
+      } else {
+        onSuggestionAccepted(aiSuggestion);
+      }
       setAiSuggestion(null);
+      setIsEditing(false);
+      setEditedText('');
     }
   };
 
   const handleModify = () => {
     if (aiSuggestion) {
-      onSuggestionAccepted(aiSuggestion);
-      setAiSuggestion(null);
+      setIsEditing(true);
+      setEditedText(aiSuggestion.proposed_text);
     }
   };
 
   const handleReject = () => {
     setAiSuggestion(null);
+    setIsEditing(false);
+    setEditedText('');
   };
 
   const handleAcceptBatchItem = (index: number) => {
@@ -422,7 +432,7 @@ export const AIAssistantPanel = ({
           ? t('ai.thinking')
           : selectedElement
             ? t('ai.suggest')
-            : 'Analyse Document'}
+            : "Let's Amend"}
       </button>
       {!canSuggest && (
         <p className="ai-panel__hint">Load a legislative document to enable AI analysis</p>
@@ -446,9 +456,19 @@ export const AIAssistantPanel = ({
 
             <div className="ai-panel__suggestion-field">
               <strong>{t('ai.proposedText')}</strong>
-              <div className="ai-panel__suggestion-text">
-                {aiSuggestion.proposed_text}
-              </div>
+              {isEditing ? (
+                <textarea
+                  className="ai-panel__textarea ai-panel__suggestion-edit"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                  rows={6}
+                  autoFocus
+                />
+              ) : (
+                <div className="ai-panel__suggestion-text">
+                  {aiSuggestion.proposed_text}
+                </div>
+              )}
             </div>
 
             <div className="ai-panel__suggestion-field">
@@ -461,13 +481,15 @@ export const AIAssistantPanel = ({
 
           <div className="ai-panel__suggestion-actions">
             <button className="button button-sm button-success" onClick={handleAccept}>
-              <span className="mdi mdi-check"></span> {t('ai.accept')}
+              <span className="mdi mdi-check"></span> {isEditing ? 'Apply' : t('ai.accept')}
             </button>
-            <button className="button button-sm button-secondary" onClick={handleModify}>
-              <span className="mdi mdi-pencil"></span> {t('ai.modify')}
-            </button>
+            {!isEditing && (
+              <button className="button button-sm button-secondary" onClick={handleModify}>
+                <span className="mdi mdi-pencil"></span> {t('ai.modify')}
+              </button>
+            )}
             <button className="button button-sm button-danger" onClick={handleReject}>
-              <span className="mdi mdi-close"></span> {t('ai.reject')}
+              <span className="mdi mdi-close"></span> {isEditing ? 'Cancel' : t('ai.reject')}
             </button>
           </div>
         </div>

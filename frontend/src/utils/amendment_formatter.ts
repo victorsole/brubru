@@ -104,37 +104,107 @@ export const formatAmendmentColumn = (
 };
 
 /**
- * Detects changes between original and proposed text
- * Returns array of TextChange objects
+ * Detects changes between original and proposed text using LCS-based word diff.
+ * Returns two arrays: changes mapped to original text positions, and changes mapped to proposed text positions.
+ * The returned TextChange[] uses `start`/`end` relative to the original text,
+ * and `oldText`/`newText` for the replaced content.
  */
 export const detectChanges = (original: string, proposed: string): TextChange[] => {
-  // Simple word-based diff algorithm
-  const originalWords = original.split(/(\s+)/);
-  const proposedWords = proposed.split(/(\s+)/);
+  // Split preserving whitespace tokens so we can reconstruct exact positions
+  const originalTokens = original.split(/(\s+)/);
+  const proposedTokens = proposed.split(/(\s+)/);
 
-  const changes: TextChange[] = [];
-  let originalIndex = 0;
-  let proposedIndex = 0;
+  // Build LCS table on word tokens (skip whitespace for comparison)
+  const origWords: { text: string; pos: number }[] = [];
+  const propWords: { text: string; pos: number }[] = [];
 
-  // Find differences (simplified - a full implementation would use a proper diff algorithm)
-  for (let i = 0; i < Math.max(originalWords.length, proposedWords.length); i++) {
-    const origWord = originalWords[i];
-    const propWord = proposedWords[i];
+  let pos = 0;
+  for (const token of originalTokens) {
+    if (token.trim()) origWords.push({ text: token, pos });
+    pos += token.length;
+  }
+  pos = 0;
+  for (const token of proposedTokens) {
+    if (token.trim()) propWords.push({ text: token, pos });
+    pos += token.length;
+  }
 
-    if (origWord !== propWord) {
-      const start = originalIndex;
-      const end = originalIndex + (origWord?.length || 0);
+  // LCS dynamic programming
+  const m = origWords.length;
+  const n = propWords.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
 
-      changes.push({
-        start,
-        end,
-        oldText: origWord || '',
-        newText: propWord || '',
-      });
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (origWords[i - 1].text === propWords[j - 1].text) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
     }
+  }
 
-    originalIndex += origWord?.length || 0;
-    proposedIndex += propWord?.length || 0;
+  // Backtrack to get opcodes (equal, replace, insert, delete)
+  type OpCode = { tag: 'equal' | 'replace' | 'insert' | 'delete'; i1: number; i2: number; j1: number; j2: number };
+  const matched: [number, number][] = [];
+  let i = m, j = n;
+  while (i > 0 && j > 0) {
+    if (origWords[i - 1].text === propWords[j - 1].text) {
+      matched.unshift([i - 1, j - 1]);
+      i--; j--;
+    } else if (dp[i - 1][j] >= dp[i][j - 1]) {
+      i--;
+    } else {
+      j--;
+    }
+  }
+
+  // Generate opcodes from matched pairs
+  const opcodes: OpCode[] = [];
+  let lastI = 0, lastJ = 0;
+  for (const [mi, mj] of matched) {
+    if (mi > lastI || mj > lastJ) {
+      if (mi > lastI && mj > lastJ) {
+        opcodes.push({ tag: 'replace', i1: lastI, i2: mi, j1: lastJ, j2: mj });
+      } else if (mi > lastI) {
+        opcodes.push({ tag: 'delete', i1: lastI, i2: mi, j1: lastJ, j2: lastJ });
+      } else {
+        opcodes.push({ tag: 'insert', i1: lastI, i2: lastI, j1: lastJ, j2: mj });
+      }
+    }
+    opcodes.push({ tag: 'equal', i1: mi, i2: mi + 1, j1: mj, j2: mj + 1 });
+    lastI = mi + 1;
+    lastJ = mj + 1;
+  }
+  if (lastI < m || lastJ < n) {
+    if (lastI < m && lastJ < n) {
+      opcodes.push({ tag: 'replace', i1: lastI, i2: m, j1: lastJ, j2: n });
+    } else if (lastI < m) {
+      opcodes.push({ tag: 'delete', i1: lastI, i2: m, j1: lastJ, j2: lastJ });
+    } else {
+      opcodes.push({ tag: 'insert', i1: lastI, i2: lastI, j1: lastJ, j2: n });
+    }
+  }
+
+  // Convert opcodes to TextChange array (positions relative to original text)
+  const changes: TextChange[] = [];
+  for (const op of opcodes) {
+    if (op.tag === 'equal') continue;
+
+    const oldTexts = origWords.slice(op.i1, op.i2).map(w => w.text);
+    const newTexts = propWords.slice(op.j1, op.j2).map(w => w.text);
+
+    const start = op.i1 < origWords.length ? origWords[op.i1].pos : original.length;
+    const end = op.i2 > 0 && op.i2 <= origWords.length
+      ? origWords[op.i2 - 1].pos + origWords[op.i2 - 1].text.length
+      : start;
+
+    changes.push({
+      start,
+      end,
+      oldText: oldTexts.join(' '),
+      newText: newTexts.join(' '),
+    });
   }
 
   return changes;

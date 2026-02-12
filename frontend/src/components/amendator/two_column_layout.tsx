@@ -65,6 +65,7 @@ export const TwoColumnLayout = ({
   const [amendments, setAmendments] = useState<Map<number, CellAmendment>>(new Map());
   const [editingCell, setEditingCell] = useState<number | null>(null);
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
+  const [additionCounter, setAdditionCounter] = useState(0);
 
   // Extract legislative elements from loaded document
   useEffect(() => {
@@ -82,6 +83,15 @@ export const TwoColumnLayout = ({
     }
   }, [amendments, onAmendmentsChange]);
 
+  // Normalize a position string for fuzzy matching: lowercase, strip parentheses, collapse spaces
+  const normalizePosition = (pos: string): string => {
+    return pos
+      .toLowerCase()
+      .replace(/[()]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  };
+
   // Process pending AI amendments from parent
   useEffect(() => {
     if (!pendingAmendments || pendingAmendments.length === 0 || elements.length === 0) return;
@@ -96,13 +106,65 @@ export const TwoColumnLayout = ({
       if (pending.elementIndex !== undefined && pending.elementIndex !== null) {
         targetIndex = pending.elementIndex;
       } else if (pending.elementPosition) {
-        // Match by position string (e.g., "Article 5", "Recital 3")
-        const pos = pending.elementPosition.toLowerCase().trim();
+        const normPos = normalizePosition(pending.elementPosition);
+
+        // Pass 1: exact normalized match or startsWith in either direction
         for (let i = 0; i < elements.length; i++) {
-          const elemPos = getElementPosition(elements[i]).toLowerCase().trim();
-          if (elemPos === pos || elemPos.startsWith(pos)) {
+          const normElemPos = normalizePosition(getElementPosition(elements[i]));
+          if (normElemPos === normPos || normElemPos.startsWith(normPos) || normPos.startsWith(normElemPos)) {
             targetIndex = i;
             break;
+          }
+        }
+
+        // Pass 2: one contains the other (handles format variations)
+        if (targetIndex === null) {
+          for (let i = 0; i < elements.length; i++) {
+            const normElemPos = normalizePosition(getElementPosition(elements[i]));
+            if (normElemPos.includes(normPos) || normPos.includes(normElemPos)) {
+              targetIndex = i;
+              break;
+            }
+          }
+        }
+
+        // Pass 3: match by article number + element type as last resort
+        if (targetIndex === null) {
+          const artMatch = normPos.match(/article\s+(\d+)/);
+          const recMatch = normPos.match(/recital\s+(\d+)/);
+          if (artMatch) {
+            const artNum = artMatch[1];
+            // Try to find a paragraph/point within this article
+            const paraMatch = normPos.match(/paragraph\s+(\w+)/);
+            const pointMatch = normPos.match(/point\s+(\w+)/);
+            for (let i = 0; i < elements.length; i++) {
+              const el = elements[i];
+              const elArtNum = el.article_number || el.number;
+              if (paraMatch && el.type === 'paragraph' && elArtNum === artNum) {
+                const paraId = paraMatch[1];
+                if (el.number === paraId || el.letter === paraId || el.number === `(${paraId})`) {
+                  targetIndex = i;
+                  break;
+                }
+              } else if (pointMatch && el.type === 'point' && elArtNum === artNum) {
+                const pointId = pointMatch[1];
+                if (el.number === pointId) {
+                  targetIndex = i;
+                  break;
+                }
+              } else if (!paraMatch && !pointMatch && el.type === 'article' && el.number === artNum) {
+                targetIndex = i;
+                break;
+              }
+            }
+          } else if (recMatch) {
+            const recNum = recMatch[1];
+            for (let i = 0; i < elements.length; i++) {
+              if (elements[i].type === 'recital' && elements[i].number === recNum) {
+                targetIndex = i;
+                break;
+              }
+            }
           }
         }
       }
@@ -130,7 +192,7 @@ export const TwoColumnLayout = ({
     if (onPendingAmendmentsProcessed) {
       onPendingAmendmentsProcessed();
     }
-  }, [pendingAmendments]);
+  }, [pendingAmendments, elements]);
 
   const handleDocumentFetched = (document: FetchedDocument) => {
     const loadedDoc: LoadedDocument = {
@@ -226,6 +288,13 @@ export const TwoColumnLayout = ({
     const element = elements[index];
     const newAmendments = new Map(amendments);
 
+    // Count existing additions after this element to generate a unique fractional key
+    const nextCounter = additionCounter + 1;
+    setAdditionCounter(nextCounter);
+
+    // Use a unique fractional index: index + 0.001 * counter to avoid collisions
+    const additionKey = index + nextCounter * 0.001;
+
     const amendment: CellAmendment = {
       elementIndex: index,
       elementType: element.type,
@@ -237,9 +306,9 @@ export const TwoColumnLayout = ({
       insertAfter: index,
     };
 
-    newAmendments.set(index + 0.5, amendment); // Use fractional index for insertions
+    newAmendments.set(additionKey, amendment);
     setAmendments(newAmendments);
-    setEditingCell(index + 0.5);
+    setEditingCell(additionKey);
   };
 
   const handleModification = (index: number) => {
@@ -459,36 +528,39 @@ export const TwoColumnLayout = ({
                         </div>
                       </div>
 
-                      {/* Addition Row (if amendment type is addition) */}
-                      {amendments.has(index + 0.5) && (
-                        <div className="two-column-layout__row two-column-layout__row--addition">
-                          <div className="two-column-layout__cell two-column-layout__cell--empty"></div>
-                          <div
-                            className={`two-column-layout__cell two-column-layout__cell--amendment two-column-layout__cell--addition ${
-                              editingCell === index + 0.5 ? 'two-column-layout__cell--editing' : ''
-                            }`}
-                          >
-                            <span className="two-column-layout__addition-badge">NEW</span>
-                            {editingCell === index + 0.5 ? (
-                              <textarea
-                                className="two-column-layout__textarea"
-                                value={amendments.get(index + 0.5)?.proposedText || ''}
-                                onChange={(e) => handleCellChange(index + 0.5, e.target.value)}
-                                onBlur={(e) => handleCellBlur(index + 0.5, e.target.value)}
-                                placeholder="Enter new text to add..."
-                                autoFocus
-                              />
-                            ) : (
-                              <span
-                                className="two-column-layout__text"
-                                onClick={() => setEditingCell(index + 0.5)}
-                              >
-                                {amendments.get(index + 0.5)?.proposedText || 'Click to add text...'}
-                              </span>
-                            )}
+                      {/* Addition Rows (all additions after this element) */}
+                      {Array.from(amendments.entries())
+                        .filter(([, a]) => a.amendmentType === 'addition' && a.insertAfter === index)
+                        .sort(([keyA], [keyB]) => keyA - keyB)
+                        .map(([additionKey, additionAmendment]) => (
+                          <div key={additionKey} className="two-column-layout__row two-column-layout__row--addition">
+                            <div className="two-column-layout__cell two-column-layout__cell--empty"></div>
+                            <div
+                              className={`two-column-layout__cell two-column-layout__cell--amendment two-column-layout__cell--addition ${
+                                editingCell === additionKey ? 'two-column-layout__cell--editing' : ''
+                              }`}
+                            >
+                              <span className="two-column-layout__addition-badge">NEW</span>
+                              {editingCell === additionKey ? (
+                                <textarea
+                                  className="two-column-layout__textarea"
+                                  value={additionAmendment.proposedText || ''}
+                                  onChange={(e) => handleCellChange(additionKey, e.target.value)}
+                                  onBlur={(e) => handleCellBlur(additionKey, e.target.value)}
+                                  placeholder="Enter new text to add..."
+                                  autoFocus
+                                />
+                              ) : (
+                                <span
+                                  className="two-column-layout__text"
+                                  onClick={() => setEditingCell(additionKey)}
+                                >
+                                  {additionAmendment.proposedText || 'Click to add text...'}
+                                </span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        ))}
                     </React.Fragment>
                   );
                 })}

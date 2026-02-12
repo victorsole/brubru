@@ -127,37 +127,44 @@ async def create_amendments_batch(
     """
     try:
         created_amendments = []
+        failed_indices = []
         linker = get_amendment_linker(db)
 
-        for amendment_data in batch.amendments:
-            new_amendment = Amendment(
-                user_id=current_user.id,
-                document_id=batch.document_id,
-                document_filename=batch.document_filename,
-                element_index=amendment_data.element_index,
-                element_type=amendment_data.element_type,
-                element_number=amendment_data.element_number,
-                position_text=amendment_data.position_text,
-                amendment_type=amendment_data.amendment_type,
-                original_text=amendment_data.original_text,
-                proposed_text=amendment_data.proposed_text,
-                insert_after=amendment_data.insert_after,
-                justification=amendment_data.justification,
-                group_label=amendment_data.group_label,
-                author=amendment_data.author,
-                amendment_number=amendment_data.amendment_number,
-                status=amendment_data.status,
-            )
-            # Auto-link to tracked carriage if CELEX matches
-            linker.auto_link_amendment(new_amendment)
-            db.add(new_amendment)
-            created_amendments.append(new_amendment)
+        for idx, amendment_data in enumerate(batch.amendments):
+            try:
+                new_amendment = Amendment(
+                    user_id=current_user.id,
+                    document_id=batch.document_id,
+                    document_filename=batch.document_filename,
+                    element_index=amendment_data.element_index,
+                    element_type=amendment_data.element_type,
+                    element_number=amendment_data.element_number,
+                    position_text=amendment_data.position_text,
+                    amendment_type=amendment_data.amendment_type,
+                    original_text=amendment_data.original_text,
+                    proposed_text=amendment_data.proposed_text,
+                    insert_after=amendment_data.insert_after,
+                    justification=amendment_data.justification,
+                    group_label=amendment_data.group_label,
+                    author=amendment_data.author,
+                    amendment_number=amendment_data.amendment_number,
+                    status=amendment_data.status,
+                )
+                # Auto-link to tracked carriage if CELEX matches
+                linker.auto_link_amendment(new_amendment)
+                db.add(new_amendment)
+                created_amendments.append(new_amendment)
+            except Exception as item_error:
+                logger.warning(f"Failed to create amendment at index {idx}: {str(item_error)}")
+                failed_indices.append(idx)
 
-        db.commit()
+        if created_amendments:
+            db.commit()
+            for amendment in created_amendments:
+                db.refresh(amendment)
 
-        # Refresh all amendments
-        for amendment in created_amendments:
-            db.refresh(amendment)
+        if failed_indices:
+            logger.warning(f"Batch: {len(created_amendments)} created, {len(failed_indices)} failed (indices: {failed_indices})")
 
         logger.info(f"Created {len(created_amendments)} amendments for user {current_user.id}")
         return created_amendments
@@ -783,48 +790,91 @@ async def suggest_batch_amendments(
     """
     Generate AI-powered amendment suggestions for an entire document.
 
-    The AI will:
-    1. Analyse all provided legislative elements
-    2. Consider the user's policy position and any supporting document context
-    3. Identify the most impactful elements to amend
-    4. Return up to max_suggestions amendment suggestions
+    Uses chunked parallel AI calls to ensure full-document coverage:
+    1. Split elements into chunks (recitals + groups of ~15 articles)
+    2. Fire parallel AI calls per chunk
+    3. Merge results into a single response
     """
     from services.ai.multi_provider_service import MultiProviderService
+    import asyncio
     import json
     import re
 
     # Determine max_suggestions based on subscription tier
     tier = current_user.subscription_tier or 'white'
     if tier in ('blue', 'admin'):
-        # Blue/Admin: unlimited - suggest for as many elements as provided
-        tier_max = len(request.elements)
+        tier_max = min(30, len(request.elements))
     elif tier == 'yellow':
         tier_max = 15
     else:
-        # White tier
         tier_max = 5
 
-    # Use the lower of user-requested and tier-allowed, or tier default if not specified
     max_suggestions = min(request.max_suggestions, tier_max) if request.max_suggestions else tier_max
 
-    try:
-        ai_service = MultiProviderService()
+    # --- Chunk elements by type for coherent grouping ---
+    recitals = [e for e in request.elements if e.element_type == 'recital']
+    non_recitals = [e for e in request.elements if e.element_type != 'recital']
 
-        # Build elements summary for the prompt
+    chunks = []
+    if recitals:
+        chunks.append(recitals)
+
+    # Split non-recitals into groups of ~15, keeping article sub-elements together
+    CHUNK_SIZE = 15
+    current_chunk = []
+    for elem in non_recitals:
+        current_chunk.append(elem)
+        if len(current_chunk) >= CHUNK_SIZE and elem.element_type == 'article':
+            chunks.append(current_chunk)
+            current_chunk = []
+    if current_chunk:
+        # Merge small trailing chunk with previous if too small
+        if len(current_chunk) < 5 and len(chunks) > 0:
+            chunks[-1].extend(current_chunk)
+        else:
+            chunks.append(current_chunk)
+
+    # If only one small chunk, just use it directly
+    if not chunks:
+        chunks = [list(request.elements)]
+
+    # --- Allocate suggestions per chunk proportionally ---
+    total_elements = sum(len(c) for c in chunks)
+    chunk_targets = []
+    allocated = 0
+    for i, chunk in enumerate(chunks):
+        if i == len(chunks) - 1:
+            target = max_suggestions - allocated
+        else:
+            target = max(2, round(max_suggestions * len(chunk) / total_elements))
+        chunk_targets.append(target)
+        allocated += target
+
+    # --- Build per-chunk AI call coroutines ---
+    ai_service = MultiProviderService()
+
+    supporting_section = ""
+    if request.supporting_context:
+        ctx = request.supporting_context[:4000]
+        supporting_section = f"\n\nSupporting Document Context (user's policy document):\n{ctx}\n"
+
+    async def _generate_for_chunk(chunk_elements, target_count):
+        """Generate amendment suggestions for a single chunk of elements."""
         elements_text = ""
-        for i, elem in enumerate(request.elements):
+        for i, elem in enumerate(chunk_elements):
             elements_text += f"\n{i+1}. {elem.position} ({elem.element_type}):\n{elem.text}\n"
 
-        system_prompt = f"""You are an expert EU legislative drafter. You will analyse a set of legislative elements and suggest the most impactful amendments based on the user's policy position.
+        system_prompt = f"""You are an expert EU legislative drafter. You will analyse a set of legislative elements and suggest amendments based on the user's policy position.
 
 IMPORTANT GUIDELINES:
-1. Identify the {max_suggestions} most strategically important elements to amend
+1. You MUST suggest exactly {target_count} amendments - no fewer
 2. Prioritise articles over recitals (articles have legal force)
 3. Keep each amendment focused and minimal - change only what is necessary
 4. Use proper EU legislative language and terminology
 5. Ensure amendments are legally coherent
 6. Each proposed_text should be a MODIFIED version of the original, not entirely new text
 7. For suppressions, set proposed_text to empty string ""
+8. Amend as many different elements as possible from the list provided
 
 Respond in this EXACT JSON format (an array of objects):
 [
@@ -839,17 +889,12 @@ Respond in this EXACT JSON format (an array of objects):
 
 Return ONLY the JSON array, no additional text."""
 
-        supporting_section = ""
-        if request.supporting_context:
-            ctx = request.supporting_context[:4000]
-            supporting_section = f"\n\nSupporting Document Context (user's policy document):\n{ctx}\n"
-
         user_message = f"""Policy Position: {request.policy_position}
 {supporting_section}
 Legislative Elements to Analyse:
 {elements_text}
 
-Please identify the {max_suggestions} most impactful amendments to align this legislation with the policy position. Return your suggestions as a JSON array."""
+You MUST return exactly {target_count} amendments as a JSON array."""
 
         response = await ai_service.generate(
             system_prompt=system_prompt,
@@ -858,41 +903,86 @@ Please identify the {max_suggestions} most impactful amendments to align this le
             temperature=0.7
         )
 
-        # Parse the JSON response
+        # Parse JSON response - handle multiple formats
         response_text = response.message.strip()
 
-        # Extract JSON from markdown code blocks if present
+        # Try 1: Extract from markdown code fences (with closing fence)
         json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response_text)
         if json_match:
             response_text = json_match.group(1)
 
-        # Try to parse JSON array
+        # Try 2: Extract JSON array directly (handles truncated fences or raw JSON)
+        if not response_text.startswith('['):
+            array_match = re.search(r'(\[[\s\S]*)', response_text)
+            if array_match:
+                response_text = array_match.group(1)
+
+        # Try 3: If JSON array is truncated (no closing ]), try to fix it
+        response_text = response_text.strip()
+        if response_text.startswith('[') and not response_text.endswith(']'):
+            # Find last complete object (ending with })
+            last_brace = response_text.rfind('}')
+            if last_brace > 0:
+                response_text = response_text[:last_brace + 1] + ']'
+
         try:
             suggestions_raw = json.loads(response_text)
             if not isinstance(suggestions_raw, list):
                 suggestions_raw = [suggestions_raw]
         except json.JSONDecodeError:
-            logger.warning(f"Failed to parse batch suggestion JSON: {response_text[:200]}")
+            print(f"[AMENDATOR] Failed to parse chunk JSON: {response_text[:300]}")
             suggestions_raw = []
 
-        # Build element lookup for original text
-        element_lookup = {elem.position: elem.text for elem in request.elements}
+        return suggestions_raw, response.provider, response.model
 
-        suggestions = []
-        for item in suggestions_raw[:max_suggestions]:
-            pos = item.get("element_position", "")
-            suggestions.append(BatchSuggestionItem(
-                element_position=pos,
-                amendment_type=item.get("amendment_type", "modification"),
-                original_text=item.get("original_text", element_lookup.get(pos, "")),
-                proposed_text=item.get("proposed_text", ""),
-                justification=item.get("justification", "")
-            ))
+    # --- Fire parallel AI calls ---
+    print(f"[AMENDATOR] Batch suggest: user={current_user.email} tier={tier}, {len(request.elements)} elements, {len(chunks)} chunks, targets={chunk_targets}, max={max_suggestions}")
+
+    try:
+        tasks = [
+            _generate_for_chunk(chunk, target)
+            for chunk, target in zip(chunks, chunk_targets)
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # --- Merge results ---
+        element_lookup = {elem.position: elem.text for elem in request.elements}
+        all_suggestions = []
+        provider = "unknown"
+        model = "unknown"
+
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                print(f"[AMENDATOR] Chunk {i+1}/{len(chunks)} failed: {result}")
+                continue
+
+            suggestions_raw, chunk_provider, chunk_model = result
+            provider = chunk_provider
+            model = chunk_model
+
+            for item in suggestions_raw:
+                pos = item.get("element_position", "")
+                all_suggestions.append(BatchSuggestionItem(
+                    element_position=pos,
+                    amendment_type=item.get("amendment_type", "modification"),
+                    original_text=item.get("original_text", element_lookup.get(pos, "")),
+                    proposed_text=item.get("proposed_text", ""),
+                    justification=item.get("justification", "")
+                ))
+
+        # Cap at max_suggestions
+        all_suggestions = all_suggestions[:max_suggestions]
+
+        if not all_suggestions:
+            # All chunks failed
+            raise Exception("All AI chunk calls failed to produce suggestions")
+
+        print(f"[AMENDATOR] Batch suggest complete: {len(all_suggestions)} suggestions from {len(chunks)} chunks via {provider}")
 
         return BatchSuggestionResponse(
-            suggestions=suggestions,
-            ai_provider=response.provider,
-            ai_model=response.model
+            suggestions=all_suggestions,
+            ai_provider=provider,
+            ai_model=model
         )
 
     except Exception as e:
