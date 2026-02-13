@@ -47,7 +47,8 @@ interface TwoColumnLayoutProps {
   loadedDocument: LoadedDocument | null;
   onDocumentLoaded: (document: LoadedDocument) => void;
   onElementSelected?: (element: LegislativeElement, index: number) => void;
-  onAmendmentsChange?: (amendments: Map<number, CellAmendment>) => void;
+  amendments: Map<number, CellAmendment>;
+  setAmendments: React.Dispatch<React.SetStateAction<Map<number, CellAmendment>>>;
   pendingAmendments?: PendingAIAmendment[];
   onPendingAmendmentsProcessed?: () => void;
 }
@@ -56,13 +57,13 @@ export const TwoColumnLayout = ({
   loadedDocument,
   onDocumentLoaded,
   onElementSelected,
-  onAmendmentsChange,
+  amendments,
+  setAmendments,
   pendingAmendments,
   onPendingAmendmentsProcessed,
 }: TwoColumnLayoutProps) => {
   const [showDocumentLoader, setShowDocumentLoader] = useState(!loadedDocument);
   const [elements, setElements] = useState<LegislativeElement[]>([]);
-  const [amendments, setAmendments] = useState<Map<number, CellAmendment>>(new Map());
   const [editingCell, setEditingCell] = useState<number | null>(null);
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
   const [additionCounter, setAdditionCounter] = useState(0);
@@ -75,13 +76,6 @@ export const TwoColumnLayout = ({
       setElements([]);
     }
   }, [loadedDocument]);
-
-  // Notify parent when amendments change
-  useEffect(() => {
-    if (onAmendmentsChange) {
-      onAmendmentsChange(amendments);
-    }
-  }, [amendments, onAmendmentsChange]);
 
   // Normalize a position string for fuzzy matching: lowercase, strip parentheses, collapse spaces
   const normalizePosition = (pos: string): string => {
@@ -270,6 +264,14 @@ export const TwoColumnLayout = ({
     const element = elements[index];
     const newAmendments = new Map(amendments);
 
+    // Toggle: if already suppressed, revert to original
+    const existing = newAmendments.get(index);
+    if (existing && existing.amendmentType === 'suppression') {
+      newAmendments.delete(index);
+      setAmendments(newAmendments);
+      return;
+    }
+
     const amendment: CellAmendment = {
       elementIndex: index,
       elementType: element.type,
@@ -282,6 +284,11 @@ export const TwoColumnLayout = ({
 
     newAmendments.set(index, amendment);
     setAmendments(newAmendments);
+
+    // Select element for AI panel context
+    if (onElementSelected) {
+      onElementSelected(element, index);
+    }
   };
 
   const handleAddition = (index: number) => {
@@ -312,6 +319,22 @@ export const TwoColumnLayout = ({
   };
 
   const handleModification = (index: number) => {
+    // Toggle: if already modified and not currently editing, revert to original
+    const existing = amendments.get(index);
+    if (existing && existing.amendmentType === 'modification' && editingCell !== index) {
+      const newAmendments = new Map(amendments);
+      newAmendments.delete(index);
+      setAmendments(newAmendments);
+      setEditingCell(null);
+      return;
+    }
+
+    // If currently editing this cell, exit edit mode
+    if (editingCell === index) {
+      setEditingCell(null);
+      return;
+    }
+
     setEditingCell(index);
 
     if (onElementSelected && elements[index]) {
@@ -541,6 +564,19 @@ export const TwoColumnLayout = ({
                               }`}
                             >
                               <span className="two-column-layout__addition-badge">NEW</span>
+                              <button
+                                className="two-column-layout__addition-remove"
+                                onClick={() => {
+                                  const newAmendments = new Map(amendments);
+                                  newAmendments.delete(additionKey);
+                                  setAmendments(newAmendments);
+                                  if (editingCell === additionKey) setEditingCell(null);
+                                }}
+                                title="Remove addition"
+                                aria-label="Remove addition"
+                              >
+                                <Icon path={mdiDeleteOutline} size={0.7} />
+                              </button>
                               {editingCell === additionKey ? (
                                 <textarea
                                   className="two-column-layout__textarea"

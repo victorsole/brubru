@@ -616,3 +616,137 @@ async def trigger_scraper(
         "message": f"Scraper {scraper_name} triggered successfully",
         "status": "queued"
     }
+
+
+# ============================================================================
+# EMAIL CAMPAIGNS
+# ============================================================================
+
+class EmailCampaignRequest(BaseModel):
+    """Request to send re-engagement emails"""
+    inactive_days: int = Field(default=7, ge=1, le=365, description="Days since last login to consider inactive")
+    include_never_logged_in: bool = Field(default=True, description="Include users who registered but never logged in")
+    dry_run: bool = Field(default=True, description="Preview recipients without sending")
+
+
+class EmailCampaignResponse(BaseModel):
+    """Response from email campaign"""
+    dry_run: bool
+    welcome_back_recipients: List[str]
+    first_time_recipients: List[str]
+    sent: int
+    failed: int
+    failed_addresses: List[str]
+
+
+@router.post("/email/re-engagement", response_model=EmailCampaignResponse)
+async def send_reengagement_emails(
+    request: EmailCampaignRequest,
+    admin: User = Depends(get_current_admin_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Send re-engagement emails to inactive users.
+
+    - Users who haven't logged in for N days get a "welcome back" email.
+    - Users who registered but never logged in get a "first time welcome" email.
+    - Default is dry_run=True (preview only). Set dry_run=False to actually send.
+    """
+    from services.email_service import get_email_service, build_welcome_back_email, build_first_time_welcome_email
+
+    email_service = get_email_service()
+    cutoff = datetime.utcnow() - timedelta(days=request.inactive_days)
+
+    # Find inactive users (logged in before, but not recently)
+    inactive_users = db.query(User).filter(
+        User.is_active == True,
+        User.last_login != None,
+        User.last_login < cutoff,
+        User.email != None,
+        User.role != 'admin',
+    ).all()
+
+    # Find users who registered but never logged in
+    never_logged_in = []
+    if request.include_never_logged_in:
+        never_logged_in = db.query(User).filter(
+            User.is_active == True,
+            User.last_login == None,
+            User.email != None,
+            User.role != 'admin',
+        ).all()
+
+    welcome_back_recipients = [u.email for u in inactive_users]
+    first_time_recipients = [u.email for u in never_logged_in]
+
+    if request.dry_run:
+        # Log admin action
+        log_entry = AdminActivityLog(
+            admin_user_id=admin.id,
+            action_type="email_campaign_preview",
+            action_details={
+                "inactive_days": request.inactive_days,
+                "welcome_back_count": len(welcome_back_recipients),
+                "first_time_count": len(first_time_recipients),
+            }
+        )
+        db.add(log_entry)
+        db.commit()
+
+        return EmailCampaignResponse(
+            dry_run=True,
+            welcome_back_recipients=welcome_back_recipients,
+            first_time_recipients=first_time_recipients,
+            sent=0,
+            failed=0,
+            failed_addresses=[],
+        )
+
+    # Actually send emails
+    total_sent = 0
+    all_failed = []
+
+    # Send welcome-back emails
+    for user in inactive_users:
+        days_since = (datetime.utcnow() - user.last_login).days
+        name = user.full_name or user.email.split("@")[0]
+        email_data = build_welcome_back_email(user_name=name, days_since_login=days_since)
+        if email_service.send(to=user.email, **email_data):
+            total_sent += 1
+        else:
+            all_failed.append(user.email)
+
+    # Send first-time welcome emails
+    for user in never_logged_in:
+        name = user.full_name or user.email.split("@")[0]
+        email_data = build_first_time_welcome_email(user_name=name)
+        if email_service.send(to=user.email, **email_data):
+            total_sent += 1
+        else:
+            all_failed.append(user.email)
+
+    # Log admin action
+    log_entry = AdminActivityLog(
+        admin_user_id=admin.id,
+        action_type="email_campaign_sent",
+        action_details={
+            "inactive_days": request.inactive_days,
+            "welcome_back_count": len(welcome_back_recipients),
+            "first_time_count": len(first_time_recipients),
+            "sent": total_sent,
+            "failed": len(all_failed),
+        }
+    )
+    db.add(log_entry)
+    db.commit()
+
+    logger.info(f"[EMAIL] Re-engagement campaign by admin {admin.id}: {total_sent} sent, {len(all_failed)} failed")
+
+    return EmailCampaignResponse(
+        dry_run=False,
+        welcome_back_recipients=welcome_back_recipients,
+        first_time_recipients=first_time_recipients,
+        sent=total_sent,
+        failed=len(all_failed),
+        failed_addresses=all_failed,
+    )

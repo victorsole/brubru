@@ -342,6 +342,24 @@
   flex-shrink: 0;
 }
 
+.two-column-layout__addition-remove {
+  background: none;
+  border: none;
+  color: var(--color-error, #dc2626);
+  cursor: pointer;
+  padding: 2px;
+  margin-right: var(--space-1);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.two-column-layout__addition-remove:hover {
+  opacity: 1;
+}
+
 .two-column-layout__row--addition {
   background-color: #f0f8ff;
   border-top: 1px dashed var(--color-accent-blue);

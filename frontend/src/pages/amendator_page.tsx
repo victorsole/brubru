@@ -98,6 +98,16 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
     setSelectedAmendment(amendment);
   };
 
+  const handleDeleteAmendment = (amendment: Amendment) => {
+    const key = parseFloat(amendment.id);
+    const newAmendments = new Map(cellAmendments);
+    newAmendments.delete(key);
+    setCellAmendments(newAmendments);
+    if (selectedAmendment?.id === amendment.id) {
+      setSelectedAmendment(null);
+    }
+  };
+
   const handleDocumentLoaded = (document: LoadedDocument) => {
     setLoadedDocument(document);
   };
@@ -109,9 +119,6 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
     setActiveTab('ai');
   };
 
-  const handleAmendmentsChange = (amendments: Map<number, CellAmendment>) => {
-    setCellAmendments(amendments);
-  };
 
   const handleSaveAmendments = async () => {
     if (!loadedDocument || cellAmendments.size === 0) {
@@ -263,6 +270,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               <AmendmentSidebar
                 amendments={amendments}
                 onSelectAmendment={handleSelectAmendment}
+                onDeleteAmendment={handleDeleteAmendment}
                 selectedAmendmentId={selectedAmendment?.id}
                 documentId={loadedDocument?.document_id}
               />
@@ -310,7 +318,8 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
           loadedDocument={loadedDocument}
           onDocumentLoaded={handleDocumentLoaded}
           onElementSelected={handleElementSelected}
-          onAmendmentsChange={handleAmendmentsChange}
+          amendments={cellAmendments}
+          setAmendments={setCellAmendments}
           pendingAmendments={pendingAmendments}
           onPendingAmendmentsProcessed={handlePendingAmendmentsProcessed}
         />

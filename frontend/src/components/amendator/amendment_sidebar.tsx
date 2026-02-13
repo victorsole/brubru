@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Amendment } from '../../pages/amendator_page';
 import { getAmendmentTypeLabel, getStructureLevelLabel } from '../../utils/amendment_formatter';
+import Icon from '@mdi/react';
+import { mdiCloseCircleOutline } from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
 import './amendment_sidebar.css';
 
@@ -11,6 +13,7 @@ const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api
 interface AmendmentSidebarProps {
   amendments: Amendment[];
   onSelectAmendment: (amendment: Amendment) => void;
+  onDeleteAmendment?: (amendment: Amendment) => void;
   selectedAmendmentId?: string;
   documentId?: string;
 }
@@ -18,6 +21,7 @@ interface AmendmentSidebarProps {
 export const AmendmentSidebar = ({
   amendments,
   onSelectAmendment,
+  onDeleteAmendment,
   selectedAmendmentId,
   documentId,
 }: AmendmentSidebarProps) => {
@@ -149,6 +153,19 @@ export const AmendmentSidebar = ({
                 <span className={`amendment-grid__status ${getStatusClass(amendment.status)}`}>
                   {getStatusLabel(amendment.status)}
                 </span>
+                {onDeleteAmendment && (
+                  <button
+                    className="amendment-grid__delete"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteAmendment(amendment);
+                    }}
+                    title="Delete amendment"
+                    aria-label="Delete amendment"
+                  >
+                    <Icon path={mdiCloseCircleOutline} size={0.65} />
+                  </button>
+                )}
               </div>
 
               {/* Amendment Type and Structure Level */}

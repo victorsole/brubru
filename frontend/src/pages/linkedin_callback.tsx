@@ -34,14 +34,15 @@ export const LinkedInCallback = () => {
           redirect_uri: `${window.location.origin}/auth/linkedin/callback`
         });
 
-        const { access_token, user } = response.data;
+        const { access_token, user, previous_last_login } = response.data;
 
         // Store auth in parent window
         if (window.opener) {
           window.opener.postMessage({
             type: 'LINKEDIN_AUTH_SUCCESS',
             token: access_token,
-            user
+            user,
+            previous_last_login
           }, window.location.origin);
         }
 

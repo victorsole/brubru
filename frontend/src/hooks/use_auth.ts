@@ -41,7 +41,9 @@ if (typeof window !== 'undefined') {
     if (event.origin !== window.location.origin) return;
 
     if (event.data.type === 'LINKEDIN_AUTH_SUCCESS') {
-      const { token, user } = event.data;
+      const { token, user, previous_last_login } = event.data;
+      // Store previous login for welcome-back greeting
+      sessionStorage.setItem('brubru_previous_login', previous_last_login || '');
       useAuth.getState().token = token;
       useAuth.getState().user = user;
       useAuth.getState().isAuthenticated = true;
@@ -63,8 +65,10 @@ export const useAuth = create<AuthState>()(
         formData.append('password', password);
 
         const response = await axios.post(`${API_URL}/api/auth/login`, formData);
-        const { access_token, user } = response.data;
+        const { access_token, user, previous_last_login } = response.data;
 
+        // Store previous login for welcome-back greeting
+        sessionStorage.setItem('brubru_previous_login', previous_last_login || '');
         set({ token: access_token, user, isAuthenticated: true });
       },
 
@@ -76,6 +80,7 @@ export const useAuth = create<AuthState>()(
       },
 
       logout: () => {
+        sessionStorage.removeItem('brubru_previous_login');
         set({ user: null, token: null, isAuthenticated: false });
       },
 
@@ -84,7 +89,10 @@ export const useAuth = create<AuthState>()(
           const response = await axios.post(`${API_URL}/api/auth/google`, {
             access_token: credentialResponse.credential
           });
-          const { access_token, user } = response.data;
+          const { access_token, user, previous_last_login } = response.data;
+
+          // Store previous login for welcome-back greeting
+          sessionStorage.setItem('brubru_previous_login', previous_last_login || '');
           set({ token: access_token, user, isAuthenticated: true });
         } catch (error) {
           console.error('Google login failed:', error);

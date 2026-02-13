@@ -137,6 +137,9 @@ async def login(
     if not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
 
+    # Capture previous login before updating
+    previous_last_login = user.last_login
+
     # Update last login
     user.last_login = datetime.utcnow()
     db.commit()
@@ -149,7 +152,8 @@ async def login(
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user": user
+        "user": user,
+        "previous_last_login": previous_last_login
     }
 
 
@@ -189,6 +193,8 @@ async def google_auth(
     # Find or create user
     user = db.query(User).filter(User.email == email).first()
 
+    previous_last_login = None
+
     if not user:
         # Create new user
         user = User(
@@ -202,7 +208,8 @@ async def google_auth(
         )
         db.add(user)
     else:
-        # Update existing user
+        # Capture previous login before updating
+        previous_last_login = user.last_login
         user.last_login = datetime.utcnow()
         if avatar_url:
             user.avatar_url = avatar_url
@@ -218,7 +225,8 @@ async def google_auth(
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user": user
+        "user": user,
+        "previous_last_login": previous_last_login
     }
 
 
@@ -273,6 +281,8 @@ async def linkedin_callback(
     # Find or create user
     user = db.query(User).filter(User.email == email).first()
 
+    previous_last_login = None
+
     if not user:
         user = User(
             email=email,
@@ -285,6 +295,8 @@ async def linkedin_callback(
         )
         db.add(user)
     else:
+        # Capture previous login before updating
+        previous_last_login = user.last_login
         user.last_login = datetime.utcnow()
         if avatar_url:
             user.avatar_url = avatar_url
@@ -300,7 +312,8 @@ async def linkedin_callback(
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "user": user
+        "user": user,
+        "previous_last_login": previous_last_login
     }
 
 

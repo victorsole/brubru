@@ -22,6 +22,7 @@
 - [Data Sources](#data-sources)
 - [Development Guidelines](#development-guidelines)
 - [Deployment](#deployment)
+- [Email Campaign System](#email-campaign-system)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
@@ -716,6 +717,75 @@ When ready to migrate from Supabase to Google Cloud SQL:
 6. **Redeploy:** `docker-compose up -d --build`
 
 No code changes required - SQLAlchemy handles database abstraction.
+
+---
+
+## Email Campaign System
+
+Brubru includes a bulk email campaign infrastructure for outreach to EU institutions and lobby organisations registered in the EU Transparency Register. Built on Gmail SMTP via Google Workspace with no third-party email dependencies.
+
+### Architecture
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| **Email Service** | `backend/services/email_service.py` | Singleton SMTP sender (TLS, port 587) |
+| **BCC Campaign Sender** | `backend/scripts/send_campaign.py` | Bulk BCC batches (90 per batch) |
+| **Institution Emails** | `backend/scripts/collect_institution_emails.py` | Tailored emails for 8 EU institutions |
+| **Lobby Campaign** | `backend/scripts/send_lobby_campaign.py` | Multilingual lobby outreach (5 languages, 12 clusters) |
+| **Bounce Cleaner** | `backend/scripts/clean_bounced_emails.py` | IMAP bounce detection and CSV cleanup |
+| **Email Collection** | `backend/scripts/collect_institution_emails.py` | DNS MX discovery for institution emails |
+
+### Institution Templates
+
+8 tailored email templates, each speaking to the institution's specific policy domain:
+
+| Key | Institution | Policy Angle |
+|-----|-------------|--------------|
+| `eeas` | European External Action Service | CFSP/CSDP, sanctions, trade agreements |
+| `agencies` | EU Decentralised Agencies | Legislative context behind agency mandates |
+| `eib` | European Investment Bank | InvestEU, REPowerEU, CBAM, Green Bond Standard |
+| `ecb` | European Central Bank | MiCA, PSD3, AML, Banking Union |
+| `eca` | Court of Auditors | MFF, RRF, CAP spending audits |
+| `eesc` | Economic and Social Committee | Legislative proposals, opinion drafting |
+| `omb` | European Ombudsman | Transparency, access to documents |
+| `cor` | Committee of the Regions | Cohesion policy, ERDF, ESF+, Just Transition |
+
+### Lobby Campaign (Multilingual)
+
+4,053 lobby organisations from the EU Transparency Register, classified into 12 policy clusters with emails in 5 languages:
+
+**Languages:** English (en), Spanish (es), French (fr), Italian (it), Dutch (nl)
+
+**Policy Clusters:** Climate, Digital, Health, Agriculture, Finance, Trade, Energy, Transport, Civil Society, Research, Defence, Social
+
+**Priority Countries:** Spain (253), France (408), Belgium (319), Italy (278), Netherlands (226), Luxembourg (30) = 1,514 orgs (37.3%)
+
+### Campaign Commands
+
+```bash
+# Institution campaigns
+python3.12 -c "from scripts.collect_institution_emails import send_from_csv; send_from_csv('eeas', dry_run=False)"
+
+# Lobby classification preview
+python3.12 scripts/send_lobby_campaign.py --classify-only
+python3.12 scripts/send_lobby_campaign.py --classify-only --country spain
+
+# Lobby campaign (multilingual)
+python3.12 scripts/send_lobby_campaign.py --send --country spain --cluster climate
+python3.12 scripts/send_lobby_campaign.py --dry-run --country spain,italy
+
+# Test templates
+python3.12 scripts/send_lobby_campaign.py --test-templates --lang es
+
+# Bounce cleaning
+python3.12 scripts/clean_bounced_emails.py --days 7 --apply
+```
+
+### Gmail Limits
+
+- Daily sending limit: ~2,000 recipients (Google Workspace)
+- Max recipients per message: 100 (we use 90 for safety)
+- Limit resets ~24 hours after hitting it
 
 ---
 

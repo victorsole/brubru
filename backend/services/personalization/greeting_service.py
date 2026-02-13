@@ -9,7 +9,7 @@ Season's greetings window, New Year. Time-of-day greetings follow business norms
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, Optional
 
 try:
@@ -134,6 +134,31 @@ def _time_of_day_greeting(local_dt: datetime) -> str:
     return "Hello"
 
 
+def _welcome_back_tail(previous_last_login: Optional[datetime], local_now: datetime) -> str:
+    """
+    Generate a welcome-back phrase based on when the user last logged in.
+
+    Rules:
+    - Never logged in before (None) → first-time user welcome
+    - Gap > 7 days → enthusiastic welcome back
+    - Gap > 3 days → simple welcome back
+    - Gap <= 3 days → empty (regular greeting suffices)
+    """
+    if previous_last_login is None:
+        return "Welcome to Brubru! Ask me anything about EU policy."
+
+    # Make comparison timezone-naive if needed
+    prev = previous_last_login.replace(tzinfo=None) if previous_last_login.tzinfo else previous_last_login
+    now = local_now.replace(tzinfo=None) if local_now.tzinfo else local_now
+    gap = now - prev
+
+    if gap > timedelta(days=7):
+        return "Great to see you again! A lot has happened in EU policy since your last visit."
+    if gap > timedelta(days=3):
+        return "Welcome back!"
+    return ""
+
+
 def _resolve_name(first_name: Optional[str], preferred_name: Optional[str], full_name: Optional[str]) -> str:
     if preferred_name and preferred_name.strip():
         return preferred_name.strip()
@@ -152,9 +177,14 @@ def generate_personalized_greeting(
     timezone: Optional[str],
     language: Optional[str],
     full_name: Optional[str] = None,
+    previous_last_login: Optional[datetime] = None,
 ) -> GreetingResult:
     """
     Build a personalised greeting string and metadata for the chatbot.
+
+    Args:
+        previous_last_login: When the user last logged in (before this session).
+            None for first-time users. Used to generate welcome-back messages.
 
     Returns:
         GreetingResult with `message` (string) and `metadata` for optional LLM use.
@@ -193,11 +223,16 @@ def generate_personalized_greeting(
     else:
         tail = ""
 
-    # For special greetings, include tail; for regular greetings, just salutation
+    # Welcome-back phrase (appended after holiday tail or as standalone tail)
+    welcome_back = _welcome_back_tail(previous_last_login, local_now)
+
+    # Build final message
+    parts = [f"{salutation}, {name}."]
     if tail:
-        message = f"{salutation}, {name}. {tail}"
-    else:
-        message = f"{salutation}, {name}."
+        parts.append(tail)
+    if welcome_back:
+        parts.append(welcome_back)
+    message = " ".join(parts)
 
     metadata = {
         "name": name,
@@ -206,6 +241,7 @@ def generate_personalized_greeting(
         "language": (language or "en"),
         "salutation": salutation,
         "is_special_greeting": str(bool(special)).lower(),
+        "welcome_back": welcome_back,
     }
 
     return GreetingResult(message=message, metadata=metadata)

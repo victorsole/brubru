@@ -52,22 +52,27 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
   interface ExamplePrompt { id: string; text: string }
   const [examplePrompts, setExamplePrompts] = useState<ExamplePrompt[] | null>(null);
 
-  // Fetch personalized greeting on mount
+  // Fetch personalized greeting on mount (available to all tiers)
   useEffect(() => {
     const fetchGreeting = async () => {
-      // Only fetch if authenticated and Blue tier
       if (!isAuthenticated || !user) return;
 
-      // Check if user has Yellow or Blue tier (greeting is restricted to these)
-      const tier = user.subscription_tier?.toLowerCase();
-      if (tier !== 'yellow' && tier !== 'blue') return;
-
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/personalization/greeting`);
+        // Pass previous_last_login from sessionStorage for welcome-back context
+        const previousLogin = sessionStorage.getItem('brubru_previous_login');
+        const params: Record<string, string> = {};
+        if (previousLogin) {
+          params.previous_last_login = previousLogin;
+        }
+
+        const response = await axios.get(`${API_BASE_URL}/api/personalization/greeting`, { params });
         const { message } = response.data;
 
         // Store greeting separately - don't add to messages
         setPersonalizedGreeting(message);
+
+        // Clear sessionStorage so welcome-back only shows once per session
+        sessionStorage.removeItem('brubru_previous_login');
       } catch (err) {
         console.error('Failed to fetch greeting:', err);
         // Silently fail - greeting is optional

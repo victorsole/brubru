@@ -18,6 +18,7 @@ from contextlib import asynccontextmanager
 from core.config import settings
 from core.database import init_db
 from services.rss.rss_scheduler import start_scheduler, stop_scheduler
+from services.email_scheduler import start_email_scheduler, stop_email_scheduler
 
 # Import routers
 from api import (
@@ -57,6 +58,13 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] RSS scheduler failed to start (non-fatal): {str(e)}")
 
+    # Start email scheduler (weekly re-engagement emails)
+    try:
+        start_email_scheduler()
+        print("[OK] Email scheduler started")
+    except Exception as e:
+        print(f"[WARN] Email scheduler failed to start (non-fatal): {str(e)}")
+
     # Connect to MCP Toolbox for Databases (non-fatal if unavailable)
     try:
         from services.toolbox_service import get_toolbox_service
@@ -84,6 +92,13 @@ async def lifespan(app: FastAPI):
         print("[OK] RSS feed scheduler stopped")
     except Exception as e:
         print(f"[WARN] RSS scheduler shutdown error: {str(e)}")
+
+    # Stop email scheduler
+    try:
+        stop_email_scheduler()
+        print("[OK] Email scheduler stopped")
+    except Exception as e:
+        print(f"[WARN] Email scheduler shutdown error: {str(e)}")
 
 
 # Create FastAPI app
