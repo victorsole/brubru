@@ -4,9 +4,13 @@ Consultation Proposal Generator
 AI-powered generation of response proposals for EC public consultations.
 Uses user's documents and profile to generate personalised input suggestions.
 
+Uses the multi-provider AI service (Mistral -> Claude -> OpenAI -> Gemini)
+for cost-effective and resilient AI generation.
+
 Blue tier only feature.
 
 Created: January 2026
+Updated: February 2026 - migrated to multi-provider service
 """
 
 import logging
@@ -14,10 +18,8 @@ from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import json
+import re
 
-from anthropic import Anthropic
-
-from core.config import settings
 from models.public_consultation import PublicConsultation, ConsultationDocument
 from models.user_document import UserDocument
 from models.user import User
@@ -58,6 +60,9 @@ class ConsultationProposalGenerator:
     """
     Generate personalised input proposals for EC consultations.
 
+    Uses the multi-provider fallback chain:
+    Mistral (primary) -> Claude -> OpenAI -> Gemini
+
     Uses:
     - Consultation analysis
     - User's uploaded documents
@@ -67,7 +72,9 @@ class ConsultationProposalGenerator:
     Blue tier only feature.
     """
 
-    PROPOSAL_PROMPT = """You are an expert EU policy consultant helping a user respond to a European Commission public consultation.
+    SYSTEM_PROMPT = """You are an expert EU policy consultant helping users respond to European Commission public consultations. You generate specific, actionable, and well-structured response proposals based on the consultation requirements and the user's documented positions. Always respond with valid JSON only."""
+
+    USER_PROMPT = """Based on the consultation requirements and the user's documented positions, generate personalised response proposals.
 
 ## Consultation Information
 
@@ -95,8 +102,6 @@ class ConsultationProposalGenerator:
 
 ## Your Task
 
-Based on the consultation requirements and the user's documented positions, generate personalised response proposals.
-
 Provide your response in JSON format:
 
 {{
@@ -123,11 +128,13 @@ Where the user's documents don't directly address a topic, note this and provide
 
 Respond ONLY with the JSON object, no additional text."""
 
-    def __init__(self, model: str = "claude-sonnet-4-20250514"):
-        """Initialise the proposal generator."""
-        self.model = model
-        self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-        logger.info(f"[OK] ConsultationProposalGenerator initialised with model {model}")
+    REFINE_SYSTEM_PROMPT = """You are an expert EU policy consultant refining draft consultation responses based on user feedback. Always respond with valid JSON only."""
+
+    def __init__(self):
+        """Initialise the proposal generator with multi-provider service."""
+        from services.ai.multi_provider_service import get_multi_provider_service
+        self.service = get_multi_provider_service()
+        logger.info(f"[OK] ConsultationProposalGenerator initialised with multi-provider (primary: {self.service.primary_provider})")
 
     async def generate_proposals(
         self,
@@ -154,7 +161,9 @@ Respond ONLY with the JSON object, no additional text."""
             # Build user context
             user_context = user.organization or user.full_name or "Policy professional"
             if user.policy_interests:
-                user_context += f" (interests: {', '.join(user.policy_interests[:5])})"
+                interests = user.policy_interests
+                if isinstance(interests, list):
+                    user_context += f" (interests: {', '.join(interests[:5])})"
 
             # Build documents context
             user_documents_text = "No specific documents provided."
@@ -172,8 +181,8 @@ Respond ONLY with the JSON object, no additional text."""
             # Format key questions
             key_questions_text = "\n".join(f"- {q}" for q in analysis.key_questions) if analysis.key_questions else "See consultation description"
 
-            # Format the prompt
-            prompt = self.PROPOSAL_PROMPT.format(
+            # Format the user prompt
+            user_prompt = self.USER_PROMPT.format(
                 title=consultation.title,
                 consultation_type=consultation.consultation_type.value if hasattr(consultation.consultation_type, 'value') else str(consultation.consultation_type),
                 dg_responsible=consultation.dg_responsible or "Not specified",
@@ -186,27 +195,23 @@ Respond ONLY with the JSON object, no additional text."""
                 user_documents=user_documents_text,
             )
 
-            # Call Claude API
-            response = self.client.messages.create(
-                model=self.model,
+            # Call multi-provider service
+            response = await self.service.generate(
+                system_prompt=self.SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": user_prompt}],
                 max_tokens=4000,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
+                temperature=0.4,
             )
 
             # Parse response
-            response_text = response.content[0].text.strip()
+            response_text = response.message.strip()
 
-            # Extract JSON from response
-            if response_text.startswith("```"):
-                response_text = response_text.split("```")[1]
-                if response_text.startswith("json"):
-                    response_text = response_text[4:]
+            # Extract JSON from response (handle markdown code blocks)
+            json_match = re.search(r'```(?:json)?\s*([\s\S]*?)```', response_text)
+            if json_match:
+                response_text = json_match.group(1).strip()
 
             proposal_data = json.loads(response_text)
-
-            tokens_used = response.usage.input_tokens + response.usage.output_tokens
 
             # Build proposals
             proposals = []
@@ -228,11 +233,14 @@ Respond ONLY with the JSON object, no additional text."""
                 overall_strategy=proposal_data.get("overall_strategy", ""),
                 recommended_tone=proposal_data.get("recommended_tone", "constructive"),
                 key_messages=proposal_data.get("key_messages", []),
-                tokens_used=tokens_used,
+                tokens_used=response.tokens_used,
                 generated_at=datetime.now()
             )
 
-            logger.info(f"[OK] Generated {len(proposals)} proposals for {consultation.initiative_id}, used {tokens_used} tokens")
+            logger.info(
+                f"[OK] Generated {len(proposals)} proposals for {consultation.initiative_id} "
+                f"via {response.provider}, used {response.tokens_used} tokens"
+            )
             return proposal_set
 
         except json.JSONDecodeError as e:
@@ -261,7 +269,7 @@ Respond ONLY with the JSON object, no additional text."""
         """
         logger.info(f"[START] Refining proposal {proposal.id} for consultation {consultation.initiative_id}")
 
-        refine_prompt = f"""You are refining a draft response for an EU consultation.
+        refine_prompt = f"""Revise the following draft response for an EU consultation based on user feedback.
 
 **Consultation:** {consultation.title}
 
@@ -288,19 +296,19 @@ Revise the proposal based on the user's feedback. Keep the same JSON structure:
 Respond ONLY with the JSON object."""
 
         try:
-            response = self.client.messages.create(
-                model=self.model,
+            response = await self.service.generate(
+                system_prompt=self.REFINE_SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": refine_prompt}],
                 max_tokens=1500,
-                messages=[
-                    {"role": "user", "content": refine_prompt}
-                ]
+                temperature=0.3,
             )
 
-            response_text = response.content[0].text.strip()
-            if response_text.startswith("```"):
-                response_text = response_text.split("```")[1]
-                if response_text.startswith("json"):
-                    response_text = response_text[4:]
+            response_text = response.message.strip()
+
+            # Extract JSON from response (handle markdown code blocks)
+            json_match = re.search(r'```(?:json)?\s*([\s\S]*?)```', response_text)
+            if json_match:
+                response_text = json_match.group(1).strip()
 
             refined_data = json.loads(response_text)
 
@@ -315,7 +323,7 @@ Respond ONLY with the JSON object."""
                 confidence_score=refined_data.get("confidence_score", proposal.confidence_score),
             )
 
-            logger.info(f"[OK] Refined proposal {proposal.id}")
+            logger.info(f"[OK] Refined proposal {proposal.id} via {response.provider}")
             return refined
 
         except Exception as e:
@@ -323,9 +331,9 @@ Respond ONLY with the JSON object."""
             raise
 
 
-def get_consultation_proposal_generator(model: str = "claude-sonnet-4-20250514") -> ConsultationProposalGenerator:
+def get_consultation_proposal_generator() -> ConsultationProposalGenerator:
     """Get or create the singleton ConsultationProposalGenerator instance."""
     global _proposal_generator
     if _proposal_generator is None:
-        _proposal_generator = ConsultationProposalGenerator(model=model)
+        _proposal_generator = ConsultationProposalGenerator()
     return _proposal_generator

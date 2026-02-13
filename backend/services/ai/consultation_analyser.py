@@ -4,7 +4,11 @@ Consultation Analyser
 AI-powered analysis of EC public consultations.
 Analyses consultation structure, key questions, requirements, and related legislation.
 
+Uses the multi-provider AI service (Mistral -> Claude -> OpenAI -> Gemini)
+for cost-effective and resilient AI generation.
+
 Created: January 2026
+Updated: February 2026 - migrated to multi-provider service
 """
 
 import logging
@@ -12,10 +16,8 @@ from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
 import json
+import re
 
-from anthropic import Anthropic
-
-from core.config import settings
 from models.public_consultation import PublicConsultation, ConsultationDocument
 from knowledge_base.ec_consultations import get_dg_full_name, POLICY_AREA_LABELS, PolicyArea
 
@@ -46,6 +48,9 @@ class ConsultationAnalyser:
     """
     AI-powered analysis of EC public consultations.
 
+    Uses the multi-provider fallback chain:
+    Mistral (primary) -> Claude -> OpenAI -> Gemini
+
     Analyses:
     - Consultation structure and requirements
     - Key questions being asked
@@ -54,9 +59,9 @@ class ConsultationAnalyser:
     - Recommended focus areas for response
     """
 
-    ANALYSIS_PROMPT = """You are an expert EU policy analyst helping users understand and respond to European Commission public consultations.
+    SYSTEM_PROMPT = """You are an expert EU policy analyst helping users understand and respond to European Commission public consultations. You provide thorough, specific, and actionable analysis to help policy professionals prepare effective responses. Always respond with valid JSON only."""
 
-Analyse the following public consultation and provide a comprehensive analysis.
+    USER_PROMPT = """Analyse the following public consultation and provide a comprehensive analysis.
 
 ## Consultation Details
 
@@ -98,11 +103,11 @@ Provide a thorough analysis in JSON format with the following structure:
 Be specific and actionable. Focus on helping a policy professional prepare an effective response.
 Respond ONLY with the JSON object, no additional text."""
 
-    def __init__(self, model: str = "claude-sonnet-4-20250514"):
-        """Initialise the analyser."""
-        self.model = model
-        self.client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-        logger.info(f"[OK] ConsultationAnalyser initialised with model {model}")
+    def __init__(self):
+        """Initialise the analyser with multi-provider service."""
+        from services.ai.multi_provider_service import get_multi_provider_service
+        self.service = get_multi_provider_service()
+        logger.info(f"[OK] ConsultationAnalyser initialised with multi-provider (primary: {self.service.primary_provider})")
 
     async def analyse_consultation(
         self,
@@ -153,8 +158,8 @@ Respond ONLY with the JSON object, no additional text."""
             # Policy areas labels
             policy_areas_str = ", ".join(consultation.policy_areas) if consultation.policy_areas else "Not specified"
 
-            # Format the prompt
-            prompt = self.ANALYSIS_PROMPT.format(
+            # Format the user prompt
+            user_prompt = self.USER_PROMPT.format(
                 title=consultation.title,
                 consultation_type=consultation.consultation_type.value if hasattr(consultation.consultation_type, 'value') else str(consultation.consultation_type),
                 status=consultation.status.value if hasattr(consultation.status, 'value') else str(consultation.status),
@@ -170,27 +175,23 @@ Respond ONLY with the JSON object, no additional text."""
                 documents_section=documents_section,
             )
 
-            # Call Claude API
-            response = self.client.messages.create(
-                model=self.model,
+            # Call multi-provider service
+            response = await self.service.generate(
+                system_prompt=self.SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": user_prompt}],
                 max_tokens=2000,
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
+                temperature=0.3,
             )
 
             # Parse response
-            response_text = response.content[0].text.strip()
+            response_text = response.message.strip()
 
-            # Extract JSON from response
-            if response_text.startswith("```"):
-                response_text = response_text.split("```")[1]
-                if response_text.startswith("json"):
-                    response_text = response_text[4:]
+            # Extract JSON from response (handle markdown code blocks)
+            json_match = re.search(r'```(?:json)?\s*([\s\S]*?)```', response_text)
+            if json_match:
+                response_text = json_match.group(1).strip()
 
             analysis_data = json.loads(response_text)
-
-            tokens_used = response.usage.input_tokens + response.usage.output_tokens
 
             analysis = ConsultationAnalysis(
                 consultation_id=str(consultation.id),
@@ -203,11 +204,14 @@ Respond ONLY with the JSON object, no additional text."""
                 potential_impacts=analysis_data.get("potential_impacts", []),
                 recommended_focus_areas=analysis_data.get("recommended_focus_areas", []),
                 confidence_score=analysis_data.get("confidence_score", 0.7),
-                tokens_used=tokens_used,
+                tokens_used=response.tokens_used,
                 generated_at=datetime.now()
             )
 
-            logger.info(f"[OK] Analysis complete for {consultation.initiative_id}, used {tokens_used} tokens")
+            logger.info(
+                f"[OK] Analysis complete for {consultation.initiative_id} "
+                f"via {response.provider}, used {response.tokens_used} tokens"
+            )
             return analysis
 
         except json.JSONDecodeError as e:
@@ -232,9 +236,9 @@ Respond ONLY with the JSON object, no additional text."""
             raise
 
 
-def get_consultation_analyser(model: str = "claude-sonnet-4-20250514") -> ConsultationAnalyser:
+def get_consultation_analyser() -> ConsultationAnalyser:
     """Get or create the singleton ConsultationAnalyser instance."""
     global _consultation_analyser
     if _consultation_analyser is None:
-        _consultation_analyser = ConsultationAnalyser(model=model)
+        _consultation_analyser = ConsultationAnalyser()
     return _consultation_analyser
