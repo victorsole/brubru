@@ -1,5 +1,6 @@
 // Amendator Document Upload Component
 import { useState } from 'react';
+import { useAuth } from '../../hooks/use_auth';
 import './amendator_document_upload.css';
 
 interface AmendatorDocumentUploadProps {
@@ -95,8 +96,12 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
         formData.append('file', file);
 
         // Upload file
+        const token = useAuth.getState().token;
         const uploadResponse = await fetch(`${API_BASE_URL}/api/documents/upload`, {
           method: 'POST',
+          headers: {
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+          },
           body: formData,
         });
 
@@ -109,7 +114,7 @@ export const AmendatorDocumentUpload = ({ onDocumentUploaded }: AmendatorDocumen
 
         // Fetch processed content
         const contentResponse = await fetch(
-          `${API_BASE_URL}/api/documents/${uploadedDoc.document_id}/content`
+          `${API_BASE_URL}/api/documents/storage/${uploadedDoc.document_id}/content`
         );
 
         if (!contentResponse.ok) {

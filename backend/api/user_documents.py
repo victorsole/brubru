@@ -324,6 +324,16 @@ async def delete_document(
                 detail="Document not found"
             )
 
+        # If uploaded document, also clean up filesystem storage
+        if document.document_type == 'uploaded' and document.storage_document_id:
+            try:
+                from services.storage.document_storage import get_document_storage
+                doc_storage = get_document_storage()
+                doc_storage.delete_document(document.storage_document_id)
+                logger.info(f"Cleaned up filesystem for upload {document.storage_document_id}")
+            except Exception as storage_err:
+                logger.warning(f"Failed to clean up filesystem storage: {storage_err}")
+
         db.delete(document)
         db.commit()
 
@@ -520,6 +530,7 @@ async def get_document_stats(
             total_analyses=by_type.get('analysis', 0),
             total_strategies=by_type.get('strategy', 0),
             total_notes=by_type.get('note', 0),
+            total_uploaded=by_type.get('uploaded', 0),
             total_word_count=total_words,
             most_viewed_documents=most_viewed_responses
         )

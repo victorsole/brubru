@@ -34,7 +34,7 @@ class UserDocument(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
 
     # Document type and metadata
-    document_type = Column(String(50), nullable=False, index=True)  # amendment, analysis, strategy, note
+    document_type = Column(String(50), nullable=False, index=True)  # amendment, analysis, strategy, note, uploaded
     title = Column(String(500), nullable=False)
     content = Column(Text, nullable=True)  # Main content
 
@@ -67,6 +67,15 @@ class UserDocument(Base):
 
     # Flexible metadata storage
     doc_metadata = Column(JSONB, nullable=True)  # Additional document-specific data
+
+    # Uploaded document fields (when document_type = 'uploaded')
+    storage_document_id = Column(String(36), nullable=True, index=True)  # Links to filesystem uploads/{id}/
+    original_filename = Column(String(500), nullable=True)
+    file_content_type = Column(String(100), nullable=True)  # e.g., application/pdf
+    file_size_bytes = Column(Integer, nullable=True)
+
+    # AI context control
+    include_in_ai_context = Column(Boolean, default=False)  # True for uploaded docs by default
 
     # Privacy and sharing
     is_private = Column(Boolean, default=True)  # Private by default
@@ -118,6 +127,11 @@ class UserDocument(Base):
     def is_note(self) -> bool:
         """Check if document is a note"""
         return self.document_type == "note"
+
+    @property
+    def is_uploaded(self) -> bool:
+        """Check if document is an uploaded file"""
+        return self.document_type == "uploaded"
 
     @property
     def has_eu_link(self) -> bool:

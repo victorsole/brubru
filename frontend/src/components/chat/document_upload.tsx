@@ -1,6 +1,7 @@
 // frontend/src/components/chat/document_upload.tsx
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../hooks/use_auth';
 import './document_upload.css';
 
 export interface UploadedFile {
@@ -51,8 +52,12 @@ export const DocumentUpload = ({ onUpload }: DocumentUploadProps = {}) => {
         const formData = new FormData();
         formData.append('file', file);
 
+        const token = useAuth.getState().token;
         const response = await fetch(`${API_BASE_URL}/api/documents/upload`, {
           method: 'POST',
+          headers: {
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+          },
           body: formData,
         });
 

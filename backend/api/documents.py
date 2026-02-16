@@ -8,13 +8,15 @@ import logging
 from typing import Optional, List
 from pathlib import Path
 
-from fastapi import APIRouter, UploadFile, File, HTTPException, Query
+from fastapi import APIRouter, UploadFile, File, HTTPException, Query, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 import httpx
 import re
 
+from api.auth_optional import get_current_user_dev as get_current_user
+from models.user import User
 from services.storage.document_storage import get_document_storage
 from services.document_processing.pdf_processor import PDFProcessor
 from services.document_processing.docx_processor import get_docx_processor
@@ -303,6 +305,7 @@ class DocumentContentResponse(BaseModel):
 @router.post("/upload", response_model=DocumentMetadata)
 async def upload_document(
     file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
 ) -> JSONResponse:
     """
     Upload and process a document (PDF, DOCX, DOC).
@@ -341,7 +344,7 @@ async def upload_document(
             file_content=file_content,
             filename=file.filename,
             content_type=file.content_type,
-            user_id=None  # TODO: Get from auth
+            user_id=str(current_user.id) if current_user else None
         )
 
         # Process document based on type
@@ -372,10 +375,42 @@ async def upload_document(
 
         logger.info(f"Successfully uploaded and processed document: {document_id}")
 
+        # Create a user_documents record to bridge file uploads with My EU Bubble
+        user_document_id = None
+        if current_user:
+            try:
+                from models.user_document import UserDocument
+
+                db = SessionLocal()
+                extracted_text = ""
+                if processed_content:
+                    extracted_text = processed_content.get('text', '') or ''
+
+                user_doc = UserDocument(
+                    user_id=current_user.id,
+                    document_type='uploaded',
+                    title=file.filename,
+                    content=extracted_text[:100000] if extracted_text else None,
+                    storage_document_id=document_id,
+                    original_filename=file.filename,
+                    file_content_type=file.content_type,
+                    file_size_bytes=len(file_content),
+                    include_in_ai_context=True,
+                )
+                db.add(user_doc)
+                db.commit()
+                db.refresh(user_doc)
+                user_document_id = str(user_doc.id)
+                logger.info(f"Created user_document {user_document_id} for upload {document_id}")
+                db.close()
+            except Exception as e:
+                logger.warning(f"Failed to create user_document for upload {document_id}: {e}")
+
         return JSONResponse(
             status_code=200,
             content={
                 'document_id': document['document_id'],
+                'user_document_id': user_document_id,
                 'filename': document['filename'],
                 'content_type': document['content_type'],
                 'file_size': document['file_size'],
@@ -696,7 +731,7 @@ async def parse_eurlex_url(url: str = Query(..., description="EUR-Lex URL to par
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{document_id}", response_model=DocumentMetadata)
+@router.get("/storage/{document_id}", response_model=DocumentMetadata)
 async def get_document_metadata(document_id: str) -> JSONResponse:
     """
     Get document metadata by ID.
@@ -728,7 +763,7 @@ async def get_document_metadata(document_id: str) -> JSONResponse:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{document_id}/content", response_model=DocumentContentResponse)
+@router.get("/storage/{document_id}/content", response_model=DocumentContentResponse)
 async def get_document_content(document_id: str) -> JSONResponse:
     """
     Get document full content (text, structure, metadata).
@@ -782,7 +817,7 @@ async def get_document_content(document_id: str) -> JSONResponse:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.delete("/{document_id}")
+@router.delete("/storage/{document_id}")
 async def delete_document(document_id: str) -> JSONResponse:
     """
     Delete document by ID.

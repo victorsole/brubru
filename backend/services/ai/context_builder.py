@@ -85,6 +85,9 @@ SOURCE_TIERS = {
 
     # EC Public Consultations (Tier 3 - official EC "Have Your Say" portal)
     'public_consultation': 3,
+
+    # User uploaded documents (Tier 4 - user-provided reference material)
+    'user_uploaded': 4,
 }
 
 
@@ -228,6 +231,9 @@ class ContextData:
 
     # MCP Toolbox supplementary results
     toolbox_results: List[Dict[str, Any]]
+
+    # User uploaded documents (for personalised AI context)
+    user_uploaded_documents: List[Dict[str, Any]]
 
     # Metadata
     query: str
@@ -498,6 +504,12 @@ class ContextBuilder:
         # MCP Toolbox supplementary DB queries (non-blocking)
         tasks.append(self._fetch_via_toolbox(query=user_message, entities=entities))
 
+        # User uploaded documents (personalised AI context)
+        if user_id:
+            tasks.append(self._fetch_user_uploaded_documents(user_id=user_id, query=user_message))
+        else:
+            tasks.append(empty_result())
+
         # Execute all tasks concurrently
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -545,6 +557,9 @@ class ContextBuilder:
         # Unpack MCP Toolbox results (index 15)
         toolbox_results = results[15] if not isinstance(results[15], Exception) else []
 
+        # Unpack User Uploaded Documents (index 16)
+        user_uploaded_documents = results[16] if not isinstance(results[16], Exception) else []
+
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
 
@@ -568,7 +583,8 @@ class ContextBuilder:
             len(beresol_content) +  # Beresol open reports
             len(committee_work_items) +  # EP Committee Work
             len(public_consultations) +  # EC Public Consultations
-            len(toolbox_results)  # MCP Toolbox supplementary
+            len(toolbox_results) +  # MCP Toolbox supplementary
+            len(user_uploaded_documents)  # User uploaded documents
         )
 
         context_data = ContextData(
@@ -590,6 +606,7 @@ class ContextBuilder:
             committee_work_items=committee_work_items,  # EP Committee Work
             public_consultations=public_consultations,  # EC Public Consultations
             toolbox_results=toolbox_results,  # MCP Toolbox supplementary
+            user_uploaded_documents=user_uploaded_documents,  # User uploaded documents
             tender_context=tender_context,  # Phase 8: Tender data
             reference_data_context=reference_data_context,
             query=user_message,
@@ -608,7 +625,8 @@ class ContextBuilder:
             f"{len(web_search_results)} web, {len(beresol_content)} beresol, "
             f"{len(committee_work_items)} committee work, "
             f"{len(public_consultations)} consultations, "
-            f"{len(toolbox_results)} toolbox) in {search_time:.2f}ms"
+            f"{len(toolbox_results)} toolbox, "
+            f"{len(user_uploaded_documents)} user uploads) in {search_time:.2f}ms"
         )
 
         return context_data
@@ -2030,6 +2048,64 @@ class ContextBuilder:
 
         return results
 
+    async def _fetch_user_uploaded_documents(
+        self,
+        user_id: str,
+        query: str,
+        max_docs: int = 3
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch user's uploaded documents marked for AI context inclusion.
+        Scores by keyword relevance to the query and returns top matches.
+        """
+        if not user_id:
+            return []
+
+        try:
+            from models.user_document import UserDocument
+
+            db = SessionLocal()
+            docs = db.query(UserDocument).filter(
+                UserDocument.user_id == user_id,
+                UserDocument.document_type == 'uploaded',
+                UserDocument.include_in_ai_context == True,
+                UserDocument.content != None,
+            ).order_by(UserDocument.updated_at.desc()).limit(10).all()
+
+            if not docs:
+                db.close()
+                return []
+
+            results = []
+            query_lower = query.lower()
+            query_words = set(w for w in query_lower.split() if len(w) > 2)
+
+            for doc in docs:
+                content_lower = (doc.content or '')[:5000].lower()
+                title_lower = (doc.title or '').lower()
+                score = sum(1 for w in query_words if w in content_lower or w in title_lower)
+
+                results.append({
+                    'id': str(doc.id),
+                    'title': doc.title,
+                    'original_filename': doc.original_filename,
+                    'content_excerpt': (doc.content or '')[:2000],
+                    'relevance_score': score,
+                    'source_type': 'user_uploaded',
+                })
+
+            results.sort(key=lambda x: x['relevance_score'], reverse=True)
+            db.close()
+
+            selected = results[:max_docs]
+            if selected:
+                logger.info(f"Found {len(selected)} relevant user uploaded documents for context")
+            return selected
+
+        except Exception as e:
+            logger.warning(f"Failed to fetch user uploaded documents: {e}")
+            return []
+
     def format_context_for_ai(
         self,
         context_data: ContextData,
@@ -2549,6 +2625,17 @@ class ContextBuilder:
                         sections.append(f"  Summary: {item['summary'][:400]}")
                 else:
                     sections.append(f"- {item.get('title', str(item))}")
+                sections.append("")
+
+        # User uploaded documents (personalised reference material)
+        if context_data.user_uploaded_documents:
+            sections.append(f"\nUSER UPLOADED DOCUMENTS ({len(context_data.user_uploaded_documents)}):")
+            sections.append("Reference material the user has uploaded. Use this to personalise your response.\n")
+            for doc in context_data.user_uploaded_documents:
+                sections.append(f"- {doc.get('title', 'Untitled')} ({doc.get('original_filename', 'unknown file')})")
+                excerpt = doc.get('content_excerpt', '')
+                if excerpt:
+                    sections.append(f"  Content: {excerpt[:1500]}")
                 sections.append("")
 
         # Reference data (calendars, institutions)

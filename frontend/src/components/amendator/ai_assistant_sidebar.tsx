@@ -136,7 +136,7 @@ export const AIAssistantPanel = ({
         const uploadResult = await uploadResponse.json();
 
         // Fetch extracted text
-        const contentResponse = await fetch(`${API_BASE}/documents/${uploadResult.document_id}/content`, {
+        const contentResponse = await fetch(`${API_BASE}/documents/storage/${uploadResult.document_id}/content`, {
           headers: {
             ...(token && { 'Authorization': `Bearer ${token}` }),
           },

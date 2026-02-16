@@ -26,7 +26,7 @@ export interface RSSEntry {
 
 export interface UserDocument {
   id: string;
-  document_type: 'amendment' | 'analysis' | 'strategy' | 'note';
+  document_type: 'amendment' | 'analysis' | 'strategy' | 'note' | 'uploaded';
   title: string;
   content?: string;
   policy_areas?: string[];
@@ -34,6 +34,12 @@ export interface UserDocument {
   celex_number?: string;
   procedure_reference?: string;
   amendment_status?: string;
+  // Uploaded document fields
+  storage_document_id?: string;
+  original_filename?: string;
+  file_content_type?: string;
+  file_size_bytes?: number;
+  include_in_ai_context?: boolean;
   created_at: string;
   updated_at: string;
   word_count?: number;

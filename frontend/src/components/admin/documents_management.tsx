@@ -110,7 +110,7 @@ export const DocumentsManagement = () => {
     if (!confirm('Are you sure you want to delete this document?')) return;
 
     try {
-      await axios.delete(`${API_BASE_URL}/api/documents/${id}`, {
+      await axios.delete(`${API_BASE_URL}/api/documents/storage/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const updatedDocuments = documents.filter(d => d.id !== id);
@@ -124,7 +124,7 @@ export const DocumentsManagement = () => {
 
   const handleDownload = async (doc: Document) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/documents/${doc.id}`, {
+      const response = await axios.get(`${API_BASE_URL}/api/documents/storage/${doc.id}`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob'
       });

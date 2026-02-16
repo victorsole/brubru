@@ -35,7 +35,7 @@ class UserDocumentBase(BaseModel):
     @field_validator('document_type')
     @classmethod
     def validate_document_type(cls, v):
-        allowed_types = ['amendment', 'analysis', 'strategy', 'note']
+        allowed_types = ['amendment', 'analysis', 'strategy', 'note', 'uploaded']
         if v not in allowed_types:
             raise ValueError(f'document_type must be one of: {allowed_types}')
         return v
@@ -208,6 +208,9 @@ class UserDocumentUpdate(BaseModel):
     stakeholders: Optional[List[str]] = None
     doc_metadata: Optional[Dict[str, Any]] = None
 
+    # AI context control (for uploaded docs)
+    include_in_ai_context: Optional[bool] = None
+
 
 class UserDocumentResponse(UserDocumentBase):
     """Schema for document response"""
@@ -237,6 +240,13 @@ class UserDocumentResponse(UserDocumentBase):
     parent_document_id: Optional[UUID] = None
     view_count: int
     word_count: int = 0
+
+    # Uploaded document fields
+    storage_document_id: Optional[str] = None
+    original_filename: Optional[str] = None
+    file_content_type: Optional[str] = None
+    file_size_bytes: Optional[int] = None
+    include_in_ai_context: bool = False
 
     # Timestamps
     created_at: datetime
@@ -288,6 +298,7 @@ class DocumentStatsResponse(BaseModel):
     total_analyses: int
     total_strategies: int
     total_notes: int
+    total_uploaded: int = 0
     total_word_count: int
     most_viewed_documents: List[UserDocumentResponse]
 
