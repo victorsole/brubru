@@ -7,7 +7,7 @@
 
 import { useEffect, useState, useMemo, useRef } from 'react';
 import Icon from '@mdi/react';
-import { mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox } from '@mdi/js';
+import { mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox, mdiOpenInNew } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
 import './analytics_tab.css';
 
@@ -198,7 +198,18 @@ export const AnalyticsTab = () => {
 
       {/* EU Law Analytics (Static) */}
       <div className="analytics-tab__section">
-        <h3>EU Law Analytics (Regulations & Directives)</h3>
+        <h3>
+          EU Law Analytics (Regulations & Directives)
+          <a
+            href="/analytics/eu_law_linguistics.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="analytics-tab__linguistics-link"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            Linguistic Patterns
+          </a>
+        </h3>
         <div className="analytics-tab__static-grid">
           <div className="analytics-tab__static-card">
             <h4>By Year</h4>

@@ -78,6 +78,27 @@
 }
 
 /* EU Law Analytics (static assets) */
+.analytics-tab__linguistics-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #0693e3, #059669);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  vertical-align: middle;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.analytics-tab__linguistics-link:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
 .analytics-tab__section {
   margin-top: 28px;
 }
