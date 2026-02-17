@@ -37,6 +37,7 @@ from knowledge_base.beresol_knowledge_loader import BeresolKnowledgeLoader, get_
 from models.legislative_train import LegislativeTrain, LegislativeCarriage
 from models.committee_work import CommitteeWorkItem, ProcedureTypeEnum
 from models.public_consultation import PublicConsultation, ConsultationStatusEnum
+from models.commission_document import CommissionDocument
 from knowledge_base.ep_committees import EP_COMMITTEE_BY_CODE
 from knowledge_base.ec_consultations import DGS, PolicyArea, get_dg_full_name
 from core.database import SessionLocal
@@ -85,6 +86,9 @@ SOURCE_TIERS = {
 
     # EC Public Consultations (Tier 3 - official EC "Have Your Say" portal)
     'public_consultation': 3,
+
+    # EC Commission Documents (Tier 2 - official EC Register proposals and legislation)
+    'commission_document': 2,
 
     # User uploaded documents (Tier 4 - user-provided reference material)
     'user_uploaded': 4,
@@ -228,6 +232,9 @@ class ContextData:
 
     # EC Public Consultations (Have Your Say portal)
     public_consultations: List[Dict[str, Any]]
+
+    # EC Commission Documents (Register of Commission Documents - Yellow/Blue tier)
+    commission_documents: List[Dict[str, Any]]
 
     # MCP Toolbox supplementary results
     toolbox_results: List[Dict[str, Any]]
@@ -501,6 +508,9 @@ class ContextBuilder:
         # Phase 9: Fetch EC Public Consultations (Have Your Say portal)
         tasks.append(self._fetch_public_consultations(query=user_message, entities=entities))
 
+        # EC Commission Documents (Yellow/Blue tier only)
+        tasks.append(self._fetch_commission_documents(query=user_message, entities=entities, user_id=user_id))
+
         # MCP Toolbox supplementary DB queries (non-blocking)
         tasks.append(self._fetch_via_toolbox(query=user_message, entities=entities))
 
@@ -554,11 +564,14 @@ class ContextBuilder:
         # Unpack Public Consultations (index 14)
         public_consultations = results[14] if not isinstance(results[14], Exception) else []
 
-        # Unpack MCP Toolbox results (index 15)
-        toolbox_results = results[15] if not isinstance(results[15], Exception) else []
+        # Unpack Commission Documents (index 15)
+        commission_documents = results[15] if not isinstance(results[15], Exception) else []
 
-        # Unpack User Uploaded Documents (index 16)
-        user_uploaded_documents = results[16] if not isinstance(results[16], Exception) else []
+        # Unpack MCP Toolbox results (index 16)
+        toolbox_results = results[16] if not isinstance(results[16], Exception) else []
+
+        # Unpack User Uploaded Documents (index 17)
+        user_uploaded_documents = results[17] if not isinstance(results[17], Exception) else []
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -583,6 +596,7 @@ class ContextBuilder:
             len(beresol_content) +  # Beresol open reports
             len(committee_work_items) +  # EP Committee Work
             len(public_consultations) +  # EC Public Consultations
+            len(commission_documents) +  # EC Commission Documents
             len(toolbox_results) +  # MCP Toolbox supplementary
             len(user_uploaded_documents)  # User uploaded documents
         )
@@ -605,6 +619,7 @@ class ContextBuilder:
             beresol_content=beresol_content,  # Beresol open reports
             committee_work_items=committee_work_items,  # EP Committee Work
             public_consultations=public_consultations,  # EC Public Consultations
+            commission_documents=commission_documents,  # EC Commission Documents
             toolbox_results=toolbox_results,  # MCP Toolbox supplementary
             user_uploaded_documents=user_uploaded_documents,  # User uploaded documents
             tender_context=tender_context,  # Phase 8: Tender data
@@ -625,6 +640,7 @@ class ContextBuilder:
             f"{len(web_search_results)} web, {len(beresol_content)} beresol, "
             f"{len(committee_work_items)} committee work, "
             f"{len(public_consultations)} consultations, "
+            f"{len(commission_documents)} commission docs, "
             f"{len(toolbox_results)} toolbox, "
             f"{len(user_uploaded_documents)} user uploads) in {search_time:.2f}ms"
         )
@@ -1542,8 +1558,8 @@ class ContextBuilder:
             # Check for DG mentions
             dg_mentions = []
             for dg in DGS:
-                if dg['code'].lower() in query_lower or dg['name'].lower() in query_lower:
-                    dg_mentions.append(dg['code'])
+                if dg.code.lower() in query_lower or dg.name.lower() in query_lower:
+                    dg_mentions.append(dg.code)
 
             # Also check extracted DG codes from entities
             if entities.dg_codes:
@@ -1639,6 +1655,155 @@ class ContextBuilder:
 
         except Exception as e:
             logger.error(f"Failed to fetch public consultations: {str(e)}")
+            return []
+
+    async def _fetch_commission_documents(
+        self,
+        query: str,
+        entities: ExtractedEntities,
+        user_id: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch relevant Commission Documents from the EC Register.
+
+        Tier-gated: Yellow and Blue tier users only (White tier returns []).
+
+        Looks for:
+        - DG codes mentioned in query or extracted from entities
+        - Procedure references matching document procedure_ref
+        - Doc type keywords (proposal -> COM, staff working -> SWD, joint -> JOIN)
+        - Reference patterns (COM(...), SWD(...), JOIN(...))
+        - Keyword search in titles for remaining queries
+
+        Args:
+            query: User query
+            entities: Extracted entities
+            user_id: Current user ID (for tier gating)
+
+        Returns:
+            List of relevant Commission documents
+        """
+        from sqlalchemy import or_
+        from models.user import User
+
+        try:
+            db = SessionLocal()
+
+            # Tier gate: Yellow and Blue only
+            if user_id:
+                user = db.query(User).filter(User.id == user_id).first()
+                if not user or user.subscription_tier == 'white':
+                    db.close()
+                    return []
+            else:
+                db.close()
+                return []
+
+            documents = []
+            query_lower = query.lower()
+            filters = []
+
+            # 1. Check for DG mentions
+            dg_mentions = []
+            if entities.dg_codes:
+                dg_mentions.extend(entities.dg_codes)
+            for dg in DGS:
+                if dg.code.lower() in query_lower or dg.name.lower() in query_lower:
+                    dg_mentions.append(dg.code)
+            dg_mentions = list(set(dg_mentions))
+
+            if dg_mentions:
+                filters.append(CommissionDocument.dg_responsible.in_(dg_mentions))
+
+            # 2. Check for procedure references
+            if entities.procedure_references:
+                proc_conditions = []
+                for proc_ref in entities.procedure_references:
+                    proc_conditions.append(
+                        CommissionDocument.procedure_ref.ilike(f"%{proc_ref}%")
+                    )
+                filters.append(or_(*proc_conditions))
+
+            # 3. Check for document reference patterns (COM(...), SWD(...), JOIN(...))
+            ref_pattern = re.search(r'(COM|SWD|JOIN|SEC)\s*\(\s*\d{4}\s*\)\s*\d+', query, re.IGNORECASE)
+            if ref_pattern:
+                ref_text = ref_pattern.group(0).replace(' ', '')
+                filters.append(CommissionDocument.reference.ilike(f"%{ref_text}%"))
+
+            # 4. Check for doc type keywords
+            doc_type_filter = None
+            if any(kw in query_lower for kw in ['proposal', 'initiative', 'com document', 'commission proposal']):
+                doc_type_filter = 'COM'
+            elif any(kw in query_lower for kw in ['staff working', 'swd', 'impact assessment']):
+                doc_type_filter = 'SWD'
+            elif any(kw in query_lower for kw in ['joint', 'join document']):
+                doc_type_filter = 'JOIN'
+            elif any(kw in query_lower for kw in ['official journal', 'adopted', 'regulation', 'directive']):
+                doc_type_filter = 'OJ'
+
+            if doc_type_filter:
+                filters.append(CommissionDocument.doc_type == doc_type_filter)
+
+            # Build query
+            base_query = db.query(CommissionDocument)
+
+            if filters:
+                base_query = base_query.filter(or_(*filters))
+            else:
+                # 5. Keyword search in titles for general queries
+                stopwords = {
+                    'tell', 'about', 'what', 'which', 'where', 'when', 'does',
+                    'have', 'this', 'that', 'with', 'from', 'they', 'been',
+                    'were', 'will', 'would', 'could', 'should', 'there',
+                    'their', 'some', 'more', 'than', 'very', 'just', 'also',
+                    'know', 'like', 'want', 'need', 'give', 'information',
+                }
+                words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
+                if words:
+                    title_conditions = []
+                    for word in words[:5]:
+                        title_conditions.append(
+                            CommissionDocument.title.ilike(f"%{word}%")
+                        )
+                        title_conditions.append(
+                            CommissionDocument.common_name.ilike(f"%{word}%")
+                        )
+                    base_query = base_query.filter(or_(*title_conditions))
+
+            # Order by most recent first
+            base_query = base_query.order_by(
+                CommissionDocument.publication_date.desc().nulls_last()
+            )
+
+            results = base_query.limit(10).all()
+
+            # Fallback: if no specific matches, return most recent documents
+            if not results:
+                results = db.query(CommissionDocument).order_by(
+                    CommissionDocument.publication_date.desc().nulls_last()
+                ).limit(5).all()
+
+            # Format results
+            for item in results:
+                documents.append({
+                    'source_type': 'commission_document',
+                    'reference': item.reference,
+                    'title': item.title,
+                    'common_name': item.common_name,
+                    'doc_type': item.doc_type,
+                    'dg_responsible': item.dg_responsible,
+                    'publication_date': item.publication_date.isoformat() if item.publication_date else None,
+                    'procedure_ref': item.procedure_ref,
+                    'portal_url': item.portal_url,
+                })
+
+            db.close()
+
+            logger.debug(f"Found {len(documents)} commission documents for query")
+            return documents
+
+        except Exception as e:
+            logger.error(f"Failed to fetch commission documents: {str(e)}")
             return []
 
     async def _fetch_eu_laws_from_database(
@@ -2601,6 +2766,28 @@ class ContextBuilder:
                     sections.append(f"  Description: {item['description'][:400]}...")
                 if item.get('portal_url'):
                     sections.append(f"  Have Your Say: {item['portal_url']}")
+                sections.append("")
+
+        # EC Commission Documents (Yellow/Blue tier)
+        if context_data.commission_documents:
+            sections.append(f"\nCOMMISSION DOCUMENTS ({len(context_data.commission_documents)} items):")
+            sections.append("Source: EC Register of Commission Documents (Yellow/Blue tier)")
+            sections.append("Note: Official EC legislative proposals, staff working documents, and joint documents\n")
+
+            for item in context_data.commission_documents:
+                doc_type = item.get('doc_type', 'COM')
+                sections.append(f"- [{doc_type}] {item['title']}")
+                if item.get('common_name'):
+                    sections.append(f"  Also known as: {item['common_name']}")
+                sections.append(f"  Reference: {item['reference']}")
+                if item.get('dg_responsible'):
+                    sections.append(f"  DG: {item['dg_responsible']}")
+                if item.get('procedure_ref'):
+                    sections.append(f"  Procedure: {item['procedure_ref']}")
+                if item.get('publication_date'):
+                    sections.append(f"  Date: {item['publication_date'][:10]}")
+                if item.get('portal_url'):
+                    sections.append(f"  URL: {item['portal_url']}")
                 sections.append("")
 
         # MCP Toolbox supplementary results

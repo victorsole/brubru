@@ -1668,6 +1668,16 @@
       letter-spacing: 0.04em;
     }
 
+    /* Comparison demo */
+    .comp-demo { display: none; animation: fadeIn 0.25s ease; }
+    .comp-demo--active { display: block; }
+    .comp-demo-tab--active { border-color: var(--color-primary) !important; background: rgba(6,147,227,0.04) !important; }
+    .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+
+    @media (max-width: 767px) {
+      .comp-grid { grid-template-columns: 1fr; }
+    }
+
     .product-detail {
       display: none;
       border-radius: var(--radius-xl);
@@ -2645,7 +2655,7 @@
       /* Show ALL sections (tabs) */
       .section { display: block !important; animation: none !important; }
 
-      /* Show ALL product details (remove page-break-inside:avoid -- details are too tall for a single page) */
+      /* Show ALL product details (remove page-break-inside:avoid —details are too tall for a single page) */
       .product-detail {
         display: block !important;
         animation: none !important;
@@ -2734,7 +2744,7 @@
         color: #111827 !important;
       }
 
-      /* Architecture diagram connectors -- simplify for print */
+      /* Architecture diagram connectors —simplify for print */
       .arch-connector { display: none !important; }
       .flow-arrow { display: none !important; }
 
@@ -2781,7 +2791,7 @@
         </div>
       </form>
       <div class="gate__error" id="gateError">Incorrect passphrase. Try again.</div>
-      <div class="gate__hint"><a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: border-color 0.2s;">Beresol BV</a> -- Confidential</div>
+      <div class="gate__hint"><a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); transition: border-color 0.2s;">Beresol BV</a> —Confidential</div>
     </div>
   </div>
 
@@ -2823,6 +2833,9 @@
     <button class="nav-tab" onclick="showSection('competitive', this)">
       <span class="mdi mdi-sword-cross"></span> Competitive
     </button>
+    <button class="nav-tab" onclick="showSection('comparison', this)">
+      <span class="mdi mdi-scale-balance"></span> AI Comparison
+    </button>
     <button class="nav-tab" onclick="showSection('business', this)">
       <span class="mdi mdi-currency-eur"></span> Business Model
     </button>
@@ -2845,7 +2858,7 @@
     <section id="overview" class="section section--active">
       <div class="section-header reveal">
         <div class="section-header__title">Executive Summary</div>
-        <div class="section-header__subtitle">All the EU with AI -- AI-native advocacy platform for the EUR 3-5B EU public affairs market</div>
+        <div class="section-header__subtitle">All the EU with AI —AI-native advocacy platform for the EUR 3-5B EU public affairs market</div>
       </div>
 
       <div class="metric-grid reveal">
@@ -2862,7 +2875,7 @@
           <div class="metric-card__label">Data Sources</div>
           <div class="metric-card__value">15+</div>
           <div class="metric-card__badge metric-card__badge--blue">
-            <span class="mdi mdi-spider-web"></span> 29 scrapers
+            <span class="mdi mdi-spider-web"></span> 32 scrapers
           </div>
         </div>
         <div class="metric-card metric-card--purple">
@@ -2884,7 +2897,7 @@
       <div class="callout">
         <div class="callout__text">
           "EU policy professionals spend EUR 500-1,000/day on work that AI can now produce in minutes.
-          Brubru encodes 17 years of Brussels expertise into software -- analyst-grade work at software costs."
+          Brubru encodes 7 years of Brussels expertise into software, analyst-grade work at software costs."
         </div>
       </div>
 
@@ -2922,11 +2935,11 @@
       </div>
 
       <div class="card">
-        <div class="card__title"><span class="mdi mdi-trophy-outline"></span> Why Now -- Three Converging Forces</div>
+        <div class="card__title"><span class="mdi mdi-trophy-outline"></span> Why Now —Three Converging Forces</div>
         <div class="grid-3 reveal-scale" style="margin-top: 1rem; margin-bottom: 0;">
           <div style="padding: 1.25rem; background: rgba(6,147,227,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-primary);">
             <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Regulatory Wave</div>
-            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">AI Act, MiCA, CSRD, NIS2, DORA, Packaging Regulation -- unprecedented compliance deadlines in 2026-2028.</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary);">AI Act, MiCA, CSRD, NIS2, DORA, Packaging Regulation —unprecedented compliance deadlines in 2026-2028.</div>
           </div>
           <div style="padding: 1.25rem; background: rgba(155,81,224,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-accent-purple);">
             <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-accent-purple); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">AI Threshold</div>
@@ -3013,7 +3026,7 @@
               <li><span class="mdi mdi-check-circle-outline"></span> Document uploads (PDF, DOCX) for contextual analysis and summarisation</li>
               <li><span class="mdi mdi-check-circle-outline"></span> Citation tracking with verifiable source references to official EU documents</li>
               <li><span class="mdi mdi-check-circle-outline"></span> Multi-turn conversation memory with quality scoring</li>
-              <li><span class="mdi mdi-check-circle-outline"></span> Beresol Knowledge Bundle: 11 policy reports + 7 live monitors as context</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Beresol Knowledge Bundle: 17 policy reports + 7 live monitors as context</li>
             </ul>
           </div>
           <div>
@@ -3023,15 +3036,16 @@
               <li><span class="mdi mdi-train"></span> Legislative Train Schedule (490+ Commission priority files)</li>
               <li><span class="mdi mdi-book-open-variant"></span> EPRS Think Tank research briefings matched by procedure reference</li>
               <li><span class="mdi mdi-account-group-outline"></span> EP Committee Work in Progress (26 committees tracked)</li>
+              <li><span class="mdi mdi-file-cabinet"></span> EC Register of Commission Documents (COM, SWD, SEC, OJ via RegDoc API)</li>
               <li><span class="mdi mdi-comment-question-outline"></span> EC Public Consultations from "Have Your Say" portal</li>
-              <li><span class="mdi mdi-file-document-multiple-outline"></span> Beresol open reports on AI Act, CBAM, Mercosur, and 8 more topics</li>
+              <li><span class="mdi mdi-file-document-multiple-outline"></span> Beresol open reports on AI Act, DORA, MiCA, SFDR, CBAM, Mercosur, and 9 more topics</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">AI Provider Chain</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-numeric-1-circle"></span> <strong>Mistral</strong> (primary) -- $0.20/M tokens, cost-effective for all queries</li>
-              <li><span class="mdi mdi-numeric-2-circle"></span> <strong>Claude Sonnet</strong> (fallback) -- $3/M tokens, complex reasoning</li>
-              <li><span class="mdi mdi-numeric-3-circle"></span> <strong>GPT-4 Turbo</strong> (fallback) -- $10/M tokens, high availability</li>
-              <li><span class="mdi mdi-numeric-4-circle"></span> <strong>Gemini 1.5 Pro</strong> (fallback) -- $1.25/M tokens, last resort</li>
+              <li><span class="mdi mdi-numeric-1-circle"></span> <strong>Mistral</strong> (primary) —$0.20/M tokens, cost-effective for all queries</li>
+              <li><span class="mdi mdi-numeric-2-circle"></span> <strong>Claude Sonnet</strong> (fallback) —$3/M tokens, complex reasoning</li>
+              <li><span class="mdi mdi-numeric-3-circle"></span> <strong>GPT-4 Turbo</strong> (fallback) —$10/M tokens, high availability</li>
+              <li><span class="mdi mdi-numeric-4-circle"></span> <strong>Gemini 1.5 Pro</strong> (fallback) —$1.25/M tokens, last resort</li>
             </ul>
           </div>
         </div>
@@ -3046,7 +3060,7 @@
           </div>
           <div>
             <div class="product-detail__title">My EU Bubble</div>
-            <div class="product-detail__tagline">Personalised intelligence dashboard -- monitor, track, predict, and generate from one place</div>
+            <div class="product-detail__tagline">Personalised intelligence dashboard —monitor, track, predict, and generate from one place</div>
           </div>
         </div>
         <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
@@ -3067,12 +3081,13 @@
           <div>
             <div class="product-detail__section-title">Dashboard Tabs</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-rss"></span> <strong>News Feed</strong> -- 33+ RSS feeds from EP, Commission, Council, EPRS, OEIL, and general EU news</li>
-              <li><span class="mdi mdi-train"></span> <strong>Legislative Train</strong> -- 490+ priority files from the Commission's work programme with status tracking</li>
-              <li><span class="mdi mdi-file-document-outline"></span> <strong>My Files</strong> -- Tracked legislation, saved entries, bookmarked collections</li>
-              <li><span class="mdi mdi-briefcase-outline"></span> <strong>Committee Work</strong> -- Work-in-progress procedures across 26 EP committees (COD, APP, CNS, NLE, INI)</li>
-              <li><span class="mdi mdi-comment-question-outline"></span> <strong>EC Consultations</strong> -- Open, closed, and outcome-published consultations from "Have Your Say" portal</li>
-              <li><span class="mdi mdi-chart-bar"></span> <strong>Analytics</strong> -- Reading patterns, topic interests, engagement metrics</li>
+              <li><span class="mdi mdi-rss"></span> <strong>News Feed</strong> —33+ RSS feeds from EP, Commission, Council, EPRS, OEIL, and general EU news</li>
+              <li><span class="mdi mdi-train"></span> <strong>Legislative Train</strong> —490+ priority files from the Commission's work programme with status tracking</li>
+              <li><span class="mdi mdi-file-document-outline"></span> <strong>My Files</strong> —Tracked legislation, saved entries, bookmarked collections</li>
+              <li><span class="mdi mdi-briefcase-outline"></span> <strong>Committee Work</strong> —Work-in-progress procedures across 26 EP committees (COD, APP, CNS, NLE, INI)</li>
+              <li><span class="mdi mdi-file-cabinet"></span> <strong>Commission Documents</strong> —COM proposals, SWD staff working documents, SEC, OJ from EC Register with live RegDoc API enrichment</li>
+              <li><span class="mdi mdi-comment-question-outline"></span> <strong>EC Consultations</strong> —Open, closed, and outcome-published consultations from "Have Your Say" portal</li>
+              <li><span class="mdi mdi-chart-bar"></span> <strong>Analytics</strong> —Reading patterns, topic interests, engagement metrics</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Core Capabilities</div>
             <ul class="product-detail__list">
@@ -3108,7 +3123,7 @@
                   AI legislative forecasting with 11 backend services. <strong>Timeline prediction</strong> (survival analysis on historical durations),
                   <strong>outcome prediction</strong> (multi-feature analysis of procedure, committee, political dynamics),
                   <strong>EP plenary vote forecast</strong> (9 political groups, 720 MEPs),
-                  <strong>Council vote</strong> (QMV calculator, 27 member states, blocking minority detection -- Blue tier),
+                  <strong>Council vote</strong> (QMV calculator, 27 member states, blocking minority detection —Blue tier),
                   <strong>resolution leading indicators</strong> (INL/INI/RSP resolutions that preceded legislation).
                   Yellow: 10/month. Blue: unlimited.
                 </div>
@@ -3166,15 +3181,15 @@
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Amendment Workflow</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-circle-outline"></span> <strong>Candidate</strong> -- Draft amendment, still being refined</li>
-              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Tabled</strong> -- Officially submitted for consideration</li>
-              <li><span class="mdi mdi-close-circle-outline"></span> <strong>Withdrawn</strong> -- Pulled from consideration</li>
+              <li><span class="mdi mdi-circle-outline"></span> <strong>Candidate</strong> —Draft amendment, still being refined</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Tabled</strong> —Officially submitted for consideration</li>
+              <li><span class="mdi mdi-close-circle-outline"></span> <strong>Withdrawn</strong> —Pulled from consideration</li>
             </ul>
           </div>
           <div>
             <div class="product-detail__section-title">Technical Compliance</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Akoma Ntoso XML</strong> -- OASIS LegalDocumentML standard used by EU institutions</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Akoma Ntoso XML</strong> —OASIS LegalDocumentML standard used by EU institutions</li>
               <li><span class="mdi mdi-check-circle-outline"></span> Automatic position references (Article X, paragraph Y, point (a))</li>
               <li><span class="mdi mdi-check-circle-outline"></span> Handles both OJ (Official Journal) and COM (Commission) document formats</li>
               <li><span class="mdi mdi-check-circle-outline"></span> Supports recitals, articles, annexes, and transitional provisions</li>
@@ -3182,9 +3197,9 @@
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Why It Matters</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-alert-circle-outline"></span> Legislative formatting is arcane -- get it wrong and amendments are rejected on procedural grounds</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> Legislative formatting is arcane —get it wrong and amendments are rejected on procedural grounds</li>
               <li><span class="mdi mdi-alert-circle-outline"></span> No other tool combines AT4AM-style editing with AI drafting assistance</li>
-              <li><span class="mdi mdi-alert-circle-outline"></span> EP's own AT4AM is internal-only -- not available to external stakeholders who draft amendments for MEPs</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> EP's own AT4AM is internal-only —not available to external stakeholders who draft amendments for MEPs</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Tier Access</div>
             <ul class="product-detail__list">
@@ -3235,23 +3250,23 @@
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Law Clusters Available</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-check-circle-outline"></span> AI Act (2024/1689) -- Risk classification, conformity, transparency</li>
-              <li><span class="mdi mdi-check-circle-outline"></span> GDPR -- Data protection, DPO requirements, transfers</li>
-              <li><span class="mdi mdi-check-circle-outline"></span> NIS2 -- Cybersecurity risk management, incident reporting</li>
-              <li><span class="mdi mdi-check-circle-outline"></span> CSRD -- Corporate sustainability reporting</li>
-              <li><span class="mdi mdi-check-circle-outline"></span> MiCA -- Crypto-asset regulation</li>
-              <li><span class="mdi mdi-check-circle-outline"></span> DORA -- Digital operational resilience (financial services)</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> AI Act (2024/1689) —Risk classification, conformity, transparency</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> GDPR —Data protection, DPO requirements, transfers</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> NIS2 —Cybersecurity risk management, incident reporting</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> CSRD —Corporate sustainability reporting</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> MiCA —Crypto-asset regulation</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> DORA —Digital operational resilience (financial services)</li>
             </ul>
           </div>
           <div>
             <div class="product-detail__section-title">Report Contents</div>
             <ul class="product-detail__list">
               <li><span class="mdi mdi-gauge"></span> <strong>Overall compliance score</strong> (0-100%) with colour-coded indicator</li>
-              <li><span class="mdi mdi-format-list-checks"></span> <strong>Gap summary</strong> -- count of missing, partial, unclear, and compliant items</li>
+              <li><span class="mdi mdi-format-list-checks"></span> <strong>Gap summary</strong> —count of missing, partial, unclear, and compliant items</li>
               <li><span class="mdi mdi-file-find-outline"></span> <strong>Detailed findings</strong> per requirement with severity rating and evidence</li>
               <li><span class="mdi mdi-lightbulb-outline"></span> <strong>Recommended actions</strong> prioritised by criticality and deadline</li>
               <li><span class="mdi mdi-timeline-clock-outline"></span> <strong>Action plan timeline</strong> with visual Gantt-style prioritisation</li>
-              <li><span class="mdi mdi-history"></span> <strong>Usage history</strong> -- track compliance improvements over time</li>
+              <li><span class="mdi mdi-history"></span> <strong>Usage history</strong> —track compliance improvements over time</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Market Context</div>
             <ul class="product-detail__list">
@@ -3261,7 +3276,7 @@
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Tier Access</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-circle-outline" style="color: var(--color-gray-500);"></span> <strong>White:</strong> Not available -- upgrade trigger</li>
+              <li><span class="mdi mdi-circle-outline" style="color: var(--color-gray-500);"></span> <strong>White:</strong> Not available —upgrade trigger</li>
               <li><span class="mdi mdi-circle" style="color: var(--color-accent-gold);"></span> <strong>Yellow:</strong> Limited analyses per month</li>
               <li><span class="mdi mdi-circle" style="color: var(--color-primary);"></span> <strong>Blue:</strong> Full access, unlimited analyses, priority processing</li>
             </ul>
@@ -3278,7 +3293,7 @@
           </div>
           <div>
             <div class="product-detail__title">Tenderator / GrantBru</div>
-            <div class="product-detail__tagline">AI-powered EU funding and procurement intelligence -- Blue tier exclusive</div>
+            <div class="product-detail__tagline">AI-powered EU funding and procurement intelligence —Blue tier exclusive</div>
           </div>
         </div>
         <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
@@ -3299,29 +3314,29 @@
           <div>
             <div class="product-detail__section-title">Core Features</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-account-cog-outline"></span> <strong>Organisation Profile</strong> -- Set up CPV codes, geographic preferences, capacity, and past experience</li>
-              <li><span class="mdi mdi-target"></span> <strong>AI-Matched Feed</strong> -- Tenders scored by relevance to your profile, updated daily from TED</li>
-              <li><span class="mdi mdi-star-circle-outline"></span> <strong>SME Suitability Scoring</strong> -- Multi-criteria weighted analysis of your fit for each tender</li>
-              <li><span class="mdi mdi-format-list-checks"></span> <strong>Bid Checklist</strong> -- Auto-generated checklist of requirements, eligibility criteria, and deadlines</li>
-              <li><span class="mdi mdi-calendar-month"></span> <strong>Tender Calendar</strong> -- Visual calendar of submission deadlines across all tracked tenders</li>
-              <li><span class="mdi mdi-magnify"></span> <strong>Tender Detail</strong> -- Full notice with AI-extracted requirements, estimated value, and award criteria</li>
+              <li><span class="mdi mdi-account-cog-outline"></span> <strong>Organisation Profile</strong> —Set up CPV codes, geographic preferences, capacity, and past experience</li>
+              <li><span class="mdi mdi-target"></span> <strong>AI-Matched Feed</strong> —Tenders scored by relevance to your profile, updated daily from TED</li>
+              <li><span class="mdi mdi-star-circle-outline"></span> <strong>SME Suitability Scoring</strong> —Multi-criteria weighted analysis of your fit for each tender</li>
+              <li><span class="mdi mdi-format-list-checks"></span> <strong>Bid Checklist</strong> —Auto-generated checklist of requirements, eligibility criteria, and deadlines</li>
+              <li><span class="mdi mdi-calendar-month"></span> <strong>Tender Calendar</strong> —Visual calendar of submission deadlines across all tracked tenders</li>
+              <li><span class="mdi mdi-magnify"></span> <strong>Tender Detail</strong> —Full notice with AI-extracted requirements, estimated value, and award criteria</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Data Sources</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-database-outline"></span> <strong>TED (Tenders Electronic Daily)</strong> -- Official EU procurement database via SPARQL + eForms API</li>
-              <li><span class="mdi mdi-file-xml-box"></span> <strong>eForms XML</strong> -- Structured procurement notices with CPV codes, lots, and award criteria</li>
-              <li><span class="mdi mdi-certificate-outline"></span> <strong>eCertis</strong> -- Procurement criteria across 27 EU member states</li>
+              <li><span class="mdi mdi-database-outline"></span> <strong>TED (Tenders Electronic Daily)</strong> —Official EU procurement database via SPARQL + eForms API</li>
+              <li><span class="mdi mdi-file-xml-box"></span> <strong>eForms XML</strong> —Structured procurement notices with CPV codes, lots, and award criteria</li>
+              <li><span class="mdi mdi-certificate-outline"></span> <strong>eCertis</strong> —Procurement criteria across 27 EU member states</li>
             </ul>
           </div>
           <div>
             <div class="product-detail__section-title">AI/ML Services (HuggingFace)</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-robot-outline"></span> <strong>Tender Classifier</strong> -- Categorise tenders by sector, type, and complexity</li>
-              <li><span class="mdi mdi-text-box-search-outline"></span> <strong>Tender Summariser</strong> -- Compress multi-page notices into actionable summaries</li>
-              <li><span class="mdi mdi-magnify"></span> <strong>Tender Search</strong> -- Full-text semantic search across all indexed notices</li>
-              <li><span class="mdi mdi-chart-box-outline"></span> <strong>SME Analyser</strong> -- Assess small business suitability against tender requirements</li>
-              <li><span class="mdi mdi-clipboard-check-outline"></span> <strong>Requirement Extractor</strong> -- Pull eligibility and technical requirements from notices</li>
-              <li><span class="mdi mdi-trophy-outline"></span> <strong>Award Explainer</strong> -- Interpret award criteria weighting and evaluation methodology</li>
+              <li><span class="mdi mdi-robot-outline"></span> <strong>Tender Classifier</strong> —Categorise tenders by sector, type, and complexity</li>
+              <li><span class="mdi mdi-text-box-search-outline"></span> <strong>Tender Summariser</strong> —Compress multi-page notices into actionable summaries</li>
+              <li><span class="mdi mdi-magnify"></span> <strong>Tender Search</strong> —Full-text semantic search across all indexed notices</li>
+              <li><span class="mdi mdi-chart-box-outline"></span> <strong>SME Analyser</strong> —Assess small business suitability against tender requirements</li>
+              <li><span class="mdi mdi-clipboard-check-outline"></span> <strong>Requirement Extractor</strong> —Pull eligibility and technical requirements from notices</li>
+              <li><span class="mdi mdi-trophy-outline"></span> <strong>Award Explainer</strong> —Interpret award criteria weighting and evaluation methodology</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Market Analytics (SPARQL)</div>
             <ul class="product-detail__list">
@@ -3331,9 +3346,9 @@
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">GrantBru Evolution (2027)</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-rocket-launch-outline"></span> <strong>All EU Funding</strong> -- Expand from procurement to cover Horizon Europe, Digital Europe, CEF, LIFE, Erasmus+, AGRIP, EIC, EIB/EIF, Structural Funds, Recovery & Resilience Facility</li>
-              <li><span class="mdi mdi-flag-outline"></span> <strong>National Schemes</strong> -- Member State co-financing, national subsidies, regional development funds</li>
-              <li><span class="mdi mdi-target"></span> <strong>AI Grant Matching</strong> -- Organisation profiling against all EU and national funding programmes</li>
+              <li><span class="mdi mdi-rocket-launch-outline"></span> <strong>All EU Funding</strong> —Expand from procurement to cover Horizon Europe, Digital Europe, CEF, LIFE, Erasmus+, AGRIP, EIC, EIB/EIF, Structural Funds, Recovery & Resilience Facility</li>
+              <li><span class="mdi mdi-flag-outline"></span> <strong>National Schemes</strong> —Member State co-financing, national subsidies, regional development funds</li>
+              <li><span class="mdi mdi-target"></span> <strong>AI Grant Matching</strong> —Organisation profiling against all EU and national funding programmes</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Why Blue Tier Exclusive</div>
             <ul class="product-detail__list">
@@ -3381,7 +3396,7 @@
 
       <!-- ===== FEEDBACK SYSTEM ===== -->
       <div class="card reveal" style="margin-top: 1.5rem; overflow: visible;">
-        <div class="card__title"><span class="mdi mdi-message-reply-text-outline"></span> Feedback System -- The Improvement Engine</div>
+        <div class="card__title"><span class="mdi mdi-message-reply-text-outline"></span> Feedback System —The Improvement Engine</div>
         <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.5rem; margin-bottom: 1.5rem;">
           Every user interaction generates structured signals that systematically improve Brubru's AI quality, data coverage, and product roadmap.
         </p>
@@ -3394,7 +3409,7 @@
             <div class="flow-step__badge" style="background: var(--color-primary);">1</div>
             <div class="flow-step__card flow-step__card--blue">
               <div class="flow-step__icon"><span class="mdi mdi-inbox-arrow-down-outline"></span></div>
-              <div class="flow-step__title">Collect -- 4 Feedback Channels</div>
+              <div class="flow-step__title">Collect —4 Feedback Channels</div>
               <div class="flow-step__desc">Feedback is captured at every touchpoint with minimal friction.</div>
               <div class="feedback-channels" style="margin-top: 0.75rem;">
                 <div class="fb-channel fb-channel--chat">
@@ -3448,7 +3463,7 @@
             <div class="flow-step__badge" style="background: var(--color-accent-purple);">2</div>
             <div class="flow-step__card flow-step__card--purple">
               <div class="flow-step__icon"><span class="mdi mdi-cog-transfer-outline"></span></div>
-              <div class="flow-step__title">Process -- Where Feedback Lives</div>
+              <div class="flow-step__title">Process —Where Feedback Lives</div>
               <div class="flow-step__desc">Feedback is stored, scored, and surfaced for action across three systems.</div>
               <div class="fb-process-grid" style="margin-top: 0.75rem;">
                 <div class="fb-process-item">
@@ -3483,7 +3498,7 @@
             <div class="flow-step__badge" style="background: var(--color-accent-green);">3</div>
             <div class="flow-step__card flow-step__card--green">
               <div class="flow-step__icon"><span class="mdi mdi-trending-up"></span></div>
-              <div class="flow-step__title">Improve -- Systematic Quality Loops</div>
+              <div class="flow-step__title">Improve —Systematic Quality Loops</div>
               <div class="flow-step__desc">Feedback drives five concrete improvement loops that compound over time.</div>
               <div class="fb-loops" style="margin-top: 0.75rem;">
                 <div class="fb-loop">
@@ -3532,7 +3547,7 @@
             <div class="flow-step__badge" style="background: var(--color-accent-gold);">4</div>
             <div class="flow-step__card flow-step__card--gold">
               <div class="flow-step__icon"><span class="mdi mdi-view-dashboard-outline"></span></div>
-              <div class="flow-step__title">Admin Dashboard -- Command Centre</div>
+              <div class="flow-step__title">Admin Dashboard —Command Centre</div>
               <div class="flow-step__desc">All feedback, analytics, and quality metrics converge in the admin panel.</div>
               <div class="flow-outputs" style="grid-template-columns: 1fr 1fr 1fr;">
                 <div class="flow-output"><span class="mdi mdi-comment-text-outline"></span> Feedback management</div>
@@ -3575,7 +3590,7 @@
           <div class="metric-card__icon"><span class="mdi mdi-flag-outline"></span></div>
           <div class="metric-card__label">Year 1 Target</div>
           <div class="metric-card__value">EUR 130K</div>
-          <div class="metric-card__detail">0.01% of SAM -- massive headroom</div>
+          <div class="metric-card__detail">0.01% of SAM —massive headroom</div>
         </div>
       </div>
 
@@ -3647,7 +3662,7 @@
     <section id="competitive" class="section">
       <div class="section-header reveal">
         <div class="section-header__title">Competitive Landscape</div>
-        <div class="section-header__subtitle">Empty category -- no AI-native EU policy platform exists</div>
+        <div class="section-header__subtitle">Empty category —no AI-native EU policy platform exists</div>
       </div>
 
       <div class="card">
@@ -3828,6 +3843,271 @@
     </section>
 
     <!-- ========================================
+         SECTION 4B: AI COMPARISON DEMO
+         ======================================== -->
+    <section id="comparison" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">ChatGPT & Claude vs Brubru</div>
+        <div class="section-header__subtitle">Same questions, radically different answers. Generic AI vs domain-specific AI.</div>
+      </div>
+
+      <div class="callout" style="margin-bottom: 2rem;">
+        <div class="callout__text">
+          "ChatGPT and Claude are brilliant generalists. But ask them about EU legislative procedures, amendment drafting, or institutional dynamics —and they hallucinate, hedge, or miss critical context. Brubru was built by someone who lived it for 7 years."
+        </div>
+      </div>
+
+      <!-- Comparison selector -->
+      <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;" class="reveal">
+        <button class="comp-demo-tab comp-demo-tab--active" onclick="showCompDemo('chatgpt', this)" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: var(--radius-lg); border: 2px solid var(--color-border); background: white; cursor: pointer; font-family: var(--font-family); font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+          <span style="width: 36px; height: 36px; border-radius: 50%; background: #10a37f; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;">G</span>
+          ChatGPT vs Brubru
+        </button>
+        <button class="comp-demo-tab" onclick="showCompDemo('claude', this)" style="flex: 1; min-width: 200px; padding: 1rem; border-radius: var(--radius-lg); border: 2px solid var(--color-border); background: white; cursor: pointer; font-family: var(--font-family); font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
+          <span style="width: 36px; height: 36px; border-radius: 50%; background: #d97706; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;">C</span>
+          Claude vs Brubru
+        </button>
+      </div>
+
+      <!-- ChatGPT vs Brubru -->
+      <div id="comp-chatgpt" class="comp-demo comp-demo--active">
+
+        <!-- Q1 -->
+        <div class="card reveal" style="margin-bottom: 1.5rem;">
+          <div class="card__title" style="color: var(--color-primary);"><span class="mdi mdi-chat-question-outline"></span> "What is the current status of the AI Act and what should my client do to prepare?"</div>
+          <div class="comp-grid">
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: #f0fdf4; border-left: 4px solid #10a37f;">
+              <div style="font-weight: 700; color: #10a37f; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #10a37f; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">G</span> ChatGPT</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                "The EU AI Act was adopted in 2024. It classifies AI systems by risk level —unacceptable, high, limited, and minimal. High-risk systems will need conformity assessments. Your client should review their AI systems, classify them, and begin compliance planning. The Act will be fully applicable by 2027."
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(220,38,38,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #dc2626;">
+                  <span class="mdi mdi-alert-circle-outline"></span> <strong>What's missing:</strong> No specific article references. No mention of the phased timeline (Art. 5 bans already applied Feb 2025). No GPAI obligations. No mention of codes of practice. No practical first steps.
+                </div>
+              </div>
+            </div>
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(6,147,227,0.04); border-left: 4px solid var(--color-primary);">
+              <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><img src="brubru_icon_colours.png" alt="" style="width: 24px; height: 24px; border-radius: 50%;"> Brubru</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                "The AI Act (Reg. 2024/1689) entered into force 1 August 2024 with a phased timeline: Art. 5 prohibited practices already apply since 2 Feb 2025. GPAI obligations (Art. 51-56) apply from 2 Aug 2025. High-risk obligations apply from 2 Aug 2026. Your client should: <strong>(1)</strong> inventory all AI systems, <strong>(2)</strong> classify each under Annex III high-risk categories, <strong>(3)</strong> check if any fall under Art. 5 prohibitions, <strong>(4)</strong> begin technical documentation per Art. 11. I can run a gap analysis via EU Law Comply if you share their AI system list."
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(5,150,105,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #059669;">
+                  <span class="mdi mdi-check-circle-outline"></span> <strong>Advantage:</strong> Specific articles, phased timeline, actionable steps, direct link to compliance tool, sourced from Beresol knowledge bundle.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="card reveal" style="margin-bottom: 1.5rem;">
+          <div class="card__title" style="color: var(--color-primary);"><span class="mdi mdi-chat-question-outline"></span> "Draft an amendment to Article 6 of the AI Act to add financial services to the high-risk list"</div>
+          <div class="comp-grid">
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: #f0fdf4; border-left: 4px solid #10a37f;">
+              <div style="font-weight: 700; color: #10a37f; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #10a37f; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">G</span> ChatGPT</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                Produces a plain-text "suggestion" that looks like an essay, not a legislative amendment. Wrong format —EU amendments follow strict EP Rules of Procedure formatting. No Akoma Ntoso XML. No justification field. Cannot be submitted to the EP Tabling Office.
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(220,38,38,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #dc2626;">
+                  <span class="mdi mdi-alert-circle-outline"></span> <strong>Verdict:</strong> Unusable. Would need complete rewriting by a policy officer. A EUR 500-1,000 task that still takes hours.
+                </div>
+              </div>
+            </div>
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(6,147,227,0.04); border-left: 4px solid var(--color-primary);">
+              <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><img src="brubru_icon_colours.png" alt="" style="width: 24px; height: 24px; border-radius: 50%;"> Brubru (Amendator)</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                Opens the actual AI Act in Amendator. Parses the EUR-Lex Akoma Ntoso XML. User clicks Article 6, hits "Suggest Amendment". AI generates a properly formatted amendment with: <strong>(1)</strong> original text, <strong>(2)</strong> amended text with additions <u>underlined</u> and deletions <s>struck through</s>, <strong>(3)</strong> legal justification citing relevant sectoral legislation (MiFID II, CRD, Solvency II). Export as AKN XML compatible with LEOS/AT4AM.
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(5,150,105,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #059669;">
+                  <span class="mdi mdi-check-circle-outline"></span> <strong>Advantage:</strong> Workflow-integrated. Proper EP format. XML-native. Seconds, not hours. Ready-to-submit quality.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="card reveal" style="margin-bottom: 1.5rem;">
+          <div class="card__title" style="color: var(--color-primary);"><span class="mdi mdi-chat-question-outline"></span> "Which MEP committee is handling the DORA implementing acts and when is the next vote?"</div>
+          <div class="comp-grid">
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: #f0fdf4; border-left: 4px solid #10a37f;">
+              <div style="font-weight: 700; color: #10a37f; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #10a37f; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">G</span> ChatGPT</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                "I don't have real-time access to EP committee schedules. DORA was handled by the ECON committee. You can check the EP's website for upcoming votes."
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(220,38,38,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #dc2626;">
+                  <span class="mdi mdi-alert-circle-outline"></span> <strong>Verdict:</strong> Punts to "check the website". No actionable intelligence. This is exactly the 2-4 hours of daily monitoring Brubru eliminates.
+                </div>
+              </div>
+            </div>
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(6,147,227,0.04); border-left: 4px solid var(--color-primary);">
+              <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><img src="brubru_icon_colours.png" alt="" style="width: 24px; height: 24px; border-radius: 50%;"> Brubru</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                Pulls live data from 32 scrapers: OEIL procedure tracker, EP Committee Work in Progress, Legislative Train Schedule, and EPRS Think Tank. Returns: committee responsible (ECON), rapporteur, shadow rapporteurs, procedure stage, upcoming dates from the EP calendar, related EPRS briefings, and AI-predicted timeline with confidence scores.
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(5,150,105,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #059669;">
+                  <span class="mdi mdi-check-circle-outline"></span> <strong>Advantage:</strong> Real-time institutional data. No "check the website". Saves 2-4 hours of daily monitoring across 15+ EU sources.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Claude vs Brubru -->
+      <div id="comp-claude" class="comp-demo">
+
+        <!-- Q1 -->
+        <div class="card reveal" style="margin-bottom: 1.5rem;">
+          <div class="card__title" style="color: var(--color-accent-gold);"><span class="mdi mdi-chat-question-outline"></span> "Analyse the SFDR 2.0 proposal and its impact on Article 8 funds"</div>
+          <div class="comp-grid">
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: #fffbeb; border-left: 4px solid #d97706;">
+              <div style="font-weight: 700; color: #d97706; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #d97706; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">C</span> Claude</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                "I can provide some context on SFDR. Article 8 products promote environmental or social characteristics. The Commission has been reviewing SFDR and may propose changes. However, my knowledge has a cutoff and I may not have the latest proposal details."
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(220,38,38,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #dc2626;">
+                  <span class="mdi mdi-alert-circle-outline"></span> <strong>What's missing:</strong> No COM(2025)841 reference. No new category system (Transition/ESG Basics/Sustainable). No 70% investment thresholds. No timeline. Hedges with "knowledge cutoff" caveat.
+                </div>
+              </div>
+            </div>
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(6,147,227,0.04); border-left: 4px solid var(--color-primary);">
+              <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><img src="brubru_icon_colours.png" alt="" style="width: 24px; height: 24px; border-radius: 50%;"> Brubru</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                "The Commission published COM(2025)841 on 20 November 2025, proposing a complete overhaul of SFDR. Article 8 funds face the most significant change: the current 'light green' category is replaced by three new categories with explicit investment thresholds. Existing Art. 8 funds must reclassify as either: <strong>Transition</strong> (Art. 7, 70% in transition assets), <strong>ESG Basics</strong> (Art. 8, 70% integrating ESG factors), or <strong>Non-categorised</strong> (Art. 6a, no sustainability claims allowed). The 15% Taxonomy-alignment shortcut means funds with sufficient green assets can auto-qualify. Application expected ~2028-2029."
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(5,150,105,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #059669;">
+                  <span class="mdi mdi-check-circle-outline"></span> <strong>Advantage:</strong> Specific COM reference, new categories with thresholds, practical reclassification guidance, timeline. Sourced from Beresol SFDR report.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="card reveal" style="margin-bottom: 1.5rem;">
+          <div class="card__title" style="color: var(--color-accent-gold);"><span class="mdi mdi-chat-question-outline"></span> "What MiCA obligations apply to a crypto exchange launching in the EU in 2026?"</div>
+          <div class="comp-grid">
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: #fffbeb; border-left: 4px solid #d97706;">
+              <div style="font-weight: 700; color: #d97706; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #d97706; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">C</span> Claude</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                Provides a reasonable overview of MiCA categories and CASP requirements. Mentions authorisation, own funds, and market abuse rules. But lacks granularity on implementation timelines, grandfathering expiry by Member State, and the 12+ delegated regulations already published.
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(220,38,38,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #dc2626;">
+                  <span class="mdi mdi-alert-circle-outline"></span> <strong>What's missing:</strong> No Member State grandfathering table. No specific delegated regulation references. No practical "next steps" workflow. Good overview, but not actionable for a compliance team.
+                </div>
+              </div>
+            </div>
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(6,147,227,0.04); border-left: 4px solid var(--color-primary);">
+              <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><img src="brubru_icon_colours.png" alt="" style="width: 24px; height: 24px; border-radius: 50%;"> Brubru</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                "As a new entrant in 2026, you cannot rely on grandfathering (Art. 143) —that applies only to CASPs operating before 30 Dec 2024. You need full CASP authorisation under Art. 59-64. Key requirements: <strong>(1)</strong> NCA authorisation (40 working days), <strong>(2)</strong> minimum own funds per Art. 67, <strong>(3)</strong> DORA-compliant ICT systems, <strong>(4)</strong> segregation of client assets (Art. 70). Member State matters: France, Malta, Luxembourg use full 18-month grandfathering (competitors may operate until July 2026); Germany and Spain shortened to 12 months (expired Dec 2025). 12+ delegated regulations published —I can list the specific ones relevant to exchange operations."
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(5,150,105,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #059669;">
+                  <span class="mdi mdi-check-circle-outline"></span> <strong>Advantage:</strong> Country-specific grandfathering data, Art. 143 analysis, cross-reference to DORA, specific delegated regulations, actionable compliance pathway.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="card reveal" style="margin-bottom: 1.5rem;">
+          <div class="card__title" style="color: var(--color-accent-gold);"><span class="mdi mdi-chat-question-outline"></span> "Generate a position paper on the AIFMD II loan origination rules for a private credit fund"</div>
+          <div class="comp-grid">
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: #fffbeb; border-left: 4px solid #d97706;">
+              <div style="font-weight: 700; color: #d97706; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><span style="width: 24px; height: 24px; border-radius: 50%; background: #d97706; color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem;">C</span> Claude</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                Produces a well-structured document. But it's a generic essay, not a position paper in the Brussels format. No executive summary, no "key asks", no addressee, no suggested amendments, no reference to the legislative procedure stage.
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(220,38,38,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #dc2626;">
+                  <span class="mdi mdi-alert-circle-outline"></span> <strong>Verdict:</strong> Academically correct. Institutionally useless. Would not survive five minutes on the desk of an MEP's assistant.
+                </div>
+              </div>
+            </div>
+            <div style="padding: 1.25rem; border-radius: var(--radius-lg); background: rgba(6,147,227,0.04); border-left: 4px solid var(--color-primary);">
+              <div style="font-weight: 700; color: var(--color-primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem;"><img src="brubru_icon_colours.png" alt="" style="width: 24px; height: 24px; border-radius: 50%;"> Brubru (Document Generator)</div>
+              <div style="font-size: 0.88rem; line-height: 1.65; color: var(--color-gray-700);">
+                Generates a Brussels-standard position paper: <strong>(1)</strong> 1-page executive summary with 3 key asks, <strong>(2)</strong> addressee (ECON Committee, rapporteur by name), <strong>(3)</strong> analysis of Art. 15(4a-4e) loan origination limits, <strong>(4)</strong> proposed textual amendments in EP format, <strong>(5)</strong> impact assessment with data, <strong>(6)</strong> counter-arguments pre-empted. Exportable as branded PDF. Produced in under 2 minutes —a consultancy charges EUR 3,000-5,000 for this.
+                <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(5,150,105,0.08); border-radius: var(--radius-sm); font-size: 0.8rem; color: #059669;">
+                  <span class="mdi mdi-check-circle-outline"></span> <strong>Advantage:</strong> Brussels-native format. Named addressee. Specific articles. Proposed amendments. 70% margin at 100x the speed.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary scorecard -->
+      <div class="card reveal" style="margin-top: 1rem;">
+        <div class="card__title"><span class="mdi mdi-chart-box-outline"></span> Capability Scorecard</div>
+        <div style="overflow-x: auto; margin-top: 1rem;">
+          <table class="comp-matrix">
+            <thead>
+              <tr>
+                <th style="width: 200px;">Capability</th>
+                <th>ChatGPT</th>
+                <th>Claude</th>
+                <th>Brubru</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>EU legislative knowledge</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Generic</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Better</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> 17 reports + 32 scrapers</td>
+              </tr>
+              <tr>
+                <td>Real-time procedure tracking</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> OEIL + EP + EC</td>
+              </tr>
+              <tr>
+                <td>Amendment drafting (EP format)</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> AKN XML native</td>
+              </tr>
+              <tr>
+                <td>Compliance gap analysis</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Generic</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> EU Law Comply</td>
+              </tr>
+              <tr>
+                <td>Position paper generation</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Essay format</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Essay format</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Brussels format</td>
+              </tr>
+              <tr>
+                <td>Legislative predictions</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Timeline + vote</td>
+              </tr>
+              <tr>
+                <td>EU tender matching</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> TED + funding</td>
+              </tr>
+              <tr>
+                <td>23 EU languages</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> i18n native</td>
+              </tr>
+              <tr>
+                <td>Price (monthly)</td>
+                <td>$20</td>
+                <td>$20</td>
+                <td>EUR 79-599</td>
+              </tr>
+              <tr>
+                <td><strong>Value per EUR spent</strong></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Low</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Low</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> <strong>10-50x ROI</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
          SECTION 5: BUSINESS MODEL
          ======================================== -->
     <section id="business" class="section">
@@ -3939,7 +4219,7 @@
     <section id="technology" class="section">
       <div class="section-header reveal">
         <div class="section-header__title">Technology & Data Infrastructure</div>
-        <div class="section-header__subtitle">29 scrapers, 18 AI services, 4-provider fallback chain, 25+ database models</div>
+        <div class="section-header__subtitle">32 scrapers, 18 AI services, 4-provider fallback chain, 25+ database models</div>
       </div>
 
       <div class="metric-grid reveal">
@@ -3952,7 +4232,7 @@
         <div class="metric-card metric-card--green">
           <div class="metric-card__icon"><span class="mdi mdi-spider-web"></span></div>
           <div class="metric-card__label">Data Scrapers</div>
-          <div class="metric-card__value">29</div>
+          <div class="metric-card__value">30</div>
           <div class="metric-card__detail">15+ EU institutional sources</div>
         </div>
         <div class="metric-card metric-card--purple">
@@ -4039,7 +4319,7 @@
             <div class="arch-layer__label">Service Layer</div>
             <div class="arch-layer__nodes">
               <div class="arch-node arch-node--ai"><span class="mdi mdi-brain"></span><span class="arch-node__text">AI Engine</span><span class="arch-node__sub">18 services, 4 providers</span></div>
-              <div class="arch-node arch-node--scraper"><span class="mdi mdi-spider-web"></span><span class="arch-node__text">Scrapers</span><span class="arch-node__sub">29 EU data scrapers</span></div>
+              <div class="arch-node arch-node--scraper"><span class="mdi mdi-spider-web"></span><span class="arch-node__text">Scrapers</span><span class="arch-node__sub">32 EU data scrapers</span></div>
               <div class="arch-node arch-node--compliance"><span class="mdi mdi-scale-balance"></span><span class="arch-node__text">Compliance</span><span class="arch-node__sub">Gap analysis + scoring</span></div>
               <div class="arch-node arch-node--predictions"><span class="mdi mdi-chart-timeline-variant-shimmer"></span><span class="arch-node__text">Predictions</span><span class="arch-node__sub">11 forecasting services</span></div>
               <div class="arch-node arch-node--tenders"><span class="mdi mdi-piggy-bank-outline"></span><span class="arch-node__text">Tenders</span><span class="arch-node__sub">TED SPARQL + ML</span></div>
@@ -4054,7 +4334,7 @@
             <div class="arch-layer__nodes">
               <div class="arch-node arch-node--db"><span class="mdi mdi-database"></span><span class="arch-node__text">PostgreSQL</span><span class="arch-node__sub">25+ models, 15 migrations</span></div>
               <div class="arch-node arch-node--vector"><span class="mdi mdi-vector-combine"></span><span class="arch-node__text">ChromaDB</span><span class="arch-node__sub">Vector search + embeddings</span></div>
-              <div class="arch-node arch-node--knowledge"><span class="mdi mdi-bookshelf"></span><span class="arch-node__text">Knowledge Base</span><span class="arch-node__sub">11 reports, 7 monitors</span></div>
+              <div class="arch-node arch-node--knowledge"><span class="mdi mdi-bookshelf"></span><span class="arch-node__text">Knowledge Base</span><span class="arch-node__sub">17 reports, 7 monitors</span></div>
               <div class="arch-node arch-node--external"><span class="mdi mdi-earth"></span><span class="arch-node__text">EU Sources</span><span class="arch-node__sub">15+ institutional APIs</span></div>
             </div>
           </div>
@@ -4063,7 +4343,7 @@
 
       <!-- ===== AI ORCHESTRATION FLOW ===== -->
       <div class="card reveal" style="overflow: visible; margin-top: 1.5rem;">
-        <div class="card__title"><span class="mdi mdi-transit-connection-variant"></span> AI Orchestration -- Query Flow</div>
+        <div class="card__title"><span class="mdi mdi-transit-connection-variant"></span> AI Orchestration —Query Flow</div>
         <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.5rem;">How a user query is processed through context injection, provider selection, and response generation.</p>
 
         <div class="flow-diagram" style="margin-top: 1.5rem;">
@@ -4115,21 +4395,21 @@
                   <div class="flow-provider__name">Mistral</div>
                   <div class="flow-provider__cost">$0.20/M</div>
                   <div class="flow-provider__bar"><div class="flow-provider__fill" style="width: 95%;"></div></div>
-                  <div class="flow-provider__label">Primary -- 95% of requests</div>
+                  <div class="flow-provider__label">Primary —95% of requests</div>
                 </div>
                 <div class="flow-provider">
                   <div class="flow-provider__rank">2</div>
                   <div class="flow-provider__name">Claude</div>
                   <div class="flow-provider__cost">$3.00/M</div>
                   <div class="flow-provider__bar"><div class="flow-provider__fill flow-provider__fill--blue" style="width: 3%;"></div></div>
-                  <div class="flow-provider__label">Fallback -- complex reasoning</div>
+                  <div class="flow-provider__label">Fallback —complex reasoning</div>
                 </div>
                 <div class="flow-provider">
                   <div class="flow-provider__rank">3</div>
                   <div class="flow-provider__name">GPT-4</div>
                   <div class="flow-provider__cost">$10.00/M</div>
                   <div class="flow-provider__bar"><div class="flow-provider__fill flow-provider__fill--gold" style="width: 1.5%;"></div></div>
-                  <div class="flow-provider__label">Fallback -- high availability</div>
+                  <div class="flow-provider__label">Fallback —high availability</div>
                 </div>
                 <div class="flow-provider">
                   <div class="flow-provider__rank">4</div>
@@ -4164,7 +4444,7 @@
       </div>
 
       <div class="card reveal" style="margin-top: 1.5rem;">
-        <div class="card__title"><span class="mdi mdi-database-search-outline"></span> EU Institutional Data Sources (29 Scrapers)</div>
+        <div class="card__title"><span class="mdi mdi-database-search-outline"></span> EU Institutional Data Sources (30 Scrapers)</div>
         <div class="source-grid reveal" style="margin-top: 1rem;">
           <div class="source-chip"><span class="mdi mdi-gavel"></span> EUR-Lex</div>
           <div class="source-chip"><span class="mdi mdi-eye-outline"></span> OEIL (21,600+)</div>
@@ -4175,6 +4455,7 @@
           <div class="source-chip"><span class="mdi mdi-book-open-variant"></span> EPRS Think Tank</div>
           <div class="source-chip"><span class="mdi mdi-briefcase-outline"></span> Committee Work (26)</div>
           <div class="source-chip"><span class="mdi mdi-comment-question-outline"></span> Public Consultations</div>
+          <div class="source-chip"><span class="mdi mdi-file-cabinet"></span> Commission Documents</div>
           <div class="source-chip"><span class="mdi mdi-file-sign"></span> TED Tenders</div>
           <div class="source-chip"><span class="mdi mdi-account-search"></span> Who's Who</div>
           <div class="source-chip"><span class="mdi mdi-translate"></span> IATE (24 langs)</div>
@@ -4407,7 +4688,7 @@
           <div class="team-card__role">Founder & CEO</div>
           <div class="team-card__bio">
             7+ years at the European Parliament. 10+ years EU policy advisory (trade, digital, regulatory affairs).
-            Full-stack developer who built the entire Brubru platform -- frontend, backend, AI pipelines, 29 scrapers.
+            Full-stack developer who built the entire Brubru platform —frontend, backend, AI pipelines, 32 scrapers. 213,000+ lines of code.
             Fluent in 6 languages (EN, ES, CA, FR, IT, NL). Based in Brussels.
           </div>
         </div>
@@ -4454,7 +4735,7 @@
             <div class="timeline-content">
               <div class="timeline-label">Now</div>
               <div class="timeline-value">Product Built</div>
-              <div class="timeline-target">25 models, 29 scrapers, 8 features</div>
+              <div class="timeline-target">25 models, 32 scrapers, 8 features, 213K lines</div>
               <div class="timeline-feature">EUR 10K cash, ready to launch</div>
             </div>
           </div>
@@ -4519,7 +4800,7 @@
       <div class="card reveal">
         <div class="card__title"><span class="mdi mdi-sword-cross"></span> Competitive Implementation Strategy</div>
         <p class="impl-intro">
-          Analysis of <strong>12 direct competitors</strong> (Dixit, POLITICO Pro, SAVOIRR, FiscalNote EUIT, Moonlit.ai, LEOS, Cogrant, DeHavilland, Policy-Insider.AI, Polpo, Quorum, Euractiv Pro) identified <strong>10 emulation priorities</strong> ranked by competitive impact. Deep codebase audit reveals <strong>25 backend models, 29 scrapers, and 8 feature modules</strong> already built -- significantly accelerating delivery.
+          Analysis of <strong>12 direct competitors</strong> (Dixit, POLITICO Pro, SAVOIRR, FiscalNote EUIT, Moonlit.ai, LEOS, Cogrant, DeHavilland, Policy-Insider.AI, Polpo, Quorum, Euractiv Pro) identified <strong>10 emulation priorities</strong> ranked by competitive impact. Deep codebase audit reveals <strong>25 backend models, 32 scrapers, and 8 feature modules</strong> already built —significantly accelerating delivery.
         </p>
 
         <div class="phase-grid">
@@ -4687,21 +4968,21 @@
               <span class="mdi mdi-account-alert-outline"></span>
             </div>
             <div class="insight-item__title">Stakeholder CRM gap is universal</div>
-            <div class="insight-item__desc">Dixit, DeHavilland, POLITICO Pro, Quorum, SAVOIRR -- nearly every competitor has a contact database. Brubru is the only serious platform without one. #1 new feature priority.</div>
+            <div class="insight-item__desc">Dixit, DeHavilland, POLITICO Pro, Quorum, SAVOIRR —nearly every competitor has a contact database. Brubru is the only serious platform without one. #1 new feature priority.</div>
           </div>
           <div class="insight-item">
             <div class="insight-item__icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);">
               <span class="mdi mdi-clock-check-outline"></span>
             </div>
             <div class="insight-item__title">Retention comes from daily habits</div>
-            <div class="insight-item__desc">POLITICO Pro's 91% renewal comes from morning briefings. Brubru needs a "daily touch" -- AI-generated morning emails summarising overnight changes to tracked files.</div>
+            <div class="insight-item__desc">POLITICO Pro's 91% renewal comes from morning briefings. Brubru needs a "daily touch" —AI-generated morning emails summarising overnight changes to tracked files.</div>
           </div>
           <div class="insight-item">
             <div class="insight-item__icon" style="background: rgba(155,81,224,0.1); color: var(--color-accent-purple);">
               <span class="mdi mdi-link-variant"></span>
             </div>
             <div class="insight-item__title">Missing step: Engage</div>
-            <div class="insight-item__desc">Brubru covers monitor, analyse, draft, comply, predict, bid. But misses <strong>engage</strong> -- contacting officials, tracking interactions. Adding it closes the full advocacy loop.</div>
+            <div class="insight-item__desc">Brubru covers monitor, analyse, draft, comply, predict, bid. But misses <strong>engage</strong> —contacting officials, tracking interactions. Adding it closes the full advocacy loop.</div>
           </div>
         </div>
       </div>
@@ -4778,8 +5059,8 @@
     <div class="cta-section">
       <div class="cta-section__title">All the EU with AI</div>
       <div class="cta-section__subtitle">
-        17 years of Brussels expertise encoded into software. 29 data scrapers, 18 AI services, 8 product features.
-        From EU institutions to 27 Member States -- every European legal framework, every funding programme, every level of governance.
+        7 years of Brussels expertise encoded into software. 32 data scrapers, 18 AI services, 8 product features. 213.000+ lines of code.
+        From EU institutions to 27 Member States —every European legal framework, every funding programme, every level of governance.
       </div>
       <div class="cta-buttons">
         <a href="https://brubru.beresol.eu" class="cta-btn cta-btn--primary">
@@ -4794,7 +5075,7 @@
 
   <!-- ========== FOOTER ========== -->
   <footer class="footer">
-    <strong>Brubru Business Plan</strong> -- Beresol BV
+    <strong>Brubru Business Plan</strong> —Beresol BV
     <br>
     <small>February 2026 | Brussels, Belgium | hello@beresol.eu</small>
   </footer>
@@ -4831,6 +5112,13 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
       /* Re-observe new section's reveal elements */
       setTimeout(function() { reReveal(sectionId); }, 50);
+    }
+
+    function showCompDemo(demoId, btn) {
+      document.querySelectorAll('.comp-demo').forEach(function(d) { d.classList.remove('comp-demo--active'); });
+      document.querySelectorAll('.comp-demo-tab').forEach(function(t) { t.classList.remove('comp-demo-tab--active'); });
+      document.getElementById('comp-' + demoId).classList.add('comp-demo--active');
+      btn.classList.add('comp-demo-tab--active');
     }
 
     function showProduct(productId, btn) {

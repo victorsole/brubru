@@ -116,3 +116,21 @@ class BatchSuggestionResponse(BaseModel):
     suggestions: List[BatchSuggestionItem]
     ai_provider: str
     ai_model: str
+
+
+class ImproveTextRequest(BaseModel):
+    """Request to improve user-drafted amendment text with AI"""
+    drafted_text: str = Field(..., min_length=1, description="The user's current drafted amendment text")
+    original_text: str = Field("", description="The original legislative text being amended")
+    element_type: str = Field(..., description="Type: recital, article, point, paragraph, etc.")
+    element_position: str = Field(..., description="Position reference, e.g. 'Article 5'")
+    amendment_type: str = Field(..., description="modification or addition")
+    document_title: Optional[str] = Field(None, description="Title of the legislative document")
+
+
+class ImproveTextResponse(BaseModel):
+    """Response containing AI-improved amendment text"""
+    improved_text: str
+    changes_summary: str
+    ai_provider: str
+    ai_model: str

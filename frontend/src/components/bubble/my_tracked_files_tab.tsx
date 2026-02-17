@@ -27,6 +27,7 @@ import {
   mdiAccountTieOutline,
   mdiFilterVariant,
   mdiTextBoxCheckOutline,
+  mdiFileDocumentMultipleOutline,
 } from '@mdi/js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -37,6 +38,9 @@ import type { CommitteeWorkItem } from '../../hooks/use_committee_work';
 import { useTextsAdopted } from '../../hooks/use_texts_adopted';
 import type { TextAdopted as TextAdoptedType } from '../../hooks/use_texts_adopted';
 import { TextAdoptedCard } from './text_adopted_card';
+import { useCommissionDocuments } from '../../hooks/use_commission_documents';
+import type { CommissionDocType } from '../../hooks/use_commission_documents';
+import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import './my_tracked_files_tab.css';
 
@@ -83,8 +87,17 @@ export const MyTrackedFilesTab = () => {
     setFilters: setTextsAdoptedFilters,
   } = useTextsAdopted();
 
+  // Commission Documents hook
+  const {
+    items: commissionDocItems,
+    isLoadingItems: isLoadingCommissionDocs,
+    fetchItems: fetchCommissionDocItems,
+    filters: commissionDocFilters,
+    setFilters: setCommissionDocFilters,
+  } = useCommissionDocuments();
+
   const hasLoadedRef = useRef(false);
-  const [activeTab, setActiveTab] = useState<'legislative' | 'committee' | 'texts_adopted'>('legislative');
+  const [activeTab, setActiveTab] = useState<'legislative' | 'committee' | 'texts_adopted' | 'commission_docs'>('legislative');
   const [amendmentCounts, setAmendmentCounts] = useState<Record<string, number>>({});
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -125,6 +138,8 @@ export const MyTrackedFilesTab = () => {
       await fetchCommitteeWorkItems();
       // Load texts adopted data
       await fetchTextsAdoptedItems();
+      // Load commission documents data
+      await fetchCommissionDocItems();
     };
 
     loadData();
@@ -136,8 +151,10 @@ export const MyTrackedFilesTab = () => {
       await fetchRecentChanges(168);
     } else if (activeTab === 'committee') {
       await fetchCommitteeWorkItems();
-    } else {
+    } else if (activeTab === 'texts_adopted') {
       await fetchTextsAdoptedItems();
+    } else {
+      await fetchCommissionDocItems();
     }
   };
 
@@ -362,7 +379,9 @@ export const MyTrackedFilesTab = () => {
               ? `${trackedFiles.length} file${trackedFiles.length !== 1 ? 's' : ''} tracked`
               : activeTab === 'committee'
               ? `${committeeWorkItems.length} committee work items`
-              : `${textsAdoptedItems.length} adopted texts`
+              : activeTab === 'texts_adopted'
+              ? `${textsAdoptedItems.length} adopted texts`
+              : `${commissionDocItems.length} Commission documents`
             }
           </p>
         </div>
@@ -370,7 +389,7 @@ export const MyTrackedFilesTab = () => {
           <button
             className="my-tracked-files-tab__btn my-tracked-files-tab__btn--secondary"
             onClick={handleRefresh}
-            disabled={isLoadingTrackedFiles || isLoadingCommitteeWork || isLoadingTextsAdopted}
+            disabled={isLoadingTrackedFiles || isLoadingCommitteeWork || isLoadingTextsAdopted || isLoadingCommissionDocs}
           >
             <Icon path={mdiRefresh} size={0.8} />
             Refresh
@@ -409,6 +428,13 @@ export const MyTrackedFilesTab = () => {
         >
           <Icon path={mdiTextBoxCheckOutline} size={0.8} />
           Texts Adopted
+        </button>
+        <button
+          className={`my-tracked-files-tab__tab ${activeTab === 'commission_docs' ? 'my-tracked-files-tab__tab--active' : ''}`}
+          onClick={() => setActiveTab('commission_docs')}
+        >
+          <Icon path={mdiFileDocumentMultipleOutline} size={0.8} />
+          Commission Docs
         </button>
       </div>
 
@@ -622,6 +648,71 @@ export const MyTrackedFilesTab = () => {
             <div className="my-tracked-files-tab__texts-adopted-list">
               {textsAdoptedItems.map((item) => (
                 <TextAdoptedCard key={item.id} item={item} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Commission Documents Tab Content */}
+      {activeTab === 'commission_docs' && (
+        <div className="my-tracked-files-tab__commission-docs">
+          {/* Filters */}
+          <div className="my-tracked-files-tab__commission-docs-filters">
+            <div className="my-tracked-files-tab__commission-docs-filter">
+              <Icon path={mdiFilterVariant} size={0.8} />
+              <select
+                value={commissionDocFilters.doc_type || ''}
+                onChange={(e) => setCommissionDocFilters({
+                  ...commissionDocFilters,
+                  doc_type: e.target.value ? e.target.value as CommissionDocType : undefined
+                })}
+              >
+                <option value="">All Types</option>
+                <option value="COM">COM (Proposals)</option>
+                <option value="SWD">SWD (Staff Working)</option>
+                {/* <option value="SEC">SEC (Secretariat)</option> */}
+                {/* <option value="C">C (Delegated Acts)</option> */}
+                <option value="JOIN">JOIN (Joint Docs)</option>
+                <option value="OJ">OJ (Official Journal)</option>
+                {/* <option value="PV">PV (Minutes)</option> — will be used in EU Calendar */}
+              </select>
+            </div>
+            <div className="my-tracked-files-tab__commission-docs-search">
+              <Icon path={mdiMagnify} size={0.8} />
+              <input
+                type="text"
+                placeholder="Search documents..."
+                value={commissionDocFilters.search || ''}
+                onChange={(e) => setCommissionDocFilters({
+                  ...commissionDocFilters,
+                  search: e.target.value || undefined
+                })}
+              />
+            </div>
+          </div>
+
+          {/* Items List */}
+          {isLoadingCommissionDocs ? (
+            <div className="my-tracked-files-tab__loading">
+              <Icon path={mdiLoading} size={1} spin />
+              Loading Commission documents...
+            </div>
+          ) : commissionDocItems.length === 0 ? (
+            <div className="my-tracked-files-tab__empty">
+              <Icon path={mdiFileDocumentMultipleOutline} size={2} color="#ccc" />
+              <h4>No Commission documents found</h4>
+              <p>
+                {commissionDocFilters.search || commissionDocFilters.doc_type
+                  ? 'Try adjusting your filters'
+                  : 'Sync Commission documents to populate this tab'
+                }
+              </p>
+            </div>
+          ) : (
+            <div className="my-tracked-files-tab__commission-docs-list">
+              {commissionDocItems.map((item) => (
+                <CommissionDocumentCard key={item.id} item={item} />
               ))}
             </div>
           )}

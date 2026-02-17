@@ -188,6 +188,8 @@ class BeresolKnowledgeLoader:
         # Check filename first (most reliable)
         filename_mappings = {
             'ai-act': 'digital',
+            'digital-omnibus': 'digital',
+            'omnibus-ai': 'digital',
             'cbam': 'trade',
             'carbon-border': 'trade',
             'mercosur': 'trade',
@@ -209,6 +211,20 @@ class BeresolKnowledgeLoader:
             'draghi': 'economic',
             'letta': 'economic',
             'niinisto': 'defence',
+            'dora': 'finance',
+            'mica': 'finance',
+            'crypto': 'finance',
+            'sfdr': 'finance',
+            'sustainable-finance': 'finance',
+            'aifmd': 'finance',
+            'alternative-investment': 'finance',
+            'us-eu-ai': 'digital',
+            'regulatory-divergence': 'digital',
+            'venture-capital': 'finance',
+            'ec-venture': 'finance',
+            'euveca': 'finance',
+            'citizens-initiative': 'democracy',
+            'european-citizens': 'democracy',
         }
 
         for pattern, area in filename_mappings.items():
@@ -217,14 +233,25 @@ class BeresolKnowledgeLoader:
 
         # Then check content for broader patterns
         content_mappings = {
+            'finance': ['dora', 'digital operational resilience', 'mica', 'crypto-asset', 'stablecoin',
+                        'sfdr', 'sustainable finance disclosure', 'eba ', 'esma ', 'eiopa',
+                        'casp', 'asset-referenced token', 'e-money token', 'aifmd', 'psd3',
+                        'crd vi', 'banking union', 'ict risk management', 'ict third-party',
+                        'alternative investment fund', 'loan origination', 'ucits',
+                        'liquidity management tool', 'private credit',
+                        'venture capital', 'euveca', 'eusef', 'growth capital',
+                        'aum threshold', 'cross-border fundraising'],
             'trade': ['mercosur', 'cbam', 'tariff', 'trade agreement', 'anti-coercion', 'wto'],
             'energy': ['blackout', 'grid', 'electricity', 'power outage', 'interconnection'],
             'agriculture': ['agri-food', 'fisheries', 'cap ', 'common agricultural', 'farming', 'trawling'],
             'transport': ['railway', 'ferrocarril', 'rodalies', 'renfe', 'train'],
-            'digital': ['ai act', 'artificial intelligence', 'digital', 'gpai', 'ai office'],
+            'digital': ['ai act', 'artificial intelligence', 'digital omnibus', 'digital', 'gpai', 'ai office'],
             'defence': ['defence', 'defense', 'military', 'edip', 'edis', 'rearm'],
             'economic': ['rrf', 'recovery and resilience', 'competitiveness', 'single market', 'draghi report'],
-            'enlargement': ['ukraine', 'enlargement', 'accession', 'membership', 'candidate country']
+            'enlargement': ['ukraine', 'enlargement', 'accession', 'membership', 'candidate country'],
+            'democracy': ['citizens initiative', 'eci ', 'participatory democracy', 'petition',
+                          'regulation 2019/788', 'right2water', 'statement of support',
+                          'direct democracy', 'citizens\' initiative']
         }
 
         for area, keywords in content_mappings.items():
@@ -238,14 +265,21 @@ class BeresolKnowledgeLoader:
         """Extract relevant EU policy keywords from content."""
         # Common EU policy terms to look for
         eu_terms = [
-            'AI Act', 'CBAM', 'ETS', 'Green Deal', 'Fit for 55',
+            'AI Act', 'Digital Omnibus', 'CBAM', 'ETS', 'Green Deal', 'Fit for 55',
             'CAP', 'CMU', 'Single Market', 'GDPR', 'DSA', 'DMA',
             'MiCA', 'CSRD', 'CSDDD', 'NIS2', 'CER', 'REACH',
             'REPowerEU', 'RRF', 'MFF', 'Horizon Europe',
             'OEIL', 'EUR-Lex', 'CELEX', 'trilogue', 'codecision',
             'directive', 'regulation', 'decision',
             'Commission', 'Parliament', 'Council', 'COREPER',
-            'Mercosur', 'WTO', 'FTA', 'tariff', 'trade war'
+            'Mercosur', 'WTO', 'FTA', 'tariff', 'trade war',
+            'DORA', 'SFDR', 'AIFMD', 'PSD2', 'PSD3', 'CRD',
+            'EBA', 'ESMA', 'EIOPA', 'Solvency II', 'MiFID',
+            'EMIR', 'UCITS', 'EU Taxonomy', 'ESG',
+            'stablecoin', 'crypto-asset', 'CASP',
+            'ICT risk', 'cyber resilience', 'fintech',
+            'ECI', 'European Citizens\' Initiative', 'participatory democracy',
+            'Right2Water', 'petition', 'EESC', 'Ombudsman'
         ]
 
         found_keywords = []
@@ -390,7 +424,14 @@ class BeresolKnowledgeLoader:
                 report.get('content', '')[:5000].lower()
             )
 
-            if query_lower in searchable:
+            # Match if full query is a substring, or if enough significant words match
+            query_words = [w for w in re.split(r'\W+', query_lower) if len(w) > 3]
+            full_match = query_lower in searchable
+            word_matches = sum(1 for w in query_words if w in searchable) if query_words else 0
+            word_ratio = word_matches / len(query_words) if query_words else 0
+            matched = full_match or (len(query_words) >= 2 and word_ratio >= 0.5)
+
+            if matched:
                 # Find context snippet around match
                 content = report.get('content', '')
                 idx = content.lower().find(query_lower)

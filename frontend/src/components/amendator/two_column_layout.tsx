@@ -1,7 +1,8 @@
 // frontend/src/components/amendator/two_column_layout.tsx
 import React, { useState, useEffect } from 'react';
 import Icon from '@mdi/react';
-import { mdiDeleteOutline, mdiPlusBoxOutline, mdiAlphaM } from '@mdi/js';
+import { mdiDeleteOutline, mdiPlusBoxOutline, mdiAlphaM, mdiAutoFix, mdiContentSave, mdiCheck } from '@mdi/js';
+import { useAuth } from '../../hooks/use_auth';
 import type { LoadedDocument } from './document_viewer';
 import { EURLexURLInput } from './eurlex_url_input';
 import type { FetchedDocument } from './eurlex_url_input';
@@ -9,6 +10,8 @@ import { AmendatorDocumentUpload } from './amendator_document_upload';
 import type { UploadedDocument } from './amendator_document_upload';
 import { TrackedFilesLoader } from './tracked_files_loader';
 import './two_column_layout.css';
+
+const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
 
 export interface LegislativeElement {
   type: 'recital' | 'article' | 'article_title' | 'article_intro' | 'point' | 'paragraph' | 'subparagraph' | 'chapter';
@@ -67,6 +70,11 @@ export const TwoColumnLayout = ({
   const [editingCell, setEditingCell] = useState<number | null>(null);
   const [hoveredCell, setHoveredCell] = useState<number | null>(null);
   const [additionCounter, setAdditionCounter] = useState(0);
+  const [improvingCell, setImprovingCell] = useState<number | null>(null);
+  const [preImproveText, setPreImproveText] = useState<string | null>(null);
+  const [improveError, setImproveError] = useState<string | null>(null);
+  const [savingCell, setSavingCell] = useState<number | null>(null);
+  const [savedCells, setSavedCells] = useState<Set<number>>(new Set());
 
   // Extract legislative elements from loaded document
   useEffect(() => {
@@ -342,7 +350,15 @@ export const TwoColumnLayout = ({
     }
   };
 
-  const handleCellBlur = (index: number, value: string) => {
+  const handleCellBlur = (index: number, value: string, event?: React.FocusEvent<HTMLTextAreaElement>) => {
+    // Don't exit edit mode if focus moved to the improve actions area
+    if (event?.relatedTarget) {
+      const related = event.relatedTarget as HTMLElement;
+      if (related.closest('.two-column-layout__cell-edit-actions')) {
+        return;
+      }
+    }
+
     const element = elements[Math.floor(index)];
     const newAmendments = new Map(amendments);
 
@@ -371,6 +387,96 @@ export const TwoColumnLayout = ({
     setEditingCell(null);
   };
 
+  const handleImproveText = async (index: number) => {
+    const element = elements[Math.floor(index)];
+    const amendment = amendments.get(index);
+    const isAddition = index % 1 !== 0;
+    const currentText = amendment?.proposedText || (isAddition ? '' : element?.text || '');
+
+    if (!currentText.trim()) return;
+
+    setImprovingCell(index);
+    setPreImproveText(currentText);
+    setImproveError(null);
+
+    try {
+      const token = useAuth.getState().token;
+      const response = await fetch(`${API_BASE}/amendments/improve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        body: JSON.stringify({
+          drafted_text: currentText,
+          original_text: isAddition ? '' : (element?.text || ''),
+          element_type: element?.type || 'unknown',
+          element_position: getElementPosition(element),
+          amendment_type: isAddition ? 'addition' : 'modification',
+          document_title: loadedDocument?.metadata?.title || loadedDocument?.filename || null,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to improve text');
+      }
+
+      const result = await response.json();
+      handleCellChange(index, result.improved_text);
+    } catch (error) {
+      setImproveError(error instanceof Error ? error.message : 'Could not improve text');
+      setTimeout(() => setImproveError(null), 5000);
+    } finally {
+      setImprovingCell(null);
+    }
+  };
+
+  const handleSaveCell = async (index: number) => {
+    const amendment = amendments.get(index);
+    if (!amendment || !loadedDocument) return;
+
+    setSavingCell(index);
+
+    try {
+      const token = useAuth.getState().token;
+      const response = await fetch(`${API_BASE}/amendments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+        body: JSON.stringify({
+          document_id: loadedDocument.document_id,
+          document_filename: loadedDocument.filename,
+          element_index: amendment.elementIndex,
+          element_type: amendment.elementType,
+          element_number: amendment.elementNumber,
+          position_text: amendment.position,
+          amendment_type: amendment.amendmentType,
+          original_text: amendment.originalText,
+          proposed_text: amendment.proposedText,
+          insert_after: amendment.insertAfter,
+          justification: '',
+          group_label: '',
+          author: '',
+          amendment_number: '',
+          status: 'draft',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save amendment');
+      }
+
+      setSavedCells(prev => new Set(prev).add(index));
+    } catch (error) {
+      console.error('Error saving amendment:', error);
+    } finally {
+      setSavingCell(null);
+    }
+  };
+
   const handleCellChange = (index: number, value: string) => {
     const element = elements[Math.floor(index)];
     const isAddition = index % 1 !== 0;
@@ -389,6 +495,13 @@ export const TwoColumnLayout = ({
 
     newAmendments.set(index, amendment);
     setAmendments(newAmendments);
+
+    // Clear saved status if text changed after saving
+    if (savedCells.has(index)) {
+      const newSaved = new Set(savedCells);
+      newSaved.delete(index);
+      setSavedCells(newSaved);
+    }
   };
 
   return (
@@ -515,20 +628,57 @@ export const TwoColumnLayout = ({
 
                           {editingCell === index ? (
                             <div className="two-column-layout__cell-edit-wrapper">
-                              <span className="two-column-layout__prefix">
-                                {getElementPrefix(element)}
-                              </span>
-                              <textarea
-                                className="two-column-layout__textarea"
-                                value={amendment?.proposedText || element.text}
-                                onChange={(e) => handleCellChange(index, e.target.value)}
-                                onBlur={(e) => handleCellBlur(index, e.target.value)}
-                                autoFocus
-                                onFocus={(e) => {
-                                  e.target.selectionStart = e.target.value.length;
-                                  e.target.selectionEnd = e.target.value.length;
-                                }}
-                              />
+                              <div className="two-column-layout__cell-edit-top">
+                                <span className="two-column-layout__prefix">
+                                  {getElementPrefix(element)}
+                                </span>
+                                <textarea
+                                  className="two-column-layout__textarea"
+                                  value={amendment?.proposedText || element.text}
+                                  onChange={(e) => handleCellChange(index, e.target.value)}
+                                  onBlur={(e) => handleCellBlur(index, e.target.value, e)}
+                                  autoFocus
+                                  onFocus={(e) => {
+                                    e.target.selectionStart = e.target.value.length;
+                                    e.target.selectionEnd = e.target.value.length;
+                                  }}
+                                />
+                              </div>
+                              <div className="two-column-layout__cell-edit-actions">
+                                {['yellow', 'blue', 'admin'].includes(useAuth.getState().user?.subscription_tier || '') && (
+                                  <button
+                                    className={`two-column-layout__improve-button ${improvingCell === index ? 'two-column-layout__improve-button--loading' : ''}`}
+                                    onClick={(e) => { e.stopPropagation(); handleImproveText(index); }}
+                                    disabled={improvingCell === index || !(amendment?.proposedText || element.text).trim()}
+                                    title="Improve with AI"
+                                    aria-label="Improve text with AI"
+                                  >
+                                    <Icon path={mdiAutoFix} size={0.65} className={improvingCell === index ? 'two-column-layout__spin' : ''} />
+                                    <span>{improvingCell === index ? 'Improving...' : 'Improve'}</span>
+                                  </button>
+                                )}
+                                <button
+                                  className={`two-column-layout__save-button ${savedCells.has(index) ? 'two-column-layout__save-button--saved' : ''}`}
+                                  onClick={(e) => { e.stopPropagation(); handleSaveCell(index); }}
+                                  disabled={savingCell === index || savedCells.has(index) || !(amendment?.proposedText || '').trim()}
+                                  title={savedCells.has(index) ? 'Saved' : 'Save amendment'}
+                                  aria-label="Save amendment"
+                                >
+                                  <Icon path={savedCells.has(index) ? mdiCheck : mdiContentSave} size={0.65} />
+                                  <span>{savingCell === index ? 'Saving...' : savedCells.has(index) ? 'Saved' : 'Save'}</span>
+                                </button>
+                                {preImproveText && improvingCell !== index && editingCell === index && (
+                                  <button
+                                    className="two-column-layout__undo-improve"
+                                    onClick={(e) => { e.stopPropagation(); handleCellChange(index, preImproveText); setPreImproveText(null); }}
+                                  >
+                                    Undo
+                                  </button>
+                                )}
+                                {improveError && editingCell === index && (
+                                  <span className="two-column-layout__improve-error">{improveError}</span>
+                                )}
+                              </div>
                             </div>
                           ) : (
                             <>
@@ -578,14 +728,51 @@ export const TwoColumnLayout = ({
                                 <Icon path={mdiDeleteOutline} size={0.7} />
                               </button>
                               {editingCell === additionKey ? (
-                                <textarea
-                                  className="two-column-layout__textarea"
-                                  value={additionAmendment.proposedText || ''}
-                                  onChange={(e) => handleCellChange(additionKey, e.target.value)}
-                                  onBlur={(e) => handleCellBlur(additionKey, e.target.value)}
-                                  placeholder="Enter new text to add..."
-                                  autoFocus
-                                />
+                                <div className="two-column-layout__cell-edit-wrapper">
+                                  <textarea
+                                    className="two-column-layout__textarea"
+                                    value={additionAmendment.proposedText || ''}
+                                    onChange={(e) => handleCellChange(additionKey, e.target.value)}
+                                    onBlur={(e) => handleCellBlur(additionKey, e.target.value, e)}
+                                    placeholder="Enter new text to add..."
+                                    autoFocus
+                                  />
+                                  <div className="two-column-layout__cell-edit-actions">
+                                    {['yellow', 'blue', 'admin'].includes(useAuth.getState().user?.subscription_tier || '') && (
+                                      <button
+                                        className={`two-column-layout__improve-button ${improvingCell === additionKey ? 'two-column-layout__improve-button--loading' : ''}`}
+                                        onClick={(e) => { e.stopPropagation(); handleImproveText(additionKey); }}
+                                        disabled={improvingCell === additionKey || !(additionAmendment.proposedText || '').trim()}
+                                        title="Improve with AI"
+                                        aria-label="Improve text with AI"
+                                      >
+                                        <Icon path={mdiAutoFix} size={0.65} className={improvingCell === additionKey ? 'two-column-layout__spin' : ''} />
+                                        <span>{improvingCell === additionKey ? 'Improving...' : 'Improve'}</span>
+                                      </button>
+                                    )}
+                                    <button
+                                      className={`two-column-layout__save-button ${savedCells.has(additionKey) ? 'two-column-layout__save-button--saved' : ''}`}
+                                      onClick={(e) => { e.stopPropagation(); handleSaveCell(additionKey); }}
+                                      disabled={savingCell === additionKey || savedCells.has(additionKey) || !(additionAmendment.proposedText || '').trim()}
+                                      title={savedCells.has(additionKey) ? 'Saved' : 'Save amendment'}
+                                      aria-label="Save amendment"
+                                    >
+                                      <Icon path={savedCells.has(additionKey) ? mdiCheck : mdiContentSave} size={0.65} />
+                                      <span>{savingCell === additionKey ? 'Saving...' : savedCells.has(additionKey) ? 'Saved' : 'Save'}</span>
+                                    </button>
+                                    {preImproveText && improvingCell !== additionKey && editingCell === additionKey && (
+                                      <button
+                                        className="two-column-layout__undo-improve"
+                                        onClick={(e) => { e.stopPropagation(); handleCellChange(additionKey, preImproveText); setPreImproveText(null); }}
+                                      >
+                                        Undo
+                                      </button>
+                                    )}
+                                    {improveError && editingCell === additionKey && (
+                                      <span className="two-column-layout__improve-error">{improveError}</span>
+                                    )}
+                                  </div>
+                                </div>
                               ) : (
                                 <span
                                   className="two-column-layout__text"

@@ -126,12 +126,14 @@ Real-time monitoring of EU legislative procedures.
 - OEIL Legislative Observatory (21,600+ procedures)
 - Legislative Train Schedule (490 priority files)
 - EP Committee Work In Progress (26 committees)
+- EC Register of Commission Documents (COM, SWD, SEC, C, JOIN, OJ, PV)
 - European Parliament calendar
 - Council working groups
 
 **Tracking Features:**
 - Procedure status updates
 - Committee assignments and work-in-progress files
+- Commission document tracking (COM, SWD, SEC, C, JOIN, OJ, PV) with RegDoc API enrichment
 - Voting schedules
 - Timeline visualization
 - Track files from Legislative Train or by OEIL procedure reference
@@ -334,6 +336,7 @@ brubru/
 │   │   ├── documents.py             # Document upload & management
 │   │   ├── generate.py              # AI document generation
 │   │   ├── rss_feeds.py             # RSS feed configuration
+│   │   ├── commission_documents.py  # EC Register Commission documents
 │   │   └── admin_panel.py           # Admin dashboard
 │   │
 │   ├── models/                       # SQLAlchemy ORM models
@@ -585,6 +588,9 @@ Brubru aggregates information from 15+ authoritative EU institutional sources:
 - **[AssistEU](https://assist.eu)** - Procedural guidance
 - **[Council of the EU](https://www.consilium.europa.eu)** - Council positions, working groups
 
+### Commission Documents
+- **[EC Register of Commission Documents](https://ec.europa.eu/transparency/documents-register/)** - COM proposals, SWD staff working documents, SEC, C, JOIN, OJ, PV documents with live RegDoc API enrichment
+
 ### Research & Standards
 - **[JRC](https://joint-research-centre.ec.europa.eu)** - Scientific research, technical reports
 - **[IATE](https://iate.europa.eu)** - EU terminology database (24 languages)
@@ -805,6 +811,11 @@ python3.12 scripts/clean_bounced_emails.py --days 7 --apply
   - EP political group vote breakdown
   - Council QMV calculator and blocking minority analysis
   - Resolution leading indicators
+- **Phase 15:** Commission Document Register (Feb 2026)
+  - EC Register of Commission Documents integration (COM, SWD, SEC, C, JOIN, OJ, PV)
+  - Discovery via EUR-Lex RSS + CELLAR SPARQL
+  - Enrichment via live RegDoc API (titles, DGs, languages for 240+ documents)
+  - CELEX-to-reference conversion for cross-system lookups
 
 ### 🔄 Current Phase
 - **Phase 13:** AI Context Injection (hybrid legal assistant)

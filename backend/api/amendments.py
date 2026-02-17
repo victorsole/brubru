@@ -36,6 +36,8 @@ from schemas.amendment_schemas import (
     BatchSuggestionRequest,
     BatchSuggestionResponse,
     BatchSuggestionItem,
+    ImproveTextRequest,
+    ImproveTextResponse,
 )
 from core.database import get_db
 from api.auth_optional import get_current_user_dev as get_current_user
@@ -990,4 +992,156 @@ You MUST return exactly {target_count} amendments as a JSON array."""
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to generate amendment suggestions: {str(e)}"
+        )
+
+
+# ============================================================================
+# AI AMENDMENT TEXT IMPROVEMENT
+# ============================================================================
+
+@router.post(
+    "/improve",
+    response_model=ImproveTextResponse,
+    summary="AI-powered amendment text improvement",
+    description="Polish and improve user-drafted amendment text using EU legislative conventions"
+)
+async def improve_amendment_text(
+    request: ImproveTextRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Improve user-drafted amendment text with AI polishing.
+
+    The AI will:
+    1. Polish language to use proper EU legislative jargon
+    2. Incorporate context from the user's uploaded documents
+    3. Align with the user's policy preferences
+    4. Preserve the user's intent and policy direction
+    """
+    from services.ai.multi_provider_service import MultiProviderService
+    from models.user_document import UserDocument
+    import json
+    import re
+
+    # Tier gating: Yellow and above only
+    tier = current_user.subscription_tier or 'white'
+    if tier == 'white':
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="AI text improvement requires a Yellow or Blue subscription"
+        )
+
+    try:
+        ai_service = MultiProviderService()
+
+        # --- Gather user context ---
+
+        # 1. Policy interests
+        policy_interests = current_user.policy_interests_list or []
+
+        # 2. User's most recent documents (max 3, capped at 2000 chars total)
+        user_docs = db.query(UserDocument).filter(
+            and_(
+                UserDocument.user_id == current_user.id,
+                UserDocument.content.isnot(None)
+            )
+        ).order_by(UserDocument.updated_at.desc()).limit(3).all()
+
+        doc_context_parts = []
+        total_chars = 0
+        for doc in user_docs:
+            snippet = (doc.content or "")[:700]
+            if total_chars + len(snippet) > 2000:
+                snippet = snippet[:2000 - total_chars]
+            if snippet:
+                doc_context_parts.append(f"[{doc.title}]: {snippet}")
+                total_chars += len(snippet)
+            if total_chars >= 2000:
+                break
+        doc_context = "\n".join(doc_context_parts)
+
+        # --- Build AI prompt ---
+
+        system_prompt = """You are an expert EU legislative drafter. Your task is to IMPROVE existing amendment text drafted by the user.
+
+GUIDELINES:
+1. Polish the text to use proper EU legislative jargon, formal terminology, and standard phrasing
+2. Maintain the user's intent and policy direction - do NOT change the substance
+3. Ensure legal precision, clarity, and consistency with EU legislative conventions
+4. Fix any grammar, awkward phrasing, or informal language
+5. If user context documents are provided, align terminology with them
+6. Keep the text concise - legislative text should be unambiguous but not verbose
+
+Respond in this EXACT JSON format:
+{
+  "improved_text": "The polished amendment text",
+  "changes_summary": "Brief description of improvements made (1 sentence)"
+}"""
+
+        # Build user message with all available context
+        sections = [
+            f"Element: {request.element_position} ({request.element_type})",
+            f"Amendment type: {request.amendment_type}",
+        ]
+        if request.original_text:
+            sections.append(f"Original legislative text:\n{request.original_text[:1000]}")
+        if request.document_title:
+            sections.append(f"Document: {request.document_title}")
+        if policy_interests:
+            sections.append(f"User's policy interests: {', '.join(policy_interests)}")
+        if doc_context:
+            sections.append(f"User's reference documents:\n{doc_context}")
+        sections.append(f"User's drafted text to improve:\n{request.drafted_text[:3000]}")
+
+        user_message = "\n\n".join(sections)
+
+        print(f"[AMENDATOR] Improve text: user={current_user.email} tier={tier}, "
+              f"element={request.element_position}, type={request.amendment_type}, "
+              f"docs={len(user_docs)}, interests={len(policy_interests)}")
+
+        # --- Call AI ---
+        response = await ai_service.generate(
+            system_prompt=system_prompt,
+            messages=[{"role": "user", "content": user_message}],
+            max_tokens=1500,
+            temperature=0.3
+        )
+
+        provider = response.provider
+        model = response.model
+        raw_response = response.message.strip()
+
+        # --- Parse response ---
+        # Try JSON extraction (handle markdown code blocks)
+        json_text = raw_response
+        code_block_match = re.search(r'```(?:json)?\s*(.*?)```', raw_response, re.DOTALL)
+        if code_block_match:
+            json_text = code_block_match.group(1).strip()
+
+        try:
+            parsed = json.loads(json_text)
+            improved_text = parsed.get("improved_text", raw_response)
+            changes_summary = parsed.get("changes_summary", "Text polished with EU legislative conventions")
+        except json.JSONDecodeError:
+            # Fallback: treat entire response as improved text
+            improved_text = raw_response
+            changes_summary = "Text polished with EU legislative conventions"
+
+        print(f"[AMENDATOR] Improve complete: provider={provider}, model={model}")
+
+        return ImproveTextResponse(
+            improved_text=improved_text,
+            changes_summary=changes_summary,
+            ai_provider=provider,
+            ai_model=model
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error improving amendment text: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to improve text: {str(e)}"
         )
