@@ -1378,6 +1378,57 @@ python3.12 scripts/clean_bounced_emails.py --days 7 --apply   # Remove from CSVs
 
 **Documentation:** Full reusable setup guide at `docs/email_system_prompt.md`
 
+### SPA Pre-rendering for AI Crawlers (February 2026)
+
+Brubru is a React SPA. AI crawlers (ChatGPT, Perplexity, Claude) don't execute JavaScript, so they see an empty `<div id="root"></div>`. Pre-rendering solves this by generating static HTML for public routes at build time.
+
+**Build commands:**
+
+```bash
+cd frontend
+
+# Normal SPA build (no pre-rendering)
+npm run build
+
+# Build + pre-render public pages (use for production deploys)
+npm run build:prerender
+```
+
+**How it works:**
+1. `vite build` produces the normal SPA bundle in `dist/`
+2. `scripts/prerender.mjs` boots a local server (sirv), visits each public route with Puppeteer, captures rendered HTML, writes to `dist/{route}/index.html`
+3. SiteGround's Apache serves `{route}/index.html` via `DirectoryIndex` -- crawlers get real content
+4. Real users still get the full SPA (JS entry point is preserved in all pre-rendered files)
+5. `main.tsx` uses conditional hydration: `hydrateRoot` when pre-rendered content exists, `createRoot` otherwise
+
+**Pre-rendered routes (9):**
+
+| Route | Title |
+|-------|-------|
+| `/` | Brubru - AI Companion for EU Advocacy |
+| `/login` | Login - Brubru |
+| `/signup` | Sign Up - Brubru |
+| `/about` | About - Brubru |
+| `/contact` | Contact - Brubru |
+| `/privacy` | Privacy Policy - Brubru |
+| `/terms` | Terms of Service - Brubru |
+| `/cookies` | Cookie Policy - Brubru |
+| `/subprocessors` | Subprocessors - Brubru |
+
+**When to update the route list:** If you add a new public (unauthenticated) route, add it to the `ROUTES` array in `frontend/scripts/prerender.mjs` with a title and meta description.
+
+**robots.txt AI crawler rules:** `frontend/public/robots.txt` has explicit `Allow` rules for GPTBot, ClaudeBot, PerplexityBot, and Google-Extended.
+
+**Files:**
+- `frontend/scripts/prerender.mjs` - Puppeteer pre-render script
+- `frontend/src/main.tsx` - Conditional hydration (hydrateRoot vs createRoot)
+- `frontend/public/robots.txt` - AI crawler Allow rules
+- `frontend/package.json` - `build:prerender` script, puppeteer + sirv devDeps
+
+**Dependencies (devDependencies):**
+- `puppeteer` - Headless Chrome for rendering
+- `sirv` - Lightweight static file server
+
 <!-- Example:
 - Never use `moment.js` — use `date-fns` instead
 - Always run `npm run lint` before committing frontend changes

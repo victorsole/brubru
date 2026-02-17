@@ -8,5 +8,30 @@ Allow: /
 Disallow: /auth/
 Disallow: /admin
 
+# AI crawlers - explicit access
+User-agent: GPTBot
+Allow: /
+Disallow: /auth/
+Disallow: /admin
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /auth/
+Disallow: /admin
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /auth/
+Disallow: /admin
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /auth/
+Disallow: /admin
+
 # Sitemap location
 Sitemap: https://brubru.beresol.eu/sitemap.xml
+
+# LLMs.txt - AI/LLM site description
+# https://llmstxt.org
+Llmstxt: https://brubru.beresol.eu/llms.txt
