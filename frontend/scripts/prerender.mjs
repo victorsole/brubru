@@ -5,6 +5,8 @@
  * captures the rendered HTML, and writes it back so crawlers see real content
  * instead of an empty <div id="root"></div>.
  *
+ * Also updates sitemap.xml lastmod dates to the current build date.
+ *
  * Usage:  node scripts/prerender.mjs
  * Called by:  npm run build:prerender
  */
@@ -18,6 +20,8 @@ import { createServer } from 'http';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = resolve(__dirname, '..', 'dist');
+const SITE_URL = 'https://brubru.beresol.eu';
+const OG_IMAGE = `${SITE_URL}/assets/brubru_og_image.png`;
 
 const ROUTES = [
   { path: '/', title: 'Brubru - AI Companion for EU Advocacy', description: 'AI-powered strategic advocacy assistant for EU policy professionals. Analyse legislation, draft amendments, and navigate EU institutional processes.' },
@@ -74,19 +78,53 @@ async function prerender() {
     // Extra settle time for animations/transitions
     await new Promise((r) => setTimeout(r, 1000));
 
-    // Inject per-route <title> and <meta description>
+    // Inject per-route <title>, <meta description>, canonical, OG and Twitter tags
+    const canonicalUrl = route.path === '/' ? SITE_URL + '/' : SITE_URL + route.path;
     await page.evaluate((meta) => {
       document.title = meta.title;
-      let desc = document.querySelector('meta[name="description"]');
-      if (desc) {
-        desc.setAttribute('content', meta.description);
-      } else {
-        desc = document.createElement('meta');
-        desc.setAttribute('name', 'description');
-        desc.setAttribute('content', meta.description);
-        document.head.appendChild(desc);
+
+      // Helper: set or create a meta tag
+      function setMeta(attr, attrVal, content) {
+        let el = document.querySelector(`meta[${attr}="${attrVal}"]`);
+        if (el) {
+          el.setAttribute('content', content);
+        } else {
+          el = document.createElement('meta');
+          el.setAttribute(attr, attrVal);
+          el.setAttribute('content', content);
+          document.head.appendChild(el);
+        }
       }
-    }, route);
+
+      // Standard meta
+      setMeta('name', 'description', meta.description);
+
+      // Canonical URL
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) {
+        canonical.setAttribute('href', meta.canonicalUrl);
+      } else {
+        canonical = document.createElement('link');
+        canonical.setAttribute('rel', 'canonical');
+        canonical.setAttribute('href', meta.canonicalUrl);
+        document.head.appendChild(canonical);
+      }
+
+      // Open Graph
+      setMeta('property', 'og:title', meta.title);
+      setMeta('property', 'og:description', meta.description);
+      setMeta('property', 'og:url', meta.canonicalUrl);
+      setMeta('property', 'og:image', meta.ogImage);
+      setMeta('property', 'og:type', 'website');
+      setMeta('property', 'og:site_name', 'Brubru');
+      setMeta('property', 'og:locale', 'en_GB');
+
+      // Twitter Card
+      setMeta('name', 'twitter:card', 'summary_large_image');
+      setMeta('name', 'twitter:title', meta.title);
+      setMeta('name', 'twitter:description', meta.description);
+      setMeta('name', 'twitter:image', meta.ogImage);
+    }, { ...route, canonicalUrl, ogImage: OG_IMAGE });
 
     const html = await page.content();
     const rootContent = await page.evaluate(() => {
@@ -144,6 +182,18 @@ async function prerender() {
     }
 
     console.log(`[prerender] Wrote ${route.path === '/' ? 'index.html' : route.path.slice(1) + '/index.html'}`);
+  }
+
+  // Auto-update sitemap.xml lastmod dates to today's build date
+  const sitemapPath = resolve(DIST, 'sitemap.xml');
+  try {
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    let sitemap = readFileSync(sitemapPath, 'utf-8');
+    sitemap = sitemap.replace(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g, `<lastmod>${today}</lastmod>`);
+    writeFileSync(sitemapPath, sitemap, 'utf-8');
+    console.log(`[prerender] Updated sitemap.xml lastmod dates to ${today}`);
+  } catch (err) {
+    console.log(`[prerender] Warning: could not update sitemap.xml: ${err.message}`);
   }
 
   // Clean up backup

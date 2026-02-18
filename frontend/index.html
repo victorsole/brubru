@@ -10,10 +10,86 @@
     <meta name="keywords" content="EU, Brussels, legislation, advocacy, amendments, European Parliament, AI assistant" />
     <meta name="author" content="Beresol BV" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
+    <link rel="canonical" href="https://brubru.beresol.eu/" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Brubru" />
+    <meta property="og:title" content="Brubru - AI Companion for EU Advocacy" />
+    <meta property="og:description" content="AI-powered strategic advocacy assistant for EU policy professionals. Analyse legislation, draft amendments, and navigate EU institutional processes." />
+    <meta property="og:url" content="https://brubru.beresol.eu/" />
+    <meta property="og:image" content="https://brubru.beresol.eu/assets/brubru_og_image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_GB" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Brubru - AI Companion for EU Advocacy" />
+    <meta name="twitter:description" content="AI-powered strategic advocacy assistant for EU policy professionals. Analyse legislation, draft amendments, and navigate EU institutional processes." />
+    <meta name="twitter:image" content="https://brubru.beresol.eu/assets/brubru_og_image.png" />
     <title>Brubru - AI Companion for EU Advocacy</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://beresol.eu/#organization",
+          "name": "Beresol BV",
+          "url": "https://beresol.eu",
+          "logo": "https://brubru.beresol.eu/assets/brubru_mainlogo.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "hello@beresol.eu",
+            "contactType": "customer service"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://brubru.beresol.eu/#website",
+          "name": "Brubru",
+          "url": "https://brubru.beresol.eu",
+          "publisher": { "@id": "https://beresol.eu/#organization" },
+          "inLanguage": "en-GB"
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Brubru",
+          "url": "https://brubru.beresol.eu",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "description": "AI-powered strategic advocacy assistant for EU policy professionals. Analyse legislation, draft amendments, track legislative procedures, and navigate EU institutional processes.",
+          "creator": { "@id": "https://beresol.eu/#organization" },
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "White",
+              "price": "0",
+              "priceCurrency": "EUR",
+              "description": "Free tier with basic AI chat and EU legislation search"
+            },
+            {
+              "@type": "Offer",
+              "name": "Yellow",
+              "price": "79",
+              "priceCurrency": "EUR",
+              "description": "Professional tier with unlimited amendments, advanced AI, and legislative tracking"
+            },
+            {
+              "@type": "Offer",
+              "name": "Blue",
+              "price": "599",
+              "priceCurrency": "EUR",
+              "description": "Enterprise tier with Council analysis, unlimited predictions, and multi-user support"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </body>
 </html>
