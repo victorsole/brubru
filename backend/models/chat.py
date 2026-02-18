@@ -175,5 +175,46 @@ class Chat(Base):
             'last_message_at': self.last_message_at.isoformat() if self.last_message_at else None,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat(),
-            'metadata': self.metadata
+            'metadata': self.chat_metadata
+        }
+
+
+class Message(Base):
+    """
+    Chat message model.
+
+    Stores individual messages within a chat conversation.
+    Each message belongs to a Chat and has a role (user/assistant).
+    """
+    __tablename__ = "chat_messages"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    chat_id = Column(UUID(as_uuid=True), ForeignKey("chats.id", ondelete="CASCADE"), nullable=False, index=True)
+    role = Column(String(20), nullable=False)  # 'user' or 'assistant'
+    content = Column(Text, nullable=False)
+
+    # AI response metadata (null for user messages)
+    tokens_used = Column(Integer, nullable=True)
+    model = Column(String(100), nullable=True)
+    provider = Column(String(50), nullable=True)
+    citations = Column(JSONB, nullable=True)
+
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    # Relationship back to chat
+    chat = relationship("Chat", back_populates="messages")
+
+    def __repr__(self):
+        return f"<Message(id={self.id}, chat_id={self.chat_id}, role={self.role})>"
+
+    def to_dict(self) -> dict:
+        return {
+            'id': str(self.id),
+            'role': self.role,
+            'content': self.content,
+            'timestamp': self.created_at.isoformat(),
+            'tokens_used': self.tokens_used,
+            'model': self.model,
+            'provider': self.provider,
+            'citations': self.citations,
         }

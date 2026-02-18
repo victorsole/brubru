@@ -13,8 +13,9 @@ Endpoints:
 """
 
 import logging
+import uuid as uuid_mod
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
@@ -24,13 +25,15 @@ from services.ai_service import AIService, ChatMessage, get_ai_service
 from services.ai.context_builder import get_context_builder
 from services.ai.citation_tracker import CitationTracker
 from services.ai.hybrid_legal_assistant import HybridLegalAssistant, get_hybrid_assistant
+from core.database import SessionLocal
+from models.chat import Chat, Message
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
 # Use hybrid assistant (Saul-7B + Claude) for enhanced legal analysis
-# ⚠️  TEMPORARILY DISABLED: Saul-7B API causing request hangs
+# TEMPORARILY DISABLED: Saul-7B API causing request hangs
 USE_HYBRID_ASSISTANT = False
 
 
@@ -72,9 +75,240 @@ class CitationsResponse(BaseModel):
     total_citations: int
 
 
-# In-memory storage (in production, use database)
-# Format: {chat_id: {'messages': [...], 'citations': [...]}}
-chat_storage: Dict[str, Dict[str, Any]] = {}
+# Database helper functions (sync, run via executor)
+
+def _get_or_create_chat(chat_id_str: str, user_id: Optional[str] = None) -> tuple:
+    """Get existing chat or create new one. Returns (chat_id_str, messages_list)."""
+    db = SessionLocal()
+    try:
+        # Try to find existing chat by ID
+        try:
+            chat_uuid = uuid_mod.UUID(chat_id_str)
+            chat = db.query(Chat).filter(Chat.id == chat_uuid).first()
+        except (ValueError, AttributeError):
+            chat = None
+
+        if chat:
+            # Load existing messages
+            messages = db.query(Message).filter(
+                Message.chat_id == chat.id
+            ).order_by(Message.created_at).all()
+
+            msg_list = [
+                {'role': m.role, 'content': m.content, 'timestamp': m.created_at.isoformat()}
+                for m in messages
+            ]
+            return str(chat.id), msg_list
+
+        # Create new chat
+        new_chat = Chat(
+            user_id=uuid_mod.UUID(user_id) if user_id else uuid_mod.uuid4(),
+            title=None,
+            message_count=0,
+        )
+        db.add(new_chat)
+        db.commit()
+        db.refresh(new_chat)
+        return str(new_chat.id), []
+
+    finally:
+        db.close()
+
+
+def _save_messages(
+    chat_id_str: str,
+    user_content: str,
+    assistant_content: str,
+    citations: Optional[List[Dict]] = None,
+    tokens_used: int = 0,
+    model: str = "",
+    provider: str = "",
+    user_id: Optional[str] = None,
+):
+    """Save user + assistant messages to database and update chat stats."""
+    db = SessionLocal()
+    try:
+        try:
+            chat_uuid = uuid_mod.UUID(chat_id_str)
+        except (ValueError, AttributeError):
+            logger.error(f"[ERROR] Invalid chat_id for save: {chat_id_str}")
+            return
+
+        chat = db.query(Chat).filter(Chat.id == chat_uuid).first()
+
+        if not chat:
+            # Create chat on the fly if it doesn't exist
+            chat = Chat(
+                id=chat_uuid,
+                user_id=uuid_mod.UUID(user_id) if user_id else uuid_mod.uuid4(),
+                title=None,
+                message_count=0,
+            )
+            db.add(chat)
+            db.flush()
+
+        # Save user message
+        user_msg = Message(
+            chat_id=chat.id,
+            role="user",
+            content=user_content,
+        )
+        db.add(user_msg)
+
+        # Save assistant message
+        assistant_msg = Message(
+            chat_id=chat.id,
+            role="assistant",
+            content=assistant_content,
+            tokens_used=tokens_used if tokens_used else None,
+            model=model if model else None,
+            provider=provider if provider else None,
+            citations=citations if citations else None,
+        )
+        db.add(assistant_msg)
+
+        # Update chat stats
+        chat.message_count = (chat.message_count or 0) + 2
+        chat.total_tokens_used = (chat.total_tokens_used or 0) + tokens_used
+        chat.last_message_at = datetime.now(timezone.utc)
+        chat.last_message_preview = assistant_content[:500] if assistant_content else None
+
+        # Auto-generate title from first user message if not set
+        if not chat.title and user_content:
+            chat.title = user_content[:100] + ("..." if len(user_content) > 100 else "")
+
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        logger.error(f"[ERROR] Failed to save messages: {e}")
+    finally:
+        db.close()
+
+
+def _get_chat_messages(chat_id_str: str) -> Optional[List[Dict]]:
+    """Get all messages for a chat. Returns None if chat not found."""
+    db = SessionLocal()
+    try:
+        try:
+            chat_uuid = uuid_mod.UUID(chat_id_str)
+        except (ValueError, AttributeError):
+            return None
+
+        chat = db.query(Chat).filter(Chat.id == chat_uuid).first()
+        if not chat:
+            return None
+
+        messages = db.query(Message).filter(
+            Message.chat_id == chat.id
+        ).order_by(Message.created_at).all()
+
+        return [m.to_dict() for m in messages]
+
+    finally:
+        db.close()
+
+
+def _get_chat_citations(chat_id_str: str) -> Optional[List[Dict]]:
+    """Get all citations from assistant messages in a chat."""
+    db = SessionLocal()
+    try:
+        try:
+            chat_uuid = uuid_mod.UUID(chat_id_str)
+        except (ValueError, AttributeError):
+            return None
+
+        chat = db.query(Chat).filter(Chat.id == chat_uuid).first()
+        if not chat:
+            return None
+
+        messages = db.query(Message).filter(
+            Message.chat_id == chat.id,
+            Message.role == "assistant",
+            Message.citations.isnot(None),
+        ).order_by(Message.created_at).all()
+
+        all_citations = []
+        for m in messages:
+            if m.citations:
+                all_citations.extend(m.citations)
+        return all_citations
+
+    finally:
+        db.close()
+
+
+def _delete_chat(chat_id_str: str) -> bool:
+    """Delete a chat and its messages. Returns True if deleted."""
+    db = SessionLocal()
+    try:
+        try:
+            chat_uuid = uuid_mod.UUID(chat_id_str)
+        except (ValueError, AttributeError):
+            return False
+
+        chat = db.query(Chat).filter(Chat.id == chat_uuid).first()
+        if not chat:
+            return False
+
+        db.delete(chat)  # CASCADE deletes messages
+        db.commit()
+        return True
+
+    except Exception as e:
+        db.rollback()
+        logger.error(f"[ERROR] Failed to delete chat: {e}")
+        return False
+    finally:
+        db.close()
+
+
+def _list_chats(user_id: Optional[str] = None, limit: int = 50) -> Dict[str, Any]:
+    """List recent chats, optionally filtered by user."""
+    db = SessionLocal()
+    try:
+        query = db.query(Chat).filter(Chat.is_active == True)
+
+        if user_id:
+            try:
+                user_uuid = uuid_mod.UUID(user_id)
+                query = query.filter(Chat.user_id == user_uuid)
+            except (ValueError, AttributeError):
+                pass
+
+        chats = query.order_by(Chat.last_message_at.desc().nullslast()).limit(limit).all()
+
+        conversations = []
+        for chat in chats:
+            conversations.append({
+                'chat_id': str(chat.id),
+                'id': str(chat.id),
+                'user_id': str(chat.user_id),
+                'title': chat.title,
+                'created_at': chat.created_at.isoformat() if chat.created_at else '',
+                'message_count': chat.message_count or 0,
+                'last_message': chat.last_message_preview or '',
+                'last_message_at': chat.last_message_at.isoformat() if chat.last_message_at else None,
+            })
+
+        total = db.query(Chat).filter(Chat.is_active == True).count()
+
+        return {
+            'conversations': conversations,
+            'total': total,
+        }
+
+    finally:
+        db.close()
+
+
+def _count_chats() -> int:
+    """Count total active chats."""
+    db = SessionLocal()
+    try:
+        return db.query(Chat).filter(Chat.is_active == True).count()
+    finally:
+        db.close()
 
 
 # Endpoints
@@ -86,44 +320,21 @@ async def send_message(
 ):
     """
     Send message and get AI response with EU context.
-
-    Args:
-        request: Chat message request
-
-    Returns:
-        AI response with citations
-
-    Example:
-        POST /api/chat/message
-        {
-            "message": "What's the status of the AI Act?",
-            "use_context": true
-        }
-
-        Response:
-        {
-            "chat_id": "chat_123",
-            "message": "The AI Act (Regulation 2024/1689) [1] was adopted...",
-            "citations": [{"id": 1, "title": "...", "url": "..."}],
-            "tokens_used": 1500,
-            "...": "..."
-        }
     """
     start_time = datetime.now()
 
     try:
-        # Generate chat ID if not provided
-        chat_id = request.chat_id or f"chat_{int(datetime.now().timestamp() * 1000)}"
+        # Get or create chat (runs in executor to not block async)
+        loop = asyncio.get_event_loop()
 
-        # Get or create conversation history
-        if chat_id not in chat_storage:
-            chat_storage[chat_id] = {
-                'messages': [],
-                'citations': [],
-                'created_at': datetime.now().isoformat()
-            }
-
-        conversation = chat_storage[chat_id]
+        if request.chat_id:
+            chat_id, history_dicts = await loop.run_in_executor(
+                None, _get_or_create_chat, request.chat_id, request.user_id
+            )
+        else:
+            chat_id, history_dicts = await loop.run_in_executor(
+                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id
+            )
 
         # Build conversation history
         history = [
@@ -132,21 +343,18 @@ async def send_message(
                 content=msg['content'],
                 timestamp=datetime.fromisoformat(msg['timestamp'])
             )
-            for msg in conversation['messages']
+            for msg in history_dicts
         ]
 
         # Get AI service (hybrid or standard)
         if USE_HYBRID_ASSISTANT:
-            # Use hybrid assistant (Saul-7B + Claude) for enhanced legal analysis
             ai_service = get_hybrid_assistant()
             logger.info("Using Hybrid Legal Assistant (Saul-7B + Claude)")
         else:
-            # Use standard Claude-only service
             ai_service = get_ai_service()
             logger.info("Using standard AI service (Claude only)")
 
-        # Generate response with timeout (180 seconds = 3 minutes for all requests)
-        # Extended timeout to handle complex queries with tender context, web search, etc.
+        # Generate response with timeout (180 seconds = 3 minutes)
         timeout = 180.0
 
         try:
@@ -168,10 +376,8 @@ async def send_message(
                 detail=f"Request timed out after {timeout} seconds. Please try a simpler question or try again later."
             )
         except Exception as ai_error:
-            # Handle specific Claude API errors
             error_msg = str(ai_error)
 
-            # Check for PDF page limit error
             if "100 PDF pages" in error_msg or "maximum of 100 PDF pages" in error_msg:
                 logger.warning(f"PDF page limit exceeded: {error_msg}")
                 raise HTTPException(
@@ -179,7 +385,6 @@ async def send_message(
                     detail="The uploaded PDF exceeds Claude's 100-page limit. The system will extract text from large PDFs automatically. Please try uploading again."
                 )
 
-            # Check for other document-related errors
             if "invalid_request_error" in error_msg and "pdf" in error_msg.lower():
                 logger.warning(f"PDF processing error: {error_msg}")
                 raise HTTPException(
@@ -187,27 +392,20 @@ async def send_message(
                     detail=f"Error processing PDF document: {error_msg}"
                 )
 
-            # Re-raise other errors
             raise
 
-        # Store messages
-        conversation['messages'].append({
-            'role': 'user',
-            'content': request.message,
-            'timestamp': datetime.now().isoformat()
-        })
-
-        conversation['messages'].append({
-            'role': 'assistant',
-            'content': response.message,
-            'timestamp': datetime.now().isoformat()
-        })
-
-        # Store citations
-        conversation['citations'].extend(response.citations)
-
-        # Background: Index conversation for future search
-        # background_tasks.add_task(index_conversation, chat_id, request.message, response.message)
+        # Save messages to database in background (non-blocking)
+        background_tasks.add_task(
+            _save_messages,
+            chat_id,
+            request.message,
+            response.message,
+            response.citations,
+            response.tokens_used,
+            response.model,
+            getattr(response, 'provider', ''),
+            request.user_id,
+        )
 
         logger.info(f"Chat response generated for {chat_id}: {len(response.message)} chars")
 
@@ -231,31 +429,18 @@ async def send_message(
 async def stream_message(request: ChatMessageRequest):
     """
     Stream AI response.
-
-    Args:
-        request: Chat message request
-
-    Returns:
-        Streaming response
-
-    Example:
-        POST /api/chat/stream
-        {
-            "message": "What's the AI Act?",
-            "chat_id": "chat_123"
-        }
-
-        Response: Server-Sent Events stream
-        data: The AI Act
-        data:  (Regulation
-        data:  2024/1689)
-        ...
     """
     try:
-        chat_id = request.chat_id or f"chat_{int(datetime.now().timestamp() * 1000)}"
+        loop = asyncio.get_event_loop()
 
-        # Get conversation history
-        conversation = chat_storage.get(chat_id, {'messages': [], 'citations': []})
+        if request.chat_id:
+            chat_id, history_dicts = await loop.run_in_executor(
+                None, _get_or_create_chat, request.chat_id, request.user_id
+            )
+        else:
+            chat_id, history_dicts = await loop.run_in_executor(
+                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id
+            )
 
         history = [
             ChatMessage(
@@ -263,15 +448,12 @@ async def stream_message(request: ChatMessageRequest):
                 content=msg['content'],
                 timestamp=datetime.fromisoformat(msg['timestamp'])
             )
-            for msg in conversation['messages']
+            for msg in history_dicts
         ]
 
-        # Get AI service (streaming not yet implemented for hybrid assistant)
-        # TODO: Implement streaming support in HybridLegalAssistant
         ai_service = get_ai_service()
         logger.info("Using standard AI service for streaming (hybrid streaming not yet implemented)")
 
-        # Create streaming response
         async def generate():
             full_response = ""
 
@@ -283,27 +465,14 @@ async def stream_message(request: ChatMessageRequest):
                 full_response += chunk
                 yield f"data: {chunk}\n\n"
 
-            # Store messages after streaming complete
-            if chat_id not in chat_storage:
-                chat_storage[chat_id] = {
-                    'messages': [],
-                    'citations': [],
-                    'created_at': datetime.now().isoformat()
-                }
+            # Save messages to database after streaming completes
+            _save_messages(
+                chat_id,
+                request.message,
+                full_response,
+                user_id=request.user_id,
+            )
 
-            chat_storage[chat_id]['messages'].append({
-                'role': 'user',
-                'content': request.message,
-                'timestamp': datetime.now().isoformat()
-            })
-
-            chat_storage[chat_id]['messages'].append({
-                'role': 'assistant',
-                'content': full_response,
-                'timestamp': datetime.now().isoformat()
-            })
-
-            # Send completion event
             yield f"data: [DONE]\n\n"
 
         return StreamingResponse(generate(), media_type="text/event-stream")
@@ -317,36 +486,18 @@ async def stream_message(request: ChatMessageRequest):
 async def get_history(chat_id: str):
     """
     Get conversation history.
-
-    Args:
-        chat_id: Conversation ID
-
-    Returns:
-        Conversation history
-
-    Example:
-        GET /api/chat/history/chat_123
-
-        Response:
-        {
-            "chat_id": "chat_123",
-            "messages": [
-                {"role": "user", "content": "...", "timestamp": "..."},
-                {"role": "assistant", "content": "...", "timestamp": "..."}
-            ],
-            "total_messages": 10
-        }
     """
     try:
-        if chat_id not in chat_storage:
-            raise HTTPException(status_code=404, detail="Conversation not found")
+        loop = asyncio.get_event_loop()
+        messages = await loop.run_in_executor(None, _get_chat_messages, chat_id)
 
-        conversation = chat_storage[chat_id]
+        if messages is None:
+            raise HTTPException(status_code=404, detail="Conversation not found")
 
         return ConversationHistoryResponse(
             chat_id=chat_id,
-            messages=conversation['messages'],
-            total_messages=len(conversation['messages'])
+            messages=messages,
+            total_messages=len(messages)
         )
 
     except HTTPException:
@@ -360,36 +511,13 @@ async def get_history(chat_id: str):
 async def get_citations(chat_id: str):
     """
     Get citations for conversation.
-
-    Args:
-        chat_id: Conversation ID
-
-    Returns:
-        All citations used in conversation
-
-    Example:
-        GET /api/chat/citations/chat_123
-
-        Response:
-        {
-            "chat_id": "chat_123",
-            "citations": [
-                {
-                    "id": 1,
-                    "type": "legislation",
-                    "title": "AI Act",
-                    "url": "..."
-                }
-            ],
-            "total_citations": 5
-        }
     """
     try:
-        if chat_id not in chat_storage:
-            raise HTTPException(status_code=404, detail="Conversation not found")
+        loop = asyncio.get_event_loop()
+        citations = await loop.run_in_executor(None, _get_chat_citations, chat_id)
 
-        conversation = chat_storage[chat_id]
-        citations = conversation.get('citations', [])
+        if citations is None:
+            raise HTTPException(status_code=404, detail="Conversation not found")
 
         return CitationsResponse(
             chat_id=chat_id,
@@ -408,24 +536,13 @@ async def get_citations(chat_id: str):
 async def delete_conversation(chat_id: str):
     """
     Delete conversation.
-
-    Args:
-        chat_id: Conversation ID
-
-    Returns:
-        Success message
-
-    Example:
-        DELETE /api/chat/chat_123
-
-        Response:
-        {"status": "deleted", "chat_id": "chat_123"}
     """
     try:
-        if chat_id not in chat_storage:
-            raise HTTPException(status_code=404, detail="Conversation not found")
+        loop = asyncio.get_event_loop()
+        deleted = await loop.run_in_executor(None, _delete_chat, chat_id)
 
-        del chat_storage[chat_id]
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Conversation not found")
 
         logger.info(f"Deleted conversation {chat_id}")
 
@@ -439,50 +556,14 @@ async def delete_conversation(chat_id: str):
 
 
 @router.get("/list")
-async def list_conversations(limit: int = 10):
+async def list_conversations(limit: int = 50, user_id: Optional[str] = None):
     """
     List recent conversations.
-
-    Args:
-        limit: Maximum conversations to return
-
-    Returns:
-        List of conversation summaries
-
-    Example:
-        GET /api/chat/list?limit=10
-
-        Response:
-        {
-            "conversations": [
-                {
-                    "chat_id": "chat_123",
-                    "created_at": "...",
-                    "message_count": 10,
-                    "last_message": "..."
-                }
-            ],
-            "total": 5
-        }
     """
     try:
-        conversations = []
-
-        for chat_id, data in list(chat_storage.items())[:limit]:
-            messages = data.get('messages', [])
-            last_message = messages[-1]['content'][:100] if messages else ""
-
-            conversations.append({
-                'chat_id': chat_id,
-                'created_at': data.get('created_at', ''),
-                'message_count': len(messages),
-                'last_message': last_message
-            })
-
-        return {
-            'conversations': conversations,
-            'total': len(chat_storage)
-        }
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(None, _list_chats, user_id, limit)
+        return result
 
     except Exception as e:
         logger.error(f"Failed to list conversations: {str(e)}")
@@ -494,20 +575,19 @@ async def list_conversations(limit: int = 10):
 async def health_check():
     """
     Health check for chat service.
-
-    Returns:
-        Service status
     """
     try:
-        # Check if AI service is available
         ai_service = get_ai_service()
         model_info = await ai_service.get_model_info()
+
+        loop = asyncio.get_event_loop()
+        chat_count = await loop.run_in_executor(None, _count_chats)
 
         return {
             'status': 'healthy',
             'service': 'chat',
             'model': model_info['model'],
-            'conversations': len(chat_storage),
+            'conversations': chat_count,
             'timestamp': datetime.now().isoformat()
         }
 
@@ -524,12 +604,6 @@ async def health_check():
 async def debug_mep_linking():
     """
     Debug endpoint to test MEP name linking functionality.
-
-    This endpoint:
-    1. Scrapes ENVI committee data
-    2. Extracts MEP profiles
-    3. Tests linking with sample text
-    4. Returns all internal state for inspection
     """
     try:
         from services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
@@ -540,7 +614,6 @@ async def debug_mep_linking():
             'steps': []
         }
 
-        # Step 1: Scrape committee data
         result['steps'].append({'step': 1, 'action': 'Scraping ENVI committee data'})
         scraper = EuropeanParliamentScraper()
         committee_members = await scraper.get_committee_members('ENVI')
@@ -557,7 +630,6 @@ async def debug_mep_linking():
             'sample_members': committee_members[:3] if len(committee_members) > 0 else []
         }
 
-        # Step 2: Extract MEP data (as ai_service does from committee_info)
         result['steps'].append({'step': 2, 'action': 'Extracting MEP profiles'})
         mep_data = {}
 
@@ -581,11 +653,9 @@ async def debug_mep_linking():
             'sample_names': [mep_data[k]['name'] for k in list(mep_data.keys())[:5]]
         }
 
-        # Step 3: Test linking
         result['steps'].append({'step': 3, 'action': 'Testing MEP name linking'})
 
         if mep_data:
-            # Get first MEP name for testing
             first_mep_name = list(mep_data.values())[0]['name']
 
             test_cases = [

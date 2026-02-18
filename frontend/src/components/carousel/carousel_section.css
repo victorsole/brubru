@@ -15,7 +15,7 @@
 .carousel__track {
   display: flex;
   gap: 2rem;
-  animation: scroll 90s linear infinite;
+  animation: scroll 60s linear infinite;
   width: fit-content;
 }
 
@@ -36,8 +36,8 @@
 /* Card - 3D Flip Container */
 .carousel__card {
   flex-shrink: 0;
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 280px;
   perspective: 1000px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -90,13 +90,13 @@
 
 /* Back - Text */
 .carousel__card-back {
-  background: linear-gradient(135deg, #a8d5ba 0%, #7db99c 100%);
+  background: #111827;
   transform: rotateY(180deg);
   padding: 1rem;
 }
 
 .carousel__message {
-  color: #1f2937;
+  color: white;
   font-size: 0.75rem;
   text-align: center;
   line-height: 1.4;
@@ -113,8 +113,8 @@
   }
 
   .carousel__card {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 196px;
   }
 
   .carousel__message {
