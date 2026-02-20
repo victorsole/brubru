@@ -1,0 +1,133 @@
+country,party_name,party_abbrev,role,european_family,key_ministries,eu_stance,ep_group_link
+# PRIORITY 4 - Party-level Council signals
+# Role: senior, junior, support (confidence and supply), external (not in govt but supports)
+# EU Families: EPP, PES, ALDE, EGP, ECR, ID, EL, Other
+# EU Stance: pro_federalist, pro_pragmatic, pro_conservative, eurosceptic_soft, eurosceptic_hard, anti_eu
+# EP Group Link: Which EP group this party's MEPs sit in
+#
+# --- GERMANY ---
+Germany,Sozialdemokratische Partei Deutschlands,SPD,senior,PES,"Chancellor,Labour,Interior,Health",pro_federalist,S&D
+Germany,Buendnis 90/Die Gruenen,Gruene,junior,EGP,"Foreign,Economy,Environment,Agriculture",pro_federalist,Greens/EFA
+Germany,Freie Demokratische Partei,FDP,junior,ALDE,"Finance,Justice,Transport,Education",pro_pragmatic,Renew
+#
+# --- FRANCE ---
+France,Ensemble pour la Republique,EPR,senior,ALDE,"PM,Interior",pro_federalist,Renew
+France,Mouvement Democrate,MoDem,junior,EDP,"Justice",pro_federalist,Renew
+France,Horizons,HOR,junior,ALDE,,pro_federalist,Renew
+France,Les Republicains,LR,junior,EPP,"Foreign,Armed Forces",pro_conservative,EPP
+#
+# --- ITALY ---
+Italy,Fratelli d'Italia,FdI,senior,ECR,"PM,Foreign,European Affairs",eurosceptic_soft,ECR
+Italy,Lega,Lega,junior,ID,"Infrastructure,Regional",eurosceptic_hard,PfE
+Italy,Forza Italia,FI,junior,EPP,"Foreign (deputy),Justice",pro_conservative,EPP
+#
+# --- SPAIN ---
+Spain,Partido Socialista Obrero Espanol,PSOE,senior,PES,"PM,Economy,Foreign,Interior,Defence",pro_federalist,S&D
+Spain,Sumar,Sumar,junior,EGP,"Labour,Social Rights,Culture",pro_federalist,Greens/EFA
+#
+# --- POLAND ---
+Poland,Koalicja Obywatelska,KO,senior,EPP,"PM,Foreign,Finance,Interior",pro_federalist,EPP
+Poland,Trzecia Droga,TD,junior,EPP,"Agriculture,Development",pro_pragmatic,EPP
+Poland,Nowa Lewica,NL,junior,PES,"Education,Equality",pro_federalist,S&D
+#
+# --- NETHERLANDS ---
+Netherlands,Partij voor de Vrijheid,PVV,senior,ID,"PM,Asylum",eurosceptic_hard,PfE
+Netherlands,Volkspartij voor Vrijheid en Democratie,VVD,junior,ALDE,"Foreign,Defence,Finance",pro_pragmatic,Renew
+Netherlands,Nieuw Sociaal Contract,NSC,junior,EPP,"Justice,Interior",pro_pragmatic,EPP
+Netherlands,BoerBurgerBeweging,BBB,junior,ECR,"Agriculture",eurosceptic_soft,ECR
+#
+# --- BELGIUM ---
+Belgium,Open Vlaamse Liberalen en Democraten,OpenVLD,senior,ALDE,PM,pro_federalist,Renew
+Belgium,Mouvement Reformateur,MR,junior,ALDE,"Foreign,Budget",pro_federalist,Renew
+Belgium,Parti Socialiste,PS-BE,junior,PES,"Economy,Climate",pro_federalist,S&D
+Belgium,Vooruit,Vooruit,junior,PES,Health,pro_federalist,S&D
+Belgium,Groen,Groen,junior,EGP,Environment,pro_federalist,Greens/EFA
+Belgium,Ecolo,Ecolo,junior,EGP,Mobility,pro_federalist,Greens/EFA
+Belgium,Christen-Democratisch en Vlaams,CD&V,junior,EPP,Justice,pro_pragmatic,EPP
+#
+# --- HUNGARY ---
+Hungary,Fidesz-KDNP,Fidesz,senior,Other,"PM,All key ministries",eurosceptic_hard,PfE
+#
+# --- ROMANIA ---
+Romania,Partidul Social Democrat,PSD,senior,PES,"PM,Finance",pro_pragmatic,S&D
+Romania,Partidul National Liberal,PNL,junior,EPP,"Foreign,Interior",pro_pragmatic,EPP
+#
+# --- GREECE ---
+Greece,Nea Dimokratia,ND,senior,EPP,All ministries,pro_pragmatic,EPP
+#
+# --- CZECH REPUBLIC ---
+Czech Republic,Obcanska Demokraticka Strana,ODS,senior,ECR,PM,pro_pragmatic,ECR
+Czech Republic,KDU-CSL,KDU-CSL,junior,EPP,Agriculture,pro_pragmatic,EPP
+Czech Republic,TOP 09,TOP09,junior,EPP,Foreign,pro_federalist,EPP
+Czech Republic,STAN,STAN,junior,EPP,Interior,pro_pragmatic,EPP
+Czech Republic,Ceska Piratska Strana,Pirati,junior,EGP,Regional,pro_federalist,Greens/EFA
+#
+# --- PORTUGAL ---
+Portugal,Alianca Democratica,AD,senior,EPP,"PM,Finance,Foreign",pro_pragmatic,EPP
+#
+# --- SWEDEN ---
+Sweden,Moderaterna,M,senior,EPP,"PM,Foreign",pro_pragmatic,EPP
+Sweden,Kristdemokraterna,KD,junior,EPP,Social Affairs,pro_pragmatic,EPP
+Sweden,Liberalerna,L,junior,ALDE,Education,pro_federalist,Renew
+Sweden,Sverigedemokraterna,SD,external,ECR,,eurosceptic_soft,ECR
+#
+# --- AUSTRIA ---
+Austria,Oesterreichische Volkspartei,OVP,senior,EPP,"Chancellor,Finance,Foreign",pro_pragmatic,EPP
+Austria,Die Gruenen,Gruene-AT,junior,EGP,"Environment,Justice",pro_federalist,Greens/EFA
+#
+# --- DENMARK ---
+Denmark,Socialdemokratiet,S,senior,PES,PM,pro_pragmatic,S&D
+Denmark,Venstre,V,junior,ALDE,Foreign,pro_pragmatic,Renew
+Denmark,Moderaterne,M-DK,junior,ALDE,Finance,pro_pragmatic,Renew
+#
+# --- FINLAND ---
+Finland,Kansallinen Kokoomus,KOK,senior,EPP,PM,pro_pragmatic,EPP
+Finland,Perussuomalaiset,PS,junior,ECR,Finance,eurosceptic_soft,ECR
+Finland,Svenska folkpartiet,SFP,junior,ALDE,Justice,pro_federalist,Renew
+Finland,Kristillisdemokraatit,KD-FI,junior,EPP,Agriculture,pro_pragmatic,EPP
+#
+# --- SLOVAKIA ---
+Slovakia,SMER-SD,SMER,senior,PES,PM,eurosceptic_soft,NI
+Slovakia,HLAS-SD,HLAS,junior,PES,Interior,pro_pragmatic,S&D
+Slovakia,Slovenska Narodna Strana,SNS,junior,Other,Defence,eurosceptic_hard,NI
+#
+# --- IRELAND ---
+Ireland,Fianna Fail,FF,senior,ALDE,Taoiseach,pro_pragmatic,Renew
+Ireland,Fine Gael,FG,junior,EPP,Foreign,pro_federalist,EPP
+Ireland,Green Party,Greens-IE,junior,EGP,Environment,pro_federalist,Greens/EFA
+#
+# --- CROATIA ---
+Croatia,Hrvatska Demokratska Zajednica,HDZ,senior,EPP,"PM,Foreign,Finance,Defence,Interior",pro_pragmatic,EPP
+#
+# --- LITHUANIA ---
+Lithuania,Tevynes Sajunga-Lietuvos Krikscionys Demokratai,TS-LKD,senior,EPP,"PM,Foreign,Finance",pro_federalist,EPP
+Lithuania,Liberalu Sajudis,LRLS,junior,ALDE,Economy,pro_federalist,Renew
+Lithuania,Laisves Partija,LP,junior,ALDE,Justice,pro_federalist,Renew
+#
+# --- SLOVENIA ---
+Slovenia,Gibanje Svoboda,GS,senior,ALDE,"PM,Foreign,Finance",pro_federalist,Renew
+Slovenia,Socialni Demokrati,SD,junior,PES,Economy,pro_federalist,S&D
+Slovenia,Levica,Levica,junior,EL,Culture,pro_federalist,The Left
+#
+# --- LATVIA ---
+Latvia,Jauna Vienotiba,JV,senior,EPP,"PM,Foreign,Finance",pro_federalist,EPP
+Latvia,Nacionala Apvieniba,NA,junior,ECR,Defence,eurosceptic_soft,ECR
+Latvia,Zalo un Zemnieku Savieniba,ZZS,junior,ALDE,Agriculture,pro_pragmatic,Renew
+#
+# --- ESTONIA ---
+Estonia,Eesti Reformierakond,RE,senior,ALDE,"PM,Finance",pro_federalist,Renew
+Estonia,Sotsiaaldemokraatlik Erakond,SDE,junior,PES,"Foreign,Social",pro_federalist,S&D
+Estonia,Eesti 200,EE200,junior,ALDE,Education,pro_federalist,Renew
+#
+# --- CYPRUS ---
+Cyprus,Independent,Independent,senior,Other,President,pro_pragmatic,NI
+#
+# --- LUXEMBOURG ---
+Luxembourg,Chreschtlech-Sozial Vollekspartei,CSV,senior,EPP,"PM,Finance,Foreign",pro_federalist,EPP
+Luxembourg,Demokratesch Partei,DP,junior,ALDE,Justice,pro_federalist,Renew
+#
+# --- MALTA ---
+Malta,Partit Laburista,PL,senior,PES,All ministries,pro_pragmatic,S&D
+#
+# --- BULGARIA ---
+Bulgaria,Caretaker Government,Caretaker,senior,Other,All ministries,pro_pragmatic,NI

@@ -1,0 +1,328 @@
+country,council_config,minister_name,minister_party,ministry,notes
+# PRIORITY 6 - Council configuration mapping
+# Start with Tier 1 countries (DE, FR, IT, ES, PL)
+# Council Configurations: GAC, ECOFIN, Competitiveness, Environment, Agriculture, TTE, JHA, EPSCO, EYCS, FAC
+#
+# --- GERMANY ---
+Germany,GAC,Annalena Baerbock,Gruene,Foreign Office,Also FAC
+Germany,FAC,Annalena Baerbock,Gruene,Foreign Office,
+Germany,ECOFIN,Christian Lindner,FDP,Finance,
+Germany,Competitiveness,Robert Habeck,Gruene,Economy and Climate,
+Germany,Environment,Steffi Lemke,Gruene,Environment,
+Germany,Agriculture,Cem Ozdemir,Gruene,Agriculture,
+Germany,TTE,Volker Wissing,FDP,Transport and Digital,
+Germany,JHA,Nancy Faeser,SPD,Interior,
+Germany,EPSCO,Hubertus Heil,SPD,Labour and Social Affairs,
+Germany,EYCS,Bettina Stark-Watzinger,FDP,Education and Research,
+#
+# --- FRANCE ---
+France,GAC,Stephane Sejourne,RE,Foreign Affairs,Also FAC
+France,FAC,Stephane Sejourne,RE,Foreign Affairs,
+France,ECOFIN,Bruno Le Maire,RE,Finance,
+France,Competitiveness,Roland Lescure,RE,Industry,
+France,Environment,Christophe Bechu,HOR,Ecological Transition,
+France,Agriculture,Marc Fesneau,MoDem,Agriculture,
+France,TTE,Clement Beaune,RE,Transport,
+France,JHA,Gerald Darmanin,RE,Interior,
+France,EPSCO,Catherine Vautrin,LR,Labour,
+France,EYCS,Nicole Belloubet,Independent,Education,
+#
+# --- ITALY ---
+Italy,GAC,Antonio Tajani,FI,Foreign Affairs,Also FAC - EPP figure
+Italy,FAC,Antonio Tajani,FI,Foreign Affairs,
+Italy,ECOFIN,Giancarlo Giorgetti,Lega,Economy,Lega moderate
+Italy,Competitiveness,Adolfo Urso,FdI,Enterprise,
+Italy,Environment,Gilberto Pichetto Fratin,FI,Environment,
+Italy,Agriculture,Francesco Lollobrigida,FdI,Agriculture,Meloni brother-in-law
+Italy,TTE,Matteo Salvini,Lega,Infrastructure,Lega leader
+Italy,JHA,Matteo Piantedosi,Independent,Interior,
+Italy,EPSCO,Marina Calderone,Independent,Labour,
+Italy,EYCS,Giuseppe Valditara,Independent,Education,
+#
+# --- SPAIN ---
+Spain,GAC,Jose Manuel Albares,PSOE,Foreign Affairs,Also FAC
+Spain,FAC,Jose Manuel Albares,PSOE,Foreign Affairs,
+Spain,ECOFIN,Carlos Cuerpo,PSOE,Economy,
+Spain,Competitiveness,Jordi Hereu,PSOE,Industry,
+Spain,Environment,Teresa Ribera,PSOE,Ecological Transition,EC Commissioner nominee
+Spain,Agriculture,Luis Planas,PSOE,Agriculture,
+Spain,TTE,Oscar Puente,PSOE,Transport,
+Spain,JHA,Fernando Grande-Marlaska,PSOE,Interior,
+Spain,EPSCO,Yolanda Diaz,Sumar,Labour,Sumar leader - VP
+Spain,EYCS,Pilar Alegria,PSOE,Education,
+#
+# --- POLAND ---
+Poland,GAC,Radoslaw Sikorski,KO,Foreign Affairs,Also FAC - former FM 2007-14
+Poland,FAC,Radoslaw Sikorski,KO,Foreign Affairs,
+Poland,ECOFIN,Andrzej Domanski,KO,Finance,
+Poland,Competitiveness,Krzysztof Paszyk,TD,Development,
+Poland,Environment,Paulina Hennig-Kloska,TD,Climate,
+Poland,Agriculture,Czeslaw Siekierski,TD,Agriculture,
+Poland,TTE,Dariusz Klimczak,TD,Infrastructure,
+Poland,JHA,Tomasz Siemoniak,KO,Interior,
+Poland,EPSCO,Agnieszka Dziemianowicz-Bak,NL,Labour,Lewica
+Poland,EYCS,Barbara Nowacka,KO,Education,
+#
+# --- NETHERLANDS ---
+Netherlands,GAC,Caspar Veldkamp,NSC,Foreign Affairs,Also FAC
+Netherlands,FAC,Caspar Veldkamp,NSC,Foreign Affairs,
+Netherlands,ECOFIN,Eelco Heinen,VVD,Finance,
+Netherlands,Competitiveness,Dirk Beljaarts,PVV,Economic Affairs,
+Netherlands,Environment,Sophie Hermans,VVD,Climate,
+Netherlands,Agriculture,Femke Wiersma,BBB,Agriculture,
+Netherlands,TTE,Barry Madlener,PVV,Infrastructure,
+Netherlands,JHA,David van Weel,VVD,Justice,
+Netherlands,EPSCO,Eddy van Hijum,NSC,Social Affairs,
+Netherlands,EYCS,Eppo Bruins,NSC,Education,
+#
+# --- BELGIUM ---
+Belgium,GAC,Hadja Lahbib,MR,Foreign Affairs,Also FAC
+Belgium,FAC,Hadja Lahbib,MR,Foreign Affairs,
+Belgium,ECOFIN,Vincent Van Peteghem,CD&V,Finance,
+Belgium,Competitiveness,Pierre-Yves Dermagne,PS-BE,Economy,
+Belgium,Environment,Zakia Khattabi,Ecolo,Climate,
+Belgium,Agriculture,David Clarinval,MR,Agriculture,
+Belgium,TTE,Georges Gilkinet,Ecolo,Mobility,
+Belgium,JHA,Annelies Verlinden,CD&V,Interior,
+Belgium,EPSCO,Frank Vandenbroucke,Vooruit,Social Affairs,
+Belgium,EYCS,Caroline Desir,PS-BE,Education,Federal system - regional competence
+#
+# --- ROMANIA ---
+Romania,GAC,Luminita Odobescu,PSD,Foreign Affairs,Also FAC
+Romania,FAC,Luminita Odobescu,PSD,Foreign Affairs,
+Romania,ECOFIN,Marcel Bolos,PNL,Finance,
+Romania,Competitiveness,Stefan-Radu Oprea,PSD,Economy,
+Romania,Environment,Mircea Fechet,PNL,Environment,
+Romania,Agriculture,Florin Barbu,PSD,Agriculture,
+Romania,TTE,Sorin Grindeanu,PSD,Transport,
+Romania,JHA,Catalin Predoiu,PNL,Internal Affairs,
+Romania,EPSCO,Marius Budai,PSD,Labour,
+Romania,EYCS,Ligia Deca,Independent,Education,
+#
+# --- GREECE ---
+Greece,GAC,Giorgos Gerapetritis,ND,Foreign Affairs,Also FAC
+Greece,FAC,Giorgos Gerapetritis,ND,Foreign Affairs,
+Greece,ECOFIN,Kostis Hatzidakis,ND,Finance,
+Greece,Competitiveness,Kostas Skrekas,ND,Development,
+Greece,Environment,Theodoros Skylakakis,ND,Environment,
+Greece,Agriculture,Lefteris Avgenakis,ND,Agriculture,
+Greece,TTE,Christos Staikouras,ND,Infrastructure,
+Greece,JHA,Michalis Chrysochoidis,ND,Civil Protection,
+Greece,EPSCO,Domna Michailidou,ND,Labour,
+Greece,EYCS,Kyriakos Pierrakakis,ND,Education,
+#
+# --- CZECH REPUBLIC ---
+Czechia,GAC,Jan Lipavsky,Pirati,Foreign Affairs,Also FAC
+Czechia,FAC,Jan Lipavsky,Pirati,Foreign Affairs,
+Czechia,ECOFIN,Zbynek Stanjura,ODS,Finance,
+Czechia,Competitiveness,Jozef Sikela,STAN,Industry,
+Czechia,Environment,Petr Hladik,KDU-CSL,Environment,
+Czechia,Agriculture,Marek Vyborny,KDU-CSL,Agriculture,
+Czechia,TTE,Martin Kupka,ODS,Transport,
+Czechia,JHA,Vit Rakusan,STAN,Interior,
+Czechia,EPSCO,Marian Jurecka,KDU-CSL,Labour,
+Czechia,EYCS,Mikulás Bek,STAN,EU Affairs,
+#
+# --- PORTUGAL ---
+Portugal,GAC,Paulo Rangel,AD,Foreign Affairs,Also FAC
+Portugal,FAC,Paulo Rangel,AD,Foreign Affairs,
+Portugal,ECOFIN,Joaquim Miranda Sarmento,AD,Finance,
+Portugal,Competitiveness,Pedro Reis,AD,Economy,
+Portugal,Environment,Maria da Graca Carvalho,AD,Environment,
+Portugal,Agriculture,Jose Manuel Fernandes,AD,Agriculture,
+Portugal,TTE,Miguel Pinto Luz,AD,Infrastructure,
+Portugal,JHA,Margarida Blasco,AD,Internal Administration,
+Portugal,EPSCO,Ana Jorge,AD,Labour,
+Portugal,EYCS,Fernando Alexandre,AD,Education,
+#
+# --- SWEDEN ---
+Sweden,GAC,Tobias Billstrom,M,Foreign Affairs,Also FAC
+Sweden,FAC,Tobias Billstrom,M,Foreign Affairs,
+Sweden,ECOFIN,Elisabeth Svantesson,M,Finance,
+Sweden,Competitiveness,Ebba Busch,KD,Energy,
+Sweden,Environment,Romina Pourmokhtari,L,Climate,
+Sweden,Agriculture,Peter Kullgren,KD,Rural Affairs,
+Sweden,TTE,Andreas Carlson,KD,Infrastructure,
+Sweden,JHA,Gunnar Strommer,M,Justice,
+Sweden,EPSCO,Johan Pehrson,L,Employment,
+Sweden,EYCS,Mats Persson,L,Education,
+#
+# --- HUNGARY ---
+Hungary,GAC,Peter Szijjarto,Fidesz,Foreign Affairs,Also FAC - very active
+Hungary,FAC,Peter Szijjarto,Fidesz,Foreign Affairs,
+Hungary,ECOFIN,Mihaly Varga,Fidesz,Finance,
+Hungary,Competitiveness,Marton Nagy,Fidesz,Economy,
+Hungary,Environment,Attila Steiner,Fidesz,Energy,
+Hungary,Agriculture,Istvan Nagy,Fidesz,Agriculture,
+Hungary,TTE,Janos Lazar,Fidesz,Construction,
+Hungary,JHA,Sandor Pinter,Fidesz,Interior,
+Hungary,EPSCO,Laszlo Palkovics,Fidesz,Technology,
+Hungary,EYCS,Balint Horvath,Fidesz,Culture,
+#
+# --- AUSTRIA ---
+Austria,GAC,Alexander Schallenberg,OVP,Foreign Affairs,Also FAC - former Chancellor
+Austria,FAC,Alexander Schallenberg,OVP,Foreign Affairs,
+Austria,ECOFIN,Magnus Brunner,OVP,Finance,EC Commissioner nominee
+Austria,Competitiveness,Martin Kocher,OVP,Labour and Economy,
+Austria,Environment,Leonore Gewessler,Gruene,Climate,Controversial green vote
+Austria,Agriculture,Norbert Totschnig,OVP,Agriculture,
+Austria,TTE,Leonore Gewessler,Gruene,Environment,
+Austria,JHA,Gerhard Karner,OVP,Interior,
+Austria,EPSCO,Johannes Rauch,Gruene,Social Affairs,
+Austria,EYCS,Martin Polaschek,OVP,Education,
+#
+# --- DENMARK ---
+Denmark,GAC,Lars Lokke Rasmussen,M-DK,Foreign Affairs,Also FAC - former PM
+Denmark,FAC,Lars Lokke Rasmussen,M-DK,Foreign Affairs,
+Denmark,ECOFIN,Nicolai Wammen,S,Finance,
+Denmark,Competitiveness,Morten Bodskov,S,Industry,
+Denmark,Environment,Magnus Heunicke,S,Environment,
+Denmark,Agriculture,Jacob Jensen,V,Food and Agriculture,
+Denmark,TTE,Thomas Danielsen,V,Transport,
+Denmark,JHA,Peter Hummelgaard,S,Justice,
+Denmark,EPSCO,Ane Halsboe-Jorgensen,S,Employment,
+Denmark,EYCS,Mattias Tesfaye,S,Education,
+#
+# --- FINLAND ---
+Finland,GAC,Elina Valtonen,KOK,Foreign Affairs,Also FAC
+Finland,FAC,Elina Valtonen,KOK,Foreign Affairs,
+Finland,ECOFIN,Riikka Purra,PS,Finance,Finns Party leader
+Finland,Competitiveness,Wille Rydman,PS,Economic Affairs,
+Finland,Environment,Kai Mykkanen,KOK,Climate,
+Finland,Agriculture,Sari Essayah,KD,Agriculture,
+Finland,TTE,Lulu Ranne,PS,Transport,
+Finland,JHA,Mari Rantanen,PS,Interior,
+Finland,EPSCO,Arto Satonen,KOK,Social Affairs,
+Finland,EYCS,Anna-Maja Henriksson,SFP,Education,
+#
+# --- SLOVAKIA ---
+Slovakia,GAC,Juraj Blanar,SMER,Foreign Affairs,Also FAC
+Slovakia,FAC,Juraj Blanar,SMER,Foreign Affairs,
+Slovakia,ECOFIN,Ladislav Kamenicky,SMER,Finance,
+Slovakia,Competitiveness,Denisa Sakova,HLAS,Economy,
+Slovakia,Environment,Tomas Taraba,SNS,Environment,Anti-green
+Slovakia,Agriculture,Richard Takac,SMER,Agriculture,
+Slovakia,TTE,Jozef Razja,SMER,Transport,
+Slovakia,JHA,Matus Sutaj Estok,HLAS,Interior,
+Slovakia,EPSCO,Erik Tomas,HLAS,Labour,
+Slovakia,EYCS,Tomas Drucker,HLAS,Education,
+#
+# --- IRELAND ---
+Ireland,GAC,Micheal Martin,FF,Foreign Affairs,Also FAC - former Taoiseach
+Ireland,FAC,Micheal Martin,FF,Foreign Affairs,
+Ireland,ECOFIN,Jack Chambers,FF,Finance,
+Ireland,Competitiveness,Peter Burke,FG,Enterprise,
+Ireland,Environment,Eamon Ryan,Greens-IE,Environment,Green Party leader
+Ireland,Agriculture,Charlie McConalogue,FF,Agriculture,
+Ireland,TTE,Eamon Ryan,Greens-IE,Transport,
+Ireland,JHA,Helen McEntee,FG,Justice,
+Ireland,EPSCO,Heather Humphreys,FG,Social Protection,
+Ireland,EYCS,Norma Foley,FF,Education,
+#
+# --- CROATIA ---
+Croatia,GAC,Gordan Grlic Radman,HDZ,Foreign Affairs,Also FAC
+Croatia,FAC,Gordan Grlic Radman,HDZ,Foreign Affairs,
+Croatia,ECOFIN,Marko Primorac,HDZ,Finance,
+Croatia,Competitiveness,Davor Filipovic,HDZ,Economy,
+Croatia,Environment,Davor Bozinovic,HDZ,Interior,
+Croatia,Agriculture,Josip Dabro,DP,Agriculture,
+Croatia,TTE,Oleg Butkovic,HDZ,Sea and Transport,
+Croatia,JHA,Davor Bozinovic,HDZ,Interior,
+Croatia,EPSCO,Marin Piletic,HDZ,Labour,
+Croatia,EYCS,Radovan Fuchs,HDZ,Education,
+#
+# --- LITHUANIA ---
+Lithuania,GAC,Gabrielius Landsbergis,TS-LKD,Foreign Affairs,Also FAC
+Lithuania,FAC,Gabrielius Landsbergis,TS-LKD,Foreign Affairs,
+Lithuania,ECOFIN,Gintare Skaiste,TS-LKD,Finance,
+Lithuania,Competitiveness,Ausrine Armonaite,LP,Economy,
+Lithuania,Environment,Simonas Gentvilas,LRLS,Environment,
+Lithuania,Agriculture,Kestutis Navickas,TS-LKD,Agriculture,
+Lithuania,TTE,Marius Skuodis,TS-LKD,Transport,
+Lithuania,JHA,Agne Bilotaite,TS-LKD,Interior,
+Lithuania,EPSCO,Monika Navickiene,TS-LKD,Social Security,
+Lithuania,EYCS,Jurgita Siugzdiniene,LRLS,Education,
+#
+# --- SLOVENIA ---
+Slovenia,GAC,Tanja Fajon,SD,Foreign Affairs,Also FAC
+Slovenia,FAC,Tanja Fajon,SD,Foreign Affairs,
+Slovenia,ECOFIN,Klemen Boštjancic,GS,Finance,
+Slovenia,Competitiveness,Matjaz Han,SD,Economy,
+Slovenia,Environment,Bojan Kumer,GS,Environment,
+Slovenia,Agriculture,Mateja Čalušic,GS,Agriculture,
+Slovenia,TTE,Alenka Bratušek,GS,Infrastructure,
+Slovenia,JHA,Boštjan Poklukar,GS,Interior,
+Slovenia,EPSCO,Luka Mesec,Levica,Labour,
+Slovenia,EYCS,Darjo Felda,GS,Education,
+#
+# --- LATVIA ---
+Latvia,GAC,Baiba Braze,JV,Foreign Affairs,Also FAC
+Latvia,FAC,Baiba Braze,JV,Foreign Affairs,
+Latvia,ECOFIN,Arvils Ašeradens,JV,Finance,
+Latvia,Competitiveness,Viktors Valainis,ZZS,Economy,
+Latvia,Environment,Raimonds Cepuritis,NA,Climate,
+Latvia,Agriculture,Armands Krauze,ZZS,Agriculture,
+Latvia,TTE,Kaspars Briskens,PRO,Transport,
+Latvia,JHA,Rihards Kozlovskis,JV,Interior,
+Latvia,EPSCO,Uldis Augulis,ZZS,Welfare,
+Latvia,EYCS,Anda Cakša,JV,Education,
+#
+# --- ESTONIA ---
+Estonia,GAC,Margus Tsahkna,EE200,Foreign Affairs,Also FAC
+Estonia,FAC,Margus Tsahkna,EE200,Foreign Affairs,
+Estonia,ECOFIN,Mart Võrklaev,RE,Finance,
+Estonia,Competitiveness,Tiit Riisalo,EE200,Economic Affairs,
+Estonia,Environment,Yoko Alender,RE,Climate,
+Estonia,Agriculture,Piret Hartman,SDE,Regional Affairs,
+Estonia,TTE,Vladimir Svet,SDE,Infrastructure,
+Estonia,JHA,Lauri Laanemets,SDE,Interior,
+Estonia,EPSCO,Signe Riisalo,RE,Social Protection,
+Estonia,EYCS,Kristina Kallas,EE200,Education,
+#
+# --- CYPRUS ---
+Cyprus,GAC,Constantinos Kombos,Independent,Foreign Affairs,Also FAC
+Cyprus,FAC,Constantinos Kombos,Independent,Foreign Affairs,
+Cyprus,ECOFIN,Makis Keravnos,DISY,Finance,
+Cyprus,Competitiveness,Costas Kadis,Independent,Energy,
+Cyprus,Environment,Maria Panayiotou,Independent,Agriculture,
+Cyprus,Agriculture,Maria Panayiotou,Independent,Agriculture,
+Cyprus,TTE,Alexis Vafeades,Independent,Transport,
+Cyprus,JHA,Constantinos Ioannou,Independent,Interior,
+Cyprus,EPSCO,Yiannis Panayiotou,Independent,Labour,
+Cyprus,EYCS,Athena Michaelidou,Independent,Education,
+#
+# --- LUXEMBOURG ---
+Luxembourg,GAC,Xavier Bettel,DP,Foreign Affairs,Also FAC - former PM
+Luxembourg,FAC,Xavier Bettel,DP,Foreign Affairs,
+Luxembourg,ECOFIN,Gilles Roth,CSV,Finance,
+Luxembourg,Competitiveness,Lex Delles,DP,Economy,
+Luxembourg,Environment,Serge Wilmes,CSV,Environment,
+Luxembourg,Agriculture,Martine Hansen,CSV,Agriculture,
+Luxembourg,TTE,Yuriko Backes,DP,Mobility,
+Luxembourg,JHA,Leon Gloden,CSV,Internal Security,
+Luxembourg,EPSCO,Georges Mischo,CSV,Social Security,
+Luxembourg,EYCS,Elisabeth Margue,CSV,Education,
+#
+# --- MALTA ---
+Malta,GAC,Ian Borg,PL,Foreign Affairs,Also FAC
+Malta,FAC,Ian Borg,PL,Foreign Affairs,
+Malta,ECOFIN,Clyde Caruana,PL,Finance,
+Malta,Competitiveness,Silvio Schembri,PL,Economy,
+Malta,Environment,Miriam Dalli,PL,Environment,
+Malta,Agriculture,Anton Refalo,PL,Agriculture,
+Malta,TTE,Chris Bonett,PL,Transport,
+Malta,JHA,Byron Camilleri,PL,Home Affairs,
+Malta,EPSCO,Jo Etienne Abela,PL,Social Policy,
+Malta,EYCS,Clifton Grima,PL,Education,
+#
+# --- BULGARIA (Caretaker) ---
+Bulgaria,GAC,Ivan Kondov,Caretaker,Foreign Affairs,Also FAC
+Bulgaria,FAC,Ivan Kondov,Caretaker,Foreign Affairs,
+Bulgaria,ECOFIN,Lyudmila Petkova,Caretaker,Finance,
+Bulgaria,Competitiveness,Petko Nikolov,Caretaker,Economy,
+Bulgaria,Environment,Petar Dimitrov,Caretaker,Environment,
+Bulgaria,Agriculture,Georgi Tahov,Caretaker,Agriculture,
+Bulgaria,TTE,Kristian Krastev,Caretaker,Transport,
+Bulgaria,JHA,Kalin Stoyanov,Caretaker,Interior,
+Bulgaria,EPSCO,Ivaylo Ivanov,Caretaker,Labour,
+Bulgaria,EYCS,Galin Tsokov,Caretaker,Education,

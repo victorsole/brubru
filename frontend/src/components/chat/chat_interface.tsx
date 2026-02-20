@@ -31,6 +31,28 @@ interface ChatInterfaceProps {
   documentIds?: string[];
 }
 
+// Pre-user helpers
+const PRE_USER_QUERY_LIMIT = 3;
+
+const getPreUserId = (): string => {
+  let id = localStorage.getItem('brubru_preuser_id');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('brubru_preuser_id', id);
+  }
+  return id;
+};
+
+const getPreUserQueryCount = (): number => {
+  return parseInt(localStorage.getItem('brubru_preuser_queries') || '0', 10);
+};
+
+const incrementPreUserQueryCount = (): number => {
+  const count = getPreUserQueryCount() + 1;
+  localStorage.setItem('brubru_preuser_queries', count.toString());
+  return count;
+};
+
 export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfaceProps = {}) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -54,8 +76,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
 
   // Fetch personalized greeting on mount (available to all tiers)
   useEffect(() => {
+    // Pre-user: show generic welcome
+    if (!isAuthenticated) {
+      setPersonalizedGreeting('Welcome to Brubru! Ask me anything about EU policy, legislation, or institutional processes!');
+      return;
+    }
+
     const fetchGreeting = async () => {
-      if (!isAuthenticated || !user) return;
+      if (!user) return;
 
       try {
         // Pass previous_last_login from sessionStorage for welcome-back context
@@ -118,6 +146,27 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
       timestamp: new Date(),
     };
 
+    // Pre-user query limit check
+    if (!isAuthenticated) {
+      const count = getPreUserQueryCount();
+      if (count >= PRE_USER_QUERY_LIMIT) {
+        const blockedMessage: Message = {
+          id: 'blocked_' + Date.now(),
+          role: 'assistant',
+          content: 'You have reached the limit for non-registered users. Sign up for free to continue chatting and unlock all of Brubru\'s features:\n\n'
+            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
+            + '- **Amendator** -- Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
+            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
+            + '- **Tenderator** -- Find and track EU public procurement tenders\n\n'
+            + '[Sign up for free](/signup)',
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, userMessage, blockedMessage]);
+        setInputValue('');
+        return;
+      }
+    }
+
     setMessages((prev) => [...prev, userMessage]);
     const currentInput = inputValue;
     setInputValue('');
@@ -137,6 +186,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
           message: currentInput,
           chat_id: chatId,
           user_id: user?.id || null,
+          pre_user_id: !isAuthenticated ? getPreUserId() : null,
           document_ids: documentIds.length > 0 ? documentIds : null,
           use_context: useContext,
           stream: false,
@@ -155,10 +205,17 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
         setChatId(data.chat_id);
       }
 
+      // For pre-users, increment count and append CTA
+      let messageContent = data.message;
+      if (!isAuthenticated) {
+        incrementPreUserQueryCount();
+        messageContent += '\n\n---\n\nWould you like to discover what else Brubru can do for you? [Sign up for free here!](/signup)';
+      }
+
       const aiMessage: Message = {
         id: data.chat_id + '_' + Date.now(),
         role: 'assistant',
-        content: data.message,
+        content: messageContent,
         timestamp: new Date(data.timestamp),
         citations: data.citations || [],
         tokensUsed: data.tokens_used,
@@ -200,6 +257,27 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
       timestamp: new Date(),
     };
 
+    // Pre-user query limit check
+    if (!isAuthenticated) {
+      const count = getPreUserQueryCount();
+      if (count >= PRE_USER_QUERY_LIMIT) {
+        const blockedMessage: Message = {
+          id: 'blocked_' + Date.now(),
+          role: 'assistant',
+          content: 'You have reached the limit for non-registered users. Sign up for free to continue chatting and unlock all of Brubru\'s features:\n\n'
+            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
+            + '- **Amendator** -- Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
+            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
+            + '- **Tenderator** -- Find and track EU public procurement tenders\n\n'
+            + '[Sign up for free](/signup)',
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, userMessage, blockedMessage]);
+        setInputValue('');
+        return;
+      }
+    }
+
     setMessages((prev) => [...prev, userMessage]);
     const currentInput = inputValue;
     setInputValue('');
@@ -229,6 +307,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
           message: currentInput,
           chat_id: chatId,
           user_id: user?.id || null,
+          pre_user_id: !isAuthenticated ? getPreUserId() : null,
           document_ids: documentIds.length > 0 ? documentIds : null,
           use_context: useContext,
         }),
@@ -276,6 +355,18 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
             );
           }
         }
+      }
+      // For pre-users, increment count and append CTA after streaming
+      if (!isAuthenticated) {
+        incrementPreUserQueryCount();
+        const ctaSuffix = '\n\n---\n\nWould you like to discover what else Brubru can do for you? [Sign up for free here!](/signup)';
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === streamingMessageId
+              ? { ...msg, content: msg.content + ctaSuffix }
+              : msg
+          )
+        );
       }
     } catch (err: any) {
       if (err.name === 'AbortError') {

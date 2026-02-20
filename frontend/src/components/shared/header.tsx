@@ -110,6 +110,21 @@ export const Header = () => {
           ].map((item) => {
             if (item.requiresBlue && !hasBlueAccess) return null;
             const active = isActive(item.path);
+
+            // Pre-user: disable all nav buttons except Main (chat)
+            if (!user && item.path !== '/main') {
+              return (
+                <span
+                  key={item.path}
+                  className={`header__nav-icon-btn header__nav-icon-btn--${item.color} header__nav-icon-btn--disabled`}
+                  data-tooltip={t('header.onlyForUsers', { feature: t(item.labelKey) })}
+                >
+                  <Icon path={item.icon} size={1} />
+                  <span className="header__nav-icon-label">{t(item.labelKey)}</span>
+                </span>
+              );
+            }
+
             return (
               <Link
                 key={item.path}
@@ -140,6 +155,13 @@ export const Header = () => {
               ))}
             </select>
           </div>
+
+          {!user && (
+            <div className="header__auth-buttons">
+              <Link to="/signup" className="header__signup-btn">{t('header.signUpFree')}</Link>
+              <Link to="/login" className="header__login-btn">{t('header.logIn')}</Link>
+            </div>
+          )}
 
           {user && (
             <>

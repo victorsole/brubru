@@ -1,0 +1,286 @@
+[
+  {
+    "id": "fortino",
+    "name": "Fortino Capital",
+    "market": "belgium",
+    "tier": 1,
+    "aum": "€100K-€3M checks",
+    "contacts": [
+      {"name": "Filip Van Innis", "role": "Partner", "email": "filip.van.innis@fortinocapital.com"},
+      {"name": "Renaat Berckmoes", "role": "Partner", "email": "renaat.berckmoes@fortinocapital.com"}
+    ],
+    "hook": "Your Altura investment shows you see AI transforming government engagement — we're building the advocacy equivalent.",
+    "portfolio_highlight": "Altura (AI for public tenders), Legalfly (legal AI), TechWolf (HR AI)",
+    "template": "portfolio",
+    "website": "https://fortinocapital.com"
+  },
+  {
+    "id": "smartfin",
+    "name": "Smartfin Capital",
+    "market": "belgium",
+    "tier": 1,
+    "aum": "€600M+",
+    "contacts": [
+      {"name": "Jurgen Ingels", "role": "Founder", "email": "info@smartfinvc.com"}
+    ],
+    "hook": "Fresh €250M Fund III, Brussels-based, explicit B2B scaling mandate — Brubru is AI-native B2B SaaS built in Brussels for the EU market.",
+    "portfolio_highlight": "Deliverect (unicorn), AI BLOX",
+    "template": "consultation",
+    "website": "https://smartfinvc.com"
+  },
+  {
+    "id": "volta",
+    "name": "Volta Ventures",
+    "market": "belgium",
+    "tier": 1,
+    "aum": "€20M AI fund",
+    "contacts": [
+      {"name": "Frank Maene", "role": "Partner", "email": "frank@voltaventures.eu"},
+      {"name": "Sander Vonk", "role": "Partner", "email": "info@voltaventures.eu"}
+    ],
+    "hook": "Your new €20M AI-first B2B SaaS fund mandate is exactly the category Brubru occupies — AI-native, B2B, SaaS, EU-focused.",
+    "portfolio_highlight": "Next Gate Tech (RegTech privacy management)",
+    "template": "portfolio",
+    "website": "https://volta.ventures"
+  },
+  {
+    "id": "blackfin",
+    "name": "BlackFin Capital Partners",
+    "market": "belgium",
+    "tier": 1,
+    "aum": "€600M+",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "contact@blackfin.com"}
+    ],
+    "hook": "Your explicit RegTech focus means you understand the market Beresol serves — AI-powered regulatory intelligence for EU policy professionals.",
+    "portfolio_highlight": "Fintech, insurtech, and RegTech portfolio",
+    "template": "consultation",
+    "website": "https://blackfin.com"
+  },
+  {
+    "id": "nauta",
+    "name": "Nauta Capital",
+    "market": "spain",
+    "tier": 1,
+    "aum": "€550M+",
+    "contacts": [
+      {"name": "Carles Ferrer", "role": "Partner", "email": "barcelona@nautacapital.com"},
+      {"name": "Jordi Vinas", "role": "Partner", "email": "info@nautacapital.com"}
+    ],
+    "hook": "Your TrustWorks investment shows you understand that regulation creates markets — this consultation shapes the regulatory landscape for your entire portfolio.",
+    "portfolio_highlight": "TrustWorks (AI governance, privacy management)",
+    "template": "portfolio",
+    "website": "https://nautacapital.com"
+  },
+  {
+    "id": "seaya",
+    "name": "Seaya Ventures",
+    "market": "spain",
+    "tier": 1,
+    "aum": "€650M+",
+    "contacts": [
+      {"name": "Beatriz Gonzalez", "role": "Founding Partner", "email": "info@seaya.vc"}
+    ],
+    "hook": "Your SFDR Article 9 fund and public support for strict EU frameworks positions you perfectly to shape this consultation — Beresol can help amplify that voice at EU level.",
+    "portfolio_highlight": "Clarity.AI (ESG compliance), Seaya Andromeda (Article 9 fund)",
+    "template": "consultation",
+    "website": "https://seaya.vc"
+  },
+  {
+    "id": "kibo",
+    "name": "Kibo Ventures",
+    "market": "spain",
+    "tier": 1,
+    "aum": "€500M+",
+    "contacts": [
+      {"name": "Aquilino Pena", "role": "Founder & ASCRI President", "email": "hello@kiboventures.com"}
+    ],
+    "hook": "As President of ASCRI, you already represent Spanish VC to government and EU institutions — Beresol offers leverage to extend that influence at EU level for your portfolio companies.",
+    "portfolio_highlight": "ASCRI (SpainCap) presidency, policy influence",
+    "template": "consultation",
+    "website": "https://kiboventures.com"
+  },
+  {
+    "id": "adara",
+    "name": "Adara Ventures",
+    "market": "spain",
+    "tier": 2,
+    "aum": "€200M+",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "info@adara.vc"}
+    ],
+    "hook": "Your Bigle Legal investment and Article 9 fund show regulatory sophistication in both investment thesis and fund structure.",
+    "portfolio_highlight": "Bigle Legal (legal tech/compliance), Article 9 fund",
+    "template": "portfolio",
+    "website": "https://adara.vc"
+  },
+  {
+    "id": "jme",
+    "name": "JME Ventures",
+    "market": "spain",
+    "tier": 2,
+    "aum": "",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "backme@jme.vc"}
+    ],
+    "hook": "Your TaxDown portfolio company operates in compliance tech — the EC consultation will shape the regulatory landscape affecting their market.",
+    "portfolio_highlight": "TaxDown (compliance tech)",
+    "template": "consultation",
+    "website": "https://jme.vc"
+  },
+  {
+    "id": "kfund",
+    "name": "K Fund",
+    "market": "spain",
+    "tier": 2,
+    "aum": "",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "info@kfund.vc"}
+    ],
+    "hook": "Factorial HR, your unicorn portfolio company, faces EU HR compliance exposure — the consultation shapes regulations affecting your entire portfolio.",
+    "portfolio_highlight": "Factorial HR (unicorn, EU HR compliance exposure)",
+    "template": "consultation",
+    "website": "https://kfund.vc"
+  },
+  {
+    "id": "inveready",
+    "name": "Inveready",
+    "market": "spain",
+    "tier": 2,
+    "aum": "",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "info@inveready.com"}
+    ],
+    "hook": "Barcelona deep tech with EIF backing — the consultation will shape how EU funds flow to ventures like yours.",
+    "portfolio_highlight": "Deep tech, EIF backing",
+    "template": "consultation",
+    "website": "https://inveready.com"
+  },
+  {
+    "id": "elaia",
+    "name": "Elaia Partners",
+    "market": "france",
+    "tier": 1,
+    "aum": "€500M+",
+    "contacts": [
+      {"name": "Anne-Sophie Carrese", "role": "Managing Partner", "email": "investor@elaia.com"}
+    ],
+    "hook": "Your Case Law Analytics investment demonstrates belief that AI can augment policy and legal intelligence — Brubru extends this thesis to EU advocacy.",
+    "portfolio_highlight": "Case Law Analytics (legal AI), Anne Bouverot (Fondation Abeona, responsible AI)",
+    "template": "portfolio",
+    "website": "https://elaia.com"
+  },
+  {
+    "id": "serena",
+    "name": "Serena Capital",
+    "market": "france",
+    "tier": 2,
+    "aum": "€600M+",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "contact@serena.vc"}
+    ],
+    "hook": "As one of France's first dedicated AI fund managers, you understand the B2B AI opportunity — Brubru applies that thesis to the EU policy market.",
+    "portfolio_highlight": "First French AI fund, B2B focus",
+    "template": "consultation",
+    "website": "https://serena.vc"
+  },
+  {
+    "id": "partech",
+    "name": "Partech",
+    "market": "france",
+    "tier": 2,
+    "aum": "€2.5B",
+    "contacts": [
+      {"name": "Emmanuel Delaveau", "role": "General Partner", "email": "edelaveau@partechpartners.com"}
+    ],
+    "hook": "With €2.5B AuM and 220+ portfolio companies, the EC consultation on venture capital reform will directly shape your operational framework across Europe.",
+    "portfolio_highlight": "220+ portfolio companies, multi-stage",
+    "template": "consultation",
+    "website": "https://partechpartners.com"
+  },
+  {
+    "id": "henq",
+    "name": "henQ",
+    "market": "netherlands",
+    "tier": 1,
+    "aum": "€67.6M Fund V",
+    "contacts": [
+      {"name": "Mick Mackaay", "role": "Partner", "email": "info@henq.nl"}
+    ],
+    "hook": "Your 'odd ones out' thesis and Zivver compliance investment suggest openness to unconventional positioning — Brubru is AI for a market nobody else has built for.",
+    "portfolio_highlight": "Zivver (secure communications/compliance), 'boring' B2B markets",
+    "template": "portfolio",
+    "website": "https://henq.nl"
+  },
+  {
+    "id": "peak",
+    "name": "Peak Capital",
+    "market": "netherlands",
+    "tier": 2,
+    "aum": "",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "info@peak.capital"}
+    ],
+    "hook": "As a 100% founder-backed fund with strong go-to-market expertise, you understand what it takes to build from zero — Brubru is one founder, 213K lines of code, production-ready.",
+    "portfolio_highlight": "100% founder-backed, go-to-market expertise",
+    "template": "consultation",
+    "website": "https://peak.capital"
+  },
+  {
+    "id": "tin",
+    "name": "TIN Capital",
+    "market": "netherlands",
+    "tier": 2,
+    "aum": "€80M+",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "info@tincapital.vc"}
+    ],
+    "hook": "Your cybersecurity/IT security focus is directly relevant as NIS2 and DORA create compliance requirements — Brubru tracks these regulations in real-time.",
+    "portfolio_highlight": "Cybersecurity/IT security, EIF backing",
+    "template": "consultation",
+    "website": "https://tincapital.vc"
+  },
+  {
+    "id": "general_catalyst",
+    "name": "General Catalyst",
+    "market": "us",
+    "tier": 1,
+    "aum": "$25B+",
+    "contacts": [
+      {"name": "", "role": "Partner, European Investments", "email": "gcinfo@generalcatalyst.com"}
+    ],
+    "hook": "General Catalyst US has the Policy Institute. We can be your EU policy infrastructure — regulatory intelligence for your European portfolio companies.",
+    "portfolio_highlight": "Parloa (AI), Helsing (defence), 22 EU investments in 2022",
+    "template": "us_gap",
+    "website": "https://generalcatalyst.com"
+  },
+  {
+    "id": "cdp",
+    "name": "CDP Venture Capital",
+    "market": "italy",
+    "tier": 3,
+    "aum": "€2B+",
+    "contacts": [
+      {"name": "Agostino Scornajenchi", "role": "CEO", "email": "media.relations@cdpventurecapital.it"},
+      {"name": "Vincenzo Di Nicola", "role": "AI Fund Head", "email": "media.relations@cdpventurecapital.it"}
+    ],
+    "hook": "Your OpenAI partnership signals intent to build European AI champions — Brubru represents AI applied to a European-specific problem: EU advocacy and policy intelligence.",
+    "portfolio_highlight": "OpenAI MOU, €500M AI Fund, €500M AI co-investments",
+    "template": "consultation",
+    "website": "https://cdpventurecapital.it"
+  },
+  {
+    "id": "p101",
+    "name": "P101",
+    "market": "italy",
+    "tier": 3,
+    "aum": "",
+    "contacts": [
+      {"name": "", "role": "Partner", "email": "info@p101.it"}
+    ],
+    "hook": "As a leading Milan VC, the EC consultation on venture capital reform will directly shape how Italian funds operate across Europe.",
+    "portfolio_highlight": "Leading Milan VC",
+    "template": "consultation",
+    "website": "https://p101.it"
+  }
+]

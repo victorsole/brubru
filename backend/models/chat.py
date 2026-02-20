@@ -29,7 +29,8 @@ class Chat(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
 
     # User identification
-    user_id = Column(UUID(as_uuid=True), nullable=False, index=True)  # Foreign key to users table
+    user_id = Column(UUID(as_uuid=True), nullable=True, index=True)  # Foreign key to users table (nullable for pre-users)
+    pre_user_id = Column(String(36), nullable=True, index=True)  # Anonymous session tracking
 
     # Chat metadata
     title = Column(String(200), nullable=True)  # Auto-generated or user-provided title

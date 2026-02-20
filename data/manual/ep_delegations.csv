@@ -1,0 +1,175 @@
+ep_group,delegation_name,country,parties_included,num_meps,delegation_chair,notes
+# PRIORITY 5 - Granular EP predictions
+# A delegation is typically a national party grouping within an EP group
+# Some countries have multiple delegations in the same group (e.g., Belgium)
+# Updated February 2026 from national_parties_ep_groups.csv - aligned with EP API
+#
+# --- EPP (187 seats) ---
+EPP,German CDU/CSU Delegation,Germany,"CDU,CSU",31,,Largest EPP delegation - per EP API
+EPP,Polish Civic Coalition Delegation,Poland,"KO,TD",23,,Tusk's coalition - per EP API
+EPP,Spanish PP Delegation,Spain,PP,22,,
+EPP,Romanian EPP Delegation,Romania,"PNL,PMP",10,,Per EP API
+EPP,Italian Forza Italia Delegation,Italy,FI,9,,Berlusconi legacy - per EP API
+EPP,Hungarian Tisza Delegation,Hungary,Tisza,7,,Peter Magyar - new 2024
+EPP,Portuguese AD Delegation,Portugal,AD,7,,PPD/PSD + CDS-PP coalition
+EPP,Greek ND Delegation,Greece,ND,7,,Mitsotakis
+EPP,Bulgarian EPP Delegation,Bulgaria,"GERB,PP-DB",6,,Borisov + We Continue the Change - per EP API
+EPP,Dutch CDA/NSC Delegation,Netherlands,"CDA,NSC",6,,Per EP API
+EPP,Croatian HDZ Delegation,Croatia,HDZ,6,,Plenkovic
+EPP,Slovenian EPP Delegation,Slovenia,"SDS,NSi",5,,Jansa + Christian Democrats
+EPP,Swedish EPP Delegation,Sweden,"M,KD",5,,Moderates + Christian Democrats
+EPP,French LR Delegation,France,LR,5,,Per EP API
+EPP,Austrian OVP Delegation,Austria,OVP,5,,
+EPP,Czech EPP Delegation,Czechia,"STAN,TOP09,KDU-CSL",5,,SPOLU coalition parties - per EP API
+EPP,Finnish Kokoomus Delegation,Finland,Kok,4,,National Coalition
+EPP,Irish Fine Gael Delegation,Ireland,FG,4,,Government party
+EPP,Lithuanian TS-LKD Delegation,Lithuania,TS-LKD,3,,Homeland Union - Kubilius
+EPP,Belgian CD&V/LE Delegation,Belgium,"CD&V,LE",3,,Per EP API
+EPP,Maltese PN Delegation,Malta,PN,3,,Nationalist Party - includes EP President Metsola
+EPP,Cypriot DISY Delegation,Cyprus,DISY,2,,Democratic Rally
+EPP,Danish EPP Delegation,Denmark,"KF,LA",2,,Conservatives + Liberal Alliance
+EPP,Estonian Isamaa Delegation,Estonia,Isamaa,2,,Fatherland
+EPP,Latvian JV Delegation,Latvia,JV,2,,New Unity - Dombrovskis
+EPP,Luxembourg CSV Delegation,Luxembourg,CSV,2,,Christian Social People's Party
+EPP,Slovak KDH Delegation,Slovakia,KDH,1,,Christian Democrats
+#
+# --- S&D (136 seats) ---
+S&D,Italian PD Delegation,Italy,PD,21,,Largest S&D delegation
+S&D,Spanish PSOE Delegation,Spain,PSOE,20,,
+S&D,German SPD Delegation,Germany,SPD,14,,
+S&D,French PS Delegation,France,PS,13,,
+S&D,Romanian PSD Delegation,Romania,PSD,11,,Per EP API
+S&D,Portuguese PS Delegation,Portugal,PS,8,,
+S&D,Austrian SPO Delegation,Austria,SPO,5,,
+S&D,Swedish SAP Delegation,Sweden,S,5,,Social Democrats
+S&D,Dutch PvdA Delegation,Netherlands,PvdA,4,,Part of GL-PvdA merged list - per EP API
+S&D,Belgian PS/Vooruit Delegation,Belgium,"PS-BE,Vooruit",4,,
+S&D,Croatian SDP Delegation,Croatia,SDP,4,,Rivers of Justice
+S&D,Finnish SDP Delegation,Finland,SDP,2,,Per EP API
+S&D,Greek PASOK Delegation,Greece,PASOK,3,,Movement for Change
+S&D,Polish Lewica Delegation,Poland,Lewica,3,,Per EP API
+S&D,Danish S Delegation,Denmark,S,3,,Social Democrats - per EP API
+S&D,Bulgarian BSP Delegation,Bulgaria,BSP,2,,
+S&D,Hungarian DK Delegation,Hungary,DK,2,,Gyurcsany
+S&D,Lithuanian LSDP Delegation,Lithuania,LSDP,2,,Social Democrats
+S&D,Estonian SDE Delegation,Estonia,SDE,2,,Social Democrats - Kaljurand
+S&D,Maltese PL Delegation,Malta,PL,3,,Labour Party
+S&D,Irish Labour Delegation,Ireland,Lab,1,,
+S&D,Slovenian SD Delegation,Slovenia,SD,1,,Social Democrats
+S&D,Cypriot DIKO Delegation,Cyprus,DIKO,1,,Democratic Party
+S&D,Latvian Saskana Delegation,Latvia,Sask,1,,Harmony - Usakovs
+S&D,Luxembourg LSAP Delegation,Luxembourg,LSAP,1,,Socialist Workers' Party
+#
+# --- RENEW (75 seats) ---
+Renew,French Renaissance Delegation,France,"RE,MoDem,HOR",13,,Macron's Ensemble coalition
+Renew,Dutch VVD/D66 Delegation,Netherlands,"VVD,D66",7,,
+Renew,Irish FF/II Delegation,Ireland,"FF,II,Ind-IE-2",6,,Fianna Fail + Independent Ireland + McNamara
+Renew,Slovak PS Delegation,Slovakia,PS,6,,Progressive Slovakia - Odor
+Renew,German FDP Delegation,Germany,FDP,8,,Per EP API
+Renew,Belgian MR/OpenVLD Delegation,Belgium,"MR,OpenVLD",5,,Per EP API
+Renew,Danish Liberal Delegation,Denmark,"V,RV",4,,Venstre + Radikale - per EP API
+Renew,Romanian USR Delegation,Romania,USR,3,,Per EP API
+Renew,Bulgarian DPS Delegation,Bulgaria,DPS,3,,Movement for Rights and Freedoms
+Renew,Finnish Centre Delegation,Finland,"Kesk,RKP",3,,Centre + Swedish People's Party
+Renew,Swedish L/C Delegation,Sweden,"L,C",3,,Liberals + Centre
+Renew,Austrian NEOS Delegation,Austria,NEOS,2,,
+Renew,Estonian Liberal Delegation,Estonia,"Reform,Kesk",2,,Reform + Centre
+Renew,Lithuanian Liberal Delegation,Lithuania,"LP,LS",2,,Freedom + Liberals Movement
+Renew,Portuguese IL Delegation,Portugal,IL,2,,Iniciativa Liberal
+Renew,Slovenian Svoboda Delegation,Slovenia,GS,2,,Freedom Movement - Golob
+Renew,Polish Konfederacja Delegation,Poland,Konf-Renew,1,,Per EP API
+Renew,Spanish Ciudadanos Delegation,Spain,Cs,1,,Per EP API
+Renew,Latvian LA Delegation,Latvia,LA,1,,For Latvia's Development
+Renew,Luxembourg DP Delegation,Luxembourg,DP,1,,Democratic Party - Goerens
+#
+# --- GREENS/EFA (53 seats) ---
+Greens/EFA,German Greens Delegation,Germany,"Gruene,Volt,OeDP",15,,Per EP API - includes Volt and OeDP
+Greens/EFA,Dutch GroenLinks Delegation,Netherlands,GL,6,,Part of GL-PvdA merged list - per EP API
+Greens/EFA,French EELV Delegation,France,EELV,5,,
+Greens/EFA,Spanish Greens Delegation,Spain,"Sumar,AR",4,,Sumar + Ahora Republicas - per EP API
+Greens/EFA,Italian AVS Delegation,Italy,AVS,4,,Alleanza Verdi e Sinistra - per EP API
+Greens/EFA,Danish SF Delegation,Denmark,SF,3,,Socialist People's Party - per EP API
+Greens/EFA,Swedish MP Delegation,Sweden,MP,3,,Green Party - per EP API
+Greens/EFA,Belgian Ecolo/Groen Delegation,Belgium,"Ecolo,Groen",2,,
+Greens/EFA,Austrian Gruene Delegation,Austria,Gruene,2,,
+Greens/EFA,Finnish Vihr Delegation,Finland,Vihr,2,,Green League - per EP API
+Greens/EFA,Romanian Greens Delegation,Romania,Grn-RO,1,,Per EP API
+Greens/EFA,Latvian PRO Delegation,Latvia,PRO,1,,Progressives
+Greens/EFA,Lithuanian DSVL Delegation,Lithuania,DSVL,1,,For Lithuania - Sinkevicius
+Greens/EFA,Czech Pirati Delegation,Czechia,Pirati,1,,Pirates
+Greens/EFA,Croatian Mozemo Delegation,Croatia,Moz,1,,We Can!
+Greens/EFA,Slovenian Vesna Delegation,Slovenia,Vesna,1,,Green party
+Greens/EFA,Luxembourg Greng Delegation,Luxembourg,Greng,1,,The Greens
+#
+# --- ECR (79 seats) ---
+ECR,Italian FdI Delegation,Italy,FdI,24,,Meloni - ECR President - Largest ECR
+ECR,Polish PiS Delegation,Poland,PiS,20,,Kaczynski
+ECR,Romanian AUR Delegation,Romania,AUR,6,,
+ECR,French ECR Delegation,France,FR-ECR,4,,Per EP API - Reconquete defectors
+ECR,Swedish SD Delegation,Sweden,SD,3,,Sweden Democrats - per EP API
+ECR,Belgian N-VA Delegation,Belgium,N-VA,3,,Flemish nationalist
+ECR,Czech ODS Delegation,Czechia,ODS,3,,Civic Democrats - Fiala
+ECR,Latvian ECR Delegation,Latvia,"NA,AS",3,,National Alliance + United List
+ECR,Spanish SALF Delegation,Spain,SALF,2,,Se Acabo la Fiesta - per EP API
+ECR,Greek EL Delegation,Greece,EL,2,,Greek Solution
+ECR,Lithuanian ECR Delegation,Lithuania,"LVZS,LLRA-KSS",2,,Farmers/Greens + Poles
+ECR,Dutch BBB Delegation,Netherlands,BBB,1,,Farmers party - per EP API
+ECR,Bulgarian ITN Delegation,Bulgaria,ITN,1,,There Is Such a People
+ECR,Croatian DP Delegation,Croatia,DP,1,,Homeland Movement - Penava
+ECR,Cypriot ELAM Delegation,Cyprus,ELAM,1,,National Popular Front
+ECR,Estonian EKRE Delegation,Estonia,EKRE,1,,Conservative People's Party - per EP API
+ECR,Danish DD Delegation,Denmark,DD,1,,Denmark Democrats
+ECR,Finnish PS Delegation,Finland,PS,1,,Finns Party - per EP API
+#
+# --- PfE (86 seats) ---
+PfE,French RN Delegation,France,RN,30,,Largest PfE - Le Pen
+PfE,Hungarian Fidesz Delegation,Hungary,"Fidesz,KDNP",11,,Orban - joined 2024
+PfE,Czech PfE Delegation,Czechia,"ANO,MOT,PRI",9,,Babis + Motorists + Oath - per EP API
+PfE,Italian Lega Delegation,Italy,Lega,8,,Salvini
+PfE,Dutch PVV Delegation,Netherlands,PVV,6,,Wilders
+PfE,Austrian FPO Delegation,Austria,FPO,6,,Freedom Party
+PfE,Spanish Vox Delegation,Spain,VOX,6,,
+PfE,Belgian VB Delegation,Belgium,VB,3,,Flemish far-right
+PfE,Portuguese Chega Delegation,Portugal,CH,2,,
+PfE,Polish PfE Delegation,Poland,Konf-PfE,2,,Per EP API - from Konfederacja
+PfE,Danish DF Delegation,Denmark,DF,1,,Danish People's Party
+PfE,Greek FL Delegation,Greece,FL,1,,Voice of Reason
+PfE,Latvian LPV Delegation,Latvia,LPV,1,,Latvia First
+#
+# --- THE LEFT (46 seats) ---
+The Left,Italian M5S Delegation,Italy,M5S,10,,Five Star Movement - per EP API
+The Left,French LFI Delegation,France,LFI,9,,Melenchon
+The Left,Spanish Left Delegation,Spain,"Pod,IU",4,,Podemos + Izquierda Unida - per EP API
+The Left,German Linke Delegation,Germany,"Linke,Tierschutz",4,,Die Linke + Animal Protection
+The Left,Greek Syriza Delegation,Greece,SYRIZA,4,,Coalition of Radical Left
+The Left,Irish Left Delegation,Ireland,"SF,Ind-IE",3,,Sinn Fein + Ming Flanagan
+The Left,Finnish Vas Delegation,Finland,Vas,3,,Left Alliance - per EP API
+The Left,Belgian PVDA-PTB Delegation,Belgium,PVDA-PTB,2,,Workers' Party
+The Left,Portuguese Left Delegation,Portugal,"BE,CDU",2,,Bloco + CDU coalition
+The Left,Swedish V Delegation,Sweden,V,2,,Left Party - per EP API
+The Left,Cypriot AKEL Delegation,Cyprus,AKEL,1,,Progressive Party of Working People - per EP API
+The Left,Danish O Delegation,Denmark,O,1,,Red-Green Alliance
+The Left,Dutch SP Delegation,Netherlands,SP,1,,Socialist Party
+#
+# --- ESN (27 seats) ---
+ESN,German AfD Delegation,Germany,AfD,15,,Largest ESN
+ESN,Polish Konf Delegation,Poland,Konf,3,,Konfederacja - per EP API
+ESN,Bulgarian VZR Delegation,Bulgaria,VZR,3,,Revival
+ESN,Slovak REP Delegation,Slovakia,REP,2,,Republika - Uhrik
+ESN,French REC Delegation,France,REC,1,,Reconquete - Zemmour - per EP API
+ESN,Czech SPD Delegation,Czechia,SPD,1,,Freedom and Direct Democracy - Okamura
+ESN,Hungarian MH Delegation,Hungary,MH,1,,Our Homeland Movement
+ESN,Lithuanian TTS Delegation,Lithuania,TTS,1,,Nation and Justice - Grazulis
+#
+# --- NI (Non-Inscrits) - 30 seats ---
+NI,German NI Delegation,Germany,"BSW,PARTEI,Familie",9,,Wagenknecht + Satirical + Family - per EP API
+NI,Slovak NI Delegation,Slovakia,"Smer,Hlas",6,,Fico (suspended from S&D) + Pellegrini - per EP API
+NI,Greek NI Delegation,Greece,"KKE,NIKI,PE",4,,Communists + small parties
+NI,Czech STC Delegation,Czechia,STC,2,,Enough! - KSCM coalition - per EP API
+NI,Bulgarian NI Delegation,Bulgaria,Ind-BG,2,,Per EP API
+NI,Romanian SOS Delegation,Romania,SOS,2,,SOS Romania
+NI,French NI Delegation,France,Ind-FR,1,,Per EP API
+NI,Spanish Junts Delegation,Spain,Junts,1,,Seat vacant - MEP cannot take seat
+NI,Cypriot NI Delegation,Cyprus,Ind-CY,1,,Per EP API
+NI,Luxembourg NI Delegation,Luxembourg,ADR,1,,Alternative Democratic Reform - per EP API
+NI,Polish NI Delegation,Poland,Konf-NI,1,,Per EP API - from Konfederacja

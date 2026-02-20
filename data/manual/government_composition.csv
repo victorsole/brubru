@@ -1,0 +1,37 @@
+country,government_name,start_date,end_date,coalition_parties,senior_party,senior_party_eu_family,status,stability_notes
+# PRIORITY 3 - Foundation for Council predictions
+# EU Families: EPP, PES, ALDE, EGP, ECR, ID, EL, Other
+# Status: current, caretaker, upcoming_election
+#
+# --- TIER 1: CRITICAL (62% of EU population) ---
+Germany,Scholz Cabinet,2021-12-08,,"SPD,Gruene,FDP",SPD,PES,current,Coalition collapsed Nov 2024 - early election Feb 2025
+France,Barnier Government,2024-09-05,,"EPR,MoDem,Horizons,LR",EPR,ALDE,current,Minority govt with RN tolerance
+Italy,Meloni Cabinet,2022-10-22,,"FdI,Lega,FI",FdI,ECR,current,Stable right-wing coalition
+Spain,Sanchez Cabinet IV,2023-11-17,,"PSOE,Sumar",PSOE,PES,current,Minority with regional support
+Poland,Tusk Cabinet,2023-12-13,,"KO,TD,NL",KO,EPP,current,Replaced PiS after 8 years
+#
+# --- TIER 2: IMPORTANT (25% of EU population) ---
+Romania,Ciolacu Cabinet,2023-06-15,,"PSD,PNL",PSD,PES,current,Grand coalition
+Netherlands,Schoof Cabinet,2024-07-02,,"PVV,VVD,NSC,BBB",PVV,ID,current,First PVV-led government
+Belgium,De Croo Cabinet II,2020-10-01,,"OpenVLD,MR,PS,Vooruit,Groen,Ecolo,CD&V",OpenVLD,ALDE,current,7-party Vivaldi coalition - fragile
+Greece,Mitsotakis Cabinet II,2023-06-26,,ND,ND,EPP,current,Single-party majority
+Czech Republic,Fiala Cabinet,2021-12-17,,"ODS,KDU-CSL,TOP09,STAN,Pirati",ODS,ECR,current,5-party coalition
+Portugal,Montenegro Cabinet,2024-04-02,,"AD (PSD+CDS)",PSD,EPP,current,Minority government
+Sweden,Kristersson Cabinet,2022-10-18,,"M,KD,L",M,EPP,current,Minority with SD support
+Hungary,Orban Cabinet V,2022-05-24,,Fidesz-KDNP,Fidesz,ID,current,Supermajority
+#
+# --- TIER 3: COMPLETE COVERAGE (13% of EU population) ---
+Austria,Nehammer Cabinet,2021-12-06,,"OVP,Gruene",OVP,EPP,current,Election Sept 2024 - FPO won
+Bulgaria,Glavchev Cabinet,2024-04-09,,Caretaker,Caretaker,Other,caretaker,Political crisis - multiple elections
+Denmark,Frederiksen Cabinet III,2022-12-15,,"S,V,M",S,PES,current,Broad coalition
+Finland,Orpo Cabinet,2023-06-20,,"KOK,PS,SFP,KD",KOK,EPP,current,Right-wing with Finns Party
+Slovakia,Fico Cabinet IV,2023-10-25,,"SMER,HLAS,SNS",SMER,PES,current,Pro-Russian tilt
+Ireland,Harris Cabinet,2024-04-09,,"FF,FG,Greens",FF,ALDE,current,Election due 2024
+Croatia,Plenkovic Cabinet III,2024-05-20,,HDZ,HDZ,EPP,current,
+Lithuania,Simonyte Cabinet,2020-12-11,,"TS-LKD,LRLS,LP",TS-LKD,EPP,current,Election Oct 2024
+Slovenia,Golob Cabinet,2022-06-01,,"GS,SD,Levica",GS,ALDE,current,
+Latvia,Silina Cabinet,2023-09-15,,"JV,NA,ZZS",JV,EPP,current,
+Estonia,Michal Cabinet,2024-07-23,,"RE,SDE,EE200",RE,ALDE,current,
+Cyprus,Christodoulides Admin,2023-03-01,,Independent,Independent,Other,current,Independent president
+Luxembourg,Frieden Cabinet,2023-11-17,,"CSV,DP",CSV,EPP,current,
+Malta,Abela Cabinet,2022-03-28,,PL,PL,PES,current,

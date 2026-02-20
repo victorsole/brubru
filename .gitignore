@@ -37,6 +37,7 @@ backend/services/*.json
 CLAUDE.md
 MISTRAL.md
 .mcp.json
+.claude/
 
 # Large files (GitHub limit: 100MB)
 *.tif

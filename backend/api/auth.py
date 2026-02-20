@@ -7,6 +7,7 @@ Handles user registration, login, OAuth, and token management.
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -379,6 +380,25 @@ async def refresh_token(
         "token_type": "bearer",
         "user": current_user
     }
+
+
+@router.post("/link-preuser")
+async def link_preuser_chats(
+    data: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Link anonymous pre-user chats to the newly registered user."""
+    pre_user_id = data.get("pre_user_id")
+    if not pre_user_id:
+        return {"linked": 0}
+
+    result = db.execute(
+        text("UPDATE chats SET user_id = :user_id WHERE pre_user_id = :pre_user_id AND user_id IS NULL"),
+        {"user_id": str(current_user.id), "pre_user_id": pre_user_id},
+    )
+    db.commit()
+    return {"linked": result.rowcount}
 
 
 @router.post("/logout")

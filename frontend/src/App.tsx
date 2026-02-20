@@ -135,15 +135,13 @@ export const App = () => {
           <Route
             path="/main"
             element={
-              <ProtectedRoute>
-                <>
-                  <Header />
-                  <AnimatedPage>
-                    <MainPage isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-                  </AnimatedPage>
-                  <Footer isSidebarOpen={isSidebarOpen} />
-                </>
-              </ProtectedRoute>
+              <>
+                <Header />
+                <AnimatedPage>
+                  <MainPage isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+                </AnimatedPage>
+                <Footer isSidebarOpen={isSidebarOpen} />
+              </>
             }
           />
           <Route

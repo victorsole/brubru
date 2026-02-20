@@ -137,7 +137,7 @@ export const LandingPage = () => {
             <span className="nav-link-text">Log In</span>
             <span className="nav-link-text nav-link-text--hover">Log In</span>
           </Link>
-          <Link to="/signup" className="nav-cta">Start Free</Link>
+          <Link to="/main" className="nav-cta">Start Free</Link>
         </div>
       </nav>
 
@@ -156,7 +156,7 @@ export const LandingPage = () => {
                 Analyse legislation. Draft amendments. Navigate EU institutions.
               </p>
               <div className="hero__cta">
-                <Link to="/signup" className="btn btn--white btn--large">Start Free Trial</Link>
+                <Link to="/main" className="btn btn--white btn--large">Start Free Trial</Link>
                 <Link to="/login" className="btn btn--outline-white btn--large">Log In</Link>
               </div>
             </div>
@@ -270,7 +270,7 @@ export const LandingPage = () => {
                 <li><span className="mdi mdi-check" /> 5 amendments/month</li>
                 <li><span className="mdi mdi-close" /> Watermark on exports</li>
               </ul>
-              <Link to="/signup" className="btn btn--outline" style={{ width: '100%' }}>Start Free</Link>
+              <Link to="/main" className="btn btn--outline" style={{ width: '100%' }}>Start Free</Link>
             </div>
 
             {/* Yellow */}
@@ -412,7 +412,7 @@ export const LandingPage = () => {
               )).reduce<React.ReactNode[]>((acc, el, i) => (i === 0 ? [el] : [...acc, ' ', el]), [])}
             </h2>
             <p className="cta__text">Join EU policy professionals using Brubru to work smarter</p>
-            <Link to="/signup" className="btn--rainbow btn--rainbow-outline">Create Free Account</Link>
+            <Link to="/main" className="btn--rainbow btn--rainbow-outline">Create Free Account</Link>
           </div>
         </section>
       </main>

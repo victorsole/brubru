@@ -10,7 +10,10 @@
     "viewProfile": "View Profile",
     "subscription": "Subscription",
     "takeTour": "Take a tour",
-    "logOut": "Log Out"
+    "logOut": "Log Out",
+    "onlyForUsers": "{{feature}} is only available for signed-up users",
+    "signUpFree": "Sign up free",
+    "logIn": "Log in"
   },
   "main": {
     "chatHistory": "Chat History",

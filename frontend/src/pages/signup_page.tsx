@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 import { useAuth } from '../hooks/use_auth';
 import './auth_pages.css';
+
+const API_BASE_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000';
 
 export const SignupPage = () => {
   const navigate = useNavigate();
@@ -64,6 +67,16 @@ export const SignupPage = () => {
         organization: formData.organization
       });
 
+      // Link pre-user chats to the new account
+      const preUserId = localStorage.getItem('brubru_preuser_id');
+      if (preUserId) {
+        try {
+          await axios.post(`${API_BASE_URL}/api/auth/link-preuser`, { pre_user_id: preUserId });
+        } catch { /* non-critical */ }
+        localStorage.removeItem('brubru_preuser_id');
+        localStorage.removeItem('brubru_preuser_queries');
+      }
+
       // Redirect based on tier
       if (preselectedTier === 'yellow') {
         navigate('/checkout?tier=yellow');
@@ -82,6 +95,17 @@ export const SignupPage = () => {
     setError('');
     try {
       await loginWithGoogle(credentialResponse);
+
+      // Link pre-user chats to the new account
+      const preUserId = localStorage.getItem('brubru_preuser_id');
+      if (preUserId) {
+        try {
+          await axios.post(`${API_BASE_URL}/api/auth/link-preuser`, { pre_user_id: preUserId });
+        } catch { /* non-critical */ }
+        localStorage.removeItem('brubru_preuser_id');
+        localStorage.removeItem('brubru_preuser_queries');
+      }
+
       if (preselectedTier === 'yellow') {
         navigate('/checkout?tier=yellow');
       } else {

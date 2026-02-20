@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { Sidebar } from '../components/shared/sidebar';
 import { ChatInterface } from '../components/chat/chat_interface';
 import { DocumentUpload } from '../components/chat/document_upload';
+import { useAuth } from '../hooks/use_auth';
 import './main_page.css';
 
 interface MainPageProps {
@@ -14,6 +15,7 @@ interface MainPageProps {
 
 export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => {
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const state = location.state as { initialQuestion?: string; source?: string; findingId?: number } | null;
   const [uploadedDocumentIds, setUploadedDocumentIds] = useState<string[]>([]);
@@ -38,10 +40,12 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
             </p>
           </div>
 
-          {/* Document Upload Section */}
-          <div className="main-page__documents">
-            <DocumentUpload onUpload={handleDocumentUpload} />
-          </div>
+          {/* Document Upload Section - only for authenticated users */}
+          {isAuthenticated && (
+            <div className="main-page__documents">
+              <DocumentUpload onUpload={handleDocumentUpload} />
+            </div>
+          )}
         </div>
       </Sidebar>
 

@@ -44,6 +44,7 @@ class ChatMessageRequest(BaseModel):
     message: str = Field(..., description="User message", min_length=1, max_length=5000)
     chat_id: Optional[str] = Field(None, description="Conversation ID (optional, for continuing conversation)")
     user_id: Optional[str] = Field(None, description="User ID (optional)")
+    pre_user_id: Optional[str] = Field(None, description="Pre-user ID for anonymous session tracking (optional)")
     document_ids: Optional[List[str]] = Field(None, description="Document IDs to include in context (optional)")
     use_context: bool = Field(True, description="Whether to inject EU context")
     stream: bool = Field(False, description="Whether to stream response")
@@ -77,7 +78,7 @@ class CitationsResponse(BaseModel):
 
 # Database helper functions (sync, run via executor)
 
-def _get_or_create_chat(chat_id_str: str, user_id: Optional[str] = None) -> tuple:
+def _get_or_create_chat(chat_id_str: str, user_id: Optional[str] = None, pre_user_id: Optional[str] = None) -> tuple:
     """Get existing chat or create new one. Returns (chat_id_str, messages_list)."""
     db = SessionLocal()
     try:
@@ -101,8 +102,18 @@ def _get_or_create_chat(chat_id_str: str, user_id: Optional[str] = None) -> tupl
             return str(chat.id), msg_list
 
         # Create new chat
+        # For pre-users without a user_id, generate a deterministic UUID from pre_user_id
+        # so the NOT NULL constraint on user_id is satisfied even before migration 020
+        if user_id:
+            chat_user_id = uuid_mod.UUID(user_id)
+        elif pre_user_id:
+            chat_user_id = uuid_mod.uuid5(uuid_mod.NAMESPACE_URL, f"preuser:{pre_user_id}")
+        else:
+            chat_user_id = uuid_mod.uuid4()
+
         new_chat = Chat(
-            user_id=uuid_mod.UUID(user_id) if user_id else uuid_mod.uuid4(),
+            user_id=chat_user_id,
+            pre_user_id=pre_user_id,
             title=None,
             message_count=0,
         )
@@ -329,11 +340,11 @@ async def send_message(
 
         if request.chat_id:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, request.chat_id, request.user_id
+                None, _get_or_create_chat, request.chat_id, request.user_id, request.pre_user_id
             )
         else:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id
+                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id, request.pre_user_id
             )
 
         # Build conversation history
@@ -435,11 +446,11 @@ async def stream_message(request: ChatMessageRequest):
 
         if request.chat_id:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, request.chat_id, request.user_id
+                None, _get_or_create_chat, request.chat_id, request.user_id, request.pre_user_id
             )
         else:
             chat_id, history_dicts = await loop.run_in_executor(
-                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id
+                None, _get_or_create_chat, str(uuid_mod.uuid4()), request.user_id, request.pre_user_id
             )
 
         history = [
