@@ -78,7 +78,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
   useEffect(() => {
     // Pre-user: show generic welcome
     if (!isAuthenticated) {
-      setPersonalizedGreeting('Welcome to Brubru! Ask me anything about EU policy, legislation, or institutional processes!');
+      setPersonalizedGreeting('Welcome to Brubru, your AI partner for EU affairs! Ask me about any EU policy, legislation, committee, or institutional process. I can help you track legislation, identify key decision-makers, analyse regulatory impact, and much more.');
       return;
     }
 
@@ -115,7 +115,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
     const fetchExamples = async () => {
       try {
         const locale = (navigator.language || 'en').toLowerCase();
-        const tier = (user?.subscription_tier || '').toLowerCase() || undefined;
+        const tier = (user?.subscription_tier || 'blue').toLowerCase();
         const resp = await axios.get(`${API_BASE_URL}/api/chat/examples`, {
           params: { locale, scope: 'main_chat', tier, limit: 4 },
         });
@@ -154,10 +154,10 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
           id: 'blocked_' + Date.now(),
           role: 'assistant',
           content: 'You have reached the limit for non-registered users. Sign up for free to continue chatting and unlock all of Brubru\'s features:\n\n'
-            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
-            + '- **Amendator** -- Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
-            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
-            + '- **Tenderator** -- Find and track EU public procurement tenders\n\n'
+            + '- **My EU Bubble**: Track EU legislation, RSS feeds, predictions, and committee work\n'
+            + '- **Amendator**: Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
+            + '- **EU Law Comply**: AI-powered compliance gap analysis against EU regulations\n'
+            + '- **Tenderator**: Find and track EU public procurement tenders\n\n'
             + '[Sign up for free](/signup)',
           timestamp: new Date(),
         };
@@ -265,10 +265,10 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
           id: 'blocked_' + Date.now(),
           role: 'assistant',
           content: 'You have reached the limit for non-registered users. Sign up for free to continue chatting and unlock all of Brubru\'s features:\n\n'
-            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
-            + '- **Amendator** -- Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
-            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
-            + '- **Tenderator** -- Find and track EU public procurement tenders\n\n'
+            + '- **My EU Bubble**: Track EU legislation, RSS feeds, predictions, and committee work\n'
+            + '- **Amendator**: Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
+            + '- **EU Law Comply**: AI-powered compliance gap analysis against EU regulations\n'
+            + '- **Tenderator**: Find and track EU public procurement tenders\n\n'
             + '[Sign up for free](/signup)',
           timestamp: new Date(),
         };

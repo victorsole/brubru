@@ -108,7 +108,8 @@ export const Header = () => {
             { path: '/eulawcomply', icon: mdiScaleBalance, labelKey: 'header.euLawComply', color: 'silver' },
             { path: '/tenderator', icon: mdiPiggyBankOutline, labelKey: 'header.tenderator', color: 'gold', requiresBlue: true },
           ].map((item) => {
-            if (item.requiresBlue && !hasBlueAccess) return null;
+            // Pre-users see everything (Blue-tier preview); logged-in users check tier
+            if (item.requiresBlue && user && !hasBlueAccess) return null;
             const active = isActive(item.path);
 
             // Pre-user: disable all nav buttons except Main (chat)

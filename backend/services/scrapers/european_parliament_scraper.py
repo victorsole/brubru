@@ -308,8 +308,11 @@ class EuropeanParliamentScraper(BaseScraper):
 
         members = []
 
-        # Find all member sections
-        member_sections = soup.find_all('div', class_='erpl_member-list-item')
+        # Find all member sections (EP website redesign: erpl_ -> es_ class prefix)
+        member_sections = (
+            soup.find_all('div', class_='es_member-list-item')
+            or soup.find_all('div', class_='erpl_member-list-item')
+        )
 
         for section in member_sections:
             try:
@@ -324,45 +327,65 @@ class EuropeanParliamentScraper(BaseScraper):
 
                 mep_id = mep_id_match.group(1)
 
-                # Extract name - use regex to extract only the name before role/group/country
-                # The link text is concatenated like "Antonio DECAROChairS&DItaly"
-                # We want to extract just "Antonio DECARO"
-                full_text = mep_link.get_text(strip=True)
-
-                # Pattern: Name usually comes before keywords like Chair, Vice-Chair, S&D, EPP, etc.
-                # Names contain letters, spaces, hyphens, apostrophes, and accented characters
-                name_match = re.match(r'^([A-Za-zÀ-ÿ\s\-\'\.]+?)(?:Chair|Vice-Chair|Member|Substitute|S&D|EPP|Renew|ECR|Greens|ID|The Left|PPE|PfE)', full_text, re.IGNORECASE)
-
-                if name_match:
-                    name = name_match.group(1).strip()
+                # Extract name from the dedicated title element (new format)
+                name_elem = section.find('div', class_='es_title-h4')
+                if name_elem:
+                    name = name_elem.get_text(strip=True)
                 else:
-                    # Fallback: just use the full text if pattern doesn't match
-                    name = full_text
+                    # Fallback: parse from link text (old format)
+                    full_text = mep_link.get_text(strip=True)
+                    name_match = re.match(
+                        r'^([A-Za-zÀ-ÿ\s\-\'\.]+?)(?:Chair|Vice-Chair|Member|Substitute|S&D|EPP|Renew|ECR|Greens|ID|The Left|PPE|PfE)',
+                        full_text, re.IGNORECASE
+                    )
+                    name = name_match.group(1).strip() if name_match else full_text
 
-                # Extract country
-                country_elem = section.find('span', class_='erpl_title-text') or section.find('span', class_='ep_name')
+                # Extract role, political group, and country from sln-additional-info spans (new format)
+                info_spans = section.find_all('span', class_='sln-additional-info')
+                role = "Member"
+                political_group = ""
                 country = ""
-                if country_elem:
-                    country_text = country_elem.get_text(strip=True)
-                    # Country is usually in format "Belgium" or "Belgium - Group"
-                    country_parts = country_text.split('-')[0].strip()
-                    country = country_parts[:2].upper() if len(country_parts) >= 2 else country_parts
 
-                # Extract political group
-                group_elem = section.find('span', class_='ep_group')
-                political_group = group_elem.get_text(strip=True) if group_elem else ""
+                if info_spans:
+                    # New format: spans are in order [role?, group, country]
+                    # Roles: Chair, Vice-Chair, Member, Substitute
+                    # Groups: S&D, EPP, PPE, Renew, ECR, Greens/EFA, The Left, PfE, ESN, NI
+                    role_keywords = {'chair', 'vice-chair', 'member', 'substitute'}
+                    group_keywords = {'s&d', 'epp', 'ppe', 'renew', 'ecr', 'greens/efa', 'the left', 'pfe', 'esn', 'ni', 'id', 'greens'}
+                    for span in info_spans:
+                        text = span.get_text(strip=True)
+                        text_lower = text.lower()
+                        if text_lower in role_keywords or 'chair' in text_lower:
+                            if 'vice' in text_lower:
+                                role = "Vice-Chair"
+                            elif 'chair' in text_lower:
+                                role = "Chair"
+                            elif 'substitute' in text_lower:
+                                role = "Substitute"
+                        elif text_lower in group_keywords or '/' in text_lower:
+                            political_group = text
+                        else:
+                            # Remaining span is the country
+                            country = text
+                else:
+                    # Old format fallback
+                    country_elem = section.find('span', class_='erpl_title-text') or section.find('span', class_='ep_name')
+                    if country_elem:
+                        country_text = country_elem.get_text(strip=True)
+                        country = country_text.split('-')[0].strip()
 
-                # Extract role (Chair, Vice-Chair, Member, Substitute)
-                role = "Member"  # Default
-                role_elem = section.find('span', class_='erpl_title-role') or section.find('em')
-                if role_elem:
-                    role_text = role_elem.get_text(strip=True).lower()
-                    if 'chair' in role_text and 'vice' not in role_text:
-                        role = "Chair"
-                    elif 'vice' in role_text:
-                        role = "Vice-Chair"
-                    elif 'substitute' in role_text:
-                        role = "Substitute"
+                    group_elem = section.find('span', class_='ep_group')
+                    political_group = group_elem.get_text(strip=True) if group_elem else ""
+
+                    role_elem = section.find('span', class_='erpl_title-role') or section.find('em')
+                    if role_elem:
+                        role_text = role_elem.get_text(strip=True).lower()
+                        if 'chair' in role_text and 'vice' not in role_text:
+                            role = "Chair"
+                        elif 'vice' in role_text:
+                            role = "Vice-Chair"
+                        elif 'substitute' in role_text:
+                            role = "Substitute"
 
                 members.append({
                     'mep_id': mep_id,
@@ -370,7 +393,7 @@ class EuropeanParliamentScraper(BaseScraper):
                     'country': country,
                     'political_group': political_group,
                     'role': role,
-                    'profile_url': f"https://www.europarl.europa.eu{mep_link['href']}"
+                    'profile_url': f"https://www.europarl.europa.eu{mep_link['href']}" if not mep_link['href'].startswith('http') else mep_link['href']
                 })
 
             except Exception as e:

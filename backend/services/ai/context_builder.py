@@ -1068,17 +1068,39 @@ class ContextBuilder:
                     logger.warning(f"No organigramme data found for DG {dg_code}")
                     continue
 
-                # Director-General
-                dg_info = org.get('director_general', {})
-                dg_name = dg_info.get('name') if isinstance(dg_info, dict) else None
+                # Director-General (handle both old and new JSON formats, plus acting/secretary variants)
+                leadership = org.get('leadership', {})
+                dg_info = (
+                    leadership.get('director_general')
+                    or org.get('director_general')
+                    or leadership.get('acting_director_general')
+                    or org.get('secretary_general')
+                    or {}
+                )
+                dg_name = dg_info.get('name') if isinstance(dg_info, dict) else (dg_info if isinstance(dg_info, str) else None)
 
-                # Deputy DGs
+                # Deputy DGs (handle plural list, singular dict, and leadership-nested variants)
                 deputy_dgs = []
-                for ddg in org.get('deputy_directors_general', []):
-                    if 'name' in ddg:
+                raw_ddgs = (
+                    leadership.get('deputy_director_generals', [])
+                    or leadership.get('deputy_directors_general', [])
+                    or org.get('deputy_directors_general', [])
+                )
+                # Handle singular deputy_director_general (dict) at top level
+                if not raw_ddgs:
+                    singular = leadership.get('deputy_director_general', org.get('deputy_director_general'))
+                    if isinstance(singular, dict) and 'name' in singular:
+                        raw_ddgs = [singular]
+                    # Also check for deputy_director_general_2 (e.g., DG HR)
+                    singular2 = org.get('deputy_director_general_2')
+                    if isinstance(singular2, dict) and 'name' in singular2:
+                        raw_ddgs = list(raw_ddgs) + [singular2]
+
+                for ddg in raw_ddgs:
+                    if isinstance(ddg, dict) and 'name' in ddg:
                         deputy_dgs.append({
                             'name': ddg['name'],
-                            'responsibilities': ddg.get('responsibilities', ''),
+                            'responsibilities': ddg.get('responsibilities', ddg.get('responsible_for', '')),
                             'email': _generate_ec_email(ddg['name'])
                         })
 
@@ -1108,7 +1130,10 @@ class ContextBuilder:
                 personnel_data.append({
                     'dg_code': dg_code.upper(),
                     'dg_name': org.get('dg_name', ''),
-                    'commissioner': org.get('commissioner', org.get('executive_vice_president', '')),
+                    'commissioner': (
+                    org['commissioner'].get('name', '') if isinstance(org.get('commissioner'), dict)
+                    else org.get('commissioner', org.get('executive_vice_president', ''))
+                ),
                     'director_general': dg_name,
                     'director_general_email': _generate_ec_email(dg_name) if dg_name else '',
                     'deputy_directors_general': deputy_dgs,
@@ -1689,15 +1714,13 @@ class ContextBuilder:
         try:
             db = SessionLocal()
 
-            # Tier gate: Yellow and Blue only
+            # Tier gate: Yellow and Blue only (pre-users get Blue-tier access as a preview)
             if user_id:
                 user = db.query(User).filter(User.id == user_id).first()
                 if not user or user.subscription_tier == 'white':
                     db.close()
                     return []
-            else:
-                db.close()
-                return []
+            # Pre-users (user_id=None) get full access to showcase Brubru's capabilities
 
             documents = []
             query_lower = query.lower()
