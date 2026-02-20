@@ -10,7 +10,10 @@
     "viewProfile": "Bekijk Profiel",
     "subscription": "Abonnement",
     "takeTour": "Doe een rondleiding",
-    "logOut": "Uitloggen"
+    "logOut": "Uitloggen",
+    "onlyForUsers": "{{feature}} is alleen beschikbaar voor geregistreerde gebruikers",
+    "signUpFree": "Gratis registreren",
+    "logIn": "Inloggen"
   },
   "main": {
     "chatHistory": "Chat Geschiedenis",
@@ -47,7 +50,53 @@
     "dashboard": "Dashboard",
     "documents": "Documenten",
     "amendments": "Amendementen",
-    "analytics": "Analyses"
+    "analytics": "Analyses",
+    "tabs": {
+      "consultations": "EC Openbare Raadplegingen",
+      "predictions": "Voorspellingen"
+    },
+    "consultations": {
+      "title": "EC Openbare Raadplegingen",
+      "subtitle": "Neem deel aan EU-beleidsvorming via het \"Have Your Say\" portaal",
+      "status": "Status",
+      "dg": "DG",
+      "policyArea": "Beleidsgebied",
+      "policyAreas": "Beleidsgebieden",
+      "allDGs": "Alle DG's",
+      "allAreas": "Alle Gebieden",
+      "search": "Raadplegingen zoeken...",
+      "clearFilters": "Filters wissen",
+      "noResults": "Geen raadplegingen gevonden",
+      "closingSoon": "Sluit binnenkort",
+      "deadline": "Deadline",
+      "noDeadline": "Geen deadline",
+      "responses": "reacties",
+      "track": "Volgen",
+      "untrack": "Niet meer volgen",
+      "tracked": "Gevolgd",
+      "view": "Bekijken",
+      "openPortal": "Openen in Have Your Say",
+      "openInPortal": "Openen in Have Your Say",
+      "description": "Beschrijving",
+      "documents": "Documenten",
+      "relatedLegislation": "Gerelateerde Wetgeving",
+      "lastUpdated": "Laatst bijgewerkt",
+      "outcomePublished": "Resultaat Gepubliceerd",
+      "cta": {
+        "title": "EC Openbare Raadplegingen",
+        "description": "Neem deel aan EU-beleidsvorming met AI-ondersteuning. Volg raadplegingen, ontvang deadline-herinneringen en genereer gepersonaliseerde antwoordvoorstellen.",
+        "feature1Title": "Volg Open Raadplegingen",
+        "feature1Desc": "Monitor alle EC openbare raadplegingen in jouw beleidsgebieden. Ontvang meldingen over deadlines en nieuwe participatiemogelijkheden.",
+        "feature2Title": "Deadline-herinneringen",
+        "feature2Desc": "Ontvang herinneringen 7 dagen, 3 dagen en 1 dag voor het sluiten van raadplegingen. Mis nooit een kans om je stem te laten horen.",
+        "feature3Title": "AI-gestuurde Voorstellen",
+        "feature3Desc": "Genereer gepersonaliseerde antwoordvoorstellen op basis van jouw documenten en standpunten. (Blue niveau)",
+        "feature4Title": "Resultaatanalyse",
+        "feature4Desc": "Volg raadplegingsresultaten en bekijk hoe goed ze aansluiten bij jouw ingediende standpunten. (Blue niveau)",
+        "upgrade": "Upgraden naar Yellow",
+        "note": "Het Yellow niveau ontgrendelt tracking en meldingen. Het Blue niveau voegt AI-voorstellen en afstemmingsanalyse toe."
+      }
+    }
   },
   "amendments": {
     "title": "Amendementen",
@@ -225,6 +274,155 @@
     "search": "Zoeken",
     "filter": "Filteren",
     "close": "Sluiten",
-    "open": "Openen"
+    "open": "Openen",
+    "previous": "Vorige",
+    "next": "Volgende",
+    "pageOf": "Pagina {{current}} van {{total}}"
+  },
+  "landing": {
+    "nav": {
+      "features": "Functies",
+      "pricing": "Prijzen",
+      "about": "Over ons",
+      "logIn": "Inloggen",
+      "startFree": "Gratis beginnen"
+    },
+    "hero": {
+      "title": "Jouw AI-assistent voor de EU-bubbel",
+      "subtitle": "Analyseer wetgeving. Stel amendementen op. Navigeer EU-instellingen.",
+      "startTrial": "Gratis proefperiode",
+      "logIn": "Inloggen"
+    },
+    "intro": {
+      "eyebrow": "Wat is Brubru",
+      "heading": "<strong>Brubru</strong> is een AI-aangedreven strategische advocacy-assistent voor EU-beleidsprofessionals. Het combineert conversatie-AI met wetgevingstools om beleid te analyseren, amendementen op te stellen en EU-institutionele processen te navigeren.",
+      "text": "Ontwikkeld door <em><a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a></em>, een in Brussel gevestigd technologiebedrijf voor public affairs, bedient Brubru lobbyisten, brancheverenigingen, advocatenkantoren en NGO's die actief zijn in de EU-bubbel."
+    },
+    "video": {
+      "text": "De EU produceert <strong>meer dan 50.000 wetgevingshandelingen</strong>. Brubru helpt je vinden wat ertoe doet."
+    },
+    "product": {
+      "eyebrow": "Platform",
+      "title": "10 Tools.<br />Een Platform.",
+      "subtitle": "Alles wat EU-professionals nodig hebben",
+      "description": "Brubru vervangt dure consultants en gefragmenteerde tools door een enkel AI-aangedreven platform dat de volledige EU-advocacy workflow dekt — van onderzoek tot het opstellen van amendementen tot nalevingscontrole."
+    },
+    "features": {
+      "aiChat": "AI Beleidschat",
+      "aiChatDesc": "Stel vragen over elke EU-wet, procedure of instelling",
+      "amendments": "Amendementen Opstellen",
+      "amendmentsDesc": "AI-ondersteunde wetgevingsamendementen in Akoma Ntoso XML-formaat",
+      "rss": "RSS-feed Aggregatie",
+      "rssDesc": "Monitor meer dan 15 EU-institutionele bronnen op een plek",
+      "predictions": "Wetgevingsvoorspellingen",
+      "predictionsDesc": "AI-aangedreven resultaatvoorspellingen voor EP- en Raadsstemmingen",
+      "comply": "EU Law Comply",
+      "complyDesc": "Nalevingskloof-analyse tegen EU-wetgeving",
+      "docGen": "Documentgeneratie",
+      "docGenDesc": "Positiedocumenten, EP-briefings, gesprekspunten",
+      "legTrain": "Wetgevingstrein Tracker",
+      "legTrainDesc": "Volg meer dan 500 wetgevingsdossiers door het EU-proces",
+      "committees": "EP Commissie Monitoring",
+      "committeesDesc": "Volg lopende werkzaamheden in alle 26 EP-commissies",
+      "consultations": "Openbare Raadplegingen",
+      "consultationsDesc": "Ontdek en neem deel aan EC \"Have Your Say\" raadplegingen",
+      "languages": "23 EU-talen",
+      "languagesDesc": "Volledige interfacelokalisatie in alle officiele EU-talen"
+    },
+    "story": {
+      "eyebrow": "Hoe Brubru werkt",
+      "title": "Van onderzoeksvraag naar beleidsactie in minuten, niet weken",
+      "intro": "Brubru's AI begrijpt EU-institutionele processen, wetgevingsprocedures en beleidscontext. Zo gebruiken professionals het elke dag.",
+      "step1Title": "Stel een beleidsvraag",
+      "step1Content": "Typ elke EU-beleidsvraag in natuurlijke taal. Brubru's AI put uit een kennisbank van meer dan 50.000 EU-wetten, EP-commissierapporten, Commissievoorstellen, EPRS-briefings en 11 open rapporten van Beresol over onderwerpen van AI-wetimplementatie tot CBAM-naleving.",
+      "step2Title": "Volg wat ertoe doet",
+      "step2Content": "Stel RSS-feeds in van het Europees Parlement, de Raad, de Commissie, EUR-Lex en meer. Volg specifieke wetgevingsdossiers via de Wetgevingstrein, monitor EP-commissiewerkzaamheden en ontvang meldingen over openbare raadplegingen met naderende deadlines.",
+      "step3Title": "Stel amendementen op",
+      "step3Content": "Laad elke EU-verordening of richtlijn van EUR-Lex, selecteer het artikel of de overweging die je wilt amenderen en laat de AI wijzigingen voorstellen. Exporteer in Akoma Ntoso XML, PDF of Word-formaat volgens de officiele EP-richtlijnen.",
+      "step4Title": "Genereer documenten",
+      "step4Content": "Produceer AI-aangedreven positiedocumenten, informatienota's voor Europarlementariers en gesprekspunten afgestemd op jouw beleidsgebied. Voer nalevingskloof-analyses uit met EU Law Comply om te controleren hoe nieuwe wetgeving jouw organisatie of sector beinvloedt."
+    },
+    "pricing": {
+      "eyebrow": "Prijzen",
+      "title": "<strong>Kies je plan</strong>",
+      "subtitle": "Begin gratis, upgrade wanneer je meer nodig hebt",
+      "white": {
+        "badge": "WHITE",
+        "name": "Basis",
+        "price": "€0",
+        "period": "/maand",
+        "f1": "Basis AI-chat",
+        "f2": "EU-wetgeving doorzoeken",
+        "f3": "EP-profielen bekijken",
+        "f4": "5 amendementen/maand",
+        "f5": "Watermerk op exports",
+        "button": "Gratis beginnen"
+      },
+      "yellow": {
+        "badge": "YELLOW — MEEST POPULAIR",
+        "name": "Professioneel",
+        "price": "€79",
+        "period": "/maand",
+        "savings": "of €790/jaar (bespaar €158)",
+        "f1": "Alles in White",
+        "f2": "Onbeperkte amendementen",
+        "f3": "Geavanceerde AI + voorspellingen",
+        "f4": "PDF/Word downloads",
+        "f5": "Aangepaste RSS-meldingen",
+        "f6": "API-toegang (1.000 aanroepen/maand)",
+        "button": "14 dagen proefperiode"
+      },
+      "blue": {
+        "badge": "BLUE",
+        "name": "Enterprise",
+        "price": "Aangepaste prijzen",
+        "note": "5+ gebruikers — Neem contact op voor een offerte op maat",
+        "f1": "Alles in Yellow",
+        "f2": "Multi-user teams (5+)",
+        "f3": "Domeinspecialisatie",
+        "f4": "Aangepaste kennisbank",
+        "f5": "Toegewijd accountmanager",
+        "button": "Neem contact op"
+      }
+    },
+    "clients": {
+      "eyebrow": "Blue Niveau",
+      "title": "Gespecialiseerde Brubru",
+      "subtitle": "Op maat gemaakt voor jouw sector",
+      "contactUs": "Neem contact op",
+      "agriTitle": "Landbouw en Voeding",
+      "agriDesc": "Gespecialiseerd in GLB, voedselveiligheid, biologische landbouw en plattelandsontwikkeling",
+      "transportTitle": "Transport en Infrastructuur",
+      "transportDesc": "Gericht op spoorwegregelgeving, TEN-T, mobiliteit en logistiek"
+    },
+    "about": {
+      "eyebrow": "Over Brubru",
+      "title": "Gemaakt in <strong>Brussel</strong>, voor de <strong>EU-bubbel</strong>",
+      "text1": "Brubru is ontwikkeld door <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>, een in Brussel gevestigd technologiebedrijf voor public affairs. We combineren diepgaand begrip van EU-institutionele processen met geavanceerde AI om tools te creeren die echt werken voor beleidsprofessionals.",
+      "text2": "Onze missie is om de toegang tot EU-beleidsintelligentie te democratiseren. Of je nu een lobbyist bent die wetgevingsdossiers volgt, een NGO die amendementen opstelt, of een branchevereniging die raadplegingen monitort — Brubru geeft je dezelfde analytische kracht als de grootste kantoren in de stad.",
+      "gdprTitle": "AVG-conform",
+      "gdprDesc": "In de EU gehoste infrastructuur. Jouw gegevens blijven in Europa.",
+      "multilingualTitle": "Meertalig",
+      "multilingualDesc": "AI begrijpt en antwoordt in alle EU-talen.",
+      "multiAiTitle": "Multi-AI Engine",
+      "multiAiDesc": "Mistral, Claude, GPT-4 en Gemini voor betrouwbaarheid.",
+      "lawsTitle": "50.000+ EU-wetten",
+      "lawsDesc": "Uitgebreide kennisbank van EU-wetgeving.",
+      "founderRole": "Oprichter en CEO",
+      "founderBio": "In Brussel gevestigde public affairs professional en technoloog. Victor richtte <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> op om de kloof te overbruggen tussen EU-beleidsexpertise en moderne AI-technologie, waardoor institutionele kennis toegankelijk wordt voor iedereen in de EU-bubbel."
+    },
+    "cta": {
+      "title": "Klaar om de EU-bubbel te navigeren met AI?",
+      "text": "Sluit je aan bij EU-beleidsprofessionals die Brubru gebruiken om slimmer te werken",
+      "button": "Gratis account aanmaken"
+    },
+    "footer": {
+      "copyright": "© 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru is een product van <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
+      "aboutUs": "Over ons",
+      "privacy": "Privacy",
+      "terms": "Voorwaarden",
+      "cookies": "Cookies",
+      "contact": "Contact"
+    }
   }
 }

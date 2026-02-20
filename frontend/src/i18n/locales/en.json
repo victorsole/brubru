@@ -278,5 +278,151 @@
     "previous": "Previous",
     "next": "Next",
     "pageOf": "Page {{current}} of {{total}}"
+  },
+  "landing": {
+    "nav": {
+      "features": "Features",
+      "pricing": "Pricing",
+      "about": "About",
+      "logIn": "Log In",
+      "startFree": "Start Free"
+    },
+    "hero": {
+      "title": "Your AI-Powered EU Bubble Assistant",
+      "subtitle": "Analyse legislation. Draft amendments. Navigate EU institutions.",
+      "startTrial": "Start Free Trial",
+      "logIn": "Log In"
+    },
+    "intro": {
+      "eyebrow": "What is Brubru",
+      "heading": "<strong>Brubru</strong> is an AI-powered strategic advocacy assistant for EU policy professionals. It combines conversational AI with legislative tools to help users analyse policies, draft amendments, and navigate EU institutional processes.",
+      "text": "Built by <em><a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a></em>, a Brussels-based public affairs technology company, Brubru serves lobbyists, trade associations, law firms, and NGOs working in the EU bubble."
+    },
+    "video": {
+      "text": "The EU produces <strong>50,000+ legislative acts</strong>. Brubru helps you find what matters."
+    },
+    "product": {
+      "eyebrow": "Platform",
+      "title": "10 Tools.<br />One Platform.",
+      "subtitle": "Everything EU professionals need",
+      "description": "Brubru replaces expensive consultants and fragmented tools with a single AI-powered platform that covers the full EU advocacy workflow \u2014 from research to amendment drafting to compliance checking."
+    },
+    "features": {
+      "aiChat": "AI Policy Chat",
+      "aiChatDesc": "Ask questions about any EU law, procedure, or institution",
+      "amendments": "Amendment Drafting",
+      "amendmentsDesc": "AI-assisted legislative amendments in Akoma Ntoso XML",
+      "rss": "RSS Feed Aggregation",
+      "rssDesc": "Monitor 15+ EU institutional sources in one place",
+      "predictions": "Legislative Predictions",
+      "predictionsDesc": "AI-powered outcome forecasts for EP and Council votes",
+      "comply": "EU Law Comply",
+      "complyDesc": "Compliance gap analysis against EU legislation",
+      "docGen": "Document Generation",
+      "docGenDesc": "Position papers, MEP briefings, talking points",
+      "legTrain": "Legislative Train Tracker",
+      "legTrainDesc": "Follow 500+ legislative files through the EU process",
+      "committees": "EP Committee Monitoring",
+      "committeesDesc": "Track work in progress across all 26 EP committees",
+      "consultations": "Public Consultations",
+      "consultationsDesc": "Discover and participate in EC \"Have Your Say\" consultations",
+      "languages": "23 EU Languages",
+      "languagesDesc": "Full interface localisation across all official EU languages"
+    },
+    "story": {
+      "eyebrow": "How Brubru Works",
+      "title": "From research question to policy action in minutes, not weeks",
+      "intro": "Brubru\u2019s AI understands EU institutional processes, legislative procedures, and policy context. Here\u2019s how professionals use it every day.",
+      "step1Title": "Ask a policy question",
+      "step1Content": "Type any EU policy question in natural language. Brubru\u2019s AI draws on a knowledge base of 50,000+ EU laws, EP committee reports, Commission proposals, EPRS briefings, and 11 Beresol open reports covering topics from AI Act implementation to CBAM compliance.",
+      "step2Title": "Track what matters",
+      "step2Content": "Set up RSS feeds from the European Parliament, Council, Commission, EUR-Lex, and more. Track specific legislative files through the Legislative Train, monitor EP committee work, and get alerts on public consultations with upcoming deadlines.",
+      "step3Title": "Draft amendments",
+      "step3Content": "Load any EU regulation or directive from EUR-Lex, select the article or recital you want to amend, and let the AI suggest changes. Export in Akoma Ntoso XML, PDF, or Word format following official EP formatting guidelines.",
+      "step4Title": "Generate documents",
+      "step4Content": "Produce AI-powered position papers, MEP briefing notes, and talking points tailored to your policy area. Run compliance gap analysis with EU Law Comply to check how new legislation affects your organisation or sector."
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "<strong>Choose Your Plan</strong>",
+      "subtitle": "Start free, upgrade when you need more",
+      "white": {
+        "badge": "WHITE",
+        "name": "Basic",
+        "price": "\u20ac0",
+        "period": "/month",
+        "f1": "Basic AI chat",
+        "f2": "Search EU legislation",
+        "f3": "View MEP profiles",
+        "f4": "5 amendments/month",
+        "f5": "Watermark on exports",
+        "button": "Start Free"
+      },
+      "yellow": {
+        "badge": "YELLOW \u2014 MOST POPULAR",
+        "name": "Professional",
+        "price": "\u20ac79",
+        "period": "/month",
+        "savings": "or \u20ac790/year (save \u20ac158)",
+        "f1": "Everything in White",
+        "f2": "Unlimited amendments",
+        "f3": "Advanced AI + predictions",
+        "f4": "PDF/Word downloads",
+        "f5": "Custom RSS alerts",
+        "f6": "API access (1,000 calls/month)",
+        "button": "Start 14-Day Trial"
+      },
+      "blue": {
+        "badge": "BLUE",
+        "name": "Enterprise",
+        "price": "Custom pricing",
+        "note": "5+ users \u2014 Contact us for a tailored quote",
+        "f1": "Everything in Yellow",
+        "f2": "Multi-user teams (5+)",
+        "f3": "Domain specialisation",
+        "f4": "Custom knowledge base",
+        "f5": "Dedicated account manager",
+        "button": "Contact Us"
+      }
+    },
+    "clients": {
+      "eyebrow": "Blue Tier",
+      "title": "Specialised Brubru",
+      "subtitle": "Custom-built for your industry",
+      "contactUs": "Contact Us",
+      "agriTitle": "Agriculture & Food",
+      "agriDesc": "Specialised in CAP, food safety, organic farming, and rural development",
+      "transportTitle": "Transport & Infrastructure",
+      "transportDesc": "Focused on railway regulations, TEN-T, mobility, and logistics"
+    },
+    "about": {
+      "eyebrow": "About Brubru",
+      "title": "Built in <strong>Brussels</strong>, for the <strong>EU bubble</strong>",
+      "text1": "Brubru is developed by <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>, a Brussels-based public affairs technology company. We combine deep understanding of EU institutional processes with cutting-edge AI to create tools that actually work for policy professionals.",
+      "text2": "Our mission is to democratise access to EU policy intelligence. Whether you\u2019re a lobbyist tracking legislative files, an NGO drafting amendments, or a trade association monitoring consultations \u2014 Brubru gives you the same analytical power as the largest firms in town.",
+      "gdprTitle": "GDPR Compliant",
+      "gdprDesc": "EU-hosted infrastructure. Your data stays in Europe.",
+      "multilingualTitle": "Multilingual",
+      "multilingualDesc": "AI understands and responds in all EU languages.",
+      "multiAiTitle": "Multi-AI Engine",
+      "multiAiDesc": "Mistral, Claude, GPT-4, and Gemini for reliability.",
+      "lawsTitle": "50,000+ EU Laws",
+      "lawsDesc": "Comprehensive knowledge base of EU legislation.",
+      "founderRole": "Founder & CEO",
+      "founderBio": "Brussels-based public affairs professional and technologist. Victor founded <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> to bridge the gap between EU policy expertise and modern AI technology, making institutional knowledge accessible to everyone in the EU bubble."
+    },
+    "cta": {
+      "title": "Ready to navigate the EU bubble with AI?",
+      "text": "Join EU policy professionals using Brubru to work smarter",
+      "button": "Create Free Account"
+    },
+    "footer": {
+      "copyright": "\u00a9 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru is a product of <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
+      "aboutUs": "About Us",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "cookies": "Cookies",
+      "contact": "Contact"
+    }
   }
 }

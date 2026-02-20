@@ -10,7 +10,10 @@
     "viewProfile": "Ver Perfil",
     "subscription": "Suscripcion",
     "takeTour": "Hacer un tour",
-    "logOut": "Cerrar Sesion"
+    "logOut": "Cerrar Sesion",
+    "onlyForUsers": "{{feature}} solo esta disponible para usuarios registrados",
+    "signUpFree": "Registrate gratis",
+    "logIn": "Iniciar sesion"
   },
   "main": {
     "chatHistory": "Historial de Chat",
@@ -47,7 +50,53 @@
     "dashboard": "Panel",
     "documents": "Documentos",
     "amendments": "Enmiendas",
-    "analytics": "Analiticas"
+    "analytics": "Analiticas",
+    "tabs": {
+      "consultations": "Consultas Publicas de la CE",
+      "predictions": "Predicciones"
+    },
+    "consultations": {
+      "title": "Consultas Publicas de la CE",
+      "subtitle": "Participa en la elaboracion de politicas de la UE a traves del portal \"Have Your Say\"",
+      "status": "Estado",
+      "dg": "DG",
+      "policyArea": "Area Politica",
+      "policyAreas": "Areas Politicas",
+      "allDGs": "Todas las DG",
+      "allAreas": "Todas las Areas",
+      "search": "Buscar consultas...",
+      "clearFilters": "Limpiar filtros",
+      "noResults": "No se encontraron consultas",
+      "closingSoon": "Cierra pronto",
+      "deadline": "Plazo",
+      "noDeadline": "Sin plazo",
+      "responses": "respuestas",
+      "track": "Seguir",
+      "untrack": "Dejar de seguir",
+      "tracked": "Seguida",
+      "view": "Ver",
+      "openPortal": "Abrir en Have Your Say",
+      "openInPortal": "Abrir en Have Your Say",
+      "description": "Descripcion",
+      "documents": "Documentos",
+      "relatedLegislation": "Legislacion Relacionada",
+      "lastUpdated": "Ultima actualizacion",
+      "outcomePublished": "Resultado Publicado",
+      "cta": {
+        "title": "Consultas Publicas de la CE",
+        "description": "Participa en la elaboracion de politicas de la UE con asistencia de IA. Sigue consultas, recibe recordatorios de plazos y genera propuestas de respuesta personalizadas.",
+        "feature1Title": "Seguir Consultas Abiertas",
+        "feature1Desc": "Monitoriza todas las consultas publicas de la CE en tus areas politicas. Recibe notificaciones sobre plazos y nuevas oportunidades de participacion.",
+        "feature2Title": "Recordatorios de Plazos",
+        "feature2Desc": "Recibe recordatorios 7 dias, 3 dias y 1 dia antes del cierre de las consultas. No pierdas ninguna oportunidad de participar.",
+        "feature3Title": "Propuestas con IA",
+        "feature3Desc": "Genera propuestas de respuesta personalizadas basadas en tus documentos y posiciones. (Nivel Blue)",
+        "feature4Title": "Analisis de Resultados",
+        "feature4Desc": "Sigue los resultados de las consultas y comprueba como se alinean con tus posiciones enviadas. (Nivel Blue)",
+        "upgrade": "Mejorar a Yellow",
+        "note": "El nivel Yellow desbloquea el seguimiento y las notificaciones. El nivel Blue anade propuestas con IA y analisis de alineacion."
+      }
+    }
   },
   "amendments": {
     "title": "Enmiendas",
@@ -225,6 +274,155 @@
     "search": "Buscar",
     "filter": "Filtrar",
     "close": "Cerrar",
-    "open": "Abrir"
+    "open": "Abrir",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "pageOf": "Pagina {{current}} de {{total}}"
+  },
+  "landing": {
+    "nav": {
+      "features": "Funciones",
+      "pricing": "Precios",
+      "about": "Nosotros",
+      "logIn": "Iniciar sesion",
+      "startFree": "Empezar gratis"
+    },
+    "hero": {
+      "title": "Tu asistente IA para la burbuja de la UE",
+      "subtitle": "Analiza legislacion. Redacta enmiendas. Navega las instituciones de la UE.",
+      "startTrial": "Prueba gratuita",
+      "logIn": "Iniciar sesion"
+    },
+    "intro": {
+      "eyebrow": "Que es Brubru",
+      "heading": "<strong>Brubru</strong> es un asistente estrategico de advocacy impulsado por IA para profesionales de politicas de la UE. Combina IA conversacional con herramientas legislativas para ayudar a analizar politicas, redactar enmiendas y navegar los procesos institucionales de la UE.",
+      "text": "Desarrollado por <em><a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a></em>, una empresa de tecnologia de asuntos publicos con sede en Bruselas, Brubru sirve a lobbistas, asociaciones sectoriales, bufetes de abogados y ONGs que trabajan en la burbuja de la UE."
+    },
+    "video": {
+      "text": "La UE produce <strong>mas de 50.000 actos legislativos</strong>. Brubru te ayuda a encontrar lo que importa."
+    },
+    "product": {
+      "eyebrow": "Plataforma",
+      "title": "10 Herramientas.<br />Una Plataforma.",
+      "subtitle": "Todo lo que los profesionales de la UE necesitan",
+      "description": "Brubru reemplaza consultores caros y herramientas fragmentadas con una unica plataforma impulsada por IA que cubre todo el flujo de trabajo de advocacy en la UE — desde la investigacion hasta la redaccion de enmiendas y la verificacion de cumplimiento."
+    },
+    "features": {
+      "aiChat": "Chat de Politica IA",
+      "aiChatDesc": "Pregunta sobre cualquier ley, procedimiento o institucion de la UE",
+      "amendments": "Redaccion de Enmiendas",
+      "amendmentsDesc": "Enmiendas legislativas asistidas por IA en formato Akoma Ntoso XML",
+      "rss": "Agregacion de Feeds RSS",
+      "rssDesc": "Monitoriza mas de 15 fuentes institucionales de la UE en un solo lugar",
+      "predictions": "Predicciones Legislativas",
+      "predictionsDesc": "Pronosticos de resultados impulsados por IA para votaciones del PE y el Consejo",
+      "comply": "EU Law Comply",
+      "complyDesc": "Analisis de brechas de cumplimiento frente a la legislacion de la UE",
+      "docGen": "Generacion de Documentos",
+      "docGenDesc": "Documentos de posicion, briefings para eurodiputados, puntos de discusion",
+      "legTrain": "Seguimiento del Tren Legislativo",
+      "legTrainDesc": "Sigue mas de 500 expedientes legislativos a traves del proceso de la UE",
+      "committees": "Seguimiento de Comisiones del PE",
+      "committeesDesc": "Monitoriza el trabajo en curso en las 26 comisiones del PE",
+      "consultations": "Consultas Publicas",
+      "consultationsDesc": "Descubre y participa en las consultas \"Have Your Say\" de la CE",
+      "languages": "23 Lenguas de la UE",
+      "languagesDesc": "Localizacion completa de la interfaz en todas las lenguas oficiales de la UE"
+    },
+    "story": {
+      "eyebrow": "Como funciona Brubru",
+      "title": "De pregunta de investigacion a accion politica en minutos, no semanas",
+      "intro": "La IA de Brubru entiende los procesos institucionales de la UE, los procedimientos legislativos y el contexto politico. Asi es como los profesionales la usan cada dia.",
+      "step1Title": "Haz una pregunta politica",
+      "step1Content": "Escribe cualquier pregunta sobre politica de la UE en lenguaje natural. La IA de Brubru se basa en una base de conocimiento de mas de 50.000 leyes de la UE, informes de comisiones del PE, propuestas de la Comision, briefings del EPRS y 11 informes abiertos de Beresol que cubren temas desde la implementacion de la Ley de IA hasta el cumplimiento del CBAM.",
+      "step2Title": "Sigue lo que importa",
+      "step2Content": "Configura feeds RSS del Parlamento Europeo, el Consejo, la Comision, EUR-Lex y mas. Sigue expedientes legislativos especificos a traves del Tren Legislativo, monitoriza el trabajo de las comisiones del PE y recibe alertas sobre consultas publicas con plazos proximos.",
+      "step3Title": "Redacta enmiendas",
+      "step3Content": "Carga cualquier reglamento o directiva de la UE desde EUR-Lex, selecciona el articulo o considerando que quieras enmendar y deja que la IA sugiera cambios. Exporta en formato Akoma Ntoso XML, PDF o Word siguiendo las directrices oficiales del PE.",
+      "step4Title": "Genera documentos",
+      "step4Content": "Produce documentos de posicion, notas informativas para eurodiputados y puntos de discusion adaptados a tu area politica con IA. Ejecuta analisis de brechas de cumplimiento con EU Law Comply para verificar como la nueva legislacion afecta a tu organizacion o sector."
+    },
+    "pricing": {
+      "eyebrow": "Precios",
+      "title": "<strong>Elige tu plan</strong>",
+      "subtitle": "Empieza gratis, mejora cuando necesites mas",
+      "white": {
+        "badge": "WHITE",
+        "name": "Basico",
+        "price": "0€",
+        "period": "/mes",
+        "f1": "Chat IA basico",
+        "f2": "Buscar legislacion de la UE",
+        "f3": "Ver perfiles de eurodiputados",
+        "f4": "5 enmiendas/mes",
+        "f5": "Marca de agua en exportaciones",
+        "button": "Empezar gratis"
+      },
+      "yellow": {
+        "badge": "YELLOW — MAS POPULAR",
+        "name": "Profesional",
+        "price": "79€",
+        "period": "/mes",
+        "savings": "o 790€/ano (ahorra 158€)",
+        "f1": "Todo en White",
+        "f2": "Enmiendas ilimitadas",
+        "f3": "IA avanzada + predicciones",
+        "f4": "Descargas PDF/Word",
+        "f5": "Alertas RSS personalizadas",
+        "f6": "Acceso API (1.000 llamadas/mes)",
+        "button": "Prueba de 14 dias"
+      },
+      "blue": {
+        "badge": "BLUE",
+        "name": "Empresarial",
+        "price": "Precio personalizado",
+        "note": "5+ usuarios — Contactanos para un presupuesto a medida",
+        "f1": "Todo en Yellow",
+        "f2": "Equipos multiusuario (5+)",
+        "f3": "Especializacion de dominio",
+        "f4": "Base de conocimiento personalizada",
+        "f5": "Gestor de cuenta dedicado",
+        "button": "Contactanos"
+      }
+    },
+    "clients": {
+      "eyebrow": "Nivel Blue",
+      "title": "Brubru Especializado",
+      "subtitle": "Hecho a medida para tu sector",
+      "contactUs": "Contactanos",
+      "agriTitle": "Agricultura y Alimentacion",
+      "agriDesc": "Especializado en PAC, seguridad alimentaria, agricultura ecologica y desarrollo rural",
+      "transportTitle": "Transporte e Infraestructura",
+      "transportDesc": "Enfocado en regulaciones ferroviarias, RTE-T, movilidad y logistica"
+    },
+    "about": {
+      "eyebrow": "Sobre Brubru",
+      "title": "Hecho en <strong>Bruselas</strong>, para la <strong>burbuja de la UE</strong>",
+      "text1": "Brubru esta desarrollado por <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>, una empresa de tecnologia de asuntos publicos con sede en Bruselas. Combinamos un profundo conocimiento de los procesos institucionales de la UE con IA de vanguardia para crear herramientas que realmente funcionan para los profesionales de politicas.",
+      "text2": "Nuestra mision es democratizar el acceso a la inteligencia politica de la UE. Ya seas un lobbista que sigue expedientes legislativos, una ONG que redacta enmiendas o una asociacion sectorial que monitoriza consultas — Brubru te da el mismo poder analitico que las mayores firmas de la ciudad.",
+      "gdprTitle": "Cumplimiento RGPD",
+      "gdprDesc": "Infraestructura alojada en la UE. Tus datos se quedan en Europa.",
+      "multilingualTitle": "Multilingue",
+      "multilingualDesc": "La IA entiende y responde en todas las lenguas de la UE.",
+      "multiAiTitle": "Motor Multi-IA",
+      "multiAiDesc": "Mistral, Claude, GPT-4 y Gemini para fiabilidad.",
+      "lawsTitle": "50.000+ Leyes UE",
+      "lawsDesc": "Base de conocimiento completa de legislacion de la UE.",
+      "founderRole": "Fundador y CEO",
+      "founderBio": "Profesional de asuntos publicos y tecnologo con sede en Bruselas. Victor fundo <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> para tender un puente entre la experiencia en politicas de la UE y la tecnologia de IA moderna, haciendo el conocimiento institucional accesible para todos en la burbuja de la UE."
+    },
+    "cta": {
+      "title": "Listo para navegar la burbuja de la UE con IA?",
+      "text": "Unete a los profesionales de politicas de la UE que usan Brubru para trabajar mas inteligentemente",
+      "button": "Crear cuenta gratuita"
+    },
+    "footer": {
+      "copyright": "© 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru es un producto de <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
+      "aboutUs": "Sobre nosotros",
+      "privacy": "Privacidad",
+      "terms": "Terminos",
+      "cookies": "Cookies",
+      "contact": "Contacto"
+    }
   }
 }

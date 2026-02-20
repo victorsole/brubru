@@ -10,7 +10,10 @@
     "viewProfile": "Voir le Profil",
     "subscription": "Abonnement",
     "takeTour": "Faire une visite",
-    "logOut": "Deconnexion"
+    "logOut": "Deconnexion",
+    "onlyForUsers": "{{feature}} est uniquement disponible pour les utilisateurs inscrits",
+    "signUpFree": "Inscription gratuite",
+    "logIn": "Se connecter"
   },
   "main": {
     "chatHistory": "Historique des Discussions",
@@ -47,7 +50,53 @@
     "dashboard": "Tableau de bord",
     "documents": "Documents",
     "amendments": "Amendements",
-    "analytics": "Analyses"
+    "analytics": "Analyses",
+    "tabs": {
+      "consultations": "Consultations Publiques de la CE",
+      "predictions": "Predictions"
+    },
+    "consultations": {
+      "title": "Consultations Publiques de la CE",
+      "subtitle": "Participez a l'elaboration des politiques de l'UE via le portail \"Have Your Say\"",
+      "status": "Statut",
+      "dg": "DG",
+      "policyArea": "Domaine Politique",
+      "policyAreas": "Domaines Politiques",
+      "allDGs": "Toutes les DG",
+      "allAreas": "Tous les Domaines",
+      "search": "Rechercher des consultations...",
+      "clearFilters": "Effacer les filtres",
+      "noResults": "Aucune consultation trouvee",
+      "closingSoon": "Fermeture imminente",
+      "deadline": "Date limite",
+      "noDeadline": "Pas de date limite",
+      "responses": "reponses",
+      "track": "Suivre",
+      "untrack": "Ne plus suivre",
+      "tracked": "Suivie",
+      "view": "Voir",
+      "openPortal": "Ouvrir dans Have Your Say",
+      "openInPortal": "Ouvrir dans Have Your Say",
+      "description": "Description",
+      "documents": "Documents",
+      "relatedLegislation": "Legislation Associee",
+      "lastUpdated": "Derniere mise a jour",
+      "outcomePublished": "Resultat Publie",
+      "cta": {
+        "title": "Consultations Publiques de la CE",
+        "description": "Participez a l'elaboration des politiques de l'UE avec l'assistance de l'IA. Suivez les consultations, recevez des rappels de dates limites et generez des propositions de reponse personnalisees.",
+        "feature1Title": "Suivre les Consultations Ouvertes",
+        "feature1Desc": "Surveillez toutes les consultations publiques de la CE dans vos domaines politiques. Soyez notifie des dates limites et des nouvelles opportunites de participation.",
+        "feature2Title": "Rappels de Dates Limites",
+        "feature2Desc": "Recevez des rappels 7 jours, 3 jours et 1 jour avant la cloture des consultations. Ne manquez aucune opportunite de vous exprimer.",
+        "feature3Title": "Propositions par IA",
+        "feature3Desc": "Generez des propositions de reponse personnalisees basees sur vos documents et prises de position. (Niveau Blue)",
+        "feature4Title": "Analyse des Resultats",
+        "feature4Desc": "Suivez les resultats des consultations et verifiez leur alignement avec vos positions soumises. (Niveau Blue)",
+        "upgrade": "Passer a Yellow",
+        "note": "Le niveau Yellow debloque le suivi et les notifications. Le niveau Blue ajoute les propositions IA et l'analyse d'alignement."
+      }
+    }
   },
   "amendments": {
     "title": "Amendements",
@@ -225,6 +274,155 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "close": "Fermer",
-    "open": "Ouvrir"
+    "open": "Ouvrir",
+    "previous": "Precedent",
+    "next": "Suivant",
+    "pageOf": "Page {{current}} sur {{total}}"
+  },
+  "landing": {
+    "nav": {
+      "features": "Fonctionnalites",
+      "pricing": "Tarifs",
+      "about": "A propos",
+      "logIn": "Se connecter",
+      "startFree": "Commencer gratuitement"
+    },
+    "hero": {
+      "title": "Votre assistant IA pour la bulle europeenne",
+      "subtitle": "Analysez la legislation. Redigez des amendements. Naviguez les institutions de l'UE.",
+      "startTrial": "Essai gratuit",
+      "logIn": "Se connecter"
+    },
+    "intro": {
+      "eyebrow": "Qu'est-ce que Brubru",
+      "heading": "<strong>Brubru</strong> est un assistant strategique de plaidoyer propulse par l'IA pour les professionnels des politiques europeennes. Il combine l'IA conversationnelle avec des outils legislatifs pour analyser les politiques, rediger des amendements et naviguer les processus institutionnels de l'UE.",
+      "text": "Developpe par <em><a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a></em>, une entreprise de technologie des affaires publiques basee a Bruxelles, Brubru sert les lobbyistes, associations professionnelles, cabinets d'avocats et ONG travaillant dans la bulle europeenne."
+    },
+    "video": {
+      "text": "L'UE produit <strong>plus de 50 000 actes legislatifs</strong>. Brubru vous aide a trouver ce qui compte."
+    },
+    "product": {
+      "eyebrow": "Plateforme",
+      "title": "10 Outils.<br />Une Plateforme.",
+      "subtitle": "Tout ce dont les professionnels de l'UE ont besoin",
+      "description": "Brubru remplace les consultants couteux et les outils fragmentes par une plateforme unique propulsee par l'IA qui couvre l'ensemble du flux de travail de plaidoyer europeen — de la recherche a la redaction d'amendements en passant par la verification de conformite."
+    },
+    "features": {
+      "aiChat": "Chat Politique IA",
+      "aiChatDesc": "Posez des questions sur n'importe quelle loi, procedure ou institution de l'UE",
+      "amendments": "Redaction d'Amendements",
+      "amendmentsDesc": "Amendements legislatifs assistes par IA au format Akoma Ntoso XML",
+      "rss": "Agregation de Flux RSS",
+      "rssDesc": "Surveillez plus de 15 sources institutionnelles de l'UE en un seul endroit",
+      "predictions": "Predictions Legislatives",
+      "predictionsDesc": "Previsions de resultats propulsees par l'IA pour les votes du PE et du Conseil",
+      "comply": "EU Law Comply",
+      "complyDesc": "Analyse des ecarts de conformite par rapport a la legislation europeenne",
+      "docGen": "Generation de Documents",
+      "docGenDesc": "Documents de position, notes pour les eurodeputes, elements de langage",
+      "legTrain": "Suivi du Train Legislatif",
+      "legTrainDesc": "Suivez plus de 500 dossiers legislatifs a travers le processus europeen",
+      "committees": "Suivi des Commissions du PE",
+      "committeesDesc": "Surveillez les travaux en cours dans les 26 commissions du PE",
+      "consultations": "Consultations Publiques",
+      "consultationsDesc": "Decouvrez et participez aux consultations \"Have Your Say\" de la CE",
+      "languages": "23 Langues de l'UE",
+      "languagesDesc": "Localisation complete de l'interface dans toutes les langues officielles de l'UE"
+    },
+    "story": {
+      "eyebrow": "Comment fonctionne Brubru",
+      "title": "De la question de recherche a l'action politique en minutes, pas en semaines",
+      "intro": "L'IA de Brubru comprend les processus institutionnels de l'UE, les procedures legislatives et le contexte politique. Voici comment les professionnels l'utilisent chaque jour.",
+      "step1Title": "Posez une question politique",
+      "step1Content": "Tapez n'importe quelle question sur les politiques de l'UE en langage naturel. L'IA de Brubru s'appuie sur une base de connaissances de plus de 50 000 lois europeennes, rapports de commissions du PE, propositions de la Commission, briefings de l'EPRS et 11 rapports ouverts de Beresol couvrant des sujets allant de la mise en oeuvre de la loi sur l'IA a la conformite MACF.",
+      "step2Title": "Suivez ce qui compte",
+      "step2Content": "Configurez des flux RSS du Parlement europeen, du Conseil, de la Commission, d'EUR-Lex et plus encore. Suivez des dossiers legislatifs specifiques via le Train Legislatif, surveillez les travaux des commissions du PE et recevez des alertes sur les consultations publiques avec les delais a venir.",
+      "step3Title": "Redigez des amendements",
+      "step3Content": "Chargez n'importe quel reglement ou directive de l'UE depuis EUR-Lex, selectionnez l'article ou le considerant que vous souhaitez amender et laissez l'IA suggerer des modifications. Exportez au format Akoma Ntoso XML, PDF ou Word selon les directives officielles du PE.",
+      "step4Title": "Generez des documents",
+      "step4Content": "Produisez des documents de position, des notes d'information pour les eurodeputes et des elements de langage adaptes a votre domaine politique avec l'IA. Executez une analyse des ecarts de conformite avec EU Law Comply pour verifier comment la nouvelle legislation affecte votre organisation ou secteur."
+    },
+    "pricing": {
+      "eyebrow": "Tarifs",
+      "title": "<strong>Choisissez votre forfait</strong>",
+      "subtitle": "Commencez gratuitement, passez a un forfait superieur quand vous en avez besoin",
+      "white": {
+        "badge": "WHITE",
+        "name": "Basique",
+        "price": "0€",
+        "period": "/mois",
+        "f1": "Chat IA basique",
+        "f2": "Recherche de legislation europeenne",
+        "f3": "Consultation des profils d'eurodeputes",
+        "f4": "5 amendements/mois",
+        "f5": "Filigrane sur les exports",
+        "button": "Commencer gratuitement"
+      },
+      "yellow": {
+        "badge": "YELLOW — LE PLUS POPULAIRE",
+        "name": "Professionnel",
+        "price": "79€",
+        "period": "/mois",
+        "savings": "ou 790€/an (economisez 158€)",
+        "f1": "Tout dans White",
+        "f2": "Amendements illimites",
+        "f3": "IA avancee + predictions",
+        "f4": "Telechargements PDF/Word",
+        "f5": "Alertes RSS personnalisees",
+        "f6": "Acces API (1 000 appels/mois)",
+        "button": "Essai de 14 jours"
+      },
+      "blue": {
+        "badge": "BLUE",
+        "name": "Entreprise",
+        "price": "Tarification personnalisee",
+        "note": "5+ utilisateurs — Contactez-nous pour un devis sur mesure",
+        "f1": "Tout dans Yellow",
+        "f2": "Equipes multi-utilisateurs (5+)",
+        "f3": "Specialisation de domaine",
+        "f4": "Base de connaissances personnalisee",
+        "f5": "Gestionnaire de compte dedie",
+        "button": "Contactez-nous"
+      }
+    },
+    "clients": {
+      "eyebrow": "Niveau Blue",
+      "title": "Brubru Specialise",
+      "subtitle": "Concu sur mesure pour votre secteur",
+      "contactUs": "Contactez-nous",
+      "agriTitle": "Agriculture et Alimentation",
+      "agriDesc": "Specialise dans la PAC, la securite alimentaire, l'agriculture biologique et le developpement rural",
+      "transportTitle": "Transport et Infrastructure",
+      "transportDesc": "Axe sur les reglementations ferroviaires, le RTE-T, la mobilite et la logistique"
+    },
+    "about": {
+      "eyebrow": "A propos de Brubru",
+      "title": "Concu a <strong>Bruxelles</strong>, pour la <strong>bulle europeenne</strong>",
+      "text1": "Brubru est developpe par <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>, une entreprise de technologie des affaires publiques basee a Bruxelles. Nous combinons une comprehension approfondie des processus institutionnels de l'UE avec une IA de pointe pour creer des outils qui fonctionnent vraiment pour les professionnels des politiques.",
+      "text2": "Notre mission est de democratiser l'acces a l'intelligence politique europeenne. Que vous soyez un lobbyiste suivant des dossiers legislatifs, une ONG redigeant des amendements ou une association professionnelle surveillant des consultations — Brubru vous donne la meme puissance analytique que les plus grands cabinets de la ville.",
+      "gdprTitle": "Conforme au RGPD",
+      "gdprDesc": "Infrastructure hebergee dans l'UE. Vos donnees restent en Europe.",
+      "multilingualTitle": "Multilingue",
+      "multilingualDesc": "L'IA comprend et repond dans toutes les langues de l'UE.",
+      "multiAiTitle": "Moteur Multi-IA",
+      "multiAiDesc": "Mistral, Claude, GPT-4 et Gemini pour la fiabilite.",
+      "lawsTitle": "50 000+ Lois UE",
+      "lawsDesc": "Base de connaissances complete de la legislation europeenne.",
+      "founderRole": "Fondateur et PDG",
+      "founderBio": "Professionnel des affaires publiques et technologue base a Bruxelles. Victor a fonde <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> pour combler le fosse entre l'expertise en politiques europeennes et la technologie IA moderne, rendant le savoir institutionnel accessible a tous dans la bulle europeenne."
+    },
+    "cta": {
+      "title": "Pret a naviguer dans la bulle europeenne avec l'IA?",
+      "text": "Rejoignez les professionnels des politiques europeennes qui utilisent Brubru pour travailler plus intelligemment",
+      "button": "Creer un compte gratuit"
+    },
+    "footer": {
+      "copyright": "© 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru est un produit de <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
+      "aboutUs": "A propos",
+      "privacy": "Confidentialite",
+      "terms": "Conditions",
+      "cookies": "Cookies",
+      "contact": "Contact"
+    }
   }
 }
