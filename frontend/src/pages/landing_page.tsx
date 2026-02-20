@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { SUPPORTED_LANGUAGES, LANGUAGE_NAMES } from '../i18n/config';
+import type { SupportedLanguage } from '../i18n/config';
 import { CarouselSection } from '../components/carousel/carousel_section';
 import './landing_page.css';
 
@@ -42,7 +44,7 @@ const ABOUT_VALUES = [
 // =====================================================
 
 export const LandingPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [openStory, setOpenStory] = useState<number | null>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
   const ctaSectionRef = useRef<HTMLElement>(null);
@@ -123,6 +125,16 @@ export const LandingPage = () => {
             <span className="nav-link-text">{t('landing.nav.logIn')}</span>
             <span className="nav-link-text nav-link-text--hover">{t('landing.nav.logIn')}</span>
           </Link>
+          <select
+            className="nav-top__lang"
+            value={i18n.language || 'en'}
+            onChange={(e) => i18n.changeLanguage(e.target.value as SupportedLanguage)}
+            aria-label="Select language"
+          >
+            {SUPPORTED_LANGUAGES.map((lang) => (
+              <option key={lang} value={lang}>{LANGUAGE_NAMES[lang]}</option>
+            ))}
+          </select>
           <Link to="/main" className="nav-cta">{t('landing.nav.startFree')}</Link>
         </div>
       </nav>

@@ -114,6 +114,27 @@ html.landing-scroll-snap {
   align-items: center;
 }
 
+.landing .nav-top__lang {
+  padding: 0.3rem 0.5rem;
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.2s, background 0.2s;
+}
+.landing .nav-top__lang:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+.landing .nav-top__lang:focus {
+  outline: none;
+  border-color: var(--color-accent-blue);
+}
+
 .landing .nav-link {
   position: relative;
   overflow: hidden;
@@ -1415,10 +1436,11 @@ html.landing-scroll-snap {
 
   .landing .section--hero { min-height: 100vh; }
 
-  /* Nav: hide text links, keep logo + CTA */
+  /* Nav: hide text links, keep logo + lang + CTA */
   .landing .nav-top { padding: var(--spacing-sm) var(--container-padding); }
   .landing .nav-top__links { gap: var(--spacing-xs); }
   .landing .nav-top__links .nav-link { display: none; }
+  .landing .nav-top__lang { font-size: var(--font-size-xs); padding: 0.2rem 0.4rem; }
   .landing .nav-cta { font-size: var(--font-size-xs); padding: 0.4rem 0.9rem; }
 
   /* Hero */

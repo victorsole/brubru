@@ -3,7 +3,7 @@
     "main": "Principale",
     "amendator": "Amendator",
     "myEuBubble": "La Mia Bolla UE",
-    "euLawComply": "Conformita UE",
+    "euLawComply": "Conformità UE",
     "tenderator": "Tenderator",
     "profile": "Profilo",
     "adminPanel": "Pannello Admin",
@@ -11,7 +11,7 @@
     "subscription": "Abbonamento",
     "takeTour": "Fai un tour",
     "logOut": "Esci",
-    "onlyForUsers": "{{feature}} e disponibile solo per gli utenti registrati",
+    "onlyForUsers": "{{feature}} è disponibile solo per gli utenti registrati",
     "signUpFree": "Registrati gratis",
     "logIn": "Accedi"
   },
@@ -24,7 +24,7 @@
     "tagline": "Il tuo compagno IA multiagente per navigare nella bolla UE a Bruxelles",
     "startConversation": "Avvia una conversazione per analizzare la legislazione UE, elaborare campagne di advocacy o ricevere indicazioni sulle procedure del Parlamento Europeo.",
     "tryAsking": "Prova a chiedere:",
-    "example1": "Qual e lo stato della legge sull'IA?",
+    "example1": "Qual è lo stato della legge sull'IA?",
     "example2": "Mostrami gli emendamenti recenti sul GDPR",
     "example3": "Chi sono gli eurodeputati della commissione ENVI?",
     "example4": "Trova la legislazione sull'adeguamento del carbonio alle frontiere",
@@ -42,7 +42,7 @@
     "dragDrop": "Trascina e rilascia i file qui o clicca per sfogliare",
     "supported": "Supportati: PDF, Word, Testo, Markdown, PowerPoint, Excel, PNG, JPEG",
     "maxSize": "Max 10MB per file",
-    "tooLarge": "e troppo grande. La dimensione massima e 10MB."
+    "tooLarge": "è troppo grande. La dimensione massima è 10MB."
   },
   "bubble": {
     "title": "La Mia Bolla UE",
@@ -86,9 +86,9 @@
         "title": "Consultazioni Pubbliche della CE",
         "description": "Partecipa all'elaborazione delle politiche UE con assistenza IA. Segui le consultazioni, ricevi promemoria sulle scadenze e genera proposte di risposta personalizzate.",
         "feature1Title": "Segui le Consultazioni Aperte",
-        "feature1Desc": "Monitora tutte le consultazioni pubbliche della CE nelle tue aree politiche. Ricevi notifiche sulle scadenze e nuove opportunita di partecipazione.",
+        "feature1Desc": "Monitora tutte le consultazioni pubbliche della CE nelle tue aree politiche. Ricevi notifiche sulle scadenze e nuove opportunità di partecipazione.",
         "feature2Title": "Promemoria Scadenze",
-        "feature2Desc": "Ricevi promemoria 7 giorni, 3 giorni e 1 giorno prima della chiusura delle consultazioni. Non perdere nessuna opportunita di partecipare.",
+        "feature2Desc": "Ricevi promemoria 7 giorni, 3 giorni e 1 giorno prima della chiusura delle consultazioni. Non perdere nessuna opportunità di partecipare.",
         "feature3Title": "Proposte con IA",
         "feature3Desc": "Genera proposte di risposta personalizzate basate sui tuoi documenti e posizioni. (Livello Blue)",
         "feature4Title": "Analisi dei Risultati",
@@ -114,7 +114,7 @@
     "assistant": "IA",
     "analyzing": "Analizzando...",
     "foundAmendment": "Ho trovato un emendamento per te!",
-    "selectRow": "Seleziona una riga e ti suggeriro un emendamento",
+    "selectRow": "Seleziona una riga e ti suggerirò un emendamento",
     "policyPosition": "La Tua Posizione Politica:",
     "policyPlaceholder": "Incolla la tua posizione politica o gli obiettivi chiave qui...\n\nEsempio: 'Vogliamo rafforzare la protezione dei dati dei minori, garantire il consenso dei genitori per i minori di 16 anni e aumentare i requisiti di trasparenza per i responsabili del trattamento dei dati.'",
     "uploadDocs": "Carica Documenti di Politica:",
@@ -141,7 +141,7 @@
     "renewsOn": "Rinnovo abbonamento",
     "personalInfo": "Informazioni Personali",
     "email": "Email",
-    "emailNote": "L'email non puo essere modificata",
+    "emailNote": "L'email non può essere modificata",
     "fullName": "Nome Completo",
     "organisation": "Organizzazione",
     "country": "Paese",
@@ -150,13 +150,13 @@
     "saveChanges": "Salva Modifiche",
     "saved": "Salvato",
     "policyInterests": "Interessi Politici",
-    "policyDescription": "Seleziona le tue aree di interesse. Brubru usera queste preferenze per personalizzare la tua esperienza e dare priorita ai contenuti rilevanti.",
+    "policyDescription": "Seleziona le tue aree di interesse. Brubru userà queste preferenze per personalizzare la tua esperienza e dare priorità ai contenuti rilevanti.",
     "feedback": "Feedback e Supporto",
-    "feedbackDescription": "Aiutaci a migliorare Brubru condividendo i tuoi feedback, segnalando bug o richiedendo nuove funzionalita. Il tuo contributo e inestimabile per migliorare la nostra piattaforma.",
+    "feedbackDescription": "Aiutaci a migliorare Brubru condividendo i tuoi feedback, segnalando bug o richiedendo nuove funzionalità. Il tuo contributo è inestimabile per migliorare la nostra piattaforma.",
     "accountSettings": "Impostazioni Account",
     "accountCreated": "Account creato",
     "lastLogin": "Ultimo accesso",
-    "deleteWarning": "Elimina il tuo account e tutti i dati associati. Questa azione non puo essere annullata.",
+    "deleteWarning": "Elimina il tuo account e tutti i dati associati. Questa azione non può essere annullata.",
     "deleteAccount": "Elimina Account"
   },
   "subscription": {
@@ -180,7 +180,7 @@
       "annualSavings": "(risparmia 158 EUR)",
       "description": "IA avanzata e emendamenti illimitati per professionisti dell'advocacy",
       "button": "Passa a Professionale",
-      "popular": "Piu Popolare"
+      "popular": "Più Popolare"
     },
     "blue": {
       "name": "Aziendale",
@@ -192,7 +192,7 @@
       "minUsers": "5+ utenti"
     },
     "features": {
-      "title": "Confronto Funzionalita",
+      "title": "Confronto Funzionalità",
       "subtitle": "Scopri cosa include ogni piano",
       "white": {
         "chat": "Chat IA base",
@@ -214,7 +214,7 @@
         "personalization": "Saluto personalizzato"
       },
       "blue": {
-        "everything": "Tutto in Professionale, piu:",
+        "everything": "Tutto in Professionale, più:",
         "multiUser": "Account team multi-utente",
         "support": "Supporto dedicato (risposta 24h)",
         "customDomain": "Specializzazione dominio personalizzata",
@@ -230,19 +230,19 @@
       "q1": "Quali metodi di pagamento accettate?",
       "a1": "Accettiamo tutte le principali carte di credito, carte di debito e bonifici bancari tramite Stripe. I clienti aziendali possono organizzare la fatturazione.",
       "q2": "Posso cambiare piano in seguito?",
-      "a2": "Si, puoi passare a un piano superiore in qualsiasi momento. I downgrade entrano in vigore alla fine del ciclo di fatturazione corrente.",
-      "q3": "Qual e la vostra politica di rimborso?",
+      "a2": "Sì, puoi passare a un piano superiore in qualsiasi momento. I downgrade entrano in vigore alla fine del ciclo di fatturazione corrente.",
+      "q3": "Qual è la vostra politica di rimborso?",
       "a3": "Offriamo una garanzia di rimborso di 14 giorni per i piani annuali. I piani mensili possono essere cancellati in qualsiasi momento.",
       "q4": "Offrite una prova gratuita?",
-      "a4": "Il nostro livello Base e gratuito per sempre con 5 emendamenti al mese. Puoi provare le funzionalita Professionali con una prova di 14 giorni.",
+      "a4": "Il nostro livello Base è gratuito per sempre con 5 emendamenti al mese. Puoi provare le funzionalità Professionali con una prova di 14 giorni.",
       "q5": "Come funziona il prezzo Aziendale?",
-      "a5": "Il prezzo aziendale e personalizzato in base alla dimensione del team, ai requisiti delle funzionalita e al volume di utilizzo. Contattaci per un preventivo su misura.",
+      "a5": "Il prezzo aziendale è personalizzato in base alla dimensione del team, ai requisiti delle funzionalità e al volume di utilizzo. Contattaci per un preventivo su misura.",
       "q6": "Cosa succede se supero il limite di emendamenti?",
-      "a6": "Gli utenti del livello Base sono limitati a 5 emendamenti al mese. Per crearne di piu, passa a Professionale per emendamenti illimitati."
+      "a6": "Gli utenti del livello Base sono limitati a 5 emendamenti al mese. Per crearne di più, passa a Professionale per emendamenti illimitati."
     },
     "trust": {
       "title": "Affidabile per i professionisti delle politiche in tutta Europa",
-      "subtitle": "Unisciti alle organizzazioni che gia usano Brubru"
+      "subtitle": "Unisciti alle organizzazioni che già usano Brubru"
     },
     "cta": {
       "title": "Pronto per iniziare?",
@@ -258,8 +258,8 @@
     "failed": "Fallito",
     "loadingHistory": "Caricamento cronologia...",
     "retry": "Riprova",
-    "noAnalyses": "Nessuna analisi di conformita ancora",
-    "runFirstAnalysis": "Esegui la tua prima analisi di conformita per iniziare",
+    "noAnalyses": "Nessuna analisi di conformità ancora",
+    "runFirstAnalysis": "Esegui la tua prima analisi di conformità per iniziare",
     "refresh": "Aggiorna",
     "refreshing": "Aggiornamento..."
   },
@@ -281,7 +281,7 @@
   },
   "landing": {
     "nav": {
-      "features": "Funzionalita",
+      "features": "Funzionalità",
       "pricing": "Prezzi",
       "about": "Chi siamo",
       "logIn": "Accedi",
@@ -294,18 +294,18 @@
       "logIn": "Accedi"
     },
     "intro": {
-      "eyebrow": "Cos'e Brubru",
-      "heading": "<strong>Brubru</strong> e un assistente strategico di advocacy alimentato dall'IA per i professionisti delle politiche UE. Combina l'IA conversazionale con strumenti legislativi per analizzare politiche, redigere emendamenti e navigare i processi istituzionali dell'UE.",
+      "eyebrow": "Cos'è Brubru",
+      "heading": "<strong>Brubru</strong> è un assistente strategico di advocacy alimentato dall'IA per i professionisti delle politiche UE. Combina l'IA conversazionale con strumenti legislativi per analizzare politiche, redigere emendamenti e navigare i processi istituzionali dell'UE.",
       "text": "Sviluppato da <em><a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a></em>, un'azienda di tecnologia per gli affari pubblici con sede a Bruxelles, Brubru serve lobbisti, associazioni di categoria, studi legali e ONG che lavorano nella bolla UE."
     },
     "video": {
-      "text": "L'UE produce <strong>oltre 50.000 atti legislativi</strong>. Brubru ti aiuta a trovare cio che conta."
+      "text": "L'UE produce <strong>oltre 50.000 atti legislativi</strong>. Brubru ti aiuta a trovare ciò che conta."
     },
     "product": {
       "eyebrow": "Piattaforma",
       "title": "10 Strumenti.<br />Una Piattaforma.",
-      "subtitle": "Tutto cio di cui i professionisti UE hanno bisogno",
-      "description": "Brubru sostituisce consulenti costosi e strumenti frammentati con un'unica piattaforma alimentata dall'IA che copre l'intero flusso di lavoro dell'advocacy UE — dalla ricerca alla redazione di emendamenti fino alla verifica di conformita."
+      "subtitle": "Tutto ciò di cui i professionisti UE hanno bisogno",
+      "description": "Brubru sostituisce consulenti costosi e strumenti frammentati con un'unica piattaforma alimentata dall'IA che copre l'intero flusso di lavoro dell'advocacy UE — dalla ricerca alla redazione di emendamenti fino alla verifica di conformità."
     },
     "features": {
       "aiChat": "Chat Politica IA",
@@ -317,7 +317,7 @@
       "predictions": "Previsioni Legislative",
       "predictionsDesc": "Previsioni di risultati alimentate dall'IA per le votazioni del PE e del Consiglio",
       "comply": "EU Law Comply",
-      "complyDesc": "Analisi delle lacune di conformita rispetto alla legislazione UE",
+      "complyDesc": "Analisi delle lacune di conformità rispetto alla legislazione UE",
       "docGen": "Generazione Documenti",
       "docGenDesc": "Documenti di posizione, briefing per eurodeputati, punti di discussione",
       "legTrain": "Tracciamento del Treno Legislativo",
@@ -334,13 +334,13 @@
       "title": "Dalla domanda di ricerca all'azione politica in minuti, non settimane",
       "intro": "L'IA di Brubru comprende i processi istituzionali UE, le procedure legislative e il contesto politico. Ecco come i professionisti la usano ogni giorno.",
       "step1Title": "Fai una domanda politica",
-      "step1Content": "Scrivi qualsiasi domanda sulle politiche UE in linguaggio naturale. L'IA di Brubru attinge a una base di conoscenza di oltre 50.000 leggi UE, rapporti delle commissioni del PE, proposte della Commissione, briefing dell'EPRS e 11 rapporti aperti di Beresol che coprono argomenti dall'implementazione della legge sull'IA alla conformita CBAM.",
-      "step2Title": "Segui cio che conta",
+      "step1Content": "Scrivi qualsiasi domanda sulle politiche UE in linguaggio naturale. L'IA di Brubru attinge a una base di conoscenza di oltre 50.000 leggi UE, rapporti delle commissioni del PE, proposte della Commissione, briefing dell'EPRS e 11 rapporti aperti di Beresol che coprono argomenti dall'implementazione della legge sull'IA alla conformità CBAM.",
+      "step2Title": "Segui ciò che conta",
       "step2Content": "Configura feed RSS dal Parlamento Europeo, dal Consiglio, dalla Commissione, da EUR-Lex e altro. Segui dossier legislativi specifici attraverso il Treno Legislativo, monitora i lavori delle commissioni del PE e ricevi avvisi sulle consultazioni pubbliche con scadenze imminenti.",
       "step3Title": "Redigi emendamenti",
       "step3Content": "Carica qualsiasi regolamento o direttiva UE da EUR-Lex, seleziona l'articolo o il considerando che vuoi emendare e lascia che l'IA suggerisca modifiche. Esporta in formato Akoma Ntoso XML, PDF o Word seguendo le linee guida ufficiali del PE.",
       "step4Title": "Genera documenti",
-      "step4Content": "Produci documenti di posizione, note informative per eurodeputati e punti di discussione adattati alla tua area politica con l'IA. Esegui analisi delle lacune di conformita con EU Law Comply per verificare come la nuova legislazione influisce sulla tua organizzazione o settore."
+      "step4Content": "Produci documenti di posizione, note informative per eurodeputati e punti di discussione adattati alla tua area politica con l'IA. Esegui analisi delle lacune di conformità con EU Law Comply per verificare come la nuova legislazione influisce sulla tua organizzazione o settore."
     },
     "pricing": {
       "eyebrow": "Prezzi",
@@ -359,7 +359,7 @@
         "button": "Inizia gratis"
       },
       "yellow": {
-        "badge": "YELLOW — PIU POPOLARE",
+        "badge": "YELLOW — PIÙ POPOLARE",
         "name": "Professionale",
         "price": "79€",
         "period": "/mese",
@@ -393,19 +393,19 @@
       "agriTitle": "Agricoltura e Alimentazione",
       "agriDesc": "Specializzato in PAC, sicurezza alimentare, agricoltura biologica e sviluppo rurale",
       "transportTitle": "Trasporti e Infrastrutture",
-      "transportDesc": "Focalizzato su regolamentazione ferroviaria, RTE-T, mobilita e logistica"
+      "transportDesc": "Focalizzato su regolamentazione ferroviaria, RTE-T, mobilità e logistica"
     },
     "about": {
       "eyebrow": "Su Brubru",
       "title": "Creato a <strong>Bruxelles</strong>, per la <strong>bolla UE</strong>",
-      "text1": "Brubru e sviluppato da <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>, un'azienda di tecnologia per gli affari pubblici con sede a Bruxelles. Combiniamo una profonda comprensione dei processi istituzionali UE con IA all'avanguardia per creare strumenti che funzionano davvero per i professionisti delle politiche.",
-      "text2": "La nostra missione e democratizzare l'accesso all'intelligence politica UE. Che tu sia un lobbista che segue dossier legislativi, una ONG che redige emendamenti o un'associazione di categoria che monitora consultazioni — Brubru ti offre la stessa potenza analitica delle piu grandi aziende della citta.",
+      "text1": "Brubru è sviluppato da <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>, un'azienda di tecnologia per gli affari pubblici con sede a Bruxelles. Combiniamo una profonda comprensione dei processi istituzionali UE con IA all'avanguardia per creare strumenti che funzionano davvero per i professionisti delle politiche.",
+      "text2": "La nostra missione è democratizzare l'accesso all'intelligence politica UE. Che tu sia un lobbista che segue dossier legislativi, una ONG che redige emendamenti o un'associazione di categoria che monitora consultazioni — Brubru ti offre la stessa potenza analitica delle più grandi aziende della città.",
       "gdprTitle": "Conforme al GDPR",
       "gdprDesc": "Infrastruttura ospitata nell'UE. I tuoi dati restano in Europa.",
       "multilingualTitle": "Multilingue",
       "multilingualDesc": "L'IA comprende e risponde in tutte le lingue UE.",
       "multiAiTitle": "Motore Multi-IA",
-      "multiAiDesc": "Mistral, Claude, GPT-4 e Gemini per l'affidabilita.",
+      "multiAiDesc": "Mistral, Claude, GPT-4 e Gemini per l'affidabilità.",
       "lawsTitle": "50.000+ Leggi UE",
       "lawsDesc": "Base di conoscenza completa della legislazione UE.",
       "founderRole": "Fondatore e CEO",
@@ -413,11 +413,11 @@
     },
     "cta": {
       "title": "Pronto a navigare nella bolla UE con l'IA?",
-      "text": "Unisciti ai professionisti delle politiche UE che usano Brubru per lavorare in modo piu intelligente",
+      "text": "Unisciti ai professionisti delle politiche UE che usano Brubru per lavorare in modo più intelligente",
       "button": "Crea un account gratuito"
     },
     "footer": {
-      "copyright": "© 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru e un prodotto di <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
+      "copyright": "© 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru è un prodotto di <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
       "aboutUs": "Chi siamo",
       "privacy": "Privacy",
       "terms": "Termini",

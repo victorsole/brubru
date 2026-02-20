@@ -26,7 +26,7 @@
     "tryAsking": "Probeer te vragen:",
     "example1": "Wat is de status van de AI-wet?",
     "example2": "Toon me recente amendementen op GDPR",
-    "example3": "Wie zijn de Europarlementariers in de ENVI-commissie?",
+    "example3": "Wie zijn de Europarlementariërs in de ENVI-commissie?",
     "example4": "Vind wetgeving over koolstofgrenscorrectie",
     "placeholder": "Vraag over EU-wetgeving, procedures of beleidsanalyse...",
     "send": "Verstuur",
@@ -37,8 +37,8 @@
   },
   "docs": {
     "title": "Documenten",
-    "noDocuments": "Geen documenten geupload",
-    "documentsUploaded": "Documenten geupload",
+    "noDocuments": "Geen documenten geüpload",
+    "documentsUploaded": "Documenten geüpload",
     "dragDrop": "Sleep bestanden hierheen of klik om te bladeren",
     "supported": "Ondersteund: PDF, Word, Tekst, Markdown, PowerPoint, Excel, PNG, JPEG",
     "maxSize": "Max 10MB per bestand",
@@ -340,7 +340,7 @@
       "step3Title": "Stel amendementen op",
       "step3Content": "Laad elke EU-verordening of richtlijn van EUR-Lex, selecteer het artikel of de overweging die je wilt amenderen en laat de AI wijzigingen voorstellen. Exporteer in Akoma Ntoso XML, PDF of Word-formaat volgens de officiele EP-richtlijnen.",
       "step4Title": "Genereer documenten",
-      "step4Content": "Produceer AI-aangedreven positiedocumenten, informatienota's voor Europarlementariers en gesprekspunten afgestemd op jouw beleidsgebied. Voer nalevingskloof-analyses uit met EU Law Comply om te controleren hoe nieuwe wetgeving jouw organisatie of sector beinvloedt."
+      "step4Content": "Produceer AI-aangedreven positiedocumenten, informatienota's voor Europarlementariërs en gesprekspunten afgestemd op jouw beleidsgebied. Voer nalevingskloof-analyses uit met EU Law Comply om te controleren hoe nieuwe wetgeving jouw organisatie of sector beïnvloedt."
     },
     "pricing": {
       "eyebrow": "Prijzen",
