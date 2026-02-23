@@ -494,3 +494,177 @@ class OEILClient(BaseAPIClient):
             'documents': results[1] if not isinstance(results[1], Exception) else [],
             'reports': results[2] if not isinstance(results[2], Exception) else [],
         }
+
+    # =========================================================================
+    # Documentation Gateway (Added February 2026)
+    # =========================================================================
+
+    # Map OEIL document type text to doceo type code
+    DOC_TYPE_MAP = {
+        'committee draft report': 'PR',
+        'amendments tabled in committee': 'AM',
+        'committee report tabled for plenary': 'RD',
+        'committee opinion': 'AD',
+        'amendments to committee opinion': 'PA',
+    }
+
+    async def get_documentation_gateway(
+        self,
+        procedure_ref: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Scrape the Documentation Gateway table from an OEIL procedure page
+        to discover amendment documents (PR, AM, RD, AD, PA).
+
+        Args:
+            procedure_ref: Procedure reference (e.g. "2023/0089(COD)")
+
+        Returns:
+            List of document entries with keys:
+            - doc_type_text: Original text (e.g. "Amendments tabled in committee")
+            - doc_type_code: Doceo code (e.g. "AM")
+            - committee: Committee code (e.g. "JURI") or None
+            - pe_reference: PE reference (e.g. "PE753.448") or None
+            - a_reference: A-number reference (e.g. "A9-0369/2023") or None
+            - date: Document date string (e.g. "18/09/2023")
+            - doceo_url: Constructed DOCX download URL
+        """
+        import httpx
+        from bs4 import BeautifulSoup
+
+        url = f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={procedure_ref}"
+
+        documents = []
+
+        try:
+            async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+                response = await client.get(url)
+                response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Step 1: Extract responsible committee from the first table
+            # (Table 0 has "Committee responsible | Rapporteur | Appointed")
+            lead_committee = None
+            for t in soup.find_all('table'):
+                header_row = t.find('tr')
+                if header_row and 'committee responsible' in header_row.get_text(strip=True).lower():
+                    # Second row has the committee name
+                    data_rows = t.find_all('tr')
+                    if len(data_rows) > 1:
+                        first_cell = data_rows[1].find(['td', 'th'])
+                        if first_cell:
+                            comm_match = re.search(r'([A-Z]{4})', first_cell.get_text(strip=True))
+                            if comm_match:
+                                lead_committee = comm_match.group(1)
+                    break
+
+            logger.debug(f"Lead committee for {procedure_ref}: {lead_committee}")
+
+            # Step 2: Find the Documentation Gateway table
+            # It's the table with header row containing "Document type" + "Committee" + "Reference"
+            # (5 columns: Document type, Committee, Reference, Date, Summary)
+            table = None
+            for t in soup.find_all('table'):
+                header_row = t.find('tr')
+                if not header_row:
+                    continue
+                headers = [c.get_text(strip=True).lower() for c in header_row.find_all(['td', 'th'])]
+                if (len(headers) >= 4 and
+                    'document type' in headers[0] and
+                    'committee' in headers[1] and
+                    'reference' in headers[2]):
+                    table = t
+                    break
+
+            if not table:
+                # Fallback: try heading-based discovery
+                for heading in soup.find_all(['h2', 'h3', 'h4']):
+                    if 'documentation gateway' in heading.get_text(strip=True).lower():
+                        table = heading.find_next('table')
+                        break
+
+            if not table:
+                logger.warning(f"Documentation gateway table not found for {procedure_ref}")
+                return documents
+
+            # Step 3: Parse table rows
+            rows = table.find_all('tr')
+            for row in rows[1:]:  # Skip header row
+                cells = row.find_all(['td', 'th'])
+                if len(cells) < 3:
+                    continue
+
+                doc_type_text = cells[0].get_text(strip=True).lower()
+                committee_text = cells[1].get_text(strip=True) if len(cells) > 1 else ''
+                reference_cell = cells[2] if len(cells) > 2 else None
+                date_text = cells[3].get_text(strip=True) if len(cells) > 3 else ''
+
+                # Map document type
+                doc_type_code = None
+                for key, code in self.DOC_TYPE_MAP.items():
+                    if key in doc_type_text:
+                        doc_type_code = code
+                        break
+
+                if not doc_type_code:
+                    continue  # Not an amendment-related document
+
+                # Extract PE reference or A-number from the reference cell
+                pe_reference = None
+                a_reference = None
+                reference_text = reference_cell.get_text(strip=True) if reference_cell else ''
+
+                pe_match = re.search(r'PE(\d+)\.(\d+)', reference_text)
+                if pe_match:
+                    pe_reference = f"PE{pe_match.group(1)}.{pe_match.group(2)}"
+
+                a_match = re.search(r'(A\d+-\d+/\d{4})', reference_text)
+                if a_match:
+                    a_reference = a_match.group(1)
+
+                # Extract committee code: from cell, or fallback to lead committee
+                committee_code = None
+                if committee_text:
+                    comm_match = re.search(r'([A-Z]{4})', committee_text)
+                    if comm_match:
+                        committee_code = comm_match.group(1)
+                if not committee_code:
+                    committee_code = lead_committee
+
+                # Construct doceo DOCX URL
+                doceo_url = None
+                if pe_reference and committee_code and doc_type_code:
+                    pe_no_dot = pe_reference.replace('PE', '').replace('.', '')
+                    doceo_url = (
+                        f"https://www.europarl.europa.eu/doceo/document/"
+                        f"{committee_code}-{doc_type_code}-{pe_no_dot}_EN.docx"
+                    )
+                elif a_reference:
+                    # A-number docs have different URL pattern
+                    a_clean = a_reference.replace('/', '-')
+                    doceo_url = (
+                        f"https://www.europarl.europa.eu/doceo/document/"
+                        f"{a_clean}_EN.docx"
+                    )
+
+                if doceo_url:
+                    documents.append({
+                        'doc_type_text': cells[0].get_text(strip=True),
+                        'doc_type_code': doc_type_code,
+                        'committee': committee_code,
+                        'pe_reference': pe_reference,
+                        'a_reference': a_reference,
+                        'date': date_text,
+                        'doceo_url': doceo_url,
+                    })
+
+            logger.info(
+                f"[OK] Found {len(documents)} amendment documents in "
+                f"documentation gateway for {procedure_ref}"
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to scrape documentation gateway for {procedure_ref}: {str(e)}")
+
+        return documents

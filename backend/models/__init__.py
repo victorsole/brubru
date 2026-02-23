@@ -34,6 +34,8 @@ from .public_consultation import (
     ConsultationStatusEnum,
     DocumentTypeEnum,
 )
+from .mep_amendment import AmendmentDocument, MEPAmendment
+from .alignment_score import AlignmentScore
 
 __all__ = [
     "User",
@@ -66,4 +68,7 @@ __all__ = [
     "ConsultationTypeEnum",
     "ConsultationStatusEnum",
     "DocumentTypeEnum",
+    "AmendmentDocument",
+    "MEPAmendment",
+    "AlignmentScore",
 ]

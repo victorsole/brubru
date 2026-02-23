@@ -125,6 +125,37 @@ When preparing for an APA meeting:
 - Treating APAs as mere schedulers rather than advisors
 - Going over their heads to the MEP
 
+## Finding and Contacting Assistants
+
+### Assistant Directory
+
+All assistants of the European Parliament are listed publicly:
+
+- **Full directory**: https://www.europarl.europa.eu/meps/en/assistants
+- **Per-MEP page**: `https://www.europarl.europa.eu/meps/en/{mep_id}/{NAME}/assistants`
+  - Example: https://www.europarl.europa.eu/meps/en/257043/MARAVILLAS_ABADIA+JOVER/assistants
+
+On each MEP's profile page, click "Assistants" to see the names of their APAs, local assistants, and service providers. Names are listed but email addresses are not published.
+
+### Email Pattern
+
+EP assistant emails historically followed the pattern:
+
+```
+firstname.surname@europarl.europa.eu
+```
+
+- All lowercase, no accents (e.g., "Jose" not "Jose")
+- Hyphenated surnames use a hyphen: `jean-pierre.dupont@europarl.europa.eu`
+- These emails were publicly listed until a few years ago; they are no longer published but the pattern still works in most cases
+- If the guessed email bounces, the assistant may use a different spelling (e.g., middle initial, abbreviated first name)
+
+### Tips
+
+- Always address APAs by name in emails: finding their name shows you've done your research
+- If you cannot find the right email, contact the MEP's general office and ask to be forwarded
+- The EP switchboard (+32 2 28 42111) can also connect you to an MEP's office
+
 ## Building Long-Term Relationships
 
 - Be consistent and reliable over time

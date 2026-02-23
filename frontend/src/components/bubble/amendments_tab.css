@@ -1,3 +1,58 @@
+/* ── Sub-tabs (My Amendments | MEP Amendments | Comparative Analysis) ── */
+.amendments-tab__sub-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1.5rem;
+}
+
+.amendments-tab__sub-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.65rem 1.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.amendments-tab__sub-tab:hover {
+  color: #111827;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.amendments-tab__sub-tab:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+.amendments-tab__sub-tab--active {
+  color: #059669;
+  border-bottom-color: #059669;
+}
+
+.amendments-tab__sub-tab svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .amendments-tab__sub-tabs {
+    overflow-x: auto;
+    padding: 0 0.5rem;
+  }
+  .amendments-tab__sub-tab {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+}
+
 .amendments-tab {
   padding: 2rem;
 }
@@ -36,7 +91,7 @@
   gap: 0.375rem;
   padding: 0.5rem 0.875rem;
   background: white;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border, #e5e7eb);
   border-radius: 6px;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -48,6 +103,11 @@
 .amendments-tab__view-btn:hover {
   border-color: #0693E3;
   color: #0693E3;
+}
+
+.amendments-tab__view-btn:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
 }
 
 .amendments-tab__view-btn--active {
@@ -187,7 +247,7 @@
 }
 
 .amendments-tab__card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .amendments-tab__card-header {

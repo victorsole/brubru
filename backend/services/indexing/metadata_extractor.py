@@ -268,6 +268,15 @@ class MetadataExtractor:
         matches = self.PATTERNS['regulation'].findall(text)
         return sorted(list(set(matches)))
 
+    # Assistant-intent keywords
+    ASSISTANT_INTENT_KEYWORDS = [
+        'assistant', 'assistants', 'apa', 'apas',
+        'accredited parliamentary assistant',
+        'accredited assistant', 'parliamentary assistant',
+        'who works for', 'who assists', 'staff of',
+        'team of', 'office of', 'cabinet of',
+    ]
+
     def extract_mep_mentions(self, text: str) -> List[str]:
         """
         Extract MEP name mentions.
@@ -288,7 +297,15 @@ class MetadataExtractor:
             # Rapporteur followed by name
             re.compile(r'\b(?:rapporteur|shadow rapporteur)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
             # Name followed by country in parentheses
-            re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s*\([A-Z]{2}\)\b')
+            re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s*\([A-Z]{2}\)\b'),
+            # "assistant(s) of/to/for [MEP] Name"
+            re.compile(r'\bassistants?\s+(?:of|to|for)\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
+            # "who works/assists/helps for/with [MEP] Name"
+            re.compile(r'\bwho\s+(?:works|assists|helps)\s+(?:for|with)\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
+            # "Name's assistant(s)" (possessive)
+            re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\'s?\s+assistants?\b'),
+            # "staff/team/office of [MEP] Name"
+            re.compile(r'\b(?:staff|team|office|cabinet)\s+of\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
         ]
 
         names = set()
@@ -300,6 +317,19 @@ class MetadataExtractor:
                     names.add(name)
 
         return sorted(list(names))
+
+    def detect_assistant_intent(self, text: str) -> bool:
+        """
+        Detect whether the user is asking about MEP assistants.
+
+        Args:
+            text: User query text
+
+        Returns:
+            True if the query relates to MEP assistants
+        """
+        text_lower = text.lower()
+        return any(kw in text_lower for kw in self.ASSISTANT_INTENT_KEYWORDS)
 
     def classify_eurovoc(self, text: str) -> List[str]:
         """

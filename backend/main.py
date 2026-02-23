@@ -19,6 +19,9 @@ from core.config import settings
 from core.database import init_db
 from services.rss.rss_scheduler import start_scheduler, stop_scheduler
 from services.email_scheduler import start_email_scheduler, stop_email_scheduler
+from services.schedulers.amendment_sync_scheduler import (
+    start_amendment_sync_scheduler, stop_amendment_sync_scheduler
+)
 
 # Import routers
 from api import (
@@ -27,7 +30,7 @@ from api import (
     feedback, admin_panel, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
-    predictions, texts_adopted, commission_documents
+    predictions, texts_adopted, commission_documents, mep_amendments
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -65,6 +68,13 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"[WARN] Email scheduler failed to start (non-fatal): {str(e)}")
 
+    # Start amendment sync scheduler (daily EP Open Data sync)
+    try:
+        start_amendment_sync_scheduler()
+        print("[OK] Amendment sync scheduler started")
+    except Exception as e:
+        print(f"[WARN] Amendment sync scheduler failed to start (non-fatal): {str(e)}")
+
     # Connect to MCP Toolbox for Databases (non-fatal if unavailable)
     try:
         from services.toolbox_service import get_toolbox_service
@@ -99,6 +109,13 @@ async def lifespan(app: FastAPI):
         print("[OK] Email scheduler stopped")
     except Exception as e:
         print(f"[WARN] Email scheduler shutdown error: {str(e)}")
+
+    # Stop amendment sync scheduler
+    try:
+        stop_amendment_sync_scheduler()
+        print("[OK] Amendment sync scheduler stopped")
+    except Exception as e:
+        print(f"[WARN] Amendment sync scheduler shutdown error: {str(e)}")
 
 
 # Create FastAPI app
@@ -175,6 +192,7 @@ app.include_router(admin_analytics.router, tags=["Admin Analytics"])
 app.include_router(generate.router, tags=["Document Generation"])
 app.include_router(predictions.router, tags=["Predictions"])
 app.include_router(commission_documents.router, tags=["Commission Documents"])
+app.include_router(mep_amendments.router, tags=["MEP Amendments"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 

@@ -182,6 +182,7 @@ class ExtractedEntities:
     article_references: List[str]
     policy_areas: List[str]
     dg_codes: List[str]  # Commission DG codes (e.g., GROW, CLIMA)
+    assistant_intent: bool = False  # True if user asks about MEP assistants
 
 
 @dataclass
@@ -241,6 +242,9 @@ class ContextData:
 
     # User uploaded documents (for personalised AI context)
     user_uploaded_documents: List[Dict[str, Any]]
+
+    # MEP amendments (scraped EP committee amendments)
+    mep_amendments_summary: List[Dict[str, Any]]
 
     # Metadata
     query: str
@@ -443,9 +447,12 @@ class ContextBuilder:
             else:
                 tasks.append(empty_result())
 
-            # MEP profiles
+            # MEP profiles (include assistants if user is asking about them)
             if entities.mep_names and self.parliament_client:
-                tasks.append(self._fetch_mep_profiles(entities.mep_names[:self.max_live_api_calls]))
+                tasks.append(self._fetch_mep_profiles(
+                    entities.mep_names[:self.max_live_api_calls],
+                    include_assistants=entities.assistant_intent
+                ))
             else:
                 tasks.append(empty_result())
 
@@ -520,6 +527,15 @@ class ContextBuilder:
         else:
             tasks.append(empty_result())
 
+        # MEP amendments (scraped EP committee amendments)
+        if entities.procedure_references or entities.mep_names:
+            tasks.append(self._fetch_mep_amendments(
+                entities.procedure_references,
+                mep_names=entities.mep_names,
+            ))
+        else:
+            tasks.append(empty_result())
+
         # Execute all tasks concurrently
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -573,6 +589,9 @@ class ContextBuilder:
         # Unpack User Uploaded Documents (index 17)
         user_uploaded_documents = results[17] if not isinstance(results[17], Exception) else []
 
+        # Unpack MEP Amendments summary (index 18)
+        mep_amendments_summary = results[18] if not isinstance(results[18], Exception) else []
+
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
 
@@ -598,7 +617,8 @@ class ContextBuilder:
             len(public_consultations) +  # EC Public Consultations
             len(commission_documents) +  # EC Commission Documents
             len(toolbox_results) +  # MCP Toolbox supplementary
-            len(user_uploaded_documents)  # User uploaded documents
+            len(user_uploaded_documents) +  # User uploaded documents
+            len(mep_amendments_summary)  # MEP amendments
         )
 
         context_data = ContextData(
@@ -622,6 +642,7 @@ class ContextBuilder:
             commission_documents=commission_documents,  # EC Commission Documents
             toolbox_results=toolbox_results,  # MCP Toolbox supplementary
             user_uploaded_documents=user_uploaded_documents,  # User uploaded documents
+            mep_amendments_summary=mep_amendments_summary,  # MEP amendments
             tender_context=tender_context,  # Phase 8: Tender data
             reference_data_context=reference_data_context,
             query=user_message,
@@ -642,7 +663,8 @@ class ContextBuilder:
             f"{len(public_consultations)} consultations, "
             f"{len(commission_documents)} commission docs, "
             f"{len(toolbox_results)} toolbox, "
-            f"{len(user_uploaded_documents)} user uploads) in {search_time:.2f}ms"
+            f"{len(user_uploaded_documents)} user uploads, "
+            f"{len(mep_amendments_summary)} MEP amendments) in {search_time:.2f}ms"
         )
 
         return context_data
@@ -666,6 +688,9 @@ class ContextBuilder:
         # Extract DG codes
         dg_codes = self._extract_dg_codes(text)
 
+        # Detect assistant intent
+        assistant_intent = self.metadata_extractor.detect_assistant_intent(text)
+
         return ExtractedEntities(
             celex_numbers=extracted['celex_numbers'],
             procedure_references=extracted['procedure_references'],
@@ -673,7 +698,8 @@ class ContextBuilder:
             committee_codes=[c['code'] for c in extracted['committees']],
             article_references=extracted['articles'],
             policy_areas=policy_areas,
-            dg_codes=dg_codes
+            dg_codes=dg_codes,
+            assistant_intent=assistant_intent
         )
 
     def _extract_dg_codes(self, text: str) -> List[str]:
@@ -916,7 +942,8 @@ class ContextBuilder:
 
     async def _fetch_mep_profiles(
         self,
-        mep_names: List[str]
+        mep_names: List[str],
+        include_assistants: bool = False
     ) -> List[Dict[str, Any]]:
         """Fetch MEP profiles from European Parliament scraper (includes email/phone)"""
         from services.scrapers.european_parliament_scraper import EuropeanParliamentScraper
@@ -940,7 +967,7 @@ class ContextBuilder:
                         if mep_id:
                             details = await scraper.get_mep_details(mep_id)
 
-                            profiles.append({
+                            profile = {
                                 'id': mep_id,
                                 'name': mep.full_name,
                                 'country': mep.country or '',
@@ -951,8 +978,19 @@ class ContextBuilder:
                                 'email': details.get('email', ''),
                                 'phone': details.get('phone', ''),
                                 'url': f"https://www.europarl.europa.eu/meps/en/{mep_id}"
-                            })
+                            }
 
+                            # Fetch assistant data if the user is asking about assistants
+                            if include_assistants:
+                                try:
+                                    assistants = await scraper.get_mep_assistants(mep_id, mep.full_name)
+                                    profile['assistants'] = assistants
+                                    profile['assistants_url'] = f"https://www.europarl.europa.eu/meps/en/{mep_id}/{mep.full_name.upper().split()[0]}_{'+'.join(mep.full_name.upper().split()[1:])}/assistants"
+                                except Exception as e:
+                                    logger.warning(f"Failed to fetch assistants for {name}: {str(e)}")
+                                    profile['assistants'] = []
+
+                            profiles.append(profile)
                             logger.debug(f"Fetched MEP profile: {name}")
 
                 except Exception as e:
@@ -1680,6 +1718,123 @@ class ContextBuilder:
 
         except Exception as e:
             logger.error(f"Failed to fetch public consultations: {str(e)}")
+            return []
+
+    async def _fetch_mep_amendments(
+        self,
+        procedure_references: List[str],
+        mep_names: Optional[List[str]] = None,
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch scraped MEP amendment summaries from the database.
+
+        Two modes:
+        1. By procedure reference: summaries per procedure
+        2. By MEP name (cross-procedure): when user asks about a specific MEP
+           without a procedure reference, query amendments by author name
+        """
+        try:
+            from collections import Counter
+            from models.mep_amendment import MEPAmendment
+
+            summaries = []
+
+            # Mode 1: By procedure reference
+            for proc_ref in (procedure_references or [])[:3]:
+                amendments = self.db.query(MEPAmendment).filter(
+                    MEPAmendment.procedure_reference == proc_ref
+                ).all()
+
+                if not amendments:
+                    continue
+
+                total = len(amendments)
+
+                # Group counts
+                group_counts = Counter(a.political_group or 'Unknown' for a in amendments)
+                group_summary = ', '.join(
+                    f"{g} ({c})" for g, c in group_counts.most_common(5)
+                )
+
+                # Most contested elements
+                element_counts = Counter(a.element_reference for a in amendments)
+                top_elements = [
+                    {'reference': ref, 'count': c}
+                    for ref, c in element_counts.most_common(5)
+                ]
+
+                # Top 5 key amendments (highest amendment numbers = later = often more political)
+                key_amendments = sorted(amendments, key=lambda a: a.amendment_number)[:5]
+                key_am_list = []
+                for am in key_amendments:
+                    key_am_list.append({
+                        'number': am.amendment_number,
+                        'authors': ', '.join(am.author_names or []),
+                        'group': am.political_group or 'Unknown',
+                        'element': am.element_reference,
+                        'type': am.amendment_type,
+                        'proposed_text': (am.proposed_text or '')[:150],
+                    })
+
+                summaries.append({
+                    'procedure_reference': proc_ref,
+                    'total': total,
+                    'group_summary': group_summary,
+                    'top_elements': top_elements,
+                    'key_amendments': key_am_list,
+                })
+
+            # Mode 2: Cross-procedure MEP search (when no procedure refs detected)
+            if not procedure_references and mep_names:
+                for mep_name in (mep_names or [])[:2]:
+                    amendments = (
+                        self.db.query(MEPAmendment)
+                        .filter(MEPAmendment.author_names.any(mep_name))
+                        .limit(200)
+                        .all()
+                    )
+
+                    if not amendments:
+                        continue
+
+                    total = len(amendments)
+
+                    # Procedure breakdown
+                    proc_counts = Counter(a.procedure_reference for a in amendments)
+                    proc_summary = ', '.join(
+                        f"{ref} ({c})" for ref, c in proc_counts.most_common(10)
+                    )
+
+                    # Group
+                    groups = set(a.political_group for a in amendments if a.political_group)
+                    group_str = ', '.join(sorted(groups)) if groups else 'Unknown'
+
+                    # Sample amendments (first 5)
+                    key_am_list = []
+                    for am in amendments[:5]:
+                        key_am_list.append({
+                            'number': am.amendment_number,
+                            'authors': ', '.join(am.author_names or []),
+                            'group': am.political_group or 'Unknown',
+                            'element': am.element_reference,
+                            'type': am.amendment_type,
+                            'procedure': am.procedure_reference,
+                            'proposed_text': (am.proposed_text or '')[:150],
+                        })
+
+                    summaries.append({
+                        'mep_name': mep_name,
+                        'total': total,
+                        'political_group': group_str,
+                        'procedures_count': len(proc_counts),
+                        'procedure_summary': proc_summary,
+                        'key_amendments': key_am_list,
+                    })
+
+            return summaries
+
+        except Exception as e:
+            logger.error(f"Failed to fetch MEP amendments: {str(e)}")
             return []
 
     async def _fetch_commission_documents(
@@ -2455,6 +2610,15 @@ class ContextBuilder:
                 if mep.get('phone'):
                     sections.append(f"  Phone: {mep['phone']}")
                 sections.append(f"  Profile: {mep['url']}")
+                # Show assistant data if available
+                if mep.get('assistants'):
+                    sections.append(f"  Assistants ({len(mep['assistants'])}):")
+                    for assistant in mep['assistants']:
+                        email_hint = f" - guessed email: {assistant['guessed_email']}" if assistant.get('guessed_email') else ""
+                        sections.append(f"    - {assistant['name']} ({assistant['type']}){email_hint}")
+                    if mep.get('assistants_url'):
+                        sections.append(f"  Assistants directory: {mep['assistants_url']}")
+                    sections.append("  Note: Assistant emails are guessed from the pattern firstname.surname@europarl.europa.eu. These are no longer publicly listed, so the guess may not always be correct.")
                 sections.append("")
 
         # Committee information
@@ -2811,6 +2975,33 @@ class ContextBuilder:
                     sections.append(f"  Date: {item['publication_date'][:10]}")
                 if item.get('portal_url'):
                     sections.append(f"  URL: {item['portal_url']}")
+                sections.append("")
+
+        # MEP Amendments (scraped EP committee amendments)
+        if context_data.mep_amendments_summary:
+            for summary in context_data.mep_amendments_summary:
+                proc = summary['procedure_reference']
+                total = summary['total']
+                sections.append(f"\nMEP AMENDMENTS FOR {proc} ({total} total):")
+                sections.append(f"  By group: {summary['group_summary']}")
+
+                if summary.get('top_elements'):
+                    contested = ', '.join(
+                        f"{e['reference']} ({e['count']})"
+                        for e in summary['top_elements'][:5]
+                    )
+                    sections.append(f"  Most contested: {contested}")
+
+                if summary.get('key_amendments'):
+                    sections.append("  Key amendments:")
+                    for am in summary['key_amendments']:
+                        text_preview = am['proposed_text'][:100] + '...' if len(am['proposed_text']) > 100 else am['proposed_text']
+                        sections.append(
+                            f"    - AM {am['number']} by {am['authors']} ({am['group']}): "
+                            f"{am['element']} - {am['type']} - \"{text_preview}\""
+                        )
+
+                sections.append(f"  Fetch more: POST /api/mep-amendments/fetch/{proc}")
                 sections.append("")
 
         # MCP Toolbox supplementary results

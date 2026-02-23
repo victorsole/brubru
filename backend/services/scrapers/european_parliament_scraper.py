@@ -205,6 +205,119 @@ class EuropeanParliamentScraper(BaseScraper):
             'source_url': url,
         }
 
+    async def get_mep_assistants(self, mep_id: str, mep_name: str) -> List[Dict[str, Any]]:
+        """
+        Scrape assistant names from an MEP's profile page.
+
+        Args:
+            mep_id: MEP identifier (e.g. '257043')
+            mep_name: MEP full name for URL slug construction
+
+        Returns:
+            List of assistants with name, guessed email, and type (APA/local/service)
+        """
+        import unicodedata
+
+        # Build URL slug from MEP name: "Maravillas ABADIA JOVER" -> "MARAVILLAS_ABADIA+JOVER"
+        slug = mep_name.upper().replace(' ', '_').replace('_', '_', 1)
+        # EP uses + for spaces in surnames after first name
+        parts = mep_name.strip().split()
+        if len(parts) >= 2:
+            first = parts[0].upper()
+            surname = '+'.join(p.upper() for p in parts[1:])
+            slug = f"{first}_{surname}"
+        else:
+            slug = mep_name.upper().replace(' ', '_')
+
+        url = f"https://www.europarl.europa.eu/meps/en/{mep_id}/{slug}/assistants"
+
+        assistants = []
+        try:
+            html = await self._fetch(url)
+            soup = self._parse_html(html)
+
+            # EP groups assistants under headings like "Accredited assistants",
+            # "Local assistants", "Service providers" etc.
+            current_type = "APA"  # Default type
+
+            # Look for assistant sections - the page uses various structures
+            # Try the detailed card section first
+            assistant_sections = soup.find_all('div', class_='erpl_meps-assistants-detail')
+            if not assistant_sections:
+                # Fallback: look for any list items under assistants content
+                assistant_sections = soup.find_all('div', class_='erpl_type-assistants')
+
+            # Parse section headings to determine type
+            for section in soup.find_all(['h3', 'h4', 'span'], class_=re.compile(r'erpl_|sln-')):
+                heading_text = section.get_text(strip=True).lower()
+                if 'accredited' in heading_text:
+                    current_type = "APA"
+                elif 'local' in heading_text:
+                    current_type = "Local"
+                elif 'service' in heading_text or 'paying agent' in heading_text:
+                    current_type = "Service provider"
+
+            # Extract assistant names from the page
+            # The EP website lists assistants as text within spans or divs
+            for elem in soup.find_all('span', class_='t-x'):
+                text = elem.get_text(strip=True)
+                if text and text.lower() == 'assistants':
+                    continue  # Skip the section header itself
+
+            # More reliable: find all name entries in the assistants section
+            assistants_container = soup.find('div', id='detailedcardmep') or soup.find('div', class_='erpl_meps-assistants')
+            if assistants_container:
+                current_type = "APA"
+                for elem in assistants_container.find_all(['h4', 'h3', 'li', 'span', 'div']):
+                    text = elem.get_text(strip=True)
+                    text_lower = text.lower()
+
+                    # Detect type headings
+                    if any(kw in text_lower for kw in ['accredited assistant', 'accredited parliamentary']):
+                        current_type = "APA"
+                        continue
+                    elif 'local assistant' in text_lower:
+                        current_type = "Local"
+                        continue
+                    elif any(kw in text_lower for kw in ['service provider', 'paying agent', 'trainee']):
+                        current_type = "Service provider"
+                        continue
+
+                    # Skip non-name content
+                    if not text or len(text) < 3 or len(text) > 100:
+                        continue
+                    if any(kw in text_lower for kw in ['assistant', 'provider', 'trainee', 'show', 'hide', 'more']):
+                        continue
+
+                    # Check if it looks like a name (at least 2 words, starts with capital)
+                    name_parts = text.split()
+                    if len(name_parts) >= 2 and name_parts[0][0].isupper():
+                        # Guess email: strip accents, lowercase, firstname.surname
+                        def strip_accents(s: str) -> str:
+                            return ''.join(
+                                c for c in unicodedata.normalize('NFD', s)
+                                if unicodedata.category(c) != 'Mn'
+                            )
+
+                        clean_first = strip_accents(name_parts[0]).lower()
+                        clean_surname = strip_accents('-'.join(name_parts[1:])).lower()
+                        guessed_email = f"{clean_first}.{clean_surname}@europarl.europa.eu"
+
+                        # Avoid duplicates
+                        if not any(a['name'] == text for a in assistants):
+                            assistants.append({
+                                'name': text,
+                                'guessed_email': guessed_email,
+                                'type': current_type,
+                            })
+
+            logger.info(f"Found {len(assistants)} assistants for MEP {mep_name} ({mep_id})")
+
+        except Exception as e:
+            logger.warning(f"Failed to scrape assistants for MEP {mep_id}: {str(e)}")
+
+        return assistants
+
     async def search_meps(self, query: str, **kwargs) -> List[MEP]:
         """
         Search for MEPs by name, country, or political group.

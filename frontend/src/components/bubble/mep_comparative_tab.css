@@ -1,0 +1,556 @@
+/* ============================================================================
+   Comparative Analysis Sub-tab
+   My EU Bubble > Amendments > Comparative Analysis
+   Phase 4: AI-powered alignment scoring
+   Created: February 2026
+   ============================================================================ */
+
+.mep-comparative {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ============================================================================
+   Policy Position Input
+   ============================================================================ */
+
+.mep-comparative__input-section {
+  background: #fff;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.mep-comparative__input-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 0.35rem;
+}
+
+.mep-comparative__input-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted, #9ca3af);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.mep-comparative__textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 0.75rem;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-primary, #111827);
+  resize: vertical;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.mep-comparative__textarea:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.12);
+}
+
+.mep-comparative__textarea::placeholder {
+  color: var(--text-muted, #9ca3af);
+}
+
+.mep-comparative__textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mep-comparative__input-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.65rem;
+}
+
+.mep-comparative__char-count {
+  font-size: 0.75rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+.mep-comparative__run-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  background: #059669;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.mep-comparative__run-btn:hover:not(:disabled) {
+  background: #047857;
+}
+
+.mep-comparative__run-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mep-comparative__run-btn:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   Shared Section Styles
+   ============================================================================ */
+
+.mep-comparative__section {
+  background: #fff;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.mep-comparative__section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 0.75rem;
+}
+
+.mep-comparative__section-header svg {
+  color: var(--text-muted, #9ca3af);
+}
+
+.mep-comparative__section-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: normal;
+  color: var(--text-muted, #9ca3af);
+}
+
+.mep-comparative__section-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+/* ============================================================================
+   Loading / Error / Info
+   ============================================================================ */
+
+.mep-comparative__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.mep-comparative__loading svg {
+  color: #059669;
+}
+
+.mep-comparative__error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #dc2626;
+}
+
+.mep-comparative__info-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg-alt, #f3f4f6);
+  border-radius: 8px;
+  border-left: 3px solid var(--text-muted, #9ca3af);
+  font-size: 0.82rem;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.5;
+}
+
+.mep-comparative__info-note svg {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+/* ============================================================================
+   Alignment Summary Cards
+   ============================================================================ */
+
+.mep-comparative__summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.mep-comparative__summary-card {
+  background: var(--bg-alt, #f3f4f6);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  padding: 0.85rem;
+  text-align: center;
+  border-top: 3px solid var(--border, #e5e7eb);
+}
+
+.mep-comparative__summary-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  line-height: 1.2;
+}
+
+.mep-comparative__summary-pct {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #6b7280);
+  margin-top: 0.1rem;
+}
+
+.mep-comparative__summary-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted, #9ca3af);
+  margin-top: 0.25rem;
+}
+
+/* ============================================================================
+   Best Allies
+   ============================================================================ */
+
+.mep-comparative__allies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mep-comparative__ally-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 6px;
+  transition: background 0.1s;
+}
+
+.mep-comparative__ally-row:hover {
+  background: var(--bg-alt, #f3f4f6);
+}
+
+.mep-comparative__ally-rank {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted, #9ca3af);
+  width: 2rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.mep-comparative__ally-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.mep-comparative__ally-group {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mep-comparative__ally-bar-container {
+  flex: 1;
+  height: 6px;
+  background: var(--bg-alt, #f3f4f6);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.mep-comparative__ally-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.mep-comparative__ally-score {
+  font-size: 0.82rem;
+  font-weight: 700;
+  width: 2.5rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.mep-comparative__ally-count {
+  font-size: 0.72rem;
+  color: var(--text-muted, #9ca3af);
+  width: 3rem;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+   Coverage Gaps
+   ============================================================================ */
+
+.mep-comparative__gaps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.mep-comparative__gap-col {
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mep-comparative__gap-header {
+  padding: 0.55rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+.mep-comparative__gap-col--unique .mep-comparative__gap-header {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.mep-comparative__gap-col--blind .mep-comparative__gap-header {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.mep-comparative__gap-list {
+  padding: 0.5rem;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.mep-comparative__gap-item {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+.mep-comparative__gap-item--unique {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #dcfce7;
+}
+
+.mep-comparative__gap-item--blind {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.mep-comparative__gap-empty {
+  padding: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+  font-style: italic;
+}
+
+/* ============================================================================
+   Political Landscape
+   ============================================================================ */
+
+.mep-comparative__landscape-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.mep-comparative__landscape-col {
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mep-comparative__landscape-header {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+  text-align: center;
+}
+
+.mep-comparative__landscape-col--supportive .mep-comparative__landscape-header {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.mep-comparative__landscape-col--mixed .mep-comparative__landscape-header {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.mep-comparative__landscape-col--opposed .mep-comparative__landscape-header {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.mep-comparative__landscape-groups {
+  padding: 0.5rem;
+}
+
+.mep-comparative__landscape-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.2rem;
+}
+
+.mep-comparative__landscape-group:hover {
+  background: var(--bg-alt, #f3f4f6);
+}
+
+.mep-comparative__landscape-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.12rem 0.4rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.mep-comparative__landscape-score {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-left: auto;
+}
+
+.mep-comparative__landscape-count {
+  font-size: 0.68rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+.mep-comparative__landscape-empty {
+  padding: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============================================================================
+   Responsive -- Tablet
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .mep-comparative__summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mep-comparative__ally-name {
+    min-width: 110px;
+  }
+
+  .mep-comparative__ally-bar-container {
+    min-width: 40px;
+  }
+}
+
+/* ============================================================================
+   Responsive -- Mobile
+   ============================================================================ */
+
+@media (max-width: 767px) {
+  .mep-comparative__summary-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .mep-comparative__summary-card {
+    padding: 0.65rem;
+  }
+
+  .mep-comparative__summary-value {
+    font-size: 1.3rem;
+  }
+
+  .mep-comparative__input-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .mep-comparative__run-btn {
+    justify-content: center;
+  }
+
+  .mep-comparative__char-count {
+    text-align: center;
+  }
+
+  /* Allies: simplify for mobile */
+  .mep-comparative__ally-row {
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .mep-comparative__ally-bar-container {
+    display: none;
+  }
+
+  .mep-comparative__ally-name {
+    min-width: 0;
+    flex: 1;
+  }
+
+  /* Gaps: stack columns */
+  .mep-comparative__gaps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Landscape: stack columns */
+  .mep-comparative__landscape-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mep-comparative__section {
+    padding: 1rem;
+  }
+}

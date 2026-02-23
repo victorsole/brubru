@@ -1,0 +1,737 @@
+/* ============================================================================
+   MEP Amendments Sub-tab
+   My EU Bubble > Amendments > MEP Amendments
+   Created: February 2026
+   ============================================================================ */
+
+.mep-amendments-tab {
+  /* Container for all MEP amendment content */
+}
+
+/* ── Loading & Empty States ── */
+.mep-amendments-tab__loading {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.9rem;
+}
+
+.mep-amendments-tab__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.mep-amendments-tab__empty svg {
+  color: var(--text-muted, #9ca3af);
+  margin-bottom: 1rem;
+}
+
+.mep-amendments-tab__empty h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary, #111827);
+}
+
+.mep-amendments-tab__empty p {
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.mep-amendments-tab__empty-list {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.9rem;
+}
+
+/* ── Procedure Selector ── */
+.mep-procedure {
+  margin-bottom: 1.5rem;
+}
+
+.mep-procedure__label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 0.4rem;
+}
+
+.mep-procedure__select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text-primary, #111827);
+  background: #fff;
+  cursor: pointer;
+}
+
+.mep-procedure__meta {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.mep-procedure__meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ── Overview Bar ── */
+.mep-overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mep-overview__card {
+  background: var(--bg-alt, #f3f4f6);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.mep-overview__value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  line-height: 1.2;
+}
+
+.mep-overview__label {
+  font-size: 0.78rem;
+  color: var(--text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-top: 0.2rem;
+}
+
+/* ── Filter Row ── */
+.mep-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+.mep-filter__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.mep-filter__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+}
+
+.mep-filter__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mep-filter__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border, #e5e7eb);
+  background: #fff;
+  color: var(--text-secondary, #6b7280);
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.mep-filter__pill:hover {
+  border-color: var(--text-muted, #9ca3af);
+}
+
+.mep-filter__pill--active {
+  color: #fff;
+  border-color: transparent;
+}
+
+.mep-filter__pill:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+.mep-filter__pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mep-filter__select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--text-primary, #111827);
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.mep-filter__select:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+.mep-filter__search {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 4px;
+  padding: 0.35rem 0.6rem;
+  background: #fff;
+}
+
+.mep-filter__search svg {
+  color: var(--text-muted, #9ca3af);
+  flex-shrink: 0;
+}
+
+.mep-filter__search input {
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--text-primary, #111827);
+  width: 150px;
+  background: transparent;
+  transition: width 0.2s;
+}
+
+.mep-filter__search:focus-within {
+  border-color: #059669;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.12);
+}
+
+.mep-filter__search:focus-within input {
+  width: 200px;
+}
+
+/* ── Analysis Grid ── */
+.mep-analysis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Group Activity Bars ── */
+.mep-bars {
+  background: var(--bg-alt, #f3f4f6);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.mep-bars__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 0.75rem;
+}
+
+.mep-bars__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.mep-bars__label {
+  min-width: 80px;
+  max-width: 200px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  text-align: right;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mep-bars__track {
+  flex: 1;
+  height: 20px;
+  background: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mep-bars__fill {
+  height: 100%;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  transition: width 0.3s ease;
+}
+
+.mep-bars__count {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.mep-bars__count-outside {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6b7280);
+  margin-left: 0.4rem;
+  flex-shrink: 0;
+}
+
+/* ── Hotspot Table ── */
+.mep-hotspots {
+  background: var(--bg-alt, #f3f4f6);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.mep-hotspots__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 0.75rem;
+}
+
+.mep-hotspots__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border: none;
+  background: none;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.1s;
+}
+
+.mep-hotspots__row:last-child {
+  border-bottom: none;
+}
+
+.mep-hotspots__row:hover {
+  background: #f3f4f6;
+}
+
+.mep-hotspots__element {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+}
+
+.mep-hotspots__bar {
+  width: 120px;
+  height: 14px;
+  background: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mep-hotspots__bar-fill {
+  height: 100%;
+  background: #059669;
+  border-radius: 2px;
+}
+
+.mep-hotspots__count {
+  width: 28px;
+  text-align: right;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+  flex-shrink: 0;
+}
+
+.mep-hotspots__empty {
+  font-size: 0.85rem;
+  color: var(--text-muted, #9ca3af);
+  padding: 1rem 0;
+}
+
+/* ── Amendment Cards ── */
+.mep-cards__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #6b7280);
+  margin-bottom: 1rem;
+}
+
+.mep-card {
+  background: #fff;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  border-left: 4px solid var(--text-muted, #9ca3af);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+
+.mep-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: #fafbfc;
+}
+
+.mep-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mep-card__header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.mep-card__number {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
+}
+
+.mep-card__group-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.mep-card__group-badge--rapporteur {
+  background: #059669 !important;
+  color: #fff;
+  border: 1px dashed rgba(255, 255, 255, 0.4);
+}
+
+.mep-card__type-badge {
+  display: inline-block;
+  padding: 0.1rem 0.45rem;
+  border-radius: 99px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.mep-card__type-badge--modification {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.mep-card__type-badge--suppression {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.mep-card__type-badge--addition {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mep-card__meta {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+.mep-card__authors {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary, #111827);
+  margin-bottom: 0.15rem;
+}
+
+.mep-card__authors--rapporteur {
+  font-style: italic;
+  font-weight: 500;
+  color: #059669;
+}
+
+.mep-card__on-behalf {
+  font-size: 0.78rem;
+  color: var(--text-muted, #9ca3af);
+  font-style: italic;
+}
+
+.mep-card__element {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+/* ── Diff Table ── */
+.mep-card__diff {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.mep-card__diff-col {
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.mep-card__diff-col:first-child {
+  border-right: 1px solid var(--border, #e5e7eb);
+  background: #fff;
+}
+
+.mep-card__diff-col--proposed {
+  background: #fafffe;
+}
+
+.mep-card__diff-header {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted, #9ca3af);
+  margin-bottom: 0.5rem;
+}
+
+.mep-card__diff-text {
+  color: var(--text-primary, #111827);
+}
+
+.mep-card__diff-new {
+  color: var(--text-muted, #9ca3af);
+  font-style: italic;
+}
+
+.mep-card__diff-del {
+  text-decoration: line-through;
+  color: #991b1b;
+  background: #fee2e2;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* Word-level diff highlights (EP convention: bold italic = changed text) */
+.mep-card__diff-added {
+  font-weight: 700;
+  font-style: italic;
+  background: #dcfce7;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+.mep-card__diff-deleted {
+  text-decoration: line-through;
+  color: #991b1b;
+  opacity: 0.7;
+}
+
+/* ── Card Footer ── */
+.mep-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--border, #e5e7eb);
+  background: var(--bg-alt, #f3f4f6);
+}
+
+.mep-card__lang {
+  font-size: 0.75rem;
+  color: var(--text-muted, #9ca3af);
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+}
+
+.mep-card__expand {
+  font-size: 0.78rem;
+  color: #0693e3;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: none;
+  border: none;
+  font-family: inherit;
+  padding: 0;
+}
+
+.mep-card__expand:hover {
+  text-decoration: underline;
+}
+
+/* ── Justification ── */
+.mep-card__justification {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--border, #e5e7eb);
+  background: #fffbeb;
+}
+
+.mep-card__justification-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #d97706;
+  margin-bottom: 0.3rem;
+}
+
+.mep-card__justification-text {
+  font-size: 0.85rem;
+  color: var(--text-primary, #111827);
+  line-height: 1.6;
+}
+
+/* ── Pagination ── */
+.mep-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border, #e5e7eb);
+}
+
+.mep-pagination__btn {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 6px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text-primary, #111827);
+  transition: all 0.15s;
+}
+
+.mep-pagination__btn:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+.mep-pagination__btn:hover {
+  border-color: #059669;
+  color: #059669;
+}
+
+.mep-pagination__btn--active {
+  background: #059669;
+  color: #fff;
+  border-color: #059669;
+}
+
+.mep-pagination__info {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #6b7280);
+  margin: 0 0.5rem;
+}
+
+/* ============================================================================
+   Responsive
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+  .mep-overview {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .mep-analysis {
+    grid-template-columns: 1fr;
+  }
+  .mep-filter {
+    gap: 0.5rem;
+  }
+  .mep-bars__label {
+    min-width: 55px;
+    max-width: 120px;
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .mep-overview {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .mep-overview__card {
+    padding: 0.65rem;
+  }
+  .mep-overview__value {
+    font-size: 1.3rem;
+  }
+  .mep-card__diff {
+    grid-template-columns: 1fr;
+  }
+  .mep-card__diff-col:first-child {
+    border-right: none;
+    border-bottom: 1px solid var(--border, #e5e7eb);
+  }
+  .mep-filter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .mep-filter__search input {
+    width: 100%;
+  }
+  .mep-filter__pills {
+    gap: 0.25rem;
+  }
+  .mep-filter__pill {
+    font-size: 0.68rem;
+    padding: 0.2rem 0.45rem;
+  }
+  .mep-hotspots__bar {
+    width: 80px;
+  }
+  .mep-procedure__meta {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+}

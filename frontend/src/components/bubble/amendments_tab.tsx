@@ -1,18 +1,31 @@
 /**
  * Amendments Tab Component
  *
- * Displays and manages user amendments with status tracking.
- * Groups amendments by tracked legislative file for better context.
- * Part of My EU Bubble - Phase 3: Frontend + Priority #4 Integration
+ * Three sub-tabs:
+ * - My Amendments: User's drafted amendments from the Amendator
+ * - MEP Amendments: EP committee amendments dashboard
+ * - Comparative Analysis: User vs MEP alignment (Phase 4)
+ *
+ * Part of My EU Bubble - Amendments tab
  */
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '@mdi/react';
-import { mdiFileDocumentOutline, mdiViewList, mdiViewModule, mdiPencilOutline, mdiOpenInNew } from '@mdi/js';
+import {
+  mdiFileDocumentOutline,
+  mdiViewList,
+  mdiViewModule,
+  mdiPencilOutline,
+  mdiOpenInNew,
+  mdiAccountGroupOutline,
+  mdiScaleBalance,
+} from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
+import { MEPAmendmentsTab } from './mep_amendments_tab';
+import { MEPComparativeTab } from './mep_comparative_tab';
 import './amendments_tab.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
@@ -41,6 +54,8 @@ interface AmendmentGroup {
   groupId: string;
 }
 
+type AmendmentSubTab = 'my-amendments' | 'mep-amendments' | 'comparative';
+
 export const AmendmentsTab = () => {
   const navigate = useNavigate();
   const { token } = useAuth();
@@ -50,6 +65,7 @@ export const AmendmentsTab = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [documentFilter, setDocumentFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'list' | 'grouped'>('grouped');
+  const [activeSubTab, setActiveSubTab] = useState<AmendmentSubTab>('my-amendments');
 
   useEffect(() => {
     fetchAmendments();
@@ -59,23 +75,19 @@ export const AmendmentsTab = () => {
   const fetchAmendments = async () => {
     setIsLoading(true);
     try {
-      console.log('🔍 Fetching amendments from API...');
       const response = await fetch(`${API_BASE}/amendments`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-      console.log('📡 Response status:', response.status);
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Amendments data:', data);
-        console.log('📊 Number of amendments:', data.amendments?.length || 0);
         setAmendments(data.amendments || []);
       } else {
-        console.error('❌ Failed to fetch amendments, status:', response.status);
+        console.error('[ERROR] Failed to fetch amendments, status:', response.status);
       }
     } catch (error) {
-      console.error('❌ Error fetching amendments:', error);
+      console.error('[ERROR] Error fetching amendments:', error);
     } finally {
       setIsLoading(false);
     }
@@ -184,6 +196,39 @@ export const AmendmentsTab = () => {
 
   return (
     <div className="amendments-tab">
+      {/* Sub-tabs: My Amendments | MEP Amendments | Comparative Analysis */}
+      <div className="amendments-tab__sub-tabs">
+        <button
+          className={`amendments-tab__sub-tab ${activeSubTab === 'my-amendments' ? 'amendments-tab__sub-tab--active' : ''}`}
+          onClick={() => setActiveSubTab('my-amendments')}
+        >
+          My Amendments
+        </button>
+        <button
+          className={`amendments-tab__sub-tab ${activeSubTab === 'mep-amendments' ? 'amendments-tab__sub-tab--active' : ''}`}
+          onClick={() => setActiveSubTab('mep-amendments')}
+        >
+          <Icon path={mdiAccountGroupOutline} size={0.7} />
+          MEP Amendments
+        </button>
+        <button
+          className={`amendments-tab__sub-tab ${activeSubTab === 'comparative' ? 'amendments-tab__sub-tab--active' : ''}`}
+          onClick={() => setActiveSubTab('comparative')}
+        >
+          <Icon path={mdiScaleBalance} size={0.7} />
+          Comparative Analysis
+        </button>
+      </div>
+
+      {/* MEP Amendments sub-tab */}
+      {activeSubTab === 'mep-amendments' && <MEPAmendmentsTab />}
+
+      {/* Comparative Analysis sub-tab */}
+      {activeSubTab === 'comparative' && <MEPComparativeTab />}
+
+      {/* My Amendments sub-tab (existing content) */}
+      {activeSubTab === 'my-amendments' && (
+      <>
       {/* Header */}
       <div className="amendments-tab__header">
         <div className="amendments-tab__header-left">
@@ -476,6 +521,8 @@ export const AmendmentsTab = () => {
           </div>
         )}
       </div>
+      </>
+      )}
     </div>
   );
 };
