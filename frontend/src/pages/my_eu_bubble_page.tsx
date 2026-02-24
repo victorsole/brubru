@@ -1,8 +1,9 @@
 // frontend/src/pages/my_eu_bubble_page.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
-import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation } from '@mdi/js';
+import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation, mdiCalendarMonth } from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { DocumentsTab } from '../components/bubble/documents_tab';
@@ -13,20 +14,44 @@ import { MyTrackedFilesTab } from '../components/bubble/my_tracked_files_tab';
 import { ECConsultationsTab } from '../components/bubble/ec_consultations_tab';
 import { ConsultationsCTA } from '../components/bubble/consultations_cta';
 import { PredictionsTab } from '../components/bubble/predictions_tab';
+import { EUCalendarTab } from '../components/bubble/eu_calendar_tab';
+import { EUCalendarCTA } from '../components/bubble/eu_calendar_cta';
 import { NewsSidebar } from '../components/bubble/news_sidebar';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import './my_eu_bubble_page.css';
 
-type TabType = 'dashboard' | 'my_files' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
+type TabType = 'dashboard' | 'my_files' | 'eu_calendar' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
+
+const VALID_TABS: TabType[] = [
+  'dashboard', 'my_files', 'eu_calendar', 'predictions', 'consultations',
+  'documents', 'amendments', 'analytics', 'legislative',
+];
 
 export const MyEUBubblePage = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+  const [searchParams] = useSearchParams();
+
+  const [activeTab, setActiveTab] = useState<TabType>(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && VALID_TABS.includes(tabParam as TabType)) {
+      return tabParam as TabType;
+    }
+    return 'dashboard';
+  });
+
+  // Respond to URL param changes (e.g. from calendar deep-links)
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && VALID_TABS.includes(tabParam as TabType)) {
+      setActiveTab(tabParam as TabType);
+    }
+  }, [searchParams]);
 
   const tabs = [
     { id: 'dashboard' as TabType, label: t('bubble.dashboard'), icon: mdiViewDashboard },
     { id: 'my_files' as TabType, label: 'My Files', icon: mdiStarOutline },
+    { id: 'eu_calendar' as TabType, label: t('bubble.tabs.euCalendar', 'My EU Calendar'), icon: mdiCalendarMonth },
     { id: 'predictions' as TabType, label: t('bubble.tabs.predictions', 'Predictions'), icon: mdiCrystalBall, isPredictions: true },
     { id: 'consultations' as TabType, label: t('bubble.tabs.consultations', 'EC Consultations'), icon: mdiCalendarCollapseHorizontal },
     { id: 'documents' as TabType, label: t('bubble.documents'), icon: mdiFileDocument },
@@ -41,6 +66,12 @@ export const MyEUBubblePage = () => {
         return <DashboardTab />;
       case 'my_files':
         return <MyTrackedFilesTab />;
+      case 'eu_calendar':
+        // Show CTA for White tier users, full calendar for Yellow+ tiers
+        if (!user || user.subscription_tier === 'white') {
+          return <EUCalendarCTA />;
+        }
+        return <EUCalendarTab />;
       case 'predictions':
         return <PredictionsTab />;
       case 'consultations':

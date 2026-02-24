@@ -15,8 +15,9 @@
  * Created: February 2026
  */
 
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useSearchParams } from 'react-router-dom';
 import Icon from '@mdi/react';
 import {
   mdiCrystalBall,
@@ -950,6 +951,27 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
       updateQuota(1, 3, resetDate);
     }
   }, [isYellowTier, quota, updateQuota]);
+
+  // Auto-load prediction from URL param (calendar deep-link)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const autoLoadRef = useRef(false);
+  useEffect(() => {
+    const refParam = searchParams.get('ref');
+    if (refParam && !autoLoadRef.current && !isWhiteTier) {
+      autoLoadRef.current = true;
+      const decodedRef = decodeURIComponent(refParam);
+      // Clear param after reading
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete('ref');
+        return next;
+      }, { replace: true });
+      // Generate prediction if not already loaded
+      if (!predictions.some((p) => p.procedure_ref === decodedRef)) {
+        generatePrediction(decodedRef, decodedRef);
+      }
+    }
+  }, [searchParams, predictions, generatePrediction, isWhiteTier, setSearchParams]);
 
   // Handle file selection for prediction
   const handleSelectFile = useCallback(() => {

@@ -36,6 +36,14 @@ from .public_consultation import (
 )
 from .mep_amendment import AmendmentDocument, MEPAmendment
 from .alignment_score import AlignmentScore
+from .eu_calendar import (
+    EUCalendarEvent,
+    UserCalendarSubscription,
+    InstitutionEnum,
+    EventTypeEnum,
+    EventStatusEnum,
+    ReminderPeriodEnum,
+)
 
 __all__ = [
     "User",
@@ -71,4 +79,10 @@ __all__ = [
     "AmendmentDocument",
     "MEPAmendment",
     "AlignmentScore",
+    "EUCalendarEvent",
+    "UserCalendarSubscription",
+    "InstitutionEnum",
+    "EventTypeEnum",
+    "EventStatusEnum",
+    "ReminderPeriodEnum",
 ]
