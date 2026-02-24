@@ -93,17 +93,19 @@ export const TermsPage = () => {
         <section className="policy-page__section">
           <h2>4. Subscription Plans and Billing</h2>
 
-          <h3>4.1 Subscription Tiers</h3>
+          <h3>4.1 Subscription Plans</h3>
           <p>
-            Brubru offers three subscription tiers:
+            Brubru offers a modular pricing model:
           </p>
           <ul>
-            <li><strong>White (Free):</strong> Basic features with usage limits</li>
-            <li><strong>Yellow (€79/month):</strong> Professional features with higher limits</li>
-            <li><strong>Blue (€599/month):</strong> Enterprise features with unlimited usage</li>
+            <li><strong>Free Trial:</strong> 14-day access to any plan</li>
+            <li><strong>Individual Modules:</strong> from &euro;19/month (Amendator, AI Chat, My EU Bubble, EU Law Comply, Tenderator)</li>
+            <li><strong>Bundles:</strong> from &euro;39/month (Starter, Advocate, Professional)</li>
+            <li><strong>EP Plan:</strong> &euro;49/month (for verified APAs and MEPs)</li>
           </ul>
           <p>
             See our <Link to="/subscription" className="policy-page__link">Subscription page</Link> for current pricing and features.
+            All prices are indicative and may be updated; the Subscription page reflects the most current pricing.
           </p>
 
           <h3>4.2 Payment Terms</h3>
@@ -246,16 +248,16 @@ export const TermsPage = () => {
             Scheduled maintenance will be announced in advance when possible.
           </p>
           <ul>
-            <li><strong>White Tier:</strong> Best-effort availability, no SLA</li>
-            <li><strong>Yellow Tier:</strong> 99% uptime target (excluding scheduled maintenance)</li>
-            <li><strong>Blue Tier:</strong> 99.9% uptime SLA with service credits for violations</li>
+            <li><strong>Free Trial:</strong> Best-effort availability, no SLA</li>
+            <li><strong>Individual Modules and Bundles (Starter, Advocate, EP Plan):</strong> 99% uptime target (excluding scheduled maintenance)</li>
+            <li><strong>Professional:</strong> 99.9% uptime SLA with service credits for violations</li>
           </ul>
 
           <h3>8.2 Support</h3>
           <ul>
-            <li><strong>White Tier:</strong> Community support and documentation</li>
-            <li><strong>Yellow Tier:</strong> Email support with 48-hour response time (business days)</li>
-            <li><strong>Blue Tier:</strong> 24/7 priority support with dedicated account manager</li>
+            <li><strong>Free Trial:</strong> Community support and documentation</li>
+            <li><strong>Individual Modules and Bundles (Starter, Advocate, EP Plan):</strong> Email support with 48-hour response time (business days)</li>
+            <li><strong>Professional:</strong> Dedicated support with 24-hour response time</li>
           </ul>
         </section>
 

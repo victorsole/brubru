@@ -143,7 +143,7 @@ export const ConsultationsCTA: React.FC = () => {
       title: t('bubble.consultations.cta.feature3Title', 'AI-Powered Proposals'),
       description: t(
         'bubble.consultations.cta.feature3Desc',
-        'Generate personalised response proposals based on your documents and position papers. (Blue tier)'
+        'Generate personalised response proposals based on your documents and position papers. (Professional plan)'
       ),
     },
     {
@@ -151,7 +151,7 @@ export const ConsultationsCTA: React.FC = () => {
       title: t('bubble.consultations.cta.feature4Title', 'Outcome Analysis'),
       description: t(
         'bubble.consultations.cta.feature4Desc',
-        'Track consultation outcomes and see how well they align with your submitted positions. (Blue tier)'
+        'Track consultation outcomes and see how well they align with your submitted positions. (Professional plan)'
       ),
     },
   ];
@@ -201,14 +201,14 @@ export const ConsultationsCTA: React.FC = () => {
           e.currentTarget.style.boxShadow = '0 4px 14px rgba(249, 115, 22, 0.4)';
         }}
       >
-        {t('bubble.consultations.cta.upgrade', 'Upgrade to Yellow')}
+        {t('bubble.consultations.cta.upgrade', 'Subscribe')}
         <Icon path={mdiArrowRight} size={0.9} />
       </button>
 
       <p style={styles.note}>
         {t(
           'bubble.consultations.cta.note',
-          'Yellow tier unlocks tracking and notifications. Blue tier adds AI proposals and alignment analysis.'
+          'Subscribe to unlock tracking and notifications. Professional plan adds AI proposals and alignment analysis.'
         )}
       </p>
     </div>

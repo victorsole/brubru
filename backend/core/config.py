@@ -66,10 +66,40 @@ class Settings(BaseSettings):
     STRIPE_PUBLISHABLE_KEY: str
     STRIPE_SECRET_KEY: str
     STRIPE_WEBHOOK_SECRET: str | None = None  # Will be set when webhook is configured
-    STRIPE_YELLOW_MONTHLY_PRICE_ID: str
-    STRIPE_YELLOW_ANNUAL_PRICE_ID: str
-    STRIPE_BLUE_MONTHLY_PRICE_ID: str
     APP_URL: str = "http://localhost:5173"
+
+    # Old tier prices (kept for migration, will be removed)
+    STRIPE_YELLOW_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_YELLOW_ANNUAL_PRICE_ID: str | None = None
+    STRIPE_BLUE_MONTHLY_PRICE_ID: str | None = None
+
+    # Individual modules - Monthly
+    STRIPE_CHAT_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_BUBBLE_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_AMENDATOR_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_COMPLY_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_TENDERATOR_MONTHLY_PRICE_ID: str | None = None
+
+    # Individual modules - Annual
+    STRIPE_CHAT_ANNUAL_PRICE_ID: str | None = None
+    STRIPE_BUBBLE_ANNUAL_PRICE_ID: str | None = None
+    STRIPE_AMENDATOR_ANNUAL_PRICE_ID: str | None = None
+    STRIPE_COMPLY_ANNUAL_PRICE_ID: str | None = None
+    STRIPE_TENDERATOR_ANNUAL_PRICE_ID: str | None = None
+
+    # Bundles - Monthly
+    STRIPE_STARTER_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_ADVOCATE_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_PROFESSIONAL_MONTHLY_PRICE_ID: str | None = None
+
+    # Bundles - Annual
+    STRIPE_STARTER_ANNUAL_PRICE_ID: str | None = None
+    STRIPE_ADVOCATE_ANNUAL_PRICE_ID: str | None = None
+    STRIPE_PROFESSIONAL_ANNUAL_PRICE_ID: str | None = None
+
+    # EP Plan (APAs/MEPs)
+    STRIPE_EP_MONTHLY_PRICE_ID: str | None = None
+    STRIPE_EP_ANNUAL_PRICE_ID: str | None = None
 
     # Email (Gmail SMTP via Google Workspace)
     SMTP_HOST: str = "smtp.gmail.com"

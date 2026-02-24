@@ -861,7 +861,7 @@ const LockedState: React.FC<{ onUpgrade: () => void }> = ({ onUpgrade }) => (
       <Icon path={mdiLock} size={2.5} className="predictions-tab__locked-lock" />
     </div>
     <h2 className="predictions-tab__locked-title">
-      Predictions are a Yellow feature
+      Predictions require a subscription
     </h2>
     <p className="predictions-tab__locked-text">
       Know the odds of your legislation passing. See how MEPs and member states
@@ -869,10 +869,10 @@ const LockedState: React.FC<{ onUpgrade: () => void }> = ({ onUpgrade }) => (
     </p>
     <button className="predictions-tab__upgrade-btn" onClick={onUpgrade}>
       <Icon path={mdiStar} size={0.875} />
-      Upgrade to Yellow - EUR 79/month
+      Subscribe -- from EUR 39/month
     </button>
     <p className="predictions-tab__locked-note">
-      Yellow subscribers get 3 predictions per month
+      Available with Starter, Advocate, and Professional plans
     </p>
   </div>
 );
@@ -1083,7 +1083,7 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
         Add another prediction
       </button>
 
-      {/* Blue tier unlimited note */}
+      {/* Professional plan unlimited note */}
       {isBlueTier && (
         <p className="predictions-tab__unlimited">
           <Icon
@@ -1091,7 +1091,7 @@ export const PredictionsTab: React.FC<PredictionsTabProps> = ({ className }) => 
             size={0.75}
             className="predictions-tab__unlimited-icon"
           />
-          Blue tier: Unlimited predictions
+          Professional: Unlimited predictions
         </p>
       )}
 

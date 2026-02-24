@@ -144,7 +144,7 @@ export const EUCalendarCTA: React.FC = () => {
       title: t('bubble.euCalendar.cta.feature3Title', 'My EU Today Digest'),
       description: t(
         'bubble.euCalendar.cta.feature3Desc',
-        'Start your day with a summary of today\'s EU events. Blue tier includes AI-generated briefings.'
+        'Start your day with a summary of today\'s EU events. Professional plan includes AI-generated briefings.'
       ),
     },
     {
@@ -202,14 +202,14 @@ export const EUCalendarCTA: React.FC = () => {
           e.currentTarget.style.boxShadow = '0 4px 14px rgba(6, 147, 227, 0.4)';
         }}
       >
-        {t('bubble.euCalendar.cta.upgrade', 'Upgrade to Yellow')}
+        {t('bubble.euCalendar.cta.upgrade', 'Subscribe')}
         <Icon path={mdiArrowRight} size={0.9} />
       </button>
 
       <p style={styles.note}>
         {t(
           'bubble.euCalendar.cta.note',
-          'Yellow tier unlocks full calendar access. Blue tier adds AI daily digest and advanced features.'
+          'Subscribe to unlock full calendar access. Professional plan adds AI daily digest and advanced features.'
         )}
       </p>
     </div>

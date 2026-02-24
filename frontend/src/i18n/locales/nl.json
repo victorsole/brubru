@@ -161,95 +161,70 @@
   },
   "subscription": {
     "hero": {
-      "title": "Kies Je Brubru Plan",
-      "subtitle": "Krachtige EU-beleidsintelligentie voor elke professional",
-      "description": "Of je nu een advocacy professional, assistent van een Europarlementarier of beleidsexpert bent, we hebben een plan dat bij je past."
+      "title": "Kies je Brubru Plan",
+      "subtitle": "Modulaire EU-beleidsintelligentie -- kies wat je nodig hebt",
+      "description": "Begin met individuele modules of bespaar met bundels. Alle plannen bevatten 14 dagen gratis proefperiode."
     },
-    "white": {
-      "name": "Basis",
-      "price": "0 EUR",
-      "period": "/maand",
-      "description": "Essentiele tools om te beginnen met EU-beleidsmonitoring",
-      "button": "Aan de Slag"
+    "toggle": { "monthly": "Maandelijks", "annual": "Jaarlijks", "saveTag": "Bespaar tot 20%" },
+    "bundles": { "title": "Bundels", "subtitle": "Bespaar door modules te combineren" },
+    "modules": { "title": "Individuele Modules", "subtitle": "Kies alleen wat je nodig hebt" },
+    "starter": {
+      "name": "Starter", "badge": "STARTER", "priceMonthly": "39", "priceAnnual": "33", "annualTotal": "396",
+      "includes": "Chat + My EU Bubble", "description": "Essentieel AI-chat en beleidsmonitoring om te beginnen",
+      "f1": "AI Policy Chat (onbeperkt)", "f2": "My EU Bubble dashboard", "f3": "RSS-feed aggregatie", "f4": "Legislative Train tracker", "f5": "Basis exports (XML, HTML)",
+      "button": "Starter kiezen"
     },
-    "yellow": {
-      "name": "Professioneel",
-      "price": "79 EUR",
-      "period": "/maand",
-      "annualPrice": "of 790 EUR/jaar",
-      "annualSavings": "(bespaar 158 EUR)",
-      "description": "Geavanceerde AI en onbeperkte amendementen voor advocacy professionals",
-      "button": "Upgraden naar Professioneel",
-      "popular": "Meest Populair"
+    "advocate": {
+      "name": "Advocate", "badge": "ADVOCATE -- MEEST POPULAIR", "priceMonthly": "59", "priceAnnual": "42", "annualTotal": "499",
+      "includes": "Chat + Bubble + Amendator", "description": "Compleet advocacy-pakket met amendementen en AI-analyse",
+      "f1": "Alles in Starter", "f2": "Amendator (onbeperkte amendementen)", "f3": "AI-aangedreven amendementsuggesties", "f4": "PDF/Word exports (zonder watermerk)", "f5": "Prioritaire reactietijden",
+      "button": "Advocate kiezen"
     },
-    "blue": {
-      "name": "Enterprise",
-      "price": "Aangepaste prijzen",
-      "period": "",
-      "description": "Oplossingen op maat voor teams en organisaties met specifieke vereisten",
-      "button": "Neem Contact Op",
-      "contactEmail": "hello@beresol.eu",
-      "minUsers": "5+ gebruikers"
+    "professional": {
+      "name": "Professional", "badge": "PROFESSIONAL -- BESTE WAARDE", "priceMonthly": "99", "priceAnnual": "67", "annualTotal": "799",
+      "includes": "Alle 5 modules", "description": "Volledig platformtoegang met nalevingscontrole en aanbestedingsanalyse",
+      "f1": "Alles in Advocate", "f2": "EU Law Comply", "f3": "Tenderator", "f4": "Raadsstemvoorspellingen", "f5": "Dedicated support (24u)", "f6": "API-toegang",
+      "button": "Professional kiezen"
+    },
+    "ep": {
+      "name": "EP Plan", "badge": "EP PLAN -- VOOR APA's EN MEP's", "priceMonthly": "49", "priceAnnual": "45", "annualTotal": "539",
+      "includes": "Chat + Bubble + Amendator", "description": "Ontworpen voor geaccrediteerde parlementaire assistenten en Europarlementariers.",
+      "f1": "AI-chat met EP-context", "f2": "My EU Bubble + commissiemonitoring", "f3": "Amendator met EP-opmaak", "f4": "EP schriftelijke vragen generator", "f5": "Prioritaire EP-ondersteuning",
+      "button": "EP Plan kiezen", "note": "Vereist EP-accreditatieverificatie"
+    },
+    "module": {
+      "chat": { "name": "AI Chat", "price": "29", "description": "AI-chat assistent voor EU-beleid", "planId": "chat" },
+      "bubble": { "name": "My EU Bubble", "price": "29", "description": "RSS-feeds, wetgevingsmonitoring, voorspellingen", "planId": "bubble" },
+      "amendator": { "name": "Amendator", "price": "19", "description": "Tool voor het opstellen van wetgevingsamendamenten", "planId": "amendator" },
+      "comply": { "name": "EU Law Comply", "price": "29", "description": "Nalevingsanalyse", "planId": "comply" },
+      "tenderator": { "name": "Tenderator", "price": "49", "description": "EU-aanbestedingsanalyse en matching", "planId": "tenderator" }
     },
     "features": {
-      "title": "Functievergelijking",
-      "subtitle": "Bekijk wat elk plan bevat",
-      "white": {
-        "chat": "Basis AI-chat",
-        "amendments": "5 amendementen per maand",
-        "searches": "5 opgeslagen zoekopdrachten",
-        "support": "Community ondersteuning",
-        "exports": "Basis exports (XML, HTML)",
-        "watermark": "Brubru watermerk op exports"
-      },
-      "yellow": {
-        "chat": "Geavanceerde AI-chat",
-        "amendments": "Onbeperkte amendementen",
-        "searches": "Onbeperkte opgeslagen zoekopdrachten",
-        "support": "E-mail ondersteuning (48u respons)",
-        "exports": "Alle exportformaten (PDF, Word, XML, HTML)",
-        "watermark": "Geen watermerk",
-        "priority": "Prioritaire responstijden",
-        "rss": "RSS-feed meldingen",
-        "personalization": "Gepersonaliseerde begroeting"
-      },
-      "blue": {
-        "everything": "Alles in Professioneel, plus:",
-        "multiUser": "Multi-user teamaccounts",
-        "support": "Toegewijde ondersteuning (24u respons)",
-        "customDomain": "Aangepaste domeinspecialisatie",
-        "whiteLabel": "White-label opties",
-        "sla": "Service Level Agreement (SLA)",
-        "training": "Onboarding & training",
-        "api": "API-toegang",
-        "preferences": "Geavanceerde gebruikersvoorkeuren"
+      "title": "Functievergelijking", "subtitle": "Bekijk wat er in elk plan zit",
+      "columns": { "feature": "Functie", "free": "Gratis Proef", "starter": "Starter", "advocate": "Advocate", "professional": "Professional" },
+      "rows": {
+        "chat": "AI Beleidschat", "chatFree": "5 berichten/dag", "chatStarter": "Onbeperkt", "chatAdvocate": "Onbeperkt", "chatProfessional": "Onbeperkt + prioriteit",
+        "amendments": "Amendementen", "amendmentsFree": "5/maand", "amendmentsStarter": "--", "amendmentsAdvocate": "Onbeperkt", "amendmentsProfessional": "Onbeperkt",
+        "rss": "RSS en Wetgevingsmonitoring", "rssFree": "Beperkt", "rssStarter": "Volledige toegang", "rssAdvocate": "Volledige toegang", "rssProfessional": "Volledige toegang",
+        "predictions": "Wetgevingsvoorspellingen", "predictionsFree": "--", "predictionsStarter": "EP-stemmen", "predictionsAdvocate": "EP-stemmen", "predictionsProfessional": "EP + Raad",
+        "comply": "EU Law Comply", "complyFree": "--", "complyStarter": "--", "complyAdvocate": "--", "complyProfessional": "Volledige toegang",
+        "tenderator": "Tenderator", "tenderatorFree": "--", "tenderatorStarter": "--", "tenderatorAdvocate": "--", "tenderatorProfessional": "Volledige toegang",
+        "exports": "Exportformaten", "exportsFree": "XML, HTML", "exportsStarter": "XML, HTML", "exportsAdvocate": "Alle formaten", "exportsProfessional": "Alle formaten",
+        "support": "Ondersteuning", "supportFree": "Community", "supportStarter": "Email (48u)", "supportAdvocate": "Email (48u)", "supportProfessional": "Dedicated (24u)"
       }
     },
     "faq": {
       "title": "Veelgestelde Vragen",
-      "q1": "Welke betaalmethoden accepteren jullie?",
-      "a1": "We accepteren alle grote creditcards, debitcards en bankoverschrijvingen via Stripe. Enterprise klanten kunnen facturatie regelen.",
-      "q2": "Kan ik later van plan wisselen?",
-      "a2": "Ja, je kunt op elk moment upgraden. Downgrades gaan in aan het einde van je huidige factureringscyclus.",
-      "q3": "Wat is jullie terugbetalingsbeleid?",
-      "a3": "We bieden een 14-dagen geld-terug-garantie voor jaarplannen. Maandplannen kunnen op elk moment worden opgezegd.",
-      "q4": "Bieden jullie een gratis proefperiode?",
-      "a4": "Ons Basis niveau is voor altijd gratis met 5 amendementen per maand. Je kunt Professionele functies uitproberen met een 14-dagen proefperiode.",
-      "q5": "Hoe werkt Enterprise-prijsstelling?",
-      "a5": "Enterprise-prijsstelling is aangepast op basis van teamgrootte, functievereisten en gebruiksvolume. Neem contact met ons op voor een offerte op maat.",
-      "q6": "Wat gebeurt er als ik mijn amendementlimiet overschrijd?",
-      "a6": "Gebruikers van het Basis niveau zijn beperkt tot 5 amendementen per maand. Om meer te maken, upgrade naar Professioneel voor onbeperkte amendementen."
+      "q1": "Welke betaalmethoden accepteren jullie?", "a1": "We accepteren alle gangbare creditcards, debitcards en bankoverschrijvingen via Stripe.",
+      "q2": "Kan ik later van plan wisselen?", "a2": "Ja, je kunt op elk moment wisselen tussen modules en bundels. Upgrades gaan direct in; downgrades aan het einde van je factureringsperiode.",
+      "q3": "Wat is jullie terugbetalingsbeleid?", "a3": "We bieden een 14-dagen geld-terug-garantie op alle plannen. Maandplannen kunnen op elk moment worden opgezegd.",
+      "q4": "Bieden jullie een gratis proefperiode?", "a4": "Ja, alle plannen bevatten een gratis proefperiode van 14 dagen. Geen creditcard nodig om te beginnen.",
+      "q5": "Kan ik individuele modules combineren?", "a5": "Je kunt je apart abonneren op individuele modules, maar bundels bieden aanzienlijke besparingen.",
+      "q6": "Wat is het EP Plan?", "a6": "Het EP Plan is ontworpen voor geaccrediteerde parlementaire assistenten en Europarlementariers. Het bevat Chat, Bubble en Amendator met EP-specifieke AI-context."
     },
-    "trust": {
-      "title": "Vertrouwd door beleidsprofessionals in heel Europa",
-      "subtitle": "Sluit je aan bij organisaties die Brubru al gebruiken"
-    },
-    "cta": {
-      "title": "Klaar om te beginnen?",
-      "subtitle": "Sluit je aan bij beleidsprofessionals die Brubru gebruiken om door het EU-landschap te navigeren",
-      "button": "Gratis Beginnen",
-      "contact": "Of neem contact op voor Enterprise"
-    }
+    "trust": { "title": "Vertrouwd door beleidsprofessionals in heel Europa", "subtitle": "Sluit je aan bij organisaties die Brubru al gebruiken" },
+    "cta": { "title": "Klaar om te beginnen?", "subtitle": "Begin vandaag je gratis proefperiode van 14 dagen -- geen creditcard nodig", "button": "Start Gratis Proef", "contact": "Of neem contact op voor zakelijke behoeften" },
+    "contactEmail": "hello@beresol.eu"
   },
   "euLawComply": {
     "history": "Analyse Geschiedenis",
@@ -344,49 +319,15 @@
     },
     "pricing": {
       "eyebrow": "Prijzen",
-      "title": "<strong>Kies je plan</strong>",
-      "subtitle": "Begin gratis, upgrade wanneer je meer nodig hebt",
-      "white": {
-        "badge": "WHITE",
-        "name": "Basis",
-        "price": "€0",
-        "period": "/maand",
-        "f1": "Basis AI-chat",
-        "f2": "EU-wetgeving doorzoeken",
-        "f3": "EP-profielen bekijken",
-        "f4": "5 amendementen/maand",
-        "f5": "Watermerk op exports",
-        "button": "Gratis beginnen"
-      },
-      "yellow": {
-        "badge": "YELLOW — MEEST POPULAIR",
-        "name": "Professioneel",
-        "price": "€79",
-        "period": "/maand",
-        "savings": "of €790/jaar (bespaar €158)",
-        "f1": "Alles in White",
-        "f2": "Onbeperkte amendementen",
-        "f3": "Geavanceerde AI + voorspellingen",
-        "f4": "PDF/Word downloads",
-        "f5": "Aangepaste RSS-meldingen",
-        "f6": "API-toegang (1.000 aanroepen/maand)",
-        "button": "14 dagen proefperiode"
-      },
-      "blue": {
-        "badge": "BLUE",
-        "name": "Enterprise",
-        "price": "Aangepaste prijzen",
-        "note": "5+ gebruikers — Neem contact op voor een offerte op maat",
-        "f1": "Alles in Yellow",
-        "f2": "Multi-user teams (5+)",
-        "f3": "Domeinspecialisatie",
-        "f4": "Aangepaste kennisbank",
-        "f5": "Toegewijd accountmanager",
-        "button": "Neem contact op"
-      }
+      "title": "<strong>Kies je Plan</strong>",
+      "subtitle": "14 dagen gratis proef op alle plannen",
+      "starter": { "badge": "STARTER", "name": "Starter", "price": "\u20ac39", "period": "/maand", "savings": "of \u20ac396/jaar (bespaar \u20ac72)", "f1": "AI Policy Chat (onbeperkt)", "f2": "My EU Bubble dashboard", "f3": "RSS-feed aggregatie", "f4": "Legislative Train tracker", "button": "Start Gratis Proef" },
+      "advocate": { "badge": "ADVOCATE \u2014 MEEST POPULAIR", "name": "Advocate", "price": "\u20ac59", "period": "/maand", "savings": "of \u20ac499/jaar (bespaar \u20ac209)", "f1": "Alles in Starter", "f2": "Amendator (onbeperkt)", "f3": "AI amendementsuggesties", "f4": "PDF/Word exports", "button": "Start Gratis Proef" },
+      "professional": { "badge": "PROFESSIONAL \u2014 BESTE WAARDE", "name": "Professional", "price": "\u20ac99", "period": "/maand", "savings": "of \u20ac799/jaar (bespaar \u20ac389)", "f1": "Alles in Advocate", "f2": "EU Law Comply", "f3": "Tenderator", "f4": "Raadsstemvoorspellingen", "f5": "Dedicated support (24u)", "button": "Start Gratis Proef" },
+      "allPlans": "Bekijk alle plannen en modules"
     },
     "clients": {
-      "eyebrow": "Blue Niveau",
+      "eyebrow": "Enterprise",
       "title": "Gespecialiseerde Brubru",
       "subtitle": "Op maat gemaakt voor jouw sector",
       "contactUs": "Neem contact op",

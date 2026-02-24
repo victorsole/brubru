@@ -144,8 +144,8 @@ export const SignupPage = () => {
           <h1>Create Your Account</h1>
           <p>
             {preselectedTier === 'yellow'
-              ? 'Start your 14-day Yellow tier trial'
-              : 'Start with free White tier'}
+              ? 'Start your 14-day free trial'
+              : 'Create your account to get started'}
           </p>
         </div>
 

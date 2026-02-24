@@ -272,7 +272,7 @@ export const EUComplyPage = ({ isSidebarOpen }: EUComplyPageProps) => {
             <div className="eu-comply-page__header-actions">
               <div className="eu-comply-page__tier-notice">
                 <span className="mdi mdi-information-outline"></span>
-                Personalized compliance curation available with Blue tier
+                Personalised compliance curation available with Professional plan
               </div>
               <button
                 className="eu-comply-page__sidebar-toggle"

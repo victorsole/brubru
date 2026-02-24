@@ -706,7 +706,7 @@ export const ConsultationDetail: React.FC<ConsultationDetailProps> = ({
                 <div style={{ padding: '0 1rem 1rem', textAlign: 'center' as const }}>
                   <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>
                     {t('bubble.consultations.proposalsUpgrade',
-                      'Upgrade to Blue tier to generate personalised response proposals based on your documents and interests.'
+                      'Upgrade to Professional to generate personalised response proposals based on your documents and interests.'
                     )}
                   </p>
                 </div>

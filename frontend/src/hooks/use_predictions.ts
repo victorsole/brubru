@@ -106,7 +106,7 @@ export const usePredictions = create<PredictionsState>((set, get) => ({
 
     // Check quota (Yellow tier)
     if (quota && quota.used >= quota.total) {
-      set({ error: 'Monthly prediction quota reached. Upgrade to Blue for unlimited predictions.' });
+      set({ error: 'Monthly prediction quota reached. Upgrade to Professional for unlimited predictions.' });
       return null;
     }
 

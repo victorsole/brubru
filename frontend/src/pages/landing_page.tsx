@@ -249,68 +249,73 @@ export const LandingPage = () => {
           <p className="pricing__subtitle fade-up">{t('landing.pricing.subtitle')}</p>
 
           <div className="pricing__grid">
-            {/* White */}
+            {/* Starter */}
             <div className="pricing__card fade-up">
-              <div className="pricing__badge pricing__badge--white">
-                <span className="mdi mdi-heart-outline" /> {t('landing.pricing.white.badge')}
+              <div className="pricing__badge pricing__badge--green">
+                {t('landing.pricing.starter.badge')}
               </div>
-              <h3>{t('landing.pricing.white.name')}</h3>
+              <h3>{t('landing.pricing.starter.name')}</h3>
               <div className="pricing__price">
-                <span className="pricing__amount">{t('landing.pricing.white.price')}</span>
-                <span className="pricing__period">{t('landing.pricing.white.period')}</span>
+                <span className="pricing__amount">{t('landing.pricing.starter.price')}</span>
+                <span className="pricing__period">{t('landing.pricing.starter.period')}</span>
               </div>
+              <p className="pricing__savings">{t('landing.pricing.starter.savings')}</p>
               <ul className="pricing__features">
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.white.f1')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.white.f2')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.white.f3')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.white.f4')}</li>
-                <li><span className="mdi mdi-close" /> {t('landing.pricing.white.f5')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f1')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f2')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f3')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.starter.f4')}</li>
               </ul>
-              <Link to="/main" className="btn btn--outline" style={{ width: '100%' }}>{t('landing.pricing.white.button')}</Link>
+              <Link to="/subscription" className="btn btn--outline" style={{ width: '100%' }}>{t('landing.pricing.starter.button')}</Link>
             </div>
 
-            {/* Yellow */}
+            {/* Advocate */}
             <div className="pricing__card pricing__card--featured fade-up">
               <div className="pricing__badge pricing__badge--yellow">
-                <span className="mdi mdi-heart" /> {t('landing.pricing.yellow.badge')}
+                {t('landing.pricing.advocate.badge')}
               </div>
-              <h3>{t('landing.pricing.yellow.name')}</h3>
+              <h3>{t('landing.pricing.advocate.name')}</h3>
               <div className="pricing__price">
-                <span className="pricing__amount">{t('landing.pricing.yellow.price')}</span>
-                <span className="pricing__period">{t('landing.pricing.yellow.period')}</span>
+                <span className="pricing__amount">{t('landing.pricing.advocate.price')}</span>
+                <span className="pricing__period">{t('landing.pricing.advocate.period')}</span>
               </div>
-              <p className="pricing__savings">{t('landing.pricing.yellow.savings')}</p>
+              <p className="pricing__savings">{t('landing.pricing.advocate.savings')}</p>
               <ul className="pricing__features">
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.yellow.f1')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.yellow.f2')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.yellow.f3')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.yellow.f4')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.yellow.f5')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.yellow.f6')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f1')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f2')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f3')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.advocate.f4')}</li>
               </ul>
-              <Link to="/signup?tier=yellow" className="btn btn--primary" style={{ width: '100%' }}>{t('landing.pricing.yellow.button')}</Link>
+              <Link to="/subscription" className="btn btn--primary" style={{ width: '100%' }}>{t('landing.pricing.advocate.button')}</Link>
             </div>
 
-            {/* Blue */}
+            {/* Professional */}
             <div className="pricing__card fade-up">
               <div className="pricing__badge pricing__badge--blue">
-                <span className="mdi mdi-heart" /> {t('landing.pricing.blue.badge')}
+                {t('landing.pricing.professional.badge')}
               </div>
-              <h3>{t('landing.pricing.blue.name')}</h3>
+              <h3>{t('landing.pricing.professional.name')}</h3>
               <div className="pricing__price">
-                <span className="pricing__amount" style={{ fontSize: '1.5rem' }}>{t('landing.pricing.blue.price')}</span>
+                <span className="pricing__amount">{t('landing.pricing.professional.price')}</span>
+                <span className="pricing__period">{t('landing.pricing.professional.period')}</span>
               </div>
-              <p className="pricing__note">{t('landing.pricing.blue.note')}</p>
+              <p className="pricing__savings">{t('landing.pricing.professional.savings')}</p>
               <ul className="pricing__features">
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.blue.f1')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.blue.f2')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.blue.f3')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.blue.f4')}</li>
-                <li><span className="mdi mdi-check" /> {t('landing.pricing.blue.f5')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f1')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f2')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f3')}</li>
+                <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f4')}</li>
+                {t('landing.pricing.professional.f5', '') && (
+                  <li><span className="mdi mdi-check" /> {t('landing.pricing.professional.f5')}</li>
+                )}
               </ul>
-              <a href="mailto:hello@beresol.eu" className="btn btn--outline" style={{ width: '100%' }}>{t('landing.pricing.blue.button')}</a>
+              <Link to="/subscription" className="btn btn--outline" style={{ width: '100%' }}>{t('landing.pricing.professional.button')}</Link>
             </div>
           </div>
+
+          <p className="pricing__all-plans fade-up">
+            <Link to="/subscription">{t('landing.pricing.allPlans')}</Link>
+          </p>
         </section>
 
         {/* ========== 7. CLIENTS ========== */}

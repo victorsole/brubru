@@ -754,6 +754,7 @@ html.landing-scroll-snap {
 }
 
 .landing .pricing__badge--white { background: var(--color-bg-alt); color: var(--color-text-muted); }
+.landing .pricing__badge--green { background: #d1fae5; color: #065f46; }
 .landing .pricing__badge--yellow { background: #fef3c7; color: #92400e; }
 .landing .pricing__badge--blue { background: #dbeafe; color: #1e40af; }
 
@@ -801,6 +802,24 @@ html.landing-scroll-snap {
 .landing .pricing__features li:last-child { border-bottom: none; }
 .landing .pricing__features .mdi-check { color: var(--color-green); }
 .landing .pricing__features .mdi-close { color: var(--color-text-muted); }
+
+.landing .pricing__all-plans {
+  text-align: center;
+  margin-top: var(--spacing-xl);
+  font-size: var(--font-size-lg);
+}
+
+.landing .pricing__all-plans a {
+  color: var(--color-blue);
+  font-weight: 600;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.landing .pricing__all-plans a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
 
 /* =====================================================
    CLIENTS / BLUE TIER EXAMPLES

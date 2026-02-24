@@ -80,26 +80,34 @@ export const AboutPage = () => {
         </section>
 
         <section className="policy-page__section">
-          <h2>Subscription Tiers</h2>
+          <h2>Subscription Plans</h2>
 
           <div className="policy-page__tier">
-            <h3>White (Free)</h3>
-            <p>Perfect for individuals exploring EU policy work. Includes basic chat, 5 amendments per month, and limited export options.</p>
+            <h3>Starter (from &euro;39/month)</h3>
+            <p>AI Chat and My EU Bubble dashboard with RSS aggregation and legislative tracking. Perfect for getting started with EU policy monitoring.</p>
           </div>
 
           <div className="policy-page__tier">
-            <h3>Yellow (€79/month)</h3>
+            <h3>Advocate (from &euro;59/month)</h3>
             <p>
-              For professional consultants and advocates. Unlimited amendments, advanced AI models (GPT-4, Claude),
-              all export formats, 1,000 API calls per month, and email support.
+              Full advocacy toolkit. Everything in Starter plus Amendator with unlimited amendments,
+              AI-powered amendment suggestions, and PDF/Word exports without watermark.
             </p>
           </div>
 
           <div className="policy-page__tier">
-            <h3>Blue (€599/month)</h3>
+            <h3>Professional (from &euro;99/month)</h3>
             <p>
-              Enterprise solution for large organizations. Everything in Yellow plus unlimited API calls,
-              multi-user accounts, white-label support, dedicated account manager, and 24/7 priority support.
+              Complete platform access. Everything in Advocate plus EU Law Comply, Tenderator,
+              Council vote predictions, dedicated support, and API access.
+            </p>
+          </div>
+
+          <div className="policy-page__tier">
+            <h3>EP Plan (&euro;49/month)</h3>
+            <p>
+              Tailored for accredited parliamentary assistants and MEPs. Includes Chat, Bubble, and Amendator
+              with EP-specific AI context and committee monitoring.
             </p>
           </div>
 

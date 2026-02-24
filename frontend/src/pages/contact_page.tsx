@@ -37,21 +37,21 @@ export const ContactPage = () => {
           </div>
 
           <div className="policy-page__feature">
-            <h3>Yellow Tier (Professional) Users</h3>
+            <h3>Starter &amp; Advocate Plan Users</h3>
             <p>
               Email support with 48-hour response time during business days.
               Send your inquiries to <a href="mailto:hello@beresol.eu" className="policy-page__link">hello@beresol.eu</a>
-              with "Yellow Support" in the subject line.
+              with "Support" in the subject line.
             </p>
           </div>
 
           <div className="policy-page__feature">
-            <h3>Blue Tier (Enterprise) Users</h3>
+            <h3>Professional Plan Users</h3>
             <p>
-              Priority 24/7 support with dedicated account manager.
+              Dedicated support with 24-hour response time.
               Contact your assigned account manager directly or email
               <a href="mailto:hello@beresol.eu" className="policy-page__link"> hello@beresol.eu</a>
-              with "Blue Priority" in the subject line for immediate escalation.
+              with "Priority Support" in the subject line for immediate escalation.
             </p>
           </div>
         </section>
@@ -140,8 +140,8 @@ export const ContactPage = () => {
           <h2>Response Times</h2>
           <ul>
             <li><strong>General Inquiries:</strong> 3-5 business days</li>
-            <li><strong>Yellow Tier Support:</strong> 48 hours (business days)</li>
-            <li><strong>Blue Tier Support:</strong> 24/7 priority response</li>
+            <li><strong>Starter &amp; Advocate Support:</strong> 48 hours (business days)</li>
+            <li><strong>Professional Support:</strong> 24-hour dedicated response</li>
             <li><strong>Enterprise Sales:</strong> 2 business days</li>
             <li><strong>Privacy/GDPR Requests:</strong> 30 days (as required by GDPR)</li>
           </ul>

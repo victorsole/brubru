@@ -90,11 +90,11 @@
         "feature2Title": "Deadline Reminders",
         "feature2Desc": "Receive reminders 7 days, 3 days, and 1 day before consultation deadlines. Never miss an opportunity to have your say.",
         "feature3Title": "AI-Powered Proposals",
-        "feature3Desc": "Generate personalised response proposals based on your documents and position papers. (Blue tier)",
+        "feature3Desc": "Generate personalised response proposals based on your documents and position papers. (Professional plan)",
         "feature4Title": "Outcome Analysis",
-        "feature4Desc": "Track consultation outcomes and see how well they align with your submitted positions. (Blue tier)",
-        "upgrade": "Upgrade to Yellow",
-        "note": "Yellow tier unlocks tracking and notifications. Blue tier adds AI proposals and alignment analysis."
+        "feature4Desc": "Track consultation outcomes and see how well they align with your submitted positions. (Professional plan)",
+        "upgrade": "Subscribe",
+        "note": "Subscribe to unlock tracking and notifications. Professional plan adds AI proposals and alignment analysis."
       }
     }
   },
@@ -162,83 +162,183 @@
   "subscription": {
     "hero": {
       "title": "Choose Your Brubru Plan",
-      "subtitle": "Powerful EU policy intelligence for every professional",
-      "description": "Whether you're an advocacy professional, MEP assistant, or policy expert, we have a plan that fits your needs."
+      "subtitle": "Modular EU policy intelligence -- pick what you need",
+      "description": "Start with individual modules or save with bundles. All plans include a 14-day free trial."
     },
-    "white": {
-      "name": "Basic",
-      "price": "€0",
-      "period": "/month",
-      "description": "Essential tools to get started with EU policy monitoring",
-      "button": "Get Started"
+    "toggle": {
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "saveTag": "Save up to 20%"
     },
-    "yellow": {
+    "bundles": {
+      "title": "Bundles",
+      "subtitle": "Save by combining modules"
+    },
+    "modules": {
+      "title": "Individual Modules",
+      "subtitle": "Pick only what you need"
+    },
+    "starter": {
+      "name": "Starter",
+      "badge": "STARTER",
+      "priceMonthly": "39",
+      "priceAnnual": "33",
+      "annualTotal": "396",
+      "includes": "Chat + My EU Bubble",
+      "description": "Essential AI chat and policy monitoring for getting started",
+      "f1": "AI Policy Chat (unlimited)",
+      "f2": "My EU Bubble dashboard",
+      "f3": "RSS feed aggregation",
+      "f4": "Legislative Train tracker",
+      "f5": "Basic exports (XML, HTML)",
+      "button": "Get Starter"
+    },
+    "advocate": {
+      "name": "Advocate",
+      "badge": "ADVOCATE -- MOST POPULAR",
+      "priceMonthly": "59",
+      "priceAnnual": "42",
+      "annualTotal": "499",
+      "includes": "Chat + Bubble + Amendator",
+      "description": "Full advocacy toolkit with amendment drafting and AI analysis",
+      "f1": "Everything in Starter",
+      "f2": "Amendator (unlimited amendments)",
+      "f3": "AI-powered amendment suggestions",
+      "f4": "PDF/Word exports (no watermark)",
+      "f5": "Priority response times",
+      "button": "Get Advocate"
+    },
+    "professional": {
       "name": "Professional",
-      "price": "€79",
-      "period": "/month",
-      "annualPrice": "or €790/year",
-      "annualSavings": "(save €158)",
-      "description": "Advanced AI and unlimited amendments for professional advocates",
-      "button": "Upgrade to Professional",
-      "popular": "Most Popular"
+      "badge": "PROFESSIONAL -- BEST VALUE",
+      "priceMonthly": "99",
+      "priceAnnual": "67",
+      "annualTotal": "799",
+      "includes": "All 5 modules",
+      "description": "Complete platform access with compliance checking and tender analysis",
+      "f1": "Everything in Advocate",
+      "f2": "EU Law Comply",
+      "f3": "Tenderator",
+      "f4": "Council vote predictions",
+      "f5": "Dedicated support (24h)",
+      "f6": "API access",
+      "button": "Get Professional"
     },
-    "blue": {
-      "name": "Enterprise",
-      "price": "Custom pricing",
-      "period": "",
-      "description": "Tailored solutions for teams and organisations with custom requirements",
-      "button": "Contact Us",
-      "contactEmail": "hello@beresol.eu",
-      "minUsers": "5+ users"
+    "ep": {
+      "name": "EP Plan",
+      "badge": "EP PLAN -- FOR APAs & MEPs",
+      "priceMonthly": "49",
+      "priceAnnual": "45",
+      "annualTotal": "539",
+      "includes": "Chat + Bubble + Amendator",
+      "description": "Tailored for accredited parliamentary assistants and MEPs. Includes EP-specific AI context and committee monitoring.",
+      "f1": "AI Chat with EP context",
+      "f2": "My EU Bubble + committee monitoring",
+      "f3": "Amendator with EP formatting",
+      "f4": "EP Written Questions generator",
+      "f5": "Priority EP support",
+      "button": "Get EP Plan",
+      "note": "Requires EP accreditation verification"
+    },
+    "module": {
+      "chat": {
+        "name": "AI Chat",
+        "price": "29",
+        "description": "AI-powered EU policy chat assistant",
+        "planId": "chat"
+      },
+      "bubble": {
+        "name": "My EU Bubble",
+        "price": "29",
+        "description": "RSS feeds, legislative tracking, predictions",
+        "planId": "bubble"
+      },
+      "amendator": {
+        "name": "Amendator",
+        "price": "19",
+        "description": "Legislative amendment drafting tool",
+        "planId": "amendator"
+      },
+      "comply": {
+        "name": "EU Law Comply",
+        "price": "29",
+        "description": "Compliance gap analysis",
+        "planId": "comply"
+      },
+      "tenderator": {
+        "name": "Tenderator",
+        "price": "49",
+        "description": "EU tender analysis and matching",
+        "planId": "tenderator"
+      }
     },
     "features": {
       "title": "Feature Comparison",
       "subtitle": "See what's included in each plan",
-      "white": {
-        "chat": "Basic AI chat",
-        "amendments": "5 amendments per month",
-        "searches": "5 saved searches",
-        "support": "Community support",
-        "exports": "Basic exports (XML, HTML)",
-        "watermark": "Brubru watermark on exports"
+      "columns": {
+        "feature": "Feature",
+        "free": "Free Trial",
+        "starter": "Starter",
+        "advocate": "Advocate",
+        "professional": "Professional"
       },
-      "yellow": {
-        "chat": "Advanced AI chat",
-        "amendments": "Unlimited amendments",
-        "searches": "Unlimited saved searches",
-        "support": "Email support (48h response)",
-        "exports": "All export formats (PDF, Word, XML, HTML)",
-        "watermark": "No watermark",
-        "priority": "Priority response times",
-        "rss": "RSS feed alerts",
-        "personalization": "Personalised greeting"
-      },
-      "blue": {
-        "everything": "Everything in Professional, plus:",
-        "multiUser": "Multi-user team accounts",
-        "support": "Dedicated support (24h response)",
-        "customDomain": "Custom domain specialisation",
-        "whiteLabel": "White-label options",
-        "sla": "Service Level Agreement (SLA)",
-        "training": "Onboarding & training",
-        "api": "API access",
-        "preferences": "Advanced user preferences"
+      "rows": {
+        "chat": "AI Policy Chat",
+        "chatFree": "5 messages/day",
+        "chatStarter": "Unlimited",
+        "chatAdvocate": "Unlimited",
+        "chatProfessional": "Unlimited + priority",
+        "amendments": "Amendments",
+        "amendmentsFree": "5/month",
+        "amendmentsStarter": "--",
+        "amendmentsAdvocate": "Unlimited",
+        "amendmentsProfessional": "Unlimited",
+        "rss": "RSS & Legislative Tracking",
+        "rssFree": "Limited",
+        "rssStarter": "Full access",
+        "rssAdvocate": "Full access",
+        "rssProfessional": "Full access",
+        "predictions": "Legislative Predictions",
+        "predictionsFree": "--",
+        "predictionsStarter": "EP votes",
+        "predictionsAdvocate": "EP votes",
+        "predictionsProfessional": "EP + Council",
+        "comply": "EU Law Comply",
+        "complyFree": "--",
+        "complyStarter": "--",
+        "complyAdvocate": "--",
+        "complyProfessional": "Full access",
+        "tenderator": "Tenderator",
+        "tenderatorFree": "--",
+        "tenderatorStarter": "--",
+        "tenderatorAdvocate": "--",
+        "tenderatorProfessional": "Full access",
+        "exports": "Export Formats",
+        "exportsFree": "XML, HTML",
+        "exportsStarter": "XML, HTML",
+        "exportsAdvocate": "All formats",
+        "exportsProfessional": "All formats",
+        "support": "Support",
+        "supportFree": "Community",
+        "supportStarter": "Email (48h)",
+        "supportAdvocate": "Email (48h)",
+        "supportProfessional": "Dedicated (24h)"
       }
     },
     "faq": {
       "title": "Frequently Asked Questions",
       "q1": "What payment methods do you accept?",
-      "a1": "We accept all major credit cards, debit cards, and bank transfers through Stripe. Enterprise clients can arrange invoicing.",
+      "a1": "We accept all major credit cards, debit cards, and bank transfers through Stripe.",
       "q2": "Can I change my plan later?",
-      "a2": "Yes, you can upgrade your plan at any time. Downgrades take effect at the end of your current billing cycle.",
+      "a2": "Yes, you can switch between modules and bundles at any time. Upgrades apply immediately; downgrades take effect at the end of your billing cycle.",
       "q3": "What is your refund policy?",
-      "a3": "We offer a 14-day money-back guarantee for annual plans. Monthly plans can be cancelled at any time.",
+      "a3": "We offer a 14-day money-back guarantee on all plans. Monthly plans can be cancelled at any time.",
       "q4": "Do you offer a free trial?",
-      "a4": "Our Basic tier is free forever with 5 amendments per month. You can try Professional features with a 14-day trial.",
-      "q5": "How does Enterprise pricing work?",
-      "a5": "Enterprise pricing is customised based on team size, feature requirements, and usage volume. Contact us for a tailored quote.",
-      "q6": "What happens if I exceed my amendment limit?",
-      "a6": "Basic tier users are limited to 5 amendments per month. To create more, upgrade to Professional for unlimited amendments."
+      "a4": "Yes, every plan includes a 14-day free trial. No credit card required to start.",
+      "q5": "Can I combine individual modules?",
+      "a5": "You can subscribe to individual modules separately, but bundles offer significant savings. For example, Starter (Chat + Bubble) costs 39/month vs 58/month for both modules separately.",
+      "q6": "What is the EP Plan?",
+      "a6": "The EP Plan is designed for accredited parliamentary assistants and MEPs. It includes Chat, Bubble, and Amendator with EP-specific AI context and committee monitoring at a reduced rate."
     },
     "trust": {
       "title": "Trusted by policy professionals across Europe",
@@ -246,10 +346,11 @@
     },
     "cta": {
       "title": "Ready to get started?",
-      "subtitle": "Join policy professionals using Brubru to navigate the EU landscape",
-      "button": "Start Free",
-      "contact": "Or contact us for Enterprise"
-    }
+      "subtitle": "Start your 14-day free trial today -- no credit card required",
+      "button": "Start Free Trial",
+      "contact": "Or contact us for enterprise needs"
+    },
+    "contactEmail": "hello@beresol.eu"
   },
   "euLawComply": {
     "history": "Analysis History",
@@ -345,48 +446,48 @@
     "pricing": {
       "eyebrow": "Pricing",
       "title": "<strong>Choose Your Plan</strong>",
-      "subtitle": "Start free, upgrade when you need more",
-      "white": {
-        "badge": "WHITE",
-        "name": "Basic",
-        "price": "\u20ac0",
+      "subtitle": "14-day free trial on all plans",
+      "starter": {
+        "badge": "STARTER",
+        "name": "Starter",
+        "price": "\u20ac39",
         "period": "/month",
-        "f1": "Basic AI chat",
-        "f2": "Search EU legislation",
-        "f3": "View MEP profiles",
-        "f4": "5 amendments/month",
-        "f5": "Watermark on exports",
-        "button": "Start Free"
+        "savings": "or \u20ac396/year (save \u20ac72)",
+        "f1": "AI Policy Chat (unlimited)",
+        "f2": "My EU Bubble dashboard",
+        "f3": "RSS feed aggregation",
+        "f4": "Legislative Train tracker",
+        "button": "Start Free Trial"
       },
-      "yellow": {
-        "badge": "YELLOW \u2014 MOST POPULAR",
+      "advocate": {
+        "badge": "ADVOCATE \u2014 MOST POPULAR",
+        "name": "Advocate",
+        "price": "\u20ac59",
+        "period": "/month",
+        "savings": "or \u20ac499/year (save \u20ac209)",
+        "f1": "Everything in Starter",
+        "f2": "Amendator (unlimited)",
+        "f3": "AI amendment suggestions",
+        "f4": "PDF/Word exports",
+        "button": "Start Free Trial"
+      },
+      "professional": {
+        "badge": "PROFESSIONAL \u2014 BEST VALUE",
         "name": "Professional",
-        "price": "\u20ac79",
+        "price": "\u20ac99",
         "period": "/month",
-        "savings": "or \u20ac790/year (save \u20ac158)",
-        "f1": "Everything in White",
-        "f2": "Unlimited amendments",
-        "f3": "Advanced AI + predictions",
-        "f4": "PDF/Word downloads",
-        "f5": "Custom RSS alerts",
-        "f6": "API access (1,000 calls/month)",
-        "button": "Start 14-Day Trial"
+        "savings": "or \u20ac799/year (save \u20ac389)",
+        "f1": "Everything in Advocate",
+        "f2": "EU Law Comply",
+        "f3": "Tenderator",
+        "f4": "Council vote predictions",
+        "f5": "Dedicated support (24h)",
+        "button": "Start Free Trial"
       },
-      "blue": {
-        "badge": "BLUE",
-        "name": "Enterprise",
-        "price": "Custom pricing",
-        "note": "5+ users \u2014 Contact us for a tailored quote",
-        "f1": "Everything in Yellow",
-        "f2": "Multi-user teams (5+)",
-        "f3": "Domain specialisation",
-        "f4": "Custom knowledge base",
-        "f5": "Dedicated account manager",
-        "button": "Contact Us"
-      }
+      "allPlans": "See all plans and modules"
     },
     "clients": {
-      "eyebrow": "Blue Tier",
+      "eyebrow": "Enterprise",
       "title": "Specialised Brubru",
       "subtitle": "Custom-built for your industry",
       "contactUs": "Contact Us",

@@ -107,7 +107,7 @@ export const TenderatorWidget = () => {
           <span className="mdi mdi-lock-outline"></span>
           <p>EU Tender Monitoring</p>
           <button onClick={() => navigate('/subscription')}>
-            Upgrade to Blue
+            Get Professional
           </button>
         </div>
       </div>

@@ -430,7 +430,7 @@ export const DocumentGeneratorWizard = ({
                     >
                       <Icon path={type.icon} size={2} color={isLocked ? '#9ca3af' : type.color} />
                       <h4>{type.title}</h4>
-                      <p>{isLocked ? 'Yellow or Blue tier required' : type.description}</p>
+                      <p>{isLocked ? 'Subscription required' : type.description}</p>
                     </div>
                   );
                 })}

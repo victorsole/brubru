@@ -32,9 +32,9 @@ interface SubscriptionState {
   tiers: SubscriptionTier[] | null;
   fetchUsage: () => Promise<void>;
   fetchTiers: () => Promise<void>;
-  upgrade: (tier: string, billingPeriod: 'monthly' | 'annual') => Promise<void>;
+  upgrade: (plan: string, billingPeriod: 'monthly' | 'annual') => Promise<void>;
   checkFeatureAccess: (feature: string) => Promise<boolean>;
-  createCheckoutSession: (tier: string, billingPeriod: 'monthly' | 'annual') => Promise<string>;
+  createCheckoutSession: (plan: string, billingPeriod: 'monthly' | 'annual') => Promise<string>;
   createPortalSession: () => Promise<string>;
 }
 
@@ -60,10 +60,10 @@ export const useSubscription = create<SubscriptionState>((set, get) => ({
     }
   },
 
-  upgrade: async (tier: string, billingPeriod: 'monthly' | 'annual') => {
+  upgrade: async (plan: string, billingPeriod: 'monthly' | 'annual') => {
     try {
       await axios.post(`${API_URL}/api/subscriptions/upgrade`, {
-        tier,
+        plan,
         billing_period: billingPeriod
       });
       // Refresh usage after upgrade
@@ -87,10 +87,10 @@ export const useSubscription = create<SubscriptionState>((set, get) => ({
   },
 
   // Stripe Payment Methods
-  createCheckoutSession: async (tier: string, billingPeriod: 'monthly' | 'annual'): Promise<string> => {
+  createCheckoutSession: async (plan: string, billingPeriod: 'monthly' | 'annual'): Promise<string> => {
     try {
       const response = await axios.post(`${API_URL}/api/stripe/create-checkout-session`, {
-        tier,
+        plan,
         billing_period: billingPeriod
       });
 

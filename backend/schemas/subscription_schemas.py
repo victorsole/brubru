@@ -37,8 +37,16 @@ class UsageStats(BaseModel):
 
 class UpgradeRequest(BaseModel):
     """Subscription upgrade request"""
-    tier: str = Field(..., pattern="^(yellow|blue)$")
+    plan: str = Field(..., pattern="^(chat|bubble|amendator|comply|tenderator|starter|advocate|professional|ep)$")
     billing_period: str = Field(..., pattern="^(monthly|annual)$")
+
+    # Backward compatibility: derive tier from plan
+    @property
+    def tier(self) -> str:
+        """Map plan to internal tier for feature gating"""
+        if self.plan == "professional":
+            return "blue"
+        return "yellow"
 
 
 class FeatureAccessResponse(BaseModel):

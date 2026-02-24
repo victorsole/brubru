@@ -255,10 +255,10 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
 
           <div className="tenderator-page__upgrade-card">
             <span className="mdi mdi-lock-outline tenderator-page__upgrade-icon"></span>
-            <h2>Blue Tier Required</h2>
+            <h2>Professional Plan Required</h2>
             <p>
-              Tenderator is a premium feature available exclusively to Blue tier subscribers.
-              Upgrade now to access:
+              Tenderator is a premium feature available with the Professional plan.
+              Subscribe now to access:
             </p>
             <ul>
               <li><span className="mdi mdi-check"></span> Personalized tender matching</li>
@@ -272,7 +272,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
               onClick={() => navigate('/subscription')}
             >
               <span className="mdi mdi-arrow-up-circle"></span>
-              Upgrade to Blue Tier
+              Get Professional Plan
             </button>
           </div>
         </div>
@@ -310,7 +310,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
             <div className="tenderator-page__header-actions">
               <div className="tenderator-page__tier-badge">
                 <span className="mdi mdi-star-circle"></span>
-                Blue Tier
+                Professional
               </div>
             </div>
           </div>

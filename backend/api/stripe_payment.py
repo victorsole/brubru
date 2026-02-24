@@ -2,6 +2,7 @@
 Stripe Payment Integration
 
 Handles subscription checkout, webhooks, and customer portal.
+Supports the modular pricing model (9 products, 18 prices).
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -22,11 +23,48 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 router = APIRouter(prefix="/stripe", tags=["stripe-payments"])
 
 
-# Price ID mapping
+# --- Price ID mapping ---
+# Each plan has a monthly and annual price.
+# Plans map to internal tiers for feature gating (yellow or blue).
+
 PRICE_IDS = {
-    "yellow_monthly": settings.STRIPE_YELLOW_MONTHLY_PRICE_ID,
-    "yellow_annual": settings.STRIPE_YELLOW_ANNUAL_PRICE_ID,
-    "blue_monthly": settings.STRIPE_BLUE_MONTHLY_PRICE_ID,
+    # Individual modules
+    "chat_monthly": settings.STRIPE_CHAT_MONTHLY_PRICE_ID,
+    "chat_annual": settings.STRIPE_CHAT_ANNUAL_PRICE_ID,
+    "bubble_monthly": settings.STRIPE_BUBBLE_MONTHLY_PRICE_ID,
+    "bubble_annual": settings.STRIPE_BUBBLE_ANNUAL_PRICE_ID,
+    "amendator_monthly": settings.STRIPE_AMENDATOR_MONTHLY_PRICE_ID,
+    "amendator_annual": settings.STRIPE_AMENDATOR_ANNUAL_PRICE_ID,
+    "comply_monthly": settings.STRIPE_COMPLY_MONTHLY_PRICE_ID,
+    "comply_annual": settings.STRIPE_COMPLY_ANNUAL_PRICE_ID,
+    "tenderator_monthly": settings.STRIPE_TENDERATOR_MONTHLY_PRICE_ID,
+    "tenderator_annual": settings.STRIPE_TENDERATOR_ANNUAL_PRICE_ID,
+    # Bundles
+    "starter_monthly": settings.STRIPE_STARTER_MONTHLY_PRICE_ID,
+    "starter_annual": settings.STRIPE_STARTER_ANNUAL_PRICE_ID,
+    "advocate_monthly": settings.STRIPE_ADVOCATE_MONTHLY_PRICE_ID,
+    "advocate_annual": settings.STRIPE_ADVOCATE_ANNUAL_PRICE_ID,
+    "professional_monthly": settings.STRIPE_PROFESSIONAL_MONTHLY_PRICE_ID,
+    "professional_annual": settings.STRIPE_PROFESSIONAL_ANNUAL_PRICE_ID,
+    # EP Plan (APAs/MEPs)
+    "ep_monthly": settings.STRIPE_EP_MONTHLY_PRICE_ID,
+    "ep_annual": settings.STRIPE_EP_ANNUAL_PRICE_ID,
+}
+
+# Map Stripe Price IDs back to plan names (for webhook processing)
+PRICE_ID_TO_PLAN = {v: k.rsplit("_", 1)[0] for k, v in PRICE_IDS.items() if v}
+
+# Map plan names to internal tier for feature gating
+PLAN_TO_TIER = {
+    "chat": "yellow",
+    "bubble": "yellow",
+    "amendator": "yellow",
+    "comply": "yellow",
+    "tenderator": "yellow",
+    "starter": "yellow",
+    "advocate": "yellow",
+    "ep": "yellow",
+    "professional": "blue",
 }
 
 
@@ -37,27 +75,18 @@ async def create_checkout_session(
     db: Session = Depends(get_db)
 ):
     """
-    Create Stripe Checkout Session for subscription upgrade
+    Create Stripe Checkout Session for subscription.
 
     Accepts JSON body with:
-    - tier: "yellow" or "blue"
+    - plan: one of chat, bubble, amendator, comply, tenderator,
+            starter, advocate, professional, ep
     - billing_period: "monthly" or "annual"
     """
-    tier = request.tier
+    plan = request.plan
     billing_period = request.billing_period
 
-    # Validate tier (already validated by Pydantic, but keep for clarity)
-    if tier not in ["yellow", "blue"]:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid tier"
-        )
-
-    if tier == "blue" and billing_period != "monthly":
-        billing_period = "monthly"  # Blue tier only supports monthly
-
     # Get price ID
-    price_key = f"{tier}_{billing_period}"
+    price_key = f"{plan}_{billing_period}"
     price_id = PRICE_IDS.get(price_key)
 
     if not price_id:
@@ -65,6 +94,9 @@ async def create_checkout_session(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Price not configured for {price_key}"
         )
+
+    # Determine the tier this plan maps to
+    tier = PLAN_TO_TIER.get(plan, "yellow")
 
     try:
         # Create or get Stripe customer
@@ -98,6 +130,7 @@ async def create_checkout_session(
             cancel_url=f"{settings.APP_URL}/subscription?checkout=canceled",
             metadata={
                 "user_id": str(current_user.id),
+                "plan": plan,
                 "tier": tier,
                 "billing_period": billing_period
             },
@@ -200,26 +233,45 @@ async def stripe_webhook(
     return {"status": "success"}
 
 
+def _resolve_tier_from_subscription(subscription) -> tuple[str, str]:
+    """
+    Resolve the plan name and tier from a Stripe subscription object.
+    Looks at the price ID on the subscription items.
+
+    Returns (plan_name, tier).
+    """
+    items = subscription.get("items", {}).get("data", [])
+    if not items:
+        return ("unknown", "yellow")
+
+    price_id = items[0].get("price", {}).get("id", "")
+    plan = PRICE_ID_TO_PLAN.get(price_id, "unknown")
+    tier = PLAN_TO_TIER.get(plan, "yellow")
+    return (plan, tier)
+
+
 async def handle_checkout_completed(session, db: Session):
     """Handle successful checkout"""
-    user_id = session["metadata"]["user_id"]
-    tier = session["metadata"]["tier"]
+    user_id = session["metadata"].get("user_id")
+    plan = session["metadata"].get("plan", "unknown")
+    tier = session["metadata"].get("tier", "yellow")
 
-    print(f"[OK] Checkout completed for user {user_id}, tier: {tier}")
+    print(f"[OK] Checkout completed for user {user_id}, plan: {plan}, tier: {tier}")
 
     user = db.query(User).filter(User.id == user_id).first()
     if user:
         user.subscription_tier = tier
         user.stripe_subscription_id = session.get("subscription")
         db.commit()
-        print(f"[OK] User {user.email} upgraded to {tier} tier")
+        print(f"[OK] User {user.email} subscribed to {plan} (tier: {tier})")
 
 
 async def handle_subscription_updated(subscription, db: Session):
-    """Handle subscription updates"""
+    """Handle subscription updates (plan changes, renewals)"""
     customer_id = subscription["customer"]
 
-    print(f"[UPDATE] Subscription updated for customer {customer_id}")
+    plan, tier = _resolve_tier_from_subscription(subscription)
+    print(f"[UPDATE] Subscription updated for customer {customer_id}, plan: {plan}, tier: {tier}")
 
     user = db.query(User).filter(User.stripe_customer_id == customer_id).first()
     if user:
@@ -228,7 +280,9 @@ async def handle_subscription_updated(subscription, db: Session):
         user.subscription_expires_at = datetime.fromtimestamp(current_period_end)
 
         # Check if subscription is active
-        if subscription["status"] not in ["active", "trialing"]:
+        if subscription["status"] in ["active", "trialing"]:
+            user.subscription_tier = tier
+        else:
             user.subscription_tier = "white"
             print(f"[WARN] Subscription inactive for {user.email}, downgraded to white")
 
