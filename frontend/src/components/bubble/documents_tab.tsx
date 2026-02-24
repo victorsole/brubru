@@ -223,7 +223,11 @@ C.  whereas [third contextual statement];
   };
 
   const filteredDocuments = documents.filter(doc => {
-    if (filterType !== 'all' && doc.document_type !== filterType) return false;
+    if (filterType === 'ep_question') {
+      if (!doc.tags?.includes('ep_question')) return false;
+    } else if (filterType !== 'all' && doc.document_type !== filterType) {
+      return false;
+    }
     if (searchQuery && !doc.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
     return true;
   });
@@ -268,6 +272,7 @@ C.  whereas [third contextual statement];
             <option value="analysis">Analyses</option>
             <option value="strategy">Strategies</option>
             <option value="note">Notes</option>
+            <option value="ep_question">EP Questions</option>
           </select>
         </div>
 
@@ -294,8 +299,11 @@ C.  whereas [third contextual statement];
           </div>
         ) : (
           <div className="documents-tab__grid">
-            {filteredDocuments.map(doc => (
-              <div key={doc.id} className="documents-tab__card" data-type={doc.document_type}>
+            {filteredDocuments.map(doc => {
+              const isEpQuestion = doc.tags?.includes('ep_question');
+              const displayType = isEpQuestion ? 'ep_question' : doc.document_type;
+              return (
+              <div key={doc.id} className="documents-tab__card" data-type={displayType}>
                 {/* Type Badge */}
                 <div className="documents-tab__card-badge">
                   {doc.document_type === 'uploaded' ? (
@@ -303,6 +311,8 @@ C.  whereas [third contextual statement];
                       <Icon path={getFileTypeIcon(doc.file_content_type)} size={0.6} />
                       uploaded
                     </span>
+                  ) : isEpQuestion ? (
+                    'EP Question'
                   ) : (
                     doc.document_type
                   )}
@@ -372,7 +382,8 @@ C.  whereas [third contextual statement];
                   </button>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

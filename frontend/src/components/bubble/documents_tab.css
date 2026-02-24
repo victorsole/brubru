@@ -178,6 +178,10 @@
   border-top: 3px solid #0d9488;
 }
 
+.documents-tab__card[data-type="ep_question"] {
+  border-top: 3px solid #0693e3;
+}
+
 .documents-tab__card-badge {
   padding: 0.375rem 0.75rem;
   font-size: 0.75rem;
@@ -562,6 +566,7 @@
 .documents-tab__view-badge[data-type="strategy"] { background: #e8f5e9; color: #2e7d32; }
 .documents-tab__view-badge[data-type="note"] { background: #fff3e0; color: #f57c00; }
 .documents-tab__view-badge[data-type="uploaded"] { background: #f0fdfa; color: #0d9488; }
+.documents-tab__view-badge[data-type="ep_question"] { background: #eff6ff; color: #0693e3; }
 
 .documents-tab__view-meta {
   display: flex;

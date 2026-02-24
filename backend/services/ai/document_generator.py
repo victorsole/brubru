@@ -19,6 +19,7 @@ from schemas.document_generation import (
     GenerateMEPBriefingRequest,
     GenerateTalkingPointsRequest,
     GenerateResolutionRequest,
+    GenerateEPQuestionRequest,
     GeneratedDocument,
     KeyAsk,
 )
@@ -367,6 +368,100 @@ CRITICAL FORMATTING RULES:
 12. Generate at least as many resolution points as there are key demands, plus 2-3 standard procedural points
 """
 
+    EP_QUESTION_PROMPT = """Generate a European Parliament written parliamentary question in the exact official EP format.
+
+TOPIC/TITLE: {topic}
+ADDRESSEE: {addressee}
+QUESTION TYPE: {question_type}
+NUMBER OF SUB-QUESTIONS: {num_sub_questions}
+TONE: {tone}
+
+CONTEXT AND EVIDENCE PROVIDED BY THE USER:
+{context_description}
+
+LEGISLATION REFERENCES TO CITE:
+{legislation_references}
+
+EVIDENCE SOURCES:
+{sources}
+
+{style_guidelines}
+
+STRUCTURAL RULES (derived from analysis of real EP written questions):
+
+1. TITLE: A descriptive headline, maximum 200 characters. Formal and specific, never vague.
+
+2. HEADER BLOCK (generate this exactly):
+   "Question for written answer {ref_prefix}-DRAFT-2026-XXX"
+   "to the {addressee_full}"
+   "Rule 144"
+
+3. CONTEXT/INTRODUCTION (the bulk of the question):
+   - Write 2-4 paragraphs of factual background
+   - Lead with evidence: facts, statistics, audit findings, news reports, court rulings
+   - Anchor in EU legislation: cite specific Regulations, Directives, Treaty articles
+   - Use footnoted references marked [1], [2], [3] etc.
+   - The ratio should be approximately 80% context, 20% question
+   - Total context section: 200-400 words
+
+4. BRIDGE PHRASE: After the context paragraphs, write one of these transitions:
+   - "In the light of the above:"
+   - "With the above in mind:"
+   - "In connection with the above:"
+   - "In view of the above:"
+
+5. SUB-QUESTIONS: Generate exactly {num_sub_questions} numbered sub-questions.
+   - Each must be direct, specific, and demand a concrete answer
+   - Each should be 1-2 sentences
+   - They must be answerable by the Commission with facts or commitments
+   - Good patterns: "Can the Commission clarify...", "What steps does the Commission intend to take...",
+     "Does the Commission consider that...", "Is the Commission aware of...", "What assessment has the Commission made of..."
+
+6. FOOTNOTES: List all sources as numbered footnotes at the end:
+   [1] Description or URL
+   [2] Description or URL
+
+REGISTER AND TONE:
+- Formal institutional voice, third-person perspective
+- Politically loaded but factual: "raises serious concerns", "significant security risk"
+- Never "I think" -- always "the above raises concerns regarding..."
+- British English spelling (analyse, organisation, programme)
+
+TONE VARIANTS:
+- ASSERTIVE: Direct pressure, strong framing ("raises serious concerns", "undermines", "violates")
+- DIPLOMATIC: Measured but probing ("it would be helpful to understand", "the Commission may wish to consider")
+- TECHNICAL: Focus on legal/procedural precision ("pursuant to Article X", "in accordance with")
+
+OUTPUT FORMAT:
+Produce the question in clean markdown. Do NOT use ## headers within the question body.
+Use **bold** for the title and header block only.
+The output should look like a real EP written question that could be submitted.
+
+EXAMPLE OF CORRECT FORMAT:
+
+**Security risks associated with flush car door handles**
+
+Question for written answer P-DRAFT-2026-XXX
+to the Commission
+Rule 144
+
+There has been a significant increase in flush door handles built into the body of vehicles over the past 10 years. While this feature may improve aesthetics and aerodynamics, it nevertheless raises safety concerns. These mechanisms often rely upon an electrical system and may jam if there is a power failure or malfunction after an impact, making it difficult for passengers to escape the vehicle or for emergency services to intervene[1].
+
+Several regulatory initiatives have emerged worldwide as of late. China will make it mandatory for all vehicles to have a mechanical door release from 1 January 2027. In the US, a legislative proposal entitled the 'SAFE Exit Act' was submitted to Congress that would require manufacturers to fit all vehicles with manual door handles accessible in all circumstances.
+
+In the light of the above:
+
+1. Is the Commission aware of the safety risks associated with flush car door handles, and has it carried out or commissioned any assessment of the risks posed by these mechanisms in the event of power failure or collision?
+
+2. Does the Commission intend to propose legislative measures to require that all vehicles sold in the EU be equipped with a mechanical door release system accessible in all circumstances?
+
+---
+
+[1] News report on vehicle safety incidents, 2025
+
+NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
+"""
+
     def __init__(
         self,
         max_tokens: int = 4000,
@@ -583,6 +678,67 @@ CRITICAL FORMATTING RULES:
         return GeneratedDocument(
             document_type="resolution",
             title=f"EP Resolution on {request.topic}",
+            content=content,
+            sections=sections,
+            word_count=len(content.split()),
+            language=request.language,
+            legislative_context=legislative_context,
+            editable_sections=list(sections.keys())
+        )
+
+    async def generate_ep_question(
+        self,
+        request: GenerateEPQuestionRequest,
+        legislative_context: Optional[Dict[str, Any]] = None
+    ) -> GeneratedDocument:
+        """
+        Generate a European Parliament written question.
+
+        Args:
+            request: EP question generation request
+            legislative_context: Optional additional context
+
+        Returns:
+            Generated document
+        """
+        logger.info(f"Generating EP written question on: {request.topic}")
+
+        # Map addressee codes to full names
+        addressee_map = {
+            "commission": "Commission",
+            "council": "Council",
+            "vp_hr": "Vice-President of the Commission / High Representative of the Union for Foreign Affairs and Security Policy",
+        }
+        ref_prefix_map = {"standard": "E", "priority": "P"}
+
+        legislation_references = "\n".join([
+            f"- {ref}" for ref in request.legislation_references
+        ]) if request.legislation_references else "Infer appropriate EU legislation references from the context"
+
+        sources = "\n".join([
+            f"- {src}" for src in request.sources
+        ]) if request.sources else "No specific sources provided -- infer from context"
+
+        prompt = self.EP_QUESTION_PROMPT.format(
+            topic=request.topic,
+            addressee=request.addressee,
+            addressee_full=addressee_map.get(request.addressee, "Commission"),
+            question_type=request.question_type.title(),
+            ref_prefix=ref_prefix_map.get(request.question_type, "E"),
+            num_sub_questions=request.num_sub_questions,
+            tone=request.tone.upper(),
+            context_description=request.context_description,
+            legislation_references=legislation_references,
+            sources=sources,
+            style_guidelines=self.EU_STYLE_GUIDELINES,
+        )
+
+        content = await self._generate(prompt)
+        sections = self._parse_sections(content)
+
+        return GeneratedDocument(
+            document_type="ep_question",
+            title=f"EP Question: {request.topic[:150]}",
             content=content,
             sections=sections,
             word_count=len(content.split()),

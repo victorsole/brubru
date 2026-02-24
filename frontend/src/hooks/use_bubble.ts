@@ -26,7 +26,7 @@ export interface RSSEntry {
 
 export interface UserDocument {
   id: string;
-  document_type: 'amendment' | 'analysis' | 'strategy' | 'note' | 'uploaded';
+  document_type: 'amendment' | 'analysis' | 'strategy' | 'note' | 'uploaded' | 'ep_question';
   title: string;
   content?: string;
   policy_areas?: string[];

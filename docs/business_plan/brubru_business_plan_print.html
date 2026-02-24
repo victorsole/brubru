@@ -236,6 +236,8 @@
 
 <p>The EU public affairs market is valued at EUR 3-5 billion annually. Today, this work is done by expensive human consultants charging EUR 250-500/hour, using generic tools that have no understanding of EU institutional procedures. Brubru encodes deep procedural knowledge from 15+ EU institutional data sources into an AI platform that produces analyst-grade work at software costs.</p>
 
+<p><strong>Vision:</strong> From AI-powered advocacy platform to the <strong>system of record for EU affairs</strong> -- the single workspace where a professional's entire dossier lives: tracked legislation, drafted amendments, MEP relationships, stakeholder positions, predictions, documents, and campaign history. Then expand nationally: 27 Member States, every level of governance, one platform per country. Nobody in EU affairs has a dossier management system powered by real-time institutional data and AI. That's the product.</p>
+
 <div class="kpi-strip no-break">
   <div class="kpi-box kpi-box--blue"><div class="kpi-box__val">Built</div><div class="kpi-box__label">Product Status</div><div class="kpi-box__note">8 modules, 34 APIs, 29 scrapers</div></div>
   <div class="kpi-box kpi-box--green"><div class="kpi-box__val">15+</div><div class="kpi-box__label">Data Sources</div><div class="kpi-box__note">29 institutional scrapers</div></div>
@@ -284,24 +286,41 @@
   </tbody>
 </table>
 
+<h3>From Workflow Platform to System of Record</h3>
+
+<p>Brubru has built an exceptionally strong <strong>vertical workflow platform</strong> (Layer 3) with 10 feature verticals, 35 scrapers, and 11 prediction services. The next strategic step is the transition to <strong>system of record</strong> (Layer 4): tying all features together around the concept of a <strong>user-owned dossier</strong> -- a workspace per legislative file where tracking, amendments, contacts, predictions, and documents accumulate into an asset the user cannot replicate elsewhere.</p>
+
+<table class="no-break">
+  <thead><tr><th>Layer</th><th>Description</th><th>Brubru Status</th></tr></thead>
+  <tbody>
+    <tr><td>Layer 1-2</td><td>Foundation models + Chat</td><td>Done (4-provider chain, context-aware chat)</td></tr>
+    <tr><td><strong>Layer 3</strong></td><td><strong>Vertical workflow platform</strong></td><td><strong>Substantially built (10 verticals, 35 scrapers)</strong></td></tr>
+    <tr><td>Layer 4</td><td>System of record</td><td>Next phase (dossier workspaces, contacts, accumulated user data)</td></tr>
+  </tbody>
+</table>
+
+<p>Today's system of record for EU affairs is fragmented across Outlook, Excel, shared drives, and mental models. Nobody owns this. A lobbyist with 50 annotated dossiers, 200 MEP contacts, and 18 months of prediction history inside Brubru will never leave -- regardless of what foundation models do.</p>
+
 <!-- ============================================================
      4. PRODUCT
      ============================================================ -->
 <h2 class="pb">4. Product Suite</h2>
 
-<p class="lead">Eight integrated modules covering the full EU advocacy workflow: Monitor > Analyse > Draft > Comply > Predict > Bid > Improve.</p>
+<p class="lead">Ten integrated modules covering the full EU advocacy workflow: Monitor > Analyse > Compare > Draft > Comply > Predict > Bid > Improve.</p>
 
 <table>
   <thead><tr><th>#</th><th>Module</th><th>Description</th><th>Tier</th></tr></thead>
   <tbody>
     <tr><td>1</td><td><strong>Brubru Chat</strong></td><td>Context-aware AI advisor. 4-provider chain (Mistral/Claude/GPT-4/Gemini), 15+ context sources injected per query, citation tracking, conversation memory, Beresol Knowledge Bundle (11 reports, 7 monitors).</td><td><span class="badge badge--green">All</span></td></tr>
-    <tr><td>2</td><td><strong>My EU Bubble</strong></td><td>Personalised monitoring dashboard: 33+ RSS feeds, Legislative Train (490+ files), 26 EP committee trackers, EC public consultations, predictions engine, document generation, analytics.</td><td><span class="badge badge--green">All</span></td></tr>
+    <tr><td>2</td><td><strong>My EU Bubble</strong></td><td>Personalised monitoring dashboard: 33+ RSS feeds, Legislative Train (490+ files), 26 EP committee trackers, EC public consultations, predictions engine, document generation, My EU Calendar, analytics.</td><td><span class="badge badge--green">All</span></td></tr>
     <tr><td>3</td><td><strong>Amendator</strong></td><td>XML-first amendment editor modelled on EP's AT4AM. AI drafting in natural language, Akoma Ntoso compliance, multi-format export (XML, HTML, PDF, Word), amendment workflow (Candidate/Tabled/Withdrawn).</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
-    <tr><td>4</td><td><strong>EU Law Comply</strong></td><td>Automated compliance gap analysis: document upload, requirement extraction, severity ratings, action plan timeline. Covers AI Act, GDPR, NIS2, CSRD, MiCA, DORA.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
-    <tr><td>5</td><td><strong>Tenderator</strong></td><td>AI-matched EU tender intelligence from TED. Organisation profiling, SME suitability scoring, bid checklist generation, SPARQL market analytics, HuggingFace classification.</td><td><span class="badge badge--blue">Blue</span></td></tr>
-    <tr><td>6</td><td><strong>Document Generator</strong></td><td>AI-powered position papers, MEP briefings, and talking points via step-by-step wizard. Links to specific legislation via CELEX numbers.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
-    <tr><td>7</td><td><strong>Predictions Engine</strong></td><td>AI legislative forecasting: timeline (survival analysis), outcome, EP plenary vote (9 groups, 720 MEPs), Council vote (QMV), resolution leading indicators.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
-    <tr><td>8</td><td><strong>Feedback System</strong></td><td>Closed-loop improvement engine: inline ratings, conversation quality scoring (0-10), knowledge gap tracking, hallucination suppression, 5 systematic improvement loops.</td><td><span class="badge badge--green">All</span></td></tr>
+    <tr><td>4</td><td><strong>MEP Amendments</strong></td><td>Real EP committee amendment data from Open Data Portal. Political group breakdown, hotspot analysis, word-level diffs. AI-powered comparative analysis: alignment scoring (-2 to +2), best allies, coverage gaps, political landscape.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
+    <tr><td>5</td><td><strong>My EU Calendar</strong></td><td>Multi-source institutional calendar: 274+ events from EP (plenary, committee weeks, 26 committee agendas), Council/European Council, Commission College (with OJ agenda enrichment), ECB. Month/week/day views, filters, AI daily summary.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
+    <tr><td>6</td><td><strong>EU Law Comply</strong></td><td>Automated compliance gap analysis: document upload, requirement extraction, severity ratings, action plan timeline. Covers AI Act, GDPR, NIS2, CSRD, MiCA, DORA.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
+    <tr><td>7</td><td><strong>Tenderator</strong></td><td>AI-matched EU tender intelligence from TED. Organisation profiling, SME suitability scoring, bid checklist generation, SPARQL market analytics, HuggingFace classification.</td><td><span class="badge badge--blue">Blue</span></td></tr>
+    <tr><td>8</td><td><strong>Document Generator</strong></td><td>AI-powered position papers, MEP briefings, and talking points via step-by-step wizard. Links to specific legislation via CELEX numbers.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
+    <tr><td>9</td><td><strong>Predictions Engine</strong></td><td>AI legislative forecasting: timeline (survival analysis), outcome, EP plenary vote (9 groups, 720 MEPs), Council vote (QMV), resolution leading indicators.</td><td><span class="badge badge--gold">Yellow+</span></td></tr>
+    <tr><td>10</td><td><strong>Feedback System</strong></td><td>Closed-loop improvement engine: inline ratings, conversation quality scoring (0-10), knowledge gap tracking, hallucination suppression, 5 systematic improvement loops.</td><td><span class="badge badge--green">All</span></td></tr>
   </tbody>
 </table>
 
@@ -369,28 +388,32 @@
 
 <table class="comp-matrix no-break">
   <thead>
-    <tr><th>Competitor</th><th>EU Focus</th><th>AI Chat</th><th>Amendments</th><th>Compliance</th><th>Tenders</th><th>Predictions</th><th>Price</th></tr>
+    <tr><th>Competitor</th><th>EU Focus</th><th>AI Chat</th><th>Amendments</th><th>MEP Analysis</th><th>Calendar</th><th>Compliance</th><th>Tenders</th><th>Predictions</th><th>Price</th></tr>
   </thead>
   <tbody>
-    <tr class="highlight"><td class="highlight">Brubru</td><td><span class="mdi mdi-check"></span> Deep</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-check"></span> XML</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-check"></span></td><td>EUR 79-599</td></tr>
-    <tr><td>Dixit</td><td><span class="mdi mdi-check"></span> Brussels</td><td><span class="mdi mdi-close"></span></td><td>Analysis</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Mid-range</td></tr>
-    <tr><td>POLITICO Pro</td><td><span class="mdi mdi-check"></span> 100+ reporters</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>EUR 7K-50K+</td></tr>
-    <tr><td>SAVOIRR</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Not disclosed</td></tr>
-    <tr><td>FiscalNote EUIT</td><td><span class="mdi mdi-check"></span> Brussels</td><td><span class="mdi mdi-close"></span></td><td>Generic</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>--</td><td>EUR 10K-30K</td></tr>
-    <tr><td>Moonlit.ai</td><td><span class="mdi mdi-check"></span> 16+ MS</td><td>Luna</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Enterprise</td></tr>
-    <tr><td>LEOS</td><td>Institutions</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-check"></span> AKN XML</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Free (internal)</td></tr>
-    <tr><td>Cogrant</td><td>Grants only</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td>Not disclosed</td></tr>
-    <tr><td>ChatGPT / Claude</td><td><span class="mdi mdi-close"></span> None</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>$20/mo</td></tr>
-    <tr><td>Traditional consultancy</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td>Manual</td><td>Manual</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>EUR 10K+/mo</td></tr>
+    <tr class="highlight"><td class="highlight">Brubru</td><td><span class="mdi mdi-check"></span> Deep</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-check"></span> XML</td><td><span class="mdi mdi-check"></span> AI</td><td><span class="mdi mdi-check"></span> 6 src</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-check"></span></td><td>EUR 79-599</td></tr>
+    <tr><td>Dixit</td><td><span class="mdi mdi-check"></span> Brussels</td><td><span class="mdi mdi-close"></span></td><td>Analysis</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Mid-range</td></tr>
+    <tr><td>POLITICO Pro</td><td><span class="mdi mdi-check"></span> 100+ reporters</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>EUR 7K-50K+</td></tr>
+    <tr><td>SAVOIRR</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Not disclosed</td></tr>
+    <tr><td>FiscalNote EUIT</td><td><span class="mdi mdi-check"></span> Brussels</td><td><span class="mdi mdi-close"></span></td><td>Generic</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>--</td><td>EUR 10K-30K</td></tr>
+    <tr><td>Moonlit.ai</td><td><span class="mdi mdi-check"></span> 16+ MS</td><td>Luna</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Enterprise</td></tr>
+    <tr><td>LEOS</td><td>Institutions</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-check"></span> AKN XML</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>Free (internal)</td></tr>
+    <tr><td>Cogrant</td><td>Grants only</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td>Not disclosed</td></tr>
+    <tr><td>ChatGPT / Claude</td><td><span class="mdi mdi-close"></span> None</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>$20/mo</td></tr>
+    <tr><td>Traditional consultancy</td><td><span class="mdi mdi-check"></span></td><td><span class="mdi mdi-close"></span></td><td>Manual</td><td>Manual</td><td><span class="mdi mdi-close"></span></td><td>Manual</td><td><span class="mdi mdi-close"></span></td><td><span class="mdi mdi-close"></span></td><td>EUR 10K+/mo</td></tr>
   </tbody>
 </table>
 
 <h3>Competitive Advantages</h3>
-<p><strong>1. Workflow completeness vs. Dixit/SAVOIRR.</strong> Full advocacy cycle: Monitor > Analyse > Draft > Comply > Predict > Bid. Dixit covers monitoring+analysis but not creation. SAVOIRR lacks drafting and predictions.</p>
-<p><strong>2. Akoma Ntoso XML vs. FiscalNote/LEOS.</strong> Standards-compliant legislative amendments. FiscalNote drafts generic text. LEOS uses AKN but is institutional-only with no AI.</p>
+<p><strong>1. Workflow completeness vs. Dixit/SAVOIRR.</strong> Full advocacy cycle: Monitor (My EU Bubble, EU Calendar) > Analyse (Chat, MEP Amendments) > Compare (AI alignment scoring, best allies, coverage gaps) > Draft (Amendator, Document Generator) > Comply > Predict > Bid. Dixit covers monitoring+analysis but not creation. SAVOIRR lacks drafting and predictions.</p>
+<p><strong>2. Akoma Ntoso XML + MEP Intelligence vs. FiscalNote/LEOS.</strong> Standards-compliant legislative amendments plus real MEP amendment data with AI comparative scoring. Draft your amendments, see what MEPs proposed, identify allies, spot gaps. FiscalNote drafts generic text with no MEP analysis. LEOS uses AKN but is institutional-only with no AI.</p>
 <p><strong>3. 10x price advantage vs. POLITICO Pro/FiscalNote.</strong> EUR 948-7,188/yr vs EUR 7K-50K+ (POLITICO) or EUR 10K-30K (FiscalNote). Mistral primary = 15x cost advantage, 90%+ margins.</p>
-<p><strong>4. Domain depth vs. generic AI.</strong> 29 scrapers, 15+ institutional data pipelines, structured procedural knowledge -- 18 months of data engineering that generic AI cannot replicate.</p>
+<p><strong>4. Domain depth vs. generic AI.</strong> 35 scrapers, 15+ institutional data pipelines, structured procedural knowledge -- 18 months of data engineering that generic AI cannot replicate.</p>
 <p><strong>5. Founder-market fit vs. all.</strong> 7+ years EP + 10+ years EU advisory. Built by a parliamentary insider who personally produced every deliverable the platform automates.</p>
+
+<p><strong>6. Structural defensibility through accumulated user data.</strong> Long-term defensibility comes from switching costs, not feature checklists. When a professional has 50+ dossiers, 200+ MEP contacts, 18 months of amendment history, and 30+ position papers inside the platform, the cost of switching becomes prohibitive. This is the difference between a workflow tool and a system of record.</p>
+
+<p><strong>7. Defence against foundation model plugins.</strong> The risk is not another SaaS competitor -- it is ChatGPT/Claude adding EU policy plugins. Defence: (1) depth of structured pipelines that general plugins cannot match, (2) domain engineering (Akoma Ntoso, QMV, compliance gap analysis) beyond data access, and (3) the system-of-record layer where user-accumulated dossiers, contacts, and documents live inside Brubru and nowhere else.</p>
 
 <h3>Comparable Transactions</h3>
 <table class="no-break">
@@ -468,6 +491,8 @@
     <tr><td>Target CAC (3:1)</td><td>EUR 473</td><td>EUR 9,400</td></tr>
   </tbody>
 </table>
+
+<p><strong>Pricing evolution.</strong> The current per-seat model is appropriate for launch. As AI agents augment human workflows, Brubru will explore outcome-based pricing: per-dossier workspace fees, per-report credits, or enterprise flat-rate models tied to legislative portfolio size rather than headcount.</p>
 
 <!-- ============================================================
      8. TECHNOLOGY
@@ -661,8 +686,8 @@
 <div class="timeline no-break">
   <div class="tl-item"><div class="tl-dot tl-dot--done"></div><div class="tl-label">Now</div><div class="tl-val">Product Built</div><div class="tl-target">EUR 10K cash, 8 modules, 29 scrapers</div></div>
   <div class="tl-item"><div class="tl-dot tl-dot--active"></div><div class="tl-label">Q1 2026</div><div class="tl-val">Launch</div><div class="tl-target">First 10 paying customers</div></div>
-  <div class="tl-item"><div class="tl-dot"></div><div class="tl-label">Q2 2026</div><div class="tl-val">Break-even</div><div class="tl-target">EUR 3K MRR, ISO 27001, i18n expansion</div></div>
-  <div class="tl-item"><div class="tl-dot"></div><div class="tl-label">Q3 2026</div><div class="tl-val">Scale</div><div class="tl-target">EUR 7K MRR + first hire</div></div>
+  <div class="tl-item"><div class="tl-dot"></div><div class="tl-label">Q2 2026</div><div class="tl-val">Dossier Foundation</div><div class="tl-target">EUR 3K MRR, dossier workspaces, notification engine, i18n</div></div>
+  <div class="tl-item"><div class="tl-dot"></div><div class="tl-label">Q3 2026</div><div class="tl-val">System of Record</div><div class="tl-target">EUR 7K MRR, stakeholder CRM, team layer, first hire</div></div>
   <div class="tl-item"><div class="tl-dot"></div><div class="tl-label">Q4 2026</div><div class="tl-val">Seed-Ready</div><div class="tl-target">EUR 10K MRR, 50+ customers, 3 case studies</div></div>
   <div class="tl-item"><div class="tl-dot"></div><div class="tl-label">2027</div><div class="tl-val">Expand</div><div class="tl-target">UK + national markets, seed round closed</div></div>
 </div>
@@ -676,7 +701,7 @@
     <tr><td>Single founder</td><td><span class="badge badge--red">High</span></td><td><span class="badge badge--red">High</span></td><td>Document everything, hire early, build recurring revenue</td></tr>
     <tr><td>Free user costs</td><td><span class="badge badge--gold">Med</span></td><td><span class="badge badge--gold">Med</span></td><td>Cap at 500 users, reduce free amendments</td></tr>
     <tr><td>AI cost spike</td><td><span class="badge badge--green">Low</span></td><td><span class="badge badge--gold">Med</span></td><td>4-provider fallback chain, Mistral primary (15x cheaper)</td></tr>
-    <tr><td>Generic AI competitors</td><td><span class="badge badge--gold">Med</span></td><td><span class="badge badge--gold">Med</span></td><td>Domain depth is the moat -- 29 scrapers, procedural knowledge</td></tr>
+    <tr><td>Foundation model plugins</td><td><span class="badge badge--gold">Med</span></td><td><span class="badge badge--gold">Med</span></td><td>Pipeline depth (35 scrapers) + domain engineering (AKN, QMV) + system-of-record lock-in (dossiers, contacts)</td></tr>
     <tr><td>Slow enterprise sales</td><td><span class="badge badge--red">High</span></td><td><span class="badge badge--gold">Med</span></td><td>Parallel SaaS + agency model, consultancy revenue funds patience</td></tr>
   </tbody>
 </table>

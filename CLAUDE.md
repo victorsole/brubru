@@ -106,7 +106,8 @@ brubru/
 3. **My EU Bubble** - RSS feed aggregator from EU sources
 4. **EU Law Comply** - Compliance gap analysis
 5. **Document Generator** - AI-powered position papers, MEP briefings, talking points (`backend/api/generate.py`)
-6. **Admin Panel** - User/subscription management (restricted)
+6. **My EU Calendar** - Multi-source institutional calendar (`backend/api/eu_calendar.py`)
+7. **Admin Panel** - User/subscription management (restricted)
 
 ## Important Patterns
 
@@ -138,6 +139,8 @@ Backend runs on `http://localhost:8000`:
 - `GET /api/amendments` - Amendment CRUD
 - `GET /api/rss-feeds` - RSS feed management
 - `POST /api/generate/*` - AI document generation (position papers, MEP briefings, talking points)
+- `GET /api/eu-calendar/events` - EU Calendar events with filters
+- `POST /api/eu-calendar/sync` - Calendar sync from all sources (Blue/Admin)
 - API docs at `/docs` (Swagger UI)
 
 ## Database
@@ -148,6 +151,8 @@ PostgreSQL via Supabase. Key tables:
 - `amendments` - Legislative amendments
 - `eu_laws` - Cached EU legislation
 - `rss_feeds` / `rss_entries` - RSS data
+- `eu_calendar_events` - EU institutional calendar events
+- `user_calendar_subscriptions` - Calendar reminders/subscriptions
 
 ## Testing
 
@@ -213,6 +218,46 @@ The Predictions tab in My EU Bubble provides AI-powered legislative outcome pred
 
 **EP Groups (in `use_predictions.ts`):**
 EPP (188), S&D (136), PfE (84), ECR (78), Renew (77), Greens/EFA (53), The Left (46), NI (33), ESN (25)
+
+## EU Calendar Feature (February 2026)
+
+My EU Calendar tab in My EU Bubble aggregates institutional events from 6 data sources (274 events).
+
+**Key Files:**
+- `backend/api/eu_calendar.py` - API endpoints (events, institutions, policy areas, sync)
+- `backend/models/eu_calendar.py` - `EUCalendarEvent` model + enums
+- `backend/services/scrapers/eu_calendar_sync_service.py` - Sync coordinator (all sources)
+- `backend/services/scrapers/ep_calendar_loader.py` - EP calendar JSON loader
+- `backend/services/scrapers/council_calendar_loader.py` - Council + ECB JSON loader
+- `backend/services/scrapers/ec_college_scraper.py` - Commission College meeting generator
+- `backend/services/scrapers/college_oj_scraper.py` - Commission OJ agenda scraper (RegDoc API)
+- `backend/services/scrapers/college_oj_sync_service.py` - OJ agenda sync/enrichment
+- `backend/services/scrapers/committee_agenda_scraper.py` - EP committee draft agenda scraper
+- `backend/services/scrapers/committee_agenda_sync_service.py` - Committee agenda sync
+- `backend/knowledge_base/eu_calendar_institutions.py` - Institution + policy area mappings
+- `backend/schemas/eu_calendar_schemas.py` - Pydantic response models
+- `frontend/src/components/bubble/eu_calendar_tab.tsx` - Calendar UI (month/week/day views)
+- `frontend/src/components/bubble/eu_calendar_tab.css` - Calendar styling (1,250+ lines)
+- `frontend/src/hooks/use_eu_calendar.ts` - Zustand state management
+- `frontend/src/services/eu_calendar_service.ts` - API client
+
+**Sync CLI:**
+```bash
+python scripts/sync_eu_calendar.py              # Full sync (all sources)
+python scripts/sync_committee_agendas.py        # EP committee agendas
+python scripts/sync_college_agendas.py --verbose # Commission College OJ
+```
+
+**Tier Access:**
+- White: Upgrade CTA (`eu_calendar_cta.tsx`)
+- Yellow+: Full read access, all views and filters
+- Blue: AI daily summary + sync trigger
+
+**Commission College OJ Scraper Notes:**
+- EC Register paginated search returns 503; individual lookup `GET /api/search/OJ(YYYY)NNNN?lang=en` works
+- Sequential reference enumeration with 3-second delay, browser-like headers
+- Baseline: OJ(2026)2550 = 14 Jan 2026
+- Fuzzy date matching (+/-1 day) for Strasbourg Tuesday meetings vs Brussels Wednesday meetings
 
 ---
 

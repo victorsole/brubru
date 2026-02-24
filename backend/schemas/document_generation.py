@@ -136,6 +136,43 @@ class GenerateResolutionRequest(BaseModel):
     language: str = Field("EN", description="Output language code")
 
 
+class GenerateEPQuestionRequest(BaseModel):
+    """Request to generate a European Parliament written question"""
+    # Topic and addressee
+    topic: str = Field(..., description="What the question is about (becomes the title)")
+    addressee: Literal["commission", "council", "vp_hr"] = Field(
+        "commission", description="Institution addressed: commission, council, or vp_hr"
+    )
+    question_type: Literal["standard", "priority"] = Field(
+        "standard", description="Standard (E-) or priority (P-) question"
+    )
+
+    # Context and evidence
+    context_description: str = Field(
+        ..., description="Background facts, evidence, and concerns to include in the introductory section"
+    )
+    legislation_references: Optional[List[str]] = Field(
+        None, description="Specific EU legislation to cite (e.g., 'Regulation (EU) 2021/2116')"
+    )
+    sources: Optional[List[str]] = Field(
+        None, description="URLs or descriptions of evidence sources (news articles, audits, reports)"
+    )
+
+    # Sub-questions
+    num_sub_questions: int = Field(
+        3, ge=1, le=3, description="Number of sub-questions to generate (1-3)"
+    )
+
+    # Optional context
+    policy_area: Optional[str] = Field(None, description="Policy area for auto-detecting relevant legislation")
+    tone: Literal["assertive", "diplomatic", "technical"] = Field(
+        "assertive", description="Tone: assertive (default), diplomatic, or technical"
+    )
+    procedure_reference: Optional[str] = Field(None, description="OEIL procedure reference if known")
+    celex_number: Optional[str] = Field(None, description="CELEX number if known")
+    language: str = Field("EN", description="Output language code")
+
+
 class GeneratedDocument(BaseModel):
     """Response containing generated document"""
     document_type: str = Field(..., description="Type of document generated")

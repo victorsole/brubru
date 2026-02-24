@@ -17,6 +17,7 @@ import {
   mdiAccountTie,
   mdiMessageText,
   mdiScriptTextOutline,
+  mdiCommentQuestionOutline,
   mdiArrowLeft,
   mdiArrowRight,
   mdiCheck,
@@ -31,7 +32,7 @@ import './document_generator_wizard.css';
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api`;
 
 // Types
-type DocumentType = 'position_paper' | 'mep_briefing' | 'talking_points' | 'resolution';
+type DocumentType = 'position_paper' | 'mep_briefing' | 'talking_points' | 'resolution' | 'ep_question';
 type PositionStance = 'support' | 'support_with_amendments' | 'oppose' | 'neutral';
 type DocumentTone = 'constructive' | 'critical' | 'technical' | 'diplomatic';
 type OrganisationType = 'company' | 'industry_association' | 'ngo' | 'think_tank' | 'law_firm' | 'consultancy';
@@ -87,6 +88,13 @@ const DOCUMENT_TYPES = [
     icon: mdiScriptTextOutline,
     color: '#b91c1c',
   },
+  {
+    id: 'ep_question' as DocumentType,
+    title: 'EP Written Question',
+    description: 'Written parliamentary question from the EP to the European Commission, Council, or VP/HR',
+    icon: mdiCommentQuestionOutline,
+    color: '#0693e3',
+  },
 ];
 
 export const DocumentGeneratorWizard = ({
@@ -140,6 +148,17 @@ export const DocumentGeneratorWizard = ({
   const [keyDemands, setKeyDemands] = useState<string[]>(['']);
   const [additionalReferences, setAdditionalReferences] = useState<string[]>([]);
 
+  // Form state - EP Question
+  const [epqTopic, setEpqTopic] = useState('');
+  const [epqAddressee, setEpqAddressee] = useState<'commission' | 'council' | 'vp_hr'>('commission');
+  const [epqQuestionType, setEpqQuestionType] = useState<'standard' | 'priority'>('standard');
+  const [epqContext, setEpqContext] = useState('');
+  const [epqLegislationRefs, setEpqLegislationRefs] = useState<string[]>([]);
+  const [epqSources, setEpqSources] = useState<string[]>([]);
+  const [epqNumSubQuestions, setEpqNumSubQuestions] = useState(3);
+  const [epqTone, setEpqTone] = useState<'assertive' | 'diplomatic' | 'technical'>('assertive');
+  const [epqPolicyArea, setEpqPolicyArea] = useState('');
+
   // Reset wizard
   const resetWizard = () => {
     setStep(1);
@@ -173,6 +192,15 @@ export const DocumentGeneratorWizard = ({
     setContextDescription('');
     setKeyDemands(['']);
     setAdditionalReferences([]);
+    setEpqTopic('');
+    setEpqAddressee('commission');
+    setEpqQuestionType('standard');
+    setEpqContext('');
+    setEpqLegislationRefs([]);
+    setEpqSources([]);
+    setEpqNumSubQuestions(3);
+    setEpqTone('assertive');
+    setEpqPolicyArea('');
   };
 
   const handleClose = () => {
@@ -280,6 +308,23 @@ export const DocumentGeneratorWizard = ({
           procedure_reference: procedureReference || undefined,
           additional_references: filteredRefs.length > 0 ? filteredRefs : undefined,
         };
+      } else if (selectedType === 'ep_question') {
+        endpoint = '/generate/ep-question';
+        const filteredLegRefs = epqLegislationRefs.filter((r: string) => r.trim());
+        const filteredSources = epqSources.filter((s: string) => s.trim());
+        payload = {
+          topic: epqTopic,
+          addressee: epqAddressee,
+          question_type: epqQuestionType,
+          context_description: epqContext,
+          legislation_references: filteredLegRefs.length > 0 ? filteredLegRefs : undefined,
+          sources: filteredSources.length > 0 ? filteredSources : undefined,
+          num_sub_questions: epqNumSubQuestions,
+          policy_area: epqPolicyArea || undefined,
+          tone: epqTone,
+          procedure_reference: procedureReference || undefined,
+          celex_number: undefined,
+        };
       }
 
       const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -329,6 +374,9 @@ export const DocumentGeneratorWizard = ({
       if (selectedType === 'resolution') {
         return resolutionTopic.trim() && contextDescription.trim();
       }
+      if (selectedType === 'ep_question') {
+        return epqTopic.trim() && epqContext.trim();
+      }
     }
     return true;
   };
@@ -372,7 +420,7 @@ export const DocumentGeneratorWizard = ({
               <h3>What would you like to generate?</h3>
               <div className="doc-generator__type-grid">
                 {DOCUMENT_TYPES.map((type) => {
-                  const isLocked = type.id === 'resolution' && !canUseResolution;
+                  const isLocked = (type.id === 'resolution' || type.id === 'ep_question') && !canUseResolution;
                   return (
                     <div
                       key={type.id}
@@ -810,6 +858,164 @@ export const DocumentGeneratorWizard = ({
                       )}
                     </>
                   )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && selectedType === 'ep_question' && (
+            <div className="doc-generator__step">
+              <h3>EP Written Question Details</h3>
+              <div className="doc-generator__form">
+                <div className="doc-generator__form-group">
+                  <label>Topic / Title *</label>
+                  <input
+                    type="text"
+                    value={epqTopic}
+                    onChange={(e) => setEpqTopic(e.target.value)}
+                    placeholder="e.g., Security risks associated with flush car door handles"
+                    maxLength={200}
+                  />
+                  <span className="doc-generator__char-count">{epqTopic.length}/200</span>
+                </div>
+
+                <div className="doc-generator__form-row">
+                  <div className="doc-generator__form-group">
+                    <label>Addressee *</label>
+                    <select value={epqAddressee} onChange={(e) => setEpqAddressee(e.target.value as 'commission' | 'council' | 'vp_hr')}>
+                      <option value="commission">European Commission</option>
+                      <option value="council">Council of the EU</option>
+                      <option value="vp_hr">VP/HR (Foreign Affairs)</option>
+                    </select>
+                  </div>
+                  <div className="doc-generator__form-group">
+                    <label>Question Type</label>
+                    <select value={epqQuestionType} onChange={(e) => setEpqQuestionType(e.target.value as 'standard' | 'priority')}>
+                      <option value="standard">Standard (E-) -- 6-week reply</option>
+                      <option value="priority">Priority (P-) -- 3-week reply</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Context and Evidence *</label>
+                  <p className="doc-generator__form-hint">
+                    Describe the facts, concerns, and evidence you want included. The AI will structure this into 2-4 formal paragraphs citing EU legislation.
+                  </p>
+                  <textarea
+                    value={epqContext}
+                    onChange={(e) => setEpqContext(e.target.value)}
+                    placeholder="e.g., Recent audit by the European Court of Auditors found that the EU is unlikely to secure sufficient critical raw materials by 2030. Continued dependency on non-EU countries, limited progress on domestic extraction..."
+                    rows={5}
+                  />
+                </div>
+
+                <div className="doc-generator__form-row">
+                  <div className="doc-generator__form-group">
+                    <label>Number of Sub-questions</label>
+                    <select value={epqNumSubQuestions} onChange={(e) => setEpqNumSubQuestions(Number(e.target.value))}>
+                      <option value={1}>1 sub-question</option>
+                      <option value={2}>2 sub-questions</option>
+                      <option value={3}>3 sub-questions</option>
+                    </select>
+                  </div>
+                  <div className="doc-generator__form-group">
+                    <label>Tone</label>
+                    <select value={epqTone} onChange={(e) => setEpqTone(e.target.value as 'assertive' | 'diplomatic' | 'technical')}>
+                      <option value="assertive">Assertive (direct pressure)</option>
+                      <option value="diplomatic">Diplomatic (measured probing)</option>
+                      <option value="technical">Technical (legal precision)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Procedure Reference</label>
+                  <input
+                    type="text"
+                    value={procedureReference}
+                    onChange={(e) => setProcedureReference(e.target.value)}
+                    placeholder="e.g., 2021/0106(COD)"
+                  />
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Legislation References (optional)</label>
+                  <p className="doc-generator__form-hint">
+                    Specific EU laws to cite. The AI will also infer relevant legislation from context.
+                  </p>
+                  {epqLegislationRefs.length === 0 ? (
+                    <button type="button" onClick={() => setEpqLegislationRefs([''])} className="doc-generator__add-btn">+ Add legislation reference</button>
+                  ) : (
+                    <>
+                      {epqLegislationRefs.map((ref, index) => (
+                        <div key={index} className="doc-generator__list-item">
+                          <input
+                            type="text"
+                            value={ref}
+                            onChange={(e) => updateListItem(epqLegislationRefs, setEpqLegislationRefs, index, e.target.value)}
+                            placeholder="e.g., Regulation (EU) 2021/2116"
+                          />
+                          <button type="button" onClick={() => {
+                            const updated = epqLegislationRefs.filter((_, i) => i !== index);
+                            setEpqLegislationRefs(updated);
+                          }} className="doc-generator__remove-btn">x</button>
+                        </div>
+                      ))}
+                      {epqLegislationRefs.length < 5 && (
+                        <button type="button" onClick={() => addListItem(epqLegislationRefs, setEpqLegislationRefs, 5)} className="doc-generator__add-btn">+ Add reference</button>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Evidence Sources (optional)</label>
+                  <p className="doc-generator__form-hint">
+                    News articles, audit reports, or other evidence to footnote.
+                  </p>
+                  {epqSources.length === 0 ? (
+                    <button type="button" onClick={() => setEpqSources([''])} className="doc-generator__add-btn">+ Add source</button>
+                  ) : (
+                    <>
+                      {epqSources.map((src, index) => (
+                        <div key={index} className="doc-generator__list-item">
+                          <input
+                            type="text"
+                            value={src}
+                            onChange={(e) => updateListItem(epqSources, setEpqSources, index, e.target.value)}
+                            placeholder="e.g., European Court of Auditors report on critical minerals, 2025"
+                          />
+                          <button type="button" onClick={() => {
+                            const updated = epqSources.filter((_, i) => i !== index);
+                            setEpqSources(updated);
+                          }} className="doc-generator__remove-btn">x</button>
+                        </div>
+                      ))}
+                      {epqSources.length < 5 && (
+                        <button type="button" onClick={() => addListItem(epqSources, setEpqSources, 5)} className="doc-generator__add-btn">+ Add source</button>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                <div className="doc-generator__form-group">
+                  <label>Policy Area</label>
+                  <select value={epqPolicyArea} onChange={(e) => setEpqPolicyArea(e.target.value)}>
+                    <option value="">Select (optional)...</option>
+                    <option value="Digital">Digital / AI / Data</option>
+                    <option value="Trade">Trade / International</option>
+                    <option value="Industry">Industry / Competitiveness</option>
+                    <option value="Environment">Environment / Climate</option>
+                    <option value="Agriculture">Agriculture / Food</option>
+                    <option value="Transport">Transport / Safety</option>
+                    <option value="Justice">Justice / Rule of Law</option>
+                    <option value="Health">Health / Pharmaceuticals</option>
+                    <option value="Foreign Affairs">Foreign Affairs / Security</option>
+                    <option value="Energy">Energy</option>
+                    <option value="Employment">Employment / Social</option>
+                    <option value="Internal Market">Internal Market</option>
+                  </select>
                 </div>
               </div>
             </div>

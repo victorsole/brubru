@@ -141,7 +141,55 @@ Real-time monitoring of EU legislative procedures.
 **Committee Work Integration:**
 All 26 EP standing committees' work-in-progress data is scraped and integrated into the AI chatbot context. Ask about any committee (e.g., "What is INTA working on?") to get current legislative procedures.
 
-### 5.1 **Predictions** (My EU Bubble Feature)
+### 5.1 **My EU Calendar** (My EU Bubble Feature)
+
+Institutional calendar aggregating events from all major EU bodies, available in the My EU Bubble "EU Calendar" tab.
+
+**Event Sources:**
+- **European Parliament** - Plenary sessions, committee weeks, group weeks, recess periods (2025 + 2026 JSON calendars)
+- **EP Committee Agendas** - Draft agendas for all 26 standing committees, scraped from EP website
+- **Council of the EU** - Council meetings, informal meetings, Eurogroup, European Council summits (static JSON)
+- **European Commission** - Weekly College of Commissioners meetings (generated + OJ agenda enrichment)
+- **ECB** - Governing Council meetings (static JSON)
+
+**Commission College OJ Scraper:**
+Enriches calendar events with published agenda metadata from the EC Register of Commission Documents. Fetches OJ (Ordre du Jour) documents via sequential reference enumeration (`OJ(YYYY)NNNN`), extracts meeting dates, locations (Brussels/Strasbourg), and meeting numbers.
+
+**Calendar Views:**
+- Month view (desktop: grid with event pills, mobile: grouped event list)
+- Week view (7-column grid with time slots)
+- Day view (detailed event cards)
+
+**Filters:**
+- Institution (EP, Council, Commission, ECB, etc.)
+- EP Committee (26 committees, horizontal scrollable chips)
+- Policy area (mapped from committee codes and council configurations)
+- Text search
+
+**API Endpoints:**
+- `GET /api/eu-calendar/events` - List events with filters and pagination
+- `GET /api/eu-calendar/events/range` - All events in date range (calendar views)
+- `GET /api/eu-calendar/events/today` - Today's digest with AI summary (Blue tier)
+- `GET /api/eu-calendar/events/{id}` - Single event detail
+- `GET /api/eu-calendar/institutions` - Institution reference data
+- `GET /api/eu-calendar/policy-areas` - Policy area reference data
+- `POST /api/eu-calendar/sync` - Full sync from all sources (Blue/Admin)
+- `POST /api/eu-calendar/sync/committee-agendas` - EP committee agenda sync (Blue/Admin)
+- `POST /api/eu-calendar/sync/college-agendas` - Commission College OJ sync (Blue/Admin)
+
+**Sync CLI Scripts:**
+```bash
+python scripts/sync_eu_calendar.py                    # Full sync (all sources)
+python scripts/sync_committee_agendas.py              # EP committee agendas only
+python scripts/sync_college_agendas.py --verbose      # Commission College OJ only
+```
+
+**Access:**
+- White tier: Upgrade CTA
+- Yellow tier: Full read access, all views and filters
+- Blue tier: Full access + AI daily summary + sync trigger
+
+### 5.2 **Predictions** (My EU Bubble Feature)
 
 AI-powered legislative outcome predictions available in the My EU Bubble "Predictions" tab.
 
@@ -337,6 +385,7 @@ brubru/
 │   │   ├── generate.py              # AI document generation
 │   │   ├── rss_feeds.py             # RSS feed configuration
 │   │   ├── commission_documents.py  # EC Register Commission documents
+│   │   ├── eu_calendar.py           # EU Calendar endpoints
 │   │   └── admin_panel.py           # Admin dashboard
 │   │
 │   ├── models/                       # SQLAlchemy ORM models
@@ -344,6 +393,7 @@ brubru/
 │   │   ├── chat.py                  # Chat conversations
 │   │   ├── amendment.py             # Amendments
 │   │   ├── eu_law.py                # EU laws database
+│   │   ├── eu_calendar.py           # EU Calendar events
 │   │   ├── compliance.py            # Compliance analyses
 │   │   ├── rss_feed.py              # RSS feeds
 │   │   └── legislative_train.py     # Legislative train items
@@ -638,10 +688,10 @@ export const ChatInterface = () => { ... }
 
 | Component | Platform | Domain |
 |-----------|----------|--------|
-| **Frontend** | IONOS Deploy Now | brubru.beresol.eu |
-| **Backend** | IONOS Deploy Now (Docker) | brubru.beresol.eu/api |
+| **Frontend** | SiteGround | brubru.beresol.eu |
+| **Backend** | Railway.app | brubru-production.up.railway.app |
 | **Database** | Supabase PostgreSQL | (managed) |
-| **SSL/TLS** | IONOS (auto-managed) | 1.3+ |
+| **SSL/TLS** | SiteGround / Railway (auto-managed) | 1.3+ |
 
 > **Migration Note:** The database will migrate from Supabase to Google Cloud SQL in a future phase. The backend uses pure SQLAlchemy with no Supabase SDK dependencies, making migration straightforward (change `DATABASE_URL` only).
 
@@ -816,6 +866,12 @@ python3.12 scripts/clean_bounced_emails.py --days 7 --apply
   - Discovery via EUR-Lex RSS + CELLAR SPARQL
   - Enrichment via live RegDoc API (titles, DGs, languages for 240+ documents)
   - CELEX-to-reference conversion for cross-system lookups
+- **Phase 16:** My EU Calendar (Feb 2026)
+  - Multi-source institutional calendar (EP, Council, Commission, ECB)
+  - EP committee draft agenda scraper (26 committees, 23 events)
+  - Commission College OJ agenda scraper (EC Register sequential lookup)
+  - Month/week/day views with institution and committee filters
+  - 274 events synced across 6 data sources
 
 ### 🔄 Current Phase
 - **Phase 13:** AI Context Injection (hybrid legal assistant)
