@@ -30,7 +30,8 @@ from api import (
     feedback, admin_panel, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
-    predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar
+    predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
+    cron
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -194,6 +195,7 @@ app.include_router(predictions.router, tags=["Predictions"])
 app.include_router(commission_documents.router, tags=["Commission Documents"])
 app.include_router(mep_amendments.router, tags=["MEP Amendments"])
 app.include_router(eu_calendar.router, tags=["EU Calendar"])
+app.include_router(cron.router, tags=["Cron Jobs"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 

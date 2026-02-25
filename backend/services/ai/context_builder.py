@@ -1415,18 +1415,57 @@ class ContextBuilder:
                 results = eurlex_query.all()
 
             else:
-                # Standard title search
-                search_term = f'%{query_lower[:50]}%'
-                carriages_query = db.query(LegislativeCarriage, LegislativeTrain).join(
-                    LegislativeTrain,
-                    LegislativeCarriage.train_id == LegislativeTrain.id,
-                    isouter=True
-                ).filter(
-                    LegislativeCarriage.title.ilike(search_term)
-                ).order_by(
-                    LegislativeCarriage.last_updated.desc()
-                ).limit(5)
-                results = carriages_query.all()
+                from sqlalchemy import or_
+
+                match_filters = []
+
+                # 1. Check for procedure references from entity extraction
+                if entities.procedure_references:
+                    for proc_ref in entities.procedure_references:
+                        match_filters.append(
+                            LegislativeCarriage.oeil_procedure_ref.ilike(f"%{proc_ref}%")
+                        )
+
+                # 2. Check for CELEX numbers from entity extraction
+                if entities.celex_numbers:
+                    for celex in entities.celex_numbers:
+                        match_filters.append(
+                            LegislativeCarriage.celex_numbers.any(celex)
+                        )
+
+                # 3. Keyword-tokenised title + description search
+                stopwords = {
+                    'tell', 'about', 'what', 'which', 'where', 'when', 'does',
+                    'have', 'this', 'that', 'with', 'from', 'they', 'been',
+                    'were', 'will', 'would', 'could', 'should', 'there',
+                    'their', 'some', 'more', 'than', 'very', 'just', 'also',
+                    'know', 'like', 'want', 'need', 'give', 'information',
+                    'status', 'current', 'progress', 'update', 'explain',
+                    'look', 'show', 'find', 'search', 'list',
+                }
+                words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
+                if words:
+                    for word in words[:5]:
+                        match_filters.append(
+                            LegislativeCarriage.title.ilike(f"%{word}%")
+                        )
+                        match_filters.append(
+                            LegislativeCarriage.description.ilike(f"%{word}%")
+                        )
+
+                if match_filters:
+                    carriages_query = db.query(LegislativeCarriage, LegislativeTrain).join(
+                        LegislativeTrain,
+                        LegislativeCarriage.train_id == LegislativeTrain.id,
+                        isouter=True
+                    ).filter(
+                        or_(*match_filters)
+                    ).order_by(
+                        LegislativeCarriage.last_updated.desc()
+                    ).limit(10)
+                    results = carriages_query.all()
+                else:
+                    results = []
 
             # Format results
             for carriage, train in results:
@@ -1455,6 +1494,82 @@ class ContextBuilder:
                     'first_seen': carriage.first_seen.isoformat() if carriage.first_seen else None,
                     'description': carriage.description[:300] if carriage.description else None
                 })
+
+            # On-demand OEIL lookup: if entity extractor found procedure refs
+            # not matched in DB results, fetch from OEIL and persist
+            if entities.procedure_references:
+                found_refs = {f.get('oeil_ref') for f in train_files}
+                missing_refs = [
+                    ref for ref in entities.procedure_references
+                    if ref not in found_refs
+                ]
+
+                if missing_refs:
+                    logger.info(
+                        f"[OEIL-ONDEMAND] {len(missing_refs)} procedure ref(s) not in DB, "
+                        f"fetching from OEIL: {missing_refs}"
+                    )
+                    try:
+                        from services.scrapers.oeil_scraper import OEILScraper
+
+                        scraper = OEILScraper(use_api=True)
+                        for ref in missing_refs[:3]:  # Limit to 3 to avoid slow responses
+                            try:
+                                proc_data = await scraper.get_procedure(ref)
+                                if proc_data and 'error' not in proc_data:
+                                    # Persist to DB as OEIL-direct carriage
+                                    from models.legislative_train import CarriageSourceEnum, CarriageStatusEnum
+                                    from datetime import datetime
+
+                                    title = proc_data.get('title', ref)
+                                    existing = db.query(LegislativeCarriage).filter(
+                                        LegislativeCarriage.oeil_procedure_ref == ref
+                                    ).first()
+
+                                    if not existing:
+                                        new_carriage = LegislativeCarriage(
+                                            title=title[:500] if title else ref,
+                                            description=proc_data.get('subject', '')[:2000],
+                                            oeil_procedure_ref=ref,
+                                            source=CarriageSourceEnum.OEIL_DIRECT,
+                                            current_status=CarriageStatusEnum.ONGOING,
+                                            committees=proc_data.get('committees', []),
+                                            lead_committee=proc_data.get('committee_responsible'),
+                                            oeil_procedure_data=proc_data,
+                                            first_seen=datetime.utcnow(),
+                                            last_updated=datetime.utcnow(),
+                                        )
+                                        db.add(new_carriage)
+                                        db.commit()
+                                        logger.info(f"[OEIL-ONDEMAND] Persisted: {ref} - {title[:60]}")
+
+                                        train_files.append({
+                                            'train_name': 'OEIL (Legislative Observatory)',
+                                            'train_priority': None,
+                                            'file_title': title,
+                                            'current_status': 'ongoing',
+                                            'days_in_current_status': None,
+                                            'is_blocked': False,
+                                            'committees': proc_data.get('committees', []),
+                                            'oeil_ref': ref,
+                                            'celex_numbers': [],
+                                            'source': 'OEIL (on-demand)',
+                                            'first_seen': datetime.utcnow().isoformat(),
+                                            'description': proc_data.get('subject', '')[:300],
+                                        })
+                                    else:
+                                        logger.debug(f"[OEIL-ONDEMAND] Already exists: {ref}")
+
+                            except Exception as e:
+                                logger.warning(f"[OEIL-ONDEMAND] Failed to fetch {ref}: {e}")
+
+                        try:
+                            await scraper.close()
+                        except Exception:
+                            pass
+
+                    except ImportError:
+                        logger.warning("[OEIL-ONDEMAND] OEILScraper not available")
 
             db.close()
 

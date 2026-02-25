@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     DEVELOPMENT_MODE: bool = False  # Enable development mode authentication bypass
     SECRET_KEY: str
+    CRON_SECRET: str | None = None  # Secret key for cron job authentication
 
     # Supabase
     SUPABASE_URL: str
