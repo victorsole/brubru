@@ -132,7 +132,8 @@ async def cron_sync_all(
     """
     Run all sync tasks (called by Railway cron every 6 hours).
 
-    Runs OEIL + EUR-Lex syncs sequentially.
+    Runs sequentially: OEIL, EUR-Lex, Committee Work, Texts Adopted, Commission Docs.
+    Each source uses its own DB session. Failures are isolated (one failing doesn't stop others).
     """
     _verify_cron_secret(authorization)
 
@@ -182,6 +183,63 @@ async def cron_sync_all(
     except Exception as e:
         logger.error(f"[CRON] EUR-Lex sync failed: {str(e)}")
         results["eurlex"] = {"status": "failed", "error": str(e)}
+    finally:
+        db.close()
+
+    # Committee Work sync (26 EP committees)
+    db = SessionLocal()
+    try:
+        from services.scrapers.committee_work_sync_service import CommitteeWorkSyncService
+
+        logger.info("[CRON] Starting combined sync: Committee Work")
+        service = CommitteeWorkSyncService(db=db)
+        cw_result = await service.sync_all(skip_existing=True)
+        results["committee_work"] = {
+            "status": "success",
+            "added": cw_result.get("added", 0),
+            "updated": cw_result.get("updated", 0),
+        }
+    except Exception as e:
+        logger.error(f"[CRON] Committee Work sync failed: {str(e)}")
+        results["committee_work"] = {"status": "failed", "error": str(e)}
+    finally:
+        db.close()
+
+    # Texts Adopted sync (EP plenary votes via RSS)
+    db = SessionLocal()
+    try:
+        from services.scrapers.texts_adopted_sync_service import TextsAdoptedSyncService
+
+        logger.info("[CRON] Starting combined sync: Texts Adopted")
+        service = TextsAdoptedSyncService(db=db)
+        ta_result = await service.sync_rss(skip_existing=True)
+        results["texts_adopted"] = {
+            "status": "success",
+            "added": ta_result.get("added", 0),
+            "updated": ta_result.get("updated", 0),
+        }
+    except Exception as e:
+        logger.error(f"[CRON] Texts Adopted sync failed: {str(e)}")
+        results["texts_adopted"] = {"status": "failed", "error": str(e)}
+    finally:
+        db.close()
+
+    # Commission Documents sync (COM/OJ via EUR-Lex fallback)
+    db = SessionLocal()
+    try:
+        from services.scrapers.commission_doc_sync_service import CommissionDocSyncService
+
+        logger.info("[CRON] Starting combined sync: Commission Documents")
+        service = CommissionDocSyncService(db=db)
+        cd_result = await service.sync_all(days=days, skip_existing=True)
+        results["commission_docs"] = {
+            "status": "success",
+            "added": cd_result.get("added", 0),
+            "updated": cd_result.get("updated", 0),
+        }
+    except Exception as e:
+        logger.error(f"[CRON] Commission Documents sync failed: {str(e)}")
+        results["commission_docs"] = {"status": "failed", "error": str(e)}
     finally:
         db.close()
 
