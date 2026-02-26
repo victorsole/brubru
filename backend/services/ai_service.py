@@ -285,6 +285,9 @@ class AIService:
         # Remove any markdown links the AI created (except footnote citations)
         assistant_message = self._remove_ai_generated_links(assistant_message)
 
+        # Strip orphan [N] citation markers that don't map to real sources
+        assistant_message = self._strip_orphan_citations(assistant_message, citations)
+
         # Post-process to add MEP links
         if mep_data:
             print(f"\n{'='*70}")
@@ -438,15 +441,17 @@ Data sources available to you:
 
 Guidelines:
 1. Answer confidently using the provided EU context
-2. Cite sources using footnotes [1], [2], etc.
-3. Be concise but comprehensive
-4. Use clear, professional language
-5. If specific details aren't in the provided context, admit it rather than guessing
+2. Cite sources using footnotes [1], [2], etc. ONLY when referencing a specific document, legislation, or data source from the EU CONTEXT section. Each number must correspond to a distinct source in the context.
+3. NEVER fabricate or hallucinate citation numbers. If no EU CONTEXT is provided, do NOT use [1], [2] references at all.
+4. Be concise but comprehensive
+5. Use clear, professional language
+6. If specific details aren't in the provided context, admit it rather than guessing
 
 When answering:
 - Start with a direct answer
 - Provide relevant details from the context and your knowledge
-- Include citations to source documents when available
+- Include citations to source documents ONLY when the EU CONTEXT section contains matching sources
+- If no relevant EU CONTEXT was provided, answer from general knowledge without numbered citations
 - Highlight recent developments and current status
 - Suggest related topics or next steps if helpful
 
@@ -454,7 +459,7 @@ Formatting rules:
 - NEVER create markdown hyperlinks in your responses - our system will add links automatically
 - Do NOT format text as [text](url) - just use plain text or **bold** for emphasis
 - MEP names and other entities will be automatically linked by our backend
-- Exception: You CAN use footnote citations like [1], [2] for references
+- Exception: You CAN use footnote citations like [1], [2] ONLY when citing specific sources from the EU CONTEXT. Never invent citation numbers.
 
 IMPORTANT - Legislation acronyms:
 - DO NOT create hyperlinks for legislation acronyms (CBAM, GDPR, AI Act, DSA, DMA, etc.)
@@ -814,6 +819,39 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             print(f"{'='*70}\n")
 
         return cleaned_text
+
+    def _strip_orphan_citations(self, text: str, citations: List[Dict]) -> str:
+        """
+        Remove [N] citation markers from AI response when they don't map
+        to actual sources. Prevents hallucinated references from appearing.
+
+        Args:
+            text: AI response text
+            citations: List of real citation dicts built from context
+
+        Returns:
+            Text with orphan citation markers removed
+        """
+        max_valid = len(citations)
+
+        def replace_orphan(match):
+            num = int(match.group(1))
+            if num < 1 or num > max_valid:
+                return ""  # Strip orphan
+            return match.group(0)  # Keep valid
+
+        # Match [N] patterns (standalone citation markers)
+        cleaned = re.sub(r'\s*\[(\d+)\]', replace_orphan, text)
+
+        # Clean up any double spaces left behind
+        cleaned = re.sub(r'  +', ' ', cleaned)
+
+        if cleaned != text:
+            orphan_count = len(re.findall(r'\[(\d+)\]', text)) - len(re.findall(r'\[(\d+)\]', cleaned))
+            if orphan_count > 0:
+                logger.info(f"Stripped {orphan_count} orphan citation markers (had {max_valid} real sources)")
+
+        return cleaned
 
     def _linkify_mep_names(self, text: str, mep_data: Dict[str, Dict[str, str]]) -> str:
         """
