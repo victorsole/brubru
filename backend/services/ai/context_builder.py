@@ -1442,10 +1442,17 @@ class ContextBuilder:
                     'know', 'like', 'want', 'need', 'give', 'information',
                     'status', 'current', 'progress', 'update', 'explain',
                     'look', 'show', 'find', 'search', 'list',
+                    'main', 'issues', 'within', 'proposal', 'regulation',
+                    'directive', 'please', 'could', 'think', 'opinion',
+                    'effects', 'impact', 'implications', 'details', 'overview',
+                    'addressing', 'regarding', 'concerning', 'related',
+                    'negative', 'positive', 'specific', 'general', 'brief',
+                    'important', 'major', 'different', 'various', 'other',
+                    'union', 'european', 'market', 'global',
                 }
                 words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
                 if words:
-                    for word in words[:5]:
+                    for word in words[:8]:
                         match_filters.append(
                             LegislativeCarriage.title.ilike(f"%{word}%")
                         )
@@ -2050,11 +2057,18 @@ class ContextBuilder:
                     'were', 'will', 'would', 'could', 'should', 'there',
                     'their', 'some', 'more', 'than', 'very', 'just', 'also',
                     'know', 'like', 'want', 'need', 'give', 'information',
+                    'main', 'issues', 'within', 'proposal', 'regulation',
+                    'directive', 'please', 'could', 'think', 'opinion',
+                    'effects', 'impact', 'implications', 'details', 'overview',
+                    'addressing', 'regarding', 'concerning', 'related',
+                    'negative', 'positive', 'specific', 'general', 'brief',
+                    'important', 'major', 'different', 'various', 'other',
+                    'union', 'european', 'market', 'global',
                 }
                 words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
                 if words:
                     title_conditions = []
-                    for word in words[:5]:
+                    for word in words[:8]:
                         title_conditions.append(
                             CommissionDocument.title.ilike(f"%{word}%")
                         )
