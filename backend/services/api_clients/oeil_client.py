@@ -496,6 +496,147 @@ class OEILClient(BaseAPIClient):
         }
 
     # =========================================================================
+    # Single Procedure Lookup (Added February 2026)
+    # =========================================================================
+
+    async def lookup_procedure(
+        self,
+        procedure_ref: str
+    ) -> Optional[OEILFeedItem]:
+        """
+        Look up a single procedure by reference from its OEIL page.
+
+        Useful for adding procedures that are older than the 30-day XML feed window.
+
+        Args:
+            procedure_ref: Procedure reference (e.g. "2025/0726(COD)")
+
+        Returns:
+            OEILFeedItem if found, None otherwise
+        """
+        import httpx
+        from bs4 import BeautifulSoup
+
+        url = f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={procedure_ref}"
+
+        try:
+            async with httpx.AsyncClient(timeout=30, follow_redirects=True) as client:
+                response = await client.get(url)
+                response.raise_for_status()
+
+            soup = BeautifulSoup(response.text, 'html.parser')
+
+            # Extract title from page title tag: "Procedure File: REF | ..."
+            page_title = soup.find('title')
+            if not page_title or 'procedure' not in page_title.text.lower():
+                logger.warning(f"Not a valid procedure page for {procedure_ref}")
+                return None
+
+            # Find procedure title - usually in a prominent heading or the first large text block
+            title = None
+
+            # Method 1: Look for the procedure title in the page content
+            # OEIL pages have the title as a prominent paragraph near the top
+            for p in soup.find_all(['p', 'div', 'span']):
+                text = p.get_text(strip=True)
+                # Skip short texts, navigation items, and the reference itself
+                if len(text) > 30 and procedure_ref not in text and 'cookie' not in text.lower():
+                    # Look for substantial text that could be a procedure title
+                    if not any(skip in text.lower() for skip in [
+                        'european parliament', 'committee responsible', 'document type',
+                        'javascript', 'cookie', 'privacy', 'navigation', 'search',
+                        'legislative observatory', 'home', 'procedure file'
+                    ]):
+                        title = text
+                        break
+
+            # Method 2: Try extracting from meta tags
+            if not title:
+                meta_desc = soup.find('meta', attrs={'name': 'description'})
+                if meta_desc and meta_desc.get('content'):
+                    title = meta_desc['content']
+
+            # Method 3: Use the h1 or first heading with substantial text
+            if not title:
+                for h in soup.find_all(['h1', 'h2', 'h3']):
+                    text = h.get_text(strip=True)
+                    if len(text) > 20 and procedure_ref not in text:
+                        title = text
+                        break
+
+            if not title:
+                logger.warning(f"Could not extract title for {procedure_ref}")
+                title = f"Procedure {procedure_ref}"
+
+            # Truncate overly long titles (sometimes we grab too much)
+            if len(title) > 300:
+                title = title[:297] + "..."
+
+            # Extract committees
+            committees = []
+            for t in soup.find_all('table'):
+                header_row = t.find('tr')
+                if header_row and 'committee responsible' in header_row.get_text(strip=True).lower():
+                    data_rows = t.find_all('tr')
+                    if len(data_rows) > 1:
+                        first_cell = data_rows[1].find(['td', 'th'])
+                        if first_cell:
+                            comm_text = first_cell.get_text(strip=True)
+                            # Extract full committee name before the code
+                            comm_match = re.search(r'([A-Z]{4})', comm_text)
+                            if comm_match:
+                                code = comm_match.group(1)
+                                # Reverse lookup name from code
+                                for name, c in {
+                                    "International Trade": "INTA",
+                                    "Foreign Affairs": "AFET",
+                                    "Environment, Public Health and Food Safety": "ENVI",
+                                    "Industry, Research and Energy": "ITRE",
+                                    "Internal Market and Consumer Protection": "IMCO",
+                                    "Economic and Monetary Affairs": "ECON",
+                                    "Employment and Social Affairs": "EMPL",
+                                    "Transport and Tourism": "TRAN",
+                                    "Agriculture and Rural Development": "AGRI",
+                                    "Legal Affairs": "JURI",
+                                    "Civil Liberties, Justice and Home Affairs": "LIBE",
+                                }.items():
+                                    if c == code:
+                                        committees.append(name)
+                                        break
+                                else:
+                                    committees.append(comm_text.split(code)[0].strip() or code)
+                    break
+
+            # Extract rapporteurs
+            rapporteurs = []
+            for t in soup.find_all('table'):
+                header_row = t.find('tr')
+                if header_row and 'rapporteur' in header_row.get_text(strip=True).lower():
+                    data_rows = t.find_all('tr')
+                    for row in data_rows[1:]:
+                        cells = row.find_all(['td', 'th'])
+                        if len(cells) >= 2:
+                            rap_text = cells[1].get_text(strip=True)
+                            if rap_text and len(rap_text) > 2:
+                                rapporteurs.append(rap_text)
+                    break
+
+            item = OEILFeedItem(
+                reference=procedure_ref,
+                title=title,
+                link=url,
+                committees=committees,
+                rapporteurs=rapporteurs
+            )
+
+            logger.info(f"[OK] Looked up procedure {procedure_ref}: {title[:80]}...")
+            return item
+
+        except Exception as e:
+            logger.error(f"Failed to look up procedure {procedure_ref}: {str(e)}")
+            return None
+
+    # =========================================================================
     # Documentation Gateway (Added February 2026)
     # =========================================================================
 

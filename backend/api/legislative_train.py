@@ -1656,6 +1656,46 @@ async def sync_oeil_feeds(
         raise HTTPException(status_code=500, detail=f"Sync failed: {str(e)}")
 
 
+@router.post(
+    "/sync/oeil/lookup",
+    summary="Look up a single OEIL procedure",
+    description="Add a specific procedure to the database by scraping its OEIL page"
+)
+async def lookup_oeil_procedure(
+    reference: str = Query(..., description="OEIL procedure reference (e.g. 2025/0726(COD))"),
+    force: bool = Query(default=False, description="Update even if already exists"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Look up and add a single OEIL procedure by reference.
+
+    Bypasses the 30-day XML feed limit by scraping the OEIL procedure page directly.
+    Useful for adding older procedures not captured by the regular sync.
+
+    Requires Blue tier subscription.
+    """
+    if current_user.subscription_tier not in ['blue', 'admin']:
+        raise HTTPException(
+            status_code=403,
+            detail="OEIL lookup requires Blue tier subscription"
+        )
+
+    try:
+        from services.scrapers.oeil_sync_service import OEILSyncService
+
+        logger.info(f"[SYNC] User {current_user.email} looking up OEIL procedure: {reference}")
+
+        service = OEILSyncService(db=db)
+        result = await service.sync_single_procedure(reference, force=force)
+
+        return result
+
+    except Exception as e:
+        logger.error(f"[SYNC] Lookup failed for {reference}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Lookup failed: {str(e)}")
+
+
 # ===== EUR-Lex Sync Endpoints =====
 
 @router.post(

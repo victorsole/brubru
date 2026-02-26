@@ -361,6 +361,83 @@ class OEILSyncService:
             return item.title
 
 
+    async def sync_single_procedure(
+        self,
+        procedure_ref: str,
+        force: bool = False
+    ) -> Dict[str, Any]:
+        """
+        Look up and sync a single procedure by reference.
+
+        Useful for adding procedures older than the 30-day XML feed window.
+
+        Args:
+            procedure_ref: OEIL procedure reference (e.g. "2025/0726(COD)")
+            force: If True, update even if already exists
+
+        Returns:
+            Result dict with status and details
+        """
+        logger.info(f"[START] Looking up single procedure: {procedure_ref}")
+
+        try:
+            # Check if already exists
+            existing = self.db.query(LegislativeCarriage).filter(
+                LegislativeCarriage.oeil_procedure_ref == procedure_ref
+            ).first()
+
+            if existing and not force:
+                logger.info(f"[INFO] Procedure {procedure_ref} already exists, skipping")
+                return {
+                    'status': 'skipped',
+                    'reference': procedure_ref,
+                    'title': existing.title,
+                    'message': 'Already exists in database'
+                }
+
+            # Look up from OEIL page
+            item = await self.client.lookup_procedure(procedure_ref)
+            if not item:
+                return {
+                    'status': 'not_found',
+                    'reference': procedure_ref,
+                    'message': 'Procedure not found on OEIL'
+                }
+
+            if existing and force:
+                self._update_carriage(existing, item)
+                self.db.commit()
+                logger.info(f"[OK] Updated procedure {procedure_ref}")
+                return {
+                    'status': 'updated',
+                    'reference': procedure_ref,
+                    'title': item.title
+                }
+            else:
+                carriage = self._create_carriage(item)
+                self.db.add(carriage)
+                self.db.commit()
+                logger.info(f"[OK] Added procedure {procedure_ref}: {item.title[:80]}")
+                return {
+                    'status': 'added',
+                    'reference': procedure_ref,
+                    'title': item.title
+                }
+
+        except Exception as e:
+            logger.error(f"[ERROR] Failed to sync procedure {procedure_ref}: {e}")
+            self.db.rollback()
+            return {
+                'status': 'error',
+                'reference': procedure_ref,
+                'message': str(e)
+            }
+        finally:
+            await self.client.close()
+            if self._owns_db and self._db:
+                self._db.close()
+
+
 # Convenience function for running sync
 async def sync_oeil_feeds(
     procedures_days: int = 7,
