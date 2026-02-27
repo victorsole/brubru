@@ -541,6 +541,17 @@ class ContextBuilder:
 
         # Unpack results (order matches task addition)
         legislative_train_files = results[0] if not isinstance(results[0], Exception) else []
+
+        # Enrich matched legislative files with procedural actions (draft reports,
+        # amendments, votes, rapporteur info) for data-driven follow-up suggestions
+        if legislative_train_files:
+            try:
+                legislative_train_files = await self._enrich_train_files_with_actions(
+                    legislative_train_files
+                )
+            except Exception as e:
+                logger.warning(f"[OEIL-ACTIONS] Enrichment pass failed, continuing: {e}")
+
         internal_knowledge = results[1] if not isinstance(results[1], Exception) else []
         eprs_publications = results[2] if not isinstance(results[2], Exception) else []
         local_eu_laws = results[3] if not isinstance(results[3], Exception) else []
@@ -1586,6 +1597,269 @@ class ContextBuilder:
         except Exception as e:
             logger.error(f"Failed to fetch legislative files: {str(e)}")
             return []
+
+    # =========================================================================
+    # Procedural Action Enrichment (Added February 2026)
+    # =========================================================================
+
+    def _extract_actions_from_cached_data(
+        self,
+        oeil_data: Dict[str, Any],
+        carriage
+    ) -> Dict[str, Any]:
+        """
+        Parse cached oeil_procedure_data to determine available procedural actions.
+
+        Handles two data shapes:
+        1. Full OEILProcedure dump (from get_procedure_full): has key_players,
+           key_events, documentation, forecasts
+        2. Partial enrichment (documentation_gateway only): has documentation_gateway list
+        """
+        actions = {
+            'has_draft_report': False,
+            'draft_report_committee': None,
+            'draft_report_date': None,
+            'has_amendments': False,
+            'amendment_count_hint': 0,
+            'has_committee_report': False,
+            'has_committee_opinions': [],
+            'has_committee_vote': False,
+            'committee_vote_date': None,
+            'has_plenary_vote': False,
+            'plenary_vote_date': None,
+            'has_plenary_debate': False,
+            'rapporteur_name': None,
+            'rapporteur_group': None,
+            'rapporteur_committee': carriage.lead_committee,
+            'shadow_rapporteurs': [],
+            'lead_committee': carriage.lead_committee,
+            'has_celex': bool(carriage.celex_numbers),
+            'upcoming_events': [],
+        }
+
+        if not oeil_data:
+            return actions
+
+        # --- Documentation Gateway ---
+        doc_gateway = oeil_data.get('documentation_gateway', [])
+
+        for doc in doc_gateway:
+            code = doc.get('doc_type_code', '')
+            if code == 'PR':
+                actions['has_draft_report'] = True
+                actions['draft_report_committee'] = doc.get('committee')
+                actions['draft_report_date'] = doc.get('date')
+            elif code == 'AM':
+                actions['has_amendments'] = True
+                actions['amendment_count_hint'] += 1
+            elif code == 'RD':
+                actions['has_committee_report'] = True
+            elif code == 'AD':
+                committee = doc.get('committee')
+                if committee and committee not in actions['has_committee_opinions']:
+                    actions['has_committee_opinions'].append(committee)
+
+        # --- Key Players (from full OEIL dump) ---
+        key_players = oeil_data.get('key_players', {})
+        if isinstance(key_players, dict):
+            responsible = key_players.get('committee_responsible', {})
+            if isinstance(responsible, dict):
+                rapporteur = responsible.get('rapporteur', {})
+                if isinstance(rapporteur, dict) and rapporteur.get('name'):
+                    actions['rapporteur_name'] = rapporteur['name']
+                    actions['rapporteur_group'] = rapporteur.get('political_group')
+                    actions['rapporteur_committee'] = responsible.get('code') or carriage.lead_committee
+
+                shadows = responsible.get('shadow_rapporteurs', [])
+                if isinstance(shadows, list):
+                    actions['shadow_rapporteurs'] = [
+                        {'name': s.get('name'), 'group': s.get('political_group')}
+                        for s in shadows if isinstance(s, dict) and s.get('name')
+                    ]
+
+        # --- Key Events (votes, debates) ---
+        key_events = oeil_data.get('key_events', {})
+        events = key_events.get('events', []) if isinstance(key_events, dict) else []
+
+        for event in events:
+            if not isinstance(event, dict):
+                continue
+            event_type = (event.get('event_type') or event.get('type') or '').lower()
+            event_date = event.get('date')
+
+            if 'vote in committee' in event_type:
+                actions['has_committee_vote'] = True
+                actions['committee_vote_date'] = event_date
+            elif 'decision by parliament' in event_type or 'vote in parliament' in event_type:
+                actions['has_plenary_vote'] = True
+                actions['plenary_vote_date'] = event_date
+            elif 'debate in plenary' in event_type:
+                actions['has_plenary_debate'] = True
+
+        # --- Forecasts (upcoming events) ---
+        forecasts = oeil_data.get('forecasts', {})
+        forecast_list = forecasts.get('forecasts', []) if isinstance(forecasts, dict) else []
+
+        for forecast in forecast_list[:3]:
+            if isinstance(forecast, dict):
+                actions['upcoming_events'].append({
+                    'event_type': forecast.get('event_type') or forecast.get('type', ''),
+                    'date': str(forecast.get('forecast_date') or forecast.get('date', '')),
+                })
+
+        return actions
+
+    async def _enrich_train_files_with_actions(
+        self,
+        train_files: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """
+        Enrich matched legislative files with available procedural actions.
+
+        For each file with an OEIL procedure reference, determine what
+        concrete actions/data exist (draft reports, amendments, votes,
+        rapporteur info) so the AI can offer grounded follow-up questions.
+
+        Uses cached oeil_procedure_data when available (< 7 days old).
+        Falls back to OEILClient.get_documentation_gateway() for fresh data.
+        """
+        from core.database import SessionLocal
+        from models.legislative_train import LegislativeCarriage
+        from datetime import datetime, timezone, timedelta
+
+        # Only enrich files that have OEIL refs, limit to 3
+        files_to_enrich = [
+            (i, f) for i, f in enumerate(train_files)
+            if f.get('oeil_ref')
+        ][:3]
+
+        if not files_to_enrich:
+            return train_files
+
+        db = SessionLocal()
+        try:
+            # Collect uncached refs that need OEIL fetch
+            uncached_tasks = []
+            cache_cutoff = datetime.now(timezone.utc) - timedelta(days=7)
+
+            for idx, file_data in files_to_enrich:
+                oeil_ref = file_data['oeil_ref']
+                carriage = db.query(LegislativeCarriage).filter(
+                    LegislativeCarriage.oeil_procedure_ref == oeil_ref
+                ).first()
+
+                if not carriage:
+                    continue
+
+                # Check cache freshness
+                oeil_data = carriage.oeil_procedure_data or {}
+                has_gateway = 'documentation_gateway' in oeil_data
+                cache_fresh = (
+                    carriage.enriched_at and
+                    carriage.enriched_at.replace(tzinfo=timezone.utc) > cache_cutoff
+                )
+
+                if has_gateway and cache_fresh:
+                    # Use cached data
+                    actions = self._extract_actions_from_cached_data(oeil_data, carriage)
+                    train_files[idx]['available_actions'] = actions
+                    logger.debug(f"[OEIL-ACTIONS] Cached actions for {oeil_ref}")
+                else:
+                    # Need to fetch from OEIL
+                    uncached_tasks.append((idx, oeil_ref, carriage))
+
+            # Fetch uncached in parallel
+            if uncached_tasks:
+                from services.api_clients.oeil_client import OEILClient
+
+                client = OEILClient()
+                try:
+                    # Fetch documentation gateway AND procedure lookup in parallel
+                    # Gateway gives us docs (PR/AM/RD/AD), lookup gives rapporteur
+                    gateway_tasks = [
+                        client.get_documentation_gateway(ref)
+                        for _, ref, _ in uncached_tasks
+                    ]
+                    lookup_tasks = [
+                        client.lookup_procedure(ref)
+                        for _, ref, _ in uncached_tasks
+                    ]
+                    all_results = await asyncio.gather(
+                        *gateway_tasks, *lookup_tasks,
+                        return_exceptions=True
+                    )
+
+                    n = len(uncached_tasks)
+                    gateway_results = all_results[:n]
+                    lookup_results = all_results[n:]
+
+                    for i, (idx, oeil_ref, carriage) in enumerate(uncached_tasks):
+                        gateway_result = gateway_results[i]
+                        lookup_result = lookup_results[i]
+
+                        if isinstance(gateway_result, Exception):
+                            logger.warning(f"[OEIL-ACTIONS] Failed to fetch gateway for {oeil_ref}: {gateway_result}")
+                            # Still try to extract from whatever cached data exists
+                            actions = self._extract_actions_from_cached_data(
+                                carriage.oeil_procedure_data or {}, carriage
+                            )
+                            train_files[idx]['available_actions'] = actions
+                            continue
+
+                        # Build cache data from gateway + lookup
+                        existing_data = carriage.oeil_procedure_data or {}
+                        existing_data['documentation_gateway'] = gateway_result
+                        existing_data['documentation_gateway_fetched_at'] = datetime.now(timezone.utc).isoformat()
+
+                        # Extract rapporteur from lookup result
+                        if not isinstance(lookup_result, Exception) and lookup_result:
+                            if lookup_result.rapporteurs:
+                                # Parse rapporteur: "KARLSBRO Karin (Renew)"
+                                import re
+                                rap_text = lookup_result.rapporteurs[0]
+                                group_match = re.search(r'\(([^)]+)\)', rap_text)
+                                rap_name = re.sub(r'\s*\([^)]*\)\s*', '', rap_text).strip()
+                                rap_group = group_match.group(1) if group_match else None
+
+                                existing_data.setdefault('key_players', {})
+                                existing_data['key_players']['committee_responsible'] = {
+                                    'code': carriage.lead_committee,
+                                    'rapporteur': {
+                                        'name': rap_name,
+                                        'political_group': rap_group,
+                                    },
+                                    'shadow_rapporteurs': []
+                                }
+
+                        carriage.oeil_procedure_data = existing_data
+                        carriage.enriched_at = datetime.now(timezone.utc)
+
+                        from sqlalchemy.orm.attributes import flag_modified
+                        flag_modified(carriage, 'oeil_procedure_data')
+
+                        try:
+                            db.commit()
+                        except Exception as e:
+                            logger.warning(f"[OEIL-ACTIONS] Cache write failed for {oeil_ref}: {e}")
+                            db.rollback()
+
+                        actions = self._extract_actions_from_cached_data(existing_data, carriage)
+                        train_files[idx]['available_actions'] = actions
+                        logger.info(
+                            f"[OEIL-ACTIONS] Enriched {oeil_ref}: "
+                            f"report={actions['has_draft_report']}, "
+                            f"amendments={actions['has_amendments']}, "
+                            f"rapporteur={actions['rapporteur_name']}"
+                        )
+                finally:
+                    await client.close()
+
+        except Exception as e:
+            logger.warning(f"[OEIL-ACTIONS] Enrichment failed: {e}")
+        finally:
+            db.close()
+
+        return train_files
 
     async def _fetch_committee_work_items(
         self,
@@ -2865,6 +3139,64 @@ class ContextBuilder:
                     sections.append(f"  CELEX: {', '.join(file['celex_numbers'][:3])}")
                 if file.get('description'):
                     sections.append(f"  Description: {file['description']}")
+
+                # Available procedural actions for data-driven follow-ups
+                if file.get('available_actions'):
+                    actions = file['available_actions']
+                    action_lines = []
+
+                    if actions.get('rapporteur_name'):
+                        rapp = actions['rapporteur_name']
+                        group = actions.get('rapporteur_group') or ''
+                        comm = actions.get('rapporteur_committee') or ''
+                        action_lines.append(f"Rapporteur: {rapp} ({group}) in {comm}")
+
+                    if actions.get('has_draft_report'):
+                        comm = actions.get('draft_report_committee') or ''
+                        date = actions.get('draft_report_date') or ''
+                        action_lines.append(f"Draft report available ({comm}, {date})")
+
+                    if actions.get('has_amendments'):
+                        count = actions.get('amendment_count_hint', 0)
+                        action_lines.append(f"MEP amendments tabled ({count} document(s))")
+
+                    if actions.get('has_committee_report'):
+                        action_lines.append("Committee report tabled for plenary")
+
+                    if actions.get('has_committee_vote'):
+                        date = actions.get('committee_vote_date') or ''
+                        action_lines.append(f"Committee vote held ({date})")
+
+                    if actions.get('has_plenary_vote'):
+                        date = actions.get('plenary_vote_date') or ''
+                        action_lines.append(f"Plenary vote held ({date})")
+
+                    if actions.get('has_plenary_debate'):
+                        action_lines.append("Plenary debate held")
+
+                    if actions.get('has_committee_opinions'):
+                        comms = ', '.join(actions['has_committee_opinions'])
+                        action_lines.append(f"Committee opinions from: {comms}")
+
+                    if actions.get('shadow_rapporteurs'):
+                        shadows = ', '.join(
+                            f"{s['name']} ({s['group']})"
+                            for s in actions['shadow_rapporteurs'][:5]
+                        )
+                        action_lines.append(f"Shadow rapporteurs: {shadows}")
+
+                    if actions.get('has_celex'):
+                        action_lines.append("Legal text available (can draft amendments in Amendator)")
+
+                    if actions.get('upcoming_events'):
+                        for ev in actions['upcoming_events']:
+                            action_lines.append(f"Upcoming: {ev['event_type']} ({ev['date']})")
+
+                    if action_lines:
+                        sections.append("  AVAILABLE DATA FOR THIS FILE:")
+                        for line in action_lines:
+                            sections.append(f"    - {line}")
+
             sections.append("")
 
         # Recent RSS updates
