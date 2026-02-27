@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brubru Strategy: WAPU-First Competitive Emulation | Beresol BV</title>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .header__logo { height: 48px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1.1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.85rem; color: var(--color-secondary); }
+
+    /* Main container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 700px;
+      margin: 0 auto 0.5rem;
+    }
+    .hero__version {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 3rem;
+    }
+    .section__title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section__title .mdi { font-size: 1.4rem; }
+    .section__subtitle {
+      font-size: 1rem;
+      color: var(--color-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Metric hero card */
+    .metric-hero {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+    }
+    .metric-hero__number {
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      line-height: 1;
+      min-width: 120px;
+      text-align: center;
+    }
+    .metric-hero__label {
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+    .metric-hero__body h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    .metric-hero__body p {
+      color: var(--color-secondary);
+      margin-bottom: 0.75rem;
+    }
+    .metric-hero__def {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .card__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.2rem; }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.95rem;
+    }
+    th {
+      background: var(--color-bg-alt);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+    }
+    tr:last-child td { border-bottom: none; }
+
+    /* Why-not cards */
+    .why-not-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .why-not-card {
+      background: var(--color-bg-alt);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+    }
+    .why-not-card__metric {
+      font-weight: 700;
+      color: var(--color-red);
+      margin-bottom: 0.25rem;
+    }
+    .why-not-card__reason {
+      font-size: 0.9rem;
+      color: var(--color-secondary);
+    }
+
+    /* Phase cards */
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .phase-card {
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      border: 1px solid var(--color-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .phase-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+    .phase-card--a::before { background: var(--color-green); }
+    .phase-card--b::before { background: var(--color-blue); }
+    .phase-card--c::before { background: var(--color-purple); }
+    .phase-card--deferred {
+      background: var(--color-bg-alt);
+      border-style: dashed;
+    }
+    .phase-card--deferred::before { background: var(--color-muted); }
+
+    .phase-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .phase-card__label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .phase-card--a .phase-card__label { color: var(--color-green); }
+    .phase-card--b .phase-card__label { color: var(--color-blue); }
+    .phase-card--c .phase-card__label { color: var(--color-purple); }
+    .phase-card--deferred .phase-card__label { color: var(--color-muted); }
+
+    .phase-card__target {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+    }
+    .phase-card--a .phase-card__target { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .phase-card--b .phase-card__target { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .phase-card--c .phase-card__target { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .phase-card--deferred .phase-card__target { background: rgba(156,163,175,0.1); color: var(--color-muted); }
+
+    .phase-card__title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .phase-card__timeline {
+      font-size: 0.9rem;
+      color: var(--color-secondary);
+      margin-bottom: 1rem;
+    }
+    .phase-card__items {
+      list-style: none;
+    }
+    .phase-card__items li {
+      padding: 0.5rem 0;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .phase-card__items li .mdi {
+      font-size: 1.1rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+    .phase-card--a .phase-card__items li .mdi { color: var(--color-green); }
+    .phase-card--b .phase-card__items li .mdi { color: var(--color-blue); }
+    .phase-card--c .phase-card__items li .mdi { color: var(--color-purple); }
+    .phase-card--deferred .phase-card__items li .mdi { color: var(--color-muted); }
+
+    .phase-card__effort {
+      font-size: 0.8rem;
+      color: var(--color-muted);
+    }
+
+    /* WAPU test verdict */
+    .verdict--keep { color: var(--color-green); font-weight: 600; }
+    .verdict--defer { color: var(--color-amber); font-weight: 600; }
+    .verdict--done { color: var(--color-blue); font-weight: 600; }
+    .verdict--park { color: var(--color-red); font-weight: 600; }
+
+    /* Comparison grid */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .comparison-card {
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      border: 1px solid var(--color-border);
+    }
+    .comparison-card--spaak {
+      background: rgba(220,38,38,0.03);
+    }
+    .comparison-card--brubru {
+      background: rgba(6,147,227,0.03);
+    }
+    .comparison-card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .comparison-card__title .mdi { font-size: 1.2rem; }
+    .comparison-card--spaak .comparison-card__title { color: var(--color-red); }
+    .comparison-card--brubru .comparison-card__title { color: var(--color-blue); }
+    .comparison-card__items {
+      list-style: none;
+    }
+    .comparison-card__items li {
+      padding: 0.4rem 0;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    .comparison-card__items li .mdi {
+      font-size: 1rem;
+      margin-top: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    /* Dashboard grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .dashboard-card {
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--color-border);
+    }
+    .dashboard-card--wall {
+      background: rgba(6,147,227,0.04);
+      border-color: var(--color-blue);
+    }
+    .dashboard-card--private {
+      background: var(--color-bg-alt);
+    }
+    .dashboard-card__title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .dashboard-card--wall .dashboard-card__title { color: var(--color-blue); }
+    .dashboard-card--private .dashboard-card__title { color: var(--color-secondary); }
+    .dashboard-card__items {
+      list-style: none;
+    }
+    .dashboard-card__items li {
+      padding: 0.35rem 0;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Callout */
+    .callout {
+      background: rgba(217,119,6,0.06);
+      border: 1px solid rgba(217,119,6,0.2);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .callout strong { color: var(--color-amber); }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.15rem 0.6rem;
+      border-radius: 10px;
+    }
+    .badge--a { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .badge--b { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .badge--c { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .badge--deferred { background: rgba(156,163,175,0.15); color: var(--color-muted); }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--color-border);
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--color-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .phase-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-not-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .container { padding: 1rem; }
+      .hero { padding: 2rem 0.5rem 1.5rem; }
+      .hero__title { font-size: 1.7rem; }
+      .metric-hero { flex-direction: column; gap: 1.5rem; padding: 1.5rem; text-align: center; }
+      .metric-hero__number { font-size: 3.5rem; }
+      .phase-grid { grid-template-columns: 1fr; }
+      .why-not-grid { grid-template-columns: 1fr; }
+      .comparison-grid { grid-template-columns: 1fr; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      table { font-size: 0.85rem; }
+      th, td { padding: 0.5rem 0.6rem; }
+      .header { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <img src="brubru_mainlogo.png" alt="Brubru" class="header__logo">
+    <div class="header__text">
+      <div class="header__title">Brubru Strategy Document</div>
+      <div class="header__subtitle">Beresol BV -- February 2026</div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero__tag"><span class="mdi mdi-strategy"></span> Strategic Framework</div>
+      <h1 class="hero__title">WAPU-First Competitive Emulation</h1>
+      <p class="hero__subtitle">
+        Every initiative is scored by one question: "Does this get a paid user to perform a core action this week?"
+      </p>
+      <p class="hero__version">Version 1.0 -- 27 February 2026</p>
+    </div>
+
+    <!-- Section 1: The Metric -->
+    <div class="section">
+      <div class="section__title">
+        <span class="mdi mdi-bullseye-arrow" style="color: var(--color-blue);"></span>
+        The Metric
+      </div>
+      <div class="section__subtitle">One number to rule them all</div>
+
+      <div class="metric-hero">
+        <div>
+          <div class="metric-hero__number">10</div>
+          <div class="metric-hero__label">Month 3 Target</div>
+        </div>
+        <div class="metric-hero__body">
+          <h3>Weekly Active Paid Users (WAPU)</h3>
+          <p>Not MRR. Not subscriber count. Not raw active users. The intersection of money AND usage -- the only honest signal of product-market fit.</p>
+          <div class="metric-hero__def">
+            <span class="mdi mdi-equal-box" style="color: var(--color-blue);"></span>
+            A paid subscriber who performs at least one core action in the past 7 days.
+          </div>
+        </div>
+      </div>
+
+      <div class="why-not-grid">
+        <div class="why-not-card">
+          <div class="why-not-card__metric">MRR</div>
+          <div class="why-not-card__reason">Trailing indicator. Subscriber x price. Doesn't tell you if the product is working. A EUR 99/mo user who hasn't logged in is a churn event waiting to happen.</div>
+        </div>
+        <div class="why-not-card">
+          <div class="why-not-card__metric">Subscriber Count</div>
+          <div class="why-not-card__reason">A subscriber who signed up but doesn't use the product is a vanishing subscriber. Inflates the dashboard, masks retention problems.</div>
+        </div>
+        <div class="why-not-card">
+          <div class="why-not-card__metric">Raw Active Users</div>
+          <div class="why-not-card__reason">Free trial users who never convert are noise. Measuring paid + active is the Slack "2,000 messages" signal -- the productivity rubicon.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Core Actions -->
+    <div class="section">
+      <div class="section__title">
+        <span class="mdi mdi-lightning-bolt" style="color: var(--color-amber);"></span>
+        Core Actions
+      </div>
+      <div class="section__subtitle">Any one of these in a 7-day window = active</div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 40%;">Core Action</th>
+              <th>Why It Signals Value</th>
+              <th style="width: 15%;">Feature</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="mdi mdi-chat-processing-outline" style="color: var(--color-blue);"></span> AI chat query</td>
+              <td>Using the policy advisor -- the primary interface</td>
+              <td>Brubru Chat</td>
+            </tr>
+            <tr>
+              <td><span class="mdi mdi-file-document-outline" style="color: var(--color-green);"></span> Document generated</td>
+              <td>A deliverable was produced -- direct labour replacement</td>
+              <td>Doc Generator</td>
+            </tr>
+            <tr>
+              <td><span class="mdi mdi-track-light" style="color: var(--color-purple);"></span> Legislative file tracked/checked</td>
+              <td>Monitoring is happening -- daily workflow integration</td>
+              <td>My EU Bubble</td>
+            </tr>
+            <tr>
+              <td><span class="mdi mdi-file-edit-outline" style="color: var(--color-green);"></span> Amendment drafted or MEP amendments analysed</td>
+              <td>Deep workflow engagement -- not just browsing</td>
+              <td>Amendator</td>
+            </tr>
+            <tr>
+              <td><span class="mdi mdi-scale-balance" style="color: var(--color-muted);"></span> Compliance report run</td>
+              <td>High-value, high-switching-cost action</td>
+              <td>EU Law Comply</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 3: The WAPU Test -->
+    <div class="section">
+      <div class="section__title">
+        <span class="mdi mdi-clipboard-check-outline" style="color: var(--color-green);"></span>
+        The WAPU Test
+      </div>
+      <div class="section__subtitle">Every decision examined through one forcing function</div>
+
+      <div class="callout">
+        <strong><span class="mdi mdi-alert-circle-outline"></span> The red pen says:</strong> Month 1-3 should be 90% about getting 10 people to pay AND use the product weekly. Everything else is a distraction.
+      </div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 35%;">Item</th>
+              <th style="width: 25%;">Grows WAPU?</th>
+              <th>Verdict</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Fix chatbot bugs</td>
+              <td>Yes -- directly</td>
+              <td><span class="verdict--done">DONE (A1)</span></td>
+            </tr>
+            <tr>
+              <td>AI briefing emails</td>
+              <td>Yes -- daily habit</td>
+              <td><span class="verdict--keep">A2 -- Phase A</span></td>
+            </tr>
+            <tr>
+              <td>Notification engine</td>
+              <td>Yes -- #1 WAPU machine</td>
+              <td><span class="verdict--keep">A3 -- Phase A</span></td>
+            </tr>
+            <tr>
+              <td>Thematic dashboards</td>
+              <td>Yes -- faster activation</td>
+              <td><span class="verdict--keep">A4 -- Phase A</span></td>
+            </tr>
+            <tr>
+              <td>Demo/booking flow</td>
+              <td>Yes -- acquisition</td>
+              <td><span class="verdict--keep">A5 -- Phase A</span></td>
+            </tr>
+            <tr>
+              <td>Dossier workspaces</td>
+              <td>Yes -- daily return reason</td>
+              <td><span class="verdict--keep">B1 -- Phase B</span></td>
+            </tr>
+            <tr>
+              <td>Amendment analysis</td>
+              <td>Yes -- deeper engagement</td>
+              <td><span class="verdict--keep">B2 -- Phase B</span></td>
+            </tr>
+            <tr>
+              <td>Stakeholder CRM</td>
+              <td>Yes -- but only after users exist</td>
+              <td><span class="verdict--defer">C1 -- Phase C</span></td>
+            </tr>
+            <tr>
+              <td>LinkedIn content</td>
+              <td>Indirect -- brand only</td>
+              <td><span class="verdict--defer">Only if it drives WAPU funnel</span></td>
+            </tr>
+            <tr>
+              <td>Beresol open reports</td>
+              <td>Indirect</td>
+              <td><span class="verdict--defer">Defer unless tied to demo pipeline</span></td>
+            </tr>
+            <tr>
+              <td>AI-native agency model</td>
+              <td>No -- revenue but not WAPU</td>
+              <td><span class="verdict--park">Park until 50+ WAPU</span></td>
+            </tr>
+            <tr>
+              <td>National parliaments (P9)</td>
+              <td>No -- market expansion</td>
+              <td><span class="verdict--park">Deferred</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Section 4: Phased Roadmap -->
+    <div class="section">
+      <div class="section__title">
+        <span class="mdi mdi-road-variant" style="color: var(--color-purple);"></span>
+        Phased Roadmap
+      </div>
+      <div class="section__subtitle">WAPU-filtered competitive emulation priorities</div>
+
+      <div class="phase-grid">
+        <!-- Phase A -->
+        <div class="phase-card phase-card--a">
+          <div class="phase-card__header">
+            <span class="phase-card__label">Phase A: Activation</span>
+            <span class="phase-card__target">10 WAPU</span>
+          </div>
+          <div class="phase-card__title">Get 10 Paid Users Active Weekly</div>
+          <div class="phase-card__timeline">Months 1-3 | ~8 weeks total</div>
+          <ul class="phase-card__items">
+            <li>
+              <span class="mdi mdi-check-circle"></span>
+              <div><strong>A1</strong> Fix chatbot bugs <span class="phase-card__effort">(DONE)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-email-fast-outline"></span>
+              <div><strong>A2</strong> AI daily/weekly briefing emails <span class="phase-card__effort">(2-3 wks)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-bell-ring-outline"></span>
+              <div><strong>A3</strong> Proactive notification engine <span class="phase-card__effort">(2-3 wks)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-view-dashboard-outline"></span>
+              <div><strong>A4</strong> Pre-configured thematic dashboards <span class="phase-card__effort">(1-2 wks)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-account-arrow-right"></span>
+              <div><strong>A5</strong> Demo/booking flow + first 10 outreach <span class="phase-card__effort">(1 wk)</span></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Phase B -->
+        <div class="phase-card phase-card--b">
+          <div class="phase-card__header">
+            <span class="phase-card__label">Phase B: Depth</span>
+            <span class="phase-card__target">25 WAPU</span>
+          </div>
+          <div class="phase-card__title">Deepen Engagement</div>
+          <div class="phase-card__timeline">Months 4-6 | ~10 weeks total</div>
+          <ul class="phase-card__items">
+            <li>
+              <span class="mdi mdi-briefcase-outline"></span>
+              <div><strong>B1</strong> Dossier workspaces <span class="phase-card__effort">(3-4 wks)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-file-compare"></span>
+              <div><strong>B2</strong> Amendment analysis view <span class="phase-card__effort">(4-5 wks)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-file-document-edit-outline"></span>
+              <div><strong>B3</strong> Document Generator improvements <span class="phase-card__effort">(2-3 wks)</span></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Phase C -->
+        <div class="phase-card phase-card--c">
+          <div class="phase-card__header">
+            <span class="phase-card__label">Phase C: Lock-in</span>
+            <span class="phase-card__target">50 WAPU</span>
+          </div>
+          <div class="phase-card__title">Build Switching Cost</div>
+          <div class="phase-card__timeline">Months 7-12 | ~18 weeks total</div>
+          <ul class="phase-card__items">
+            <li>
+              <span class="mdi mdi-account-group-outline"></span>
+              <div><strong>C1</strong> Stakeholder CRM <span class="phase-card__effort">(8-12 wks)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-account-multiple-outline"></span>
+              <div><strong>C2</strong> Team layer <span class="phase-card__effort">(5-7 wks)</span></div>
+            </li>
+            <li>
+              <span class="mdi mdi-chart-bar"></span>
+              <div><strong>C3</strong> Activity logging + ROI <span class="phase-card__effort">(3-4 wks)</span></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Deferred -->
+        <div class="phase-card phase-card--deferred">
+          <div class="phase-card__header">
+            <span class="phase-card__label">Deferred</span>
+            <span class="phase-card__target">Post-50 WAPU</span>
+          </div>
+          <div class="phase-card__title">Feature Parity Plays</div>
+          <div class="phase-card__timeline">Only after core WAPU established</div>
+          <ul class="phase-card__items">
+            <li>
+              <span class="mdi mdi-twitter"></span>
+              <div><strong>P7</strong> MEP social media monitoring</div>
+            </li>
+            <li>
+              <span class="mdi mdi-file-document-edit-outline"></span>
+              <div><strong>P8</strong> Grant proposal AI drafting</div>
+            </li>
+            <li>
+              <span class="mdi mdi-bank-outline"></span>
+              <div><strong>P9</strong> National parliament monitoring</div>
+            </li>
+            <li>
+              <span class="mdi mdi-handshake-outline"></span>
+              <div><strong>P10</strong> LEOS interoperability</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Spaak Competitive Posture -->
+    <div class="section">
+      <div class="section__title">
+        <span class="mdi mdi-sword-cross" style="color: var(--color-red);"></span>
+        Spaak Competitive Posture
+      </div>
+      <div class="section__subtitle">Not "match their monitoring breadth" but "make our features irreplaceable"</div>
+
+      <div class="comparison-grid">
+        <div class="comparison-card comparison-card--spaak">
+          <div class="comparison-card__title">
+            <span class="mdi mdi-shield-sword-outline"></span>
+            Spaak Strengths
+          </div>
+          <ul class="comparison-card__items">
+            <li><span class="mdi mdi-check" style="color: var(--color-red);"></span> VC-backed, dedicated sales team</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-red);"></span> 100+ public affairs teams as clients</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-red);"></span> Brussels office, events presence</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-red);"></span> Webinars, content marketing, network effects</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-red);"></span> Multi-level governance monitoring</li>
+          </ul>
+        </div>
+        <div class="comparison-card comparison-card--brubru">
+          <div class="comparison-card__title">
+            <span class="mdi mdi-shield-check-outline"></span>
+            Brubru Strengths
+          </div>
+          <ul class="comparison-card__items">
+            <li><span class="mdi mdi-check" style="color: var(--color-blue);"></span> <strong>Amendator</strong> -- Only non-institutional Akoma Ntoso editor</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-blue);"></span> <strong>Predictions</strong> -- EP group vote, QMV calculator, resolution indicators</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-blue);"></span> <strong>EU Law Comply</strong> -- Compliance gap analysis (high switching cost)</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-blue);"></span> <strong>Document Generator</strong> -- Position papers in 2 minutes vs 4 hours</li>
+            <li><span class="mdi mdi-check" style="color: var(--color-blue);"></span> <strong>Brubru Chat</strong> -- AI advisor with 35 scrapers of context</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong><span class="mdi mdi-orbit-variant"></span> Orbit Strategy:</strong> Build feature depth, maintain LinkedIn visibility, let Spaak come to you from a position of strength. The CEO is connected on LinkedIn -- build the relationship from a position of product superiority. Spaak's distribution advantage is real but can't be replicated by a solo founder. Feature depth can.
+      </div>
+    </div>
+
+    <!-- Section 6: Private Dashboard vs Company Number -->
+    <div class="section">
+      <div class="section__title">
+        <span class="mdi mdi-monitor-dashboard" style="color: var(--color-amber);"></span>
+        Dashboard vs. Wall Metric
+      </div>
+      <div class="section__subtitle">What to track privately vs. the one number on the wall</div>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card dashboard-card--wall">
+          <div class="dashboard-card__title">
+            <span class="mdi mdi-bullseye-arrow"></span>
+            Wall Metric
+          </div>
+          <ul class="dashboard-card__items">
+            <li><span class="mdi mdi-numeric" style="color: var(--color-blue); font-size: 1.2rem;"></span> <strong>WAPU</strong> -- How many paid users were active this week?</li>
+          </ul>
+          <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--color-secondary);">
+            The number you wake up wanting to see. The number every sprint is judged against.
+          </p>
+        </div>
+        <div class="dashboard-card dashboard-card--private">
+          <div class="dashboard-card__title">
+            <span class="mdi mdi-lock-outline"></span>
+            Private Dashboard (Guardrails)
+          </div>
+          <ul class="dashboard-card__items">
+            <li><span class="mdi mdi-cash-multiple" style="color: var(--color-green);"></span> MRR and cash position (survival)</li>
+            <li><span class="mdi mdi-robot-outline" style="color: var(--color-purple);"></span> AI cost per user (margin protection)</li>
+            <li><span class="mdi mdi-filter-outline" style="color: var(--color-amber);"></span> Trial-to-paid conversion (funnel health)</li>
+            <li><span class="mdi mdi-chart-line" style="color: var(--color-red);"></span> Churn by plan type (guardrail)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 7: Competitive Emulation Cross-Reference -->
+    <div class="section">
+      <div class="section__title">
+        <span class="mdi mdi-swap-horizontal" style="color: var(--color-green);"></span>
+        Competitive Emulation Cross-Reference
+      </div>
+      <div class="section__subtitle">How P1-P10 from competitive_learnings.html maps to WAPU phases</div>
+
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Original</th>
+              <th>Priority</th>
+              <th>WAPU Phase</th>
+              <th>WAPU ID</th>
+              <th>Rationale</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>P1</td>
+              <td>AI briefing emails</td>
+              <td><span class="badge badge--a">Phase A</span></td>
+              <td>A2</td>
+              <td>Highest retention lever -- creates daily habit</td>
+            </tr>
+            <tr>
+              <td>P2</td>
+              <td>Thematic dashboards</td>
+              <td><span class="badge badge--a">Phase A</span></td>
+              <td>A4</td>
+              <td>Reduces time-to-value, critical for activation</td>
+            </tr>
+            <tr>
+              <td>P3</td>
+              <td>Amendment analysis view</td>
+              <td><span class="badge badge--b">Phase B</span></td>
+              <td>B2</td>
+              <td>Deep workflow feature, users need to exist first</td>
+            </tr>
+            <tr>
+              <td>P4</td>
+              <td>Activity logging + ROI</td>
+              <td><span class="badge badge--c">Phase C</span></td>
+              <td>C3</td>
+              <td>Enterprise selling point, not needed until user base exists</td>
+            </tr>
+            <tr>
+              <td>P5</td>
+              <td>Stakeholder CRM</td>
+              <td><span class="badge badge--c">Phase C</span></td>
+              <td>C1</td>
+              <td>Switching cost only matters after adoption</td>
+            </tr>
+            <tr>
+              <td>P6</td>
+              <td>Team layer</td>
+              <td><span class="badge badge--c">Phase C</span></td>
+              <td>C2</td>
+              <td>Multiplies WAPU per customer, but need customers first</td>
+            </tr>
+            <tr>
+              <td>P7</td>
+              <td>MEP social media</td>
+              <td><span class="badge badge--deferred">Deferred</span></td>
+              <td>--</td>
+              <td>Feature-parity play, doesn't drive activation</td>
+            </tr>
+            <tr>
+              <td>P8</td>
+              <td>Grant proposal AI</td>
+              <td><span class="badge badge--deferred">Deferred</span></td>
+              <td>--</td>
+              <td>GrantBru enhancement, not core to first 50 WAPU</td>
+            </tr>
+            <tr>
+              <td>P9</td>
+              <td>National parliaments</td>
+              <td><span class="badge badge--deferred">Deferred</span></td>
+              <td>--</td>
+              <td>Market expansion, premature before EU base</td>
+            </tr>
+            <tr>
+              <td>P10</td>
+              <td>LEOS interoperability</td>
+              <td><span class="badge badge--deferred">Deferred</span></td>
+              <td>--</td>
+              <td>Institutional play, requires established user base</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Brubru Strategy v1.0 -- February 2026 | Beresol BV<br>
+    <span style="font-size: 0.8rem;">Source: docs/instructions.md (WAPU framework) + competitive_learnings.html (P1-P10 research)</span>
+  </div>
+
+</body>
+</html>

@@ -61,7 +61,7 @@ cd backend && pytest
 # Database migrations
 cd backend && alembic upgrade head
 
-# Seed test users (13 users with Blue/Yellow tiers)
+# Seed test users (13 users with Professional/Starter tiers)
 python3.12 -m backend.scripts.seed_test_users
 ```
 
@@ -114,16 +114,19 @@ brubru/
 - **AI Context:** `backend/services/ai/context_builder.py` injects EU-specific context
 - **Scrapers:** `backend/services/scrapers/` fetch data from 15+ EU sources
 - **Auth:** Custom JWT with Google/LinkedIn OAuth (no Supabase SDK dependency)
-- **Payments:** Stripe integration for subscriptions
-- **i18n:** All frontend text supports 23 EU languages via i18next
+- **Payments:** Stripe integration for modular subscriptions (9 products, 18 price IDs)
+- **i18n:** All frontend text supports 6 human-reviewed locales (en, es, ca, fr, it, nl) via i18next
 
 ## Environment Variables
 
 Required in `.env`:
 - `SUPABASE_URL`, `SUPABASE_KEY` - Database/auth
-- `ANTHROPIC_API_KEY` - Primary AI
-- `OPENAI_API_KEY` - Fallback AI
-- `STRIPE_SECRET_KEY` - Payments (optional)
+- `MISTRAL_API_KEY` - Primary AI
+- `ANTHROPIC_API_KEY` - Fallback AI 1
+- `OPENAI_API_KEY` - Fallback AI 2
+- `GOOGLE_GEMINI_API_KEY` - Fallback AI 3 (optional)
+- `STRIPE_SECRET_KEY` - Payments
+- 18 Stripe Price IDs (see Pricing Model section below)
 
 ## Code Style
 
@@ -140,7 +143,9 @@ Backend runs on `http://localhost:8000`:
 - `GET /api/rss-feeds` - RSS feed management
 - `POST /api/generate/*` - AI document generation (position papers, MEP briefings, talking points)
 - `GET /api/eu-calendar/events` - EU Calendar events with filters
-- `POST /api/eu-calendar/sync` - Calendar sync from all sources (Blue/Admin)
+- `POST /api/eu-calendar/sync` - Calendar sync from all sources (Professional/Admin)
+- `GET /api/subscriptions/plans` - Full pricing breakdown (all plans, modules, bundles)
+- `POST /api/stripe/create-checkout-session` - Create Stripe checkout (`{plan, billing_period}`)
 - API docs at `/docs` (Swagger UI)
 
 ## Database
@@ -171,8 +176,8 @@ npx playwright test
 
 13 pre-configured test users for development and training (see `docs/users.md`):
 
-- **Blue tier (5):** Charlotte Berends, Marga Payola, Daniel Roldán, Aleix Sarri, Nick Ligthart
-- **Yellow tier (8):** Robin Loos, Joan González, Sergi Duarte, Meritxell Vicheto, Bo, Marc Desmond, Andrés López, Jaume Bernis
+- **Professional plan / Blue tier (5):** Charlotte Berends, Marga Payola, Daniel Roldán, Aleix Sarri, Nick Ligthart
+- **Starter/Advocate plan / Yellow tier (8):** Robin Loos, Joan González, Sergi Duarte, Meritxell Vicheto, Bo, Marc Desmond, Andrés López, Jaume Bernis
 
 Password: `test123` (except Meritxell: `test23`)
 
@@ -211,10 +216,10 @@ The Predictions tab in My EU Bubble provides AI-powered legislative outcome pred
 | `/api/predictions/resolutions/{ref}` | GET | Resolution leading indicators |
 | `/api/predictions/qmv/calculate` | POST | QMV calculator |
 
-**Tier Access:**
-- White: Locked (upgrade CTA)
-- Yellow: 10 predictions/month
-- Blue: Unlimited + Council analysis
+**Access:**
+- No subscription: Locked (upgrade CTA)
+- Starter/Advocate/EP (yellow tier): 10 predictions/month
+- Professional (blue tier): Unlimited + Council analysis
 
 **EP Groups (in `use_predictions.ts`):**
 EPP (188), S&D (136), PfE (84), ECR (78), Renew (77), Greens/EFA (53), The Left (46), NI (33), ESN (25)
@@ -248,16 +253,97 @@ python scripts/sync_committee_agendas.py        # EP committee agendas
 python scripts/sync_college_agendas.py --verbose # Commission College OJ
 ```
 
-**Tier Access:**
-- White: Upgrade CTA (`eu_calendar_cta.tsx`)
-- Yellow+: Full read access, all views and filters
-- Blue: AI daily summary + sync trigger
+**Access:**
+- No subscription: Upgrade CTA (`eu_calendar_cta.tsx`)
+- Starter/Advocate/EP+ (yellow tier): Full read access, all views and filters
+- Professional (blue tier): AI daily summary + sync trigger
 
 **Commission College OJ Scraper Notes:**
 - EC Register paginated search returns 503; individual lookup `GET /api/search/OJ(YYYY)NNNN?lang=en` works
 - Sequential reference enumeration with 3-second delay, browser-like headers
 - Baseline: OJ(2026)2550 = 14 Jan 2026
 - Fuzzy date matching (+/-1 day) for Strasbourg Tuesday meetings vs Brussels Wednesday meetings
+
+## Pricing Model: Modular A La Carte + Bundles (February 2026)
+
+The old 3-tier model (White free / Yellow 79/month / Blue 599/month) has been replaced with a modular pricing system. **Internal feature gating still uses white/yellow/blue tiers** -- the new plans map to these internally.
+
+### Plans and Pricing
+
+**Individual Modules:**
+
+| Module | Monthly | Annual | Internal Tier |
+|--------|---------|--------|---------------|
+| Brubru Chat | 29 | 288/year | yellow |
+| My EU Bubble | 29 | 288/year | yellow |
+| Amendator | 19 | 109/year | yellow |
+| EU Law Comply | 29 | 288/year | yellow |
+| Tenderator | 49 | 539/year | yellow |
+
+**Bundles:**
+
+| Bundle | Monthly | Annual | Internal Tier |
+|--------|---------|--------|---------------|
+| Starter (Chat + Bubble) | 39 | 396/year | yellow |
+| Advocate (Chat + Bubble + Amendator) | 59 | 499/year | yellow |
+| Professional (all 5 modules) | 99 | 799/year | blue |
+
+**EP Plan (APAs/MEPs):** 49/month, 539/year -> yellow tier
+
+**Free Trial:** 14 days on all plans. No permanent free tier.
+
+### Plan-to-Tier Mapping
+
+```python
+PLAN_TO_TIER = {
+    "chat": "yellow", "bubble": "yellow", "amendator": "yellow",
+    "comply": "yellow", "tenderator": "yellow",
+    "starter": "yellow", "advocate": "yellow",
+    "professional": "blue",  # Only Professional maps to blue
+    "ep": "yellow",
+}
+```
+
+### Stripe Configuration
+
+9 Stripe Products with 18 Price IDs (monthly + annual for each). Environment variables:
+
+```env
+# Individual modules (monthly + annual each)
+STRIPE_CHAT_MONTHLY_PRICE_ID / STRIPE_CHAT_ANNUAL_PRICE_ID
+STRIPE_BUBBLE_MONTHLY_PRICE_ID / STRIPE_BUBBLE_ANNUAL_PRICE_ID
+STRIPE_AMENDATOR_MONTHLY_PRICE_ID / STRIPE_AMENDATOR_ANNUAL_PRICE_ID
+STRIPE_COMPLY_MONTHLY_PRICE_ID / STRIPE_COMPLY_ANNUAL_PRICE_ID
+STRIPE_TENDERATOR_MONTHLY_PRICE_ID / STRIPE_TENDERATOR_ANNUAL_PRICE_ID
+
+# Bundles (monthly + annual each)
+STRIPE_STARTER_MONTHLY_PRICE_ID / STRIPE_STARTER_ANNUAL_PRICE_ID
+STRIPE_ADVOCATE_MONTHLY_PRICE_ID / STRIPE_ADVOCATE_ANNUAL_PRICE_ID
+STRIPE_PROFESSIONAL_MONTHLY_PRICE_ID / STRIPE_PROFESSIONAL_ANNUAL_PRICE_ID
+
+# EP Plan
+STRIPE_EP_MONTHLY_PRICE_ID / STRIPE_EP_ANNUAL_PRICE_ID
+```
+
+### Key Files
+
+- `backend/api/stripe_payment.py` - Checkout session creation with plan-to-price mapping
+- `backend/api/subscriptions.py` - `/plans` endpoint with full pricing breakdown
+- `backend/core/config.py` - All 18 STRIPE_*_PRICE_ID environment variables
+- `backend/schemas/subscription_schemas.py` - `UpgradeRequest` with `plan` field (9 valid values)
+- `frontend/src/hooks/use_subscription.ts` - `createCheckoutSession(plan, billingPeriod)`
+- `frontend/src/pages/subscription_page.tsx` - Redesigned UI: billing toggle, 3 bundle cards, EP banner, 5 module cards, feature comparison table
+- `frontend/src/pages/subscription_page.css` - Grid layouts for bundles (3 cols) and modules (5 cols)
+- `frontend/src/pages/landing_page.tsx` - Pricing section with Starter/Advocate/Professional cards
+- `docs/marketing/pricing_strategy.md` - Full pricing strategy document with Stripe Product/Price IDs
+
+### User-Facing Text Rules
+
+- **Never reference** White/Yellow/Blue tiers in user-facing text
+- Use plan names: Starter, Advocate, Professional, EP Plan, or individual module names
+- CTA buttons: "Start Free Trial", "Subscribe", "Get Professional"
+- Generic upgrade: "Subscribe -- from 39/month"
+- All 6 locales (en, es, ca, fr, it, nl) updated with new pricing text
 
 ---
 
@@ -347,6 +433,21 @@ explainers = await service.find_explainers(procedure_ref="2021/0106(COD)")
 
 **Full reference:** See `memory/integrations.md` -> OEIL XML Feed section. Key files: `services/api_clients/oeil_client.py`, `services/scrapers/oeil_sync_service.py`. CLI: `python scripts/sync_oeil_feeds.py --days 7`. API: `POST /api/legislative-train/sync/oeil` (Blue tier).
 
+**OEIL XML feed limit:** The procedures feed has a **30-day server-side limit** (`maxDays=30`). For older procedures, use `OEILClient.lookup_procedure(ref)` or `OEILSyncService.sync_single_procedure(ref)` which scrape individual OEIL pages. API: `POST /api/legislative-train/sync/oeil/lookup?reference=2025/0726(COD)` (Blue tier).
+
+### Data-Driven Chat Follow-Ups (February 2026)
+
+When Brubru Chat matches a legislative file, it enriches the AI context with **structured procedural metadata** scraped from OEIL (Documentation Gateway + procedure page). The AI uses this to craft follow-up questions grounded in real data.
+
+**Available actions detected:** Draft report (PR), MEP amendments (AM), committee report for plenary (RD), committee opinions (AD), committee vote, plenary vote, plenary debate, rapporteur name/group, shadow rapporteurs, upcoming events.
+
+**Key files:**
+- `services/ai/context_builder.py` - `_enrich_train_files_with_actions()`, `_extract_actions_from_cached_data()`
+- `services/ai_service.py` - System prompt Phase D3: DATA-DRIVEN FOLLOW-UPS
+- `services/api_clients/oeil_client.py` - `get_documentation_gateway()`, `lookup_procedure()`
+
+**Caching:** Results cached on `LegislativeCarriage.oeil_procedure_data` (JSON) with 7-day TTL via `enriched_at` field. Max 3 files enriched per request, parallel fetches.
+
 ### EUR-Lex RSS Feed Integration (January 2026)
 
 **Full reference:** See `memory/integrations.md` -> EUR-Lex RSS section. Key files: `services/api_clients/eurlex_client.py`, `services/scrapers/eurlex_sync_service.py`. CLI: `python scripts/sync_eurlex_feeds.py --days 7`. API: `POST /api/legislative-train/sync/eurlex` (Blue tier).
@@ -365,7 +466,7 @@ explainers = await service.find_explainers(procedure_ref="2021/0106(COD)")
 
 ### EC Public Consultations (January 2026)
 
-**Full reference:** See `memory/integrations.md` -> Consultations section. "Have Your Say" portal integration. Yellow/Blue: full access. Blue only: AI proposals. White: CTA. CLI: `python scripts/sync_consultations.py --status open`. API: `GET /api/consultations`, `POST /api/consultations/sync` (Admin). Key files: `services/scrapers/public_consultation_scraper.py`, `api/public_consultations.py`.
+**Full reference:** See `memory/integrations.md` -> Consultations section. "Have Your Say" portal integration. Subscribers: full access. Professional only: AI proposals. No subscription: CTA. CLI: `python scripts/sync_consultations.py --status open`. API: `GET /api/consultations`, `POST /api/consultations/sync` (Admin). Key files: `services/scrapers/public_consultation_scraper.py`, `api/public_consultations.py`.
 
 ### SQLAlchemy `metadata` Reserved Attribute (January 2025)
 
@@ -591,7 +692,7 @@ The header navigation uses **animated icon buttons** instead of text links. Each
 | `/my-eu-bubble` | `mdiGlassMugVariant` | Purple (`#9b51e0`) | My EU Bubble |
 | `/amendator` | `mdiFileEditOutline` | Green (`#059669`) | Amendator |
 | `/eulawcomply` | `mdiScaleBalance` | Silver (`#9ca3af`) | EU Law Comply |
-| `/tenderator` | `mdiPiggyBankOutline` | Gold (`#d97706`) | Tenderator (Blue tier only) |
+| `/tenderator` | `mdiPiggyBankOutline` | Gold (`#d97706`) | Tenderator (Professional plan only) |
 
 **CSS pattern:**
 ```css
@@ -787,6 +888,52 @@ Resolution Leading Indicators show EP resolutions (INL, INI, RSP) that preceded 
 ### SPA Pre-rendering for AI Crawlers (February 2026)
 
 **Full reference:** See `memory/deployment.md`. Production deploy: `npm run build:prerender`. 9 public routes pre-rendered with Puppeteer. `main.tsx` uses conditional hydration. Add new public routes to `ROUTES` array in `frontend/scripts/prerender.mjs`. AI crawler rules in `frontend/public/robots.txt`.
+
+---
+
+## Strategic North Star: WAPU (Weekly Active Paid Users)
+
+**WAPU = a paid subscriber who performs at least one core action in the past 7 days.**
+
+This is Brubru's primary metric. Not MRR, not subscriber count, not raw active users. WAPU measures the intersection of money AND usage -- the only honest signal of product-market fit.
+
+### Core Actions (any one = active for the week)
+
+| Core Action | Why It Signals Value |
+|-------------|---------------------|
+| AI chat query | Using the policy advisor -- the primary interface |
+| Document generated | A deliverable was produced -- direct labour replacement |
+| Legislative file tracked/checked | Monitoring is happening -- daily workflow integration |
+| Amendment drafted or MEP amendments analysed | Deep workflow engagement -- not just browsing |
+| Compliance report run | High-value, high-switching-cost action |
+
+### The WAPU Test
+
+Every feature, initiative, and sprint item must answer: **"Does this grow WAPU?"** If it doesn't directly increase the number of paid users performing core actions weekly, it is deprioritised.
+
+### WAPU Targets
+
+| Phase | Timeline | WAPU Target | Focus |
+|-------|----------|-------------|-------|
+| A: Activation | Months 1-3 | **10** | Fix bugs, briefing emails, notifications, dashboards, first 10 outreach |
+| B: Depth | Months 4-6 | **25** | Dossier workspaces, amendment analysis, document generator improvements |
+| C: Lock-in | Months 7-12 | **50** | Stakeholder CRM, team layer, activity logging + ROI |
+
+### WAPU-Phased Priorities
+
+**Phase A (Activation -- 10 WAPU):** A1 Fix chatbot bugs (DONE), A2 AI briefing emails, A3 Proactive notification engine, A4 Thematic dashboards, A5 Demo/booking flow + first 10 outreach
+
+**Phase B (Depth -- 25 WAPU):** B1 Dossier workspaces, B2 Amendment analysis view, B3 Document generator improvements
+
+**Phase C (Lock-in -- 50 WAPU):** C1 Stakeholder CRM, C2 Team layer, C3 Activity logging + ROI
+
+**Deferred (post-50 WAPU):** MEP social media (P7), Grant proposal AI drafting (P8), National parliaments (P9), LEOS interop (P10)
+
+### Spaak Competitive Posture
+
+Spaak is the #1 direct competitor (VC-backed, 100+ PA teams, Brussels office). Their strength is **distribution** (sales team, events, webinars, content marketing). Brubru's strength is **feature depth** (Amendator, Predictions, EU Law Comply, Tenderator, Document Generator). Strategy: lean into feature depth to make Brubru irreplaceable, not match Spaak's monitoring breadth. Orbit strategy active (CEO connected on LinkedIn).
+
+**Full strategy details:** See `memory/strategy.md` and `docs/business_plan/strategy.html`.
 
 <!-- Example:
 - Never use `moment.js` — use `date-fns` instead

@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brubru - Competitive Learnings | Beresol BV</title>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-primary: #0693e3;
+      --color-primary-dark: #0066cc;
+      --color-accent-purple: #9b51e0;
+      --color-accent-green: #059669;
+      --color-accent-gold: #d97706;
+      --color-accent-red: #dc2626;
+      --color-accent-orange: #f97316;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-500: #6b7280;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --color-text: #111827;
+      --color-text-secondary: #6b7280;
+      --color-border: #e5e7eb;
+      --gradient-primary: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+      --font-family: 'Adobe Caslon Pro', Georgia, 'Times New Roman', serif;
+      --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-family);
+      color: var(--color-text);
+      line-height: 1.7;
+      background: var(--color-gray-50);
+    }
+
+    /* HEADER */
+    .page-header {
+      background: var(--gradient-primary);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .page-header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .page-header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.85;
+    }
+    .page-header .meta {
+      font-size: 0.85rem;
+      opacity: 0.65;
+      margin-top: 0.75rem;
+    }
+
+    /* NAV */
+    .toc {
+      max-width: 1100px;
+      margin: -1.5rem auto 2rem;
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 1.5rem 2rem;
+      position: relative;
+      z-index: 10;
+    }
+    .toc h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-gray-500); margin-bottom: 0.75rem; }
+    .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.4rem; }
+    .toc a {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.25rem 0;
+      display: block;
+      transition: color 0.15s;
+    }
+    .toc a:hover { color: var(--color-accent-purple); }
+
+    /* MAIN */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* SECTIONS */
+    .section {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--color-border);
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--color-primary);
+    }
+    h2.green { border-bottom-color: var(--color-accent-green); }
+    h2.purple { border-bottom-color: var(--color-accent-purple); }
+    h2.gold { border-bottom-color: var(--color-accent-gold); }
+    h2.red { border-bottom-color: var(--color-accent-red); }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 1.75rem 0 0.75rem;
+      color: var(--color-gray-800);
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 1.25rem 0 0.5rem;
+      color: var(--color-gray-700);
+    }
+
+    p { margin-bottom: 0.75rem; }
+
+    strong { font-weight: 700; }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      background: var(--color-gray-100);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: var(--color-accent-purple);
+    }
+
+    /* TABLES */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    thead th {
+      background: var(--color-gray-800);
+      color: white;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    thead th:first-child { border-radius: var(--radius-md) 0 0 0; }
+    thead th:last-child { border-radius: 0 var(--radius-md) 0 0; }
+    tbody td {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--color-gray-200);
+      vertical-align: top;
+    }
+    tbody tr:hover { background: var(--color-gray-50); }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* Competitor tables */
+    .competitor-table td:first-child {
+      font-weight: 600;
+      white-space: nowrap;
+      width: 120px;
+      color: var(--color-gray-700);
+    }
+
+    /* TIMELINE BADGES */
+    .badge {
+      display: inline-block;
+      padding: 0.15em 0.55em;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .badge-short { background: #dcfce7; color: #166534; }
+    .badge-mid { background: #fef3c7; color: #92400e; }
+    .badge-long { background: #fee2e2; color: #991b1b; }
+    .badge-phase { background: var(--color-gray-100); color: var(--color-gray-700); font-size: 0.7rem; }
+
+    /* PRIORITY CARDS */
+    .priority-card {
+      border-left: 4px solid var(--color-primary);
+      background: white;
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .priority-card.p-green { border-left-color: var(--color-accent-green); }
+    .priority-card.p-purple { border-left-color: var(--color-accent-purple); }
+    .priority-card.p-gold { border-left-color: var(--color-accent-gold); }
+    .priority-card.p-red { border-left-color: var(--color-accent-red); }
+    .priority-card.p-orange { border-left-color: var(--color-accent-orange); }
+
+    .priority-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .priority-number {
+      width: 32px; height: 32px;
+      background: var(--gradient-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .priority-title { font-size: 1.15rem; font-weight: 700; }
+
+    .priority-meta {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--color-gray-500);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+    .priority-meta span { display: flex; align-items: center; gap: 0.3rem; }
+
+    /* EXISTS CALLOUT */
+    .exists-callout {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      margin: 0.75rem 0;
+      font-size: 0.9rem;
+    }
+    .exists-callout strong { color: #166534; }
+
+    /* STEPS */
+    .steps { counter-reset: step; margin: 1rem 0; }
+    .step {
+      counter-increment: step;
+      padding: 0.75rem 0 0.75rem 2.5rem;
+      position: relative;
+      border-left: 2px solid var(--color-gray-200);
+      margin-left: 0.75rem;
+    }
+    .step::before {
+      content: counter(step);
+      position: absolute;
+      left: -0.85rem;
+      top: 0.75rem;
+      width: 1.5rem; height: 1.5rem;
+      background: var(--color-primary);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step:last-child { border-left-color: transparent; }
+    .step h4 { margin-top: 0; }
+    .step ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+    .step li { margin-bottom: 0.3rem; font-size: 0.9rem; }
+
+    /* FILE LISTS */
+    .file-list { margin: 0.75rem 0; }
+    .file-list-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-gray-500);
+      margin-bottom: 0.4rem;
+    }
+    .file-list ul { list-style: none; padding: 0; }
+    .file-list li {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.2rem 0;
+      color: var(--color-gray-700);
+    }
+    .file-list li::before {
+      content: '+';
+      color: var(--color-accent-green);
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+    .file-list.modify li::before {
+      content: '~';
+      color: var(--color-accent-gold);
+    }
+
+    /* DOD */
+    .dod {
+      background: var(--color-gray-50);
+      border: 1px dashed var(--color-gray-300);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    .dod strong { color: var(--color-accent-green); }
+
+    /* INSIGHT BOX */
+    .insight-box {
+      background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+      border: 1px solid #c7d2fe;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    .insight-box h3 { color: var(--color-primary-dark, #0066cc); margin-top: 0; }
+    .insight-box ol { padding-left: 1.25rem; }
+    .insight-box li { margin-bottom: 0.75rem; }
+
+    /* ROADMAP */
+    .roadmap-phase {
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    .roadmap-phase.phase1 { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .roadmap-phase.phase2 { background: #eff6ff; border: 1px solid #bfdbfe; }
+    .roadmap-phase.phase3 { background: #fefce8; border: 1px solid #fde68a; }
+    .roadmap-phase.phase4 { background: #fdf2f8; border: 1px solid #fbcfe8; }
+    .roadmap-phase h3 { margin-top: 0; }
+
+    /* REUSE MAP */
+    .reuse-tag {
+      display: inline-block;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.1em 0.5em;
+      border-radius: 4px;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--color-gray-500);
+      font-size: 0.85rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .page-header { padding: 2rem 1rem; }
+      .page-header h1 { font-size: 1.6rem; }
+      .container { padding: 0 0.75rem 2rem; }
+      .section { padding: 1.25rem; }
+      .toc-grid { grid-template-columns: 1fr; }
+      .priority-meta { flex-direction: column; gap: 0.5rem; }
+      table { font-size: 0.8rem; }
+      thead th, tbody td { padding: 0.4rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="page-header">
+  <h1>Competitive Learnings</h1>
+  <div class="subtitle">What Brubru Can Learn and Emulate</div>
+  <div class="meta">Last updated: 7 February 2026 | Source: competitive_benchmarking.md | Beresol BV, Brussels</div>
+</header>
+
+<!-- TABLE OF CONTENTS -->
+<nav class="toc">
+  <h3>Contents</h3>
+  <div class="toc-grid">
+    <a href="#summary">Summary</a>
+    <a href="#dixit">1. Dixit (Paris)</a>
+    <a href="#politico">2. POLITICO Pro</a>
+    <a href="#savoirr">3. SAVOIRR</a>
+    <a href="#fiscalnote">4. FiscalNote EUIT</a>
+    <a href="#moonlit">5. Moonlit.ai</a>
+    <a href="#leos">6. LEOS</a>
+    <a href="#cogrant">7. Cogrant</a>
+    <a href="#helio">8. Helio / DeHavilland</a>
+    <a href="#policyinsider">9. Policy-Insider.AI</a>
+    <a href="#polpo">10. Polpo</a>
+    <a href="#quorum">11. Quorum</a>
+    <a href="#euractiv">12. Euractiv Pro</a>
+    <a href="#spaak">13. Spaak</a>
+    <a href="#priority-matrix">Priority Matrix</a>
+    <a href="#strategic-insight">Strategic Insight</a>
+    <a href="#implementation">Implementation Strategy</a>
+    <a href="#roadmap">Implementation Roadmap</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- SUMMARY -->
+<section class="section" id="summary">
+  <h2>Summary</h2>
+  <p>Every competitor has at least one thing Brubru can learn from, even if they are weaker overall. This document maps specific learnings and emulation opportunities to Brubru's existing features, with a timeline for implementation.</p>
+  <p><strong>Brubru features referenced:</strong> Brubru Chat, My EU Bubble (incl. Predictions, Tracked Files), Amendator, EU Law Comply, Document Generator, Tenderator/GrantBru, Platform (cross-cutting).</p>
+  <p><strong>Timeline definitions:</strong></p>
+  <table>
+    <thead><tr><th>Timeline</th><th>Duration</th><th>Scope</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-short">Short</span></td><td>1-3 months</td><td>Quick wins, minimal architecture changes</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td>3-9 months</td><td>Moderate effort, may require new components</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td>9-18+ months</td><td>Significant development, new modules</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 1: DIXIT -->
+<section class="section" id="dixit">
+  <h2 class="red">1. Dixit (Paris) -- Highest Threat</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>"By lobbyists, for lobbyists" -- Dixit's positioning resonates because it signals insider credibility. Their amendment <strong>analysis</strong> feature (showing amendment relationships, who proposed what, how amendments cluster) is genuinely useful even without drafting. Their comitology/expert group tracking covers a blind spot. MEP social media monitoring adds a real-time political sentiment layer.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Amendator:</strong> Add amendment analysis/comparison view -- show existing tabled amendments grouped by EP group, article, and position.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>My EU Bubble:</strong> Add comitology and expert group alerts to the monitoring pipeline.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> Integrate EP meeting transcripts. AI-summarise key interventions per legislative file.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> MEP social media monitoring -- track posts on X/LinkedIn related to tracked files.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>New feature: Stakeholder CRM.</strong> Dixit's stakeholder mapping is their strongest differentiator. Build a contacts database of MEPs, Commissioners, Council attaches, linked to legislative files.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 2: POLITICO PRO -->
+<section class="section" id="politico">
+  <h2>2. POLITICO Pro -- Industry Standard</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>91% renewal rate -- driven by irreplaceable daily habit (morning briefing) + reporter relationships + fear of missing a scoop. Capitol AI partnership = "buy not build" for AI. Pro Connect: 10,000+ contacts. Events create community AND revenue AND sales pipeline.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> AI-generated daily/weekly policy briefing email. Make Brubru a morning habit.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>My EU Bubble:</strong> "What happened yesterday" summary panel -- AI-generated overnight digest.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Partnerships for journalistic content (Euractiv, Contexte, Agence Europe).</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Host virtual policy events/webinars on trending EU dossiers.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>Platform:</strong> Stakeholder directory with 5,000+ EU contacts. Include in Blue tier.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 3: SAVOIRR -->
+<section class="section" id="savoirr">
+  <h2 class="purple">3. SAVOIRR -- AI-Native PA Platform</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td><strong>Competition/opponent tracking</strong> -- identifying who is lobbying FOR and AGAINST you on each legislative file. "AI stakeholder identification" detects relevant actors for a dossier.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Predictions:</strong> Add "Known Positions" section -- show which organisations have publicly stated positions.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Brubru Chat:</strong> Include known stakeholder positions in AI context.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Tracked Files:</strong> "Allies and Opponents" view per legislative file.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>New feature: Competition Intelligence.</strong> Full module tracking competitor advocacy activity.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 4: FISCALNOTE -->
+<section class="section" id="fiscalnote">
+  <h2>4. FiscalNote EUIT -- NYSE-Listed Incumbent</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>Combined <strong>human analysts + AI tools</strong>. Recent AI legislative drafting launch validates market demand. Enterprise sales motion (onboarding, SLA, account managers) = Blue tier aspiration.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Brubru Chat:</strong> Add "analyst perspective" prompts -- proactively mention political dynamics.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> Improve Blue tier onboarding -- setup call, pre-configured dashboards.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Amendator:</strong> Benchmark against FiscalNote's drafting. Emphasise Akoma Ntoso XML.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Team collaboration features -- shared files, shared drafts, team feed.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>Platform:</strong> Enterprise sales motion with annual contracts, SLAs, dedicated customer success.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 5: MOONLIT -->
+<section class="section" id="moonlit">
+  <h2>5. Moonlit.ai -- Legal AI (Deloitte Spinout)</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>Cross-jurisdictional search across 16+ MS. Citation network visualisation. Microsoft partnership = instant credibility. EUR 80M Series B validates European legal AI market.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>EU Law Comply:</strong> Add MS transposition status for directives from EUR-Lex.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Brubru Chat:</strong> Proactively mention transposition status for directives.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Amendator / My EU Bubble:</strong> Citation network view -- visualise the regulatory web.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Pursue strategic partnership (Deloitte, Accenture, Microsoft).</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>EU Law Comply:</strong> Deep national law integration. Search how articles are implemented in each MS.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 6: LEOS -->
+<section class="section" id="leos">
+  <h2 class="green">6. LEOS -- EU Commission Open-Source Editor</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>LEOS = <strong>institutional standard</strong> for Akoma Ntoso. Mature collaborative editing (versioning, comments, co-editing). Adoption by MS parliaments = AKN standard expanding.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Amendator:</strong> Verify full AKN4EU compliance parity. Ensure LEOS interoperability.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Amendator:</strong> Add export formats -- AKN XML, DOCX, PDF.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Amendator:</strong> Collaborative editing with change tracking and comments (Blue tier).</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Contribute to the LEOS open-source community.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>Amendator:</strong> Position as commercial AI-enhanced front-end for LEOS. Ultimate defensibility play.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 7: COGRANT -->
+<section class="section" id="cogrant">
+  <h2 class="gold">7. Cogrant (Lithuania) -- Grant AI</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>Workflow: discovery > <strong>eligibility check</strong> > AI drafting > expert review. Eligibility pre-screening is missing from Tenderator. Focus on Horizon Europe, Erasmus+, Digital Europe.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Tenderator:</strong> Add automated eligibility pre-screening against user profile.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Tenderator:</strong> Show success rates and average grant sizes per programme.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Document Generator + Tenderator:</strong> AI-assisted grant proposal drafting.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Tenderator:</strong> "Grant Calendar" view with upcoming deadlines.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>Tenderator:</strong> Expert review marketplace -- connect users with grant writers.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 8: HELIO -->
+<section class="section" id="helio">
+  <h2>8. Helio Intelligence / DeHavilland EU -- Largest Incumbent</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>Scale: 1,000+ clients, 16,000+ contacts, 5,000+ social channels. Events serve triple duty. Consolidation strategy (Dods EU, Forefront, NewsDirect). PE backing.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>My EU Bubble:</strong> Social media monitoring for key EU accounts.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> MEP/Commissioner profile cards linked to legislative files.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> Expand social media monitoring to all 720 MEPs.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Host quarterly "EU Policy Outlook" events.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>New feature: Stakeholder CRM.</strong> DeHavilland's 16K+ contact database is their core asset.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 9: POLICY-INSIDER -->
+<section class="section" id="policyinsider">
+  <h2>9. Policy-Insider.AI (Hamburg) -- Bootstrapped Competitor</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>Bootstrapped to $660K revenue with 6 people. 125+ institutions incl. <strong>national parliaments</strong>. "PQ Insights" AI newsletters drive retention. M&amp;A offer validates market.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> AI-generated personalised weekly newsletters based on tracked files.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Brubru Chat:</strong> Mention relevant national parliament activity when discussing a file.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> Add FR and DE national parliament monitoring.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Study their lean operations model (6 people, $660K, bootstrapped).</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>My EU Bubble:</strong> Multi-level governance monitoring.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 10: POLPO -->
+<section class="section" id="polpo">
+  <h2>10. Polpo (Netherlands) -- Fast-Growing Monitor</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>FD Gazellen 2025 winner. ISO 9001/27001 certified. IBM AI partnership. Municipal-level monitoring. NL/BE beachhead expanding to Brussels.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> Pursue ISO 27001 certification (procurement requirement).</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> Add "Security &amp; Compliance" page to website.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> Add Belgian federal/regional parliament monitoring.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Explore AI partnerships (similar to Polpo-IBM).</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>My EU Bubble:</strong> Municipal/regional monitoring for EU capitals.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 11: QUORUM -->
+<section class="section" id="quorum">
+  <h2>11. Quorum (Washington DC) -- US PA Software</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>40K+ EU stakeholder directory. Email outreach <strong>from within the tool</strong>. ROI reporting (proving advocacy impact). Issue management workflows.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> Add basic advocacy activity logging per legislative file.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Tracked Files:</strong> "My Actions" timeline per file.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> ROI/impact dashboard with metrics.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Email template generation for contacting MEPs.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>New feature: Stakeholder CRM + Outreach.</strong> Closes the loop: monitor > analyse > draft > comply > predict > bid > <strong>engage</strong>.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 12: EURACTIV -->
+<section class="section" id="euractiv">
+  <h2>12. Euractiv Pro -- Pan-EU Media Network</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td>Thematic hubs (Health, Tech, AgriFood, Energy, Defence). Cross-border correspondent network. Freemium tier. 14,000 users / 1,600 organisations.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>My EU Bubble:</strong> Pre-configured thematic dashboards ("Digital &amp; AI", "Green Deal", etc.).</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>My EU Bubble:</strong> Include Euractiv RSS feeds in default library.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Policy area "landing pages" with curated view per area.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>Platform:</strong> Cross-border policy tracking across Member States.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 13: SPAAK -->
+<section class="section" id="spaak">
+  <h2 class="red">13. Spaak (Copenhagen/Brussels): VC-Backed AI-Native PA Platform</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>What Brubru can learn</td><td><strong>Spaak is Brubru's most direct competitor</strong> and the highest strategic threat due to VC backing (EUR 1.5m pre-seed from Node.vc, March 2025) and rapid team scaling (15+ open roles across engineering, product, commercial, and operations as of January 2026). Founded in early 2024 in Copenhagen, they expanded to Brussels in December 2025 (Rue du Commerce 31) with Cyrille Mai Thanh as Managing Director Europe. They claim 100+ PA teams onboarded and aggregate 698+ sources (social media, parliaments, municipalities, organisations). Their product covers <strong>political monitoring</strong>, an <strong>AI assistant</strong> for stakeholder mapping/briefs/bios, <strong>public consultations</strong> tracking (launched February 2026), cross-platform debate aggregation, and politician activity analytics. However, <strong>Spaak lacks Brubru's deeper legislative workflow tools</strong>: no amendment editor (Amendator), no compliance checker (EU Law Comply), no tender/grant tool (Tenderator), no AI document generator (position papers, MEP briefings, talking points), no legislative predictions with EP group vote breakdown, no QMV calculator, and no multi-source EU institutional calendar. Their strength is execution speed backed by capital and a growing team; Brubru's advantage is feature depth and institutional workflow integration that would take Spaak significant time to replicate. <strong>Key lesson:</strong> Spaak's aggressive go-to-market (events, webinars, content marketing, hiring dedicated sales staff) shows that product alone is not enough, distribution and brand presence in Brussels matter enormously.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>My EU Bubble:</strong> Match Spaak's source aggregation breadth, ensure Brubru's RSS/monitoring covers social media channels (X, BlueSky, Instagram) alongside institutional sources. Their "698 sources, one overview" is a strong marketing claim.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> Improve public-facing content marketing and LinkedIn presence. Spaak's highest-engagement posts are about team growth and product launches: Brubru should showcase unique features (Amendator, Predictions, EU Law Comply) that Spaak cannot match.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Brubru Chat:</strong> Develop a dedicated "AI Assistant" mode similar to Spaak's "The Assistant": a co-pilot for everyday PA tasks (stakeholder mapping, policy briefs, MEP bios) that is prominently positioned and easy to discover, not buried within the chat interface.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Build a demo/booking flow (Spaak uses spaak.ai/booking) and webinar programme targeting Brussels PA community. Spaak's Brussels Sustainability Club webinar model, partnering with existing communities for live demos, is highly effective and low-cost.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>Platform:</strong> Consider strategic positioning for acqui-hire or partnership. Spaak's VC-backed growth trajectory means they will need to expand feature coverage; Brubru's unique modules (Amendator, EU Law Comply, Tenderator, Predictions) represent exactly the capabilities they would need to build or acquire. Maintain LinkedIn visibility with CEO and let the orbit strategy play out from a position of feature strength.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PRIORITY MATRIX -->
+<section class="section" id="priority-matrix">
+  <h2 class="purple">Priority Matrix -- Top 10 Emulation Opportunities</h2>
+
+  <div style="background: rgba(6,147,227,0.06); border: 1px solid rgba(6,147,227,0.25); padding: 1rem 1.25rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6;">
+    <strong style="color: #0693e3;">WAPU Realignment (Feb 2026):</strong> These P1-P10 priorities have been re-evaluated through the WAPU (Weekly Active Paid Users) lens. The primary metric is now WAPU: a paid subscriber who performs at least one core action in the past 7 days. Priorities are mapped to three phases:
+    <strong style="color: #059669;">Phase A</strong> (Activation, 10 WAPU -- P1, P2),
+    <strong style="color: #0693e3;">Phase B</strong> (Depth, 25 WAPU -- P3),
+    <strong style="color: #9b51e0;">Phase C</strong> (Lock-in, 50 WAPU -- P4, P5, P6), and
+    <strong style="color: #9ca3af;">Deferred</strong> (post-50 WAPU -- P7, P8, P9, P10).
+    See <a href="strategy.html" style="color: #0693e3;">strategy.html</a> for the full cross-reference and rationale for each reordering.
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>What</th><th>Learn From</th><th>Timeline</th><th>Feature</th><th>Impact</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td><strong>AI daily/weekly briefing emails</strong></td><td>POLITICO Pro, Policy-Insider.AI</td><td><span class="badge badge-short">Short</span></td><td>Platform</td><td>High retention (daily habit)</td></tr>
+      <tr><td><strong>2</strong></td><td><strong>Pre-configured thematic dashboards</strong></td><td>Euractiv, POLITICO Pro</td><td><span class="badge badge-short">Short</span></td><td>My EU Bubble</td><td>Faster onboarding, higher activation</td></tr>
+      <tr><td><strong>3</strong></td><td><strong>Amendment analysis view</strong></td><td>Dixit</td><td><span class="badge badge-short">Short</span></td><td>Amendator</td><td>Counter #1 threat</td></tr>
+      <tr><td><strong>4</strong></td><td><strong>Advocacy activity logging + ROI</strong></td><td>Quorum</td><td><span class="badge badge-mid">Short-Mid</span></td><td>Platform</td><td>Enterprise selling point</td></tr>
+      <tr><td><strong>5</strong></td><td><strong>Stakeholder CRM</strong></td><td>Dixit, DeHavilland, Quorum, POLITICO</td><td><span class="badge badge-long">Mid-Long</span></td><td>New feature</td><td>Closes #1 feature gap</td></tr>
+      <tr><td><strong>6</strong></td><td><strong>Collaborative amendment editing</strong></td><td>LEOS</td><td><span class="badge badge-mid">Mid</span></td><td>Amendator</td><td>Blue tier essential</td></tr>
+      <tr><td><strong>7</strong></td><td><strong>MEP social media monitoring</strong></td><td>Dixit, DeHavilland, Polpo</td><td><span class="badge badge-mid">Mid</span></td><td>My EU Bubble</td><td>Real-time intelligence</td></tr>
+      <tr><td><strong>8</strong></td><td><strong>Grant proposal AI drafting</strong></td><td>Cogrant</td><td><span class="badge badge-mid">Mid</span></td><td>Tenderator + Doc Gen</td><td>GrantBru competitor response</td></tr>
+      <tr><td><strong>9</strong></td><td><strong>National parliament monitoring</strong></td><td>Policy-Insider.AI, Polpo</td><td><span class="badge badge-long">Mid-Long</span></td><td>My EU Bubble</td><td>Multi-level governance</td></tr>
+      <tr><td><strong>10</strong></td><td><strong>LEOS interoperability</strong></td><td>LEOS</td><td><span class="badge badge-long">Long</span></td><td>Amendator</td><td>Institutional adoption</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- STRATEGIC INSIGHT -->
+<section class="section" id="strategic-insight">
+  <h2>Strategic Insight</h2>
+  <div class="insight-box">
+    <h3>Five patterns emerge across all competitors:</h3>
+    <ol>
+      <li><strong>The Stakeholder CRM gap is universal.</strong> Dixit, DeHavilland, POLITICO Pro, Quorum, SAVOIRR -- nearly every competitor has a contact/stakeholder database. Brubru is the only serious platform without one. This should be the #1 new feature priority.</li>
+      <li><strong>Retention comes from daily habits.</strong> POLITICO Pro's 91% renewal comes from the morning briefing. Policy-Insider.AI's PQ Insights newsletter drives engagement. Brubru needs a "daily touch" -- an AI-generated morning email summarising overnight changes to tracked files.</li>
+      <li><strong>The advocacy workflow has a missing step.</strong> Brubru covers monitor > analyse > draft > comply > predict > bid. But it misses <strong>engage</strong> -- actually contacting officials, tracking interactions, measuring impact. Adding it closes the full loop.</li>
+      <li><strong>The real competitive threat is foundation models, not SaaS competitors.</strong> No SaaS competitor will replicate 35 scrapers and 10 workflow verticals quickly. The existential risk is Anthropic, OpenAI, or Google adding EU policy plugins via MCP, custom GPTs, or Gems. Defence is threefold: (1) depth of structured pipelines that general plugins cannot match, (2) domain engineering (Akoma Ntoso XML, QMV calculation, compliance gap analysis) beyond data access, and (3) the system-of-record layer: user-accumulated dossiers, contacts, and documents that live inside Brubru and nowhere else.</li>
+      <li><strong>Nobody has a dossier management system.</strong> The system of record for EU affairs today is fragmented across Outlook, Excel, shared drives, and mental models. No competitor -- not Dixit, not POLITICO Pro, not FiscalNote -- offers a <strong>user-owned dossier workspace</strong> where tracking, amendments, contacts, predictions, and documents accumulate into an irreplaceable asset. Brubru's path from workflow platform (Layer 3) to system of record (Layer 4) requires one architectural shift: tie all features together around the dossier concept. A lobbyist with 50 annotated dossiers, 200 MEP contacts, and 18 months of prediction history inside Brubru will never leave.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- IMPLEMENTATION STRATEGY -->
+<section class="section" id="implementation">
+  <h2 class="green">Implementation Strategy -- 10 Emulation Priorities</h2>
+  <p style="background: #fef3c7; border: 1px solid #fde68a; padding: 0.75rem 1rem; border-radius: var(--radius-md); font-size: 0.9rem;"><strong>v2.1</strong> -- Updated Feb 2026. Now includes dossier workspace strategy (Layer 4 transition), foundation model threat analysis, and updated infrastructure counts (35 scrapers, 30+ models, 10 feature modules, 9 My EU Bubble tabs).</p>
+
+  <h3>Existing Infrastructure Summary</h3>
+  <p>Brubru has significantly more infrastructure than a first glance suggests. 35 scrapers, 30+ database models, 10 feature modules, 9 My EU Bubble tabs. Several priorities are <strong>faster than expected</strong> because core models and UI components already exist.</p>
+  <table>
+    <thead><tr><th>Component</th><th>Status</th><th>Reuse Potential</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Newsletter pipeline</strong></td><td>5 complete models, no email transport</td><td><span class="reuse-tag">P1 reuses directly</span></td></tr>
+      <tr><td><strong>ProactiveNotifier</strong></td><td>Complete workflow, email/webhook stubs</td><td><span class="reuse-tag">P1 -- wire SendGrid</span></td></tr>
+      <tr><td><strong>Tenderator UI</strong></td><td>6 components already built</td><td><span class="reuse-tag">P8 extends existing</span></td></tr>
+      <tr><td><strong>FeedbackComment model</strong></td><td>Has <code>parent_comment_id</code> threading</td><td><span class="reuse-tag">P6 reuses pattern</span></td></tr>
+      <tr><td><strong>AdminActivityLog</strong></td><td>Audit trail pattern</td><td><span class="reuse-tag">P4 reuses pattern</span></td></tr>
+      <tr><td><strong>EP Voting models</strong></td><td>3 models for parliamentary votes</td><td><span class="reuse-tag">P3 reuses vote data</span></td></tr>
+      <tr><td><strong>Document Generator</strong></td><td>3 doc types, multi-provider AI</td><td><span class="reuse-tag">P8 adds grant type</span></td></tr>
+      <tr><td><strong>My EU Bubble</strong></td><td>9 tabs fully built (incl. EU Calendar, MEP Amendments)</td><td>P2, P7, P9 add tabs</td></tr>
+      <tr><td><strong>Amendator</strong></td><td>10 components, 2-tab sidebar + MEP comparison</td><td>P3 adds 3rd tab; P6 adds sharing</td></tr>
+      <tr><td><strong>Scraper infrastructure</strong></td><td>35 scrapers, BaseScraper class</td><td>P3, P7, P9 inherit</td></tr>
+      <tr><td><strong>WebSocket</strong></td><td style="color: var(--color-accent-red);">None</td><td>P6 stretch goal from scratch</td></tr>
+    </tbody>
+  </table>
+
+  <!-- P1 -->
+  <div class="priority-card" id="p1">
+    <div class="priority-header">
+      <div class="priority-number">1</div>
+      <div class="priority-title">AI Daily/Weekly Briefing Emails</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> POLITICO Pro, Policy-Insider.AI</span>
+      <span><span class="mdi mdi-clock-outline"></span> 2-3 weeks</span>
+      <span><span class="mdi mdi-tag"></span> Platform (cross-cutting)</span>
+    </div>
+    <p><strong>Goal:</strong> Make Brubru a daily habit. Users receive a personalised AI-generated digest every morning.</p>
+    <div class="exists-callout">
+      <strong>Already exists:</strong> Newsletter pipeline (5 models), ProactiveNotifier workflow (monitoring loop, subscription matching, AI summaries, batching). Only <code>_send_email()</code> and <code>_send_webhook()</code> are stubs. <code>User.preferences</code> JSONB is extendable without migration.
+    </div>
+    <div class="steps">
+      <div class="step"><h4>Set up email transport</h4><p>Create <code>services/email/email_service.py</code> (SendGrid wrapper). Wire <code>ProactiveNotifier._send_email()</code> stub to real transport (~10 lines).</p></div>
+      <div class="step"><h4>Add digest preferences to User.preferences JSONB</h4><p>Add <code>digest_frequency</code>, <code>digest_time</code>, <code>digest_day</code>. No migration needed.</p></div>
+      <div class="step"><h4>Build digest generation service</h4><p>Create <code>digest_generator.py</code>. Aggregate overnight changes from RSSEntry, LegislativeTrain, NewsletterContent, PublicConsultation, CommitteeWorkItem. Send to Mistral (~$0.01/user/day).</p></div>
+      <div class="step"><h4>Create email template</h4><p>"Good morning [Name]" + AI bullets + tracked file changes + upcoming deadlines + unsubscribe.</p></div>
+      <div class="step"><h4>Schedule the digest job</h4><p>APScheduler at 06:00 UTC daily. Reuse <code>ProactiveNotifier.start_monitoring()</code> async loop pattern.</p></div>
+      <div class="step"><h4>Add onboarding prompt</h4><p>After first tracked file: "Enable your morning digest." Default ON for Yellow/Blue.</p></div>
+      <div class="step"><h4>Track engagement</h4><p>Reuse <code>UserNewsletterInteraction</code> model for open/click tracking.</p></div>
+    </div>
+    <div class="dod"><strong>Definition of done:</strong> Yellow/Blue users receive daily email at 07:00 CET with AI summaries. Open rate >40% after 2 weeks.</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+      <div class="file-list"><div class="file-list-title">Files to create</div><ul><li>services/email/email_service.py</li><li>services/notifications/digest_generator.py</li><li>templates/email/base.html</li><li>templates/email/daily_digest.html</li></ul></div>
+      <div class="file-list modify"><div class="file-list-title">Files to modify</div><ul><li>core/config.py</li><li>main.py</li><li>services/notifications/proactive_notifier.py</li><li>api/user_preferences.py</li></ul></div>
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div class="priority-card p-purple" id="p2">
+    <div class="priority-header">
+      <div class="priority-number">2</div>
+      <div class="priority-title">Pre-Configured Thematic Dashboards</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> Euractiv, POLITICO Pro</span>
+      <span><span class="mdi mdi-clock-outline"></span> 1-2 weeks</span>
+      <span><span class="mdi mdi-tag"></span> My EU Bubble</span>
+    </div>
+    <p><strong>Goal:</strong> New users start monitoring a policy area in one click. 8 themes: Digital &amp; AI, Green Deal, Trade, Defence, Health, Agriculture, Migration, Budget.</p>
+    <div class="dod"><strong>Definition of done:</strong> One-click activation. 8 themes. Activation <2 seconds.</div>
+  </div>
+
+  <!-- P3 -->
+  <div class="priority-card p-red" id="p3">
+    <div class="priority-header">
+      <div class="priority-number">3</div>
+      <div class="priority-title">Amendment Analysis View</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> Dixit (#1 threat)</span>
+      <span><span class="mdi mdi-clock-outline"></span> 4-5 weeks</span>
+      <span><span class="mdi mdi-tag"></span> Amendator</span>
+    </div>
+    <p><strong>Goal:</strong> Show all tabled amendments grouped by article and EP group with AI position analysis. 3rd tab in Amendator sidebar.</p>
+    <div class="exists-callout"><strong>Reuses:</strong> EP voting models, predictions_tab group visualisation (FOR/AGAINST/ABSTENTION/SPLIT colours), BaseScraper, MetadataExtractor, OEIL client.</div>
+    <div class="dod"><strong>Definition of done:</strong> User opens a file and sees tabled amendments grouped by article/EP group, with AI analysis and overlap detection.</div>
+  </div>
+
+  <!-- P4 -->
+  <div class="priority-card" id="p4">
+    <div class="priority-header">
+      <div class="priority-number">4</div>
+      <div class="priority-title">Advocacy Activity Logging + ROI Metrics</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> Quorum, FiscalNote</span>
+      <span><span class="mdi mdi-clock-outline"></span> 3-4 weeks</span>
+      <span><span class="mdi mdi-tag"></span> Platform (cross-cutting)</span>
+    </div>
+    <p><strong>Goal:</strong> Log advocacy actions, see ROI metrics. Auto-log amendments, documents, consultation responses. Enterprise selling point for Blue tier.</p>
+    <div class="exists-callout"><strong>Reuses:</strong> AdminActivityLog audit pattern, existing auto-loggable endpoints (amendments, generate, consultations).</div>
+    <div class="dod"><strong>Definition of done:</strong> Manual + auto-logged activities. Dashboard with aggregated metrics. Blue tier team metrics.</div>
+  </div>
+
+  <!-- P5 -->
+  <div class="priority-card p-gold" id="p5">
+    <div class="priority-header">
+      <div class="priority-number">5</div>
+      <div class="priority-title">Stakeholder CRM</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> Dixit, DeHavilland, Quorum, POLITICO</span>
+      <span><span class="mdi mdi-clock-outline"></span> 8-12 weeks</span>
+      <span><span class="mdi mdi-tag"></span> New module (/stakeholders)</span>
+    </div>
+    <p><strong>Goal:</strong> Structured database of 720+ MEPs, 27 Commissioners, linked to legislative files with interaction tracking. The #1 feature gap across ALL competitors.</p>
+    <div class="dod"><strong>Definition of done:</strong> MEPs + Commissioners pre-loaded. Search, profiles, interactions, relationship dashboard. Blue tier full CRM.</div>
+  </div>
+
+  <!-- P6 -->
+  <div class="priority-card p-green" id="p6">
+    <div class="priority-header">
+      <div class="priority-number">6</div>
+      <div class="priority-title">Collaborative Amendment Editing</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> LEOS, FiscalNote</span>
+      <span><span class="mdi mdi-clock-outline"></span> 5-7 weeks</span>
+      <span><span class="mdi mdi-tag"></span> Amendator</span>
+    </div>
+    <p><strong>Goal:</strong> Blue tier team members share, version, and comment on amendments.</p>
+    <div class="exists-callout"><strong>Reuses:</strong> FeedbackComment <code>parent_comment_id</code> threading pattern, in-app notification system. No WebSocket infrastructure exists (stretch goal).</div>
+    <div class="dod"><strong>Definition of done:</strong> Share, threaded comments, version history with diffs. Real-time co-editing is stretch.</div>
+  </div>
+
+  <!-- P7 -->
+  <div class="priority-card p-purple" id="p7">
+    <div class="priority-header">
+      <div class="priority-number">7</div>
+      <div class="priority-title">MEP Social Media Monitoring</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> Dixit, DeHavilland, Polpo</span>
+      <span><span class="mdi mdi-clock-outline"></span> 4-6 weeks</span>
+      <span><span class="mdi mdi-tag"></span> My EU Bubble (9th tab)</span>
+    </div>
+    <p><strong>Goal:</strong> Show MEP social media posts filtered by tracked files. Feed sentiment into Predictions. Cost: ~$115/month (X API + Mistral).</p>
+    <div class="dod"><strong>Definition of done:</strong> Relevant MEP posts shown. Social sentiment in predictions. Updated daily.</div>
+  </div>
+
+  <!-- P8 -->
+  <div class="priority-card p-gold" id="p8">
+    <div class="priority-header">
+      <div class="priority-number">8</div>
+      <div class="priority-title">Grant Proposal AI Drafting</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> Cogrant</span>
+      <span><span class="mdi mdi-clock-outline"></span> 2-3 weeks</span>
+      <span><span class="mdi mdi-tag"></span> Tenderator + Document Generator</span>
+    </div>
+    <p><strong>Goal:</strong> Eligibility check + AI-drafted proposal sections + DOCX export.</p>
+    <div class="exists-callout"><strong>Already built:</strong> <code>tender_calendar.tsx</code> (month/list view), <code>tender_profile_setup.tsx</code> (33 CPV categories, 27 countries), <code>bid_checklist.tsx</code>, <code>document_generator.py</code> (3 doc types). Just extend, don't create from scratch.</div>
+    <div class="dod"><strong>Definition of done:</strong> Eligibility check, AI sections, edit, export DOCX. Calendar with deadline countdowns.</div>
+  </div>
+
+  <!-- P9 -->
+  <div class="priority-card" id="p9">
+    <div class="priority-header">
+      <div class="priority-number">9</div>
+      <div class="priority-title">National Parliament Monitoring (FR, DE)</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> Policy-Insider.AI, Polpo</span>
+      <span><span class="mdi mdi-clock-outline"></span> 5-7 weeks</span>
+      <span><span class="mdi mdi-tag"></span> My EU Bubble</span>
+    </div>
+    <p><strong>Goal:</strong> Track Bundestag and Assemblee Nationale EU-relevant activity. Show national implementation status on tracked files.</p>
+    <div class="dod"><strong>Definition of done:</strong> DE + FR activity in My EU Bubble. Tracked files show transposition status. Brubru Chat mentions national context.</div>
+  </div>
+
+  <!-- P10 -->
+  <div class="priority-card p-green" id="p10">
+    <div class="priority-header">
+      <div class="priority-number">10</div>
+      <div class="priority-title">LEOS Interoperability + Institutional Positioning</div>
+    </div>
+    <div class="priority-meta">
+      <span><span class="mdi mdi-school"></span> LEOS</span>
+      <span><span class="mdi mdi-clock-outline"></span> 6-10 weeks</span>
+      <span><span class="mdi mdi-tag"></span> Amendator</span>
+    </div>
+    <p><strong>Goal:</strong> Full AKN4EU compliance, LEOS import/export, multi-format export (XML, DOCX, PDF). Institutional demo package and pilot programme.</p>
+    <div class="dod"><strong>Definition of done:</strong> AKN4EU XML opens in LEOS. Multi-format export. Compliance tests pass. Demo package ready.</div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="section" id="roadmap">
+  <h2 class="gold">Implementation Roadmap</h2>
+
+  <div class="roadmap-phase phase1">
+    <h3><span class="badge badge-phase">Phase 1</span> Quick Wins (Months 1-3)</h3>
+    <table>
+      <thead><tr><th>Month</th><th>Priority</th><th>Effort</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>Month 1</td><td><strong>P1: Daily briefing emails</strong></td><td>2-3 weeks</td><td>Retention (daily habit)</td></tr>
+        <tr><td>Month 1</td><td><strong>P2: Thematic dashboards</strong></td><td>1-2 weeks (parallel)</td><td>Activation (faster onboarding)</td></tr>
+        <tr><td>Month 2</td><td><strong>P8: Grant proposal drafting</strong></td><td>2-3 weeks</td><td>Competitive response (Cogrant)</td></tr>
+        <tr><td>Month 2-3</td><td><strong>P4: Activity logging + ROI</strong></td><td>3-4 weeks</td><td>Enterprise selling point</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Outcome:</strong> Improved retention, faster onboarding, GrantBru parity, enterprise ROI metrics. <strong>Total: 8-12 weeks.</strong></p>
+  </div>
+
+  <div class="roadmap-phase phase2">
+    <h3><span class="badge badge-phase">Phase 2</span> Dossier Foundation (Months 4-6)</h3>
+    <table>
+      <thead><tr><th>Month</th><th>Priority</th><th>Effort</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>Month 4</td><td><strong>Dossier workspaces</strong></td><td>3-4 weeks</td><td>System-of-record foundation (Layer 4)</td></tr>
+        <tr><td>Month 4-5</td><td><strong>P3: Amendment analysis</strong></td><td>4-5 weeks</td><td>Counter Dixit (#1 threat)</td></tr>
+        <tr><td>Month 5</td><td><strong>Proactive notification engine</strong></td><td>2-3 weeks</td><td>Stage-change alerts, deadline warnings</td></tr>
+        <tr><td>Month 5-6</td><td><strong>P7: MEP social media</strong></td><td>4-6 weeks</td><td>Real-time intelligence layer</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Outcome:</strong> Dossier workspaces tie all features together. Proactive alerts make Brubru indispensable. Direct competitive response to Dixit. <strong>Total: 13-18 weeks.</strong></p>
+  </div>
+
+  <div class="roadmap-phase phase3">
+    <h3><span class="badge badge-phase">Phase 3</span> System of Record (Months 7-12)</h3>
+    <table>
+      <thead><tr><th>Month</th><th>Priority</th><th>Effort</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>Month 7-9</td><td><strong>P5: Stakeholder CRM</strong></td><td>8-12 weeks</td><td>Closes #1 feature gap + dossier lock-in</td></tr>
+        <tr><td>Month 9-10</td><td><strong>P6: Team layer + shared dossiers</strong></td><td>5-7 weeks</td><td>Enterprise sales + switching costs</td></tr>
+        <tr><td>Month 10-12</td><td><strong>P9: National parliaments</strong></td><td>5-7 weeks</td><td>Multi-level governance</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Outcome:</strong> CRM linked to dossiers, team workspaces with permissions, national depth. By Month 12, a user with 50+ dossiers and 200+ contacts cannot switch. <strong>Total: 18-26 weeks.</strong></p>
+  </div>
+
+  <div class="roadmap-phase phase4">
+    <h3><span class="badge badge-phase">Phase 4</span> Institutional Play (Months 12-18)</h3>
+    <table>
+      <thead><tr><th>Month</th><th>Priority</th><th>Effort</th><th>Impact</th></tr></thead>
+      <tbody>
+        <tr><td>Month 12-15</td><td><strong>P10: LEOS interoperability</strong></td><td>6-10 weeks</td><td>Institutional adoption path</td></tr>
+        <tr><td>Month 15-18</td><td>Institutional pilot programme</td><td>Ongoing</td><td>Government contracts</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Outcome:</strong> Position Brubru as commercial AI front-end for institutional AKN workflows.</p>
+  </div>
+
+  <h3>Total Estimated Effort</h3>
+  <table>
+    <thead><tr><th>Phase</th><th>Duration</th><th>Priorities</th><th>Weeks (v2.0)</th><th>v1.0 Est.</th></tr></thead>
+    <tbody>
+      <tr><td>Phase 1</td><td>Months 1-3</td><td>P1, P2, P4, P8</td><td><strong>8-12</strong></td><td>10-14</td></tr>
+      <tr><td>Phase 2</td><td>Months 4-6</td><td>P3, P7</td><td><strong>8-11</strong></td><td>8-11</td></tr>
+      <tr><td>Phase 3</td><td>Months 7-12</td><td>P5, P6, P9</td><td><strong>18-26</strong></td><td>19-27</td></tr>
+      <tr><td>Phase 4</td><td>Months 12-18</td><td>P10</td><td><strong>6-10</strong></td><td>6-10</td></tr>
+      <tr style="background: var(--color-gray-50); font-weight: 700;"><td>Total</td><td>18 months</td><td>10 priorities</td><td><strong>40-59 weeks</strong></td><td>43-62 weeks</td></tr>
+    </tbody>
+  </table>
+  <p><strong>v2.0 savings:</strong> ~3 weeks saved in Phase 1 (newsletter pipeline + Tenderator UI). ~1 week in Phase 3 (FeedbackComment threading).</p>
+  <p>Solo founder: 15-18 months. 2-person team: 8-10 months. 3-person team (post-funding): <strong>5-7 months</strong>.</p>
+
+  <h3>Key Reuse Map</h3>
+  <table>
+    <thead><tr><th>Priority</th><th>Existing Asset</th><th>Saves</th></tr></thead>
+    <tbody>
+      <tr><td>P1 (Daily Briefing)</td><td>Newsletter pipeline (5 models), ProactiveNotifier, User.preferences JSONB</td><td><span class="reuse-tag">~1 week</span></td></tr>
+      <tr><td>P3 (Amendment Analysis)</td><td>EP voting models, predictions_tab visualisation, BaseScraper</td><td><span class="reuse-tag">~0.5 weeks</span></td></tr>
+      <tr><td>P4 (Activity Logging)</td><td>AdminActivityLog pattern, auto-loggable endpoints</td><td><span class="reuse-tag">~0.5 weeks</span></td></tr>
+      <tr><td>P6 (Collaborative Editing)</td><td>FeedbackComment threading, in-app notifications</td><td><span class="reuse-tag">~1 week</span></td></tr>
+      <tr><td>P7 (Social Media)</td><td>MetadataExtractor, BaseScraper, predictions_tab colours</td><td><span class="reuse-tag">~0.5 weeks</span></td></tr>
+      <tr><td>P8 (Grant Proposals)</td><td>tender_calendar, tender_profile_setup, bid_checklist, document_generator</td><td><span class="reuse-tag">~1.5 weeks</span></td></tr>
+      <tr><td>P9 (National Parliaments)</td><td>BaseScraper, MetadataExtractor, eurlex_client NIM, RSS</td><td><span class="reuse-tag">~0.5 weeks</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  Competitive Learnings v2.1 -- February 2026<br>
+  Beresol BV | Brussels, Belgium
+</footer>
+
+</body>
+</html>
