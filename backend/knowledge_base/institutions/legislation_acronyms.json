@@ -57,13 +57,6 @@
       "year": 2021,
       "source_file": "L_2021073EN.01001601.xml"
     },
-    "ECB": {
-      "celex": "32021R0379",
-      "full_title": "Regulation (EU) 2021/379 of the European Central Bank of 22 January 2021 on the balance sheet items of credit institutions and of the monetary financial institutions sector (recast) (ECB/2021/2)",
-      "type": "Regulation",
-      "year": 2021,
-      "source_file": "L_2021073EN.01001601.xml"
-    },
     "PDO": {
       "celex": "32020R2158",
       "full_title": "Commission Implementing Regulation (EU) 2020/2158 of 14 December 2020 approving non-minor amendments to the specification for a name entered in the register of protected designations of origin and pro",
@@ -1744,13 +1737,6 @@
       "year": 2022,
       "source_file": "L_2022090EN.01019701.xml"
     },
-    "EIOPA": {
-      "celex": "32021D0879",
-      "full_title": "Council Implementing Decision (EU) 2021/879 of 27 May 2021 on the appointment of the Chair of the European Insurance and Occupational Pensions Authority (EIOPA)",
-      "type": "Decision",
-      "year": 2021,
-      "source_file": "L_2021192EN.01001401.xml"
-    },
     "46": {
       "celex": "32021R1814",
       "full_title": "Regulation (EU) 2021/1814 of the European Central Bank of 7 October 2021 amending Regulation (EC) No 2157/1999 on the powers of the European Central Bank to impose sanctions (ECB/2021/46)",
@@ -2107,13 +2093,6 @@
       "type": "Decision",
       "year": 2024,
       "source_file": "L_202402079EN.000101.fmx.xml"
-    },
-    "ESMA": {
-      "celex": "32018R1645",
-      "full_title": "Commission Delegated Regulation (EU) 2018/1645 of 13 July 2018 supplementing Regulation (EU) 2016/1011 of the European Parliament and of the Council with regard to regulatory technical standards for t",
-      "type": "Regulation",
-      "year": 2018,
-      "source_file": "L_2018274EN.01003601.xml"
     },
     "ECB/2022/33": {
       "celex": "32022D1981",
@@ -3584,13 +3563,6 @@
       "type": "Regulation",
       "year": 2018,
       "source_file": "L_2018062EN.01000401.xml"
-    },
-    "EBA": {
-      "celex": "32024D0742",
-      "full_title": "Council Implementing Decision (EU) 2024/742 of 20 February 2024 on the extension of the term of office of the Chairperson of the European Banking Authority (EBA)",
-      "type": "Decision",
-      "year": 2024,
-      "source_file": "L_202400742EN.000101.fmx.xml"
     },
     "CEPOL": {
       "celex": "32015R2219",

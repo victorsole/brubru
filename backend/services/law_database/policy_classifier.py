@@ -32,13 +32,17 @@ class PolicyAreaClassifier:
     - Confidence scores
     """
 
-    def __init__(self, policy_taxonomy_path: str = "backend/knowledge_base/institutions/eu_policies.json"):
+    def __init__(self, policy_taxonomy_path: str = None):
         """
         Initialize classifier.
 
         Args:
-            policy_taxonomy_path: Path to eu_policies.json
+            policy_taxonomy_path: Path to eu_policies.json (auto-resolved if None)
         """
+        if policy_taxonomy_path is None:
+            policy_taxonomy_path = str(
+                Path(__file__).parent.parent.parent / "knowledge_base" / "institutions" / "eu_policies.json"
+            )
         self.policy_taxonomy = self._load_taxonomy(policy_taxonomy_path)
         self.policy_keywords = self._build_keyword_map()
 

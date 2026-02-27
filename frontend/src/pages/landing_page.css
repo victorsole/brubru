@@ -140,6 +140,8 @@ html.landing-scroll-snap {
   overflow: hidden;
   height: 1.5em;
   display: inline-block;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .landing .nav-link-text {
@@ -170,6 +172,8 @@ html.landing-scroll-snap {
   border-radius: 6px;
   font-size: var(--font-size-sm);
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: background var(--transition-fast), transform var(--transition-fast);
 }
 

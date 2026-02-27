@@ -171,6 +171,202 @@ CONTACT_INTENT_PHRASES = [
     'who should i reach out to', 'who should i write to',
 ]
 
+# Country name to demonym mapping for rapporteur-by-country queries
+COUNTRY_DEMONYMS = {
+    'spanish': 'Spain', 'spain': 'Spain', 'espanol': 'Spain', 'espanyol': 'Spain',
+    'french': 'France', 'france': 'France', 'francais': 'France', 'frances': 'France',
+    'german': 'Germany', 'germany': 'Germany', 'aleman': 'Germany', 'alemany': 'Germany',
+    'italian': 'Italy', 'italy': 'Italy', 'italiano': 'Italy', 'italia': 'Italy',
+    'dutch': 'Netherlands', 'netherlands': 'Netherlands', 'holandes': 'Netherlands', 'neerlandes': 'Netherlands',
+    'belgian': 'Belgium', 'belgium': 'Belgium', 'belga': 'Belgium',
+    'polish': 'Poland', 'poland': 'Poland', 'polaco': 'Poland',
+    'romanian': 'Romania', 'romania': 'Romania', 'rumano': 'Romania',
+    'greek': 'Greece', 'greece': 'Greece', 'griego': 'Greece', 'grec': 'Greece',
+    'portuguese': 'Portugal', 'portugal': 'Portugal', 'portugues': 'Portugal',
+    'swedish': 'Sweden', 'sweden': 'Sweden', 'sueco': 'Sweden', 'suec': 'Sweden',
+    'danish': 'Denmark', 'denmark': 'Denmark', 'danes': 'Denmark',
+    'finnish': 'Finland', 'finland': 'Finland', 'finlandes': 'Finland',
+    'irish': 'Ireland', 'ireland': 'Ireland', 'irlandes': 'Ireland',
+    'austrian': 'Austria', 'austria': 'Austria', 'austriaco': 'Austria',
+    'czech': 'Czechia', 'czechia': 'Czechia',
+    'hungarian': 'Hungary', 'hungary': 'Hungary', 'hungaro': 'Hungary',
+    'bulgarian': 'Bulgaria', 'bulgaria': 'Bulgaria',
+    'croatian': 'Croatia', 'croatia': 'Croatia', 'croata': 'Croatia',
+    'slovak': 'Slovakia', 'slovakia': 'Slovakia',
+    'slovenian': 'Slovenia', 'slovenia': 'Slovenia',
+    'estonian': 'Estonia', 'estonia': 'Estonia',
+    'latvian': 'Latvia', 'latvia': 'Latvia',
+    'lithuanian': 'Lithuania', 'lithuania': 'Lithuania',
+    'cypriot': 'Cyprus', 'cyprus': 'Cyprus',
+    'maltese': 'Malta', 'malta': 'Malta',
+    'luxembourgish': 'Luxembourg', 'luxembourg': 'Luxembourg',
+}
+
+# Rapporteur-intent phrases
+RAPPORTEUR_INTENT_PHRASES = [
+    'rapporteur', 'rapporteurs', 'ponente', 'ponentes', 'ponent', 'ponents',
+    'relator', 'relatores', 'berichterstatter',
+]
+
+# Country name to ISO 3166-1 alpha-2 code (for EP API filtering)
+COUNTRY_NAME_TO_CODE = {
+    'Spain': 'ES', 'France': 'FR', 'Germany': 'DE', 'Italy': 'IT',
+    'Netherlands': 'NL', 'Belgium': 'BE', 'Poland': 'PL', 'Romania': 'RO',
+    'Greece': 'GR', 'Portugal': 'PT', 'Sweden': 'SE', 'Denmark': 'DK',
+    'Finland': 'FI', 'Ireland': 'IE', 'Austria': 'AT', 'Czechia': 'CZ',
+    'Hungary': 'HU', 'Bulgaria': 'BG', 'Croatia': 'HR', 'Slovakia': 'SK',
+    'Slovenia': 'SI', 'Estonia': 'EE', 'Latvia': 'LV', 'Lithuania': 'LT',
+    'Cyprus': 'CY', 'Malta': 'MT', 'Luxembourg': 'LU',
+}
+
+
+@dataclass
+class DraftingIntent:
+    """Detected drafting/action intent from user query.
+
+    When a user wants to PRODUCE a document (not just learn about a topic),
+    the context builder signals this so the AI switches to drafting mode.
+    """
+    is_drafting_query: bool
+    action_word: str = ""  # The detected action word (e.g., "draft", "justificacio")
+    document_type: str = ""  # Best guess at document type (e.g., "justification", "briefing", "position_paper")
+    topic: str = ""  # The topic/subject extracted from the query
+    confidence: float = 0.0
+
+
+# Action words that signal the user wants to PRODUCE something, not learn about it.
+# Organised by language, with the document type they map to.
+ACTION_WORD_MAP = {
+    # English
+    'draft': 'draft', 'write': 'draft', 'prepare': 'draft', 'redact': 'draft',
+    'template': 'template', 'model': 'template', 'example': 'template', 'sample': 'template',
+    'justification': 'justification', 'justify': 'justification',
+    'briefing': 'briefing', 'brief': 'briefing',
+    'position': 'position_paper', 'position paper': 'position_paper',
+    'amendment': 'amendment', 'amend': 'amendment',
+    'talking points': 'talking_points',
+    'summary': 'summary', 'summarise': 'summary', 'summarize': 'summary',
+    'note': 'briefing', 'memo': 'briefing', 'memorandum': 'briefing',
+    'letter': 'letter', 'email': 'letter',
+    'report': 'report', 'analysis': 'report',
+    'proposal': 'proposal',
+    'resolution': 'resolution',
+    'question': 'ep_question',
+    # Catalan
+    'justificacio': 'justification', 'redacta': 'draft', 'escriu': 'draft',
+    'esborrany': 'draft', 'prepara': 'draft', 'plantilla': 'template',
+    'resum': 'summary', 'resumeix': 'summary',
+    'nota': 'briefing', 'informe': 'report', 'carta': 'letter',
+    'proposta': 'proposal', 'esmena': 'amendment',
+    # Spanish
+    'justificacion': 'justification', 'redactar': 'draft', 'escribir': 'draft',
+    'borrador': 'draft', 'preparar': 'draft', 'modelo': 'template',
+    'resumen': 'summary', 'resumir': 'summary',
+    'argumentario': 'talking_points', 'posicionamiento': 'position_paper',
+    'enmienda': 'amendment', 'pregunta': 'ep_question',
+    # French
+    'brouillon': 'draft', 'rediger': 'draft', 'ecrire': 'draft',
+    'argumentaire': 'talking_points', 'justificatif': 'justification',
+    'resume': 'summary', 'resumer': 'summary',
+    'projet': 'draft', 'amendement': 'amendment',
+    # Italian
+    'bozza': 'draft', 'scrivere': 'draft', 'redigere': 'draft',
+    'giustificazione': 'justification', 'riassunto': 'summary',
+    'emendamento': 'amendment',
+    # Dutch
+    'ontwerp': 'draft', 'schrijven': 'draft', 'samenvatting': 'summary',
+    'amendement_nl': 'amendment', 'rechtvaardiging': 'justification',
+}
+
+# Map document types to the best matching template names
+DOC_TYPE_TO_TEMPLATE = {
+    'position_paper': ['position_paper_template', 'coalition_position_template'],
+    'briefing': ['briefing_note', 'mep_briefing_note_template', 'meeting_preparation_brief_template'],
+    'talking_points': ['briefing_note', 'mep_briefing_note_template'],
+    'report': ['monthly_monitoring_report_template', 'weekly_legislative_monitoring_report_template'],
+    'letter': ['briefing_note'],
+    'ep_question': [],  # Handled by Document Generator
+    'resolution': [],  # Handled by Document Generator
+    'amendment': [],  # Handled by Amendator
+    'template': [],  # Will search all templates
+    'draft': [],  # Generic -- will search all
+    'justification': ['eu_strategy_advocacy_template'],
+    'summary': [],
+    'proposal': ['position_paper_template', 'eu_strategy_advocacy_template'],
+}
+
+
+def detect_drafting_intent(query: str) -> DraftingIntent:
+    """
+    Detect whether a user query is asking to PRODUCE a document vs learn about a topic.
+
+    Examples:
+        "Justificacio interreg" -> DraftingIntent(is_drafting_query=True, action_word="justificacio",
+                                                   document_type="justification", topic="interreg")
+        "What is the AI Act?" -> DraftingIntent(is_drafting_query=False)
+        "Draft a position paper on REACH" -> DraftingIntent(is_drafting_query=True, ...)
+    """
+    query_lower = query.lower().strip()
+
+    # Find ALL action words present in the query (longest match first)
+    sorted_actions = sorted(ACTION_WORD_MAP.keys(), key=len, reverse=True)
+    found_actions = []
+
+    temp_query = query_lower
+    for action_word in sorted_actions:
+        if action_word in temp_query:
+            found_actions.append((action_word, ACTION_WORD_MAP[action_word]))
+            # Remove this action word from temp_query so topic extraction is clean
+            temp_query = temp_query.replace(action_word, ' ')
+
+    if not found_actions:
+        return DraftingIntent(is_drafting_query=False)
+
+    # Pick the most specific document type (prefer non-generic types over "draft")
+    # Priority: specific types > "draft" > "template" > "summary"
+    TYPE_PRIORITY = {
+        'position_paper': 10, 'briefing': 9, 'talking_points': 9,
+        'justification': 9, 'amendment': 9, 'ep_question': 9,
+        'resolution': 9, 'report': 8, 'letter': 8,
+        'proposal': 7, 'summary': 5, 'template': 4, 'draft': 3,
+    }
+    found_actions.sort(key=lambda x: TYPE_PRIORITY.get(x[1], 0), reverse=True)
+    best_action_word, best_doc_type = found_actions[0]
+
+    # Extract topic: remove ALL action words from query
+    topic = temp_query.strip()
+    # Clean up multiple spaces
+    topic = re.sub(r'\s+', ' ', topic).strip()
+    # Clean up common connectors at the start (loop until stable)
+    connectors = ['for', 'about', 'on', 'of', 'per', 'sobre', 'pour', 'sur',
+                  'de la', 'de les', 'de', 'del', 'dels',  # longer first
+                  'un', 'una', 'el', 'la', 'les', 'los', 'las',
+                  'il', 'le', 'het', 'een', 'a']
+    changed = True
+    while changed:
+        changed = False
+        for connector in connectors:
+            if topic.startswith(connector + ' '):
+                topic = topic[len(connector) + 1:].strip()
+                changed = True
+                break
+    topic = topic.strip()
+
+    # Confidence scoring
+    confidence = 0.9 if query_lower.startswith(best_action_word) else 0.7
+    if len(found_actions) > 1:
+        confidence = min(confidence + 0.1, 1.0)  # Multiple action words = high confidence
+    if topic and len(topic) > 2:
+        confidence = min(confidence + 0.1, 1.0)
+
+    return DraftingIntent(
+        is_drafting_query=True,
+        action_word=best_action_word,
+        document_type=best_doc_type,
+        topic=topic,
+        confidence=confidence
+    )
+
 
 @dataclass
 class ExtractedEntities:
@@ -253,6 +449,13 @@ class ContextData:
 
     # Phase 8: Tender data (Tenderator integration) - optional, must come after required fields
     tender_context: Optional[TenderContextData] = None
+
+    # Drafting intent detection (action vs information)
+    drafting_intent: Optional[DraftingIntent] = None
+
+    # Rapporteur-by-country results (for "Spanish MEPs who are rapporteurs" queries)
+    rapporteur_by_country: Optional[List[Dict[str, Any]]] = None
+    rapporteur_country: Optional[str] = None
 
 
 class ContextBuilder:
@@ -402,6 +605,13 @@ class ContextBuilder:
         # 2. Extract entities from query
         entities = self.extract_entities(user_message)
 
+        # 2b. Detect drafting/action intent (user wants to PRODUCE something)
+        drafting_intent = detect_drafting_intent(user_message)
+        if drafting_intent.is_drafting_query:
+            logger.info(f"[DRAFTING] Detected action intent: {drafting_intent.action_word} -> "
+                        f"{drafting_intent.document_type} (topic: {drafting_intent.topic}, "
+                        f"confidence: {drafting_intent.confidence:.0%})")
+
         # 3. Run all async operations in parallel for maximum speed
         # This reduces total wait time from sum(times) to max(time)
 
@@ -412,7 +622,7 @@ class ContextBuilder:
         tasks.append(self._fetch_legislative_train_files(query=user_message, entities=entities))
 
         # Internal knowledge base (always run)
-        tasks.append(self._query_internal_knowledge(user_message))
+        tasks.append(self._query_internal_knowledge(user_message, drafting_intent=drafting_intent))
 
         # EPRS publications (always run)
         tasks.append(self._search_eprs_publications(query=user_message, entities=entities))
@@ -603,6 +813,22 @@ class ContextBuilder:
         # Unpack MEP Amendments summary (index 18)
         mep_amendments_summary = results[18] if not isinstance(results[18], Exception) else []
 
+        # Rapporteur-by-country query (detect country + rapporteur intent)
+        rapporteur_by_country = []
+        query_lower = user_message.lower()
+        detected_country = None
+        for demonym, country in COUNTRY_DEMONYMS.items():
+            if demonym in query_lower:
+                detected_country = country
+                break
+        has_rapporteur_intent = any(phrase in query_lower for phrase in RAPPORTEUR_INTENT_PHRASES)
+
+        if detected_country and has_rapporteur_intent:
+            try:
+                rapporteur_by_country = await self._fetch_rapporteurs_by_country(detected_country)
+            except Exception as e:
+                logger.warning(f"[RAPPORTEUR] Country rapporteur fetch failed: {e}")
+
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
 
@@ -655,6 +881,9 @@ class ContextBuilder:
             user_uploaded_documents=user_uploaded_documents,  # User uploaded documents
             mep_amendments_summary=mep_amendments_summary,  # MEP amendments
             tender_context=tender_context,  # Phase 8: Tender data
+            drafting_intent=drafting_intent if drafting_intent.is_drafting_query else None,
+            rapporteur_by_country=rapporteur_by_country if rapporteur_by_country else None,
+            rapporteur_country=detected_country if rapporteur_by_country else None,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -979,7 +1208,7 @@ class ContextBuilder:
                             details = await scraper.get_mep_details(mep_id)
 
                             profile = {
-                                'id': mep_id,
+                                'mep_id': mep_id,
                                 'name': mep.full_name,
                                 'country': mep.country or '',
                                 'party': mep.national_party or '',
@@ -1014,6 +1243,153 @@ class ContextBuilder:
                 await scraper.close()
 
         return profiles
+
+    async def _fetch_rapporteurs_by_country(
+        self,
+        country_name: str
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch all known rapporteurs from a specific country.
+        Aggregates data from legislative_carriages (OEIL cache) and committee_work.
+        Uses EP API country filter (ISO code) to get MEPs from target country,
+        then matches rapporteur names against that list.
+
+        Args:
+            country_name: Country name (e.g., "Spain", "France")
+
+        Returns:
+            List of rapporteur entries with name, group, committee, procedure, title
+        """
+        rapporteurs = []
+        seen_names = set()
+
+        try:
+            from sqlalchemy import text
+
+            db = SessionLocal()
+
+            # 1. Query OEIL-cached rapporteur data from legislative_carriages
+            oeil_results = db.execute(text("""
+                SELECT
+                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'name' as name,
+                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'political_group' as grp,
+                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'mep_id' as mep_id,
+                    lead_committee, oeil_procedure_ref, title
+                FROM legislative_carriages
+                WHERE oeil_procedure_data IS NOT NULL
+                AND oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'name' IS NOT NULL
+            """)).fetchall()
+
+            # 2. Query committee_work rapporteurs
+            cw_results = db.execute(text("""
+                SELECT rapporteur_name, committee_code, procedure_ref, title
+                FROM committee_work_items
+                WHERE rapporteur_name IS NOT NULL AND rapporteur_name != ''
+            """)).fetchall()
+
+            db.close()
+
+            logger.info(f"[RAPPORTEUR] DB data: {len(oeil_results)} OEIL rapporteurs, {len(cw_results)} committee_work rapporteurs")
+
+            # 3. Get all MEPs from the target country using EP API with country code filter
+            # The API's country-of-representation filter returns ONLY MEPs from that country
+            country_code = COUNTRY_NAME_TO_CODE.get(country_name)
+            country_mep_name_parts = {}  # lowercase name -> set of name parts
+            country_mep_info = {}  # lowercase name -> {full_name, group, mep_id}
+
+            if country_code:
+                try:
+                    from services.api_clients.european_parliament_client import EuropeanParliamentClient
+                    ep_client = EuropeanParliamentClient()
+                    # Use limit=500 to get ALL MEPs for the country (historical + current)
+                    # The default get_all_meps() only fetches 100, missing Z-surnames
+                    api_meps = await ep_client.get_mep_list(country=country_code, limit=500)
+                    await ep_client.close()
+
+                    for mep_data in api_meps:
+                        name = mep_data.get('name', '')
+                        if not name:
+                            continue
+                        name_lower = name.lower().strip()
+                        parts = set(name_lower.split())
+                        country_mep_name_parts[name_lower] = parts
+                        country_mep_info[name_lower] = {
+                            'full_name': name,
+                            'group': '',  # API list doesn't return group
+                            'mep_id': mep_data.get('id', ''),
+                        }
+
+                    logger.info(f"[RAPPORTEUR] EP API returned {len(api_meps)} MEPs for {country_name} ({country_code})")
+                except Exception as e:
+                    logger.warning(f"[RAPPORTEUR] Failed to fetch MEP list for {country_name}: {e}")
+            else:
+                logger.warning(f"[RAPPORTEUR] No ISO code found for country: {country_name}")
+
+            # 4. Name matching helper: checks if rapporteur name overlaps with any country MEP
+            CONNECTOR_WORDS = {'de', 'da', 'di', 'van', 'von', 'del', 'la', 'le', 'el', 'dos', 'das'}
+
+            def match_to_country_mep(rapp_name_lower: str):
+                """Match a rapporteur name against country MEPs. Returns matched MEP info or None.
+                Requires at least 2 significant name parts overlap to avoid false positives
+                from common first names like 'Francisco' matching across countries."""
+                rapp_parts = set(rapp_name_lower.split())
+                rapp_parts = {p for p in rapp_parts if len(p) > 1 and p not in CONNECTOR_WORDS}
+
+                for mep_name, mep_parts in country_mep_name_parts.items():
+                    clean_mep_parts = {p for p in mep_parts if len(p) > 1 and p not in CONNECTOR_WORDS}
+                    overlap = rapp_parts & clean_mep_parts
+                    if len(overlap) >= 2:
+                        return country_mep_info.get(mep_name)
+                return None
+
+            # 5. Match OEIL rapporteurs to country
+            for row in oeil_results:
+                rapp_name = row[0] or ''
+                rapp_name_lower = rapp_name.lower().strip()
+                # Remove trailing group annotation like "(Greens/EFA)"
+                if '(' in rapp_name_lower:
+                    rapp_name_lower = rapp_name_lower[:rapp_name_lower.index('(')].strip()
+                    rapp_name = rapp_name[:rapp_name.index('(')].strip()
+
+                matched_info = match_to_country_mep(rapp_name_lower)
+                if matched_info and rapp_name_lower not in seen_names:
+                    seen_names.add(rapp_name_lower)
+                    rapporteurs.append({
+                        'name': matched_info.get('full_name', rapp_name),
+                        'political_group': row[1] or matched_info.get('group', ''),
+                        'committee': row[3] or '',
+                        'procedure_ref': row[4] or '',
+                        'file_title': (row[5] or '')[:100],
+                        'source': 'OEIL',
+                    })
+
+            # 6. Match committee_work rapporteurs to country
+            for row in cw_results:
+                rapp_name = row[0] or ''
+                rapp_name_lower = rapp_name.lower().strip()
+
+                matched_info = match_to_country_mep(rapp_name_lower)
+                if matched_info and rapp_name_lower not in seen_names:
+                    seen_names.add(rapp_name_lower)
+                    rapporteurs.append({
+                        'name': matched_info.get('full_name', rapp_name),
+                        'political_group': matched_info.get('group', ''),
+                        'committee': row[1] or '',
+                        'procedure_ref': row[2] or '',
+                        'file_title': (row[3] or '')[:100],
+                        'source': 'committee_work',
+                    })
+
+            logger.info(f"[RAPPORTEUR] Found {len(rapporteurs)} rapporteurs from {country_name} "
+                        f"(checked {len(oeil_results)} OEIL + {len(cw_results)} committee_work "
+                        f"against {len(country_mep_name_parts)} {country_name} MEPs)")
+
+        except Exception as e:
+            logger.error(f"[RAPPORTEUR] Failed to fetch rapporteurs by country: {e}")
+            import traceback
+            traceback.print_exc()
+
+        return rapporteurs
 
     async def _fetch_committee_info(
         self,
@@ -1272,13 +1648,18 @@ class ContextBuilder:
 
     async def _query_internal_knowledge(
         self,
-        query: str
+        query: str,
+        drafting_intent: Optional[DraftingIntent] = None
     ) -> List[Dict[str, Any]]:
         """
         Query internal knowledge base (templates, guides).
 
+        When drafting intent is detected, templates are prioritised over guides
+        and the best-matching templates for the document type are injected first.
+
         Args:
             query: User query
+            drafting_intent: Detected drafting intent (if any)
 
         Returns:
             List of relevant internal knowledge documents
@@ -1288,46 +1669,103 @@ class ContextBuilder:
         try:
             query_lower = query.lower()
 
-            # Search guides first (reference knowledge)
-            # These contain EU jargon, resources, tips for working with APAs, etc.
-            matching_guides = self.knowledge_loader.search_guides(query)
+            # If drafting intent detected, prioritise templates FIRST
+            if drafting_intent and drafting_intent.is_drafting_query:
+                logger.info(f"[DRAFTING] Boosting templates for document type: {drafting_intent.document_type}")
 
-            if matching_guides:
-                for guide in matching_guides[:self.max_internal_knowledge_results]:
-                    guide_content = self.knowledge_loader.get_guide(guide['id'])
-                    if guide_content:
-                        knowledge_items.append({
-                            'type': 'guide',
-                            'name': guide['id'],
-                            'title': guide['title'],
-                            'content': guide_content[:3000],  # Guides can be longer
-                            'full_length': len(guide_content),
-                            'snippet': guide.get('snippet', '')
-                        })
-
-                logger.debug(f"Found {len(matching_guides)} guide matches for query: {query}")
-
-            # Also search templates (document templates)
-            matching_templates = self.knowledge_loader.search_templates(query)
-
-            if matching_templates:
-                remaining_slots = self.max_internal_knowledge_results - len(knowledge_items)
-                for template_name in matching_templates[:remaining_slots]:
+                # 1. Inject best-matching templates for detected document type
+                preferred_templates = DOC_TYPE_TO_TEMPLATE.get(drafting_intent.document_type, [])
+                for template_name in preferred_templates:
                     template_content = self.knowledge_loader.get_template(template_name)
                     if template_content:
-                        # Extract title
                         title_match = re.search(r'^#\s+(.+)$', template_content, re.MULTILINE)
                         title = title_match.group(1) if title_match else template_name.replace('_', ' ').title()
-
                         knowledge_items.append({
                             'type': 'template',
                             'name': template_name,
                             'title': title,
                             'content': template_content[:2000],
-                            'full_length': len(template_content)
+                            'full_length': len(template_content),
+                            'drafting_match': True  # Signal this was matched via intent
                         })
 
-                logger.debug(f"Found {len(matching_templates)} template matches for query: {query}")
+                # 2. Also search templates by topic keywords
+                if drafting_intent.topic:
+                    topic_templates = self.knowledge_loader.search_templates(drafting_intent.topic)
+                    added_names = {item['name'] for item in knowledge_items}
+                    for template_name in topic_templates:
+                        if template_name not in added_names:
+                            template_content = self.knowledge_loader.get_template(template_name)
+                            if template_content:
+                                title_match = re.search(r'^#\s+(.+)$', template_content, re.MULTILINE)
+                                title = title_match.group(1) if title_match else template_name.replace('_', ' ').title()
+                                knowledge_items.append({
+                                    'type': 'template',
+                                    'name': template_name,
+                                    'title': title,
+                                    'content': template_content[:2000],
+                                    'full_length': len(template_content)
+                                })
+
+                # 3. Then add guides for background context (fewer slots)
+                matching_guides = self.knowledge_loader.search_guides(query)
+                remaining_slots = max(1, self.max_internal_knowledge_results - len(knowledge_items))
+                if matching_guides:
+                    for guide in matching_guides[:remaining_slots]:
+                        guide_content = self.knowledge_loader.get_guide(guide['id'])
+                        if guide_content:
+                            knowledge_items.append({
+                                'type': 'guide',
+                                'name': guide['id'],
+                                'title': guide['title'],
+                                'content': guide_content[:3000],
+                                'full_length': len(guide_content),
+                                'snippet': guide.get('snippet', '')
+                            })
+
+                logger.info(f"[DRAFTING] Injected {len(knowledge_items)} items "
+                            f"({sum(1 for i in knowledge_items if i['type'] == 'template')} templates, "
+                            f"{sum(1 for i in knowledge_items if i['type'] == 'guide')} guides)")
+
+            else:
+                # Standard path: guides first, then templates
+                matching_guides = self.knowledge_loader.search_guides(query)
+
+                if matching_guides:
+                    for guide in matching_guides[:self.max_internal_knowledge_results]:
+                        guide_content = self.knowledge_loader.get_guide(guide['id'])
+                        if guide_content:
+                            knowledge_items.append({
+                                'type': 'guide',
+                                'name': guide['id'],
+                                'title': guide['title'],
+                                'content': guide_content[:3000],
+                                'full_length': len(guide_content),
+                                'snippet': guide.get('snippet', '')
+                            })
+
+                    logger.debug(f"Found {len(matching_guides)} guide matches for query: {query}")
+
+                # Also search templates (document templates)
+                matching_templates = self.knowledge_loader.search_templates(query)
+
+                if matching_templates:
+                    remaining_slots = self.max_internal_knowledge_results - len(knowledge_items)
+                    for template_name in matching_templates[:remaining_slots]:
+                        template_content = self.knowledge_loader.get_template(template_name)
+                        if template_content:
+                            title_match = re.search(r'^#\s+(.+)$', template_content, re.MULTILINE)
+                            title = title_match.group(1) if title_match else template_name.replace('_', ' ').title()
+
+                            knowledge_items.append({
+                                'type': 'template',
+                                'name': template_name,
+                                'title': title,
+                                'content': template_content[:2000],
+                                'full_length': len(template_content)
+                            })
+
+                    logger.debug(f"Found {len(matching_templates)} template matches for query: {query}")
 
             if not knowledge_items:
                 logger.debug(f"No internal knowledge matches found for query: {query}")
@@ -2493,6 +2931,10 @@ class ContextBuilder:
         Phase 2: This is the KEY method that brings EPRS "jargon translators"
         into the AI context.
 
+        Two-pass search:
+        1. PostgreSQL (persistent, always available) - by CELEX, procedure, or text search
+        2. ChromaDB (semantic, may be empty) - vector similarity search
+
         Args:
             query: User query
             entities: Extracted entities (to help with filtering)
@@ -2501,53 +2943,209 @@ class ContextBuilder:
             List of relevant EPRS publications
         """
         eprs_results = []
+        seen_ids = set()
 
+        # Pass 1: PostgreSQL search (persistent, reliable)
         try:
-            # Build filters based on extracted entities
-            filters = {}
+            pg_results = self._search_eprs_postgresql(query, entities)
+            for pub in pg_results:
+                pub_id = pub.get('publication_id')
+                if pub_id and pub_id not in seen_ids:
+                    seen_ids.add(pub_id)
+                    eprs_results.append(pub)
 
-            # Filter by policy areas if detected
-            if entities.policy_areas:
-                # Use first policy area for filtering
-                filters['policy_areas'] = entities.policy_areas[0]
-
-            # Filter by committees if detected
-            if entities.committee_codes:
-                filters['committees'] = entities.committee_codes[0]
-
-            # Search EPRS publications
-            search_results = await self.eprs_indexer.search(
-                query=query,
-                limit=self.max_eprs_results,
-                filters=filters if filters else None
-            )
-
-            # Format results
-            for result in search_results:
-                metadata = result.get('metadata', {})
-
-                eprs_results.append({
-                    'chunk_id': result.get('id'),
-                    'text': result.get('text', '')[:500],  # Excerpt
-                    'title': metadata.get('title', 'Unknown'),
-                    'publication_type': metadata.get('publication_type', 'unknown'),
-                    'publication_url': metadata.get('html_url'),
-                    'pdf_url': metadata.get('pdf_url'),
-                    'related_celex': metadata.get('related_celex_numbers', '').split(',') if metadata.get('related_celex_numbers') else [],
-                    'related_procedures': metadata.get('related_procedures', '').split(',') if metadata.get('related_procedures') else [],
-                    'policy_areas': metadata.get('policy_areas', '').split(',') if metadata.get('policy_areas') else [],
-                    'distance': result.get('distance')
-                })
-
-            if eprs_results:
-                logger.debug(f"Found {len(eprs_results)} relevant EPRS publications for query")
-            else:
-                logger.debug("No EPRS publications found for query")
+            if pg_results:
+                logger.debug(f"Found {len(pg_results)} EPRS publications from PostgreSQL")
 
         except Exception as e:
-            logger.error(f"Failed to search EPRS publications: {str(e)}")
+            logger.warning(f"PostgreSQL EPRS search failed (non-fatal): {str(e)}")
 
-        return eprs_results
+        # Pass 2: ChromaDB semantic search (if we need more results)
+        if len(eprs_results) < self.max_eprs_results:
+            try:
+                # Build filters based on extracted entities
+                filters = {}
+                if entities.policy_areas:
+                    filters['policy_areas'] = entities.policy_areas[0]
+                if entities.committee_codes:
+                    filters['committees'] = entities.committee_codes[0]
+
+                search_results = await self.eprs_indexer.search(
+                    query=query,
+                    limit=self.max_eprs_results - len(eprs_results),
+                    filters=filters if filters else None
+                )
+
+                for result in search_results:
+                    metadata = result.get('metadata', {})
+                    pub_id = metadata.get('publication_id')
+
+                    if pub_id and pub_id in seen_ids:
+                        continue
+                    seen_ids.add(pub_id)
+
+                    eprs_results.append({
+                        'chunk_id': result.get('id'),
+                        'publication_id': pub_id,
+                        'text': result.get('text', '')[:500],
+                        'title': metadata.get('title', 'Unknown'),
+                        'publication_type': metadata.get('publication_type', 'unknown'),
+                        'publication_url': metadata.get('html_url'),
+                        'pdf_url': metadata.get('pdf_url'),
+                        'related_celex': metadata.get('related_celex_numbers', '').split(',') if metadata.get('related_celex_numbers') else [],
+                        'related_procedures': metadata.get('related_procedures', '').split(',') if metadata.get('related_procedures') else [],
+                        'policy_areas': metadata.get('policy_areas', '').split(',') if metadata.get('policy_areas') else [],
+                        'distance': result.get('distance')
+                    })
+
+                if search_results:
+                    logger.debug(f"Found {len(search_results)} additional EPRS publications from ChromaDB")
+
+            except Exception as e:
+                logger.warning(f"ChromaDB EPRS search failed (non-fatal): {str(e)}")
+
+        if eprs_results:
+            logger.debug(f"Total: {len(eprs_results)} EPRS publications for query")
+        else:
+            logger.debug("No EPRS publications found for query")
+
+        return eprs_results[:self.max_eprs_results]
+
+    def _search_eprs_postgresql(
+        self,
+        query: str,
+        entities: ExtractedEntities
+    ) -> List[Dict[str, Any]]:
+        """
+        Search EPRS publications in PostgreSQL.
+
+        Searches by:
+        1. CELEX number match (highest priority)
+        2. Procedure reference match
+        3. Title/summary text search (fallback)
+
+        Returns:
+            List of formatted EPRS publication dicts
+        """
+        from core.database import SessionLocal
+        from models.eprs_publication import EPRSPublication as EPRSPubModel
+        from sqlalchemy import or_, desc
+
+        results = []
+        db = None
+
+        try:
+            db = SessionLocal()
+
+            # Strategy 1: Exact CELEX match
+            if entities.celex_numbers:
+                for celex in entities.celex_numbers[:3]:
+                    pubs = (
+                        db.query(EPRSPubModel)
+                        .filter(EPRSPubModel.related_celex_numbers.any(celex))
+                        .order_by(desc(EPRSPubModel.publication_date))
+                        .limit(3)
+                        .all()
+                    )
+                    results.extend(pubs)
+
+            # Strategy 2: Procedure reference match
+            if entities.procedure_references and len(results) < self.max_eprs_results:
+                for proc_ref in entities.procedure_references[:3]:
+                    pubs = (
+                        db.query(EPRSPubModel)
+                        .filter(EPRSPubModel.related_procedures.any(proc_ref))
+                        .order_by(desc(EPRSPubModel.publication_date))
+                        .limit(3)
+                        .all()
+                    )
+                    results.extend(pubs)
+
+            # Strategy 3: Title/summary text search (only if no structured matches)
+            if not results:
+                # Extract meaningful search terms
+                query_lower = query.lower()
+                search_words = [
+                    w for w in query_lower.split()
+                    if len(w) > 4 and w not in {
+                        'about', 'there', 'their', 'which', 'would',
+                        'could', 'should', 'where', 'these', 'those',
+                        'being', 'having', 'doing', 'going', 'making',
+                    }
+                ]
+
+                if search_words:
+                    # Use the most specific terms (longest words first)
+                    search_words.sort(key=len, reverse=True)
+                    search_term = f"%{' '.join(search_words[:3])}%"
+
+                    pubs = (
+                        db.query(EPRSPubModel)
+                        .filter(
+                            or_(
+                                EPRSPubModel.title.ilike(search_term),
+                                EPRSPubModel.summary.ilike(search_term)
+                            )
+                        )
+                        .order_by(desc(EPRSPubModel.publication_date))
+                        .limit(self.max_eprs_results)
+                        .all()
+                    )
+
+                    # If combined search fails, try individual terms
+                    if not pubs and len(search_words) > 1:
+                        for word in search_words[:2]:
+                            word_pubs = (
+                                db.query(EPRSPubModel)
+                                .filter(
+                                    or_(
+                                        EPRSPubModel.title.ilike(f"%{word}%"),
+                                        EPRSPubModel.summary.ilike(f"%{word}%")
+                                    )
+                                )
+                                .order_by(desc(EPRSPubModel.publication_date))
+                                .limit(3)
+                                .all()
+                            )
+                            pubs.extend(word_pubs)
+
+                    results.extend(pubs)
+
+            # Deduplicate and format
+            seen = set()
+            formatted = []
+            for pub in results:
+                if pub.publication_id in seen:
+                    continue
+                seen.add(pub.publication_id)
+
+                text_excerpt = ''
+                if pub.full_text:
+                    text_excerpt = pub.full_text[:500]
+                elif pub.summary:
+                    text_excerpt = pub.summary[:500]
+
+                formatted.append({
+                    'publication_id': pub.publication_id,
+                    'text': text_excerpt,
+                    'title': pub.title,
+                    'publication_type': pub.publication_type or 'unknown',
+                    'publication_url': pub.html_url,
+                    'pdf_url': pub.pdf_url,
+                    'related_celex': pub.related_celex_numbers or [],
+                    'related_procedures': pub.related_procedures or [],
+                    'policy_areas': pub.policy_areas or [],
+                })
+
+            return formatted[:self.max_eprs_results]
+
+        except Exception as e:
+            logger.error(f"PostgreSQL EPRS search error: {str(e)}")
+            return []
+
+        finally:
+            if db:
+                db.close()
 
     async def _fetch_web_search(
         self,
@@ -2893,6 +3491,28 @@ class ContextBuilder:
         """
         sections = []
 
+        # Drafting mode signal (action intent detected)
+        if context_data.drafting_intent and context_data.drafting_intent.is_drafting_query:
+            di = context_data.drafting_intent
+            sections.append("*** DRAFTING MODE ACTIVE ***")
+            sections.append(f"User intent: PRODUCE a {di.document_type.replace('_', ' ')} (action word: '{di.action_word}')")
+            sections.append(f"Topic: {di.topic}")
+            sections.append("INSTRUCTION: Help the user WRITE/DRAFT this document. Do NOT give a Wikipedia-style explanation of the topic.")
+            sections.append("Use the templates below as structure. Ask clarifying questions to produce a better document.")
+
+            # Map document type to Brubru features
+            feature_hints = {
+                'position_paper': "Brubru's Document Generator can create full position papers -- offer to use it.",
+                'briefing': "Brubru's Document Generator can create MEP briefing notes -- offer to use it.",
+                'talking_points': "Brubru's Document Generator can create talking points -- offer to use it.",
+                'amendment': "Brubru's Amendator tool can draft legislative amendments -- suggest using it.",
+                'resolution': "Brubru's Document Generator can create EP resolution drafts -- offer to use it.",
+                'ep_question': "Brubru's Document Generator can create EP Parliamentary Questions -- offer to use it.",
+            }
+            if di.document_type in feature_hints:
+                sections.append(f"FEATURE: {feature_hints[di.document_type]}")
+            sections.append("")
+
         # Header
         sections.append(f"USER QUERY: {context_data.query}\n")
 
@@ -3024,6 +3644,27 @@ class ContextBuilder:
                     sections.append("  Note: Assistant emails are guessed from the pattern firstname.surname@europarl.europa.eu. These are no longer publicly listed, so the guess may not always be correct.")
                 sections.append("")
 
+        # Rapporteur-by-country data
+        if context_data.rapporteur_by_country:
+            country = context_data.rapporteur_country or 'Unknown'
+            raps = context_data.rapporteur_by_country
+            sections.append(f"\nRAPPORTEURS FROM {country.upper()} ({len(raps)} found in Brubru database):")
+            sections.append("IMPORTANT: This is a PARTIAL list based on Brubru's tracked legislative files.")
+            sections.append("More rapporteurs may exist. Suggest the user check the EP website for a complete list.")
+            sections.append("")
+            for rap in raps:
+                line = f"- {rap['name']}"
+                if rap.get('political_group'):
+                    line += f" ({rap['political_group']})"
+                sections.append(line)
+                if rap.get('committee'):
+                    sections.append(f"  Committee: {rap['committee']}")
+                if rap.get('procedure_ref'):
+                    sections.append(f"  Procedure: {rap['procedure_ref']}")
+                if rap.get('file_title'):
+                    sections.append(f"  File: {rap['file_title']}")
+                sections.append("")
+
         # Committee information
         if context_data.committee_info:
             sections.append(f"\nCOMMITTEE INFORMATION ({len(context_data.committee_info)}):")
@@ -3049,11 +3690,15 @@ class ContextBuilder:
 
                 if 'Member' in members_by_role:
                     members = members_by_role['Member']
-                    sections.append(f"\n  Members ({len(members)}):")
-                    for member in members[:10]:  # Show first 10 members
+                    sections.append(f"\n  Full Members ({len(members)}):")
+                    for member in members:  # Show ALL members
                         sections.append(f"    - {member['name']} ({member['country']}, {member['group']})")
-                    if len(members) > 10:
-                        sections.append(f"    ... and {len(members) - 10} more members")
+
+                if 'Substitute' in members_by_role:
+                    substitutes = members_by_role['Substitute']
+                    sections.append(f"\n  Substitutes ({len(substitutes)}):")
+                    for member in substitutes:  # Show ALL substitutes
+                        sections.append(f"    - {member['name']} ({member['country']}, {member['group']})")
 
                 sections.append("")
 

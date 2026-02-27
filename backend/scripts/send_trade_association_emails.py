@@ -45,7 +45,7 @@ def _wrap_html(body_content: str) -> str:
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:24px 0 4px;">Best regards,</p>
 <p style="color:#1e293b;font-size:16px;line-height:1.4;margin:0;">
-<strong>Victor Sole Ferioli</strong><br/>
+<strong>Victor Sol&eacute; Ferioli</strong><br/>
 Founder &amp; Director, Beresol BV<br/>
 Brussels | <a href="mailto:hello@beresol.eu" style="color:#0693e3;text-decoration:none;">hello@beresol.eu</a>
 </p>
@@ -82,7 +82,7 @@ TIER_1_EMAILS = [
 <li><strong>Legislation tracking:</strong> monitors the AI Act, DORA, NIS2, and 490+ other EU legislative files, with 26 EP committee work programmes and EC public consultations.</li>
 <li><strong>Document generation:</strong> drafts position papers, MEP briefings, EP resolutions, talking points, and consultation responses tailored to your policy objectives.</li>
 <li><strong>Amendment tools:</strong> drafts EU legislative amendments in Akoma Ntoso XML format, tracks all MEP amendments across procedures, and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 <li><strong>EU officials directory:</strong> access information on officials across all EU institutions to support your institutional engagement.</li>
 </ul>
 
@@ -108,7 +108,7 @@ TIER_1_EMAILS = [
 <li><strong>Monitors EU legislative developments:</strong> tracks automotive, digital, and trade policy files with updates from the EP, Council, and Commission, plus 26 EP committee work programmes.</li>
 <li><strong>Drafts key documents:</strong> generates position papers, MEP briefings, EP resolutions, talking points, and consultation responses tailored to your company's regulatory objectives.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Whether as a bridge while you recruit or as a permanent augmentation to your Brussels team, Brubru delivers policy intelligence at a fraction of the cost of a full-time hire.</p>
@@ -133,7 +133,7 @@ TIER_1_EMAILS = [
 <li><strong>Financial services regulation tracking:</strong> monitors PSD3, MiCA, DORA, AML packages, and related EU legislative files across 26 EP committee work programmes.</li>
 <li><strong>Document generation:</strong> drafts consultation responses, position papers, MEP briefings, and talking points tailored to PayPal's policy positions.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Brubru augments your team's capacity instantly: no recruitment timeline, no onboarding. It's already used by EU policy professionals tracking 490+ legislative files.</p>
@@ -158,7 +158,7 @@ TIER_1_EMAILS = [
 <li><strong>Legislation tracking:</strong> monitors 490+ EU legislative files and 26 EP committee work programmes, from early-stage Commission proposals through EP committee votes to Council positions.</li>
 <li><strong>Document generation:</strong> drafts position papers, MEP briefings, EP resolutions, talking points, and consultation responses that your lawyers can refine for client-facing outputs.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies across competition, digital, sustainability, and other dossiers.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a law firm managing multiple EU dossiers across practice groups, Brubru provides always-on legislative intelligence that complements your EU Law &amp; Policy team at a fraction of a full-time hire.</p>
@@ -180,10 +180,10 @@ TIER_1_EMAILS = [
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Managing this many interconnected EU files simultaneously is exactly why we built Brubru. It's an AI-powered EU policy intelligence platform that:</p>
 
 <ul style="color:#475569;font-size:16px;line-height:1.8;margin:0 0 16px;padding-left:24px;">
-<li><strong>Tracks multiple EU dossiers in parallel:</strong> DPP, CSRD, PPWR, product safety, and traceability files with updates from EP committees, Council working parties, and Commission proceedings.</li>
+<li><strong>Tracks multiple EU dossiers in parallel:</strong> monitors DPP, CSRD, PPWR, product safety, and traceability files with updates from EP committees, Council working parties, and Commission proceedings.</li>
 <li><strong>Document generation:</strong> drafts consultation responses, position papers, MEP briefings, and talking points aligned to your organisation's standards expertise.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For an organisation tracking as many interconnected EU files as GS1, Brubru provides the systematic coverage that even a well-resourced policy team struggles to maintain manually.</p>
@@ -206,9 +206,9 @@ TIER_1_EMAILS = [
 
 <ul style="color:#475569;font-size:16px;line-height:1.8;margin:0 0 16px;padding-left:24px;">
 <li><strong>Automated legislative monitoring:</strong> tracks 490+ EU legislative files, EP committee votes, Council positions, and Commission proceedings.</li>
-<li><strong>Data-driven predictions:</strong> AI-generated legislative timeline predictions, EP plenary vote forecasts, and Council QMV calculations.</li>
+<li><strong>Data-driven predictions:</strong> generates legislative timeline predictions, EP plenary vote forecasts, and Council QMV calculations using AI.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure, with filtering by political group, author, and committee, plus alignment analysis against policy positions.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a division that produces "ready-to-use reports distilling complex regulatory developments into clear, digestible insights" (your words), Brubru provides the underlying intelligence infrastructure that scales your analysts' output.</p>
@@ -239,7 +239,7 @@ TIER_2_EMAILS = [
 <li><strong>Legislation tracking:</strong> monitors 490+ EU legislative files across digital, mobility, AI, gig economy, and sustainability dossiers, with 26 EP committee work programmes.</li>
 <li><strong>Document generation:</strong> drafts position papers, MEP briefings, EP resolutions, talking points, and consultation responses tailored to your policy objectives.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a team managing policy influence across multiple countries and policy domains, Brubru provides the systematic intelligence layer that keeps you ahead of developments at a fraction of the cost of additional headcount.</p>
@@ -264,7 +264,7 @@ TIER_2_EMAILS = [
 <li><strong>Legislation tracking:</strong> monitors 490+ EU legislative files across digital markets, AI regulation, data governance, sustainability, and competition dossiers, with 26 EP committee work programmes.</li>
 <li><strong>Document generation:</strong> drafts position papers, MEP briefings, talking points, and consultation responses from live legislative data, ready for your team's review.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a team managing EU policy communications across multiple dossiers, Brubru provides the intelligence infrastructure that accelerates your workflow.</p>
@@ -289,7 +289,7 @@ TIER_2_EMAILS = [
 <li><strong>Media regulation tracking:</strong> monitors copyright, AI, content protection, media regulation, DSA, and DMA dossiers with updates from EP committees, Council, and Commission.</li>
 <li><strong>Document generation:</strong> drafts position papers, MEP briefings, talking points, and consultation responses tailored to your regulatory objectives.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for media and digital regulation files and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a team managing regulatory affairs across multiple EU media and digital dossiers, Brubru provides the systematic coverage that complements your Brussels office.</p>
@@ -314,7 +314,7 @@ TIER_2_EMAILS = [
 <li><strong>Healthcare regulation tracking:</strong> monitors HTA regulation, EHDS, pharmaceutical legislation review, medical device regulation, and related dossiers with updates from EP committees, Council, and Commission.</li>
 <li><strong>Document generation:</strong> drafts consultation responses, position papers, MEP briefings, and talking points tailored to your healthcare policy objectives.</li>
 <li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies.</li>
-<li><strong>EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with a daily digest and deep-links to tracked legislative files.</li>
 </ul>
 
 <p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a newly independent company building its European government affairs function, Brubru provides immediate policy intelligence capacity while you recruit and onboard your team.</p>
@@ -404,9 +404,115 @@ TIER_3_EMAILS = [
 ]
 
 
+# ─── Wave 2 Email Data (26 Feb 2026) ─────────────────────────────────────────
+
+WAVE_2_EMAILS = [
+    {
+        "tier": 4,
+        "company": "ABB Robotics",
+        "contact": "Marc Mustard",
+        "email": "Marc.Mustard@us.abb.com",
+        "confidence": "MEDIUM",
+        "subject": "ABB Robotics Brussels: EU policy intelligence from day one",
+        "html_body": _wrap_html("""
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Dear Marc,</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">I noticed ABB Robotics is establishing a Government Relations &amp; Public Affairs office in Brussels, with a VP-level hire to lead EU advocacy across AI, automation, trade, and sustainability policy.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Building a GRPA function from scratch takes time. While you recruit and onboard, <strong>Brubru</strong>, our AI-powered EU policy intelligence platform, provides immediate coverage:</p>
+
+<ul style="color:#475569;font-size:16px;line-height:1.8;margin:0 0 16px;padding-left:24px;">
+<li><strong>AI and digital regulation tracking:</strong> monitors the AI Act, DORA, NIS2, Data Act, and 490+ other EU legislative files in real-time, with 26 EP committee work programmes.</li>
+<li><strong>Document generation:</strong> drafts position papers, MEP briefings, talking points, and consultation responses tailored to your policy objectives.</li>
+<li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with deep-links to tracked legislative files.</li>
+</ul>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a company establishing its EU government affairs presence, Brubru provides structured intelligence from day one, with no ramp-up period and no knowledge gaps.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Would a 15-minute demo focused on AI and industrial policy dossiers be useful?</p>"""),
+    },
+    {
+        "tier": 4,
+        "company": "EY",
+        "contact": "Monica Pesce",
+        "email": "monica.pesce@ey.com",
+        "confidence": "MEDIUM",
+        "subject": "EY EU Advisory: AI-powered legislative intelligence for your policy analysts",
+        "html_body": _wrap_html("""
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Dear Monica,</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">I noticed EY's EU Advisory division is recruiting two Senior Managers in Diegem: one for the space and digital team (DG DEFIS, EUSPA, CNCT) and one for EU institutions advisory across DG GROW, DG JUST, DG FISMA, and others.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Managing framework contracts across that many Directorates-General requires systematic legislative monitoring. <strong>Brubru</strong>, our AI-powered EU policy intelligence platform, provides capabilities relevant to your EU Advisory team:</p>
+
+<ul style="color:#475569;font-size:16px;line-height:1.8;margin:0 0 16px;padding-left:24px;">
+<li><strong>Cross-DG legislative tracking:</strong> monitors 490+ EU legislative files in real-time, covering every policy domain your teams work on, from space and digital to financial services, industrial policy, and sustainability.</li>
+<li><strong>Policy briefing generation:</strong> drafts policy analyses, consultation responses, and position papers from live legislative data, ready for your consultants to refine for client deliverables.</li>
+<li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure with political alignment analysis, useful for impact assessments and stakeholder mapping.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, helping your teams track upcoming institutional events across all DGs.</li>
+</ul>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For an EU Advisory practice managing multiple DG relationships simultaneously, Brubru provides the systematic intelligence layer that scales with your project portfolio.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Would a brief demo tailored to your EU institutions practice be useful?</p>"""),
+    },
+    {
+        "tier": 4,
+        "company": "AstraZeneca",
+        "contact": "Tijs Neutens",
+        "email": "tijs.neutens@astrazeneca.com",
+        "confidence": "HIGH",
+        "subject": "AstraZeneca BeLux: AI-powered healthcare policy intelligence",
+        "html_body": _wrap_html("""
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Dear Tijs,</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">I noticed AstraZeneca is recruiting a Government Affairs Lead for Belgium and Luxembourg to monitor healthcare policy, develop evidence-based positions, draft consultation responses, and engage with policymakers across pharma regulation, HTA, and market access.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">These are precisely the tasks <strong>Brubru</strong> was built to handle. Brubru is an AI-powered EU policy intelligence platform that:</p>
+
+<ul style="color:#475569;font-size:16px;line-height:1.8;margin:0 0 16px;padding-left:24px;">
+<li><strong>Tracks healthcare regulation:</strong> monitors the EU pharmaceutical legislation revision, HTA Regulation, EHDS, Critical Medicines Act, and related dossiers with updates from EP committees, Council, and Commission.</li>
+<li><strong>Generates advocacy materials:</strong> drafts consultation responses, position papers, MEP briefings, and talking points tailored to your healthcare policy objectives.</li>
+<li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for any legislative procedure and compares them against your positions to identify political allies across ENVI, ITRE, and other relevant committees.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with deep-links to tracked legislative files.</li>
+</ul>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Whether as a complement to your new Government Affairs Lead or as immediate coverage while you onboard, Brubru provides systematic healthcare policy intelligence at a fraction of additional headcount.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Would a 15-minute demo focused on pharma regulation and HTA dossiers be useful?</p>"""),
+    },
+    {
+        "tier": 4,
+        "company": "Deutsche Bank",
+        "contact": "Malte Kilian",
+        "email": "malte.kilian@db.com",
+        "confidence": "MEDIUM-HIGH",
+        "subject": "Deutsche Bank Brussels: AI-powered financial regulation intelligence",
+        "html_body": _wrap_html("""
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Dear Malte,</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">I noticed Deutsche Bank is expanding its Brussels Government &amp; Public Affairs team with a Head of Office role to steer EU regulatory analysis and position the bank as a thought leader in EU financial services policy.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;"><strong>Brubru</strong>, our AI-powered EU policy intelligence platform, provides capabilities directly relevant to your Brussels team:</p>
+
+<ul style="color:#475569;font-size:16px;line-height:1.8;margin:0 0 16px;padding-left:24px;">
+<li><strong>Financial regulation tracking:</strong> monitors PSD3/PSR, AML Package, MiCA, DORA, Banking Union, and related EU financial services dossiers with real-time updates from EP committees, Council working parties, and Commission proceedings.</li>
+<li><strong>Document generation:</strong> drafts position papers, MEP briefings, talking points, and consultation responses from live legislative data.</li>
+<li><strong>MEP amendment tracking:</strong> fetches all MEP amendments for financial services procedures and compares them against your positions to identify political allies across ECON and other committees.</li>
+<li><strong>My EU Calendar:</strong> unified calendar covering EP plenary sessions, Council meetings, and Commission college meetings, with deep-links to tracked legislative files.</li>
+</ul>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">For a Brussels team managing EU regulatory intelligence across multiple financial services dossiers, Brubru provides the systematic monitoring layer that augments your analysts' capacity.</p>
+
+<p style="color:#475569;font-size:16px;line-height:1.7;margin:0 0 16px;">Would a brief demo focused on financial services regulation be useful?</p>"""),
+    },
+]
+
+
 # ─── Combined list ────────────────────────────────────────────────────────────
 
-ALL_EMAILS = TIER_1_EMAILS + TIER_2_EMAILS + TIER_3_EMAILS
+ALL_EMAILS = TIER_1_EMAILS + TIER_2_EMAILS + TIER_3_EMAILS + WAVE_2_EMAILS
 
 
 def _filter_emails(tiers: list[int] = None, company: str = None) -> list[dict]:
@@ -505,8 +611,8 @@ def main():
     group.add_argument("--dry-run", action="store_true", help="Preview without sending")
     group.add_argument("--send", action="store_true", help="Actually send the emails")
     group.add_argument("--preview", action="store_true", help="Show email summary only")
-    parser.add_argument("--tier", type=int, choices=[1, 2, 3], action="append",
-                        help="Filter by tier (can be repeated, e.g. --tier 2 --tier 3)")
+    parser.add_argument("--tier", type=int, choices=[1, 2, 3, 4], action="append",
+                        help="Filter by tier (can be repeated, e.g. --tier 2 --tier 3, tier 4 = Wave 2)")
     parser.add_argument("--company", type=str, help="Send to a specific company only")
     args = parser.parse_args()
 

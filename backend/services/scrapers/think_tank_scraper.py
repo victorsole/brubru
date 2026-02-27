@@ -17,6 +17,7 @@ studies, and in-depth analyses
 """
 
 import logging
+import re
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 from pathlib import Path
@@ -577,6 +578,14 @@ class ThinkTankScraper(BaseScraper):
     # HELPER METHODS
     # ========================================================================
 
+    # Mapping from EPRS document short codes to RegData folder names
+    EPRS_CODE_TO_FOLDER = {
+        "ATA": "ATAG",    # At a Glance
+        "BRI": "BRIE",    # Briefing
+        "IDA": "IDAN",    # In-Depth Analysis
+        "STU": "STUD",    # Study
+    }
+
     def _extract_pdf_url_from_rss(self, pub_data: Dict[str, Any]) -> Optional[str]:
         """
         Extract PDF URL from RSS entry data.
@@ -585,6 +594,8 @@ class ThinkTankScraper(BaseScraper):
         1. Direct 'pdf_url' field
         2. Link ending in .pdf
         3. Enclosures
+        4. europarl.europa.eu document reference in RSS content
+        5. Scrape blog post page for europarl link (async fallback)
         """
         # Check direct pdf_url field
         if 'pdf_url' in pub_data:
@@ -601,19 +612,72 @@ class ThinkTankScraper(BaseScraper):
                 if enclosure.get('type', '').startswith('application/pdf'):
                     return enclosure.get('url')
 
-        # Fallback: construct typical EPRS PDF URL pattern
-        # Many EPRS PDFs follow pattern: epthinktank.eu/.../document.pdf
-        if 'epthinktank.eu' in link:
-            # Try adding /document.pdf
-            base_url = link.rstrip('/')
-            potential_pdf = f"{base_url}/document.pdf"
-            return potential_pdf
+        # Parse europarl document reference from RSS content:encoded
+        # The epthinktank.eu blog posts embed links like:
+        #   href="https://www.europarl.europa.eu/thinktank/en/document/EPRS_ATA(2026)782665"
+        content = pub_data.get('content', '')
+        pdf_url = self._extract_pdf_from_europarl_ref(content)
+        if pdf_url:
+            return pdf_url
+
+        # Also check summary (sometimes contains the link)
+        summary = pub_data.get('summary', '')
+        pdf_url = self._extract_pdf_from_europarl_ref(summary)
+        if pdf_url:
+            return pdf_url
 
         return None
+
+    def _extract_pdf_from_europarl_ref(self, html_content: str) -> Optional[str]:
+        """
+        Extract PDF URL from europarl.europa.eu document reference in HTML.
+
+        Parses links like:
+            https://www.europarl.europa.eu/thinktank/en/document/EPRS_ATA(2026)782665
+
+        Constructs PDF URL:
+            https://www.europarl.europa.eu/RegData/etudes/ATAG/2026/782665/EPRS_ATA(2026)782665_EN.pdf
+
+        Returns:
+            PDF URL or None
+        """
+        if not html_content:
+            return None
+
+        # Pattern: EPRS_{CODE}({YEAR}){ID}
+        # e.g., EPRS_ATA(2026)782665, EPRS_BRI(2025)123456
+        match = re.search(
+            r'(EPRS_([A-Z]{3})\((\d{4})\)(\d+))',
+            html_content
+        )
+        if not match:
+            return None
+
+        full_code = match.group(1)   # EPRS_ATA(2026)782665
+        short_code = match.group(2)  # ATA
+        year = match.group(3)        # 2026
+        doc_id = match.group(4)      # 782665
+
+        folder = self.EPRS_CODE_TO_FOLDER.get(short_code)
+        if not folder:
+            logger.warning(f"Unknown EPRS code '{short_code}' in {full_code}")
+            return None
+
+        pdf_url = (
+            f"https://www.europarl.europa.eu/RegData/etudes/"
+            f"{folder}/{year}/{doc_id}/{full_code}_EN.pdf"
+        )
+        logger.debug(f"Constructed PDF URL from europarl ref: {pdf_url}")
+        return pdf_url
 
     async def _find_pdf_url(self, page_url: str) -> Optional[str]:
         """
         Find PDF URL by scraping the publication page.
+
+        Strategy:
+        1. Fetch blog post HTML
+        2. Look for europarl.europa.eu document reference -> construct PDF URL
+        3. Fallback: look for any .pdf link
 
         Args:
             page_url: HTML page URL
@@ -623,18 +687,23 @@ class ThinkTankScraper(BaseScraper):
         """
         try:
             import aiohttp
-            from bs4 import BeautifulSoup
 
             async with aiohttp.ClientSession() as session:
                 async with session.get(page_url) as response:
                     html = await response.text()
+
+                    # Try europarl document reference first
+                    pdf_url = self._extract_pdf_from_europarl_ref(html)
+                    if pdf_url:
+                        return pdf_url
+
+                    # Fallback: find any .pdf link
+                    from bs4 import BeautifulSoup
                     soup = BeautifulSoup(html, 'html.parser')
 
-                    # Find PDF links
                     for link in soup.find_all('a', href=True):
                         href = link['href']
                         if href.endswith('.pdf'):
-                            # Make absolute URL
                             if href.startswith('http'):
                                 return href
                             else:

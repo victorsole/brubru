@@ -468,6 +468,10 @@ When Brubru Chat matches a legislative file, it enriches the AI context with **s
 
 **Full reference:** See `memory/integrations.md` -> Consultations section. "Have Your Say" portal integration. Subscribers: full access. Professional only: AI proposals. No subscription: CTA. CLI: `python scripts/sync_consultations.py --status open`. API: `GET /api/consultations`, `POST /api/consultations/sync` (Admin). Key files: `services/scrapers/public_consultation_scraper.py`, `api/public_consultations.py`.
 
+### EPRS Database Integration (February 2026)
+
+**Full reference:** See `memory/integrations.md` -> EPRS Database Integration section. EPRS publications synced from RSS to PostgreSQL. **Chatbot-only** -- no UI tab. CLI: `python scripts/sync_eprs_publications.py --days 14` (metadata), `--enrich` (PDF extraction). API: `GET /api/eprs/publications`, `POST /api/eprs/sync` (Blue tier). Context builder does two-pass search: PostgreSQL first (CELEX/procedure/text), ChromaDB semantic second. Key files: `models/eprs_publication.py`, `services/scrapers/eprs_sync_service.py`, `api/eprs.py`.
+
 ### SQLAlchemy `metadata` Reserved Attribute (January 2025)
 
 SQLAlchemy models have a **built-in `metadata` attribute** that conflicts with custom fields named `metadata`.
@@ -513,62 +517,11 @@ If Vite reports "Port 5173 is in use, trying another one...", stop and free the 
 
 ### Markdown Rendering in React (January 2025)
 
-When displaying AI-generated content that uses Markdown formatting, use the `marked` library to render it as HTML.
-
-**Pattern:**
-```tsx
-import { marked } from 'marked';
-
-// Render Markdown content
-<div
-  className="markdown-content"
-  dangerouslySetInnerHTML={{ __html: marked.parse(content) as string }}
-/>
-```
-
-**CSS for Markdown content:**
-```css
-.markdown-content h1 { font-size: 1.5rem; border-bottom: 2px solid #0066cc; }
-.markdown-content h2 { font-size: 1.25rem; margin: 1.5rem 0 0.75rem 0; }
-.markdown-content p { margin: 0 0 1rem 0; line-height: 1.7; }
-.markdown-content ul, .markdown-content ol { padding-left: 1.5rem; }
-.markdown-content li { margin-bottom: 0.5rem; }
-```
-
-**Used in:**
-- `frontend/src/components/bubble/document_generator_wizard.tsx`
+Use `marked` library: `<div dangerouslySetInnerHTML={{ __html: marked.parse(content) as string }} className="markdown-content" />`. CSS class `.markdown-content` styles headings/lists. Used in `document_generator_wizard.tsx`.
 
 ### EUR-Lex Parser: COM Documents vs OJ Documents (January 2025)
 
-The `EurlexParser` now handles **two distinct document formats**:
-
-| Format | CELEX Pattern | Document Type | Example |
-|--------|---------------|---------------|---------|
-| **OJ (Official Journal)** | Starts with `3` | Adopted legislation | `32024R1689` (AI Act) |
-| **COM (Commission)** | Starts with `5` | Legislative proposals | `52021PC0206` (AI Act proposal) |
-
-**Why this matters:** The Legislative Train tracks **proposals** (COM documents), not adopted laws. The parser auto-detects the format and uses appropriate extraction methods.
-
-**CSS classes by format:**
-
-| Element | OJ Format | COM Format |
-|---------|-----------|------------|
-| Recitals | `div.eli-subdivision[id^="rct_"]` | `p.ManualConsidrant` |
-| Articles | `p.oj-ti-art` | `p.ManualHeading1/2/3` or actual "Article X" |
-| Title | `.oj-doc-ti` | `.Titreobjet`, `.Titreobjet_cp` |
-
-**Detection logic** (`_detect_com_document()`):
-```python
-# COM documents have specific CSS classes
-com_indicators = [
-    soup.select_one('.ManualConsidrant'),
-    soup.select_one('.ManualHeading1'),
-    soup.select_one('.Typedudocument'),
-]
-# Also checks for "COM(2021) 206" pattern in text
-```
-
-**File:** `backend/services/parsers/eurlex_parser.py`
+`EurlexParser` handles two formats: **OJ** (CELEX starts with `3`, adopted legislation, CSS: `.oj-doc-ti`, `.oj-ti-art`) and **COM** (CELEX starts with `5`, proposals, CSS: `.Titreobjet`, `.ManualConsidrant`). Auto-detects via `_detect_com_document()`. File: `backend/services/parsers/eurlex_parser.py`.
 
 ### Legislative Train OEIL Data Quality (January 2025)
 
@@ -591,52 +544,7 @@ com_indicators = [
 
 ### No Emojis - Use MDI Icons (January 2025)
 
-**Never use emojis in the codebase.** Use Material Design Icons (MDI) instead.
-
-**Why:** Emojis render inconsistently across platforms and don't match the professional UI aesthetic.
-
-**Frontend - Use MDI icon classes:**
-```tsx
-// Bad - emoji
-<span>📄 Document</span>
-<li>✓ Feature included</li>
-
-// Good - MDI icons
-<span className="mdi mdi-file-document"></span> Document
-<li><span className="mdi mdi-check"></span> Feature included</li>
-```
-
-**Common MDI replacements:**
-| Emoji | MDI Class | Usage |
-|-------|-----------|-------|
-| ✓ ✅ | `mdi-check` | Success, included |
-| ✗ ❌ | `mdi-close` | Error, excluded |
-| ⚠️ | `mdi-alert` | Warning |
-| 📄 | `mdi-file-document` | Document |
-| 📎 | `mdi-paperclip` | Attachment |
-| 🔍 | `mdi-magnify` | Search |
-| ▶ | `mdi-chevron-right` | Expand/navigate |
-| 🤍 💛 💙 | `mdi-heart-outline` / `mdi-heart` | Tier badges (with CSS color) |
-
-**Backend console logging - Use text prefixes:**
-```python
-# Bad - emoji
-print("🚀 Starting server...")
-print("✅ Database connected")
-
-# Good - text prefix
-print("[START] Starting server...")
-print("[OK] Database connected")
-```
-
-**Standard logging prefixes:**
-- `[OK]` - Success
-- `[INFO]` - Information
-- `[WARN]` - Warning
-- `[ERROR]` - Error
-- `[START]` / `[STOP]` - Lifecycle events
-
-**Note:** The € symbol and accented characters (é, ñ, etc.) are NOT emojis and should be used as-is.
+**Never use emojis in the codebase.** Frontend: use MDI icon classes (`mdi-check`, `mdi-close`, `mdi-alert`, `mdi-file-document`, `mdi-magnify`). Backend logging: use text prefixes `[OK]`, `[INFO]`, `[WARN]`, `[ERROR]`, `[START]`/`[STOP]`. The € symbol and accented characters (é, ñ) are NOT emojis.
 
 ### Standalone HTML Files Must Follow Brubru Aesthetics (February 2026)
 
@@ -653,94 +561,11 @@ print("[OK] Database connected")
 | **Background** | White (`#ffffff`) -- never dark/black backgrounds |
 | **Paths** | Use **relative paths** (`../assets/`, `../New-Yorker-Font/`) so files work both locally and when served |
 
-**Font declaration template (copy into every standalone HTML):**
-
-```html
-<style>
-@font-face {
-  font-family: 'Adobe Caslon Pro';
-  src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Adobe Caslon Pro';
-  src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
-  font-weight: 600; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: 'Adobe Caslon Pro';
-  src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-body {
-  font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
-}
-</style>
-```
-
-**Why relative paths:** Absolute paths (`/assets/...`) only work when served by the web server. Relative paths (`../assets/...`) work both when opened locally as a file AND when served. Since standalone HTML files live in `public/analytics/`, use `../` to reach `public/assets/` and `public/New-Yorker-Font/`.
+**Font:** Use `@font-face` with Adobe Caslon Pro (Regular/Semibold/Bold `.otf` from `New-Yorker-Font/`). Use **relative paths** (`../New-Yorker-Font/`, `../assets/`) since files live in `public/analytics/`.
 
 ### Header Icon Navigation (January 2025)
 
-The header navigation uses **animated icon buttons** instead of text links. Each button displays only an icon by default, expands to show a label on hover, and maintains its accent color when active.
-
-**Navigation items and colours:**
-
-| Route | Icon | Colour | Label |
-|-------|------|--------|-------|
-| `/main` | `mdiChatProcessingOutline` | Blue (`#0693e3`) | Main |
-| `/my-eu-bubble` | `mdiGlassMugVariant` | Purple (`#9b51e0`) | My EU Bubble |
-| `/amendator` | `mdiFileEditOutline` | Green (`#059669`) | Amendator |
-| `/eulawcomply` | `mdiScaleBalance` | Silver (`#9ca3af`) | EU Law Comply |
-| `/tenderator` | `mdiPiggyBankOutline` | Gold (`#d97706`) | Tenderator (Professional plan only) |
-
-**CSS pattern:**
-```css
-/* Base icon button */
-.header__nav-icon-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-/* Hover: expand and show label */
-.header__nav-icon-btn:hover {
-  width: auto;
-  gap: 8px;
-}
-
-/* Colour variants */
-.header__nav-icon-btn--blue.header__nav-icon-btn--active {
-  color: var(--nav-color-main);
-}
-```
-
-**React pattern:**
-```tsx
-import Icon from '@mdi/react';
-import { mdiChatProcessingOutline } from '@mdi/js';
-
-const navItems = [
-  { path: '/main', icon: mdiChatProcessingOutline, labelKey: 'header.main', color: 'blue' },
-  // ...
-];
-
-{navItems.map((item) => (
-  <Link
-    to={item.path}
-    className={`header__nav-icon-btn header__nav-icon-btn--${item.color}${active ? ' header__nav-icon-btn--active' : ''}`}
-    aria-label={t(item.labelKey)}
-  >
-    <Icon path={item.icon} size={1} />
-    <span className="header__nav-icon-label">{t(item.labelKey)}</span>
-  </Link>
-))}
-```
-
-**Files:**
-- `frontend/src/components/shared/header.tsx`
-- `frontend/src/components/shared/header.css`
+Header uses animated MDI icon buttons (icon-only, expand on hover). Nav colours: Main=Blue(`#0693e3`), Bubble=Purple(`#9b51e0`), Amendator=Green(`#059669`), Comply=Silver(`#9ca3af`), Tenderator=Gold(`#d97706`). CSS class: `.header__nav-icon-btn--{color}`. Files: `frontend/src/components/shared/header.tsx`, `header.css`.
 
 ### Feature Completion Checklist (January 2026)
 
@@ -765,60 +590,11 @@ const navItems = [
 
 ### Multi-Provider AI System (January 2026)
 
-Brubru uses a **4-tier AI provider fallback chain** for cost-effectiveness and resilience:
-
-| Priority | Provider | Model | Cost (per 1M tokens) | Use Case |
-|----------|----------|-------|---------------------|----------|
-| 1 (Primary) | **Mistral** | `mistral-small-latest` | $0.20 input / $0.60 output | Default for all requests |
-| 2 (Fallback) | Anthropic | `claude-sonnet-4-20250514` | $3.00 input / $15.00 output | Complex reasoning |
-| 3 (Fallback) | OpenAI | `gpt-4-turbo-preview` | $10.00 input / $30.00 output | If Claude fails |
-| 4 (Fallback) | Google | `gemini-1.5-pro` | $1.25 input / $5.00 output | Last resort |
-
-**Why Mistral is primary:** 15x cheaper than Claude with comparable quality for EU policy questions.
-
-**Environment Variables:**
-```env
-MISTRAL_API_KEY=xxx      # Get from console.mistral.ai
-ANTHROPIC_API_KEY=xxx    # Fallback 1
-OPENAI_API_KEY=xxx       # Fallback 2
-GOOGLE_GEMINI_API_KEY=xxx  # Fallback 3 (optional)
-```
-
-**Key Files:**
-- `backend/services/ai/multi_provider_service.py` - Provider abstraction + fallback chain
-- `backend/core/config.py` - API key configuration
-
-**Testing the provider chain:**
-```python
-from services.ai.multi_provider_service import get_multi_provider_service
-
-service = get_multi_provider_service()
-print(service.available_providers)  # ['Mistral', 'Anthropic', 'OpenAI', 'Gemini']
-print(service.primary_provider)     # 'Mistral'
-```
+4-tier fallback: Mistral (`mistral-small-latest`, primary, 15x cheaper) -> Claude (`claude-sonnet-4-20250514`) -> GPT-4 -> Gemini. Key file: `backend/services/ai/multi_provider_service.py`.
 
 ### RSS AI Enrichment - On-Demand Only (January 2026)
 
-**Problem:** Automatic AI enrichment of RSS entries was costing ~$5/day by calling Claude for every entry.
-
-**Solution:** AI enrichment is now **on-demand only**. The `RSSProcessor` defaults to `enable_ai_enrichment=False`.
-
-**How to trigger enrichment:**
-```bash
-# API endpoint for on-demand enrichment
-POST /api/rss/entries/{entry_id}/enrich
-```
-
-**What gets enriched:**
-- Policy area classification
-- Entity extraction (people, organizations, places)
-- CELEX number detection (regex - no AI cost)
-- Procedure reference detection (regex - no AI cost)
-- Sentiment analysis
-
-**Files changed:**
-- `backend/services/rss/rss_processor.py` - Default changed to `enable_ai_enrichment=False`
-- `backend/api/rss_feeds.py` - Added `/entries/{entry_id}/enrich` endpoint
+AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to avoid $5/day cost. Trigger via `POST /api/rss/entries/{entry_id}/enrich`. Files: `services/rss/rss_processor.py`, `api/rss_feeds.py`.
 
 ### EP Group Position Colours (February 2026)
 
@@ -834,25 +610,9 @@ In the Predictions tab EP Political Group Breakdown, each position type needs a 
 **Files:**
 - `frontend/src/components/bubble/predictions_tab.css` - CSS classes for bar fill and position text
 
-### Resolution Leading Indicators Implementation (February 2026)
+### Resolution Leading Indicators (February 2026)
 
-Resolution Leading Indicators show EP resolutions (INL, INI, RSP) that preceded legislative procedures as predictive signals.
-
-**Backend:**
-- `services/matching/resolution_legislation_matcher.py` - Added `find_resolutions_for_legislation()` and `find_related_resolutions_by_similarity()` functions
-- `api/predictions.py` - Added `GET /api/predictions/resolutions/{procedure_ref:path}` endpoint
-
-**Frontend:**
-- `services/prediction_service.ts` - Added `ResolutionIndicator` types and `getResolutionLeadingIndicators()` function
-- `components/bubble/predictions_tab.tsx` - Added `ResolutionIndicatorRow` component
-- `components/bubble/predictions_tab.css` - Added 200+ lines of resolution styling
-
-**Match Methods (confidence):**
-- `OEIL_CROSSREF` (1.0) - Explicit OEIL link
-- `COMMISSION_FOLLOWUP` (0.9) - Commission follow-up document
-- `TITLE_SIMILARITY` (0.5-0.8) - Title word overlap
-
-**Documentation:** `docs/predictions.md` Section 12.9
+EP resolutions (INL, INI, RSP) as predictive signals for legislative procedures. Match methods: OEIL_CROSSREF (1.0), COMMISSION_FOLLOWUP (0.9), TITLE_SIMILARITY (0.5-0.8). Key files: `services/matching/resolution_legislation_matcher.py`, `api/predictions.py`, `predictions_tab.tsx`. Docs: `docs/predictions.md` Section 12.9.
 
 ### Responsive Design Requirement (February 2026)
 

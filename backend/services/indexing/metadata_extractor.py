@@ -16,6 +16,8 @@ import re
 from typing import List, Dict, Any, Optional, Set
 from datetime import datetime
 
+from knowledge_base.ep_committees import EP_COMMITTEES, EP_COMMITTEE_BY_CODE
+
 logger = logging.getLogger(__name__)
 
 
@@ -53,29 +55,68 @@ class MetadataExtractor:
         'regulation': re.compile(r'\bRegulation\s+(?:\(EU\)\s+)?(\d{4}/\d+)\b', re.IGNORECASE),
     }
 
-    # Known EU committees
-    EU_COMMITTEES = {
-        'AFET': 'Foreign Affairs',
-        'DEVE': 'Development',
-        'INTA': 'International Trade',
-        'BUDG': 'Budgets',
-        'CONT': 'Budgetary Control',
-        'ECON': 'Economic and Monetary Affairs',
-        'EMPL': 'Employment and Social Affairs',
-        'ENVI': 'Environment, Public Health and Food Safety',
-        'ITRE': 'Industry, Research and Energy',
-        'IMCO': 'Internal Market and Consumer Protection',
-        'TRAN': 'Transport and Tourism',
-        'REGI': 'Regional Development',
-        'AGRI': 'Agriculture and Rural Development',
-        'PECH': 'Fisheries',
-        'CULT': 'Culture and Education',
-        'JURI': 'Legal Affairs',
-        'LIBE': 'Civil Liberties, Justice and Home Affairs',
-        'AFCO': 'Constitutional Affairs',
-        'FEMM': 'Women\'s Rights and Gender Equality',
-        'PETI': 'Petitions'
-    }
+    # Known EU committees (all 26, sourced from ep_committees.py)
+    EU_COMMITTEES = {c.code: c.name for c in EP_COMMITTEES}
+
+    # Reverse lookup: natural language names -> committee code
+    # Maps lowercase keywords to committee codes for conversational matching
+    _COMMITTEE_NAME_LOOKUP: Dict[str, str] = {}
+    for _c in EP_COMMITTEES:
+        # Full name: "Committee on Environment, Public Health and Food Safety" -> ENVI
+        _COMMITTEE_NAME_LOOKUP[_c.full_name.lower()] = _c.code
+        # Short name: "Environment, Public Health and Food Safety" -> ENVI
+        _COMMITTEE_NAME_LOOKUP[_c.name.lower()] = _c.code
+        # First word of short name as keyword: "environment" -> ENVI
+        _first_word = _c.name.split(',')[0].split(' and ')[0].strip().lower()
+        if len(_first_word) > 4:  # Avoid short ambiguous words
+            _COMMITTEE_NAME_LOOKUP[_first_word] = _c.code
+
+    # Additional common shorthand/colloquial names
+    _COMMITTEE_NAME_LOOKUP.update({
+        'foreign affairs': 'AFET',
+        'human rights': 'DROI',
+        'defence': 'SEDE',
+        'security': 'SEDE',
+        'development': 'DEVE',
+        'trade': 'INTA',
+        'international trade': 'INTA',
+        'budget': 'BUDG',
+        'budgets': 'BUDG',
+        'budgetary control': 'CONT',
+        'economic affairs': 'ECON',
+        'monetary affairs': 'ECON',
+        'employment': 'EMPL',
+        'social affairs': 'EMPL',
+        'environment': 'ENVI',
+        'public health': 'SANT',
+        'health': 'SANT',
+        'industry': 'ITRE',
+        'research': 'ITRE',
+        'energy': 'ITRE',
+        'internal market': 'IMCO',
+        'consumer protection': 'IMCO',
+        'transport': 'TRAN',
+        'tourism': 'TRAN',
+        'regional development': 'REGI',
+        'cohesion': 'REGI',
+        'agriculture': 'AGRI',
+        'fisheries': 'PECH',
+        'culture': 'CULT',
+        'education': 'CULT',
+        'legal affairs': 'JURI',
+        'civil liberties': 'LIBE',
+        'justice': 'LIBE',
+        'home affairs': 'LIBE',
+        'constitutional affairs': 'AFCO',
+        "women's rights": 'FEMM',
+        'gender equality': 'FEMM',
+        'petitions': 'PETI',
+        'housing': 'HOUS',
+        'urban development': 'HOUS',
+        'tax': 'FISC',
+        'taxation': 'FISC',
+        'tax matters': 'FISC',
+    })
 
     # EuroVoc top-level domains (simplified)
     EUROVOC_DOMAINS = [
@@ -216,7 +257,13 @@ class MetadataExtractor:
 
     def extract_committees(self, text: str) -> List[Dict[str, str]]:
         """
-        Extract EU committee mentions.
+        Extract EU committee mentions from both codes and natural language.
+
+        Detects:
+        - Literal 4-letter codes: "ENVI", "ITRE"
+        - Natural language: "environment committee", "the ENVI committee"
+        - Conversational: "committee on environment", "transport and tourism"
+        - Contextual: "committee responsible for health"
 
         Args:
             text: Document text
@@ -228,10 +275,11 @@ class MetadataExtractor:
                 ...
             ]
         """
-        matches = self.PATTERNS['committee'].findall(text)
         committees = []
         seen = set()
 
+        # 1. Match literal 4-letter committee codes (existing logic)
+        matches = self.PATTERNS['committee'].findall(text)
         for code in matches:
             if code in self.EU_COMMITTEES and code not in seen:
                 committees.append({
@@ -239,6 +287,40 @@ class MetadataExtractor:
                     'name': self.EU_COMMITTEES[code]
                 })
                 seen.add(code)
+
+        # 2. Match natural language committee names
+        text_lower = text.lower()
+
+        # Pattern: "X committee" or "committee on X" or "committee for X"
+        committee_context_patterns = [
+            re.compile(r'(\w[\w\s,\'-]{3,40}?)\s+committee\b', re.IGNORECASE),
+            re.compile(r'\bcommittee\s+(?:on|for|of)\s+([\w\s,\'-]{3,50}?)(?:\.|,|\?|$|\band\b)', re.IGNORECASE),
+        ]
+
+        for pattern in committee_context_patterns:
+            for match in pattern.finditer(text):
+                phrase = match.group(1).strip().lower()
+                # Look up in reverse map
+                if phrase in self._COMMITTEE_NAME_LOOKUP:
+                    code = self._COMMITTEE_NAME_LOOKUP[phrase]
+                    if code not in seen:
+                        committees.append({
+                            'code': code,
+                            'name': self.EU_COMMITTEES[code]
+                        })
+                        seen.add(code)
+
+        # 3. Direct keyword matching against known committee names
+        # Sort by length descending so longer matches take priority
+        # Use word boundary regex to avoid substring false positives (e.g., "culture" in "agriculture")
+        for name, code in sorted(self._COMMITTEE_NAME_LOOKUP.items(), key=lambda x: -len(x[0])):
+            if len(name) > 5 and code not in seen:
+                if re.search(r'\b' + re.escape(name) + r'\b', text_lower):
+                    committees.append({
+                        'code': code,
+                        'name': self.EU_COMMITTEES[code]
+                    })
+                    seen.add(code)
 
         return committees
 
@@ -277,12 +359,38 @@ class MetadataExtractor:
         'team of', 'office of', 'cabinet of',
     ]
 
+    # Common false positives for MEP name extraction
+    _MEP_NAME_BLACKLIST = {
+        'Member States', 'European Union', 'Official Journal',
+        'European Parliament', 'European Commission', 'European Council',
+        'Council of the European Union', 'Court of Justice',
+        'European Central Bank', 'European Court',
+        'United Nations', 'United States', 'United Kingdom',
+        'EU Law', 'EU Policy', 'EU Budget', 'EU Trade',
+        'EU Bubble', 'EU Calendar', 'EU Legislation',
+        'Public Affairs', 'Public Health', 'Public Consultation',
+        'Internal Market', 'Single Market', 'Green Deal',
+        'Common Agricultural', 'Foreign Affairs', 'Legal Affairs',
+        'Civil Liberties', 'Regional Development',
+        'Dear Colleague', 'Best Regards', 'Kind Regards',
+        'Please Note', 'See Also', 'For Example',
+        'New York', 'San Francisco', 'Los Angeles',
+    }
+
+    # Prefix words that should never start an MEP name
+    _MEP_NAME_BAD_PREFIXES = {'EU ', 'The ', 'This ', 'That ', 'What ', 'How ', 'My ', 'Our '}
+
     def extract_mep_mentions(self, text: str) -> List[str]:
         """
-        Extract MEP name mentions.
+        Extract MEP name mentions from text.
 
-        Uses simple heuristic: capitalized names followed by country codes
-        or preceded by "MEP", "rapporteur", etc.
+        Detects MEP names in various conversational patterns:
+        - "MEP Antonio Decaro"
+        - "rapporteur Decaro"
+        - "what has Decaro said about..."
+        - "Decaro (IT)"
+        - "tell me about Antonio Decaro"
+        - "LASTNAME in uppercase" (EP convention: "DECARO")
 
         Args:
             text: Document text
@@ -290,13 +398,12 @@ class MetadataExtractor:
         Returns:
             List of potential MEP names
         """
-        # Pattern: "MEP Name" or "Name (Country)" or "rapporteur Name"
         patterns = [
-            # MEP followed by capitalized name
-            re.compile(r'\bMEP\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b'),
-            # Rapporteur followed by name
+            # MEP followed by capitalized name (case-insensitive for "mep")
+            re.compile(r'\bMEPs?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b'),
+            # "rapporteur/shadow rapporteur Name"
             re.compile(r'\b(?:rapporteur|shadow rapporteur)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
-            # Name followed by country in parentheses
+            # Name followed by country in parentheses: "Decaro (IT)"
             re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s*\([A-Z]{2}\)\b'),
             # "assistant(s) of/to/for [MEP] Name"
             re.compile(r'\bassistants?\s+(?:of|to|for)\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
@@ -304,8 +411,29 @@ class MetadataExtractor:
             re.compile(r'\bwho\s+(?:works|assists|helps)\s+(?:for|with)\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
             # "Name's assistant(s)" (possessive)
             re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\'s?\s+assistants?\b'),
-            # "staff/team/office of [MEP] Name"
+            # "staff/team/office/cabinet of [MEP] Name"
             re.compile(r'\b(?:staff|team|office|cabinet)\s+of\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b', re.IGNORECASE),
+
+            # --- New broader patterns ---
+
+            # "tell me about / what about / who is / information on [Name]"
+            re.compile(r'\b(?:tell me about|what about|who is|information on|info on|details on|profile of)\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b', re.IGNORECASE),
+            # "what has/did Name said/done/voted" (supports single surname)
+            re.compile(r'\bwhat\s+(?:has|did|does)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+(?:said|done|voted|proposed|written|stated)\b', re.IGNORECASE),
+            # "Name's position/vote/stance/opinion" (supports single surname)
+            re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\'s?\s+(?:position|vote|stance|opinion|view|amendment|report|speech)\b'),
+            # "position/vote/stance of Name"
+            re.compile(r'\b(?:position|vote|stance|opinion|view|amendment|report)\s+of\s+(?:MEP\s+)?([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b', re.IGNORECASE),
+            # "chair/vice-chair/coordinator Name" (supports single surname)
+            re.compile(r'\b(?:chair(?:wo)?man|vice[- ]?chair|coordinator|president|vice[- ]?president|questor|chair)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b', re.IGNORECASE),
+            # "Name, the rapporteur/chair/MEP" (supports single surname)
+            re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*),?\s+(?:the\s+)?(?:rapporteur|shadow rapporteur|chair|coordinator|MEP)\b', re.IGNORECASE),
+            # EP convention: UPPERCASE LASTNAME (at least 3 chars, not a known acronym)
+            re.compile(r'\b(?:MEP|rapporteur|chair|coordinator|vice-chair)\s+([A-Z]{3,}(?:\s+[A-Z]{3,})*)\b'),
+            # "by Name" in legislative context (supports single surname)
+            re.compile(r'\b(?:report|amendment|proposal|motion|opinion)\s+by\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b', re.IGNORECASE),
+            # "Name (EPP/S&D/Renew/ECR/Greens/Left/PfE/NI/ESN)" (supports single surname)
+            re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s*\((?:EPP|S&D|Renew|ECR|Greens?(?:/EFA)?|The Left|GUE/NGL|PfE|NI|ESN|ID)\)', re.IGNORECASE),
         ]
 
         names = set()
@@ -313,7 +441,9 @@ class MetadataExtractor:
             for match in pattern.finditer(text):
                 name = match.group(1).strip()
                 # Filter out common false positives
-                if len(name) > 3 and name not in ['Member States', 'European Union', 'Official Journal']:
+                if (len(name) > 3
+                        and name not in self._MEP_NAME_BLACKLIST
+                        and not any(name.startswith(p) for p in self._MEP_NAME_BAD_PREFIXES)):
                     names.add(name)
 
         return sorted(list(names))

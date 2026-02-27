@@ -1,0 +1,258 @@
+{
+  "title": "Horizon Europe Joint Undertakings",
+  "description": "All 10 institutionalised European Partnerships under Horizon Europe established by Council Regulation (EU) 2021/2085",
+  "legal_basis": "Council Regulation (EU) 2021/2085 establishing the Joint Undertakings under Horizon Europe",
+  "last_updated": "2026-02-27",
+  "joint_undertakings": [
+    {
+      "name": "Circular Bio-based Europe Joint Undertaking",
+      "acronym": "CBE JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title I",
+      "strategic_research_agenda": "Strategic Innovation and Research Agenda (SIRA) 2021-2031: bio-based solutions for climate-neutral, circular economy",
+      "member_states_participation": "All EU Member States eligible",
+      "private_partners": "Bio-based Industries Consortium (BIC) representing 300+ organisations",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 1 billion",
+        "private_contribution": "EUR 1 billion (in-kind + financial)",
+        "total": "EUR 2 billion"
+      },
+      "executive_director": "Nicoletta Amodio",
+      "key_programmes": [
+        "Biorefineries development",
+        "Bio-based materials and products",
+        "Feedstock sustainability",
+        "Circular bioeconomy systems"
+      ],
+      "website": "https://www.cbe.europa.eu/",
+      "predecessor": "Bio-based Industries Joint Undertaking (BBI JU)"
+    },
+    {
+      "name": "Clean Aviation Joint Undertaking",
+      "acronym": "Clean Aviation JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title II",
+      "strategic_research_agenda": "SRIA for Clean Aviation: climate-neutral aviation by 2050",
+      "member_states_participation": "All EU Member States eligible",
+      "private_partners": "Clean Aviation founding members (Airbus, Safran, Rolls-Royce, MTU, Dassault, Leonardo, GKN, Liebherr, and others)",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 1.7 billion",
+        "private_contribution": "EUR 2.4 billion (in-kind + financial)",
+        "total": "EUR 4.1 billion"
+      },
+      "executive_director": "Axel Krein",
+      "key_programmes": [
+        "Hybrid-electric regional aircraft",
+        "Ultra-efficient short-medium range aircraft",
+        "Hydrogen-powered aircraft",
+        "Disruptive technologies (new configurations, sustainable aviation fuels integration)"
+      ],
+      "website": "https://www.clean-aviation.eu/",
+      "predecessor": "Clean Sky 2 Joint Undertaking"
+    },
+    {
+      "name": "Clean Hydrogen Joint Undertaking",
+      "acronym": "Clean Hydrogen JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title III",
+      "strategic_research_agenda": "SRIA for Clean Hydrogen: accelerate development and deployment of clean hydrogen technologies",
+      "member_states_participation": "All EU Member States eligible",
+      "private_partners": "Hydrogen Europe (industry) and Hydrogen Europe Research (research)",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 1 billion",
+        "private_contribution": "EUR 1 billion (in-kind + financial)",
+        "total": "EUR 2 billion"
+      },
+      "executive_director": "Valerie Bouillon-Delporte",
+      "key_programmes": [
+        "Electrolysis and renewable hydrogen production",
+        "Hydrogen storage and distribution",
+        "Fuel cells for transport and stationary applications",
+        "Cross-cutting (safety, regulation, hydrogen valleys)"
+      ],
+      "website": "https://www.clean-hydrogen.europa.eu/",
+      "predecessor": "Fuel Cells and Hydrogen 2 Joint Undertaking (FCH2 JU)"
+    },
+    {
+      "name": "European High Performance Computing Joint Undertaking",
+      "acronym": "EuroHPC JU",
+      "location": "Luxembourg City, Luxembourg",
+      "founding_regulation": "Council Regulation (EU) 2021/1173 (separate from 2021/2085)",
+      "strategic_research_agenda": "European HPC strategy: world-class supercomputing infrastructure and ecosystem",
+      "member_states_participation": "32 participating states (27 EU + 5 associated countries)",
+      "private_partners": "European Technology Platform for HPC (ETP4HPC) and Big Data Value Association (BDVA/DAIRO)",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 3.5 billion (from Digital Europe + Horizon Europe + CEF)",
+        "private_contribution": "Participating states and private partners match EU contribution",
+        "total": "EUR 7+ billion (estimated)"
+      },
+      "executive_director": "Anders Dam Jensen",
+      "key_programmes": [
+        "Pre-exascale supercomputers (LUMI, Leonardo, MareNostrum 5)",
+        "Exascale supercomputer (JUPITER)",
+        "Quantum computing integration",
+        "HPC competence centres",
+        "AI and HPC convergence"
+      ],
+      "website": "https://eurohpc-ju.europa.eu/",
+      "predecessor": "EuroHPC JU (established 2018, restructured 2021)"
+    },
+    {
+      "name": "Europe's Rail Joint Undertaking",
+      "acronym": "EU-Rail JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title IV",
+      "strategic_research_agenda": "System Pillar Master Plan: single European railway area, digitalisation, decarbonisation",
+      "member_states_participation": "All EU Member States eligible",
+      "private_partners": "Rail industry founding members (Alstom, Siemens, Bombardier/Alstom, Thales, Hitachi Rail, CAF, Stadler, infrastructure managers)",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 600 million",
+        "private_contribution": "EUR 600 million (in-kind + financial)",
+        "total": "EUR 1.2 billion"
+      },
+      "executive_director": "Giorgio Travaini",
+      "key_programmes": [
+        "Digital Automatic Coupling (DAC) for freight",
+        "ERTMS/ETCS (European Train Control System) evolution",
+        "Sustainable and green rail",
+        "Automated train operations",
+        "Customer-centric digitalisation"
+      ],
+      "website": "https://rail-research.europa.eu/",
+      "predecessor": "Shift2Rail Joint Undertaking"
+    },
+    {
+      "name": "Global Health EDCTP3 Joint Undertaking",
+      "acronym": "Global Health EDCTP3 JU",
+      "location": "The Hague, Netherlands",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title V",
+      "strategic_research_agenda": "Strategic Research and Innovation Agenda for clinical trials in sub-Saharan Africa on poverty-related diseases",
+      "member_states_participation": "14 EU participating states + 31 sub-Saharan African countries",
+      "private_partners": "BMGF (Bill & Melinda Gates Foundation) as contributing partner",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 800 million",
+        "private_contribution": "EUR 440 million (BMGF + other partners)",
+        "total": "EUR 1.24 billion"
+      },
+      "executive_director": "Michael Makanga",
+      "key_programmes": [
+        "Phase II/III clinical trials for infectious diseases (HIV, TB, malaria, NTDs)",
+        "Capacity building for clinical research in Africa",
+        "Product-oriented research for diagnostics, drugs, vaccines",
+        "Pandemic preparedness in Africa"
+      ],
+      "website": "https://www.edctp.org/",
+      "predecessor": "EDCTP2 Joint Undertaking"
+    },
+    {
+      "name": "Innovative Health Initiative Joint Undertaking",
+      "acronym": "IHI JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title VI",
+      "strategic_research_agenda": "SRIA for health innovation: translating health research into tangible benefits for patients and society",
+      "member_states_participation": "All EU Member States eligible",
+      "private_partners": "COCIR, EFPIA, EuropaBio, MedTech Europe, Vaccines Europe",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 1.2 billion",
+        "private_contribution": "EUR 1.2 billion (in-kind from industry partners)",
+        "total": "EUR 2.4 billion"
+      },
+      "executive_director": "Pierre Meulien",
+      "key_programmes": [
+        "Environment and health (exposome, climate change)",
+        "Digital tools for health (AI, real-world data, health data spaces)",
+        "Antimicrobial resistance (AMR)",
+        "Personalised medicine (rare diseases, oncology)",
+        "Next-generation diagnostics and therapeutics"
+      ],
+      "website": "https://www.ihi.europa.eu/",
+      "predecessor": "Innovative Medicines Initiative 2 (IMI2 JU)"
+    },
+    {
+      "name": "Key Digital Technologies Joint Undertaking",
+      "acronym": "KDT JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title VII",
+      "strategic_research_agenda": "ECS-SRIA: Electronic Components and Systems for European leadership in digital technologies",
+      "member_states_participation": "All EU Member States eligible + national funding authorities contribute",
+      "private_partners": "AENEAS, EPoSS, INSIDE industry associations",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 1.8 billion",
+        "private_contribution": "EUR 2.6 billion (national authorities + industry)",
+        "total": "EUR 4.4 billion"
+      },
+      "executive_director": "Bert De Colvenaer",
+      "key_programmes": [
+        "Semiconductor manufacturing and design (Chips Act synergies)",
+        "Embedded software and systems",
+        "IoT and edge computing",
+        "Photonics and sensing",
+        "Cyber-physical systems"
+      ],
+      "website": "https://www.kdt-ju.europa.eu/",
+      "predecessor": "ECSEL Joint Undertaking"
+    },
+    {
+      "name": "Single European Sky ATM Research 3 Joint Undertaking",
+      "acronym": "SESAR 3 JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title VIII",
+      "strategic_research_agenda": "Digital European Sky: modernisation of European air traffic management",
+      "member_states_participation": "All EU Member States eligible + Eurocontrol as founding member",
+      "private_partners": "Air navigation service providers, airports, airlines, aerospace manufacturers, Eurocontrol",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 600 million",
+        "private_contribution": "EUR 600 million (in-kind + financial)",
+        "total": "EUR 1.2 billion"
+      },
+      "executive_director": "Andreas Boschen",
+      "key_programmes": [
+        "Digital European Sky architecture",
+        "U-space (drone traffic management)",
+        "Green ATM (fuel-efficient routes, continuous descent)",
+        "Automation and AI for air traffic control",
+        "Interoperability and data sharing"
+      ],
+      "website": "https://www.sesarju.eu/",
+      "predecessor": "SESAR 2020 Joint Undertaking"
+    },
+    {
+      "name": "Smart Networks and Services Joint Undertaking",
+      "acronym": "SNS JU",
+      "location": "Brussels, Belgium",
+      "founding_regulation": "Council Regulation (EU) 2021/2085, Part Two, Title IX",
+      "strategic_research_agenda": "5G/6G SRIA: European leadership in next-generation networks and services",
+      "member_states_participation": "All EU Member States eligible",
+      "private_partners": "6G-IA (6G Smart Networks and Services Industry Association, formerly 5G-IA/NetWorld2020)",
+      "budget_2021_2027": {
+        "eu_contribution": "EUR 900 million",
+        "private_contribution": "EUR 900 million (in-kind + financial)",
+        "total": "EUR 1.8 billion"
+      },
+      "executive_director": "Colin Willcock",
+      "key_programmes": [
+        "6G research and vision (2030 target)",
+        "5G deployment and large-scale trials",
+        "Smart connectivity for verticals (industry, health, transport, energy)",
+        "Open and disaggregated networks (Open RAN)",
+        "Edge computing and network intelligence"
+      ],
+      "website": "https://smart-networks.europa.eu/",
+      "predecessor": "5G-PPP (Public-Private Partnership, not a JU)"
+    }
+  ],
+  "common_governance": {
+    "governing_board": "Representatives of all members (EU, participating states, private partners)",
+    "executive_director": "Appointed by Governing Board, manages day-to-day operations",
+    "scientific_advisory_body": "Independent experts advising on research priorities",
+    "states_representatives_group": "Member State delegates for national coordination",
+    "stakeholders_group": "Broader stakeholder input (open call for expressions of interest)"
+  },
+  "common_rules": {
+    "financial_regulation": "EU Financial Regulation 2018/1046 applies (adapted for JUs)",
+    "staff_regulations": "EU Staff Regulations apply to JU staff",
+    "grant_management": "Horizon Europe Model Grant Agreement (MGA) for funded projects",
+    "audit": "ECA audit + internal audit capability + Commission OLAF access",
+    "evaluation": "Mid-term and final evaluations by Commission (Art. 171 Horizon Europe Regulation)"
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "title": "European Supervisory Authorities (ESAs)",
+  "description": "The three European Supervisory Authorities for financial regulation: EBA, EIOPA, and ESMA",
+  "last_updated": "2026-02-27",
+  "authorities": [
+    {
+      "name": "European Banking Authority",
+      "acronym": "EBA",
+      "location": "Paris, France",
+      "address": "Tour Europlaza, 20 Avenue Andre Prothin, 92927 Paris La Defense",
+      "founding_regulation": "Regulation (EU) No 1093/2010",
+      "founding_date": "2011-01-01",
+      "mandate": "Ensure effective and consistent regulation and supervision across the European banking sector. Maintain financial stability and safeguard the integrity, efficiency and orderly functioning of the banking sector.",
+      "governance": {
+        "board_of_supervisors": {
+          "composition": "Chairperson + heads of banking supervisory authorities from all EU Member States",
+          "voting": "Simple majority for most decisions; qualified majority for technical standards"
+        },
+        "management_board": {
+          "composition": "Chairperson + 6 members elected from Board of Supervisors + Executive Director (non-voting)"
+        },
+        "chairperson": {
+          "name": "Jose Manuel Campa",
+          "term": "2019-2024 (renewed)"
+        },
+        "executive_director": {
+          "name": "Francois-Louis Michaud"
+        }
+      },
+      "key_units": [
+        {
+          "unit": "Directorate I -- Banking Markets, Innovation and Products",
+          "function": "Payment services, electronic money, crypto-assets (MiCA), FinTech, consumer protection",
+          "relevance_mica_dora": "Primary unit for MiCA implementation and crypto-asset supervision"
+        },
+        {
+          "unit": "Directorate II -- Prudential Regulation and Supervisory Policy",
+          "function": "CRD/CRR implementation, own funds, large exposures, leverage ratio, liquidity",
+          "relevance_mica_dora": "Own funds requirements for CASPs and token issuers"
+        },
+        {
+          "unit": "Directorate III -- Banking Supervision and Resolution",
+          "function": "Supervisory convergence, peer reviews, colleges, stress testing, resolution",
+          "relevance_mica_dora": "Supervisory convergence tools for MiCA supervision across NCAs"
+        },
+        {
+          "unit": "Digital Finance Unit",
+          "function": "DORA implementation, ICT risk, CTPP oversight framework",
+          "relevance_mica_dora": "Lead unit for DORA CTPP designation and oversight"
+        },
+        {
+          "unit": "AML/CFT Unit",
+          "function": "Anti-money laundering guidance, risk assessments, supervisory expectations",
+          "relevance_mica_dora": "AML/CFT requirements for CASPs under MiCA"
+        }
+      ],
+      "joint_bodies": [
+        {
+          "name": "Joint Committee of the ESAs",
+          "role": "Cross-sectoral coordination, consumer protection, AML, financial conglomerates",
+          "eba_role": "Rotating chair (shared with EIOPA and ESMA)"
+        },
+        {
+          "name": "Joint Oversight Venture (JOV)",
+          "role": "Coordinated oversight of CTPPs serving entities across banking, insurance, and securities",
+          "legal_basis": "DORA Regulation Art. 31-44"
+        }
+      ],
+      "website": "https://www.eba.europa.eu/",
+      "budget_2024": "EUR 52 million (approximately)",
+      "staff": "~250"
+    },
+    {
+      "name": "European Insurance and Occupational Pensions Authority",
+      "acronym": "EIOPA",
+      "location": "Frankfurt am Main, Germany",
+      "address": "Westhafenplatz 1, 60327 Frankfurt am Main",
+      "founding_regulation": "Regulation (EU) No 1094/2010",
+      "founding_date": "2011-01-01",
+      "mandate": "Protect policyholders, pension scheme members and beneficiaries. Promote sound regulation of insurance and occupational pensions across the EU. Contribute to systemic stability of the financial system.",
+      "governance": {
+        "board_of_supervisors": {
+          "composition": "Chairperson + heads of insurance and pensions supervisory authorities from all EU Member States",
+          "voting": "Simple majority for most decisions; qualified majority for technical standards"
+        },
+        "management_board": {
+          "composition": "Chairperson + 6 members elected from Board of Supervisors + Executive Director (non-voting)"
+        },
+        "chairperson": {
+          "name": "Petra Hielkema",
+          "term": "2021-2026"
+        },
+        "executive_director": {
+          "name": "Fausto Parente"
+        }
+      },
+      "key_units": [
+        {
+          "unit": "Directorate -- Supervisory Processes and Convergence",
+          "function": "Solvency II implementation, supervisory convergence, peer reviews, colleges",
+          "relevance_mica_dora": "DORA implementation for insurance and pensions sector"
+        },
+        {
+          "unit": "Directorate -- Regulations",
+          "function": "Technical standards, IORPs directive, Solvency II review, sustainable finance",
+          "relevance_mica_dora": "Regulatory technical standards for DORA in insurance"
+        },
+        {
+          "unit": "Digital Operational Resilience Unit",
+          "function": "DORA oversight for insurance sector, ICT risk assessment",
+          "relevance_mica_dora": "DORA CTPP oversight (insurance sector perspective)"
+        }
+      ],
+      "joint_bodies": [
+        {
+          "name": "Joint Committee of the ESAs",
+          "role": "Cross-sectoral coordination",
+          "eiopa_role": "Rotating chair"
+        }
+      ],
+      "website": "https://www.eiopa.europa.eu/",
+      "budget_2024": "EUR 32 million (approximately)",
+      "staff": "~200"
+    },
+    {
+      "name": "European Securities and Markets Authority",
+      "acronym": "ESMA",
+      "location": "Paris, France",
+      "address": "201-203 Rue de Bercy, 75012 Paris",
+      "founding_regulation": "Regulation (EU) No 1095/2010",
+      "founding_date": "2011-01-01",
+      "mandate": "Enhance investor protection and promote stable and orderly financial markets. Direct supervision of credit rating agencies and trade repositories. Supervisory convergence across EU securities regulators.",
+      "governance": {
+        "board_of_supervisors": {
+          "composition": "Chairperson + heads of securities supervisory authorities from all EU Member States",
+          "voting": "Simple majority for most decisions; qualified majority for technical standards"
+        },
+        "management_board": {
+          "composition": "Chairperson + 6 members elected from Board of Supervisors + Executive Director (non-voting)"
+        },
+        "chairperson": {
+          "name": "Verena Ross",
+          "term": "2021-2026"
+        },
+        "executive_director": {
+          "name": "Natasha Cazenave"
+        }
+      },
+      "key_units": [
+        {
+          "unit": "Markets and Digital Finance Department",
+          "function": "MiFID II/MiFIR, DLT pilot regime, crypto-asset trading platforms under MiCA",
+          "relevance_mica_dora": "MiCA CASP supervisory convergence; DLT market infrastructure"
+        },
+        {
+          "unit": "Data Analytics and Services Department",
+          "function": "Data reporting, EMIR trade repository supervision, MiCA registers",
+          "relevance_mica_dora": "MiCA registers (CASPs, white papers); DORA incident reporting"
+        },
+        {
+          "unit": "Investors and Issuers Department",
+          "function": "Investor protection, prospectus regulation, MiCA white paper requirements",
+          "relevance_mica_dora": "MiCA crypto-asset white paper review and guidance"
+        },
+        {
+          "unit": "Supervision Department",
+          "function": "Direct supervision of CRAs, trade repositories; benchmarks supervision",
+          "relevance_mica_dora": "Supervisory experience applied to DORA oversight"
+        }
+      ],
+      "joint_bodies": [
+        {
+          "name": "Joint Committee of the ESAs",
+          "role": "Cross-sectoral coordination",
+          "esma_role": "Rotating chair"
+        }
+      ],
+      "website": "https://www.esma.europa.eu/",
+      "budget_2024": "EUR 73 million (approximately)",
+      "staff": "~350"
+    }
+  ],
+  "joint_committee": {
+    "name": "Joint Committee of the European Supervisory Authorities",
+    "composition": "Chairs of EBA, EIOPA, ESMA + their Executive Directors",
+    "secretariat": "Rotating between the three ESAs",
+    "sub_committees": [
+      {
+        "name": "Sub-Committee on Consumer Protection and Financial Innovation",
+        "focus": "FinTech, consumer trends, complaints, cross-sectoral products"
+      },
+      {
+        "name": "Sub-Committee on AML/CFT",
+        "focus": "Anti-money laundering coordination (until AMLA becomes operational in 2025-2026)"
+      },
+      {
+        "name": "Sub-Committee on Risk",
+        "focus": "Cross-sectoral risk analysis, Joint Risk Report, systemic risk monitoring"
+      },
+      {
+        "name": "Sub-Committee on Securitisation",
+        "focus": "STS securitisation, reporting, due diligence requirements"
+      }
+    ],
+    "outputs": [
+      "Joint Risk Report (biannual)",
+      "Joint Committee Report on Risks and Vulnerabilities",
+      "Cross-sectoral guidelines (e.g. complaints handling, product governance)",
+      "DORA Joint Oversight Venture coordination"
+    ]
+  }
+}

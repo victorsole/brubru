@@ -70,7 +70,7 @@ class EULawIndexer:
     def _load_policy_taxonomy(self) -> Dict[str, Any]:
         """Load EU policy taxonomy from eu_policies.json"""
         try:
-            policy_file = Path("backend/knowledge_base/institutions/eu_policies.json")
+            policy_file = Path(__file__).parent.parent.parent / "knowledge_base" / "institutions" / "eu_policies.json"
             if policy_file.exists():
                 with open(policy_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)

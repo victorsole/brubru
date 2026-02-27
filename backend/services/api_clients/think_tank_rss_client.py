@@ -32,34 +32,41 @@ class ThinkTankRSSClient:
     - Study publications
     """
 
-    # RSS Feeds by topic/type
+    # RSS Feeds - epthinktank.eu (WordPress blog, always available)
+    # Note: europarl.europa.eu/thinktank/en/rss.xml URLs returned 404 as of Feb 2026
+    # The general feed contains all publication types; category feeds may be empty.
+    # Items are categorised via <category> tags (e.g. "At a glance", "Briefings").
     RSS_FEEDS = {
-        # Publication types
-        "all_publications": "https://www.europarl.europa.eu/thinktank/en/rss.xml",
-        "at_a_glance": "https://www.europarl.europa.eu/thinktank/en/rss.xml?type=AT_A_GLANCE",
-        "briefings": "https://www.europarl.europa.eu/thinktank/en/rss.xml?type=BRIEFING",
-        "in_depth_analysis": "https://www.europarl.europa.eu/thinktank/en/rss.xml?type=IN_DEPTH_ANALYSIS",
-        "studies": "https://www.europarl.europa.eu/thinktank/en/rss.xml?type=STUDY",
+        # Primary feed (contains all publication types, 10 items per page)
+        "all_publications": "https://epthinktank.eu/feed/",
 
-        # Policy areas
-        "agriculture": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=AGRI",
-        "budgets": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=BUDG",
-        "constitutional_affairs": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=AFCO",
-        "culture_education": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=CULT",
-        "development": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=DEVE",
-        "economic_monetary": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=ECON",
-        "employment_social": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=EMPL",
-        "environment": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=ENVI",
-        "fisheries": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=PECH",
-        "foreign_affairs": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=AFET",
-        "industry_energy": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=ITRE",
-        "internal_market": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=IMCO",
-        "international_trade": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=INTA",
-        "justice_home_affairs": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=LIBE",
-        "legal_affairs": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=JURI",
-        "regional_development": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=REGI",
-        "transport_tourism": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=TRAN",
-        "womens_rights": "https://www.europarl.europa.eu/thinktank/en/rss.xml?topic=FEMM"
+        # Category feeds (WordPress category archives -- may be empty, use general feed + filter)
+        "at_a_glance": "https://epthinktank.eu/category/publications/at-a-glance/feed/",
+        "briefings": "https://epthinktank.eu/category/publications/briefings/feed/",
+        "in_depth_analysis": "https://epthinktank.eu/category/publications/in-depth-analysis/feed/",
+        "studies": "https://epthinktank.eu/category/publications/studies/feed/",
+
+        # Paginated general feed (WordPress supports ?paged=N)
+        "page_2": "https://epthinktank.eu/feed/?paged=2",
+        "page_3": "https://epthinktank.eu/feed/?paged=3",
+        "page_4": "https://epthinktank.eu/feed/?paged=4",
+        "page_5": "https://epthinktank.eu/feed/?paged=5",
+        "page_6": "https://epthinktank.eu/feed/?paged=6",
+        "page_7": "https://epthinktank.eu/feed/?paged=7",
+        "page_8": "https://epthinktank.eu/feed/?paged=8",
+        "page_9": "https://epthinktank.eu/feed/?paged=9",
+        "page_10": "https://epthinktank.eu/feed/?paged=10",
+
+        # Publications category (broader than type-specific)
+        "publications": "https://epthinktank.eu/category/publications/feed/",
+    }
+
+    # Category tag values used to classify publications from the general feed
+    TYPE_CATEGORIES = {
+        "at_a_glance": ["At a glance", "At a glance EPRS"],
+        "briefings": ["Briefing", "Briefings", "Briefing EPRS"],
+        "in_depth_analysis": ["In-Depth Analysis", "In depth analysis"],
+        "studies": ["Study", "Studies"],
     }
 
     def __init__(
@@ -128,7 +135,11 @@ class ThinkTankRSSClient:
         publication_type: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """
-        Get latest Think Tank publications
+        Get latest Think Tank publications.
+
+        Uses paginated general feed and filters by category tags.
+        Category-specific feeds may be empty, so we always use the
+        general feed with post-fetch filtering.
 
         Args:
             days: Get publications from last N days
@@ -139,24 +150,65 @@ class ThinkTankRSSClient:
         """
         since = datetime.now() - timedelta(days=days)
 
-        if publication_type and publication_type in self.RSS_FEEDS:
-            feeds = [await self.rss_client.fetch_feed(self.RSS_FEEDS[publication_type], since=since)]
-        else:
-            # Get main feed
-            feeds = [await self.rss_client.fetch_feed(self.RSS_FEEDS["all_publications"], since=since)]
+        logger.info(f"Fetching latest Think Tank publications ({publication_type or 'all'}, last {days} days)")
 
-        logger.info(f"Fetching latest Think Tank publications ({publication_type or 'all'})")
+        # Fetch paginated general feed to get enough items
+        # Each page has ~10 items, so fetch enough pages for the requested time window
+        max_pages = min(days // 3 + 1, 10)  # Rough: ~3 days per page of 10 items
+        feeds = []
+
+        # Page 1
+        try:
+            feed = await self.rss_client.fetch_feed(self.RSS_FEEDS["all_publications"], since=since)
+            feeds.append(feed)
+        except Exception as e:
+            logger.error(f"Failed to fetch general feed: {str(e)}")
+
+        # Additional pages if needed
+        for page_num in range(2, max_pages + 1):
+            page_key = f"page_{page_num}"
+            if page_key not in self.RSS_FEEDS:
+                break
+            try:
+                feed = await self.rss_client.fetch_feed(self.RSS_FEEDS[page_key], since=since)
+                if not feed.entries:
+                    break  # No more items
+                feeds.append(feed)
+            except Exception as e:
+                logger.debug(f"Page {page_num} fetch failed (expected at end): {str(e)}")
+                break
 
         publications = []
+        seen_links = set()
+
         for feed in feeds:
             for entry in feed.entries:
-                publications.append({
+                # Deduplicate
+                if entry.link in seen_links:
+                    continue
+                seen_links.add(entry.link)
+
+                pub = {
                     "title": entry.title,
                     "link": entry.link,
                     "published": entry.published.isoformat(),
                     "summary": entry.summary,
-                    "categories": entry.categories
-                })
+                    "content": entry.content,
+                    "categories": entry.categories,
+                    "author": getattr(entry, 'author', None),
+                }
+                publications.append(pub)
+
+        # Filter by publication type using category tags
+        if publication_type and publication_type in self.TYPE_CATEGORIES:
+            type_tags = [t.lower() for t in self.TYPE_CATEGORIES[publication_type]]
+            publications = [
+                p for p in publications
+                if any(
+                    cat.lower() in type_tags
+                    for cat in p.get("categories", [])
+                )
+            ]
 
         # Sort by date
         publications.sort(key=lambda x: x["published"], reverse=True)
@@ -170,7 +222,9 @@ class ThinkTankRSSClient:
         days: int = 30
     ) -> List[Dict[str, Any]]:
         """
-        Get research for specific policy area
+        Get research for specific policy area.
+
+        Fetches general feed and filters by policy area keyword in categories.
 
         Args:
             policy_area: Policy area name (e.g., "environment", "digital")
@@ -179,25 +233,17 @@ class ThinkTankRSSClient:
         Returns:
             List of research publications
         """
-        if policy_area not in self.RSS_FEEDS:
-            raise ValueError(f"Unknown policy area: {policy_area}")
-
-        since = datetime.now() - timedelta(days=days)
-
         logger.info(f"Fetching Think Tank research for {policy_area}")
 
-        feed = await self.rss_client.fetch_feed(self.RSS_FEEDS[policy_area], since=since)
+        all_pubs = await self.get_latest_publications(days=days)
 
-        research = []
-        for entry in feed.entries:
-            research.append({
-                "title": entry.title,
-                "link": entry.link,
-                "published": entry.published.isoformat(),
-                "summary": entry.summary,
-                "policy_area": policy_area,
-                "categories": entry.categories
-            })
+        # Filter by policy area keyword in categories
+        policy_lower = policy_area.lower()
+        research = [
+            {**p, "policy_area": policy_area}
+            for p in all_pubs
+            if any(policy_lower in cat.lower() for cat in p.get("categories", []))
+        ]
 
         logger.info(f"Found {len(research)} research items for {policy_area}")
         return research
@@ -265,39 +311,28 @@ class ThinkTankRSSClient:
     async def search_by_keyword(
         self,
         keyword: str,
-        days: int = 365
+        days: int = 90
     ) -> List[Dict[str, Any]]:
         """
-        Search publications by keyword
+        Search publications by keyword in title or summary.
 
         Args:
             keyword: Search keyword
-            days: Search within last N days
+            days: Search within last N days (max ~90 days via RSS pagination)
 
         Returns:
             Matching publications
         """
-        since = datetime.now() - timedelta(days=days)
-
         logger.info(f"Searching Think Tank publications for keyword: {keyword}")
 
-        # Fetch all publications
-        feed = await self.rss_client.fetch_feed(self.RSS_FEEDS["all_publications"], since=since)
+        all_pubs = await self.get_latest_publications(days=days)
 
-        # Filter by keyword
         keyword_lower = keyword.lower()
-        results = []
-
-        for entry in feed.entries:
-            if (keyword_lower in entry.title.lower() or
-                keyword_lower in entry.summary.lower()):
-                results.append({
-                    "title": entry.title,
-                    "link": entry.link,
-                    "published": entry.published.isoformat(),
-                    "summary": entry.summary,
-                    "categories": entry.categories
-                })
+        results = [
+            p for p in all_pubs
+            if keyword_lower in p.get("title", "").lower()
+            or keyword_lower in p.get("summary", "").lower()
+        ]
 
         logger.info(f"Found {len(results)} publications matching '{keyword}'")
         return results
@@ -308,7 +343,7 @@ class ThinkTankRSSClient:
         days: int = 30
     ) -> Dict[str, List[Dict[str, Any]]]:
         """
-        Get research from multiple policy areas
+        Get research from multiple policy areas.
 
         Args:
             policy_areas: List of policy area names
@@ -317,30 +352,19 @@ class ThinkTankRSSClient:
         Returns:
             Dictionary with research grouped by policy area
         """
-        since = datetime.now() - timedelta(days=days)
-
         logger.info(f"Fetching aggregated research for {len(policy_areas)} policy areas")
 
+        all_pubs = await self.get_latest_publications(days=days)
+
         results = {}
-
         for area in policy_areas:
-            if area not in self.RSS_FEEDS:
-                logger.warning(f"Unknown policy area: {area}")
-                continue
-
-            feed = await self.rss_client.fetch_feed(self.RSS_FEEDS[area], since=since)
-
-            research_items = []
-            for entry in feed.entries:
-                research_items.append({
-                    "title": entry.title,
-                    "link": entry.link,
-                    "published": entry.published.isoformat(),
-                    "summary": entry.summary,
-                    "categories": entry.categories
-                })
-
-            results[area] = research_items
+            area_lower = area.lower()
+            area_pubs = [
+                {**p, "policy_area": area}
+                for p in all_pubs
+                if any(area_lower in cat.lower() for cat in p.get("categories", []))
+            ]
+            results[area] = area_pubs
 
         return results
 

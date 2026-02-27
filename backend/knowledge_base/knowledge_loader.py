@@ -21,6 +21,236 @@ import re
 logger = logging.getLogger(__name__)
 
 
+# Keyword triggers for guide matching
+# Maps keywords (lowercase) to guide file stems that should be surfaced
+# when those keywords appear in user queries
+GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
+    # Horizon Europe Grant Management
+    'grant': ['horizon_europe_grant_management'],
+    'mga': ['horizon_europe_grant_management'],
+    'model grant agreement': ['horizon_europe_grant_management'],
+    'consortium': ['horizon_europe_grant_management'],
+    'horizon europe': ['horizon_europe_grant_management'],
+    'gap process': ['horizon_europe_grant_management'],
+    'eligible costs': ['horizon_europe_grant_management'],
+    'lump sum': ['horizon_europe_grant_management'],
+    'grant agreement preparation': ['horizon_europe_grant_management'],
+    'form c': ['horizon_europe_grant_management'],
+
+    # EU Financial Regulation Procurement
+    'procurement': ['eu_financial_regulation_procurement'],
+    'tender': ['eu_financial_regulation_procurement'],
+    'framework contract': ['eu_financial_regulation_procurement'],
+    'financial regulation': ['eu_financial_regulation_procurement', 'eu_budget_emu_law'],
+    'evaluation committee': ['eu_financial_regulation_procurement'],
+    'open procedure': ['eu_financial_regulation_procurement'],
+    'restricted procedure': ['eu_financial_regulation_procurement'],
+    'competitive dialogue': ['eu_financial_regulation_procurement'],
+    'lafr': ['eu_financial_regulation_procurement'],
+    'la fr': ['eu_financial_regulation_procurement'],
+    'le rf': ['eu_financial_regulation_procurement'],
+    'the fr': ['eu_financial_regulation_procurement'],
+    'reglamento financiero': ['eu_financial_regulation_procurement'],
+    'reglement financier': ['eu_financial_regulation_procurement'],
+
+    # Competition Law Enforcement
+    'antitrust': ['competition_law_enforcement'],
+    'cartel': ['competition_law_enforcement'],
+    'article 101': ['competition_law_enforcement'],
+    'article 102': ['competition_law_enforcement'],
+    'dawn raid': ['competition_law_enforcement'],
+    'leniency': ['competition_law_enforcement'],
+    'dg comp': ['competition_law_enforcement'],
+    'dominance': ['competition_law_enforcement'],
+    'merger control': ['competition_law_enforcement'],
+    'statement of objections': ['competition_law_enforcement'],
+    'fining guidelines': ['competition_law_enforcement'],
+
+    # EU Budget and EMU Law
+    'mff': ['eu_budget_emu_law'],
+    'multiannual financial framework': ['eu_budget_emu_law'],
+    'own resources': ['eu_budget_emu_law'],
+    'esm': ['eu_budget_emu_law'],
+    'olaf': ['eu_budget_emu_law', 'cohesion_policy_audit'],
+    'eppo': ['eu_budget_emu_law'],
+    'eib': ['eu_budget_emu_law'],
+    'investeu': ['eu_budget_emu_law', 'knowledge_valorisation_tech_transfer'],
+    'budget': ['eu_budget_emu_law'],
+    'discharge': ['eu_budget_emu_law'],
+    'stability and growth pact': ['eu_budget_emu_law'],
+
+    # Employment and Future of Work
+    'platform work': ['employment_future_of_work'],
+    'right to disconnect': ['employment_future_of_work'],
+    'youth guarantee': ['employment_future_of_work'],
+    'esf+': ['employment_future_of_work', 'cohesion_policy_audit'],
+    'algorithmic management': ['employment_future_of_work'],
+    'just transition fund': ['employment_future_of_work', 'cohesion_policy_audit'],
+    'pillar of social rights': ['employment_future_of_work'],
+    'platform workers': ['employment_future_of_work'],
+    'traineeships': ['employment_future_of_work'],
+
+    # European Semester Communication
+    'european semester': ['european_semester_communication'],
+    'economic forecast': ['european_semester_communication'],
+    'rrf': ['european_semester_communication', 'eu_budget_emu_law'],
+    'recovery and resilience': ['european_semester_communication', 'eu_budget_emu_law'],
+    'digital euro': ['european_semester_communication'],
+    'csr': ['european_semester_communication'],
+    'country report': ['european_semester_communication'],
+    'country-specific recommendation': ['european_semester_communication'],
+    'annual sustainable growth survey': ['european_semester_communication'],
+
+    # Cohesion Policy Audit
+    'cohesion': ['cohesion_policy_audit'],
+    'audit': ['cohesion_policy_audit'],
+    'erdf': ['cohesion_policy_audit'],
+    'arachne': ['cohesion_policy_audit'],
+    'error rate': ['cohesion_policy_audit'],
+    'shared management': ['cohesion_policy_audit'],
+    'managing authority': ['cohesion_policy_audit'],
+    'audit authority': ['cohesion_policy_audit'],
+    'financial corrections': ['cohesion_policy_audit'],
+    'common provisions regulation': ['cohesion_policy_audit'],
+
+    # Financial Supervision (EBA/MiCA/DORA)
+    'eba': ['financial_supervision_eba'],
+    'eiopa': ['financial_supervision_eba'],
+    'esma': ['financial_supervision_eba'],
+    'prudential': ['financial_supervision_eba'],
+    'on-site inspection': ['financial_supervision_eba'],
+    'supervisory college': ['financial_supervision_eba'],
+    'ctpp': ['financial_supervision_eba'],
+    'mica': ['financial_supervision_eba'],
+    'dora': ['financial_supervision_eba'],
+    'crypto-asset': ['financial_supervision_eba'],
+    'significant token': ['financial_supervision_eba'],
+
+    # Eurostat Statistics Production
+    'eurostat': ['eurostat_statistics_production'],
+    'itss': ['eurostat_statistics_production'],
+    'fats': ['eurostat_statistics_production'],
+    'fdi': ['eurostat_statistics_production'],
+    'ebops': ['eurostat_statistics_production'],
+    'statistics': ['eurostat_statistics_production'],
+    'asymmetry': ['eurostat_statistics_production'],
+    'data quality': ['eurostat_statistics_production'],
+    'nsi': ['eurostat_statistics_production'],
+    'trade in services': ['eurostat_statistics_production'],
+
+    # Knowledge Valorisation and Technology Transfer
+    'knowledge valorisation': ['knowledge_valorisation_tech_transfer'],
+    'technology transfer': ['knowledge_valorisation_tech_transfer'],
+    'trl': ['knowledge_valorisation_tech_transfer'],
+    'ip management': ['knowledge_valorisation_tech_transfer'],
+    'era': ['knowledge_valorisation_tech_transfer'],
+    'eic': ['knowledge_valorisation_tech_transfer'],
+    'eic pathfinder': ['knowledge_valorisation_tech_transfer'],
+    'eic accelerator': ['knowledge_valorisation_tech_transfer'],
+    'spin-off': ['knowledge_valorisation_tech_transfer'],
+    'technology readiness': ['knowledge_valorisation_tech_transfer'],
+    'valley of death': ['knowledge_valorisation_tech_transfer'],
+
+    # Bioeconomy and Food Systems
+    'bioeconomy': ['bioeconomy_food_systems'],
+    'food2030': ['bioeconomy_food_systems'],
+    'scar': ['bioeconomy_food_systems'],
+    'alternative proteins': ['bioeconomy_food_systems'],
+    'living labs': ['bioeconomy_food_systems'],
+    'food systems': ['bioeconomy_food_systems'],
+    'cellular agriculture': ['bioeconomy_food_systems'],
+    'precision fermentation': ['bioeconomy_food_systems'],
+    'novel food': ['bioeconomy_food_systems'],
+    'biorefinery': ['bioeconomy_food_systems'],
+
+    # EU Space Programme
+    'galileo': ['eu_space_programme'],
+    'copernicus': ['eu_space_programme'],
+    'iris2': ['eu_space_programme'],
+    'space act': ['eu_space_programme'],
+    'space debris': ['eu_space_programme'],
+    'euspa': ['eu_space_programme'],
+    'autonomous access': ['eu_space_programme'],
+    'ariane': ['eu_space_programme'],
+    'sentinel': ['eu_space_programme'],
+    'space programme': ['eu_space_programme'],
+    'egnos': ['eu_space_programme'],
+
+    # Road Safety, Autonomous Vehicles and ADAS
+    'road safety': ['road_safety_autonomous_vehicles'],
+    'adas': ['road_safety_autonomous_vehicles'],
+    'autonomous vehicle': ['road_safety_autonomous_vehicles'],
+    'automated driving': ['road_safety_autonomous_vehicles'],
+    'self-driving': ['road_safety_autonomous_vehicles'],
+    'vehicle safety': ['road_safety_autonomous_vehicles'],
+    'type-approval': ['road_safety_autonomous_vehicles'],
+    'type approval': ['road_safety_autonomous_vehicles'],
+    'general safety regulation': ['road_safety_autonomous_vehicles'],
+    'gsr': ['road_safety_autonomous_vehicles'],
+    'emergency braking': ['road_safety_autonomous_vehicles'],
+    'lane keeping': ['road_safety_autonomous_vehicles'],
+    'speed assistance': ['road_safety_autonomous_vehicles'],
+    'ecall': ['road_safety_autonomous_vehicles'],
+    'euro ncap': ['road_safety_autonomous_vehicles'],
+    'unece': ['road_safety_autonomous_vehicles'],
+    'dg move': ['road_safety_autonomous_vehicles'],
+    'vehicle autonom': ['road_safety_autonomous_vehicles'],
+    'vehicule autonome': ['road_safety_autonomous_vehicles'],
+    'seguretat viaria': ['road_safety_autonomous_vehicles'],
+    'securite routiere': ['road_safety_autonomous_vehicles'],
+    'seguridad vial': ['road_safety_autonomous_vehicles'],
+    'driving licence': ['road_safety_autonomous_vehicles'],
+    'connected vehicle': ['road_safety_autonomous_vehicles'],
+    'cybersecurity vehicle': ['road_safety_autonomous_vehicles'],
+
+    # REACH and Chemicals Regulation
+    'reach': ['reach_chemicals_regulation'],
+    'chemicals': ['reach_chemicals_regulation'],
+    'chemical substances': ['reach_chemicals_regulation'],
+    'echa': ['reach_chemicals_regulation'],
+    'pfas': ['reach_chemicals_regulation'],
+    'svhc': ['reach_chemicals_regulation'],
+    'substances of very high concern': ['reach_chemicals_regulation'],
+    'restriction proposal': ['reach_chemicals_regulation'],
+    'annex xiv': ['reach_chemicals_regulation'],
+    'annex xvii': ['reach_chemicals_regulation'],
+    'authorisation list': ['reach_chemicals_regulation'],
+    'candidate list': ['reach_chemicals_regulation'],
+    'microplastics': ['reach_chemicals_regulation'],
+    'bisphenol': ['reach_chemicals_regulation'],
+    'clp regulation': ['reach_chemicals_regulation'],
+    'biocidal': ['reach_chemicals_regulation'],
+    'chemicals strategy': ['reach_chemicals_regulation'],
+    'one substance one assessment': ['reach_chemicals_regulation'],
+    'osoa': ['reach_chemicals_regulation'],
+    'reglament reach': ['reach_chemicals_regulation'],
+
+    # Multilingual, Translation and Content Localisation Law
+    'translation': ['multilingual_content_law'],
+    'localisation': ['multilingual_content_law'],
+    'localization': ['multilingual_content_law'],
+    'multilingual': ['multilingual_content_law'],
+    'language requirements': ['multilingual_content_law'],
+    'official languages': ['multilingual_content_law'],
+    'content localisation': ['multilingual_content_law'],
+    'content localization': ['multilingual_content_law'],
+    'subtitling': ['multilingual_content_law'],
+    'audio description': ['multilingual_content_law'],
+    'labelling language': ['multilingual_content_law'],
+    'etranslation': ['multilingual_content_law'],
+    'avmsd': ['multilingual_content_law'],
+    'audiovisual media': ['multilingual_content_law'],
+    'european works': ['multilingual_content_law'],
+    'media freedom': ['multilingual_content_law'],
+    'en 17100': ['multilingual_content_law'],
+    'dg translation': ['multilingual_content_law'],
+    'linguistic diversity': ['multilingual_content_law'],
+    'plain language': ['multilingual_content_law'],
+    'package leaflet': ['multilingual_content_law'],
+    'food labelling': ['multilingual_content_law'],
+}
+
+
 class KnowledgeLoader:
     """
     Load and manage internal knowledge base.
@@ -772,29 +1002,98 @@ class KnowledgeLoader:
 
     def search_guides(self, query: str) -> List[Dict[str, Any]]:
         """
-        Search guides by keyword.
+        Search guides by keyword triggers and content matching.
+
+        Uses a two-pass approach:
+        1. Keyword triggers: check if any trigger phrases appear in the query
+           (higher priority, more precise matching)
+        2. Content search: fallback to searching guide names and content
+           (lower priority, broader matching)
 
         Args:
-            query: Search query (searches in name and content)
+            query: Search query (searches triggers, name, and content)
 
         Returns:
-            List of matching guides with context snippets
+            List of matching guides with context snippets, ordered by relevance
         """
         query_lower = query.lower()
+        triggered_guides = set()
         matches = []
+        seen_ids = set()
+
+        # Pass 1: Keyword trigger matching (highest priority)
+        # Check multi-word triggers first (longer = more specific), then single-word
+        sorted_triggers = sorted(GUIDE_KEYWORD_TRIGGERS.keys(), key=len, reverse=True)
+        for trigger in sorted_triggers:
+            if trigger in query_lower:
+                for guide_id in GUIDE_KEYWORD_TRIGGERS[trigger]:
+                    if guide_id in self.guides and guide_id not in seen_ids:
+                        triggered_guides.add(guide_id)
+
+        # Add triggered guides first (they are the most relevant)
+        for guide_id in triggered_guides:
+            content = self.guides[guide_id]
+            title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
+            title = title_match.group(1) if title_match else guide_id.replace('_', ' ').title()
+
+            # Find context around the query match in content
+            content_lower = content.lower()
+            idx = content_lower.find(query_lower)
+            if idx != -1:
+                start = max(0, idx - 50)
+                end = min(len(content), idx + len(query_lower) + 100)
+                snippet = content[start:end].strip()
+                if start > 0:
+                    snippet = "..." + snippet
+                if end < len(content):
+                    snippet = snippet + "..."
+            else:
+                # Use the first paragraph after the title as snippet
+                para_match = re.search(r'^#[^\n]+\n+([^\n#]+)', content)
+                snippet = para_match.group(1).strip()[:150] + "..." if para_match else ""
+
+            matches.append({
+                'id': guide_id,
+                'title': title,
+                'snippet': snippet,
+                'trigger_matched': True
+            })
+            seen_ids.add(guide_id)
+
+        # Pass 2: Content search (fallback for guides not already matched by triggers)
+        # Split query into individual words for broader matching
+        # Filter out common words that would match too many guides
+        stopwords = {
+            'what', 'when', 'where', 'which', 'that', 'this', 'these', 'those',
+            'have', 'does', 'will', 'would', 'could', 'should', 'about', 'with',
+            'from', 'they', 'their', 'there', 'been', 'being', 'some', 'more',
+            'also', 'than', 'then', 'very', 'just', 'like', 'make', 'made',
+            'need', 'know', 'help', 'work', 'want', 'into', 'over', 'after',
+            'before', 'between', 'under', 'through', 'during', 'each', 'only',
+            'most', 'much', 'many', 'such', 'well', 'good', 'best',
+        }
+        query_words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
 
         for name, content in self.guides.items():
-            if query_lower in name.lower() or query_lower in content.lower():
-                # Extract title
+            if name in seen_ids:
+                continue
+
+            # Check if the full query or any significant word matches
+            content_lower = content.lower()
+            name_lower = name.lower()
+
+            full_match = query_lower in name_lower or query_lower in content_lower
+            word_matches = sum(1 for w in query_words if w in name_lower or w in content_lower)
+
+            # Require either full match or at least 3 word matches (stricter to reduce noise)
+            if full_match or word_matches >= 3:
                 title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
                 title = title_match.group(1) if title_match else name.replace('_', ' ').title()
 
-                # Find context around the match
-                content_lower = content.lower()
                 idx = content_lower.find(query_lower)
                 if idx != -1:
                     start = max(0, idx - 50)
-                    end = min(len(content), idx + len(query) + 100)
+                    end = min(len(content), idx + len(query_lower) + 100)
                     snippet = content[start:end].strip()
                     if start > 0:
                         snippet = "..." + snippet
@@ -806,8 +1105,10 @@ class KnowledgeLoader:
                 matches.append({
                     'id': name,
                     'title': title,
-                    'snippet': snippet
+                    'snippet': snippet,
+                    'trigger_matched': False
                 })
+                seen_ids.add(name)
 
         return matches
 
