@@ -68,7 +68,7 @@ const getProgressiveCTA = (queryNumber: number): string | null => {
     + '- **Amendator** -- Draft EU legislative amendments in proper EP format\n'
     + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
     + '- **Document Generator** -- Position papers, MEP briefings, and talking points\n\n'
-    + '[Start your free trial -- from EUR 39/month](/signup)';
+    + '[Start your 14-day free trial](/signup)';
 };
 
 export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfaceProps = {}) => {
@@ -173,12 +173,12 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
         const blockedMessage: Message = {
           id: 'blocked_' + Date.now(),
           role: 'assistant',
-          content: 'You have reached the limit for non-registered users. Sign up for free to continue chatting and unlock all of Brubru\'s features:\n\n'
-            + '- **My EU Bubble**: Track EU legislation, RSS feeds, predictions, and committee work\n'
-            + '- **Amendator**: Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
-            + '- **EU Law Comply**: AI-powered compliance gap analysis against EU regulations\n'
-            + '- **Tenderator**: Find and track EU public procurement tenders\n\n'
-            + '[Sign up for free](/signup)',
+          content: 'You have used your 3 free queries. Start a free trial to continue chatting and unlock the full Brubru toolkit:\n\n'
+            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
+            + '- **Amendator** -- Draft EU legislative amendments in proper EP format\n'
+            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
+            + '- **Document Generator** -- Position papers, MEP briefings, and talking points\n\n'
+            + '[Start your 14-day free trial](/signup)',
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, userMessage, blockedMessage]);
@@ -287,12 +287,12 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
         const blockedMessage: Message = {
           id: 'blocked_' + Date.now(),
           role: 'assistant',
-          content: 'You have reached the limit for non-registered users. Sign up for free to continue chatting and unlock all of Brubru\'s features:\n\n'
-            + '- **My EU Bubble**: Track EU legislation, RSS feeds, predictions, and committee work\n'
-            + '- **Amendator**: Draft EU legislative amendments in proper Akoma Ntoso XML format\n'
-            + '- **EU Law Comply**: AI-powered compliance gap analysis against EU regulations\n'
-            + '- **Tenderator**: Find and track EU public procurement tenders\n\n'
-            + '[Sign up for free](/signup)',
+          content: 'You have used your 3 free queries. Start a free trial to continue chatting and unlock the full Brubru toolkit:\n\n'
+            + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work\n'
+            + '- **Amendator** -- Draft EU legislative amendments in proper EP format\n'
+            + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
+            + '- **Document Generator** -- Position papers, MEP briefings, and talking points\n\n'
+            + '[Start your 14-day free trial](/signup)',
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, userMessage, blockedMessage]);
