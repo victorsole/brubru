@@ -81,6 +81,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
   const [useContext] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [personalizedGreeting, setPersonalizedGreeting] = useState<string | null>(null);
+  const [personalizedSubGreeting, setPersonalizedSubGreeting] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const { isAuthenticated, user } = useAuth();
@@ -96,7 +97,8 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
   useEffect(() => {
     // Pre-user: show generic welcome
     if (!isAuthenticated) {
-      setPersonalizedGreeting('Welcome to Brubru, your AI partner for EU affairs! Ask me about any EU policy, legislation, committee, or institutional process. I can help you track legislation, identify key decision-makers, analyse regulatory impact, and much more.');
+      setPersonalizedGreeting('Welcome to Brubru, your AI partner for EU affairs!');
+      setPersonalizedSubGreeting('Ask me about any EU policy, legislation, committee, or institutional process. I can help you track legislation, identify key decision-makers, analyse regulatory impact, and much more.');
       return;
     }
 
@@ -463,6 +465,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
         {messages.length === 0 ? (
           <div className="chat-interface__empty">
             <h2>{personalizedGreeting || t('chat.welcome')}</h2>
+            {personalizedSubGreeting && <h3>{personalizedSubGreeting}</h3>}
             <p>{t('chat.tagline')}</p>
             <p className="chat-interface__empty-hint">
               {t('chat.startConversation')}
