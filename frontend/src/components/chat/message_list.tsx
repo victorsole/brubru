@@ -11,9 +11,52 @@ import './message_list.css';
 interface MessageListProps {
   messages: Message[];
   chatId?: string | null;
+  onFollowUpClick?: (text: string) => void;
 }
 
-export const MessageList = ({ messages, chatId }: MessageListProps) => {
+// Extract follow-up suggestions from the end of assistant messages.
+// Looks for patterns like "Would you like me to...", "I can also...", "Shall I..."
+// at the end of a message and splits them into clickable items.
+const extractFollowUps = (content: string): { cleanContent: string; followUps: string[] } => {
+  const lines = content.split('\n');
+  const followUps: string[] = [];
+  let cutIndex = lines.length;
+
+  // Scan backwards from end for follow-up patterns
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const trimmed = lines[i].trim();
+    if (!trimmed) continue;
+
+    // Match lines starting with follow-up patterns (with or without bullet prefix)
+    const followUpMatch = trimmed.match(
+      /^(?:[-*]\s*)?(?:Would you like (?:me to|to)|I can (?:also|help)|Shall I|Do you want me to|I could also)\b/i
+    );
+    if (followUpMatch) {
+      // Strip bullet prefix and leading dash
+      const cleaned = trimmed.replace(/^[-*]\s*/, '').trim();
+      followUps.unshift(cleaned);
+      cutIndex = i;
+    } else {
+      // Stop scanning once we hit a non-follow-up, non-empty line
+      break;
+    }
+  }
+
+  if (followUps.length === 0) {
+    return { cleanContent: content, followUps: [] };
+  }
+
+  // Build clean content without the follow-up lines
+  const cleanLines = lines.slice(0, cutIndex);
+  // Also trim trailing empty lines
+  while (cleanLines.length > 0 && !cleanLines[cleanLines.length - 1].trim()) {
+    cleanLines.pop();
+  }
+
+  return { cleanContent: cleanLines.join('\n'), followUps };
+};
+
+export const MessageList = ({ messages, chatId, onFollowUpClick }: MessageListProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [expandedSources, setExpandedSources] = useState<Set<string>>(new Set());
   const [feedbackGiven, setFeedbackGiven] = useState<Map<string, 'positive' | 'negative' | 'hallucination'>>(new Map());
@@ -269,7 +312,31 @@ export const MessageList = ({ messages, chatId }: MessageListProps) => {
             </div>
 
             {/* Message Content */}
-            {renderContentWithCitations(message.content, message.citations)}
+            {(() => {
+              if (message.role === 'assistant') {
+                const { cleanContent, followUps } = extractFollowUps(message.content);
+                return (
+                  <>
+                    {renderContentWithCitations(cleanContent, message.citations)}
+                    {followUps.length > 0 && onFollowUpClick && (
+                      <div className="message-list__follow-ups">
+                        {followUps.map((text, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            className="message-list__follow-up-btn"
+                            onClick={() => onFollowUpClick(text)}
+                          >
+                            {text}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                );
+              }
+              return renderContentWithCitations(message.content, message.citations);
+            })()}
 
             {/* Context Indicator */}
             {message.role === 'assistant' && message.contextsUsed !== undefined && message.contextsUsed > 0 && (

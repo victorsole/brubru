@@ -129,7 +129,8 @@ class AIService:
         user_id: Optional[str] = None,
         document_ids: Optional[List[str]] = None,
         use_context: bool = True,
-        stream: bool = False
+        stream: bool = False,
+        is_pre_user: bool = False
     ) -> ChatResponse:
         """
         Send chat message and get AI response.
@@ -229,7 +230,7 @@ class AIService:
             context_str = memory_context
 
         # Build system prompt
-        system_prompt = self._build_system_prompt()
+        system_prompt = self._build_system_prompt(is_pre_user=is_pre_user)
 
         # Build messages
         messages = self._build_messages(
@@ -368,7 +369,8 @@ class AIService:
         self,
         user_message: str,
         conversation_history: Optional[List[ChatMessage]] = None,
-        use_context: bool = True
+        use_context: bool = True,
+        is_pre_user: bool = False
     ) -> AsyncGenerator[str, None]:
         """
         Stream chat response.
@@ -396,7 +398,7 @@ class AIService:
             )
 
         # Build prompts
-        system_prompt = self._build_system_prompt()
+        system_prompt = self._build_system_prompt(is_pre_user=is_pre_user)
         messages = self._build_messages(
             user_message=user_message,
             context=context_str,
@@ -416,14 +418,17 @@ class AIService:
 
         logger.info(f"Streamed response in {(datetime.now() - start_time).total_seconds():.2f}s")
 
-    def _build_system_prompt(self) -> str:
+    def _build_system_prompt(self, is_pre_user: bool = False) -> str:
         """
         Build system prompt for Claude.
+
+        Args:
+            is_pre_user: Whether the user is a non-registered pre-user
 
         Returns:
             System prompt string
         """
-        return """You are Brubru, an expert AI assistant specializing in European Union legislative affairs, policies, and institutional operations.
+        prompt = """You are Brubru, an expert AI assistant specializing in European Union legislative affairs, policies, and institutional operations.
 
 Your capabilities:
 - Answer questions about EU legislation, directives, and regulations
@@ -446,6 +451,19 @@ Guidelines:
 4. Be concise but comprehensive
 5. Use clear, professional language
 6. If specific details aren't in the provided context, admit it rather than guessing
+
+CRITICAL - QUERY CLASSIFICATION:
+Before answering, classify the query:
+- CLEAR: Contains a specific entity (legislation name/number, MEP name, committee code, procedure ref, institution, date). Answer directly.
+- BROAD: No specific entity, covers multiple topics, or is a single general concept. You MUST ask for clarification first.
+
+For BROAD queries:
+1. Acknowledge the topic in one sentence.
+2. List 3-5 specific angles the user might mean, as bullet points.
+3. Ask which to explore.
+4. Keep total response under 100 words until the user clarifies.
+
+Rule: When uncertain, ask. When certain, answer.
 
 When answering:
 - Start with a direct answer
@@ -585,27 +603,7 @@ Drafting response pattern:
 Bad pattern (NEVER do this): Starting with an explanation of what the topic IS. Example: if user says "Draft position paper on PFAS", do NOT start with "PFAS are a group of chemicals..." Instead start with "I can help you draft a position paper on the PFAS restriction."
 
 CLARIFICATION FOR BROAD QUESTIONS (Phase D1):
-When a question covers multiple aspects of a complex topic, ask for clarification before giving a vague answer:
-
-Example 4 - Asking for clarification:
-User: "What does the AI Act say about biometrics?"
-Good: "The AI Act addresses biometrics in several ways:
-- **Prohibited uses** (Article 5): Real-time remote biometric identification in public spaces
-- **High-risk classification** (Annex III): Biometric systems for identification
-- **Transparency requirements** (Article 50): Disclosure when interacting with biometric AI
-
-Which aspect would you like me to explain in detail?"
-
-Example 5 - Clarifying scope:
-User: "Tell me about EU digital policy"
-Good: "EU digital policy covers many areas. To give you the most useful answer, are you interested in:
-- **Data protection** (GDPR, Data Act)
-- **Platform regulation** (DSA, DMA)
-- **AI governance** (AI Act)
-- **Cybersecurity** (NIS2, Cyber Resilience Act)
-- **Digital infrastructure** (connectivity, cloud)
-
-Or would you prefer a general overview of all areas?"
+See QUERY CLASSIFICATION above. For multi-aspect questions, list sub-topics as bullet points with bold labels, then ask which to explore. Do NOT write a long answer before the user clarifies.
 
 PROGRESSIVE DISCLOSURE (Phase D2):
 For complex topics, structure your response in layers:
@@ -716,6 +714,19 @@ The Amendator formats everything according to EP amendment conventions, includin
 Adapt the wording to the specific legislation the user mentions. If they mention a specific procedure reference, include it in step 1. If they describe their policy goals, acknowledge them and explain that the AI Assistant in the Amendator can help translate those goals into concrete amendment text.
 
 Remember: You have access to comprehensive EU data. When information IS in your context, answer confidently. When it is NOT, be honest about the limitation rather than guessing."""
+
+        if is_pre_user:
+            prompt += """
+
+PRE-USER CONTEXT:
+This user has NOT signed up yet. When your answer relates to a Brubru feature, mention it naturally in ONE sentence:
+- Legislative file tracking -> "You can track this file's progress in My EU Bubble."
+- Amendment drafting -> "The Amendator lets you draft amendments to this file."
+- Document generation -> "Brubru's Document Generator can produce full position papers and briefings."
+- Compliance analysis -> "EU Law Comply can analyse your organisation's compliance gaps."
+Maximum one feature mention per response. Keep it natural, not salesy."""
+
+        return prompt
 
     def _build_messages(
         self,

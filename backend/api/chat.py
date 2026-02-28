@@ -365,6 +365,9 @@ async def send_message(
             ai_service = get_ai_service()
             logger.info("Using standard AI service (Claude only)")
 
+        # Determine if this is a pre-user (anonymous, not signed up)
+        is_pre_user = bool(request.pre_user_id and not request.user_id)
+
         # Generate response with timeout (180 seconds = 3 minutes)
         timeout = 180.0
 
@@ -376,7 +379,8 @@ async def send_message(
                     user_id=request.user_id,
                     document_ids=request.document_ids,
                     use_context=request.use_context,
-                    stream=False
+                    stream=False,
+                    is_pre_user=is_pre_user
                 ),
                 timeout=timeout
             )
@@ -463,6 +467,7 @@ async def stream_message(request: ChatMessageRequest):
         ]
 
         ai_service = get_ai_service()
+        is_pre_user = bool(request.pre_user_id and not request.user_id)
         logger.info("Using standard AI service for streaming (hybrid streaming not yet implemented)")
 
         async def generate():
@@ -471,7 +476,8 @@ async def stream_message(request: ChatMessageRequest):
             async for chunk in ai_service.chat_stream(
                 user_message=request.message,
                 conversation_history=history,
-                use_context=request.use_context
+                use_context=request.use_context,
+                is_pre_user=is_pre_user
             ):
                 full_response += chunk
                 yield f"data: {chunk}\n\n"

@@ -546,6 +546,65 @@
   cursor: not-allowed;
 }
 
+/* Follow-up Suggestion Buttons */
+.message-list__follow-ups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.message-list__follow-up-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background-color: transparent;
+  border: 1px solid var(--color-accent-blue, #0693e3);
+  border-radius: 999px;
+  color: var(--color-accent-blue, #0693e3);
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  max-width: 100%;
+}
+
+.message-list__follow-up-btn:hover {
+  background-color: var(--color-accent-blue, #0693e3);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.message-list__follow-up-btn:active {
+  transform: translateY(0);
+}
+
+/* Tablet: max 2 per row */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .message-list__follow-up-btn {
+    flex: 0 1 calc(50% - var(--space-2));
+  }
+}
+
+/* Mobile: full-width stacked, 44px min touch target */
+@media (max-width: 767px) {
+  .message-list__follow-ups {
+    flex-direction: column;
+  }
+
+  .message-list__follow-up-btn {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+  }
+}
+
 /* Flex wrap for feedback section */
 .message-list__feedback {
   flex-wrap: wrap;

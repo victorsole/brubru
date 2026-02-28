@@ -53,6 +53,24 @@ const incrementPreUserQueryCount = (): number => {
   return count;
 };
 
+const getProgressiveCTA = (queryNumber: number): string | null => {
+  if (queryNumber <= 1) {
+    // Query 1: No CTA - pure value delivery
+    return null;
+  }
+  if (queryNumber === 2) {
+    // Query 2: Subtle feature discovery
+    return '\n\n---\n\nDid you know? Brubru can also track legislation, draft amendments, and generate position papers. [Discover all features](/signup)';
+  }
+  // Query 3: Prominent feature cards
+  return '\n\n---\n\n**Unlock the full Brubru toolkit:**\n\n'
+    + '- **My EU Bubble** -- Track EU legislation, RSS feeds, predictions, and committee work in real time\n'
+    + '- **Amendator** -- Draft EU legislative amendments in proper EP format\n'
+    + '- **EU Law Comply** -- AI-powered compliance gap analysis against EU regulations\n'
+    + '- **Document Generator** -- Position papers, MEP briefings, and talking points\n\n'
+    + '[Start your free trial -- from EUR 39/month](/signup)';
+};
+
 export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfaceProps = {}) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -205,11 +223,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
         setChatId(data.chat_id);
       }
 
-      // For pre-users, increment count and append CTA
+      // For pre-users, increment count and append progressive CTA
       let messageContent = data.message;
       if (!isAuthenticated) {
-        incrementPreUserQueryCount();
-        messageContent += '\n\n---\n\nWould you like to discover what else Brubru can do for you? [Sign up for free here!](/signup)';
+        const newCount = incrementPreUserQueryCount();
+        const cta = getProgressiveCTA(newCount);
+        if (cta) {
+          messageContent += cta;
+        }
       }
 
       const aiMessage: Message = {
@@ -356,17 +377,19 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
           }
         }
       }
-      // For pre-users, increment count and append CTA after streaming
+      // For pre-users, increment count and append progressive CTA after streaming
       if (!isAuthenticated) {
-        incrementPreUserQueryCount();
-        const ctaSuffix = '\n\n---\n\nWould you like to discover what else Brubru can do for you? [Sign up for free here!](/signup)';
-        setMessages((prev) =>
-          prev.map((msg) =>
-            msg.id === streamingMessageId
-              ? { ...msg, content: msg.content + ctaSuffix }
-              : msg
-          )
-        );
+        const newCount = incrementPreUserQueryCount();
+        const cta = getProgressiveCTA(newCount);
+        if (cta) {
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === streamingMessageId
+                ? { ...msg, content: msg.content + cta }
+                : msg
+            )
+          );
+        }
       }
     } catch (err: any) {
       if (err.name === 'AbortError') {
@@ -479,7 +502,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
             </div>
           </div>
         ) : (
-          <MessageList messages={messages} chatId={chatId} />
+          <MessageList
+            messages={messages}
+            chatId={chatId}
+            onFollowUpClick={(text) => {
+              setInputValue(text);
+              requestAnimationFrame(() => textareaRef.current?.focus());
+            }}
+          />
         )}
         <AnimatePresence>
           {(isLoading || isStreaming) && (
