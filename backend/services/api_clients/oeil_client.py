@@ -38,6 +38,7 @@ class OEILFeedItem:
     last_pub_date: Optional[datetime] = None
     committees: List[str] = field(default_factory=list)
     rapporteurs: List[str] = field(default_factory=list)
+    shadow_rapporteurs: List[str] = field(default_factory=list)
 
     @property
     def procedure_type(self) -> Optional[str]:
@@ -607,11 +608,26 @@ class OEILClient(BaseAPIClient):
                                     committees.append(comm_text.split(code)[0].strip() or code)
                     break
 
-            # Extract rapporteurs
+            # Extract rapporteurs and shadow rapporteurs
             rapporteurs = []
+            shadow_rapporteurs = []
             for t in soup.find_all('table'):
                 header_row = t.find('tr')
-                if header_row and 'rapporteur' in header_row.get_text(strip=True).lower():
+                if not header_row:
+                    continue
+                header_text = header_row.get_text(strip=True).lower()
+
+                if 'shadow' in header_text and 'rapporteur' in header_text:
+                    # Shadow rapporteurs table
+                    data_rows = t.find_all('tr')
+                    for row in data_rows[1:]:
+                        cells = row.find_all(['td', 'th'])
+                        if len(cells) >= 2:
+                            rap_text = cells[1].get_text(strip=True)
+                            if rap_text and len(rap_text) > 2:
+                                shadow_rapporteurs.append(rap_text)
+                elif 'rapporteur' in header_text and not rapporteurs:
+                    # Lead rapporteur table (take first match only)
                     data_rows = t.find_all('tr')
                     for row in data_rows[1:]:
                         cells = row.find_all(['td', 'th'])
@@ -619,14 +635,14 @@ class OEILClient(BaseAPIClient):
                             rap_text = cells[1].get_text(strip=True)
                             if rap_text and len(rap_text) > 2:
                                 rapporteurs.append(rap_text)
-                    break
 
             item = OEILFeedItem(
                 reference=procedure_ref,
                 title=title,
                 link=url,
                 committees=committees,
-                rapporteurs=rapporteurs
+                rapporteurs=rapporteurs,
+                shadow_rapporteurs=shadow_rapporteurs,
             )
 
             logger.info(f"[OK] Looked up procedure {procedure_ref}: {title[:80]}...")

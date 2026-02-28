@@ -206,6 +206,11 @@ COUNTRY_DEMONYMS = {
 RAPPORTEUR_INTENT_PHRASES = [
     'rapporteur', 'rapporteurs', 'ponente', 'ponentes', 'ponent', 'ponents',
     'relator', 'relatores', 'berichterstatter',
+    # Shadow rapporteur variants (triggers same country-rapporteur pipeline)
+    'shadow rapporteur', 'shadow rapporteurs', 'shadow-rapporteur',
+    'ponente sombra', 'ponentes sombra', 'ponent ombra', 'ponents ombra',
+    'schattenberichterstatter', 'rapporteur fictif', 'rapporteurs fictifs',
+    'relator-sombra', 'relatores-sombra',
 ]
 
 # Country name to ISO 3166-1 alpha-2 code (for EP API filtering)
@@ -1249,7 +1254,7 @@ class ContextBuilder:
         country_name: str
     ) -> List[Dict[str, Any]]:
         """
-        Fetch all known rapporteurs from a specific country.
+        Fetch all known rapporteurs and shadow rapporteurs from a specific country.
         Aggregates data from legislative_carriages (OEIL cache) and committee_work.
         Uses EP API country filter (ISO code) to get MEPs from target country,
         then matches rapporteur names against that list.
@@ -1258,26 +1263,27 @@ class ContextBuilder:
             country_name: Country name (e.g., "Spain", "France")
 
         Returns:
-            List of rapporteur entries with name, group, committee, procedure, title
+            List of rapporteur entries with name, group, committee, procedure, title, role
         """
         rapporteurs = []
-        seen_names = set()
+        seen_entries = set()  # (name_lower, procedure_ref, role) to avoid duplicates
 
         try:
             from sqlalchemy import text
+            import json
 
             db = SessionLocal()
 
-            # 1. Query OEIL-cached rapporteur data from legislative_carriages
+            # 1. Query OEIL-cached rapporteur + shadow data from legislative_carriages
             oeil_results = db.execute(text("""
                 SELECT
-                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'name' as name,
-                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'political_group' as grp,
-                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'mep_id' as mep_id,
+                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'name' as rap_name,
+                    oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'political_group' as rap_grp,
+                    oeil_procedure_data->'key_players'->'committee_responsible'->>'shadow_rapporteurs' as shadows_json,
                     lead_committee, oeil_procedure_ref, title
                 FROM legislative_carriages
                 WHERE oeil_procedure_data IS NOT NULL
-                AND oeil_procedure_data->'key_players'->'committee_responsible'->'rapporteur'->>'name' IS NOT NULL
+                AND oeil_procedure_data->'key_players'->'committee_responsible' IS NOT NULL
             """)).fetchall()
 
             # 2. Query committee_work rapporteurs
@@ -1289,10 +1295,22 @@ class ContextBuilder:
 
             db.close()
 
-            logger.info(f"[RAPPORTEUR] DB data: {len(oeil_results)} OEIL rapporteurs, {len(cw_results)} committee_work rapporteurs")
+            # Count rapporteurs and shadows from OEIL
+            oeil_rap_count = sum(1 for r in oeil_results if r[0])
+            oeil_shadow_count = 0
+            for r in oeil_results:
+                if r[2]:
+                    try:
+                        shadows = json.loads(r[2]) if isinstance(r[2], str) else r[2]
+                        if isinstance(shadows, list):
+                            oeil_shadow_count += len(shadows)
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+
+            logger.info(f"[RAPPORTEUR] DB data: {oeil_rap_count} OEIL rapporteurs, "
+                        f"{oeil_shadow_count} OEIL shadows, {len(cw_results)} committee_work")
 
             # 3. Get all MEPs from the target country using EP API with country code filter
-            # The API's country-of-representation filter returns ONLY MEPs from that country
             country_code = COUNTRY_NAME_TO_CODE.get(country_name)
             country_mep_name_parts = {}  # lowercase name -> set of name parts
             country_mep_info = {}  # lowercase name -> {full_name, group, mep_id}
@@ -1301,8 +1319,6 @@ class ContextBuilder:
                 try:
                     from services.api_clients.european_parliament_client import EuropeanParliamentClient
                     ep_client = EuropeanParliamentClient()
-                    # Use limit=500 to get ALL MEPs for the country (historical + current)
-                    # The default get_all_meps() only fetches 100, missing Z-surnames
                     api_meps = await ep_client.get_mep_list(country=country_code, limit=500)
                     await ep_client.close()
 
@@ -1315,7 +1331,7 @@ class ContextBuilder:
                         country_mep_name_parts[name_lower] = parts
                         country_mep_info[name_lower] = {
                             'full_name': name,
-                            'group': '',  # API list doesn't return group
+                            'group': '',
                             'mep_id': mep_data.get('id', ''),
                         }
 
@@ -1325,13 +1341,11 @@ class ContextBuilder:
             else:
                 logger.warning(f"[RAPPORTEUR] No ISO code found for country: {country_name}")
 
-            # 4. Name matching helper: checks if rapporteur name overlaps with any country MEP
+            # 4. Name matching helper
             CONNECTOR_WORDS = {'de', 'da', 'di', 'van', 'von', 'del', 'la', 'le', 'el', 'dos', 'das'}
 
             def match_to_country_mep(rapp_name_lower: str):
-                """Match a rapporteur name against country MEPs. Returns matched MEP info or None.
-                Requires at least 2 significant name parts overlap to avoid false positives
-                from common first names like 'Francisco' matching across countries."""
+                """Match a rapporteur name against country MEPs. Requires 2+ name part overlap."""
                 rapp_parts = set(rapp_name_lower.split())
                 rapp_parts = {p for p in rapp_parts if len(p) > 1 and p not in CONNECTOR_WORDS}
 
@@ -1342,45 +1356,70 @@ class ContextBuilder:
                         return country_mep_info.get(mep_name)
                 return None
 
-            # 5. Match OEIL rapporteurs to country
+            def clean_name(name: str) -> tuple:
+                """Remove group annotation, return (cleaned_name, cleaned_lower)."""
+                if '(' in name:
+                    name = name[:name.index('(')].strip()
+                return name, name.lower().strip()
+
+            def add_entry(name, group, committee, proc_ref, title, role, source):
+                """Add a rapporteur/shadow entry if not duplicate."""
+                _, name_lower = clean_name(name)
+                entry_key = (name_lower, proc_ref or '', role)
+                if entry_key in seen_entries:
+                    return False
+
+                matched_info = match_to_country_mep(name_lower)
+                if not matched_info:
+                    return False
+
+                seen_entries.add(entry_key)
+                rapporteurs.append({
+                    'name': matched_info.get('full_name', name),
+                    'political_group': group or matched_info.get('group', ''),
+                    'committee': committee or '',
+                    'procedure_ref': proc_ref or '',
+                    'file_title': (title or '')[:100],
+                    'role': role,
+                    'source': source,
+                })
+                return True
+
+            # 5. Match OEIL lead rapporteurs to country
             for row in oeil_results:
-                rapp_name = row[0] or ''
-                rapp_name_lower = rapp_name.lower().strip()
-                # Remove trailing group annotation like "(Greens/EFA)"
-                if '(' in rapp_name_lower:
-                    rapp_name_lower = rapp_name_lower[:rapp_name_lower.index('(')].strip()
-                    rapp_name = rapp_name[:rapp_name.index('(')].strip()
+                rap_name = row[0] or ''
+                if rap_name:
+                    add_entry(rap_name, row[1], row[3], row[4], row[5], 'rapporteur', 'OEIL')
 
-                matched_info = match_to_country_mep(rapp_name_lower)
-                if matched_info and rapp_name_lower not in seen_names:
-                    seen_names.add(rapp_name_lower)
-                    rapporteurs.append({
-                        'name': matched_info.get('full_name', rapp_name),
-                        'political_group': row[1] or matched_info.get('group', ''),
-                        'committee': row[3] or '',
-                        'procedure_ref': row[4] or '',
-                        'file_title': (row[5] or '')[:100],
-                        'source': 'OEIL',
-                    })
+                # 6. Match OEIL shadow rapporteurs to country
+                shadows_raw = row[2]
+                if shadows_raw:
+                    try:
+                        shadows = json.loads(shadows_raw) if isinstance(shadows_raw, str) else shadows_raw
+                        if isinstance(shadows, list):
+                            for shadow in shadows:
+                                if isinstance(shadow, dict):
+                                    shadow_name = shadow.get('name', '')
+                                    shadow_group = shadow.get('political_group', '')
+                                    if shadow_name:
+                                        add_entry(
+                                            shadow_name, shadow_group,
+                                            row[3], row[4], row[5],
+                                            'shadow rapporteur', 'OEIL'
+                                        )
+                    except (json.JSONDecodeError, TypeError):
+                        pass
 
-            # 6. Match committee_work rapporteurs to country
+            # 7. Match committee_work rapporteurs to country
             for row in cw_results:
                 rapp_name = row[0] or ''
-                rapp_name_lower = rapp_name.lower().strip()
+                if rapp_name:
+                    add_entry(rapp_name, '', row[1], row[2], row[3], 'rapporteur', 'committee_work')
 
-                matched_info = match_to_country_mep(rapp_name_lower)
-                if matched_info and rapp_name_lower not in seen_names:
-                    seen_names.add(rapp_name_lower)
-                    rapporteurs.append({
-                        'name': matched_info.get('full_name', rapp_name),
-                        'political_group': matched_info.get('group', ''),
-                        'committee': row[1] or '',
-                        'procedure_ref': row[2] or '',
-                        'file_title': (row[3] or '')[:100],
-                        'source': 'committee_work',
-                    })
-
-            logger.info(f"[RAPPORTEUR] Found {len(rapporteurs)} rapporteurs from {country_name} "
+            # Count by role
+            lead_count = sum(1 for r in rapporteurs if r['role'] == 'rapporteur')
+            shadow_count = sum(1 for r in rapporteurs if r['role'] == 'shadow rapporteur')
+            logger.info(f"[RAPPORTEUR] Found {lead_count} rapporteurs + {shadow_count} shadows from {country_name} "
                         f"(checked {len(oeil_results)} OEIL + {len(cw_results)} committee_work "
                         f"against {len(country_mep_name_parts)} {country_name} MEPs)")
 
@@ -2249,25 +2288,30 @@ class ContextBuilder:
                         existing_data['documentation_gateway'] = gateway_result
                         existing_data['documentation_gateway_fetched_at'] = datetime.now(timezone.utc).isoformat()
 
-                        # Extract rapporteur from lookup result
+                        # Extract rapporteur + shadow rapporteurs from lookup result
                         if not isinstance(lookup_result, Exception) and lookup_result:
-                            if lookup_result.rapporteurs:
-                                # Parse rapporteur: "KARLSBRO Karin (Renew)"
-                                import re
-                                rap_text = lookup_result.rapporteurs[0]
-                                group_match = re.search(r'\(([^)]+)\)', rap_text)
-                                rap_name = re.sub(r'\s*\([^)]*\)\s*', '', rap_text).strip()
-                                rap_group = group_match.group(1) if group_match else None
+                            import re
 
-                                existing_data.setdefault('key_players', {})
-                                existing_data['key_players']['committee_responsible'] = {
-                                    'code': carriage.lead_committee,
-                                    'rapporteur': {
-                                        'name': rap_name,
-                                        'political_group': rap_group,
-                                    },
-                                    'shadow_rapporteurs': []
-                                }
+                            def _parse_rap(text):
+                                gm = re.search(r'\(([^)]+)\)', text)
+                                nm = re.sub(r'\s*\([^)]*\)\s*', '', text).strip()
+                                return {'name': nm, 'political_group': gm.group(1) if gm else None}
+
+                            committee_data = existing_data.get('key_players', {}).get('committee_responsible', {})
+                            committee_data['code'] = carriage.lead_committee
+
+                            if lookup_result.rapporteurs:
+                                committee_data['rapporteur'] = _parse_rap(lookup_result.rapporteurs[0])
+
+                            if lookup_result.shadow_rapporteurs:
+                                committee_data['shadow_rapporteurs'] = [
+                                    _parse_rap(s) for s in lookup_result.shadow_rapporteurs
+                                ]
+                            elif 'shadow_rapporteurs' not in committee_data:
+                                committee_data['shadow_rapporteurs'] = []
+
+                            existing_data.setdefault('key_players', {})
+                            existing_data['key_players']['committee_responsible'] = committee_data
 
                         carriage.oeil_procedure_data = existing_data
                         carriage.enriched_at = datetime.now(timezone.utc)
@@ -3648,22 +3692,42 @@ class ContextBuilder:
         if context_data.rapporteur_by_country:
             country = context_data.rapporteur_country or 'Unknown'
             raps = context_data.rapporteur_by_country
-            sections.append(f"\nRAPPORTEURS FROM {country.upper()} ({len(raps)} found in Brubru database):")
+            leads = [r for r in raps if r.get('role') == 'rapporteur']
+            shadows = [r for r in raps if r.get('role') == 'shadow rapporteur']
+
+            sections.append(f"\nRAPPORTEURS FROM {country.upper()} ({len(leads)} lead rapporteurs, {len(shadows)} shadow rapporteurs found in Brubru database):")
             sections.append("IMPORTANT: This is a PARTIAL list based on Brubru's tracked legislative files.")
             sections.append("More rapporteurs may exist. Suggest the user check the EP website for a complete list.")
-            sections.append("")
-            for rap in raps:
-                line = f"- {rap['name']}"
-                if rap.get('political_group'):
-                    line += f" ({rap['political_group']})"
-                sections.append(line)
-                if rap.get('committee'):
-                    sections.append(f"  Committee: {rap['committee']}")
-                if rap.get('procedure_ref'):
-                    sections.append(f"  Procedure: {rap['procedure_ref']}")
-                if rap.get('file_title'):
-                    sections.append(f"  File: {rap['file_title']}")
-                sections.append("")
+
+            if leads:
+                sections.append("\nLead Rapporteurs:")
+                for rap in leads:
+                    line = f"- {rap['name']}"
+                    if rap.get('political_group'):
+                        line += f" ({rap['political_group']})"
+                    sections.append(line)
+                    if rap.get('committee'):
+                        sections.append(f"  Committee: {rap['committee']}")
+                    if rap.get('procedure_ref'):
+                        sections.append(f"  Procedure: {rap['procedure_ref']}")
+                    if rap.get('file_title'):
+                        sections.append(f"  File: {rap['file_title']}")
+                    sections.append("")
+
+            if shadows:
+                sections.append("Shadow Rapporteurs:")
+                for rap in shadows:
+                    line = f"- {rap['name']}"
+                    if rap.get('political_group'):
+                        line += f" ({rap['political_group']})"
+                    sections.append(line)
+                    if rap.get('committee'):
+                        sections.append(f"  Committee: {rap['committee']}")
+                    if rap.get('procedure_ref'):
+                        sections.append(f"  Procedure: {rap['procedure_ref']}")
+                    if rap.get('file_title'):
+                        sections.append(f"  File: {rap['file_title']}")
+                    sections.append("")
 
         # Committee information
         if context_data.committee_info:
