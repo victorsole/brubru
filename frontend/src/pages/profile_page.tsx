@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { PolicyPreferencesSelector } from '../components/profile/policy_preferences_selector';
 import { BackgroundSelector } from '../components/profile/background_selector';
 import { FeedbackForm } from '../components/feedback/feedback_form';
+import { TrainerStarRing, TrainerShieldBadge, TrainerNameGlow } from '../components/shared/trainer_badge';
 import Icon from '@mdi/react';
 import {
   mdiViewDashboardOutline,
@@ -217,7 +218,7 @@ export const ProfilePage = () => {
             <p className="profile-dashboard__stat-label">Subscription</p>
             <p className="profile-dashboard__stat-value">
               <span className={`profile-dashboard__tier-badge profile-dashboard__tier-badge--${user?.subscription_tier || 'white'}`}>
-                {currentTier?.name || 'White (Basic)'}
+                {user?.is_trainer ? 'Brubru Trainer' : (currentTier?.name || 'White (Basic)')}
               </span>
             </p>
           </div>
@@ -665,9 +666,21 @@ export const ProfilePage = () => {
       {/* Sidebar */}
       <aside className={`profile-dashboard__sidebar ${mobileMenuOpen ? 'profile-dashboard__sidebar--open' : ''}`}>
         <div className="profile-dashboard__sidebar-header">
-          <div className="profile-dashboard__avatar">{userInitials}</div>
+          {user?.is_trainer ? (
+            <TrainerStarRing size={44}>
+              <div className="profile-dashboard__avatar">{userInitials}</div>
+            </TrainerStarRing>
+          ) : (
+            <div className="profile-dashboard__avatar">{userInitials}</div>
+          )}
           <div className="profile-dashboard__user-info">
-            <div className="profile-dashboard__user-name">{user?.full_name || 'User'}</div>
+            <div className="profile-dashboard__user-name">
+              {user?.is_trainer ? (
+                <><TrainerNameGlow>{user?.full_name || 'User'}</TrainerNameGlow><TrainerShieldBadge size="md" /></>
+              ) : (
+                user?.full_name || 'User'
+              )}
+            </div>
             <div className="profile-dashboard__user-email">{user?.email}</div>
           </div>
         </div>

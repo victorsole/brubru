@@ -1,0 +1,84 @@
+/* frontend/src/components/shared/trainer_badge.css */
+
+/* ================================================================
+   TrainerStarRing
+   ================================================================ */
+
+.trainer-star-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trainer-star-ring__orbit {
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  animation: trainerStarRotate 30s linear infinite;
+}
+
+.trainer-star-ring__star {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -3px;
+  margin-left: -3px;
+  transform-origin: 0 0;
+}
+
+@keyframes trainerStarRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ================================================================
+   TrainerShieldBadge
+   ================================================================ */
+
+.trainer-shield-badge {
+  vertical-align: middle;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   TrainerNameGlow
+   ================================================================ */
+
+.trainer-name-glow {
+  background: linear-gradient(
+    90deg,
+    currentColor 0%,
+    #0693e3 25%,
+    #d97706 50%,
+    #0693e3 75%,
+    currentColor 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: trainerNameShimmer 3s ease-in-out infinite;
+}
+
+@keyframes trainerNameShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ================================================================
+   Mobile responsive
+   ================================================================ */
+
+@media (max-width: 767px) {
+  .trainer-star-ring__orbit {
+    inset: -4px;
+  }
+
+  .trainer-star-ring__star {
+    margin-top: -2px;
+    margin-left: -2px;
+  }
+}

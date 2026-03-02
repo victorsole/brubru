@@ -87,6 +87,7 @@ class UserResponse(BaseModel):
     last_login: Optional[datetime]
     is_active: bool
     is_verified: bool
+    is_trainer: bool = False
 
     class Config:
         from_attributes = True

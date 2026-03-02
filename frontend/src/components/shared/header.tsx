@@ -15,6 +15,7 @@ import { SUPPORTED_LANGUAGES, LANGUAGE_NAMES } from '../../i18n/config';
 import type { SupportedLanguage } from '../../i18n/config';
 import { useTour } from '../tour';
 import { NotificationDropdown } from './notification_dropdown';
+import { TrainerStarRing, TrainerShieldBadge, TrainerNameGlow } from './trainer_badge';
 import './header.css';
 
 export const Header = () => {
@@ -173,17 +174,33 @@ export const Header = () => {
                   onClick={() => setShowDropdown(!showDropdown)}
                   aria-label="User menu"
                 >
-                  <img
-                    src="/assets/brubru_icon.png"
-                    alt="User"
-                    className="header__user-icon"
-                  />
+                  {user.is_trainer ? (
+                    <TrainerStarRing size={28}>
+                      <img
+                        src="/assets/brubru_icon.png"
+                        alt="User"
+                        className="header__user-icon"
+                      />
+                    </TrainerStarRing>
+                  ) : (
+                    <img
+                      src="/assets/brubru_icon.png"
+                      alt="User"
+                      className="header__user-icon"
+                    />
+                  )}
                 </button>
 
               {showDropdown && (
                 <div className="header__user-dropdown">
                   <div className="header__user-info">
-                    <div className="header__user-name">{user.full_name || user.email}</div>
+                    <div className="header__user-name">
+                      {user.is_trainer ? (
+                        <><TrainerNameGlow>{user.full_name || user.email}</TrainerNameGlow><TrainerShieldBadge size="sm" /></>
+                      ) : (
+                        user.full_name || user.email
+                      )}
+                    </div>
                     <div className="header__user-email">{user.email}</div>
                   </div>
                   <div className="header__user-divider"></div>

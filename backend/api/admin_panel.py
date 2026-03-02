@@ -38,6 +38,7 @@ class UserManagementResponse(BaseModel):
     role: str
     is_active: bool
     is_verified: bool
+    is_trainer: bool = False
     created_at: datetime
     last_login: Optional[datetime]
     subscription_tier: Optional[str]
@@ -56,6 +57,7 @@ class UserManagementResponse(BaseModel):
             role=obj.role,
             is_active=obj.is_active,
             is_verified=obj.is_verified,
+            is_trainer=getattr(obj, 'is_trainer', False) or False,
             created_at=obj.created_at,
             last_login=obj.last_login,
             subscription_tier=obj.subscription_tier,
@@ -68,6 +70,7 @@ class UserUpdateRequest(BaseModel):
     role: Optional[str] = None
     is_active: Optional[bool] = None
     is_verified: Optional[bool] = None
+    is_trainer: Optional[bool] = None
     subscription_tier: Optional[str] = None
 
 

@@ -62,6 +62,7 @@ class User(Base):
     last_login = Column(DateTime(timezone=True), nullable=True)
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
+    is_trainer = Column(Boolean, default=False)
 
     # Relationships
     notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")

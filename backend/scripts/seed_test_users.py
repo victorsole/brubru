@@ -36,7 +36,8 @@ TEST_USERS = [
         "email": "cjsberends@gmail.com",
         "password": "test123",
         "subscription_tier": "blue",
-        "policy_interests": ["Trade"]
+        "policy_interests": ["Trade"],
+        "is_trainer": True,
     },
     {
         "full_name": "Marga Payola",
@@ -64,14 +65,16 @@ TEST_USERS = [
         "email": "nsligthart@gmail.com",
         "password": "test123",
         "subscription_tier": "blue",
-        "policy_interests": ["Economics", "Finance"]
+        "policy_interests": ["Economics", "Finance"],
+        "is_trainer": True,
     },
     {
         "full_name": "Robin Loos",
         "email": "sustainability@beuc.eu",
         "password": "test123",
         "subscription_tier": "yellow",
-        "policy_interests": ["Transport", "Consumer Protection"]
+        "policy_interests": ["Transport", "Consumer Protection"],
+        "is_trainer": True,
     },
     {
         "full_name": "Joan González",
@@ -106,7 +109,8 @@ TEST_USERS = [
         "email": "marc.desmond10@gmail.com",
         "password": "test123",
         "subscription_tier": "yellow",
-        "policy_interests": ["Sports supplements"]
+        "policy_interests": ["Sports supplements"],
+        "is_trainer": True,
     },
     {
         "full_name": "Andrés López",
@@ -121,6 +125,22 @@ TEST_USERS = [
         "password": "test123",
         "subscription_tier": "yellow",
         "policy_interests": ["Transport"]
+    },
+    {
+        "full_name": "Dave Hemingway",
+        "email": "dwhemingway@gmail.com",
+        "password": "test123",
+        "subscription_tier": "blue",
+        "policy_interests": ["General"],
+        "is_trainer": True,
+    },
+    {
+        "full_name": "Victor",
+        "email": "victor@hellobo.eu",
+        "password": "test123",
+        "subscription_tier": "blue",
+        "policy_interests": ["General"],
+        "is_trainer": True,
     },
 ]
 
@@ -155,6 +175,7 @@ def main():
                 policy_interests=user_data["policy_interests"],
                 is_active=True,
                 is_verified=True,  # Pre-verified for testing
+                is_trainer=user_data.get("is_trainer", False),
             )
 
             db.add(new_user)

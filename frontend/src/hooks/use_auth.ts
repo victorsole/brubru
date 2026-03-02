@@ -20,6 +20,7 @@ interface User {
   last_login: string | null;
   is_active: boolean;
   is_verified: boolean;
+  is_trainer: boolean;
 }
 
 interface AuthState {
