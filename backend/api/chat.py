@@ -12,6 +12,7 @@ Endpoints:
 - GET /api/chat/citations/{chat_id} - Get citations for conversation
 """
 
+import json
 import logging
 import uuid as uuid_mod
 from typing import List, Dict, Any, Optional
@@ -477,8 +478,19 @@ async def stream_message(request: ChatMessageRequest):
                 user_message=request.message,
                 conversation_history=history,
                 use_context=request.use_context,
-                is_pre_user=is_pre_user
+                is_pre_user=is_pre_user,
+                document_ids=request.document_ids
             ):
+                # Status/entity events are JSON -- pass through as SSE but don't save to DB
+                if chunk.startswith("{"):
+                    try:
+                        parsed = json.loads(chunk)
+                        if parsed.get("type") in ("status", "entities"):
+                            yield f"data: {chunk}\n\n"
+                            continue
+                    except (json.JSONDecodeError, AttributeError):
+                        pass
+
                 full_response += chunk
                 yield f"data: {chunk}\n\n"
 

@@ -5,13 +5,17 @@ import { marked } from 'marked';
 import Icon from '@mdi/react';
 import { mdiMedalOutline, mdiEmoticonConfusedOutline, mdiAlertCircleOutline, mdiClose } from '@mdi/js';
 import axios from 'axios';
-import type { Message, Citation } from './chat_interface';
+import type { Message, Citation, DetectedEntities } from './chat_interface';
 import './message_list.css';
 
 interface MessageListProps {
   messages: Message[];
   chatId?: string | null;
   onFollowUpClick?: (text: string) => void;
+  abVariant?: 'A' | 'B';
+  detectedEntities?: DetectedEntities | null;
+  preUserQueryCount?: number;
+  onSmartSuggestionClick?: (text: string) => void;
 }
 
 // Extract follow-up suggestions from the end of assistant messages.
@@ -56,7 +60,35 @@ const extractFollowUps = (content: string): { cleanContent: string; followUps: s
   return { cleanContent: cleanLines.join('\n'), followUps };
 };
 
-export const MessageList = ({ messages, chatId, onFollowUpClick }: MessageListProps) => {
+// Generate smart suggestion buttons based on detected entities
+const generateSmartSuggestions = (entities: DetectedEntities | null | undefined): string[] => {
+  if (!entities) return [];
+  const suggestions: string[] = [];
+
+  if (entities.mep_names.length > 0) {
+    suggestions.push('Show me which MEPs are working on this');
+  }
+  if (entities.procedure_references.length > 0) {
+    const ref = entities.procedure_references[0];
+    suggestions.push(`What is the current status of ${ref}?`);
+  }
+  if (entities.committee_codes.length > 0) {
+    const code = entities.committee_codes[0];
+    suggestions.push(`Who are the key members of the ${code} committee?`);
+  }
+  if (entities.policy_areas.length > 0) {
+    suggestions.push('Draft a quick briefing on this topic');
+  }
+
+  // Fallback if no specific entities detected
+  if (suggestions.length === 0) {
+    suggestions.push('What EU legislation is most relevant to this topic?');
+  }
+
+  return suggestions.slice(0, 3);
+};
+
+export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, detectedEntities, preUserQueryCount, onSmartSuggestionClick }: MessageListProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [expandedSources, setExpandedSources] = useState<Set<string>>(new Set());
   const [feedbackGiven, setFeedbackGiven] = useState<Map<string, 'positive' | 'negative' | 'hallucination'>>(new Map());
@@ -315,6 +347,9 @@ export const MessageList = ({ messages, chatId, onFollowUpClick }: MessageListPr
             {(() => {
               if (message.role === 'assistant') {
                 const { cleanContent, followUps } = extractFollowUps(message.content);
+                const isLastAssistant = message === [...messages].reverse().find(m => m.role === 'assistant');
+                const showSmartSuggestions = abVariant === 'B' && preUserQueryCount === 1 && isLastAssistant;
+                const smartSuggestions = showSmartSuggestions ? generateSmartSuggestions(detectedEntities) : [];
                 return (
                   <>
                     {renderContentWithCitations(cleanContent, message.citations)}
@@ -327,6 +362,22 @@ export const MessageList = ({ messages, chatId, onFollowUpClick }: MessageListPr
                             className="message-list__follow-up-btn"
                             onClick={() => onFollowUpClick(text)}
                           >
+                            {text}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {smartSuggestions.length > 0 && onSmartSuggestionClick && (
+                      <div className="message-list__smart-suggestions">
+                        <span className="message-list__smart-suggestions-label">Explore further:</span>
+                        {smartSuggestions.map((text, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            className="message-list__smart-suggestion-btn"
+                            onClick={() => onSmartSuggestionClick(text)}
+                          >
+                            <span className="mdi mdi-lightbulb-on-outline"></span>
                             {text}
                           </button>
                         ))}

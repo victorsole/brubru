@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { MessageList } from './message_list';
 import { useAuth } from '../../hooks/use_auth';
+import { trackPreUserEvent, getAbVariant } from '../../services/preuser_tracker';
 import './chat_interface.css';
 
 export interface Citation {
@@ -71,17 +72,28 @@ const getProgressiveCTA = (queryNumber: number): string | null => {
     + '[Start your 14-day free trial](/signup)';
 };
 
+export interface DetectedEntities {
+  mep_names: string[];
+  committee_codes: string[];
+  procedure_references: string[];
+  celex_numbers: string[];
+  policy_areas: string[];
+}
+
 export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfaceProps = {}) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [thinkingStatus, setThinkingStatus] = useState<string | null>(null);
   const [chatId, setChatId] = useState<string | null>(null);
   const [useContext] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [personalizedGreeting, setPersonalizedGreeting] = useState<string | null>(null);
   const [personalizedSubGreeting, setPersonalizedSubGreeting] = useState<string | null>(null);
+  const [detectedEntities, setDetectedEntities] = useState<DetectedEntities | null>(null);
+  const [preUserQueryCount, setPreUserQueryCount] = useState<number>(getPreUserQueryCount());
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const { isAuthenticated, user } = useAuth();
@@ -95,10 +107,11 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
 
   // Fetch personalized greeting on mount (available to all tiers)
   useEffect(() => {
-    // Pre-user: show generic welcome
+    // Pre-user: show generic welcome + track page_load
     if (!isAuthenticated) {
       setPersonalizedGreeting('Welcome to Brubru, your AI partner for EU affairs!');
       setPersonalizedSubGreeting('Ask me about any EU policy, legislation, committee, or institutional process. I can help you track legislation, identify key decision-makers, analyse regulatory impact, and much more.');
+      trackPreUserEvent(getPreUserId(), 'page_load');
       return;
     }
 
@@ -148,6 +161,26 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
     };
     fetchExamples();
   }, [API_BASE_URL, user?.subscription_tier]);
+
+  // Cycle generic status messages during non-streaming (isLoading) requests
+  useEffect(() => {
+    if (!isLoading) {
+      setThinkingStatus(null);
+      return;
+    }
+    const messages = [
+      'Searching EU legislation...',
+      'Consulting knowledge base...',
+      'Composing response...',
+    ];
+    let index = 0;
+    setThinkingStatus(messages[0]);
+    const interval = setInterval(() => {
+      index = (index + 1) % messages.length;
+      setThinkingStatus(messages[index]);
+    }, 1500);
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   // Handle initial question from EU Law Comply or other sources
   useEffect(() => {
@@ -225,10 +258,13 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
         setChatId(data.chat_id);
       }
 
-      // For pre-users, increment count and append progressive CTA
+      // For pre-users, increment count, track event, and append progressive CTA
       let messageContent = data.message;
       if (!isAuthenticated) {
         const newCount = incrementPreUserQueryCount();
+        setPreUserQueryCount(newCount);
+        const eventType = newCount <= 3 ? `query_${newCount}` : 'query_3';
+        trackPreUserEvent(getPreUserId(), eventType);
         const cta = getProgressiveCTA(newCount);
         if (cta) {
           messageContent += cta;
@@ -363,7 +399,36 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
             const content = line.slice(6);
 
             if (content === '[DONE]') {
+              setThinkingStatus(null);
               break;
+            }
+
+            // Parse status/entity events from backend
+            if (content.startsWith('{')) {
+              try {
+                const parsed = JSON.parse(content);
+                if (parsed.type === 'status') {
+                  setThinkingStatus(parsed.message);
+                  continue;
+                }
+                if (parsed.type === 'entities') {
+                  setDetectedEntities({
+                    mep_names: parsed.mep_names || [],
+                    committee_codes: parsed.committee_codes || [],
+                    procedure_references: parsed.procedure_references || [],
+                    celex_numbers: parsed.celex_numbers || [],
+                    policy_areas: parsed.policy_areas || [],
+                  });
+                  continue;
+                }
+              } catch {
+                // Not JSON -- treat as text chunk
+              }
+            }
+
+            // First real text chunk clears status
+            if (!accumulatedContent) {
+              setThinkingStatus(null);
             }
 
             accumulatedContent += content;
@@ -379,9 +444,12 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
           }
         }
       }
-      // For pre-users, increment count and append progressive CTA after streaming
+      // For pre-users, increment count, track event, and append progressive CTA after streaming
       if (!isAuthenticated) {
         const newCount = incrementPreUserQueryCount();
+        setPreUserQueryCount(newCount);
+        const eventType = newCount <= 3 ? `query_${newCount}` : 'query_3';
+        trackPreUserEvent(getPreUserId(), eventType);
         const cta = getProgressiveCTA(newCount);
         if (cta) {
           setMessages((prev) =>
@@ -403,6 +471,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
       setError('Failed to stream response. Please try again.');
     } finally {
       setIsStreaming(false);
+      setThinkingStatus(null);
       abortControllerRef.current = null;
     }
   };
@@ -512,6 +581,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
               setInputValue(text);
               requestAnimationFrame(() => textareaRef.current?.focus());
             }}
+            abVariant={!isAuthenticated ? getAbVariant(getPreUserId()) : undefined}
+            detectedEntities={detectedEntities}
+            preUserQueryCount={preUserQueryCount}
+            onSmartSuggestionClick={(text) => {
+              trackPreUserEvent(getPreUserId(), 'smart_suggestion_clicked', { suggestion: text });
+              setInputValue(text);
+              requestAnimationFrame(() => textareaRef.current?.focus());
+            }}
           />
         )}
         <AnimatePresence>
@@ -530,12 +607,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
                 className="chat-interface__typing-logo"
               />
               <span className="chat-interface__typing-text">
-                {isStreaming ? (
+                {thinkingStatus ? (
+                  thinkingStatus
+                ) : isStreaming ? (
                   <>
                     Streaming<span className="chat-interface__cursor">|</span>
                   </>
                 ) : (
-                  'Thinking…'
+                  'Thinking...'
                 )}
               </span>
             </motion.div>

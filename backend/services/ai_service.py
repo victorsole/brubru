@@ -26,7 +26,7 @@ from dataclasses import dataclass
 from anthropic import AsyncAnthropic
 import anthropic
 
-from .ai.context_builder import ContextBuilder, get_context_builder, SOURCE_TIERS
+from .ai.context_builder import ContextBuilder, get_context_builder, SOURCE_TIERS, detect_drafting_intent
 from .ai.multi_provider_service import MultiProviderService, get_multi_provider_service
 from .ai.conversation_memory import get_conversation_memory_service
 from core.config import settings
@@ -370,32 +370,68 @@ class AIService:
         user_message: str,
         conversation_history: Optional[List[ChatMessage]] = None,
         use_context: bool = True,
-        is_pre_user: bool = False
+        is_pre_user: bool = False,
+        document_ids: Optional[List[str]] = None
     ) -> AsyncGenerator[str, None]:
         """
-        Stream chat response.
+        Stream chat response with dynamic status events.
+
+        Yields JSON status events during context building, then text chunks.
 
         Args:
             user_message: User's message
             conversation_history: Previous messages
             use_context: Whether to inject EU context
+            is_pre_user: Whether user is anonymous
+            document_ids: Document IDs for status detection
 
         Yields:
-            Response chunks as they arrive
-
-        Example:
-            >>> async for chunk in ai_service.chat_stream("What's the AI Act?"):
-            ...     print(chunk, end="", flush=True)
+            JSON status events ({"type":"status","message":"..."}) and text chunks
         """
         start_time = datetime.now()
 
-        # Build context
+        # --- Emit entity-aware status events before context building ---
+        if use_context:
+            # Fast sync detection (<1ms each)
+            entities = self.context_builder.extract_entities(user_message)
+            drafting = detect_drafting_intent(user_message)
+
+            # Always start with "Searching EU legislation..."
+            yield json.dumps({"type": "status", "message": "Searching EU legislation..."})
+
+            # Entity-specific statuses
+            if entities.mep_names:
+                yield json.dumps({"type": "status", "message": "Looking up MEP data..."})
+            if entities.committee_codes:
+                yield json.dumps({"type": "status", "message": "Fetching committee information..."})
+            if entities.procedure_references or entities.celex_numbers:
+                yield json.dumps({"type": "status", "message": "Checking legislative progress..."})
+            if document_ids:
+                yield json.dumps({"type": "status", "message": "Analysing your document..."})
+            if drafting.is_drafting_query:
+                yield json.dumps({"type": "status", "message": "Consulting knowledge base..."})
+
+            # Emit detected entities for pre-users (used by smart suggestions)
+            if is_pre_user:
+                yield json.dumps({
+                    "type": "entities",
+                    "mep_names": entities.mep_names[:3],
+                    "committee_codes": entities.committee_codes[:3],
+                    "procedure_references": entities.procedure_references[:3],
+                    "celex_numbers": entities.celex_numbers[:3],
+                    "policy_areas": entities.policy_areas[:3],
+                })
+
+        # Build context (the slow part: 2-5s)
         context_str = ""
         if use_context:
             context_str, _ = await self.context_builder.build_context_with_citations(
                 user_message=user_message,
                 conversation_history=self._convert_to_dict(conversation_history)
             )
+
+        # Signal context building done, AI composing
+        yield json.dumps({"type": "status", "message": "Composing response..."})
 
         # Build prompts
         system_prompt = self._build_system_prompt(is_pre_user=is_pre_user)

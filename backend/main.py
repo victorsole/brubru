@@ -31,7 +31,7 @@ from api import (
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
-    eprs, cron
+    eprs, cron, preuser_analytics
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -197,6 +197,7 @@ app.include_router(eprs.router, tags=["EPRS Publications"])
 app.include_router(mep_amendments.router, tags=["MEP Amendments"])
 app.include_router(eu_calendar.router, tags=["EU Calendar"])
 app.include_router(cron.router, tags=["Cron Jobs"])
+app.include_router(preuser_analytics.router, tags=["Pre-User Analytics"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 

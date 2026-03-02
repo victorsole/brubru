@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useAuth } from '../hooks/use_auth';
+import { trackPreUserEvent } from '../services/preuser_tracker';
 import './auth_pages.css';
 
 const API_BASE_URL = import.meta.env?.VITE_API_URL || 'http://localhost:8000';
@@ -67,9 +68,10 @@ export const SignupPage = () => {
         organization: formData.organization
       });
 
-      // Link pre-user chats to the new account
+      // Track signup event before clearing pre-user data
       const preUserId = localStorage.getItem('brubru_preuser_id');
       if (preUserId) {
+        trackPreUserEvent(preUserId, 'signed_up');
         try {
           await axios.post(`${API_BASE_URL}/api/auth/link-preuser`, { pre_user_id: preUserId });
         } catch { /* non-critical */ }
@@ -96,11 +98,12 @@ export const SignupPage = () => {
     try {
       await loginWithGoogle(credentialResponse);
 
-      // Link pre-user chats to the new account
-      const preUserId = localStorage.getItem('brubru_preuser_id');
-      if (preUserId) {
+      // Track signup event before clearing pre-user data
+      const preUserIdGoogle = localStorage.getItem('brubru_preuser_id');
+      if (preUserIdGoogle) {
+        trackPreUserEvent(preUserIdGoogle, 'signed_up');
         try {
-          await axios.post(`${API_BASE_URL}/api/auth/link-preuser`, { pre_user_id: preUserId });
+          await axios.post(`${API_BASE_URL}/api/auth/link-preuser`, { pre_user_id: preUserIdGoogle });
         } catch { /* non-critical */ }
         localStorage.removeItem('brubru_preuser_id');
         localStorage.removeItem('brubru_preuser_queries');
