@@ -90,6 +90,9 @@ SOURCE_TIERS = {
     # EC Commission Documents (Tier 2 - official EC Register proposals and legislation)
     'commission_document': 2,
 
+    # EU Calendar Events (Tier 2 - official institutional calendar data with exact dates)
+    'eu_calendar': 2,
+
     # User uploaded documents (Tier 4 - user-provided reference material)
     'user_uploaded': 4,
 }
@@ -462,6 +465,9 @@ class ContextData:
     # MEP amendments (scraped EP committee amendments)
     mep_amendments_summary: List[Dict[str, Any]]
 
+    # EU Calendar Events (institutional calendar data with exact dates)
+    eu_calendar_events: List[Dict[str, Any]]
+
     # Metadata
     query: str
     search_time_ms: float
@@ -766,6 +772,9 @@ class ContextBuilder:
         else:
             tasks.append(empty_result())
 
+        # EU Calendar Events (institutional calendar with exact dates)
+        tasks.append(self._fetch_eu_calendar_events(query=user_message, entities=entities))
+
         # Execute all tasks concurrently
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -833,6 +842,33 @@ class ContextBuilder:
         # Unpack MEP Amendments summary (index 18)
         mep_amendments_summary = results[18] if not isinstance(results[18], Exception) else []
 
+        # Unpack EU Calendar Events (index 19)
+        eu_calendar_events = results[19] if not isinstance(results[19], Exception) else []
+
+        # Fix 4: Extract procedure_refs from plenary events and fetch their amendments
+        # This connects plenary scheduling to amendment data
+        if eu_calendar_events and not mep_amendments_summary:
+            plenary_proc_refs = set()
+            for event in eu_calendar_events:
+                if event.get('procedure_refs'):
+                    plenary_proc_refs.update(event['procedure_refs'])
+                # Also check plenary sessions (these may have amendments filed)
+                if event.get('event_type') in ('plenary_session',) and event.get('procedure_refs'):
+                    plenary_proc_refs.update(event['procedure_refs'])
+
+            # Subtract already-fetched procedure refs
+            already_fetched = set(entities.procedure_references or [])
+            new_refs = list(plenary_proc_refs - already_fetched)[:3]
+
+            if new_refs:
+                try:
+                    plenary_amendments = await self._fetch_mep_amendments(
+                        procedure_references=new_refs,
+                    )
+                    mep_amendments_summary.extend(plenary_amendments)
+                except Exception as e:
+                    logger.warning(f"[PLENARY-AM] Failed to fetch plenary amendments: {e}")
+
         # Rapporteur-by-country query (detect country + rapporteur intent)
         rapporteur_by_country = []
         query_lower = user_message.lower()
@@ -875,7 +911,8 @@ class ContextBuilder:
             len(commission_documents) +  # EC Commission Documents
             len(toolbox_results) +  # MCP Toolbox supplementary
             len(user_uploaded_documents) +  # User uploaded documents
-            len(mep_amendments_summary)  # MEP amendments
+            len(mep_amendments_summary) +  # MEP amendments
+            len(eu_calendar_events)  # EU Calendar events
         )
 
         context_data = ContextData(
@@ -900,6 +937,7 @@ class ContextBuilder:
             toolbox_results=toolbox_results,  # MCP Toolbox supplementary
             user_uploaded_documents=user_uploaded_documents,  # User uploaded documents
             mep_amendments_summary=mep_amendments_summary,  # MEP amendments
+            eu_calendar_events=eu_calendar_events,  # EU Calendar events
             tender_context=tender_context,  # Phase 8: Tender data
             drafting_intent=drafting_intent if drafting_intent.is_drafting_query else None,
             rapporteur_by_country=rapporteur_by_country if rapporteur_by_country else None,
@@ -924,7 +962,8 @@ class ContextBuilder:
             f"{len(commission_documents)} commission docs, "
             f"{len(toolbox_results)} toolbox, "
             f"{len(user_uploaded_documents)} user uploads, "
-            f"{len(mep_amendments_summary)} MEP amendments) in {search_time:.2f}ms"
+            f"{len(mep_amendments_summary)} MEP amendments, "
+            f"{len(eu_calendar_events)} calendar events) in {search_time:.2f}ms"
         )
 
         return context_data
@@ -2884,6 +2923,150 @@ class ContextBuilder:
             logger.error(f"Failed to fetch commission documents: {str(e)}")
             return []
 
+    async def _fetch_eu_calendar_events(
+        self,
+        query: str,
+        entities: ExtractedEntities,
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch relevant EU Calendar events from the database.
+
+        No tier-gating -- calendar data is public knowledge.
+
+        Detects temporal intent:
+        - "last meeting" / "recent" / "what happened" -> past 30 days, desc
+        - "next" / "upcoming" / "when is" -> next 30 days, asc
+        - Default: next 14 days + past 14 days
+
+        Filters by institution and committee code when detected.
+        Excludes recess events.
+        """
+        from models.eu_calendar import EUCalendarEvent, EventTypeEnum, InstitutionEnum
+        from sqlalchemy import and_, or_
+        from datetime import date
+
+        try:
+            db = SessionLocal()
+            today = date.today()
+            query_lower = query.lower()
+
+            # Detect temporal direction
+            past_keywords = [
+                'last meeting', 'last session', 'previous', 'recent',
+                'what happened', 'what did', 'discussed', 'talked about',
+                'took place', 'was held', 'outcome', 'results of',
+                'latest meeting', 'most recent',
+            ]
+            future_keywords = [
+                'next', 'upcoming', 'when is', 'when will', 'when does',
+                'scheduled', 'planned', 'agenda for', 'what is on',
+                'calendar', 'coming up',
+            ]
+
+            look_past = any(kw in query_lower for kw in past_keywords)
+            look_future = any(kw in query_lower for kw in future_keywords)
+
+            if look_past and not look_future:
+                date_start = today - timedelta(days=30)
+                date_end = today
+                order_desc = True
+            elif look_future and not look_past:
+                date_start = today
+                date_end = today + timedelta(days=30)
+                order_desc = False
+            else:
+                # Default: window around today
+                date_start = today - timedelta(days=14)
+                date_end = today + timedelta(days=14)
+                order_desc = False
+
+            # Base filters: date range + exclude recess
+            filters = [
+                EUCalendarEvent.start_date >= date_start,
+                EUCalendarEvent.start_date <= date_end,
+                EUCalendarEvent.event_type != EventTypeEnum.RECESS.value,
+            ]
+
+            # Institution filter
+            institution_map = {
+                'parliament': InstitutionEnum.EP.value,
+                'plenary': InstitutionEnum.EP.value,
+                'mep': InstitutionEnum.EP.value,
+                'committee': InstitutionEnum.EP.value,
+                'council': InstitutionEnum.COUNCIL.value,
+                'european council': InstitutionEnum.EUROPEAN_COUNCIL.value,
+                'summit': InstitutionEnum.EUROPEAN_COUNCIL.value,
+                'commission': InstitutionEnum.COMMISSION.value,
+                'commissioner': InstitutionEnum.COMMISSION.value,
+                'college': InstitutionEnum.COMMISSION.value,
+                'ecb': InstitutionEnum.ECB.value,
+                'central bank': InstitutionEnum.ECB.value,
+            }
+            detected_institution = None
+            for keyword, inst_value in institution_map.items():
+                if keyword in query_lower:
+                    detected_institution = inst_value
+                    break
+
+            if detected_institution:
+                filters.append(EUCalendarEvent.institution == detected_institution)
+
+            # Committee code filter
+            if entities.committee_codes:
+                committee_conditions = [
+                    EUCalendarEvent.ep_committee_code == code
+                    for code in entities.committee_codes
+                ]
+                filters.append(or_(*committee_conditions))
+
+            # Procedure reference filter
+            if entities.procedure_references:
+                proc_conditions = []
+                for proc_ref in entities.procedure_references:
+                    proc_conditions.append(
+                        EUCalendarEvent.procedure_refs.any(proc_ref)
+                    )
+                filters.append(or_(*proc_conditions))
+
+            # Build query
+            base_query = db.query(EUCalendarEvent).filter(and_(*filters))
+
+            if order_desc:
+                base_query = base_query.order_by(EUCalendarEvent.start_date.desc())
+            else:
+                base_query = base_query.order_by(EUCalendarEvent.start_date.asc())
+
+            results = base_query.limit(5).all()
+
+            # Format results
+            events = []
+            for event in results:
+                events.append({
+                    'source_type': 'eu_calendar',
+                    'institution': event.institution if isinstance(event.institution, str) else event.institution.value,
+                    'title': event.title,
+                    'description': event.description,
+                    'start_date': event.start_date.isoformat() if event.start_date else None,
+                    'end_date': event.end_date.isoformat() if event.end_date else None,
+                    'start_time': event.start_time.isoformat() if event.start_time else None,
+                    'all_day': event.all_day,
+                    'event_type': event.event_type if isinstance(event.event_type, str) else event.event_type.value,
+                    'source_url': event.source_url,
+                    'agenda_url': event.agenda_url,
+                    'procedure_refs': event.procedure_refs or [],
+                    'ep_committee_code': event.ep_committee_code,
+                    'council_configuration': event.council_configuration,
+                })
+
+            db.close()
+
+            logger.debug(f"Found {len(events)} EU Calendar events for query")
+            return events
+
+        except Exception as e:
+            logger.error(f"Failed to fetch EU Calendar events: {str(e)}")
+            return []
+
     async def _fetch_eu_laws_from_database(
         self,
         query: str,
@@ -4162,6 +4345,39 @@ class ContextBuilder:
                     sections.append(f"  URL: {item['portal_url']}")
                 sections.append("")
 
+        # EU Calendar Events (institutional calendar with exact dates)
+        if context_data.eu_calendar_events:
+            sections.append(f"\nEU INSTITUTIONAL CALENDAR ({len(context_data.eu_calendar_events)} events):")
+            sections.append("Source: Official EU institutional calendars (exact dates -- prioritise over RSS/news)\n")
+            for event in context_data.eu_calendar_events:
+                inst = event.get('institution', 'Unknown')
+                sections.append(f"- {inst}: {event['title']}")
+                date_str = event.get('start_date', '')
+                time_str = event.get('start_time')
+                if time_str:
+                    sections.append(f"  Date: {date_str} {time_str}")
+                elif event.get('all_day'):
+                    sections.append(f"  Date: {date_str} (all day)")
+                else:
+                    sections.append(f"  Date: {date_str}")
+                if event.get('end_date') and event['end_date'] != event.get('start_date'):
+                    sections.append(f"  End date: {event['end_date']}")
+                sections.append(f"  Type: {event.get('event_type', 'unknown')}")
+                if event.get('council_configuration'):
+                    sections.append(f"  Council configuration: {event['council_configuration']}")
+                if event.get('ep_committee_code'):
+                    sections.append(f"  Committee: {event['ep_committee_code']}")
+                if event.get('description'):
+                    desc = event['description'][:300]
+                    sections.append(f"  Details: {desc}")
+                if event.get('agenda_url'):
+                    sections.append(f"  Agenda: {event['agenda_url']}")
+                if event.get('source_url'):
+                    sections.append(f"  Source: {event['source_url']}")
+                if event.get('procedure_refs'):
+                    sections.append(f"  Procedures: {', '.join(event['procedure_refs'])}")
+                sections.append("")
+
         # MEP Amendments (scraped EP committee amendments)
         if context_data.mep_amendments_summary:
             for summary in context_data.mep_amendments_summary:
@@ -4373,6 +4589,19 @@ class ContextBuilder:
                     'last_verified': None,
                     'note': 'Monitor published by Beresol, Brubru\'s company'
                 })
+
+        # Add EU Calendar events (Tier 2 - official institutional calendar)
+        for event in (context_data.eu_calendar_events or []):
+            citations.append({
+                'type': 'eu_calendar',
+                'title': event.get('title', 'Unknown event'),
+                'institution': event.get('institution', ''),
+                'date': event.get('start_date'),
+                'url': event.get('source_url') or event.get('agenda_url', ''),
+                'event_type': event.get('event_type', ''),
+                'source_tier': get_source_tier('eu_calendar'),
+                'last_verified': event.get('start_date'),
+            })
 
         # Phase 8: Add tender citations (Tier 4 - official but domain-specific)
         if context_data.tender_context:

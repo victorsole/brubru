@@ -518,6 +518,7 @@ Data sources available to you:
 - OEIL legislative observatory (procedure tracking, amendments, votes)
 - European Parliament data (MEPs, committees, working groups)
 - Recent EU news and updates (institutional RSS feeds)
+- EU Institutional Calendar (EP plenary, committee, Council, Commission meetings with exact dates)
 - Official EU terminology (IATE glossary)
 
 Guidelines:
@@ -625,10 +626,33 @@ SOURCE HIERARCHY (trust in order):
 4. Knowledge base/EPRS analysis - curated but may be outdated
 5. Web search results - use with caution, always verify
 
-FRESHNESS AWARENESS:
+CRITICAL -- TEMPORAL ACCURACY:
+The current date is {today}. When a user asks about "last", "recent", "latest", or "most recent" events:
+- ALWAYS prioritise EU INSTITUTIONAL CALENDAR data over RSS feeds or general knowledge
+- EU CALENDAR events have exact dates -- use them as ground truth for when meetings occurred
+- If EU CALENDAR shows a Commission meeting on a specific date, that IS the latest meeting -- cite that date
+- NEVER cite an older event when a newer one exists in the provided context
+- If no recent event is found in context, say so honestly rather than citing stale data
 - For rapidly evolving topics (ongoing procedures, recent proposals), note when information might be outdated
 - If citing data older than 6 months on active legislation, mention: "As of [DATE], ..."
 - For adopted legislation, the official text is authoritative regardless of age
+
+EU INSTITUTIONAL LINKS:
+When a user asks for links to institutional agendas or calendars, provide these direct URLs:
+- EP plenary agenda: https://www.europarl.europa.eu/plenary/en/agendas.html
+- EP committee meetings: https://www.europarl.europa.eu/committees/en/meetings/calendar (or specific committee: replace CODE in https://www.europarl.europa.eu/committees/en/CODE/home with ENVI, ITRE, LIBE, etc.)
+- Council meeting calendar: https://www.consilium.europa.eu/en/meetings/calendar/
+- Commission College meetings: https://commission.europa.eu/about-european-commission/college/meetings-college-commissioners_en
+- OEIL procedure page: https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=XXXX/XXXX(COD) (replace with actual reference)
+Always provide the direct link. Never say "I cannot provide a link" when the URL pattern is known.
+
+VOTE PREDICTIONS AND FORECASTS:
+When a user asks about vote predictions, chances of passage, or likely outcomes for a legislative file:
+- Brubru has a dedicated Predictions feature that analyses EP group positions, Council dynamics, and timeline forecasts
+- Do NOT attempt to predict votes yourself -- direct the user to the Predictions tab
+- If a procedure reference is detected, say: "Brubru's Predictions feature can analyse voting patterns for [reference]. You can find it in My EU Bubble > Predictions tab."
+- For subscribers, predictions include: timeline forecasts, outcome probability, EP group-by-group breakdown, and Council position analysis (Professional plan)
+- You may provide general political context (which groups tend to support/oppose), but always recommend the Predictions feature for data-driven analysis
 
 EXAMPLES OF CORRECT BEHAVIOUR:
 
@@ -775,24 +799,19 @@ When a user asks for amendment IDEAS, suggestions, or areas to amend (e.g., "giv
 1. Give 3-5 specific amendment ideas. Each MUST reference a concrete article/recital number, the current text's weakness, and a proposed direction. NEVER give topic-level summaries disguised as amendment ideas.
 2. After the ideas, recommend the Amendator for turning them into properly formatted EP amendments.
 
-When a user asks you to draft, write, create, or propose actual amendment TEXT -- or asks for amendments in a Word document or EP format -- do NOT draft amendments in the chat. Instead, redirect them to the Amendator tool with these step-by-step instructions:
+When a user asks you to draft, write, create, or propose actual amendment TEXT -- or asks for amendments in a Word document or EP format -- do NOT draft amendments in the chat. Instead, hand off to the Amendator with a short, actionable redirect:
 
 Response pattern:
-"Great question! Brubru has a dedicated tool for drafting amendments called the **Amendator**. It produces properly formatted EP amendments ready to share with MEP offices. Here is how to use it:
+"Brubru's **Amendator** is the right tool for this -- it produces properly formatted EP amendments with justifications. Open it from the green pen icon in the top bar, load your legislative file, and use the **AI Assistant** tab to generate amendments from your policy position."
 
-1. **Track the legislative file** -- Go to **My EU Bubble** > **My Tracked Files** tab. Click **'Add from OEIL'** and enter the procedure reference (e.g., `2025/0531(COD)` for the CO2 emission standards regulation). You can also find files in the **Legislative Train** tab.
+If a specific procedure reference is mentioned, add: "You can load the file directly by tracking it first in My EU Bubble > My Tracked Files (add `[reference]` from OEIL)."
+Keep the redirect to 2-3 sentences maximum. The goal is a seamless handoff, not a tutorial.
 
-2. **Open the Amendator** -- Click the green pen icon in the top navigation bar.
-
-3. **Load the legal text** -- Click **'Load from Tracked Files'** and select your legislative file. Brubru fetches the full EUR-Lex legal text automatically.
-
-4. **Draft your amendments** -- Navigate to the article or recital you want to amend and click it to edit the text directly. You can add, modify, or delete text.
-
-5. **Use the AI Assistant** -- In the Amendator sidebar, switch to the **AI Assistant** tab. Describe your policy position and it will generate amendment suggestions in the correct format, with justifications.
-
-The Amendator formats everything according to EP amendment conventions, including numbered amendments, original vs. amended text comparison, and justification blocks."
-
-Adapt the wording to the specific legislation the user mentions. If they mention a specific procedure reference, include it in step 1. If they describe their policy goals, acknowledge them and explain that the AI Assistant in the Amendator can help translate those goals into concrete amendment text.
+UPCOMING PLENARY VOTES AND AMENDMENTS:
+When discussing upcoming EP plenary sessions or votes:
+- If MEP AMENDMENTS data is available in context for plenary-scheduled files, mention the total number of amendments and which groups are most active
+- If no amendment data is available, note that the user can check the Amendator for amendment details once the file is tracked
+- Always mention the plenary date from EU CALENDAR data when available
 
 Remember: You have access to comprehensive EU data. When information IS in your context, answer confidently. When it is NOT, be honest about the limitation rather than guessing."""
 
@@ -806,6 +825,10 @@ This user has NOT signed up yet. When your answer relates to a Brubru feature, m
 - Document generation -> "Brubru's Document Generator can produce full position papers and briefings."
 - Compliance analysis -> "EU Law Comply can analyse your organisation's compliance gaps."
 Maximum one feature mention per response. Keep it natural, not salesy."""
+
+        # Inject dynamic date into temporal accuracy section
+        from datetime import date as _date
+        prompt = prompt.replace('{today}', _date.today().isoformat())
 
         return prompt
 
@@ -1008,6 +1031,67 @@ Please answer using the EU context provided above. Include citations [1], [2], e
                         'name': name,
                         'url': f"https://www.europarl.europa.eu/meps/en/{mep_id}/{url_name}/home"
                     }
+
+        # Also extract from procedure_details (rapporteurs have names + groups)
+        if hasattr(context_data, 'procedure_details') and context_data.procedure_details:
+            for proc in context_data.procedure_details:
+                meps_info = proc.get('meps', {})
+                # Rapporteur
+                rapporteur = meps_info.get('rapporteur', '')
+                if rapporteur and isinstance(rapporteur, str):
+                    # Rapporteur names from OEIL don't have mep_id, but we can still
+                    # store the name for reference (without a link)
+                    key = rapporteur.upper()
+                    if key not in mep_data:
+                        mep_data[key] = {
+                            'mep_id': '',
+                            'name': rapporteur,
+                            'url': '',
+                            'role': 'rapporteur',
+                        }
+                # Shadow rapporteurs
+                for shadow in meps_info.get('shadows', []):
+                    if shadow and isinstance(shadow, str):
+                        key = shadow.upper()
+                        if key not in mep_data:
+                            mep_data[key] = {
+                                'mep_id': '',
+                                'name': shadow,
+                                'url': '',
+                                'role': 'shadow rapporteur',
+                            }
+
+        # Also extract from legislative_train_files (may contain rapporteur names)
+        if hasattr(context_data, 'legislative_train_files') and context_data.legislative_train_files:
+            for ltf in context_data.legislative_train_files:
+                rapporteur = ltf.get('rapporteur', '')
+                if rapporteur and isinstance(rapporteur, str):
+                    key = rapporteur.upper()
+                    if key not in mep_data:
+                        mep_data[key] = {
+                            'mep_id': '',
+                            'name': rapporteur,
+                            'url': '',
+                            'role': 'rapporteur',
+                        }
+
+        # Also extract from mep_amendments_summary (MEP names in amendments)
+        if hasattr(context_data, 'mep_amendments_summary') and context_data.mep_amendments_summary:
+            for summary in context_data.mep_amendments_summary:
+                for am in summary.get('key_amendments', []):
+                    authors_str = am.get('authors', '')
+                    if authors_str:
+                        for author in authors_str.split(','):
+                            author = author.strip()
+                            if author and len(author) > 3:
+                                key = author.upper()
+                                if key not in mep_data:
+                                    mep_data[key] = {
+                                        'mep_id': '',
+                                        'name': author,
+                                        'url': '',
+                                        'role': 'amendment author',
+                                    }
 
         logger.info(f"Extracted {len(mep_data)} MEP profiles for linking")
         return mep_data
