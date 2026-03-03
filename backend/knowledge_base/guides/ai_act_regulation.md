@@ -1,0 +1,114 @@
+# EU Artificial Intelligence Act (AI Act)
+
+Guide for professionals working on AI regulation, compliance, and EU digital policy. Covers the AI Act framework, risk categories, enforcement timeline, institutional landscape, and the Digital Omnibus amendments.
+
+## AI Act - Regulation (EU) 2024/1689
+CELEX: 32024R1689
+Procedure: 2021/0106(COD) (Ordinary Legislative Procedure)
+
+The Artificial Intelligence Act is the world's first comprehensive legal framework for AI. It regulates AI systems based on their risk level, from prohibited practices to minimal-risk systems with no obligations.
+
+### Legislative Timeline
+
+| Date | Event |
+|------|-------|
+| 21 April 2021 | Commission proposal published (COM(2021) 206) |
+| 6 December 2022 | Council general approach adopted |
+| 14 June 2023 | European Parliament plenary position adopted |
+| 8 December 2023 | Trilogue political agreement reached |
+| 13 March 2024 | European Parliament adopted final text (523 for, 46 against, 49 abstentions) |
+| 21 May 2024 | Council formally adopted |
+| 12 July 2024 | Published in Official Journal (OJ L 2024/1689) |
+| 1 August 2024 | Entered into force |
+
+### Committees and Rapporteurs
+
+| Role | Name | Group |
+|------|------|-------|
+| Lead committees | IMCO (Internal Market) + LIBE (Civil Liberties) -- joint procedure |
+| Co-rapporteurs | Brando Benifei (S&D, Italy) + Dragos Tudorache (Renew, Romania) |
+| Opinions | CULT, ENVI, EMPL, ITRE, JURI, TRAN |
+
+### Phased Enforcement Timeline
+
+The AI Act uses a staggered enforcement approach from the date of entry into force (1 August 2024):
+
+| Deadline | What Applies |
+|----------|-------------|
+| 2 February 2025 (6 months) | Prohibited AI practices (Article 5): social scoring, real-time remote biometric identification in public spaces (with exceptions), manipulation, exploitation of vulnerabilities |
+| 2 August 2025 (12 months) | General-purpose AI (GPAI) models: transparency, copyright, systemic risk obligations. Codes of practice. AI Office enforcement powers. Penalties framework. |
+| 2 August 2025 | Member States must designate national competent authorities and national AI supervisory authorities |
+| 2 August 2026 (24 months) | High-risk AI systems in Annex III: biometric identification, critical infrastructure, education, employment, essential services, law enforcement, migration, justice. Full compliance obligations apply. |
+| 2 August 2027 (36 months) | High-risk AI systems in Annex I (EU harmonisation legislation): medical devices, machinery, toys, marine equipment, etc. |
+
+### Risk Categories
+
+| Category | Examples | Obligations |
+|----------|----------|-------------|
+| **Prohibited** (Article 5) | Social scoring, manipulative AI, untargeted facial scraping, emotion recognition at work/school | Banned outright |
+| **High-risk** (Articles 6-49) | Biometric ID, critical infrastructure, education, employment, law enforcement, migration, justice | Conformity assessment, risk management, data governance, transparency, human oversight, accuracy, robustness, cybersecurity |
+| **Limited risk** (Article 50) | Chatbots, deepfakes, emotion recognition | Transparency obligations (must disclose AI interaction) |
+| **Minimal risk** | Spam filters, AI-enabled video games | No obligations (voluntary codes of conduct) |
+
+### Institutional Landscape
+
+| Body | Role |
+|------|------|
+| **AI Office** (European Commission) | Central enforcement for GPAI models, coordinates with national authorities, develops guidelines and codes of practice |
+| **AI Board** | Advisory body of national authority representatives, ensures consistent application |
+| **National competent authorities** | Enforce high-risk AI rules at Member State level. Deadline to designate: 2 August 2025 |
+| **Advisory forum** | Stakeholder advisory body (industry, civil society, academia) |
+| **Scientific panel** | Independent experts advising on GPAI systemic risks |
+
+### Penalties
+
+| Violation | Maximum Fine |
+|-----------|-------------|
+| Prohibited AI practices | 35 million euro or 7% of global turnover |
+| High-risk AI non-compliance | 15 million euro or 3% of global turnover |
+| Incorrect information to authorities | 7.5 million euro or 1.5% of global turnover |
+| SME/startup reduction | Proportionate caps (lower of absolute/percentage amounts) |
+
+### Key Definitions
+
+| Term | Definition |
+|------|-----------|
+| **AI system** (Article 3(1)) | Machine-based system that infers from input how to generate outputs (predictions, content, recommendations, decisions) that can influence physical or virtual environments. Designed to operate with varying levels of autonomy. |
+| **Provider** | Develops or has an AI system developed and places it on the market or puts it into service under its own name/trademark |
+| **Deployer** | Uses an AI system under its authority (except personal non-professional use) |
+| **General-purpose AI (GPAI)** | AI model trained on broad data, capable of performing a wide range of tasks (e.g. large language models) |
+| **Systemic risk GPAI** | GPAI model with high-impact capabilities (trained with >10^25 FLOPs or equivalent) |
+
+## Digital Omnibus on AI
+
+For full details on the Digital Omnibus Package (COM(2025) 836 and COM(2025) 837), including all 33 AI Act amendments, GDPR/ePrivacy changes, and stakeholder positions, see the dedicated guide: `digital_omnibus_package.md`.
+
+## Related Legislation
+
+| Legislation | CELEX | Relevance |
+|------------|-------|-----------|
+| GDPR | 32016R0679 | Data protection obligations for AI systems processing personal data |
+| Data Act | 32023R2854 | Data access and sharing rules, intersects with AI training data |
+| Digital Services Act (DSA) | 32022R2065 | Content moderation AI, recommender systems, systemic risk |
+| Digital Markets Act (DMA) | 32022R1925 | Gatekeeper AI obligations |
+| NIS2 Directive | 32022L2555 | Cybersecurity obligations for AI infrastructure |
+| DORA | 32022R2554 | Digital operational resilience for financial sector AI |
+| Product Liability Directive | 32024L2853 | AI system liability framework |
+| Cyber Resilience Act | 32024R2847 | Security requirements for AI products with digital elements |
+| AI Liability Directive (proposed) | -- | Proposed non-contractual liability rules for AI (2022/0303(COD)) |
+
+## Compliance Checklist for High-Risk AI Providers
+
+1. Risk management system (Article 9) -- continuous, documented
+2. Data governance (Article 10) -- training/validation/testing data quality
+3. Technical documentation (Article 11) -- pre-market, kept up to date
+4. Record-keeping / logging (Article 12) -- automatic, proportionate
+5. Transparency and information (Article 13) -- instructions for deployers
+6. Human oversight (Article 14) -- design for human intervention
+7. Accuracy, robustness, cybersecurity (Article 15)
+8. Quality management system (Article 17)
+9. EU Declaration of Conformity (Article 47)
+10. CE marking (Article 48)
+11. Registration in EU database (Article 49)
+12. Post-market monitoring (Article 72)
+13. Serious incident reporting (Article 73)

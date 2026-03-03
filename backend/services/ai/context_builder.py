@@ -253,7 +253,8 @@ ACTION_WORD_MAP = {
     'summary': 'summary', 'summarise': 'summary', 'summarize': 'summary',
     'note': 'briefing', 'memo': 'briefing', 'memorandum': 'briefing',
     'letter': 'letter', 'email': 'letter',
-    'report': 'report', 'analysis': 'report',
+    'draft a report': 'report', 'write a report': 'report', 'prepare a report': 'report',
+    'draft report': 'report', 'write report': 'report',
     'proposal': 'proposal',
     'resolution': 'resolution',
     'question': 'ep_question',
@@ -261,7 +262,7 @@ ACTION_WORD_MAP = {
     'justificacio': 'justification', 'redacta': 'draft', 'escriu': 'draft',
     'esborrany': 'draft', 'prepara': 'draft', 'plantilla': 'template',
     'resum': 'summary', 'resumeix': 'summary',
-    'nota': 'briefing', 'informe': 'report', 'carta': 'letter',
+    'nota': 'briefing', 'redacta informe': 'report', 'escriu informe': 'report', 'carta': 'letter',
     'proposta': 'proposal', 'esmena': 'amendment',
     # Spanish
     'justificacion': 'justification', 'redactar': 'draft', 'escribir': 'draft',
@@ -312,6 +313,20 @@ def detect_drafting_intent(query: str) -> DraftingIntent:
         "Draft a position paper on REACH" -> DraftingIntent(is_drafting_query=True, ...)
     """
     query_lower = query.lower().strip()
+
+    # Guard: if the query is clearly asking for STATUS or INFORMATION, skip drafting detection
+    INFO_INTENT_PHRASES = [
+        "what's the status", "what is the status", "status of",
+        "what is", "what are", "tell me about", "explain",
+        "how does", "how do", "how is", "who is", "who are",
+        "when is", "when will", "where is", "will it be voted",
+        "voted during", "voted in", "next plenary", "plenary session",
+        "qual es", "que es", "que son", "quin es", "quina es",
+        "quel est", "qu'est", "cos'e", "wat is",
+    ]
+    for phrase in INFO_INTENT_PHRASES:
+        if phrase in query_lower:
+            return DraftingIntent(is_drafting_query=False)
 
     # Find ALL action words present in the query (longest match first)
     sorted_actions = sorted(ACTION_WORD_MAP.keys(), key=len, reverse=True)

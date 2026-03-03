@@ -80,55 +80,55 @@ BEAT_HOOKS = {
         "{outlet}'s coverage of EU digital regulation is among the most detailed "
         "in Brussels. I thought you'd find it relevant that an AI platform now "
         "tracks the AI Act, DSA/DMA enforcement, Data Act, and Cyber Resilience "
-        "Act in real-time &mdash; the same files you cover daily."
+        "Act in real-time, the same files you cover daily."
     ),
     "trade": (
         "Your trade policy reporting for {outlet} covers some of the most "
         "consequential EU dossiers right now. Brubru tracks CBAM, trade defence "
-        "instruments, FTA negotiations, and related economic files systematically "
-        "&mdash; something I thought might be relevant for your reporting."
+        "instruments, FTA negotiations, and related economic files systematically: "
+        "something I thought might be relevant for your reporting."
     ),
     "energy_climate": (
         "Your energy and climate coverage for {outlet} touches some of the EU's "
         "most active legislative files. Brubru tracks Fit for 55, ETS reform, "
         "renewable energy directives, and related sustainability dossiers in "
-        "real-time &mdash; I thought it might be relevant to your work."
+        "real-time, and I thought it might be relevant to your work."
     ),
     "ep_institutional": (
         "Your EP and institutional affairs reporting for {outlet} requires "
         "tracking complex procedures across multiple committees. Brubru monitors "
-        "all 26 EP committee work programmes with procedure-level status updates "
-        "&mdash; I thought you'd find it relevant."
+        "all 26 EP committee work programmes with procedure-level status updates, "
+        "and I thought you'd find it relevant."
     ),
     "finance": (
         "Your financial services coverage for {outlet} tracks technically complex "
         "EU regulation. Brubru monitors PSD3/PSR, MiCA, DORA, Banking Union, and "
-        "AML packages with real-time updates from EP committees and Council "
-        "&mdash; I thought it might be relevant to your reporting."
+        "AML packages with real-time updates from EP committees and Council, "
+        "and I thought it might be relevant to your reporting."
     ),
     "defence_security": (
         "Your defence and security reporting for {outlet} covers an increasingly "
         "active EU legislative agenda. Brubru tracks the European Defence "
         "Industrial Strategy, dual-use regulation, NIS2, and Cyber Resilience Act "
-        "alongside 490+ other EU legislative files &mdash; I thought you'd find "
+        "alongside 490+ other EU legislative files, and I thought you'd find "
         "it relevant."
     ),
     "agriculture_food": (
         "Your agriculture and food policy coverage for {outlet} tracks dossiers "
         "from CAP reform to food safety regulation. Brubru monitors these files "
-        "alongside sustainability and trade regulation in real-time &mdash; I "
+        "alongside sustainability and trade regulation in real-time, and I "
         "thought it might be relevant."
     ),
     "automotive": (
         "Your automotive sector reporting for {outlet} covers CO2 standards, "
         "Euro 7, and electrification policy. Brubru tracks these regulatory files "
-        "with real-time updates from EP committees, Council, and Commission "
-        "&mdash; I thought you'd find it relevant."
+        "with real-time updates from EP committees, Council, and Commission, "
+        "and I thought you'd find it relevant."
     ),
     "editorial": (
         "I'm reaching out because {outlet} covers EU policy extensively. Brubru "
-        "is an AI-powered EU legislative intelligence platform built in Brussels "
-        "&mdash; I thought your team might find it relevant, either as a "
+        "is an AI-powered EU legislative intelligence platform built in Brussels. "
+        "I thought your team might find it relevant, either as a "
         "newsroom research tool or as a story about Brussels-built policy tech."
     ),
 }
@@ -193,7 +193,7 @@ BEAT_FEATURES = {
 
 JOURNALIST_CTA = (
     "Brubru is built by Beresol, a Brussels-based company. Not a Silicon Valley "
-    "product trying to understand EU institutions &mdash; we live in the bubble. "
+    "product trying to understand EU institutions: we live in the bubble. "
     "Happy to offer a demo or provide more detail for a piece. You can also try "
     'it directly at <a href="https://brubru.beresol.eu" style="color:#0693e3;'
     'text-decoration:none;">brubru.beresol.eu</a>.'
@@ -206,11 +206,14 @@ def _journalist_body(first_name: str, outlet: str, beat: str) -> str:
     features_html = "\n".join(f"<li>{f}</li>" for f in features)
     return _wrap_html(
         f'<p {_P}>Dear {first_name},</p>\n\n'
-        f'<p {_P}>I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an '
+        f'<p {_P}>I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an '
         f'AI-powered EU legislative intelligence platform built in Brussels.</p>\n\n'
         f'<p {_P}>{hook}</p>\n\n'
         f'<p {_P}>Brubru provides:</p>\n\n'
         f'<ul {_UL}>\n{features_html}\n</ul>\n\n'
+        f'<p {_P}><em>A note on transparency:</em> Brubru\'s AI assistant improves with every query it receives. '
+        f'If you try it, I\'d encourage you to be demanding: the harder and more specific the question, '
+        f'the smarter it gets. Your queries genuinely help us build a better tool for the Brussels community.</p>\n\n'
         f'<p {_P}>{JOURNALIST_CTA}</p>'
     )
 
@@ -227,7 +230,7 @@ def _journalist_subject(first_name: str, beat: str, outlet: str) -> str:
         "automotive": "EU automotive regulation intelligence",
         "editorial": "EU legislative intelligence (built in Brussels)",
     }
-    return f"{first_name} — AI-powered {beat_labels[beat]}"
+    return f"{first_name}, AI-powered {beat_labels[beat]}"
 
 
 # ─── Journalist email data ───────────────────────────────────────────────────
@@ -444,7 +447,7 @@ def _ep_press_body(first_name: str, committees: list[str]) -> str:
 
     return _wrap_html(
         f'<p {_P}>Dear {first_name},</p>\n\n'
-        f'<p {_P}>I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an '
+        f'<p {_P}>I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an '
         f'AI-powered EU legislative intelligence platform built in Brussels.</p>\n\n'
         f'<p {_P}>I\'m writing because Brubru tracks the work of {committee_ref} '
         f'in real-time, including ongoing procedures, rapporteur assignments, and '
@@ -462,6 +465,9 @@ def _ep_press_body(first_name: str, committees: list[str]) -> str:
         f'<li><strong>Instant policy briefings:</strong> generates MEP briefings, talking '
         f'points, or procedure summaries on demand.</li>\n'
         f'</ul>\n\n'
+        f'<p {_P}><em>A note on transparency:</em> Brubru\'s AI assistant improves with every query it receives. '
+        f'If you try it, I\'d encourage you to be demanding: the harder and more specific the question, '
+        f'the smarter it gets. Your queries genuinely help us build a better tool for the Brussels community.</p>\n\n'
         f'<p {_P}>I\'d be happy to show you how Brubru could complement {codes}\'s '
         f'press operations. You can also try it directly at '
         f'<a href="https://brubru.beresol.eu" style="color:#0693e3;text-decoration:none;">'
@@ -471,7 +477,7 @@ def _ep_press_body(first_name: str, committees: list[str]) -> str:
 
 def _ep_press_subject(committees: list[str]) -> str:
     codes = "/".join(committees)
-    return f"Brubru: AI tool tracking {codes} committee work in real-time"
+    return f"Brubru, AI tool tracking {codes} committee work in real-time"
 
 
 # ─── EP Press Officer email data ─────────────────────────────────────────────
@@ -583,6 +589,9 @@ def _trade_assoc_body(first_name: str, org_name: str, hook: str,
         f'<p {_P}>For an organisation managing as many EU dossiers as {org_name}, '
         f'Brubru provides the systematic monitoring layer that frees your policy '
         f'team for strategic work.</p>\n\n'
+        f'<p {_P}><em>A note on transparency:</em> Brubru\'s AI assistant improves with every query it receives. '
+        f'If you try it, I\'d encourage your team to be demanding: the harder and more specific the question, '
+        f'the smarter it gets. Your queries genuinely help us build a better tool for the Brussels community.</p>\n\n'
         f'<p {_P}>Would a 15-minute demo be useful? You can also try it directly at '
         f'<a href="https://brubru.beresol.eu" style="color:#0693e3;text-decoration:none;">'
         f'brubru.beresol.eu</a>.</p>'
@@ -601,7 +610,7 @@ TRADE_ASSOC_EMAILS = [
         "subject": "DIGITALEUROPE: AI-powered EU digital regulation intelligence",
         "html_body": _trade_assoc_body(
             "Gabriel", "DIGITALEUROPE",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. DIGITALEUROPE "
             "tracks the most complex digital regulation dossiers in the EU, from the "
             "AI Act to DSA/DMA, Data Act, and Cyber Resilience Act. Brubru was built "
@@ -623,14 +632,14 @@ TRADE_ASSOC_EMAILS = [
         "subject": "Brubru: AI-powered legislative intelligence for DIGITALEUROPE",
         "html_body": _trade_assoc_body(
             "Cecilia", "DIGITALEUROPE",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. Managing "
             "DIGITALEUROPE's advocacy across AI Act, DSA/DMA, Data Act, CRA, and "
             "the broader digital regulation landscape requires systematic monitoring "
             "of dozens of active procedures simultaneously.",
             [
                 "<strong>Digital regulation tracking:</strong> monitors the AI Act, DSA/DMA, Data Act, CRA, and related dossiers with real-time updates from EP committees, Council, and Commission.",
-                "<strong>Amendment intelligence:</strong> fetches all MEP amendments for any procedure with political group analysis &mdash; useful for identifying allies and tracking opposition.",
+                "<strong>Amendment intelligence:</strong> fetches all MEP amendments for any procedure with political group analysis, useful for identifying allies and tracking opposition.",
                 "<strong>Document generation:</strong> drafts position papers, MEP briefings, talking points, and consultation responses tailored to your policy objectives.",
                 "<strong>Consultation tracking:</strong> monitors the EC &lsquo;Have Your Say&rsquo; portal with upcoming deadlines across all digital policy areas.",
             ],
@@ -645,10 +654,10 @@ TRADE_ASSOC_EMAILS = [
         "subject": "EBF: AI-powered EU financial regulation intelligence",
         "html_body": _trade_assoc_body(
             "Wim", "EBF",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. The EBF manages "
             "advocacy across an exceptionally wide range of financial services "
-            "dossiers &mdash; from Banking Union and AML packages to MiCA, DORA, and "
+            "dossiers, from Banking Union and AML packages to MiCA, DORA, and "
             "PSD3/PSR. Brubru tracks all of these systematically.",
             [
                 "<strong>Financial regulation tracking:</strong> monitors PSD3/PSR, MiCA, DORA, Banking Union, AML packages, Solvency II, and related dossiers with real-time updates.",
@@ -667,7 +676,7 @@ TRADE_ASSOC_EMAILS = [
         "subject": "EBF: EU banking regulation intelligence powered by AI",
         "html_body": _trade_assoc_body(
             "R.", "EBF",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. I\'m reaching out "
             "because Brubru tracks the full range of EU financial services regulation "
             "that the EBF covers, from Banking Union and AML to digital finance.",
@@ -688,10 +697,10 @@ TRADE_ASSOC_EMAILS = [
         "subject": "ACEA: AI-powered EU automotive regulation intelligence",
         "html_body": _trade_assoc_body(
             "Massimiliano", "ACEA",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. ACEA\'s advocacy "
             "spans CO2 standards, Euro 7, ETS2, e-mobility regulation, and automotive "
-            "supply chain dossiers &mdash; all files that Brubru monitors systematically.",
+            "supply chain dossiers, all files that Brubru monitors systematically.",
             [
                 "<strong>Automotive regulation tracking:</strong> monitors CO2 standards, Euro 7, ETS2, e-mobility, and related dossiers with committee-level updates.",
                 "<strong>Amendment intelligence:</strong> fetches all MEP amendments for ENVI, ITRE, and TRAN procedures with political group analysis.",
@@ -709,7 +718,7 @@ TRADE_ASSOC_EMAILS = [
         "subject": "ACEA: EU automotive policy intelligence powered by AI",
         "html_body": _trade_assoc_body(
             "Camille", "ACEA",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. I\'m reaching out "
             "because Brubru tracks the automotive regulatory dossiers ACEA covers, "
             "from CO2 standards and Euro 7 to ETS2 and electrification policy.",
@@ -730,10 +739,10 @@ TRADE_ASSOC_EMAILS = [
         "subject": "FuelsEurope: AI-powered EU energy regulation intelligence",
         "html_body": _trade_assoc_body(
             "Alain", "FuelsEurope",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. FuelsEurope\'s "
             "advocacy covers fuel regulation, refining policy, and the broader Fit "
-            "for 55 package &mdash; dossiers that Brubru tracks in real-time.",
+            "for 55 package, dossiers that Brubru tracks in real-time.",
             [
                 "<strong>Energy regulation tracking:</strong> monitors Fit for 55, ETS reform, fuel quality directives, and renewable energy regulation.",
                 "<strong>Consultation monitoring:</strong> tracks the EC &lsquo;Have Your Say&rsquo; portal with upcoming energy policy deadlines.",
@@ -751,7 +760,7 @@ TRADE_ASSOC_EMAILS = [
         "subject": "GSMA Europe: AI-powered EU digital and telecom regulation intelligence",
         "html_body": _trade_assoc_body(
             "Elsa", "GSMA Europe",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. GSMA Europe\'s "
             "policy work on connectivity, spectrum regulation, and the Digital "
             "Networks Act covers some of the EU's most active digital dossiers.",
@@ -772,10 +781,10 @@ TRADE_ASSOC_EMAILS = [
         "subject": "CEFIC: AI-powered EU chemicals and sustainability regulation intelligence",
         "html_body": _trade_assoc_body(
             "Marco", "CEFIC",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. CEFIC\'s advocacy "
             "spans REACH, CLP, PFAS restriction, industrial emissions, and the broader "
-            "Green Deal package &mdash; an exceptionally wide regulatory landscape.",
+            "Green Deal package: an exceptionally wide regulatory landscape.",
             [
                 "<strong>Chemicals and sustainability tracking:</strong> monitors REACH revision, CLP, PFAS restriction proposals, IED, and related Green Deal files.",
                 "<strong>Consultation monitoring:</strong> tracks the EC &lsquo;Have Your Say&rsquo; portal with upcoming chemicals and environmental policy deadlines.",
@@ -793,10 +802,10 @@ TRADE_ASSOC_EMAILS = [
         "subject": "EFPIA: AI-powered EU pharmaceutical regulation intelligence",
         "html_body": _trade_assoc_body(
             "Nathalie", "EFPIA",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. EFPIA manages "
             "advocacy across the pharmaceutical legislation revision, EHDS, HTA "
-            "Regulation, Critical Medicines Act, SPC reform, and IP policy &mdash; "
+            "Regulation, Critical Medicines Act, SPC reform, and IP policy, "
             "dossiers that Brubru tracks systematically.",
             [
                 "<strong>Pharmaceutical regulation tracking:</strong> monitors the pharma package revision, EHDS, HTA Regulation, Critical Medicines Act, and related dossiers.",
@@ -815,10 +824,10 @@ TRADE_ASSOC_EMAILS = [
         "subject": "MedTech Europe: AI-powered EU health regulation intelligence",
         "html_body": _trade_assoc_body(
             "Oliver", "MedTech Europe",
-            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru &mdash; an AI-powered "
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
             "EU legislative intelligence platform built in Brussels. MedTech Europe "
             "covers MDR, IVDR, EHDS, the AI Act\'s health provisions, and related "
-            "dossiers &mdash; a complex regulatory landscape that Brubru monitors "
+            "dossiers, a complex regulatory landscape that Brubru monitors "
             "in real-time.",
             [
                 "<strong>Health regulation tracking:</strong> monitors MDR, IVDR, EHDS, AI Act health provisions, HTA Regulation, and related dossiers.",
