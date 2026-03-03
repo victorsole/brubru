@@ -29,6 +29,7 @@ import anthropic
 from .ai.context_builder import ContextBuilder, get_context_builder, SOURCE_TIERS, detect_drafting_intent
 from .ai.multi_provider_service import MultiProviderService, get_multi_provider_service
 from .ai.conversation_memory import get_conversation_memory_service
+from .ai.action_router import compute_actions
 from core.config import settings
 from core.database import SessionLocal
 from knowledge_base.ep_committees import EP_COMMITTEE_CODES
@@ -56,6 +57,7 @@ class ChatResponse:
     model: str
     search_time_ms: float
     total_time_ms: float
+    actions: List[Dict[str, Any]] = None
 
 
 class AIService:
@@ -159,6 +161,7 @@ class AIService:
         citations = []
         search_time_ms = 0.0
         mep_data = {}  # For MEP name linking
+        context_data = None
 
         if use_context:
             # Get full context data to extract MEP information
@@ -356,13 +359,30 @@ class AIService:
             )
         )
 
+        # Compute action buttons from entities and intent
+        action_dicts = []
+        if use_context and context_data is not None:
+            try:
+                tracked_refs = self._get_tracked_procedure_refs(user_id) if user_id else set()
+                actions = compute_actions(
+                    entities=context_data.entities,
+                    drafting_intent=context_data.drafting_intent,
+                    has_train_match=bool(context_data.legislative_train_files),
+                    is_pre_user=is_pre_user,
+                    tracked_refs=tracked_refs,
+                )
+                action_dicts = [a.to_dict() for a in actions]
+            except Exception as e:
+                logger.warning(f"Action routing failed (non-critical): {e}")
+
         return ChatResponse(
             message=assistant_message,
             citations=citations,
             tokens_used=tokens_used,
             model=actual_model,
             search_time_ms=search_time_ms,
-            total_time_ms=total_time_ms
+            total_time_ms=total_time_ms,
+            actions=action_dicts,
         )
 
     async def chat_stream(
@@ -451,6 +471,26 @@ class AIService:
         ) as stream:
             async for text in stream.text_stream:
                 yield text
+
+        # After streaming completes, compute and emit action buttons
+        if use_context:
+            try:
+                has_train_match = self._check_train_match(entities.procedure_references) if entities.procedure_references else False
+                tracked_refs = set()  # Streaming path doesn't have user_id; tracked_refs unavailable
+                actions = compute_actions(
+                    entities=entities,
+                    drafting_intent=drafting,
+                    has_train_match=has_train_match,
+                    is_pre_user=is_pre_user,
+                    tracked_refs=tracked_refs,
+                )
+                if actions:
+                    yield json.dumps({
+                        "type": "actions",
+                        "actions": [a.to_dict() for a in actions],
+                    })
+            except Exception as e:
+                logger.warning(f"Action routing failed in stream (non-critical): {e}")
 
         logger.info(f"Streamed response in {(datetime.now() - start_time).total_seconds():.2f}s")
 
@@ -866,6 +906,45 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             }
             for msg in conversation_history
         ]
+
+    def _get_tracked_procedure_refs(self, user_id: str) -> set:
+        """Get procedure refs the user already tracks. Non-critical, returns empty set on failure."""
+        try:
+            from models.legislative_train import LegislativeCarriage, UserCarriageTrack
+            import uuid as uuid_mod
+            db = SessionLocal()
+            try:
+                rows = db.query(LegislativeCarriage.oeil_procedure_ref).join(
+                    UserCarriageTrack,
+                    UserCarriageTrack.carriage_id == LegislativeCarriage.id
+                ).filter(
+                    UserCarriageTrack.user_id == uuid_mod.UUID(user_id),
+                    LegislativeCarriage.oeil_procedure_ref.isnot(None)
+                ).all()
+                return {r[0] for r in rows}
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning(f"Failed to get tracked refs: {e}")
+            return set()
+
+    def _check_train_match(self, procedure_refs: List[str]) -> bool:
+        """Check if any procedure refs exist in the legislative train DB. Quick indexed lookup."""
+        if not procedure_refs:
+            return False
+        try:
+            from models.legislative_train import LegislativeCarriage
+            db = SessionLocal()
+            try:
+                count = db.query(LegislativeCarriage.id).filter(
+                    LegislativeCarriage.oeil_procedure_ref.in_(procedure_refs)
+                ).limit(1).count()
+                return count > 0
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning(f"Failed to check train match: {e}")
+            return False
 
     def _extract_mep_data(self, context_data: Any) -> Dict[str, Dict[str, str]]:
         """

@@ -5,7 +5,8 @@ import { marked } from 'marked';
 import Icon from '@mdi/react';
 import { mdiMedalOutline, mdiEmoticonConfusedOutline, mdiAlertCircleOutline, mdiClose } from '@mdi/js';
 import axios from 'axios';
-import type { Message, Citation, DetectedEntities } from './chat_interface';
+import type { Message, Citation, DetectedEntities, ChatAction } from './chat_interface';
+import { ActionButtons } from './action_buttons';
 import './message_list.css';
 
 interface MessageListProps {
@@ -16,6 +17,7 @@ interface MessageListProps {
   detectedEntities?: DetectedEntities | null;
   preUserQueryCount?: number;
   onSmartSuggestionClick?: (text: string) => void;
+  onActionClick?: (action: ChatAction) => void;
 }
 
 // Extract follow-up suggestions from the end of assistant messages.
@@ -88,7 +90,7 @@ const generateSmartSuggestions = (entities: DetectedEntities | null | undefined)
   return suggestions.slice(0, 3);
 };
 
-export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, detectedEntities, preUserQueryCount, onSmartSuggestionClick }: MessageListProps) => {
+export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, detectedEntities, preUserQueryCount, onSmartSuggestionClick, onActionClick }: MessageListProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [expandedSources, setExpandedSources] = useState<Set<string>>(new Set());
   const [feedbackGiven, setFeedbackGiven] = useState<Map<string, 'positive' | 'negative' | 'hallucination'>>(new Map());
@@ -366,6 +368,13 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
                           </button>
                         ))}
                       </div>
+                    )}
+                    {isLastAssistant && message.actions && message.actions.length > 0 && onActionClick && (
+                      <ActionButtons
+                        actions={message.actions}
+                        onActionClick={onActionClick}
+                        isPreUser={!!abVariant}
+                      />
                     )}
                     {smartSuggestions.length > 0 && onSmartSuggestionClick && (
                       <div className="message-list__smart-suggestions">

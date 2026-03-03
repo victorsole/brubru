@@ -61,6 +61,7 @@ class ChatMessageResponse(BaseModel):
     search_time_ms: float
     total_time_ms: float
     timestamp: str
+    actions: List[Dict[str, Any]] = []
 
 
 class ConversationHistoryResponse(BaseModel):
@@ -433,7 +434,8 @@ async def send_message(
             model=response.model,
             search_time_ms=response.search_time_ms,
             total_time_ms=response.total_time_ms,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
+            actions=response.actions or [],
         )
 
     except Exception as e:
@@ -485,7 +487,7 @@ async def stream_message(request: ChatMessageRequest):
                 if chunk.startswith("{"):
                     try:
                         parsed = json.loads(chunk)
-                        if parsed.get("type") in ("status", "entities"):
+                        if parsed.get("type") in ("status", "entities", "actions"):
                             yield f"data: {chunk}\n\n"
                             continue
                     except (json.JSONDecodeError, AttributeError):

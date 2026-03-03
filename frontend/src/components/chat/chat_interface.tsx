@@ -2,9 +2,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { MessageList } from './message_list';
 import { useAuth } from '../../hooks/use_auth';
+import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { trackPreUserEvent, getAbVariant } from '../../services/preuser_tracker';
 import './chat_interface.css';
 
@@ -16,6 +18,17 @@ export interface Citation {
   metadata?: Record<string, any>;
 }
 
+export interface ChatAction {
+  action_type: 'track_file' | 'generate_document' | 'open_amendator' | 'view_prediction' | 'view_calendar';
+  label: string;
+  icon: string;
+  colour: string;
+  route?: string;
+  params: Record<string, any>;
+  requires_auth: boolean;
+  pre_user_label?: string;
+}
+
 export interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -25,6 +38,7 @@ export interface Message {
   tokensUsed?: number;
   searchTimeMs?: number;
   contextsUsed?: number;
+  actions?: ChatAction[];
 }
 
 interface ChatInterfaceProps {
@@ -97,6 +111,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const { isAuthenticated, user } = useAuth();
+  const navigate = useNavigate();
 
   // API base URL - configure this in your environment
   const API_BASE_URL = import.meta.env?.VITE_API_URL || (window as any).REACT_APP_API_URL || 'http://localhost:8000';
@@ -280,6 +295,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
         tokensUsed: data.tokens_used,
         searchTimeMs: data.search_time_ms,
         contextsUsed: data.citations?.length || 0,
+        actions: data.actions || [],
       };
 
       setMessages((prev) => [...prev, aiMessage]);
@@ -421,6 +437,16 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
                   });
                   continue;
                 }
+                if (parsed.type === 'actions' && parsed.actions) {
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === streamingMessageId
+                        ? { ...msg, actions: parsed.actions }
+                        : msg
+                    )
+                  );
+                  continue;
+                }
               } catch {
                 // Not JSON -- treat as text chunk
               }
@@ -500,6 +526,40 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
       } catch {}
     }
     requestAnimationFrame(() => textareaRef.current?.focus());
+  };
+
+  const handleActionClick = (action: ChatAction) => {
+    // Pre-user: always navigate to subscription
+    if (!isAuthenticated) {
+      navigate('/subscription');
+      return;
+    }
+
+    switch (action.action_type) {
+      case 'track_file': {
+        const ref = action.params.procedure_ref;
+        if (ref) {
+          useLegislativeTrains.getState().trackFile(ref);
+        }
+        break;
+      }
+      case 'generate_document':
+        navigate('/main', {
+          state: {
+            openDocGenerator: true,
+            docType: action.params.document_type,
+            topic: action.params.topic,
+          },
+        });
+        break;
+      case 'open_amendator':
+      case 'view_prediction':
+      case 'view_calendar':
+        if (action.route) {
+          navigate(action.route);
+        }
+        break;
+    }
   };
 
   return (
@@ -589,6 +649,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
               setInputValue(text);
               requestAnimationFrame(() => textareaRef.current?.focus());
             }}
+            onActionClick={handleActionClick}
           />
         )}
         <AnimatePresence>

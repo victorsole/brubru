@@ -1,5 +1,6 @@
 // frontend/src/pages/amendator_page.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiContentSave, mdiFileEditOutline, mdiRobotOutline } from '@mdi/js';
 import { Sidebar } from '../components/shared/sidebar';
@@ -66,6 +67,7 @@ interface AmendatorPageProps {
 }
 
 export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPageProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedAmendment, setSelectedAmendment] = useState<Amendment | null>(null);
   const [loadedDocument, setLoadedDocument] = useState<LoadedDocument | null>(null);
   const [activeTab, setActiveTab] = useState<SidebarTab>('amendments');
@@ -75,6 +77,39 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
   const [pendingAmendments, setPendingAmendments] = useState<PendingAIAmendment[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
+  // Deep-link: auto-load document from ?celex= query param
+  useEffect(() => {
+    const celex = searchParams.get('celex');
+    if (!celex || loadedDocument) return;
+
+    const loadFromCelex = async () => {
+      try {
+        const eurlexUrl = `https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:${celex}`;
+        const response = await fetch(`${API_BASE}/documents/fetch-eurlex`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: eurlexUrl, format: 'html', language: 'EN' }),
+        });
+        if (response.ok) {
+          const doc = await response.json();
+          setLoadedDocument({
+            document_id: doc.document_id,
+            filename: doc.filename,
+            text: doc.text,
+            metadata: doc.metadata,
+            structure: doc.structure,
+          });
+        }
+      } catch (err) {
+        console.error('Failed to auto-load CELEX document:', err);
+      }
+      // Clear the celex param so it doesn't re-trigger
+      setSearchParams({}, { replace: true });
+    };
+
+    loadFromCelex();
+  }, [searchParams, loadedDocument, setSearchParams]);
 
   // Convert cellAmendments to Amendment format for sidebar display
   const amendments: Amendment[] = Array.from(cellAmendments.entries()).map(([index, cellAmendment]) => ({

@@ -1,0 +1,75 @@
+/* Action buttons shown below AI chat responses */
+
+.action-buttons {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.action-buttons__label {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted, #9ca3af);
+  margin-bottom: var(--space-2);
+  font-weight: 500;
+}
+
+.action-buttons__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.action-buttons__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-2) var(--space-3);
+  background-color: transparent;
+  border: 1px solid var(--action-colour, #0693e3);
+  border-radius: 999px;
+  color: var(--action-colour, #0693e3);
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, transform 0.1s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+
+.action-buttons__btn .mdi {
+  font-size: 1rem;
+}
+
+.action-buttons__btn:hover {
+  background-color: var(--action-colour, #0693e3);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.action-buttons__btn:active {
+  transform: translateY(0);
+}
+
+/* Tablet: max 2 per row */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .action-buttons__btn {
+    flex: 0 1 calc(50% - var(--space-2));
+    justify-content: center;
+  }
+}
+
+/* Mobile: full-width stacked, 44px min touch target */
+@media (max-width: 767px) {
+  .action-buttons__row {
+    flex-direction: column;
+  }
+
+  .action-buttons__btn {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+  }
+}
