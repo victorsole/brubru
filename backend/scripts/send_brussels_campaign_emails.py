@@ -774,6 +774,27 @@ TRADE_ASSOC_EMAILS = [
     },
     {
         "segment": "trade-associations",
+        "org": "GSMA Europe",
+        "contact": "Sergi Sarri",
+        "email": "sergi.sarri@gmail.com",
+        "confidence": "HIGH",
+        "subject": "GSMA Europe: AI-powered EU digital and telecom regulation intelligence",
+        "html_body": _trade_assoc_body(
+            "Sergi", "GSMA Europe",
+            "I\'m Victor Sol&eacute; Ferioli, founder of Brubru, an AI-powered "
+            "EU legislative intelligence platform built in Brussels. GSMA Europe\'s "
+            "policy work on connectivity, spectrum regulation, and the Digital "
+            "Networks Act covers some of the EU's most active digital dossiers.",
+            [
+                "<strong>Telecom and digital regulation:</strong> monitors the Digital Networks Act, spectrum regulation, connectivity policy, and related dossiers.",
+                "<strong>Legislative monitoring:</strong> tracks 500+ EU files across digital, industrial, and trade dossiers.",
+                "<strong>Amendment intelligence:</strong> fetches all MEP amendments for ITRE and IMCO procedures with political group analysis.",
+                "<strong>EU Calendar:</strong> unified calendar covering EP plenary, Council TTE, and Commission college meetings.",
+            ],
+        ),
+    },
+    {
+        "segment": "trade-associations",
         "org": "CEFIC",
         "contact": "Marco Mensink",
         "email": "mvo@cefic.be",

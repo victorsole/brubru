@@ -44,6 +44,8 @@ export interface Message {
 interface ChatInterfaceProps {
   initialQuestion?: string;
   documentIds?: string[];
+  activeChatId?: string | null;
+  onConversationUpdate?: () => void;
 }
 
 // Pre-user helpers
@@ -94,7 +96,7 @@ export interface DetectedEntities {
   policy_areas: string[];
 }
 
-export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfaceProps = {}) => {
+export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId, onConversationUpdate }: ChatInterfaceProps = {}) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -204,6 +206,46 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
     }
   }, [initialQuestion]);
 
+  // Load messages when activeChatId changes (clicking a previous conversation)
+  useEffect(() => {
+    if (activeChatId === undefined) return; // prop not provided
+
+    if (activeChatId === null) {
+      // New chat requested
+      setMessages([]);
+      setChatId(null);
+      setInputValue('');
+      setError(null);
+      return;
+    }
+
+    const loadConversation = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/chat/history/${activeChatId}`);
+        if (!response.ok) throw new Error('Failed to load conversation');
+        const data = await response.json();
+
+        const loaded: Message[] = (data.messages || []).map((m: any) => ({
+          id: m.id || crypto.randomUUID(),
+          role: m.role,
+          content: m.content,
+          timestamp: new Date(m.timestamp),
+          citations: m.citations || [],
+        }));
+
+        setMessages(loaded);
+        setChatId(activeChatId);
+        setInputValue('');
+        setError(null);
+      } catch (err) {
+        console.error('Failed to load conversation:', err);
+        setError('Failed to load conversation');
+      }
+    };
+
+    loadConversation();
+  }, [activeChatId, API_BASE_URL]);
+
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -299,6 +341,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
       };
 
       setMessages((prev) => [...prev, aiMessage]);
+      onConversationUpdate?.();
     } catch (err: any) {
       if (err.name === 'AbortError') {
         console.log('Request aborted');
@@ -487,6 +530,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [] }: ChatInterfa
           );
         }
       }
+      onConversationUpdate?.();
     } catch (err: any) {
       if (err.name === 'AbortError') {
         console.log('Streaming aborted');

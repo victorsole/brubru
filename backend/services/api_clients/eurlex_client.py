@@ -14,7 +14,8 @@ Documentation:
 """
 
 import logging
-from typing import Optional, Dict, Any, List
+import time
+from typing import Optional, Dict, Any, List, Tuple
 from datetime import datetime, timedelta
 from enum import Enum
 
@@ -141,6 +142,12 @@ class EURLexClient(BaseAPIClient):
         self.soap_username = soap_username
         self.soap_password = soap_password
         self.soap_auth_available = bool(soap_username and soap_password)
+
+        # In-memory EuroVoc cache: key -> (results, timestamp)
+        # TTL: 24 hours, max 200 entries, LRU eviction
+        self._eurovoc_cache: Dict[str, Tuple[List[Dict[str, Any]], float]] = {}
+        self._eurovoc_cache_ttl = 86400  # 24 hours
+        self._eurovoc_cache_max = 200
 
         logger.info(f"Initialized EUR-Lex client (SOAP auth: {self.soap_auth_available})")
 
@@ -835,6 +842,108 @@ class EURLexClient(BaseAPIClient):
         except Exception as e:
             logger.error(f"Failed to count documents: {str(e)}")
             return {}
+
+    def _get_eurovoc_cache_key(self, keywords: List[str]) -> str:
+        """Generate a cache key from sorted normalised keywords."""
+        return "|".join(sorted(k.lower().strip() for k in keywords))
+
+    def _evict_eurovoc_cache(self):
+        """Evict oldest entries if cache exceeds max size."""
+        if len(self._eurovoc_cache) <= self._eurovoc_cache_max:
+            return
+        # Sort by timestamp (oldest first) and remove excess
+        sorted_keys = sorted(self._eurovoc_cache.keys(),
+                             key=lambda k: self._eurovoc_cache[k][1])
+        to_remove = len(self._eurovoc_cache) - self._eurovoc_cache_max
+        for key in sorted_keys[:to_remove]:
+            del self._eurovoc_cache[key]
+
+    async def search_by_eurovoc_keyword(
+        self,
+        keywords: List[str],
+        date_from: Optional[str] = None,
+        limit: int = 10,
+        language: str = "en"
+    ) -> List[Dict[str, Any]]:
+        """
+        Search CELLAR for legislation by EuroVoc topic keywords.
+
+        Uses the SPARQL endpoint to find legislation tagged with EuroVoc
+        concept labels matching the given keywords. Results are cached
+        in-memory with 24h TTL.
+
+        Args:
+            keywords: List of topic keywords to search for (e.g., ["fisheries", "aquaculture"])
+            date_from: ISO date string for minimum document date (default: 2020-01-01)
+            limit: Maximum results per keyword (default: 10)
+            language: Language for titles (default: "en")
+
+        Returns:
+            List of legislation dicts with celex, title, date fields
+        """
+        if not keywords:
+            return []
+
+        # Check cache
+        cache_key = self._get_eurovoc_cache_key(keywords)
+        if cache_key in self._eurovoc_cache:
+            cached_results, cached_time = self._eurovoc_cache[cache_key]
+            if time.time() - cached_time < self._eurovoc_cache_ttl:
+                logger.debug(f"EuroVoc cache hit for: {keywords}")
+                return cached_results
+
+        if not date_from:
+            date_from = "2020-01-01"
+
+        logger.info(f"CELLAR EuroVoc search: {keywords} (from {date_from}, limit {limit})")
+
+        all_results = []
+        seen_celex = set()
+
+        for keyword in keywords[:3]:  # Max 3 keywords per query
+            # Build raw SPARQL query (the query builder doesn't support all patterns)
+            sparql_text = f"""
+PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?celex ?title ?date WHERE {{
+  ?work cdm:resource_legal_id_celex ?celex .
+  ?work cdm:work_date_document ?date .
+  ?work cdm:work_is_about_concept_eurovoc ?concept .
+  ?concept skos:prefLabel ?label .
+  OPTIONAL {{ ?work cdm:resource_legal_title ?title . FILTER(LANG(?title) = "{language}") }}
+  FILTER(CONTAINS(LCASE(STR(?label)), "{keyword.lower()}"))
+  FILTER(?date >= "{date_from}"^^xsd:date)
+}} ORDER BY DESC(?date) LIMIT {limit}
+"""
+
+            try:
+                from .base_sparql_client import SPARQLResultFormat
+                response = await self.sparql.query(sparql_text.strip(), SPARQLResultFormat.JSON)
+
+                if "results" in response and "bindings" in response["results"]:
+                    for binding in response["results"]["bindings"]:
+                        celex = binding.get("celex", {}).get("value", "")
+                        if celex and celex not in seen_celex:
+                            seen_celex.add(celex)
+                            all_results.append({
+                                "celex": celex,
+                                "title": binding.get("title", {}).get("value", ""),
+                                "date": binding.get("date", {}).get("value", ""),
+                                "eurovoc_keyword": keyword,
+                                "source": "cellar_eurovoc"
+                            })
+
+            except Exception as e:
+                logger.warning(f"CELLAR EuroVoc query failed for '{keyword}': {e}")
+
+        # Cache results
+        self._eurovoc_cache[cache_key] = (all_results, time.time())
+        self._evict_eurovoc_cache()
+
+        logger.info(f"CELLAR EuroVoc search returned {len(all_results)} results for {keywords}")
+        return all_results
 
     async def health_check(self) -> bool:
         """

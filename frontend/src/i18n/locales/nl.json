@@ -17,7 +17,14 @@
   },
   "main": {
     "chatHistory": "Chat Geschiedenis",
-    "previousConversations": "Eerdere gesprekken verschijnen hier"
+    "previousConversations": "Eerdere gesprekken verschijnen hier",
+    "newChat": "Nieuw Gesprek",
+    "noConversations": "Nog geen gesprekken",
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "thisWeek": "Deze Week",
+    "older": "Ouder",
+    "signInHistory": "Log in om je chatgeschiedenis te bekijken"
   },
   "chat": {
     "welcome": "Welkom bij Brubru",

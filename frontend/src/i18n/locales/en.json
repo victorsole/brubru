@@ -17,7 +17,14 @@
   },
   "main": {
     "chatHistory": "Chat History",
-    "previousConversations": "Previous conversations will appear here"
+    "previousConversations": "Previous conversations will appear here",
+    "newChat": "New Chat",
+    "noConversations": "No conversations yet",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This Week",
+    "older": "Older",
+    "signInHistory": "Sign in to see your chat history"
   },
   "chat": {
     "welcome": "Welcome to Brubru",

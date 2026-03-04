@@ -34,6 +34,110 @@
   margin-bottom: 0;
 }
 
+/* New Chat button */
+.main-page__new-chat-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px dashed var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-primary, #0693e3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.main-page__new-chat-btn:hover {
+  background: rgba(6, 147, 227, 0.06);
+  border-color: var(--color-primary, #0693e3);
+}
+
+/* Conversation list */
+.main-page__history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  overflow-y: auto;
+  max-height: calc(100vh - 320px);
+}
+
+/* Date group */
+.main-page__history-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.main-page__history-group-label {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted, #9ca3af);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 8px 4px;
+}
+
+/* Conversation item */
+.main-page__history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-left: 3px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+  min-height: 44px;
+}
+
+.main-page__history-item:hover {
+  background: var(--color-background-alt, #f3f4f6);
+}
+
+.main-page__history-item--active {
+  background: rgba(6, 147, 227, 0.08);
+  border-left-color: var(--color-primary, #0693e3);
+}
+
+.main-page__history-item--active:hover {
+  background: rgba(6, 147, 227, 0.12);
+}
+
+.main-page__history-item-title {
+  font-size: var(--font-size-sm);
+  color: var(--color-text, #111827);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-page__history-item-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 11px;
+  color: var(--color-text-muted, #9ca3af);
+}
+
+.main-page__history-item-count {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.main-page__history-item-count .mdi {
+  font-size: 12px;
+}
+
 .main-page__documents {
   padding-top: var(--space-4);
   border-top: 1px solid var(--color-border);

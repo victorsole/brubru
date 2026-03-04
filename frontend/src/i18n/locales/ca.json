@@ -17,7 +17,14 @@
   },
   "main": {
     "chatHistory": "Historial de Xat",
-    "previousConversations": "Les converses anteriors apareixeran aquí"
+    "previousConversations": "Les converses anteriors apareixeran aquí",
+    "newChat": "Nou Xat",
+    "noConversations": "Encara no hi ha converses",
+    "today": "Avui",
+    "yesterday": "Ahir",
+    "thisWeek": "Aquesta Setmana",
+    "older": "Anteriors",
+    "signInHistory": "Inicia sessió per veure el teu historial de xat"
   },
   "chat": {
     "welcome": "Benvingut a Brubru",

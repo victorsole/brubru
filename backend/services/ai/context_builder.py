@@ -245,46 +245,53 @@ class DraftingIntent:
 # Action words that signal the user wants to PRODUCE something, not learn about it.
 # Organised by language, with the document type they map to.
 ACTION_WORD_MAP = {
-    # English
+    # English -- explicit action phrases only (no standalone nouns that match inside other words)
     'draft': 'draft', 'write': 'draft', 'prepare': 'draft', 'redact': 'draft',
-    'template': 'template', 'model': 'template', 'example': 'template', 'sample': 'template',
+    'template': 'template', 'sample': 'template',
     'justification': 'justification', 'justify': 'justification',
-    'briefing': 'briefing', 'brief': 'briefing',
-    'position': 'position_paper', 'position paper': 'position_paper',
+    'draft a briefing': 'briefing', 'write a briefing': 'briefing', 'prepare a briefing': 'briefing',
+    'briefing note': 'briefing',
+    'position paper': 'position_paper', 'draft a position': 'position_paper',
     'amendment': 'amendment', 'amend': 'amendment',
     'talking points': 'talking_points',
-    'summary': 'summary', 'summarise': 'summary', 'summarize': 'summary',
-    'note': 'briefing', 'memo': 'briefing', 'memorandum': 'briefing',
-    'letter': 'letter', 'email': 'letter',
+    'summarise': 'summary', 'summarize': 'summary',
+    'draft a note': 'briefing', 'write a note': 'briefing', 'prepare a note': 'briefing',
+    'memo': 'briefing', 'memorandum': 'briefing',
+    'draft a letter': 'letter', 'write a letter': 'letter', 'write an email': 'letter',
     'draft a report': 'report', 'write a report': 'report', 'prepare a report': 'report',
     'draft report': 'report', 'write report': 'report',
-    'proposal': 'proposal',
-    'resolution': 'resolution',
-    'question': 'ep_question',
+    'draft a proposal': 'proposal', 'write a proposal': 'proposal',
+    'draft a resolution': 'resolution', 'write a resolution': 'resolution',
+    'draft a question': 'ep_question', 'write a question': 'ep_question',
+    'parliamentary question': 'ep_question', 'written question': 'ep_question',
     # Catalan
     'justificacio': 'justification', 'redacta': 'draft', 'escriu': 'draft',
     'esborrany': 'draft', 'prepara': 'draft', 'plantilla': 'template',
-    'resum': 'summary', 'resumeix': 'summary',
-    'nota': 'briefing', 'redacta informe': 'report', 'escriu informe': 'report', 'carta': 'letter',
-    'proposta': 'proposal', 'esmena': 'amendment',
+    'resumeix': 'summary',
+    'redacta una nota': 'briefing', 'escriu una nota': 'briefing',
+    'redacta informe': 'report', 'escriu informe': 'report',
+    'redacta una carta': 'letter', 'escriu una carta': 'letter',
+    'redacta una proposta': 'proposal', 'esmena': 'amendment',
     # Spanish
     'justificacion': 'justification', 'redactar': 'draft', 'escribir': 'draft',
-    'borrador': 'draft', 'preparar': 'draft', 'modelo': 'template',
-    'resumen': 'summary', 'resumir': 'summary',
+    'borrador': 'draft', 'preparar': 'draft',
+    'resumir': 'summary',
     'argumentario': 'talking_points', 'posicionamiento': 'position_paper',
-    'enmienda': 'amendment', 'pregunta': 'ep_question',
+    'enmienda': 'amendment',
+    'redactar una nota': 'briefing', 'escribir una nota': 'briefing',
     # French
     'brouillon': 'draft', 'rediger': 'draft', 'ecrire': 'draft',
     'argumentaire': 'talking_points', 'justificatif': 'justification',
-    'resume': 'summary', 'resumer': 'summary',
-    'projet': 'draft', 'amendement': 'amendment',
+    'resumer': 'summary',
+    'amendement': 'amendment',
+    'rediger une note': 'briefing', 'ecrire une note': 'briefing',
     # Italian
     'bozza': 'draft', 'scrivere': 'draft', 'redigere': 'draft',
     'giustificazione': 'justification', 'riassunto': 'summary',
     'emendamento': 'amendment',
     # Dutch
     'ontwerp': 'draft', 'schrijven': 'draft', 'samenvatting': 'summary',
-    'amendement_nl': 'amendment', 'rechtvaardiging': 'justification',
+    'rechtvaardiging': 'justification',
 }
 
 # Map document types to the best matching template names
@@ -319,13 +326,34 @@ def detect_drafting_intent(query: str) -> DraftingIntent:
 
     # Guard: if the query is clearly asking for STATUS or INFORMATION, skip drafting detection
     INFO_INTENT_PHRASES = [
+        # English -- status & information
         "what's the status", "what is the status", "status of",
         "what is", "what are", "tell me about", "explain",
         "how does", "how do", "how is", "who is", "who are",
         "when is", "when will", "where is", "will it be voted",
         "voted during", "voted in", "next plenary", "plenary session",
+        "inform me", "can you inform", "give me an overview",
+        "latest studies", "latest reports", "released by",
+        "published by", "conducted by", "do you know",
+        "are there any", "can you find", "can you check",
+        "can you look", "do look", "look for", "search for",
+        "overview of", "list of", "show me",
+        "what amendments", "what proposals", "what resolutions",
+        "which amendments", "which proposals",
+        "has this mep", "has tabled", "have tabled",
+        # Catalan
         "qual es", "que es", "que son", "quin es", "quina es",
-        "quel est", "qu'est", "cos'e", "wat is",
+        "dona'm", "mostra'm", "busca", "cerca",
+        # Spanish
+        "cuales son", "informame", "dame un resumen",
+        "busca", "muestra",
+        # French
+        "quel est", "qu'est", "quels sont", "quelles sont",
+        "informez-moi", "donnez-moi", "montrez-moi", "cherchez",
+        # Italian
+        "cos'e", "quali sono", "mostrami", "cercami",
+        # Dutch
+        "wat is", "wat zijn", "laat me zien", "zoek",
     ]
     for phrase in INFO_INTENT_PHRASES:
         if phrase in query_lower:
@@ -478,6 +506,9 @@ class ContextData:
 
     # Drafting intent detection (action vs information)
     drafting_intent: Optional[DraftingIntent] = None
+
+    # CELLAR on-demand legislation (EuroVoc fallback when no guides match)
+    cellar_legislation: Optional[List[Dict[str, Any]]] = None
 
     # Rapporteur-by-country results (for "Spanish MEPs who are rapporteurs" queries)
     rapporteur_by_country: Optional[List[Dict[str, Any]]] = None
@@ -885,6 +916,22 @@ class ContextBuilder:
             except Exception as e:
                 logger.warning(f"[RAPPORTEUR] Country rapporteur fetch failed: {e}")
 
+        # CELLAR on-demand fallback: if no knowledge guides matched, query CELLAR
+        # for relevant legislation by EuroVoc topic keywords.
+        # This is a conditional second-pass to avoid wasting SPARQL queries when
+        # guides already provide context.
+        cellar_legislation = []
+        if not internal_knowledge and self.eurlex_client:
+            topic_keywords = self._extract_topic_keywords(user_message.lower())
+            if topic_keywords:
+                try:
+                    cellar_legislation = await self._fetch_cellar_legislation_context(topic_keywords)
+                    if cellar_legislation:
+                        logger.info(f"[CELLAR] Fallback returned {len(cellar_legislation)} results "
+                                    f"for keywords: {topic_keywords}")
+                except Exception as e:
+                    logger.warning(f"[CELLAR] On-demand fallback failed: {e}")
+
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
 
@@ -912,7 +959,8 @@ class ContextBuilder:
             len(toolbox_results) +  # MCP Toolbox supplementary
             len(user_uploaded_documents) +  # User uploaded documents
             len(mep_amendments_summary) +  # MEP amendments
-            len(eu_calendar_events)  # EU Calendar events
+            len(eu_calendar_events) +  # EU Calendar events
+            len(cellar_legislation)  # CELLAR on-demand fallback
         )
 
         context_data = ContextData(
@@ -938,6 +986,7 @@ class ContextBuilder:
             user_uploaded_documents=user_uploaded_documents,  # User uploaded documents
             mep_amendments_summary=mep_amendments_summary,  # MEP amendments
             eu_calendar_events=eu_calendar_events,  # EU Calendar events
+            cellar_legislation=cellar_legislation if cellar_legislation else None,  # CELLAR fallback
             tender_context=tender_context,  # Phase 8: Tender data
             drafting_intent=drafting_intent if drafting_intent.is_drafting_query else None,
             rapporteur_by_country=rapporteur_by_country if rapporteur_by_country else None,
@@ -963,7 +1012,8 @@ class ContextBuilder:
             f"{len(toolbox_results)} toolbox, "
             f"{len(user_uploaded_documents)} user uploads, "
             f"{len(mep_amendments_summary)} MEP amendments, "
-            f"{len(eu_calendar_events)} calendar events) in {search_time:.2f}ms"
+            f"{len(eu_calendar_events)} calendar events, "
+            f"{len(cellar_legislation)} CELLAR) in {search_time:.2f}ms"
         )
 
         return context_data
@@ -1867,6 +1917,91 @@ class ContextBuilder:
             logger.error(f"Failed to query internal knowledge: {str(e)}")
 
         return knowledge_items
+
+    # =========================================================================
+    # CELLAR On-Demand Context (EuroVoc fallback)
+    # =========================================================================
+
+    # Topic keywords for CELLAR EuroVoc search
+    # Maps common query terms to EuroVoc-compatible keywords
+    CELLAR_TOPIC_KEYWORDS = {
+        'fisheries': ['fisheries'], 'fishing': ['fisheries'], 'aquaculture': ['aquaculture'],
+        'agriculture': ['agriculture'], 'farming': ['agriculture'], 'cap': ['common agricultural policy'],
+        'humanitarian': ['humanitarian aid'], 'civil protection': ['civil protection'],
+        'trade': ['trade policy'], 'trade agreement': ['trade agreement'],
+        'consumer': ['consumer protection'], 'product safety': ['product safety'],
+        'culture': ['culture'], 'creative': ['cultural policy'],
+        'development': ['development cooperation'], 'development aid': ['development aid'],
+        'customs': ['customs'], 'customs union': ['customs union'],
+        'human rights': ['human rights'], 'fundamental rights': ['fundamental rights'],
+        'education': ['education'], 'erasmus': ['student mobility'],
+        'enlargement': ['enlargement'], 'accession': ['accession'],
+        'sme': ['small and medium-sized enterprises'], 'enterprise': ['enterprise policy'],
+        'environment': ['environment'], 'biodiversity': ['biodiversity'],
+        'climate': ['climate change'], 'green deal': ['climate change'],
+        'taxation': ['taxation'], 'vat': ['value added tax'], 'tax': ['taxation'],
+        'fraud': ['fraud'], 'anti-fraud': ['anti-fraud'], 'corruption': ['corruption'],
+        'justice': ['justice'], 'security': ['internal security'],
+        'migration': ['migration'], 'asylum': ['asylum'],
+        'internal market': ['internal market'], 'single market': ['internal market'],
+        'foreign policy': ['foreign policy'], 'defence': ['defence'],
+        'external relations': ['external relations'],
+        'health': ['public health'], 'pharmaceutical': ['pharmaceutical product'],
+        'digital': ['digital economy'], 'cybersecurity': ['cybersecurity'],
+        'transport': ['transport'], 'maritime': ['maritime transport'],
+        'energy': ['energy policy'], 'renewable': ['renewable energy'],
+    }
+
+    def _extract_topic_keywords(self, query_lower: str) -> List[str]:
+        """Extract EuroVoc topic keywords from a user query.
+
+        Args:
+            query_lower: Lowercased user query
+
+        Returns:
+            List of EuroVoc-compatible keywords (max 3)
+        """
+        matched = []
+        # Check multi-word terms first (longer = more specific)
+        sorted_terms = sorted(self.CELLAR_TOPIC_KEYWORDS.keys(), key=len, reverse=True)
+        for term in sorted_terms:
+            if term in query_lower:
+                for kw in self.CELLAR_TOPIC_KEYWORDS[term]:
+                    if kw not in matched:
+                        matched.append(kw)
+                if len(matched) >= 3:
+                    break
+        return matched[:3]
+
+    async def _fetch_cellar_legislation_context(
+        self,
+        topic_keywords: List[str],
+        date_from: str = "2020-01-01",
+        limit: int = 10
+    ) -> List[Dict[str, Any]]:
+        """Fetch relevant legislation from CELLAR by EuroVoc topics.
+
+        This is a fallback method called only when no knowledge guides
+        matched the user query. Results are cached by the EURLexClient.
+
+        Args:
+            topic_keywords: EuroVoc keywords extracted from query
+            date_from: Minimum document date
+            limit: Max results per keyword
+
+        Returns:
+            List of legislation dicts with celex, title, date, source
+        """
+        if not self.eurlex_client or not topic_keywords:
+            return []
+
+        results = await self.eurlex_client.search_by_eurovoc_keyword(
+            keywords=topic_keywords,
+            date_from=date_from,
+            limit=limit
+        )
+
+        return results
 
     async def _fetch_legislative_train_files(
         self,
@@ -4122,6 +4257,25 @@ class ContextBuilder:
                 sections.append(f"- {item['title']}")
                 sections.append(f"  Type: {item['type']}")
                 sections.append(f"  {item['content'][:1000]}...")
+                sections.append("")
+
+        # CELLAR on-demand legislation (EuroVoc fallback when no guides match)
+        if context_data.cellar_legislation:
+            sections.append(f"\nCELLAR LEGISLATION (EuroVoc topic match, {len(context_data.cellar_legislation)} results):")
+            sections.append("These are recent EU legal acts matching the query topic from CELLAR SPARQL.")
+            sections.append("Source tier: 1 (official EUR-Lex/CELLAR data).\n")
+            for item in context_data.cellar_legislation:
+                celex = item.get('celex', 'N/A')
+                title = item.get('title', 'No English title')
+                date = item.get('date', 'N/A')
+                keyword = item.get('eurovoc_keyword', '')
+                sections.append(f"- CELEX: {celex}")
+                if title:
+                    sections.append(f"  Title: {title[:200]}")
+                sections.append(f"  Date: {date}")
+                if keyword:
+                    sections.append(f"  Topic: {keyword}")
+                sections.append(f"  EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}")
                 sections.append("")
 
         # Phase 2: EPRS Publications (plain-language explainers)

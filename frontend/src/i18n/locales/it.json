@@ -17,7 +17,14 @@
   },
   "main": {
     "chatHistory": "Cronologia Chat",
-    "previousConversations": "Le conversazioni precedenti appariranno qui"
+    "previousConversations": "Le conversazioni precedenti appariranno qui",
+    "newChat": "Nuova Chat",
+    "noConversations": "Nessuna conversazione ancora",
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "thisWeek": "Questa Settimana",
+    "older": "Precedenti",
+    "signInHistory": "Accedi per vedere la cronologia delle tue chat"
   },
   "chat": {
     "welcome": "Benvenuto su Brubru",

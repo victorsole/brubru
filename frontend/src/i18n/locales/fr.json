@@ -17,7 +17,14 @@
   },
   "main": {
     "chatHistory": "Historique des Discussions",
-    "previousConversations": "Les conversations précédentes apparaîtront ici"
+    "previousConversations": "Les conversations précédentes apparaîtront ici",
+    "newChat": "Nouvelle Discussion",
+    "noConversations": "Aucune conversation pour le moment",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "thisWeek": "Cette Semaine",
+    "older": "Plus anciennes",
+    "signInHistory": "Connectez-vous pour voir votre historique de discussions"
   },
   "chat": {
     "welcome": "Bienvenue sur Brubru",
