@@ -25,7 +25,9 @@ export type InstitutionType =
   | 'ESMA'
   | 'EMA'
   | 'EBA'
-  | 'EIOPA';
+  | 'EIOPA'
+  | 'COR'
+  | 'EESC';
 
 export type EventType =
   | 'plenary_session'
@@ -153,6 +155,8 @@ export const INSTITUTION_CONFIG: Record<InstitutionType, InstitutionConfig> = {
   EMA: { label: 'EMA', shortLabel: 'EMA', mdiIcon: 'mdi-pill', colour: '#0d9488' },
   EBA: { label: 'EBA', shortLabel: 'EBA', mdiIcon: 'mdi-cash', colour: '#b45309' },
   EIOPA: { label: 'EIOPA', shortLabel: 'EIOPA', mdiIcon: 'mdi-shield-check', colour: '#6366f1' },
+  COR: { label: 'Committee of the Regions', shortLabel: 'CoR', mdiIcon: 'mdi-map-marker-multiple', colour: '#e11d48' },
+  EESC: { label: 'Economic and Social Committee', shortLabel: 'EESC', mdiIcon: 'mdi-handshake', colour: '#4f46e5' },
 };
 
 export const POLICY_AREA_CONFIG: Record<string, { label: string; colour: string }> = {

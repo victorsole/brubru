@@ -82,6 +82,15 @@ Key targets set by REPowerEU:
 - **FuelEU Maritime**: Regulation (EU) 2023/1805 (CELEX 32023R1805), adopted September 2023. Mandates gradual reduction of GHG intensity of fuels used in maritime transport, targets -80% by 2050.
 - **Alternative Fuels Infrastructure Regulation (AFIR)**: Regulation (EU) 2023/1804 (CELEX 32023R1804), adopted July 2023. Binding deployment targets for electric vehicle charging and hydrogen refuelling stations along TEN-T corridors.
 
+### EU Industrial Maritime and Ports Strategies (March 2026)
+
+On 4 March 2026, the Commission launched two complementary strategies:
+
+- **EU Industrial Maritime Strategy**: Aims to boost competitiveness, sustainability, and resilience of the EU maritime sector. Covers shipbuilding, shipping, offshore renewable energy, maritime equipment, and blue economy industries.
+- **EU Ports Strategy**: Strengthens the competitiveness, security, and sustainability of European ports. Addresses infrastructure investment, digitalisation, energy transition in port operations, and strategic autonomy.
+
+Both strategies sit under the broader Clean Industrial Deal framework and involve DG MOVE, DG MARE, and DG GROW. They complement FuelEU Maritime (decarbonisation of shipping fuels) with industrial competitiveness measures.
+
 ### Carbon Management
 
 - **Carbon Capture and Storage (CCS) Directive**: Directive 2009/31/EC (CELEX 32009L0031), adopted April 2009. Legal framework for geological storage of CO2, site selection, monitoring, and liability.
@@ -154,6 +163,7 @@ Announced by President von der Leyen as a priority for the 2024-2029 Commission 
 - LNG import capacity expanded significantly (new terminals in Germany, Greece, Italy, Finland)
 - Energy prices stabilised but remain above pre-2022 levels
 - Middle East tensions (2025-2026) create renewed supply risk for oil/LNG
+- On 4 March 2026, Commission and EU countries confirmed no immediate oil or gas supply concerns following disruptions in the Middle East, though monitoring continues
 - Commission Security College coordinates geopolitical energy risk assessment
 - Energy poverty affects over 46 million Europeans; affordability remains a priority
 

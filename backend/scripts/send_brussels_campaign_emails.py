@@ -11,16 +11,17 @@ Usage:
     # Preview
     python -m scripts.send_brussels_campaign_emails --preview
     python -m scripts.send_brussels_campaign_emails --preview --segment journalists
-    python -m scripts.send_brussels_campaign_emails --preview --segment ep-press
-    python -m scripts.send_brussels_campaign_emails --preview --segment trade-associations
 
     # Dry run
-    python -m scripts.send_brussels_campaign_emails --dry-run
     python -m scripts.send_brussels_campaign_emails --dry-run --segment journalists
 
-    # Send
+    # Send initial outreach
     python -m scripts.send_brussels_campaign_emails --send --segment journalists
     python -m scripts.send_brussels_campaign_emails --send  # all segments
+
+    # Send follow-ups
+    python -m scripts.send_brussels_campaign_emails --send --followup 1 --segment journalists
+    python -m scripts.send_brussels_campaign_emails --preview --followup 1 --segment ep-press
 """
 
 import argparse
@@ -872,15 +873,124 @@ SEGMENT_MAP = {
 }
 
 
-def _filter_emails(segment: str = None) -> list[dict]:
+# ─── Follow-up templates ─────────────────────────────────────────────────────
+
+# News hook for follow-ups (update this with the latest Brubru-relevant EU news)
+FOLLOWUP_NEWS_HOOK = (
+    "Since my last email, Brubru has added full coverage of the "
+    "<strong>Industrial Accelerator Act</strong> (COM(2026)100), the Commission's "
+    "new proposal on industrial decarbonisation and clean product lead markets "
+    "adopted on 4 March. We already have a comprehensive legislative guide, "
+    "EP plenary vote prediction, and comparative analysis of what the EP asked "
+    "vs what the Commission proposed."
+)
+
+FOLLOWUP_INTERNAL_NEWS = (
+    "We've also expanded our knowledge base to 27 EU policy guides, added "
+    "Maritime and Ports Strategy coverage, and improved our EU Calendar with "
+    "Commission College OJ agenda integration."
+)
+
+
+def _journalist_followup_body(first_name: str, outlet: str, beat: str) -> str:
+    return _wrap_html(
+        f'<p {_P}>Dear {first_name},</p>\n\n'
+        f'<p {_P}>Following up briefly on my email last week about Brubru.</p>\n\n'
+        f'<p {_P}>{FOLLOWUP_NEWS_HOOK}</p>\n\n'
+        f'<p {_P}>{FOLLOWUP_INTERNAL_NEWS}</p>\n\n'
+        f'<p {_P}>If you cover EU industrial policy, trade, or energy for {outlet}, '
+        f'this is exactly the kind of real-time legislative intelligence Brubru provides. '
+        f'Happy to do a quick demo or answer any questions.</p>\n\n'
+        f'<p {_P}>You can try it at '
+        f'<a href="https://brubru.beresol.eu" style="color:#0693e3;text-decoration:none;">'
+        f'brubru.beresol.eu</a>.</p>'
+    )
+
+
+def _journalist_followup_subject(first_name: str, beat: str, outlet: str) -> str:
+    return f"{first_name}, Brubru now covers the Industrial Accelerator Act"
+
+
+def _ep_press_followup_body(first_name: str, committees: list[str]) -> str:
+    codes = "/".join(committees)
+    return _wrap_html(
+        f'<p {_P}>Dear {first_name},</p>\n\n'
+        f'<p {_P}>Following up briefly on my email last week about Brubru.</p>\n\n'
+        f'<p {_P}>{FOLLOWUP_NEWS_HOOK}</p>\n\n'
+        f'<p {_P}>For {codes}, this means full procedure tracking from proposal to first reading, '
+        f'including predicted rapporteur assignments and EP group positions. Brubru '
+        f'now covers the IAA alongside 500+ other legislative files.</p>\n\n'
+        f'<p {_P}>Happy to show you how it works for {codes}\'s press operations. '
+        f'You can also try it at '
+        f'<a href="https://brubru.beresol.eu" style="color:#0693e3;text-decoration:none;">'
+        f'brubru.beresol.eu</a>.</p>'
+    )
+
+
+def _ep_press_followup_subject(committees: list[str]) -> str:
+    codes = "/".join(committees)
+    return f"Brubru update: Industrial Accelerator Act coverage for {codes}"
+
+
+def _trade_assoc_followup_body(first_name: str, org_name: str) -> str:
+    return _wrap_html(
+        f'<p {_P}>Dear {first_name},</p>\n\n'
+        f'<p {_P}>Following up on my email last week about Brubru.</p>\n\n'
+        f'<p {_P}>{FOLLOWUP_NEWS_HOOK}</p>\n\n'
+        f'<p {_P}>{FOLLOWUP_INTERNAL_NEWS}</p>\n\n'
+        f'<p {_P}>For {org_name}, this means your policy team can track the IAA '
+        f'from proposal through committee and plenary, with amendment analysis '
+        f'and political group position forecasts, all in one place.</p>\n\n'
+        f'<p {_P}>Would a 15-minute demo be useful? You can also try it at '
+        f'<a href="https://brubru.beresol.eu" style="color:#0693e3;text-decoration:none;">'
+        f'brubru.beresol.eu</a>.</p>'
+    )
+
+
+def _trade_assoc_followup_subject(org_name: str) -> str:
+    return f"{org_name}: Brubru now covers the Industrial Accelerator Act"
+
+
+def _apply_followup(emails: list[dict]) -> list[dict]:
+    """Transform email list to use follow-up templates."""
+    followup_emails = []
+    for e in emails:
+        fu = dict(e)  # shallow copy
+        seg = e["segment"]
+        first = e["contact"].split()[0]
+
+        if seg == "journalists":
+            beat = e.get("beat", "editorial")
+            outlet = e.get("outlet", "")
+            fu["subject"] = _journalist_followup_subject(first, beat, outlet)
+            fu["html_body"] = _journalist_followup_body(first, outlet, beat)
+        elif seg == "ep-press":
+            committees = e.get("committees", ["ITRE"])
+            fu["subject"] = _ep_press_followup_subject(committees)
+            fu["html_body"] = _ep_press_followup_body(first, committees)
+        elif seg == "trade-associations":
+            org = e.get("org", "your organisation")
+            fu["subject"] = _trade_assoc_followup_subject(org)
+            fu["html_body"] = _trade_assoc_followup_body(first, org)
+
+        followup_emails.append(fu)
+    return followup_emails
+
+
+def _filter_emails(segment: str = None, followup: int = None) -> list[dict]:
     if segment:
-        return SEGMENT_MAP.get(segment, [])
-    return ALL_EMAILS
+        emails = SEGMENT_MAP.get(segment, [])
+    else:
+        emails = ALL_EMAILS
+    if followup:
+        emails = _apply_followup(emails)
+    return emails
 
 
-def preview_emails(segment: str = None):
-    emails = _filter_emails(segment)
+def preview_emails(segment: str = None, followup: int = None):
+    emails = _filter_emails(segment, followup=followup)
     label = segment or "all segments"
+    phase = f" (Follow-up {followup})" if followup else ""
 
     if not emails:
         print(f"[WARN] No emails for segment '{segment}'")
@@ -888,7 +998,7 @@ def preview_emails(segment: str = None):
         return
 
     print(f"\n{'='*60}")
-    print(f"  BRUSSELS CAMPAIGN EMAILS - Preview ({label})")
+    print(f"  BRUSSELS CAMPAIGN EMAILS - Preview ({label}){phase}")
     print(f"  {len(emails)} email(s)")
     print(f"{'='*60}\n")
 
@@ -902,10 +1012,11 @@ def preview_emails(segment: str = None):
         print()
 
 
-def send_emails(segment: str = None, dry_run: bool = False):
+def send_emails(segment: str = None, followup: int = None, dry_run: bool = False):
     service = get_email_service()
-    emails = _filter_emails(segment)
+    emails = _filter_emails(segment, followup=followup)
     label = segment or "all segments"
+    phase = f" (Follow-up {followup})" if followup else ""
 
     if not emails:
         print(f"[WARN] No emails for segment '{segment}'")
@@ -915,7 +1026,7 @@ def send_emails(segment: str = None, dry_run: bool = False):
         print("\n[DRY RUN] No emails will actually be sent.\n")
 
     print(f"\n{'='*60}")
-    print(f"  SENDING BRUSSELS CAMPAIGN EMAILS ({label})")
+    print(f"  SENDING BRUSSELS CAMPAIGN EMAILS ({label}){phase}")
     print(f"  {len(emails)} email(s) | {'DRY RUN' if dry_run else 'LIVE'}")
     print(f"{'='*60}\n")
 
@@ -959,21 +1070,33 @@ def send_emails(segment: str = None, dry_run: bool = False):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Send Brussels EU Bubble campaign emails")
+    parser = argparse.ArgumentParser(
+        description="Send Brussels EU Bubble campaign emails",
+        epilog="""
+Examples:
+  python3.12 -m scripts.send_brussels_campaign_emails --preview --segment journalists
+  python3.12 -m scripts.send_brussels_campaign_emails --send --segment journalists
+  python3.12 -m scripts.send_brussels_campaign_emails --preview --followup 1 --segment journalists
+  python3.12 -m scripts.send_brussels_campaign_emails --send --followup 1 --segment ep-press
+        """,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--dry-run", action="store_true", help="Preview without sending")
     group.add_argument("--send", action="store_true", help="Actually send the emails")
     group.add_argument("--preview", action="store_true", help="Show email summary only")
     parser.add_argument("--segment", choices=["journalists", "ep-press", "trade-associations"],
                         help="Filter by segment")
+    parser.add_argument("--followup", type=int, choices=[1],
+                        help="Send follow-up N instead of initial outreach")
     args = parser.parse_args()
 
     if args.preview:
-        preview_emails(segment=args.segment)
+        preview_emails(segment=args.segment, followup=args.followup)
     elif args.dry_run:
-        send_emails(segment=args.segment, dry_run=True)
+        send_emails(segment=args.segment, followup=args.followup, dry_run=True)
     elif args.send:
-        send_emails(segment=args.segment, dry_run=False)
+        send_emails(segment=args.segment, followup=args.followup, dry_run=False)
 
 
 if __name__ == "__main__":

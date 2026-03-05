@@ -205,6 +205,18 @@ These are classified as **high-risk** and must comply with:
 | Adult learning (25-64) | 60% annually | 37% (2016) |
 | Reduction in people at risk of poverty or social exclusion | -15 million (of which -5 million children) | 91 million (2019) |
 
+## Union of Skills (2025-2026)
+
+The Union of Skills is a flagship Commission initiative launched in 2025 to address labour shortages and keep Europe competitive. After one year (March 2026), key actions delivered include:
+
+- Skills partnerships with industry sectors
+- Reinforced support for upskilling and reskilling through ESF+
+- Alignment of education/training systems with labour market needs
+- Digital skills acceleration across Member States
+- Recognition of qualifications and micro-credentials framework
+
+The initiative sits under DG EMPL and connects to the European Pillar of Social Rights Action Plan target of 60% adult learning participation by 2030.
+
 ## Key Legal References
 
 - **Platform Work Directive (EU) 2024/2831**: Employment status, algorithmic management

@@ -36,6 +36,8 @@ class InstitutionEnum(str, enum.Enum):
     EMA = "EMA"
     EBA = "EBA"
     EIOPA = "EIOPA"
+    COR = "COR"
+    EESC = "EESC"
 
 
 class EventTypeEnum(str, enum.Enum):

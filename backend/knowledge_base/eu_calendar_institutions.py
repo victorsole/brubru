@@ -108,6 +108,22 @@ EU_INSTITUTIONS: List[EUInstitution] = [
         colour="#6366f1",
         calendar_url="https://www.eiopa.europa.eu/agenda_en",
     ),
+    EUInstitution(
+        code="COR",
+        name="European Committee of the Regions",
+        short_name="CoR",
+        mdi_icon="mdi-map-marker-multiple",
+        colour="#e11d48",
+        calendar_url="https://cor.europa.eu/en/plenaries-events/plenary-sessions",
+    ),
+    EUInstitution(
+        code="EESC",
+        name="European Economic and Social Committee",
+        short_name="EESC",
+        mdi_icon="mdi-handshake",
+        colour="#4f46e5",
+        calendar_url="https://www.eesc.europa.eu/en/agenda",
+    ),
 ]
 
 # Quick lookups

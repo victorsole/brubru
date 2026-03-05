@@ -28,6 +28,8 @@ class InstitutionType(str, Enum):
     EMA = "EMA"
     EBA = "EBA"
     EIOPA = "EIOPA"
+    COR = "COR"
+    EESC = "EESC"
 
 
 class EventType(str, Enum):
