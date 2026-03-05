@@ -1,5 +1,24 @@
 # Industrial Accelerator Act (COM(2026)100)
 
+## QUICK FACTS
+- Full name: Industrial Accelerator Act
+- Reference: COM(2026)100
+- EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN
+- Type: Regulation (directly applicable)
+- Legal basis: Article 114 TFEU + Article 192 TFEU
+- Adopted by Commission: 4 March 2026
+- Responsible Commissioner: Stephane Sejourne (EVP for Prosperity and Industrial Strategy)
+- Responsible DG: DG GROW
+- Procedure: Ordinary legislative procedure (COD)
+- EP lead committee: ITRE (expected)
+- EP resolution rapporteur (Clean Industrial Deal, 2025/2656(RSP)): Tom Berendsen (EPP, Netherlands)
+- EP resolution shadows: Nicolas Gonzalez Casares (S&D/ES), Isabella Tovaglieri (PfE/IT), Daniel Obajtek (ECR/PL), Christophe Grudler (Renew/FR), Sara Matthieu (Greens-EFA/BE), Hanna Gedin (The Left/SE)
+- Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
+- Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735)
+- 6 key measures: (1) Permitting acceleration, (2) Low-carbon product labels (steel, cement), (3) Public procurement sustainability criteria, (4) Lead markets for EU-made clean products, (5) State aid/financing (CCfDs, Industrial Decarbonisation Bank EUR 100bn, CISAF, Innovation Fund), (6) Strategic sectors (steel, cement, chemicals, clean tech, automotive, aerospace)
+- Press release: IP/26/515
+- Impact assessment: SWD(2026)71
+
 ## Overview
 
 On 4 March 2026, the European Commission presented the **Industrial Accelerator Act** -- a proposal for a Regulation establishing measures for industrial capacity and decarbonisation in strategic sectors. The proposal is part of the **Clean Industrial Deal** package (COM(2025)85) and the **Competitiveness Compass** (COM(2025)30).

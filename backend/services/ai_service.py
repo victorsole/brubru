@@ -254,12 +254,17 @@ class AIService:
 
         if self.use_fallback and self.multi_provider:
             # Use multi-provider fallback chain
+            # Route to Claude Haiku when knowledge guides are matched
+            has_knowledge = bool(
+                context_data and context_data.internal_knowledge
+            )
             try:
                 provider_response = await self.multi_provider.generate(
                     system_prompt=system_prompt,
                     messages=messages,
                     max_tokens=self.max_output_tokens,
-                    temperature=self.temperature
+                    temperature=self.temperature,
+                    prefer_claude=has_knowledge
                 )
                 assistant_message = provider_response.message
                 tokens_used = provider_response.tokens_used

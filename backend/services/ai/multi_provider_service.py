@@ -16,8 +16,8 @@ Provider priority is based on cost-effectiveness:
 import logging
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
-from datetime import datetime
-from dataclasses import dataclass
+from datetime import datetime, date
+from dataclasses import dataclass, field
 
 from anthropic import AsyncAnthropic
 import anthropic
@@ -145,8 +145,54 @@ class MistralProvider(AIProvider):
         )
 
 
+class AnthropicHaikuProvider(AIProvider):
+    """Anthropic Claude Haiku provider (knowledge-heavy queries)"""
+
+    MODEL = "claude-haiku-4-5-20251001"
+
+    def __init__(self, api_key: Optional[str] = None):
+        self.api_key = api_key or settings.ANTHROPIC_API_KEY
+        self.client = AsyncAnthropic(api_key=self.api_key) if self.api_key else None
+
+    @property
+    def name(self) -> str:
+        return "Anthropic-Haiku"
+
+    @property
+    def is_available(self) -> bool:
+        return bool(self.api_key and self.client)
+
+    async def generate(
+        self,
+        system_prompt: str,
+        messages: List[Dict[str, Any]],
+        max_tokens: int = 4000,
+        temperature: float = 0.7
+    ) -> ProviderResponse:
+        if not self.is_available:
+            raise RuntimeError("Anthropic Haiku provider not configured")
+
+        response = await self.client.messages.create(
+            model=self.MODEL,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            system=system_prompt,
+            messages=messages
+        )
+
+        content = response.content[0].text if response.content else ""
+        tokens = response.usage.input_tokens + response.usage.output_tokens
+
+        return ProviderResponse(
+            message=content,
+            tokens_used=tokens,
+            model=self.MODEL,
+            provider=self.name
+        )
+
+
 class AnthropicProvider(AIProvider):
-    """Anthropic Claude provider (fallback 1)"""
+    """Anthropic Claude Sonnet provider (fallback 1)"""
 
     MODEL = "claude-sonnet-4-20250514"
 
@@ -382,6 +428,12 @@ class MultiProviderService:
         gemini_key: Optional[str] = None
     ):
         self.providers: List[AIProvider] = []
+        self.haiku_provider: Optional[AIProvider] = None
+
+        # Daily spend cap for Claude Haiku ($1.00/day = ~$25 lasts 25 days)
+        self._haiku_daily_cap_usd = 1.00
+        self._haiku_daily_tokens = 0
+        self._haiku_daily_date = date.today()
 
         # Initialise providers in priority order (cost-effectiveness)
 
@@ -389,13 +441,19 @@ class MultiProviderService:
         mistral = MistralProvider(mistral_key)
         if mistral.is_available:
             self.providers.append(mistral)
-            logger.info("Mistral provider available (primary - $0.20/1M input)")
+            logger.info("Mistral provider available (primary - $0.10/1M input)")
 
-        # 2. Claude (fallback 1)
+        # 1b. Claude Haiku (knowledge-heavy routing - $0.80/1M input)
+        haiku = AnthropicHaikuProvider(anthropic_key)
+        if haiku.is_available:
+            self.haiku_provider = haiku
+            logger.info("Anthropic Haiku provider available (knowledge routing)")
+
+        # 2. Claude Sonnet (fallback 1)
         anthropic = AnthropicProvider(anthropic_key)
         if anthropic.is_available:
             self.providers.append(anthropic)
-            logger.info("Anthropic provider available (fallback 1)")
+            logger.info("Anthropic Sonnet provider available (fallback 1)")
 
         # 3. OpenAI (fallback 2)
         openai_provider = OpenAIProvider(openai_key)
@@ -429,7 +487,8 @@ class MultiProviderService:
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7
+        temperature: float = 0.7,
+        prefer_claude: bool = False
     ) -> ProviderResponse:
         """
         Generate a response, falling back through providers on failure.
@@ -439,6 +498,7 @@ class MultiProviderService:
             messages: Conversation messages
             max_tokens: Maximum response tokens
             temperature: Response temperature
+            prefer_claude: If True, use Claude Haiku first (for knowledge-heavy queries)
 
         Returns:
             ProviderResponse with message and metadata
@@ -446,6 +506,43 @@ class MultiProviderService:
         Raises:
             RuntimeError: If all providers fail
         """
+        # Route knowledge-heavy queries to Claude Haiku for better extraction
+        if prefer_claude and self.haiku_provider:
+            # Reset daily counter if new day
+            today = date.today()
+            if today != self._haiku_daily_date:
+                self._haiku_daily_tokens = 0
+                self._haiku_daily_date = today
+
+            # Estimate cost: Haiku = $0.80/1M input + $4.00/1M output
+            # Average query ~5K tokens. $1/day cap = ~200 queries/day (plenty)
+            estimated_daily_cost = (self._haiku_daily_tokens / 1_000_000) * 4.00
+            if estimated_daily_cost >= self._haiku_daily_cap_usd:
+                logger.warning(
+                    f"Claude Haiku daily cap reached (${estimated_daily_cost:.2f}/"
+                    f"${self._haiku_daily_cap_usd:.2f}). Falling back to Mistral."
+                )
+            else:
+                try:
+                    logger.info("Routing to Claude Haiku (knowledge guide matched)")
+                    start = datetime.now()
+                    response = await self.haiku_provider.generate(
+                        system_prompt=system_prompt,
+                        messages=messages,
+                        max_tokens=max_tokens,
+                        temperature=temperature
+                    )
+                    elapsed = (datetime.now() - start).total_seconds()
+                    self._haiku_daily_tokens += response.tokens_used
+                    logger.info(
+                        f"Claude Haiku succeeded in {elapsed:.2f}s "
+                        f"({response.tokens_used} tokens, "
+                        f"daily: {self._haiku_daily_tokens} tokens)"
+                    )
+                    return response
+                except Exception as e:
+                    logger.warning(f"Claude Haiku failed, falling back to chain: {e}")
+
         errors = []
 
         for provider in self.providers:

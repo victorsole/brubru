@@ -1,5 +1,27 @@
 # Ecodesign for Sustainable Products Regulation (ESPR) and Digital Product Passport (DPP)
 
+## QUICK FACTS
+- Full name: Ecodesign for Sustainable Products Regulation (ESPR)
+- Reference: Regulation (EU) 2024/1781
+- CELEX: 32024R1781
+- EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1781
+- OEIL procedure: https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0095(COD)
+- Procedure: 2022/0095(COD) -- Ordinary legislative procedure
+- Legal basis: Article 114 TFEU (internal market)
+- Responsible DGs: DG ENV (ecodesign requirements), DG GROW (DPP infrastructure)
+- Entry into force: 18 July 2024
+- Replaces: Directive 2009/125/EC (Ecodesign Directive)
+- EP rapporteur: Alessandra Moretti (S&D, Italy)
+- EP lead committee: ENVI
+- DPP Registry operational: 19 July 2026
+- Working Plan 2025-2030: SWD(2025)130 (adopted 16 April 2025)
+- First wave products: Iron/steel, Aluminium, Textiles, Furniture, Mattresses, Tyres (delegated acts 2026)
+- Battery passport: Battery Regulation (EU) 2023/1542, deadline 18 February 2027
+- Packaging DPP: PPWR (EU) 2025/40, deadline 2028-2029
+- 5 key measures: (1) Ecodesign requirements via delegated acts, (2) Digital Product Passport, (3) Ban on destruction of unsold consumer products, (4) Green public procurement criteria, (5) EPREL database expansion
+- EP first reading vote: 473-110-69 (12 July 2023)
+- ESPR press release: COM(2022)142
+
 ## Overview
 
 The **Ecodesign for Sustainable Products Regulation (ESPR)**, Regulation (EU) 2024/1781, is the EU's framework for setting sustainability requirements for virtually all physical products on the single market. It replaces the 2009 Ecodesign Directive (2009/125/EC), which was limited to energy-related products. The ESPR introduces the **Digital Product Passport (DPP)** -- a digital identity card for products, components, and materials that stores sustainability, circularity, and compliance information accessible via QR codes or RFID tags.
