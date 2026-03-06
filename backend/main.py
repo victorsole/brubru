@@ -2,6 +2,7 @@
 Brubru FastAPI Application
 
 Main application entry point with FastAPI + SQLAlchemy + Supabase integration.
+Version: 2026.03.06
 """
 
 # Ensure /app is in Python path for Cloud Run deployment
