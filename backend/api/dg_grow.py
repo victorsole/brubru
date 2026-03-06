@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from core.auth import get_current_user, require_tier
+from api.auth import get_current_user
 from models.dg_grow import (
     NotifiedBody,
     TechnicalRegulation,
@@ -240,9 +240,11 @@ async def sync_dg_grow(
     days: int = Query(7, description="Look back period for TRIS"),
     country: Optional[str] = Query(None),
     db: Session = Depends(get_db),
-    current_user=Depends(require_tier("blue")),
+    current_user=Depends(get_current_user),
 ):
     """Sync DG GROW databases (Blue tier / Admin only)."""
+    if current_user.tier not in ("blue",):
+        raise HTTPException(status_code=403, detail="Professional plan required")
     service = DGGrowSyncService(db)
 
     if source == "nando":
