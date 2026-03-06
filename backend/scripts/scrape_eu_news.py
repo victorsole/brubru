@@ -699,11 +699,13 @@ def save_to_daily_briefs(items: List[NewsItem]):
 
         for item in items:
             try:
+                # Clean headline: strip [IP], [MEX], etc. prefixes
+                clean_headline = re.sub(r'^\[(?:IP|MEX|QANDA|FS|SPEECH|STATEMENT)\]\s*', '', item.title).strip()
                 cur.execute(
                     """INSERT INTO daily_briefs (brief_date, headline, url, source, category, priority, snippet, suggested_query)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                        ON CONFLICT (brief_date, url) DO NOTHING""",
-                    (today, item.title, item.url, item.source, item.category,
+                    (today, clean_headline, item.url, item.source, item.category,
                      item.priority, item.snippet or None,
                      generate_suggested_query(item.title))
                 )

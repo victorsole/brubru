@@ -9,6 +9,7 @@ from datetime import date, timedelta
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
@@ -120,3 +121,63 @@ def get_brief_stats(db: Session = Depends(get_db)):
         "total_files": total_files,
         "last_trained": latest[0].isoformat() if latest else None,
     }
+
+
+@router.get("/unsubscribe", response_class=HTMLResponse)
+def unsubscribe_daily_brief(
+    email: str = Query(...),
+    db: Session = Depends(get_db),
+):
+    """
+    Unsubscribe from the daily brief. Works for both registered users and pre-users.
+    Returns a simple confirmation page.
+    """
+    from models.user import User
+    from models.pre_user_event import PreUserEvent
+
+    unsubscribed = False
+
+    # Check if registered user
+    user = db.query(User).filter(User.email == email).first()
+    if user:
+        prefs = user.preferences or {}
+        prefs["daily_brief_unsubscribed"] = True
+        user.preferences = prefs
+        db.commit()
+        unsubscribed = True
+
+    # Also remove pre-user capture events for this email
+    deleted = (
+        db.query(PreUserEvent)
+        .filter(
+            PreUserEvent.event_type == "email_captured",
+            PreUserEvent.event_metadata["email"].astext == email,
+        )
+        .delete(synchronize_session="fetch")
+    )
+    if deleted > 0:
+        db.commit()
+        unsubscribed = True
+
+    if unsubscribed:
+        message = "You have been unsubscribed from the Brubru Daily Brief."
+        sub_message = "You will no longer receive daily emails from us."
+    else:
+        message = "We could not find this email address in our records."
+        sub_message = "If you are still receiving emails, please contact hello@beresol.eu."
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unsubscribe</title></head>
+<body style="margin: 0; padding: 0; background: #f9fafb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <div style="max-width: 480px; margin: 80px auto; text-align: center; padding: 32px;">
+    <img src="https://brubru.beresol.eu/assets/brubru_mainlogo.png" alt="Brubru" style="height: 40px; margin-bottom: 24px;" />
+    <h1 style="font-size: 20px; color: #111827; margin: 0 0 12px 0;">{message}</h1>
+    <p style="font-size: 15px; color: #6b7280; line-height: 1.5;">{sub_message}</p>
+    <a href="https://brubru.beresol.eu" style="display: inline-block; margin-top: 24px; padding: 10px 24px; background: #0693e3; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 14px;">
+      Go to Brubru
+    </a>
+  </div>
+</body>
+</html>"""

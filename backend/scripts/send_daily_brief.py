@@ -15,36 +15,35 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.database import SessionLocal
-from models.pre_user_event import PreUserEvent
-from sqlalchemy import func
 
 
 def list_subscribers(db):
-    """List all captured emails."""
-    rows = (
-        db.query(
-            PreUserEvent.event_metadata["email"].astext,
-            func.min(PreUserEvent.created_at),
-        )
-        .filter(PreUserEvent.event_type == "email_captured")
-        .group_by(PreUserEvent.event_metadata["email"].astext)
-        .order_by(func.min(PreUserEvent.created_at))
-        .all()
-    )
+    """List all daily brief recipients (registered users + pre-user captures)."""
+    from services.daily_brief_email import _get_all_recipient_emails
 
-    if not rows:
-        print("[INFO] No subscribers yet")
-        return
+    registered, preusers = _get_all_recipient_emails(db)
 
-    print(f"\n  Daily Brief Subscribers ({len(rows)} total):\n")
-    for i, (email, subscribed_at) in enumerate(rows, 1):
-        print(f"  {i}. {email}  (since {subscribed_at.strftime('%Y-%m-%d %H:%M')})")
+    print(f"\n  Daily Brief Recipients ({len(registered) + len(preusers)} total):\n")
+
+    if registered:
+        print(f"  Registered users ({len(registered)}):")
+        for i, email in enumerate(sorted(registered), 1):
+            print(f"    {i}. {email}")
+
+    if preusers:
+        print(f"\n  Pre-user captures ({len(preusers)}):")
+        for i, email in enumerate(sorted(preusers), 1):
+            print(f"    {i}. {email}")
+
+    if not registered and not preusers:
+        print("  [INFO] No subscribers yet")
     print()
 
 
 def preview(db):
     """Show what would be sent."""
     from models.daily_brief import DailyBrief
+    from services.daily_brief_email import _get_all_recipient_emails
     from datetime import date
 
     today = date.today().isoformat()
@@ -66,13 +65,9 @@ def preview(db):
         print(f"     {item.url}")
     print()
 
-    # Count subscribers
-    count = (
-        db.query(func.count(func.distinct(PreUserEvent.event_metadata["email"].astext)))
-        .filter(PreUserEvent.event_type == "email_captured")
-        .scalar()
-    )
-    print(f"  Would send to {count} subscriber(s)")
+    registered, preusers = _get_all_recipient_emails(db)
+    total = len(registered) + len(preusers)
+    print(f"  Would send to {total} recipient(s): {len(registered)} users, {len(preusers)} pre-users")
     print(f"  Run with --send to deliver\n")
 
 
@@ -84,7 +79,9 @@ def send(db):
     print(f"\n  Daily Brief Send Results:")
     print(f"  Sent: {result.get('sent', 0)}")
     print(f"  Failed: {result.get('failed', 0)}")
-    print(f"  Total subscribers: {result.get('total_subscribers', 0)}")
+    print(f"  Registered users: {result.get('registered_users', 0)}")
+    print(f"  Pre-users: {result.get('pre_users', 0)}")
+    print(f"  Total recipients: {result.get('total_recipients', 0)}")
 
     if result.get("error"):
         print(f"  Error: {result['error']}")
