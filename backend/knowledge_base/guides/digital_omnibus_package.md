@@ -201,3 +201,15 @@ Reporting obligations referencing old instruments must be migrated by 31 Decembe
 | Civil aviation regulation | 32018R1139 | Amended by COM(2025) 836 (AI safety components) |
 | Data Governance Act | 32022R0868 | Repealed by COM(2025) 837 |
 | Platform-to-Business | 32019R1150 | Repealed by COM(2025) 837 |
+
+## Child Safety Online (March 2026)
+
+On 5 March 2026, the Commission held the **first meeting of the Special Panel on Child Safety Online**, hosted by President von der Leyen (announced in the 2025 State of the Union).
+
+The Panel provides expert recommendations on:
+- Better protecting and empowering children online
+- Potential harmonised age restrictions to access social media
+- Links to the DSA Guidelines on Protection of Minors, the BIK+ Strategy, and the Cyberbullying Action Plan
+- EU Age Verification solution development
+
+This complements the proposed regulation on preventing and combating child sexual abuse online (CSAM regulation, 2022/0155(COD)), which is still under negotiation between Parliament and Council.

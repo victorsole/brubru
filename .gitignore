@@ -38,6 +38,8 @@ CLAUDE.md
 MISTRAL.md
 .mcp.json
 .claude/
+memory/
+backend/backend/
 
 # Large files (GitHub limit: 100MB)
 *.tif

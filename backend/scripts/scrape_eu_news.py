@@ -570,6 +570,8 @@ async def main():
                         help='Output as JSON')
     parser.add_argument('--concurrency', type=int, default=5,
                         help='Max concurrent requests (default: 5)')
+    parser.add_argument('--save', action='store_true',
+                        help='Save top headlines to daily_briefs table for chat Daily Brief')
     args = parser.parse_args()
 
     # Filter portals
@@ -653,6 +655,68 @@ async def main():
     else:
         report = format_news_report(all_items, args.hours)
         print(report)
+
+    # Save top headlines to database for Daily Brief feature
+    if args.save:
+        save_to_daily_briefs(all_items[:20])
+
+
+def generate_suggested_query(headline: str) -> str:
+    """Turn a news headline into a natural question for the chatbot."""
+    # Strip EC Press Corner prefixes like [IP], [MEX], [QANDA], [FS]
+    h = re.sub(r'^\[(?:IP|MEX|QANDA|FS|SPEECH|STATEMENT)\]\s*', '', headline).strip()
+    # Strip common institution prefixes
+    h = re.sub(r'^(commission|council|parliament|ep|ec)\s*:\s*', '', h, flags=re.IGNORECASE).strip()
+    # If it already looks like a question, use it
+    if h.endswith('?'):
+        return h
+    # Short headlines: prefix with "What is"
+    if len(h.split()) <= 6:
+        return f"What is the {h}?"
+    # Longer headlines: "Tell me about"
+    return f"Tell me about the {h[:120]}"
+
+
+def save_to_daily_briefs(items: List[NewsItem]):
+    """Save top headlines to the daily_briefs database table."""
+    from pathlib import Path
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent.parent.parent / '.env')
+
+    try:
+        import psycopg2
+        db_url = os.environ.get('DATABASE_URL', '')
+        if not db_url:
+            print("[WARN] No DATABASE_URL, skipping save", file=sys.stderr)
+            return
+
+        conn = psycopg2.connect(db_url)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        today = datetime.now().strftime('%Y-%m-%d')
+        saved = 0
+
+        for item in items:
+            try:
+                cur.execute(
+                    """INSERT INTO daily_briefs (brief_date, headline, url, source, category, priority, snippet, suggested_query)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                       ON CONFLICT (brief_date, url) DO NOTHING""",
+                    (today, item.title, item.url, item.source, item.category,
+                     item.priority, item.snippet or None,
+                     generate_suggested_query(item.title))
+                )
+                if cur.rowcount > 0:
+                    saved += 1
+            except Exception as e:
+                print(f"  [ERROR] Failed to save: {str(e)[:60]}", file=sys.stderr)
+
+        conn.close()
+        print(f"[OK] Saved {saved} headlines to daily_briefs for {today}", file=sys.stderr)
+
+    except Exception as e:
+        print(f"[ERROR] Database save failed: {str(e)[:80]}", file=sys.stderr)
 
 
 if __name__ == '__main__':

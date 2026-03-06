@@ -28,6 +28,23 @@ interface BidChecklistProps {
   onAskChatbot: (question: string) => void;
 }
 
+interface NotifiedBodyInfo {
+  body_number: string;
+  body_name: string;
+  country: string;
+  directives: string[];
+  email?: string;
+  phone?: string;
+  website?: string;
+}
+
+interface NotifiedBodiesData {
+  cpv_code: string;
+  country: string | null;
+  bodies: NotifiedBodyInfo[];
+  count: number;
+}
+
 export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps) => {
   const { token } = useAuth();
   const [requirements, setRequirements] = useState<ESPDRequirement[]>([]);
@@ -35,6 +52,8 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
   const [isLoading, setIsLoading] = useState(true);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
+  const [notifiedBodies, setNotifiedBodies] = useState<NotifiedBodiesData | null>(null);
+  const [showNotifiedBodies, setShowNotifiedBodies] = useState(false);
 
   // Fetch requirements from API or use defaults
   useEffect(() => {
@@ -67,6 +86,28 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
     if (savedChecklist) {
       setChecklist(JSON.parse(savedChecklist));
     }
+
+    // Fetch notified bodies from DG GROW
+    const fetchNotifiedBodies = async () => {
+      if (!tender.cpv_main) return;
+      try {
+        const params = new URLSearchParams();
+        if (tender.buyer_country) params.set('country', tender.buyer_country);
+        const response = await fetch(
+          `${API_URL}/api/dg-grow/notified-bodies/for-tender/${encodeURIComponent(tender.cpv_main)}${params.toString() ? '?' + params.toString() : ''}`,
+          { headers: { 'Authorization': `Bearer ${token}` } },
+        );
+        if (response.ok) {
+          const data = await response.json();
+          if (data.count > 0) {
+            setNotifiedBodies(data);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch notified bodies:', err);
+      }
+    };
+    fetchNotifiedBodies();
   }, [tender.id, tender.buyer_country]);
 
   // Save checklist state to localStorage
@@ -314,6 +355,75 @@ export const BidChecklist = ({ tender, onBack, onAskChatbot }: BidChecklistProps
                 );
               })}
           </div>
+        </div>
+      )}
+
+      {/* Notified Bodies (DG GROW / NANDO) */}
+      {notifiedBodies && notifiedBodies.count > 0 && (
+        <div className="bid-checklist__section bid-checklist__notified-bodies">
+            <h3 className="bid-checklist__section-title">
+              <span className="mdi mdi-certificate"></span>
+              Conformity Assessment Bodies (NANDO)
+            </h3>
+            <p className="bid-checklist__section-desc">
+              This tender's sector (CPV {tender.cpv_main?.substring(0, 2)}xx) may require CE marking
+              via a notified body. {notifiedBodies.count} active notified {notifiedBodies.count === 1 ? 'body' : 'bodies'} found
+              {tender.buyer_country ? ` in ${tender.buyer_country}` : ' across the EU'}.
+            </p>
+
+            <button
+              className="bid-checklist__category-header"
+              onClick={() => setShowNotifiedBodies(!showNotifiedBodies)}
+            >
+              <div className="bid-checklist__category-left">
+                <span className="mdi mdi-shield-check"></span>
+                <span className="bid-checklist__category-name">
+                  Notified Bodies ({notifiedBodies.count})
+                </span>
+              </div>
+              <span className={`mdi ${showNotifiedBodies ? 'mdi-chevron-up' : 'mdi-chevron-down'}`}></span>
+            </button>
+
+            {showNotifiedBodies && (
+              <div className="bid-checklist__nb-list">
+                {notifiedBodies.bodies.map((body, idx) => (
+                  <div key={idx} className="bid-checklist__nb-card">
+                    <div className="bid-checklist__nb-header">
+                      <span className="bid-checklist__nb-number">#{body.body_number}</span>
+                      <span className="bid-checklist__nb-country">{body.country}</span>
+                    </div>
+                    <h4 className="bid-checklist__nb-name">{body.body_name}</h4>
+                    {body.directives && body.directives.length > 0 && (
+                      <div className="bid-checklist__nb-directives">
+                        {body.directives.slice(0, 3).map((d, i) => (
+                          <span key={i} className="bid-checklist__nb-directive">{d}</span>
+                        ))}
+                        {body.directives.length > 3 && (
+                          <span className="bid-checklist__nb-directive">+{body.directives.length - 3} more</span>
+                        )}
+                      </div>
+                    )}
+                    <div className="bid-checklist__nb-contact">
+                      {body.email && (
+                        <a href={`mailto:${body.email}`} className="bid-checklist__nb-contact-link">
+                          <span className="mdi mdi-email-outline"></span> {body.email}
+                        </a>
+                      )}
+                      {body.phone && (
+                        <span className="bid-checklist__nb-contact-item">
+                          <span className="mdi mdi-phone-outline"></span> {body.phone}
+                        </span>
+                      )}
+                      {body.website && (
+                        <a href={body.website} target="_blank" rel="noopener noreferrer" className="bid-checklist__nb-contact-link">
+                          <span className="mdi mdi-web"></span> Website
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
       )}
 

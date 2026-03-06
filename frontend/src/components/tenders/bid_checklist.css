@@ -469,6 +469,114 @@
   box-shadow: 0 4px 12px rgba(56, 161, 105, 0.3);
 }
 
+/* Notified Bodies (NANDO) */
+.bid-checklist__notified-bodies {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+}
+
+.bid-checklist__notified-bodies .bid-checklist__section-title .mdi {
+  color: #d69e2e;
+}
+
+.bid-checklist__notified-bodies .bid-checklist__category-header {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.bid-checklist__nb-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.bid-checklist__nb-card {
+  padding: 1rem;
+  background: #fffbeb;
+  border-radius: 8px;
+  border: 1px solid #fde68a;
+}
+
+.bid-checklist__nb-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+}
+
+.bid-checklist__nb-number {
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #744210;
+}
+
+.bid-checklist__nb-country {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #718096;
+  background: white;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+}
+
+.bid-checklist__nb-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.5rem;
+  line-height: 1.3;
+}
+
+.bid-checklist__nb-directives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+.bid-checklist__nb-directive {
+  padding: 0.125rem 0.4rem;
+  background: white;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.bid-checklist__nb-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bid-checklist__nb-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: #3182ce;
+  text-decoration: none;
+}
+
+.bid-checklist__nb-contact-link:hover {
+  text-decoration: underline;
+}
+
+.bid-checklist__nb-contact-link .mdi,
+.bid-checklist__nb-contact-item .mdi {
+  font-size: 0.9rem;
+}
+
+.bid-checklist__nb-contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8rem;
+  color: #4a5568;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .bid-checklist__header {
@@ -502,5 +610,9 @@
   .bid-checklist__export-btn,
   .bid-checklist__submit-btn {
     justify-content: center;
+  }
+
+  .bid-checklist__nb-list {
+    grid-template-columns: 1fr;
   }
 }

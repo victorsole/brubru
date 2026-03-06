@@ -331,11 +331,30 @@ class TenderMatcher:
         if profile.exclude_frameworks and tender.is_framework:
             scores["procedure_match"] = 0  # Penalize frameworks if excluded
 
+        # 8. DG GROW regulatory risk bonus/penalty (not weighted, direct adjustment)
+        try:
+            from services.tenders.dg_grow_enrichment import DGGrowEnrichment
+            enrichment = DGGrowEnrichment(self.db)
+            risk_data = enrichment.get_regulatory_risk_score(
+                tender.cpv_main or "", tender.buyer_country
+            )
+            if risk_data.get("risk_level") == "high":
+                barriers.append(f"High regulatory risk: {risk_data['tris_count']} active technical regulations, "
+                                f"{risk_data['tbt_count']} trade barriers in this sector")
+            elif risk_data.get("risk_level") == "low" and risk_data.get("score_adjustment", 0) > 0:
+                opportunities.append("Stable regulatory environment in this sector")
+        except Exception:
+            risk_data = {"score_adjustment": 0}
+
         # Calculate weighted total
         total_score = sum(
             scores.get(key, 0) * self.weights.get(key, 0)
             for key in self.weights.keys()
         ) * 100  # Scale to 0-100
+
+        # Apply DG GROW regulatory risk adjustment
+        total_score += risk_data.get("score_adjustment", 0)
+        total_score = max(0, min(100, total_score))  # Clamp to 0-100
 
         # Generate match details summary
         match_details = self._generate_match_details(

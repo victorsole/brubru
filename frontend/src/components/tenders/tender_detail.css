@@ -770,6 +770,162 @@
   font-size: 1.25rem;
 }
 
+/* Regulatory Risk Badge */
+.tender-detail__badge--risk-high {
+  background: #fed7d7;
+  color: #742a2a;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tender-detail__badge--risk-medium {
+  background: #fefcbf;
+  color: #744210;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tender-detail__badge--risk-low {
+  background: #c6f6d5;
+  color: #22543d;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tender-detail__risk-badge {
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.tender-detail__risk-badge--high {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.tender-detail__risk-badge--medium {
+  background: #fefcbf;
+  color: #744210;
+}
+
+.tender-detail__risk-badge--low {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+/* Regulatory Alerts */
+.tender-detail__reg-group {
+  margin-bottom: 1.5rem;
+}
+
+.tender-detail__reg-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin: 0 0 0.75rem;
+}
+
+.tender-detail__reg-group-title .mdi {
+  color: #d69e2e;
+  font-size: 1.1rem;
+}
+
+.tender-detail__reg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tender-detail__reg-item {
+  padding: 0.875rem 1rem;
+  background: #fffbeb;
+  border-radius: 8px;
+  border-left: 3px solid #d69e2e;
+}
+
+.tender-detail__reg-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.tender-detail__reg-id {
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #744210;
+}
+
+.tender-detail__reg-status {
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.tender-detail__reg-status--standstill {
+  background: #fed7d7;
+  color: #742a2a;
+}
+
+.tender-detail__reg-status--notified {
+  background: #fefcbf;
+  color: #744210;
+}
+
+.tender-detail__reg-country {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #718096;
+  background: #edf2f7;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+}
+
+.tender-detail__reg-sector {
+  font-size: 0.75rem;
+  color: #718096;
+  background: #edf2f7;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+}
+
+.tender-detail__reg-title {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin: 0 0 0.375rem;
+  line-height: 1.4;
+}
+
+.tender-detail__reg-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #3182ce;
+  text-decoration: none;
+}
+
+.tender-detail__reg-link:hover {
+  text-decoration: underline;
+}
+
+.tender-detail__reg-link .mdi {
+  font-size: 0.875rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .tender-detail__header {

@@ -10,7 +10,8 @@
 - Responsible Commissioner: Stephane Sejourne (EVP for Prosperity and Industrial Strategy)
 - Responsible DG: DG GROW
 - Procedure: Ordinary legislative procedure (COD)
-- EP lead committee: ITRE (expected)
+- EP lead committee: ITRE (confirmed)
+- EP rapporteur: Christophe Grudler (Renew, France) -- ITRE coordinator, appointed 4 March 2026
 - EP resolution rapporteur (Clean Industrial Deal, 2025/2656(RSP)): Tom Berendsen (EPP, Netherlands)
 - EP resolution shadows: Nicolas Gonzalez Casares (S&D/ES), Isabella Tovaglieri (PfE/IT), Daniel Obajtek (ECR/PL), Christophe Grudler (Renew/FR), Sara Matthieu (Greens-EFA/BE), Hanna Gedin (The Left/SE)
 - Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
@@ -150,9 +151,9 @@ The Industrial Accelerator Act broadly aligns with the EP resolution. The Parlia
 |---------|--------|
 | **Commission proposal** | Adopted 4 March 2026 |
 | **Procedure type** | Ordinary legislative procedure (COD) |
-| **EP committee** | Expected: ITRE (lead), ENVI/IMCO (opinion) |
+| **EP committee** | ITRE (lead, confirmed), ENVI/IMCO (opinion, expected) |
 | **Council configuration** | Expected: Competitiveness Council |
-| **Rapporteur** | Not yet assigned (likely same ITRE team as CID resolution) |
+| **Rapporteur** | **Christophe Grudler** (Renew, France) -- ITRE coordinator, appointed 4 March 2026 |
 | **Expected timeline** | First reading: late 2026 / early 2027 |
 
 ## Institutional Landscape
@@ -199,7 +200,7 @@ Based on the Clean Industrial Deal resolution (2025/2656(RSP)), which was the di
 
 | Role | Predicted MEP | Group | Confidence |
 |------|--------------|-------|------------|
-| **Rapporteur** | Tom Berendsen | EPP (NL) | Medium -- was CID rapporteur, ITRE expertise |
+| **Rapporteur** | **Christophe Grudler** | **Renew (FR)** | **CONFIRMED** -- ITRE coordinator, appointed 4 March 2026 |
 | Shadow (S&D) | Nicolas Gonzalez Casares | S&D (ES) | Medium |
 | Shadow (PfE) | Isabella Tovaglieri | PfE (IT) | Medium |
 | Shadow (ECR) | Daniel Obajtek | ECR (PL) | Medium |

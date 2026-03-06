@@ -27,6 +27,7 @@ from sqlalchemy import func
 from core.database import SessionLocal
 from models.tender import Tender, TenderProfile, TenderMatch
 from services.tenders.tender_service import TenderService
+from services.tenders.dg_grow_enrichment import DGGrowEnrichment
 
 logger = logging.getLogger(__name__)
 
@@ -629,12 +630,53 @@ class TenderContextProvider:
             for tip in checklist_info['tips'][:3]:
                 sections.append(f"- {tip}")
 
+        # DG GROW sector intelligence
+        dg_grow_context = self._get_dg_grow_context(intent, tenders, user_profile)
+        if dg_grow_context:
+            sections.append(dg_grow_context)
+
         sections.append("\n" + "=" * 60)
         sections.append("Use this tender data to help the user. Reference specific")
         sections.append("tenders by their publication numbers. Provide actionable advice.")
         sections.append("=" * 60)
 
         return "\n".join(sections)
+
+
+    def _get_dg_grow_context(
+        self,
+        intent: TenderIntent,
+        tenders: List[Dict[str, Any]],
+        user_profile: Optional[Dict[str, Any]],
+    ) -> str:
+        """
+        Get DG GROW sector intelligence for AI context.
+        Adds notified bodies, regulatory risks, and ecosystem data.
+        """
+        try:
+            db = self._get_db()
+            enrichment = DGGrowEnrichment(db)
+
+            # Determine CPV codes to look up
+            cpv_codes = set()
+            if intent.cpv_sectors:
+                cpv_codes.update(intent.cpv_sectors)
+            if user_profile and user_profile.get("cpv_categories"):
+                cpv_codes.update(user_profile["cpv_categories"])
+            for tender in tenders[:3]:
+                if tender.get("cpv_main"):
+                    cpv_codes.add(tender["cpv_main"][:2])
+
+            if not cpv_codes:
+                return ""
+
+            # Get context for the primary CPV code
+            primary_cpv = list(cpv_codes)[0]
+            return enrichment.format_sector_context_for_ai(primary_cpv)
+
+        except Exception as e:
+            logger.debug(f"DG GROW context enrichment failed: {e}")
+            return ""
 
 
 # Global singleton

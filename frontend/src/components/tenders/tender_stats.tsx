@@ -1,12 +1,46 @@
 // frontend/src/components/tenders/tender_stats.tsx
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../hooks/use_auth';
 import type { UserTenderStats } from '../../pages/tenderator_page';
 import './tender_stats.css';
 
-interface TenderStatsProps {
-  stats: UserTenderStats;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+interface EcosystemInfo {
+  ecosystem: string;
+  cpv_categories: string[];
+  indicators: string[];
 }
 
-export const TenderStats = ({ stats }: TenderStatsProps) => {
+interface TenderStatsProps {
+  stats: UserTenderStats;
+  cpvCode?: string;
+}
+
+export const TenderStats = ({ stats, cpvCode }: TenderStatsProps) => {
+  const { token } = useAuth();
+  const [ecosystems, setEcosystems] = useState<EcosystemInfo[]>([]);
+
+  useEffect(() => {
+    if (!cpvCode) return;
+    const fetchEcosystems = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/api/dg-grow/ecosystems/for-cpv/${encodeURIComponent(cpvCode)}`,
+          { headers: { 'Authorization': `Bearer ${token}` } },
+        );
+        if (response.ok) {
+          const data = await response.json();
+          if (data.ecosystems && data.ecosystems.length > 0) {
+            setEcosystems(data.ecosystems);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch ecosystems:', err);
+      }
+    };
+    fetchEcosystems();
+  }, [cpvCode, token]);
   return (
     <div className="tender-stats">
       <h3 className="tender-stats__title">
@@ -79,6 +113,33 @@ export const TenderStats = ({ stats }: TenderStatsProps) => {
           <p className="tender-stats__no-data">No matches yet</p>
         )}
       </div>
+
+      {/* EU Industrial Ecosystems (DG GROW / EMI) */}
+      {ecosystems.length > 0 && (
+        <div className="tender-stats__ecosystems">
+          <h4>
+            <span className="mdi mdi-factory"></span>
+            EU Industrial Ecosystems
+          </h4>
+          <div className="tender-stats__eco-list">
+            {ecosystems.map((eco, idx) => (
+              <div key={idx} className="tender-stats__eco-card">
+                <span className="tender-stats__eco-name">{eco.ecosystem}</span>
+                {eco.indicators && eco.indicators.length > 0 && (
+                  <div className="tender-stats__eco-dims">
+                    {eco.indicators.slice(0, 3).map((ind, i) => (
+                      <span key={i} className="tender-stats__eco-dim">{ind}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <p className="tender-stats__eco-note">
+            Source: European Monitor of Industrial Ecosystems (EMI)
+          </p>
+        </div>
+      )}
 
       {/* Quick Tips */}
       <div className="tender-stats__tips">

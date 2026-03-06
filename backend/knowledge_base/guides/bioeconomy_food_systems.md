@@ -199,10 +199,31 @@ Commission strategy covering pharmaceutical, biotech, and medical device sectors
 - Bio-based materials for food packaging
 - Diagnostic tools for food safety
 
+## Farmers' Position in the Food Supply Chain (March 2026)
+
+On 5 March 2026, the European Parliament and Council reached a **provisional trilogue agreement** on amendments to the Common Market Organisation (CMO) Regulation to reinforce farmers' position in the food supply chain.
+
+- **Procedure:** 2024/0319(COD) -- Ordinary legislative procedure
+- **Rapporteur:** Celine Imart (EPP, France)
+- **Committee:** AGRI (Agriculture and Rural Development)
+
+### Key Measures Agreed
+- Member States must establish and publish online **price indicators** for use in farm contracts
+- **Producer organisations (POs)** strengthened with direct buyer engagement rights
+- Rules preventing direct individual producer contact (bypassing POs)
+- "**Fair/equitable**" labelling criteria to include rural development and farmer organisation promotion
+- "**Meat**" designation reserved for animal products, excluding lab-grown alternatives; terms like "steak" and "liver" reserved for traditional livestock products
+- "**Short supply chain**" labelling restricted to EU-produced goods with limited intermediaries
+- Mandatory **written dairy contracts** with opt-out provisions and revision clauses
+
+### Next Steps
+The provisional agreement requires formal approval by both Parliament and Council before entry into force. Plenary vote expected Q1-Q2 2026.
+
 ## Key Legal References
 
 - **Bioeconomy Strategy COM(2018) 673** (updated 2025): EU Bioeconomy Strategy
 - **Farm to Fork Strategy COM(2020) 381**: Sustainable food system targets
+- **CMO Regulation amendment 2024/0319(COD)**: Farmers' food supply chain position (trilogue agreed March 2026)
 - **Novel Food Regulation (EU) 2015/2283**: Authorisation of new food sources
 - **CBE JU Regulation (EU) 2021/2085**: Circular Bio-based Europe Joint Undertaking
 - **Horizon Europe Regulation (EU) 2021/695**: Framework programme including Cluster 6

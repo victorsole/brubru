@@ -21,6 +21,10 @@ VALID_EVENT_TYPES = {
     "smart_suggestion_clicked",
     "cta_clicked",
     "signed_up",
+    "email_captured",
+    "brief_headline_clicked",
+    "tour_completed",
+    "tour_skipped",
 }
 
 

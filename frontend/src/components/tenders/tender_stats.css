@@ -130,6 +130,71 @@
   margin: 0;
 }
 
+/* Ecosystems Section */
+.tender-stats__ecosystems {
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.tender-stats__ecosystems h4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #22543d;
+  margin: 0 0 0.75rem;
+}
+
+.tender-stats__ecosystems h4 .mdi {
+  color: #38a169;
+}
+
+.tender-stats__eco-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tender-stats__eco-card {
+  padding: 0.625rem 0.75rem;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid #38a169;
+}
+
+.tender-stats__eco-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a202c;
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+.tender-stats__eco-dims {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tender-stats__eco-dim {
+  padding: 0.1rem 0.375rem;
+  background: #f0fff4;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  color: #22543d;
+  text-transform: capitalize;
+}
+
+.tender-stats__eco-note {
+  font-size: 0.7rem;
+  color: #38a169;
+  margin: 0.5rem 0 0;
+  font-style: italic;
+}
+
 /* Tips Section */
 .tender-stats__tips {
   padding: 1rem;

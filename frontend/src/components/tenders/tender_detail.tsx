@@ -126,6 +126,25 @@ interface TenderDetailProps {
   onAskChatbot: (question?: string) => void;
 }
 
+interface RegulatoryRisk {
+  risk_level: string;
+  technical_regulations: Array<{
+    notification_number: number;
+    reference?: string;
+    title: string;
+    country: string;
+    status: string;
+    source_url?: string;
+  }>;
+  trade_barriers: Array<{
+    notification_id: string;
+    title: string;
+    country: string;
+    product_area?: string;
+    source_url?: string;
+  }>;
+}
+
 export const TenderDetail = ({
   tender,
   match,
@@ -138,6 +157,7 @@ export const TenderDetail = ({
   const { token } = useAuth();
   const [summary, setSummary] = useState<TenderSummary | null>(null);
   const [smeAnalysis, setSmeAnalysis] = useState<SMEAnalysis | null>(null);
+  const [regulatoryRisk, setRegulatoryRisk] = useState<RegulatoryRisk | null>(null);
   const [isLoadingSummary, setIsLoadingSummary] = useState(false);
   const [isLoadingSme, setIsLoadingSme] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'analysis' | 'criteria'>('overview');
@@ -188,6 +208,34 @@ export const TenderDetail = ({
 
     fetchSmeAnalysis();
   }, [tender.id, token]);
+
+  // Fetch regulatory risk data from DG GROW
+  useEffect(() => {
+    if (!tender.cpv_main) return;
+    const fetchRegulatoryRisk = async () => {
+      try {
+        const params = new URLSearchParams();
+        if (tender.buyer_country) params.set('country', tender.buyer_country);
+        const response = await fetch(
+          `${API_URL}/api/dg-grow/regulatory-risks/${encodeURIComponent(tender.cpv_main)}${params.toString() ? '?' + params.toString() : ''}`,
+          { headers: { 'Authorization': `Bearer ${token}` } },
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setRegulatoryRisk(data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch regulatory risk:', err);
+      }
+    };
+    fetchRegulatoryRisk();
+  }, [tender.cpv_main, tender.buyer_country, token]);
+
+  const getRiskBadgeClass = (level: string): string => {
+    if (level === 'high') return 'tender-detail__badge--risk-high';
+    if (level === 'medium') return 'tender-detail__badge--risk-medium';
+    return 'tender-detail__badge--risk-low';
+  };
 
   const getSectorName = (cpvCode: string): string => {
     if (!cpvCode) return 'Unknown';
@@ -285,6 +333,12 @@ export const TenderDetail = ({
             <span className={`tender-detail__badge tender-detail__badge--status tender-detail__badge--${tender.status}`}>
               {tender.status}
             </span>
+            {regulatoryRisk && regulatoryRisk.risk_level !== 'low' && (
+              <span className={`tender-detail__badge ${getRiskBadgeClass(regulatoryRisk.risk_level)}`}>
+                <span className="mdi mdi-shield-alert-outline"></span>
+                {regulatoryRisk.risk_level === 'high' ? 'High' : 'Medium'} Regulatory Risk
+              </span>
+            )}
           </div>
           <h1 className="tender-detail__title">{tender.title}</h1>
           <p className="tender-detail__publication">
@@ -488,6 +542,83 @@ export const TenderDetail = ({
                 ))}
               </div>
             </div>
+
+            {/* DG GROW Regulatory Alerts */}
+            {regulatoryRisk && (regulatoryRisk.technical_regulations.length > 0 || regulatoryRisk.trade_barriers.length > 0) && (
+              <div className="tender-detail__section">
+                <h3>
+                  <span className="mdi mdi-shield-alert"></span>
+                  Regulatory Alerts
+                  <span className={`tender-detail__risk-badge tender-detail__risk-badge--${regulatoryRisk.risk_level}`}>
+                    {regulatoryRisk.risk_level.toUpperCase()}
+                  </span>
+                </h3>
+
+                {regulatoryRisk.technical_regulations.length > 0 && (
+                  <div className="tender-detail__reg-group">
+                    <h4 className="tender-detail__reg-group-title">
+                      <span className="mdi mdi-file-document-alert"></span>
+                      TRIS Technical Regulations ({regulatoryRisk.technical_regulations.length})
+                    </h4>
+                    <div className="tender-detail__reg-list">
+                      {regulatoryRisk.technical_regulations.map((reg, idx) => (
+                        <div key={idx} className="tender-detail__reg-item">
+                          <div className="tender-detail__reg-header">
+                            <span className="tender-detail__reg-id">{reg.reference || `#${reg.notification_number}`}</span>
+                            <span className={`tender-detail__reg-status tender-detail__reg-status--${reg.status}`}>
+                              {reg.status}
+                            </span>
+                            <span className="tender-detail__reg-country">{reg.country}</span>
+                          </div>
+                          <p className="tender-detail__reg-title">{reg.title || 'Untitled regulation'}</p>
+                          {reg.source_url && (
+                            <a href={reg.source_url} target="_blank" rel="noopener noreferrer" className="tender-detail__reg-link">
+                              View on TRIS <span className="mdi mdi-open-in-new"></span>
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {regulatoryRisk.trade_barriers.length > 0 && (
+                  <div className="tender-detail__reg-group">
+                    <h4 className="tender-detail__reg-group-title">
+                      <span className="mdi mdi-earth-off"></span>
+                      TBT Trade Barriers ({regulatoryRisk.trade_barriers.length})
+                    </h4>
+                    <div className="tender-detail__reg-list">
+                      {regulatoryRisk.trade_barriers.map((tbt, idx) => (
+                        <div key={idx} className="tender-detail__reg-item">
+                          <div className="tender-detail__reg-header">
+                            <span className="tender-detail__reg-id">{tbt.notification_id}</span>
+                            <span className="tender-detail__reg-country">{tbt.country}</span>
+                            {tbt.product_area && (
+                              <span className="tender-detail__reg-sector">{tbt.product_area}</span>
+                            )}
+                          </div>
+                          <p className="tender-detail__reg-title">{tbt.title || 'Trade barrier notification'}</p>
+                          {tbt.source_url && (
+                            <a href={tbt.source_url} target="_blank" rel="noopener noreferrer" className="tender-detail__reg-link">
+                              View details <span className="mdi mdi-open-in-new"></span>
+                            </a>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  className="tender-detail__ask-btn"
+                  onClick={() => onAskChatbot(`Analyse the regulatory risks for this tender. There are ${regulatoryRisk.technical_regulations.length} TRIS technical regulations and ${regulatoryRisk.trade_barriers.length} TBT trade barriers in this sector. What should I be aware of?`)}
+                >
+                  <span className="mdi mdi-chat-question"></span>
+                  Ask AI about regulatory risks
+                </button>
+              </div>
+            )}
           </div>
         )}
 

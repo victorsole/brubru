@@ -327,6 +327,23 @@ The transformation runs both directions. An EU of 35+ members with Ukraine at it
 
 ---
 
+## 8b. Latest Developments (March 2026)
+
+### EUR 1.5 Billion Investment Boost (5 March 2026)
+
+On 5 March 2026, the EU unveiled a new **EUR 1.5 billion investment package** to drive Ukraine's recovery, reconstruction and modernisation. This is in addition to the existing support packages and reflects continued EU commitment to Ukraine's economic integration ahead of potential accession.
+
+The investment targets:
+- **Recovery and reconstruction** of war-damaged infrastructure
+- **Modernisation** of Ukrainian institutions and economy
+- **EU alignment** to support the accession process
+
+This brings total EU financial support for Ukraine to well above EUR 100 billion since February 2022, combining macro-financial assistance, military aid, humanitarian support, and investment packages.
+
+Source: DG NEAR news, 5 March 2026.
+
+---
+
 ## 9. References
 
 ### EU institutional sources

@@ -1,0 +1,143 @@
+/* Daily EU Brief - Chat page component */
+
+.daily-brief {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  animation: fadeIn var(--transition-base) 0.2s both;
+}
+
+/* Knowledge stats badge */
+.daily-brief__stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  justify-content: center;
+}
+
+.daily-brief__stats .mdi-brain {
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+
+/* Brief card */
+.daily-brief__card {
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.daily-brief__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.daily-brief__header .mdi-newspaper-variant-outline {
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
+.daily-brief__header h3 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin: 0;
+  flex: 1;
+}
+
+.daily-brief__date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Items list */
+.daily-brief__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.daily-brief__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-md);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.daily-brief__item:hover {
+  background: var(--color-gray-50);
+  color: var(--color-text);
+}
+
+.daily-brief__item:hover .daily-brief__item-arrow {
+  opacity: 1;
+  transform: translateX(2px);
+}
+
+.daily-brief__item-icon {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.daily-brief__item-text {
+  flex: 1;
+}
+
+.daily-brief__item-arrow {
+  opacity: 0;
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+/* Hint */
+.daily-brief__hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: var(--space-3);
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .daily-brief {
+    max-width: 100%;
+  }
+
+  .daily-brief__stats {
+    font-size: 0.65rem;
+    flex-wrap: wrap;
+  }
+
+  .daily-brief__date {
+    display: none;
+  }
+}

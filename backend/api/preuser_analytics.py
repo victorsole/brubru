@@ -92,6 +92,41 @@ async def track_preuser_event(
     return None  # 204 No Content
 
 
+# ---------- POST: pre-user email capture ----------
+
+class PreUserEmailRequest(BaseModel):
+    pre_user_id: str = Field(..., min_length=1, max_length=36)
+    email: str = Field(..., min_length=3, max_length=254)
+
+
+@router.post("/api/analytics/preuser-email", status_code=204)
+async def capture_preuser_email(
+    request: PreUserEmailRequest,
+    db: Session = Depends(get_db),
+):
+    """Capture a pre-user email for daily brief subscription. Unauthenticated."""
+    if _is_rate_limited(request.pre_user_id):
+        raise HTTPException(status_code=429, detail="Rate limit exceeded")
+
+    variant = _compute_variant(request.pre_user_id)
+
+    try:
+        event = PreUserEvent(
+            pre_user_id=request.pre_user_id,
+            event_type="email_captured",
+            ab_variant=variant,
+            event_metadata={"email": request.email},
+        )
+        db.add(event)
+        db.commit()
+        logger.info(f"[OK] Pre-user email captured: {request.email[:3]}***")
+    except Exception as e:
+        db.rollback()
+        logger.warning(f"[WARN] Failed to save pre-user email (non-fatal): {e}")
+
+    return None  # 204 No Content
+
+
 # ---------- GET: admin funnel report ----------
 
 @router.get("/api/admin/analytics/preuser-funnel")

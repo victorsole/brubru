@@ -1,0 +1,155 @@
+/* Onboarding Tour - 3-step overlay for pre-users */
+
+.onboarding-tour__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(2px);
+}
+
+.onboarding-tour__card {
+  background: var(--color-background, #fff);
+  border-radius: var(--radius-lg, 12px);
+  padding: 2rem;
+  max-width: 420px;
+  width: calc(100% - 2rem);
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+}
+
+.onboarding-tour__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted, #9ca3af);
+  font-size: 1.25rem;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm, 4px);
+  transition: color 0.15s;
+}
+
+.onboarding-tour__close:hover {
+  color: var(--color-text, #111827);
+}
+
+/* Step dots */
+.onboarding-tour__steps {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.onboarding-tour__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border, #e5e7eb);
+  transition: all 0.2s;
+}
+
+.onboarding-tour__dot--active {
+  background: #0693e3;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.onboarding-tour__dot--done {
+  background: #059669;
+}
+
+/* Content */
+.onboarding-tour__content {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.onboarding-tour__icon {
+  font-size: 2.5rem;
+  color: #0693e3;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.onboarding-tour__content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text, #111827);
+  margin: 0 0 0.75rem 0;
+}
+
+.onboarding-tour__content p {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+/* Actions */
+.onboarding-tour__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.onboarding-tour__btn {
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md, 8px);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+}
+
+.onboarding-tour__btn--primary {
+  background: #0693e3;
+  color: #fff;
+}
+
+.onboarding-tour__btn--primary:hover {
+  background: #0574b8;
+}
+
+.onboarding-tour__btn--secondary {
+  background: var(--color-gray-100, #f3f4f6);
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.onboarding-tour__btn--secondary:hover {
+  background: var(--color-gray-200, #e5e7eb);
+}
+
+.onboarding-tour__btn--skip {
+  background: none;
+  color: var(--color-text-muted, #9ca3af);
+}
+
+.onboarding-tour__btn--skip:hover {
+  color: var(--color-text-secondary, #6b7280);
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .onboarding-tour__card {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .onboarding-tour__icon {
+    font-size: 2rem;
+  }
+
+  .onboarding-tour__content h3 {
+    font-size: 1.125rem;
+  }
+}

@@ -5,6 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { MessageList } from './message_list';
+import { DailyBrief } from './daily_brief';
+import { OnboardingTour } from './onboarding_tour';
+import { EmailCapture } from './email_capture';
 import { useAuth } from '../../hooks/use_auth';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { trackPreUserEvent, getAbVariant } from '../../services/preuser_tracker';
@@ -608,6 +611,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
 
   return (
     <div className="chat-interface">
+      {/* Onboarding tour for pre-users */}
+      <OnboardingTour isAuthenticated={isAuthenticated} />
+
       {/* Settings Bar - Commented out: EU Context is always enabled for Brubru */}
       {/* <div className="chat-interface__settings">
         <label className="chat-interface__setting">
@@ -640,6 +646,13 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             <h2>{personalizedGreeting || t('chat.welcome')}</h2>
             {personalizedSubGreeting && <h3>{personalizedSubGreeting}</h3>}
             <p>{t('chat.tagline')}</p>
+
+            {/* Daily EU Brief + Knowledge Stats */}
+            <DailyBrief onQueryClick={(query) => {
+              setInputValue(query);
+              requestAnimationFrame(() => textareaRef.current?.focus());
+            }} />
+
             <p className="chat-interface__empty-hint">
               {t('chat.startConversation')}
             </p>
@@ -655,22 +668,22 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                       onClick={() => handleExampleClick(ex)}
                       aria-label={`Use example: ${ex.text}`}
                     >
-                      “{ex.text}”
+                      "{ex.text}"
                     </button>
                   ))
                 ) : (
                   <>
                     <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example1'))}>
-                      “{t('chat.example1')}”
+                      "{t('chat.example1')}"
                     </button>
                     <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example2'))}>
-                      “{t('chat.example2')}”
+                      "{t('chat.example2')}"
                     </button>
                     <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example3'))}>
-                      “{t('chat.example3')}”
+                      "{t('chat.example3')}"
                     </button>
                     <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example4'))}>
-                      “{t('chat.example4')}”
+                      "{t('chat.example4')}"
                     </button>
                   </>
                 )}
@@ -696,6 +709,12 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
             onActionClick={handleActionClick}
           />
         )}
+
+        {/* Email capture prompt after first assistant response */}
+        {!isAuthenticated && messages.filter(m => m.role === 'assistant').length === 1 && (
+          <EmailCapture preUserId={getPreUserId()} />
+        )}
+
         <AnimatePresence>
           {(isLoading || isStreaming) && (
             <motion.div

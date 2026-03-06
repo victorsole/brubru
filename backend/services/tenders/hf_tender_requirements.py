@@ -159,6 +159,10 @@ class TenderRequirementsExtractor:
                 if country_evidence:
                     req["country_evidence"] = country_evidence
 
+        # Add DG GROW conformity assessment data (notified bodies + regulatory alerts)
+        dg_grow_reqs = self._get_dg_grow_requirements(tender)
+        requirements.extend(dg_grow_reqs)
+
         # Remove duplicates
         requirements = self._deduplicate_requirements(requirements)
 
@@ -461,6 +465,66 @@ Only include clear, explicit requirements. Return empty array if no clear requir
                         }
 
         return None
+
+    def _get_dg_grow_requirements(self, tender: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """
+        Get conformity assessment requirements from DG GROW databases.
+        Adds notified body information and regulatory alerts to the checklist.
+        """
+        requirements = []
+        cpv_main = tender.get("cpv_main", "")
+        buyer_country = tender.get("buyer_country", "")
+
+        if not cpv_main:
+            return []
+
+        try:
+            from core.database import SessionLocal
+            from services.tenders.dg_grow_enrichment import DGGrowEnrichment
+
+            db = SessionLocal()
+            try:
+                enrichment = DGGrowEnrichment(db)
+
+                # Get notified bodies for conformity assessment
+                bodies_data = enrichment.get_notified_bodies_for_checklist(cpv_main, buyer_country)
+                if bodies_data.get("requires_conformity"):
+                    body_names = [b["body_name"] for b in bodies_data["bodies"][:5]]
+                    requirements.append({
+                        "type": "selection",
+                        "category": "E",
+                        "requirement": (
+                            f"Conformity assessment may be required. "
+                            f"{bodies_data['body_count']} notified body/ies available"
+                            + (f" in {buyer_country}" if buyer_country else "")
+                            + f". Applicable directives: {', '.join(bodies_data['applicable_directives'][:3])}"
+                        ),
+                        "document_needed": "CE marking / conformity certificate from notified body",
+                        "mandatory": False,
+                        "notified_bodies": body_names,
+                        "dg_grow_source": "NANDO",
+                    })
+
+                # Get regulatory alerts
+                alerts = enrichment.get_regulatory_alerts_for_checklist(cpv_main, buyer_country)
+                for alert in alerts[:3]:
+                    requirements.append({
+                        "type": "information",
+                        "category": "F",
+                        "requirement": alert["title"],
+                        "document_needed": None,
+                        "mandatory": False,
+                        "severity": alert["severity"],
+                        "impact": alert["impact"],
+                        "dg_grow_source": alert["type"],
+                    })
+            finally:
+                db.close()
+
+        except Exception as e:
+            logger.debug(f"DG GROW requirements enrichment failed: {e}")
+
+        return requirements
 
     def _deduplicate_requirements(self, requirements: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Remove duplicate requirements."""

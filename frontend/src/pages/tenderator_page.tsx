@@ -432,7 +432,7 @@ export const TenderatorPage = ({ isSidebarOpen: _isSidebarOpen }: TenderatorPage
         {/* Stats Sidebar */}
         {userProfile && userStats && viewState === 'feed' && (
           <div className="tenderator-page__stats-sidebar">
-            <TenderStats stats={userStats} />
+            <TenderStats stats={userStats} cpvCode={userProfile.cpv_categories?.[0]} />
             <FeedbackInvitation
               featureName="Tenderator"
               featureDescription="Help us improve Tenderator. Your feedback on tender matching and SME tools is valuable."
