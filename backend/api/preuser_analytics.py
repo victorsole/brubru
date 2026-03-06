@@ -120,6 +120,14 @@ async def capture_preuser_email(
         db.add(event)
         db.commit()
         logger.info(f"[OK] Pre-user email captured: {request.email[:3]}***")
+
+        # Send welcome email with today's brief (fire-and-forget)
+        try:
+            from services.daily_brief_email import send_welcome_brief
+            send_welcome_brief(request.email, db)
+        except Exception as e:
+            logger.warning(f"[WARN] Welcome email failed (non-fatal): {e}")
+
     except Exception as e:
         db.rollback()
         logger.warning(f"[WARN] Failed to save pre-user email (non-fatal): {e}")
