@@ -641,6 +641,123 @@ def format_news_report(items: List[NewsItem], hours: int) -> str:
     return "\n".join(lines)
 
 
+def fetch_committee_work_items(hours: int = 48) -> List[NewsItem]:
+    """Fetch recent EP committee draft reports and amendments from the database.
+
+    Requires sync_committee_work.py to have run first (called by --save flow).
+    Returns NewsItems for draft reports, opinions, and amendments updated recently.
+    """
+    from pathlib import Path
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent.parent.parent / '.env')
+
+    items = []
+    try:
+        import psycopg2
+        db_url = os.environ.get('DATABASE_URL', '')
+        if not db_url:
+            return items
+
+        conn = psycopg2.connect(db_url)
+        cur = conn.cursor()
+
+        cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).isoformat()
+
+        # Draft reports and opinions updated recently
+        cur.execute("""
+            SELECT procedure_ref, title, committee_code, committee_role,
+                   rapporteur_name, status, ep_page_url, oeil_url, last_updated
+            FROM committee_work_items
+            WHERE last_updated >= %s
+            ORDER BY last_updated DESC
+            LIMIT 30
+        """, (cutoff,))
+
+        for row in cur.fetchall():
+            proc_ref, title, committee, role, rapporteur, status, ep_url, oeil_url, last_updated = row
+            # Build a clean headline
+            role_label = "Draft Report" if role == "LEAD" else "Opinion"
+            rapporteur_str = f" (rapporteur: {rapporteur})" if rapporteur else ""
+            headline = f"{committee} {role_label}: {title}{rapporteur_str}"
+            if proc_ref:
+                headline += f" [{proc_ref}]"
+
+            url = ep_url or oeil_url or f"https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={proc_ref}"
+            date_str = last_updated.strftime('%Y-%m-%d') if last_updated else None
+
+            items.append(NewsItem(
+                title=headline,
+                url=url,
+                date=date_str,
+                source=f"EP {committee}",
+                category="ep",
+                priority=2,  # High priority: committee legislative work
+            ))
+
+        # Also check for recent amendment documents
+        cur.execute("""
+            SELECT DISTINCT ad.procedure_reference, ad.pe_reference, ad.document_date,
+                   ad.doceo_url, COUNT(ma.id) as amendment_count
+            FROM amendment_documents ad
+            JOIN mep_amendments ma ON ma.procedure_reference = ad.procedure_reference
+                AND ma.pe_reference = ad.pe_reference
+            WHERE ad.scraped_at >= %s
+            GROUP BY ad.procedure_reference, ad.pe_reference, ad.document_date, ad.doceo_url
+            ORDER BY ad.document_date DESC
+            LIMIT 15
+        """, (cutoff,))
+
+        for row in cur.fetchall():
+            proc_ref, pe_ref, doc_date, doceo_url, am_count = row
+            headline = f"EP Amendments: {am_count} amendments filed on {proc_ref} ({pe_ref})"
+            date_str = doc_date.strftime('%Y-%m-%d') if doc_date else None
+            url = doceo_url or f"https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={proc_ref}"
+
+            items.append(NewsItem(
+                title=headline,
+                url=url,
+                date=date_str,
+                source="EP Amendments",
+                category="ep",
+                priority=2,
+            ))
+
+        conn.close()
+        print(f"  [OK] EP Committee Work: {len(items)} items from database", file=sys.stderr)
+
+    except Exception as e:
+        print(f"  [WARN] EP Committee Work fetch failed: {str(e)[:80]}", file=sys.stderr)
+
+    return items
+
+
+def run_committee_work_sync():
+    """Run the committee work sync script before fetching items."""
+    import subprocess
+    script_path = os.path.join(os.path.dirname(__file__), 'sync_committee_work.py')
+    if not os.path.exists(script_path):
+        print("  [WARN] sync_committee_work.py not found, skipping", file=sys.stderr)
+        return False
+    try:
+        result = subprocess.run(
+            [sys.executable, script_path, '--max-pages', '2'],
+            capture_output=True, text=True, timeout=180,
+            cwd=os.path.join(os.path.dirname(__file__), '..')
+        )
+        if result.returncode == 0:
+            print("  [OK] Committee work sync completed", file=sys.stderr)
+            return True
+        else:
+            print(f"  [WARN] Committee work sync failed: {result.stderr[:100]}", file=sys.stderr)
+            return False
+    except subprocess.TimeoutExpired:
+        print("  [WARN] Committee work sync timed out (3min limit)", file=sys.stderr)
+        return False
+    except Exception as e:
+        print(f"  [WARN] Committee work sync error: {str(e)[:80]}", file=sys.stderr)
+        return False
+
+
 async def main():
     parser = argparse.ArgumentParser(description='Scrape EU institutional news portals')
     parser.add_argument('--hours', type=int, default=24,
@@ -656,6 +773,8 @@ async def main():
                         help='Max concurrent requests (default: 5)')
     parser.add_argument('--save', action='store_true',
                         help='Save top headlines to daily_briefs table for chat Daily Brief')
+    parser.add_argument('--skip-committee-sync', action='store_true',
+                        help='Skip running committee work sync (use existing DB data only)')
     args = parser.parse_args()
 
     # Filter portals
@@ -699,6 +818,14 @@ async def main():
 
         for portal_items in results:
             all_items.extend(portal_items)
+
+    # EP Committee Work: draft reports, opinions, amendments from database
+    if not args.category or args.category == 'ep':
+        log("\n[START] EP Committee Work (draft reports and amendments)...")
+        if not args.skip_committee_sync:
+            run_committee_work_sync()
+        committee_items = fetch_committee_work_items(hours=args.hours * 2)  # wider window for DB items
+        all_items.extend(committee_items)
 
     # Filter by time window
     all_items = [i for i in all_items if is_recent(i, args.hours)]

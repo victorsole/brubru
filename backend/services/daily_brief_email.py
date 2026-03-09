@@ -106,7 +106,7 @@ def _build_brief_email_html(
     else:
         intro = """
         <p style="font-size: 15px; color: #374151; line-height: 1.6; margin: 0 0 20px 0;">
-          Good morning. Here is what is happening in Brussels today:
+          Good morning. Here is what is happening in the EU bubble today:
         </p>"""
 
     # Registered users see "Log in" CTA, pre-users see "Sign up free"

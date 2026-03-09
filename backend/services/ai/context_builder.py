@@ -2608,6 +2608,23 @@ class ContextBuilder:
                     )
                 )
 
+            # If no specific filters matched, try keyword search in titles
+            if not committee_mentions and not entities.committee_codes and \
+               not procedure_type_mentions and not entities.procedure_references:
+                # Extract meaningful keywords (3+ chars, skip stopwords)
+                stopwords = {'the', 'and', 'for', 'that', 'this', 'with', 'from',
+                             'about', 'what', 'how', 'does', 'are', 'was', 'has',
+                             'tell', 'which', 'where', 'when', 'who', 'can', 'any',
+                             'new', 'latest', 'recent', 'current'}
+                keywords = [w for w in query_lower.split()
+                            if len(w) >= 3 and w not in stopwords]
+                if keywords:
+                    keyword_filters = [
+                        CommitteeWorkItem.title.ilike(f'%{kw}%')
+                        for kw in keywords[:5]  # max 5 keywords
+                    ]
+                    base_query = base_query.filter(or_(*keyword_filters))
+
             # Order by relevance score then last updated
             base_query = base_query.order_by(
                 CommitteeWorkItem.relevance_score.desc(),

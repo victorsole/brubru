@@ -1243,6 +1243,43 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'politique commerciale': ['eu_trade_policy'],
     'politica comercial ue': ['eu_trade_policy'],
     'handelspolitik': ['eu_trade_policy'],
+
+    # Georgia Visa Suspension
+    'georgia visa': ['georgia_visa_suspension'],
+    'georgia': ['georgia_visa_suspension'],
+    'georgian': ['georgia_visa_suspension'],
+    'georgian dream': ['georgia_visa_suspension'],
+    'visa suspension': ['georgia_visa_suspension'],
+    'visa exemption': ['georgia_visa_suspension'],
+    'visa liberalisation': ['georgia_visa_suspension'],
+    'visa liberalization': ['georgia_visa_suspension'],
+    'predator spyware': ['georgia_visa_suspension'],
+    'khoshtaria': ['georgia_visa_suspension'],
+    '2026/496': ['georgia_visa_suspension'],
+    '32026r0496': ['georgia_visa_suspension'],
+    'georgie': ['georgia_visa_suspension'],
+
+    # Transport Community Treaty
+    'transport community': ['transport_community_treaty'],
+    'transport community treaty': ['transport_community_treaty'],
+    'western balkans transport': ['transport_community_treaty'],
+    '2026/523': ['transport_community_treaty'],
+    '32026d0523': ['transport_community_treaty'],
+    'regional steering committee': ['transport_community_treaty'],
+    'balkans transport': ['transport_community_treaty'],
+
+    # Natura 2000 Sites Update
+    'natura 2000': ['natura_2000_sites_update'],
+    'natura2000': ['natura_2000_sites_update'],
+    'sites of community importance': ['natura_2000_sites_update'],
+    'sci': ['natura_2000_sites_update'],
+    'special areas of conservation': ['natura_2000_sites_update'],
+    'sac': ['natura_2000_sites_update'],
+    'habitats directive': ['natura_2000_sites_update'],
+    '2026/401': ['natura_2000_sites_update'],
+    '32026d0401': ['natura_2000_sites_update'],
+    'biogeographical region': ['natura_2000_sites_update'],
+    '92/43': ['natura_2000_sites_update'],
 }
 
 
