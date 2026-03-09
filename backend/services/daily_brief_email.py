@@ -173,8 +173,8 @@ def _build_brief_email_html(
       <p style="font-size: 11px; color: #9ca3af; margin: 0;">
         Brubru by <a href="https://beresol.eu" style="color: #9ca3af;">Beresol</a> &middot; Brussels, Belgium
       </p>
-      <p style="font-size: 11px; color: #9ca3af; margin: 4px 0 0 0;">
-        <a href="{unsub_link}" style="color: #9ca3af; text-decoration: underline;">
+      <p style="margin: 12px 0 0 0;">
+        <a href="{unsub_link}" style="display: inline-block; padding: 6px 16px; font-size: 12px; color: #6b7280; text-decoration: none; border: 1px solid #e5e7eb; border-radius: 6px;">
           Stop receiving this daily brief
         </a>
       </p>

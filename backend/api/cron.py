@@ -246,3 +246,68 @@ async def cron_sync_all(
     logger.info(f"[CRON] Combined sync complete: {results}")
 
     return {"status": "success", "results": results}
+
+
+@router.post("/daily-brief")
+async def cron_daily_brief(
+    authorization: str = Header(...),
+):
+    """
+    Scrape EU news, save top headlines, and send daily brief emails.
+
+    Called by Railway cron at 11:00 UTC (12:00 CET) every day.
+    Steps: (1) scrape 44 portals, (2) save top 20 to daily_briefs, (3) email all subscribers.
+    """
+    _verify_cron_secret(authorization)
+
+    import asyncio
+    import subprocess
+    import sys
+    import os
+
+    results = {}
+
+    # Step 1: Scrape EU news and save to daily_briefs table
+    try:
+        logger.info("[CRON] Daily brief: scraping EU news portals")
+        script_path = os.path.join(os.path.dirname(__file__), '..', 'scripts', 'scrape_eu_news.py')
+        proc = subprocess.run(
+            [sys.executable, script_path, '--save', '--hours', '24'],
+            capture_output=True, text=True, timeout=180,
+            cwd=os.path.dirname(script_path),
+        )
+        if proc.returncode == 0:
+            results["scrape"] = {"status": "success", "output": proc.stderr[-500:] if proc.stderr else ""}
+            logger.info("[CRON] Daily brief: news scrape complete")
+        else:
+            results["scrape"] = {"status": "failed", "error": proc.stderr[-300:] if proc.stderr else "Unknown error"}
+            logger.error(f"[CRON] Daily brief: scrape failed: {proc.stderr[-200:]}")
+    except Exception as e:
+        logger.error(f"[CRON] Daily brief: scrape error: {str(e)}")
+        results["scrape"] = {"status": "failed", "error": str(e)}
+
+    # Step 2: Send daily brief emails to all subscribers
+    db = SessionLocal()
+    try:
+        from services.daily_brief_email import send_daily_brief_batch
+
+        logger.info("[CRON] Daily brief: sending emails to subscribers")
+        email_result = send_daily_brief_batch(db)
+        results["email"] = {
+            "status": "success",
+            "sent": email_result.get("sent", 0),
+            "failed": email_result.get("failed", 0),
+            "total_recipients": email_result.get("total_recipients", 0),
+            "registered_users": email_result.get("registered_users", 0),
+            "pre_users": email_result.get("pre_users", 0),
+        }
+        if email_result.get("error"):
+            results["email"]["error"] = email_result["error"]
+        logger.info(f"[CRON] Daily brief: emails sent={email_result.get('sent', 0)}/{email_result.get('total_recipients', 0)}")
+    except Exception as e:
+        logger.error(f"[CRON] Daily brief: email send failed: {str(e)}")
+        results["email"] = {"status": "failed", "error": str(e)}
+    finally:
+        db.close()
+
+    return {"status": "success", "results": results}

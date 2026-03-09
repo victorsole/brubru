@@ -15,6 +15,30 @@ EU energy policy is governed by Article 194 TFEU, which establishes four key obj
 
 Long-term goal: climate neutrality by 2050. Energy poverty affects over 46 million Europeans.
 
+## 2026 Energy Package (College adoption: 10 March 2026)
+
+The Commission is adopting a major Energy Package on 10 March 2026, led by Executive VP Teresa Ribera and Commissioner Wopke Hoekstra. Three main pillars:
+
+### Small Modular Reactors (SMRs)
+- EU strategy for small modular reactors as part of the energy mix
+- SMRs are nuclear reactors with output up to 300 MWe, designed for factory fabrication and modular deployment
+- Aims to establish an EU SMR industrial alliance and streamline licensing
+- Part of the broader nuclear energy renaissance in EU policy
+
+### Clean Energy Investment Strategy
+- Framework for mobilising public and private investment in clean energy
+- Addresses the investment gap estimated at EUR 500 billion annually to 2030
+- Links to the Clean Industrial Deal and InvestEU programme
+- Focus on grid infrastructure, storage, and renewable capacity
+
+### Citizens Energy Package
+- Measures to protect consumers from energy price volatility
+- Strengthening energy communities and prosumer rights
+- Addressing energy poverty (affecting 46+ million Europeans)
+- Building on the Electricity Market Design reform (Regulation (EU) 2024/1747)
+
+This package is being debated at the EP plenary on 10 March 2026 (Strasbourg) and will require legislative follow-up from the Commission in subsequent months.
+
 ## Key Legislation
 
 ### Clean Energy Package (2019)

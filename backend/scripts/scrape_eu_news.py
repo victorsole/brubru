@@ -162,13 +162,21 @@ PORTALS = [
     {"url": "https://www.europarl.europa.eu/news/en",
      "source": "European Parliament", "category": "ep", "priority": 1},
 
-    # ── Council of the EU (Cloudflare-protected, use Tavily fallback) ───
-    {"url": "https://www.consilium.europa.eu/en/press/press-releases/",
-     "source": "Council of the EU", "category": "council", "priority": 1, "type": "tavily"},
+    # ── EU Policy News (via Politico EU RSS, covers Council/Commission/EP) ──
+    {"url": "https://www.politico.eu/feed/",
+     "source": "Politico EU", "category": "ec", "priority": 1, "type": "politico_eu"},
 
-    # ── ECB (JS-rendered, use Tavily fallback) ─────────────────────────
-    {"url": "https://www.ecb.europa.eu/press/pr/html/index.en.html",
-     "source": "ECB", "category": "ecb", "priority": 2, "type": "tavily"},
+    # ── ECB Press Releases (via RSS) ─────────────────────────────────
+    {"url": "https://www.ecb.europa.eu/rss/press.html",
+     "source": "ECB", "category": "ecb", "priority": 2},
+
+    # ── Official Journal L-series (adopted legislation via EUR-Lex RSS) ─
+    {"url": "https://eur-lex.europa.eu/EN/display-feed.rss?rssId=222",
+     "source": "Official Journal (L)", "category": "ec", "priority": 1, "type": "oj_rss"},
+
+    # ── Official Journal C-series (information/notices via EUR-Lex RSS) ─
+    {"url": "https://eur-lex.europa.eu/EN/display-feed.rss?rssId=221",
+     "source": "Official Journal (C)", "category": "ec", "priority": 2, "type": "oj_rss"},
 ]
 
 
@@ -312,68 +320,144 @@ async def scrape_ec_press_corner_api(client: httpx.AsyncClient, portal: dict) ->
     return items
 
 
-async def scrape_with_tavily(portal: dict) -> List[NewsItem]:
-    """Fallback scraper using Tavily extraction for JS-rendered pages."""
+async def scrape_politico_eu(portal: dict) -> List[NewsItem]:
+    """Scrape Politico EU RSS for EU policy news (covers Council, Commission, EP).
+
+    Since consilium.europa.eu is Cloudflare-blocked, Politico is the best source
+    for Council and cross-institutional EU policy news.
+    """
+    items = []
+    # Categories that signal EU institutional news (from Politico's RSS category tags)
+    eu_categories = {
+        'foreign affairs', 'diplomacy', 'enlargement', 'defense', 'defence',
+        'trade', 'energy', 'climate', 'digital', 'migration', 'regulation',
+        'competition', 'single market', 'eu budget', 'agriculture',
+    }
+    # Title keywords for Council-specific items
+    council_keywords = [
+        'council', 'minister', 'presidency', 'euco', 'european council',
+        'member state', 'general approach', 'trilogue', 'coreper', 'summit',
+        'heads of state', 'foreign affairs council', 'ecofin',
+    ]
+    try:
+        async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
+            resp = await client.get(portal["url"], headers={'User-Agent': HEADERS['User-Agent']})
+            if resp.status_code != 200:
+                print(f"  [WARN] Politico RSS returned {resp.status_code}", file=sys.stderr)
+                return items
+
+            from xml.etree import ElementTree as ET
+            root = ET.fromstring(resp.text)
+            for item_el in root.findall('.//item'):
+                title = (item_el.find('title').text or '').strip()
+                link = (item_el.find('link').text or '').strip()
+                pubdate_el = item_el.find('pubDate')
+                pubdate = pubdate_el.text if pubdate_el is not None else ''
+
+                # Check RSS categories for EU relevance
+                item_cats = set()
+                for cat_el in item_el.findall('category'):
+                    if cat_el.text:
+                        item_cats.add(cat_el.text.lower())
+
+                title_lower = title.lower()
+
+                # Determine if Council-specific or general EU
+                is_council = any(kw in title_lower for kw in council_keywords)
+                is_eu_policy = bool(item_cats & eu_categories) or any(
+                    kw in title_lower for kw in [
+                        'eu ', 'european', 'commission', 'parliament', 'brussels',
+                        'von der leyen', 'regulation', 'directive',
+                    ]
+                )
+
+                if is_council or is_eu_policy:
+                    category = "council" if is_council else portal["category"]
+                    date_str = parse_date_text(pubdate) if pubdate else None
+                    priority = classify_priority(title, portal["priority"])
+                    items.append(NewsItem(
+                        title=title,
+                        url=link,
+                        date=date_str,
+                        source="Politico EU",
+                        category=category,
+                        priority=priority,
+                    ))
+    except Exception as e:
+        print(f"  [ERROR] Politico EU RSS: {str(e)[:80]}", file=sys.stderr)
+    return items
+
+
+async def scrape_oj_rss(portal: dict) -> List[NewsItem]:
+    """Scrape Official Journal via EUR-Lex predefined RSS feeds.
+
+    Uses rssId=222 for OJ L-series (legislation) and rssId=221 for OJ C-series.
+    These feeds are maintained by the Publications Office and return up to 100 items.
+    """
     items = []
     source = portal["source"]
     try:
-        # Try to import tavily client from project
-        from services.api_clients.tavily_client import tavily_extract
-        result = await tavily_extract(portal["url"])
-        if result:
-            # Parse extracted text for headlines
-            for line in result.split('\n'):
-                line = line.strip()
-                if len(line) > 20 and len(line) < 300 and not line.startswith(('#', '-', '*')):
-                    priority = classify_priority(line, portal["priority"])
-                    date = parse_date_text(line)
-                    items.append(NewsItem(
-                        title=line,
-                        url=portal["url"],
-                        date=date,
-                        source=source,
-                        category=portal["category"],
-                        priority=priority,
-                    ))
-    except ImportError:
-        # No Tavily available, try with enhanced headers as last resort
-        try:
-            async with httpx.AsyncClient(
-                headers={
-                    **HEADERS,
-                    'Sec-Fetch-Dest': 'document',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-Site': 'none',
-                    'Sec-Fetch-User': '?1',
-                    'Upgrade-Insecure-Requests': '1',
-                },
-                timeout=25.0,
-                follow_redirects=True,
-            ) as client:
-                response = await client.get(portal["url"])
-                if response.status_code == 200:
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    for link in soup.find_all('a', href=True, limit=20):
-                        href = link.get('href', '')
-                        title = link.text.strip()
-                        if title and len(title) > 20 and len(title) < 300:
-                            if any(kw in href.lower() for kw in ['/press/', '/news/', '/pr/', '/press-release']):
-                                from urllib.parse import urlparse
-                                if href.startswith('/'):
-                                    parsed = urlparse(portal["url"])
-                                    href = f"{parsed.scheme}://{parsed.netloc}{href}"
-                                items.append(NewsItem(
-                                    title=title,
-                                    url=href,
-                                    date=parse_date_text(title),
-                                    source=source,
-                                    category=portal["category"],
-                                    priority=classify_priority(title, portal["priority"]),
-                                ))
-        except Exception as e:
-            print(f"  [ERROR] {source} (fallback): {str(e)[:80]}", file=sys.stderr)
+        async with httpx.AsyncClient(timeout=20.0, follow_redirects=True) as client:
+            resp = await client.get(portal["url"], headers={
+                'User-Agent': HEADERS['User-Agent'],
+                'Accept': 'application/rss+xml, text/xml, */*',
+            })
+            if resp.status_code != 200:
+                print(f"  [WARN] {source} RSS returned {resp.status_code}", file=sys.stderr)
+                return items
+
+            from xml.etree import ElementTree as ET
+            root = ET.fromstring(resp.text)
+
+            # Filter for significant legislation (skip corrections, court cases, etc.)
+            skip_prefixes = ['Corrigendum', 'Rectificatif', 'Case ', 'Affaire ']
+
+            for item_el in root.findall('.//item'):
+                title_raw = (item_el.find('title').text or '').strip()
+                link = (item_el.find('link').text or '').strip()
+                pubdate_el = item_el.find('pubDate')
+                pubdate = pubdate_el.text if pubdate_el is not None else ''
+
+                # Extract CELEX from title (format: "CELEX:XXXXX: Title text")
+                celex = ''
+                title = title_raw
+                if title_raw.startswith('CELEX:'):
+                    parts = title_raw.split(':', 2)
+                    if len(parts) >= 3:
+                        celex = parts[1].strip()
+                        title = parts[2].strip()
+                    elif len(parts) == 2:
+                        celex = parts[1].strip()
+
+                # Skip corrections, court cases, and empty titles
+                if not title or any(title.startswith(p) for p in skip_prefixes):
+                    continue
+
+                # Fix EUR-Lex relative URLs
+                if link.startswith('.'):
+                    link = f"https://eur-lex.europa.eu{link[1:]}"
+
+                date_str = parse_date_text(pubdate) if pubdate else None
+                priority = classify_priority(title, portal["priority"])
+
+                display_title = f"{title[:200]}"
+                if celex:
+                    display_title = f"[{celex}] {display_title}"
+
+                items.append(NewsItem(
+                    title=display_title,
+                    url=link,
+                    date=date_str,
+                    source=source,
+                    category=portal["category"],
+                    priority=priority,
+                ))
+
+            # Limit to top 15 most significant items (feeds return up to 100)
+            items = items[:15]
+
     except Exception as e:
-        print(f"  [ERROR] {source} (tavily): {str(e)[:80]}", file=sys.stderr)
+        print(f"  [ERROR] {source} RSS: {str(e)[:80]}", file=sys.stderr)
     return items
 
 
@@ -598,8 +682,10 @@ async def main():
                 portal_type = portal.get("type", "html")
                 if portal_type == "json_api":
                     result = await scrape_ec_press_corner_api(client, portal)
-                elif portal_type == "tavily":
-                    result = await scrape_with_tavily(portal)
+                elif portal_type == "politico_eu":
+                    result = await scrape_politico_eu(portal)
+                elif portal_type == "oj_rss":
+                    result = await scrape_oj_rss(portal)
                 else:
                     result = await scrape_portal(client, portal)
                 if result:
