@@ -1,0 +1,122 @@
+{
+  "institution_code": "COREPER",
+  "institution_name": "Permanent Representatives Committee (COREPER)",
+  "source": "EU Who Is Who (op.europa.eu)",
+  "date_extracted": "2026-03-09",
+  "structure": [
+    {
+      "code": "REPRES_PERM",
+      "name": "Permanent representations",
+      "units": [
+        {
+          "code": "MDR_COREPER_40CS",
+          "name": "Permanent Representation of Belgium"
+        },
+        {
+          "code": "MDR_COREPER_CS00916",
+          "name": "Permanent Representation of Bulgaria"
+        },
+        {
+          "code": "MDR_COREPER_CS00530",
+          "name": "Permanent Representation of Czechia"
+        },
+        {
+          "code": "MDR_COREPER_48CS",
+          "name": "Permanent Representation of Denmark"
+        },
+        {
+          "code": "MDR_COREPER_67CS",
+          "name": "Permanent Representation of Germany"
+        },
+        {
+          "code": "MDR_COREPER_CS00470",
+          "name": "Permanent Representation of Estonia"
+        },
+        {
+          "code": "MDR_COREPER_123CS",
+          "name": "Permanent Representation of Ireland"
+        },
+        {
+          "code": "MDR_COREPER_77CS",
+          "name": "Permanent Representation of Greece"
+        },
+        {
+          "code": "MDR_COREPER_92CS",
+          "name": "Permanent Representation of Spain"
+        },
+        {
+          "code": "MDR_COREPER_106CS",
+          "name": "Permanent Representation of France"
+        },
+        {
+          "code": "MDR_COREPER_CSU554",
+          "name": "Permanent Representation of Croatia"
+        },
+        {
+          "code": "MDR_COREPER_132CS",
+          "name": "Permanent Representation of Italy"
+        },
+        {
+          "code": "MDR_COREPER_CS00614",
+          "name": "Permanent Representation of Cyprus"
+        },
+        {
+          "code": "MDR_COREPER_CS00500",
+          "name": "Permanent Representation of Latvia"
+        },
+        {
+          "code": "MDR_COREPER_CS00591",
+          "name": "Permanent Representation of Lithuania"
+        },
+        {
+          "code": "MDR_COREPER_149CS",
+          "name": "Permanent Representation of Luxembourg"
+        },
+        {
+          "code": "MDR_COREPER_DA00543",
+          "name": "Permanent Representation of Hungary"
+        },
+        {
+          "code": "MDR_COREPER_CS00615",
+          "name": "Permanent Representation of Malta"
+        },
+        {
+          "code": "MDR_COREPER_151CS",
+          "name": "Permanent Representation of the Netherlands"
+        },
+        {
+          "code": "MDR_COREPER_559CS",
+          "name": "Permanent Representation of Austria"
+        },
+        {
+          "code": "MDR_COREPER_CS00555",
+          "name": "Permanent Representation of Poland"
+        },
+        {
+          "code": "MDR_COREPER_163CS",
+          "name": "Permanent Representation of Portugal"
+        },
+        {
+          "code": "MDR_COREPER_CS00935",
+          "name": "Permanent Representation of Romania"
+        },
+        {
+          "code": "MDR_COREPER_CS00488",
+          "name": "Permanent Representation of Slovenia"
+        },
+        {
+          "code": "MDR_COREPER_CS00573",
+          "name": "Permanent Representation of Slovakia"
+        },
+        {
+          "code": "MDR_COREPER_560CS",
+          "name": "Permanent Representation of Finland"
+        },
+        {
+          "code": "MDR_COREPER_561CS",
+          "name": "Permanent Representation of Sweden"
+        }
+      ]
+    }
+  ]
+}

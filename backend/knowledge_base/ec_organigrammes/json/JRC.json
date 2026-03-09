@@ -1,405 +1,645 @@
 {
   "dg_code": "JRC",
   "dg_name": "Joint Research Centre",
-  "commissioner": "Ekaterina Zaharieva",
-  "date_of_effect": "2025-03-01",
-  "director_general": {
-    "name": "Bernard Magenhann",
-    "assistants": [
-      "Célia Doumerg"
-    ]
-  },
-  "deputy_director_general": {
-    "name": "Bernard Magenhann (Acting)",
-    "code": "JRC.G.1"
-  },
-  "adviser_for_strategy": {
-    "name": "Not shown"
-  },
-  "adviser_for_foresight_and_partnerships": {
-    "name": "Vacant"
-  },
-  "jrc_02": {
-    "name": "Expert Coordination",
-    "head": "Natasha Vollert",
-    "deputy": "Georgios Kosmopoulou"
-  },
+  "commissioner": "",
+  "director_general": "Bernard Magenhann",
+  "director_general_email": "Bernard.MAGENHANN@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Margot Möslinger",
+      "email": "Margot.MOSLINGER11@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Bernard Magenhann",
+      "email": "Bernard.MAGENHANN@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
   "directorates": [
     {
-      "code": "JRC.A",
-      "name": "Strategy and Impact",
-      "director": "Vacant",
+      "code": "Dir A",
+      "name": "STRATEGY AND IMPACT",
+      "director": "Sabine Henzler",
+      "director_email": "Sabine.Henzler@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.A.1",
-          "name": "EU Science and Knowledge Discovery",
-          "head": "Luis Calero",
-          "deputy": "Antoine Karmazs"
+          "code": "",
+          "name": "",
+          "head": "Jutta Thielen - Del Pozo",
+          "head_email": "Jutta.THIELEN-DEL-POZO@ec.europa.eu",
+          "head_phone": "+39 033278-5455"
         },
         {
-          "code": "JRC.A.2",
-          "name": "Science Policy and Coordination",
-          "head": "Alexandre Colas",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Loic Julien",
+          "head_email": "Loic.JULIEN@ec.europa.eu",
+          "head_phone": "+32 229-90882"
         },
         {
-          "code": "JRC.A.3",
-          "name": "Business Development and Research Infrastructure",
-          "head": "Marco Iozzo",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Valérie Enjolras",
+          "head_email": "Valerie.ENJOLRAS@ec.europa.eu",
+          "head_phone": "+32 229-69643"
         },
         {
-          "code": "JRC.A.4",
-          "name": "Territorial and Development",
-          "head": "Vacant",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Emanuela Bellan",
+          "head_email": "Emanuela.Bellan@ec.europa.eu",
+          "head_phone": "+32 229-53134"
         },
         {
-          "code": "JRC.A.5",
-          "name": "Innovation and Industry Sector and Components",
-          "head": "David Szauer",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Carina Røhl Søberg",
+          "head_email": "Carina-Rohl.SOBERG@ec.europa.eu",
+          "head_phone": "+39 033278-9018"
         },
         {
-          "code": "JRC.A.6",
-          "name": "Communications",
-          "head": "Valentina Marchi",
-          "deputy": "Not shown"
-        }
-    ]
-    },
-    {
-      "code": "JRC.B",
-      "name": "Life and Sustainable Economy",
-      "director": "Susanna Salminen",
-      "units": [
-        {
-          "code": "JRC.B.1",
-          "name": "Reference Materials and Measurements",
-          "head": "Beatrix Capernicus"
-        },
-        {
-          "code": "JRC.B.2",
-          "name": "Food, Science, Policy and Analysis",
-          "head": "Petra Kucova"
-        },
-        {
-          "code": "JRC.B.3",
-          "name": "Health and Consumer Products",
-          "head": "Maurice Whelan"
-        },
-        {
-          "code": "JRC.B.4",
-          "name": "Innovation Policy & Technology Transfer",
-          "head": "Luigi Antonio"
-        },
-        {
-          "code": "JRC.B.5",
-          "name": "EU Reference Lab",
-          "head": "Philippe Testud-Marquarey"
-        },
-        {
-          "code": "JRC.B.6",
-          "name": "Innovation R&D Water",
-          "head": "Simone Manfredi"
-        },
-        {
-          "code": "JRC.B.7",
-          "name": "Production Site & S.C.R.C. Plant",
-          "head": "Michel Berge De Rovira"
-        },
-        {
-          "code": "JRC.B.8",
-          "name": "Research and Innovation",
-          "head": "Francesco Peraudo"
+          "code": "",
+          "name": "",
+          "head": "Margareta Theelen",
+          "head_email": "Margareta.THEELEN@ec.europa.eu",
+          "head_phone": "+32 229-93184"
         }
       ]
     },
     {
-      "code": "JRC.C",
-      "name": "Energy, Climate and Change",
-      "director": "Not shown",
+      "code": "Dir G",
+      "name": "NUCLEAR SAFETY AND SECURITY",
+      "director": "Ulla Engelmann",
+      "director_email": "Ulla.ENGELMANN@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.C.1",
-          "name": "Energy Transition, Energy System",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Daniel Freis",
+          "head_email": "Daniel.FREIS@ec.europa.eu",
+          "head_phone": "+49 7247951-497"
         },
         {
-          "code": "JRC.C.2",
-          "name": "Renewable Energy and Energy System Analysis",
-          "head": "Georgios Kopanos"
+          "code": "",
+          "name": "",
+          "head": "Jette Pedersen",
+          "head_email": "Jette.PEDERSEN@ec.europa.eu",
+          "head_phone": "+49 7247951-289"
         },
         {
-          "code": "JRC.C.3",
-          "name": "Transport and Infrastructure",
-          "head": "Giacomo Lozzi"
+          "code": "",
+          "name": "",
+          "head": "Jaroslava Pravdova",
+          "head_email": "Jaroslava.Pravdova@ec.europa.eu",
+          "head_phone": "+49 7247951-402"
         },
         {
-          "code": "JRC.C.4",
-          "name": "Clean and Circular Economy",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Concetta Fazio",
+          "head_email": "Concetta.FAZIO@ec.europa.eu",
+          "head_phone": "+31 22456-5801"
         },
         {
-          "code": "JRC.C.5",
-          "name": "Energy and Environment Monitoring and Modelling",
-          "head": "Greet Janssens-Maenhout"
+          "code": "",
+          "name": "",
+          "head": "Rachel Eloirdi",
+          "head_email": "Rachel.ELOIRDI@ec.europa.eu",
+          "head_phone": "+49 7247951-382"
         },
         {
-          "code": "JRC.C.6",
-          "name": "Bio and Carbon Engineering and Climate",
-          "head": "Dan Popescu"
+          "code": "",
+          "name": "",
+          "head": "Arjan Plompen",
+          "head_email": "Arjan.PLOMPEN@ec.europa.eu",
+          "head_phone": "+32 1457-1381"
         },
         {
-          "code": "JRC.C.7",
-          "name": "Nuclear Security, Environment Radioactivity",
-          "head": "Viorica Lazanu"
+          "code": "",
+          "name": "",
+          "head": "Willem Janssens",
+          "head_email": "Willem.JANSSENS@ec.europa.eu",
+          "head_phone": "+39 033278-9939"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Wallenius",
+          "head_email": "Maria-S.Wallenius@ec.europa.eu",
+          "head_phone": "+49 7247951-373"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Margarida Goulart",
+          "head_email": "Margarida.GOULART@ec.europa.eu",
+          "head_phone": "+32 229-59817"
         }
       ]
     },
     {
-      "code": "JRC.D",
-      "name": "Sustainable Resources",
-      "director": "Not shown",
+      "code": "Dir J",
+      "name": "ISPRA SITE MANAGEMENT, NUCLEAR DECOMMISSIONING AND WASTE",
+      "director": "Laurent Jerrige",
+      "director_email": "Laurent.JERRIGE@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.D.1",
-          "name": "Earth Observation",
-          "head": "Pierre Soille"
+          "code": "",
+          "name": "",
+          "head": "Andrea Ravazzani",
+          "head_email": "Andrea.RAVAZZANI@ec.europa.eu",
+          "head_phone": "+39 033278-9228"
         },
         {
-          "code": "JRC.D.2",
-          "name": "Bio-Economy",
-          "head": "Davide Campolongo"
+          "code": "",
+          "name": "",
+          "head": "Laurent Jerrige",
+          "head_email": "Laurent.JERRIGE@ec.europa.eu",
+          "head_phone": "+39 033278-9183"
         },
         {
-          "code": "JRC.D.3",
-          "name": "Risk, Resilience and Global Food Security",
-          "head": "Andrea Pagano"
-        },
-        {
-          "code": "JRC.D.4",
-          "name": "Forest and Infrastructure and Support",
-          "head": "Eric Arets"
-        },
-        {
-          "code": "JRC.D.5",
-          "name": "Water Resources",
-          "head": "Fayçal Bouraoui"
-        },
-        {
-          "code": "JRC.D.6",
-          "name": "Rural Environmental Development and Forest",
-          "head": "Bénédicte Liegois"
-        },
-        {
-          "code": "JRC.D.7",
-          "name": "Food, Climate and Resilience",
-          "head": "Alois Frotschur"
+          "code": "",
+          "name": "",
+          "head": "Francesco Scaffidi-Argentina",
+          "head_email": "francesco.scaffidi-argentina@ec.europa.eu",
+          "head_phone": "+39 033278-5759"
         }
       ]
     },
     {
-      "code": "JRC.E",
-      "name": "Space, Security and Migration",
-      "director": "Not shown",
+      "code": "Dir T",
+      "name": "DIGITAL TRANSFORMATION, AI AND DATA",
+      "director": "Francesca Campolongo",
+      "director_email": "Francesca.CAMPOLONGO@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.E.1",
-          "name": "Global Security and Crisis Management",
-          "head": "Stefano Ferracuti"
+          "code": "",
+          "name": "",
+          "head": "Michele Vespe",
+          "head_email": "Michele.VESPE@ec.europa.eu",
+          "head_phone": ""
         },
         {
-          "code": "JRC.E.2",
-          "name": "Disaster Risk Management",
-          "head": "Luc Feyen"
+          "code": "",
+          "name": "",
+          "head": "Igor Nai Fovino",
+          "head_email": "Igor.NAI-FOVINO@ec.europa.eu",
+          "head_phone": "+39 033278-5809"
         },
         {
-          "code": "JRC.E.3",
-          "name": "European Laboratory for Structural Assessment",
-          "head": "Marco Domaneschi"
+          "code": "",
+          "name": "",
+          "head": "E. Alberto PENA Fernandez",
+          "head_email": "Alberto.Pena@ec.europa.eu",
+          "head_phone": "+34 854590-388"
         },
         {
-          "code": "JRC.E.4",
-          "name": "Nuclear Decommissioning and Waste Management",
-          "head": "Hamid Aït Abderrahim"
+          "code": "",
+          "name": "",
+          "head": "Matthew King",
+          "head_email": "Matthew.King@ec.europa.eu",
+          "head_phone": "+32 229-69914"
         },
         {
-          "code": "JRC.E.5",
-          "name": "Nuclear Reactor Systems and Fuel Cycle",
-          "head": "Alessandro Perego"
+          "code": "",
+          "name": "",
+          "head": "Celina Ramjoue",
+          "head_email": "Celina.RAMJOUE@ec.europa.eu",
+          "head_phone": "+39 033278-3787"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Philippe Bierlaire",
+          "head_email": "Philippe.Bierlaire@ec.europa.eu",
+          "head_phone": "+32 229-94682"
         }
       ]
     },
     {
-      "code": "JRC.F",
-      "name": "Health, Consumers and Reference Materials",
-      "director": "Not shown",
+      "code": "Dir R",
+      "name": "OPERATIONS AND SUPPORT MANAGEMENT",
+      "director": "Dan Chirondojan",
+      "director_email": "Dan-Claudiu.CHIRONDOJAN@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.F.1",
-          "name": "Health in Society, Disease Prevention",
-          "head": "Montse Gispert"
+          "code": "",
+          "name": "",
+          "head": "Fabio Taucer",
+          "head_email": "Fabio.TAUCER@ec.europa.eu",
+          "head_phone": "+32 229-63369"
         },
         {
-          "code": "JRC.F.2",
-          "name": "Chemicals Safety and Alternative Methods",
-          "head": "Maurice Whelan"
+          "code": "",
+          "name": "",
+          "head": "Soraya Baragano",
+          "head_email": "Soraya.BARAGANO@ec.europa.eu",
+          "head_phone": "+34 854590-566"
         },
         {
-          "code": "JRC.F.3",
-          "name": "Reference Materials and EU Reference Laboratories",
-          "head": "Martina Steliarov"
+          "code": "",
+          "name": "",
+          "head": "Lois Brett",
+          "head_email": "Lois.BRETT@ec.europa.eu",
+          "head_phone": "+3131 22456-506522456-5065"
         },
         {
-          "code": "JRC.F.4",
-          "name": "Consumer and Product Safety, Exposure",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Marc Wellens",
+          "head_email": "Marc.WELLENS@ec.europa.eu",
+          "head_phone": "+32 1457-1327"
         },
         {
-          "code": "JRC.F.5",
-          "name": "Precision Medicine, Early and Accurate Diagnosis",
-          "head": "Philippe Corbisier"
+          "code": "",
+          "name": "",
+          "head": "Jacqueline Ribeiro",
+          "head_email": "Jacqueline.RIBEIRO@ec.europa.eu",
+          "head_phone": "+49 7247951-356"
         },
         {
-          "code": "JRC.F.6",
-          "name": "Chemical, Biological, Radiological and Nuclear",
-          "head": "Ralf Kägi"
+          "code": "",
+          "name": "",
+          "head": "Stephanie Lutique",
+          "head_email": "Stephanie.LUTIQUE@ec.europa.eu",
+          "head_phone": "+39 033278-6601"
         },
         {
-          "code": "JRC.F.7",
-          "name": "E.U. Science Hub",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Romilda Manicolo",
+          "head_email": "Romilda.MANICOLO@ec.europa.eu",
+          "head_phone": "+39 033278-6612"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Iain Formosa",
+          "head_email": "Iain.FORMOSA@ec.europa.eu",
+          "head_phone": "+39 033278-6091"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Salvatore Ferraloro",
+          "head_email": "Salvatore.Ferraloro@ec.europa.eu",
+          "head_phone": "+32 229-60645"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Krzysztof Maruszewski",
+          "head_email": "Krzysztof.MARUSZEWSKI@ec.europa.eu",
+          "head_phone": "+39 033278-6514"
         }
       ]
     },
     {
-      "code": "JRC.G",
-      "name": "Innovation, Engineering and Research",
-      "director": "Not shown",
+      "code": "Dir B",
+      "name": "FAIR AND SUSTAINABLE ECONOMY",
+      "director": "Mikel Landabaso Alvarez",
+      "director_email": "Mikel.Landabaso@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.G.1",
-          "name": "Text and Data Mining",
-          "head": "Domenico Daniele"
+          "code": "",
+          "name": "",
+          "head": "Vincenzo Cardarelli",
+          "head_email": "Vincenzo.CARDARELLI@ec.europa.eu",
+          "head_phone": "+34 854590-235"
         },
         {
-          "code": "JRC.G.2",
-          "name": "Computational Physics",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Jessica Cariboni",
+          "head_email": "jessica.cariboni@ec.europa.eu",
+          "head_phone": "+39 033278-9372"
         },
         {
-          "code": "JRC.G.3",
-          "name": "Artificial Intelligence",
-          "head": "Erik Brilla-Thøgersen"
+          "code": "",
+          "name": "",
+          "head": "Salvador Barrios",
+          "head_email": "Salvador.BARRIOS@ec.europa.eu",
+          "head_phone": "+34 854590-244"
         },
         {
-          "code": "JRC.G.4",
-          "name": "Innovation for Digital Transformation",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Paolo Canfora",
+          "head_email": "Paolo.CANFORA@ec.europa.eu",
+          "head_phone": "+34 854590-233"
         },
         {
-          "code": "JRC.G.5",
-          "name": "Robotics",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Elena Montani",
+          "head_email": "Elena.MONTANI@ec.europa.eu",
+          "head_phone": "+32 229-68017"
         },
         {
-          "code": "JRC.G.6",
-          "name": "Knowledge for Digital Age",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Caroline Lambert",
+          "head_email": "caroline.lambert@ec.europa.eu",
+          "head_phone": "+34 854590-266"
         },
         {
-          "code": "JRC.G.7.1",
-          "name": "JRC Support Services (Geel)",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Asuncion Fernandez",
+          "head_email": "CARRETERO@ec.europa.eu",
+          "head_phone": "+34 854590-277"
         },
         {
-          "code": "JRC.G.8",
-          "name": "Admin-Interoperability and Blockchain",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Carlos Torrecilla Salinas",
+          "head_email": "Carlos.TORRECILLA-SALINAS@ec.europa.eu",
+          "head_phone": "+34 854590-288"
         }
       ]
     },
     {
-      "code": "JRC.I",
-      "name": "Competence Centre on Behavioural Insights",
-      "director": "Not shown"
-    },
-    {
-      "code": "JRC.T",
-      "name": "Text, Transformation for Agents",
-      "director": "Not shown"
-    },
-    {
-      "code": "JRC.R",
-      "name": "Finance, Services and Site Operations",
-      "director": "Not shown",
+      "code": "Dir C",
+      "name": "ENERGY, MOBILITY AND CLIMATE",
+      "director": "Piotr Szymanski",
+      "director_email": "Piotr.SZYMANSKI@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.R.1",
-          "name": "Finance and Accounting",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Christopher Hunter",
+          "head_email": "Christopher.HUNTER@ec.europa.eu",
+          "head_phone": "+31 22456-5268"
         },
         {
-          "code": "JRC.R.2",
-          "name": "Budget and Financial Management and Compliance",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Beatriz Acosta Iborra",
+          "head_email": "Beatriz.ACOSTA-IBORRA@ec.europa.eu",
+          "head_phone": "+31 22456-5435"
         },
         {
-          "code": "JRC.R.3",
-          "name": "IT and Knowledge Management and Services",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Christian Thiel",
+          "head_email": "Christian.THIEL@ec.europa.eu",
+          "head_phone": "+39 033278-9207"
         },
         {
-          "code": "JRC.R.4",
-          "name": "Contracts and Site Infrastructure",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Gianluca Fulli",
+          "head_email": "Gianluca.FULLI@ec.europa.eu",
+          "head_phone": "+39 033278-5377"
         },
         {
-          "code": "JRC.R.5",
-          "name": "Site Operations",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Giorgio Martini",
+          "head_email": "Giorgio.MARTINI@ec.europa.eu",
+          "head_phone": "+39 033278-9293"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ferenc Pekar",
+          "head_email": "Ferenc.PEKAR@ec.europa.eu",
+          "head_phone": "+39 033278-3925"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Antonio Soria Ramirez",
+          "head_email": "Antonio.SORIA@ec.europa.eu",
+          "head_phone": "+34 854590-299"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Evangelos Tzimas",
+          "head_email": "Evangelos.TZIMAS@ec.europa.eu",
+          "head_phone": "+31 22456-5149"
         }
       ]
     },
     {
-      "code": "JRC.S",
-      "name": "Ispra Site Operations and Services",
-      "director": "Not shown",
+      "code": "Dir D",
+      "name": "SUSTAINABLE RESOURCES",
+      "director": "Alessandra Zampieri",
+      "director_email": "Alessandra.Zampieri@ec.europa.eu",
       "units": [
         {
-          "code": "JRC.S.1",
-          "name": "Services for Ispra Site 1",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Greet Maenhout",
+          "head_email": "greet.maenhout@ec.europa.eu",
+          "head_phone": "+39 033278-5831"
         },
         {
-          "code": "JRC.S.2",
-          "name": "Services for Ispra Site 2",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Jann Martinsohn",
+          "head_email": "jann.martinsohn@ec.europa.eu",
+          "head_phone": "+39 033278-6567"
         },
         {
-          "code": "JRC.S.3",
-          "name": "Infrastructures, Maintenance and Compliance Ispra",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Serenella Sala",
+          "head_email": "Serenella.SALA@ec.europa.eu",
+          "head_phone": "+39 033278-6417"
         },
         {
-          "code": "JRC.S.4",
-          "name": "Technical Realization",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Giampiero Genovese",
+          "head_email": "Giampiero.GENOVESE@ec.europa.eu",
+          "head_phone": "+34 854590-322"
         },
         {
-          "code": "JRC.S.5",
-          "name": "Safety and Infrastructure for Site",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Francois Kayitakire",
+          "head_email": "Francois.KAYITAKIRE@ec.europa.eu",
+          "head_phone": "+39 033278-9298"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ivan Davor Kulis",
+          "head_email": "ivan-davor.kulis@ec.europa.eu",
+          "head_phone": "+39 033278-9759"
+        }
+      ]
+    },
+    {
+      "code": "Dir E",
+      "name": "SOCIETAL RESILIENCE AND SECURITY",
+      "director": "Georgios Giannopoulos",
+      "director_email": "Georgios.GIANNOPOULOS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Tom De Groeve",
+          "head_email": "Tom.DE-GROEVE@ec.europa.eu",
+          "head_phone": "+39 033278-6340"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Georgios Giannopoulos",
+          "head_email": "Georgios.GIANNOPOULOS@ec.europa.eu",
+          "head_phone": "+39 033278-6211"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francois Augendre",
+          "head_email": "Francois.Augendre@ec.europa.eu",
+          "head_phone": "+39 033278-9541"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bartel Meersman",
+          "head_email": "Bartel.MEERSMAN@ec.europa.eu",
+          "head_phone": "+32 1457-1404"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Fabiana Scapolo",
+          "head_email": "Fabiana.SCAPOLO@ec.europa.eu",
+          "head_phone": "+39 033278-9098"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paola Piccinini",
+          "head_email": "Paola.PICCININI@ec.europa.eu",
+          "head_phone": "+39 033278-9124"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dessislava Choumelova",
+          "head_email": "Dessislava.CHOUMELOVA@ec.europa.eu",
+          "head_phone": "+39 033278-6529"
+        }
+      ]
+    },
+    {
+      "code": "Dir F",
+      "name": "HEALTH AND FOOD",
+      "director": "Ciaran Nicholl",
+      "director_email": "Ciaran.NICHOLL@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sandra Caldeira",
+          "head_email": "Sandra.CALDEIRA@ec.europa.eu",
+          "head_phone": "+39 033278-3887"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Catherine Simoneau",
+          "head_email": "Catherine.SIMONEAU@ec.europa.eu",
+          "head_phone": "+39 033278-5889"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maurice Whelan",
+          "head_email": "Maurice.WHELAN@ec.europa.eu",
+          "head_phone": "+39 033278-6234"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lourdes Alvarellos",
+          "head_email": "Lourdes.ALVARELLOS@ec.europa.eu",
+          "head_phone": "+32 1457-1316"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ursula Vincent",
+          "head_email": "Ursula.VINCENT@ec.europa.eu",
+          "head_phone": "+32 1457-1207"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Robert Koeber",
+          "head_email": "Robert.KOEBER@ec.europa.eu",
+          "head_phone": "+32 1457-1952"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tobias Wiesenthal",
+          "head_email": "Tobias.WIESENTHAL@ec.europa.eu",
+          "head_phone": "+39 033278-6162"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Antje Collowald",
+          "head_email": "Antje.COLLOWALD@ec.europa.eu",
+          "head_phone": "+32 229-91847"
+        }
+      ]
+    },
+    {
+      "code": "Dir S",
+      "name": "INNOVATION IN SCIENCE AND POLICYMAKING",
+      "director": "Jolita Butkeviciene",
+      "director_email": "Jolita.BUTKEVICIENE@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Geraldine Barry",
+          "head_email": "Geraldine.Barry@ec.europa.eu",
+          "head_phone": "+32 229-90266"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Thomas Hemmelgarn",
+          "head_email": "Thomas.HEMMELGARN@ec.europa.eu",
+          "head_phone": "+32 229-56656"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "David Mair",
+          "head_email": "David.Mair@ec.europa.eu",
+          "head_phone": "+32 229-50489"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michaela Saisana",
+          "head_email": "michaela.saisana@ec.europa.eu",
+          "head_phone": "+39 033278-6572"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Koen Jonkers",
+          "head_email": "Koen.JONKERS@ec.europa.eu",
+          "head_phone": "+32 229-57113"
         }
       ]
     }
   ],
-  "notes": [
-    "D: Deputy to the Director",
-    "DG: Dir. D, Dept. with functional reporting to Directors with Directorate/heads in thematic/geographic",
-    "D1: Dir. E, Dept. with functional reporting to the Site Director of the JRC Petten and Karlsruhe sites",
-    "A: High administrative responsibility for the decommissioning teams directly attached to the Directors of Directorate E",
-    "Note: This organizational chart was very difficult to read comprehensively due to image quality and overlap of organizational elements"
-  ]
+  "num_directorates": 11,
+  "num_units": 76,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

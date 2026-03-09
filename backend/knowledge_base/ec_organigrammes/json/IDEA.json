@@ -1,0 +1,50 @@
+{
+  "dg_code": "IDEA",
+  "dg_name": "IDEA — Inspire, Debate, Engage and Accelerate Action",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Philippe Lamberts",
+          "head_email": "Philippe.LAMBERTS@ec.europa.eu",
+          "head_phone": "+32 229-82609"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "David Mueller",
+          "head_email": "David.MUELLER@ec.europa.eu",
+          "head_phone": "+32 229-60891"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Undine Ruge",
+          "head_email": "Undine.RUGE@ec.europa.eu",
+          "head_phone": "+32 229-59791"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Patricia Reilly",
+          "head_email": "Patricia.REILLY@ec.europa.eu",
+          "head_phone": "+32 229-57922"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 4,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

@@ -1,49 +1,518 @@
 {
   "dg_code": "CONNECT",
-  "dg_name": "Communications Networks, Content and Technology",
-  "full_name": "Directorate-General for Communications Networks, Content & Technology",
-  "date_of_effect": "2025-10-01",
-  "executive_vice_president": {
-    "name": "Henna Virkkunen",
-    "title": "Executive Vice-President"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "Roberto Viola",
-      "position": "Director-General",
-      "assistants": [
+  "dg_name": "Directorate-General for Communications Networks, Content and",
+  "commissioner": "",
+  "director_general": "Roberto Viola",
+  "director_general_email": "Roberto.VIOLA@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Jana Jakubová",
+      "email": "Jana.JAKUBOVA@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Thomas Skordas",
+      "email": "Thomas.Skordas@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Max Lemke",
+      "email": "Max.Lemke@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Renate Nikolay",
+      "email": "Renate.NIKOLAY@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Martin Dawson",
+      "email": "",
+      "responsibilities": ""
+    },
+    {
+      "name": "Despina Spanou",
+      "email": "Despina.SPANOU@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Witte Wijsmuller",
+      "director_email": "Witte.WIJSMULLER@ec.europa.eu",
+      "units": [
         {
-          "name": "Rana Jaakoura",
-          "role": "Assistant"
-        },
-        {
-          "name": "Mart Wijnholds van Leeuwen",
-          "role": "Assistant"
+          "code": "E, and Unit DDG1.01",
+          "name": "E, and Unit DDG1.01",
+          "head": "Dimitri Lorenzani",
+          "head_email": "Dimitri.LORENZANI@ec.europa.eu",
+          "head_phone": "+32 229-71174"
         }
       ]
     },
-    "deputy_director_generals": [
-      {
-        "name": "Thomas Skordas",
-        "position": "Deputy Director-General",
-        "responsibility": "In charge of directorates A, C, E"
-      },
-      {
-        "name": "Renata Nikolay",
-        "position": "Deputy Director-General",
-        "responsibility": "In charge of directorates B, D, F, G, I, H (acting)"
-      },
-      {
-        "name": "Despina Spanou",
-        "position": "Deputy Director-General",
-        "responsibility": "In charge of directorates H"
-      }
-    ]
-  },
-  "notes": [
-    "Reporting lines: R. Viola for Directorate R, Th. Skordas for Directorates A, C, E, R. Nikolay for Directorates B, D, F, G, I, R. Viola (Acting) for Directorate H",
-    "Seconded managers: L. Chapuis, Head of Unit seconded to Cabinet of High Representative for Foreign Affairs and Security Policy and Vice President Kallas",
-    "Union with Legal Personality markers present",
-    "Staff located in Luxembourg"
-  ]
+    {
+      "code": "Dir A",
+      "name": "ARTIFICIAL INTELLIGENCE OFFICE",
+      "director": "Lucilla Sioli",
+      "director_email": "Lucilla.SIOLI@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Cécile Huet",
+          "head_email": "Cecile.HUET@ec.europa.eu",
+          "head_phone": "+352 4301-36088"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Thierry Boulange",
+          "head_email": "Thierry.BOULANGE@ec.europa.eu",
+          "head_phone": "+32 229-65864"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Matthieu Delescluse",
+          "head_email": "Matthieu.DELESCLUSE@ec.europa.eu",
+          "head_phone": "+32 229-51321"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Malgorzata Nikowska",
+          "head_email": "Malgorzata.NIKOWSKA@ec.europa.eu",
+          "head_phone": "+32 229-50365"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Bailey",
+          "head_email": "Martin.BAILEY@ec.europa.eu",
+          "head_phone": "+32 229-69176"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Saila Rinne",
+          "head_email": "Saila.Rinne@ec.europa.eu",
+          "head_phone": "+352 4301-35446"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "ENABLING AND EMERGING TECHNOLOGIES",
+      "director": "Kilian Gross",
+      "director_email": "Kilian.Gross@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Grazyna Piesiewicz",
+          "head_email": "grazyna.PIESIEWICZ@ec.europa.eu",
+          "head_phone": "+352 4301-35239"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gustav Kalbe",
+          "head_email": "Gustav.Kalbe@ec.europa.eu",
+          "head_phone": "+352 4301-32866"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pierre Chastanet",
+          "head_email": "Pierre.CHASTANET@ec.europa.eu",
+          "head_phone": "+32 229-84557"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Aymard De Touzalin",
+          "head_email": "Aymard.DE-TOUZALIN@ec.europa.eu",
+          "head_phone": "+32 229-68540"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne-Marie Sassen",
+          "head_email": "Anne-marie.SASSEN@ec.europa.eu",
+          "head_phone": "+32 229-57923"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Viorel Peca",
+          "head_email": "Viorel.PECA@ec.europa.eu",
+          "head_phone": "+32 229-57843"
+        }
+      ]
+    },
+    {
+      "code": "Dir E",
+      "name": "FUTURE NETWORKS",
+      "director": "Thibaut Kleiner",
+      "director_email": "Thibaut.KLEINER@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Miguel Gonzalez-Sancho",
+          "head_email": "BODERO@ec.europa.eu",
+          "head_phone": "+32 229-52918"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Manuel Mateo Goyet",
+          "head_email": "Manuel.MATEO@ec.europa.eu",
+          "head_phone": "+32 229-62576"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Fabrizia Benini",
+          "head_email": "Fabrizia.Benini@ec.europa.eu",
+          "head_phone": "+32 229-66417"
+        },
+        {
+          "code": "G & I, and Unit DDG2.01",
+          "name": "G & I, and Unit DDG2.01",
+          "head": "Olivier Bringer",
+          "head_email": "Olivier.BRINGER@ec.europa.eu",
+          "head_phone": "+32 229-92067"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "DIGITAL DECADE AND CONNECTIVITY",
+      "director": "Kamila Kloc",
+      "director_email": "Kamila.KLOC@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Peter Stuckmann",
+          "head_email": "Peter.STUCKMANN@ec.europa.eu",
+          "head_phone": "+32 229-21097"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eric Peters",
+          "head_email": "Eric.PETERS@ec.europa.eu",
+          "head_phone": "+32 229-81205"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lucrezia Busa",
+          "head_email": "Lucrezia.BUSA@ec.europa.eu",
+          "head_phone": "+32 229-84760"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gerasimos Sofianatos",
+          "head_email": "Gerasimos.SOFIANATOS@ec.europa.eu",
+          "head_phone": "+32 229-88226"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Franco Accordino",
+          "head_email": "Franco.ACCORDINO@ec.europa.eu",
+          "head_phone": "+32 229-98272"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hervé Dupuy",
+          "head_email": "Herve.Dupuy@ec.europa.eu",
+          "head_phone": "+32 229-95258"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "ONLINE PLATFORMS: ECONOMY",
+      "director": "Rita Wezenbeek",
+      "director_email": "Rita.WEZENBEEK@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Irene Roche Laguna",
+          "head_email": "Irene.ROCHE-LAGUNA@ec.europa.eu",
+          "head_phone": "+32 229-62661"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Filomena Chirico",
+          "head_email": "Filomena.CHIRICO@ec.europa.eu",
+          "head_phone": "+32 229-95265"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Réka Horváth",
+          "head_email": "Reka.HORVATH@ec.europa.eu",
+          "head_phone": "+32 229-58647"
+        }
+      ]
+    },
+    {
+      "code": "Dir F",
+      "name": "ONLINE PLATFORMS: SOCIETY",
+      "director": "Prabhat Agarwal",
+      "director_email": "Prabhat.AGARWAL@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Marco Giorello",
+          "head_email": "Marco.GIORELLO@ec.europa.eu",
+          "head_phone": "+32 229-69563"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Prabhat Agarwal",
+          "head_email": "Prabhat.AGARWAL@ec.europa.eu",
+          "head_phone": "+32 229-87153"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Prabhat Agarwal",
+          "head_email": "Prabhat.AGARWAL@ec.europa.eu",
+          "head_phone": "+32 229-87153"
+        }
+      ]
+    },
+    {
+      "code": "Dir G",
+      "name": "DATA",
+      "director": "Yvo Volman",
+      "director_email": "Yvo.VOLMAN@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Bjoern Juretzki",
+          "head_email": "Bjoern.JURETZKI@ec.europa.eu",
+          "head_phone": "+352 4301-33508"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Rehana Schwinninger-Ladak",
+          "head_email": "LADAK@ec.europa.eu",
+          "head_phone": "+352 4301-32300"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tuuli-Maria Mattila",
+          "head_email": "Tuuli-Maria.MATTILA@ec.europa.eu",
+          "head_phone": "+352 4301-42007"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mikaela Farr-David",
+          "head_email": "Mikaela.Farr-David@ec.europa.eu",
+          "head_phone": "+352 4301-38085"
+        }
+      ]
+    },
+    {
+      "code": "Dir I",
+      "name": "MEDIA POLICY",
+      "director": "Giuseppe Abbamonte",
+      "director_email": "Giuseppe.Abbamonte@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Herold",
+          "head_email": "Anna.HEROLD@ec.europa.eu",
+          "head_phone": "+32 229-58022"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Emmanuelle Du Chalard",
+          "head_email": "Emmanuelle.DU-CHALARD@ec.europa.eu",
+          "head_phone": "+32 229-63354"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lucia Recalde Langarica",
+          "head_email": "Lucia.Recalde@ec.europa.eu",
+          "head_phone": "+32 229-91281"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Krisztina Stump",
+          "head_email": "Krisztina.STUMP@ec.europa.eu",
+          "head_phone": "+32 229-65995"
+        }
+      ]
+    },
+    {
+      "code": "Dir H",
+      "name": "CYBERSECURITY AND TRUST",
+      "director": "Christiane Kirketerp De Viron",
+      "director_email": "Christiane.KIRKETERP@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Svetlana Schuster",
+          "head_email": "Svetlana.SCHUSTER@ec.europa.eu",
+          "head_phone": "+32 229-75508"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christiane Kirketerp De Viron",
+          "head_email": "Christiane.KIRKETERP@ec.europa.eu",
+          "head_phone": "+32 229-97776"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christian Dcunha",
+          "head_email": "Christian.DCUNHA@ec.europa.eu",
+          "head_phone": "+32 229-62615"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Norbert Sagstetter",
+          "head_email": "Norbert.SAGSTETTER@ec.europa.eu",
+          "head_phone": "+352 4301-35460"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wojciech Saryusz-Wolski",
+          "head_email": "Wojciech.SARYUSZ-WOLSKI@ec.europa.eu",
+          "head_phone": "+32 229-53690"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ewelina Jelenkowska-Luca",
+          "head_email": "LUCA@ec.europa.eu",
+          "head_phone": "+32 229-93190"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Juha Heikkilä",
+          "head_email": "Juha.Heikkila@ec.europa.eu",
+          "head_phone": "+352 4301-35325"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kyriakos Baxevanidis",
+          "head_email": "Kyriakos.Baxevanidis@ec.europa.eu",
+          "head_phone": "+32 229-94016"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Philippe Gerard",
+          "head_email": "Philippe.GERARD@ec.europa.eu",
+          "head_phone": "+32 229-68644"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ilias Iakovidis",
+          "head_email": "Ilias.Iakovidis@ec.europa.eu",
+          "head_phone": "+32 229-52329"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "RESOURCES AND SUPPORT",
+      "director": "Anne Montagnon",
+      "director_email": "Anne.MONTAGNON@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Gregory Van Caenegem",
+          "head_email": "Gregory.VAN-CAENEGEM@ec.europa.eu",
+          "head_phone": "+32 229-59613"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marc Van Achter",
+          "head_email": "Marc.Van-Achter@ec.europa.eu",
+          "head_phone": "+32 229-64141"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christophe Chardonnet",
+          "head_email": "Christophe.CHARDONNET@ec.europa.eu",
+          "head_phone": "+32 229-90820"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Schauer",
+          "head_email": "Martin.SCHAUER@ec.europa.eu",
+          "head_phone": "+32 229-50070"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Elisabeth Lipiatou",
+          "head_email": "Elisabeth.Lipiatou@ec.europa.eu",
+          "head_phone": "+32 229-66286"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katleen Engelbosch",
+          "head_email": "Katleen.Engelbosch@ec.europa.eu",
+          "head_phone": "+32 229-54693"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Katrami",
+          "head_email": "Anna.KATRAMI@ec.europa.eu",
+          "head_phone": "+32 229-91870"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gerard De Graaf",
+          "head_email": "Gerrit.DE-GRAAF@ec.europa.eu",
+          "head_phone": "+1 202-8629500"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 11,
+  "num_units": 55,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

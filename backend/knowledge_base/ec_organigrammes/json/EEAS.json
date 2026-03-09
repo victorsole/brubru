@@ -1,0 +1,3383 @@
+{
+  "institution": "EEAS",
+  "source": "euwhoiswho_eeas.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 349,
+  "units": {
+    "European External Action Service": {
+      "name": "European External Action Service",
+      "persons": [
+        {
+          "name": "L41 C158 C115 Eeas",
+          "title": ""
+        }
+      ]
+    },
+    "Secretariat-General of the EEAS": {
+      "name": "Secretariat-General of the EEAS",
+      "persons": [
+        {
+          "name": "Rond Point Robert Schuman 9A / Robert Schumanplein 9A",
+          "title": ""
+        },
+        {
+          "name": "Belen Martinez Carbonell",
+          "title": "Secretary-General",
+          "email": "CARBONELL@eeas.europa.eu",
+          "phone": "+32 2584-6258"
+        },
+        {
+          "name": "Petra Gombalova",
+          "title": "Head of Office (Acting) -- To lead and manage the Division and -- the SG Office, by defining the expected -- results and ensuring that staff deliver the -- work required to implement the Division’s -- work programme in the context of SG’s -- mission and objectives. To include -- supporting the High Representative (HR/ -- VP), EEAS Secretary-General and EEAS -- Senior Management in achieving policy -- priorities through ensuring effective and -- efficient coordination, both EEAS internal -- and at the interinstitutional level (COMM, -- Council, GSC).",
+          "email": "Petra.GOMBALOVA@eeas.europa.eu",
+          "phone": "+32 2584-3013"
+        }
+      ]
+    },
+    "Policy Coordination": {
+      "name": "Policy Coordination",
+      "persons": [
+        {
+          "name": "Petra Gombalova",
+          "title": "Head of Division -- To lead and manage the Division and -- the SG Office, by defining the expected -- results and ensuring that staff deliver the -- work required to implement the Division’s -- work programme in the context of SG’s -- mission and objectives. To include -- supporting the High Representative (HR/ -- VP), EEAS Secretary-General and EEAS -- Senior Management in achieving policy -- priorities through ensuring effective and -- efficient coordination, both EEAS internal -- and at the interinstitutional level (COMM, -- Council, GSC).",
+          "email": "Petra.GOMBALOVA@eeas.europa.eu",
+          "phone": "+32 2584-3013"
+        }
+      ]
+    },
+    "Mediator": {
+      "name": "Mediator",
+      "persons": [
+        {
+          "name": "Loic Lallemand Zeller",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of the Mediation -- Service’s mission and objectives, while -- enabling the staff to develop their -- potential.",
+          "email": "Loic.LALLEMAND-ZELLER@eeas.europa.eu",
+          "phone": "+32 2584-2344"
+        }
+      ]
+    },
+    "Parliamentary Affairs": {
+      "name": "Parliamentary Affairs",
+      "persons": [
+        {
+          "name": "Marco Piantini",
+          "title": "Head of Division -- To lead and manage the Division, -- namely to ensure overall coordination -- of parliamentary affairs-related activities -- in the EEAS, as well as managing the -- interinstitutional relations. To provide -- professional support and political advice -- to the High Representative /Vice- -- President (HR/VP), including preparation -- of his parliamentary activities.",
+          "email": "Marco.PIANTINI@eeas.europa.eu",
+          "phone": "+32 2584-4488"
+        }
+      ]
+    },
+    "Protocol": {
+      "name": "Protocol",
+      "persons": [
+        {
+          "name": "Lucie Samcova - Hall Allen",
+          "title": "",
+          "email": "Lucie.SAMCOVA@eeas.europa.eu",
+          "phone": "+32 2584-4913"
+        }
+      ]
+    },
+    "Department": {
+      "name": "Department",
+      "persons": [
+        {
+          "name": "Frank Hoffmeister",
+          "title": "Director -- -",
+          "email": "Frank.HOFFMEISTER@eeas.europa.eu",
+          "phone": "+32 2584-2843"
+        }
+      ]
+    },
+    "Law": {
+      "name": "Law",
+      "persons": [
+        {
+          "name": "Lorant Havas",
+          "title": "Head of Division -- To lead and manage the work of the -- Division for EU External Relations Law -- and Public International Law, by defining -- the expected results and ensuring -- its staff delivers the work required to -- implement the Division’s work program -- in the context of the EEAS mission and -- objectives, while enabling the staff to -- develop their potential.",
+          "email": "Lorant.HAVAS@eeas.europa.eu",
+          "phone": "+32 2584-2468"
+        }
+      ]
+    },
+    "EU Civil Service Law": {
+      "name": "EU Civil Service Law",
+      "persons": [
+        {
+          "name": "Karim Kouri",
+          "title": "Head of Division -- Head of Division",
+          "email": "Karim.KOURI@eeas.europa.eu",
+          "phone": "+32 2584-3091"
+        }
+      ]
+    },
+    "DG RM — DIRECTORATE-GENERAL FOR RESOURCE MANAGEMENT": {
+      "name": "DG RM — DIRECTORATE-GENERAL FOR RESOURCE MANAGEMENT",
+      "persons": [
+        {
+          "name": "Kristin De Peyron",
+          "title": "Director-General -- Responsible for the administrative, -- budgetary, infrastructure, IT and -- security management of the External -- Service both at Headquarters and -- in the Delegations’ network (aside -- those responsibilities falling under the -- Crisis Response Centre). This includes -- oversight of all Directorates in the -- Directorate-General, as well as ensuring -- efficient cooperation between them and -- with the other Service’s Departments -- and the Delegations.",
+          "email": "Kristin.DE-PEYRON@eeas.europa.eu",
+          "phone": "+32 2584-7597"
+        }
+      ]
+    },
+    "Coordination": {
+      "name": "Coordination",
+      "persons": [
+        {
+          "name": "Francesco Caleprico",
+          "title": "Head of Division -- Diriger et gérer la Division, en définissant -- les résultats attendus et en veillant -- à ce que son personnel fournisse le -- travail requis pour mettre en œuvre le -- programme de travail de la Division dans -- le cadre de la mission et des objectifs -- de la Direction, tout en permettant au -- personnel de développer son potentiel.",
+          "email": "Francesco.CALEPRICO@eeas.europa.eu",
+          "phone": "+32 2584-7536"
+        }
+      ]
+    },
+    "Human Resources": {
+      "name": "Human Resources",
+      "persons": [
+        {
+          "name": "Elsa Fenet",
+          "title": "Director -- Provide the overall strategic orientation -- and management of the Directorate, -- within the framework set by the mission -- statement and the annual work program -- of the Directorate General. The -- Directorate operates under the direct -- supervision of the Director-General -- and manages all the staff of the EEAS -- (Headquarters and Delegations)as well -- the administrative budget.",
+          "email": "Elsa.FENET@eeas.europa.eu",
+          "phone": "+32 2584-2976"
+        }
+      ]
+    },
+    "Management": {
+      "name": "Management",
+      "persons": [
+        {
+          "name": "David Hallonsten",
+          "title": "Head of Division -- Préparer le budget du SEAE, assurer -- sa bonne exécution, veiller à la clôture -- comptable.",
+          "email": "David.Hallonsten@eeas.europa.eu",
+          "phone": "+32 2584-3483"
+        },
+        {
+          "name": "Paola Casini",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- mission and objectives in the context -- of the Department’s work program, -- while enabling the staff to develop their -- potential.",
+          "email": "Paola.CASINI@eeas.europa.eu",
+          "phone": "+32 2584-3112"
+        },
+        {
+          "name": "Cosmin Dobran",
+          "title": "Director -- To provide overall strategic orientation -- and management of the Directorate, -- within the framework set by the -- Directorate’s-General (or Department) -- mission statement and annual work -- programme. The Directorate operates -- under the direct supervision of the -- Director-General / Managing Director.",
+          "email": "Cosmin.DOBRAN@eeas.europa.eu",
+          "phone": "+32 2584-2889"
+        }
+      ]
+    },
+    "Selection and Recruitment": {
+      "name": "Selection and Recruitment",
+      "persons": [
+        {
+          "name": "Ulrike Hauer",
+          "title": "Head of Division -- - Overall coordination, direction and -- management of the Division",
+          "email": "Ulrike.Hauer@eeas.europa.eu",
+          "phone": "+32 2584-2374"
+        }
+      ]
+    },
+    "Diplomatic Academy": {
+      "name": "Diplomatic Academy",
+      "persons": [
+        {
+          "name": "Charles-Michel Geurts",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Charles-Michel.GEURTS@eeas.europa.eu",
+          "phone": "+32 2584-5118"
+        }
+      ]
+    },
+    "Local Agents": {
+      "name": "Local Agents",
+      "persons": [
+        {
+          "name": "Pierre Luan Nguyen",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Pierre-Luan.NGUYEN@eeas.europa.eu",
+          "phone": "+32 2584-2473"
+        }
+      ]
+    },
+    "Support to Delegations": {
+      "name": "Support to Delegations",
+      "persons": [
+        {
+          "name": "Kai Holst Andersen",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Kai-Holst.ANDERSEN@eeas.europa.eu",
+          "phone": "+32 2584-4138"
+        }
+      ]
+    },
+    "Corporate Services": {
+      "name": "Corporate Services",
+      "persons": [
+        {
+          "name": "Joanna Krzeminska-Vamvaka",
+          "title": "",
+          "email": "Joanna.KRZEMINSKA@ec.europa.eu"
+        }
+      ]
+    },
+    "Contracts and Finance": {
+      "name": "Contracts and Finance",
+      "persons": [
+        {
+          "name": "Pasqualino Battista",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of the “Entity”’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Pasqualino.BATTISTA@eeas.europa.eu",
+          "phone": "+32 2584-3053"
+        }
+      ]
+    },
+    "Security Policy": {
+      "name": "Security Policy",
+      "persons": [
+        {
+          "name": "Khaldoun Sinno",
+          "title": "Head of Division -- To lead and manage the Division in -- charge to protect EEAS Staff, visitors, -- premises and physical assets in Brussels -- and classified information relevant to the -- EEAS by ensuring that the appropriate -- security measures and procedures are -- put in place.",
+          "email": "Khaldoun.SINNO@eeas.europa.eu",
+          "phone": "+32 2584-3511"
+        }
+      ]
+    },
+    "Secure Communications": {
+      "name": "Secure Communications",
+      "persons": [
+        {
+          "name": "Roeland Lacroix",
+          "title": "Head of Division -- Diriger et gérer la division en définissant -- les résultats escomptés et en veillant à -- ce que son personnel accomplisse le -- travail nécessaire à la mise en œuvre du -- programme de travail de la division dans -- le contexte de la mission et des objectifs -- du directorat, tout en permettant au -- personnel de développer son potentiel.",
+          "email": "Roeland.LACROIX@eeas.europa.eu",
+          "phone": "+32 2584-2700"
+        }
+      ]
+    },
+    "Digital solutions": {
+      "name": "Digital solutions",
+      "persons": [
+        {
+          "name": "Herman Brand",
+          "title": "Head of Division -- Assurer un niveau d’équipement -- informatique de qualité pour le SEAE.",
+          "email": "Herman.BRAND@eeas.europa.eu",
+          "phone": "+32 2584-5034"
+        }
+      ]
+    },
+    "Greening": {
+      "name": "Greening",
+      "persons": [
+        {
+          "name": "Francesco Fini",
+          "title": "Head of Division -- To lead and manage the Division by -- defining the expected results and -- implementing the Division’s work -- programme in the context of DG RM -- and the Directorate’s mission and -- objectives, through the optimal use of -- the available resources while enabling -- the staff to develop their potential. -- Overall coordination, management and -- representation of the Division. Relations -- with internal and external stakeholders. -- Coordination of the eleven teams of the -- Division.",
+          "email": "Francesco.FINI@eeas.europa.eu",
+          "phone": "+32 2584-2658"
+        }
+      ]
+    },
+    "economic and global issues": {
+      "name": "economic and global issues",
+      "persons": [
+        {
+          "name": "Matti Maasikas",
+          "title": "",
+          "email": "Matti.MAASIKAS@eeas.europa.eu",
+          "phone": "+32 2584-4117"
+        }
+      ]
+    },
+    "Response Centre": {
+      "name": "Response Centre",
+      "persons": [
+        {
+          "name": "Christian Berger",
+          "title": "",
+          "email": "Christian.BERGER@eeas.europa.eu",
+          "phone": "+32 2584-2498"
+        }
+      ]
+    },
+    "Situation Room": {
+      "name": "Situation Room",
+      "persons": [
+        {
+          "name": "Georgios Kritikos",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of the “Entity”’s -- mission and objectives, while enabling -- the staff to develop their potential.es",
+          "email": "Georgios.KRITIKOS@eeas.europa.eu",
+          "phone": "+32 2584-2163"
+        }
+      ]
+    },
+    "Consular Affairs": {
+      "name": "Consular Affairs",
+      "persons": [
+        {
+          "name": "Terhi Lehtinen",
+          "title": "Head of Division -- To lead and manage the Consular Affairs -- Division by defining the expected results -- and ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Terhi.LEHTINEN@eeas.europa.eu",
+          "phone": "+32 2584-5177"
+        }
+      ]
+    },
+    "Field Security": {
+      "name": "Field Security",
+      "persons": [
+        {
+          "name": "Kestutis Jankauskas",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results -- and ensuring its staff delivers the -- work required to implement it’s work -- programme, in the context of DG BA and -- the Directorate’s mission and objectives. -- This is accomplished through making the -- optimal use of the available resources, -- while enabling the staff to develop their -- potential.",
+          "email": "Kestutis.JANKAUSKAS@eeas.europa.eu",
+          "phone": "+7 717297-4557"
+        }
+      ]
+    },
+    "Governance": {
+      "name": "Governance",
+      "persons": [
+        {
+          "name": "Gianmarco Di Vita",
+          "title": "",
+          "email": "Gianmarco.Di-Vita@eeas.europa.eu",
+          "phone": "+32 2584-8846"
+        },
+        {
+          "name": "Gianmarco Di Vita",
+          "title": "",
+          "phone": "+32 2584-8846"
+        }
+      ]
+    },
+    "Inspection Service": {
+      "name": "Inspection Service",
+      "persons": [
+        {
+          "name": "Tom Vens",
+          "title": "Head of Division -- To assist the Secretary General to fulfil -- the requirements of the Lisbon Treaty -- Art. 5(5), namely \"The operation of -- each Delegation shall be periodically -- evaluated by the Executive Secretary -- General\". To lead and manage the -- Division, to plan and coordinate the -- inspection missions to EU Delegations, -- to ensure the quality of inspection -- reports.",
+          "email": "Tom.VENS@eeas.europa.eu",
+          "phone": "+32 2584-1819"
+        }
+      ]
+    },
+    "Internal Audit": {
+      "name": "Internal Audit",
+      "persons": [
+        {
+          "name": "Claudia Salustri",
+          "title": "Head of Division -- To lead and manage an independent -- internal audit Division, providing auditing -- and consulting services as well as ex- -- post controls, by defining the expected -- results and ensuring its staff delivers -- the work required to implement the -- Division’s work program in the context of -- the directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Claudia.SALUSTRI@eeas.europa.eu",
+          "phone": "+32 2584-6591"
+        }
+      ]
+    },
+    "compliance": {
+      "name": "compliance",
+      "persons": [
+        {
+          "name": "Alessio Silva",
+          "title": "Head of Division -- Management of the Planning, Reporting -- and Compliance Division (SG.GOV.3) -- in the EEAS Corporate Governance -- Service (SG.GOV).",
+          "email": "alessio.silva@eeas.europa.eu",
+          "phone": "+32 2584-7933"
+        },
+        {
+          "name": "Francisco Fontan",
+          "title": "",
+          "email": "Francisco.FONTAN@eeas.europa.eu",
+          "phone": "+32 2584-5074"
+        }
+      ]
+    },
+    "Communication": {
+      "name": "Communication",
+      "persons": [
+        {
+          "name": "Olivier Bailly",
+          "title": "Managing Director -- Support HRVP in implementing -- EU’s foreign policy with regards to -- Global affairs in coordination with EU -- Delegations, other EU institutions -- and EU Member States, as well -- as overall political and strategic -- orientation. Responsible for department’s -- administrative, human resource and -- budgetary management including -- oversight of all EU Delegations in its -- region.",
+          "email": "Olivier.BAILLY@eeas.europa.eu",
+          "phone": "+32 2584-2181"
+        },
+        {
+          "name": "Matthew Reece",
+          "title": "Director -- To provide overall strategic orientation -- and management of the Directorate -- within the framework set by the -- Secretary-General’s mission statement -- and annual work programme.",
+          "email": "Matthew.REECE@eeas.europa.eu",
+          "phone": "+32 2584-6305"
+        }
+      ]
+    },
+    "Issues": {
+      "name": "Issues",
+      "persons": [
+        {
+          "name": "Taneli Lahti",
+          "title": "",
+          "email": "Taneli.LAHTI@ec.europa.eu",
+          "phone": "+32 2584-4672"
+        }
+      ]
+    },
+    "Global Health": {
+      "name": "Global Health",
+      "persons": [
+        {
+          "name": "Oronzo Console",
+          "title": "Head of Division -- The Head of Division Global 2’s -- overall purpose is to ensure that the -- EU’s foreign policy is equipped to -- tackle a number of pressing global -- challenges, revolving around economic -- issues, energy, culture, climate and -- environment. The overriding objective -- is to improve the integration of these -- subjects — all of which link European -- values inextricably with European -- interests — into the EU’s relations -- with countries, regions and multilateral -- bodies worldwide. Aiming to ensure -- maximum coherence between internal -- and external policies, and serving as -- a point of interface between the EEAS -- and Commission services, the Division’s -- purpose is directly guided by the EU -- Global Strategy.",
+          "email": "Oronzo.CONSOLE@eeas.europa.eu",
+          "phone": "+32 2584-3458"
+        }
+      ]
+    },
+    "Transition": {
+      "name": "Transition",
+      "persons": [
+        {
+          "name": "David Ringrose",
+          "title": "Head of Division -- Working in close cooperation with -- the Commission, EU Delegations -- and Member States, ensure that the -- EU’s Foreign and Security Policy fully -- integrate digital issues and strategic -- investments as key geopolitical -- developments, and developstrategies to -- tackle these challenges.",
+          "email": "David.RINGROSE@eeas.europa.eu",
+          "phone": "+32 2584-2859"
+        }
+      ]
+    },
+    "Green Transition": {
+      "name": "Green Transition",
+      "persons": [
+        {
+          "name": "Bruno Scholl",
+          "title": "Head of Division -- The Head of the Green Green Transition -- Division, GLOBAL GI 3, embedded in -- the Directorate for \"Global Issues\" has a -- broad mandate to lead and steer work on -- the external dimension of the EU Green -- Deal, with global scope. It has -as an -- overall purpose- to ensure that the EU -- foreign and security policy is equipped -- to tackle pressing global challenges -- related to green transition, including its -- geopolitical impact and relations with -- partners, in both bilateral and multilateral -- settings. The Head shall ensure that the -- Division fulfills its responsibilities as the -- focal point within the EEAS for policy -- making, guidance and information on -- the external dimension of the Green -- Deal notably on energy, climate and -- environment. As an overriding objective -- the Head shall constantly improve the -- integration of these aspects into the EU’s -- relations with countries, regions and -- multilateral bodies worldwide.",
+          "email": "Bruno.SCHOLL@eeas.europa.eu",
+          "phone": "+32 2584-4222"
+        }
+      ]
+    },
+    "Security": {
+      "name": "Security",
+      "persons": [
+        {
+          "name": "Mercedes Garcia Perez",
+          "title": "Head of Division -- To determine, formulate and coordinate -- policies and provide overall direction to -- the Unit in charge of Economic Analysis, -- on the basis of the DG RELEX work -- programme.",
+          "email": "Mercedes.GARCIA-PEREZ@eeas.europa.eu",
+          "phone": "+32 2584-3365"
+        },
+        {
+          "name": "Marek Kollarik",
+          "title": "",
+          "email": "Marek.KOLLARIK@eeas.europa.eu",
+          "phone": "+32 2584-9547"
+        }
+      ]
+    },
+    "Cooperation": {
+      "name": "Cooperation",
+      "persons": [
+        {
+          "name": "Eric Dejoie",
+          "title": "Head of Division -- The Head of Financing Instruments -- and International Cooperation (Gl.5) -- supports HRVP supports in his double -- mandate (and as chair of the FAC/ -- DEV), and — with regard to multiannual -- programming of NDICI-Global Europe- -- the Commissioners responsible for the -- neighbourhood and non-neighbourhood -- region. He leads and manages GLOBAL -- GI 5 and aims to ensure that EU -- international policy and cooperation is -- an integral part of EU external action -- including the Team Europe approach -- and coordinates within EEAS external -- financing instruments and programming -- including the NDICI — Global Europe -- instrument and budgetary issues. He -- acts as interface with Member States, -- the Council and relevant services of -- the European Commission (especially -- INTPA, NEAR, FPI, ECHO, SG and -- BUDG) and coordinates with the relevant -- Commission services the multi-annual -- programming of EU external financing -- assistance and related-budgetary -- issues (Heading 6). He also provides -- support and coordinates within EEAS -- the institutional engagement on the -- key financing modalities for external -- assistance including EFSD+ and budget -- support and acts as EEAS focal point of -- the humanitarian-development-peace -- nexus approach in fragile and conflict- -- affected countries. He coordinates the -- EU geopolitical response and global -- action relevant to the developing world -- and \"global South\", in particularly the -- reform and engagement with the IFIs -- and multilateral development banks, -- Global food security, the SDGs and -- engagement in fragile and estranged -- contexts. He provides operational -- support to Global Gateway and -- Economic Investment Plans. GI5 works -- closely with Member States and the -- European Parliament, as well as with -- international organisations (in particular -- UN and IFIs), academia, think tanks and -- civil society organisations.",
+          "email": "Eric.DEJOIE@eeas.europa.eu",
+          "phone": "+32 2584-4544"
+        },
+        {
+          "name": "Eduard Auer",
+          "title": "Head of Division -- To lead and manage the Division by -- defining the expected results and -- ensuring the staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Eduard.AUER@eeas.europa.eu",
+          "phone": "+32 2584-3308"
+        }
+      ]
+    },
+    "Strategic Foresight": {
+      "name": "Strategic Foresight",
+      "persons": [
+        {
+          "name": "Alexandros Yannis",
+          "title": "",
+          "email": "Alexandros.YANNIS@eeas.europa.eu",
+          "phone": "+32 2584-8112"
+        }
+      ]
+    },
+    "and Public Diplomacy": {
+      "name": "and Public Diplomacy",
+      "persons": [
+        {
+          "name": "Luca Eszter Kadar",
+          "title": "Head of Division -- To lead and manage the division, -- by planning, delivering the expected -- results and ensuring that all staff -- contributes to implement the Division`s -- work programme in the context of the -- Division`s mission, while ensuring staff -- engagement and enabling them to -- develop their potential.",
+          "email": "Luca.KADAR@eeas.europa.eu",
+          "phone": "+32 2584-2390"
+        }
+      ]
+    },
+    "Forces": {
+      "name": "Forces",
+      "persons": [
+        {
+          "name": "Andrea Matteo Fontana",
+          "title": "Head of Division -- To lead and manage the Division, by -- planning, delivering the expected results -- and ensuring that all staff contributes to -- implement the Division’s work program -- in the context of the Division’s mission, -- while ensuring staff engagement and -- enabling them to develop their potential.",
+          "email": "Andrea.FONTANA@eeas.europa.eu",
+          "phone": "+32 2584-3764"
+        }
+      ]
+    },
+    "and Interference": {
+      "name": "and Interference",
+      "persons": [
+        {
+          "name": "Filip Grzegorzewski",
+          "title": "Head of Division -- Overall management and direction of the -- Division",
+          "email": "Filip.GRZEGORZEWSKI@eeas.europa.eu",
+          "phone": "+32 2584-5228"
+        }
+      ]
+    },
+    "Principal Adviser — Energy": {
+      "name": "Principal Adviser — Energy",
+      "persons": [
+        {
+          "name": "Tibor Stelbaczky",
+          "title": "Principal Adviser -- • To further scale up EEAS engagement -- on energy-related matters, in order to -- better position the EU globally; • To -- maintain close contacts with relevant EU -- Member State authorities, in particular -- Foreign Ministries, while working -- closely with key third countries and -- international partners and organisations; -- • To reinforce at senior level EEAS -- cooperation with COM, Council, EP, EU -- Agencies.",
+          "email": "Tibor.STELBACZKY@eeas.europa.eu",
+          "phone": "+32 2584-3325"
+        }
+      ]
+    },
+    "Principal Adviser — Climate": {
+      "name": "Principal Adviser — Climate",
+      "persons": [
+        {
+          "name": "Anthony Agotha",
+          "title": "",
+          "email": "Anthony.AGOTHA@eeas.europa.eu",
+          "phone": "+32 2584-4100"
+        },
+        {
+          "name": "Riina Kionka",
+          "title": "",
+          "email": "Riina.KIONKA@eeas.europa.eu",
+          "phone": "+32 2584-7374"
+        }
+      ]
+    },
+    "Principal Adviser — Critical": {
+      "name": "Principal Adviser — Critical",
+      "persons": [
+        {
+          "name": "Luc Pierre Devigne",
+          "title": "",
+          "email": "Luc.Devigne@eeas.europa.eu",
+          "phone": "+32 2584-9187"
+        }
+      ]
+    },
+    "Ambassador for Equality": {
+      "name": "Ambassador for Equality",
+      "persons": [
+        {
+          "name": "Aude Maio-Coliche",
+          "title": "",
+          "email": "Aude.MAIO-COLICHE@eeas.europa.eu",
+          "phone": "+32 2584-2636"
+        },
+        {
+          "name": "Julia Koch-De Biolley",
+          "title": "Head of Task Force -- Overall coordination, direction and -- management of the Task Force. -- Supporting the EEAS Ambassador for -- Equality in implementing Art. 19 TFEU -- and ensuring that equality and non- -- discrimination are fully integrated into -- all aspects of the EEAS internal and -- external action.",
+          "email": "Julia.KOCH@eeas.europa.eu",
+          "phone": "+32 2584-3149"
+        },
+        {
+          "name": "Ignacio Ybanez",
+          "title": "",
+          "email": "IGNACIO.YBANEZ@eeas.europa.eu",
+          "phone": "+32 2584-3941"
+        }
+      ]
+    },
+    "political affairs": {
+      "name": "political affairs",
+      "persons": [
+        {
+          "name": "Olof Skoog",
+          "title": "Deputy Secretary-General",
+          "email": "Olof.SKOOG@eeas.europa.eu",
+          "phone": "+32 2584-4398"
+        }
+      ]
+    },
+    "Africa": {
+      "name": "Africa",
+      "persons": [
+        {
+          "name": "Patricia Llombart Cussac",
+          "title": "Managing Director",
+          "email": "CUSSAC@eeas.europa.eu",
+          "phone": "+32 2584-9919"
+        },
+        {
+          "name": "Helene Le Gal",
+          "title": "Managing Director",
+          "email": "Helene.LE-GAL@eeas.europa.eu",
+          "phone": "+32 2584-3901"
+        }
+      ]
+    },
+    "Managing Director": {
+      "name": "Managing Director",
+      "persons": [
+        {
+          "name": "Aude Maio-Coliche",
+          "title": "Acting Director -- To provide overall strategic orientation -- and management of the Directorate, with -- specific responsibilities for the whole of -- the African Region, within the framework -- set by the mission statement and annual -- work programme of the Department. -- The Director has a particular role in -- the oversight of the management and -- performance of the Delegations in the -- region for which he is responsible. -- The Directorate operates under direct -- supervision of the Managing Director.",
+          "email": "Aude.MAIO-COLICHE@eeas.europa.eu",
+          "phone": "+32 2584-2636"
+        },
+        {
+          "name": "Pelayo Castro",
+          "title": "Deputy Managing Director — Americas -- To provide overall strategic orientation -- and management of the Directorate, -- within the framework set by the -- Directorate’s-General (or Department) -- mission statement and annual work -- programme. The Directorate operates -- under the direct supervision of the -- Managing Director.",
+          "email": "Pelayo.CASTRO@eeas.europa.eu",
+          "phone": "+32 2584-2959"
+        },
+        {
+          "name": "Paola Pampaloni",
+          "title": "Director -- To provide overall strategic orientation -- and management of RELEX.H, with -- specific responsibilities for Asia (except -- Japan and Korea), within the framework -- set by the Directorate’s-General mission -- statement and annual work programme. -- The Directorate operates under the -- direct supervision of the Director- -- General / Deputy Director-General",
+          "email": "Paola.Pampaloni@eeas.europa.eu",
+          "phone": "+32 2584-3825"
+        },
+        {
+          "name": "Rosamaria Gili",
+          "title": "Director -- To provide overall strategic orientation -- and management of Directorate IV -- A, with specific responsibilities for -- North Africa, the Middle East, Arabian -- Peninsula, Iran and Iraq, within the -- framework set by the Managing -- Department’s mission statement and -- annual work programme. The Directorate -- operates under the direct supervision of -- the Managing Director",
+          "email": "Rosamaria.GILI@eeas.europa.eu",
+          "phone": "+32 2584-2880"
+        },
+        {
+          "name": "Kirsi Henriksson",
+          "title": "Deputy Managing Director — Deputy -- Civilian Operations Commander -- To provide overall strategic orientation -- and management of the Managing -- Directorate, within the framework set -- by the Directorate’s-General mission -- statement and annual work programme. -- The Managing Directorate operates -- under the direct supervision of the -- Managing Director.",
+          "email": "Kirsi.HENRIKSSON@eeas.europa.eu",
+          "phone": "+32 2584-4369"
+        }
+      ]
+    },
+    "Pan-African Affairs": {
+      "name": "Pan-African Affairs",
+      "persons": [
+        {
+          "name": "Nicola Bellomo",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Nicola.BELLOMO@eeas.europa.eu",
+          "phone": "+32 2584-3279"
+        }
+      ]
+    },
+    "Indian Ocean": {
+      "name": "Indian Ocean",
+      "persons": [
+        {
+          "name": "Amador Sanchez Rico",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of the “Entity”’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Amador.SANCHEZ-RICO@eeas.europa.eu",
+          "phone": "+32 2584-6326"
+        }
+      ]
+    },
+    "West Africa": {
+      "name": "West Africa",
+      "persons": [
+        {
+          "name": "Jolita Pons",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Jolita.PONS@eeas.europa.eu",
+          "phone": "+32 2584-7265"
+        }
+      ]
+    },
+    "Central Africa": {
+      "name": "Central Africa",
+      "persons": [
+        {
+          "name": "Paolo Berizzi",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Paolo.BERIZZI@eeas.europa.eu",
+          "phone": "+32598 2584-6341219440-145"
+        }
+      ]
+    },
+    "Horn of Africa, East Africa": {
+      "name": "Horn of Africa, East Africa",
+      "persons": [
+        {
+          "name": "Jonas Jonsson",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of Directorate’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Jonas.JONSSON@eeas.europa.eu",
+          "phone": "+32 2584-4361"
+        }
+      ]
+    },
+    "Americas": {
+      "name": "Americas",
+      "persons": [
+        {
+          "name": "Delphine Pronk",
+          "title": "Managing Director — Americas -- Support HRVP in implementing EU’s -- foreign policy in the Americas region -- in coordination with EU Delegations, -- other EU institutions and EU Member -- States, as well as overall political and -- strategic orientation. Responsible for -- directorate’s administrative, human -- resource and budgetary management -- including oversight of all EU Delegations -- in its region.",
+          "email": "Delphine.PRONK@eeas.europa.eu",
+          "phone": "+32 2584-4947"
+        },
+        {
+          "name": "Tomas Reyes Ortega",
+          "title": "Chair of Working Group — Latin -- America, Caribbean (COLAC) and -- Trans-Atlantic Relations (COTRA) -- Prepare the agenda of the Working -- Groups (COLAC and COTRA), in -- close cooperation with the EEAS, -- the Commission, the Council and the -- Member States. Conduct the meetings of -- the Working Groups, in accordance with -- the rules of procedure of the Council and -- ensure the appropriate follow-up of the -- issues discussed.",
+          "phone": "+32 2584-2350"
+        }
+      ]
+    },
+    "Regional Affairs": {
+      "name": "Regional Affairs",
+      "persons": [
+        {
+          "name": "Christian Burgsmueller",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Americas Directorate, mission and -- objectives, while enabling the staff to -- develop their potential.The focus of the -- Division is to advance the bi-regional -- EU relationship with LAC, focusing -- particularly on the EU-CELAC agenda, -- through bi-annual summits, annual -- ministerials and regular SOM meetings.",
+          "email": "Christian.BURGSMUELLER@eeas.europa.eu",
+          "phone": "+32 2584-5223"
+        },
+        {
+          "name": "Heike Schneider",
+          "title": "Deputy Head of Division -- To assist and replace the Head of -- Division (HoD) in leading and managing -- the division. This includes ensuring -- its staff delivers the work required -- to implement the directorates’s work -- program in an effective way, while -- enabling the jobholders to develop -- their potential in order to support in the -- mission and priorities of the Division.",
+          "phone": "+32 2584-9157"
+        },
+        {
+          "name": "Nadia Costantini",
+          "title": "Head of Division -- Develop the concept of the European -- Neighbourhood Policy and the -- instruments used in its implementation. -- Ensure a regular reporting on the -- ENP and the provision of timely -- information on all aspects of the -- policy. Coordinate the programming -- of the European Neighbourhood and -- Partnership Instrument and contacts with -- International Financial Institutions and -- other donors.",
+          "email": "Nadia.COSTANTINI@eeas.europa.eu",
+          "phone": "+32 2584-3891"
+        }
+      ]
+    },
+    "and Caribbean": {
+      "name": "and Caribbean",
+      "persons": [
+        {
+          "name": "Marianne Van Steen",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Marianne.VAN-STEEN@eeas.europa.eu",
+          "phone": "+32 2584-4873"
+        }
+      ]
+    },
+    "South America": {
+      "name": "South America",
+      "persons": [
+        {
+          "name": "Adriana Vázquez Garrido",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "adriana.vazquez@eeas.europa.eu",
+          "phone": "+32 2584-4350"
+        }
+      ]
+    },
+    "United States and Canada": {
+      "name": "United States and Canada",
+      "persons": [
+        {
+          "name": "Charlotte Bue",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Charlotte.BUE@eeas.europa.eu",
+          "phone": "+32 2584-9106"
+        }
+      ]
+    },
+    "Asia and Pacific": {
+      "name": "Asia and Pacific",
+      "persons": [
+        {
+          "name": "Erik Kurzweil",
+          "title": "Managing Director",
+          "email": "Erik.KURZWEIL@eeas.europa.eu",
+          "phone": "+32 2584-6683"
+        }
+      ]
+    },
+    "Pacific": {
+      "name": "Pacific",
+      "persons": [
+        {
+          "name": "Ivo Schutte",
+          "title": "Head of Division -- To determine and formulate policies and -- provide overall direction of the activities -- within the unit in charge of relation to -- India, Nepal and Bhutan on the basis -- of the work program of the directorate -- general",
+          "email": "Ivo.SCHUTTE@eeas.europa.eu",
+          "phone": "+32 2584-4124"
+        }
+      ]
+    },
+    "Afghanistan and Pakistan": {
+      "name": "Afghanistan and Pakistan",
+      "persons": [
+        {
+          "name": "Gilles Bertrand",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of the “Entity”’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Gilles.BERTRAND@eeas.europa.eu",
+          "phone": "+32 2584-6387"
+        }
+      ]
+    },
+    "South-East Asia": {
+      "name": "South-East Asia",
+      "persons": [
+        {
+          "name": "Leila Fernandez Stembridge",
+          "title": "Head of Division -- To determine and formulate policies -- and provide overall direction of the -- activities of the unit in charge of relations -- with ASEAN, Brunei Darussalam, -- Cambodia, East Timor, Indonesia, Laos, -- Malaysia, Myanmar(Burma), Philippines, -- Singapore, Thailand and Vietnam within -- the framework of the work programme of -- the Directorate General.",
+          "email": "STEMBRIDGE@eeas.europa.eu",
+          "phone": "+32 2584-4315"
+        }
+      ]
+    },
+    "Taiwan and Mongolia": {
+      "name": "Taiwan and Mongolia",
+      "persons": [
+        {
+          "name": "Dominic Porter",
+          "title": "Head of Division -- To determine and formulate policies and -- provide overall direction of the activities -- within the unit in charge of relations -- with China, Hong Kong, Macau, Taiwan -- and Mongolia on the basis of the work -- programme of the directorate general.",
+          "email": "Dominic.PORTER@eeas.europa.eu",
+          "phone": "+32 2584-4049"
+        }
+      ]
+    },
+    "New Zealand and Pacific": {
+      "name": "New Zealand and Pacific",
+      "persons": [
+        {
+          "name": "Thomas Frellesen",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Department’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Thomas.FRELLESEN@eeas.europa.eu",
+          "phone": "+32 2584-4963"
+        }
+      ]
+    },
+    "South Asia": {
+      "name": "South Asia",
+      "persons": [
+        {
+          "name": "Charles Whiteley",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Charles.Whiteley@eeas.europa.eu",
+          "phone": "+32 2584-4874"
+        }
+      ]
+    },
+    "Europe and Central Asia": {
+      "name": "Europe and Central Asia",
+      "persons": [
+        {
+          "name": "Matti Maasikas",
+          "title": "Managing Director — Europe and -- Central Asia -- Support HRVP in implementing EU’s -- foreign policy in coordination with EU -- Delegations, other EU institutions -- and EU Member States, as well -- as overall political and strategic -- orientation. Responsible for directorate’s -- administrative, human resource and -- budgetary management including -- oversight of all EU Delegations in its -- region.",
+          "email": "Matti.MAASIKAS@eeas.europa.eu",
+          "phone": "+32 2584-4117"
+        },
+        {
+          "name": "Audrone Perkauskiene",
+          "title": "Deputy Managing Director — Eastern -- Europe and Central Asia -- To provide overall strategic orientation -- and management of the Directorate, -- within the framework set by the mission -- statement and annual work programme -- of the Department. The Deputy -- Managing Director has a particular role -- in the oversight of the management -- and performance of the Delegations in -- the region for which he is responsible. -- The Directorate operates under direct -- supervision of the Managing Director.",
+          "email": "Audrone.PERKAUSKIENE@eeas.europa.eu",
+          "phone": "+32 2584-9825"
+        },
+        {
+          "name": "Weronika Frydryszek",
+          "title": "",
+          "phone": "+32 2584-6369"
+        }
+      ]
+    },
+    "Ukraine": {
+      "name": "Ukraine",
+      "persons": [
+        {
+          "name": "Baiba Tavaresa",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of Directorate’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Baiba.TAVARESA@eeas.europa.eu",
+          "phone": "+32 2584-9970"
+        }
+      ]
+    },
+    "Azerbaijan": {
+      "name": "Azerbaijan",
+      "persons": [
+        {
+          "name": "Deren Derya",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of Directorate’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Deren.DERYA@eeas.europa.eu",
+          "phone": "+32 2584-4021"
+        }
+      ]
+    },
+    "Russia": {
+      "name": "Russia",
+      "persons": [
+        {
+          "name": "Dirk Schuebel",
+          "title": "",
+          "email": "Dirk.Schuebel@eeas.europa.eu",
+          "phone": "+32 2584-2542"
+        }
+      ]
+    },
+    "Central Asia": {
+      "name": "Central Asia",
+      "persons": [
+        {
+          "name": "Dietmar Krissler",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Central Asia mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Dietmar.KRISSLER@eeas.europa.eu",
+          "phone": "+32 2584-8001"
+        }
+      ]
+    },
+    "Europe": {
+      "name": "Europe",
+      "persons": [
+        {
+          "name": "Emanuele Giaufret",
+          "title": "Deputy Managing Director — Western -- Europe -- To provide overall strategic orientation -- and management of the Directorate, -- within the framework set by the mission -- statement and annual work programme -- of the Department. The Deputy -- Managing Director has a particular role -- in the oversight of the management -- and performance of the Delegations in -- the region for which he is responsible. -- The Directorate operates under direct -- supervision of the Managing Director.",
+          "email": "Emanuele.GIAUFRET@eeas.europa.eu",
+          "phone": "+32 2584-6266"
+        }
+      ]
+    },
+    "Western Europe": {
+      "name": "Western Europe",
+      "persons": [
+        {
+          "name": "Claude Veron-Reville",
+          "title": "Head of Division -- To lead and manage the Division by -- defining the expected results and -- ensuring the staff delivers the work -- required to implement the Division’s work -- programme, while enabling the staff to -- develop their potential. To determine and -- formulate policies.",
+          "email": "Claude.VERON-REVILLE@eeas.europa.eu",
+          "phone": "+32 2584-3159"
+        }
+      ]
+    },
+    "Western Balkans": {
+      "name": "Western Balkans",
+      "persons": [
+        {
+          "name": "Zuzana Michalcova Sutiakova",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of Directorate’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Zuzana.SUTIAKOVA@eeas.europa.eu",
+          "phone": "+32 2584-3593"
+        },
+        {
+          "name": "Marko Horvat",
+          "title": "Chair of Working Group -- Ensure the smooth functioning and -- good management of the COWEB -- Working Party and contribute to policy -- definition and implementation in the -- area of its mandate. Cooperate closely -- with EU Member State representatives -- and with the Chair of the COELA -- Working Party, working where relevant -- under the guidance of the Chair of the -- Political and Security Committee (PSC). -- Follow Western Balkans policy files -- including, subject to possible change, -- enlargement package coordination, -- Council Conclusions on enlargement, -- regional cooperation, and briefings for -- contacts with Member States and/or with -- a regional dimension.",
+          "phone": "+32 2584-9888"
+        }
+      ]
+    },
+    "Türkiye / EastMed": {
+      "name": "Türkiye / EastMed",
+      "persons": [
+        {
+          "name": "Gabriel Munuera Vinals",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Gabriel.MUNUERA-VINALS@eeas.europa.eu",
+          "phone": "+32 2584-6379"
+        }
+      ]
+    },
+    "United Kingdom": {
+      "name": "United Kingdom",
+      "persons": [
+        {
+          "name": "Maike Tribbels",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Maike.TRIBBELS@eeas.europa.eu",
+          "phone": "+32 2584-2253"
+        },
+        {
+          "name": "Stefan Tressing",
+          "title": "",
+          "phone": "+32 2584-2443"
+        }
+      ]
+    },
+    "East Peace Process": {
+      "name": "East Peace Process",
+      "persons": [
+        {
+          "name": "Vladimir Janecek",
+          "title": "Head of Division -- To lead and manage Division A2, by -- defining the expected results and -- ensuring its staff delivers the work -- required to implement the unit’s work -- program in the context of the DG’s and -- directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Vladimir.JANECEK@eeas.europa.eu",
+          "phone": "+32 2584-4055"
+        }
+      ]
+    },
+    "North Africa": {
+      "name": "North Africa",
+      "persons": [
+        {
+          "name": "Colin Steinbach",
+          "title": "Head of Division -- Déterminer et mettre au point les -- politiques à mener pour les pays du -- Maghreb (Maroc, Algérie, Tunisie, -- Libye) dans le contexte de la Politique -- Européenne de Voisinage et de l’Unioin -- pour la Méditerrannée et indiquer la -- direction générale à suivre pour la mise -- en oeuvre des activités au sein de l’unité -- MAGHREB sur la base du programme -- de travail du SEAE.",
+          "email": "Colin.STEINBACH@eeas.europa.eu",
+          "phone": "+32 2584-2471"
+        }
+      ]
+    },
+    "Iraq": {
+      "name": "Iraq",
+      "persons": [
+        {
+          "name": "Maria Panagiotakopoulou",
+          "title": "Head of Division -- Determine and formulate policies and -- provide overall direction of the division -- on the basis of the work programmes of -- EEAS and MD IV.",
+          "email": "Maria.PANAGIOTAKOPOULOU@eeas.europa.eu",
+          "phone": "+32 2584-5172"
+        }
+      ]
+    },
+    "Lebanon and Jordan": {
+      "name": "Lebanon and Jordan",
+      "persons": [
+        {
+          "name": "Alessio Cappellani",
+          "title": "Head of Division -- Determine and formulate policies and -- provide overall direction of the division -- on the basis of the work programmes of -- EEAS and MD IV.",
+          "email": "Alessio.CAPPELLANI@eeas.europa.eu",
+          "phone": "+32 2584-3184"
+        }
+      ]
+    },
+    "Iran": {
+      "name": "Iran",
+      "persons": [
+        {
+          "name": "Sebastien Brabant",
+          "title": "",
+          "email": "Sebastien.BRABANT@eeas.europa.eu",
+          "phone": "+32 2584-2168"
+        }
+      ]
+    },
+    "Political Director": {
+      "name": "Political Director",
+      "persons": [
+        {
+          "name": "Martin Bille Hermann",
+          "title": "",
+          "email": "Martin.BILLE-HERMANN@eeas.europa.eu",
+          "phone": "+32 2584-6364"
+        }
+      ]
+    },
+    "and Democracy": {
+      "name": "and Democracy",
+      "persons": [
+        {
+          "name": "Stella Ronner",
+          "title": "Deputy Managing Director -- To provide overall strategic orientation -- and management of the Directorate, -- within the framework set by the -- Directorate’s-General (or Department) -- mission statement and annual work -- programme. The Directorate operates -- under the direct supervision of the -- Director-General / Managing Director.",
+          "email": "Stella.RONNER@eeas.europa.eu",
+          "phone": "+32 2584-2516"
+        }
+      ]
+    },
+    "Multilateral Relations": {
+      "name": "Multilateral Relations",
+      "persons": [
+        {
+          "name": "Eleftheria Pertzinidou",
+          "title": "Head of Division -- To formulate and implement policies and -- provide overall direction of the activities -- of the division, in particular as regards : -- • The EU relationship and mutually -- beneficial cooperation with multilateral -- organisations and its contribution to -- strengthening the effectiveness of -- the UN, and the Council of Europe -- in responding to their mandates; • -- the coherence of EU action in these -- organisations in terms of its participation/ -- status, policy stance, policy dialogue, -- cooperation and visibility.",
+          "email": "Eleftheria.PERTZINIDOU@eeas.europa.eu",
+          "phone": "+32 2584-3958"
+        },
+        {
+          "name": "Rafael Osorio",
+          "title": "Chair of Working Group — Multilateral -- relations -- The Chair of CONUN ensures the -- smooth running of the Working Party, -- in accordance with the Council rules -- of procedure and CONUN’s mandate -- (doc. ST 5767/2016). The Chair is -- responsible for the good management of -- the Working Party’s work and contributes -- to the planning, processing, and -- substance of policy work on the UN -- and multilateralism. This includes the -- preparation of files going through PSC, -- COREPER, and Council, for example -- the annual Council Conclusions on EU -- priorities at the UN General Assembly. -- The Chair works in close cooperation -- with and under the guidance of the -- Managing Director.",
+          "phone": "+32 2584-2470"
+        }
+      ]
+    },
+    "Observation": {
+      "name": "Observation",
+      "persons": [
+        {
+          "name": "Neal Mac Call",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- program in the context of its mission and -- objectives, while enabling the staff to -- develop their potential.",
+          "email": "Neal.MACCALL@eeas.europa.eu",
+          "phone": "+32 2584-7197"
+        }
+      ]
+    },
+    "Human Rights": {
+      "name": "Human Rights",
+      "persons": [
+        {
+          "name": "Ellis Mathews",
+          "title": "Head of Division -- (1)To determine and formulate policies -- and provide overall direction of the -- activities of the division on the basis -- of the EEAS work programme and the -- EEAS VIB action plan; (2) to mainstream -- the human rights and democratisation -- policy inside the EEAS and with the -- other Institutions.",
+          "email": "Ellis.MATHEWS@eeas.europa.eu",
+          "phone": "+32 2584-6656"
+        }
+      ]
+    },
+    "Sanctions": {
+      "name": "Sanctions",
+      "persons": [
+        {
+          "name": "Brice De Schietere",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Brice.DE-SCHIETERE@eeas.europa.eu",
+          "phone": "+32 2584-4266"
+        },
+        {
+          "name": "Tomas Sindelar",
+          "title": "Deputy Head of Division -- To assist and replace the Head of -- Division (HoD) in leading and managing -- the division. This includes ensuring -- its staff delivers the work required -- to implement the directorates’s work -- program in an effective way, while -- enabling the jobholders to develop -- their potential in order to support in the -- mission and priorities of the Division."
+        }
+      ]
+    },
+    "Peace, Security and Defence": {
+      "name": "Peace, Security and Defence",
+      "persons": [
+        {
+          "name": "Charles Fries",
+          "title": "",
+          "email": "Charles.FRIES@eeas.europa.eu",
+          "phone": "+32 2584-1138"
+        }
+      ]
+    },
+    "Defence": {
+      "name": "Defence",
+      "persons": [
+        {
+          "name": "Benedikta Von Seherr-Thoss",
+          "title": "Managing Director -- To provide overall strategic orientation -- and management of the Department -- within the framework set by the Deputy -- Secretary-General or the Secretary -- General mission statement and annual -- work programme.",
+          "email": "THOSS@eeas.europa.eu",
+          "phone": "+32 2584-3820"
+        },
+        {
+          "name": "Linas Linkevicius",
+          "title": "Chair of Working Group — Politico- -- Military Group (PMG) -- On behalf of the High Representative of -- the Union for Foreign Affairs & Security -- Policy, the Chair of Politico Military -- Group (PMG) ensures the smooth -- running and management of the PMG -- in accordance with the Council rules -- of procedures and the mandate of the -- Working Party. The Chair supports -- and advises the Managing Director -- for Peace, Security and Defence and -- the Chair of the Political and Security -- Committee on all aspects related to -- the EU security and defence policy -- development (EU Global Strategy, -- Strategic Compass, White Paper, etc.), -- EU defence initiatives, CSDP military -- missions and operations, exercises & -- trainings, partnerships (incl. EU-NATO, -- EU-UN, EU-AU, etc.), defence capability -- development and defence cooperation. -- In order to ensure that the Group’s views -- are taken into full account in EEAS policy -- formulation, the Chair is fully associated -- in the work of the CSDP services of the -- EEAS and is able to draw on the support -- of the relevant EEAS’s departments as -- well as the Union delegations.",
+          "phone": "+32 2584-4831"
+        },
+        {
+          "name": "Gábor Tóthi",
+          "title": "Chair of Working Group — Committee -- for Civilian Aspects of Crisis -- management (CIVCOM) -- The Chair of the Committee for -- Civilian Aspects of Crisis Management -- (CIVCOM) ensures the smooth running -- of CIVCOM in accordance with the -- Council rules of procedures and the -- mandate of the Working Party. Supports -- and advises the Managing Director -- and the Chair of the Political and -- Security Committee on all aspects -- related to civilian crisis management -- and conflict prevention, and ensures -- that the Committee’s views are -- taken into account in relevant EEAS -- policy formulation. Contributes to the -- elaboration of existing and new EU -- policies relevant to the area of civilian -- CSDP.",
+          "phone": "+32 2584-3330"
+        }
+      ]
+    },
+    "Peace and Security": {
+      "name": "Peace and Security",
+      "persons": [
+        {
+          "name": "Katariina Leinonen",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Katariina.LEINONEN@eeas.europa.eu",
+          "phone": "+32 2584-2325"
+        },
+        {
+          "name": "Ciara O'Brien",
+          "title": "Deputy Head of Division -- To assist and when required replace -- the Head of Division in leading and -- managing the division. This includes -- in particular ensuring its staff delivers -- the work required to implement the -- directorate’s work program in an -- effective way, while enabling the -- jobholders to develop their potential in -- order to support in the most effective -- manner the mission and priorities of the -- Division.",
+          "phone": "+32 2584-3409"
+        }
+      ]
+    },
+    "Defence Partnerships": {
+      "name": "Defence Partnerships",
+      "persons": [
+        {
+          "name": "Guillem Riutord Sampol",
+          "title": "Head of Division -- To lead and manage the Division -- by defining the expected results -- and ensuring its staff delivers the -- work required in the context of the -- Directorate’s mission and objectives, -- while enabling staff to develop their -- potential.",
+          "email": "Guillem.RIUTORD-SAMPOL@eeas.europa.eu",
+          "phone": "+32 2584-1173"
+        },
+        {
+          "name": "Jean Baptiste Valmary",
+          "title": "Deputy Head of Division -- To assist and when required replace -- the Head of Division in leading and -- managing the division. This includes -- in particular ensuring its staff delivers -- the work required to implement the -- directorate’s work program in an -- effective way, while enabling the -- jobholders to develop their potential in -- order to support in the most effective -- manner the mission and priorities of the -- Division.",
+          "phone": "+32 2584-3272"
+        }
+      ]
+    },
+    "Crisis Management": {
+      "name": "Crisis Management",
+      "persons": [
+        {
+          "name": "Gil Rostain",
+          "title": "Head of Division -- To lead and manage the Division by -- defining expected results and ensuring -- its staff delivers required output in the -- context of the Directorate’s mission -- and objectives, while enabling staff to -- develop their full potential.",
+          "email": "Gil.ROSTAIN@eeas.europa.eu",
+          "phone": "+32 2584-1745"
+        }
+      ]
+    },
+    "Policy": {
+      "name": "Policy",
+      "persons": [
+        {
+          "name": "Maciej Stadejek",
+          "title": "Director -- To provide overall strategic orientation -- and management of the Directorate, -- within the framework set by the -- Directorate’s General (or Department) -- mission statement and annual work -- programme.",
+          "email": "Maciej.STADEJEK@eeas.europa.eu",
+          "phone": "+32 2584-5399"
+        }
+      ]
+    },
+    "and Policy": {
+      "name": "and Policy",
+      "persons": [
+        {
+          "name": "Rory Domm",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work program in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Rory.DOMM@eeas.europa.eu",
+          "phone": "+32 2584-3326"
+        }
+      ]
+    },
+    "Hybrid Threats & Cyber": {
+      "name": "Hybrid Threats & Cyber",
+      "persons": [
+        {
+          "name": "Barbara Gallo",
+          "title": "",
+          "email": "Barbara.GALLO@eeas.europa.eu",
+          "phone": "+32 2584-2230"
+        }
+      ]
+    },
+    "Counter-terrorism": {
+      "name": "Counter-terrorism",
+      "persons": [
+        {
+          "name": "Anna Strzaska",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential. To formulate and implement -- policies and provide overall direction -- of the activities of the Division, in -- particular as regards: counterterrorism -- (CT) and counter-violent extremism -- (CVE) policy dialogue/cooperation with -- third countries as well as multilateral -- organisations, including the UN and -- the Global Counterterrorism Forum -- (GCTF) ensuring coherence of EU action -- in terms of policy stance, cooperation -- and visibility; support the network of CT -- Experts deployed in EU Delegations.",
+          "email": "Anna.STRZASKA@eeas.europa.eu",
+          "phone": "+32 2584-6853"
+        }
+      ]
+    },
+    "Export Control": {
+      "name": "Export Control",
+      "persons": [
+        {
+          "name": "Stephan Klement",
+          "title": "Head of Division -- - To formulate policies and provide -- overall direction of the activities within -- the unit on the basis of the work program -- — To ensure the working of the Working -- Group for Global Disarmament and Arms -- Control (CODUN)as Chair",
+          "email": "Stephan.KLEMENT@eeas.europa.eu",
+          "phone": "+32 2584-3843"
+        },
+        {
+          "name": "Michał Karczmarz",
+          "title": "Chair of Working Group — Conventional -- Arms Exports (COARM) Chair -- Coordinate European arms export -- control policies, based on the further -- convergence of the implementation -- of the relevant Common Position -- by Member States. Prepare the -- agenda of the Working Group on -- Conventional Arms Export (COARM), -- in close cooperation with the EEAS, -- the Commission, the Council and the -- Member States. Conduct the meetings -- of the Working Group, and ensure the -- appropriate follow-up of the issues -- discussed. Represent the EU externally -- in international fora regarding arms -- export control.",
+          "phone": "+32 2584-3147"
+        }
+      ]
+    },
+    "Space": {
+      "name": "Space",
+      "persons": [
+        {
+          "name": "Marjolijn Van Deelen",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring itss staff delivers the work -- required to implement the Division’s work -- programme,, mission and objectives, -- while enabling the staff to develop -- their potential. To ensure the High -- Representative (HR) is able to fulfil -- his operational responsibilities related -- to threats to or through systems -- and services deployed under the -- different components of the EU Space -- Programme and other space-related -- programmes. To ensure the HR is -- able to fulfil the operational direction of -- the EU Satellite Centre (SatCen). To -- support the HR and the EEAS senior -- management on all issues related to -- space, in particular these in the field -- of security and defence, implementing -- the Strategy for Space Security and -- Defence.",
+          "email": "Marjolijn.VAN-DEELEN@eeas.europa.eu",
+          "phone": "+32 2584-1888"
+        }
+      ]
+    },
+    "Maritime Security": {
+      "name": "Maritime Security",
+      "persons": [
+        {
+          "name": "Alison Weston",
+          "title": "Head of Division -- EEAS lead on implementation of the -- EU Maritime Security Strategy and for -- the implementation of the Coordinated -- Maritime Presences concept in the Gulf -- of Guinea and the Northwest Indian -- Ocean.",
+          "email": "Alison.WESTON@eeas.europa.eu",
+          "phone": "+32 2584-5178"
+        },
+        {
+          "name": "Mika-Markus Leinonen",
+          "title": "",
+          "phone": "+32 2584-4966"
+        }
+      ]
+    },
+    "Headquarters": {
+      "name": "Headquarters",
+      "persons": [
+        {
+          "name": "Stefano Tomat",
+          "title": "Managing Director — Civilian Operations -- Commander -- To provide overall strategic orientation -- and management of the Managing -- Directorate, within the framework set -- by the Deputy Secretary-General or -- Secretary-General mission statement -- and annual work programme.",
+          "email": "Stefano.TOMAT@eeas.europa.eu",
+          "phone": "+32 2584-2411"
+        }
+      ]
+    },
+    "Office to the MD and the": {
+      "name": "Office to the MD and the",
+      "persons": [
+        {
+          "name": "Olivier Baour",
+          "title": "",
+          "email": "Olivier.BAOUR@eeas.europa.eu",
+          "phone": "+32 2584-5149"
+        }
+      ]
+    },
+    "Concepts": {
+      "name": "Concepts",
+      "persons": [
+        {
+          "name": "Douglas Darius Carpenter",
+          "title": "Head of Division -- To lead and manage the Division in -- charge of Coordination and Horizontal -- Affairs by defining the expected results -- and ensuring its staff delivers the work -- required to implement the Division’s work -- programme in the context of the entity’s -- mission and objectives, while enabling -- the staff to develop their potential.",
+          "email": "Douglas.CARPENTER@eeas.europa.eu",
+          "phone": "+32 2584-5225"
+        },
+        {
+          "name": "Torsten Ites",
+          "title": "",
+          "email": "Torsten.ITES@eeas.europa.eu",
+          "phone": "+32 2584-5950"
+        }
+      ]
+    },
+    "Operations": {
+      "name": "Operations",
+      "persons": [
+        {
+          "name": "Frank Neisse",
+          "title": "Head of Division -- Under the authority of the Civilian -- Operations Commander (CivOpCdr), -- the Head of Division is leading the -- operational division, providing the -- Civilian Operations Commander with the -- means to exercise command and control -- at strategic level over the Common -- Security and Defence Policy (CSDP) -- crisis management civilian missions.",
+          "email": "Frank.NEISSE@eeas.europa.eu",
+          "phone": "+32 2584-8086"
+        }
+      ]
+    },
+    "Personnel": {
+      "name": "Personnel",
+      "persons": [
+        {
+          "name": "Mirco Kreibich",
+          "title": "Head of Division -- To lead and manage the Missions -- Personnel Division, by defining the -- expected results and ensuring its staff -- delivers the work required to implement -- the Division’s work programme in the -- context of the CPCC’s (Civilian Planning -- and Conduct Capability) mission and -- objectives, while enabling the staff to -- develop their potential.",
+          "email": "Mirco.KREIBICH@eeas.europa.eu",
+          "phone": "+32 2584-1136"
+        }
+      ]
+    },
+    "Support": {
+      "name": "Support",
+      "persons": [
+        {
+          "name": "Gloria Iniesta Arias",
+          "title": "Head of Division -- To lead and manage the Division in -- charge of Missions Operational Support -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s work -- programme in the context of the entity’s -- mission and objecitves, while enabling -- the staff to develop their potential.",
+          "email": "Gloria.INIESTA-ARIAS@eeas.europa.eu",
+          "phone": "+32 2584-2485"
+        },
+        {
+          "name": "Gianluca Alessandri",
+          "title": "",
+          "email": "Gianluca.ALESSANDRI@eeas.europa.eu",
+          "phone": "+32 2584-8556"
+        }
+      ]
+    },
+    "Security and Health": {
+      "name": "Security and Health",
+      "persons": [
+        {
+          "name": "Kirsi Henriksson",
+          "title": "Head of Division (Acting) -- To lead and manage the Division in -- charge of Security and Health in the -- civilian CSDP Missions by defining the -- expected results and ensuring its staff -- delivers the work required to implement -- the Division’s work programme in the -- context of the entity’s mission and -- objectives, while enabling the staff to -- develop their potential.",
+          "email": "Kirsi.HENRIKSSON@eeas.europa.eu",
+          "phone": "+32 2584-4369"
+        },
+        {
+          "name": "Chair of the Eu Military",
+          "title": ""
+        }
+      ]
+    },
+    "DG EUMS — EUROPEAN UNION MILITARY STAFF": {
+      "name": "DG EUMS — EUROPEAN UNION MILITARY STAFF",
+      "persons": [
+        {
+          "name": "Michiel Van Der Laan",
+          "title": "",
+          "email": "Michiel.VAN-DER-LAAN@eeas.europa.eu",
+          "phone": "+32 2584-6565"
+        }
+      ]
+    },
+    "Horizontal coordination": {
+      "name": "Horizontal coordination",
+      "persons": [
+        {
+          "name": "Sylvie Tabesse",
+          "title": "Head of Division -- To lead and manage the Division, -- by defining the expected results and -- ensuring its staff delivers the work -- required to implement the Division’s -- work programme in the context of the -- Directorate’s mission and objectives, -- while enabling the staff to develop their -- potential.",
+          "email": "Sylvie.TABESSE@eeas.europa.eu",
+          "phone": "+32 2584-5335"
+        }
+      ]
+    },
+    "Group": {
+      "name": "Group",
+      "persons": [
+        {
+          "name": "Arnaud Drier De Laforte",
+          "title": "",
+          "email": "LAFORTE@eeas.europa.eu",
+          "phone": "+32 2584-3971"
+        }
+      ]
+    },
+    "Support Division": {
+      "name": "Support Division",
+      "persons": [
+        {
+          "name": "George Florin Vasiliu",
+          "title": "",
+          "email": "George-Florin.VASILIU@eeas.europa.eu",
+          "phone": "+32 2584-3099"
+        }
+      ]
+    },
+    "Operations Division": {
+      "name": "Operations Division",
+      "persons": [
+        {
+          "name": "Mariusz Kasprzyk",
+          "title": "",
+          "email": "Mariusz.KASPRZYK@eeas.europa.eu",
+          "phone": "+32 2584-4811"
+        }
+      ]
+    },
+    "Staff": {
+      "name": "Staff",
+      "persons": [
+        {
+          "name": "Gabor Horvath",
+          "title": "",
+          "email": "Gabor.HORVATH@eeas.europa.eu",
+          "phone": "+32 2584-5888"
+        }
+      ]
+    },
+    "EU Cell at SHAPE": {
+      "name": "EU Cell at SHAPE",
+      "persons": [
+        {
+          "name": "Panagiotis Froussos",
+          "title": ""
+        }
+      ]
+    },
+    "External Relations": {
+      "name": "External Relations",
+      "persons": [
+        {
+          "name": "Sterian Bumbaru",
+          "title": "",
+          "email": "Sterian.BUMBARU@eeas.europa.eu",
+          "phone": "+32 2584-3377"
+        }
+      ]
+    },
+    "Synchronisation": {
+      "name": "Synchronisation",
+      "persons": [
+        {
+          "name": "Christian Schrumpf",
+          "title": "",
+          "email": "Christian.SCHRUMPF@eeas.europa.eu",
+          "phone": "+32 2584-5961"
+        }
+      ]
+    },
+    "Capabilities": {
+      "name": "Capabilities",
+      "persons": [
+        {
+          "name": "Ignacio Cuartero Lorenzo",
+          "title": "",
+          "email": "LORENZO@eeas.europa.eu",
+          "phone": "+32 2584-5954"
+        }
+      ]
+    },
+    "Force Capability": {
+      "name": "Force Capability",
+      "persons": [
+        {
+          "name": "Klaus Schadenbauer",
+          "title": "",
+          "email": "Klaus.SCHADENBAUER@eeas.europa.eu",
+          "phone": "+32 2584-3131"
+        }
+      ]
+    },
+    "Analysis": {
+      "name": "Analysis",
+      "persons": [
+        {
+          "name": "Sven Lukas",
+          "title": "",
+          "email": "Sven.LUKAS@eeas.europa.eu",
+          "phone": "+32 2584-4428"
+        },
+        {
+          "name": "Stefan Berresheim",
+          "title": "",
+          "email": "Stefan.BERRESHEIM@eeas.europa.eu",
+          "phone": "+3232 2584-59372584-6225"
+        }
+      ]
+    },
+    "Dir B — Intelligence": {
+      "name": "Dir B — Intelligence",
+      "persons": [
+        {
+          "name": "Danail Baev",
+          "title": "",
+          "email": "Danail.BAEV@eeas.europa.eu",
+          "phone": "+32 2584-4424"
+        }
+      ]
+    },
+    "Development": {
+      "name": "Development",
+      "persons": [
+        {
+          "name": "Philip Van Heemstra",
+          "title": "",
+          "email": "Philip.VAN-HEEMSTRA@eeas.europa.eu",
+          "phone": "+32 2584-3218"
+        }
+      ]
+    },
+    "Dir C — Operations": {
+      "name": "Dir C — Operations",
+      "persons": [
+        {
+          "name": "Jean Philippe Leroux",
+          "title": "",
+          "email": "Jean-Philippe.LEROUX@eeas.europa.eu",
+          "phone": "+32 2584-3792"
+        }
+      ]
+    },
+    "Analysis and Planning": {
+      "name": "Analysis and Planning",
+      "persons": [
+        {
+          "name": "Felix Hansen",
+          "title": "",
+          "email": "Felix.HANSEN@eeas.europa.eu",
+          "phone": "+32 2584-5237"
+        }
+      ]
+    },
+    "Strategic Analysis": {
+      "name": "Strategic Analysis",
+      "persons": [
+        {
+          "name": "Sergio Puebla Garcia",
+          "title": "",
+          "email": "Sergio.PUEBLA-GARCIA@eeas.europa.eu",
+          "phone": "+32 2584-6507"
+        }
+      ]
+    },
+    "Situational Awareness": {
+      "name": "Situational Awareness",
+      "persons": [
+        {
+          "name": "Hans Huygens",
+          "title": "",
+          "email": "Hans.HUYGENS@eeas.europa.eu",
+          "phone": "+32 2584-5936"
+        }
+      ]
+    },
+    "Coordination Division": {
+      "name": "Coordination Division",
+      "persons": [
+        {
+          "name": "Christianne Vermue",
+          "title": "",
+          "email": "Christianne.VERMUE@eeas.europa.eu",
+          "phone": "+32 2584-5774"
+        }
+      ]
+    },
+    "Dir D — Logistics": {
+      "name": "Dir D — Logistics",
+      "persons": [
+        {
+          "name": "Stefan Lampl",
+          "title": "",
+          "email": "Stefan.LAMPL@eeas.europa.eu",
+          "phone": "+32 2584-1743"
+        }
+      ]
+    },
+    "Logistics Policy": {
+      "name": "Logistics Policy",
+      "persons": [
+        {
+          "name": "Michael Nuyens",
+          "title": "",
+          "email": "Michael.NUYENS@eeas.europa.eu",
+          "phone": "+32 2584-3960"
+        }
+      ]
+    },
+    "Resources Support": {
+      "name": "Resources Support",
+      "persons": [
+        {
+          "name": "Gert Dobben",
+          "title": "",
+          "email": "Gert.DOBBEN@eeas.europa.eu",
+          "phone": "+32 2584-6752"
+        }
+      ]
+    },
+    "& Cyber Defence": {
+      "name": "& Cyber Defence",
+      "persons": [
+        {
+          "name": "Ante Tolic",
+          "title": "",
+          "email": "Ante.TOLIC@eeas.europa.eu",
+          "phone": "+32 2584-2283"
+        }
+      ]
+    },
+    "Requirements": {
+      "name": "Requirements",
+      "persons": [
+        {
+          "name": "Carlos Enriquez Gonzalez",
+          "title": "",
+          "email": "GONZALEZ@eeas.europa.eu",
+          "phone": "+32 2584-6095"
+        }
+      ]
+    },
+    "Research (OSR)": {
+      "name": "Research (OSR)",
+      "persons": [
+        {
+          "name": "Dario Malnar",
+          "title": "Head of Division -- Full responsibility for the EU INTCEN’s -- Open Source Intelligence Division day- -- to-day functioning and output",
+          "email": "Dario.MALNAR@eeas.europa.eu",
+          "phone": "+32 2584-2170"
+        }
+      ]
+    },
+    "Delegation to Afghanistan": {
+      "name": "Delegation to Afghanistan",
+      "persons": [
+        {
+          "name": "Veronika Boskovic Pohar",
+          "title": "",
+          "email": "POHAR@eeas.europa.eu",
+          "phone": "+32 2584-9246"
+        },
+        {
+          "name": "Eric Beaume",
+          "title": "Head of Unit",
+          "email": "Eric.BEAUME@eeas.europa.eu",
+          "phone": "+93 20-2200457"
+        }
+      ]
+    },
+    "Delegation to Albania": {
+      "name": "Delegation to Albania",
+      "persons": [
+        {
+          "name": "Silvio Gonzato",
+          "title": "",
+          "email": "Silvio.GONZATO@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Algeria": {
+      "name": "Delegation to Algeria",
+      "persons": [
+        {
+          "name": "Diego Mellado",
+          "title": "Head of Delegation -- To represent the Commission in Algeria -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Diego.MELLADO@eeas.europa.eu",
+          "phone": "+213 23051300-(147)"
+        }
+      ]
+    },
+    "Delegation to Angola": {
+      "name": "Delegation to Angola",
+      "persons": [
+        {
+          "name": "Rosario Bento Pais",
+          "title": "Head of Delegation -- To represent the Commission in Angola -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Rosario.BENTO@ec.europa.eu",
+          "phone": "+244 01-1732250"
+        }
+      ]
+    },
+    "Delegation to Argentina": {
+      "name": "Delegation to Argentina",
+      "persons": [
+        {
+          "name": "Erik Hoeeg",
+          "title": "",
+          "email": "Erik.HOEEG@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Armenia": {
+      "name": "Delegation to Armenia",
+      "persons": [
+        {
+          "name": "Vassilis Maragos",
+          "title": "Head of Delegation -- To represent the Commission in Armenia -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards.",
+          "email": "Vassilis.MARAGOS@ec.europa.eu",
+          "phone": "+374 10546494-811"
+        }
+      ]
+    },
+    "Delegation to Australia": {
+      "name": "Delegation to Australia",
+      "persons": [
+        {
+          "name": "Gabriele Visentin",
+          "title": "Head of Delegation -- To represent the Commission in Australia -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Gabriele.VISENTIN@eeas.europa.eu",
+          "phone": "+61 262712-730"
+        }
+      ]
+    },
+    "Delegation to Azerbaijan": {
+      "name": "Delegation to Azerbaijan",
+      "persons": [
+        {
+          "name": "Marijana Kujundzic",
+          "title": "Head of Delegation -- To represent the Commission in -- Azerbaijan in accordance with the -- mandate given by Headquarters and the -- 24 Internal Control Standards.",
+          "email": "Marijana.KUJUNDZIC@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Bangladesh": {
+      "name": "Delegation to Bangladesh",
+      "persons": [
+        {
+          "name": "Michael Miller",
+          "title": "Head of Delegation -- To represent the Commission in -- Bangladesh in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Michael.Miller@ec.europa.eu",
+          "phone": "+880 2-55668057"
+        },
+        {
+          "name": "Michal Krejza",
+          "title": "Head of Unit",
+          "email": "Michal.KREJZA@eeas.europa.eu",
+          "phone": "+880 2-55668057"
+        }
+      ]
+    },
+    "CARICOM/CARIFORUM": {
+      "name": "CARICOM/CARIFORUM",
+      "persons": [
+        {
+          "name": "Fiona Ramsey",
+          "title": "Head of Delegation -- To represent the Commission in -- Barbados and the Eastern Caribbean in -- accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Fiona.RAMSEY@eeas.europa.eu",
+          "phone": "+1 246-4348502"
+        }
+      ]
+    },
+    "Delegation to Belarus": {
+      "name": "Delegation to Belarus",
+      "persons": [
+        {
+          "name": "Steen Noerlov",
+          "title": "Head of Delegation -- To represent the European Union in -- Belarus in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards.",
+          "email": "Steen.NOERLOV@eeas.europa.eu",
+          "phone": "+375 173686613-124"
+        }
+      ]
+    },
+    "Delegation to Benin": {
+      "name": "Delegation to Benin",
+      "persons": [
+        {
+          "name": "Stéphane Mund",
+          "title": "Head of Delegation -- To represent the Commission in BENIN -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Stephane.MUND@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Bolivia": {
+      "name": "Delegation to Bolivia",
+      "persons": [
+        {
+          "name": "Jaume Segura Socias",
+          "title": "Head of Delegation -- To represent the European Union in -- Bolivia in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards",
+          "email": "Jaume.SEGURA-SOCIAS@eeas.europa.eu",
+          "phone": "+591 2432424"
+        }
+      ]
+    },
+    "Herzegovina": {
+      "name": "Herzegovina",
+      "persons": [
+        {
+          "name": "Luigi Soreca",
+          "title": "",
+          "email": "Luigi.Soreca@eeas.europa.eu",
+          "phone": "+387 33254-711"
+        },
+        {
+          "name": "Adebayo Babajide",
+          "title": "Deputy Head of Delegation -- Under the authority of the Head of -- Delegation to represent the European -- Union (EC and EEAS) in Bosnia and -- Herzegovina in accordance with the -- mandate given by Headquarters and the -- Internal Control Standards To replace the -- Head of delegation in his/her absence -- and assure the good function of the -- Delegation",
+          "phone": "+387 33254-715"
+        }
+      ]
+    },
+    "Gaborone": {
+      "name": "Gaborone",
+      "persons": [
+        {
+          "name": "Petra Pereyra",
+          "title": "Head of Delegation — Botswana and -- SADC -- To represent the European Union in -- Botswana and vis-à-vis the SADC -- Secretariat in accordance with -- the mandate given by the HRVP/ -- Headquarters and as outlined in the -- mission letter. To manage the human -- and financial resources assigned to the -- Delegation to deliver on the mandate of -- the Delegation as to both EU-Botswana -- and EU-SADC partnership respectively.",
+          "email": "Petra.PEREYRA@eeas.europa.eu",
+          "phone": "+267 3-610009"
+        }
+      ]
+    },
+    "Delegation to Brazil": {
+      "name": "Delegation to Brazil",
+      "persons": [
+        {
+          "name": "Marian Schuegraf",
+          "title": "Head of Delegation -- To represent the Commission in [host -- country] in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards",
+          "email": "Marian.SCHUEGRAF@eeas.europa.eu",
+          "phone": "+55 61-2104"
+        },
+        {
+          "name": "Jean-Pierre Bou",
+          "title": "Deputy Head of Delegation -- To represent the European Union at -- the level of Deputy Head of Mission. -- To replace the Head of Delegation in -- his / her absence and assure the good -- functioning of the Delegation.",
+          "phone": "+55 61-2104"
+        }
+      ]
+    },
+    "Faso": {
+      "name": "Faso",
+      "persons": [
+        {
+          "name": "Philippe Bronchain",
+          "title": "Head of Delegation -- Représenter la Commission européenne -- au Burkina Faso conformément au -- mandat donné par le Siège et aux 24 -- Standards de Contrôle Interne",
+          "email": "Philippe.BRONCHAIN@eeas.europa.eu"
+        },
+        {
+          "name": "Marc Duponcel",
+          "title": "Acting Head of Unit",
+          "email": "Marc.DUPONCEL@eeas.europa.eu",
+          "phone": "+226 25492900"
+        }
+      ]
+    },
+    "Burma": {
+      "name": "Burma",
+      "persons": [
+        {
+          "name": "Marc Fiedrich",
+          "title": "",
+          "email": "Marc.FIEDRICH@eeas.europa.eu",
+          "phone": "+95 (0) 99 7707 9991"
+        }
+      ]
+    },
+    "Delegation to Burundi": {
+      "name": "Delegation to Burundi",
+      "persons": [
+        {
+          "name": "Elisabetta Pietrobon",
+          "title": "Head of Delegation -- To represent the Commission in Burundi -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "elisabetta.pietrobon@eeas.europa.eu",
+          "phone": "+257 12 64 70"
+        }
+      ]
+    },
+    "Delegation to Cambodia": {
+      "name": "Delegation to Cambodia",
+      "persons": [
+        {
+          "name": "Igor Driesmans",
+          "title": "Head of delegation",
+          "email": "Igor.DRIESMANS@eeas.europa.eu",
+          "phone": "+855 23230-440"
+        }
+      ]
+    },
+    "Delegation to Cameroon": {
+      "name": "Delegation to Cameroon",
+      "persons": [
+        {
+          "name": "Jean-Marc Chataigner",
+          "title": "Head of Delegation -- To represent the Commission in -- Cameroon in accordance with the -- mandate given by Headquarters and the -- 24 Internal Control Standards",
+          "email": "Jean-Marc.CHATAIGNER@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Canada": {
+      "name": "Delegation to Canada",
+      "persons": [
+        {
+          "name": "Geneviève Tuts",
+          "title": "Head of Delegation -- To represent the Commission in Canada -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Genevieve.TUTS@eeas.europa.eu"
+        },
+        {
+          "name": "Aurelie Bonal",
+          "title": "Deputy Head of Delegation -- To represent the Commission in Canada -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation."
+        }
+      ]
+    },
+    "Delegation to Cabo Verde": {
+      "name": "Delegation to Cabo Verde",
+      "persons": [
+        {
+          "name": "Sylvie Millot",
+          "title": "Head of Delegation -- To represent the Commission in Cape -- Verde in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards.",
+          "email": "Sylvie.MILLOT@eeas.europa.eu",
+          "phone": "+238 260-4150"
+        }
+      ]
+    },
+    "African Republic": {
+      "name": "African Republic",
+      "persons": [
+        {
+          "name": "Diego Escalona Paturel",
+          "title": "Head of Delegation -- To represent the Commission in the -- Central African Republic in accordance -- with the mandate given by Headquarters -- and the internal control standards and -- to manage the human and financial -- resources assigned to the delegation.",
+          "email": "PATUREL@EC.EUROPA.EU",
+          "phone": "+236 24619860"
+        }
+      ]
+    },
+    "Delegation to Chad": {
+      "name": "Delegation to Chad",
+      "persons": [
+        {
+          "name": "Sona Jarosova",
+          "title": "Head of Delegation (Acting) -- To represent the Commission in the -- Republic of Chad in accordance with the -- mandate given by Headquarters and the -- 24 Internal Control Standards.",
+          "email": "Sona.JAROSOVA@eeas.europa.eu",
+          "phone": "+235 22-527276"
+        }
+      ]
+    },
+    "Delegation to Chile": {
+      "name": "Delegation to Chile",
+      "persons": [
+        {
+          "name": "Claudia Gintersdorfer",
+          "title": "Head of Delegation -- To represent the European Union in -- Chile in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards",
+          "email": "Claudia.GINTERSDORFER@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to China": {
+      "name": "Delegation to China",
+      "persons": [
+        {
+          "name": "Jorge Toledo",
+          "title": "",
+          "email": "Jorge.TOLEDO@eeas.europa.eu",
+          "phone": "+86 108454-8088"
+        },
+        {
+          "name": "Marjut Hannonen",
+          "title": "Head of Unit",
+          "email": "MARJUT.HANNONEN@EC.EUROPA.EU",
+          "phone": "+86 10-84548000"
+        },
+        {
+          "name": "003. Other Eu Policies 1",
+          "title": ""
+        },
+        {
+          "name": "Stefan Kuhnert",
+          "title": "",
+          "phone": "+86 108454-8139"
+        }
+      ]
+    },
+    "Delegation to Colombia": {
+      "name": "Delegation to Colombia",
+      "persons": [
+        {
+          "name": "Francois Roudie",
+          "title": "Head of Delegation -- To represent the Commission in -- Colombia in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Francois.ROUDIE@eeas.europa.eu",
+          "phone": "+57 48053759"
+        }
+      ]
+    },
+    "Delegation to Congo": {
+      "name": "Delegation to Congo",
+      "persons": [
+        {
+          "name": "Anne Marchal",
+          "title": "Head of Delegation -- Chef de délégation en République du -- Congo (Brazzaville). Connaissances -- approfondies des politiques -- communautaires et du fonctionnement -- de l’Union (aspects économiques -- et politiques, relations extérieures). -- Aptitude à diriger une équipe dans un -- environnement socio-culturel différent. -- Expérience appropriée à la fonction.",
+          "email": "Anne.MARCHAL@eeas.europa.eu",
+          "phone": "+242 05500-2425"
+        }
+      ]
+    },
+    "the Congo": {
+      "name": "the Congo",
+      "persons": [
+        {
+          "name": "Fabrice Basile",
+          "title": "Head of Delegation (Acting) -- To represent the Commission in -- Kinshasa in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Fabrice.BASILE@eeas.europa.eu",
+          "phone": "+243 32.44.40"
+        },
+        {
+          "name": "Nicolas Berlanga Martinez",
+          "title": "Head of Delegation -- To represent the Commission in -- Kinshasa in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "MARTINEZ@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Costa Rica": {
+      "name": "Delegation to Costa Rica",
+      "persons": [
+        {
+          "name": "Pierre-Louis Lempereur",
+          "title": "",
+          "email": "Pierre-Louis.LEMPEREUR@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Cuba": {
+      "name": "Delegation to Cuba",
+      "persons": [
+        {
+          "name": "Jens Urban",
+          "title": "Head of Delegation -- To represent the Commission in Cuba in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Jens.URBAN@eeas.europa.eu"
+        }
+      ]
+    },
+    "Djibouti": {
+      "name": "Djibouti",
+      "persons": [
+        {
+          "name": "Denisa-Elena Ionete",
+          "title": "Head of Delegation -- Représenter la Commission européenne -- à Djibouti conformément au mandat -- donné par le Siège et aux 16 Standards -- de Contrôle Interne.",
+          "email": "Denisa-Elena.IONETE@eeas.europa.eu"
+        }
+      ]
+    },
+    "Dominican Republic": {
+      "name": "Dominican Republic",
+      "persons": [
+        {
+          "name": "Raul Fuentes Milani",
+          "title": "Head of Delegation -- To represent the European Union in the -- Dominican Republic in accordance with -- the mandate given by Headquarters and -- ensure EU Presidency role.",
+          "email": "Raul.FUENTES-MILANI@eeas.europa.eu",
+          "phone": "+1 8092270525-(253)"
+        }
+      ]
+    },
+    "Delegation to Ecuador": {
+      "name": "Delegation to Ecuador",
+      "persons": [
+        {
+          "name": "Jekaterina Dorodnova",
+          "title": "Head of Delegation -- To represent the EEAS in Ecuador in -- accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Jekaterina.DORODNOVA@eeas.europa.eu",
+          "phone": "+593 33-254715"
+        }
+      ]
+    },
+    "Delegation to Egypt": {
+      "name": "Delegation to Egypt",
+      "persons": [
+        {
+          "name": "Angelina Eichhorst",
+          "title": "Head of Delegation — MD -- To represent the Commission in Egypt in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Angelina.Eichhorst@eeas.europa.eu",
+          "phone": "+20 2-2461 9860"
+        }
+      ]
+    },
+    "Delegation to El Salvador": {
+      "name": "Delegation to El Salvador",
+      "persons": [
+        {
+          "name": "Duccio Bandini",
+          "title": "Head of Delegation -- To represent the Commission in El -- Salvador in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Duccio.BANDINI@eeas.europa.eu",
+          "phone": "+32 2584-3207"
+        }
+      ]
+    },
+    "Delegation to Eritrea": {
+      "name": "Delegation to Eritrea",
+      "persons": [
+        {
+          "name": "Joanna Darmanin",
+          "title": "Head of Delegation -- Represent the EC in the State of -- Eritrea and general management of -- the Delegation. Management of the -- human and financial resources of -- the Delegation. Elaborate new and -- maintain existing contacts with Eritrean -- authorities, Member States and other -- Embassies, NGOs. Regularly reporting -- on political, economic (inclusive trade) -- and development matters. Present -- the EC’s position to the Eritrean -- authorities, the Member States and -- other Embassies and International -- Organisations (UNMEE and UN -- development related organisations), -- the NGO Community. Participate in -- negotiations and meetings. Manage -- the Commission’s aid programme in -- conformity with the rules. Encourage -- EC participation and give guidance to -- organisation of EU culture event (e.g. -- culture or film week). Promote the image -- of the EC and its policies and represent -- the EC and organise offical events.",
+          "email": "Joanna.DARMANIN@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Eswatini": {
+      "name": "Delegation to Eswatini",
+      "persons": [
+        {
+          "name": "Karsten Mecklenburg",
+          "title": "Head of Delegation -- To represent the Commission in Eswatini -- in order to promote the interests of the -- EU and to improve relations between the -- EU and Eswatini, in accordance with the -- mandate given by Headquarters",
+          "email": "Karsten.MECKLENBURG@eeas.europa.eu",
+          "phone": "+268 613-5636357"
+        }
+      ]
+    },
+    "Delegation for the Pacific": {
+      "name": "Delegation for the Pacific",
+      "persons": [
+        {
+          "name": "Barbara Plinkert",
+          "title": "Head of Delegation -- To represent the European Union in -- 11 ACP countries, and in the Pacific -- Region, and to oversee the management -- of assistabce in 4 OCTs, in accordance -- with the mandate given by Headquarters -- and the Internal Control Standards",
+          "email": "Barbara.PLINKERT@eeas.europa.eu",
+          "phone": "+679 3239-536"
+        },
+        {
+          "name": "Maurizio Cian",
+          "title": "Head of Unit",
+          "email": "MAURIZIO.CIAN@EC.EUROPA.EU",
+          "phone": "+679 3313633"
+        },
+        {
+          "name": "Nereo Penalver Garcia",
+          "title": "Deputy Head of Delegation -- To represent the European Union at -- the level of Deputy Head of Mission. -- To replace the Head of Delegation in -- his/her absence, support the HoD in -- realising the objectives set out in the -- Delegation’s Annual Management Plan, -- and help assure the good functioning -- of the Delegation, including through -- ensuring proper coordination between -- the political and operational activities of -- the Delegation.",
+          "phone": "+679 3239-517"
+        }
+      ]
+    },
+    "Delegation to Georgia": {
+      "name": "Delegation to Georgia",
+      "persons": [
+        {
+          "name": "Pawel Herczynski",
+          "title": "Head of Delegation — MD -- To represent the Commission in Georgia -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Pawel.HERCZYNSKI@eeas.europa.eu",
+          "phone": "+995 32-2364364"
+        }
+      ]
+    },
+    "Delegation to Ethiopia": {
+      "name": "Delegation to Ethiopia",
+      "persons": [
+        {
+          "name": "Sofie From-Emmesberger",
+          "title": "Head of Delegation -- As Head of Delegation, to represent -- the Commission in Ethiopia in order -- to promote the interests of the EU and -- to improve relations between the EU -- and Ethiopia, in accordance with the -- mandate given by Headquarters. The -- job- holder maintained his functions -- as Head of Operations sub-delegated -- authorizing officer for EDF in addition -- to being the sub-delegated authorizing -- officer for financial administration of the -- Delegation.",
+          "email": "EMMESBERGER@eeas.europa.eu"
+        },
+        {
+          "name": "Daniel Hachez",
+          "title": "Acting Head of Unit",
+          "email": "Daniel.HACHEZ@ec.europa.eu",
+          "phone": "+25132 2-3052600229-64737"
+        }
+      ]
+    },
+    "Libreville": {
+      "name": "Libreville",
+      "persons": [
+        {
+          "name": "Cecile Abadie",
+          "title": "Head of Delegation -- To represent the European Union in -- Gabon, Equatorial Guinea, Sao Tomé e -- Principe and ECCAS in accordance with -- the mandate given by Headquarters and -- the Internal Control Standards",
+          "email": "Cecile.ABADIE@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Iceland": {
+      "name": "Delegation to Iceland",
+      "persons": [
+        {
+          "name": "Clara Ganslandt",
+          "title": "Head of Delegation -- To represent the Commission in Iceland -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Clara.GANSLANDT@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to The Gambia": {
+      "name": "Delegation to The Gambia",
+      "persons": [
+        {
+          "name": "Immaculada Roca I Cortes",
+          "title": "Head of Delegation -- To represent the European Union -- and to oversee the management of -- the EU assistance in The Gambia, in -- accordance with the mandate given by -- Headquarters and the Internal Control -- Standards.",
+          "email": "CORTES@eeas.europa.eu",
+          "phone": "+220 4495146-(101)"
+        }
+      ]
+    },
+    "Delegation to Guatemala": {
+      "name": "Delegation to Guatemala",
+      "persons": [
+        {
+          "name": "Jarna Johanna Karanko",
+          "title": "Head of Delegation -- To represent the European Union in -- Guatemala in accordance with the -- mandate given by Headquarters.",
+          "email": "Jarna-Johanna.KARANKO@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Ghana": {
+      "name": "Delegation to Ghana",
+      "persons": [
+        {
+          "name": "Rune Skinnebach",
+          "title": "Head of Delegation -- To represent the Commission in Ghana -- and Togo in accordance with the -- mandate given by Headquarters and the -- internal control standards and to manage -- the human and financial resources -- assigned to the delegation.",
+          "email": "Rune.SKINNEBACH@eeas.europa.eu",
+          "phone": "+32 2584-6352"
+        }
+      ]
+    },
+    "Bissau": {
+      "name": "Bissau",
+      "persons": [
+        {
+          "name": "Federico Bianchi",
+          "title": "Head of Delegation -- To represent the EEAS/Commission in -- Guinea-Bissau in accordance with the -- mandate given by Headquarters and the -- Internal Control Standards",
+          "email": "Federico.BIANCHI@eeas.europa.eu",
+          "phone": "+245 955546315-(3231)"
+        }
+      ]
+    },
+    "Maarten": {
+      "name": "Maarten",
+      "persons": [
+        {
+          "name": "Luca Pierantoni",
+          "title": "Head of Delegation -- During my mandate, I will carry into -- effect all the new consequences, -- commitments and roles of the European -- External Action Service resulting from -- the Lisbon Treaty. It pays for all the -- constituencies I am responsible for, that -- means Guyana, Suriname, Trinidad -- and Tobago, Aruba, Bonaire, Curacao, -- Saba, Sint Eustatius, Sint Maarten -- and CARICOM. On the diplomatic -- level I will implement the shift of the -- European external doing from almost -- exclusive development cooperation -- activities to much more balanced -- three pillars based actions: political, -- trade and development cooperation. -- I will improve the PR of the European -- external action in the constituencies -- and amongst the EU Member States, -- I will improve their perception, when -- it comes to the meaningfulness of it. I -- will help to boost European trade with -- the constituencies and I will guard the -- effectiveness and accountability of -- implementation of the development -- cooperation programmes. A separated -- challenge will be the programming of the -- 11 European Development Fund. On the -- regional note, I will pursue a real and -- substantial Caribbean integration. When -- it comes to the managerial challenges, I -- will encourage all the three Delegations’ -- staff to identify themselves with the EU -- ideas, to be dedicated to the service and -- I will improve the working atmosphere -- in the sense of team building. I will, -- indeed, represent the European Union -- in Guyana, Suriname, Trinidad and -- Tobago, Aruba, Bonaire, Curacao, -- Saba, Sint Eustatius, Sint Maarten -- and Caricom/Cariforum in accordance -- with the mandate given to me by the -- Headquarters.",
+          "email": "Luca.PIERANTONI@eeas.europa.eu",
+          "phone": "+592 11 48053759"
+        }
+      ]
+    },
+    "Delegation to Haiti": {
+      "name": "Delegation to Haiti",
+      "persons": [
+        {
+          "name": "Hélène Roos",
+          "title": "Head of Delegation -- To represent the Commission in Haiti in -- accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Helene.ROOS@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Honduras": {
+      "name": "Delegation to Honduras",
+      "persons": [
+        {
+          "name": "Gonzalo Fournier",
+          "title": "Head of Delegation -- To represent the Commission in -- Honduras in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Gonzalo.FOURNIER@eeas.europa.eu"
+        }
+      ]
+    },
+    "and Macao": {
+      "name": "and Macao",
+      "persons": [
+        {
+          "name": "Harvey Rouse",
+          "title": "Head of Office -- To represent the European Union in -- Hong Kong and Macao in accordance -- with the mandate given by Headquarters -- and the 24 internal Control Standards.",
+          "email": "Harvey.ROUSE@ec.europa.eu",
+          "phone": "+852 22305-601"
+        }
+      ]
+    },
+    "Delegation to Kazakhstan": {
+      "name": "Delegation to Kazakhstan",
+      "persons": [
+        {
+          "name": "Aleska Simkic",
+          "title": "Head of Delegation -- To represent the Commission in -- Kazakhstan in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Aleska.SIMKIC@eeas.europa.eu",
+          "phone": "+7 717297-4552"
+        }
+      ]
+    },
+    "Bhutan": {
+      "name": "Bhutan",
+      "persons": [
+        {
+          "name": "Herve Delphin",
+          "title": "",
+          "email": "Herve.Delphin@eeas.europa.eu",
+          "phone": "+91 1166781-917"
+        }
+      ]
+    },
+    "and Brunei Darussalam": {
+      "name": "and Brunei Darussalam",
+      "persons": [
+        {
+          "name": "Denis Chaibi",
+          "title": "",
+          "email": "Denis.CHAIBI@eeas.europa.eu",
+          "phone": "+62 21-25546299"
+        }
+      ]
+    },
+    "Delegation to Israel": {
+      "name": "Delegation to Israel",
+      "persons": [
+        {
+          "name": "Michael Mann",
+          "title": "Head of Delegation -- To represent the Commission in Israel in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Michael.MANN@eeas.europa.eu",
+          "phone": "+32 2584-3732"
+        }
+      ]
+    },
+    "Delegation to Iraq": {
+      "name": "Delegation to Iraq",
+      "persons": [
+        {
+          "name": "Klemens Semtner",
+          "title": "Head of Delegation -- To represent the Commission in Iraq in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Klemens.SEMTNER@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Guinea": {
+      "name": "Delegation to Guinea",
+      "persons": [
+        {
+          "name": "Xavier Sticker",
+          "title": "Head of Delegation -- To represent the Commission in Guinea -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Xavier.STICKER@eeas.europa.eu",
+          "phone": "+224 622352071-(6701)"
+        }
+      ]
+    },
+    "and Cayman Islands": {
+      "name": "and Cayman Islands",
+      "persons": [
+        {
+          "name": "Erja Askola",
+          "title": "Head of Delegation -- To represent the Commission in Jamaica -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Erja.ASKOLA@eeas.europa.eu",
+          "phone": "+1 876619-3801"
+        }
+      ]
+    },
+    "Delegation to Japan": {
+      "name": "Delegation to Japan",
+      "persons": [
+        {
+          "name": "Jean-Eric Paquet",
+          "title": "Head of Delegation -- To represent the Commission in Japan -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Jean-Eric.PAQUET@eeas.europa.eu",
+          "phone": "+81 3-54226002"
+        },
+        {
+          "name": "Thomas Gnocchi",
+          "title": "Deputy Head of Delegation -- To represent the Commission in Japan -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "phone": "+81 22305601"
+        },
+        {
+          "name": "Adeline Hinderer",
+          "title": "Head of Unit",
+          "email": "Adeline.HINDERER@ec.europa.eu",
+          "phone": "+81 3-54226001"
+        }
+      ]
+    },
+    "Delegation to Jordan": {
+      "name": "Delegation to Jordan",
+      "persons": [
+        {
+          "name": "Pierre-Christophe Chatzisavas",
+          "title": "",
+          "email": "Christophe.CHATZISAVAS@eeas.europa.eu",
+          "phone": "+962 64607000-(1500)"
+        }
+      ]
+    },
+    "Office in Kosovo": {
+      "name": "Office in Kosovo",
+      "persons": [
+        {
+          "name": "Aivo Orav",
+          "title": "Head of Office -- To represent the European Union in -- Kosovo in accordance with the mandate -- given by Headquarters and the 24 -- internal Control Standards.",
+          "email": "Aivo.ORAV@eeas.europa.eu",
+          "phone": "+383 385131-320"
+        },
+        {
+          "name": "Eva Palatova",
+          "title": "Deputy Head of Delegation — Deputy -- Head of Office / Chief of Staff EUSR in -- Kosovo -- To deputise and represent the HoO/ -- EUSR as required. To assist the HoO/ -- EUSR in defining the strategy and -- policies of EU in Kosovo. To coordinate -- and manage the EUOK and EUSR -- sections ensuring coordinated and -- coherent advice for the HoO/EUSR, -- her/his decision-making, outreach and -- reporting. To ensure all EUOK and -- EUSR office activities are consistently -- planned, supported and executed -- in a qualitative manner. To organise -- the regular senior management team -- meetings, all staff meetings, thematic -- progress report meetings, periodic EUSR -- mandate implementation meetings. -- To assist the HoO/EUSR in human -- resources management, including on -- appraisal / goal setting, recruitment and -- induction of new staff.",
+          "phone": "+383 385131-321"
+        }
+      ]
+    },
+    "Delegation to Ivory Coast": {
+      "name": "Delegation to Ivory Coast",
+      "persons": [
+        {
+          "name": "Irchad Razaaly",
+          "title": "Head of Delegation -- To represent the Commission in Ivory -- Coast in accordance with the mandate -- given by Headquarters and manage the -- human and financial resources assigned -- to the delegation.",
+          "email": "Irchad.RAZAALY@ec.europa.eu",
+          "phone": "+225 302-746200"
+        }
+      ]
+    },
+    "Delegation to South Korea": {
+      "name": "Delegation to South Korea",
+      "persons": [
+        {
+          "name": "Ugo Astuto",
+          "title": "",
+          "email": "Ugo.ASTUTO@eeas.europa.eu",
+          "phone": "+82 237041-711"
+        }
+      ]
+    },
+    "Delegation to Kyrgyzstan": {
+      "name": "Delegation to Kyrgyzstan",
+      "persons": [
+        {
+          "name": "Rémi Duflot",
+          "title": "Head of Delegation -- To represent the Commission in -- Kyrgyzstan in accordance with the -- mandate given by Headquarters as well -- as to manage the human and financial -- resources assigned to the delegation.",
+          "email": "Remi.DUFLOT@eeas.europa.eu",
+          "phone": "+32 2584-6246"
+        }
+      ]
+    },
+    "Delegation to Moldova": {
+      "name": "Delegation to Moldova",
+      "persons": [
+        {
+          "name": "Iwona Piorko",
+          "title": "Head of Delegation -- To represent the Commission in Moldova -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Iwona.PIORKO@ec.europa.eu",
+          "phone": "+373 22-505210"
+        }
+      ]
+    },
+    "Delegation to Laos": {
+      "name": "Delegation to Laos",
+      "persons": [
+        {
+          "name": "Mark Gallagher",
+          "title": "Head of Delegation -- To represent the Commission in Laos in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Mark.GALLAGHER@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Kuwait": {
+      "name": "Delegation to Kuwait",
+      "persons": [
+        {
+          "name": "Anne Koistinen",
+          "title": "Head of Delegation -- To represent the European Union in -- Kuwait in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards.",
+          "email": "Anne.KOISTINEN@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Kenya": {
+      "name": "Delegation to Kenya",
+      "persons": [
+        {
+          "name": "Ondrej Simek",
+          "title": "Deputy Head of Delegation -- To provide advice to the Head of -- Delegation in key areas and represent -- him/her in his/hers absence. To assure -- the good functioning of the Delegation."
+        },
+        {
+          "name": "Henriette Geiger",
+          "title": "Head of Delegation -- To represent the Commission in Kenya -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Henriette.GEIGER@eeas.europa.eu",
+          "phone": "+254 20-2802000"
+        }
+      ]
+    },
+    "Delegation to Lesotho": {
+      "name": "Delegation to Lesotho",
+      "persons": [
+        {
+          "name": "Mette Sunnergren",
+          "title": "Head of Delegation -- To represent the European Union in the -- Kingdom of Lesotho and to foster mutual -- relations and cooperation in accordance -- with the mandate given by Headquarters",
+          "email": "Mette.SUNNERGREN@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Lebanon": {
+      "name": "Delegation to Lebanon",
+      "persons": [
+        {
+          "name": "Sandra De Waele",
+          "title": "Head of Delegation -- To represent the EEAS/Commission -- in Lebanon in accordance with the -- mandate given by Headquarters and the -- 24 Internal Control Standards",
+          "email": "Sandra.DE-WAELE@eeas.europa.eu",
+          "phone": "+961 1-956 904"
+        },
+        {
+          "name": "Samy Saadi",
+          "title": ""
+        }
+      ]
+    },
+    "Delegation to Liberia": {
+      "name": "Delegation to Liberia",
+      "persons": [
+        {
+          "name": "Nona Deprez",
+          "title": "Head of Delegation -- To represent the Commission in Liberia -- in accordance with the mandate given by -- Headquarters and the 16 Internal Control -- Standards",
+          "email": "Nona.DEPREZ@eeas.europa.eu",
+          "phone": "+231 77-5577777"
+        }
+      ]
+    },
+    "Antananarivo": {
+      "name": "Antananarivo",
+      "persons": [
+        {
+          "name": "Roland Kobia",
+          "title": "Head of Delegation -- To represent the Commission in -- Madagascar in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Roland.KOBIA@eeas.europa.eu",
+          "phone": "+261 2305650"
+        }
+      ]
+    },
+    "Delegation to Malaysia": {
+      "name": "Delegation to Malaysia",
+      "persons": [
+        {
+          "name": "Rafael Daerr",
+          "title": "Head of Delegation -- To represent the Commission in [host -- country] in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards",
+          "email": "rafael.daerr@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Malawi": {
+      "name": "Delegation to Malawi",
+      "persons": [
+        {
+          "name": "Daniel Aristi Gaztelumendi",
+          "title": "Head of Delegation -- To represent the Commission in Malawi -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "GAZTELUMENDI@eeas.europa.eu",
+          "phone": "+265 111773199-(250)"
+        }
+      ]
+    },
+    "Delegation to Mali": {
+      "name": "Delegation to Mali",
+      "persons": [
+        {
+          "name": "Bettina Muscheidt",
+          "title": "Head of Delegation -- To represent the Commission in [host -- country] in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards",
+          "email": "Bettina.MUSCHEIDT@eeas.europa.eu",
+          "phone": "+32 2584-4975"
+        },
+        {
+          "name": "Maria Pilar Palmero Vaquero",
+          "title": "Acting Head of Unit",
+          "email": "VAQUERO@ec.europa.eu",
+          "phone": "+32 229-57502"
+        }
+      ]
+    },
+    "Delegation in Mauritania": {
+      "name": "Delegation in Mauritania",
+      "persons": [
+        {
+          "name": "Joaquin Tasso Vilallonga",
+          "title": "Head of Delegation -- Représenter la Commission européenne -- en République Islamique de Mauritanie -- conformément au mandant donné par le -- Siège et aux 24 Standards de Contrôle -- Interne.",
+          "email": "VILALLONGA@eeas.europa.eu",
+          "phone": "+222 45252724-233"
+        }
+      ]
+    },
+    "Delegation to Mexico": {
+      "name": "Delegation to Mexico",
+      "persons": [
+        {
+          "name": "Francisco André",
+          "title": "Head of Delegation -- To represent the Commission in Mexico -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Francisco.ANDRE@eeas.europa.eu"
+        },
+        {
+          "name": "Suvi Roponen",
+          "title": "Deputy Head of Delegation -- To represent the European Union at -- the level of Deputy Head of Mission. -- To replace the Head of Delegation in -- his / her absence and assure the good -- functioning of the Delegation."
+        }
+      ]
+    },
+    "Delegation to Montenegro": {
+      "name": "Delegation to Montenegro",
+      "persons": [
+        {
+          "name": "Johann Sattler",
+          "title": "Head of Delegation -- To represent the Commission in -- Montenegro in accordance with the -- mandate given by Headquarters. -- To set up the Delegation in newly -- independent Montenegro, to manage -- the phasing out of the activities of the -- EAR in Montenegro and to introduce -- de-concentrated management in the -- Delegation on the basis of the 24 Internal -- Control Standards.",
+          "email": "Johann.SATTLER@eeas.europa.eu",
+          "phone": "+382 20-444686"
+        }
+      ]
+    },
+    "Macedonia": {
+      "name": "Macedonia",
+      "persons": [
+        {
+          "name": "Michalis Rokas",
+          "title": "Head of Delegation -- To represent the European Union in -- North Macedonia in accordance with -- the mandate given by Headquarters -- and manage the human and financial -- resources assigned to the delegation.",
+          "email": "Michalis.ROKAS@eeas.europa.eu",
+          "phone": "+389 2-3248"
+        }
+      ]
+    },
+    "Delegation to Libya": {
+      "name": "Delegation to Libya",
+      "persons": [
+        {
+          "name": "Nicola Orlando",
+          "title": "Head of Delegation -- To represent the Commission in Lybia in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Nicola.ORLANDO@eeas.europa.eu"
+        }
+      ]
+    },
+    "Port-Louis": {
+      "name": "Port-Louis",
+      "persons": [
+        {
+          "name": "Oskar Benedikt",
+          "title": "Head of Delegation -- Represent the European Commission in -- Mauritius, the Comoros, the Seychelles, -- Mayotte (French Overseas Territory), -- and vis-a-vis the Indian Ocean -- Commission in accordance with the -- mandate given by Headquarters and the -- Internal Control Standards.",
+          "email": "Oskar.BENEDIKT@eeas.europa.eu",
+          "phone": "+230 2071501"
+        }
+      ]
+    },
+    "Delegation to Mozambique": {
+      "name": "Delegation to Mozambique",
+      "persons": [
+        {
+          "name": "Antonino Maggiore",
+          "title": "Head of Delegation — Mozambique -- To represent the European Union in -- Mozambique in accordance with the -- mandate given by Headquarters.",
+          "email": "Antonino.MAGGIORE@eeas.europa.eu",
+          "phone": "+258 214810-11"
+        },
+        {
+          "name": "Paula Vazquez Horyaans",
+          "title": "Head of Unit",
+          "email": "HORYAANS@EC.EUROPA.EU",
+          "phone": "+258 21-481000"
+        }
+      ]
+    },
+    "Ulaanbaatar": {
+      "name": "Ulaanbaatar",
+      "persons": [
+        {
+          "name": "Ina Marciulionyte",
+          "title": "Head of Delegation -- To represent the European External -- Action Service and the European -- Commission in Mongolia in accordance -- with the mandate given by the HRVP.",
+          "email": "Ina.MARCIULIONYTE@eeas.europa.eu",
+          "phone": "+976 21-255575"
+        }
+      ]
+    },
+    "Delegation to Nepal": {
+      "name": "Delegation to Nepal",
+      "persons": [
+        {
+          "name": "Veronique Lorenzo",
+          "title": "Head of Delegation -- To represent the Commission in Nepal in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Veronique.LORENZO@eeas.europa.eu"
+        }
+      ]
+    },
+    "System (SICA)": {
+      "name": "System (SICA)",
+      "persons": [
+        {
+          "name": "Fernando Ponz",
+          "title": "Head of Delegation -- To represent the Commission in -- Nicaragua in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Fernando.PONZ@eeas.europa.eu",
+          "phone": "+505 2280-9551"
+        }
+      ]
+    },
+    "Delegation to Namibia": {
+      "name": "Delegation to Namibia",
+      "persons": [
+        {
+          "name": "Ana Beatriz Martins",
+          "title": "Head of Delegation -- To represent the EUROPEAN UNION -- in NAMIBIA in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Ana-Beatriz.MARTINS@eeas.europa.eu",
+          "phone": "+264 61-2104"
+        }
+      ]
+    },
+    "Delegation to Niger": {
+      "name": "Delegation to Niger",
+      "persons": [
+        {
+          "name": "Olai Voionmaa",
+          "title": "Head of Delegation (Acting) -- To represent the Commission in [host -- country] in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards",
+          "email": "Olai.VOIONMAA@eeas.europa.eu"
+        },
+        {
+          "name": "Gerard Van Driessche",
+          "title": "Acting Head of Unit",
+          "email": "Gerard.VAN-DRIESSCHE@eeas.europa.eu",
+          "phone": "+230 2071515"
+        }
+      ]
+    },
+    "Delegation to Norway": {
+      "name": "Delegation to Norway",
+      "persons": [
+        {
+          "name": "Nicolas De La Grandville",
+          "title": "Head of Delegation -- To represent the Commission in Norway -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "GRANDVILLE@eeas.europa.eu",
+          "phone": "+47 90 99 48 42"
+        }
+      ]
+    },
+    "Delegation to New Zealand": {
+      "name": "Delegation to New Zealand",
+      "persons": [
+        {
+          "name": "Lawrence Meredith",
+          "title": "Head of Delegation -- To represent the Commission in New -- Zealand in accordance with the mandate -- given by Headquarters and manage the -- human and financial resources assigned -- to the delegation.",
+          "email": "Lawrence.Meredith@ec.europa.eu",
+          "phone": "+64 4-4729146"
+        }
+      ]
+    },
+    "Delegation to Pakistan": {
+      "name": "Delegation to Pakistan",
+      "persons": [
+        {
+          "name": "Raimundas Karoblis",
+          "title": "",
+          "email": "Raimundas.KAROBLIS@eeas.europa.eu"
+        },
+        {
+          "name": "Philipp Oliver Gross",
+          "title": "Deputy Head of Delegation -- To represent the European Union at the -- level of Deputy Head of Mission and -- conduct all relevant actions accordingly. -- To replace the Head of Delegation in -- his / her absence and assure the good -- functioning of the Delegation.",
+          "phone": "+92 51-8486501"
+        }
+      ]
+    },
+    "Delegation to Panama": {
+      "name": "Delegation to Panama",
+      "persons": [
+        {
+          "name": "Izabela Matusz",
+          "title": "Head of Delegation -- To represent the Commission in Panama -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Izabela.MATUSZ@eeas.europa.eu",
+          "phone": "+507 280-3500"
+        }
+      ]
+    },
+    "Delegation to Paraguay": {
+      "name": "Delegation to Paraguay",
+      "persons": [
+        {
+          "name": "Katja Afheldt",
+          "title": "",
+          "email": "Katja.AFHELDT@eeas.europa.eu"
+        }
+      ]
+    },
+    "Guinea": {
+      "name": "Guinea",
+      "persons": [
+        {
+          "name": "Erika Hasznos",
+          "title": "Head of Delegation -- To represent the Commission in Papua -- New Guinea and in Solomon Island -- and Vanuatu in accordance with the -- mandate given by Headquarters and the -- 24 Internal Control Standards",
+          "email": "Erika.HASZNOS@eeas.europa.eu",
+          "phone": "+32 2584-5179"
+        }
+      ]
+    },
+    "Delegation to Russia": {
+      "name": "Delegation to Russia",
+      "persons": [
+        {
+          "name": "Roland Galharague",
+          "title": "Head of Delegation — Dir -- To represent the Commission in Russia -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Roland.GALHARAGUE@eeas.europa.eu"
+        },
+        {
+          "name": "Soren Liborius",
+          "title": "Deputy Head of Delegation -- To represent the Commission in Russia -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "phone": "+32 2584-4032"
+        }
+      ]
+    },
+    "Delegation to Nigeria and": {
+      "name": "Delegation to Nigeria and",
+      "persons": [
+        {
+          "name": "Gautier Mignot",
+          "title": "Head of Delegation -- To represent the Commission in Nigeria -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Gautier.MIGNOT@eeas.europa.eu",
+          "phone": "+234 2094617800-(200)"
+        }
+      ]
+    },
+    "Delegation to Morocco": {
+      "name": "Delegation to Morocco",
+      "persons": [
+        {
+          "name": "Eric Trotemann",
+          "title": "",
+          "email": "Eric.TROTEMANN@ec.europa.eu",
+          "phone": "+212 53757-9827"
+        },
+        {
+          "name": "Dimiter Tzantchev",
+          "title": "",
+          "email": "Dimiter.TZANTCHEV@eeas.europa.eu",
+          "phone": "+212 53757-9801"
+        }
+      ]
+    },
+    "Delegation to Rwanda": {
+      "name": "Delegation to Rwanda",
+      "persons": [
+        {
+          "name": "Belen Calvo Uyarra",
+          "title": "Head of Delegation -- To represent the Commission in Rwanda -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Belen.CALVO-UYARRA@eeas.europa.eu",
+          "phone": "+250 788 198 105"
+        }
+      ]
+    },
+    "Delegation to Serbia": {
+      "name": "Delegation to Serbia",
+      "persons": [
+        {
+          "name": "Andreas Von Beckerath",
+          "title": "",
+          "email": "Andreas.VON-BECKERATH@eeas.europa.eu",
+          "phone": "+381 11-3083212"
+        }
+      ]
+    },
+    "Delegation to Senegal": {
+      "name": "Delegation to Senegal",
+      "persons": [
+        {
+          "name": "Jean-Marc Pisani",
+          "title": "Head of Delegation -- To represent the Commission in Senegal -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Jean-Marc.PISANI@eeas.europa.eu",
+          "phone": "+221 338891071-(202)"
+        }
+      ]
+    },
+    "Philippines": {
+      "name": "Philippines",
+      "persons": [
+        {
+          "name": "Massimo Santoro",
+          "title": "Head of Delegation -- To represent the European Union in -- the Philippines in accordance with the -- mandate given by the EEAS Secretary -- General.",
+          "email": "Massimo.SANTORO@eeas.europa.eu",
+          "phone": "+63 2-88595110"
+        }
+      ]
+    },
+    "Delegation to Sierra Leone": {
+      "name": "Delegation to Sierra Leone",
+      "persons": [
+        {
+          "name": "Jacek Jankowski",
+          "title": "Head of Delegation -- To represent the Commission in Sierra -- Leone in accordance with the mandate -- given by Headquarters and the internal -- control standards and to manage the -- human and financial resources assigned -- to the delegation.",
+          "email": "Jacek.JANKOWSKI@eeas.europa.eu",
+          "phone": "+232 88136000-(6102)"
+        }
+      ]
+    },
+    "Delegation to Somalia": {
+      "name": "Delegation to Somalia",
+      "persons": [
+        {
+          "name": "Francesca Di Mauro",
+          "title": "Head of Delegation -- To represent the European Union -- in SOMALIA in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the Delegation",
+          "email": "Francesca.DI-MAURO@eeas.europa.eu",
+          "phone": "+252 2720318362"
+        }
+      ]
+    },
+    "Delegation to Singapore": {
+      "name": "Delegation to Singapore",
+      "persons": [
+        {
+          "name": "Artis Bertulis",
+          "title": "Head of Delegation -- To represent the External Service and -- the European Commission in Singapore -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards.",
+          "email": "Artis.BERTULIS@eeas.europa.eu",
+          "phone": "+65 65760-122"
+        }
+      ]
+    },
+    "Delegation to South Africa": {
+      "name": "Delegation to South Africa",
+      "persons": [
+        {
+          "name": "Sandra Kramer",
+          "title": "Head of Delegation -- To represent the Commission in South -- Africa in order to promote the interests of -- the EU and to improve relations between -- the EU and South Africa, in accordance -- with the mandate given by Headquarters",
+          "email": "Sandra.KRAMER@eeas.europa.eu",
+          "phone": "+27 12-452 5210"
+        }
+      ]
+    },
+    "Sudan": {
+      "name": "Sudan",
+      "persons": [
+        {
+          "name": "Per Enar Enarsson",
+          "title": "Head of Delegation -- To represent the Commission in South -- Sudan in accordance with the mandate -- given by Headquarters and manage the -- human and financial resources assigned -- to the delegation.",
+          "email": "Per-Enar.ENARSSON@eeas.europa.eu"
+        }
+      ]
+    },
+    "and to Liechtenstein": {
+      "name": "and to Liechtenstein",
+      "persons": [
+        {
+          "name": "Andreas Künne",
+          "title": "Head of Delegation -- To represent the Commission in -- Switzerland in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Andreas.KUNNE@eeas.europa.eu"
+        }
+      ]
+    },
+    "Doha": {
+      "name": "Doha",
+      "persons": [
+        {
+          "name": "Cristian Tudor",
+          "title": "Head of Delegation -- To represent the Commission in Qatar in -- accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards.",
+          "email": "Cristian.TUDOR@eeas.europa.eu",
+          "phone": "+974 55875466"
+        }
+      ]
+    },
+    "and the Maldives": {
+      "name": "and the Maldives",
+      "persons": [
+        {
+          "name": "Carmen Moreno",
+          "title": "Head of Delegation -- To represent the Commission in Sri -- Lanka in accordance with the mandate -- given by Headquarters and manage the -- human and financial resources assigned -- to the delegation.",
+          "email": "Carmen.MORENO@eeas.europa.eu",
+          "phone": "+94 11-2674413"
+        }
+      ]
+    },
+    "Delegation to Tajikistan": {
+      "name": "Delegation to Tajikistan",
+      "persons": [
+        {
+          "name": "Radoslaw Darski",
+          "title": "Head of Delegation -- To represent the Commission in -- Tajikistan in accordance with the -- mandate given by Headquarters as well -- as to manage the human and financial -- resources assigned to the delegation.",
+          "email": "Radoslaw.DARSKI@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Sudan": {
+      "name": "Delegation to Sudan",
+      "persons": [
+        {
+          "name": "Wolfram Vetter",
+          "title": "",
+          "email": "Wolfram.VETTER@eeas.europa.eu",
+          "phone": "+32 2584-2955"
+        }
+      ]
+    },
+    "Trade Office in Taiwan": {
+      "name": "Trade Office in Taiwan",
+      "persons": [
+        {
+          "name": "Lutz Guellner",
+          "title": "Head of Office -- To represent the European Union in -- Taiwan in accordance with the mandate -- given by Headquarters and manage the -- human and financial resources assigned -- to the Office.",
+          "email": "Lutz.GUELLNER@eeas.europa.eu",
+          "phone": "+886 227577211-100"
+        }
+      ]
+    },
+    "Delegation to Thailand": {
+      "name": "Delegation to Thailand",
+      "persons": [
+        {
+          "name": "Luisa Ragher",
+          "title": "Head of Delegation -- To represent the Commission in Thailand -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Luisa.RAGHER@eeas.europa.eu",
+          "phone": "+32 2584-4954"
+        },
+        {
+          "name": "Tom Corrie",
+          "title": "Acting Head of Unit",
+          "email": "Tom.CORRIE@eeas.europa.eu",
+          "phone": "+6632 2-3052600229-89460"
+        }
+      ]
+    },
+    "Delegation to Tanzania": {
+      "name": "Delegation to Tanzania",
+      "persons": [
+        {
+          "name": "Christine Grau",
+          "title": "Head of Delegation -- To represent the Commission in -- Tanzania in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Christine.GRAU@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Peru": {
+      "name": "Delegation to Peru",
+      "persons": [
+        {
+          "name": "Jonathan Hatwell",
+          "title": "Head of Delegation -- To represent the Commission in Peru in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Jonathan.HATWELL@eeas.europa.eu"
+        }
+      ]
+    },
+    "Oman, and Saudi Arabia": {
+      "name": "Oman, and Saudi Arabia",
+      "persons": [
+        {
+          "name": "Christophe Farnaud",
+          "title": "Head of Delegation -- To represent the Commission in Saudia -- Arabia and in Bahrain, Kuwait, Oman, -- Qatar and the United Arab Emirates -- (hereafter referred to as the \"countries -- of responsibility\") in accordance with the -- mandate given by Headquarters and the -- 24 Internal Control Standards",
+          "email": "Christophe.FARNAUD@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Türkiye": {
+      "name": "Delegation to Türkiye",
+      "persons": [
+        {
+          "name": "Jurgis Vilcinskas",
+          "title": "Head of Delegation (Acting) -- To represent the Commission in Turkiye -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Jurgis.VILCINSKAS@eeas.europa.eu"
+        },
+        {
+          "name": "Maria Luisa Wyganowski",
+          "title": "",
+          "email": "Maria-Luisa.WYGANOWSKI@ec.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Togo": {
+      "name": "Delegation to Togo",
+      "persons": [
+        {
+          "name": "Gwilym Jones",
+          "title": "Head of Delegation -- Représenter la Commission européenne -- au Togo conformément au mandat -- donné par le Siège et aux 16 Standards -- de Contrôle Interne.",
+          "email": "Gwilym.JONES@ec.europa.eu",
+          "phone": "+228 2253-6028"
+        }
+      ]
+    },
+    "Turkmenistan": {
+      "name": "Turkmenistan",
+      "persons": [
+        {
+          "name": "Beata Peksa",
+          "title": "",
+          "email": "Beata.PEKSA@eeas.europa.eu",
+          "phone": "+993 12362203"
+        }
+      ]
+    },
+    "Delegation to Syria": {
+      "name": "Delegation to Syria",
+      "persons": [
+        {
+          "name": "Michael Ohnmacht",
+          "title": "",
+          "email": "Michael.OHNMACHT@eeas.europa.eu"
+        }
+      ]
+    },
+    "Tobago": {
+      "name": "Tobago",
+      "persons": [
+        {
+          "name": "Cecile Tassin",
+          "title": "Head of Delegation -- To represent the EEAS in Trinidad and -- Tobago and the Eastern Caribbean in -- accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards.",
+          "email": "Cecile.TASSIN-PELZER@ec.europa.eu"
+        }
+      ]
+    },
+    "States of America": {
+      "name": "States of America",
+      "persons": [
+        {
+          "name": "Jovita Neliupsiene",
+          "title": "Head of Delegation -- To represent the Commission in the -- United States of America in accordance -- with the mandate given by Headquarters -- and manage the human and financial -- resources assigned to the delegation.",
+          "email": "Jovita.NELIUPSIENE@eeas.europa.eu"
+        },
+        {
+          "name": "Michelangelo Margherita",
+          "title": "Head of Unit",
+          "email": "MICHELANGELO.MARGHERITA@EC.EUROPA.EU",
+          "phone": "+1 202-8629500"
+        },
+        {
+          "name": "Gerard De Graaf",
+          "title": ""
+        }
+      ]
+    },
+    "Delegation to Ukraine": {
+      "name": "Delegation to Ukraine",
+      "persons": [
+        {
+          "name": "Katarina Mathernova",
+          "title": "Head of Delegation -- To represent the Commission in Ukraine -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Katarina.MATHERNOVA@eeas.europa.eu",
+          "phone": "+380 44-3908010"
+        },
+        {
+          "name": "Stefan Schleuning",
+          "title": "",
+          "email": "STEFAN.SCHLEUNING@EC.EUROPA.EU"
+        }
+      ]
+    },
+    "Delegation to Uruguay": {
+      "name": "Delegation to Uruguay",
+      "persons": [
+        {
+          "name": "Petros Mavromichalis",
+          "title": "Head of Delegation -- To represent the European Union in -- Uruguay.",
+          "email": "Petros.MAVROMICHALIS@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Timor-Leste": {
+      "name": "Delegation to Timor-Leste",
+      "persons": [
+        {
+          "name": "Thorsten Bargfrede",
+          "title": "Head of Delegation -- To represent the Commission in Timor -- Leste in accordance with the mandate -- given by Headquarters and the 24 -- Internal Control Standards.",
+          "email": "Thorsten.BARGFREDE@eeas.europa.eu",
+          "phone": "+32 2584-3223"
+        }
+      ]
+    },
+    "Delegation to Tunisia": {
+      "name": "Delegation to Tunisia",
+      "persons": [
+        {
+          "name": "Giuseppe Perrone",
+          "title": "",
+          "email": "Giuseppe.PERRONE@eeas.europa.eu",
+          "phone": "+216 71139-250"
+        }
+      ]
+    },
+    "Emirates": {
+      "name": "Emirates",
+      "persons": [
+        {
+          "name": "Lucie Berger",
+          "title": "Head of Delegation -- To represent the European Union in -- the United Arab Emirates (UAE) in -- accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards.",
+          "email": "Lucie.BERGER@eeas.europa.eu",
+          "phone": "+971 2205-1159"
+        }
+      ]
+    },
+    "Delegation to Uganda": {
+      "name": "Delegation to Uganda",
+      "persons": [
+        {
+          "name": "Jan Sadek",
+          "title": "Head of Division -- To represent the Commission in Uganda -- in accordance with the mandate given by -- Headquarters and the 24 Internal Control -- Standards",
+          "email": "Jan.SADEK@eeas.europa.eu",
+          "phone": "+256 3-610009"
+        }
+      ]
+    },
+    "Lusaka": {
+      "name": "Lusaka",
+      "persons": [
+        {
+          "name": "Karolina Stasiak",
+          "title": "Head of Delegation — to ZAMBIA and -- COMESA -- As Head of Delegation, to represent the -- European Union to Zambia in order to -- promote the interests of the EU and to -- improve relations between the EU and -- Zambia, in accordance with the mandate -- given by Headquarters.",
+          "email": "Karolina.STASIAK@eeas.europa.eu"
+        }
+      ]
+    },
+    "Delegation to Zimbabwe": {
+      "name": "Delegation to Zimbabwe",
+      "persons": [
+        {
+          "name": "Katrin Hagemann",
+          "title": "Head of Delegation -- To represent the Commission in -- Zimbabwe in accordance with the -- mandate given by Headquarters and -- manage the human and financial -- resources assigned to the delegation.",
+          "email": "Katrin.HAGEMANN@eeas.europa.eu",
+          "phone": "+263 242338158"
+        }
+      ]
+    },
+    "World Trade Organisation": {
+      "name": "World Trade Organisation",
+      "persons": [
+        {
+          "name": "Joao Aguiar Machado",
+          "title": "Head of Delegation — MD -- To coordinate and represent the -- European Union in the relevant -- multilateral organisation in accordance -- with the mandate given by the Treaties -- and the respective mission letter.",
+          "email": "JOAO.AGUIAR-MACHADO@EC.EUROPA.EU",
+          "phone": "+41 22-9182261"
+        },
+        {
+          "name": "Antonio Fernandez-Martos",
+          "title": "Deputy Head of Delegation -- To assist and replace when and where -- necessary the Head of Delegation (HoD) -- in representing the European Union -- to the WTO in accordance with the -- mandate given to him by Headquarters. -- Assist in particular the HoD in the -- internal management of the delegation, -- i.a. as subdelegated authorizing officer."
+        }
+      ]
+    },
+    "organisations in Geneva": {
+      "name": "organisations in Geneva",
+      "persons": [
+        {
+          "name": "Deike Potzel",
+          "title": "",
+          "email": "Deike.POTZEL@eeas.europa.eu"
+        },
+        {
+          "name": "Michele Cervone",
+          "title": "Head of Division -- To assist and replace when and where -- necessary the Head of Delegation -- in representing the European Union -- to the UN and to other International -- Organisations in accordance with -- the mandate given by Headquarters. -- Assist in particular the HoD in the -- general coordination and the internal -- management of the delegation, including -- as subdelegated authorising officer.",
+          "phone": "+32 2584-2528"
+        }
+      ]
+    },
+    "Nations in New York": {
+      "name": "Nations in New York",
+      "persons": [
+        {
+          "name": "Stavros Lambrinidis",
+          "title": "Head of Delegation -- To coordinate and represent the -- European Union in the relevant -- multilateral organisation in accordance -- with the mandate given by the Treaties -- and the respective mission letter.",
+          "email": "Stavros.LAMBRINIDIS@eeas.europa.eu",
+          "phone": "+1 212-2928631"
+        }
+      ]
+    },
+    "Organisations in Vienna": {
+      "name": "Organisations in Vienna",
+      "persons": [
+        {
+          "name": "Carl Hallergard",
+          "title": "Head of Delegation -- To coordinate and represent the -- European Union in the relevant -- multilateral organisation in accordance -- with the mandate given by the Treaties -- and the respective mission letter.",
+          "email": "Carl.HALLERGARD@eeas.europa.eu",
+          "phone": "+43 1-5058411"
+        },
+        {
+          "name": "Rasa Ostrauskaite",
+          "title": "Deputy Head of Delegation — -- Permanent representative to the OSCE -- 1. Assist the Head of Delegation -- in ensuring a sound management -- of the Delegation 2. As permanent -- Representative to the OSCE, support the -- HR/VP and the Commission in Fulfilling -- their mandate, represent the EU to the -- OSCE, contribute to the coordination -- between the different areas of the -- Union’s External Action, pursues EU -- policies in the OSCE, promote visibility -- of the EU in the OSCE, conduct regular -- dialogue, coordinate with Member States -- representative to the OSCE.",
+          "phone": "+43 1-5058411"
+        }
+      ]
+    },
+    "and the UNESCO in Paris": {
+      "name": "and the UNESCO in Paris",
+      "persons": [
+        {
+          "name": "Christina Kokkinakis",
+          "title": "Head of Delegation -- To coordinate and represent the -- European Union in the relevant -- multilateral organisation in accordance -- with the mandate given by the Treaties -- and the respective mission letter.",
+          "email": "Christina.KOKKINAKIS@eeas.europa.eu"
+        }
+      ]
+    },
+    "and to San Marino": {
+      "name": "and to San Marino",
+      "persons": [
+        {
+          "name": "Martin Selmayr",
+          "title": "Head of Delegation -- To coordinate and represent the -- European Union in the relevant -- multilateral organisation in accordance -- with the mandate given by the Treaties -- and the respective mission letter.",
+          "email": "Martin.SELMAYR@ec.europa.eu"
+        }
+      ]
+    },
+    "of Europe": {
+      "name": "of Europe",
+      "persons": [
+        {
+          "name": "Vesna Kos",
+          "title": "Head of Delegation -- To coordinate and represent the -- European Union in the relevant -- multilateral organisation in accordance -- with the mandate given by the Treaties -- and the respective mission letter.",
+          "email": "Vesna.KOS@eeas.europa.eu",
+          "phone": "+33 3-90 40 60 81"
+        }
+      ]
+    },
+    "Delegation to Viet Nam": {
+      "name": "Delegation to Viet Nam",
+      "persons": [
+        {
+          "name": "Julien Guerrier",
+          "title": "",
+          "email": "Julien.GUERRIER@eeas.europa.eu"
+        }
+      ]
+    },
+    "Union": {
+      "name": "Union",
+      "persons": [
+        {
+          "name": "Javier Nino Perez",
+          "title": "Head of Delegation — and European -- Union Special Representative to the -- African Union -- As Head of Delegation, to represent the -- European Union to the African Union in -- order to promote the interests of the EU -- and to improve relations between the -- EU and African Union, in accordance -- with the mandate given by Headquarters. -- The job-holder also exercises the -- function of European Union Special -- Representative to the African Union. -- The mandate of the EUSR is based -- on the EU’s comprehensive policy -- objectives in support of African efforts -- to build a peaceful, democratic and -- prosperous future as set out in the EU -- Africa Strategy.",
+          "email": "Javier.NINO-PEREZ@eeas.europa.eu"
+        },
+        {
+          "name": "Karin Stanghed",
+          "title": "Deputy Head of Delegation -- To represent the Commission in AU in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation."
+        }
+      ]
+    },
+    "Delegation to Venezuela": {
+      "name": "Delegation to Venezuela",
+      "persons": [
+        {
+          "name": "Antonia Calvo Puerta",
+          "title": "Head of Delegation -- Représenter l’Union Européenne -- au Venezuela en accord avec le -- mandat établie par le Siège et gérer -- les ressources humaines et financières -- alloués à la Délégation.",
+          "email": "Antonia.CALVO-PUERTA@eeas.europa.eu",
+          "phone": "+58 212-8210601"
+        }
+      ]
+    },
+    "Kingdom": {
+      "name": "Kingdom",
+      "persons": [
+        {
+          "name": "Pedro Serrano",
+          "title": "Head of Delegation — MD",
+          "email": "Pedro.SERRANO@eeas.europa.eu"
+        },
+        {
+          "name": "Isabell Poppelbaum",
+          "title": "Deputy Head of Delegation -- To assist and when required replace the -- Head of Delegation in providing overall -- strategic orientation and management -- of the Delegation. This includes in -- particular ensuring its staff delivers -- the work required to implement the -- delegation’s work program in an effective -- way, while enabling the jobholders to -- develop their potential."
+        }
+      ]
+    },
+    "and Gaza Strip, UNRWA": {
+      "name": "and Gaza Strip, UNRWA",
+      "persons": [
+        {
+          "name": "Alexandre Stutzmann",
+          "title": "Head of Office -- To represent the European Union -- in West Bank and Gaza Strip in -- accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- Office.",
+          "email": "Alexandre.STUTZMANN@eeas.europa.eu",
+          "phone": "+972 2-5415800"
+        },
+        {
+          "name": "James Rizzo",
+          "title": "Deputy Head of Delegation -- To represent the European Union at -- the level of Deputy Head of Mission. -- To replace the Head of Delegation in -- his / her absence and assure the good -- functioning of the Delegation.",
+          "phone": "+972 2-5415817"
+        }
+      ]
+    },
+    "Delegation to Uzbekistan": {
+      "name": "Delegation to Uzbekistan",
+      "persons": [
+        {
+          "name": "Toivo Klaar",
+          "title": "Head of Delegation -- To represent the Commission in -- Uzbekistan in accordance with the -- mandate given by Headquarters as well -- as to manage the human and financial -- resources assigned to the delegation.",
+          "email": "Toivo.KLAAR@eeas.europa.eu",
+          "phone": "+998 781201601-(102)"
+        }
+      ]
+    },
+    "Jakarta": {
+      "name": "Jakarta",
+      "persons": [
+        {
+          "name": "Sujiro Seam",
+          "title": "Head of Delegation -- To represent the Commission in Asean -- in accordance with the mandate given by -- Headquarters and manage the human -- and financial resources assigned to the -- delegation.",
+          "email": "Sujiro.SEAM@eeas.europa.eu",
+          "phone": "+62 21-25546291"
+        }
+      ]
+    },
+    "Delegation to Yemen": {
+      "name": "Delegation to Yemen",
+      "persons": [
+        {
+          "name": "Patrick Simonnet",
+          "title": "Head of Delegation — Ambassador -- Promote EU — Yemen relations",
+          "email": "Patrick.SIMONNET@eeas.europa.eu",
+          "phone": "+962 65902929-(2500)"
+        }
+      ]
+    }
+  }
+}

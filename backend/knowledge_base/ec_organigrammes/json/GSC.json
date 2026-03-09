@@ -1,0 +1,2273 @@
+{
+  "institution_code": "GSC",
+  "institution_name": "General Secretariat of the Council",
+  "full_name": "General Secretariat of the Council of the European Union",
+  "source": "EU Who Is Who (op.europa.eu)",
+  "date_extracted": "2026-03-09",
+  "secretary_general": {
+    "name": "Ms Thérèse BLANCHET",
+    "position": "Secretary-General"
+  },
+  "structure": [
+    {
+      "code": "CM_CRF_246986",
+      "name": "Chair of the Eurogroup Working Group",
+      "persons": [
+        {
+          "name": "Mr Tuomas SAARENHEIMO",
+          "phone": "+32-22816006"
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_251648",
+      "name": "Digital Transformation",
+      "persons": [
+        {
+          "name": "Mr Raoul UEBERECKEN"
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_246814",
+      "name": "Private Office of the Secretary-General",
+      "persons": [
+        {
+          "name": "Ms Inese SULCE"
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247680",
+      "name": "Counter-Terrorism Coordination",
+      "persons": [
+        {
+          "name": "Mr Bartjan WEGTER"
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247719",
+      "name": "Internal Audit",
+      "persons": [
+        {
+          "name": "Mr Ilkka SAARILAHTI"
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247447",
+      "name": "Data Protection",
+      "persons": [
+        {
+          "name": "Ms Elisa MORO"
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_249084",
+      "name": "Analysis and Research Team",
+      "persons": [
+        {
+          "name": "Ms Christiane HOEHN"
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_250765",
+      "name": "Competitiveness and Trade",
+      "persons": [
+        {
+          "name": "Ms Isabel RIANO IBANEZ"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_250766",
+          "name": "Internal Market, Industry, Competition and Intellectual Property",
+          "persons": [
+            {
+              "name": "Ms Malgorzata WENERSKA-CRAPS"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_250767",
+          "name": "Research, Space, Company Law and Consumer Protection",
+          "persons": [
+            {
+              "name": "Mr Marius HIRTE"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_250768",
+          "name": "Trade",
+          "persons": [
+            {
+              "name": "Ms Maria Luisa BALSELLS TRAVER"
+            },
+            {
+              "name": "Ms Eleonora BOTAR"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247599",
+      "name": "Economic and financial affairs",
+      "persons": [
+        {
+          "name": "Mr Thomas WESTPHAL"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_247401",
+          "name": "Economic Policy and Financial Services",
+          "persons": [
+            {
+              "name": "Mr Olaf PRUESSMANN"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_246828",
+              "name": "Economic Policy, including Eurogroup",
+              "persons": [
+                {
+                  "name": "Ms Alenka JASCHKE"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247711",
+              "name": "Financial services",
+              "persons": [
+                {
+                  "name": "Mr Mariano ABAD MENENDEZ"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247540",
+          "name": "Budget, Tax, Customs Union and Cohesion Policy",
+          "persons": [
+            {
+              "name": "Mr Nicolaj MORTENSEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247094",
+              "name": "Budget and Cohesion",
+              "persons": [
+                {
+                  "name": "Ms Saskia STOLK"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247570",
+              "name": "Tax Policy, Customs Union and Export Credits",
+              "persons": [
+                {
+                  "name": "Ms Kristi RABA"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_249765",
+      "name": "General and Institutional policy",
+      "persons": [
+        {
+          "name": "Mr Didier SEEUWS"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_247102",
+          "name": "European Council, Strategic Planning and PEC briefings",
+          "persons": [
+            {
+              "name": "Ms Marig LE GOFF"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_250547",
+          "name": "Presidency preparation and horizontal policies",
+          "persons": [
+            {
+              "name": "Ms Ines HEMPEL"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_253890",
+          "name": "Council Decision Making",
+          "persons": [
+            {
+              "name": "Mr Raoul UEBERECKEN"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_251812",
+          "name": "Policy Coordination",
+          "persons": [
+            {
+              "name": "Mr André GILLISSEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_251813",
+              "name": "Coreper 1"
+            },
+            {
+              "code": "CM_CRF_251814",
+              "name": "Coreper 2"
+            },
+            {
+              "code": "CM_CRF_251815",
+              "name": "EU-UK"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247598",
+          "name": "Interinstitutional Relations",
+          "persons": [
+            {
+              "name": "Ms Maria MAROTTA"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_250550",
+              "name": "European Parliament and Institutional issues"
+            },
+            {
+              "code": "CM_CRF_250552",
+              "name": "Legislative programming, coordination and support"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247473",
+      "name": "Justice and home affairs",
+      "persons": [
+        {
+          "name": "Ms Christine ROGER"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_248980",
+          "name": "External Relations in Justice and Home Affairs"
+        },
+        {
+          "code": "CM_CRF_247508",
+          "name": "Home affairs",
+          "persons": [
+            {
+              "name": "Mr Kim FREIDBERG"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247044",
+          "name": "Fundamental Rights and Values and Rule of Law",
+          "persons": [
+            {
+              "name": "Mr Ralph KAESSNER"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247043",
+          "name": "Evaluations in Justice and Home Affairs and Drugs Policy",
+          "persons": [
+            {
+              "name": "Ms Maïlys RAMONATXO"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247927",
+          "name": "Justice",
+          "persons": [
+            {
+              "name": "Mr Serge DE BIOLLEY"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247792",
+      "name": "Legal Service",
+      "persons": [
+        {
+          "name": "Ms Emer FINNEGAN"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_252124",
+          "name": "Information and Support",
+          "persons": [
+            {
+              "name": "Ms Gabriella LODI"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247124",
+          "name": "Competitiveness, Environment, Transport, Telecom, Energy",
+          "persons": [
+            {
+              "name": "Mr Frederik NAERT"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_248022",
+          "name": "Employment, Social Affairs, Education, Agriculture, Fisheries",
+          "persons": [
+            {
+              "name": "Ms Marion SIMM"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247127",
+          "name": "External Relations",
+          "persons": [
+            {
+              "name": "Mr Jean-Baptiste LAIGNELOT"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247189",
+          "name": "Institutional Questions / Staff Regulations / Litigation",
+          "persons": [
+            {
+              "name": "Ms Eugenia DUMITRIU-SEGNANA"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247874",
+          "name": "Justice / Home Affairs",
+          "persons": [
+            {
+              "name": "Ms Paloma LOPEZ-CARCELLER"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247383",
+          "name": "Economic and Financial Affairs, Budget, Structural Funds",
+          "persons": [
+            {
+              "name": "Mr Matthieu CHAVRIER"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247347",
+          "name": "Quality of Legislation",
+          "persons": [
+            {
+              "name": "Mr Soren SCHONBERG"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247047",
+              "name": "Treaties and Agreements"
+            },
+            {
+              "code": "CM_CRF_250837",
+              "name": "Planning, Coordination and Quality Control",
+              "persons": [
+                {
+                  "name": "Mr Cédric BARRA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_250839",
+                  "name": "Coordination and Official Journal",
+                  "persons": [
+                    {
+                      "name": "Ms Magdalena ZAGORSKA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247989",
+              "name": "Ordinary Legislative Procedure Acts Quality Policy",
+              "persons": [
+                {
+                  "name": "Mr Sven SIPOS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247748",
+                  "name": "German-Dutch Section"
+                },
+                {
+                  "code": "CM_CRF_247757",
+                  "name": "Spanish-Portuguese Section"
+                },
+                {
+                  "code": "CM_CRF_247491",
+                  "name": "Greek-Polish Section"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247988",
+              "name": "International Agreements  Quality Policy",
+              "persons": [
+                {
+                  "name": "Ms Evgenia CHATZIIOAKEIMIDOU"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247209",
+                  "name": "Croatian-Slovenian Section"
+                },
+                {
+                  "code": "CM_CRF_247769",
+                  "name": "Danish-Swedish Section"
+                },
+                {
+                  "code": "CM_CRF_247751",
+                  "name": "French-Romanian Section"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247990",
+              "name": "Other Acts Quality Policy",
+              "persons": [
+                {
+                  "name": "Ms Aleksandra KRYSZTOFIAK"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_248056",
+                  "name": "English-Irish Section"
+                },
+                {
+                  "code": "CM_CRF_250865",
+                  "name": "Bulgarian-Hungarian Section"
+                },
+                {
+                  "code": "CM_CRF_250866",
+                  "name": "Latvian-Lithuanian Section"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_250838",
+              "name": "Processes and Digitalisation",
+              "persons": [
+                {
+                  "name": "Ms Dace ANCANE"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_250867",
+                  "name": "Estonian-Finnish Section"
+                },
+                {
+                  "code": "CM_CRF_250868",
+                  "name": "Czech-Slovak Section"
+                },
+                {
+                  "code": "CM_CRF_250869",
+                  "name": "Italian-Maltese Section"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247536",
+      "name": "Agriculture, Fisheries, Social Affairs and Health",
+      "persons": [
+        {
+          "name": "Mr David BROZINA"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_247446",
+          "name": "Agriculture (SCA - Special Committee on Agriculture)",
+          "persons": [
+            {
+              "name": "Mr Andrä RUPPRECHTER"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247128",
+          "name": "Fisheries",
+          "persons": [
+            {
+              "name": "Mr Gábor IVAN"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_248835",
+          "name": "Veterinary and Plant Health Questions, Food and Forestry",
+          "persons": [
+            {
+              "name": "Mr Jean RECALDE"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_248836",
+          "name": "Employment and Social Policy",
+          "persons": [
+            {
+              "name": "Ms Mari LINNAPUOMI"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_250739",
+          "name": "Health",
+          "persons": [
+            {
+              "name": "Ms Anna Eva AMPELAS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247212",
+      "name": "External Relations",
+      "persons": [
+        {
+          "name": "Ms Maryem VAN DEN HEUVEL"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_246960",
+          "name": "Horizontal and Global Affairs",
+          "persons": [
+            {
+              "name": "Mr Jurij ASTON"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_246961",
+          "name": "Africa and MENA",
+          "persons": [
+            {
+              "name": "Mr Bostjan SPORAR"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_250840",
+          "name": "Eastern Europe and Asia",
+          "persons": [
+            {
+              "name": "Mr Zoltan MARTINUSZ"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_250841",
+          "name": "Enlargement and Europe",
+          "persons": [
+            {
+              "name": "Ms Helene HOLM-PEDERSEN"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_250842",
+          "name": "Security and Crisis Management",
+          "persons": [
+            {
+              "name": "Mr Nicolas KERLEROUX"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247396",
+      "name": "Environment, Education, Transport, Telecom and Energy",
+      "persons": [
+        {
+          "name": "Mr Peter JAVORCIK"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_246842",
+          "name": "Environment, Education, Youth, Culture, Audiovisual and Sport",
+          "persons": [
+            {
+              "name": "Mr Fabrice DUBREUIL"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247121",
+              "name": "Environment and Climate Change",
+              "persons": [
+                {
+                  "name": "Ms Milena PETKOVA"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247606",
+              "name": "Education, Youth, Culture, Audiovisual and Sport",
+              "persons": [
+                {
+                  "name": "Ms Petra CERNA"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247408",
+          "name": "Transport, telecommunications and energy",
+          "persons": [
+            {
+              "name": "Ms Kathiana GHIO"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247676",
+              "name": "Transport",
+              "persons": [
+                {
+                  "name": "Ms Caroline GERKENS"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_248040",
+              "name": "Energy Policies, Atomic Questions, Information Society",
+              "persons": [
+                {
+                  "name": "Mr Jan VAN ELST"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247332",
+      "name": "Communication and Information",
+      "persons": [
+        {
+          "name": "Mr Preben AAMANN"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_253202",
+          "name": "Budget and financial management",
+          "persons": [
+            {
+              "name": "Mr Nikola LESINSKI"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_246837",
+          "name": "Media and Communication",
+          "persons": [
+            {
+              "name": "Ms Nicole BAYER"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247156",
+              "name": "Media Relations",
+              "persons": [
+                {
+                  "name": "Mr Romain SADET"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247266",
+                  "name": "Media Monitoring and Research",
+                  "persons": [
+                    {
+                      "name": "Ms Lina ERSBORG"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247914",
+                  "name": "Press and Média Information"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247007",
+              "name": "Media Operations",
+              "persons": [
+                {
+                  "name": "Mr Tarik MEZIANI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247858",
+                  "name": "Audiovisual",
+                  "persons": [
+                    {
+                      "name": "Ms Isabelle BRUSSELMANS"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_253669",
+                  "name": "Press Centre and Media Planning",
+                  "persons": [
+                    {
+                      "name": "Mr Oscar FONTAO REGUEIRA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247116",
+              "name": "Digital Communication",
+              "persons": [
+                {
+                  "name": "Mr Maciej BURY"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_253670",
+                  "name": "Website Management and Design",
+                  "persons": [
+                    {
+                      "name": "Mr Alfredo PULVIRENTI"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_253671",
+                  "name": "Digital Content and Governance",
+                  "persons": [
+                    {
+                      "name": "Ms Liza DRIUS"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247055",
+          "name": "Information and Outreach",
+          "persons": [
+            {
+              "name": "Ms Inga Dominika ROSINSKA"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_246964",
+              "name": "Outreach and Engagement",
+              "persons": [
+                {
+                  "name": "Ms Oana DUTESCU"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247056",
+              "name": "Visual Creation and Production",
+              "persons": [
+                {
+                  "name": "Mr Achilleas KARRAS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_248842",
+                  "name": "Requests and Projects Management"
+                },
+                {
+                  "code": "CM_CRF_248843",
+                  "name": "Creative Services"
+                },
+                {
+                  "code": "CM_CRF_247282",
+                  "name": "Production Services",
+                  "persons": [
+                    {
+                      "name": "Mr Bernard PHILIPPART"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_246841",
+              "name": "Information Services",
+              "persons": [
+                {
+                  "name": "Mr Fernando FLORINDO GIJON"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247030",
+                  "name": "Transparency"
+                },
+                {
+                  "code": "CM_CRF_247057",
+                  "name": "Council Library"
+                },
+                {
+                  "code": "CM_CRF_247058",
+                  "name": "Council Archives"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247718",
+      "name": "Translation Service",
+      "persons": [
+        {
+          "name": "Ms Máire KILLORAN"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_247040",
+          "name": "Operations",
+          "persons": [
+            {
+              "name": "Ms Milda KISIELIENE"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_251465",
+              "name": "Planning and Support",
+              "persons": [
+                {
+                  "name": "Mr Glenn DU VILLE"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_252125",
+              "name": "Terminology coordination",
+              "persons": [
+                {
+                  "name": "Ms Lore VANDEVOORDE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247206",
+          "name": "Resources",
+          "persons": [
+            {
+              "name": "Ms Andreea IVANESCU"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_253203",
+              "name": "Language Technology",
+              "persons": [
+                {
+                  "name": "Ms Roxana WEINTRAUB"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247046",
+              "name": "HR management and horizontal support",
+              "persons": [
+                {
+                  "name": "Ms Liana VASILACHE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_246993",
+          "name": "Translation 1",
+          "persons": [
+            {
+              "name": "Ms Malgorzata STECKO"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247423",
+              "name": "Bulgarian Language",
+              "persons": [
+                {
+                  "name": "Ms Viktorija ZURBIENE"
+                },
+                {
+                  "name": "Ms Valeriya NIKOLOVA"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247848",
+              "name": "Czech Language",
+              "persons": [
+                {
+                  "name": "Mr Jiri PLACEK"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_246849",
+              "name": "German Language",
+              "persons": [
+                {
+                  "name": "Mr David ZELINGER"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_248070",
+              "name": "Irish Language",
+              "persons": [
+                {
+                  "name": "Ms Úna O'CONNOR"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247666",
+              "name": "Greek Language",
+              "persons": [
+                {
+                  "name": "Mr José Miguel COLERA RODRIGUEZ"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247765",
+              "name": "Spanish Language",
+              "persons": [
+                {
+                  "name": "Mr José Miguel COLERA RODRIGUEZ"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247802",
+              "name": "Italian Language",
+              "persons": [
+                {
+                  "name": "Ms Agnes TARNAI"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247178",
+              "name": "Latvian Language",
+              "persons": [
+                {
+                  "name": "Mr Anastassios PAPADOPOULOS"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247703",
+              "name": "Lithuanian Language",
+              "persons": [
+                {
+                  "name": "Ms Inga RUDZINSKIENE"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247822",
+              "name": "Portuguese Language",
+              "persons": [
+                {
+                  "name": "Mr Orlando GAMBOA DOS SANTOS"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247585",
+              "name": "Slovak Language",
+              "persons": [
+                {
+                  "name": "Mr Zdenko SOVCIK"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247440",
+              "name": "English Language",
+              "persons": [
+                {
+                  "name": "Ms Shauna DOHERTY"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_246994",
+          "name": "Translation 2",
+          "persons": [
+            {
+              "name": "Ms Máire KILLORAN"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247340",
+              "name": "Danish Language",
+              "persons": [
+                {
+                  "name": "Ms Anne Kristine ANHOJ"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247657",
+              "name": "Estonian Language",
+              "persons": [
+                {
+                  "name": "Ms Eva RADAI KOVACS"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247584",
+              "name": "French Language",
+              "persons": [
+                {
+                  "name": "Mr Eric THORAVAL"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_246980",
+              "name": "Croatian Language",
+              "persons": [
+                {
+                  "name": "Ms Ieva LEJASISAKA"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247187",
+              "name": "Hungarian Language",
+              "persons": [
+                {
+                  "name": "Ms Lucia CECCARELLI"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247304",
+              "name": "Maltese Language",
+              "persons": [
+                {
+                  "name": "Mr Dan MARASESCU"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247414",
+              "name": "Dutch Language",
+              "persons": [
+                {
+                  "name": "Mr Joris ROELANTS"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247100",
+              "name": "Polish Language",
+              "persons": [
+                {
+                  "name": "Ms Agata KLOPOTOWSKA"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247398",
+              "name": "Romanian Language",
+              "persons": [
+                {
+                  "name": "Mr Dan MARASESCU"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247362",
+              "name": "Slovenian Language",
+              "persons": [
+                {
+                  "name": "Ms Anna KALBE"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247961",
+              "name": "Finnish Language",
+              "persons": [
+                {
+                  "name": "Ms Eva RADAI KOVACS"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247227",
+              "name": "Swedish Language",
+              "persons": [
+                {
+                  "name": "Ms Camilla ENNET"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_247832",
+      "name": "Organisational Development and Services",
+      "persons": [
+        {
+          "name": "Mr Cesare ONESTINI"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_247060",
+          "name": "Organisational Development",
+          "persons": [
+            {
+              "name": "Ms Monika BARABASZ-LOPES"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247323",
+          "name": "Human Resources",
+          "persons": [
+            {
+              "name": "Ms Rebekka WIEMANN"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247965",
+              "name": "Diversity and Inclusion"
+            },
+            {
+              "code": "CM_CRF_246872",
+              "name": "Staffing and Mobility",
+              "persons": [
+                {
+                  "name": "Ms Gordana MLACAK"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247150",
+                  "name": "Recruitment",
+                  "persons": [
+                    {
+                      "name": "Ms Kristel DE BAENE"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247310",
+                      "name": "Selection of officials",
+                      "persons": [
+                        {
+                          "name": "Ms Beata ZOMBEKOVA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "CM_CRF_246987",
+                      "name": "Temporary Staffing Services",
+                      "persons": [
+                        {
+                          "name": "Ms Inna VILLALVILLA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "CM_CRF_246979",
+                      "name": "Mobile Team"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_249270",
+                  "name": "Staff Planning and Performance Management",
+                  "persons": [
+                    {
+                      "name": "Mr Matteo INFERNUSO"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247397",
+                      "name": "Performance Management",
+                      "persons": [
+                        {
+                          "name": "Mr Tamas ZAHONYI"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247160",
+                  "name": "Traineeships",
+                  "persons": [
+                    {
+                      "name": "Ms Judith MEINEL"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_246829",
+                  "name": "Provisional Cell"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247651",
+              "name": "Staff Development",
+              "persons": [
+                {
+                  "name": "Ms Sandra BEELAARD"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_246863",
+                  "name": "Course Design and Coaching"
+                },
+                {
+                  "code": "CM_CRF_246864",
+                  "name": "Budget and Programming",
+                  "persons": [
+                    {
+                      "name": "Mr Bruno PEREIRA LAGOS"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247795",
+              "name": "Working Conditions and Staff Support",
+              "persons": [
+                {
+                  "name": "Ms Sonia FUMAGALLI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_246969",
+                  "name": "Staff Support",
+                  "persons": [
+                    {
+                      "name": "Mr Salvatore MORELLO"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247878",
+                      "name": "HR & You Helpdesk and Privileges",
+                      "persons": [
+                        {
+                          "name": "Ms Christine VAN VIJLE"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_246968",
+                  "name": "Working Time and Personal Files",
+                  "units": [
+                    {
+                      "code": "CM_CRF_247386",
+                      "name": "Time Management",
+                      "persons": [
+                        {
+                          "name": "Mr Fabio COZZI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "CM_CRF_247617",
+                      "name": "Personal Files"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247370",
+              "name": "Missions, Finance, HR-IT",
+              "persons": [
+                {
+                  "name": "Mr Ivan ENEV"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247045",
+                  "name": "HR IT and Analytics"
+                },
+                {
+                  "code": "CM_CRF_252126",
+                  "name": "Missions",
+                  "persons": [
+                    {
+                      "name": "Ms Nicole VAN VIJLE"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_252127",
+                  "name": "HR Finance",
+                  "persons": [
+                    {
+                      "name": "Mr Marc HENRIQUES DE GRANADA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247610",
+              "name": "Healthcare and Social Services",
+              "persons": [
+                {
+                  "name": "Mr Juan PALLARES CASADO"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247327",
+                  "name": "Finance and Operations"
+                },
+                {
+                  "code": "CM_CRF_248494",
+                  "name": "Psychosocial Support"
+                },
+                {
+                  "code": "CM_CRF_247459",
+                  "name": "Management of medical absences"
+                },
+                {
+                  "code": "CM_CRF_247093",
+                  "name": "Medical Service",
+                  "persons": [
+                    {
+                      "name": "Mr Mark SMIT"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247182",
+                      "name": "Dispensary"
+                    },
+                    {
+                      "code": "CM_CRF_247607",
+                      "name": "Management/Coordination",
+                      "persons": [
+                        {
+                          "name": "Mr Mitchell TALPE"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247361",
+              "name": "Legal Advisers to the Administration",
+              "persons": [
+                {
+                  "name": "Mr Colin DOHERTY"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_246990",
+                  "name": "Coordination and Registry",
+                  "persons": [
+                    {
+                      "name": "Ms Vi NGUYEN"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_246831",
+          "name": "Protocol and Events",
+          "persons": [
+            {
+              "name": "Ms Ragnheidur ROUBINEAU"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_246833",
+              "name": "Protocol",
+              "persons": [
+                {
+                  "name": "Ms Melinda KERESZTES"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_253591",
+                  "name": "Council and Multilateral Events",
+                  "persons": [
+                    {
+                      "name": "Mr José Manuel SALGADO PAREDES"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_253592",
+                  "name": "European Council",
+                  "persons": [
+                    {
+                      "name": "Mr Marko FERBAR"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247738",
+                  "name": "Reception",
+                  "persons": [
+                    {
+                      "name": "Ms Maria Del Pilar ROZA MANZANO"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247905",
+              "name": "Events",
+              "persons": [
+                {
+                  "name": "Ms Isabelle DIRKX"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247026",
+                  "name": "Digitalisation and Events Planning",
+                  "persons": [
+                    {
+                      "name": "Ms Martina BOSIAKOVA"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247382",
+                      "name": "Events and Interpretation Planning",
+                      "persons": [
+                        {
+                          "name": "Ms Ana Maria ALFONSO PALENCIA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_253590",
+                  "name": "Room and Participants Management",
+                  "persons": [
+                    {
+                      "name": "Ms Doriana DRAGOMIR"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247616",
+                      "name": "Room Attendants"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_246971",
+              "name": "Catering",
+              "persons": [
+                {
+                  "name": "Ms Nina BROVC"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_246991",
+                  "name": "Collective Catering and Food Safety",
+                  "persons": [
+                    {
+                      "name": "Mr Didier BOURGOIN"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_253596",
+                  "name": "Protocol Catering",
+                  "persons": [
+                    {
+                      "name": "Mr Théo GRANET"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_246847",
+                      "name": "Orders"
+                    },
+                    {
+                      "code": "CM_CRF_253798",
+                      "name": "Hospitality services",
+                      "persons": [
+                        {
+                          "name": "Mr Olivier RESMINI",
+                          "phone": "+32-22818597"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_246835",
+              "name": "Support",
+              "persons": [
+                {
+                  "name": "Mr Jaroslaw ZACZYKIEWICZ"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247834",
+                  "name": "Ushers",
+                  "persons": [
+                    {
+                      "name": "Mr Vincent BOUILLEZ"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_246820",
+                  "name": "Finance, Calls for Tender, Delegates’ Expenses"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_246832",
+          "name": "Buildings and Logistics",
+          "persons": [
+            {
+              "name": "Mr Frédéric DESMIDT"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_251460",
+              "name": "General Support and Procurement",
+              "persons": [
+                {
+                  "name": "Ms Laura PALACIOS GONZALEZ"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_248017",
+              "name": "Buildings",
+              "persons": [
+                {
+                  "name": "Ms Eva FALATOVA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_246996",
+                  "name": "Projects",
+                  "persons": [
+                    {
+                      "name": "Mr Bertrand HARMIGNIE"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247097",
+                  "name": "Buildings Policy and Environmental Management",
+                  "persons": [
+                    {
+                      "name": "Mr Simone CATALANI"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247120",
+                  "name": "Technical Management and Engineering",
+                  "persons": [
+                    {
+                      "name": "Mr Gábor TÓTH"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247517",
+                      "name": "Electrical, Electromechanical and Security Installations",
+                      "persons": [
+                        {
+                          "name": "Mr Nicolas DEBRULLE"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "CM_CRF_247275",
+                      "name": "Thermal and Sanitary Installations",
+                      "persons": [
+                        {
+                          "name": "Mr Ramon LARREA"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_249342",
+                  "name": "Operations and General Maintenance",
+                  "persons": [
+                    {
+                      "name": "Mr Stijn TOURNEL"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247955",
+              "name": "Logistics",
+              "persons": [
+                {
+                  "name": "Mr Nicolas PAPADOPOULOS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_246945",
+                  "name": "Equipment and Operations",
+                  "persons": [
+                    {
+                      "name": "Ms Agnieszka FRON"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_247394",
+                      "name": "Furniture/Removals/Events Equipment"
+                    },
+                    {
+                      "code": "CM_CRF_247199",
+                      "name": "Stores/Stocktaking"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_248486",
+                  "name": "Transport Services",
+                  "persons": [
+                    {
+                      "name": "Mr Jean-Marc VAN LEEUW"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_251811",
+                  "name": "Procurement",
+                  "persons": [
+                    {
+                      "name": "Mr Luca VISENTIN"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_246997",
+              "name": "Finances",
+              "persons": [
+                {
+                  "name": "Mr Fernando SENDRA PALMER"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_246876",
+                  "name": "Budget Implementation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247521",
+          "name": "Finance",
+          "persons": [
+            {
+              "name": "Mr Francis MORGAN"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247392",
+              "name": "European Peace Facility (EPF) Operations"
+            },
+            {
+              "code": "CM_CRF_247222",
+              "name": "Financial Planning and Contracts"
+            },
+            {
+              "code": "CM_CRF_247763",
+              "name": "Digital Finance and Analysis"
+            },
+            {
+              "code": "CM_CRF_247661",
+              "name": "Accounting"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247242",
+          "name": "Safety and Security",
+          "persons": [
+            {
+              "name": "Mr Alexandre PICHON"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247279",
+              "name": "Security Strategy and Business Continuity"
+            },
+            {
+              "code": "CM_CRF_247487",
+              "name": "Operational Security"
+            },
+            {
+              "code": "CM_CRF_247303",
+              "name": "Information Security"
+            },
+            {
+              "code": "CM_CRF_247287",
+              "name": "Safety"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "CM_CRF_246944",
+      "name": "Digitalisation, Information Technology and Cybersecurity",
+      "persons": [
+        {
+          "name": "Mr Sven EGYEDY"
+        }
+      ],
+      "units": [
+        {
+          "code": "CM_CRF_247168",
+          "name": "Resources and Communication",
+          "persons": [
+            {
+              "name": "Ms Saskia HERRMANN"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_251321",
+              "name": "Financial Resources",
+              "persons": [
+                {
+                  "name": "Mr Johan VAN EYLEN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_254305",
+                  "name": "Financial Initiation"
+                },
+                {
+                  "code": "CM_CRF_254306",
+                  "name": "Financial Verification"
+                },
+                {
+                  "code": "CM_CRF_254307",
+                  "name": "Asset, Budget and Procurement Management"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_251461",
+              "name": "HR Coordination"
+            },
+            {
+              "code": "CM_CRF_251462",
+              "name": "Internal Communication"
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_246838",
+          "name": "Digitalisation",
+          "persons": [
+            {
+              "name": "Ms Nathalie PENSAERT"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247475",
+              "name": "Strategy and Operational Compliance",
+              "persons": [
+                {
+                  "name": "Mr Konstantinos DRYLLERAKIS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_254308",
+                  "name": "Compliance"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247049",
+              "name": "Demand and Change Management",
+              "persons": [
+                {
+                  "name": "Mr Daniel CABRERO MORENO"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_250553",
+                  "name": "Customer Engagement",
+                  "persons": [
+                    {
+                      "name": "Ms Eva BOURDAKOU"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_248491",
+                  "name": "Digital Change for Policy and Events",
+                  "persons": [
+                    {
+                      "name": "Mr Wout DEKEYSER"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_254309",
+                  "name": "Digital Change for Workplace"
+                },
+                {
+                  "code": "CM_CRF_254310",
+                  "name": "Business Management"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247349",
+              "name": "Records, Information and Knowledge",
+              "persons": [
+                {
+                  "name": "Ms Sonia RIANO DE ANTONIO"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_253407",
+                  "name": "Records and Files Management"
+                },
+                {
+                  "code": "CM_CRF_253408",
+                  "name": "Knowledge and Change Management"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_254311",
+              "name": "Data and AI Lab",
+              "persons": [
+                {
+                  "name": "Mr Kristian ABILDSKOV"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_247529",
+          "name": "Communication and Information Systems",
+          "persons": [
+            {
+              "name": "Mr Jan STUER"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_254312",
+              "name": "Operational Cybersecurity Cell",
+              "persons": [
+                {
+                  "name": "Mr Adrian TANASIE",
+                  "phone": "+32-22815821"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_246839",
+              "name": "PLAN/Horizontal",
+              "persons": [
+                {
+                  "name": "Mr Juraj SYKORA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247729",
+                  "name": "Notifications and Official Acts",
+                  "persons": [
+                    {
+                      "name": "Mr Bruno RUGGIANO"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247577",
+                  "name": "Mail",
+                  "persons": [
+                    {
+                      "name": "Mr Olivier LANOVE"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_254313",
+                  "name": "IT Service Desk",
+                  "persons": [
+                    {
+                      "name": "Mr José LOPEZ GONZALEZ",
+                      "phone": "+32-22815520"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_254314",
+                  "name": "Enterprise Architecture and Business Processes",
+                  "persons": [
+                    {
+                      "name": "Ms Oana NUTU",
+                      "phone": "+32-22813970"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_254315",
+                  "name": "IT Governance",
+                  "persons": [
+                    {
+                      "name": "Mr Guillaume EHRET"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247374",
+                  "name": "Classified Information",
+                  "persons": [
+                    {
+                      "name": "Mr Pascal MANZANO"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247642",
+              "name": "Infrastructure and Operations",
+              "persons": [
+                {
+                  "name": "Mr Marco NERVI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247052",
+                  "name": "Operations Centre",
+                  "persons": [
+                    {
+                      "name": "Mr Michel KASICA",
+                      "phone": "+32-22817208"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "CM_CRF_251650",
+                      "name": "Conference Support",
+                      "persons": [
+                        {
+                          "name": "Mr Luis GAST MANSO",
+                          "phone": "+32-22816534"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247456",
+                  "name": "Applications and Middleware",
+                  "persons": [
+                    {
+                      "name": "Mr Georgios ZEVGOLATIS"
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247978",
+                  "name": "Central Infrastructure",
+                  "units": [
+                    {
+                      "code": "CM_CRF_248046",
+                      "name": "Servers",
+                      "persons": [
+                        {
+                          "name": "Mr Bart VANNESTE"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "CM_CRF_247260",
+                      "name": "Storage and Backup"
+                    },
+                    {
+                      "code": "CM_CRF_247016",
+                      "name": "IT Facilities",
+                      "persons": [
+                        {
+                          "name": "Mr Christophe DELHAYE",
+                          "phone": "+32-22816318"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "CM_CRF_247013",
+                  "name": "Corporate Networks",
+                  "persons": [
+                    {
+                      "name": "Mr Yorgos KATSIKOGIANNIS"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_247530",
+              "name": "Product and Service Development",
+              "persons": [
+                {
+                  "name": "Mr Magnus KUMLIN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_247360",
+                  "name": "Finance and Human Resources"
+                },
+                {
+                  "code": "CM_CRF_247415",
+                  "name": "Front Office Applications"
+                },
+                {
+                  "code": "CM_CRF_247691",
+                  "name": "Events, Security and Logistics"
+                },
+                {
+                  "code": "CM_CRF_247146",
+                  "name": "Back Office Applications"
+                },
+                {
+                  "code": "CM_CRF_254316",
+                  "name": "Engagement Platforms"
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_249611",
+              "name": "Core Services",
+              "persons": [
+                {
+                  "name": "Mr Fabrice DREZET",
+                  "phone": "+32-22819390"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_249612",
+                  "name": "Projects and Services"
+                },
+                {
+                  "code": "CM_CRF_254317",
+                  "name": "Digital Workplace Support"
+                },
+                {
+                  "code": "CM_CRF_249616",
+                  "name": "Digital End Point Solutions"
+                },
+                {
+                  "code": "CM_CRF_249617",
+                  "name": "Communication and Productivity Platforms"
+                },
+                {
+                  "code": "CM_CRF_251137",
+                  "name": "Conference Platforms"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "CM_CRF_254318",
+          "name": "Cybersecurity",
+          "persons": [
+            {
+              "name": "Mr Mario BECCIA"
+            }
+          ],
+          "units": [
+            {
+              "code": "CM_CRF_247845",
+              "name": "Cybersecurity Governance and Compliance",
+              "persons": [
+                {
+                  "name": "Ms Liliana MUSETAN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_251170",
+                  "name": "Cybersecurity Programme"
+                },
+                {
+                  "code": "CM_CRF_247776",
+                  "name": "Governance, Risk Management and Compliance",
+                  "persons": [
+                    {
+                      "name": "Mr Dan GHERASIM"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "CM_CRF_254319",
+              "name": "Cybersecurity Operations",
+              "persons": [
+                {
+                  "name": "Mr Antony DE JACQUIER"
+                }
+              ],
+              "units": [
+                {
+                  "code": "CM_CRF_254320",
+                  "name": "Cyber Defence and Incident Response"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

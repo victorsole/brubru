@@ -1,0 +1,61 @@
+{
+  "dg_code": "EUSA",
+  "dg_name": "European School",
+  "commissioner": "",
+  "director_general": "Michael Karnitschnig",
+  "director_general_email": "Michael.Karnitschnig@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Markus Lepine",
+      "email": "Markus.LEPINE@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Michael Karnitschnig",
+      "email": "Michael.Karnitschnig@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Mitelman",
+          "head_email": "Anna.MITELMAN-NIELSEN@ec.europa.eu",
+          "head_phone": "+32 229-93302"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gergo Pasqualetti",
+          "head_email": "Gergo.PASQUALETTI@ec.europa.eu",
+          "head_phone": "+32 229-65667"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christos Komninos",
+          "head_email": "Christos.KOMNINOS@ec.europa.eu",
+          "head_phone": "+32 229-59208"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maja Kocijancic",
+          "head_email": "Maja.KOCIJANCIC@ec.europa.eu",
+          "head_phone": "+32 229-86570"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 4,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

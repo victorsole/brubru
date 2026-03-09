@@ -1,0 +1,21 @@
+{
+  "institution": "EIF",
+  "source": "euwhoiswho_eif.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 2,
+  "units": {
+    "European Investment Fund": {
+      "name": "European Investment Fund",
+      "persons": [
+        {
+          "name": "Marjut Falkstedt",
+          "title": "Chief Executive"
+        },
+        {
+          "name": "Merete Clausen",
+          "title": "Deputy Chief Executive"
+        }
+      ]
+    }
+  }
+}

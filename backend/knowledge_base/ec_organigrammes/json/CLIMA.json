@@ -1,298 +1,261 @@
 {
   "dg_code": "CLIMA",
-  "dg_name": "Climate Action",
-  "full_name": "Directorate-General for Climate Action",
-  "date_of_effect": "2025-11-01",
-  "commissioner": {
-    "name": "Wopke Hoekstra",
-    "title": "Commissioner"
-  },
-  "leadership": {
-    "director_general": {
+  "dg_name": "Directorate-General for Climate Action",
+  "commissioner": "",
+  "director_general": "Niels Schuster",
+  "director_general_email": "Niels.SCHUSTER@ec.europa.eu",
+  "deputy_directors_general": [
+    {
       "name": "Kurt Vandenberghe",
-      "position": "Director-General",
-      "assistants": [
+      "email": "Kurt.Vandenberghe@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Jan Dusik",
+      "email": "Jan.DUSIK@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "Dir B",
+      "name": "CARBON MARKETS AND CLEAN MOBILITY",
+      "director": "Beatriz Yordi",
+      "director_email": "Beatriz.Yordi@ec.europa.eu",
+      "units": [
         {
-          "name": "Niels Schuster",
-          "role": "DG Assistant"
+          "code": "",
+          "name": "",
+          "head": "Damien Meadows",
+          "head_email": "Damien.MEADOWS@ec.europa.eu",
+          "head_phone": "+32 229-96319"
         },
         {
-          "name": "Liva Andersone",
-          "role": "DG Assistant"
+          "code": "",
+          "name": "",
+          "head": "Mette Koefoed Quinn",
+          "head_email": "Mette.QUINN@ec.europa.eu",
+          "head_phone": "+32 229-91241"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Heiko Kunst",
+          "head_email": "Heiko.KUNST@ec.europa.eu",
+          "head_phone": "+32 229-20779"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Edoardo Turano",
+          "head_email": "Edoardo.TURANO@ec.europa.eu",
+          "head_phone": "+32 229-91748"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Polona Gregorin",
+          "head_email": "Polona.GREGORIN@ec.europa.eu",
+          "head_phone": "+32 229-99356"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marcos Gonzalez Alvarez",
+          "head_email": "Marcos.GONZALEZ-ALVAREZ@ec.europa.eu",
+          "head_phone": "+32 229-81897"
         }
       ]
     },
-    "deputy_director_general": {
-      "name": "Jan Dusik",
-      "position": "Deputy Director-General",
-      "responsibility": "EU and External Policy Coherence",
-      "assistant": {
-        "name": "Tim McPhie",
-        "role": "DDG Assistant"
-      }
+    {
+      "code": "Dir C",
+      "name": "INNOVATION FOR CLEAN GROWTH AND LOW CARBON ECONOMY",
+      "director": "Alexandre Paquot",
+      "director_email": "Alexandre.PAQUOT@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Willem Van Ierland",
+          "head_email": "Tom.VAN-IERLAND@ec.europa.eu",
+          "head_phone": "+32 229-97810"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefanie Hiesinger",
+          "head_email": "Stefanie.HIESINGER@ec.europa.eu",
+          "head_phone": "+32 229-99641"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christian Holzleitner",
+          "head_email": "Christian.HOLZLEITNER@ec.europa.eu",
+          "head_phone": "+32 229-96452"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tereza Budnakova",
+          "head_email": "Tereza.BUDNAKOVA@ec.europa.eu",
+          "head_phone": "+32 229-80793"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Roman Doubrava",
+          "head_email": "Roman.DOUBRAVA@ec.europa.eu",
+          "head_phone": "+32 229-98452"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefaan Vergote",
+          "head_email": "Stefaan.Vergote@ec.europa.eu",
+          "head_phone": "+32 229-69696"
+        }
+      ]
     },
-    "advisers": [
-      {
-        "name": "Jacob Werksman",
-        "title": "Principal Adviser",
-        "area": "International Aspects of EU Climate Policy",
-        "note": "Chief Paris Agreement Negotiator and Head of the UNFCCC Task Force"
-      },
-      {
-        "name": "Dušan Chrenek",
-        "title": "Principal Adviser",
-        "area": "Digital for the Green Transition"
-      },
-      {
-        "name": "Marzena Rogalska",
-        "title": "Principal Adviser",
-        "area": "Industrial Decarbonisation (including Climate Club)"
-      },
-      {
-        "name": "Laurence Graff",
-        "title": "Adviser",
-        "area": "Multi-level Climate Action",
-        "code": "CLIMA.DDG.ADV01"
-      }
-    ],
-    "task_force": {
-      "name": "Sebastien Paquot",
-      "code": "CLIMA.TF",
-      "title": "Task Force International Carbon Pricing and Markets Diplomacy",
-      "deputy": "Maja-Alexandra Dittel (acting)"
+    {
+      "code": "Dir D",
+      "name": "INTERNATIONAL AFFAIRS AND CLIMATE FINANCE",
+      "director": "Diana Acconcia",
+      "director_email": "Diana.ACCONCIA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Dimitrios Zevgolis",
+          "head_email": "Dimitrios.ZEVGOLIS@ec.europa.eu",
+          "head_phone": "+32 229-97850"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Caroline Edery",
+          "head_email": "Caroline.Edery@ec.europa.eu",
+          "head_phone": "+32 229-69906"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alessandra Sgobbi",
+          "head_email": "Alessandra.SGOBBI@ec.europa.eu",
+          "head_phone": "+32 229-51786"
+        }
+      ]
+    },
+    {
+      "code": "Dir E",
+      "name": "CLIMATE RESILIENCE AND INFORMATION MANAGEMENT",
+      "director": "Elina Bardram",
+      "director_email": "Elina.BARDRAM@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Spolc",
+          "head_email": "Martin.SPOLC@ec.europa.eu",
+          "head_phone": "+32 229-86535"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paolo Caridi",
+          "head_email": "Paolo.CARIDI@ec.europa.eu",
+          "head_phone": "+32 229-69256"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Javier Caceres",
+          "head_email": "Javier.CACERES@ec.europa.eu",
+          "head_phone": "+32 229-60384"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Laurence Graff",
+          "head_email": "Laurence.Graff@ec.europa.eu",
+          "head_phone": "+32 229-60518"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sebastien Paquot",
+          "head_email": "Sebastien.PAQUOT@ec.europa.eu",
+          "head_phone": "+32 229-90042"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jacob Werksman",
+          "head_email": "Jacob.WERKSMAN@ec.europa.eu",
+          "head_phone": "+32 229-54087"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dusan Chrenek",
+          "head_email": "Dusan.CHRENEK@ec.europa.eu",
+          "head_phone": "+32 229-55704"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marzena Rogalska",
+          "head_email": "Marzena.ROGALSKA@ec.europa.eu",
+          "head_phone": "+32 229-59772"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "STRATEGY, ANALYSIS AND PLANNING",
+      "director": "Yvon Slingenberg",
+      "director_email": "Yvon.Slingenberg@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Luca De Carli",
+          "head_email": "Luca.DE-CARLI@ec.europa.eu",
+          "head_phone": "+32 229-53599"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vicky Pollard",
+          "head_email": "Vicky.POLLARD@ec.europa.eu",
+          "head_phone": "+32 229-99758"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cécile Hanoune",
+          "head_email": "Cecile.HANOUNE@ec.europa.eu",
+          "head_phone": "+32 229-66574"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Yiannos Asimakis",
+          "head_email": "Yiannakis.ASIMAKIS@ec.europa.eu",
+          "head_phone": "+32 229-68752"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Liva Andersone",
+          "head_email": "Liva.ANDERSONE@ec.europa.eu",
+          "head_phone": "+32 229-69245"
+        }
+      ]
     }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "CLIMA.A",
-      "name": "Strategy, Analysis & Planning",
-      "director": {
-        "name": "Yvon Slingenberg",
-        "position": "Director"
-      },
-      "units": {
-        "a1": {
-          "code": "CLIMA.A.1",
-          "name": "Strategic Coordination, Legal & Institutional",
-          "head_of_unit": {
-            "name": "Luca De Carli",
-            "deputy": "Isobel Findlay"
-          }
-        },
-        "a2": {
-          "code": "CLIMA.A.2",
-          "name": "Foresight, Economic Analysis & Modelling",
-          "head_of_unit": {
-            "name": "Vicky Pollard",
-            "deputy": "Alban Kitous"
-          }
-        },
-        "a3": {
-          "code": "CLIMA.A.3",
-          "name": "Climate Governance, Plans & Mainstreaming",
-          "head_of_unit": {
-            "name": "Cecile Hanoune",
-            "deputy": "Tsvetelina Natcheva"
-          }
-        },
-        "a4": {
-          "code": "CLIMA.A.4",
-          "name": "Administration, Financial Affairs & Human Resources",
-          "head_of_unit": {
-            "name": "Yiannos Asimakis",
-            "deputy": "Maria Luisa Libardi"
-          },
-          "note": "The HR correspondent has a functional reporting line to the Director-General"
-        }
-      }
-    },
-    "directorate_b": {
-      "code": "CLIMA.B",
-      "name": "Carbon Markets & Clean Mobility",
-      "director": {
-        "name": "Beatriz Yordi",
-        "position": "Director"
-      },
-      "units": {
-        "b1": {
-          "code": "CLIMA.B.1",
-          "name": "ETS (I): Policy Coordination, International Carbon Markets",
-          "head_of_unit": {
-            "name": "Mette Quinn",
-            "deputy": "Ruben Vermeeren"
-          }
-        },
-        "b2": {
-          "code": "CLIMA.B.2",
-          "name": "ETS (II): Implementation, Policy Support & ETS Registry",
-          "head_of_unit": {
-            "name": "Heiko Kunst",
-            "deputy": "Ioana Rusu"
-          }
-        },
-        "b3": {
-          "code": "CLIMA.B.3",
-          "name": "Mobility (I): Road",
-          "head_of_unit": {
-            "name": "Edoardo Turano",
-            "deputy": "Baptiste Legay"
-          }
-        },
-        "b4": {
-          "code": "CLIMA.B.4",
-          "name": "Mobility (II): Air, Rail, Water and Intermodal Policy",
-          "head_of_unit": {
-            "name": "Polona Gregorin",
-            "deputy": "vacant"
-          }
-        },
-        "b5": {
-          "code": "CLIMA.B.5",
-          "name": "Social Climate Fund and EU ETS2 Implementation",
-          "head_of_unit": {
-            "name": "Marcos Gonzalez Alvarez",
-            "deputy": "vacant"
-          }
-        },
-        "adv01": {
-          "code": "CLIMA.B.ADV01",
-          "name": "Legal and Policy Matters: Emission Trading and Air/Sea Transport",
-          "head_of_unit": {
-            "name": "Damien Meadows",
-            "title": "Adviser"
-          }
-        }
-      }
-    },
-    "directorate_c": {
-      "code": "CLIMA.C",
-      "name": "Innovation for Clean Growth and Low Carbon Economy",
-      "director": {
-        "name": "Alexandre Paquot",
-        "position": "Director"
-      },
-      "units": {
-        "c1": {
-          "code": "CLIMA.C.1",
-          "name": "Low Carbon Solutions (I): Montreal Protocol, Clean Cooling & Heating, Twin Transitions",
-          "head_of_unit": {
-            "name": "Tom Van Ierland",
-            "deputy": "Bente Tranholm-Schwarz"
-          }
-        },
-        "c2": {
-          "code": "CLIMA.C.2",
-          "name": "Low Carbon Solutions (II): Research & Low Carbon Technology Deployment",
-          "head_of_unit": {
-            "name": "Stefanie Hiesinger",
-            "deputy": "Maria Velkova"
-          }
-        },
-        "c3": {
-          "code": "CLIMA.C.3",
-          "name": "Low Carbon Solutions (III): Land Economy & Carbon Removals",
-          "head_of_unit": {
-            "name": "Christian Holzleitner",
-            "deputy": "Valeria Forlin"
-          }
-        },
-        "adv01": {
-          "code": "CLIMA.C.ADV01",
-          "name": "Innovation and Investment for Low Carbon Economy",
-          "head_of_unit": {
-            "name": "Stefaan Vergote",
-            "title": "Adviser"
-          }
-        },
-        "cinea_c1": {
-          "code": "CLIMA.C.CINEA.C.1",
-          "name": "Horizon Europe Climate",
-          "head_of_unit": {
-            "name": "Tereza Budnakova",
-            "note": "Executive Agency"
-          }
-        },
-        "cinea_c4": {
-          "code": "CLIMA.C.CINEA.C.4",
-          "name": "Innovation Fund",
-          "head_of_unit": {
-            "name": "Roman Doubrava",
-            "note": "Executive Agency"
-          }
-        }
-      }
-    },
-    "directorate_d": {
-      "code": "CLIMA.D",
-      "name": "International Affairs & Climate Finance",
-      "director": {
-        "name": "Diana Acconcia",
-        "position": "Director"
-      },
-      "units": {
-        "d1": {
-          "code": "CLIMA.D.1",
-          "name": "Multilateral Affairs",
-          "head_of_unit": {
-            "name": "Dimitrios Zevgolis",
-            "deputy": "Ivone Kaizeler"
-          }
-        },
-        "d2": {
-          "code": "CLIMA.D.2",
-          "name": "Diplomacy",
-          "head_of_unit": {
-            "name": "Caroline Edery",
-            "deputy": "Ana Danila"
-          }
-        },
-        "d3": {
-          "code": "CLIMA.D.3",
-          "name": "Climate Finance",
-          "head_of_unit": {
-            "name": "Alessandra Sgobbi",
-            "deputy": "Giovanni Garcea"
-          }
-        }
-      }
-    },
-    "directorate_e": {
-      "code": "CLIMA.E",
-      "name": "Climate Resilience and Information Management",
-      "director": {
-        "name": "Elina Bardram",
-        "position": "Director"
-      },
-      "units": {
-        "e1": {
-          "code": "CLIMA.E.1",
-          "name": "Preparedness and Adaptation",
-          "head_of_unit": {
-            "name": "Martin Spolc",
-            "deputy": "Anna Dimitrijevics"
-          }
-        },
-        "e2": {
-          "code": "CLIMA.E.2",
-          "name": "Communication and Stakeholder Relations",
-          "head_of_unit": {
-            "name": "Paolo Caridi",
-            "deputy": "Laura Maanavilja"
-          }
-        },
-        "e3": {
-          "code": "CLIMA.E.3",
-          "name": "Information Systems and Services",
-          "head_of_unit": {
-            "name": "Javier Caceres",
-            "deputy": "Radu Tudose"
-          }
-        }
-      }
-    }
-  },
-  "notes": [
-    "Chief Paris Agreement Negotiator and Head of the UNFCCC Task Force",
-    "The HR correspondent has a functional reporting line to the Director-General"
-  ]
+  ],
+  "num_directorates": 5,
+  "num_units": 28,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

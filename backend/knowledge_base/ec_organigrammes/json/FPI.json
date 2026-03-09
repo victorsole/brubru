@@ -1,0 +1,92 @@
+{
+  "dg_code": "FPI",
+  "dg_name": "Service for Foreign Policy Instruments",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Peter Wagner",
+      "director_email": "Peter.Wagner@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Rond Point Robert Schuman 9A / Robert Schumanplein 9A",
+          "head_email": "FPI-INFO@ec.europa.eu",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Rosa Sabbatelli",
+          "head_email": "Maria-Rosa.SABBATELLI@ec.europa.eu",
+          "head_phone": "+32 229-66952"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jesper Pedersen",
+          "head_email": "Jesper.PEDERSEN@ec.europa.eu",
+          "head_phone": "+32 229-85281"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Irène Mingasson",
+          "head_email": "Irene.MINGASSON@ec.europa.eu",
+          "head_phone": "+32 229-52296"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniele Senzanonna",
+          "head_email": "Daniele.SENZANONNA@ec.europa.eu",
+          "head_phone": "+32 229-50390"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marika Lautso-Mousnier",
+          "head_email": "Marika.LAUTSO-MOUSNIER@ec.europa.eu",
+          "head_phone": "+32 229-88298"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Heike Gerstbrein",
+          "head_email": "Heike.Gerstbrein@ec.europa.eu",
+          "head_phone": "+32 229-90161"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Raimondo Bussi",
+          "head_email": "Raimondo.BUSSI@ec.europa.eu",
+          "head_phone": "+32 229-86542"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kristina Tsistova",
+          "head_email": "Kristina.TSISTOVA@ec.europa.eu",
+          "head_phone": "+32 229-62029"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marc Fiedrich",
+          "head_email": "Marc.FIEDRICH@eeas.europa.eu",
+          "head_phone": "+32 229-86442"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 10,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

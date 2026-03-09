@@ -1,352 +1,371 @@
 {
   "dg_code": "EMPL",
-  "dg_name": "Employment, Social Affairs & Inclusion",
-  "executive_vice_president": "Roxana Mînzatu",
-  "date_of_effect": "2025-07-01",
-  "director_general": {
-    "name": "Mario Nava",
-    "assistants": [
-      "Franciska Barabas Komives",
-      "Shadin Viratham",
-      "Kim Henriksson"
-    ]
-  },
-  "hr_correspondent": {
-    "name": "Annick Van Damme"
-  },
+  "dg_name": "Directorate-General for Employment, Social Affairs and Inclusion",
+  "commissioner": "",
+  "director_general": "Mario Nava",
+  "director_general_email": "Mario.Nava@ec.europa.eu",
   "deputy_directors_general": [
     {
+      "name": "Shadin Viratham",
+      "email": "Shadin.VIRATHAM@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
       "name": "Stefan Olsson",
-      "responsibilities": "Jobs, Skills and Social Policies"
+      "email": "Stefan.Olsson@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Raymond Maes",
+      "email": "Raymond.Maes@ec.europa.eu",
+      "responsibilities": ""
     },
     {
       "name": "Andriana Sukova",
-      "responsibilities": "Funds, Fair Transition and Analysis"
+      "email": "Andriana.SUKOVA@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "EMPL.A",
-      "name": "European Pillar of Social Rights, Strategy",
-      "director": "Denis Genton",
-      "units": [
-        {
-          "code": "EMPL.A.1",
-          "name": "Strategic, Legal and Interinstitutional Coordination",
-          "head": "Vacant"
-        },
-        {
-          "code": "EMPL.A.2",
-          "name": "Communication",
-          "head": "Carolien Peeters (Acting)",
-          "deputy": "Carolien Peeters"
-        },
-        {
-          "code": "EMPL.A.3",
-          "name": "Budget and Planning Cycle",
-          "head": "Miriam Fernandez Jutz",
-          "deputy": "Vladislava Glietz"
-        },
-        {
-          "code": "EMPL.A.4",
-          "name": "IT Strategy and Solutions",
-          "head": "Vacant (Acting)",
-          "deputy": "Loris Di Pietrantonio"
-        }
-      ]
+      "code": "",
+      "name": "General",
+      "director": "Franciska Barabas Komives",
+      "director_email": "KOMIVES@ec.europa.eu",
+      "units": []
     },
     {
-      "code": "EMPL.B",
-      "name": "Jobs and Skills",
+      "code": "Dir B",
+      "name": "JOBS AND SKILLS",
       "director": "Manuela Geleng",
+      "director_email": "Manuela.Geleng@ec.europa.eu",
       "units": [
         {
-          "code": "EMPL.B.1",
-          "name": "Future of Work, Youth Employment",
+          "code": "",
+          "name": "",
           "head": "Chiara Riondino",
-          "deputy": "Agathe Demarle"
+          "head_email": "Chiara.RIONDINO@ec.europa.eu",
+          "head_phone": "+32 229-57601"
         },
         {
-          "code": "EMPL.B.2",
-          "name": "Union of Skills",
+          "code": "",
+          "name": "",
           "head": "Ann Branch",
-          "deputy": "Julie Fionda"
+          "head_email": "Ann.BRANCH@ec.europa.eu",
+          "head_phone": "+32 229-85340"
         },
         {
-          "code": "EMPL.B.3",
-          "name": "Vocational Education and Training, Skills Portability, CEDEFOP",
-          "head": "Steven Engels",
-          "deputy": "Nathalie Vervang"
-        },
-        {
-          "code": "EMPL.B.4",
-          "name": "Professional Qualifications and Skills for Competitiveness",
+          "code": "",
+          "name": "",
           "head": "Anna Banczyk",
-          "deputy": "Andrea Leruste"
+          "head_email": "Anna.BANCZYK@ec.europa.eu",
+          "head_phone": "+32 229-84609"
         },
         {
-          "code": "EMPL.B.5",
-          "name": "Digital Solutions",
-          "head": "David Dion",
-          "deputy": "Andrei Luchici"
-        }
-      ]
-    },
-    {
-      "code": "EMPL.C",
-      "name": "Quality Jobs, Working Conditions and Social Dialogue",
-      "director": "Maria Luisa Cabral",
-      "units": [
-        {
-          "code": "EMPL.C.1",
-          "name": "Labour Law",
-          "head": "Adam Pokorny",
-          "deputy": "Arzela Aida"
-        },
-        {
-          "code": "EMPL.C.2",
-          "name": "Health and Safety at Work, EU-OSHA",
-          "head": "Charlotte Grevfors Ernoult",
-          "deputy": "Paula V. Somoano"
-        },
-        {
-          "code": "EMPL.C.3",
-          "name": "Social Dialogue",
-          "head": "Maria Luisa Llano-Cardenal",
-          "deputy": "Sven Matzke"
-        },
-        {
-          "code": "EMPL.C.4",
-          "name": "Spain, Malta",
-          "head": "Patricia Perez Gomez Delaunay",
-          "deputy": "Marian Raduţa"
-        },
-        {
-          "code": "EMPL.C.5",
-          "name": "Romania, Bulgaria",
-          "head": "Emmanuelle Grange",
-          "deputy": "Ana Maria Dobre"
-        }
-      ]
-    },
-    {
-      "code": "EMPL.D",
-      "name": "Social Rights and Inclusion",
-      "director": "Katarina Ivankovic-Knezevic",
-      "units": [
-        {
-          "code": "EMPL.D.1",
-          "name": "Social Policies, Child Guarantee, SPC",
-          "head": "Jiri Svarc",
-          "deputy": "Olivier Bontout"
-        },
-        {
-          "code": "EMPL.D.2",
-          "name": "Social Protection and Demography",
-          "head": "Dana Bachmann",
-          "deputy": "Valdis Zagorskis"
-        },
-        {
-          "code": "EMPL.D.3",
-          "name": "Poland, Czech Republic, Slovakia",
-          "head": "Emmanuelle Grange"
-        },
-        {
-          "code": "EMPL.D.4",
-          "name": "Germany, Austria, Slovenia, Croatia",
+          "code": "",
+          "name": "",
           "head": "Patrick Paquet",
-          "deputy": "Michael Morass"
+          "head_email": "Patrick.PAQUET@ec.europa.eu",
+          "head_phone": "+32 229-64304"
         },
         {
-          "code": "EMPL.D.5",
-          "name": "Finland, Latvia, Estonia, Lithuania",
+          "code": "",
+          "name": "",
+          "head": "Steven Engels",
+          "head_email": "Steven.ENGELS@ec.europa.eu",
+          "head_phone": "+32 229-66438"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "QUALITY JOBS, WORKING CONDITIONS AND SOCIAL DIALOGUE",
+      "director": "Maria Luisa Cabral",
+      "director_email": "Maria-Luisa.CABRAL@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Adam Pokorny",
+          "head_email": "Adam.POKORNY@ec.europa.eu",
+          "head_phone": "+32 229-63988"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zinta Podniece",
+          "head_email": "Zinta.PODNIECE@ec.europa.eu",
+          "head_phone": "+352 4301-32840"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Luisa Llano Cardenal",
+          "head_email": "CARDENAL@ec.europa.eu",
+          "head_phone": "+32 229-92759"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Patricia Perez-Gomez",
+          "head_email": "Patricia.PEREZ-GOMEZ@ec.europa.eu",
+          "head_phone": "+32 229-93391"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Emmanuelle Grange",
+          "head_email": "Emmanuelle.GRANGE@ec.europa.eu",
+          "head_phone": "+32 229-58795"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ana Maria Dobre",
+          "head_email": "Ana-Maria.DOBRE@ec.europa.eu",
+          "head_phone": "+32 229-58883"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "SOCIAL RIGHTS AND INCLUSION",
+      "director": "Katarina Ivankovic-Knezevic",
+      "director_email": "KNEZEVIC@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Jiri Svarc",
+          "head_email": "Jiri.SVARC@ec.europa.eu",
+          "head_phone": "+32 229-81346"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dana-Carmen Bachmann",
+          "head_email": "Dana-Carmen.BACHMANN@ec.europa.eu",
+          "head_phone": "+32 229-91277"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Urszula Romanska",
+          "head_email": "Urszula.ROMANSKA@ec.europa.eu",
+          "head_phone": "+32 229-63825"
+        },
+        {
+          "code": "",
+          "name": "",
           "head": "Thomas Andreou",
-          "deputy": "Cinzia Masina"
+          "head_email": "Thomas.ANDREOU@ec.europa.eu",
+          "head_phone": "+32 229-81809"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniel Woehl",
+          "head_email": "Daniel.WOEHL@ec.europa.eu",
+          "head_phone": "+32 229-98376"
         }
       ]
     },
     {
-      "code": "EMPL.E",
-      "name": "Labour Mobility and International Affairs",
+      "code": "Dir E",
+      "name": "LABOUR MOBILITY AND INTERNATIONAL AFFAIRS",
       "director": "Antoine Kasel",
+      "director_email": "Antoine.KASEL@ec.europa.eu",
       "units": [
         {
-          "code": "EMPL.E.1",
-          "name": "Labour Mobility, Public Employment Services, ELA",
+          "code": "",
+          "name": "",
           "head": "David Dion",
-          "deputy": "Benoit Abeloos and Liejo"
+          "head_email": "David.DION@ec.europa.eu",
+          "head_phone": "+32 229-88269"
         },
         {
-          "code": "EMPL.E.2",
-          "name": "Social Security Coordination",
-          "head": "Joerg Tagger",
-          "deputy": "Benoit Abeloos"
+          "code": "",
+          "name": "",
+          "head": "Jörg Tagger",
+          "head_email": "Jorg.Tagger@ec.europa.eu",
+          "head_phone": "+32 229-92366"
         },
         {
-          "code": "EMPL.E.3",
-          "name": "International Affairs, ETF",
-          "head": "Agnieszka Krolikowska",
-          "deputy": "Zinta Podniece"
+          "code": "",
+          "name": "",
+          "head": "Laura Corrado",
+          "head_email": "Laura.CORRADO@ec.europa.eu",
+          "head_phone": "+32 229-50831"
         },
         {
-          "code": "EMPL.E.4",
-          "name": "Italy, Denmark, Sweden",
+          "code": "",
+          "name": "",
           "head": "Adelina Dos Reis",
-          "deputy": "Leonardo Colucci"
+          "head_email": "Adelina.Dos-Reis@ec.europa.eu",
+          "head_phone": "+32 229-61454"
         },
         {
-          "code": "EMPL.E.5",
-          "name": "Hungary, UK, Ireland, Portugal",
+          "code": "",
+          "name": "",
           "head": "Laurent Sens",
-          "deputy": "Gregorio De Castro"
+          "head_email": "Laurent.SENS@ec.europa.eu",
+          "head_phone": "+32 229-80474"
         }
       ]
     },
     {
-      "code": "EMPL.F",
-      "name": "Employment and Social Governance, Analysis",
+      "code": "Dir F",
+      "name": "EMPLOYMENT AND SOCIAL GOVERNANCE, ANALYSIS",
       "director": "Jeroen Jutte",
+      "director_email": "Jeroen.Jutte@ec.europa.eu",
       "units": [
         {
-          "code": "EMPL.F.1",
-          "name": "European Semester, EMCO",
+          "code": "",
+          "name": "",
           "head": "Katia Berti",
-          "deputy": "Anton Mangov"
+          "head_email": "Katia.BERTI@ec.europa.eu",
+          "head_phone": "+32 229-99061"
         },
         {
-          "code": "EMPL.F.2",
-          "name": "Labour Market and Wages, EUROFOUND",
+          "code": "",
+          "name": "",
           "head": "Nathalie Darnaut",
-          "deputy": "Imad Kanjou Auge"
+          "head_email": "Nathalie.Darnaut@ec.europa.eu",
+          "head_phone": "+32 229-66575"
         },
         {
-          "code": "EMPL.F.3",
-          "name": "Fair Green and Digital Transitions, Research",
-          "head": "Fabien Dell",
-          "deputy": "Filip Tanay"
-        },
-        {
-          "code": "EMPL.F.4",
-          "name": "Analysis and Statistics",
-          "head": "Elva Bova",
-          "deputy": "Katarina Jaksic"
-        },
-        {
-          "code": "EMPL.F.5",
-          "name": "Cyprus, Greece",
-          "head": "Cristiana Costinescu",
-          "deputy": "Matteo Duiella"
-        },
-        {
-          "code": "EMPL.F.6",
-          "name": "France, Netherlands, Belgium, Luxembourg",
-          "head": "Raymond Maes",
-          "deputy": "Dinos Alevizopoulos"
-        },
-        {
-          "code": "EMPL.F.7",
-          "name": "Adviser for Labour Mobility",
-          "head": "Raymond Maes"
-        }
-      ]
-    },
-    {
-      "code": "EMPL.G",
-      "name": "Funds: Programming and Implementation",
-      "director": "Ruth Paserman",
-      "units": [
-        {
-          "code": "EMPL.G.1",
-          "name": "European Social Fund +",
-          "head": "Christoph Nerlich",
-          "deputy": "Dora Krumova"
-        },
-        {
-          "code": "EMPL.G.2",
-          "name": "Social Climate Fund, European Globalisation Adjustment Fund, Social Innovation",
-          "head": "Raluca Painter",
-          "deputy": "Roxana Osiac"
-        },
-        {
-          "code": "EMPL.G.3",
-          "name": "Social and Inclusive Entrepreneurship",
-          "head": "Brigitte Fellahi-Brognaux",
-          "deputy": "Severin Strohal"
-        },
-        {
-          "code": "EMPL.G.4",
-          "name": "Financial Implementation and Procurement Centre",
+          "code": "",
+          "name": "",
           "head": "Frank Siebern-Thomas",
-          "deputy": "Fabio Domanico"
+          "head_email": "Frank.SIEBERN@ec.europa.eu",
+          "head_phone": "+32 229-92711"
         },
         {
-          "code": "EMPL.G.5",
-          "name": "Impact Assessment, Evaluation, Monitoring of Funds",
-          "head": "Federico Lucidi",
-          "deputy": "Johannes Ziemendorff"
+          "code": "",
+          "name": "",
+          "head": "Elva Bova",
+          "head_email": "Elva.BOVA@ec.europa.eu",
+          "head_phone": "+32 229-59169"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cristiana Costinescu",
+          "head_email": "Cristiana.COSTINESCU@ec.europa.eu",
+          "head_phone": "+32 229-57524"
         }
       ]
     },
     {
-      "code": "DAC",
-      "name": "Joint Audit Directorate for Cohesion",
-      "director": "Franck Sébert",
-      "note": "Joint Directorate with DG REGIO as specified in Commission Decision SEC(2021)186",
+      "code": "Dir G",
+      "name": "FUNDS: PROGRAMMING AND IMPLEMENTATION",
+      "director": "Ruth Paserman",
+      "director_email": "Ruth.Paserman@ec.europa.eu",
       "units": [
         {
-          "code": "DAC.1",
-          "name": "Audit I",
-          "head": "Ilse Van Den Abeele",
-          "deputy": "Jarosław Hawrysz"
+          "code": "",
+          "name": "",
+          "head": "Christoph Nerlich",
+          "head_email": "Christoph.NERLICH@ec.europa.eu",
+          "head_phone": "+32 229-51437"
         },
         {
-          "code": "DAC.2",
-          "name": "Audit II",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Raluca Painter",
+          "head_email": "Raluca.PAINTER@ec.europa.eu",
+          "head_phone": "+32 229-84279"
         },
         {
-          "code": "DAC.3",
-          "name": "Audit III",
-          "head": "Cendrine De Buggenoms",
-          "deputy": "Beatrice Stanciu"
+          "code": "",
+          "name": "",
+          "head": "Brigitte Fellahi-Brognaux",
+          "head_email": "Brigitte.Fellahi@ec.europa.eu",
+          "head_phone": "+32 229-58565"
         },
         {
-          "code": "DAC.4",
-          "name": "Audit IV",
-          "head": "Rafael Lopez Sanchez",
-          "deputy": "Olivia Jordan"
-        },
-        {
-          "code": "DAC.5",
-          "name": "Audit V",
-          "head": "Vacant"
-        },
-        {
-          "code": "DAC.6",
-          "name": "Audit VI",
-          "head": "Marcela Buzoi (Acting)",
-          "deputy": "Marcela Buzoi"
-        },
-        {
-          "code": "DAC.7",
-          "name": "Coordination, Relations with the ECA and OLAF",
+          "code": "",
+          "name": "",
           "head": "Stanislav Ranguelov",
-          "deputy": "Jean-Noel Bonifait"
+          "head_email": "Stanislav.RANGUELOV@ec.europa.eu",
+          "head_phone": "+32 229-90099"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Federico Lucidi",
+          "head_email": "Federico.LUCIDI@ec.europa.eu",
+          "head_phone": "+32 229-88103"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "EUROPEAN PILLAR OF SOCIAL RIGHTS, STRATEGY",
+      "director": "Denis Genton",
+      "director_email": "Denis.Genton@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Fabien Dell",
+          "head_email": "Fabien.DELL@ec.europa.eu",
+          "head_phone": "+32 229-57014"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Carolien Peeters",
+          "head_email": "Carolien.PEETERS@ec.europa.eu",
+          "head_phone": "+32 229-72505"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Loris Di Pietrantonio",
+          "head_email": "Loris.DI-PIETRANTONIO@ec.europa.eu",
+          "head_phone": "+32 229-65470"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christopher Borrelly",
+          "head_email": "Christopher.BORRELLY@ec.europa.eu",
+          "head_phone": "+32 229-51265"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cristina Asturias",
+          "head_email": "Cristina.ASTURIAS@ec.europa.eu",
+          "head_phone": "+32 229-62026"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Miriam Fernandez Jutz",
+          "head_email": "Miriam.FERNANDEZ-JUTZ@ec.europa.eu",
+          "head_phone": "+32 229-67439"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cendrine De Buggenoms",
+          "head_email": "Sandrine.DE-BUGGENOMS@ec.europa.eu",
+          "head_phone": "+32 229-98529"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mina Alexandrova Andreeva",
+          "head_email": "Mina.ANDREEVA@ec.europa.eu",
+          "head_phone": "+32 229-91382"
         }
       ]
     }
   ],
-  "advisers": [
-    {
-      "role": "Adviser for Labour Mobility",
-      "name": "Cristina Asturias",
-      "deputy": "Brian Debattista"
-    }
-  ],
-  "seconded_managers": [
-    "M. Alexandrova Andreeva - European Parliament",
-    "G. Calacean - President Cabinet",
-    "M. Uebe (cabinet of Vice-President Roxana Mînzatu)",
-    "R. Torppa (cabinet of Commissioner Maria Luís Albuquerque)"
-  ]
+  "num_directorates": 8,
+  "num_units": 39,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

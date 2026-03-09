@@ -1,304 +1,316 @@
 {
   "dg_code": "HOME",
-  "dg_name": "Migration & HOME Affairs",
-  "commissioner": "Magnus Brunner",
-  "date_of_effect": "2025-10-01",
-  "director_general": {
-    "name": "Beate Gminder",
-    "assistants": [
-      "Ludovica Fabbri",
-      "Benedetta Fornaciari Da Passano",
-      "Laura Gornicio Iue",
-      "Enrique Ibanez"
-    ]
-  },
+  "dg_name": "Directorate-General for Migration and Home Affairs",
+  "commissioner": "",
+  "director_general": "Beate Gminder",
+  "director_general_email": "Beate.Gminder@ec.europa.eu",
   "deputy_directors_general": [
     {
-      "name": "Johannes Luchner",
-      "responsibilities": "Horizontal Affairs & Migration"
+      "name": "Ludovica Fabbri",
+      "email": "Ludovica.FABBRI@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "name": "Olivier Onidi",
-      "responsibilities": "Schengen & Internal Security",
-      "additional_role": "Schengen Coordinator"
-    }
-  ],
-  "hr_correspondent": {
-    "name": "Sylvie Bares"
-  },
-  "advisers": [
-    {
-      "name": "Mari Juritsch",
-      "area": "Return Coordinator",
-      "role": "Principal Adviser"
+      "name": "Johannes Luchner",
+      "email": "Johannes.Luchner@ec.europa.eu",
+      "responsibilities": ""
     },
     {
       "name": "Diane Schmitt",
-      "area": "Anti-Trafficking Coordinator",
-      "role": "Adviser"
+      "email": "Diane.Schmitt@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "name": "Franz Lamplmair",
-      "area": "Migration Management"
+      "name": "Olivier Onidi",
+      "email": "Olivier.Onidi@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "HOME.01",
-      "name": "Migration Management Coordination",
-      "director": "Nacira Boulehouat",
-      "deputy": "Alix Muller-Rappard",
-      "task_force": {
-        "name": "Task Force for Migration Management",
-        "head": "Nacira Boulehouat",
-        "members": [
-          "Andrea Baumann"
-        ]
-      }
-    },
-    {
-      "code": "HOME.A",
-      "name": "International & Horizontal Affairs",
-      "director": "Corinna Ullrich",
+      "code": "",
+      "name": "General",
+      "director": "Laura Cristina Gornicioiu",
+      "director_email": "Laura-Cristina.GORNICIOIU@ec.europa.eu",
       "units": [
         {
-          "code": "HOME.A.1",
-          "name": "Policy Coordination & Interinstitutional Relations",
-          "head": "Charlotte Arwidi",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Enrique Ibanez",
+          "head_email": "enrique.ibanez@ec.europa.eu",
+          "head_phone": "+32 229-69672"
         },
         {
-          "code": "HOME.A.2",
-          "name": "Communication",
-          "head": "Tina Zournatz",
-          "deputy": "Michael Palmer"
-        },
-        {
-          "code": "HOME.A.3",
-          "name": "International Affairs",
-          "head": "Pawel Busiakiewicz",
-          "deputy": "Alexandra Sa Carvalho"
-        },
-        {
-          "code": "HOME.A.4",
-          "name": "Legal Affairs",
-          "head": "Olivier Bergeau (Acting)",
-          "deputy": "Olivier Bergeau"
+          "code": "",
+          "name": "",
+          "head": "Mari Juritsch",
+          "head_email": "Mari.JURITSCH@ec.europa.eu",
+          "head_phone": "+32 229-99450"
         }
       ]
     },
     {
-      "code": "HOME.B",
-      "name": "Schengen, Borders & Visa",
+      "code": "Dir B",
+      "name": "INTERNATIONAL AFFAIRS, RETURNS AND VISA",
       "director": "Henrik Nielsen",
+      "director_email": "Henrik.Nielsen@ec.europa.eu",
       "units": [
         {
-          "code": "HOME.B.1",
-          "name": "Schengen & External Borders",
-          "head": "Angelina Gros Tchorbadjiska",
-          "deputy": "Denise Kwantes"
+          "code": "",
+          "name": "",
+          "head": "Pawel Busiakiewicz",
+          "head_email": "Pawel.BUSIAKIEWICZ@ec.europa.eu",
+          "head_phone": "+32 229-59423"
         },
         {
-          "code": "HOME.B.2",
-          "name": "Schengen Governance",
-          "head": "Tom Snels",
-          "deputy": "Wojtek Kalocinskii"
+          "code": "",
+          "name": "",
+          "head": "Dimitri Giotakos",
+          "head_email": "Dimitri.Giotakos@ec.europa.eu",
+          "head_phone": "+32 229-54474"
         },
         {
-          "code": "HOME.B.3",
-          "name": "Digital Schengen",
-          "head": "Marc Sulon",
-          "deputy": "Viera Ehret"
+          "code": "",
+          "name": "",
+          "head": "Silvena Pesta",
+          "head_email": "Silvena.PESTA@ec.europa.eu",
+          "head_phone": "+32 229-64753"
         },
         {
-          "code": "HOME.B.4",
-          "name": "Visa Policy",
-          "head": "Dimitrios Giotakos"
-        }
-      ]
-    },
-    {
-      "code": "HOME.C",
-      "name": "Migration & Asylum",
-      "director": "Michael Shotter",
-      "units": [
-        {
-          "code": "HOME.C.1",
-          "name": "Return & Readmission",
-          "head": "Silvena Pestana",
-          "deputy": "Serena Di Benedetto"
-        },
-        {
-          "code": "HOME.C.2",
-          "name": "Legal Pathways & Integration",
-          "head": "Anita Vella",
-          "deputy": "Silvio Grieco"
-        },
-        {
-          "code": "HOME.C.3",
-          "name": "Asylum",
-          "head": "Esther Pozo Vera",
-          "deputy": "Severine Wernert"
-        },
-        {
-          "code": "HOME.C.4",
-          "name": "Migration Management Response & Counter-Smuggling",
+          "code": "",
+          "name": "",
           "head": "Simona Ardovino",
-          "deputy": "Krzysztof Nowaczek"
-        },
-        {
-          "code": "HOME.C.5",
-          "name": "Migration Management Preparedness",
-          "head": "Martin Taschner",
-          "deputy": "Ramona Toader"
+          "head_email": "Simona.ARDOVINO@ec.europa.eu",
+          "head_phone": "+32 229-62435"
         }
       ]
     },
     {
-      "code": "HOME.D",
-      "name": "Internal Security",
+      "code": "Dir C",
+      "name": "BORDERS, MIGRATION AND ANTI-SMUGGLING",
+      "director": "Michael Shotter",
+      "director_email": "Michael.Shotter@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Angelina Gros",
+          "head_email": "TCHORBADJIYSKA@ec.europa.eu",
+          "head_phone": "+32 229-59749"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anita Vella",
+          "head_email": "Anita.VELLA@ec.europa.eu",
+          "head_phone": "+32 229-84140"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Séverine Wernert",
+          "head_email": "Severine.WERNERT1@ec.europa.eu",
+          "head_phone": "+32 229-82310"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Esther Pozo Vera",
+          "head_email": "Esther.POZO-VERA@ec.europa.eu",
+          "head_phone": "+32 229-99388"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Krzysztof Nowaczek",
+          "head_email": "Krzysztof.NOWACZEK@ec.europa.eu",
+          "head_phone": "+32 229-53273"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "INTERNAL SECURITY",
       "director": "Floriana Sipala",
-      "notes": [
-        "The Counter-Terrorism Coordinator in the Commission is the Director of HOME.D",
-        "The European Commission Coordinator for the Fight against Drug Trafficking is located within the Director HOME.D team"
-      ],
+      "director_email": "Floriana.Sipala@ec.europa.eu",
       "units": [
         {
-          "code": "HOME.D.1",
-          "name": "Law Enforcement Cooperation",
+          "code": "",
+          "name": "",
           "head": "Julian Siegl",
-          "deputy": "Julija Varnaite-Kamstra"
+          "head_email": "Julian.SIEGL@ec.europa.eu",
+          "head_phone": "+32 229-59302"
         },
         {
-          "code": "HOME.D.2",
-          "name": "Counter-Terrorism",
-          "head": "Martin Schiffer",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Martin Schieffer",
+          "head_email": "Martin.Schieffer@ec.europa.eu",
+          "head_phone": "+32 229-91313"
         },
         {
-          "code": "HOME.D.3",
-          "name": "Prevention of Radicalisation",
-          "head": "Heike Buss (Acting)",
-          "deputy": "Heike Buss"
+          "code": "",
+          "name": "",
+          "head": "Jo De Cock",
+          "head_email": "Jo.DE-COCK@ec.europa.eu",
+          "head_phone": "+32 229-95862"
         },
         {
-          "code": "HOME.D.4",
-          "name": "Security in the Digital Age",
+          "code": "",
+          "name": "",
           "head": "Monika Kopcheva",
-          "deputy": "Vacant"
-        },
-        {
-          "code": "HOME.D.5",
-          "name": "Organised Crime & Drugs",
-          "head": "Jo De Cock"
+          "head_email": "Monika.KOPCHEVA@ec.europa.eu",
+          "head_phone": "+32 229-65452"
         }
       ]
     },
     {
-      "code": "HOME.E",
-      "name": "Home Affairs Funds",
-      "director": "Silvia Marcellini",
+      "code": "Dir E",
+      "name": "BORDERS, MIGRATION AND SECURITY IN MEMBER STATES I",
+      "director": "Silvia Michelini",
+      "director_email": "Silvia.Michelini@ec.europa.eu",
       "units": [
         {
-          "code": "HOME.E.1",
-          "name": "Border & Compliance",
-          "head": "Amis Sijakovic",
-          "deputy": "Wietske Janssen-Norin"
+          "code": "",
+          "name": "",
+          "head": "Robert France",
+          "head_email": "Robert.FRANCE@ec.europa.eu",
+          "head_phone": "+32 229-95976"
         },
         {
-          "code": "HOME.E.2",
-          "name": "Asylum & Central Europe (I)",
-          "head": "Sergio Mesa",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Doede Ackers",
+          "head_email": "Doede.Ackers@ec.europa.eu",
+          "head_phone": "+32 229-66936"
         },
         {
-          "code": "HOME.E.3",
-          "name": "North, West & Central Europe (II)",
-          "head": "Annick Faguer",
-          "deputy": "Vacant"
-        },
-        {
-          "code": "HOME.E.4",
-          "name": "Actions & Procurement",
-          "head": "Paul Casajus",
-          "deputy": "Vacant"
-        },
-        {
-          "code": "HOME.E.5",
-          "name": "Budget & Reporting",
-          "head": "Paul Szaszman",
-          "deputy": "Lukas Richterov"
+          "code": "",
+          "name": "",
+          "head": "Alix Muller-Rappard",
+          "head_email": "Alix.MULLER-RAPPARD@ec.europa.eu",
+          "head_phone": "+32 229-81847"
         }
       ]
     },
     {
-      "code": "HOME.F",
-      "name": "Innovation & Audit",
-      "director": "Marta Cybula",
+      "code": "Dir F",
+      "name": "BORDERS, MIGRATION AND SECURITY IN MEMBER STATES II",
+      "director": "",
+      "director_email": "",
       "units": [
         {
-          "code": "HOME.F.1",
-          "name": "Border & Compliance",
-          "head": "Julija Amos",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Silvia Michelini",
+          "head_email": "Silvia.Michelini@ec.europa.eu",
+          "head_phone": "+32 229-62447"
         },
         {
-          "code": "HOME.F.2",
-          "name": "Strategic & Security Research",
-          "head": "Natalia Prieto",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Martin Taschner",
+          "head_email": "Martin.TASCHNER@ec.europa.eu",
+          "head_phone": "+32 229-98841"
         },
         {
-          "code": "HOME.F.3",
-          "name": "Secure Society",
-          "head": "Vacant",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Wojtek Kalocinski",
+          "head_email": "Wojciech.KALOCINSKI@ec.europa.eu",
+          "head_phone": "+32 229-96837"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marc Sulon",
+          "head_email": "Marc.SULON@ec.europa.eu",
+          "head_phone": "+32 229-93182"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Robert France",
+          "head_email": "Robert.FRANCE@ec.europa.eu",
+          "head_phone": "+32 229-95976"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "STRATEGY, FORESIGHT AND HORIZONTAL AFFAIRS",
+      "director": "Corinna Ullrich",
+      "director_email": "Corinna.ULLRICH@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Olivier Bergeau",
+          "head_email": "Olivier.BERGEAU@ec.europa.eu",
+          "head_phone": "+32 229-92656"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Charlotte Arwidi",
+          "head_email": "Charlotte.ARWIDI@ec.europa.eu",
+          "head_phone": "+32 229-87797"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Denise Kwantes",
+          "head_email": "Denise.KWANTES@ec.europa.eu",
+          "head_phone": "+32 229-83152"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tom Snels",
+          "head_email": "Tom.SNELS@ec.europa.eu",
+          "head_phone": "+32 229-64058"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Valeria Bricola",
+          "head_email": "Valeria.BRICOLA@ec.europa.eu",
+          "head_phone": "+32 229-66129"
+        }
+      ]
+    },
+    {
+      "code": "Dir G",
+      "name": "ASSURANCE, BUDGET AND SUPPORT",
+      "director": "Marta Cygan",
+      "director_email": "Marta.CYGAN@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ute Stiegel",
+          "head_email": "Ute.STIEGEL@ec.europa.eu",
+          "head_phone": "+32 229-64591"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paul Capeyron",
+          "head_email": "Paul.Capeyron@ec.europa.eu",
+          "head_phone": "+32 229-64018"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stephanie Carillon",
+          "head_email": "Stephanie.CARILLON@ec.europa.eu",
+          "head_phone": "+32 229-98815"
         }
       ]
     }
   ],
-  "agencies": [
-    {
-      "code": "EBCGA",
-      "name": "European Border and Coast Guard Agency",
-      "head": "Hans Leijtens"
-    },
-    {
-      "code": "EU-LISA",
-      "name": "European Union Agency for the Operational Management of Large-Scale IT Systems",
-      "head": "Marili Männik (Ad Interim)"
-    },
-    {
-      "code": "EUAA",
-      "name": "European Union Agency for Asylum",
-      "head": "Nina Gregori"
-    },
-    {
-      "code": "EUROPOL",
-      "name": "European Union Agency for Law Enforcement Cooperation",
-      "head": "Catherine De Bolle"
-    },
-    {
-      "code": "CEPOL",
-      "name": "European Union Agency for Law Enforcement Training",
-      "head": "Montserrat Marín"
-    },
-    {
-      "code": "EUDA",
-      "name": "European Union Drugs Agency",
-      "head": "Alexis Goosdeel"
-    }
-  ],
-  "seconded_managers": [
-    "Gosia Pearson, Head of Unit seconded to the Cabinet of Commissioner Brunner",
-    "Cathrin Bauer-Bulst, Head of Unit seconded to the Cabinet of Commissioner Brunner",
-    "Alexandra Cupsan-Catalin, Head of Unit seconded to the Cabinet of Executive Vice-President Virkkunen"
-  ],
-  "notes": [
-    "The Head of Task Force for Migration Management is the Head of Unit HOME.01",
-    "The Counter-Terrorism Coordinator in the Commission is the Director of HOME.D",
-    "The European Commission Coordinator for the Fight against Drug Trafficking is located within the Director HOME.D team",
-    "D: Deputy to the Director",
-    "A: Mirror entity in an Executive Agency"
-  ]
+  "num_directorates": 8,
+  "num_units": 31,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

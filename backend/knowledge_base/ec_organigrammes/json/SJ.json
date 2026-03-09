@@ -1,202 +1,454 @@
 {
   "dg_code": "SJ",
-  "dg_name": "Legal Service",
-  "president": {
-    "name": "Ursula von der Leyen",
-    "title": "President"
-  },
-  "director_general": {
-    "name": "Daniel Calleja Crespo",
-    "title": "Director-General",
-    "assistants": [
-      "The Maram Refque - Legal Coordination",
-      "Managing - Taxonomy Reform - Legal Coordination",
-      "Managing - Interinstitutional",
-      "Maribeth Maur - Dispute Settlement"
-    ],
-    "principal_adviser": {
-      "name": "Hannes Kraemer",
-      "role": "Legal Matters Related to Taxation"
+  "dg_name": "Legal service",
+  "commissioner": "",
+  "director_general": "Alberto De Gregorio",
+  "director_general_email": "MERINO@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Yona Marinova",
+      "email": "Yona.MARINOVA@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Clemens Ladenburger",
+      "email": "Clemens.Ladenburger@ec.europa.eu",
+      "responsibilities": ""
     }
-  },
-  "deputy_director_general": {
-    "name": "Clemens Ladenburger",
-    "title": "Deputy Director-General"
-  },
-  "units": [
+  ],
+  "directorates": [
     {
-      "code": "SJ.R",
-      "name": "Resources and Performance Management",
-      "head": "Gilles Bartelet",
-      "deputy": "Vacant"
-    },
-    {
-      "code": "SJ.R.1",
-      "name": "ICT, Correspondent Finance & Digital Solutions",
-      "head": "Emil Wezdenbeck"
-    },
-    {
-      "code": "SJ.R.2",
-      "name": "Strategy, Knowledge Management & Documentation",
-      "head": "David Blanchard"
-    },
-    {
-      "code": "SJ.R.3",
-      "name": "Conventions, Agreements & Litigations",
-      "head": "Olivier Verhenne"
-    },
-    {
-      "code": "SJ.A",
-      "name": "Affair - Business Law",
-      "head": "Allerton Gregorio",
+      "code": "",
+      "name": "General",
+      "director": "Hannes Kraemer",
+      "director_email": "Hannes.KRAEMER@ec.europa.eu",
       "units": [
         {
-          "code": "SJ.A.1",
-          "name": "Agriculture & Fisheries",
-          "head": "Chiara Cattariga"
+          "code": "",
+          "name": "",
+          "head": "Tim Maxian Rusche",
+          "head_email": "Tim.RUSCHE@ec.europa.eu",
+          "head_phone": "+32 229-54358"
+        }
+      ]
+    },
+    {
+      "code": "Dir K",
+      "name": "LEG TEAM (QUALITY OF LEGISLATION)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Tibor Scharf",
+          "head_email": "Tibor.Scharf@ec.europa.eu",
+          "head_phone": "+32 229-65994"
         },
         {
-          "code": "SJ.A.2",
-          "name": "Humos Kunchumyties"
-        }
-      ]
-    },
-    {
-      "code": "SJ.B",
-      "name": "AGRI - Agriculture & Fisheries",
-      "head": "Chiara Cattariga",
-      "units": [
-        {
-          "code": "SJ.B.1",
-          "name": "Agriculture & Fisheries, Operating",
-          "head": "Convention"
+          "code": "",
+          "name": "",
+          "head": "Margarida Teles Romao",
+          "head_email": "Margarida.TELES-ROMAO@ec.europa.eu",
+          "head_phone": "+32 229-85262"
         },
         {
-          "code": "SJ.B.2",
-          "name": "Agriculture & Fisheries, Operating",
-          "head": "Humos Kunchumyties"
-        }
-      ]
-    },
-    {
-      "code": "SJ.C",
-      "name": "AIDE - State Aids",
-      "head": "Leda Flynn",
-      "deputy": "Andre Boulquet"
-    },
-    {
-      "code": "SJ.D",
-      "name": "BUDG - Budget, Customs, Taxation",
-      "head": "Bernd Martengigm"
-    },
-    {
-      "code": "SJ.E",
-      "name": "COMP - Competition & Mergers",
-      "head": "Paulo Stingionelli",
-      "units": [
-        {
-          "code": "SJ.E.1",
-          "name": "Erik Copovi Federher"
-        }
-      ]
-    },
-    {
-      "code": "SJ.F",
-      "name": "INST - Institutions",
-      "head": "Paolo Stingionelli",
-      "units": [
-        {
-          "code": "SJ.F.1",
-          "name": "Frederick Bellenger"
-        }
-      ]
-    },
-    {
-      "code": "SJ.G",
-      "name": "EAC - Employment & Social Affairs",
-      "head": "Maria Gloria Martinez Del Peral",
-      "units": [
-        {
-          "code": "SJ.G.1",
-          "name": "Sandra Herdelius"
-        }
-      ]
-    },
-    {
-      "code": "SJ.H",
-      "name": "RELEX - Relax & International Law",
-      "head": "Hannes Kraemer (Acting)",
-      "units": [
-        {
-          "code": "SJ.H.1",
-          "name": "Christophe Gaslito"
-        }
-      ]
-    },
-    {
-      "code": "SJ.I",
-      "name": "JLS - Justice, Freedom & Security; Privacy; Law, Crime; Law",
-      "head": "Elisabetta Montalhanti",
-      "units": [
-        {
-          "code": "SJ.I.1",
-          "name": "Elamco Vidal, Piriz"
-        }
-      ]
-    },
-    {
-      "code": "SJ.J",
-      "name": "EUROZONE - Eurozone & Economic Issues",
-      "head": "Jean-Paul Keppennes",
-      "units": [
-        {
-          "code": "SJ.J.1",
-          "name": "Celine Valerio"
-        }
-      ]
-    },
-    {
-      "code": "SJ.K",
-      "name": "LEG - Quality of Legislation",
-      "head": "Tibor Scharf",
-      "units": [
-        {
-          "code": "SJ.K.1",
-          "name": "Sarah Mortimer Gaham"
+          "code": "",
+          "name": "",
+          "head": "Polya Mihaylova",
+          "head_email": "Polya.MIHAYLOVA@ec.europa.eu",
+          "head_phone": "+32 229-55862"
         },
         {
-          "code": "SJ.K.2",
-          "name": "Pela Van Delsen Romau"
+          "code": "",
+          "name": "",
+          "head": "Phillipa Van Den Wyngaert",
+          "head_email": "Phillipa.Van-Den-Wyngaert@ec.europa.eu",
+          "head_phone": "+32 229-52350"
         }
       ]
     },
     {
-      "code": "SJ.L",
-      "name": "TRADE - Trade Policy",
-      "head": "Marcos Oremeithein",
+      "code": "Dir A",
+      "name": "AFFAIR TEAM (ESTABLISHMENT, SERVICES, BUSINESS LAW, MOVEMENT OF",
+      "director": "",
+      "director_email": "",
       "units": [
         {
-          "code": "SJ.L.1",
-          "name": "Elamco Vidal, Piriz"
+          "code": "",
+          "name": "",
+          "head": "Gregor Von Rintelen",
+          "head_email": "Gregor.VON-RINTELEN@ec.europa.eu",
+          "head_phone": "+32 229-54882"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bruno Stromsky",
+          "head_email": "Bruno.Stromsky@ec.europa.eu",
+          "head_phone": "+32 229-51705"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dimitrios Triantafyllou",
+          "head_email": "Dimitrios.Triantafyllou@ec.europa.eu",
+          "head_phone": "+32 229-61570"
         }
       ]
     },
     {
-      "code": "SJ.M",
-      "name": "PERS - European Civil Service Law",
-      "head": "Florence Clodrighe Dowkehaut",
+      "code": "Dir B",
+      "name": "AGRI TEAM (AGRICULTURE AND FISHERIES)",
+      "director": "",
+      "director_email": "",
       "units": [
         {
-          "code": "SJ.M.1",
-          "name": "Klaïa Talaire-Ruitz"
+          "code": "",
+          "name": "",
+          "head": "Chiara Cattabriga",
+          "head_email": "Chiara.CATTABRIGA@ec.europa.eu",
+          "head_phone": "+32 229-68947"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "AIDE TEAM (STATE AIDS)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Leo Flynn",
+          "head_email": "Leo.FLYNN@ec.europa.eu",
+          "head_phone": "+32 229-69902"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andre Bouquet",
+          "head_email": "Andre.Bouquet@ec.europa.eu",
+          "head_phone": "+32 229-52541"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "BUDG TEAM (BUDGET, CUSTOMS, TAXATION)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Bernd Martenczuk",
+          "head_email": "Bernd.Martenczuk@ec.europa.eu",
+          "head_phone": "+32 229-65058"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Barbara Eggers",
+          "head_email": "Barbara.EGGERS@ec.europa.eu",
+          "head_phone": "+32 229-91794"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wim Roels",
+          "head_email": "Wim.ROELS@ec.europa.eu",
+          "head_phone": "+32 229-84820"
+        }
+      ]
+    },
+    {
+      "code": "Dir E",
+      "name": "CONC TEAM (COMPETITION AND MERGERS)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Fernando Castillo De La",
+          "head_email": "TORRE@ec.europa.eu",
+          "head_phone": "+32 229-60064"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eric Gippini Fournier",
+          "head_email": "Eric.GIPPINI-FOURNIER@ec.europa.eu",
+          "head_phone": "+32 229-98373"
+        }
+      ]
+    },
+    {
+      "code": "Dir F",
+      "name": "INST TEAM (INSTITUTIONS)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Paolo Stancanelli",
+          "head_email": "Paolo.Stancanelli@ec.europa.eu",
+          "head_phone": "+32 229-61808"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Friedrich Erlbacher",
+          "head_email": "Friedrich.ERLBACHER@ec.europa.eu",
+          "head_phone": "+32 229-50307"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Muriel Heller",
+          "head_email": "Muriel.HELLER@ec.europa.eu",
+          "head_phone": "+32 229-87574"
+        }
+      ]
+    },
+    {
+      "code": "Dir G",
+      "name": "JLS TEAM (JUSTICE, FREEDOM AND SECURITY, PRIVATE LAW AND CRIMINAL",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Carlo Zadra",
+          "head_email": "carlo.zadra@consilium.europa.eu",
+          "head_phone": "+32 229-50458"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Elisabetta Montaguti",
+          "head_email": "Elisabetta.Montaguti@ec.europa.eu",
+          "head_phone": "+32 229-52972"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Roland Tricot",
+          "head_email": "Roland.TRICOT@ec.europa.eu",
+          "head_phone": "+32 229-61450"
+        }
+      ]
+    },
+    {
+      "code": "Dir H",
+      "name": "MIMED TEAM (INTERNAL MARKET FOR GOODS, ENERGY; ENTERPRISE;",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Bernhard Schima",
+          "head_email": "Bernhard.SCHIMA@ec.europa.eu",
+          "head_phone": "+32 229-60372"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "James Flett",
+          "head_email": "James.Flett@ec.europa.eu",
+          "head_phone": "+32 229-66580"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Geert Wils",
+          "head_email": "Geert.WILS@ec.europa.eu",
+          "head_phone": "+32 229-53945"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Odile Beynet",
+          "head_email": "Odile.Beynet@ec.europa.eu",
+          "head_phone": "+32 229-94368"
+        }
+      ]
+    },
+    {
+      "code": "Dir I",
+      "name": "RELEX TEAM (RELEX AND INTERNATIONAL LAW)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Hannes Kraemer",
+          "head_email": "Hannes.KRAEMER@ec.europa.eu",
+          "head_phone": "+32 229-50686"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Manuel Kellerbauer",
+          "head_email": "Manuel.KELLERBAUER@ec.europa.eu",
+          "head_phone": "+32 229-66970"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sabine Gruenheid",
+          "head_email": "Sabine.GRUENHEID@ec.europa.eu",
+          "head_phone": "+32 229-66071"
+        }
+      ]
+    },
+    {
+      "code": "Dir J",
+      "name": "SOC TEAM (EMPLOYMENT AND SOCIAL AFFAIRS, EDUCATION AND CULTURE,",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria-Isabel Martinez Del",
+          "head_email": "Peral@ec.europa.eu",
+          "head_phone": "+32 229-65039"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sandrine Delaude",
+          "head_email": "Sandrine.DELAUDE@ec.europa.eu",
+          "head_phone": "+32 229-96601"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Minas Konstantinidis",
+          "head_email": "Minas.Konstantinidis@ec.europa.eu",
+          "head_phone": "+32 229-58902"
+        }
+      ]
+    },
+    {
+      "code": "Dir L",
+      "name": "TRADE TEAM — (TRADE POLICY AND WTO)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Mikko Huttunen",
+          "head_email": "Mikko.HUTTUNEN@ec.europa.eu",
+          "head_phone": "+32 229-64728"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ramon Vidal Puig",
+          "head_email": "Jose-Ramon.Vidal-Puig@ec.europa.eu",
+          "head_phone": "+32 229-90199"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Margarida Afonso",
+          "head_email": "Margarida.AFONSO@ec.europa.eu",
+          "head_phone": "+32 229-94423"
+        }
+      ]
+    },
+    {
+      "code": "Dir M",
+      "name": "PERS TEAM (EUROPEAN CIVIL SERVICE LAW)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Florence Clotuche-",
+          "head_email": "Florence.Clotuche-Duvieusart@ec.europa.eu",
+          "head_phone": "+32 229-57775"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Klara Talaber-Ritz",
+          "head_email": "Klara.TALABER-RITZ@ec.europa.eu",
+          "head_phone": "+32 229-87089"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jean-Francois Brakeland",
+          "head_email": "Jean-Francois.Brakeland@ec.europa.eu",
+          "head_phone": "+32 229-53918"
+        }
+      ]
+    },
+    {
+      "code": "Dir N",
+      "name": "EUROZONE TEAM (EUROZONE AND ECONOMIC ISSUES)",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Céline Valero",
+          "head_email": "Celine.VALERO@ec.europa.eu",
+          "head_phone": "+32 229-98350"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "RESOURCES AND PERFORMANCE MANAGEMENT",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Gilles Gantelet",
+          "head_email": "Gilles.Gantelet@ec.europa.eu",
+          "head_phone": "+32 229-94896"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Emiel Weizenbach",
+          "head_email": "Emiel.Weizenbach@ec.europa.eu",
+          "head_phone": "+32 229-94953"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "David Blanchard",
+          "head_email": "David.BLANCHARD@ec.europa.eu",
+          "head_phone": "+32 229-64905"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Olivier Verheecke",
+          "head_email": "Olivier.VERHEECKE@ec.europa.eu",
+          "head_phone": "+32 229-86954"
         }
       ]
     }
   ],
-  "notes": [
-    "Assistants to the Director-General and Deputy Director-General",
-    "The HR Correspondent has a functional reporting line to the Director-General",
-    "For the subjects treated by the teams of the Legal Service, please consult the page 'The Teams of the Legal Service'"
-  ],
-  "date_of_effect": "2025-12-01"
+  "num_directorates": 16,
+  "num_units": 43,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

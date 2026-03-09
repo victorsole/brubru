@@ -1,0 +1,29 @@
+{
+  "dg_code": "PRB",
+  "dg_name": "Performance",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria De Las Flores Diaz Pulido",
+          "head_email": "Flor.Diaz-Pulido@ec.europa.eu",
+          "head_phone": "+32 229-91290"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 1,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

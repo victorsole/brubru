@@ -1,0 +1,5321 @@
+{
+  "institution": "AGENCIES",
+  "source": "euwhoiswho_agencies.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 918,
+  "units": {
+    "ACER — AGENCY FOR THE COOPERATION OF ENERGY REGULATORS": {
+      "name": "ACER — AGENCY FOR THE COOPERATION OF ENERGY REGULATORS",
+      "persons": [
+        {
+          "name": "Christian Zinglersen",
+          "title": "Director"
+        },
+        {
+          "name": "Edit Herczog",
+          "title": "Chair of the Administrative Board"
+        },
+        {
+          "name": "Bogdan Marius Chiriţoiu",
+          "title": "Vice-Chair of the Administrative Board"
+        },
+        {
+          "name": "Clara Poletti",
+          "title": "Chair of the Board of Regulators"
+        },
+        {
+          "name": "Rafał Gawin",
+          "title": "Vice-Chair of the Board of Regulators"
+        },
+        {
+          "name": "Andrea Biondi",
+          "title": "Vice-Chair of the Board of Appeal"
+        }
+      ]
+    },
+    "ENISA — THE EUROPEAN UNION AGENCY FOR CYBERSECURITY": {
+      "name": "ENISA — THE EUROPEAN UNION AGENCY FOR CYBERSECURITY",
+      "persons": [
+        {
+          "name": "Fabienne Tegeler",
+          "title": "Chair of the Management Board"
+        },
+        {
+          "name": "Tomáš Minarik",
+          "title": "Vice-Chair of the Management Board"
+        },
+        {
+          "name": "Juhan Lepassaar",
+          "title": "Executive Director",
+          "email": "ed@enisa.europa.eu",
+          "phone": "+30 2814409619"
+        },
+        {
+          "name": "Hans Lourens De Vries",
+          "title": "Chief Cybersecurity and Operations -- Officer"
+        },
+        {
+          "name": "Florian Pennings",
+          "title": "Associate Chief Cybersecurity and -- Operations Officer -- Executive Director Office"
+        },
+        {
+          "name": "Andreas Mitrakas",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Georgia Pappa",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Analyses Unit (Pma)",
+          "title": ""
+        },
+        {
+          "name": "Ingrida Taurina",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Resilience of Critical Sectors": {
+      "name": "Resilience of Critical Sectors",
+      "persons": [
+        {
+          "name": "Dimitra Liveri",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Capacity Building Unit (CBU)": {
+      "name": "Capacity Building Unit (CBU)",
+      "persons": [
+        {
+          "name": "Evangelos Ouzounis",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Operational Cooperation Unit": {
+      "name": "Operational Cooperation Unit",
+      "persons": [
+        {
+          "name": "Jo De Muynck",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Awareness Unit (OSA)": {
+      "name": "Awareness Unit (OSA)",
+      "persons": [
+        {
+          "name": "Stefano De Crescenzo",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Operational Support Unit": {
+      "name": "Operational Support Unit",
+      "persons": [
+        {
+          "name": "Demosthenes Oikonomou",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Mattanja De Boer",
+          "title": "Head of Operations",
+          "email": "mdb@eurofound.europa.eu"
+        },
+        {
+          "name": "Markus Grimmeisen",
+          "title": "Head of Resources",
+          "email": "mgr@eurofound.europa.eu"
+        },
+        {
+          "name": "Frank Von Boven",
+          "title": "Head of Human Resources"
+        }
+      ]
+    },
+    "Cybersecurity Certification Unit": {
+      "name": "Cybersecurity Certification Unit",
+      "persons": [
+        {
+          "name": "Apostolos Malatras",
+          "title": "Acting Head of Unit"
+        }
+      ]
+    },
+    "Product Security Unit (MTP)": {
+      "name": "Product Security Unit (MTP)",
+      "persons": [
+        {
+          "name": "Apostolos Malatras",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "FRA — EUROPEAN UNION AGENCY FOR FUNDAMENTAL RIGHTS": {
+      "name": "FRA — EUROPEAN UNION AGENCY FOR FUNDAMENTAL RIGHTS",
+      "persons": [
+        {
+          "name": "Sirpa Rautio",
+          "title": "Director"
+        },
+        {
+          "name": "Andreas Accardo",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Ioannis Dimitrakopoulos",
+          "title": "Interim Head of Unit"
+        },
+        {
+          "name": "Joanna Goodey",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Constantinos Manolopoulos",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Nicole Romain",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "EUSPA — EUROPEAN UNION AGENCY FOR THE SPACE PROGRAMME": {
+      "name": "EUSPA — EUROPEAN UNION AGENCY FOR THE SPACE PROGRAMME",
+      "persons": [
+        {
+          "name": "Rodrigo Da Costa",
+          "title": "Executive Director",
+          "email": "Rodrigo.DACOSTA@gsa.europa.eu",
+          "phone": "+420 234766677"
+        },
+        {
+          "name": "Pascal Claudel",
+          "title": "Chief Operating Officer of Service",
+          "email": "Pascal.CLAUDEL@gsa.europa.eu",
+          "phone": "+420 234766173"
+        },
+        {
+          "name": "Patrick Hamilton",
+          "title": "Head of Administration",
+          "email": "patrick.hamilton@gsa.europa.eu",
+          "phone": "+420 234766708"
+        },
+        {
+          "name": "Guerric Pont",
+          "title": "Galileo Exploitation Programme -- Manager",
+          "email": "Guerric.PONT@gsa.europa.eu",
+          "phone": "+420 234766682"
+        },
+        {
+          "name": "Fiammetta Diani",
+          "title": "Head of Market, Downstream and -- Innovation",
+          "email": "Fiammetta.DIANI@gsa.europa.eu",
+          "phone": "+420 234766609"
+        },
+        {
+          "name": "Stefano Iannitti",
+          "title": "Head of the Security Authority and -- Acting Inspector General"
+        },
+        {
+          "name": "Jean-Marc Piéplu",
+          "title": "EGNOS Exploitation Programme -- Manager",
+          "email": "jean-marc.pieplu@gsa.europa.eu",
+          "phone": "+32 229-62413"
+        },
+        {
+          "name": "Philippe Rosius",
+          "title": "Head of Security Operations and -- Monitoring",
+          "email": "philippe.rosius@gsa.europa.eu",
+          "phone": "+33 184270489"
+        },
+        {
+          "name": "Juan Garcés De Marcilla",
+          "title": "Head of the Secured Communications -- Department"
+        },
+        {
+          "name": "Miroslav Slezak",
+          "title": "Head of Information and -- Communications Technology, Facility -- Management and Logistics Department",
+          "email": "Miroslav.SLEZAK@gsa.europa.eu",
+          "phone": "+420 234766190"
+        },
+        {
+          "name": "Kate Szabo",
+          "title": "Head of Finance Department",
+          "email": "Kate.SZABO@gsa.europa.eu",
+          "phone": "+420 234766640"
+        },
+        {
+          "name": "Ezio Villa",
+          "title": "Head of Legal and Procurement -- Department, and Data Protection Officer -- (DPO)",
+          "email": "ezio.villa@gsa.europa.eu",
+          "phone": "+420 234766928"
+        },
+        {
+          "name": "Martina Vondraskova",
+          "title": "Head of Human Resources Department",
+          "email": "Martina.VONDRASKOVA@gsa.europa.eu",
+          "phone": "+420 234766669"
+        },
+        {
+          "name": "Elisabetta Carrara",
+          "title": "Head of the Security Accreditation -- Department"
+        }
+      ]
+    },
+    "EFCA — EUROPEAN FISHERIES CONTROL AGENCY": {
+      "name": "EFCA — EUROPEAN FISHERIES CONTROL AGENCY",
+      "persons": [
+        {
+          "name": "Susan Steele",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Marcel Dedic",
+          "title": "Acting Head of Unit"
+        },
+        {
+          "name": "Christina Morgado",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Mario Santos",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Vytautas Lukas",
+          "title": "Acting Head of Unit"
+        }
+      ]
+    },
+    "Strategy and Cooperation": {
+      "name": "Strategy and Cooperation",
+      "persons": [
+        {
+          "name": "Pedro Galache",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "EASA — EUROPEAN UNION AVIATION SAFETY AGENCY": {
+      "name": "EASA — EUROPEAN UNION AVIATION SAFETY AGENCY",
+      "persons": [
+        {
+          "name": "Florian Guillermet",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Luc Tytgat",
+          "title": "High Representative of the Executive -- Director"
+        },
+        {
+          "name": "Patrick Hadou",
+          "title": "Senior Military Advisor to the Executive -- Director"
+        },
+        {
+          "name": "Alain Leroy",
+          "title": "Chief Engineer"
+        },
+        {
+          "name": "Janet Northcote",
+          "title": "Chief information Officer (acting)"
+        }
+      ]
+    },
+    "Management Board": {
+      "name": "Management Board",
+      "persons": [
+        {
+          "name": "Koen Milis",
+          "title": "Chairperson"
+        },
+        {
+          "name": "Anelia Marinova",
+          "title": "Deputy Chairperson"
+        }
+      ]
+    },
+    "Executive Directorate": {
+      "name": "Executive Directorate",
+      "persons": [
+        {
+          "name": "Jeremie Teahan",
+          "title": "Head of Executive Office"
+        },
+        {
+          "name": "Janet Northcote",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Arthur Beckand",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Athanassios Tziolas",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Management": {
+      "name": "Management",
+      "persons": [
+        {
+          "name": "Maria Rueda",
+          "title": "Director"
+        },
+        {
+          "name": "Ralf Erckmann",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Christopher Holgate-Romanov",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Rodrigo Priego",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Peter Van Der Zandt",
+          "title": "Director"
+        }
+      ]
+    },
+    "Flight Standards": {
+      "name": "Flight Standards",
+      "persons": [
+        {
+          "name": "Jesper Rasmussen",
+          "title": "Director"
+        },
+        {
+          "name": "Eugenia Diaz Alcazar",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Eduard Ciofu",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Francesco Gaetani",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Resources and Support": {
+      "name": "Resources and Support",
+      "persons": [
+        {
+          "name": "Iva Solcova",
+          "title": "Director"
+        },
+        {
+          "name": "Riitta Honkanen-Vaheri",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Iva Solcova",
+          "title": "Acting Head of Department"
+        },
+        {
+          "name": "Annika Haug",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Niall Brazil",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Certification": {
+      "name": "Certification",
+      "persons": [
+        {
+          "name": "Rachel Daeschler",
+          "title": "Director"
+        },
+        {
+          "name": "David Solar",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Colin Hancock",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Michael Singer",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Frank Steffens",
+          "title": "Head of Department"
+        },
+        {
+          "name": "ETSO (European Technical",
+          "title": ""
+        },
+        {
+          "name": "Gregory Lievre",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "EMA — EUROPEAN MEDICINES AGENCY": {
+      "name": "EMA — EUROPEAN MEDICINES AGENCY",
+      "persons": [
+        {
+          "name": "Emer Cooke",
+          "title": "Executive Director",
+          "email": "EMER.COOKE@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Mgt Division": {
+      "name": "Mgt Division",
+      "persons": [
+        {
+          "name": "Nerimantas Steikunas",
+          "title": "Head of Division",
+          "email": "NERIMANTAS.STEIKUNAS@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Finance Department": {
+      "name": "Finance Department",
+      "persons": [
+        {
+          "name": "Jean-Michel Adrien Mastio",
+          "title": "Head of Department",
+          "email": "JEANMICHEL.MASTIO@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Paola Samassa",
+          "title": "Head of Service",
+          "email": "PAOLA.SAMASSA@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Ulrike Nagl",
+          "title": "Head of Service",
+          "email": "ULRIKE.NAGL@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Alexander Jacobs",
+          "title": "Head of Service ad interim",
+          "email": "ALEXANDER.JACOBS@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Relations": {
+      "name": "Relations",
+      "persons": [
+        {
+          "name": "Simona Iozu",
+          "title": "Head of Service",
+          "email": "SIMONA.IOZU@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Governance Depart": {
+      "name": "Governance Depart",
+      "persons": [
+        {
+          "name": "Michael Gerard Lenihan",
+          "title": "Head of Department",
+          "email": "MICHAEL.LENIHAN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Svetoslava Radomirova",
+          "title": "Head of Service",
+          "email": "SVETLA.NAYDENOVA@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Mario Benetti",
+          "title": "Head of Service",
+          "email": "MARIO.BENETTI@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Piero Bortolotti",
+          "title": "Head of Service",
+          "email": "PIERO.BORTOLOTTI@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Support Dept": {
+      "name": "Support Dept",
+      "persons": [
+        {
+          "name": "Nathalie Gisele Rampal Olmedo",
+          "title": "Head of Department",
+          "email": "NATHALIE.RAMPALOLMEDO@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Tiago Freitas",
+          "title": "Head of Service",
+          "email": "TIAGO.FREITAS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Olivier Duquesne",
+          "title": "Head of Service",
+          "email": "OLIVIER.DUQUESNE@EMA.EUROPA.EU"
+        },
+        {
+          "name": "HR Rules, Procedures And",
+          "title": ""
+        },
+        {
+          "name": "Tomasz Jablonski",
+          "title": "Head of Service",
+          "email": "TOMASZ.JABLONSKI@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Daniela Luehrs",
+          "title": "Head of Service",
+          "email": "DANIELA.LUHRS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Monika Irena Hankiewicz-",
+          "title": "Head of Service",
+          "email": "MONIKA.HANKIEWICZ@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Audit": {
+      "name": "Audit",
+      "persons": [
+        {
+          "name": "Franck Diafouka",
+          "title": "Head of Service ad interim",
+          "email": "FRANCK.DIAFOUKA@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Public Health Threats": {
+      "name": "Public Health Threats",
+      "persons": [
+        {
+          "name": "Marco Cavaleri",
+          "title": "Head of Office",
+          "email": "MARCO.CAVALERI@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Department": {
+      "name": "Department",
+      "persons": [
+        {
+          "name": "Martin Harvey Allchurch",
+          "title": "Head of Department",
+          "email": "MARTIN.HARVEY@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Hilde Boone",
+          "title": "Head of Department",
+          "email": "HILDE.BOONE@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Francesca Day",
+          "title": "Head of Department",
+          "email": "FRANCESCA.DAY@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Caroline Pothet",
+          "title": "Head of Office",
+          "email": "CAROLINE.POTHET@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Heidi Janssen",
+          "title": "Head of Office",
+          "email": "HEIDI.JANSSEN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Thomas Castelnovo",
+          "title": "Head of Office",
+          "email": "THOMAS.CASTELNOVO@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Irene Rager",
+          "title": "Head of Office",
+          "email": "IRENE.RAGER@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Pavel Balabanov",
+          "title": "Head of Office",
+          "email": "PAVEL.BALABANOV@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Elias Pean",
+          "title": "Head of Office",
+          "email": "ELIAS.PEAN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Sokratis Kartelias",
+          "title": "Head of Department",
+          "email": "SOKRATIS.KARTELIAS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "David Bosque Villaverde",
+          "title": "Head of Service",
+          "email": "DAVID.BOSQUE@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Patrycja Joanna Gdynia-",
+          "title": "Head of Service",
+          "email": "PATRYCJA.GDYNIA@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Stephen Donnelly",
+          "title": "Head of Service",
+          "email": "STEPHEN.DONNELLY@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Marie-Agnes Heine",
+          "title": "Head of Department",
+          "email": "MARIE-AGNES.HEINE@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Monika Benstetter",
+          "title": "Head of Service",
+          "email": "MONIKA.BENSTETTER@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Christopher Gadd",
+          "title": "Head of Service",
+          "email": "CHRISTOPHER.GADD@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Eva Jimeno Sicilia",
+          "title": "Head of Strategy and Resources -- Department"
+        },
+        {
+          "name": "Mila Bas Sanchez",
+          "title": "Head of Department",
+          "phone": "+32 229-98391"
+        },
+        {
+          "name": "Soudaina Wala",
+          "title": "Head of sector",
+          "phone": "+32 229-54570"
+        },
+        {
+          "name": "Niki Atzoulatou",
+          "title": "Head of Unit",
+          "phone": "+32 229-95992"
+        },
+        {
+          "name": "Gabriel Karajian",
+          "title": "Head of sector",
+          "phone": "+32 229-76727"
+        },
+        {
+          "name": "Ilze Zandere",
+          "title": "Head of sector",
+          "phone": "+32 229-55661"
+        },
+        {
+          "name": "Domenico Usai",
+          "title": "Head of sector",
+          "phone": "+32 229-59504"
+        },
+        {
+          "name": "Tom Fordel",
+          "title": "Head of sector",
+          "phone": "+32 229-99114"
+        },
+        {
+          "name": "Mila Bas Sanchez",
+          "title": "Acting Head of Unit",
+          "phone": "+32 229-98391"
+        },
+        {
+          "name": "Veronica Williams",
+          "title": "Head of sector",
+          "phone": "+32 229-51463"
+        },
+        {
+          "name": "Chantal Bicque",
+          "title": "Head of sector",
+          "phone": "+32 229-50801"
+        },
+        {
+          "name": "Daniele Springhetti",
+          "title": "Head of sector",
+          "phone": "+32 229-64041"
+        },
+        {
+          "name": "Dimitrios Kargianiotis",
+          "title": "Head of sector",
+          "phone": "+32 229-52460"
+        },
+        {
+          "name": "Anita Kucharska",
+          "title": "Head of Unit",
+          "phone": "+32 229-52833"
+        },
+        {
+          "name": "Giuseppe Bambara",
+          "title": "Head of sector",
+          "phone": "+32 229-93019"
+        },
+        {
+          "name": "Francisco Laso Ballesteros",
+          "title": "Head of sector",
+          "phone": "+32 229-92134"
+        },
+        {
+          "name": "Andrea Romano",
+          "title": "Head of sector",
+          "phone": "+32 229-88588"
+        },
+        {
+          "name": "Komninos Diamantaras",
+          "title": "Head of sector",
+          "phone": "+32 229-55851"
+        },
+        {
+          "name": "Nikola Car",
+          "title": "Head of Unit",
+          "phone": "+32 229-53327"
+        },
+        {
+          "name": "Doroteya Petrova",
+          "title": "Head of sector",
+          "phone": "+32 229-97929"
+        },
+        {
+          "name": "Toni Skeen",
+          "title": "Head of sector",
+          "phone": "+32 229-96690"
+        },
+        {
+          "name": "Caterina Visani",
+          "title": "Head of sector",
+          "phone": "+32 229-92465"
+        },
+        {
+          "name": "Konstantia Vigli - Papadaki",
+          "title": "Head of sector",
+          "phone": "+32 229-68024"
+        }
+      ]
+    },
+    "Information Security": {
+      "name": "Information Security",
+      "persons": [
+        {
+          "name": "Elias Veiga Tavares",
+          "title": "Head of Service",
+          "email": "ELIAS.TAVARES@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Legal Department": {
+      "name": "Legal Department",
+      "persons": [
+        {
+          "name": "Georgia Gavriilidou",
+          "title": "Head of Legal Department at EMA"
+        },
+        {
+          "name": "Sandra Vanlievendael",
+          "title": "Head of Office",
+          "email": "SANDRA.VANLIEVENDAEL@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Director": {
+      "name": "Director",
+      "persons": [
+        {
+          "name": "Maria Alves",
+          "title": "Head of Office",
+          "email": "MARIA.ALVES@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Human Medicines Division": {
+      "name": "Human Medicines Division",
+      "persons": [
+        {
+          "name": "Alexis Nolte",
+          "title": "Head of Division",
+          "email": "ALEXIS.NOLTE@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Generation Dept": {
+      "name": "Generation Dept",
+      "persons": [
+        {
+          "name": "Michael Berntgen",
+          "title": "Head of Department",
+          "email": "MICHAEL.BERNTGEN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Kristina Larsson",
+          "title": "Head of Office",
+          "email": "KRISTINA.LARSSON@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Ralph Thomas Bax",
+          "title": "Head of Office",
+          "email": "RALPH.BAX@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Iordanis Gravanis",
+          "title": "Head of Service",
+          "email": "IORDANIS.GRAVANIS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Corinne De Vries",
+          "title": "Head of Office",
+          "email": "CORINNE.DEVRIES@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Assurance Dept": {
+      "name": "Assurance Dept",
+      "persons": [
+        {
+          "name": "Alberto Ganan Jimenez",
+          "title": "Head of Department -- Expert Panels and Groups",
+          "email": "ALBERTO.GANAN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Silvy Da Rocha Dias",
+          "title": "Head of Office",
+          "email": "SILVY.DAROCHADIAS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Alexios Skarlatos",
+          "title": "Head of Office",
+          "email": "ALEXIOS.SKARLATOS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Virginia Rojo Guerra",
+          "title": "Head of Office",
+          "email": "VIRGINIA.ROJO@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Thomas Girard",
+          "title": "Head of Office",
+          "email": "THOMAS.GIRARD@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Sonia Maria De Sousa Ribeiro",
+          "title": "Head of Office",
+          "email": "SONIA.RIBEIRO@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Medicines Dept": {
+      "name": "Medicines Dept",
+      "persons": [
+        {
+          "name": "Evdokia Korakianiti",
+          "title": "Head of Department",
+          "email": "EVDOKIA.KORAKIANITI@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Peter Twomey",
+          "title": "Head of Office",
+          "email": "PETER.TWOMEY@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Georgy Genov",
+          "title": "Head of Office",
+          "email": "GEORGY.GENOV@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Veronika Jekerle",
+          "title": "Head of Office",
+          "email": "VERONIKA.JEKERLE@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Veronique Le Ber",
+          "title": "Head of Office",
+          "email": "VERONIQUE.LEBER@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Justine Pourchasse",
+          "title": "Head of Office ad interim",
+          "email": "JUSTINE.POURCHASSE@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Division": {
+      "name": "Division",
+      "persons": [
+        {
+          "name": "Hilmar Hamann",
+          "title": "Head of Division",
+          "email": "HILMAR.HAMANN@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Delivery Dept": {
+      "name": "Delivery Dept",
+      "persons": [
+        {
+          "name": "Aleksandra Dacic-Pilcevic",
+          "title": "Head of Department",
+          "email": "ALEKSANDRA.DACICPILCEVIC@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Angela-Christina Schmidt",
+          "title": "Head of Service",
+          "email": "CHRISTINA.SCHMIDT@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Hannes Kulovits",
+          "title": "Head of Service",
+          "email": "HANNES.KULOVITS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Marko Banjanin",
+          "title": "Head of Service",
+          "email": "MARKO.BANJANIN@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "CIO Office": {
+      "name": "CIO Office",
+      "persons": [
+        {
+          "name": "Roelof Otterspeer",
+          "title": "Head of Office",
+          "email": "ROELOF.OTTERSPEER@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Core Services Department": {
+      "name": "Core Services Department",
+      "persons": [
+        {
+          "name": "Petri Paakkonen",
+          "title": "Head of Department",
+          "email": "PETRI.PAAKKONEN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Stylianos Dolopikos",
+          "title": "Head of Service",
+          "email": "STYLIANOS.DOLOPIKOS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Taavi Pehme",
+          "title": "Head of Service",
+          "email": "TAAVI.PEHME@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Patricia Isabel Teixeira",
+          "title": "Head of Service",
+          "email": "ISABEL.CHICHARO@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Communication Division": {
+      "name": "Communication Division",
+      "persons": [
+        {
+          "name": "Melanie Carr",
+          "title": "Head of Division",
+          "email": "MELANIE.CARR@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Engagement": {
+      "name": "Engagement",
+      "persons": [
+        {
+          "name": "Juan Garcia Burgos",
+          "title": "Head of Department",
+          "email": "JUAN.GARCIA@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Morgane Colin De Verdiere",
+          "title": "Head of Service",
+          "email": "MORGANE.DEVERDIERE@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Transparency Department": {
+      "name": "Transparency Department",
+      "persons": [
+        {
+          "name": "Anne-Sophie Henry-Eude",
+          "title": "Head of Department",
+          "email": "EUDE@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Gaetan Guyodo",
+          "title": "Head of Service",
+          "email": "GAETAN.GUYODO@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Karen Quigley",
+          "title": "Head of Service",
+          "email": "KAREN.QUIGLEY@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Data Analytics and Methods": {
+      "name": "Data Analytics and Methods",
+      "persons": [
+        {
+          "name": "Peter Richard Arlett",
+          "title": "Head of Task Force",
+          "email": "PETER.ARLETT@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Systems": {
+      "name": "Systems",
+      "persons": [
+        {
+          "name": "Pieter Vankeerberghen",
+          "title": "Head of Workstream",
+          "email": "PIETER.VANKEERBERGHEN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Kai Taka-Aho",
+          "title": "Director"
+        }
+      ]
+    },
+    "Transformation": {
+      "name": "Transformation",
+      "persons": [
+        {
+          "name": "Ana Maria Zanoletty Perez",
+          "title": "Head of Workstream",
+          "email": "ANA.ZANOLETTYPEREZ@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Zaide Frias Ferreira Da",
+          "title": "Head of Task Force",
+          "email": "ZAIDE.FRIAS@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "TDA-Healthcare Data": {
+      "name": "TDA-Healthcare Data",
+      "persons": [
+        {
+          "name": "Paolo Alcini",
+          "title": "Head of Workstream",
+          "email": "PAOLO.ALCINI@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "TDA-Methodology": {
+      "name": "TDA-Methodology",
+      "persons": [
+        {
+          "name": "Frank Petavy",
+          "title": "Head of Workstream",
+          "email": "FRANK.PETAVY@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "EVIDENCE": {
+      "name": "EVIDENCE",
+      "persons": [
+        {
+          "name": "Patrice Verpillat",
+          "title": "Head of Workstream",
+          "email": "PATRICE.VERPILLAT@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Excellence": {
+      "name": "Excellence",
+      "persons": [
+        {
+          "name": "Mireia Castillon Melero",
+          "title": "Head of Workstream",
+          "email": "MIREIA.CASTILLON@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Digital Change": {
+      "name": "Digital Change",
+      "persons": [
+        {
+          "name": "Nektaria Varela",
+          "title": "Head of Workstream",
+          "email": "NEKTARIA.VARELA@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Office": {
+      "name": "Office",
+      "persons": [
+        {
+          "name": "Jean-Michel Becar",
+          "title": "Head of Workstream",
+          "email": "JEANMICHEL.BECAR@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Innovation": {
+      "name": "Innovation",
+      "persons": [
+        {
+          "name": "Philippe Cormier",
+          "title": "Head of Task Force",
+          "email": "EMMANUEL.CORMIER@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Academia": {
+      "name": "Academia",
+      "persons": [
+        {
+          "name": "Ralf Herold",
+          "title": "Head of Workstream",
+          "email": "RALF.HEROLD@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Development Accelerator": {
+      "name": "Development Accelerator",
+      "persons": [
+        {
+          "name": "Falk Ehmann",
+          "title": "Head of Workstream",
+          "email": "FALK.EHMANN@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "medicines and devices": {
+      "name": "medicines and devices",
+      "persons": [
+        {
+          "name": "Monica Dias",
+          "title": "Head of Workstream",
+          "email": "MONICA.DIAS@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "SME Office": {
+      "name": "SME Office",
+      "persons": [
+        {
+          "name": "Constantinos Ziogas",
+          "title": "Head of Workstream",
+          "email": "CONSTANTINOS.ZIOGAS@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Veterinary Medicines Division": {
+      "name": "Veterinary Medicines Division",
+      "persons": [
+        {
+          "name": "Ivo Claassen",
+          "title": "Head of Division",
+          "email": "IVO.CLAASSEN@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Support Depart": {
+      "name": "Support Depart",
+      "persons": [
+        {
+          "name": "Jordi Torren Edo",
+          "title": "Head of Department",
+          "email": "JORDI.TORREN@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Maria Noemi Garcia Del",
+          "title": "Head of Service",
+          "email": "NOEMI.GARCIADELBLANCO@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Nicholas Hywel Jarrett",
+          "title": "Head of Service",
+          "email": "NICHOLAS.JARRETT@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Regulatory Support": {
+      "name": "Regulatory Support",
+      "persons": [
+        {
+          "name": "Emily Drury",
+          "title": "Head of Department ad interim",
+          "email": "EMILY.DRURY@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Zoltan Kunsagi",
+          "title": "Head of Service",
+          "email": "ZOLTAN.KUNSAGI@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Jos Olaerts",
+          "title": "Head of Service",
+          "email": "JOS.OLAERTS@EMA.EUROPA.EU"
+        },
+        {
+          "name": "Kristina Paterson",
+          "title": "Head of Service ad interim",
+          "email": "KRISTINA.PATERSON@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "Support Office": {
+      "name": "Support Office",
+      "persons": [
+        {
+          "name": "Jana Schalansky",
+          "title": "Head of Office",
+          "email": "JANA.SCHALANSKY@EMA.EUROPA.EU"
+        }
+      ]
+    },
+    "ECHA — EUROPEAN CHEMICALS AGENCY": {
+      "name": "ECHA — EUROPEAN CHEMICALS AGENCY",
+      "persons": [
+        {
+          "name": "Sharon Mcguinness",
+          "title": "Executive Director"
+        }
+      ]
+    },
+    "Interaction": {
+      "name": "Interaction",
+      "persons": [
+        {
+          "name": "Mercedes Viñas",
+          "title": "Director"
+        }
+      ]
+    },
+    "Integration": {
+      "name": "Integration",
+      "persons": [
+        {
+          "name": "Ofelia Bercaru",
+          "title": "Director"
+        }
+      ]
+    },
+    "Assessment": {
+      "name": "Assessment",
+      "persons": [
+        {
+          "name": "Mike Rasenberg",
+          "title": "Director"
+        }
+      ]
+    },
+    "Directorate R – Resources": {
+      "name": "Directorate R – Resources",
+      "persons": [
+        {
+          "name": "Shay O'Malley",
+          "title": "Director"
+        },
+        {
+          "name": "Paul Krajnik",
+          "title": "Chair of the Governing Board"
+        },
+        {
+          "name": "Roberto Scazzola",
+          "title": "Chair"
+        },
+        {
+          "name": "Maria Ottati",
+          "title": "Chair"
+        },
+        {
+          "name": "Katinka Van Der Jagt",
+          "title": "Chair"
+        },
+        {
+          "name": "Joost Van Galen",
+          "title": "Chair"
+        },
+        {
+          "name": "Henrik Hedlund",
+          "title": "Chair",
+          "email": "appeal@echa.europa.eu"
+        },
+        {
+          "name": "Antoine Buchet",
+          "title": "Chair"
+        }
+      ]
+    },
+    "RESEARCH COMPETENCE CENTRE (BUCHAREST)": {
+      "name": "RESEARCH COMPETENCE CENTRE (BUCHAREST)",
+      "persons": [
+        {
+          "name": "Luca Tagliaretti",
+          "title": "Executive Director"
+        }
+      ]
+    },
+    "FRONTEX — EUROPEAN BORDER AND COAST GUARD AGENCY": {
+      "name": "FRONTEX — EUROPEAN BORDER AND COAST GUARD AGENCY",
+      "persons": [
+        {
+          "name": "Alexander Fritsch",
+          "title": "Chairman"
+        },
+        {
+          "name": "Neville Xuereb",
+          "title": "Deputy Chairman"
+        },
+        {
+          "name": "Hans Leijtens",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Aija Kalnaja",
+          "title": "Deputy Executive Director for -- Capabilities"
+        },
+        {
+          "name": "Lars Gerdes",
+          "title": "Deputy Executive Director for Operations"
+        },
+        {
+          "name": "Uku Särekanno",
+          "title": "Deputy Executive Director for -- Administration and Information -- Management"
+        },
+        {
+          "name": "Eva Capogna",
+          "title": "Director of Strategy, Governance and -- External Relations Division"
+        },
+        {
+          "name": "Karol Okonski",
+          "title": "Director of Security and Information -- Management Division"
+        },
+        {
+          "name": "Justyna Jurczak",
+          "title": "Head of Communications Office a.i.",
+          "email": "justyna.jurczak@frontex.europa.eu",
+          "phone": "+48 222059531"
+        },
+        {
+          "name": "Jonas Grimheden",
+          "title": "Fundamental Rights Officer",
+          "phone": "+48 222366778"
+        }
+      ]
+    },
+    "JUSTICE": {
+      "name": "JUSTICE",
+      "persons": [
+        {
+          "name": "Tillmann Keber",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Luca Zampaglione",
+          "title": "Deputy Director ad interim"
+        },
+        {
+          "name": "Matteo Bonfanti",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Giorgos Ksouris",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Zsolt Szolnoki",
+          "title": "Chairperson"
+        },
+        {
+          "name": "Rene Vihalem",
+          "title": "Deputy Chairperson"
+        },
+        {
+          "name": "Flavius Popa",
+          "title": "Head of Sector",
+          "email": "press@eulisa.europa.eu"
+        },
+        {
+          "name": "Mare Haab",
+          "title": "Head of Sector",
+          "email": "mare.haab@eulisa.europa.eu",
+          "phone": "+372 58878668"
+        },
+        {
+          "name": "Stephan Brandes",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Maria Bouligaraki",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Krzysztof Czekalowski",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Human Resources Unit": {
+      "name": "Human Resources Unit",
+      "persons": [
+        {
+          "name": "Kristi Täht",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Systems Operations Unit": {
+      "name": "Systems Operations Unit",
+      "persons": [
+        {
+          "name": "Damien Krauth",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Jakub Mayer",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Stakeholder Relations Unit": {
+      "name": "Stakeholder Relations Unit",
+      "persons": [
+        {
+          "name": "Flavius Popa",
+          "title": "Interim Head of Unit"
+        }
+      ]
+    },
+    "Delivery Unit": {
+      "name": "Delivery Unit",
+      "persons": [
+        {
+          "name": "Stephan Wildeboer",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Security Unit": {
+      "name": "Security Unit",
+      "persons": [
+        {
+          "name": "Luca Zampaglione",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Test and Transition Unit": {
+      "name": "Test and Transition Unit",
+      "persons": [
+        {
+          "name": "Erkki Erend",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Unit": {
+      "name": "Unit",
+      "persons": [
+        {
+          "name": "Philippe Harant",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Thierry Foubert",
+          "title": "Head of Strategic Development Unit"
+        },
+        {
+          "name": "Sofia Sakali",
+          "title": "Head of Project Management, Tools and -- Dissemination Unit"
+        }
+      ]
+    },
+    "EU-OSHA — EUROPEAN AGENCY FOR SAFETY AND HEALTH AT WORK": {
+      "name": "EU-OSHA — EUROPEAN AGENCY FOR SAFETY AND HEALTH AT WORK",
+      "persons": [
+        {
+          "name": "William Cockburn",
+          "title": "Executive Director",
+          "email": "cockburn@osha.europa.eu",
+          "phone": "+34 944358373"
+        },
+        {
+          "name": "Rory Harrington",
+          "title": "Head of Communication and Promotion -- Unit"
+        },
+        {
+          "name": "Vibe Westh",
+          "title": "Head of Prevention and Research Unit"
+        },
+        {
+          "name": "Donianzu Murgiondo",
+          "title": "Head of Resource and Service Centre"
+        }
+      ]
+    },
+    "EMSA — EUROPEAN MARITIME SAFETY AGENCY": {
+      "name": "EMSA — EUROPEAN MARITIME SAFETY AGENCY",
+      "persons": [
+        {
+          "name": "Maja Markovčić Kostelac",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Andreas Nordseth",
+          "title": "Chairman of the Administrative Board"
+        },
+        {
+          "name": "Andrea Tassoni",
+          "title": "Head of the Executive Office"
+        },
+        {
+          "name": "Manuela Tomassini",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Unit 1.1 – Sustainability": {
+      "name": "Unit 1.1 – Sustainability",
+      "persons": [
+        {
+          "name": "Frédéric Hébert",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Unit 1.2 - Visits and Inspections,": {
+      "name": "Unit 1.2 - Visits and Inspections,",
+      "persons": [
+        {
+          "name": "Mario Mifsud",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Unit 1.3 – Capacity Building": {
+      "name": "Unit 1.3 – Capacity Building",
+      "persons": [
+        {
+          "name": "Georgios Christofi",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Departement 2 — Safety,": {
+      "name": "Departement 2 — Safety,",
+      "persons": [
+        {
+          "name": "Leendert Bal",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Unit 2.1 - Safety and Security": {
+      "name": "Unit 2.1 - Safety and Security",
+      "persons": [
+        {
+          "name": "Ioannis Mispinas",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Unit 2.2 – Surveillance": {
+      "name": "Unit 2.2 – Surveillance",
+      "persons": [
+        {
+          "name": "Helena Ramon Jarraud",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Peter Kirov",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Unit 3.1 - Maritime Digital Services": {
+      "name": "Unit 3.1 - Maritime Digital Services",
+      "persons": [
+        {
+          "name": "Lukša Čičovački",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Unit 3.2 - Digital Infrastructure": {
+      "name": "Unit 3.2 - Digital Infrastructure",
+      "persons": [
+        {
+          "name": "Ivo Kupsky",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Unit 3.3 – Simplification": {
+      "name": "Unit 3.3 – Simplification",
+      "persons": [
+        {
+          "name": "Lazaros Aichmalotidis",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Dominika Lempicka-Fichter",
+          "title": "Head of Department"
+        }
+      ]
+    },
+    "Unit 4.1 - Human Resources and": {
+      "name": "Unit 4.1 - Human Resources and",
+      "persons": [
+        {
+          "name": "Cristina Romay-Lopez",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Unit 4.2 - Legal, Finance and Facilities": {
+      "name": "Unit 4.2 - Legal, Finance and Facilities",
+      "persons": [
+        {
+          "name": "Dominika Lempicka-Fichter",
+          "title": "Acting Head of Unit"
+        }
+      ]
+    },
+    "EEA — EUROPEAN ENVIRONMENT AGENCY": {
+      "name": "EEA — EUROPEAN ENVIRONMENT AGENCY",
+      "persons": [
+        {
+          "name": "Leena Ylä-Mononen",
+          "title": "Executive Director"
+        },
+        {
+          "name": "André Weidenhaupt",
+          "title": "Chair of the Management Board"
+        },
+        {
+          "name": "Elisabeth Freytag-Rigler",
+          "title": "Vice-Chair of the Management Board"
+        },
+        {
+          "name": "Julia Werner",
+          "title": "Vice-Chair of the Management Board"
+        },
+        {
+          "name": "Laura Höijer",
+          "title": "Vice-Chair of the Management Board"
+        },
+        {
+          "name": "Stefano Laporta",
+          "title": "Vice-Chair of the Management Board"
+        },
+        {
+          "name": "Søren Nielsen",
+          "title": "Head of Resources",
+          "email": "soren.nielsen@eea.europa.eu"
+        },
+        {
+          "name": "Eva Jensen",
+          "title": "Head of Department",
+          "email": "eva.jensen@eea.europa.eu"
+        },
+        {
+          "name": "Katja Rosenbohm",
+          "title": "Head of Department",
+          "email": "katja.rosenbohm@eea.europa.eu"
+        },
+        {
+          "name": "Karl Hamilton",
+          "title": "Head of Department",
+          "email": "karl.hamilton@eea.europa.eu"
+        },
+        {
+          "name": "Riyong Kim",
+          "title": "Head of Department",
+          "email": "riyong.kim@eea.europa.eu"
+        }
+      ]
+    },
+    "ERA — EUROPEAN UNION AGENCY FOR RAILWAYS": {
+      "name": "ERA — EUROPEAN UNION AGENCY FOR RAILWAYS",
+      "persons": [
+        {
+          "name": "Josef Doppelbauer",
+          "title": "Executive Director",
+          "email": "josef.doppelbauer@era.europa.eu"
+        },
+        {
+          "name": "Pio Guido",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Oliver Piron",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "EBA — EUROPEAN BANKING AUTHORITY": {
+      "name": "EBA — EUROPEAN BANKING AUTHORITY",
+      "persons": [
+        {
+          "name": "Francois-Louis Michaud",
+          "title": "Executive Director"
+        }
+      ]
+    },
+    "EFSA — EUROPEAN FOOD SAFETY AUTHORITY": {
+      "name": "EFSA — EUROPEAN FOOD SAFETY AUTHORITY",
+      "persons": [
+        {
+          "name": "Nikolaus Kriz",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Aivars Bērziņš",
+          "title": "Chair"
+        },
+        {
+          "name": "Pamela Byrne",
+          "title": "Vice-Chair"
+        },
+        {
+          "name": "Guilhem De Seze",
+          "title": "Head of Department",
+          "email": "Guilhem.deSeze@efsa.europa.eu",
+          "phone": "+39 0521 036 778"
+        },
+        {
+          "name": "Nikolaus Kriz",
+          "title": "Head of Department",
+          "email": "Nikolaus.Kriz@efsa.europa.eu",
+          "phone": "+39 0521 036 970"
+        },
+        {
+          "name": "Selomey Yamadjako",
+          "title": "Head of Department",
+          "email": "Selomey.Yamadjako@efsa.europa.eu",
+          "phone": "+39 0521 036 467"
+        },
+        {
+          "name": "Partnership (Engage)",
+          "title": ""
+        },
+        {
+          "name": "Barbara Gallani",
+          "title": "Head of Department",
+          "email": "Barbara.Gallani@efsa.europa.eu",
+          "phone": "+39 0521036222"
+        }
+      ]
+    },
+    "EIOPA — EUROPEAN INSURANCE AND OCCUPATIONAL PENSIONS AUTHORITY": {
+      "name": "EIOPA — EUROPEAN INSURANCE AND OCCUPATIONAL PENSIONS AUTHORITY",
+      "persons": [
+        {
+          "name": "Damian Jaworski",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Zuzana Silberová",
+          "title": "Vice Chairperson"
+        },
+        {
+          "name": "Fausto Parente",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Susanne Rosenbaum",
+          "title": "Head of Corporate Affairs Department"
+        },
+        {
+          "name": "Danny Janssen",
+          "title": "Head of Corporate Support Department"
+        },
+        {
+          "name": "Ana Teresa Moutinho",
+          "title": "Head of Oversight Department"
+        },
+        {
+          "name": "Patrick Hoedjes",
+          "title": "Head of Policy and Supervisory -- Convergence Department"
+        },
+        {
+          "name": "Dimitris Zafeiris",
+          "title": "Head of Risks and Financial Stability -- Department"
+        },
+        {
+          "name": "Valérie Mariatte-Wood",
+          "title": "Head of the Consumer Protection -- Department"
+        }
+      ]
+    },
+    "ELA — EUROPEAN LABOUR AUTHORITY": {
+      "name": "ELA — EUROPEAN LABOUR AUTHORITY",
+      "persons": [
+        {
+          "name": "Cosmin Boiangiu",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Tom Bevers",
+          "title": "Chair of the Management Board"
+        },
+        {
+          "name": "Agniezska Wołoszyn",
+          "title": "Deputy Chairperson"
+        }
+      ]
+    },
+    "ESMA — EUROPEAN SECURITIES AND MARKETS AUTHORITY": {
+      "name": "ESMA — EUROPEAN SECURITIES AND MARKETS AUTHORITY",
+      "persons": [
+        {
+          "name": "Verena Ross",
+          "title": "Chair"
+        },
+        {
+          "name": "Klaus Löber",
+          "title": "CCP Chair"
+        },
+        {
+          "name": "VOJTĚCH Belling",
+          "title": "Vice-Chair"
+        },
+        {
+          "name": "Natasha Cazenave",
+          "title": "Executive Director"
+        }
+      ]
+    },
+    "EUAA — EUROPEAN ASYLUM SUPPORT OFFICE": {
+      "name": "EUAA — EUROPEAN ASYLUM SUPPORT OFFICE",
+      "persons": [
+        {
+          "name": "Evelina Gudzinskaitė",
+          "title": "Chairperson of the Management Board"
+        },
+        {
+          "name": "Marios Kaleas",
+          "title": "Deputy Chairperson of the Management -- Board"
+        },
+        {
+          "name": "Nina Gregori",
+          "title": "Executive Director",
+          "email": "info@euaa.europa.eu"
+        },
+        {
+          "name": "Mikael Ribbenvik Cassar",
+          "title": "Deputy Executive Director"
+        },
+        {
+          "name": "Alexander Sorel",
+          "title": "Senior Adviser to the Executive Director"
+        },
+        {
+          "name": "Operational Support (C1)",
+          "title": ""
+        },
+        {
+          "name": "Georgios Raskos",
+          "title": "Head of Operational Support Centre (C1)"
+        },
+        {
+          "name": "Development Centre (C2)",
+          "title": ""
+        },
+        {
+          "name": "Rachelle Cortis",
+          "title": "Head of Training and Professional -- Development Centre (C2)",
+          "email": "headc2@euaa.europa.eu"
+        },
+        {
+          "name": "Ward Lutin",
+          "title": "Head of Asylum Knowledge Centre (C3)"
+        },
+        {
+          "name": "Affairs Centre (C4)",
+          "title": ""
+        },
+        {
+          "name": "Mark Camilleri",
+          "title": "Head of Institutional and Horizontal -- Affairs Centre (C4)"
+        },
+        {
+          "name": "Administration Centre (C5)",
+          "title": ""
+        },
+        {
+          "name": "Pascal Deleu",
+          "title": "Head of Administration Centre (C5)"
+        }
+      ]
+    },
+    "ECDC — EUROPEAN CENTRE FOR DISEASE PREVENTION AND CONTROL": {
+      "name": "ECDC — EUROPEAN CENTRE FOR DISEASE PREVENTION AND CONTROL",
+      "persons": [
+        {
+          "name": "Pamela Rendi-Wagner",
+          "title": "Director"
+        },
+        {
+          "name": "Anni Virolainen-Julkunen",
+          "title": "Chair of the Management Board"
+        },
+        {
+          "name": "Zofija Mazej Kukovič",
+          "title": "Deputy Chairperson of the Management -- Board"
+        }
+      ]
+    },
+    "Director's Office (DIR)": {
+      "name": "Director's Office (DIR)",
+      "persons": [
+        {
+          "name": "Communication (Sec)",
+          "title": ""
+        },
+        {
+          "name": "Piotr Kramarz",
+          "title": "Chief Scientist"
+        },
+        {
+          "name": "Ole Heuer",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "and Response (Spr)",
+          "title": ""
+        },
+        {
+          "name": "Vicky Lefevre",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Diseases (Dvd)",
+          "title": ""
+        },
+        {
+          "name": "Bruno Ciancio",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Services (Dts)",
+          "title": ""
+        },
+        {
+          "name": "François Mestre",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Services (Rms)",
+          "title": ""
+        },
+        {
+          "name": "Pontus Molin",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "TRAINING": {
+      "name": "TRAINING",
+      "persons": [
+        {
+          "name": "Tony Donohoe",
+          "title": "Chairperson of the Management Board"
+        },
+        {
+          "name": "Jürgen Siebel",
+          "title": "Executive Director",
+          "email": "Juergen.SIEBEL@cedefop.europa.eu"
+        },
+        {
+          "name": "Mara Brugia",
+          "title": "Deputy Director",
+          "email": "mara.brugia@cedefop.europa.eu"
+        },
+        {
+          "name": "Antonio Ranieri",
+          "title": "Head of Department",
+          "email": "antonio.ranieri@cedefop.europa.eu"
+        },
+        {
+          "name": "Irene Mandl",
+          "title": "Head of Department",
+          "email": "irene.mandl@cedefop.europa.eu"
+        },
+        {
+          "name": "Maurizio Roncaccia",
+          "title": "Head of Department"
+        },
+        {
+          "name": "Pascaline Descy",
+          "title": "Head of Department -- Liaison officer",
+          "email": "brusselsoffice@cedefop.europa.eu",
+          "phone": "+30 2310490049"
+        }
+      ]
+    },
+    "CEPOL — EUROPEAN UNION AGENCY FOR LAW ENFORCEMENT TRAINING": {
+      "name": "CEPOL — EUROPEAN UNION AGENCY FOR LAW ENFORCEMENT TRAINING",
+      "persons": [
+        {
+          "name": "Montserrat Marín López",
+          "title": "Executive Director",
+          "phone": "+36 30 636 3711"
+        },
+        {
+          "name": "Vera Pavinska",
+          "title": "Head of EU Training Hub Unit",
+          "phone": "+36 30 190 0450"
+        },
+        {
+          "name": "Alexandru Niculita",
+          "title": "Head of International Cooperation Unit",
+          "phone": "+36 301442418"
+        },
+        {
+          "name": "Mailis Pukonen",
+          "title": "Head of Strategic Planning and -- Directorate Unit",
+          "phone": "+36 30 403 8720"
+        },
+        {
+          "name": "Roeland Woldhuis",
+          "title": "Head of Corporate Services Unit",
+          "phone": "+36 30 637 1230"
+        }
+      ]
+    },
+    "COOPERATION": {
+      "name": "COOPERATION",
+      "persons": [
+        {
+          "name": "Michael Schmid",
+          "title": "President of Eurojust and National -- Member for Austria"
+        },
+        {
+          "name": "José De La Mata Amaya",
+          "title": "Vice-President of Eurojust and National -- Member for Spain"
+        },
+        {
+          "name": "Margarita Šniutytė-",
+          "title": "Vice-President of Eurojust and National -- Member for Lithuania"
+        },
+        {
+          "name": "Vincent Jamin",
+          "title": "Administrative Director"
+        },
+        {
+          "name": "Federica Curtol",
+          "title": "Head of Operations Department"
+        },
+        {
+          "name": "Roberto Lenti",
+          "title": "Head of Resources Department"
+        },
+        {
+          "name": "Peter De Buysscher",
+          "title": "Chairperson, International Police -- Cooperation - Federal Police - Ministry of -- Interior"
+        },
+        {
+          "name": "Péter Kővári",
+          "title": "Deputy Chairperson, Deputy Director -- of the International Law Enforcement -- Cooperation Centre"
+        },
+        {
+          "name": "Catherine De Bolle",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Jean-Philippe Lecouffe",
+          "title": "Deputy Executive Director of Europol, -- Operations Directorate"
+        },
+        {
+          "name": "Jürgen Ebner",
+          "title": "Deputy Executive Director of Europol, -- Governance Directorate"
+        },
+        {
+          "name": "Andrei Linda",
+          "title": "Deputy Executive Director of Europol, -- Capabilities Directorate"
+        }
+      ]
+    },
+    "ETF — EUROPEAN TRAINING FOUNDATION": {
+      "name": "ETF — EUROPEAN TRAINING FOUNDATION",
+      "persons": [
+        {
+          "name": "Pilvi Torsti",
+          "title": "Director"
+        }
+      ]
+    },
+    "Resources Unit": {
+      "name": "Resources Unit",
+      "persons": [
+        {
+          "name": "Cécile Beelaerts",
+          "title": "Head of Resources Unit"
+        }
+      ]
+    },
+    "Programming Unit": {
+      "name": "Programming Unit",
+      "persons": [
+        {
+          "name": "Georgios Zisimos",
+          "title": "Head of Policy Advice and EU -- Programming Unit"
+        }
+      ]
+    },
+    "Development Unit": {
+      "name": "Development Unit",
+      "persons": [
+        {
+          "name": "Manuela Prina",
+          "title": "Head of Skills Identification and -- Development Unit"
+        }
+      ]
+    },
+    "Assessment Unit": {
+      "name": "Assessment Unit",
+      "persons": [
+        {
+          "name": "Hugues Moussy",
+          "title": "Head of Systems Performance and -- Assessment Unit"
+        }
+      ]
+    },
+    "EIGE — EUROPEAN INSTITUTE FOR GENDER EQUALITY": {
+      "name": "EIGE — EUROPEAN INSTITUTE FOR GENDER EQUALITY",
+      "persons": [
+        {
+          "name": "Tanja Auvinen",
+          "title": "Chair of the Management Board"
+        },
+        {
+          "name": "Carlien Scheele",
+          "title": "Director"
+        },
+        {
+          "name": "Maruša Gortnar",
+          "title": "Head of Research and Policy Support -- Unit"
+        },
+        {
+          "name": "Emmanuel Maurage",
+          "title": "Head of Administration Unit"
+        },
+        {
+          "name": "Dennis Van Der Veur",
+          "title": "Head of Outreach and Engagement Unit"
+        }
+      ]
+    },
+    "AND WORKING CONDITIONS": {
+      "name": "AND WORKING CONDITIONS",
+      "persons": [
+        {
+          "name": "Ivailo Kalfin",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Maria Jepsen",
+          "title": "Deputy Director",
+          "email": "Maria.Jepsen@eurofound.europa.eu"
+        },
+        {
+          "name": "Stefan Gran",
+          "title": "Chair of the Management Board"
+        },
+        {
+          "name": "Pierre Baussand",
+          "title": "Head of the Brussels Liaison Office",
+          "email": "pba@eurofound.europa.eu"
+        },
+        {
+          "name": "David Foden",
+          "title": "Adviser-Industrial Relations"
+        },
+        {
+          "name": "Barbara Gerstenberger",
+          "title": "Head of Unit, Working Life",
+          "email": "bge@eurofound.europa.eu"
+        },
+        {
+          "name": "Irene Mandl",
+          "title": "Head of Unit, Employment",
+          "email": "ima@eurofound.europa.eu"
+        },
+        {
+          "name": "Massimilliano Mascherini",
+          "title": "Head of Unit Social Policies (ad interim)"
+        },
+        {
+          "name": "Mary Mccaughey",
+          "title": "Head of Information and Communication",
+          "email": "mcu@eurofound.europa.eu"
+        },
+        {
+          "name": "Jim Halpenny",
+          "title": "Head of Information and Communication -- Technologies",
+          "email": "jim@eurofound.europa.eu"
+        }
+      ]
+    },
+    "EUDA — EUROPEAN MONITORING CENTRE FOR DRUGS AND DRUG ADDICTION": {
+      "name": "EUDA — EUROPEAN MONITORING CENTRE FOR DRUGS AND DRUG ADDICTION",
+      "persons": [
+        {
+          "name": "Alexis Goosdeel",
+          "title": "Executive Director",
+          "email": "alexis.goosdeel@euda.europa.eu"
+        },
+        {
+          "name": "Franz Pietsch",
+          "title": "Chair of the Management Board"
+        },
+        {
+          "name": "Xavier Poos",
+          "title": "Vice-Chair of the Management Board"
+        },
+        {
+          "name": "Fabián Pereyra",
+          "title": "Head of Unit",
+          "email": "fabian.pereyra@euda.europa.eu"
+        },
+        {
+          "name": "Monika Blum",
+          "title": "Senior policy officer to the Management -- Board",
+          "email": "monika.blum@euda.europa.eu"
+        },
+        {
+          "name": "Paul Griffiths",
+          "title": "Scientific Director",
+          "email": "paul.griffiths@euda.europa.eu"
+        },
+        {
+          "name": "Jane Mounteney",
+          "title": "Head of Unit",
+          "email": "jane.mounteney@euda.europa.eu"
+        },
+        {
+          "name": "Roumen Sedefov",
+          "title": "Head of Unit",
+          "email": "roumen.sedefov@euda.europa.eu"
+        },
+        {
+          "name": "Maria Moreira",
+          "title": "Head of Unit",
+          "email": "maria.moreira@euda.europa.eu"
+        },
+        {
+          "name": "Rosemary De Sousa",
+          "title": "Head of Unit",
+          "email": "rosemary.de.sousa@euda.europa.eu"
+        },
+        {
+          "name": "Ovidiu Huluban",
+          "title": "Head of Unit",
+          "email": "Ovidiu.Huluban@euda.europa.eu"
+        },
+        {
+          "name": "Dante Storti",
+          "title": "Head of Unit",
+          "email": "dante.storti@euda.europa.eu"
+        }
+      ]
+    },
+    "EPPO — EUROPEAN PUBLIC PROSECUTOR’S OFFICE": {
+      "name": "EPPO — EUROPEAN PUBLIC PROSECUTOR’S OFFICE",
+      "persons": [
+        {
+          "name": "Laura Kövesi",
+          "title": "EPPO's College Chair and European -- Chief Prosecutor"
+        },
+        {
+          "name": "Selomey Yamadjako",
+          "title": "Administrative Director"
+        },
+        {
+          "name": "Steven Ryder",
+          "title": "Data Protection Officer"
+        },
+        {
+          "name": "Kim Hublé",
+          "title": "Internal Audit Capability"
+        },
+        {
+          "name": "Milan Jaron",
+          "title": "Acting Head of Unit"
+        }
+      ]
+    },
+    "Communication Sector": {
+      "name": "Communication Sector",
+      "persons": [
+        {
+          "name": "Tine Hollevoet",
+          "title": "Acting head of sector"
+        }
+      ]
+    },
+    "Legal Service Sector": {
+      "name": "Legal Service Sector",
+      "persons": [
+        {
+          "name": "Luca De Matteis",
+          "title": "Acting head of sector"
+        },
+        {
+          "name": "Marius Bulancea",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Sector": {
+      "name": "Sector",
+      "persons": [
+        {
+          "name": "Marius Bulancea",
+          "title": "Acting head of sector"
+        }
+      ]
+    },
+    "Registry and Verification Sector": {
+      "name": "Registry and Verification Sector",
+      "persons": [
+        {
+          "name": "Paolo Proli",
+          "title": "Acting head of sector"
+        }
+      ]
+    },
+    "1 Team": {
+      "name": "1 Team",
+      "persons": [
+        {
+          "name": "Andon Tashukov",
+          "title": "Coordinator"
+        }
+      ]
+    },
+    "2 Team": {
+      "name": "2 Team",
+      "persons": [
+        {
+          "name": "Gianluca Dianese",
+          "title": "Coordinator"
+        }
+      ]
+    },
+    "3 Team": {
+      "name": "3 Team",
+      "persons": [
+        {
+          "name": "Milanka Jug",
+          "title": "Coordinator"
+        }
+      ]
+    },
+    "4 Team": {
+      "name": "4 Team",
+      "persons": [
+        {
+          "name": "Giorgos Kougias",
+          "title": "Coordinator"
+        }
+      ]
+    },
+    "Case Analysis Sector": {
+      "name": "Case Analysis Sector",
+      "persons": [
+        {
+          "name": "IT, Security and Corporate",
+          "title": ""
+        },
+        {
+          "name": "Jon Broughton",
+          "title": "Acting Head of Unit"
+        }
+      ]
+    },
+    "CMS Programme Sector": {
+      "name": "CMS Programme Sector",
+      "persons": [
+        {
+          "name": "Mihaela Mardale",
+          "title": "Acting head of sector"
+        }
+      ]
+    },
+    "CMS Support Sector": {
+      "name": "CMS Support Sector",
+      "persons": [
+        {
+          "name": "Adamou Habou Alassane",
+          "title": "Acting head of sector"
+        }
+      ]
+    },
+    "IT User Services Team": {
+      "name": "IT User Services Team",
+      "persons": [
+        {
+          "name": "Vili Georgieva",
+          "title": "Coordinator"
+        }
+      ]
+    },
+    "Security and Facilities Team": {
+      "name": "Security and Facilities Team",
+      "persons": [
+        {
+          "name": "Alain-Pierre Louis",
+          "title": "Coordinator"
+        }
+      ]
+    },
+    "Helpdesk Team": {
+      "name": "Helpdesk Team",
+      "persons": [
+        {
+          "name": "Jon Broughton",
+          "title": "Acting Coordinator"
+        },
+        {
+          "name": "Olivier Ramsayer",
+          "title": "Acting Head of Unit"
+        }
+      ]
+    },
+    "Finance and Procurement Sector": {
+      "name": "Finance and Procurement Sector",
+      "persons": [
+        {
+          "name": "Telemachos Telemachou",
+          "title": "Acting head of sector"
+        }
+      ]
+    },
+    "CPVO — COMMUNITY PLANT VARIETY": {
+      "name": "CPVO — COMMUNITY PLANT VARIETY",
+      "persons": [
+        {
+          "name": "José Antonio Sobrino Maté",
+          "title": "Chair of the Administrative Council"
+        },
+        {
+          "name": "Francesco Mattina",
+          "title": "President",
+          "email": "mattina@cpvo.europa.eu",
+          "phone": "+33 241256421"
+        },
+        {
+          "name": "Nuria Urquia Fernandez",
+          "title": "Vice-President"
+        },
+        {
+          "name": "James Moran",
+          "title": "Building and Projects",
+          "email": "moran@cpvo.europa.eu",
+          "phone": "+33 241256400"
+        },
+        {
+          "name": "Todor Gadev",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Sergio Semón",
+          "title": "Quality Audit Team Leader",
+          "email": "semon@cpvo.europa.eu",
+          "phone": "+33 241256434"
+        },
+        {
+          "name": "Dirk Theobald",
+          "title": "Senior adviser to the President",
+          "email": "theobald@cpvo.europa.eu",
+          "phone": "+33 241256442"
+        },
+        {
+          "name": "Montserrat Garcia-Monco",
+          "title": "Head of Legal & Governance Affairs Unit",
+          "email": "garcia-monco@cpvo.europa.eu",
+          "phone": "+33 241256400"
+        },
+        {
+          "name": "Jean Maison",
+          "title": "Head of Plant Variety Expertise Unit (f.f)"
+        },
+        {
+          "name": "Annamaria Sideri",
+          "title": "Head of People & Resources Unit",
+          "email": "sideri@cpvo.europa.eu",
+          "phone": "+33 241256400"
+        },
+        {
+          "name": "Gregory Jones",
+          "title": "Head of the Digital Transformation Unit",
+          "email": "jones@cpvo.europa.eu",
+          "phone": "+33 241256400"
+        }
+      ]
+    },
+    "EUIPO — EUROPEAN UNION INTELLECTUAL PROPERTY OFFICE": {
+      "name": "EUIPO — EUROPEAN UNION INTELLECTUAL PROPERTY OFFICE",
+      "persons": [
+        {
+          "name": "Andrea Di Carlo",
+          "title": "Deputy Executive Director"
+        },
+        {
+          "name": "João Negrão",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Ursula Schildt",
+          "title": "Head of Cabinet"
+        }
+      ]
+    },
+    "Corporate Governance Service": {
+      "name": "Corporate Governance Service",
+      "persons": [
+        {
+          "name": "K. Karmiris",
+          "title": "Acting Head of Service"
+        }
+      ]
+    },
+    "Communication Service": {
+      "name": "Communication Service",
+      "persons": [
+        {
+          "name": "Julio Laporta Insa",
+          "title": "Head of Service",
+          "email": "julio.laporta@euipo.europa.eu"
+        },
+        {
+          "name": "G. Humphreys",
+          "title": "President of BoA ad interim"
+        },
+        {
+          "name": "Giuseppe Bertoli",
+          "title": "Director"
+        },
+        {
+          "name": "Erik Dijkema",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Service": {
+      "name": "Service",
+      "persons": [
+        {
+          "name": "S. Beslier",
+          "title": "Head of Service"
+        },
+        {
+          "name": "E. ZAERA Cuadrado",
+          "title": "Head of Service"
+        },
+        {
+          "name": "Xavier Xheneumont",
+          "title": "Head of Service",
+          "email": "xavier.xheneumont@euipo.europa.eu"
+        },
+        {
+          "name": "Antonio Berenguer Reguant",
+          "title": "Head of Service",
+          "email": "antonio.berenguer@euipo.europa.eu"
+        },
+        {
+          "name": "Miguel Angel Villarroya",
+          "title": "Director"
+        },
+        {
+          "name": "Vincent Polomé",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Alternative Dispute Resolution Service": {
+      "name": "Alternative Dispute Resolution Service",
+      "persons": [
+        {
+          "name": "K. Bauch",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Litigation Service": {
+      "name": "Litigation Service",
+      "persons": [
+        {
+          "name": "D. Hanf",
+          "title": "Head of Service"
+        },
+        {
+          "name": "J. M. Nicolai",
+          "title": "Head of Service"
+        },
+        {
+          "name": "G. Folguera",
+          "title": "Data Protection Officer"
+        },
+        {
+          "name": "Karin Kuhl",
+          "title": "Director"
+        },
+        {
+          "name": "Miguel Gusmão",
+          "title": "Deputy Director"
+        }
+      ]
+    },
+    "Trademark Examination Service": {
+      "name": "Trademark Examination Service",
+      "persons": [
+        {
+          "name": "B. Filtenborg",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Applications Service": {
+      "name": "Applications Service",
+      "persons": [
+        {
+          "name": "F. GARCÍA Quinto",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Design Examination Service": {
+      "name": "Design Examination Service",
+      "persons": [
+        {
+          "name": "E. Kelly",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Inter-Partes Proceedings Service": {
+      "name": "Inter-Partes Proceedings Service",
+      "persons": [
+        {
+          "name": "S. Hackstock",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "IP Rights Management Service": {
+      "name": "IP Rights Management Service",
+      "persons": [
+        {
+          "name": "P. DUARTE Guimarães",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Substantive Decision Management Area": {
+      "name": "Substantive Decision Management Area",
+      "persons": [
+        {
+          "name": "Alexandra Apostolakis",
+          "title": "Deputy Director"
+        }
+      ]
+    },
+    "Absolute Grounds Service": {
+      "name": "Absolute Grounds Service",
+      "persons": [
+        {
+          "name": "E. ABARCA Cuenca",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "RCD Invalidity Service": {
+      "name": "RCD Invalidity Service",
+      "persons": [
+        {
+          "name": "I. GARCÍA Lledó",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Opposition Decisions Service": {
+      "name": "Opposition Decisions Service",
+      "persons": [
+        {
+          "name": "C. Schlie",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Cancellation Decisions Service": {
+      "name": "Cancellation Decisions Service",
+      "persons": [
+        {
+          "name": "B. URIARTE Valiente",
+          "title": "Head of Service"
+        },
+        {
+          "name": "I. Buffolo",
+          "title": "Director"
+        }
+      ]
+    },
+    "Customer Support Service": {
+      "name": "Customer Support Service",
+      "persons": [
+        {
+          "name": "M. Schneider",
+          "title": "Head of Service",
+          "phone": "+32 229-65136"
+        }
+      ]
+    },
+    "Business Promotion Service": {
+      "name": "Business Promotion Service",
+      "persons": [
+        {
+          "name": "D. Campagne",
+          "title": "Acting Head of Service"
+        }
+      ]
+    },
+    "Customer Data Service": {
+      "name": "Customer Data Service",
+      "persons": [
+        {
+          "name": "S. Hanck",
+          "title": "Acting Head of Service"
+        }
+      ]
+    },
+    "SME Network Service": {
+      "name": "SME Network Service",
+      "persons": [
+        {
+          "name": "N. Vigneron",
+          "title": "Head of Service"
+        },
+        {
+          "name": "Patricia Garcia Escudero",
+          "title": "Director",
+          "email": "patricia.garcia-escudero@euipo.europa.eu"
+        },
+        {
+          "name": "Claire Duranton",
+          "title": "Head of Service",
+          "email": "claire.duranton@euipo.europa.eu"
+        },
+        {
+          "name": "Juan Suarez",
+          "title": "Head of Service",
+          "email": "juan.suarez@euipo.europa.eu"
+        },
+        {
+          "name": "José Izquierdo Peris",
+          "title": "Director",
+          "email": "jose.izquierdo@euipo.europa.eu"
+        }
+      ]
+    },
+    "Business Analysis Service": {
+      "name": "Business Analysis Service",
+      "persons": [
+        {
+          "name": "Lilian Fraysse",
+          "title": "Head of Service",
+          "email": "lilian.fraysse@euipo.europa.eu"
+        }
+      ]
+    },
+    "Architecture and Development Service": {
+      "name": "Architecture and Development Service",
+      "persons": [
+        {
+          "name": "Raymond Klaassen",
+          "title": "Head of Service",
+          "email": "raymond.klaassen@euipo.europa.eu"
+        }
+      ]
+    },
+    "New Technologies Service": {
+      "name": "New Technologies Service",
+      "persons": [
+        {
+          "name": "M. Ortega",
+          "title": "Head of Service"
+        },
+        {
+          "name": "Nour Eddine Hachiby",
+          "title": "Director",
+          "email": "nour-eddine.hachiby@euipo.europa.eu"
+        }
+      ]
+    },
+    "and Treasury Service": {
+      "name": "and Treasury Service",
+      "persons": [
+        {
+          "name": "E. Cutillas",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Management Service": {
+      "name": "Management Service",
+      "persons": [
+        {
+          "name": "Timea Holik",
+          "title": "Head of Service"
+        },
+        {
+          "name": "Susana Pérez Ferraras",
+          "title": "Director"
+        }
+      ]
+    },
+    "Welfare Service": {
+      "name": "Welfare Service",
+      "persons": [
+        {
+          "name": "J. VAN DER Ven",
+          "title": "Acting Head of Service"
+        }
+      ]
+    },
+    "Talent and Career Service": {
+      "name": "Talent and Career Service",
+      "persons": [
+        {
+          "name": "Anna Michaleli",
+          "title": "Head of Service",
+          "email": "anna.michaleli@euipo.europa.eu"
+        }
+      ]
+    },
+    "Common Services": {
+      "name": "Common Services",
+      "persons": [
+        {
+          "name": "Natalie Pasinato",
+          "title": "Head of Service",
+          "email": "natalie.pasinato@euipo.europa.eu"
+        },
+        {
+          "name": "Sandris Laganovskis",
+          "title": "Director"
+        }
+      ]
+    },
+    "European Cooperation Service": {
+      "name": "European Cooperation Service",
+      "persons": [
+        {
+          "name": "Javier Moreno Ramos",
+          "title": "Head of Service",
+          "email": "javier.moreno@euipo.europa.eu"
+        }
+      ]
+    },
+    "Institutional Relations Service": {
+      "name": "Institutional Relations Service",
+      "persons": [
+        {
+          "name": "Maria Chiodo",
+          "title": "Acting Head of Service",
+          "email": "maria.chiodo@euipo.europa.eu"
+        }
+      ]
+    },
+    "International Cooperation Service": {
+      "name": "International Cooperation Service",
+      "persons": [
+        {
+          "name": "I. DE Medrano",
+          "title": "Head of Service"
+        },
+        {
+          "name": "Dimitris Botis",
+          "title": "Director",
+          "email": "dimitris.botis@euipo.europa.eu"
+        }
+      ]
+    },
+    "Legal Practice Service": {
+      "name": "Legal Practice Service",
+      "persons": [
+        {
+          "name": "Hugh O´Neill",
+          "title": "Head of Service",
+          "email": "hugh.oneill@euipo.europa.eu"
+        }
+      ]
+    },
+    "General Legal Affairs Service": {
+      "name": "General Legal Affairs Service",
+      "persons": [
+        {
+          "name": "Asta Lukosiute",
+          "title": "Head of Service",
+          "email": "asta.lukosiute@euipo.europa.eu"
+        },
+        {
+          "name": "Alexandra Poch",
+          "title": "Deputy Director",
+          "email": "alexandra.poch@euipo.europa.eu"
+        },
+        {
+          "name": "Alexandra Poch",
+          "title": "Deputy Director",
+          "email": "alexandra.poch@euipo.europa.eu"
+        }
+      ]
+    },
+    "Enforcement Service": {
+      "name": "Enforcement Service",
+      "persons": [
+        {
+          "name": "B. Arteche",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "Outreach Knowledge of IP Service": {
+      "name": "Outreach Knowledge of IP Service",
+      "persons": [
+        {
+          "name": "C. Castel",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "IP in the Digital World Service": {
+      "name": "IP in the Digital World Service",
+      "persons": [
+        {
+          "name": "H. A.G. Temmink",
+          "title": "Head of Service"
+        },
+        {
+          "name": "Nathan Wajsman",
+          "title": "Head of Service"
+        }
+      ]
+    },
+    "ELECTRONIC COMMUNICATIONS": {
+      "name": "ELECTRONIC COMMUNICATIONS",
+      "persons": [
+        {
+          "name": "Verena Weber",
+          "title": "Director"
+        }
+      ]
+    },
+    "SRB — SINGLE RESOLUTION BOARD": {
+      "name": "SRB — SINGLE RESOLUTION BOARD",
+      "persons": [
+        {
+          "name": "Dominique Laboureix",
+          "title": "Chair"
+        },
+        {
+          "name": "Jan Reinder De Carpentier",
+          "title": "Vice-Chair"
+        },
+        {
+          "name": "Jesús Saurina Salas",
+          "title": "Member"
+        },
+        {
+          "name": "Karen Braun-Munzinger",
+          "title": "Member"
+        },
+        {
+          "name": "Tuija Taos",
+          "title": "Member"
+        },
+        {
+          "name": "Pedro Machado",
+          "title": "Member"
+        }
+      ]
+    },
+    "and Cooperation": {
+      "name": "and Cooperation",
+      "persons": [
+        {
+          "name": "Karen Braun-Munzinger",
+          "title": "Director"
+        }
+      ]
+    },
+    "Planning and Decisions I": {
+      "name": "Planning and Decisions I",
+      "persons": [
+        {
+          "name": "Jesús Saurina Salas",
+          "title": "Director"
+        }
+      ]
+    },
+    "Planning and Decisions II": {
+      "name": "Planning and Decisions II",
+      "persons": [
+        {
+          "name": "Tuija Taos",
+          "title": "Director"
+        }
+      ]
+    },
+    "Planning and Decisions III": {
+      "name": "Planning and Decisions III",
+      "persons": [
+        {
+          "name": "Pedro Machado",
+          "title": "Director"
+        }
+      ]
+    },
+    "services": {
+      "name": "services",
+      "persons": [
+        {
+          "name": "Jan Reinder De Carpentier",
+          "title": "Director"
+        }
+      ]
+    },
+    "CDT — TRANSLATION CENTRE FOR THE BODIES OF THE EUROPEAN UNION": {
+      "name": "CDT — TRANSLATION CENTRE FOR THE BODIES OF THE EUROPEAN UNION",
+      "persons": [
+        {
+          "name": "Christos Ellinides",
+          "title": "Chairman of the CdT Management -- Board",
+          "phone": "+32 22967825"
+        },
+        {
+          "name": "Ildikó Horváth",
+          "title": "Director"
+        }
+      ]
+    },
+    "Director's office": {
+      "name": "Director's office",
+      "persons": [
+        {
+          "name": "Viviane Schütz",
+          "title": "Director's Office Assistant",
+          "phone": "+352 421711213"
+        },
+        {
+          "name": "Rudi Nonweiler",
+          "title": "LISO",
+          "phone": "+352 421711-259"
+        }
+      ]
+    },
+    "Accounting Section": {
+      "name": "Accounting Section",
+      "persons": [
+        {
+          "name": "Victor Contineanu",
+          "title": "Accounting Officer",
+          "phone": "+352 421711337"
+        }
+      ]
+    },
+    "Communication Section": {
+      "name": "Communication Section",
+      "persons": [
+        {
+          "name": "Corina Ionescu",
+          "title": "Acting Head of External Relations and -- Communication Section"
+        },
+        {
+          "name": "Georgios Kazantzis",
+          "title": "Officer in Charge of Risk Management -- and Internal Control Coordination",
+          "email": "georgios.kazantzis@cdt.europa.eu",
+          "phone": "+352 421711205"
+        },
+        {
+          "name": "Tamara Ferlusca",
+          "title": "Head of Department",
+          "email": "tamara.ferlusca@cdt.europa.eu",
+          "phone": "+352 421711-382"
+        }
+      ]
+    },
+    "Section": {
+      "name": "Section",
+      "persons": [
+        {
+          "name": "Rima Knabikaite",
+          "title": "Acting Head of Germanic and Slavonic 2 -- Languages Section",
+          "email": "rima.knabikaite@cdt.europa.eu",
+          "phone": "+32 421711-319"
+        }
+      ]
+    },
+    "Languages Section": {
+      "name": "Languages Section",
+      "persons": [
+        {
+          "name": "Catherine Johnson",
+          "title": "Head of Romance and Mediterranean -- Languages Section",
+          "email": "catherine.johnson@cdt.europa.eu"
+        },
+        {
+          "name": "Sona Tavodova",
+          "title": "Head of Finno-Ugric, Baltic and Slavonic -- 1 Languages Section"
+        },
+        {
+          "name": "M. Garnier",
+          "title": "Acting Head of Unit"
+        },
+        {
+          "name": "Mauro Bubnic",
+          "title": "Head of Department",
+          "email": "mauro.bubnic@cdt.europa.eu",
+          "phone": "+352 421711-307"
+        }
+      ]
+    },
+    "Workflow Management Section": {
+      "name": "Workflow Management Section",
+      "persons": [
+        {
+          "name": "Giuseppe Forte",
+          "title": "Head of Workflow Management Section"
+        }
+      ]
+    },
+    "Solutions Section": {
+      "name": "Solutions Section",
+      "persons": [
+        {
+          "name": "Daniel Marin",
+          "title": "Head of Advanced Language Solutions -- Section",
+          "email": "daniel.marin@cdt.europa.eu",
+          "phone": "+352 421711-352"
+        },
+        {
+          "name": "Paula Zorrilla Agut",
+          "title": "IATE Tool Manager",
+          "email": "paula.zorrilla-agut@cdt.europa.eu",
+          "phone": "+352 421711-578"
+        },
+        {
+          "name": "Silvana Miggiano",
+          "title": "Head of Department",
+          "email": "silvana.miggiano@cdt.europa.eu",
+          "phone": "+352 421711-205"
+        },
+        {
+          "name": "Grégroy Rado",
+          "title": "Head of Finance Group",
+          "email": "gregory.rado@cdt.europa.eu",
+          "phone": "+352 421711-425"
+        }
+      ]
+    },
+    "Human Resources Section": {
+      "name": "Human Resources Section",
+      "persons": [
+        {
+          "name": "Wouter Stevens",
+          "title": "Acting Head of Human Resources and -- Staff Support Section",
+          "email": "stevens@cdt.europa.eu",
+          "phone": "+352 421711-580"
+        }
+      ]
+    },
+    "Strategic Planning Section": {
+      "name": "Strategic Planning Section",
+      "persons": [
+        {
+          "name": "Georgios Kazantzis",
+          "title": "Head of Strategic Planning Section",
+          "email": "georgios.kazantzis@cdt.europa.eu",
+          "phone": "+352 421711205"
+        },
+        {
+          "name": "IT Department",
+          "title": ""
+        },
+        {
+          "name": "Pascal Dufour",
+          "title": "Head of IT Department",
+          "email": "pascal.dufour@cdt.europa.eu",
+          "phone": "+352 421711-224"
+        }
+      ]
+    },
+    "Development Section": {
+      "name": "Development Section",
+      "persons": [
+        {
+          "name": "Thierry Decamps",
+          "title": "Head of Development Section",
+          "email": "thierry.decamps@cdt.europa.eu",
+          "phone": "+352 421711-223"
+        }
+      ]
+    },
+    "Service Desk Section": {
+      "name": "Service Desk Section",
+      "persons": [
+        {
+          "name": "Marc Maréchal",
+          "title": "Head of Service Desk Section",
+          "email": "marc.marechal@cdt.europa.eu",
+          "phone": "+352 421711-277"
+        }
+      ]
+    },
+    "IT Infrastructure Section": {
+      "name": "IT Infrastructure Section",
+      "persons": [
+        {
+          "name": "Yannick Charton",
+          "title": "Acting Head of IT Infrastructure Section",
+          "email": "charton@cdt.europa.eu",
+          "phone": "+352 421711-531"
+        }
+      ]
+    },
+    "EDA — EUROPEAN DEFENCE AGENCY": {
+      "name": "EDA — EUROPEAN DEFENCE AGENCY",
+      "persons": [
+        {
+          "name": "Kaja Kallas",
+          "title": "High Representative of the Union for -- Foreign Affairs and Security Policy"
+        },
+        {
+          "name": "Andre Erich Denk",
+          "title": "Chief Executive"
+        },
+        {
+          "name": "Stefano Cont",
+          "title": "Acting Deputy Chief Executive"
+        },
+        {
+          "name": "Etienne De Durand",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Enablers Directorate (Ise)",
+          "title": ""
+        },
+        {
+          "name": "Sean White",
+          "title": "Director"
+        },
+        {
+          "name": "Planning Directorate (Cap)",
+          "title": ""
+        },
+        {
+          "name": "Stefano Cont",
+          "title": "Director"
+        },
+        {
+          "name": "Innovation Directorate (Rti)",
+          "title": ""
+        },
+        {
+          "name": "Nathalie Guichard",
+          "title": "Director -- Directorate"
+        },
+        {
+          "name": "Ginette Manderscheid",
+          "title": "Director"
+        }
+      ]
+    },
+    "EUISS — EUROPEAN UNION INSTITUTE FOR SECURITY STUDIES": {
+      "name": "EUISS — EUROPEAN UNION INSTITUTE FOR SECURITY STUDIES",
+      "persons": [
+        {
+          "name": "Steven Everts",
+          "title": "Director"
+        },
+        {
+          "name": "Helmut Keller",
+          "title": "Head of Administration"
+        },
+        {
+          "name": "Fanny Pollet",
+          "title": "Communications Coordinator"
+        },
+        {
+          "name": "Gearóid Cronin",
+          "title": "Publications officer"
+        }
+      ]
+    },
+    "SATCEN — EUROPEAN UNION SATELLITE CENTRE": {
+      "name": "SATCEN — EUROPEAN UNION SATELLITE CENTRE",
+      "persons": [
+        {
+          "name": "Louis Tillier",
+          "title": "Director"
+        },
+        {
+          "name": "Jorge Farré Basurte",
+          "title": "Deputy Director"
+        },
+        {
+          "name": "Jochen Müller",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Alvaro Ruiz",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Andrea Patrono",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Alexis Letulier",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Lorenzo Mulero",
+          "title": "Head of Section"
+        },
+        {
+          "name": "Juan-Luis Valero",
+          "title": "Head of Office"
+        }
+      ]
+    },
+    "EACEA — EUROPEAN EDUCATION AND CULTURE EXECUTIVE AGENCY": {
+      "name": "EACEA — EUROPEAN EDUCATION AND CULTURE EXECUTIVE AGENCY",
+      "persons": [
+        {
+          "name": "Sophie Beernaerts",
+          "title": "Director",
+          "email": "Sophie.Beernaerts@ec.europa.eu",
+          "phone": "+32 229-66315"
+        }
+      ]
+    },
+    "Corps": {
+      "name": "Corps",
+      "persons": [
+        {
+          "name": "Frederic Fimeyer",
+          "title": "Head of Department",
+          "email": "Frederic.FIMEYER@ec.europa.eu",
+          "phone": "+32 229-95296"
+        },
+        {
+          "name": "Walter Zampieri",
+          "title": "Head of Unit",
+          "email": "Walter.ZAMPIERI@ec.europa.eu",
+          "phone": "+32 229-98974"
+        },
+        {
+          "name": "Vasiliki Mourtou",
+          "title": "Head of Unit",
+          "email": "Vasiliki.MOURTOU@ec.europa.eu",
+          "phone": "+32 229-90653"
+        },
+        {
+          "name": "Theo Duivenvoorde",
+          "title": "Head of Unit",
+          "email": "Theo.Duivenvoorde@ec.europa.eu",
+          "phone": "+32 229-94484"
+        },
+        {
+          "name": "Bodo Richter",
+          "title": "Head of Unit",
+          "email": "Bodo.Richter@ec.europa.eu",
+          "phone": "+32 229-90067"
+        },
+        {
+          "name": "5. Youth, Eu Solidarity Corps",
+          "title": ""
+        },
+        {
+          "name": "Armin Bosch",
+          "title": "Head of Unit",
+          "email": "Armin.Bosch@ec.europa.eu",
+          "phone": "+32 229-91295"
+        },
+        {
+          "name": "Florence Mondin",
+          "title": "Head of Unit",
+          "email": "Florence.MONDIN@ec.europa.eu",
+          "phone": "+32 229-86374"
+        }
+      ]
+    },
+    "operations": {
+      "name": "operations",
+      "persons": [
+        {
+          "name": "Alessandra Luchetti",
+          "title": "Head of Department",
+          "email": "Alessandra.Luchetti@ec.europa.eu",
+          "phone": "+32 229-60874"
+        },
+        {
+          "name": "Gilles Pelayo",
+          "title": "Head of Unit",
+          "email": "Gilles.Pelayo@ec.europa.eu",
+          "phone": "+32 229-67864"
+        },
+        {
+          "name": "2. Media",
+          "title": ""
+        },
+        {
+          "name": "Martin Dawson",
+          "title": "Head of Unit",
+          "email": "Martin.DAWSON@ec.europa.eu",
+          "phone": "+32 229-85010"
+        },
+        {
+          "name": "3. Citizens and Eu Values",
+          "title": ""
+        },
+        {
+          "name": "Godelieve Dutrieux",
+          "title": "Head of Unit",
+          "email": "Godelieve.Dutrieux@ec.europa.eu",
+          "phone": "+32 229-55507"
+        },
+        {
+          "name": "Florencia Van Houdt",
+          "title": "Head of Unit",
+          "email": "Florencia.Van-Houdt@ec.europa.eu",
+          "phone": "+32 229-91228"
+        },
+        {
+          "name": "Thierry Prost",
+          "title": "Head of Unit",
+          "email": "Thierry.Prost@ec.europa.eu",
+          "phone": "+32 229-50790"
+        },
+        {
+          "name": "Markus Rester",
+          "title": "Head of Unit",
+          "email": "Markus.RESTER@ec.europa.eu",
+          "phone": "+32 229-88431"
+        },
+        {
+          "name": "R1. People, Workplace And",
+          "title": ""
+        },
+        {
+          "name": "Ulrich Sondermann",
+          "title": "Head of Unit",
+          "email": "Ulrich.SONDERMANN@ec.europa.eu",
+          "phone": "+32 229-85311"
+        },
+        {
+          "name": "R2. Budget and Control",
+          "title": ""
+        },
+        {
+          "name": "Marco Carnaccini",
+          "title": "Head of Unit",
+          "email": "Marco.Carnaccini@ec.europa.eu",
+          "phone": "+32 229-92618"
+        }
+      ]
+    },
+    "CINEA — EUROPEAN CLIMATE, INFRASTRUCTURE AND ENVIRONMENT EXECUTIVE": {
+      "name": "CINEA — EUROPEAN CLIMATE, INFRASTRUCTURE AND ENVIRONMENT EXECUTIVE",
+      "persons": [
+        {
+          "name": "Paloma Aba Garrote",
+          "title": "Director — European Climate, -- Infrastructure and Environment -- Executive Agency — CINEA"
+        }
+      ]
+    },
+    "Resources": {
+      "name": "Resources",
+      "persons": [
+        {
+          "name": "Maria Novak",
+          "title": "Head of Department"
+        },
+        {
+          "name": "A.A1 Financial",
+          "title": ""
+        },
+        {
+          "name": "ENGINEERING, Business",
+          "title": ""
+        },
+        {
+          "name": "INTELLIGENCE & It",
+          "title": ""
+        },
+        {
+          "name": "Marc Vanderhaegen",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Philipp Troppmann",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "A.A2 LEGAL Affairs,",
+          "title": ""
+        },
+        {
+          "name": "EXTERNAL AUDITS And",
+          "title": ""
+        },
+        {
+          "name": "ADMINISTRATIVE Finance",
+          "title": ""
+        },
+        {
+          "name": "Joachim Wiemann",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Jean-Christophe Gayrand",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "A.A3 Operational",
+          "title": ""
+        },
+        {
+          "name": "Celine Vandreche Teniers",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Florina Lintu",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "A.A4 Communication,",
+          "title": ""
+        },
+        {
+          "name": "PEOPLE & Workplace",
+          "title": ""
+        },
+        {
+          "name": "Daniela Rosca",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "networks and investments": {
+      "name": "networks and investments",
+      "persons": [
+        {
+          "name": "Olivier Silla",
+          "title": "Head of Department"
+        },
+        {
+          "name": "B.B1 CEF TRANSPORT :",
+          "title": ""
+        },
+        {
+          "name": "Austria + MoS, Ertms",
+          "title": ""
+        },
+        {
+          "name": "Morten Jensen",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "B.B2 CEF TRANSPORT :",
+          "title": ""
+        },
+        {
+          "name": "Europe + Atm And Jtm",
+          "title": ""
+        },
+        {
+          "name": "Lucie Zackova",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "B.B3 CEF TRANSPORT :",
+          "title": ""
+        },
+        {
+          "name": "BeNeLux + Innovation, Its",
+          "title": ""
+        },
+        {
+          "name": "and Ris",
+          "title": ""
+        },
+        {
+          "name": "Christian Faure",
+          "title": "Head of Unit",
+          "phone": "+32 229-53262"
+        },
+        {
+          "name": "B.B4 CEF ENERGY And",
+          "title": ""
+        },
+        {
+          "name": "RENEWABLE Energy",
+          "title": ""
+        },
+        {
+          "name": "FINANCING Mechanism",
+          "title": ""
+        },
+        {
+          "name": "Anca-Iulia Cimpeanu",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "research and innovation": {
+      "name": "research and innovation",
+      "persons": [
+        {
+          "name": "Matthias Langemeyer",
+          "title": "Head of Department"
+        },
+        {
+          "name": "C.C1 HORIZON Europe",
+          "title": ""
+        },
+        {
+          "name": "Tereza Budnakova",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "C.C2 HORIZON Europe",
+          "title": ""
+        },
+        {
+          "name": "Peter Petrov",
+          "title": "Acting Head of Unit"
+        },
+        {
+          "name": "C.C3 HORIZON Europe",
+          "title": ""
+        },
+        {
+          "name": "Ewa Ptaszynska",
+          "title": "Head of Unit",
+          "phone": "+32 229-55334"
+        },
+        {
+          "name": "C.C4 INNOVATION Fund",
+          "title": ""
+        },
+        {
+          "name": "Roman Doubrava",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Maria Alfayate",
+          "title": "Deputy Head of Unit"
+        }
+      ]
+    },
+    "energy": {
+      "name": "energy",
+      "persons": [
+        {
+          "name": "Aneta Willems",
+          "title": "Head of Department"
+        },
+        {
+          "name": "D.D1 LIFE ENERGY + Life",
+          "title": ""
+        },
+        {
+          "name": "Hans Rhein",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "D.D2 LIFE Environment",
+          "title": ""
+        },
+        {
+          "name": "(NATURE & Circular",
+          "title": ""
+        },
+        {
+          "name": "Matthias Leonhard Maier",
+          "title": "Acting Head of Unit"
+        },
+        {
+          "name": "D.D3 SUSTAINABLE Blue",
+          "title": ""
+        },
+        {
+          "name": "Vincent Favrel",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Luca Marangoni",
+          "title": "Deputy Head of Unit"
+        }
+      ]
+    },
+    "EISMEA — EUROPEAN INNOVATION COUNCIL AND SMES EXECUTIVE AGENCY": {
+      "name": "EISMEA — EUROPEAN INNOVATION COUNCIL AND SMES EXECUTIVE AGENCY",
+      "persons": [
+        {
+          "name": "Momchil Sabev",
+          "title": "Director",
+          "phone": "+32 229-52135"
+        }
+      ]
+    },
+    "AO — Accounting Office": {
+      "name": "AO — Accounting Office",
+      "persons": [
+        {
+          "name": "Olga Ciesielska",
+          "title": "Head of sector",
+          "phone": "+32 229-88374"
+        },
+        {
+          "name": "Anne-Marie Sassen",
+          "title": "Head of Unit",
+          "phone": "+32 229-57923"
+        }
+      ]
+    },
+    "Council (EIC)": {
+      "name": "Council (EIC)",
+      "persons": [
+        {
+          "name": "Stéphane Ouaki",
+          "title": "Head of Department",
+          "phone": "+32 229-67286"
+        }
+      ]
+    },
+    "Acceleration Services Global Offer": {
+      "name": "Acceleration Services Global Offer",
+      "persons": [
+        {
+          "name": "Agnieszka Stasiakowska",
+          "title": "Head of sector",
+          "phone": "+32 229-52585"
+        },
+        {
+          "name": "E.01. EIC Pathfinder",
+          "title": ""
+        },
+        {
+          "name": "Timo Hallantie",
+          "title": "Head of Unit",
+          "phone": "+32 229-68167"
+        },
+        {
+          "name": "Isabella Tamagnini",
+          "title": "Head of sector",
+          "phone": "+32 229-94140"
+        },
+        {
+          "name": "Andreas Lymberis",
+          "title": "Head of sector",
+          "phone": "+32 229-96978"
+        },
+        {
+          "name": "E.02. EIC Transition",
+          "title": ""
+        },
+        {
+          "name": "Viorel Peca",
+          "title": "Head of Unit",
+          "phone": "+32 229-57843"
+        },
+        {
+          "name": "Marco Giorgini",
+          "title": "Head of sector",
+          "phone": "+32 229-60163"
+        },
+        {
+          "name": "E.03. EIC Accelerator",
+          "title": ""
+        },
+        {
+          "name": "Denisa Perrin",
+          "title": "Head of Unit",
+          "phone": "+32 229-80061"
+        },
+        {
+          "name": "Marco Grancagnolo",
+          "title": "Head of sector"
+        },
+        {
+          "name": "Luis Carlos Busquets Pérez",
+          "title": "Head of sector",
+          "phone": "+32 229-66246"
+        }
+      ]
+    },
+    "and Consumers": {
+      "name": "and Consumers",
+      "persons": [
+        {
+          "name": "Giuseppe Casella",
+          "title": "Head of Department",
+          "phone": "+32 229-56396"
+        },
+        {
+          "name": "I.01. EU and Place-Based",
+          "title": ""
+        },
+        {
+          "name": "Francesca Doria",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Daniel Gassmann",
+          "title": "Head of sector",
+          "phone": "+32 229-74193"
+        },
+        {
+          "name": "Eric Koch",
+          "title": "Head of sector",
+          "phone": "+32 229-71976"
+        },
+        {
+          "name": "I.02. SMP/SME Pillar, Internal",
+          "title": ""
+        },
+        {
+          "name": "Natalia Martinez Paramo",
+          "title": "Head of Unit",
+          "phone": "+32 229-62543"
+        },
+        {
+          "name": "Muriel De Grande",
+          "title": "Head of sector",
+          "phone": "+32 229-67522"
+        },
+        {
+          "name": "Igor Kalinic",
+          "title": "Head of sector",
+          "phone": "+32 229-82289"
+        },
+        {
+          "name": "Ramūnas Kuncaitis",
+          "title": "Head of sector",
+          "phone": "+32 229-50795"
+        },
+        {
+          "name": "Niccolo Costantini",
+          "title": "Head of sector",
+          "phone": "+32 229-64991"
+        },
+        {
+          "name": "I.03. Smp/Consumers",
+          "title": ""
+        },
+        {
+          "name": "Gilda Capuano",
+          "title": "Head of Unit",
+          "phone": "+32 229-60203"
+        },
+        {
+          "name": "Gorana Krsikapa",
+          "title": "Head of sector",
+          "phone": "+32 229-63040"
+        }
+      ]
+    },
+    "Budget": {
+      "name": "Budget",
+      "persons": [
+        {
+          "name": "Maarit Viljanen",
+          "title": "Head of Department",
+          "phone": "+32 229-96306"
+        },
+        {
+          "name": "Sandrine Turbide",
+          "title": "Acting head of sector",
+          "phone": "+32 229-73929"
+        },
+        {
+          "name": "C.01. Finance, Budget And",
+          "title": ""
+        },
+        {
+          "name": "Alice Langerová",
+          "title": "Head of Unit",
+          "phone": "+32 229-80176"
+        }
+      ]
+    },
+    "Department E": {
+      "name": "Department E",
+      "persons": [
+        {
+          "name": "Jorge Gonzalez Sarlet",
+          "title": "Head of sector",
+          "phone": "+32 229-93345"
+        }
+      ]
+    },
+    "Department I": {
+      "name": "Department I",
+      "persons": [
+        {
+          "name": "Kyriaki Tragouda",
+          "title": "Head of sector",
+          "phone": "+32 229-91549"
+        },
+        {
+          "name": "Anna Evtimova-Stella",
+          "title": "Head of sector",
+          "phone": "+32 229-53611"
+        },
+        {
+          "name": "Cedric De Ridder",
+          "title": "Head of sector",
+          "phone": "+32 229-63229"
+        },
+        {
+          "name": "C.02. Workplace, IT And",
+          "title": ""
+        },
+        {
+          "name": "Kyriakos Georgopoulos",
+          "title": "Head of Unit",
+          "phone": "+32 229-64012"
+        },
+        {
+          "name": "Robert Schroder",
+          "title": "Head of sector",
+          "phone": "+32 229-56167"
+        },
+        {
+          "name": "Yassen Todorov",
+          "title": "Head of sector",
+          "phone": "+32 229-99037"
+        }
+      ]
+    },
+    "REA — EUROPEAN RESEARCH EXECUTIVE AGENCY": {
+      "name": "REA — EUROPEAN RESEARCH EXECUTIVE AGENCY",
+      "persons": [
+        {
+          "name": "Marc Tachelet",
+          "title": "Director",
+          "phone": "+32 229-67827"
+        },
+        {
+          "name": "Graham Wilkie",
+          "title": "Head of Department (Acting) — Marie -- Skłodowska-Curie Actions & Support to -- Experts",
+          "phone": "+32 229-59300"
+        },
+        {
+          "name": "1. Msca Doctoral Networks",
+          "title": ""
+        },
+        {
+          "name": "Klaus Haupt",
+          "title": "Head of Unit",
+          "phone": "+32 229-69923"
+        },
+        {
+          "name": "Audrey Arfi",
+          "title": "Head of Sector",
+          "phone": "+32 229-56850"
+        },
+        {
+          "name": "Michaela Bitsakis",
+          "title": "Head of Sector",
+          "phone": "+32 229-80279"
+        },
+        {
+          "name": "Gabriela Chira",
+          "title": "Head of Sector",
+          "phone": "+32 229-66976"
+        },
+        {
+          "name": "2. Msca Postdoctoral",
+          "title": ""
+        },
+        {
+          "name": "Fredrik Olsson Hector",
+          "title": "Head of Unit",
+          "phone": "+32 229-64255"
+        },
+        {
+          "name": "Maria Vili",
+          "title": "Head of Sector",
+          "phone": "+32 229-56964"
+        },
+        {
+          "name": "Mika Levonen",
+          "title": "Head of Sector",
+          "phone": "+32 229-52591"
+        },
+        {
+          "name": "Antonio Balestrieri",
+          "title": "Head of Sector",
+          "phone": "+32 229-88052"
+        },
+        {
+          "name": "Laura Elena Apostol",
+          "title": "Head of Sector",
+          "phone": "+32 229-60985"
+        },
+        {
+          "name": "3. Msca Staff Exchanges",
+          "title": ""
+        },
+        {
+          "name": "Monika Holik",
+          "title": "Head of Unit",
+          "phone": "+32 229-85807"
+        },
+        {
+          "name": "Thomas Vyzikas",
+          "title": "Head of Sector",
+          "phone": "+32 229-62670"
+        },
+        {
+          "name": "Brito Ferreira",
+          "title": "Head of Sector",
+          "phone": "+32 229-92388"
+        },
+        {
+          "name": "Laurent Correia",
+          "title": "Head of Sector",
+          "phone": "+32 229-80532"
+        },
+        {
+          "name": "4. Msca And Citizens,",
+          "title": ""
+        },
+        {
+          "name": "COFUND and Support",
+          "title": ""
+        },
+        {
+          "name": "Graham Wilkie",
+          "title": "Head of Unit",
+          "phone": "+32 229-59300"
+        },
+        {
+          "name": "David Wizel",
+          "title": "Head of Sector",
+          "phone": "+32 229-53380"
+        },
+        {
+          "name": "Marcela Groholova",
+          "title": "Deputy Head of Unit",
+          "phone": "+32 229-81482"
+        },
+        {
+          "name": "Michel Vanbiervliet",
+          "title": "Head of Unit",
+          "phone": "+32 229-99336"
+        },
+        {
+          "name": "Alexandra Ruete",
+          "title": "Head of Sector",
+          "phone": "+32 229-55217"
+        },
+        {
+          "name": "Georgios Fligkos",
+          "title": "Head of Sector",
+          "phone": "+32 229-83277"
+        },
+        {
+          "name": "Jose-Antonio Lopez Morales",
+          "title": "Head of Sector",
+          "phone": "+32 229-97633"
+        },
+        {
+          "name": "Paul Webb",
+          "title": "Head of Department — Green Europe",
+          "phone": "+32 229-54533"
+        },
+        {
+          "name": "Sebastiano Fumero",
+          "title": "Head of Unit",
+          "phone": "+32 229-69688"
+        },
+        {
+          "name": "Spyridon Merkourakis",
+          "title": "Head of Sector",
+          "phone": "+32 229-56905"
+        },
+        {
+          "name": "Julio Riesgo Arnaldo",
+          "title": "Deputy Head of Unit",
+          "phone": "+32 229-68767"
+        },
+        {
+          "name": "Nadezhda Naydenova",
+          "title": "Head of Unit",
+          "phone": "+32 229-64499"
+        },
+        {
+          "name": "Olivier Pastre",
+          "title": "Head of Sector",
+          "phone": "+32 229-86030"
+        },
+        {
+          "name": "Dominika Trzaska",
+          "title": "Head of Sector (Acting)",
+          "phone": "+32 229-60724"
+        },
+        {
+          "name": "Gianmaria Maule",
+          "title": "Head of Sector",
+          "phone": "+32 229-53489"
+        },
+        {
+          "name": "Arnoldas Milukas",
+          "title": "Head of Unit",
+          "phone": "+32 229-98414"
+        },
+        {
+          "name": "Francisco Javier Peinado",
+          "title": "Head of Sector",
+          "phone": "+32 229-90559"
+        },
+        {
+          "name": "Evdokia Achilleos",
+          "title": "Head of Sector",
+          "phone": "+32 229-62212"
+        },
+        {
+          "name": "Ingrid Zekoll",
+          "title": "Head of Sector",
+          "phone": "+32 229-59765"
+        },
+        {
+          "name": "Katia Philaniotou",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Agata Pieniadz",
+          "title": "Head of Sector",
+          "phone": "+32 229-96807"
+        },
+        {
+          "name": "Dyanne Bennink",
+          "title": "Head of Sector",
+          "phone": "+32 229-91276"
+        },
+        {
+          "name": "Anabell Bassat",
+          "title": "Head of Sector",
+          "phone": "+32 229-66616"
+        },
+        {
+          "name": "Francisca Cuesta Sanchez",
+          "title": "Head of Sector",
+          "phone": "+32 229-86549"
+        },
+        {
+          "name": "Minna Wilkki",
+          "title": "Head of Department — Future Society",
+          "phone": "+32 229-95573"
+        },
+        {
+          "name": "Kristien Van Goey",
+          "title": "Head of Unit",
+          "phone": "+32 229-69234"
+        },
+        {
+          "name": "Patricio Ortiz De La Torre",
+          "title": "Head of Sector",
+          "phone": "+32 229-88621"
+        },
+        {
+          "name": "Maria Spulber",
+          "title": "Head of Sector",
+          "phone": "+32 229-87333"
+        },
+        {
+          "name": "Cristina Moldovan",
+          "title": "Head of Sector",
+          "phone": "+32 229-96450"
+        },
+        {
+          "name": "Valeria Bricola",
+          "title": "Head of Unit",
+          "phone": "+32 229-66129"
+        },
+        {
+          "name": "Petri Backman",
+          "title": "Head of Sector (Acting)",
+          "phone": "+32 229-94285"
+        },
+        {
+          "name": "Markus Walter",
+          "title": "Head of Sector",
+          "phone": "+32 229-62257"
+        },
+        {
+          "name": "Ales Fiala",
+          "title": "Head of Unit",
+          "phone": "+32 229-64787"
+        },
+        {
+          "name": "Christopher Reynolds",
+          "title": "Head of Sector",
+          "phone": "+32 229-64527"
+        },
+        {
+          "name": "Deirdre Furlong",
+          "title": "Head of Sector",
+          "phone": "+32 229-68818"
+        },
+        {
+          "name": "Per Martin Schmidt",
+          "title": "Head of Sector",
+          "phone": "+32 229-67100"
+        },
+        {
+          "name": "4. Reforming European R&I",
+          "title": ""
+        },
+        {
+          "name": "Sari Vartiainen-Mathieu",
+          "title": "Head of Unit",
+          "phone": "+32 229-57909"
+        },
+        {
+          "name": "Michele Galatola",
+          "title": "Head of Sector"
+        },
+        {
+          "name": "Andrea Hutterer",
+          "title": "Head of Sector",
+          "phone": "+32 229-56866"
+        },
+        {
+          "name": "Alexandru Calaras",
+          "title": "Head of Sector",
+          "phone": "+32 229-62489"
+        }
+      ]
+    },
+    "Corporate Services": {
+      "name": "Corporate Services",
+      "persons": [
+        {
+          "name": "Gaia Fantechi",
+          "title": "Head of Department — Coordination and -- Corporate Services",
+          "phone": "+32 229-86217"
+        },
+        {
+          "name": "Gaia Fantechi",
+          "title": "Acting Head of Unit",
+          "phone": "+32 229-86217"
+        },
+        {
+          "name": "Kristian Krieger",
+          "title": "Head of Sector",
+          "phone": "+32 229-50189"
+        },
+        {
+          "name": "Luis Miguel Valentin Del",
+          "title": "Head of Sector",
+          "phone": "+32 229-53105"
+        },
+        {
+          "name": "Melanie Renault",
+          "title": "Head of Sector",
+          "phone": "+32 229-52964"
+        },
+        {
+          "name": "Barbara Kampis",
+          "title": "Head of Unit",
+          "phone": "+32 229-91510"
+        },
+        {
+          "name": "Valeria La Spina",
+          "title": "Head of Sector",
+          "phone": "+32 229-89374"
+        },
+        {
+          "name": "Yvette Chrissantonis",
+          "title": "Head of Sector",
+          "phone": "+32 229-63155"
+        },
+        {
+          "name": "Wilfried Hoc",
+          "title": "Head of Sector",
+          "phone": "+32 229-64821"
+        },
+        {
+          "name": "Griet Van Caenegem",
+          "title": "Head of Unit",
+          "phone": "+32 229-61895"
+        },
+        {
+          "name": "Valerie Ponta-Breitenstein",
+          "title": "Head of Sector",
+          "phone": "+32 229-84192"
+        },
+        {
+          "name": "Konstantinos Strouzas",
+          "title": "Head of Sector",
+          "phone": "+32 229-85457"
+        },
+        {
+          "name": "Louise Byrne",
+          "title": "Head of Sector",
+          "phone": "+32 229-87949"
+        },
+        {
+          "name": "Oana Daniela Manea-",
+          "title": "Head of Sector",
+          "phone": "+32 229-81419"
+        },
+        {
+          "name": "Elena Simova",
+          "title": "Head of Unit",
+          "phone": "+32 229-85858"
+        },
+        {
+          "name": "José Luis Mena",
+          "title": "Head of Sector",
+          "phone": "+32 229-82182"
+        },
+        {
+          "name": "Simon Wöss",
+          "title": "Head of Sector",
+          "phone": "+32 229-97764"
+        },
+        {
+          "name": "Daniel Skarja",
+          "title": "Head of Sector",
+          "phone": "+32 229-86573"
+        },
+        {
+          "name": "Daniele Palladino",
+          "title": "Head of Sector",
+          "phone": "+32 229-52778"
+        }
+      ]
+    },
+    "ERCEA — EUROPEAN RESEARCH COUNCIL EXECUTIVE AGENCY": {
+      "name": "ERCEA — EUROPEAN RESEARCH COUNCIL EXECUTIVE AGENCY",
+      "persons": [
+        {
+          "name": "Laurence Moreau",
+          "title": "Director",
+          "phone": "+32 229-81448"
+        },
+        {
+          "name": "Claire Levacher",
+          "title": "Head of sector",
+          "phone": "+32 229-98159"
+        },
+        {
+          "name": "A1. Support to the Scientific",
+          "title": ""
+        },
+        {
+          "name": "Alban Kellerbauer",
+          "title": "Head of Unit",
+          "phone": "+32 229-64831"
+        },
+        {
+          "name": "A2. Communication",
+          "title": ""
+        },
+        {
+          "name": "Martin Penny",
+          "title": "Head of Unit",
+          "phone": "+32 229-54504"
+        },
+        {
+          "name": "Samantha Christey",
+          "title": "Head of sector",
+          "phone": "+32 229-60929"
+        },
+        {
+          "name": "Marcin Monko",
+          "title": "Head of sector",
+          "phone": "+32 229-66644"
+        }
+      ]
+    },
+    "Management Department": {
+      "name": "Management Department",
+      "persons": [
+        {
+          "name": "Philippe Cupers",
+          "title": "Head of Department",
+          "phone": "+32 229-98796"
+        },
+        {
+          "name": "Eleni Zika",
+          "title": "Head of sector",
+          "phone": "+32 229-64807"
+        },
+        {
+          "name": "Raluca Ionescu",
+          "title": "Head of Unit",
+          "phone": "+32 229-59982"
+        },
+        {
+          "name": "Florin Patras",
+          "title": "Head of sector",
+          "phone": "+32 229-52996"
+        },
+        {
+          "name": "Veronica Martinez Ocana",
+          "title": "Head of sector",
+          "phone": "+32 229-98901"
+        },
+        {
+          "name": "Victor Losada Gonzalez",
+          "title": "Head of sector",
+          "phone": "+32 229-67923"
+        },
+        {
+          "name": "Josefina Enfedaque",
+          "title": "Head of Unit",
+          "phone": "+32 229-58605"
+        },
+        {
+          "name": "Monique Smaihi",
+          "title": "Head of sector",
+          "phone": "+32 229-62310"
+        },
+        {
+          "name": "David Kurz",
+          "title": "Head of sector",
+          "phone": "+32 229-90032"
+        },
+        {
+          "name": "Philippe Cupers",
+          "title": "Acting Head of Unit",
+          "phone": "+32 229-98796"
+        }
+      ]
+    },
+    "001. Molecular and Cellular Biology": {
+      "name": "001. Molecular and Cellular Biology",
+      "persons": [
+        {
+          "name": "Fiona Kernan",
+          "title": "Head of sector",
+          "phone": "+32 229-55499"
+        },
+        {
+          "name": "Angela Wittelsberger",
+          "title": "Head of sector",
+          "phone": "+32 229-83479"
+        },
+        {
+          "name": "Carmen Garcia Fernandez",
+          "title": "Head of sector",
+          "phone": "+32 229-55519"
+        },
+        {
+          "name": "Pablo Perez-Illana",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Andre Schirotzek",
+          "title": "Head of sector",
+          "phone": "+32 229-80511"
+        },
+        {
+          "name": "Isabelle Ortmans",
+          "title": "Head of sector",
+          "phone": "+32 229-68241"
+        },
+        {
+          "name": "David Krasa",
+          "title": "Head of sector",
+          "phone": "+32 229-60014"
+        },
+        {
+          "name": "Vanessa Fivet",
+          "title": "Head of sector",
+          "phone": "+32 229-50474"
+        },
+        {
+          "name": "Lino Paula",
+          "title": "Head of Unit",
+          "phone": "+32 229-63873"
+        },
+        {
+          "name": "Flavia Cumoli",
+          "title": "Head of sector",
+          "phone": "+32 229-53379"
+        },
+        {
+          "name": "Frank Kuhn",
+          "title": "Head of sector",
+          "phone": "+32 229-66403"
+        }
+      ]
+    },
+    "Support Department": {
+      "name": "Support Department",
+      "persons": [
+        {
+          "name": "Pascale Cid",
+          "title": "Head of Department",
+          "phone": "+32 229-86226"
+        },
+        {
+          "name": "Athanasia Papathanasiou",
+          "title": "Head of sector",
+          "phone": "+32 229-76726"
+        },
+        {
+          "name": "1. It Solutions And Services",
+          "title": ""
+        },
+        {
+          "name": "Philippe Vijghen",
+          "title": "Head of Unit",
+          "phone": "+32 229-99250"
+        }
+      ]
+    },
+    "Management Services": {
+      "name": "Management Services",
+      "persons": [
+        {
+          "name": "Oliviero Ferraretto",
+          "title": "Head of sector",
+          "phone": "+32 229-67704"
+        },
+        {
+          "name": "Gian Franco Casula",
+          "title": "Head of sector",
+          "phone": "+32 229-62836"
+        },
+        {
+          "name": "Vitor Cardoso",
+          "title": "Head of sector",
+          "phone": "+32 229-64990"
+        }
+      ]
+    },
+    "004. ERC IT Services supporting": {
+      "name": "004. ERC IT Services supporting",
+      "persons": [
+        {
+          "name": "Mihai Ionescu",
+          "title": "Head of sector",
+          "phone": "+32 229-87177"
+        },
+        {
+          "name": "Carole Micmacher",
+          "title": "Head of Unit — Human Resources",
+          "phone": "+32 229-61002"
+        },
+        {
+          "name": "Gwennael Joliff-Botrel",
+          "title": "Head of Unit",
+          "phone": "+32 229-65774"
+        },
+        {
+          "name": "Miguel Pesquera",
+          "title": "Head of sector",
+          "phone": "+32 229-86422"
+        },
+        {
+          "name": "Alejandro Rodriguez Ramos",
+          "title": "Head of sector",
+          "phone": "+32 229-83045"
+        }
+      ]
+    },
+    "HADEA — EUROPEAN HEALTH AND DIGITAL EXECUTIVE AGENCY": {
+      "name": "HADEA — EUROPEAN HEALTH AND DIGITAL EXECUTIVE AGENCY",
+      "persons": [
+        {
+          "name": "Marina Zanchi",
+          "title": "Director",
+          "phone": "+32 229-53814"
+        },
+        {
+          "name": "Bernd Reggers",
+          "title": "Head of sector",
+          "phone": "+32 229-63565"
+        }
+      ]
+    },
+    "Health and Food": {
+      "name": "Health and Food",
+      "persons": [
+        {
+          "name": "Angelo Marino",
+          "title": "Head of Department",
+          "phone": "+32 229-66657"
+        },
+        {
+          "name": "Nadia Elhaggagi",
+          "title": "Head of Unit ad interim",
+          "phone": "+32 229-61553"
+        },
+        {
+          "name": "Georgios Margetidis",
+          "title": "Head of sector",
+          "phone": "+32 229-60899"
+        },
+        {
+          "name": "Chiara Tripepi",
+          "title": "Head of sector",
+          "phone": "+32 229-61051"
+        },
+        {
+          "name": "Nicolas Krieger",
+          "title": "Head of Unit ad interim",
+          "phone": "+32 229-85845"
+        },
+        {
+          "name": "Marilena Di Stasi",
+          "title": "Head of sector",
+          "phone": "+32 229-60886"
+        },
+        {
+          "name": "Marc Vallons",
+          "title": "Head of sector",
+          "phone": "+32 229-54439"
+        },
+        {
+          "name": "Stéphane Hogan",
+          "title": "Head of Unit",
+          "phone": "+32 229-63265"
+        },
+        {
+          "name": "Miguel Lizaso",
+          "title": "Head of sector",
+          "phone": "+32 229-93350"
+        },
+        {
+          "name": "David Gancberg",
+          "title": "Head of sector",
+          "phone": "+32 229-84566"
+        }
+      ]
+    },
+    "Space": {
+      "name": "Space",
+      "persons": [
+        {
+          "name": "Katleen Engelbosch",
+          "title": "Head of Department",
+          "phone": "+32 229-54693"
+        }
+      ]
+    },
+    "Facility — Digital": {
+      "name": "Facility — Digital",
+      "persons": [
+        {
+          "name": "Hervé Dupuy",
+          "title": "Head of Unit",
+          "phone": "+32 229-95258"
+        },
+        {
+          "name": "Mateusz Kujawa",
+          "title": "Head of sector",
+          "phone": "+32 229-54460"
+        },
+        {
+          "name": "Xavier Derrey",
+          "title": "Head of sector",
+          "phone": "+32 229-68191"
+        },
+        {
+          "name": "Anna Katrami",
+          "title": "Head of Unit",
+          "phone": "+32 229-91870"
+        },
+        {
+          "name": "Daniela Rosati",
+          "title": "Head of sector",
+          "phone": "+32 229-81746"
+        },
+        {
+          "name": "Gianluca Comuniello",
+          "title": "Head of sector",
+          "phone": "+32 229-61005"
+        },
+        {
+          "name": "Silke Obst",
+          "title": "Head of Unit",
+          "phone": "+32 229-84643"
+        },
+        {
+          "name": "Mikhail Simonov",
+          "title": "Head of sector",
+          "phone": "+32 229-83379"
+        },
+        {
+          "name": "Jean-Philippe Guisset",
+          "title": "Head of sector",
+          "phone": "+32 229-54199"
+        },
+        {
+          "name": "Jonas Hedberg",
+          "title": "Head of sector",
+          "phone": "+32 229-54293"
+        },
+        {
+          "name": "Marko Curavić",
+          "title": "Head of Unit",
+          "phone": "+32 229-87425"
+        },
+        {
+          "name": "Davide Di Domizio",
+          "title": "Head of sector",
+          "phone": "+32 229-64713"
+        },
+        {
+          "name": "Massimo Ciscato",
+          "title": "Head of sector",
+          "phone": "+32 229-58800"
+        }
+      ]
+    },
+    "Finance and Resources": {
+      "name": "Finance and Resources",
+      "persons": [
+        {
+          "name": "Jacques Remacle",
+          "title": "Head of Department",
+          "phone": "+32 229-60771"
+        },
+        {
+          "name": "Alexandros Iatrou",
+          "title": "Head of Unit",
+          "phone": "+32 229-80458"
+        },
+        {
+          "name": "Beatrice Semzaconi",
+          "title": "Head of sector",
+          "phone": "+32 229-68460"
+        },
+        {
+          "name": "Ramona Sirbu",
+          "title": "Head of sector",
+          "phone": "+32 229-56056"
+        },
+        {
+          "name": "Klara Kasnyik",
+          "title": "Head of sector",
+          "phone": "+32 229-60865"
+        },
+        {
+          "name": "Pierluigi Verderame",
+          "title": "Head of sector",
+          "phone": "+32 229-50969"
+        },
+        {
+          "name": "Maciej Górka",
+          "title": "Head of Unit",
+          "phone": "+32 229-54714"
+        },
+        {
+          "name": "Teresa Monge",
+          "title": "Head of sector",
+          "phone": "+32 229-60803"
+        },
+        {
+          "name": "Fanny De Lannoy",
+          "title": "Head of sector",
+          "phone": "+32 229-67620"
+        },
+        {
+          "name": "Yolanda Arevalo Torres",
+          "title": "Head of sector",
+          "phone": "+32 229-60837"
+        },
+        {
+          "name": "Stepan Svoboda",
+          "title": "Head of sector",
+          "phone": "+32 229-85342"
+        },
+        {
+          "name": "Sylvia Ferretti",
+          "title": "Head of Unit",
+          "phone": "+32 229-87331"
+        },
+        {
+          "name": "Nicolas Sakellion",
+          "title": "Head of sector",
+          "phone": "+32 229-61092"
+        },
+        {
+          "name": "Hussein Sattaf",
+          "title": "Head of sector",
+          "phone": "+32 229-96423"
+        },
+        {
+          "name": "Gilles Vandenborre",
+          "title": "Head of sector",
+          "phone": "+32 229-89936"
+        }
+      ]
+    },
+    "ESA — EURATOM SUPPLY AGENCY": {
+      "name": "ESA — EURATOM SUPPLY AGENCY",
+      "persons": [
+        {
+          "name": "Michael Huebel Huebel",
+          "title": "Director General of the Euratom Supply -- Agency"
+        },
+        {
+          "name": "Stefanos Kardaras",
+          "title": "Legal and Strategy Adviser to the DG"
+        }
+      ]
+    },
+    "Market Unit": {
+      "name": "Market Unit",
+      "persons": [
+        {
+          "name": "Stefano Ciccarello",
+          "title": "Head of Unit",
+          "phone": "+352 4301-36227"
+        }
+      ]
+    },
+    "F4E — FUSION FOR ENERGY JOINT UNDERTAKING": {
+      "name": "F4E — FUSION FOR ENERGY JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Marc Lachaise",
+          "title": "Director"
+        },
+        {
+          "name": "Leonardo Biagioni",
+          "title": "Head of Projects"
+        },
+        {
+          "name": "Enrique García",
+          "title": "Head of Fusion Technologies and -- Engineering"
+        },
+        {
+          "name": "Kristel Tans",
+          "title": "Head of Project Control, Supply Chain -- and Finance"
+        },
+        {
+          "name": "Alessia Vecchio",
+          "title": "Head of Administration"
+        }
+      ]
+    },
+    "CBEJU — BIO-BASED INDUSTRIES JOINT UNDERTAKING": {
+      "name": "CBEJU — BIO-BASED INDUSTRIES JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Nicoló Giacomuzzi-Moore",
+          "title": "Executive Director ad interim"
+        },
+        {
+          "name": "Virginia Puzzolo",
+          "title": "Head of Programme Unit"
+        },
+        {
+          "name": "Nicoló Giacomuzzi-Moore",
+          "title": "Head of Administration and Finance Unit"
+        }
+      ]
+    },
+    "CAJU — CLEAN SKY JOINT UNDERTAKING": {
+      "name": "CAJU — CLEAN SKY JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Axel Krein",
+          "title": "Executive Director"
+        }
+      ]
+    },
+    "CJU — CHIPS JOINT UNDERTAKING": {
+      "name": "CJU — CHIPS JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Jari Kinaret",
+          "title": "Executive Director"
+        }
+      ]
+    },
+    "UNDERTAKING": {
+      "name": "UNDERTAKING",
+      "persons": [
+        {
+          "name": "Anders Dam Jensen",
+          "title": "Executive Director",
+          "email": "anders.jensen@eurohpc-ju.europa.eu",
+          "phone": "+352 28124522"
+        },
+        {
+          "name": "Claudia Marchesini",
+          "title": "Internal Control and Audit Officer"
+        },
+        {
+          "name": "Veronika Zuziova",
+          "title": "Executive Personal Assistant"
+        },
+        {
+          "name": "Fernando Ramos Lopez",
+          "title": "Head of Unit Administration, Finance and -- Corporate Support"
+        },
+        {
+          "name": "Maria Vasilopoulou",
+          "title": "Assistant to the Head of Unit",
+          "email": "maria.vasilopoulou@eurohpc-ju.europa.eu",
+          "phone": "+352 28124519"
+        },
+        {
+          "name": "Doris Meijer-Lassonczyk",
+          "title": "Head of Sector Finance"
+        },
+        {
+          "name": "Emmanuelle Piergiorgi",
+          "title": "Financial Assistant"
+        },
+        {
+          "name": "Diana Mihaylova",
+          "title": "Financial Assistant"
+        },
+        {
+          "name": "Manjola Gashi",
+          "title": "Budget Officer and Accounting -- Correspondent"
+        },
+        {
+          "name": "Véronique Houart",
+          "title": "Financial Assistant"
+        },
+        {
+          "name": "Georgiana Glodeanu-",
+          "title": "Financial Officer"
+        },
+        {
+          "name": "Anna Hedrzak",
+          "title": "Head of Sector Administration, HR and -- IT",
+          "email": "anna.hedrzak@eurohpc-ju.europa.eu",
+          "phone": "+352 28124525"
+        },
+        {
+          "name": "Irina Chirica",
+          "title": "Administrative Officer"
+        },
+        {
+          "name": "Elena Lymperi",
+          "title": "HR Officer"
+        },
+        {
+          "name": "Cynthia Kharoufeh",
+          "title": "HR Assistant"
+        },
+        {
+          "name": "Regis Delhaille",
+          "title": "IT Service Coordinator",
+          "email": "regis.delhalle@eurohpc-ju.europa.eu",
+          "phone": "+352 28124523"
+        },
+        {
+          "name": "Josephine Wood",
+          "title": "Head of Unit Strategy and Governance",
+          "email": "josephine.wood@eurohpc-ju.europa.eu",
+          "phone": "+352 28124522"
+        },
+        {
+          "name": "Stefani Wolfgarten",
+          "title": "Head of Sector Legal and Governance"
+        },
+        {
+          "name": "Ralf Zwierzynski",
+          "title": "Governance, Planning and Reporting -- Officer"
+        },
+        {
+          "name": "Magdalena Kania",
+          "title": "Legal Officer"
+        },
+        {
+          "name": "Veronica Ortu",
+          "title": "Governance and Legal Assistant"
+        },
+        {
+          "name": "Pauline Gounaud",
+          "title": "Head of Sector Communication",
+          "email": "pauline.gounaud@eurohpc-ju.europa.eu",
+          "phone": "+352 28124520"
+        },
+        {
+          "name": "Beatrice Rossi",
+          "title": "Communication officer"
+        },
+        {
+          "name": "Marzio P. Rotondò",
+          "title": "Communication officer"
+        }
+      ]
+    },
+    "Programmes": {
+      "name": "Programmes",
+      "persons": [
+        {
+          "name": "Evangelos Floros",
+          "title": "Head of Unit Infrastructure",
+          "email": "evangelos.floros@eurohpc-ju.europa.eu",
+          "phone": "+352 28124513"
+        },
+        {
+          "name": "Lilit Axner",
+          "title": "Programme Manager – Infrastructure"
+        },
+        {
+          "name": "Athanasia Evangelinou",
+          "title": "Programme Manager – Infrastructure"
+        },
+        {
+          "name": "Christos Datsikas",
+          "title": "Programme Manager – Infrastructure"
+        },
+        {
+          "name": "Klara Mestrovic",
+          "title": "Head of Sector Peer review"
+        },
+        {
+          "name": "Krishnakshi Bhuyan",
+          "title": "Programme Manager - Peer review"
+        },
+        {
+          "name": "Dora Marton",
+          "title": "Programme Officer - Peer review"
+        },
+        {
+          "name": "Catarina Guerreiro",
+          "title": "Programme Officer - Peer review"
+        },
+        {
+          "name": "Daniel Opalka",
+          "title": "Head of Unit R&I"
+        },
+        {
+          "name": "Alexandra Kourfali",
+          "title": "Programme Manager - R&I"
+        },
+        {
+          "name": "René Chatwell",
+          "title": "Programme Manager - R&I"
+        },
+        {
+          "name": "Linda Gesenhues",
+          "title": "Programme Manager - R&I"
+        },
+        {
+          "name": "Matteo Mascagni",
+          "title": "Programme Manager - R&I"
+        },
+        {
+          "name": "Mladen Skelin",
+          "title": "Programme Manager - R&I"
+        },
+        {
+          "name": "Veneta Boneva",
+          "title": "Programme Assistant – Infrastructure"
+        },
+        {
+          "name": "Tanya Spitaels",
+          "title": "Programme Assistant - R&I"
+        }
+      ]
+    },
+    "EIT — EUROPEAN INSTITUTE OF INNOVATION AND TECHNOLOGY": {
+      "name": "EIT — EUROPEAN INSTITUTE OF INNOVATION AND TECHNOLOGY",
+      "persons": [
+        {
+          "name": "Martin Kern",
+          "title": "Acting Director"
+        }
+      ]
+    },
+    "SESAR — SESAR JOINT UNDERTAKING": {
+      "name": "SESAR — SESAR JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Andreas Boschen",
+          "title": "Executive Director"
+        },
+        {
+          "name": "Richard Frizon",
+          "title": "Chief Resources"
+        },
+        {
+          "name": "Alain Siebert",
+          "title": "Chief Technology and Strategy"
+        },
+        {
+          "name": "David Batchelor",
+          "title": "Chief External Affairs and -- Communications"
+        },
+        {
+          "name": "Benoit Fonck",
+          "title": "Chief Programme"
+        },
+        {
+          "name": "Peter Hotham",
+          "title": "Advisor for ATM Science and Technology"
+        },
+        {
+          "name": "José Calvo Fresno",
+          "title": "Advisor for Stakeholder Relations and -- Corporate Matters"
+        }
+      ]
+    },
+    "IHIJU — INNOVATIVE MEDICINES INITIATIVE 2 JOINT UNDERTAKING": {
+      "name": "IHIJU — INNOVATIVE MEDICINES INITIATIVE 2 JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Niklas Blomberg",
+          "title": "Executive Director"
+        }
+      ]
+    },
+    "CLEAN HYDROGEN JOINT UNDERTAKING": {
+      "name": "CLEAN HYDROGEN JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Mirela Atanasiu",
+          "title": "Director ad interim"
+        },
+        {
+          "name": "Ivana Hockova",
+          "title": "Internal Control Manager"
+        },
+        {
+          "name": "Philippe Binet",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Athanasios Batsilas",
+          "title": "Financial Officer"
+        },
+        {
+          "name": "Margherita Bertuola",
+          "title": "Assistant"
+        },
+        {
+          "name": "Georgiana Buznosu",
+          "title": "Legal Officer"
+        },
+        {
+          "name": "Patricia Maes",
+          "title": "Assistant"
+        },
+        {
+          "name": "Loan Nguyen",
+          "title": "Financial Officer"
+        },
+        {
+          "name": "Nora Ovcharova",
+          "title": "Financial Officer"
+        },
+        {
+          "name": "Magdalini Pilichou",
+          "title": "Budget Officer"
+        },
+        {
+          "name": "Antonio Requena Fernandez",
+          "title": "Financial Officer"
+        },
+        {
+          "name": "Laurent Samyn",
+          "title": "Project/Process Manager — Business -- Process Manager Participant Validation"
+        },
+        {
+          "name": "Marta Skolimowska",
+          "title": "Assistant"
+        },
+        {
+          "name": "Julien Spremolla",
+          "title": "Legal Assistant"
+        }
+      ]
+    },
+    "Communication Unit": {
+      "name": "Communication Unit",
+      "persons": [
+        {
+          "name": "Mirela Atanasiu",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Antonio Aguilo Rullan",
+          "title": "Project Officer"
+        },
+        {
+          "name": "Lionel Boillot",
+          "title": "Project Officer"
+        },
+        {
+          "name": "Pietro Caloprisco",
+          "title": "Project Officer"
+        },
+        {
+          "name": "Alberto Garcia Hombrados",
+          "title": "Project Officer"
+        },
+        {
+          "name": "Petros Karatzias",
+          "title": "(SNE) Dissemination and exploitation of -- results officer"
+        },
+        {
+          "name": "Eleni Kontonasiou",
+          "title": "Project Officer"
+        },
+        {
+          "name": "Nikolaos Lymperopoulos",
+          "title": "Project Officer"
+        },
+        {
+          "name": "Inês Moura Martins",
+          "title": "(SNE) Stakeholder relationship officer"
+        },
+        {
+          "name": "Lara Orlandi",
+          "title": "Communication Officer"
+        },
+        {
+          "name": "Claudiu Pavel",
+          "title": "Project Officer"
+        },
+        {
+          "name": "Lelia Rotaru",
+          "title": "Communication Officer"
+        },
+        {
+          "name": "Kostis Sakellaris",
+          "title": "Knowledge Management Officer"
+        },
+        {
+          "name": "Dionisis Tsimis",
+          "title": "Project Officer"
+        }
+      ]
+    },
+    "EU-RAIL — EUROPE’S RAIL JOINT UNDERTAKING": {
+      "name": "EU-RAIL — EUROPE’S RAIL JOINT UNDERTAKING",
+      "persons": [
+        {
+          "name": "Giorgio Travaini",
+          "title": "Executive Director"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "dg_code": "I",
+  "dg_name": "Operations and",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Amira Szönyi",
+          "head_email": "Amira.SZONYI@ec.europa.eu",
+          "head_phone": "+32 229-98209"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 1,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

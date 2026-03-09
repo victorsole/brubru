@@ -1,0 +1,180 @@
+{
+  "dg_code": "OP",
+  "dg_name": "Publications Office of the European Union",
+  "commissioner": "",
+  "director_general": "Hilde Hardeman",
+  "director_general_email": "Hilde.Hardeman@ec.europa.eu",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Marek Koska",
+      "director_email": "Marek.KOSKA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "L-2985 Luxembourg",
+          "head_email": "",
+          "head_phone": ""
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "DATA, INFORMATION AND KNOWLEDGE MANAGEMENT SERVICES AND",
+      "director": "Achim Ladwig",
+      "director_email": "Achim.LADWIG@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Marc Vanderperren",
+          "head_email": "Marc.VANDERPERREN@publications.europa.eu",
+          "head_phone": "+352 4301-30704"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ján Plánovský",
+          "head_email": "Jan.PLANOVSKY@publications.europa.eu",
+          "head_phone": "+352 2929-44415"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Norbert Hohn",
+          "head_email": "norbert.hohn@publications.europa.eu",
+          "head_phone": "+352 2929-44586"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Carol Riccalton",
+          "head_email": "carol.riccalton@publications.europa.eu",
+          "head_phone": "+352 2929-42830"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Aija Bilzena",
+          "head_email": "aija.bilzena@publications.europa.eu",
+          "head_phone": "+352 2929-44329"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "PUBLICATION PRODUCTION SERVICES",
+      "director": "Susanne Gutjahr",
+      "director_email": "Susanne.GUTJAHR@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Manuela Cruz",
+          "head_email": "maria.cruz@publications.europa.eu",
+          "head_phone": "+352 2929-44164"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cécile Adam",
+          "head_email": "cecile.adam@publications.europa.eu",
+          "head_phone": "+352 2929-42516"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Huy Hien Bui",
+          "head_email": "Huy-Hien.Bui@ec.europa.eu",
+          "head_phone": "+352 2929-44540"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "António Reis",
+          "head_email": "antonio.reis@publications.europa.eu",
+          "head_phone": "+352 4301-42970"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "ACCESS TO AND REUSE OF PUBLIC INFORMATION",
+      "director": "Franck Noël",
+      "director_email": "franck.noel@publications.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Westermann",
+          "head_email": "Maria.WESTERMANN@publications.europa.eu",
+          "head_phone": "+352 2929-42992"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Edyta Posel-Czescik",
+          "head_email": "CZESCIK@publications.europa.eu",
+          "head_phone": "+352 2929-44168"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Luca Martinelli",
+          "head_email": "Luca.MARTINELLI@publications.europa.eu",
+          "head_phone": "+352 2929-42768"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Valeria Sciarrino",
+          "head_email": "valeria.sciarrino@publications.europa.eu",
+          "head_phone": "+352 2929-44011"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "STAKEHOLDER RELATIONS AND CORPORATE SERVICES",
+      "director": "Christine Kormann",
+      "director_email": "christine.kormann@publications.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Dominika Uhrikova",
+          "head_email": "Dominika.UHRIKOVA@ec.europa.eu",
+          "head_phone": "+352 2929-42832"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marcin Baryn",
+          "head_email": "Marcin.BARYN@ec.europa.eu",
+          "head_phone": "+352 4301-30158"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ventsislav Voikov",
+          "head_email": "ventsislav.voikov@publications.europa.eu",
+          "head_phone": "+352 2929-42916"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marc Küster",
+          "head_email": "Marc.KUSTER@ec.europa.eu",
+          "head_phone": "+352 2929-42466"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 5,
+  "num_units": 18,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

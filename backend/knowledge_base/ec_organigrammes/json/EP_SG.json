@@ -1,0 +1,5543 @@
+{
+  "institution_code": "EP_SG",
+  "institution_name": "Secretariat-General of the European Parliament",
+  "source": "EU Who Is Who (op.europa.eu)",
+  "date_extracted": "2026-03-09",
+  "secretary_general": {
+    "name": "Mr Alessandro CHIOCCHETTI",
+    "position": "Secretary-General"
+  },
+  "structure": [
+    {
+      "name": "Mr Alessandro CHIOCCHETTI"
+    },
+    {
+      "code": "EP_DPPESG00",
+      "name": "Office of the Secretary-General",
+      "persons": [
+        {
+          "name": "Mr Michael WEISS"
+        },
+        {
+          "name": "Ms Ekaterini DESPOTOPOULOU"
+        },
+        {
+          "name": "Mr Gregor ROHLJE"
+        },
+        {
+          "name": "Ms Bettina VOLPI"
+        },
+        {
+          "name": "Ms Brenda FURNIERE"
+        },
+        {
+          "name": "Mr Piero CAVICCHI"
+        },
+        {
+          "name": "Ms Maria Paola DE ANGELIS"
+        },
+        {
+          "name": "Mr Anatole Emmanuel Marie DE LA CROPTE DE CHANTERAC"
+        },
+        {
+          "name": "Ms Clara DE MELO PONCE"
+        },
+        {
+          "name": "Mr Edouard DIRRIG"
+        },
+        {
+          "name": "Ms Simone Karin HOWSE"
+        },
+        {
+          "name": "Ms Emanuela ILARIO"
+        },
+        {
+          "name": "Ms Elisabetta MONTANO"
+        },
+        {
+          "name": "Ms Claire PERETIE"
+        },
+        {
+          "name": "Ms Stefana PUIU"
+        },
+        {
+          "name": "Ms Ruta STANEVICIENE"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPESG01",
+          "name": "Central Services"
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPESG10",
+      "name": "Internal Audit Unit",
+      "persons": [
+        {
+          "name": "Mr Francis CLERGEAUD"
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPESG20",
+      "name": "Data Protection Unit",
+      "persons": [
+        {
+          "name": "Mr Secondo SABBIONI"
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPESG30",
+      "name": "Mediation Service",
+      "persons": [
+        {
+          "name": "Mr Jean-Viorel MIRICESCU"
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPESH",
+      "name": "Directorate for Relations with the Political Groups",
+      "persons": [
+        {
+          "name": "Ms Ute MULLER"
+        }
+      ]
+    },
+    {
+      "code": "EP_PRES",
+      "name": "Directorate-General for the Presidency",
+      "persons": [
+        {
+          "name": "Mr Markus WINKLER"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE0101",
+          "name": "Office of the Deputy Secretary-General",
+          "persons": [
+            {
+              "name": "Mr Jakob SCHWARZ"
+            }
+          ]
+        },
+        {
+          "code": "EP_COP",
+          "name": "Secretariat of the Conference of Presidents",
+          "persons": [
+            {
+              "name": "Ms Gemma ROIG LINANA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE01A",
+          "name": "Directorate for the Plenary",
+          "persons": [
+            {
+              "name": "Ms Maria GANDOLFO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE01A10",
+              "name": "Plenary Records Unit",
+              "persons": [
+                {
+                  "name": "Ms Aurora PARRAGA GIMENEZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01A20",
+              "name": "Members’ Activities Unit",
+              "persons": [
+                {
+                  "name": "Mr Francisco PEYRO LLOPIS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01A40",
+              "name": "Plenary Organisation and Follow-up Unit",
+              "persons": [
+                {
+                  "name": "Ms Ana-Iuliana POSTU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01A50",
+              "name": "Tabling Desk Unit",
+              "persons": [
+                {
+                  "name": "Mr Ján LIZÁK"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01A70",
+              "name": "Unit for Reception and Referral of Official Documents",
+              "persons": [
+                {
+                  "name": "Ms Teresa PEREIRA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01A80",
+              "name": "Members’ Administration Unit",
+              "persons": [
+                {
+                  "name": "Mr Pekka NURMINEN"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE01B",
+          "name": "Directorate for Legislative Acts",
+          "persons": [
+            {
+              "name": "Ms Alina Monica MEDELEANU"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE01B05",
+              "name": "Legislative Quality Assurance and Publications Unit",
+              "persons": [
+                {
+                  "name": "Mr Vincent MEUNIER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01B10",
+              "name": "Coordination & Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Sven CORTHOUT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01B20",
+              "name": "Legislative Quality Unit A — Transformation, Innovation and Health",
+              "persons": [
+                {
+                  "name": "Ms Mette DIGET"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE01B2001",
+                  "name": "English Section",
+                  "persons": [
+                    {
+                      "name": "Ms Mette DIGET"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B2002",
+                  "name": "Irish Section",
+                  "persons": [
+                    {
+                      "name": "Ms Mette DIGET"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B2003",
+                  "name": "Danish Section",
+                  "persons": [
+                    {
+                      "name": "Ms Mette DIGET"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B2004",
+                  "name": "Italian Section",
+                  "persons": [
+                    {
+                      "name": "Ms Mette DIGET"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01B30",
+              "name": "Legislative Quality Unit B — Cohesion, Agriculture and Social policies",
+              "persons": [
+                {
+                  "name": "Mr Georgios KATHARIOS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE01B3001",
+                  "name": "German Section",
+                  "persons": [
+                    {
+                      "name": "Mr Georgios KATHARIOS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B3002",
+                  "name": "French Section",
+                  "persons": [
+                    {
+                      "name": "Mr Georgios KATHARIOS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B3003",
+                  "name": "Dutch Section",
+                  "persons": [
+                    {
+                      "name": "Mr Georgios KATHARIOS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B3004",
+                  "name": "Romanian Section",
+                  "persons": [
+                    {
+                      "name": "Mr Georgios KATHARIOS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B3005",
+                  "name": "Swedish Section",
+                  "persons": [
+                    {
+                      "name": "Mr Georgios KATHARIOS"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01B40",
+              "name": "Legislative Quality Unit C — Citizens’ rights, Justice and Institutional affairs",
+              "persons": [
+                {
+                  "name": "Ms Amparo RUEDA BUESO"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE01B4001",
+                  "name": "Bulgarian Section",
+                  "persons": [
+                    {
+                      "name": "Ms Amparo RUEDA BUESO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B4002",
+                  "name": "Finnish Section",
+                  "persons": [
+                    {
+                      "name": "Ms Amparo RUEDA BUESO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B4003",
+                  "name": "Maltese Section",
+                  "persons": [
+                    {
+                      "name": "Ms Amparo RUEDA BUESO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B4004",
+                  "name": "Slovak Section",
+                  "persons": [
+                    {
+                      "name": "Ms Amparo RUEDA BUESO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B4005",
+                  "name": "Slovene Section",
+                  "persons": [
+                    {
+                      "name": "Ms Amparo RUEDA BUESO"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01B50",
+              "name": "Legislative Quality Unit D — Economy, Growth and Budgetary affairs",
+              "persons": [
+                {
+                  "name": "Mr Philipp REIFENRATH"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE01B5001",
+                  "name": "Czech Section",
+                  "persons": [
+                    {
+                      "name": "Mr Philipp REIFENRATH"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B5002",
+                  "name": "Spanish Section",
+                  "persons": [
+                    {
+                      "name": "Mr Philipp REIFENRATH"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B5003",
+                  "name": "Hungarian Section",
+                  "persons": [
+                    {
+                      "name": "Mr Philipp REIFENRATH"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B5004",
+                  "name": "Latvian Section",
+                  "persons": [
+                    {
+                      "name": "Mr Philipp REIFENRATH"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B5005",
+                  "name": "Portuguese Section",
+                  "persons": [
+                    {
+                      "name": "Mr Philipp REIFENRATH"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01B60",
+              "name": "Legislative Quality Unit E — Legislative planning and External policies",
+              "persons": [
+                {
+                  "name": "Ms Lucienne ATTARD"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE01B6001",
+                  "name": "Polish Section",
+                  "persons": [
+                    {
+                      "name": "Ms Lucienne ATTARD"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B6002",
+                  "name": "Lithuanian Section",
+                  "persons": [
+                    {
+                      "name": "Ms Lucienne ATTARD"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B6003",
+                  "name": "Croatian Section",
+                  "persons": [
+                    {
+                      "name": "Ms Lucienne ATTARD"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B6004",
+                  "name": "Estonian Section",
+                  "persons": [
+                    {
+                      "name": "Ms Lucienne ATTARD"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B6005",
+                  "name": "Greek Section",
+                  "persons": [
+                    {
+                      "name": "Ms Lucienne ATTARD"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE01B6006",
+                  "name": "Legislative Planning Section",
+                  "persons": [
+                    {
+                      "name": "Ms Lucienne ATTARD"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE01C",
+          "name": "Directorate for Protocol",
+          "persons": [
+            {
+              "name": "Ms Julia GLINSKI"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE01C10",
+              "name": "Institutional and non-EU Visits, Delegations, and Visas Unit",
+              "persons": [
+                {
+                  "name": "Mr Eric PEGAZZANO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01C20",
+              "name": "Institutional and EU Visits, Ceremonies and Courtesy Events Unit",
+              "persons": [
+                {
+                  "name": "Ms Julia GLINSKI"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE01D",
+          "name": "Directorate for Interinstitutional Affairs and Legislative Coordination",
+          "persons": [
+            {
+              "name": "Mr Guillaume Edward MCLAUGHLIN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE01D10",
+              "name": "Legislative Planning and Coordination Unit"
+            },
+            {
+              "code": "EP_DPPE01D30",
+              "name": "Interinstitutional Relations Unit",
+              "persons": [
+                {
+                  "name": "Ms Carla SAILIS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01D40",
+              "name": "Transparency Unit",
+              "persons": [
+                {
+                  "name": "Ms Radostina PARENTI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01D50",
+              "name": "Interinstitutional Future Reflection Unit",
+              "persons": [
+                {
+                  "name": "Ms Miriam KORTEWEG"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE01E",
+          "name": "Directorate for Organisational Development and Support",
+          "persons": [
+            {
+              "name": "Mr Josep Maria RIBOT IGUALADA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE01E10",
+              "name": "People Services and Organisational Development Unit",
+              "persons": [
+                {
+                  "name": "Ms Paola TARDIOLI-SCHIAVO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01E20",
+              "name": "Finance and IT Facilitation Unit",
+              "persons": [
+                {
+                  "name": "Ms Teresa MARTO DE OLIVEIRA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01E30",
+              "name": "Strategy Coordination and Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Francois JAVELLE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE01F",
+          "name": "Directorate for Document Management and Digital Workflows Development",
+          "persons": [
+            {
+              "name": "Mr Stephan HUBER"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE01F10",
+              "name": "Official Mail Unit",
+              "persons": [
+                {
+                  "name": "Ms Daniela CARVALHO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01F20",
+              "name": "Classified Information Unit",
+              "persons": [
+                {
+                  "name": "Mr Carlo LOCCHI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01F30",
+              "name": "Archives Unit",
+              "persons": [
+                {
+                  "name": "Ms Aurora PARRAGA GIMENEZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE01F40",
+              "name": "Document Management Unit",
+              "persons": [
+                {
+                  "name": "Mr Bertrand Jean-Francois REY"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPEDS",
+      "name": "Office of the Deputy Secretary-General",
+      "persons": [
+        {
+          "name": "Mr Anders RASMUSSEN"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPEDSA",
+          "name": "Directorate for Committee Coordination and Legislative Activities",
+          "persons": [
+            {
+              "name": "Ms Sabina MAGNANO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEDSA10",
+              "name": "Legislative Activities Unit",
+              "persons": [
+                {
+                  "name": "Ms Anje BULTENA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEDSA20",
+              "name": "Committee Coordination and Legislative Programming Unit",
+              "persons": [
+                {
+                  "name": "Ms Kaja ZUFFEREY"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEDSA30",
+              "name": "Calendar Unit",
+              "persons": [
+                {
+                  "name": "Mr Jozef DUCH"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEDSA40",
+              "name": "Communication Coordination Unit",
+              "persons": [
+                {
+                  "name": "Ms Emma SOTO RENOU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEDSA50",
+              "name": "Processes Coordination and Learning Hub",
+              "persons": [
+                {
+                  "name": "Mr Emiliano IMERONI"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DGECTI",
+      "name": "Directorate-General for Economy, Transformation and Industry",
+      "persons": [
+        {
+          "name": "Mr Michael Alexander SPEISER"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE2110",
+          "name": "Resources Unit",
+          "persons": [
+            {
+              "name": "Mr Alexandre ROGALSKI"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE21A",
+          "name": "Directorate for Economy and Growth",
+          "persons": [
+            {
+              "name": "Ms Claudia LINDEMANN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE21A20",
+              "name": "Secretariat of the Committee on Economic and Monetary Affairs",
+              "persons": [
+                {
+                  "name": "Ms Monika NOGAJ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE21A50",
+              "name": "Secretariat of the Subcommittee on Tax Matters",
+              "persons": [
+                {
+                  "name": "Mr Benoît WETS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE21A30",
+              "name": "Secretariat of the Committee on the Internal Market and Consumer Protection",
+              "persons": [
+                {
+                  "name": "Ms Elena MAINARDI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE21A40",
+              "name": "Economic Governance and EMU Scrutiny Unit",
+              "persons": [
+                {
+                  "name": "Mr Lasse BOEHM"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE21A10",
+              "name": "Policy Department",
+              "persons": [
+                {
+                  "name": "Mr Ollivier GIMENEZ ESPINOS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE21B",
+          "name": "Directorate for Transformation, Innovation and Health",
+          "persons": [
+            {
+              "name": "Mr Etienne BASSOT"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE21B20",
+              "name": "Secretariat of the Committee on Industry, Research and Energy",
+              "persons": [
+                {
+                  "name": "Mr Peter TRAUNG"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE21B30",
+              "name": "Secretariat of the Committee on the Environment, Climate and Food Safety",
+              "persons": [
+                {
+                  "name": "Ms Sarah BLAU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE21B40",
+              "name": "Secretariat of the Committee on Public Health",
+              "persons": [
+                {
+                  "name": "Ms Julia LINDEMANN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE21B10",
+              "name": "Policy Department",
+              "persons": [
+                {
+                  "name": "Mr Markus Josef PRUTSCH"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DGCASP",
+      "name": "Directorate-General for Cohesion, Agriculture and Social Policies",
+      "persons": [
+        {
+          "name": "Ms Agnieszka WALTER-DROP"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE2210",
+          "name": "Resources Unit",
+          "persons": [
+            {
+              "name": "Ms Hanna-Liisa GLASER"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE22A",
+          "name": "Directorate for Regional Development, Agriculture and Fisheries",
+          "persons": [
+            {
+              "name": "Mr Eduard REIJNDERS"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE22A20",
+              "name": "Secretariat of the Committee on Regional Development",
+              "persons": [
+                {
+                  "name": "Mr Radek PILAR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE22A30",
+              "name": "Secretariat of the Committee on Agriculture and Rural Development",
+              "persons": [
+                {
+                  "name": "Ms Tereza PINTO DE REZENDE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE22A40",
+              "name": "Secretariat of the Committee on Fisheries",
+              "persons": [
+                {
+                  "name": "Mr Gai OREN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE22A10",
+              "name": "Policy Department",
+              "persons": [
+                {
+                  "name": "Mr Johannes LITZELMANN"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE22B",
+          "name": "Directorate for Transport, Employment and Social Affairs",
+          "persons": [
+            {
+              "name": "Mr Nils DANKLEFSEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE22B20",
+              "name": "Secretariat of the Committee on Transport and Tourism",
+              "persons": [
+                {
+                  "name": "Mr Nils DANKLEFSEN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE22B30",
+              "name": "Secretariat of the Committee on Employment and Social Affairs",
+              "persons": [
+                {
+                  "name": "Ms Bozica MATIC"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE22B0040",
+              "name": "Secretariat of the Special Committee on the Housing Crisis in the European Union",
+              "persons": [
+                {
+                  "name": "Mr Jeremie REQUIS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE22B10",
+              "name": "Policy Department",
+              "persons": [
+                {
+                  "name": "Ms Ausra ALELIUNAITE"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DGIUST",
+      "name": "Directorate-General for Citizens’ Rights, Justice and Institutional Affairs",
+      "persons": [
+        {
+          "name": "Ms Leticia ZULETA DE REALES ANSALDO"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE2310",
+          "name": "Resources Unit",
+          "persons": [
+            {
+              "name": "Ms Laurence SMAJDA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE23A",
+          "name": "Directorate for Citizens, Equality and Culture",
+          "persons": [
+            {
+              "name": "Ms Sonia WOLLNY"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE23A20",
+              "name": "Secretariat of the Committee on Petitions",
+              "persons": [
+                {
+                  "name": "Ms Roberta PANIZZA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE23A30",
+              "name": "Secretariat of the Committee on Women’s Rights and Gender Equality",
+              "persons": [
+                {
+                  "name": "Ms Zuzana HRUSCOVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE23A40",
+              "name": "Secretariat of the Committee on Culture and Education",
+              "persons": [
+                {
+                  "name": "Ms Ana Maria FERNANDEZ PERLES"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE23A10",
+              "name": "Policy Department",
+              "persons": [
+                {
+                  "name": "Ms Elodie CARMONA"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE23B",
+          "name": "Directorate for Justice, Civil Liberties and Institutional Affairs",
+          "persons": [
+            {
+              "name": "Ms Els VANDENBOSCH"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE23B20",
+              "name": "Secretariat of the Committee on Civil Liberties, Justice and Home Affairs"
+            },
+            {
+              "code": "EP_DPPE23B30",
+              "name": "Secretariat of the Committee on Legal Affairs"
+            },
+            {
+              "code": "EP_DPPE23B40",
+              "name": "Secretariat of the Committee on Constitutional Affairs"
+            },
+            {
+              "code": "EP_DPPE23B0050",
+              "name": "Secretariat of the Special Committee on the European Democracy Shield"
+            },
+            {
+              "code": "EP_DPPE23B10",
+              "name": "Policy Department"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DGBUDG",
+      "name": "Directorate-General for Budgetary Affairs",
+      "persons": [
+        {
+          "name": "Ms Monika STRASSER"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE2410",
+          "name": "Resources Unit",
+          "persons": [
+            {
+              "name": "Mr Niels FISCHER"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE24A",
+          "name": "Directorate for Budget and Budgetary Control",
+          "persons": [
+            {
+              "name": "Ms Elisa DAFFARRA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE24A10",
+              "name": "Secretariat of the Committee on Budgets",
+              "persons": [
+                {
+                  "name": "Mr Guillaume REY"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE24A20",
+              "name": "Secretariat of the Committee on Budgetary Control",
+              "persons": [
+                {
+                  "name": "Ms Elisa DAFFARRA"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE24B",
+          "name": "Directorate for Budgetary Analysis and Scrutiny Support",
+          "persons": [
+            {
+              "name": "Ms Patricia SILVEIRA DA CUNHA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE24B10",
+              "name": "Budgetary Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Darren NEVILLE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE24B20",
+              "name": "Expenditure Analysis Unit",
+              "persons": [
+                {
+                  "name": "Mr Etienne Olivier Alfred SAIL"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_EXTERN_POL",
+      "name": "Directorate-General for External Policies of the Union",
+      "persons": [
+        {
+          "name": "Mr Pietro DUCCI"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE0310",
+          "name": "Strategy and Innovation Unit",
+          "persons": [
+            {
+              "name": "Mr Pekka HAKALA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0320",
+          "name": "Communication and Outreach Unit",
+          "persons": [
+            {
+              "name": "Ms Anna KONTOKONTI"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE03A",
+          "name": "Directorate for Committees",
+          "persons": [
+            {
+              "name": "Ms Raquel DE VICENTE"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE03A10",
+              "name": "Secretariat of the Committee on Foreign Affairs",
+              "persons": [
+                {
+                  "name": "Mr Martti KALAUS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03A60",
+              "name": "Secretariat of the Committee on Security and Defence",
+              "persons": [
+                {
+                  "name": "Mr Gerrard QUILLE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03A1020",
+              "name": "Secretariat of the Subcommittee on Human Rights / Human Rights Unit",
+              "persons": [
+                {
+                  "name": "Ms Myriam GOINARD"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03A20",
+              "name": "Secretariat of the Committee on Development",
+              "persons": [
+                {
+                  "name": "Mr Jesper HAGLUND"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03A30",
+              "name": "Secretariat of the Committee on International Trade",
+              "persons": [
+                {
+                  "name": "Ms June O'KEEFFE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03A40",
+              "name": "External Policies Analysis and Support Unit",
+              "persons": [
+                {
+                  "name": "Ms Andrea Nicole MAIER"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE03B",
+          "name": "Directorate for Regions",
+          "persons": [
+            {
+              "name": "Ms Annalisa GLIUBIZZI-FAJARDO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE03B10",
+              "name": "Europe Unit: Enlargement, Western Europe and Northern Cooperation",
+              "persons": [
+                {
+                  "name": "Mr Adam ISAACS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03B20",
+              "name": "Unit for Asia, Australia and New Zealand",
+              "persons": [
+                {
+                  "name": "Mr Niccolò RINALDI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03B40",
+              "name": "Euromed and Middle East Unit",
+              "persons": [
+                {
+                  "name": "Ms Delia VLASE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03B50",
+              "name": "Latin America Unit",
+              "persons": [
+                {
+                  "name": "Mr David CHICO ZAMANILLO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03B60",
+              "name": "Unit for Europe: Eastern Partnership and Russia",
+              "persons": [
+                {
+                  "name": "Mr Alain CRESPINET"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03B70",
+              "name": "Unit for Africa, Caribbean and Pacific",
+              "persons": [
+                {
+                  "name": "Ms Mychelle RIEU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03B80",
+              "name": "Transatlantic Relations and Global Governance Unit",
+              "persons": [
+                {
+                  "name": "Ms Micaela DEL MONTE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE03D",
+          "name": "Directorate for Democracy Support",
+          "persons": [
+            {
+              "name": "Ms Armelle DOUAUD"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE03D10",
+              "name": "Election Observation and Follow-up Unit",
+              "persons": [
+                {
+                  "name": "Ms Cristina CASTAGNOLI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03D20",
+              "name": "Parliamentary Support and Capacity Building Unit",
+              "persons": [
+                {
+                  "name": "Ms Marta UDINA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03D40",
+              "name": "Human Rights Action Unit",
+              "persons": [
+                {
+                  "name": "Mr Stefan KRAUSS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03D50",
+              "name": "Mediation and Dialogue Support Unit",
+              "persons": [
+                {
+                  "name": "Ms Joanna PLACZEK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE03C",
+          "name": "Directorate for Resources",
+          "persons": [
+            {
+              "name": "Ms Christina RUPP"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE03C10",
+              "name": "Personnel Unit",
+              "persons": [
+                {
+                  "name": "Mr Fabio GALATIOTO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03C20",
+              "name": "Finance Unit",
+              "persons": [
+                {
+                  "name": "Mr Mauro DE OLIVEIRA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE03C30",
+              "name": "Informatics Unit",
+              "persons": [
+                {
+                  "name": "Mr Ronan D'HAESE"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_RESEARCH",
+      "name": "Directorate-General for Parliamentary Research Services",
+      "persons": [
+        {
+          "name": "Mr Anders RASMUSSEN"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE1120",
+          "name": "Strategy, Coordination and Outreach Unit",
+          "persons": [
+            {
+              "name": "Ms Annamaria FORGACS"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE1140",
+          "name": "Publications Management and Editorial Unit",
+          "persons": [
+            {
+              "name": "Mr Aidan CHRISTIE"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE1150",
+          "name": "Human Resources Unit",
+          "persons": [
+            {
+              "name": "Ms Patricia Marguerite Leonarda ISENBORGHS"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE1160",
+          "name": "Finance Unit",
+          "persons": [
+            {
+              "name": "Ms Ana Sofia MORAIS DA SILVA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE1170",
+          "name": "Information Technology Unit",
+          "persons": [
+            {
+              "name": "Mr Claudio FABIANI"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE11A",
+          "name": "Directorate Members’ Research Service",
+          "persons": [
+            {
+              "name": "Ms Sarah SHEIL"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE11A0010",
+              "name": "Climate Action Research and Tracking Service",
+              "persons": [
+                {
+                  "name": "Mr Gregor ERBACH"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11A0020",
+              "name": "Next Generation EU Monitoring Service",
+              "persons": [
+                {
+                  "name": "Mr Alessandro D'ALFONSO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11A10",
+              "name": "Economic Policies Unit",
+              "persons": [
+                {
+                  "name": "Mr Guillaume RAGONNAUD"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11A20",
+              "name": "Structural Policies Unit",
+              "persons": [
+                {
+                  "name": "Mr Walter GOETZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11A30",
+              "name": "Citizens’ Policies Unit",
+              "persons": [
+                {
+                  "name": "Ms Eva-Maria Alexandrova POPTCHEVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11A40",
+              "name": "External Policies Unit",
+              "persons": [
+                {
+                  "name": "Ms Eva-Maria Alexandrova POPTCHEVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11A50",
+              "name": "Budgetary Policies Unit",
+              "persons": [
+                {
+                  "name": "Mr Tim Ulrich PETERS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11A70",
+              "name": "Digital Policies Unit",
+              "persons": [
+                {
+                  "name": "Mr Michael ADAM"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE11C",
+          "name": "Directorate for Impact Assessment and Evaluation",
+          "persons": [
+            {
+              "name": "Mr Kajus HAGELSTAM"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE11C10",
+              "name": "Ex-Ante Impact Assessment Unit",
+              "persons": [
+                {
+                  "name": "Mr Zoltan PETHO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11C30",
+              "name": "Scientific Foresight Unit",
+              "persons": [
+                {
+                  "name": "Mr Marcus SCHEUREN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11C40",
+              "name": "Ex-Post Evaluation Unit",
+              "persons": [
+                {
+                  "name": "Ms Alexia MANIAKI-GRIVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11C60",
+              "name": "European Council Oversight Unit",
+              "persons": [
+                {
+                  "name": "Ms Astrid WORUM"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11C70",
+              "name": "European Added Value Unit",
+              "persons": [
+                {
+                  "name": "Mr Zoltan PETHO"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE11B",
+          "name": "Directorate for the Library and Knowledge Services",
+          "persons": [
+            {
+              "name": "Mr Franck DEBIE"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE11B0010",
+              "name": "European Parliament History Service",
+              "persons": [
+                {
+                  "name": "Mr Lars Anders HÅKANSSON"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11B10",
+              "name": "Library Reading Room Unit",
+              "persons": [
+                {
+                  "name": "Mr Neil Fergus MURRAY"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11B20",
+              "name": "Digital Library Unit",
+              "persons": [
+                {
+                  "name": "Ms Fernanda Manuela MARQUES GONÇALVES SERRA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11B40",
+              "name": "Citizens’ Enquiries Unit",
+              "persons": [
+                {
+                  "name": "Mr Didier BOURGUIGNON"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11B50",
+              "name": "Comparative Law Library Unit",
+              "persons": [
+                {
+                  "name": "Mr Ignacio DÍEZ PARRA"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE11D",
+          "name": "Directorate for Academia, Research and Foresight",
+          "persons": [
+            {
+              "name": "Mr Anders RASMUSSEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE11D10",
+              "name": "Academic Networks Unit",
+              "persons": [
+                {
+                  "name": "Mr Anders RASMUSSEN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE11D20",
+              "name": "Policy Foresight Unit",
+              "persons": [
+                {
+                  "name": "Mr Eschel Claus ALPERMANN"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_COMMU",
+      "name": "Directorate-General for Communication",
+      "persons": [
+        {
+          "name": "Mr Christian MANGOLD"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE0410",
+          "name": "Spokesperson’s and Information Integrity Unit",
+          "persons": [
+            {
+              "name": "Ms Delphine COLARD"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0420",
+          "name": "Strategic Relations and Coordination Unit",
+          "persons": [
+            {
+              "name": "Mr Florent LE MONTAGNER"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0430",
+          "name": "Relations with Committees and Content Coordination Unit",
+          "persons": [
+            {
+              "name": "Ms Malene CHAUCHEPRAT"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE04A",
+          "name": "Directorate for Media",
+          "persons": [
+            {
+              "name": "Mr Jesus CARMONA NUNEZ"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE04A0010",
+              "name": "Finance Service — Media",
+              "persons": [
+                {
+                  "name": "Mr Jacques ZAJDENBAND"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04A10",
+              "name": "Media Relations Unit",
+              "persons": [
+                {
+                  "name": "Mr Neil CORLETT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04A20",
+              "name": "Decentralised Media Unit",
+              "persons": [
+                {
+                  "name": "Ms Raffaella DE MARTE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04A30",
+              "name": "Audiovisual Unit",
+              "persons": [
+                {
+                  "name": "Mr Thibault LESENECAL"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04A70",
+              "name": "Media Intelligence Unit",
+              "persons": [
+                {
+                  "name": "Mr Tasos GEORGIOU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04A80",
+              "name": "Video Production Unit",
+              "persons": [
+                {
+                  "name": "Mr Takis Panagiotis AGELADARAKIS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE04B",
+          "name": "Directorate for Liaison Offices",
+          "persons": [
+            {
+              "name": "Mr Stephen CLARK"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE04B20",
+              "name": "Financial Support Unit for Liaison Offices",
+              "persons": [
+                {
+                  "name": "Ms Anja FUCHS-KOENIG"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B21",
+              "name": "Local Multipliers Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Federico ROSSETTO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B22",
+              "name": "European Parliament Liaison Office in Greece",
+              "persons": [
+                {
+                  "name": "Mr Constantinos TSOUTSOPLIDES"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B23",
+              "name": "European Parliament Liaison Office in Germany",
+              "persons": [
+                {
+                  "name": "Ms Judit HERCEGFALVI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE04B2310",
+                  "name": "Munich Regional Office"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B24",
+              "name": "European Parliament Liaison Office in Belgium",
+              "persons": [
+                {
+                  "name": "Ms Sanne DE RYCK"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B25",
+              "name": "European Parliament Liaison Office in Denmark",
+              "persons": [
+                {
+                  "name": "Mr Sune HANSEN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B26",
+              "name": "European Parliament Liaison Office in Ireland",
+              "persons": [
+                {
+                  "name": "Mr Fearghas O'BEARA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B27",
+              "name": "European Parliament Liaison Office in Finland",
+              "persons": [
+                {
+                  "name": "Mr Jarmo OIKARINEN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B28",
+              "name": "European Parliament Liaison Office in the Netherlands",
+              "persons": [
+                {
+                  "name": "Mr Danny DE PAEPE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B32",
+              "name": "European Parliament Liaison Office in Luxembourg",
+              "persons": [
+                {
+                  "name": "Mr Christoph SCHROEDER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B33",
+              "name": "European Parliament Liaison Office in Spain",
+              "persons": [
+                {
+                  "name": "Ms Maria ANDRES MARIN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE04B3310",
+                  "name": "Barcelona Regional Office",
+                  "persons": [
+                    {
+                      "name": "Mr Sergio BARRERA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B34",
+              "name": "European Parliament Liaison Office in France",
+              "persons": [
+                {
+                  "name": "Ms Isabelle COUSTET"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE04B3410",
+                  "name": "Marseille Regional Office",
+                  "persons": [
+                    {
+                      "name": "Mr Daniel RACTLIFFE"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B35",
+              "name": "European Parliament Liaison Office in Italy",
+              "persons": [
+                {
+                  "name": "Mr Carlo CORAZZA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE04B3510",
+                  "name": "Milan Regional Office",
+                  "persons": [
+                    {
+                      "name": "Mr Maurizio MOLINARI"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B36",
+              "name": "European Parliament Liaison Office in Sweden",
+              "persons": [
+                {
+                  "name": "Mr Per JOHANSSON"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B38",
+              "name": "European Parliament Liaison Office in Austria",
+              "persons": [
+                {
+                  "name": "Mr Georg PFEIFER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B39",
+              "name": "European Parliament Liaison Office in Cyprus",
+              "persons": [
+                {
+                  "name": "Ms Thea PIERIDOU SERRURIER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B40",
+              "name": "European Parliament Liaison Office in Estonia",
+              "persons": [
+                {
+                  "name": "Ms Pille VAHER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B41",
+              "name": "European Parliament Liaison Office in Hungary",
+              "persons": [
+                {
+                  "name": "Ms Andrea LOVEI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B42",
+              "name": "European Parliament Liaison Office in Latvia",
+              "persons": [
+                {
+                  "name": "Ms Anne Mette VESTERGAARD"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B43",
+              "name": "European Parliament Liaison Office in Lithuania",
+              "persons": [
+                {
+                  "name": "Ms Daiva JAKAITE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B44",
+              "name": "European Parliament Liaison Office in Malta",
+              "persons": [
+                {
+                  "name": "Mr Mario SAMMUT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B45",
+              "name": "European Parliament Liaison Office in Poland",
+              "persons": [
+                {
+                  "name": "Mr Witold Jan NATURSKI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE04B4510",
+                  "name": "Wroclaw Regional Office",
+                  "persons": [
+                    {
+                      "name": "Mr Bartlomiej BALCERZYK"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B46",
+              "name": "European Parliament Liaison Office in the Czech Republic",
+              "persons": [
+                {
+                  "name": "Mr Jindrich PIETRAS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B47",
+              "name": "European Parliament Liaison Office in Slovakia",
+              "persons": [
+                {
+                  "name": "Mr Robert SERMEK"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B48",
+              "name": "European Parliament Liaison Office in Slovenia",
+              "persons": [
+                {
+                  "name": "Ms Anita TUSAR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B49",
+              "name": "European Parliament Liaison Office in Bulgaria",
+              "persons": [
+                {
+                  "name": "Mr Teodor STOYCHEV"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B50",
+              "name": "European Parliament Liaison Office in Romania",
+              "persons": [
+                {
+                  "name": "Ms Madalina Beatrice MIHALACHE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B51",
+              "name": "European Parliament Liaison Office in Croatia",
+              "persons": [
+                {
+                  "name": "Ms Maja LJUBIC KUTNJAK"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B60",
+              "name": "Logistical Support Unit for Liaison Offices",
+              "persons": [
+                {
+                  "name": "Ms Rebecca WEST"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04B65",
+              "name": "Europa Experience and Operations Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Stéphane VAN WASSENHOVE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE04C",
+          "name": "Directorate for Visitors",
+          "persons": [
+            {
+              "name": "Mr Ciril STOKELJ"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE04C0010",
+              "name": "Finance Service — Visitors",
+              "persons": [
+                {
+                  "name": "Ms Chiara LANDOLFO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04C10",
+              "name": "Parlamentarium",
+              "persons": [
+                {
+                  "name": "Ms Patrizia Maria PRODE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04C20",
+              "name": "Visitors’ Groups and Hemicycle Visits Unit",
+              "persons": [
+                {
+                  "name": "Mr Markus BONEKAMP"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04C50",
+              "name": "InfoHub and Visitors’ Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Piotr BARTOSZEWICZ-MALICKI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04C60",
+              "name": "House of European History",
+              "persons": [
+                {
+                  "name": "Ms Constanze ITZEL"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE04C6010",
+                  "name": "Jean Monnet’s House at Bazoches-sur-Guyonne",
+                  "persons": [
+                    {
+                      "name": "Mr Marti GRAU SEGU"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04C70",
+              "name": "Strasbourg Visits Unit",
+              "persons": [
+                {
+                  "name": "Ms Justyna Maria TLAGA"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE04D",
+          "name": "Directorate for Communication Support and Analytics",
+          "persons": [
+            {
+              "name": "Ms Paulina BOVEINGTON-FAURAN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE04D10",
+              "name": "Personnel Unit",
+              "persons": [
+                {
+                  "name": "Mr Marco REDOLFI TEZZAT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04D20",
+              "name": "Compliance and Procurement Unit",
+              "persons": [
+                {
+                  "name": "Ms Isabelle Claude Marie SEROIN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04D30",
+              "name": "Informatics Unit",
+              "persons": [
+                {
+                  "name": "Mr Georgios GEORGIADIS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04D40",
+              "name": "Budget and Data Analytics Unit",
+              "persons": [
+                {
+                  "name": "Mr Paul DE SPIEGELEER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04D60",
+              "name": "Website Management Unit",
+              "persons": [
+                {
+                  "name": "Mr Nicolas WIERZEJEWSKI"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE04E",
+          "name": "Directorate for Outreach",
+          "persons": [
+            {
+              "name": "Mr Philipp SCHULMEISTER"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE04E10",
+              "name": "Social Media and Digital Multipliers Unit",
+              "persons": [
+                {
+                  "name": "Ms Nastja KLEMENCIC"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04E20",
+              "name": "Concept and Design Unit",
+              "persons": [
+                {
+                  "name": "Ms Tanja RUDOLF"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04E30",
+              "name": "Youth Outreach Unit",
+              "persons": [
+                {
+                  "name": "Ms Magdalena STAROSTIN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04E50",
+              "name": "Multipliers Outreach Unit",
+              "persons": [
+                {
+                  "name": "Ms Mariana COSAC"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE04E70",
+              "name": "Eurobarometer and Surveys Unit",
+              "persons": [
+                {
+                  "name": "Mr Nicolas LE POLAIN DE WAROUX"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DGPART",
+      "name": "Directorate-General for Parliamentary Democracy Partnerships",
+      "persons": [
+        {
+          "name": "Ms Sannaleena LEPOLA-HONIG"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE1310",
+          "name": "Strategy and Communications Unit",
+          "persons": [
+            {
+              "name": "Mr David LUNDY"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE13A",
+          "name": "Directorate for Relations with National Parliaments",
+          "persons": [
+            {
+              "name": "Mr Jesus GOMEZ"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE13A10",
+              "name": "Institutional Cooperation Unit",
+              "persons": [
+                {
+                  "name": "Ms Andrea LASKAVÁ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13A20",
+              "name": "Legislative Dialogue Unit",
+              "persons": [
+                {
+                  "name": "Mr Joeri HAMVAS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13A30",
+              "name": "Networks Cooperation Unit",
+              "persons": [
+                {
+                  "name": "Ms Andrea LASKAVÁ"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE13B",
+          "name": "Directorate for External Liaison Offices",
+          "persons": [
+            {
+              "name": "Mr Oumar DOUMBOUYA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE13B10",
+              "name": "European Parliament Liaison Office in the United Kingdom",
+              "persons": [
+                {
+                  "name": "Ms Leena Maria LINNUS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B20",
+              "name": "EP-US Congress Liaison Office in Washington DC",
+              "persons": [
+                {
+                  "name": "Ms Amelie GIESEMANN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B30",
+              "name": "EP-United Nations (UN) Antenna",
+              "persons": [
+                {
+                  "name": "Mr Pedro VALENTE DA SILVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B40",
+              "name": "EP-Association of Southeast Asian Nations (ASEAN) Antenna"
+            },
+            {
+              "code": "EP_DPPE13B50",
+              "name": "EP-African Union (AU) Antenna",
+              "persons": [
+                {
+                  "name": "Mr Luca DI PRESO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B70",
+              "name": "EP-Latin America and the Caribbean (LAC) Antenna",
+              "persons": [
+                {
+                  "name": "Mr Jesús MORENO DIAZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B80",
+              "name": "EP-Ukraine Antenna",
+              "persons": [
+                {
+                  "name": "Mr Oumar DOUMBOUYA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B85",
+              "name": "EP-Western Balkans Antenna",
+              "persons": [
+                {
+                  "name": "Ms Tatiana MRAZIKOVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B90",
+              "name": "EP-Eastern Partnership Antenna",
+              "persons": [
+                {
+                  "name": "Ms Anca-Maria SIMION-NEAGOE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13B60",
+              "name": "European Union Visitors Programme Unit (EUVP)",
+              "persons": [
+                {
+                  "name": "Mr Andreas KETTIS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE13C",
+          "name": "Directorate for Resources",
+          "persons": [
+            {
+              "name": "Ms Marie-Cecile BERNARD"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE13C10",
+              "name": "Innovation and Partnership Development Unit",
+              "persons": [
+                {
+                  "name": "Ms Nikolina VASSILEVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE13C20",
+              "name": "Budget Management and Human Resources Unit",
+              "persons": [
+                {
+                  "name": "Mr Petre PARVANOV"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_PERS",
+      "name": "Directorate-General for Personnel",
+      "persons": [
+        {
+          "name": "Ms Ellen ROBSON"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE050030",
+          "name": "Temporary Placements — Unions",
+          "persons": [
+            {
+              "name": "Ms Ellen ROBSON"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0510",
+          "name": "Legal Assistance and Social Dialogue Unit",
+          "persons": [
+            {
+              "name": "Ms Íde NÍ RIAGÁIN DÜRO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE051010",
+              "name": "Legal Affairs Service",
+              "persons": [
+                {
+                  "name": "Ms Margaret DEAN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE051020",
+              "name": "Interinstitutional Relations and Social Dialogue Service",
+              "persons": [
+                {
+                  "name": "Mr Benjamin ALBEROLA MULET"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE051030",
+              "name": "Data Protection Service",
+              "persons": [
+                {
+                  "name": "Ms Íde NÍ RIAGÁIN DÜRO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE051040",
+              "name": "Article 24 Requests for Assistance Service",
+              "persons": [
+                {
+                  "name": "Ms Silvia GAMBINO"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE05A",
+          "name": "Directorate for Strategic HR Governance, Recruitment and Careers",
+          "persons": [
+            {
+              "name": "Mr Pasquale CIUFFREDA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE05A10",
+              "name": "HR Strategy and Insight Unit",
+              "persons": [
+                {
+                  "name": "Ms Chiara MALASOMMA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE05A1010",
+                  "name": "Data Analytics Service"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05A20",
+              "name": "Talent Selection and Outreach Unit",
+              "persons": [
+                {
+                  "name": "Mr Paul EMMETT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05A70",
+              "name": "Trainee Outreach and Recruitment Unit",
+              "persons": [
+                {
+                  "name": "Ms Fabia FONTANILI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05A40",
+              "name": "Career Development and Ethics Unit",
+              "persons": [
+                {
+                  "name": "Mr Michiel JANSSENS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05A60",
+              "name": "Staff Recruitment Unit",
+              "persons": [
+                {
+                  "name": "Mr Andrea ARMELLIN"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE05B",
+          "name": "Directorate for HR Administration",
+          "persons": [
+            {
+              "name": "Mr Jurij TOMAC"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE05B10",
+              "name": "Individual Entitlements Unit",
+              "persons": [
+                {
+                  "name": "Ms Vicky HANLEY"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05B20",
+              "name": "Payroll Unit",
+              "persons": [
+                {
+                  "name": "Mr Pietro ALBA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05B50",
+              "name": "Staff Front Office Unit",
+              "persons": [
+                {
+                  "name": "Mr Jens SCHROEDER"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE05B5011",
+                  "name": "Privileges and Immunities Section",
+                  "persons": [
+                    {
+                      "name": "Mr Jens SCHROEDER"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE05B5012",
+                  "name": "Info Desk Section",
+                  "persons": [
+                    {
+                      "name": "Mr Jens SCHROEDER"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05B60",
+              "name": "APA Front Office Unit",
+              "persons": [
+                {
+                  "name": "Mr Peter VAVRIK"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE05B6011",
+                  "name": "APA Contracts Section",
+                  "persons": [
+                    {
+                      "name": "Mr Peter VAVRIK"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE05B6012",
+                  "name": "APA Desk Section",
+                  "persons": [
+                    {
+                      "name": "Mr Peter VAVRIK"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05B30",
+              "name": "Missions Unit",
+              "persons": [
+                {
+                  "name": "Ms Zsuzsanna KOVÁCS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05B40",
+              "name": "Pensions and Social Insurance Unit",
+              "persons": [
+                {
+                  "name": "Ms Florence WALLERAND"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE05C",
+          "name": "Directorate for HR Support and Social Services",
+          "persons": [
+            {
+              "name": "Ms Valérie MONTEBELLO-DEMOGEOT"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE05C0010",
+              "name": "Medical Leave Service",
+              "persons": [
+                {
+                  "name": "Mr Juan Manuel MARTINEZ SELVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05C50",
+              "name": "Equality, Inclusion and Diversity Unit",
+              "persons": [
+                {
+                  "name": "Ms Chiara TAMBURINI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05C40",
+              "name": "Prevention and Well-being at Work Unit",
+              "persons": [
+                {
+                  "name": "Ms Valérie MONTEBELLO-DEMOGEOT"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE05C4010",
+                  "name": "Well-Being at Work Service",
+                  "persons": [
+                    {
+                      "name": "Mr Mihail ONEA"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE05C4020",
+                  "name": "Prevention and Protection at Work Service",
+                  "persons": [
+                    {
+                      "name": "Ms Ramona ASANDI"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05C30",
+              "name": "Medical Preparedness and Crisis Management Unit",
+              "persons": [
+                {
+                  "name": "Ms Petra CLAES"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05C20",
+              "name": "Medical Service, Brussels",
+              "persons": [
+                {
+                  "name": "Ms Benedicte BELGE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05C10",
+              "name": "Medical Service, Luxembourg",
+              "persons": [
+                {
+                  "name": "Mr Alexander BAUMGÄRTEL"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05C60",
+              "name": "Working Time and Childcare Facilities Unit",
+              "persons": [
+                {
+                  "name": "Ms María Del Carmen MALAGÓN GARCÍA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE05C6010",
+                  "name": "Working Time Facilities Service",
+                  "persons": [
+                    {
+                      "name": "Mr Gergely CSONKARÉTI"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE05C6020",
+                  "name": "Childcare Facilities Service",
+                  "persons": [
+                    {
+                      "name": "Mr Jean-Luc NOEL"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPE05C6021",
+                      "name": "Luxembourg Crèches Section",
+                      "persons": [
+                        {
+                          "name": "Ms Elisabete GOMES DA SILVA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPE05C6022",
+                      "name": "Brussels Crèches Section",
+                      "persons": [
+                        {
+                          "name": "Mr Jean-Luc NOEL"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE05D",
+          "name": "Directorate for Organisational Development, Communication and Support",
+          "persons": [
+            {
+              "name": "Ms Sarita KAUKAOJA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE05D0010",
+              "name": "Communication Service",
+              "persons": [
+                {
+                  "name": "Mr Jean-Yves LOOG"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05D0020",
+              "name": "Coaching and Management Development Service",
+              "persons": [
+                {
+                  "name": "Ms Christine LATTEUR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05D40",
+              "name": "Learning and Development Unit",
+              "persons": [
+                {
+                  "name": "Ms Ana Lilian YTURRIAGA SALDANHA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE05D4010",
+                  "name": "Members Professional Training Service",
+                  "persons": [
+                    {
+                      "name": "Ms Judith ECKER"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05D10",
+              "name": "Human Resources and Strategic Monitoring Unit",
+              "persons": [
+                {
+                  "name": "Ms Alina Maria GOGOSANU"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE05D1010",
+                  "name": "Human Resources Service",
+                  "persons": [
+                    {
+                      "name": "Ms Alina Maria GOGOSANU"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE05D1020",
+                  "name": "Strategic Monitoring Service",
+                  "persons": [
+                    {
+                      "name": "Ms Alina Maria GOGOSANU"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05D20",
+              "name": "Financial Resources Unit",
+              "persons": [
+                {
+                  "name": "Mr Olivier LABESQUE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE05D30",
+              "name": "IT Unit",
+              "persons": [
+                {
+                  "name": "Mr Ignacio IZQUIERDO PERIS"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_INFRA_LOGIS",
+      "name": "Directorate-General for Infrastructure and Logistics",
+      "persons": [
+        {
+          "name": "Ms Anna GRZYBOWSKA"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE0610",
+          "name": "Strategy and Innovation Unit",
+          "persons": [
+            {
+              "name": "Mr Adrian PANAIT"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE061010",
+              "name": "One-Stop Shop for Members Service",
+              "persons": [
+                {
+                  "name": "Mr Adrian PANAIT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0620",
+          "name": "Europa Experience and Property Market Surveys Unit",
+          "persons": [
+            {
+              "name": "Mr Bernd LIPPERT"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0630",
+          "name": "Sustainability and Accessibility Policy Unit",
+          "persons": [
+            {
+              "name": "Ms Lucia COJOCARU"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0640",
+          "name": "Architectural Identity Unit",
+          "persons": [
+            {
+              "name": "Ms Ine Sanne BIRONT"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE06D",
+          "name": "Directorate for Sustainable Buildings and Facilities in Brussels",
+          "persons": [
+            {
+              "name": "Mr Davy MESOTTEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE06D10",
+              "name": "Brussels Facilities Management Unit",
+              "persons": [
+                {
+                  "name": "Mr Marco SERENO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06D30",
+              "name": "Brussels Upkeep Unit",
+              "persons": [
+                {
+                  "name": "Ms Cristina MELCHOR BLANCO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06D20",
+              "name": "Brussels Environmental and Sustainable Upgrade Unit",
+              "persons": [
+                {
+                  "name": "Mr Peter Paul RAMSELAAR"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE06A",
+          "name": "Directorate for Sustainable Buildings and Facilities in Luxembourg",
+          "persons": [
+            {
+              "name": "Ms Christine BAHR"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE06A10",
+              "name": "Luxembourg Facilities Management Unit",
+              "persons": [
+                {
+                  "name": "Mr Xavier BILGER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06A30",
+              "name": "Luxembourg Upkeep Unit",
+              "persons": [
+                {
+                  "name": "Ms Anna Maria VAGO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06A20",
+              "name": "Luxembourg Environmental and Sustainable Upgrade Unit",
+              "persons": [
+                {
+                  "name": "Mr Stefano VENANZI"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE06E",
+          "name": "Directorate for Sustainable Buildings and Facilities in Strasbourg",
+          "persons": [
+            {
+              "name": "Mr Armin MACHMER"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE06E10",
+              "name": "Strasbourg Facilities Management Unit",
+              "persons": [
+                {
+                  "name": "Ms Alexandra DE WAEL"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06E30",
+              "name": "Strasbourg Upkeep Unit",
+              "persons": [
+                {
+                  "name": "Mr Eric RICCA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06E20",
+              "name": "Strasbourg Environmental and Sustainable Upgrade Unit",
+              "persons": [
+                {
+                  "name": "Ms Anna PRZYBYL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE06B",
+          "name": "Directorate for Sustainable Mobility and Services",
+          "persons": [
+            {
+              "name": "Mr Miguel PAPI BOUCHER"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE06B10",
+              "name": "Drivers Unit",
+              "persons": [
+                {
+                  "name": "Ms Milvia PRIANO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06B80",
+              "name": "Sustainable Mobility Unit",
+              "persons": [
+                {
+                  "name": "Mr Stefano GUCCIONE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06B40",
+              "name": "Catering Unit",
+              "persons": [
+                {
+                  "name": "Mr Thomas DUDRAP"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06B60",
+              "name": "Ushers and Movers Unit",
+              "persons": [
+                {
+                  "name": "Ms Ine Sanne BIRONT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06B50",
+              "name": "Office Space Attribution Unit",
+              "persons": [
+                {
+                  "name": "Ms Ann Margareta WUERTTEMBERGER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06B30",
+              "name": "Purchases Unit",
+              "persons": [
+                {
+                  "name": "Mr Adam WIEJAK"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE06B3010",
+                  "name": "Financial Initiation Service",
+                  "persons": [
+                    {
+                      "name": "Mr Patrick BEGA"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE06C",
+          "name": "Directorate for Resources",
+          "persons": [
+            {
+              "name": "Mr Lars Vind SORENSEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE06C10",
+              "name": "Human Resources Unit",
+              "persons": [
+                {
+                  "name": "Mr Thomas CANTARELLA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06C20",
+              "name": "Financial Evaluation Unit",
+              "persons": [
+                {
+                  "name": "Ms Hilde GRAFFIEDI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06C30",
+              "name": "Ex-Ante Control and Public Procurement Coordination Unit",
+              "persons": [
+                {
+                  "name": "Mr Attila GEMES"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE06C3010",
+                  "name": "Ex-Ante Control Service",
+                  "persons": [
+                    {
+                      "name": "Ms Edina TELESSY"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE06C3020",
+                  "name": "Public Procurement Coordination Service",
+                  "persons": [
+                    {
+                      "name": "Mr Attila GEMES"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06C40",
+              "name": "Information Technology and IT Support Unit",
+              "persons": [
+                {
+                  "name": "Ms Timea MOLNAR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06C50",
+              "name": "Insurance Unit",
+              "persons": [
+                {
+                  "name": "Ms Maria HAERDIN HOWAT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06C60",
+              "name": "Communication Unit",
+              "persons": [
+                {
+                  "name": "Mr Gianpaolo MENEGHINI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06C25",
+              "name": "Budget Unit",
+              "persons": [
+                {
+                  "name": "Ms Maria MISSENARD"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE06C70",
+              "name": "Research Unit",
+              "persons": [
+                {
+                  "name": "Mr Xavier LACROIX"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_TRANSL",
+      "name": "Directorate-General for Translation and Clear Language",
+      "persons": [
+        {
+          "name": "Mr Valter MAVRIC"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE0710",
+          "name": "Strategy and Innovation Unit",
+          "persons": [
+            {
+              "name": "Mr Mads Nyegaard OUTZEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE071010",
+              "name": "Business Analysis Cell",
+              "persons": [
+                {
+                  "name": "Mr Owen James DEGABRIELE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE071020",
+              "name": "Projects and Strategy Service",
+              "persons": [
+                {
+                  "name": "Ms Alison ROBERTS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0720",
+          "name": "Human Resources Unit",
+          "persons": [
+            {
+              "name": "Ms Sara BICIC PETERSEN"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0730",
+          "name": "Multilingualism and External Relations Unit",
+          "persons": [
+            {
+              "name": "Ms Paraskevi CHAVAKI"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0740",
+          "name": "Financial Resources Management and Controls Unit",
+          "persons": [
+            {
+              "name": "Mr Stéphane VIVARD"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE07A",
+          "name": "Directorate for Legislative and Parliamentary Business Translation",
+          "persons": [
+            {
+              "name": "Ms Veronique ROSENKRANZ"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE07A10",
+              "name": "Bulgarian Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Irena Stoyanova PETROVA TOTOMANOVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A11",
+              "name": "Czech Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Karel HRUSKA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A12",
+              "name": "Danish Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Birgitte Lindberg DANE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A13",
+              "name": "German Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Magdalena SOCHA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A14",
+              "name": "Greek Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Despoina GEORGIOU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A15",
+              "name": "English Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Linda FORDE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A16",
+              "name": "Spanish Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Ewa SINCLAIR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A17",
+              "name": "Estonian Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Tadeja Zdenka TOMŠIČ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A18",
+              "name": "Finnish Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Meri RANTALA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A19",
+              "name": "French Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Philippe GILLARD"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A20",
+              "name": "Irish Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Ieva MAINARDI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A21",
+              "name": "Croatian Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr József VILLÁNYI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A22",
+              "name": "Hungarian Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Marek DREVING"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A23",
+              "name": "Italian Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Daniela DIMOVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A24",
+              "name": "Lithuanian Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Nerijus PREKEVICIUS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A25",
+              "name": "Latvian Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Jogita HARDERE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A26",
+              "name": "Maltese Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Clare BUGEJA GAFA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A27",
+              "name": "Dutch Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Geert HELLEMANS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A28",
+              "name": "Polish Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Patrycja LASKOWSKA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A29",
+              "name": "Portuguese Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Helena COSTA NUNES"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A30",
+              "name": "Romanian Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Otilia DRAGOMIR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A31",
+              "name": "Slovak Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Rudolf HORNAK"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A32",
+              "name": "Slovenian Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Andrej ZERAK"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07A33",
+              "name": "Swedish Translation Unit",
+              "persons": [
+                {
+                  "name": "Mr Christian WOLMERUD"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE07B",
+          "name": "Directorate for Clear Language and Audiovisual Translation",
+          "persons": [
+            {
+              "name": "Ms Cathy WAIBEL"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE07B10",
+              "name": "Audiovisual Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Vera VASCONCELOS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07B20",
+              "name": "Citizens’ Language and Editing Unit",
+              "persons": [
+                {
+                  "name": "Ms Isabelle MARTON"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE07B2010",
+                  "name": "Editing Service",
+                  "persons": [
+                    {
+                      "name": "Mr Steve DREGGS"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07B30",
+              "name": "Enlargement and Third-Country Languages Unit",
+              "persons": [
+                {
+                  "name": "Ms Marta Maria KĄKOL"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07B40",
+              "name": "Speech Processing and Language Accessibility Unit",
+              "persons": [
+                {
+                  "name": "Mr Dragos-Lucian CIOBANU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07B50",
+              "name": "Text and Publications Translation Unit",
+              "persons": [
+                {
+                  "name": "Ms Antoniya SUTTY"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE07C",
+          "name": "Directorate for Language Technology, Support and Innovation",
+          "persons": [
+            {
+              "name": "Ms Suzanne KÖNIG"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE07C10",
+              "name": "IT Development Unit",
+              "persons": [
+                {
+                  "name": "Ms Maria-Paula VLAIC"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE07C1010",
+                  "name": "Transversal Project Support Service",
+                  "persons": [
+                    {
+                      "name": "Mr Paolo PANBIANCO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE07C1020",
+                  "name": "Applications Development and Integration Service",
+                  "persons": [
+                    {
+                      "name": "Mr Daniel VANDAMME"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07C20",
+              "name": "IT Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Nerijus PREKEVICIUS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07C30",
+              "name": "Pre-Processing and Translation Memories Management Unit",
+              "persons": [
+                {
+                  "name": "Ms Maria MESIAS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07C40",
+              "name": "Outsourcing Unit",
+              "persons": [
+                {
+                  "name": "Mr Tom SKINNER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07C50",
+              "name": "Planning Unit",
+              "persons": [
+                {
+                  "name": "Ms Simona KRIŽAJ POCHAT"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE07C5010",
+                  "name": "Legislative and Administrative Translation Request Service",
+                  "persons": [
+                    {
+                      "name": "Ms Viola LACI-PONGRACZ"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE07C5020",
+                  "name": "Presidency and Plenary Translation Request Service",
+                  "persons": [
+                    {
+                      "name": "Mr Istvan SOOS-PETEK"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE07C5030",
+                  "name": "Liaison and Forecasting Service",
+                  "persons": [
+                    {
+                      "name": "Ms Silvia LOCATI"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE07C5040",
+                  "name": "Clear Language and Audiovisual Translation Request Service",
+                  "persons": [
+                    {
+                      "name": "Ms Manuela SPEISER"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07C60",
+              "name": "Quality Coordination Unit",
+              "persons": [
+                {
+                  "name": "Ms Angelika VAASA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07C70",
+              "name": "Terminology Coordination Unit",
+              "persons": [
+                {
+                  "name": "Ms Hilary LAVELLE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE07C80",
+              "name": "Training and Traineeships Unit",
+              "persons": [
+                {
+                  "name": "Ms Joanna LANKAMER"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_INTERPRET",
+      "name": "Directorate-General for Logistics and Interpretation for Conferences",
+      "persons": [
+        {
+          "name": "Mr Juan Carlos JIMÉNEZ MARÍN"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE0850",
+          "name": "Strategy and Innovation Unit",
+          "persons": [
+            {
+              "name": "Mr Tomasz Stanisław BAŃKA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0860",
+          "name": "Communications and Outreach Unit",
+          "persons": [
+            {
+              "name": "Ms Nele Dorothea Elsa FASSNACHT"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE08A",
+          "name": "Directorate for Interpretation",
+          "persons": [
+            {
+              "name": "Ms Marijana NIKOLIC"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE08A01",
+              "name": "Danish Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Tania Marina VEGA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A02",
+              "name": "German Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Viviane RAMPONI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A03",
+              "name": "Greek Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Maria PROVATA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A04",
+              "name": "English Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Nicholas WOODMAN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A05",
+              "name": "Spanish Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Maria TABOAS RODRIGUEZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A06",
+              "name": "Finnish Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Mirja BOUCHARD"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A07",
+              "name": "French Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Stéphane GROSJEAN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A08",
+              "name": "Italian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Giancarlo ZUCCHETTO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A09",
+              "name": "Dutch Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Florian HEINES"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A10",
+              "name": "Portuguese Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Francisco FALCAO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A11",
+              "name": "Swedish Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Florian HEINES"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A12",
+              "name": "Polish Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Monika WOISCH"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A13",
+              "name": "Czech Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Ivana HLAVACOVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A14",
+              "name": "Hungarian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Ilga BERZINA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A15",
+              "name": "Slovak Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Miroslava PETROVSKÁ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A16",
+              "name": "Slovene Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Ivana HLAVACOVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A17",
+              "name": "Estonian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Michael SHORT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A18",
+              "name": "Lithuanian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Gintaras MORKUNAS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A19",
+              "name": "Latvian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Ilga BERZINA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A20",
+              "name": "Maltese Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Daniela SCERRI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A21",
+              "name": "Bulgarian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Michael SHORT"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A22",
+              "name": "Romanian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Ms Izabella BADIU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A23",
+              "name": "Croatian Interpretation Unit",
+              "persons": [
+                {
+                  "name": "Mr Gintaras MORKUNAS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A30",
+              "name": "Multilingualism and Succession Planning Unit",
+              "persons": [
+                {
+                  "name": "Ms Catherine Anne PEARSON"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE08A3010",
+                  "name": "Test Service"
+                },
+                {
+                  "code": "EP_DPPE08A3020",
+                  "name": "EP Interpreting Academy Service"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE08A40",
+              "name": "Interpreter Support and Training Unit",
+              "persons": [
+                {
+                  "name": "Ms Andrea SEIDENSTÜCKER"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE08B",
+          "name": "Directorate for Operational Planning",
+          "persons": [
+            {
+              "name": "Mr Simon BUSUTTIL"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE08B10",
+              "name": "Unit for the Recruitment of Auxiliary Conference Interpreters"
+            },
+            {
+              "code": "EP_DPPE08B20",
+              "name": "Programming Unit"
+            },
+            {
+              "code": "EP_DPPE08B30",
+              "name": "Request Management Unit"
+            },
+            {
+              "code": "EP_DPPE08B40",
+              "name": "Multilingual Solutions Unit"
+            },
+            {
+              "code": "EP_DPPE08B90",
+              "name": "ACI Payment Unit"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE08D",
+          "name": "Directorate for Conference Organisation",
+          "persons": [
+            {
+              "name": "Ms Virpi KOYKKA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE08D10",
+              "name": "Conference Technicians Unit"
+            },
+            {
+              "code": "EP_DPPE08D20",
+              "name": "Conference Ushers Unit"
+            },
+            {
+              "code": "EP_DPPE08D30",
+              "name": "Remote Conference Services Unit"
+            },
+            {
+              "code": "EP_DPPE08D40",
+              "name": "Conference Coordination Unit"
+            },
+            {
+              "code": "EP_DPPE08D50",
+              "name": "Conference Infrastructure and Innovation Unit"
+            },
+            {
+              "code": "EP_DPPE08D60",
+              "name": "Strasbourg Conferences Unit"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE08C",
+          "name": "Directorate for Resources",
+          "persons": [
+            {
+              "name": "Ms Bernadette LIGETI"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE08C10",
+              "name": "Human Resources Unit"
+            },
+            {
+              "code": "EP_DPPE08C20",
+              "name": "Information Technology and IT Support Unit"
+            },
+            {
+              "code": "EP_DPPE08C30",
+              "name": "Budget Unit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_FINANCE",
+      "name": "Directorate-General for Finance",
+      "persons": [
+        {
+          "name": "Mr Didier KLETHI"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE0910",
+          "name": "Budget, Verification and Procurement Unit",
+          "persons": [
+            {
+              "name": "Ms Gabriela-Elena DEICA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0920",
+          "name": "Compliance Monitoring Unit",
+          "persons": [
+            {
+              "name": "Mr Jean-Christophe Matthias PUFFER"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE0930",
+          "name": "Strategy, Innovation and Communication Unit",
+          "persons": [
+            {
+              "name": "Mr Jérémy Yannick SCHULZ"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE09A",
+          "name": "Directorate for Budget and Financial Services",
+          "persons": [
+            {
+              "name": "Ms Kirsten LUEDDECKE"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE09A10",
+              "name": "Budget Unit",
+              "persons": [
+                {
+                  "name": "Ms Corinne NICOLAI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09A20",
+              "name": "Accounting and Treasury Unit",
+              "persons": [
+                {
+                  "name": "Mr Ville-Veikko TIMBERG"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE09A2010",
+                  "name": "Treasury Service",
+                  "persons": [
+                    {
+                      "name": "Mr Ari-Pekka JANTUNEN"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE09A2020",
+                  "name": "Accounting Service",
+                  "persons": [
+                    {
+                      "name": "Ms Maria DZANOVA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09A30",
+              "name": "Central Financial Unit",
+              "persons": [
+                {
+                  "name": "Mr Matthias SANDER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09A40",
+              "name": "FMS Competence Centre Unit",
+              "persons": [
+                {
+                  "name": "Mr Miguel GOMEZ GOMEZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09A50",
+              "name": "Management Accounting and Inventory Unit",
+              "persons": [
+                {
+                  "name": "Ms Jurate SULCIENE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE09B",
+          "name": "Directorate for Members’ Financial and Social Entitlements",
+          "persons": [
+            {
+              "name": "Mr Nikolaos TZIORKAS"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE09B10",
+              "name": "Members’ Salaries and Social Entitlements Unit",
+              "persons": [
+                {
+                  "name": "Ms Eva BUDA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09B20",
+              "name": "Members’ Local Assistance Financial Management Unit",
+              "persons": [
+                {
+                  "name": "Mr Risto NIEMINEN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09B30",
+              "name": "Members’ Attendance and Travel Expenses Unit",
+              "persons": [
+                {
+                  "name": "Mr Pierre-Antoine BARTHÉLÉMY"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09B40",
+              "name": "MEPs’ Portal Unit",
+              "persons": [
+                {
+                  "name": "Ms Maria Angeles MARTINEZ VALLS"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE09C",
+          "name": "Directorate for Political Structures Financing and Resources",
+          "persons": [
+            {
+              "name": "Ms Ines MORGADO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE09C10",
+              "name": "Financing of Political Groups and Non-Attached Members Unit",
+              "persons": [
+                {
+                  "name": "Mr Wolfgang HERZIG"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09C20",
+              "name": "Information Technology and e-Portal Unit",
+              "persons": [
+                {
+                  "name": "Mr Georg BECKER"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE09C2010",
+                  "name": "Informatics and Logistics Service",
+                  "persons": [
+                    {
+                      "name": "Mr Jean-Marc KLEIN"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE09C2030",
+                  "name": "e-Portal Service",
+                  "persons": [
+                    {
+                      "name": "Ms Agnieszka PAJAK"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09C30",
+              "name": "Travel Management Unit",
+              "persons": [
+                {
+                  "name": "Ms Martina GIERING"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE09C3010",
+                  "name": "Group Travel and Events Service",
+                  "persons": [
+                    {
+                      "name": "Ms Eva Sophia Kathrin BECKER"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE09C3020",
+                  "name": "Contract Implementation Service",
+                  "persons": [
+                    {
+                      "name": "Mr Guillaume Jacques Louis Pierre PRINGIERS"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09C40",
+              "name": "Human Resources and Organisation Unit",
+              "persons": [
+                {
+                  "name": "Mr Frank ANTOINE-POIREL"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE09C50",
+              "name": "Financing of Political Parties and Foundations Unit",
+              "persons": [
+                {
+                  "name": "Ms Mihaela PRIGENT"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPE10",
+      "name": "Directorate-General for Information Technologies and Cybersecurity",
+      "persons": [
+        {
+          "name": "Mr Lorenzo MANNELLI"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE1010",
+          "name": "Strategic Coordination, Digital Partnerships and Legal Advice Unit",
+          "persons": [
+            {
+              "name": "Ms Stefania BOSCHETTO"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE1020",
+          "name": "LCO Coordination and EP-CERT",
+          "persons": [
+            {
+              "name": "Mr Benoit DEMOULIN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE102010",
+              "name": "Cybersecurity Emergency Response Team"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE10A",
+          "name": "Directorate for Customers and Digital Workplace",
+          "persons": [
+            {
+              "name": "Ms Emilia ROMANO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE10A10",
+              "name": "Members’ Digital Experience Unit",
+              "persons": [
+                {
+                  "name": "Ms Emilia ROMANO"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10A1010",
+                  "name": "Digital Workplace Support",
+                  "persons": [
+                    {
+                      "name": "Mr José Carlos REIS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10A1020",
+                  "name": "Customised Support and Emerging Needs",
+                  "persons": [
+                    {
+                      "name": "Ms Maria SANDE LANDEIRA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10A20",
+              "name": "IT Support Unit",
+              "persons": [
+                {
+                  "name": "Mr Niall THOMPSON"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10A2010",
+                  "name": "Service Desk and Proximity",
+                  "persons": [
+                    {
+                      "name": "Ms Rut CARRIÓ"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10A30",
+              "name": "Customer Relations and Service Delivery Excellence Unit",
+              "persons": [
+                {
+                  "name": "Mr Sandro MAMELI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10A3010",
+                  "name": "Service Excellence Hub",
+                  "persons": [
+                    {
+                      "name": "Ms Myriam DJEROUNI"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10A3020",
+                  "name": "Customer Relations Hub",
+                  "persons": [
+                    {
+                      "name": "Ms Elena-Raluca VOINEA"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10A3030",
+                  "name": "Organisational Engagement",
+                  "persons": [
+                    {
+                      "name": "Mr Mitja BRUS"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10A40",
+              "name": "Digital Workplace Experience Unit",
+              "persons": [
+                {
+                  "name": "Mr Stéphan JANSSENS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10A50",
+              "name": "IT Logistics Unit",
+              "persons": [
+                {
+                  "name": "Mr Javier CALVIÑO LOPEZ"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10A5010",
+                  "name": "Unified Printing",
+                  "persons": [
+                    {
+                      "name": "Mr Aleksandras CYRAS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10A5020",
+                  "name": "Just-In-Time Logistics",
+                  "persons": [
+                    {
+                      "name": "Mr Jorge DEL RIO CUMBREÑO"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE10B",
+          "name": "Directorate for Cybersecurity and IT Governance",
+          "units": [
+            {
+              "code": "EP_DPPE10B10",
+              "name": "Cybersecurity Governance Unit",
+              "persons": [
+                {
+                  "name": "Ms Krassimira BOGDANOVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10B20",
+              "name": "IT Governance and Enterprise Architecture Unit",
+              "persons": [
+                {
+                  "name": "Mr Ludovic DELEPINE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10B30",
+              "name": "Portfolio Management and Compliance Unit",
+              "persons": [
+                {
+                  "name": "Mr Neven DRLJEVIĆ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10B40",
+              "name": "Risk and Control Unit",
+              "persons": [
+                {
+                  "name": "Mr Mamadou LAKHOUNE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE10C",
+          "name": "Directorate for Business Solutions",
+          "persons": [
+            {
+              "name": "Mr Libor BOHAC"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE10C10",
+              "name": "Solution Design and Quality Assurance Unit",
+              "persons": [
+                {
+                  "name": "Mr Gerrit POTOMS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10C1010",
+                  "name": "Functional analysis, design and attribution",
+                  "persons": [
+                    {
+                      "name": "Mr Todor TODOROV"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C1020",
+                  "name": "Technical Analysis and Interface harmonisation",
+                  "persons": [
+                    {
+                      "name": "Mr Gerrit POTOMS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C1030",
+                  "name": "Quality Control and Accessibility",
+                  "persons": [
+                    {
+                      "name": "Mr Michele CASARELLA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10C20",
+              "name": "Business Platforms and Artificial Intelligence Unit",
+              "persons": [
+                {
+                  "name": "Mr Fakhreddine AOUADI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10C2010",
+                  "name": "AI Competence Centre",
+                  "persons": [
+                    {
+                      "name": "Mr Charalampos MOSCHOPOULOS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C2020",
+                  "name": "Automation and Business Platforms",
+                  "persons": [
+                    {
+                      "name": "Mr Sébastien Julien François SOCKEEL"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C2030",
+                  "name": "ServiceNow",
+                  "persons": [
+                    {
+                      "name": "Mr Andreu Miquel BOSA PUIGREDON"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10C30",
+              "name": "Reusable Solutions Unit",
+              "persons": [
+                {
+                  "name": "Mr Mikael MICUCCI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10C3010",
+                  "name": "Administration Systems",
+                  "persons": [
+                    {
+                      "name": "Mr Sebastien VAST"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C3020",
+                  "name": "Central Systems",
+                  "persons": [
+                    {
+                      "name": "Mr Emmanouil PALAIKOS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C3030",
+                  "name": "Reusable Components",
+                  "persons": [
+                    {
+                      "name": "Mr Olivier PELTIER"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10C40",
+              "name": "Legislative and Custom Solutions Unit",
+              "persons": [
+                {
+                  "name": "Ms Clara BOUZAS MANTE"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10C4010",
+                  "name": "Parliamentary Systems",
+                  "persons": [
+                    {
+                      "name": "Ms Kelly LILJEMO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C4020",
+                  "name": "Legislative Systems",
+                  "persons": [
+                    {
+                      "name": "Mr Tuukka LINDBERG"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10C50",
+              "name": "Data Services Unit",
+              "persons": [
+                {
+                  "name": "Ms Reet SOMMER"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10C5010",
+                  "name": "Internal Data Management",
+                  "persons": [
+                    {
+                      "name": "Mr Dimitrios MANIOPOULOS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10C5020",
+                  "name": "Data Solutions",
+                  "persons": [
+                    {
+                      "name": "Mr Luca LAMORTE"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE10D",
+          "name": "Directorate for ICT Infrastructure and Security Operations",
+          "persons": [
+            {
+              "name": "Mr Philip TULKENS"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE10D10",
+              "name": "Platform Architecture and Engineering Unit",
+              "persons": [
+                {
+                  "name": "Ms Ingrid SCHNEIDER-DI ROCCO"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10D1010",
+                  "name": "Systems Architecture",
+                  "persons": [
+                    {
+                      "name": "Mr Pedro Eugenio LAGUNAS BRAVO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D1020",
+                  "name": "Platform Engineering",
+                  "persons": [
+                    {
+                      "name": "Ms Antonia LOPEZ SERRANO"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10D20",
+              "name": "Network Architecture and Engineering Unit",
+              "persons": [
+                {
+                  "name": "Mr Nuno Miguel CIPRIANO PAIVA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10D2010",
+                  "name": "Network Architecture",
+                  "persons": [
+                    {
+                      "name": "Mr Giuseppe BARRESE"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D2020",
+                  "name": "Network Foundations",
+                  "persons": [
+                    {
+                      "name": "Mr Nuno Miguel CIPRIANO PAIVA"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D2030",
+                  "name": "Advanced Network Services",
+                  "persons": [
+                    {
+                      "name": "Mr Ulrich Eberhard KRÖNER"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10D30",
+              "name": "Hosting and Continuous Improvement Unit",
+              "persons": [
+                {
+                  "name": "Mr Michel Joseph Lucien BROCHARD"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10D3010",
+                  "name": "Hosting Operations",
+                  "persons": [
+                    {
+                      "name": "Mr Alain HUITRIC"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D3020",
+                  "name": "Hosting Projects",
+                  "persons": [
+                    {
+                      "name": "Mr Juan Jose CARREIRAS ALBA"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D3030",
+                  "name": "Electronic Voting",
+                  "persons": [
+                    {
+                      "name": "Mr Viorel COSMA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10D40",
+              "name": "Infrastructure Operations Unit",
+              "persons": [
+                {
+                  "name": "Mr Frédéric JUSTE"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10D4010",
+                  "name": "System Operations",
+                  "persons": [
+                    {
+                      "name": "Mr Pedro GARCIA DIEGUEZ"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D4020",
+                  "name": "Datacentre and Network Operations",
+                  "persons": [
+                    {
+                      "name": "Mr Thomas Jean-Michel CARLU"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10D50",
+              "name": "Cybersecurity Operations Unit",
+              "persons": [
+                {
+                  "name": "Mr Luca RETTORE"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10D5010",
+                  "name": "Cybersecurity Assurance",
+                  "persons": [
+                    {
+                      "name": "Mr Stavros LINGRIS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D5020",
+                  "name": "Solutions and Monitoring",
+                  "persons": [
+                    {
+                      "name": "Mr Alexander Boykov PETROV"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE10D5030",
+                  "name": "Identity and Access Management",
+                  "persons": [
+                    {
+                      "name": "Mr Alessandro Luigi IOMMI"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE10E",
+          "name": "Directorate for Sourcing and Organisational Management",
+          "persons": [
+            {
+              "name": "Mr Oliver MARTIN LEON"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE10E0010",
+              "name": "Organisational Engagement",
+              "persons": [
+                {
+                  "name": "Mr Oliver MARTIN LEON"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10E10",
+              "name": "Human Resources Unit",
+              "persons": [
+                {
+                  "name": "Ms Wanda TROSZCZYNSKA VAN GENDEREN"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10E20",
+              "name": "Financial Resources Management Unit",
+              "persons": [
+                {
+                  "name": "Mr Jesper MADSEN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10E2010",
+                  "name": "Ex-Ante Verification",
+                  "persons": [
+                    {
+                      "name": "Ms Chantal DELL'AMICO GHEYSEN"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10E30",
+              "name": "Procurement and Contract Management Unit",
+              "persons": [
+                {
+                  "name": "Ms Karin COLLIN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10E3010",
+                  "name": "Contract Administration",
+                  "persons": [
+                    {
+                      "name": "Ms Eva RUDOLFOVA"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10E40",
+              "name": "Publishing Support and Visual Projects Unit",
+              "persons": [
+                {
+                  "name": "Ms Adriana JANSEN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10E4010",
+                  "name": "Publishing Service Desk",
+                  "persons": [
+                    {
+                      "name": "Ms Adriana JANSEN"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE10E50",
+              "name": "Printing Unit",
+              "persons": [
+                {
+                  "name": "Mr Andrea BARTOLINI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE10E5010",
+                  "name": "Instant Printing and Delivery",
+                  "persons": [
+                    {
+                      "name": "Mr James BORG"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_SAFE",
+      "name": "Directorate-General for Security and Safety",
+      "persons": [
+        {
+          "name": "Mr Guy MOLS"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPE1210",
+          "name": "Strategy and Innovation Unit",
+          "persons": [
+            {
+              "name": "Mr Giorgio MUSSA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE12A",
+          "name": "Directorate for Security Operations",
+          "persons": [
+            {
+              "name": "Mr Gert VAN BASTELAERE"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE12A20",
+              "name": "Security Brussels Unit",
+              "persons": [
+                {
+                  "name": "Mr Gert VAN BASTELAERE"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE12A2001",
+                  "name": "Security Section 1",
+                  "persons": [
+                    {
+                      "name": "Ms Maria ARRAZOLA DELGADO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE12A2002",
+                  "name": "Security Section 2",
+                  "persons": [
+                    {
+                      "name": "Mr Roberto FACCHINI"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE12A2003",
+                  "name": "Security Section 3"
+                },
+                {
+                  "code": "EP_DPPE12A2004",
+                  "name": "Security Section 4",
+                  "persons": [
+                    {
+                      "name": "Mr Mario MARMO"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12A30",
+              "name": "Security Strasbourg Unit",
+              "persons": [
+                {
+                  "name": "Ms Catherine SCHAAL"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12A40",
+              "name": "Security Luxembourg Unit",
+              "persons": [
+                {
+                  "name": "Mr Pascal DE BACKER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12A50",
+              "name": "Protection Unit",
+              "persons": [
+                {
+                  "name": "Ms Mihaela Adelina HUMINIC ORZU"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE12B",
+          "name": "Directorate for Safety, Access and Assistance",
+          "persons": [
+            {
+              "name": "Ms Lisbeth Grodum KNUDSEN"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE12B10",
+              "name": "Safety and First Aid Unit",
+              "persons": [
+                {
+                  "name": "Mr Christopher SANCHEZ OZOLS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12B40",
+              "name": "Access and Visitors Unit",
+              "persons": [
+                {
+                  "name": "Mr Fabien DURAND"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12B50",
+              "name": "Emergency and Control Room Unit",
+              "persons": [
+                {
+                  "name": "Mr Jean Luca COCCI"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE12B5010",
+                  "name": "Brussels Operations Service",
+                  "persons": [
+                    {
+                      "name": "Mr Radian-Marius SANDA"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE12B5020",
+                  "name": "Strasbourg and Luxembourg Operations Service",
+                  "persons": [
+                    {
+                      "name": "Mr Jean Luca COCCI"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPE12B5030",
+                  "name": "Project and Processes Management Service",
+                  "persons": [
+                    {
+                      "name": "Mr Christian CURRAN"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE12C",
+          "name": "Directorate for Resources",
+          "persons": [
+            {
+              "name": "Ms Patricia JIMENEZ LOZANO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE12C10",
+              "name": "Training Unit",
+              "persons": [
+                {
+                  "name": "Mr Juan Ignacio SOLE ANDRES"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12C20",
+              "name": "Human Resources Unit",
+              "persons": [
+                {
+                  "name": "Ms Nicoletta VALSESIA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12C30",
+              "name": "Budget Unit",
+              "persons": [
+                {
+                  "name": "Ms Katja VATTER"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12C40",
+              "name": "IT Policy Unit",
+              "persons": [
+                {
+                  "name": "Mr Victor Manuel DIAS FERNANDES"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPE12D",
+          "name": "Directorate for Technologies and Information",
+          "persons": [
+            {
+              "name": "Mr Manuel RODRIGUEZ VICO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPE12D10",
+              "name": "Risk Assessment and Investigation Unit",
+              "persons": [
+                {
+                  "name": "Mr Karel VAN DE WEYER"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE12D1010",
+                  "name": "Security Investigation Service",
+                  "persons": [
+                    {
+                      "name": "Mr Rodrigo Victor ALONSO DOMINGUEZ"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12D20",
+              "name": "Information Security and Analysis Unit",
+              "persons": [
+                {
+                  "name": "Ms Valeria GHILARDI"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPE12D30",
+              "name": "Security Engineering Unit",
+              "persons": [
+                {
+                  "name": "Mr Constantin MARIN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPE12D3010",
+                  "name": "Building Projects Service",
+                  "persons": [
+                    {
+                      "name": "Mr Giuseppe D'AGO"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_LS",
+      "name": "Legal Service",
+      "persons": [
+        {
+          "name": "Mr Freddy DREXLER"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPESJ10",
+          "name": "Legislative and Judicial Coordination Unit",
+          "persons": [
+            {
+              "name": "Ms Raluca IGNATESCU"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPESJ20",
+          "name": "Resources Unit",
+          "persons": [
+            {
+              "name": "Ms Brigitte MÜLLER-RECK"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPESJA",
+          "name": "Directorate for Institutional, Budgetary and Staff Affairs",
+          "persons": [
+            {
+              "name": "Ms Andrea MRAZ-ANDROVICOVA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPESJA10",
+              "name": "Institutional and Budgetary Law Unit",
+              "persons": [
+                {
+                  "name": "Mr Richard CROWE"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPESJA20",
+              "name": "External Relations Unit",
+              "persons": [
+                {
+                  "name": "Mr Anders NEERGAARD"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPESJA30",
+              "name": "Staff Rights and Obligations Unit",
+              "persons": [
+                {
+                  "name": "Ms Sibylle SEYR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPESJA40",
+              "name": "Staff Careers Unit",
+              "persons": [
+                {
+                  "name": "Ms Sibylle SEYR"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPESJA50",
+              "name": "Administrative Investigations and Disciplinary Proceedings Unit",
+              "persons": [
+                {
+                  "name": "Mr Daniel WARIN"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPESJB",
+          "name": "Directorate for Legislative Affairs",
+          "persons": [
+            {
+              "name": "Mr Luca VISAGGIO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPESJB10",
+              "name": "Economic and Scientific Policies Unit"
+            },
+            {
+              "code": "EP_DPPESJB20",
+              "name": "Structural and Cohesion Policies Unit"
+            },
+            {
+              "code": "EP_DPPESJB30",
+              "name": "Justice and Civil Liberties Unit"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPESJC",
+          "name": "Directorate for Parliamentary and Financial Affairs",
+          "persons": [
+            {
+              "name": "Mr Norbert LORENZ"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPESJC10",
+              "name": "Members’ Rights Unit",
+              "persons": [
+                {
+                  "name": "Mr Niklas GOERLITZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPESJC20",
+              "name": "Contractual and Financial Law Unit",
+              "persons": [
+                {
+                  "name": "Mr Balazs Daniel SIMON"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPESJC30",
+              "name": "Real Estate Projects Unit",
+              "persons": [
+                {
+                  "name": "Mr Antonio CAIOLA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPESJC40",
+              "name": "Data Protection and Transparency Unit",
+              "persons": [
+                {
+                  "name": "Ms Marta WINDISCH"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

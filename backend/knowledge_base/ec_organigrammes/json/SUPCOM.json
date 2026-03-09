@@ -1,0 +1,99 @@
+{
+  "dg_code": "SUPCOM",
+  "dg_name": "Secretariat",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Guy Drowart",
+      "director_email": "Guy.DROWART@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Angela Nardella",
+          "head_email": "Angela.NARDELLA@ec.europa.eu",
+          "head_phone": "+32 229-90844"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Przemek Slowik",
+          "head_email": "Przemyslaw.SLOWIK@ec.europa.eu",
+          "head_phone": "+32 229-21389"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jurgen Van Deyck",
+          "head_email": "Jurgen.VAN-DEYCK@ec.europa.eu",
+          "head_phone": "+32 229-69943"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Adriana Leroy",
+          "head_email": "Adriana.LEROY@ec.europa.eu",
+          "head_phone": "+32 229-57795"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ilze Baltmane",
+          "head_email": "Ilze.BALTMANE@ec.europa.eu",
+          "head_phone": "+39 033278-6379"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Aurora Ortega",
+          "head_email": "Aurora.ORTEGA@ec.europa.eu",
+          "head_phone": "+352 4301-32032"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Julio Garulo Rodriguez",
+          "head_email": "Julio.GARULO-RODRIGUEZ@ec.europa.eu",
+          "head_phone": "+32 229-58852"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Adrian Popa",
+          "head_email": "Adrian.POPA@ec.europa.eu",
+          "head_phone": "+32 229-55915"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Catherine Heldmaier-Regnier",
+          "head_email": "Catherine.Heldmaier-Regnier@ec.europa.eu",
+          "head_phone": "+32 229-52208"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lampros Papadias",
+          "head_email": "Lambros.PAPADIAS@ec.europa.eu",
+          "head_phone": "+32 229-55218"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "L-1521 Luxembourg",
+          "head_email": "",
+          "head_phone": ""
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 11,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

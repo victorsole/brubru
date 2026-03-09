@@ -1,0 +1,233 @@
+{
+  "dg_code": "OLAF",
+  "dg_name": "European Anti-Fraud Office",
+  "commissioner": "",
+  "director_general": "Petr Klement",
+  "director_general_email": "Petr.KLEMENT@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Roman Vokurek",
+      "email": "Roman.VOKUREK@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Salla Saastamoinen",
+      "email": "Salla.Saastamoinen@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Florin Postica",
+          "head_email": "Florin.POSTICA@ec.europa.eu",
+          "head_phone": "+32 229-97470"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Buchta",
+          "head_email": "anna.buchta@edps.europa.eu",
+          "head_phone": "+32 229-69768"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Johannes Noack",
+          "head_email": "Johannes.NOACK@ec.europa.eu",
+          "head_phone": "+32 229-91867"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "EXPENDITURE — OPERATIONS AND INVESTIGATIONS",
+      "director": "Vasil Kirov",
+      "director_email": "Vasil.KIROV@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Jana Cappello",
+          "head_email": "Jana.CAPPELLO@ec.europa.eu",
+          "head_phone": "+32 229-85549"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vasil Kirov",
+          "head_email": "Vasil.KIROV@ec.europa.eu",
+          "head_phone": "+32 229-65438"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Amira Szönyi",
+          "head_email": "Amira.SZONYI@ec.europa.eu",
+          "head_phone": "+32 229-98209"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cvetelina Cholakova",
+          "head_email": "Cvetelina.CHOLAKOVA@ec.europa.eu",
+          "head_phone": "+32 229-55525"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesco Albore",
+          "head_email": "Francesco.ALBORE@ec.europa.eu",
+          "head_phone": "+32 229-58797"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "REVENUE AND INTERNATIONAL OPERATIONS — INVESTIGATIONS AND",
+      "director": "Ernesto Bianchi",
+      "director_email": "Ernesto.Bianchi@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Lara Dobinson",
+          "head_email": "Lara.DOBINSON@ec.europa.eu",
+          "head_phone": "+32 229-64276"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marta Castillo Gonzalez",
+          "head_email": "Marta.CASTILLO-GONZALEZ@ec.europa.eu",
+          "head_phone": "+32 229-62968"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pablo Tedo Murua",
+          "head_email": "Pablo.TEDO-MURUA@ec.europa.eu",
+          "head_phone": "+32 229-86487"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Biagio Fiorito",
+          "head_email": "Biagio.FIORITO@ec.europa.eu",
+          "head_phone": "+32 229-53750"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "ANTI-FRAUD KNOWLEDGE CENTRE",
+      "director": "James Sweeney",
+      "director_email": "James.Sweeney@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Juergen Marke",
+          "head_email": "Jurgen.MARKE@ec.europa.eu",
+          "head_phone": "+32 229-91521"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andrea Bordoni",
+          "head_email": "Andrea.BORDONI@ec.europa.eu",
+          "head_phone": "+32 229-67737"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Georg Roebling",
+          "head_email": "Georg.Roebling@ec.europa.eu",
+          "head_phone": "+32 229-58976"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Konstantinos Bovalis",
+          "head_email": "Konstantinos.BOVALIS@ec.europa.eu",
+          "head_phone": "+32 229-91771"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Claire Scharf-Kroener",
+          "head_email": "Claire.SCHARF-KROENER@ec.europa.eu",
+          "head_phone": "+32 229-59581"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "LEGAL, RESOURCES AND PARTNERSHIPS",
+      "director": "Petra Kneuer",
+      "director_email": "Petra.KNEUER@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Eleonore Von Bardeleben",
+          "head_email": "Eleonore.VON-BARDELEBEN@ec.europa.eu",
+          "head_phone": "+32 229-56735"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Agnes Lecomte",
+          "head_email": "Agnes.LECOMTE@ec.europa.eu",
+          "head_phone": "+32 229-67811"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lukas Jelinek",
+          "head_email": "Lukas.JELINEK@ec.europa.eu",
+          "head_phone": "+32 229-99716"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eleonore Von Bardeleben",
+          "head_email": "Eleonore.VON-BARDELEBEN@ec.europa.eu",
+          "head_phone": "+32 229-56735"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Helka Nykänen",
+          "head_email": "Helka.NYKANEN@ec.europa.eu",
+          "head_phone": "+32 229-59564"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Rita Di Prospero",
+          "head_email": "Rita.DI-PROSPERO@ec.europa.eu",
+          "head_phone": "+32 229-91583"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Joanna Krzeminska-Vamvaka",
+          "head_email": "Joanna.KRZEMINSKA@ec.europa.eu",
+          "head_phone": "+32 229-50299"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 5,
+  "num_units": 24,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

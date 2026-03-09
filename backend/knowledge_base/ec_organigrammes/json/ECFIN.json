@@ -1,138 +1,430 @@
 {
   "dg_code": "ECFIN",
-  "dg_name": "Economic and Financial Affairs",
-  "full_name": "Directorate-General for Economic and Financial Affairs",
-  "date_of_effect": "2025-11-01",
-  "commissioner": {
-    "name": "Valdis Dombrovskis",
-    "title": "Commissioner"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "Maarten Verwey",
-      "position": "Director-General",
-      "assistants": [
+  "dg_name": "Directorate-General for Economic and Financial Affairs",
+  "commissioner": "",
+  "director_general": "Maarten Verwey",
+  "director_general_email": "Maarten.VERWEY@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Elena Reitano",
+      "email": "Elena.Reitano@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Declan Costello",
+      "email": "Declan.Costello@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Christine Frayne",
+      "email": "Christine.FRAYNE@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Annika Eriksgaard",
+      "email": "Annika.ERIKSGAARD@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Nick Ligthart",
+      "director_email": "Nick.LIGTHART@ec.europa.eu",
+      "units": [
         {
-          "name": "Giulia Brussiganom",
-          "role": "Assistant"
+          "code": "",
+          "name": "",
+          "head": "Giulia Filippeschi",
+          "head_email": "Giulia.FILIPPESCHI@ec.europa.eu",
+          "head_phone": "+32 229-52364"
         },
         {
-          "name": "Giulia Filippeschi",
-          "role": "Assistant"
+          "code": "",
+          "name": "",
+          "head": "Taneli Lahti",
+          "head_email": "Taneli.LAHTI@ec.europa.eu",
+          "head_phone": "+32 229-21201"
         }
       ]
     },
-    "deputy_director_generals": [
-      {
-        "name": "vacant",
-        "position": "Deputy Director-General",
-        "responsibility": "Investment and International"
-      },
-      {
-        "name": "Declan Costello",
-        "position": "Deputy Director-General",
-        "responsibility": "Coordination of Economic Policies of Member States"
-      }
-    ],
-    "principal_adviser": {
-      "name": "vacant",
-      "title": "Principal Adviser",
-      "area": "For Sustainable Growth and the European Semester",
-      "code": "ECFIN.01"
+    {
+      "code": "Dir A",
+      "name": "POLICY COORDINATION, ECONOMIC FORECASTS AND COMMUNICATION",
+      "director": "João Nogueira Martins",
+      "director_email": "Joao.NOGUEIRAMARTINS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "João Nogueira Martins",
+          "head_email": "Joao.NOGUEIRAMARTINS@ec.europa.eu",
+          "head_phone": "+32 229-93457"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "James Hinton",
+          "head_email": "James.HINTON@ec.europa.eu",
+          "head_phone": "+32 229-72084"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Laura Bardone",
+          "head_email": "Laura.BARDONE@ec.europa.eu",
+          "head_phone": "+32 229-67436"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Matthieu Hebert",
+          "head_email": "Matthieu.HEBERT@ec.europa.eu",
+          "head_phone": "+32 229-77301"
+        }
+      ]
     },
-    "advisers": [
-      {
-        "name": "vacant",
-        "title": "Principal Adviser",
-        "area": "EU Director at the EBRD"
-      },
-      {
-        "name": "vacant",
-        "title": "Principal Adviser",
-        "area": "For MFP, InvestEU & the Relations with ITI & RIS"
-      },
-      {
-        "name": "vacant",
-        "title": "Adviser",
-        "area": "On InvestEU and EIB Governance"
-      },
-      {
-        "name": "Charlotte van Hootonrik",
-        "title": "Adviser",
-        "area": "On Rural and Country-Specific"
-      }
-    ]
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "ECFIN.A",
-      "name": "Policy Coordination, Economic Architecture & Member State Communication",
-      "director": {
-        "name": "Sebastien Dauchy",
-        "position": "Director"
-      }
+    {
+      "code": "Dir B",
+      "name": "INVESTMENT, GROWTH AND STRUCTURAL REFORMS",
+      "director": "Geraldine Mahieu",
+      "director_email": "Geraldine.MAHIEU@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Dino Pinelli",
+          "head_email": "Dino.PINELLI@ec.europa.eu",
+          "head_phone": "+32 229-92360"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Javier Yaniz Igal",
+          "head_email": "Javier.YANIZ-IGAL@ec.europa.eu",
+          "head_phone": "+32 229-66926"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alessandro Turrini",
+          "head_email": "Alessandro.TURRINI@ec.europa.eu",
+          "head_phone": "+32 229-95072"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Björn Döhring",
+          "head_email": "Bjoern.DOEHRING@ec.europa.eu",
+          "head_phone": "+32 229-98160"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christina Jordan",
+          "head_email": "Christina.JORDAN@ec.europa.eu",
+          "head_phone": "+32 229-53749"
+        }
+      ]
     },
-    "directorate_b": {
-      "code": "ECFIN.B",
-      "name": "Investment, Growth & Structural Policies",
-      "director": {
-        "name": "Lorenzo Codogno",
-        "position": "Director"
-      }
+    {
+      "code": "Dir C",
+      "name": "MACROECONOMIC POLICIES",
+      "director": "Massimo Suardi",
+      "director_email": "Massimo.Suardi@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Gilles Mourre",
+          "head_email": "Gilles.MOURRE@ec.europa.eu",
+          "head_phone": "+32 229-63225"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Angela D'Elia",
+          "head_email": "ELIA@ec.europa.eu",
+          "head_phone": "+32 229-72650"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eric Ruscher",
+          "head_email": "Eric.RUSCHER@ec.europa.eu",
+          "head_phone": "+32 229-66488"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christian Weise",
+          "head_email": "Christian.WEISE@ec.europa.eu",
+          "head_phone": "+32 229-84327"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Philip Tod",
+          "head_email": "Philip.TOD@ec.europa.eu",
+          "head_phone": "+32 229-20811"
+        }
+      ]
     },
-    "directorate_c": {
-      "code": "ECFIN.C",
-      "name": "Macroeconomic Policies",
-      "director": {
-        "name": "vacant",
-        "position": "Director"
-      }
+    {
+      "code": "Dir CEF/CPE",
+      "name": "SECRETARIAT OF THE ECONOMIC AND FINANCIAL COMMITTEE AND OF",
+      "director": "Stefan Pflueger",
+      "director_email": "Stefan.Pflueger@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Maarten Masselink",
+          "head_email": "Maarten.MASSELINK@ec.europa.eu",
+          "head_phone": "+32 229-99596"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Charlotte Van Hooydonk",
+          "head_email": "Charlotte.Van-Hooydonk@ec.europa.eu",
+          "head_phone": "+32 229-69607"
+        }
+      ]
     },
-    "directorate_d": {
-      "code": "ECFIN.D",
-      "name": "International Economic and Financial Issues",
-      "director": {
-        "name": "Margit Molnar",
-        "position": "Director"
-      }
+    {
+      "code": "Dir E",
+      "name": "ECONOMIES OF THE MEMBER STATES I",
+      "director": "Paul Kutos",
+      "director_email": "Paul.KUTOS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Paul Kutos",
+          "head_email": "Paul.KUTOS@ec.europa.eu",
+          "head_phone": "+32 229-60923"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Valerie Vandermeulen",
+          "head_email": "Valerie.VANDERMEULEN@ec.europa.eu",
+          "head_phone": "+32 229-93839"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Patrick D'Souza",
+          "head_email": "SOUZA@ec.europa.eu",
+          "head_phone": "+32 229-91283"
+        }
+      ]
     },
-    "directorate_e": {
-      "code": "ECFIN.E",
-      "name": "Economics of the Member States I",
-      "director": {
-        "name": "Stephanie Riso",
-        "position": "Director"
-      }
+    {
+      "code": "Dir F",
+      "name": "ECONOMIES OF THE MEMBER STATES II",
+      "director": "Luc Tholoniat",
+      "director_email": "Luc.THOLONIAT@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Jonas Fischer",
+          "head_email": "Jonas.Fischer@ec.europa.eu",
+          "head_phone": "+32 229-53733"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Joern Griesse",
+          "head_email": "Joern.GRIESSE@ec.europa.eu",
+          "head_phone": "+32 229-96350"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Julia Lendvai",
+          "head_email": "Julia.LENDVAI@ec.europa.eu",
+          "head_phone": "+32 229-97718"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "María José Doval Tedin",
+          "head_email": "Maria-Jose.DOVAL-TEDIN@ec.europa.eu",
+          "head_phone": "+32 229-52504"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bogdan Bogdanov",
+          "head_email": "Bogdan.BOGDANOV@ec.europa.eu",
+          "head_phone": "+32 229-75796"
+        }
+      ]
     },
-    "directorate_f": {
-      "code": "ECFIN.F",
-      "name": "Economics of the Member States II",
-      "director": {
-        "name": "Valerio Spiriano",
-        "position": "Director"
-      }
+    {
+      "code": "Dir G",
+      "name": "ECONOMIES OF THE MEMBER STATES III",
+      "director": "Isabel Grilo",
+      "director_email": "Isabel.Grilo@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Hallet",
+          "head_email": "Martin.Hallet@ec.europa.eu",
+          "head_phone": "+32 229-93438"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Roberta Torre",
+          "head_email": "Roberta.TORRE@ec.europa.eu",
+          "head_phone": "+32 229-64317"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Florian Woehlbier",
+          "head_email": "Florian.WOEHLBIER@ec.europa.eu",
+          "head_phone": "+32 229-84123"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Markus Schulte",
+          "head_email": "Markus.SCHULTE@ec.europa.eu",
+          "head_phone": "+32 229-80207"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Reinhard Felke",
+          "head_email": "",
+          "head_phone": ""
+        }
+      ]
     },
-    "directorate_g": {
-      "code": "ECFIN.G",
-      "name": "Economics of the Member States III",
-      "director": {
-        "name": "Atanas Pekanov",
-        "position": "Director"
-      }
+    {
+      "code": "Dir D",
+      "name": "INTERNATIONAL ECONOMIC AND FINANCIAL RELATIONS AND INSTITUTIONS",
+      "director": "Annika Eriksgaard",
+      "director_email": "Annika.ERIKSGAARD@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Joost Kuhlmann",
+          "head_email": "Joost.Kuhlmann@ec.europa.eu",
+          "head_phone": "+32 229-93348"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Norbert Wunner",
+          "head_email": "Norbert.Wunner@ec.europa.eu",
+          "head_phone": "+32 229-90461"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Uwe Stamm",
+          "head_email": "Uwe.Stamm@ec.europa.eu",
+          "head_phone": "+32 229-55813"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stéphanie Pamies",
+          "head_email": "Stephanie.PAMIES@ec.europa.eu",
+          "head_phone": "+32 229-80055"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Heinz Scherrer",
+          "head_email": "Heinz.Scherrer@ec.europa.eu",
+          "head_phone": "+32 229-57914"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Moises Orellana",
+          "head_email": "Moises.ORELLANA@ec.europa.eu",
+          "head_phone": "+32 229-69933"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Witold Willak",
+          "head_email": "Witold.WILLAK@ec.europa.eu",
+          "head_phone": "+352 4301-36766"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefan Kuhnert",
+          "head_email": "Stefan.KUHNERT@eeas.europa.eu",
+          "head_phone": "+86 10-84548000"
+        }
+      ]
     },
-    "directorate_h": {
-      "code": "ECFIN.H",
-      "name": "Resources & Performance Management",
-      "director": {
-        "name": "Stefanos Sinanidis",
-        "position": "Director"
-      }
+    {
+      "code": "Dir R",
+      "name": "RESOURCES AND PERFORMANCE MANAGEMENT",
+      "director": "Bernadette Frederick",
+      "director_email": "Bernadette.FREDERICK@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Monika Sherwood",
+          "head_email": "Monika.SHERWOOD@ec.europa.eu",
+          "head_phone": "+32 229-80529"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nicoleta Carbunaru",
+          "head_email": "Nicoleta.CARBUNARU@ec.europa.eu",
+          "head_phone": "+32 229-95108"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Farid Rahmi",
+          "head_email": "Farid.Rahmi@ec.europa.eu",
+          "head_phone": "+32 229-95147"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefan Ciobanu",
+          "head_email": "Stefan.CIOBANU@ec.europa.eu",
+          "head_phone": "+32 229-90092"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jakob Wegener Friis",
+          "head_email": "",
+          "head_phone": "+32 229-84832"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mark Schelfhout",
+          "head_email": "Mark.Schelfhout@ec.europa.eu",
+          "head_phone": "+352 4301-30039"
+        }
+      ]
     }
-  },
-  "notes": [
-    "Deputy to the Director",
-    "Staff in FI Adaptations: S. Ruhnot - Adviser - Head of the economic and financial section in the EU delegation to China",
-    "Seconded Managers and Advisers: II Fin - seconded to the Cabinet of the President of the Council. II G Graise - seconded to the European Court of Auditors",
-    "In London: HII Staff in both Brussels and Luxembourg. DI Staff in both Brussels and Athens"
-  ]
+  ],
+  "num_directorates": 10,
+  "num_units": 45,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

@@ -1,0 +1,285 @@
+{
+  "institution_code": "EURCOU",
+  "source": "EU Who Is Who (op.europa.eu)",
+  "date_extracted": "2026-03-09",
+  "url": "https://op.europa.eu/en/web/who-is-who/organization/-/organization/EURCOU/EURCOU",
+  "structure": [
+    {
+      "code": "EURCOU_EURCOUPRES",
+      "name": "President",
+      "persons": [
+        {
+          "name": "Mr António COSTA"
+        }
+      ]
+    },
+    {
+      "code": "EURCOU_EURCOU.MEMB",
+      "name": "Members",
+      "units": [
+        {
+          "code": "EURCOU_EURCOU.MEMB.BEL",
+          "name": "Belgium",
+          "persons": [
+            {
+              "name": "Mr Bart DE WEVER"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.BGR",
+          "name": "Bulgaria",
+          "persons": [
+            {
+              "name": "Mr Rosen ZHELYAZKOV"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.CSK",
+          "name": "Czechia",
+          "persons": [
+            {
+              "name": "Mr Andrej BABIŠ"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.DNK",
+          "name": "Denmark",
+          "persons": [
+            {
+              "name": "Mette FREDERIKSEN"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.DEU",
+          "name": "Germany",
+          "persons": [
+            {
+              "name": "Mr Friedrich MERZ"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.EST",
+          "name": "Estonia",
+          "persons": [
+            {
+              "name": "Mr Kristen MICHAL"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.IRL",
+          "name": "Ireland",
+          "persons": [
+            {
+              "name": "Micheál MARTIN"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.GRC",
+          "name": "Greece",
+          "persons": [
+            {
+              "name": "Mr Kyriakos MITSOTAKIS"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.ESP",
+          "name": "Spain",
+          "persons": [
+            {
+              "name": "Mr Pedro SÁNCHEZ"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.FRA",
+          "name": "France",
+          "persons": [
+            {
+              "name": "Mr Emmanuel MACRON"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.HRV",
+          "name": "Croatia",
+          "persons": [
+            {
+              "name": "Mr Andrej PLENKOVIĆ"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.ITA",
+          "name": "Italy",
+          "persons": [
+            {
+              "name": "Ms Giorgia MELONI"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.CYP",
+          "name": "Cyprus",
+          "persons": [
+            {
+              "name": "Nikos CHRISTODOULIDES"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.LVA",
+          "name": "Latvia",
+          "persons": [
+            {
+              "name": "Ms Evika SILIŅA"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.LTU",
+          "name": "Lithuania",
+          "persons": [
+            {
+              "name": "Mr Gitanas NAUSĖDA"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.LUX",
+          "name": "Luxembourg",
+          "persons": [
+            {
+              "name": "Mr Luc FRIEDEN"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.HUN",
+          "name": "Hungary",
+          "persons": [
+            {
+              "name": "Mr Viktor ORBÁN"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.MLT",
+          "name": "Malta",
+          "persons": [
+            {
+              "name": "Mr Robert ABELA"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.NLD",
+          "name": "Netherlands",
+          "persons": [
+            {
+              "name": "Mr Dick SCHOOF"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.AUT",
+          "name": "Austria",
+          "persons": [
+            {
+              "name": "Mr Christian STOCKER"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.POL",
+          "name": "Poland",
+          "persons": [
+            {
+              "name": "Mr Donald TUSK"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.PRT",
+          "name": "Portugal",
+          "persons": [
+            {
+              "name": "Mr Luís MONTENEGRO"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.ROU",
+          "name": "Romania",
+          "persons": [
+            {
+              "name": "Mr Nicușor DAN"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.SVN",
+          "name": "Slovenia",
+          "persons": [
+            {
+              "name": "Mr Robert GOLOB"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.SVK",
+          "name": "Slovakia",
+          "persons": [
+            {
+              "name": "Mr Robert FICO"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.FIN",
+          "name": "Finland",
+          "persons": [
+            {
+              "name": "Mr Petteri ORPO"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.SWE",
+          "name": "Sweden",
+          "persons": [
+            {
+              "name": "Ulf KRISTERSSON"
+            }
+          ]
+        },
+        {
+          "code": "EURCOU_EURCOU.MEMB.COM",
+          "name": "European Commission",
+          "persons": [
+            {
+              "name": "Ms Ursula VON DER LEYEN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EURCOU_EURCOU.CAB",
+      "name": "Cabinet of the President",
+      "persons": [
+        {
+          "name": "Mr Pedro LOURTIE"
+        }
+      ]
+    }
+  ],
+  "person_count": 30
+}

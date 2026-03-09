@@ -1,0 +1,1472 @@
+{
+  "institution": "ECB",
+  "source": "euwhoiswho_ecb.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 228,
+  "units": {
+    "European Central Bank": {
+      "name": "European Central Bank",
+      "persons": [
+        {
+          "name": "SONNEMANNSTRASSE 20",
+          "title": "",
+          "phone": "+49 691344-6000"
+        },
+        {
+          "name": "Christine Lagarde",
+          "title": "President"
+        },
+        {
+          "name": "Luis De Guindos",
+          "title": "Vice-President"
+        },
+        {
+          "name": "Piero Cipollone",
+          "title": "Member of the Executive Board of the -- ECB"
+        },
+        {
+          "name": "Frank Elderson",
+          "title": "Member of the Executive Board of the -- ECB"
+        },
+        {
+          "name": "Philip R. Lane",
+          "title": "Member of the Executive Board of the -- ECB"
+        },
+        {
+          "name": "Isabel Schnabel",
+          "title": "Member of the Executive Board of the -- ECB"
+        }
+      ]
+    },
+    "GOVERNING COUNCIL": {
+      "name": "GOVERNING COUNCIL",
+      "persons": [
+        {
+          "name": "Christine Lagarde",
+          "title": "President"
+        },
+        {
+          "name": "Luis De Guindos",
+          "title": "Vice-President"
+        },
+        {
+          "name": "Frank Elderson",
+          "title": "Member of the Executive Board of the -- ECB"
+        },
+        {
+          "name": "Philip R. Lane",
+          "title": "Member of the Executive Board of the -- ECB"
+        },
+        {
+          "name": "Fabio Panetta",
+          "title": "Member of the Executive Board of the -- ECB"
+        },
+        {
+          "name": "Isabel Schnabel",
+          "title": "Member of the Executive Board of the -- ECB"
+        },
+        {
+          "name": "Pierre Wunsch",
+          "title": "Governor, Nationale Bank van België/ -- Banque Nationale de Belgique"
+        },
+        {
+          "name": "Joachim Nagel",
+          "title": "President, Deutsche Bundesbank"
+        },
+        {
+          "name": "Madis Müller",
+          "title": "Governor, Eesti Pank"
+        },
+        {
+          "name": "Gabriel Makhlouf",
+          "title": "Governor, Central Bank of Ireland"
+        },
+        {
+          "name": "Yannis Stournaras",
+          "title": "Governor, Bank of Greece"
+        },
+        {
+          "name": "Pablo Hernández De Cos",
+          "title": "Governor, Banco de España"
+        },
+        {
+          "name": "François Villeroy De Galhau",
+          "title": "Governor, Banque de France"
+        },
+        {
+          "name": "Boris Vujčić",
+          "title": "Governor, Hrvatska narodna banka"
+        },
+        {
+          "name": "Ignazio Visco",
+          "title": "Governor, Banca d'Italia"
+        },
+        {
+          "name": "Constantinos Herodotou",
+          "title": "Governor, Central Bank of Cyprus"
+        },
+        {
+          "name": "Mārtiņš Kazāks",
+          "title": "Governor, Latvijas Banka"
+        },
+        {
+          "name": "Gediminas Šimkus",
+          "title": "Chairman of the Board, Lietuvos bankas"
+        },
+        {
+          "name": "Gaston Reinesch",
+          "title": "Governor, Banque centrale du -- Luxembourg"
+        },
+        {
+          "name": "Edward Scicluna",
+          "title": "Governor, Central Bank of Malta"
+        },
+        {
+          "name": "Klaas Knot",
+          "title": "President, De Nederlandsche Bank"
+        },
+        {
+          "name": "Robert Holzmann",
+          "title": "Governor, Oesterreichische -- Nationalbank"
+        },
+        {
+          "name": "Mário Centeno",
+          "title": "Governor, Banco de Portugal"
+        },
+        {
+          "name": "Boštjan Vasle",
+          "title": "Governor, Banka Slovenije"
+        },
+        {
+          "name": "Peter Kažimír",
+          "title": "Governor, Národná banka Slovenska"
+        },
+        {
+          "name": "Oli Rehn",
+          "title": "Governor, Suomen Pankki — Finlands -- Bank"
+        }
+      ]
+    },
+    "GENERAL COUNCIL": {
+      "name": "GENERAL COUNCIL",
+      "persons": [
+        {
+          "name": "Christine Lagarde",
+          "title": "President"
+        },
+        {
+          "name": "Luis De Guindos",
+          "title": "Vice-President"
+        },
+        {
+          "name": "Pierre Wunsch",
+          "title": "Governor, Nationale Bank van België/ -- Banque Nationale de Belgique"
+        },
+        {
+          "name": "Dimitar Radev",
+          "title": "Governor, Българска народна банка -- (Bulgarian National Bank)"
+        },
+        {
+          "name": "Aleš Michl",
+          "title": "Governor, Česká národní banka"
+        },
+        {
+          "name": "Christian Kettel Thomsen",
+          "title": "Governor, Danmarks Nationalbank"
+        },
+        {
+          "name": "Joachim Nagel",
+          "title": "President, Deutsche Bundesbank"
+        },
+        {
+          "name": "Yannis Stournaras",
+          "title": "Governor, Bank of Greece"
+        },
+        {
+          "name": "Madis Müller",
+          "title": "Governor, Eesti Pank"
+        },
+        {
+          "name": "Gabriel Makhlouf",
+          "title": "Governor, Central Bank of Ireland"
+        },
+        {
+          "name": "Pablo Hernández De Cos",
+          "title": "Governor, Banco de España"
+        },
+        {
+          "name": "François Villeroy De Galhau",
+          "title": "Governor, Banque de France"
+        },
+        {
+          "name": "Boris Vujčić",
+          "title": "Governor, Hrvatska narodna banka"
+        },
+        {
+          "name": "Ignazio Visco",
+          "title": "Governor, Banca d'Italia"
+        },
+        {
+          "name": "Constantinos Herodotou",
+          "title": "Governor, Central Bank of Cyprus"
+        },
+        {
+          "name": "Mārtiņš Kazāks",
+          "title": "Governor, Latvijas Banka"
+        },
+        {
+          "name": "Gaston Reinesch",
+          "title": "Governor, Banque centrale du -- Luxembourg"
+        },
+        {
+          "name": "György Matolcsy",
+          "title": "Governor, Magyar Nemzeti Bank"
+        },
+        {
+          "name": "Gediminas Šimkus",
+          "title": "Chairman of the Board, Lietuvos bankas"
+        },
+        {
+          "name": "Klaas Knot",
+          "title": "President, De Nederlandsche Bank"
+        },
+        {
+          "name": "Robert Holzmann",
+          "title": "Governor, Oesterreichische -- Nationalbank"
+        },
+        {
+          "name": "Edward Scicluna",
+          "title": "Governor, Central Bank of Malta"
+        },
+        {
+          "name": "Adam Glapiński",
+          "title": "President, Narodowy Bank Polski"
+        },
+        {
+          "name": "Mugur Constantin Isărescu",
+          "title": "Governor, Banca Naţională a României"
+        },
+        {
+          "name": "Boštjan Vasle",
+          "title": "Governor, Banka Slovenije"
+        },
+        {
+          "name": "Stefan Ingves",
+          "title": "Governor, Sveriges Riksbank"
+        },
+        {
+          "name": "Oli Rehn",
+          "title": "Governor, Suomen Pankki — Finlands -- Bank"
+        },
+        {
+          "name": "Mário Centeno",
+          "title": "Governor, Banco de Portugal"
+        },
+        {
+          "name": "Peter Kažimír",
+          "title": "Governor, Národná banka Slovenska"
+        },
+        {
+          "name": "Erik Thedéen",
+          "title": "Governor, Sveriges Riksbank"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL SECRETARIAT": {
+      "name": "DIRECTORATE GENERAL SECRETARIAT",
+      "persons": [
+        {
+          "name": "Petra Senkovic",
+          "title": "Director General"
+        }
+      ]
+    },
+    "COMPLIANCE AND GOVERNANCE OFFICE": {
+      "name": "COMPLIANCE AND GOVERNANCE OFFICE",
+      "persons": [
+        {
+          "name": "Roman Schremser",
+          "title": "Chief Compliance and Governance -- Officer"
+        }
+      ]
+    },
+    "Compliance and Governance Division": {
+      "name": "Compliance and Governance Division",
+      "persons": [
+        {
+          "name": "Marguerite-Louise Karydi",
+          "title": ""
+        }
+      ]
+    },
+    "Secretariat Division": {
+      "name": "Secretariat Division",
+      "persons": [
+        {
+          "name": "Manfred Koch",
+          "title": ""
+        }
+      ]
+    },
+    "Information Governance Division": {
+      "name": "Information Governance Division",
+      "persons": [
+        {
+          "name": "Evangelia Kargianioti",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "PRINCIPAL COORDINATOR OF THE COUNSEL TO THE EXECUTIVE BOARD": {
+      "name": "PRINCIPAL COORDINATOR OF THE COUNSEL TO THE EXECUTIVE BOARD",
+      "persons": [
+        {
+          "name": "Roland Straub",
+          "title": "Counsellor to the President and -- Coordinator of the Counsel to the -- Executive Board"
+        }
+      ]
+    },
+    "DIRECTORATE INTERNAL AUDIT": {
+      "name": "DIRECTORATE INTERNAL AUDIT",
+      "persons": [
+        {
+          "name": "Banafsheh Geretzki",
+          "title": "Director"
+        }
+      ]
+    },
+    "Audit Missions Division": {
+      "name": "Audit Missions Division",
+      "persons": [
+        {
+          "name": "Kevin Yeung",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division": {
+      "name": "Division",
+      "persons": [
+        {
+          "name": "Carin Pronk",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Matteo Ciccarelli",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Holger Neuhaus",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Sylvain Debeaumont",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Karen Birkel",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Carsten Schneider",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Remigio Echeverría",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Olga Susana Monteiro",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Frank Mayerlen",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Alessandro Bonara",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Ioannis Ganoulis",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Alessandro Calza",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Christoph Schaper",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "ESRB SECRETARIAT": {
+      "name": "ESRB SECRETARIAT",
+      "persons": [
+        {
+          "name": "Francesco Mazzaferro",
+          "title": "Director"
+        },
+        {
+          "name": "Tuomas Peltonen",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL COMMUNICATIONS": {
+      "name": "DIRECTORATE GENERAL COMMUNICATIONS",
+      "persons": [
+        {
+          "name": "Wolfgang Proissl",
+          "title": "Director General"
+        },
+        {
+          "name": "Thierry Bracke",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Cornelia Lotze",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Design and Digital Division": {
+      "name": "Design and Digital Division",
+      "persons": [
+        {
+          "name": "Stefania Secola",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Language Services Division": {
+      "name": "Language Services Division",
+      "persons": [
+        {
+          "name": "Rossana Villani",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Newsroom Division": {
+      "name": "Newsroom Division",
+      "persons": [
+        {
+          "name": "Paul Gordon",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Public Communication Division": {
+      "name": "Public Communication Division",
+      "persons": [
+        {
+          "name": "Torsten Busse",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL MACROPRUDENTIAL POLICY & FINANCIAL STABILITY": {
+      "name": "DIRECTORATE GENERAL MACROPRUDENTIAL POLICY & FINANCIAL STABILITY",
+      "persons": [
+        {
+          "name": "Cornelia Holthausen",
+          "title": "Director General"
+        },
+        {
+          "name": "John Fell",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Livio Stracca",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Institutions Division": {
+      "name": "Institutions Division",
+      "persons": [
+        {
+          "name": "Paul Hiebert",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Stress Test Modelling Division": {
+      "name": "Stress Test Modelling Division",
+      "persons": [
+        {
+          "name": "Carmelo Salleo",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Macroprudential Policy Division": {
+      "name": "Macroprudential Policy Division",
+      "persons": [
+        {
+          "name": "Carsten Detken",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Market-based Finance Division": {
+      "name": "Market-based Finance Division",
+      "persons": [
+        {
+          "name": "Sujit Kapadia",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Financial Regulation & Policy Division": {
+      "name": "Financial Regulation & Policy Division",
+      "persons": [
+        {
+          "name": "Anton Van Der Kraaij",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE RISK MANAGEMENT": {
+      "name": "DIRECTORATE RISK MANAGEMENT",
+      "persons": [
+        {
+          "name": "Fernando Monar Lora",
+          "title": "Director"
+        }
+      ]
+    },
+    "Risk Strategy Division": {
+      "name": "Risk Strategy Division",
+      "persons": [
+        {
+          "name": "Elke Heinle",
+          "title": "Director"
+        }
+      ]
+    },
+    "Risk Analysis Division": {
+      "name": "Risk Analysis Division",
+      "persons": [
+        {
+          "name": "Thomas Werner",
+          "title": "Director"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL INTERNATIONAL & EUROPEAN RELATIONS": {
+      "name": "DIRECTORATE GENERAL INTERNATIONAL & EUROPEAN RELATIONS",
+      "persons": [
+        {
+          "name": "Isabel Vansteenkiste",
+          "title": "Director General"
+        },
+        {
+          "name": "Fatima Pires",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "ECB Representative Office In",
+          "title": ""
+        },
+        {
+          "name": "Boris Kisselevsky",
+          "title": "Principal Adviser"
+        },
+        {
+          "name": "ECB Representation In",
+          "title": ""
+        },
+        {
+          "name": "Washington D.C.",
+          "title": ""
+        },
+        {
+          "name": "Rasmus Rüffer",
+          "title": "Principal Adviser"
+        }
+      ]
+    },
+    "ECB REPRESENTATIVE OFFICE IN LONDON": {
+      "name": "ECB REPRESENTATIVE OFFICE IN LONDON",
+      "persons": [
+        {
+          "name": "Guy-Charles Marhic",
+          "title": "Senior Lead Economist"
+        }
+      ]
+    },
+    "International Policy Analysis Division": {
+      "name": "International Policy Analysis Division",
+      "persons": [
+        {
+          "name": "Regine Wölfinger",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "External Developments Division": {
+      "name": "External Developments Division",
+      "persons": [
+        {
+          "name": "Stylianos Markrydakis",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "EU Institutions & Fora Division": {
+      "name": "EU Institutions & Fora Division",
+      "persons": [
+        {
+          "name": "Daniel Kapp",
+          "title": "Deputy Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE BANKNOTES": {
+      "name": "DIRECTORATE BANKNOTES",
+      "persons": [
+        {
+          "name": "Doris Schneeberger",
+          "title": "Director"
+        }
+      ]
+    },
+    "Currency Development Division": {
+      "name": "Currency Development Division",
+      "persons": [
+        {
+          "name": "Jean-Michel Grimal",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Currency Management Division": {
+      "name": "Currency Management Division",
+      "persons": [
+        {
+          "name": "Paloma Varela",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL ECONOMICS": {
+      "name": "DIRECTORATE GENERAL ECONOMICS",
+      "persons": [
+        {
+          "name": "Oscar Arce",
+          "title": "Director General"
+        },
+        {
+          "name": "Christiane Nickel",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Joao Sousa",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Prices & Costs Division": {
+      "name": "Prices & Costs Division",
+      "persons": [
+        {
+          "name": "Sarah Holton",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Sarah Holton",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Business Cycle Analysis Division": {
+      "name": "Business Cycle Analysis Division",
+      "persons": [
+        {
+          "name": "Beatrice Pierluigi",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Wolfgang Modery",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Adoption Division": {
+      "name": "Adoption Division",
+      "persons": [
+        {
+          "name": "David Lodge",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Fiscal Policies Division": {
+      "name": "Fiscal Policies Division",
+      "persons": [
+        {
+          "name": "Ettore Dorrucci",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL MARKET INFRASTRUCTURE & PAYMENTS": {
+      "name": "DIRECTORATE GENERAL MARKET INFRASTRUCTURE & PAYMENTS",
+      "persons": [
+        {
+          "name": "Ulrich Bindseil",
+          "title": "Director General"
+        },
+        {
+          "name": "Dimitri Pattyn",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Fiona Van Echelpoel",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Oversight Division": {
+      "name": "Oversight Division",
+      "persons": [
+        {
+          "name": "Daniela Rosati",
+          "title": "Head of Division",
+          "phone": "+32 229-81746"
+        }
+      ]
+    },
+    "Market Infrastructure Support Division": {
+      "name": "Market Infrastructure Support Division",
+      "persons": [
+        {
+          "name": "Francisco José Tur Hartmann",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL LEGAL SERVICES": {
+      "name": "DIRECTORATE GENERAL LEGAL SERVICES",
+      "persons": [
+        {
+          "name": "Chiara Zilioli",
+          "title": "Director General"
+        },
+        {
+          "name": "Christian Kroppenstedt",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Roberto Ugena",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Institutional Law Division": {
+      "name": "Institutional Law Division",
+      "persons": [
+        {
+          "name": "Frederik Malfrère",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Financial Law Division": {
+      "name": "Financial Law Division",
+      "persons": [
+        {
+          "name": "Otto Heinz",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Legislation Division": {
+      "name": "Legislation Division",
+      "persons": [
+        {
+          "name": "Peter Pfeifhofer",
+          "title": "Head of Division -- Supervisory Law Division"
+        },
+        {
+          "name": "Eleni Koupepidou",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DATA PROTECTION OFFICE": {
+      "name": "DATA PROTECTION OFFICE",
+      "persons": [
+        {
+          "name": "Daman Maarten",
+          "title": "Data Protection Officer"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL MONETARY POLICY": {
+      "name": "DIRECTORATE GENERAL MONETARY POLICY",
+      "persons": [
+        {
+          "name": "Massimo Rostagno",
+          "title": "Director General"
+        },
+        {
+          "name": "Christophe Kamps",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Monetary Analysis Division": {
+      "name": "Monetary Analysis Division",
+      "persons": [
+        {
+          "name": "Carlo Altavilla",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Monetary Policy Strategy Division": {
+      "name": "Monetary Policy Strategy Division",
+      "persons": [
+        {
+          "name": "Katrin Assenmacher",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL STATISTICS": {
+      "name": "DIRECTORATE GENERAL STATISTICS",
+      "persons": [
+        {
+          "name": "Claudia Mann",
+          "title": "Director General"
+        },
+        {
+          "name": "Caroline Willeke",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Remigio Echeverría",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Banking Supervision Data Division": {
+      "name": "Banking Supervision Data Division",
+      "persons": [
+        {
+          "name": "Giancarlo Pellizzari",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "ECB Data Office": {
+      "name": "ECB Data Office",
+      "persons": [
+        {
+          "name": "Maciej Brzezinski",
+          "title": "Deputy Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL RESEARCH": {
+      "name": "DIRECTORATE GENERAL RESEARCH",
+      "persons": [
+        {
+          "name": "Luc Laeven",
+          "title": "Director General"
+        },
+        {
+          "name": "Philipp Hartmann",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Monetary Policy Research Division": {
+      "name": "Monetary Policy Research Division",
+      "persons": [
+        {
+          "name": "Michael Ehrmann",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Financial Research Division": {
+      "name": "Financial Research Division",
+      "persons": [
+        {
+          "name": "Simone Manganelli",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL MARKET OPERATIONS": {
+      "name": "DIRECTORATE GENERAL MARKET OPERATIONS",
+      "persons": [
+        {
+          "name": "Imène Rahmouni-Rousseau",
+          "title": "Director General"
+        },
+        {
+          "name": "Isabel Von Köppen-Mertes",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Roland Straub",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Financial Operations Services Division": {
+      "name": "Financial Operations Services Division",
+      "persons": [
+        {
+          "name": "Isabel Soares",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Intelligence Division": {
+      "name": "Intelligence Division",
+      "persons": [
+        {
+          "name": "Tobias Linzert",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Liquidity and Investments Division": {
+      "name": "Liquidity and Investments Division",
+      "persons": [
+        {
+          "name": "Emily Witt",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Innovations Division": {
+      "name": "Innovations Division",
+      "persons": [
+        {
+          "name": "Christophe Beuve",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "CHIEF SERVICES OFFICE": {
+      "name": "CHIEF SERVICES OFFICE",
+      "persons": [
+        {
+          "name": "Andreas Burgstaller",
+          "title": "Head of Section"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL CORPORATE SERVICES": {
+      "name": "DIRECTORATE GENERAL CORPORATE SERVICES",
+      "persons": [
+        {
+          "name": "Roberto Schiavi",
+          "title": "Director General"
+        },
+        {
+          "name": "Anna Maria Bausback",
+          "title": "Director Finance"
+        },
+        {
+          "name": "Cristina San Agapito",
+          "title": "Director Administration"
+        }
+      ]
+    },
+    "Services Division": {
+      "name": "Services Division",
+      "persons": [
+        {
+          "name": "Daniele Krebs",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL HUMAN RESOURCES": {
+      "name": "DIRECTORATE GENERAL HUMAN RESOURCES",
+      "persons": [
+        {
+          "name": "Eva Murciano",
+          "title": "Director General"
+        }
+      ]
+    },
+    "Business Partnering Division": {
+      "name": "Business Partnering Division",
+      "persons": [
+        {
+          "name": "Eglantine Devaux",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Talent Management Division": {
+      "name": "Talent Management Division",
+      "persons": [
+        {
+          "name": "Ildikó Ráczné Szoke",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Employee Services Division": {
+      "name": "Employee Services Division",
+      "persons": [
+        {
+          "name": "Benjamin Sahel",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL INFORMATION SYSTEMS": {
+      "name": "DIRECTORATE GENERAL INFORMATION SYSTEMS",
+      "persons": [
+        {
+          "name": "Claudia Plattner",
+          "title": "Director General"
+        },
+        {
+          "name": "Dirk Robijns",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Data Analytics Domain Services": {
+      "name": "Data Analytics Domain Services",
+      "persons": [
+        {
+          "name": "Peter Lindlacher",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Digital Security Services Division": {
+      "name": "Digital Security Services Division",
+      "persons": [
+        {
+          "name": "Alvise Grammatica",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Enterprise Domain Services Division": {
+      "name": "Enterprise Domain Services Division",
+      "persons": [
+        {
+          "name": "Eleftheria Amilitou",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Prudential Domain Services Division": {
+      "name": "Prudential Domain Services Division",
+      "persons": [
+        {
+          "name": "Sertac Son",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Alliance of DevOps Product Teams": {
+      "name": "Alliance of DevOps Product Teams",
+      "persons": [
+        {
+          "name": "Julie Anne Dubois",
+          "title": "Deputy Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE SUPERVISORY STRATEGY & RISK": {
+      "name": "DIRECTORATE SUPERVISORY STRATEGY & RISK",
+      "persons": [
+        {
+          "name": "Mario Quagliariello",
+          "title": "Director"
+        }
+      ]
+    },
+    "Division Strategic Risk & Analytics": {
+      "name": "Division Strategic Risk & Analytics",
+      "persons": [
+        {
+          "name": "Klaus Düllmann",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Supervisory Risk-Financial": {
+      "name": "Division Supervisory Risk-Financial",
+      "persons": [
+        {
+          "name": "Thomas Prehofer",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Supervisory Risk-Non-": {
+      "name": "Division Supervisory Risk-Non-",
+      "persons": [
+        {
+          "name": "Veerle De Vuyst",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL SSM GOVERNANCE & OPERATIONS": {
+      "name": "DIRECTORATE GENERAL SSM GOVERNANCE & OPERATIONS",
+      "persons": [
+        {
+          "name": "Pedro Gustavo Teixeira",
+          "title": "Director General"
+        },
+        {
+          "name": "Daniela Schackis",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Division SSM Secretariat": {
+      "name": "Division SSM Secretariat",
+      "persons": [
+        {
+          "name": "Hans Georg Gruber",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Technology & Innovation": {
+      "name": "Division Technology & Innovation",
+      "persons": [
+        {
+          "name": "Francisco Gil Almansa",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Fit and Proper": {
+      "name": "Division Fit and Proper",
+      "persons": [
+        {
+          "name": "Ana Campos",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Authorisation": {
+      "name": "Division Authorisation",
+      "persons": [
+        {
+          "name": "Bernhard Hoertnagl",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Enforcement & Sanctions": {
+      "name": "Division Enforcement & Sanctions",
+      "persons": [
+        {
+          "name": "Oscar Melendez Huelin",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL HORIZONTAL LINE SUPERVISION": {
+      "name": "DIRECTORATE GENERAL HORIZONTAL LINE SUPERVISION",
+      "persons": [
+        {
+          "name": "Isabel Von Köppen-Mertes",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Sofia Toscano Rico",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Division Credit Risk Experts": {
+      "name": "Division Credit Risk Experts",
+      "persons": [
+        {
+          "name": "Gianluca Trevisan",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Stress Test Experts": {
+      "name": "Division Stress Test Experts",
+      "persons": [
+        {
+          "name": "Christoffer Kok",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Supervisory Policy": {
+      "name": "Division Supervisory Policy",
+      "persons": [
+        {
+          "name": "Florian Weidenholzer",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Business Model, Capital &": {
+      "name": "Division Business Model, Capital &",
+      "persons": [
+        {
+          "name": "Katia Mastrodomenico",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Supervisory Methodology": {
+      "name": "Division Supervisory Methodology",
+      "persons": [
+        {
+          "name": "Jan Hendrik Schmidt",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Non-Financial Risk Experts": {
+      "name": "Division Non-Financial Risk Experts",
+      "persons": [
+        {
+          "name": "Maria Julve San Martin",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Capital Markets & Treasury": {
+      "name": "Division Capital Markets & Treasury",
+      "persons": [
+        {
+          "name": "Armin Leistenschneider",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL SYSTEMIC & INTERNATIONAL BANKS": {
+      "name": "DIRECTORATE GENERAL SYSTEMIC & INTERNATIONAL BANKS",
+      "persons": [
+        {
+          "name": "Ramón Quintana",
+          "title": "Director General"
+        },
+        {
+          "name": "Paolo Corradino",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Thomas Jorgensen",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Division Systemic & international": {
+      "name": "Division Systemic & international",
+      "persons": [
+        {
+          "name": "Pien Van Erp Taalman Kip",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIVISION SYSTEMIC & INTERNATIONAL BANKS 2": {
+      "name": "DIVISION SYSTEMIC & INTERNATIONAL BANKS 2",
+      "persons": [
+        {
+          "name": "Thomas Gständtner",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIVISION SYSTEMIC & INTERNATIONAL BANKS 3": {
+      "name": "DIVISION SYSTEMIC & INTERNATIONAL BANKS 3",
+      "persons": [
+        {
+          "name": "Gemar Knöchlein",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIVISION SYSTEMIC & INTERNATIONAL BANKS 4": {
+      "name": "DIVISION SYSTEMIC & INTERNATIONAL BANKS 4",
+      "persons": [
+        {
+          "name": "José Vicente Martinez Lisalde",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIVISION SYSTEMIC & INTERNATIONAL BANKS 5": {
+      "name": "DIVISION SYSTEMIC & INTERNATIONAL BANKS 5",
+      "persons": [
+        {
+          "name": "Tilo Däbritz",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIVISION SYSTEMIC & INTERNATIONAL BANKS 6": {
+      "name": "DIVISION SYSTEMIC & INTERNATIONAL BANKS 6",
+      "persons": [
+        {
+          "name": "Jekaterina Titarenko",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL UNIVERSAL & DIVERSIFIED INSTITUTIONS": {
+      "name": "DIRECTORATE GENERAL UNIVERSAL & DIVERSIFIED INSTITUTIONS",
+      "persons": [
+        {
+          "name": "Korbinian Ibel",
+          "title": "Director General"
+        },
+        {
+          "name": "Rolf Klug",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Maria Da Conceiçao Macedo",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Division Universal & Diversified": {
+      "name": "Division Universal & Diversified",
+      "persons": [
+        {
+          "name": "Banafsheh Geretzki",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Damiano Guadalupi",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Stephen Woulfe",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Juan Blanc",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Victor Luis Guerrero Gutierrez",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL SPECIALISED INSTITUTIONS & LSIS": {
+      "name": "DIRECTORATE GENERAL SPECIALISED INSTITUTIONS & LSIS",
+      "persons": [
+        {
+          "name": "Patrick Amis",
+          "title": "Director General"
+        },
+        {
+          "name": "Eleni Angelopoulou",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Anne Lécuyer",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Division Specialised Institutions &": {
+      "name": "Division Specialised Institutions &",
+      "persons": [
+        {
+          "name": "Stephanie Hecker",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Marc Trausch",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Giacomo Caviglia",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Fabio Perata",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Antti Ville Juhana Olkinuora",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Institutional & Sectoral": {
+      "name": "Division Institutional & Sectoral",
+      "persons": [
+        {
+          "name": "Anne Fröhling",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "DIRECTORATE GENERAL ON-SITE & INTERNAL MODEL INSPECTIONS": {
+      "name": "DIRECTORATE GENERAL ON-SITE & INTERNAL MODEL INSPECTIONS",
+      "persons": [
+        {
+          "name": "Linette Field",
+          "title": "Director General"
+        },
+        {
+          "name": "Muriel Tiesset",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Division Non-Financial Risk": {
+      "name": "Division Non-Financial Risk",
+      "persons": [
+        {
+          "name": "Marco Rocco",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Financial Risk Inspections": {
+      "name": "Division Financial Risk Inspections",
+      "persons": [
+        {
+          "name": "Pietro Giammario",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Internal Model Investigations": {
+      "name": "Division Internal Model Investigations",
+      "persons": [
+        {
+          "name": "Robert Lauter",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Division Operations & Integration": {
+      "name": "Division Operations & Integration",
+      "persons": [
+        {
+          "name": "Laurent Mercier",
+          "title": "Head of Division"
+        }
+      ]
+    }
+  }
+}

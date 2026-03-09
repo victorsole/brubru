@@ -1,88 +1,205 @@
 {
   "dg_code": "DIGIT",
-  "dg_name": "Digital Services",
-  "full_name": "Directorate-General for Digital Services",
-  "date_of_effect": "2025-09-16",
-  "executive_vice_president": {
-    "name": "Henna Virkkunen",
-    "title": "Executive Vice-President"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "Veronica Gaffey",
-      "position": "Director-General",
-      "assistant": {
-        "name": "Marleen Hoebeke",
-        "role": "Assistant to the DG"
-      }
+  "dg_name": "Directorate-General for Digital Services",
+  "commissioner": "",
+  "director_general": "Veronica Gaffey",
+  "director_general_email": "Veronica.Gaffey@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Georgios Psykakos",
+      "email": "Georgios.PSYKAKOS@ec.europa.eu",
+      "responsibilities": ""
     },
-    "deputy_director_general": {
+    {
       "name": "Philippe Van Damme",
-      "position": "Deputy Director-General"
+      "email": "Philippe.VAN-DAMME@ec.europa.eu",
+      "responsibilities": ""
     }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "DIGIT.A",
-      "name": "Digital Transformation",
-      "director": {
-        "name": "Carl-Christian Buhr",
-        "position": "Director"
-      }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Saad Kadhi",
+      "director_email": "Saad.KADHI@ec.europa.eu",
+      "units": []
     },
-    "directorate_b": {
-      "code": "DIGIT.B",
-      "name": "Digital Enablers & Innovation",
-      "director": {
-        "name": "Natalia Aristimuno Perez (acting)",
-        "position": "Director"
-      }
+    {
+      "code": "Dir B",
+      "name": "DIGITAL ENABLERS & INNOVATION",
+      "director": "Leontina Sandu",
+      "director_email": "Leontina.SANDU@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Spyros Sarigiannidis",
+          "head_email": "Spyridon.SARIGIANNIDIS@ec.europa.eu",
+          "head_phone": "+352 4301-34425"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Leontina Sandu",
+          "head_email": "Leontina.SANDU@ec.europa.eu",
+          "head_phone": "+32 229-13965"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Chrysanthi Giortsou",
+          "head_email": "Chrysanthi.GIORTSOU@ec.europa.eu",
+          "head_phone": "+352 4301-31279"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Thomas Michlmayr",
+          "head_email": "Thomas.Michlmayr@ec.europa.eu",
+          "head_phone": "+352 4301-34356"
+        }
+      ]
     },
-    "directorate_c": {
-      "code": "DIGIT.C",
-      "name": "Digital Workplace & Infrastructure",
-      "director": {
-        "name": "Philippe Van Damme (acting)",
-        "position": "Director"
-      }
+    {
+      "code": "Dir C",
+      "name": "DIGITAL WORKPLACE AND INFRASTRUCTURE",
+      "director": "Philippe Van Damme",
+      "director_email": "Philippe.VAN-DAMME@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Philippe Merle",
+          "head_email": "Philippe.MERLE@ec.europa.eu",
+          "head_phone": "+352 4301-32243"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Diana Gheorghe",
+          "head_email": "Diana.GHEORGHE@ec.europa.eu",
+          "head_phone": "+32 229-65371"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cedric Duchesne",
+          "head_email": "Cedric.Duchesne@ec.europa.eu",
+          "head_phone": "+352 4301-34979"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Titus Purdea",
+          "head_email": "Titus.PURDEA@ec.europa.eu",
+          "head_phone": "+352 4301-30711"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lucja Adamczyk-Dobbelstein",
+          "head_email": "DOBBELSTEIN@ec.europa.eu",
+          "head_phone": "+32 229-87744"
+        }
+      ]
     },
-    "directorate_r": {
-      "code": "DIGIT.R",
-      "name": "Change Management & Resources",
-      "director": {
-        "name": "Natalia Aristimuno Perez",
-        "position": "Director"
-      }
+    {
+      "code": "Dir A",
+      "name": "DIGITAL TRANSFORMATION",
+      "director": "Carl-Christian Buhr",
+      "director_email": "Carl-Christian.BUHR@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Margarita Rodriguez",
+          "head_email": "GARAGORRI@ec.europa.eu",
+          "head_phone": "+32 229-94393"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Angeliki Chlapani",
+          "head_email": "Angeliki.CHLAPANI@ec.europa.eu",
+          "head_phone": "+32 229-58333"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Magdalena Hagiu",
+          "head_email": "Magdalena.HAGIU@ec.europa.eu",
+          "head_phone": "+32 229-68236"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eric Derruine",
+          "head_email": "Eric.Derruine@ec.europa.eu",
+          "head_phone": "+32 229-90497"
+        }
+      ]
     },
-    "directorate_s": {
-      "code": "DIGIT.S",
-      "name": "Cybersecurity",
-      "director": {
-        "name": "Grzegorz Minczakiewicz",
-        "position": "Director"
-      }
+    {
+      "code": "Dir R",
+      "name": "CHANGE MANAGEMENT AND RESOURCES",
+      "director": "Natalia Aristimuno Perez",
+      "director_email": "Natalia.ARISTIMUNO@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Tanya Chetcuti",
+          "head_email": "Tanya.CHETCUTI@ec.europa.eu",
+          "head_phone": "+32 229-69348"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pierre Charlier",
+          "head_email": "Pierre.CHARLIER@ec.europa.eu",
+          "head_phone": "+32 229-54537"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Miroslav Ognyanov",
+          "head_email": "Miroslav.OGNYANOV@ec.europa.eu",
+          "head_phone": "+32 229-57074"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Angel Ancin",
+          "head_email": "Angel.ANCIN@ec.europa.eu",
+          "head_phone": "+32 229-95267"
+        }
+      ]
+    },
+    {
+      "code": "Dir S",
+      "name": "CYBERSECURITY",
+      "director": "Grzegorz Minczakiewicz",
+      "director_email": "Grzegorz.MINCZAKIEWICZ@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Roberto Barcellan",
+          "head_email": "Roberto.Barcellan@ec.europa.eu",
+          "head_phone": "+32 229-56980"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Guy Lambert",
+          "head_email": "Guy.LAMBERT@ec.europa.eu",
+          "head_phone": "+352 4301-33582"
+        }
+      ]
     }
-  },
-  "special_units": {
-    "cert_eu": {
-      "code": "DIGIT.CERT-EU",
-      "name": "Cybersecurity Service for the Union Institutions, Bodies, Offices and Agencies",
-      "head": {
-        "name": "Saad Kadhi",
-        "position": "Head"
-      }
-    },
-    "hr_correspondent_team": {
-      "code": "HR Correspondent Team",
-      "head": {
-        "name": "Catherine Alterman",
-        "position": "Head"
-      }
-    }
-  },
-  "notes": [
-    "Entities located in Luxembourg",
-    "Deputy to the Director",
-    "Deputy Head of Unit"
-  ]
+  ],
+  "num_directorates": 6,
+  "num_units": 19,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

@@ -1,0 +1,144 @@
+{
+  "dg_code": "IAS",
+  "dg_name": "Internal Audit Service",
+  "commissioner": "",
+  "director_general": "Agnieszka Kaźmierczak",
+  "director_general_email": "Agnieszka.KAZMIERCZAK@ec.europa.eu",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Georgiana Van Rompuy",
+      "director_email": "Georgiana.VAN-ROMPUY@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Giorgos Rossides",
+          "head_email": "George.ROSSIDES@ec.europa.eu",
+          "head_phone": "+32 229-80097"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Rogero Vincitore",
+          "head_email": "Rogero.Vincitore@ec.europa.eu",
+          "head_phone": "+32 229-69725"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Filip Verhoeven",
+          "head_email": "Filip.VERHOEVEN@ec.europa.eu",
+          "head_phone": "+32 229-62059"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne-Catherine Simeon",
+          "head_email": "Anne-Catherine.SIMEON@ec.europa.eu",
+          "head_phone": "+32 229-62010"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "DIGITAL, KNOWLEDGE AND INNOVATION",
+      "director": "Cristiana Giacobbo",
+      "director_email": "Cristiana.Giacobbo@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Volker Rokos",
+          "head_email": "Volker.Rokos@ec.europa.eu",
+          "head_phone": "+32 229-65017"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nadezhda Klyancheva",
+          "head_email": "Nadezhda.KLYANCHEVA@ec.europa.eu",
+          "head_phone": "+32 229-55732"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Carlo Billi",
+          "head_email": "Carlo.BILLI@ec.europa.eu",
+          "head_phone": "+32 229-96924"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "INTERNAL MARKET, EXTERNAL POLICIES AND PUBLIC ADMINISTRATION",
+      "director": "Derek Dunphy",
+      "director_email": "Derek.DUNPHY@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Elena Climent Vano",
+          "head_email": "Elena.CLIMENT-VANO@ec.europa.eu",
+          "head_phone": "+32 229-54025"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Edwin Croonen",
+          "head_email": "Edwin.Croonen@ec.europa.eu",
+          "head_phone": "+32 229-61867"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Niina Lehtinen",
+          "head_email": "Niina-Maarit.LEHTINEN@ec.europa.eu",
+          "head_phone": "+32 229-86252"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sunil Beersing",
+          "head_email": "Sunil.BEERSING@ec.europa.eu",
+          "head_phone": "+32 229-91508"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "COHESION, GREEN ECONOMY, SECURITY AND JUSTICE",
+      "director": "Ilian Komitski",
+      "director_email": "Ilian.KOMITSKI@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ilian Komitski",
+          "head_email": "Ilian.KOMITSKI@ec.europa.eu",
+          "head_phone": "+32 229-63612"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jose Carbajales",
+          "head_email": "Jose.Carbajales@ec.europa.eu",
+          "head_phone": "+32 229-65772"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Natacha Legras Marechal",
+          "head_email": "Natacha.LEGRAS-MARECHAL@ec.europa.eu",
+          "head_phone": "+32 229-87026"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 4,
+  "num_units": 14,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

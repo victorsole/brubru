@@ -1,186 +1,248 @@
 {
   "dg_code": "ECHO",
-  "dg_name": "European Civil Protection & Humanitarian Aid Operations",
-  "commissioner": "Hadja Lahbib",
-  "date_of_effect": "2025-01-09",
-  "director_general": {
-    "name": "Maciej Popowski",
-    "assistants": [
-      {
-        "role": "Assistant to the DG",
-        "name": "Vacant",
-        "location": "ECHO.01"
-      },
-      {
-        "role": "Assistant to the DG",
-        "name": "Vacant",
-        "location": "Documents"
-      }
-    ]
-  },
-  "deputy_director_general": {
-    "name": "Hans Das",
-    "principal_adviser": {
-      "name": "Henri Koenig",
-      "area": "Principal Adviser Security"
+  "dg_name": "Directorate-General for European Civil Protection and Humanitarian Aid",
+  "commissioner": "",
+  "director_general": "Maciej Popowski",
+  "director_general_email": "Maciej.POPOWSKI1@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Virginia Blanco Mon",
+      "email": "Virginia.BLANCO@ec.europa.eu",
+      "responsibilities": ""
     },
-    "adviser_climate_change": {
-      "name": "Julia Stanwahar",
-      "area": "Adviser Climate Change and Resilience"
+    {
+      "name": "Hans Das",
+      "email": "Hans.DAS@ec.europa.eu",
+      "responsibilities": ""
     }
-  },
+  ],
   "directorates": [
     {
-      "code": "ECHO.A",
-      "name": "Emergency Response Coordination Centre",
-      "director": "Michela Maraviglia",
+      "code": "",
+      "name": "General",
+      "director": "Artur Malantowicz",
+      "director_email": "Artur.MALANTOWICZ@ec.europa.eu",
       "units": [
         {
-          "code": "ECHO.A.1",
-          "name": "Emergency Response Operations",
-          "head": "Virgile Giraud"
-        },
-        {
-          "code": "ECHO.A.2",
-          "name": "Civil Protection Planning, Readiness and Early Warning",
-          "head": "Anna Sangel",
-          "deputy": "Olivier Chaumagne"
-        },
-        {
-          "code": "ECHO.A.3",
-          "name": "Natural and Man-Made Emergency Response Capacities",
-          "head": "Loris Compagnoni"
-        },
-        {
-          "code": "ECHO.A.4",
-          "name": "Civil Protection Emergency Response Capabilities",
-          "head": "Marco Fargallo",
-          "deputy": "Adriane Neme"
+          "code": "",
+          "name": "",
+          "head": "Aid Operations (Echo)",
+          "head_email": "",
+          "head_phone": ""
         }
       ]
     },
     {
-      "code": "ECHO.B",
-      "name": "Strategy and Policy",
+      "code": "Dir A",
+      "name": "EMERGENCY RESPONSE COORDINATION CENTRE",
+      "director": "Michela Matuella",
+      "director_email": "Michela.MATUELLA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Zuber",
+          "head_email": "Maria.ZUBER@ec.europa.eu",
+          "head_phone": "+32 229-67718"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Samsel",
+          "head_email": "Anna.SAMSEL@ec.europa.eu",
+          "head_phone": "+32 229-86779"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Leonor Nieto Leon",
+          "head_email": "Leonor.Nieto@ec.europa.eu",
+          "head_phone": "+32 229-68713"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marco Panigalli",
+          "head_email": "Marco.Panigalli@ec.europa.eu",
+          "head_phone": "+32 229-54441"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bernd Adolph",
+          "head_email": "Bernd.ADOLPH@ec.europa.eu",
+          "head_phone": "+32 229-83936"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Julia Stewart-David",
+          "head_email": "Julia.Stewart-David@ec.europa.eu",
+          "head_phone": "+32 229-56432"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zacharias Giakoumis",
+          "head_email": "Zacharias.GIAKOUMIS@ec.europa.eu",
+          "head_phone": "+32 229-56753"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "STRATEGY AND POLICY",
       "director": "Hanna Jahns",
+      "director_email": "Hanna.JAHNS@ec.europa.eu",
       "units": [
         {
-          "code": "ECHO.B.1",
-          "name": "Strategy, International and Interinstitutional Relations",
-          "head": "Annaig Morvan",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Arnaud Dupont",
+          "head_email": "Arnaud.DUPONT@ec.europa.eu",
+          "head_phone": "+32 229-89320"
         },
         {
-          "code": "ECHO.B.2",
-          "name": "Civil Protection Policy",
-          "head": "Haike Rubert Grohs",
-          "deputy": "Claes Wallenius"
+          "code": "",
+          "name": "",
+          "head": "Hans Ulrich Goessl",
+          "head_email": "Hans-Ulrich.GOESSL@ec.europa.eu",
+          "head_phone": "+32 229-88176"
         },
         {
-          "code": "ECHO.B.3",
-          "name": "Prevention and Preparedness Capacity Building",
-          "head": "Nicola Bertolini",
-          "deputy": "Oksana Prykhodko"
+          "code": "",
+          "name": "",
+          "head": "Erwan Marteil",
+          "head_email": "Erwan.MARTEIL@ec.europa.eu",
+          "head_phone": "+32 229-64602"
         },
         {
-          "code": "ECHO.B.4",
-          "name": "Humanitarian Aid Policy and International Humanitarian Issues",
-          "head": "Javier J. Villarroya Ochova",
-          "deputy": "Catherine Lecerf (Belisario)"
+          "code": "",
+          "name": "",
+          "head": "Annick Villarosa",
+          "head_email": "Annick.VILLAROSA@ec.europa.eu",
+          "head_phone": "+32 229-68457"
         }
       ]
     },
     {
-      "code": "ECHO.C",
-      "name": "Regional/Desk: Middle East, Southwest and Central Asia",
-      "director": "Andreas Papadopoulos",
+      "code": "Dir C",
+      "name": "NEIGHBOURHOOD, MIDDLE EAST, SOUTH-WEST AND CENTRAL ASIA",
+      "director": "Andreas Papaconstantinou",
+      "director_email": "Andreas.PAPACONSTANTINOU@ec.europa.eu",
       "units": [
         {
-          "code": "ECHO.C.1",
-          "name": "Regional Expertise Programme Coordination (Central Asia)",
-          "head": "Iskandar Gabalov",
-          "deputy": "Gina Cecchino"
+          "code": "",
+          "name": "",
+          "head": "Katarzyna Marzec",
+          "head_email": "Katarzyna.MARZEC@ec.europa.eu",
+          "head_phone": "+32 229-50223"
         },
         {
-          "code": "ECHO.C.2",
-          "name": "Middle East and North Africa",
-          "head": "Giovanno Di Giussepo",
-          "deputy": "Anja Von Bochow"
+          "code": "",
+          "name": "",
+          "head": "Giovanni Di Girolamo",
+          "head_email": "Giovanni.DI-GIROLAMO@eeas.europa.eu",
+          "head_phone": "+32 229-54559"
         },
         {
-          "code": "ECHO.C.3",
-          "name": "Southwest and Indian Peninsula",
-          "head": "Vacant",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Patrice Lenormand",
+          "head_email": "Patrice.LENORMAND@ec.europa.eu",
+          "head_phone": "+32 229-94709"
         }
       ]
     },
     {
-      "code": "ECHO.D",
-      "name": "Sub-Saharan Africa, Latin America and Caribbean, North and East Asia and Pacific",
-      "director": "Andrea Kovalenko",
+      "code": "Dir D",
+      "name": "SUB-SAHARAN AFRICA, LATIN AMERICA, CARIBBEAN, SOUTH, EAST AND",
+      "director": "Andrea Koulaimah",
+      "director_email": "Andrea.KOULAIMAH@ec.europa.eu",
       "units": [
         {
-          "code": "ECHO.D.1",
-          "name": "East and Southern Africa",
-          "head": "Gregorio Galazzi",
-          "deputy": "Josefin Blanch"
+          "code": "",
+          "name": "",
+          "head": "Giuseppe Angelini",
+          "head_email": "Giuseppe.Angelini@ec.europa.eu",
+          "head_phone": "+32 229-64342"
         },
         {
-          "code": "ECHO.D.2",
-          "name": "East and Southern Africa",
-          "head": "Antoine Lvhasson",
-          "deputy": "Ondrej Konecny"
+          "code": "",
+          "name": "",
+          "head": "Antoine Lemasson",
+          "head_email": "Antoine.LEMASSON@ec.europa.eu",
+          "head_phone": "+32 229-94691"
         },
         {
-          "code": "ECHO.D.3",
-          "name": "Sahel, Central Africa, Development and Emergencies/Post-Disaster Risk Reduction",
-          "head": "Valentina Benetton",
-          "deputy": "Nika Lutfijeva"
+          "code": "",
+          "name": "",
+          "head": "Valentina Auricchio",
+          "head_email": "Valentina.AURICCHIO@ec.europa.eu",
+          "head_phone": "+32 229-56708"
         }
       ]
     },
     {
-      "code": "ECHO.E",
-      "name": "Resources",
-      "director": "Mirela Zdrahalova-Nalasova",
+      "code": "Dir E",
+      "name": "RESOURCES",
+      "director": "Mihaela Zupancic Magovac",
+      "director_email": "Mihela.ZUPANCIC@ec.europa.eu",
       "units": [
         {
-          "code": "ECHO.HRC",
-          "name": "HR Correspondent",
-          "head": "Adrianna Spyropoulou"
+          "code": "",
+          "name": "",
+          "head": "Frederik Schutyser",
+          "head_email": "Frederik.SCHUTYSER@ec.europa.eu",
+          "head_phone": "+32 229-87086"
         },
         {
-          "code": "ECHO.E.1",
-          "name": "Legal, Internal and Security",
-          "head": "Friedrich Scheltzer",
-          "deputy": "Laura Cornette"
+          "code": "",
+          "name": "",
+          "head": "Dominique Albert",
+          "head_email": "Dominique.ALBERT@ec.europa.eu",
+          "head_phone": "+32 229-57188"
         },
         {
-          "code": "ECHO.E.2",
-          "name": "Communication, Knowledge and Learning",
-          "head": "Danuta Sacher",
-          "deputy": "Sophie Jeanmairet"
+          "code": "",
+          "name": "",
+          "head": "Jan Sempels",
+          "head_email": "Jan.Sempels@ec.europa.eu",
+          "head_phone": "+32 229-56825"
         },
         {
-          "code": "ECHO.E.3",
-          "name": "Contract and Finance",
-          "head": "Erik Somerli",
-          "deputy": "Arna Sofia Isleifs"
+          "code": "",
+          "name": "",
+          "head": "Susanne Mallaun",
+          "head_email": "Susanne.MALLAUN@ec.europa.eu",
+          "head_phone": "+32 229-55010"
         },
         {
-          "code": "ECHO.E.4",
-          "name": "Food Aid Network",
-          "head": "Giovanni Vassallo",
-          "deputy": "Andrea Rojas Puga"
+          "code": "",
+          "name": "",
+          "head": "Monika Lanzenberger",
+          "head_email": "Monika.LANZENBERGER@ec.europa.eu",
+          "head_phone": "+32 229-81557"
         },
         {
-          "code": "ECHO.E.5",
-          "name": "IT Solutions",
-          "head": "Monika Laudenbacher",
-          "deputy": "Monica Jimenez"
+          "code": "",
+          "name": "",
+          "head": "Petra Pereyra",
+          "head_email": "Petra.PEREYRA@eeas.europa.eu",
+          "head_phone": "+267 391-4455"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Joanna Darmanin",
+          "head_email": "Joanna.DARMANIN@eeas.europa.eu",
+          "head_phone": "+32 229-81846"
         }
       ]
     }
-  ]
+  ],
+  "num_directorates": 6,
+  "num_units": 25,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

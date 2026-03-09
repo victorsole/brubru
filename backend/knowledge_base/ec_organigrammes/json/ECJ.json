@@ -1,0 +1,2112 @@
+{
+  "institution": "ECJ",
+  "source": "euwhoiswho_ecj.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 496,
+  "units": {
+    "Court of Justice": {
+      "name": "Court of Justice",
+      "persons": [
+        {
+          "name": "Koen Lenaerts",
+          "title": "President of the Court of Justice"
+        },
+        {
+          "name": "Jan Inghelram",
+          "title": "Head of private office"
+        },
+        {
+          "name": "Matthew Radley",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Leila Rezki",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alexandra Ruth",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "José Antonio Gutierrez Fons",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Stanislas Adam",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ziva Nendl",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Vildan Hrustemova",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anne Schneider",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Flavien Mariatte",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Laurent Graviere",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Pierre Lecroart",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Fabrice Bocquillon",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Alain Burkic",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Bernard Carlier",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Jean-Charles Engel",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Alexandre Geulette",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Lionela Stapper",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Thomas Von Danwitz",
+          "title": "Vice-President"
+        },
+        {
+          "name": "Vincent Cador",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Katherina Paraschas",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Dominik Düsterhaus",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Moritz Bleckmann",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Polona Farmany",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mathias Lamberty",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "François Biltgen",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Jacques Radoux",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Martine Kremer",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Carole Wagener",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Csilla Fekete",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Barbara Cid Leyton-Prieux",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Küllike Jürimäe",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Jonathan Wildemeersch",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Cédric Kaczmarek",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Charles-Henry Frouart",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Freya Clausen",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Constantinos Lycourgos",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Jan Vanhamme",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Juan Jauregui Olaguibel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Thomas Bombois",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Yann Laurans",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Irmantas Jarukaitis",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Emmanuelle Broussy",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Gaëlle Bontinck",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mantas Stanevicius",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Laurent Jacques",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Dalia Misiunaite-",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "María Lourdes Arastey Sahún",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Patricia Alvarez Gonzalez",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Przemyslaw Miklaszewic",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Moritz Hartmann",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Cristian Oro Martinez",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maciej Szpunar",
+          "title": "First Advocate-General"
+        },
+        {
+          "name": "Mikolaj Jarosz",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Roland Klages",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Krzysztof Pacula",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Pawel Banczyk",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Léa Berthiau-Jezequel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mariana Sofia Martins Pereira",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Marlene Brosch (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Siniša Rodin",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Martin Konrad Moser",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Georges Vallindas",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Filip Kuhta",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mirna Romic",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Arthur Bongrain",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Andreas Kumin",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Alexander Pelzl",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maria Škof",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Sophie Juliard",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "David Eisendle",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alexander Simon Lerche",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Niilo Jääskinen",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Catherine Blanchin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Elina Paunio",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anne-Lucie Snoy",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Laura Gavilan Hormigo",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Giordana Aquilea",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Dimitrios Gratsias",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Ioannis Natsinas",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Stéphane Menez",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Stella Thanou",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Georgios Naziroglou",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Miroslav Gavalec",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Marton Szüts",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Laurent Coutron",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Marie Meister",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Vincent Tourres",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Lenka Senkarova",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Juliane Kokott",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Christoph Sobotta",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Hanns Peter Nehl",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "David Hummel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Hanna Schröder",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Manuel Campos Sánchez-",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Juan Luis Requejo Pages",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Joaquin Moreno Grau",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Manuel Lopez Escudero",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Martina Mantovani",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Eugene Regan",
+          "title": "Judge"
+        },
+        {
+          "name": "Bruno Van Hees",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Julien Sterck",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Antoine Masson",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Clare Moriarty",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nuno José Cardoso Da Silva",
+          "title": "Judge"
+        },
+        {
+          "name": "Alexandre Sayde",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Myriam Benlolo Carabot",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Karen Briet",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Jean Richard De La Tour",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Isabelle Guyon-Renard",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "David Mas",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maud Vieux",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Aude Ab-Der-Halden",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Athanasios Rantos",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Frédéric Baron",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Fabio Filpo",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Andreas Scordamaglia-Tousis",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alfredos Theodorakopoulos",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ineta Ziemele",
+          "title": "Judge"
+        },
+        {
+          "name": "Emmanuel François",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ieva Freija",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Kristine Zubkane",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Diana-Daniela Popel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Jan Passer",
+          "title": "Judge"
+        },
+        {
+          "name": "Cyrille Callies",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "David Hadrousek",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Fabien Zivy",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Pierre Schmitt",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nicholas Emiliou",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Luca Prete",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Magdalena Lickova",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Hubert De Verdelhan Des",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Pauline Sabouret (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Zoltán Csehi",
+          "title": "Judge"
+        },
+        {
+          "name": "Dieter Kraus",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Thilo Stapper",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Diane Beranger",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Sławomira Lerman-Balsaux",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Octavia Spineanu-Matei",
+          "title": "Judge"
+        },
+        {
+          "name": "Thierry Erniquin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Milan Kristof",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Valérie Bauer",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Cristina Prunaru",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Tamara Capeta",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Kathleen Gutman",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Franck Lecomte",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nicolaj Kuplewatzky",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Erik Kamenjašević",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Laila Medina",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Juan Ignacio Signes De Mesa",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mirjam Abner",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anthi Beka",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Simon Labayle",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Bernardus Smulders",
+          "title": "Judge"
+        },
+        {
+          "name": "Christopher Van Der Hauwaert",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "François Van Den Berghe",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Vinciane Vanovermeire",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Michael Van Veen",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Dean Spielmann",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Olivia Davidson",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Panayotis Voyatzis",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Gian Marco Galletti",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nathalie Leyns",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Massimo Condinanzi",
+          "title": "Judge"
+        },
+        {
+          "name": "Vincent Kronenberg",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Paolo Iannuccelli",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Massimiliano Puglia",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Chiara Giussani",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Fredrik Schalin",
+          "title": "Judge"
+        },
+        {
+          "name": "Yolanda De Muynck",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Didier Grandhay",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anders Flood",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Annie Fainelli",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Andrea Biondi",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Maria Teresa D'Alessio",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Vincenzo Valentini",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Igor Taccani",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Florence Giorgi",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Stéphane Gervasoni",
+          "title": "Judge"
+        },
+        {
+          "name": "Philippe Bonneville",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Estelle Lepka",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Eric Briancon",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anne Iljic",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Niels Fenger",
+          "title": "Judge"
+        },
+        {
+          "name": "Tatiana Cassagnabère",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Chiara Ricci",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anna Grasso",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ramona Frendo",
+          "title": "Judge"
+        },
+        {
+          "name": "Stefano Boni",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Paola Nebbia",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nathalie Stenier",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Filip Popovski",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Rimvydas Norkus",
+          "title": "Advocate-General"
+        },
+        {
+          "name": "Eileen Sheehan",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "María Esther Blas López",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Werner Kuhn",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Milda Pranckute",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Marko Bošnjak",
+          "title": "Judge"
+        },
+        {
+          "name": "Marta Requejo Isidro",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Sven Kaufmann",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Emanuel Castellarin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Filippos Siaplaouras",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alexander Kornezov",
+          "title": "Judge"
+        },
+        {
+          "name": "Kai-Peter Ziegler",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Julie Brohée",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Angel Pachev",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Aleksandar Dorich",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alfredo Calot Escobar",
+          "title": "Registrar"
+        },
+        {
+          "name": "Caroline Pellerin",
+          "title": "Head of private office"
+        },
+        {
+          "name": "Katarina Andova",
+          "title": "Attaché to the Registrar"
+        },
+        {
+          "name": "Valérie Giacobbo",
+          "title": "Attaché to the Registrar"
+        },
+        {
+          "name": "Lana Kukec",
+          "title": "Attaché to the Registrar"
+        },
+        {
+          "name": "Sara Iglesias Sanchez (Dis)",
+          "title": "Attaché to the Registrar"
+        }
+      ]
+    },
+    "Registry": {
+      "name": "Registry",
+      "persons": [
+        {
+          "name": "Marc-André Gaudissart",
+          "title": "Deputy Registrar"
+        },
+        {
+          "name": "Thomas Henze",
+          "title": "Deputy Registrar"
+        }
+      ]
+    },
+    "UNIT A - MANAGEMENT OF CASE FILES AND MULTIDISCIPLINARY ACTIVITIES": {
+      "name": "UNIT A - MANAGEMENT OF CASE FILES AND MULTIDISCIPLINARY ACTIVITIES",
+      "persons": [
+        {
+          "name": "Daniel Dittert",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "UNIT B - MANAGEMENT OF CASE FILES AND MULTIDISCIPLINARY ACTIVITIES": {
+      "name": "UNIT B - MANAGEMENT OF CASE FILES AND MULTIDISCIPLINARY ACTIVITIES",
+      "persons": [
+        {
+          "name": "Miroslav Aleksejev",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "General Court": {
+      "name": "General Court",
+      "persons": [
+        {
+          "name": "Marc Van Der Woude",
+          "title": "President of the Court"
+        },
+        {
+          "name": "Nina Savin (Adi)",
+          "title": "Head of private office"
+        },
+        {
+          "name": "Alexandre Thillier",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maria Helena Cardoso",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anna Jorna",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Renella Reumerman",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Delphine Gillet",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Eleni Artemiou",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Charlène Herbain",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Stéphanie Mahieu",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Hervé Expert",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Marc Bouillaguet",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Laurent Marechal",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Franck Jozek",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Corentin Poullet",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Vincent Friant",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Laure Grandmaire",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Paul-André Braud",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Samuel Seroc",
+          "title": "Reader of judgments"
+        },
+        {
+          "name": "Martyna Aleksandra Jurkiewicz",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alessandro Marciano",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Savvas Papasavvas",
+          "title": "Vice-President of the General court"
+        },
+        {
+          "name": "Raphaël Vuitton",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Dominique Adja",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Natalie Schall",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Eugène Buttigieg",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Dimosthenis Papakrivopoulos",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Katarzyna Pochec-Pilipavicius",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Cécile Ferla (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Sotirios Petrovas (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mariya Serafimova (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nina Półtorak",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Piotr Staszczyk",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Agnieszka Chudyba",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Marie Cournot (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Krystyna Kowalik-Bańczyk",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Charles Meillier",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Pierre Cavaillé",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Thomas Evans (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Deyan Roussanov (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Margaux Marie Coralie Dalon",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Geert De Baere",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Stéphanie Ramet",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Coline Beaucourt",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Edouard Leduc (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ebba Thoms (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Romane Snaet (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Miguel Sampol Pucurul",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Laura Olza Moreno",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Julia Magaz Urquidi",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Vincent Huc (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Olivier, Jean-Roger Pejout (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nóra Cseke (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Petra Skvarilova-Pelzl",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Nicolas Martinez",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Arnaud Raclet",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ieva Žurauskienė (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Kit Larsen-Links (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Krisztian Kecsmar",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Alexandre Lacresse",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mathieu Brisse",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Valentina Barone (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ion Gâlea",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Clelia Lacchi",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Antoine Andreucci",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Hristo Kirilov (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mélanie Sarkozi (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Wojciech Zagorski (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Suzanne Kingston",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Peter Cimentarov",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Valérie Noel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Damien Dubois (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Patricia Cano Gámiz (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alvaro Gomez De La Cruz (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Saulius Lukas Kalėda",
+          "title": "President of Chamber"
+        },
+        {
+          "name": "Šarūnas Stalauskas",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alexandre Martin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Thierry Fouquet (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ionuţ Drăgan (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Michaela Hajkova (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Marc Jaeger",
+          "title": "Judge"
+        },
+        {
+          "name": "Pablo Berbel Fernández",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alessandra Donati",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Heikki Kanninen",
+          "title": "Judge"
+        },
+        {
+          "name": "Julie Bousin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Olivier Peiffert",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Juraj Schwarcz",
+          "title": "Judge"
+        },
+        {
+          "name": "Ulrich Forsthoff",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Claudia Rexha",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mariyana Kancheva",
+          "title": "Judge"
+        },
+        {
+          "name": "Charles-Henry Massa",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Nicolas Triart",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Lauri Madise",
+          "title": "Judge"
+        },
+        {
+          "name": "Olivier Speltdoorn",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Paul Hanry",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Anna Marcoulli",
+          "title": "Judge"
+        },
+        {
+          "name": "Mélanie Bilocq",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Luigi Cappelletti",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Inga Reine",
+          "title": "Judge"
+        },
+        {
+          "name": "Vineta Bei",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Céline Remy",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ricardo Da Silva Passos",
+          "title": "Judge"
+        },
+        {
+          "name": "Goncalo Braga Da Cruz",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Katrien Hanquet",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Paul Nihoul",
+          "title": "Judge"
+        },
+        {
+          "name": "Véronique Bertrand",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Sabine Thibault-Liger",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Jesper Svenningsen",
+          "title": "Judge"
+        },
+        {
+          "name": "Benjamin Cheynel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Massimo Francesco Orzan",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ulf Öberg",
+          "title": "Judge"
+        },
+        {
+          "name": "Esben Jensen",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Julie De Vrieze",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maria José Costeira",
+          "title": "Judge"
+        },
+        {
+          "name": "Esperança Mealha",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Irina Fala",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Colm Mac Eochaidh",
+          "title": "Judge"
+        },
+        {
+          "name": "Aoife Power",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Cédric Chenevière-Mesdag",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Tuula Pynnä",
+          "title": "Judge"
+        },
+        {
+          "name": "Panagiota Katsorchi",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Charlotte Emin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Laurent Truchot",
+          "title": "Judge"
+        },
+        {
+          "name": "Maxime Hauviller",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Noémie Vincent",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Christoph Laitenberger",
+          "title": "Judge"
+        },
+        {
+          "name": "Nathalie Lauer",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "James Kröger",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "José Martín Y Pérez De",
+          "title": "Judge"
+        },
+        {
+          "name": "Christian Ganser",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Sarah Lacrampe",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Gerhard Hesse",
+          "title": "Judge"
+        },
+        {
+          "name": "Barbara Schenk",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Claudia Calvi",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Mirela Stancu",
+          "title": "Judge"
+        },
+        {
+          "name": "Alessandro Carollo",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Alice Valade",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Iko Nõmm",
+          "title": "Judge"
+        },
+        {
+          "name": "Eric Vanham",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Silvère Lefevre",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Gabriele Steinfatt",
+          "title": "Judge"
+        },
+        {
+          "name": "Peter Pecho",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Max Frenzel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Tamara Perisin",
+          "title": "Judge"
+        },
+        {
+          "name": "Anael Aram Tchoulfian",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ilektra Antonaki",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "David Petrlik",
+          "title": "Judge"
+        },
+        {
+          "name": "Petr Mádr",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Thomas Reyntjens",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maja Brkan",
+          "title": "Judge"
+        },
+        {
+          "name": "Loic Wagner",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Adrienne Audras-Hidelot",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Peteris Zilgalvis",
+          "title": "Judge"
+        },
+        {
+          "name": "Frédéric Schmied",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maris Kurecko",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Ioannis Dimitrakopoulos",
+          "title": "Judge"
+        },
+        {
+          "name": "Andrej Stec",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maria Ioanna Rantou",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Damjan Kukovec",
+          "title": "Judge"
+        },
+        {
+          "name": "Bucura Catalina Mihaescu",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Enrique Arnaldos Orts",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Tihamer Toth",
+          "title": "Judge"
+        },
+        {
+          "name": "Franck Michel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Fanny Angevin Kenny",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Beatrix Ricziova",
+          "title": "Judge"
+        },
+        {
+          "name": "Valeria Magdova",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Jean-François Guillardeau",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Elisabeth Tichy-Fisslberger",
+          "title": "Judge"
+        },
+        {
+          "name": "Felix Schatz",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Maximilian Mertel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "William Valasidis",
+          "title": "Judge"
+        },
+        {
+          "name": "Jean-Philippe Christienne",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Eirini Pantelodimou",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Steven Verschuur",
+          "title": "Judge"
+        },
+        {
+          "name": "Caroline Heeren",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Léa Mancel",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Louise Spangsberg Grønfeldt",
+          "title": "Judge"
+        },
+        {
+          "name": "Gwenaël Muguet-Poullennec",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Arnaud Ferrand",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Hervé Cassagnabère",
+          "title": "Judge"
+        },
+        {
+          "name": "Richard Himmer",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Pierre De Lapasse",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Raphaël Meyer",
+          "title": "Judge"
+        },
+        {
+          "name": "Frédéric Messina",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Frédérique Rolin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Jörgen Hettne",
+          "title": "Judge"
+        },
+        {
+          "name": "Anne-Sophie Reinbold",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Andreas Jasper",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Danutė Jočienė",
+          "title": "Judge"
+        },
+        {
+          "name": "Jerome Gstalter",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Renata Ukelyte",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Francesco Bestagno",
+          "title": "Judge"
+        },
+        {
+          "name": "Daniele Paolo Domenicucci",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Antonio La Pergola",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Tanja Pavelin",
+          "title": "Judge"
+        },
+        {
+          "name": "Alice Jacquin",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Álvaro Fomperosa Rivero (Dis)",
+          "title": "Legal secretary"
+        },
+        {
+          "name": "Vittorio Di Bucci",
+          "title": "Registrar"
+        },
+        {
+          "name": "Ximena Lopez Bancalari",
+          "title": "Attaché to the Registrar"
+        },
+        {
+          "name": "Giulia Predonzani",
+          "title": "Attaché to the Registrar"
+        },
+        {
+          "name": "Alain Scaramucci",
+          "title": "Legal secretary"
+        }
+      ]
+    },
+    "files": {
+      "name": "files",
+      "persons": [
+        {
+          "name": "Angela Juhasz-Toth",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "B - Unit in Charge of case files": {
+      "name": "B - Unit in Charge of case files",
+      "persons": [
+        {
+          "name": "Camilla Kristensen",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Activities": {
+      "name": "Activities",
+      "persons": [
+        {
+          "name": "Cyril Boyer",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Registrar": {
+      "name": "Registrar",
+      "persons": [
+        {
+          "name": "Joris Plingers",
+          "title": ""
+        }
+      ]
+    },
+    "Directorate": {
+      "name": "Directorate",
+      "persons": [
+        {
+          "name": "Eleftheria Vrakotsoli",
+          "title": "Director"
+        },
+        {
+          "name": "Celestina Iannone",
+          "title": "Director"
+        },
+        {
+          "name": "Alicja Sikora-Kaleda",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Natacha Rosemary",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Pedro Cabral",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Angel Manuel Almendros",
+          "title": ""
+        },
+        {
+          "name": "MANZANO (Adi)",
+          "title": "Director"
+        },
+        {
+          "name": "Javier Martínez De Aragón",
+          "title": "Director"
+        },
+        {
+          "name": "Caroline Reichling",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Seminars and Visits Unit": {
+      "name": "Seminars and Visits Unit",
+      "persons": [
+        {
+          "name": "Zita Avas",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "DIRECTORATE-GENERAL FOR ADMINISTRATION": {
+      "name": "DIRECTORATE-GENERAL FOR ADMINISTRATION",
+      "persons": [
+        {
+          "name": "Agostino Valerio Placco",
+          "title": "Director-General"
+        }
+      ]
+    },
+    "Administration": {
+      "name": "Administration",
+      "persons": [
+        {
+          "name": "Paola Saba",
+          "title": "Director"
+        },
+        {
+          "name": "Malgorzata Deka",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Catherine Calambe",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Daniel Karzel",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Ioanna-Emmanuela Lossidou",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "and Financial Affairs": {
+      "name": "and Financial Affairs",
+      "persons": [
+        {
+          "name": "Belén Huerta Rico",
+          "title": "Director"
+        },
+        {
+          "name": "Lorenzo Fedel",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Michel Goblet",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "and Security": {
+      "name": "and Security",
+      "persons": [
+        {
+          "name": "Thomas Kirchner",
+          "title": "Director"
+        },
+        {
+          "name": "Jan Vanparijs",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Didier Urbain",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Hubert Laligant",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Bernard Lheritier",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Luis Moitinho De Almeida",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "DIRECTORATE-GENERAL FOR MULTILINGUALISM": {
+      "name": "DIRECTORATE-GENERAL FOR MULTILINGUALISM",
+      "persons": [
+        {
+          "name": "Thierry Lefevre",
+          "title": "Director-General"
+        }
+      ]
+    },
+    "Interpretation Directorate": {
+      "name": "Interpretation Directorate",
+      "persons": [
+        {
+          "name": "Marie Muttilainen",
+          "title": "Director"
+        },
+        {
+          "name": "Marina Pascual Olaguibel",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Predrag Latinovic",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Christina Zanon",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Carmen Albu",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Directorate A": {
+      "name": "Directorate A",
+      "persons": [
+        {
+          "name": "Maciej Markiewicz",
+          "title": "Director"
+        },
+        {
+          "name": "Dimitar Stefanov",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Petra Novotna",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Ivo Gross",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Liina Teras",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Alejandra Manzano Valle",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Tomi Kunnari",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Frédérique Locoge",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Rita Petró",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Monica Casula",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Natalija Tocickiene",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Joseph Izzo Clarke",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Branislav Kapala",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Directorate B": {
+      "name": "Directorate B",
+      "persons": [
+        {
+          "name": "Madis Vunder",
+          "title": "Director"
+        },
+        {
+          "name": "Jess Have Nielsen",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Emma-Jean Hinchy",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Nikolaos Sortikos",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Ivana Bozac",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Ilona Skuja",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Koen Wolfs",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Ana Inês Nogueira Leite",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Diana Magdalena Bulancea",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Silva Horvat Nynabb",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Gudrun Savel",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Director-General": {
+      "name": "Director-General",
+      "persons": [
+        {
+          "name": "Florent Thouvenin",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Normunds Vasarins",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Julie O'Farrell",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Dorota Schaack",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "DIRECTORATE-GENERAL FOR INFORMATION": {
+      "name": "DIRECTORATE-GENERAL FOR INFORMATION",
+      "persons": [
+        {
+          "name": "Raluca-Lavinia Peica",
+          "title": "Director-General"
+        }
+      ]
+    },
+    "Technology": {
+      "name": "Technology",
+      "persons": [
+        {
+          "name": "Joao Fernandes",
+          "title": "Director"
+        },
+        {
+          "name": "José Perez Abad (Ff)",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "IT Solutions Design Unit",
+          "title": ""
+        },
+        {
+          "name": "Éric Deudon",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "IT Solution Implementation",
+          "title": ""
+        },
+        {
+          "name": "Karine Lewicki",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "André Fernandez",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Library Directorate": {
+      "name": "Library Directorate",
+      "persons": [
+        {
+          "name": "Andrew Paton (Adi)",
+          "title": "Director"
+        },
+        {
+          "name": "Branislav Kapala (Ff)",
+          "title": "Head of Unit -- Head of Unit"
+        },
+        {
+          "name": "Andrew Paton",
+          "title": "Head of Unit"
+        }
+      ]
+    },
+    "Communication": {
+      "name": "Communication",
+      "persons": [
+        {
+          "name": "Arnaud Bohler",
+          "title": "Director"
+        },
+        {
+          "name": "Juan-Carlos Gonzalez Alvarez",
+          "title": "Head of Unit"
+        },
+        {
+          "name": "Estella Cigna-Angelidis",
+          "title": "Head of Unit"
+        }
+      ]
+    }
+  }
+}

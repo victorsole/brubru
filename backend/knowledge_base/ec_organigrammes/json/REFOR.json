@@ -1,0 +1,193 @@
+{
+  "dg_code": "REFOR",
+  "dg_name": "Reform and Investment Task Force",
+  "commissioner": "",
+  "director_general": "Celine Gauer",
+  "director_general_email": "Celine.Gauer@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Kees Van Duin",
+      "email": "kees.van-duin@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Giulia Astuti",
+      "director_email": "Giulia.ASTUTI@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniele Dotto",
+          "head_email": "Daniele.Dotto@ec.europa.eu",
+          "head_phone": "+32 229-62701"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Luca Rossi",
+          "head_email": "Luca.ROSSI@ec.europa.eu",
+          "head_phone": "+32 229-66755"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "TECHNICAL SUPPORT INSTRUMENT (TSI)",
+      "director": "Judit Rozsa",
+      "director_email": "Judit.ROZSA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Hristo Tomov",
+          "head_email": "Hristo.TOMOV@ec.europa.eu",
+          "head_phone": "+32 229-93369"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marta Wieczorek",
+          "head_email": "Marta.WIECZOREK@ec.europa.eu",
+          "head_phone": "+32 229-58197"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kaspar Richter",
+          "head_email": "Kaspar.RICHTER@ec.europa.eu",
+          "head_phone": "+32 229-90048"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kjartan Björnsson",
+          "head_email": "Kjartan.BJORNSSON@ec.europa.eu",
+          "head_phone": "+32 229-87414"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Celine Gauer",
+          "head_email": "Celine.Gauer@ec.europa.eu",
+          "head_phone": "+32 229-63919"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "RECOVERY & RESILIENCE I (RRF I)",
+      "director": "Marie Donnay",
+      "director_email": "Marie.DONNAY@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesco Felice Carlucci",
+          "head_email": "Francesco-Felice.CARLUCCI@ec.europa.eu",
+          "head_phone": "+32 229-97987"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Veronica Vecchio",
+          "head_email": "Veronica.VECCHIO@ec.europa.eu",
+          "head_phone": "+32 229-65369"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Magdalena Morgese Borys",
+          "head_email": "BORYS@ec.europa.eu",
+          "head_phone": "+32 229-69992"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Roxane Crestian",
+          "head_email": "Roxane.CRESTIAN@ec.europa.eu",
+          "head_phone": "+32 229-58817"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "RECOVERY & RESILIENCE II (RRF II)",
+      "director": "Maria Teresa Fabregas",
+      "director_email": "Fernandez@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexander Schwan",
+          "head_email": "Alexander.SCHWAN@ec.europa.eu",
+          "head_phone": "+32 229-80483"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Laura Rinaldi",
+          "head_email": "Laura.RINALDI@ec.europa.eu",
+          "head_phone": "+32 229-68745"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Valeri Natan",
+          "head_email": "Valeri.NATAN@ec.europa.eu",
+          "head_phone": "+32 229-87476"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Julia Brockhoff",
+          "head_email": "Julia.BROCKHOFF@ec.europa.eu",
+          "head_phone": "+32 229-98749"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "RECOVERY & RESILIENCE III (RRF III)",
+      "director": "Johannes Luebking",
+      "director_email": "Johannes.LUEBKING@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Melina Boneva",
+          "head_email": "Melina.BONEVA@ec.europa.eu",
+          "head_phone": "+32 229-51039"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Adelaide Mozzi",
+          "head_email": "Adelaide.MOZZI@ec.europa.eu",
+          "head_phone": "+32 229-60848"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Georgiana Capraru Ianus",
+          "head_email": "Georgiana.IANUS@ec.europa.eu",
+          "head_phone": "+32 229-69173"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Heinrich Wollny",
+          "head_email": "Heinrich.WOLLNY@ec.europa.eu",
+          "head_phone": "+32 229-54988"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 5,
+  "num_units": 19,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

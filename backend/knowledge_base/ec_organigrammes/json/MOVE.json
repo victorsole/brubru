@@ -1,292 +1,338 @@
 {
   "dg_code": "MOVE",
-  "dg_name": "Directorate-General for Mobility & Transport",
-  "commissioner": {
-    "name": "Apostolos Tzitzikostas",
-    "title": "Commissioner"
-  },
-  "director_general": {
-    "name": "Magda Kopczynska",
-    "title": "Director-General",
-    "assistants": [
-      "Roxana Lesovici",
-      "Antoine Kedzierski",
-      "Hannah Herzig (includes MOVE.001 Tourism Sector)"
-    ]
-  },
+  "dg_name": "Directorate-General for Mobility and Transport",
+  "commissioner": "",
+  "director_general": "Magda Kopczynska",
+  "director_general_email": "Magda.KOPCZYNSKA@ec.europa.eu",
   "deputy_directors_general": [
     {
-      "name": "Vacant",
-      "title": "Deputy Director-General"
+      "name": "Andreea Staicu",
+      "email": "Andreea.STAICU@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "name": "Maja Bakran Marcich",
-      "title": "Deputy Director-General"
+      "name": "Ewa Ptaszynska",
+      "email": "",
+      "responsibilities": ""
+    },
+    {
+      "name": "Maja Bakran",
+      "email": "Maja.BAKRAN@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "MOVE.01",
-      "name": "Strategy & Communication",
-      "head": "Marit Ruuda",
-      "deputy": "Joshua Salsby",
-      "note": "Includes HR Correspondent"
+      "code": "",
+      "name": "General",
+      "director": "Pantelis Lamprianidis",
+      "director_email": "Pantelis.LAMPRIANIDIS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Roxana Lesovici",
+          "head_email": "Roxana.LESOVICI@ec.europa.eu",
+          "head_phone": "+32 229-86151"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hannah Herzig",
+          "head_email": "Hannah.HERZIG@ec.europa.eu",
+          "head_phone": "+32 229-82154"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marit Ruuda",
+          "head_email": "Marit.RUUDA@ec.europa.eu",
+          "head_phone": "+32 229-57243"
+        }
+      ]
     },
     {
-      "code": "MOVE.A",
-      "name": "Policy, Coordination",
+      "code": "Dir A",
+      "name": "POLICY COORDINATION",
       "director": "Mona Bjorklund",
+      "director_email": "Mona.Bjorklund@ec.europa.eu",
       "units": [
         {
-          "code": "MOVE.A.1",
-          "name": "Coordination & Planning",
-          "head": "Gergely Sulyok",
-          "deputy": "Jakub Koniecki"
+          "code": "",
+          "name": "",
+          "head": "Gergely Antal Sulyok",
+          "head_email": "Gergely-Antal.SULYOK@ec.europa.eu",
+          "head_phone": "+32 229-82229"
         },
         {
-          "code": "MOVE.A.2",
-          "name": "International Relations",
-          "head": "Stefano Paci (Acting)",
-          "deputy": "Stefano Paci"
+          "code": "",
+          "name": "",
+          "head": "Stefano Paci",
+          "head_email": "Stefano.PACI@ec.europa.eu",
+          "head_phone": "+32 229-51148"
         },
         {
-          "code": "MOVE.A.3",
-          "name": "Economic Analysis & Better Regulation",
+          "code": "",
+          "name": "",
           "head": "Rolf Diemer",
-          "deputy": "Maria Cristina Mohora"
+          "head_email": "Rolf.Diemer@ec.europa.eu",
+          "head_phone": "+32 229-61075"
         },
         {
-          "code": "MOVE.A.4",
-          "name": "Legal Issues & Enforcement",
+          "code": "",
+          "name": "",
           "head": "Barbara Jankovec",
-          "deputy": "Eliska Mamdaniova"
-        },
-        {
-          "code": "MOVE.A.5",
-          "name": "Security",
-          "head": "Carlos Bermejo Acosta",
-          "deputy": "Christopher Ross"
+          "head_email": "Barbara.JANKOVEC@ec.europa.eu",
+          "head_phone": "+32 229-57809"
         }
       ]
     },
     {
-      "code": "MOVE.B",
-      "name": "Investment, Innovative & Sustainable Transport",
+      "code": "Dir B",
+      "name": "INVESTMENT, INNOVATIVE & SUSTAINABLE TRANSPORT",
       "director": "Eric Von Breska",
+      "director_email": "Eric.Von-Breska@ec.europa.eu",
       "units": [
         {
-          "code": "MOVE.B.1",
-          "name": "Transport Networks",
+          "code": "",
+          "name": "",
           "head": "Silke Brocks",
-          "deputy": "Vacant"
+          "head_email": "Silke.BROCKS@ec.europa.eu",
+          "head_phone": "+32 229-76884"
         },
         {
-          "code": "MOVE.B.2",
-          "name": "Transport Investment",
+          "code": "",
+          "name": "",
           "head": "Philippe Chantraine",
-          "deputy": "Ewa Ptaszynska"
+          "head_email": "Philippe.CHANTRAINE@ec.europa.eu",
+          "head_phone": "+32 229-81913"
         },
         {
-          "code": "MOVE.B.3",
-          "name": "Innovation & Research",
-          "head": "Isabelle Vandoorne (Acting)",
-          "deputy": "Isabelle Vandoorne"
+          "code": "",
+          "name": "",
+          "head": "Axel Volkery",
+          "head_email": "Axel.VOLKERY@ec.europa.eu",
+          "head_phone": "+32 229-66393"
         },
         {
-          "code": "MOVE.B.4",
-          "name": "Sustainable & Intelligent Transport",
+          "code": "",
+          "name": "",
           "head": "Moumen Hamdouch",
-          "deputy": "Axel Volkery"
+          "head_email": "Moumen.HAMDOUCH@ec.europa.eu",
+          "head_phone": "+32 229-63114"
         },
         {
-          "code": "MOVE.B.5",
-          "name": "Social Aspects, Passenger Rights & Equal Opportunities",
+          "code": "",
+          "name": "",
           "head": "Elisabeth Kotthaus",
-          "deputy": "Dominik Piotrowski"
+          "head_email": "Elisabeth.KOTTHAUS@ec.europa.eu",
+          "head_phone": "+32 229-94870"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Olivier Silla",
+          "head_email": "Olivier.Silla@ec.europa.eu",
+          "head_phone": "+32 229-66597"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lucie Zackova",
+          "head_email": "Lucie.ZACKOVA@ec.europa.eu",
+          "head_phone": "+32 229-57986"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christian Faure",
+          "head_email": "Christian.FAURE@ec.europa.eu",
+          "head_phone": "+32 229-54290"
         }
       ]
     },
     {
-      "code": "MOVE.C",
-      "name": "Land",
+      "code": "Dir C",
+      "name": "LAND",
       "director": "Kristian Schmidt",
+      "director_email": "Kristian.Schmidt@ec.europa.eu",
       "units": [
         {
-          "code": "MOVE.C.1",
-          "name": "Road Transport",
+          "code": "",
+          "name": "",
           "head": "Jean-Louis Colson",
-          "deputy": "Filip Negreanu Arboreanu"
+          "head_email": "Jean-Louis.Colson@ec.europa.eu",
+          "head_phone": "+32 229-60995"
         },
         {
-          "code": "MOVE.C.2",
-          "name": "Road Safety",
+          "code": "",
+          "name": "",
           "head": "Claire Depre",
-          "deputy": "Vesna Valant"
+          "head_email": "Claire.DEPRE@ec.europa.eu",
+          "head_phone": "+32 229-98463"
         },
         {
-          "code": "MOVE.C.3",
-          "name": "Single European Rail Area",
+          "code": "",
+          "name": "",
           "head": "Sandro Santamato",
-          "deputy": "Kathrin Obst"
+          "head_email": "Sandro.Santamato@ec.europa.eu",
+          "head_phone": "+32 229-93447"
         },
         {
-          "code": "MOVE.C.4",
-          "name": "Rail Safety & Interoperability",
+          "code": "",
+          "name": "",
           "head": "Joachim Luecking",
-          "deputy": "Michaela Strohschneider"
+          "head_email": "Joachim.Luecking@ec.europa.eu",
+          "head_phone": "+32 229-66545"
         }
       ]
     },
     {
-      "code": "MOVE.D",
-      "name": "Waterborne",
+      "code": "Dir D",
+      "name": "WATERBORNE",
       "director": "Fotini Ioannidou",
+      "director_email": "Fotini.Ioannidou@ec.europa.eu",
       "units": [
         {
-          "code": "MOVE.D.1",
-          "name": "Maritime Transport & Logistics",
+          "code": "",
+          "name": "",
           "head": "Annika Kroon",
-          "deputy": "Szymon Oscislowski"
+          "head_email": "Annika.KROON@ec.europa.eu",
+          "head_phone": "+32 229-64493"
         },
         {
-          "code": "MOVE.D.2",
-          "name": "Maritime Safety",
+          "code": "",
+          "name": "",
           "head": "Barbara Sellier",
-          "deputy": "Andrei Mungiu-Patrascu"
+          "head_email": "Barbara.SELLIER@ec.europa.eu",
+          "head_phone": "+32 229-86932"
         },
         {
-          "code": "MOVE.D.3",
-          "name": "Ports & Inland Navigation",
+          "code": "",
+          "name": "",
           "head": "Torsten Klimke",
-          "deputy": "Jorgen Bjerre"
+          "head_email": "Torsten.KLIMKE@ec.europa.eu",
+          "head_phone": "+32 229-64133"
         }
       ]
     },
     {
-      "code": "MOVE.E",
-      "name": "Aviation",
+      "code": "Dir E",
+      "name": "AVIATION",
       "director": "Filip Cornelis",
+      "director_email": "Filip.Cornelis@ec.europa.eu",
       "units": [
         {
-          "code": "MOVE.E.1",
-          "name": "Aviation Policy",
+          "code": "",
+          "name": "",
           "head": "Eddy Liegeois",
-          "deputy": "Ewa Oney"
+          "head_email": "Eddy.Liegeois@ec.europa.eu",
+          "head_phone": "+32 229-51839"
         },
         {
-          "code": "MOVE.E.2",
-          "name": "Aviation Agreements",
-          "head": "Gzim Ocakoglu (Acting)",
-          "deputy": "Gzim Ocakoglu"
+          "code": "",
+          "name": "",
+          "head": "Carlos Bermejo Acosta",
+          "head_email": "Carlos.BERMEJO-ACOSTA@ec.europa.eu",
+          "head_phone": "+32 229-67376"
         },
         {
-          "code": "MOVE.E.3",
-          "name": "Single European Sky",
+          "code": "",
+          "name": "",
           "head": "Maria De Las Flores Diaz Pulido",
-          "deputy": "Frederik Rasmussen"
+          "head_email": "Flor.Diaz-Pulido@ec.europa.eu",
+          "head_phone": "+32 229-91290"
         },
         {
-          "code": "MOVE.E.4",
-          "name": "Aviation Safety",
+          "code": "",
+          "name": "",
           "head": "Christine Berg",
-          "deputy": "Peter Sorensen"
+          "head_email": "Christine.Berg@ec.europa.eu",
+          "head_phone": "+32 229-91922"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria De Las Flores Diaz Pulido",
+          "head_email": "Flor.Diaz-Pulido@ec.europa.eu",
+          "head_phone": "+32 229-91290"
         }
       ]
     },
     {
-      "code": "MOVE.SRD",
-      "name": "Shared Resources",
-      "director": "Frederic Versini (Acting)",
+      "code": "Dir SRD",
+      "name": "SHARED RESOURCE DIRECTORATE MOVE/ENER",
+      "director": "Frederic Versini",
+      "director_email": "Frederic.VERSINI@ec.europa.eu",
       "units": [
         {
-          "code": "MOVE.SRD.1",
-          "name": "Assurance & Supervision",
+          "code": "",
+          "name": "",
           "head": "Frederic Versini",
-          "deputy": "Philippe Cornu"
+          "head_email": "Frederic.VERSINI@ec.europa.eu",
+          "head_phone": "+32 229-51836"
         },
         {
-          "code": "MOVE.SRD.2",
-          "name": "Information Management & Systems",
+          "code": "",
+          "name": "",
           "head": "Dejan Dvorsek",
-          "deputy": "Luisa Guedes"
+          "head_email": "Dejan.DVORSEK@ec.europa.eu",
+          "head_phone": "+32 229-81439"
         },
         {
-          "code": "MOVE.SRD.3",
-          "name": "Budget & Financial Management",
+          "code": "",
+          "name": "",
           "head": "Cristina Cuadra Garcia",
-          "deputy": "Anne-Laurence Voiseux"
+          "head_email": "Cristina.CUADRA-GARCIA@ec.europa.eu",
+          "head_phone": "+32 229-53850"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paloma Aba Garrote",
+          "head_email": "Paloma.ABA-GARROTE@ec.europa.eu",
+          "head_phone": "+32 229-61408"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Novak",
+          "head_email": "Maria.NOVAK@ec.europa.eu",
+          "head_phone": "+32 229-95635"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marc Vanderhaegen",
+          "head_email": "Marc.Vanderhaegen@ec.europa.eu",
+          "head_phone": "+32 229-90771"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Joachim Wiemann",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniela Rosca",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Harvey Rouse",
+          "head_email": "Harvey.ROUSE@ec.europa.eu",
+          "head_phone": "+32 229-62326"
         }
       ]
     }
   ],
-  "linked_agencies": [
-    {
-      "code": "CINEA",
-      "name": "European Climate, Infrastructure and Environment Executive Agency",
-      "director": "Paloma Aba Garrote",
-      "departments": [
-        {
-          "code": "CINEA.A",
-          "director": "Maria Novak",
-          "units": [
-            {
-              "code": "CINEA.A.A1",
-              "head": "Marc Vanderhaegen"
-            },
-            {
-              "code": "CINEA.A.2",
-              "head": "Joachim Wiemann"
-            },
-            {
-              "code": "CINEA.A.A4",
-              "head": "Daniela Rosca"
-            }
-          ]
-        },
-        {
-          "code": "CINEA.B",
-          "director": "Olivier Silla",
-          "units": [
-            {
-              "code": "CINEA.B.B1",
-              "head": "Morten Jensen"
-            },
-            {
-              "code": "CINEA.B.B2",
-              "head": "Lucie Zackova"
-            },
-            {
-              "code": "CINEA.B.B3",
-              "head": "Christian Faure"
-            }
-          ]
-        },
-        {
-          "code": "CINEA.C.C3",
-          "head": "Vacant"
-        }
-      ]
-    },
-    {
-      "code": "EMSA",
-      "name": "European Maritime Safety Agency"
-    },
-    {
-      "code": "SESAR3",
-      "name": "SESAR 3 Joint Undertaking"
-    },
-    {
-      "code": "EU-RAIL",
-      "name": "Europe's Rail Joint Undertaking"
-    },
-    {
-      "code": "ERA",
-      "name": "European Agency for Railways"
-    },
-    {
-      "code": "EASA",
-      "name": "European Union Aviation Safety Agency"
-    }
-  ],
-  "date_of_effect": "2025-11-01"
+  "num_directorates": 7,
+  "num_units": 36,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

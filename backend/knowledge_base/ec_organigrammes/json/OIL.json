@@ -1,0 +1,78 @@
+{
+  "dg_code": "OIL",
+  "dg_name": "Office for Infrastructure and Logistics in Luxembourg",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Guy Drowart",
+      "director_email": "Guy.DROWART@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "L-1521 Luxembourg",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jose Miranda-Vizuete",
+          "head_email": "Jose.MIRANDA-VIZUETE@ec.europa.eu",
+          "head_phone": "+352 4301-38063"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Antoon Gijsens",
+          "head_email": "Antoon.GIJSENS@ec.europa.eu",
+          "head_phone": "+352 4301-33641"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Delia Morea",
+          "head_email": "Delia.MOREA@ec.europa.eu",
+          "head_phone": "+352 4301-38312"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bernard Felix",
+          "head_email": "Bernard.Felix@ec.europa.eu",
+          "head_phone": "+352 4301-38090"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mateja Rus",
+          "head_email": "Mateja.RUS@ec.europa.eu",
+          "head_phone": "+352 4301-32176"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vincent Lambotte",
+          "head_email": "Vincent.LAMBOTTE@ec.europa.eu",
+          "head_phone": "+352 4301-32773"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lenka Nydrlova",
+          "head_email": "Lenka.NYDRLOVA@ec.europa.eu",
+          "head_phone": "+352 4301-32673"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 8,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

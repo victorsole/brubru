@@ -1,0 +1,5646 @@
+{
+  "institution": "COUNCIL_EU",
+  "source": "euwhoiswho_councileu.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 1387,
+  "units": {
+    "AUSTRIA": {
+      "name": "AUSTRIA",
+      "persons": [
+        {
+          "name": "Christian Stocker",
+          "title": "Federal Chancellor"
+        },
+        {
+          "name": "Andreas Babler",
+          "title": "Vice-Chancellor, Federal Minister for -- Housing, Arts, Culture, Media and Sport"
+        },
+        {
+          "name": "Beate Meinl-Reisinger",
+          "title": "Federal Minister for European and -- International Affairs"
+        },
+        {
+          "name": "Korinna Schumann",
+          "title": "Federal Minister for Labour, Social -- Affairs, Health, Care and Consumer -- Protection"
+        },
+        {
+          "name": "Christoph Wiederkehr",
+          "title": "Federal Minister for Education"
+        },
+        {
+          "name": "Markus Marterbauer",
+          "title": "Federal Minister for Finance"
+        },
+        {
+          "name": "Eva-Maria Holzleitner",
+          "title": "Federal Minister for Women, Science -- and Research"
+        },
+        {
+          "name": "Gerhard Karner",
+          "title": "Federal Minister for the Interior"
+        },
+        {
+          "name": "Peter Hanke",
+          "title": "Federal Minister for Innovation, Mobility -- and Infrastructure"
+        },
+        {
+          "name": "Anna Sporrer",
+          "title": "Federal Minister for Justice"
+        },
+        {
+          "name": "Norbert Totschnig",
+          "title": "Federal Minister for Agriculture and -- Forestry, Climate and Environmental -- Protection, Regions and Water -- Management"
+        },
+        {
+          "name": "Klaudia Tanner",
+          "title": "Federal Minister for Defence"
+        },
+        {
+          "name": "Wolfgang Hattmannsdorfer",
+          "title": "Federal Minister for Economic Affairs, -- Energy and Tourism"
+        },
+        {
+          "name": "Claudia Plakolm",
+          "title": "Federal Minister for Europe, Integration -- and Family"
+        },
+        {
+          "name": "Alexander Pröll",
+          "title": "State Secretary in the Federal -- Chancellery"
+        },
+        {
+          "name": "Michaela Schmidt",
+          "title": "State Secretary, Federal Ministry of -- Housing, Arts, Culture, Media and Sport"
+        },
+        {
+          "name": "Josef Schellhorn",
+          "title": "State Secretary, Federal Ministry of -- European and International Affairs"
+        },
+        {
+          "name": "Ulrike Königsberger-Ludwig",
+          "title": "State Secretary, Federal Ministry of -- Labour, Social Affairs, Health, Care and -- Consumer Protection"
+        },
+        {
+          "name": "Barbara Eibinger-Miedl",
+          "title": "State Secretary, Federal Ministry of -- Finance"
+        },
+        {
+          "name": "Jörg Leichtfried",
+          "title": "State Secretary, Federal Ministry of the -- Interior"
+        },
+        {
+          "name": "Elisabeth Zehetner",
+          "title": "State Secretary, Federal Ministry of -- Economic Affairs, Energy and Tourism"
+        }
+      ]
+    },
+    "BELGIUM": {
+      "name": "BELGIUM",
+      "persons": [
+        {
+          "name": "Bart De Wever",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "David Clarinval",
+          "title": "Deputy Prime Minister and Minister -- for Employment, the Economy and -- Agriculture"
+        },
+        {
+          "name": "Maxime Prévot",
+          "title": "Deputy Prime Minister and Minister for -- Foreign Affairs, European Affairs and -- Development Cooperation"
+        },
+        {
+          "name": "Frank Vandenbroucke",
+          "title": "Deputy Prime Minister and Minister -- for Social Affairs and Public Health, -- with responsibility for the Fight against -- Poverty"
+        },
+        {
+          "name": "Vincent Van Peteghem",
+          "title": "Deputy Prime Minister and Minister -- for the Budget, with responsibility for -- Administrative Simplification"
+        },
+        {
+          "name": "Jan Jambon",
+          "title": "Deputy Prime Minister and Minister -- for Finance and Pensions, with -- responsibility for the National Lottery and -- Federal Cultural Institutions"
+        },
+        {
+          "name": "Annelies Verlinden",
+          "title": "Minister for Justice, with responsibility for -- the North Sea"
+        },
+        {
+          "name": "Bernard Quintin",
+          "title": "Minister for Security and the Interior, with -- responsibility for Beliris"
+        },
+        {
+          "name": "Theo Francken",
+          "title": "Minister for Defence, with responsibility -- for Foreign Trade"
+        },
+        {
+          "name": "Jean-Luc Crucke",
+          "title": "Minister for Mobility, Climate and the -- Environmental Transition"
+        },
+        {
+          "name": "Vanessa Matz",
+          "title": "Minister for Public Action and -- Modernisation, with responsibility for -- Public Enterprises, Public Administration, -- State Buildings Administration, Digital, -- and Federal Scientific Establishments"
+        },
+        {
+          "name": "Rob Beenders",
+          "title": "Minister for Consumer Protection, the -- Fight against Social Security Fraud, -- Persons with Disabilities and Equal -- Opportunities"
+        },
+        {
+          "name": "Anneleen Van Bossuyt",
+          "title": "Minister for Asylum and Migration, and -- Social Integration, with responsibility for -- Urban Policy"
+        },
+        {
+          "name": "Mathieu Bihet",
+          "title": "Minister for Energy"
+        },
+        {
+          "name": "Éléonore Simonet",
+          "title": "Minister for Small Businesses, the Self- -- Employed and SMEs"
+        },
+        {
+          "name": "Matthias Diependaele",
+          "title": "Minister-President of the Flemish -- Government and Flemish Minister for -- the Economy, Innovation and Industry, -- Foreign Policy, Digitisation and Facilities"
+        },
+        {
+          "name": "Melissa Depraetere",
+          "title": "Vice-Minister-President of the Flemish -- Government and Flemish Minister for -- Housing, Energy and Climate, Tourism -- and Youth"
+        },
+        {
+          "name": "Hilde Crevits",
+          "title": "Vice-Minister-President of the Flemish -- Government and Flemish Minister for -- the Interior, Urban and Rural Policy, -- Society, Integration and Civic Integration, -- Administrative Affairs, Social Economy -- and Sea Fishing"
+        },
+        {
+          "name": "Ben Weyts",
+          "title": "Vice-Minister-President of the Flemish -- Government and Flemish Minister for -- the Budget and Finance, the Flemish -- Periphery of Brussels, Immovable -- Heritage and Animal Welfare"
+        },
+        {
+          "name": "Zuhal Demir",
+          "title": "Flemish Minister for Education, Justice -- and Employment"
+        },
+        {
+          "name": "Caroline Gennez",
+          "title": "Flemish Minister for Welfare and -- Poverty Reduction, Culture and Equal -- Opportunities"
+        },
+        {
+          "name": "Jo Brouns",
+          "title": "Flemish Minister for the Environment and -- Agriculture"
+        },
+        {
+          "name": "Annick De Ridder",
+          "title": "Flemish Minister for Mobility, Public -- Works, Ports and Sport"
+        },
+        {
+          "name": "Cieltje Van Achter",
+          "title": "Flemish Minister for Brussels Affairs and -- Media"
+        },
+        {
+          "name": "Adrien Dolimont",
+          "title": "Minister-President of Wallonia for the -- Budget, Finance, Animal Welfare, -- International Relations and Firearms -- Licensing"
+        },
+        {
+          "name": "François Desquesnes",
+          "title": "Vice-President and Walloon Minister for -- Spatial Planning, Business Parks, Public -- Works, Mobility, Road Safety and Local -- Authorities"
+        },
+        {
+          "name": "Pierre-Yves Jeholet",
+          "title": "Vice-President and Walloon Minister for -- Economic Affairs, Industry, the Digital -- Economy, Employment and Training"
+        },
+        {
+          "name": "Yves Coppieters",
+          "title": "Walloon Minister for Health, the -- Environment, Solidarity and the Social -- Economy"
+        },
+        {
+          "name": "Jacqueline Galant",
+          "title": "Walloon Minister for the Civil Service, -- Administrative Simplification and Sports -- Infrastructure"
+        },
+        {
+          "name": "Valérie Lescrenier",
+          "title": "Walloon Minister for Tourism, Heritage -- and Early Childhood Facilities"
+        },
+        {
+          "name": "Céline Neven",
+          "title": "Walloon Minister for Energy, the Air- -- Climate Plan, Housing and Airports"
+        },
+        {
+          "name": "Anne-Catherine Dalcq",
+          "title": "Walloon Minister for Agriculture, Rural -- Policy, Nature, Hunting, Fisheries and -- Forests"
+        },
+        {
+          "name": "Oliver Paasch",
+          "title": "Minister-President, Minister for Local -- Authorities, Spatial Planning and -- Finance"
+        },
+        {
+          "name": "Jérôme Franssen",
+          "title": "Minister for Education, Vocational -- Training and Employment"
+        },
+        {
+          "name": "Gregor Freches",
+          "title": "Minister for Culture, Sport, Tourism and -- Media"
+        },
+        {
+          "name": "Lydia Klinkenberg",
+          "title": "Minister for the Family, Social Affairs, -- Housing and Health"
+        },
+        {
+          "name": "Elisabeth Degryse",
+          "title": "Minister-President, with responsibility for -- the Budget, Higher Education, Culture, -- International Relations and French- -- Speaking Relations within Belgium"
+        },
+        {
+          "name": "Valérie Glatigny",
+          "title": "First Vice-President and Minister for -- Education and Social Advancement -- Education"
+        },
+        {
+          "name": "Valérie Lescrenier",
+          "title": "Vice-President and Minister for -- Childhood, Youth, Youth Welfare and -- Community Justice Centres"
+        },
+        {
+          "name": "Jacqueline Galant",
+          "title": "Minister for Sport, the Civil Service, -- Administrative Simplification and Media"
+        },
+        {
+          "name": "Yves Coppieters",
+          "title": "Minister for Health, Equal Opportunities -- and Women’s Rights"
+        },
+        {
+          "name": "Adrien Dolimont",
+          "title": "Minister for Research"
+        }
+      ]
+    },
+    "BULGARIA": {
+      "name": "BULGARIA",
+      "persons": [
+        {
+          "name": "Rossen Jeliazkov",
+          "title": ""
+        },
+        {
+          "name": "(Росен Желязков)",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Tomislav Donchev",
+          "title": ""
+        },
+        {
+          "name": "(Томислав Дончев)",
+          "title": "Deputy Prime Minister, Minister for -- Innovation and Growth"
+        },
+        {
+          "name": "Atanas Zafirov",
+          "title": ""
+        },
+        {
+          "name": "(Атанас Зафиров)",
+          "title": "Deputy Prime Minister"
+        },
+        {
+          "name": "Grozdan Karadjov",
+          "title": ""
+        },
+        {
+          "name": "(Гроздан Караджов)",
+          "title": "Deputy Prime Minister, Minister for -- Transport and Communications"
+        },
+        {
+          "name": "Temenuzhka Petkova",
+          "title": ""
+        },
+        {
+          "name": "(Теменужка Петкова)",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Daniel Mitov (Даниел Митов)",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Georg Georgiev",
+          "title": ""
+        },
+        {
+          "name": "(Георг Георгиев)",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Ivan Ivanov (Иван Иванов)",
+          "title": "Minister for Regional Development and -- Public Works"
+        },
+        {
+          "name": "Borislav Gutsanov",
+          "title": ""
+        },
+        {
+          "name": "(Борислав Гуцанов)",
+          "title": "Minister for Labour and Social Policy"
+        },
+        {
+          "name": "Atanas Zapryanov",
+          "title": ""
+        },
+        {
+          "name": "(Атанас Запрянов)",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Georgi Georgiev",
+          "title": ""
+        },
+        {
+          "name": "(Георги Георгиев)",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Krasimir Valchev",
+          "title": ""
+        },
+        {
+          "name": "(Красимир Вълчев)",
+          "title": "Minister for Education and Science"
+        },
+        {
+          "name": "Silvi Petrov (Силви Петров)",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Marian Bachev (Мариан Бачев)",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Georgi Tahov (Георги Тахов)",
+          "title": "Minister for Agriculture and Food"
+        },
+        {
+          "name": "Manol Genov (Манол Генов)",
+          "title": "Minister for the Environment and Water"
+        },
+        {
+          "name": "Peter Dilov (Петър Дилов)",
+          "title": "Minister for Economic Affairs and -- Industry"
+        },
+        {
+          "name": "Zhecho Stankov",
+          "title": ""
+        },
+        {
+          "name": "(Жечо Станков)",
+          "title": "Minister for Energy"
+        },
+        {
+          "name": "Valentin Mundrov",
+          "title": ""
+        },
+        {
+          "name": "(Валентин Мундров)",
+          "title": "Minister for e-Government"
+        },
+        {
+          "name": "Miroslav Borshosh",
+          "title": ""
+        },
+        {
+          "name": "(Мирослав Боршош)",
+          "title": "Minister for Tourism"
+        },
+        {
+          "name": "Ivan Peshev (Иван Пешев)",
+          "title": "Minister for Youth and Sport"
+        }
+      ]
+    },
+    "CROATIA": {
+      "name": "CROATIA",
+      "persons": [
+        {
+          "name": "Andrej Plenković",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Gordan Grlić Radman",
+          "title": "Minister for Foreign and European -- Affairs"
+        },
+        {
+          "name": "Marija Vučković",
+          "title": "Minister for Environmental Protection -- and Green Transition"
+        },
+        {
+          "name": "Davor Božinović",
+          "title": "Deputy Prime Minister and Minister for -- Internal Affairs"
+        },
+        {
+          "name": "Marko Primorac",
+          "title": "Deputy Prime Minister and Minister for -- Finance"
+        },
+        {
+          "name": "Damir Habijan",
+          "title": "Minister for Justice, Public Administration -- and Digital Transformation"
+        },
+        {
+          "name": "Marin Piletić",
+          "title": "Minister for Labour, Pensions, Family -- and Social Policy"
+        },
+        {
+          "name": "Nina Obuljen Koržinek",
+          "title": "Minister for Culture and Media"
+        },
+        {
+          "name": "Tonči Glavina",
+          "title": "Minister for Tourism and Sport"
+        },
+        {
+          "name": "Radovan Fuchs",
+          "title": "Minister for Science, Education and -- Youth"
+        },
+        {
+          "name": "Ante Šušnjar",
+          "title": "Minister for Economic Affairs"
+        },
+        {
+          "name": "Oleg Butković",
+          "title": "Deputy Prime Minister and Minister for -- the Sea, Transport and Infrastructure"
+        },
+        {
+          "name": "David Vlajčić",
+          "title": "Deputy Prime Minister and Minister for -- Agriculture, Forestry and Fisheries"
+        },
+        {
+          "name": "Ivan Šipić",
+          "title": "Minister for Demographics and -- Immigration"
+        },
+        {
+          "name": "Branko Bačić",
+          "title": "Deputy Prime Minister and Minister for -- Spatial Planning, Construction and State -- Property"
+        },
+        {
+          "name": "Tomo Medved",
+          "title": "Deputy Prime Minister and Minister for -- Croatian Veterans’ Affairs"
+        },
+        {
+          "name": "Irena Hrstić",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Ivan Anušić",
+          "title": "Deputy Prime Minister and Minister for -- Defence"
+        },
+        {
+          "name": "Andreja Metelko-Zgombić",
+          "title": "State Secretary, Ministry of Foreign and -- European Affairs"
+        },
+        {
+          "name": "Zdenko Lucić",
+          "title": "State Secretary, Ministry of Foreign and -- European Affairs, with responsibility -- for foreign trade and development -- cooperation"
+        },
+        {
+          "name": "Frano Matušić",
+          "title": "State Secretary, Ministry of Foreign and -- European Affairs, with responsibility for -- political affairs"
+        },
+        {
+          "name": "Tomislav Bilandžić",
+          "title": "State Secretary, Ministry of Internal -- Affairs"
+        },
+        {
+          "name": "Nevenka Lastrić-Đurić",
+          "title": "State Secretary, Ministry of Internal -- Affairs"
+        },
+        {
+          "name": "Irena Petrijevčanin",
+          "title": "State Secretary, Ministry of Internal -- Affairs"
+        },
+        {
+          "name": "Drago Matanović",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Branko Hrg",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Tomislav Galić",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Tereza Rogić Lugarić",
+          "title": "State Secretary, Ministry of Finance"
+        },
+        {
+          "name": "Stipe Župan",
+          "title": "State Secretary, Ministry of Finance"
+        },
+        {
+          "name": "Davor Zoričić",
+          "title": "State Secretary, Ministry of Finance"
+        },
+        {
+          "name": "Ivan Crnčec",
+          "title": "State Secretary, Ministry of Justice, -- Public Administration and Digital -- Transformation"
+        },
+        {
+          "name": "Sanjin Rukavina",
+          "title": "State Secretary, Ministry of Justice, -- Public Administration and Digital -- Transformation"
+        },
+        {
+          "name": "Vedrana Šimundža Nikolić",
+          "title": "State Secretary, Ministry of Justice, -- Public Administration and Digital -- Transformation"
+        },
+        {
+          "name": "Fadila Bahović",
+          "title": "State Secretary, Ministry of Justice, -- Public Administration and Digital -- Transformation"
+        },
+        {
+          "name": "Dunja Magaš",
+          "title": "State Secretary, Ministry of Spatial -- Planning, Construction and State -- Property"
+        },
+        {
+          "name": "Željko Uhlir",
+          "title": "State Secretary, Ministry of Spatial -- Planning, Construction and State -- Property"
+        },
+        {
+          "name": "Sanja Bošnjak",
+          "title": "State Secretary, Ministry of Spatial -- Planning, Construction and State -- Property"
+        },
+        {
+          "name": "Dario Tišov",
+          "title": "State Secretary, Ministry of Spatial -- Planning, Construction and State -- Property"
+        },
+        {
+          "name": "Tonči Glavinić",
+          "title": "State Secretary, Ministry of Spatial -- Planning, Construction and State -- Property"
+        },
+        {
+          "name": "Ivan Vidiš",
+          "title": "State Secretary, Ministry of Labour, -- Pensions, Family and Social Policy"
+        },
+        {
+          "name": "Marija Pletikosa",
+          "title": "State Secretary, Ministry of Labour, -- Pensions, Family and Social Policy"
+        },
+        {
+          "name": "Margareta Mađerić",
+          "title": "State Secretary, Ministry of Labour, -- Pensions, Family and Social Policy"
+        },
+        {
+          "name": "Marinko Lukenda",
+          "title": "State Secretary, Ministry of Labour, -- Pensions, Family and Social Policy"
+        },
+        {
+          "name": "Krešimir Partl",
+          "title": "State Secretary, Ministry of Culture and -- Media"
+        },
+        {
+          "name": "Dražena Vrselja",
+          "title": "State Secretary, Ministry of Culture and -- Media"
+        },
+        {
+          "name": "Mladen Pavić",
+          "title": "State Secretary, Ministry of Culture and -- Media"
+        },
+        {
+          "name": "Monika Udovičić",
+          "title": "State Secretary, Ministry of Tourism and -- Sport"
+        },
+        {
+          "name": "Josip Pavić",
+          "title": "State Secretary, Ministry of Tourism and -- Sport"
+        },
+        {
+          "name": "Tugomir Majdak",
+          "title": "State Secretary, Ministry of Agriculture, -- Forestry and Fisheries"
+        },
+        {
+          "name": "Zdravko Tušek",
+          "title": "State Secretary, Ministry of Agriculture, -- Forestry and Fisheries"
+        },
+        {
+          "name": "Ivan Matijević",
+          "title": "State Secretary, Ministry of Agriculture, -- Forestry and Fisheries"
+        },
+        {
+          "name": "Marinko Beljo",
+          "title": "State Secretary, Ministry of Agriculture, -- Forestry and Fisheries"
+        },
+        {
+          "name": "Nikola Mrvac",
+          "title": "State Secretary, Ministry of Science, -- Education and Youth"
+        },
+        {
+          "name": "Stipe Mamić",
+          "title": "State Secretary, Ministry of Science, -- Education and Youth"
+        },
+        {
+          "name": "Iva Ivanković",
+          "title": "State Secretary, Ministry of Science, -- Education and Youth"
+        },
+        {
+          "name": "Zrinka Mužinić-Bikić",
+          "title": "State Secretary, Ministry of Science, -- Education and Youth"
+        },
+        {
+          "name": "Anja Bagarić",
+          "title": "State Secretary, Ministry of -- Environmental Protection and Green -- Transition"
+        },
+        {
+          "name": "Željko Vuković",
+          "title": "State Secretary, Ministry of -- Environmental Protection and Green -- Transition"
+        },
+        {
+          "name": "Tanja Radić Lakoš",
+          "title": "State Secretary, Ministry of -- Environmental Protection and Green -- Transition"
+        },
+        {
+          "name": "Ivo Milatić",
+          "title": "State Secretary, Ministry of Economic -- Affairs"
+        },
+        {
+          "name": "Vedran Špehar",
+          "title": "State Secretary, Ministry of Economic -- Affairs"
+        },
+        {
+          "name": "Goran Romek",
+          "title": "State Secretary, Ministry of Economic -- Affairs"
+        },
+        {
+          "name": "Tomislav Mihotić",
+          "title": "State Secretary, Ministry of the Sea, -- Transport and Infrastructure"
+        },
+        {
+          "name": "Žarko Tušek",
+          "title": "State Secretary, Ministry of the Sea, -- Transport and Infrastructure"
+        },
+        {
+          "name": "Kristina Bilić",
+          "title": "State Secretary, Ministry of Regional -- Development and EU Funds"
+        },
+        {
+          "name": "Zrinka Raguž",
+          "title": "State Secretary, Ministry of Regional -- Development and EU Funds, acting -- Minister for Regional Development and -- EU Funds"
+        },
+        {
+          "name": "Domagoj Mikulić",
+          "title": "State Secretary, Ministry of Regional -- Development and EU Funds"
+        },
+        {
+          "name": "Zlatan Bašić",
+          "title": "State Secretary, Ministry of Croatian -- Veterans’ Affairs"
+        },
+        {
+          "name": "Darko Nekić",
+          "title": "State Secretary, Ministry of Croatian -- Veterans’ Affairs"
+        },
+        {
+          "name": "Marija Bubaš",
+          "title": "State Secretary, Ministry of Health"
+        },
+        {
+          "name": "Tomislav Dulibić",
+          "title": "State Secretary, Ministry of Health"
+        },
+        {
+          "name": "Ivan Bubić",
+          "title": "State Secretary, Central State Office for -- Central Public Procurement"
+        },
+        {
+          "name": "Zvonko Milas",
+          "title": "State Secretary, Central State Office for -- Croatians outside the Republic of Croatia"
+        },
+        {
+          "name": "Slavko Tucaković",
+          "title": "Chief Fire Commander"
+        },
+        {
+          "name": "Andrija Mikulić",
+          "title": "Chief State Inspector"
+        }
+      ]
+    },
+    "CZECHIA": {
+      "name": "CZECHIA",
+      "persons": [
+        {
+          "name": "Andrej Babiš",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Alena Schillerová",
+          "title": "Deputy Prime Minister and Minister for -- Finance"
+        },
+        {
+          "name": "Lubomír Metnar",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Petr Macinka",
+          "title": "Deputy Prime Minister, Minister for -- Foreign Affairs and Minister for the -- Environment"
+        },
+        {
+          "name": "Jeroným Tejc",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Karel Havlíček",
+          "title": "First Deputy Prime Minister and Minister -- for Industry and Trade"
+        },
+        {
+          "name": "Adam Vojtěch",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Zuzana Mrázová",
+          "title": "Minister for Regional Development"
+        },
+        {
+          "name": "Jaromír Zůna",
+          "title": "Deputy Prime Minister and Minister for -- Defence"
+        },
+        {
+          "name": "Aleš Juchelka",
+          "title": "Minister for Labour and Social Affairs"
+        },
+        {
+          "name": "Ivan Bednárik",
+          "title": "Minister for Transport"
+        },
+        {
+          "name": "Martin Šebestyán",
+          "title": "Minister for Agriculture"
+        },
+        {
+          "name": "Robert Plaga",
+          "title": "Minister for Education, Youth and Sports"
+        },
+        {
+          "name": "Oto Klempíř",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Boris Šťastný",
+          "title": "Minister for Sport, Prevention and Health"
+        },
+        {
+          "name": "Milena Hrdinková",
+          "title": "Advisor to the Prime Minister on EU -- Affairs"
+        },
+        {
+          "name": "Jiří Brodský",
+          "title": "Deputy Minister for Foreign Affairs"
+        },
+        {
+          "name": "Marie Chatardová",
+          "title": "Deputy Minister for Foreign Affairs"
+        },
+        {
+          "name": "Radek Augustin",
+          "title": "Deputy Minister for Foreign Affairs"
+        },
+        {
+          "name": "Lukáš Klučka",
+          "title": "Deputy Minister for the Interior"
+        },
+        {
+          "name": "Zdeněk Mach",
+          "title": "Deputy Minister for the Interior"
+        },
+        {
+          "name": "Ondřej Máchal",
+          "title": "Deputy Minister for the Interior"
+        },
+        {
+          "name": "Adam Kalous",
+          "title": "Deputy Minister for Transport"
+        },
+        {
+          "name": "Radovan Vích",
+          "title": "Deputy Minister for Defence"
+        },
+        {
+          "name": "René Schreier",
+          "title": "Deputy Minister for Defence"
+        },
+        {
+          "name": "Jan Sechter",
+          "title": "Deputy Minister for Industry and Trade"
+        },
+        {
+          "name": "Jiřina Žežulová",
+          "title": "Deputy Minister for Labour and Social -- Affairs"
+        },
+        {
+          "name": "Edita Stejskalová",
+          "title": "Deputy Minister for Labour and Social -- Affairs"
+        },
+        {
+          "name": "Kateřina Jirková",
+          "title": "Deputy Minister for Labour and Social -- Affairs"
+        },
+        {
+          "name": "Oldřich Černý",
+          "title": "Deputy Minister for Agriculture"
+        },
+        {
+          "name": "Jaroslava Špalková",
+          "title": "Deputy Minister for Agriculture"
+        },
+        {
+          "name": "Jiří Zajíček",
+          "title": "Deputy Minister for Education, Youth and -- Sports"
+        },
+        {
+          "name": "Zdeněk Kettner",
+          "title": "Deputy Minister for Education, Youth and -- Sports"
+        },
+        {
+          "name": "Vladislav Smrž",
+          "title": "Deputy Minister for the Environment"
+        },
+        {
+          "name": "Jaromír Wasserbauer",
+          "title": "Deputy Minister for the Environment"
+        },
+        {
+          "name": "Martin Weiss",
+          "title": "Deputy Minister for the Environment"
+        },
+        {
+          "name": "Filip Endal",
+          "title": "Deputy Minister for Regional -- Development"
+        },
+        {
+          "name": "Olga Nebeská",
+          "title": "Deputy Minister for Regional -- Development"
+        },
+        {
+          "name": "Adam Kocián",
+          "title": "Deputy Minister for Culture"
+        },
+        {
+          "name": "Kateřina Pešatová",
+          "title": "Deputy Minister for Culture"
+        },
+        {
+          "name": "Adam Šimice",
+          "title": "Deputy Minister for Justice"
+        },
+        {
+          "name": "Ladislav Švec",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Igor Karen",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Karla Maříková",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Nikos Christodoulides",
+          "title": "President of the Republic of Cyprus"
+        },
+        {
+          "name": "Constantinos Kombos",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Theodora Constantinidou",
+          "title": "Permanent Secretary, Ministry of Foreign -- Affairs"
+        },
+        {
+          "name": "Makis Keravnos",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Andreas Zachariades",
+          "title": "Permanent Secretary, Ministry of -- Finance"
+        },
+        {
+          "name": "Penelope Papavassiliou",
+          "title": "Permanent Secretary for Growth, -- Ministry of Finance"
+        },
+        {
+          "name": "Constantinos Ioannou",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Elikkos Elia",
+          "title": "Permanent Secretary, Ministry of the -- Interior"
+        },
+        {
+          "name": "Vasilis Palmas",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Stelios Kountouris",
+          "title": "Acting Permanent Secretary, Ministry of -- Defence"
+        },
+        {
+          "name": "Athina Michaelidou",
+          "title": "Minister for Education, Sport and Youth"
+        },
+        {
+          "name": "Marios Panayides",
+          "title": "Permanent Secretary, Ministry of -- Education, Sport and Youth"
+        },
+        {
+          "name": "Alexis Vafeades",
+          "title": "Minister for Transport, Communications -- and Works"
+        },
+        {
+          "name": "Marina Ioannou Hasapi",
+          "title": "Permanent Secretary, Ministry of -- Transport, Communications and Works"
+        },
+        {
+          "name": "Michalis Damianos",
+          "title": "Minister for Energy, Commerce and -- Industry"
+        },
+        {
+          "name": "Kyriakos Iordanou",
+          "title": "Permanent Secretary, Ministry of Energy, -- Commerce and Industry"
+        },
+        {
+          "name": "Maria Panayiotou",
+          "title": "Minister for Agriculture, Rural -- Development and Environment"
+        },
+        {
+          "name": "Andreas A. Gregoriou",
+          "title": "Permanent Secretary, Directorate- -- General for Agriculture and Rural -- Development"
+        },
+        {
+          "name": "Costas Constantinou",
+          "title": "Permanent Secretary, Directorate- -- General for the Environment"
+        },
+        {
+          "name": "Marinos Moushiouttas",
+          "title": "Minister for Labour and Social Insurance"
+        },
+        {
+          "name": "Stelios Himonas",
+          "title": "Permanent Secretary, Ministry of Labour -- and Social Insurance"
+        },
+        {
+          "name": "Constantinos Fitiris",
+          "title": "Minister for Justice and Public Order"
+        },
+        {
+          "name": "George Panteli",
+          "title": "Permanent Secretary, Ministry of Justice -- and Public Order"
+        },
+        {
+          "name": "Neofytos Charalambides",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Elisavet Constantinou",
+          "title": "Acting Permanent Secretary, Ministry of -- Health"
+        },
+        {
+          "name": "Marilena Raouna",
+          "title": "Deputy Minister for European Affairs"
+        },
+        {
+          "name": "Marina Hadjimanoli",
+          "title": "Deputy Minister for Shipping"
+        },
+        {
+          "name": "Lakis Mesimeris",
+          "title": "Acting Permanent Secretary, Deputy -- Ministry of Shipping"
+        },
+        {
+          "name": "Nicholas A. Ioannides",
+          "title": "Deputy Minister for Migration and -- International Protection"
+        },
+        {
+          "name": "Charalambos Roussos",
+          "title": "Permanent Secretary, Deputy Ministry of -- Migration and International Protection"
+        },
+        {
+          "name": "Nicodemos Damianou",
+          "title": "Deputy Minister for Research, Innovation -- and Digital Policy"
+        },
+        {
+          "name": "George Komodromos",
+          "title": "Acting Permanent Secretary, Deputy -- Ministry of Research, Innovation and -- Digital Policy"
+        },
+        {
+          "name": "Costas Koumis",
+          "title": "Deputy Minister for Tourism"
+        },
+        {
+          "name": "Neophytos Papadopoulos",
+          "title": "Permanent Secretary, Deputy Ministry of -- Tourism"
+        },
+        {
+          "name": "Clea Hadjistephanou",
+          "title": "Deputy Minister for Social Welfare"
+        },
+        {
+          "name": "Yiannis Nicolaides",
+          "title": "Permanent Secretary, Deputy Ministry of -- Social Welfare"
+        },
+        {
+          "name": "Vasiliki Kassianidou",
+          "title": "Deputy Minister for Culture"
+        },
+        {
+          "name": "Giorgos Papageorgiou",
+          "title": "Permanent Secretary, Deputy Ministry of -- Culture"
+        },
+        {
+          "name": "Constantinos Letymbiotis",
+          "title": "Government Spokesperson"
+        },
+        {
+          "name": "Yiannis Antoniou",
+          "title": "Deputy Government Spokesperson"
+        },
+        {
+          "name": "Irene Piki",
+          "title": "Deputy Minister to the President"
+        }
+      ]
+    },
+    "DENMARK": {
+      "name": "DENMARK",
+      "persons": [
+        {
+          "name": "Mette Frederiksen",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Barbara Bertelsen",
+          "title": "State Secretary, Prime Minister’s Office"
+        },
+        {
+          "name": "Troels Lund Poulsen",
+          "title": "Deputy Prime Minister and Minister for -- Defence"
+        },
+        {
+          "name": "Pernille Langeberg",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Lars Løkke Rasmussen",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Marie Bjerre",
+          "title": "Minister for European Affairs"
+        },
+        {
+          "name": "Jeppe Tranholm-Mikkelsen",
+          "title": "State Secretary, Ministry of Foreign -- Affairs"
+        },
+        {
+          "name": "Lotte Machon",
+          "title": "State Secretary, Ministry of Foreign -- Affairs (foreign policy)"
+        },
+        {
+          "name": "Jonas Bering Liisberg",
+          "title": "State Secretary, Ministry of Foreign -- Affairs (European policy and the Arctic)"
+        },
+        {
+          "name": "Elsebeth Søndergaard Krone",
+          "title": "State Secretary, Ministry of Foreign -- Affairs (development policy)"
+        },
+        {
+          "name": "Lina Gandløse Hansen",
+          "title": "State Secretary, Ministry of Foreign -- Affairs (trade and investments)"
+        },
+        {
+          "name": "Nicolai Wammen",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Kent Harnisch",
+          "title": "State Secretary, Ministry of Finance"
+        },
+        {
+          "name": "Sophie Løhde",
+          "title": "Minister for the Interior and Health"
+        },
+        {
+          "name": "Svend Særkjær",
+          "title": "State Secretary, Ministry of the Interior -- and Health"
+        },
+        {
+          "name": "Peter Hummelgaard",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Johan Kristian Legarth",
+          "title": "State Secretary, Ministry of Justice"
+        },
+        {
+          "name": "Jakob Engel-Schmidt",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Dorte Nøhr Andersen",
+          "title": "State Secretary, Ministry of Culture"
+        },
+        {
+          "name": "Stephanie Lose",
+          "title": "Minister for the Economy"
+        },
+        {
+          "name": "Stig Henneberg",
+          "title": "State Secretary, Ministry of the Economy"
+        },
+        {
+          "name": "Morten Bødskov",
+          "title": "Minister for Industry, Business and -- Financial Affairs"
+        },
+        {
+          "name": "Jens Brøchner",
+          "title": "State Secretary, Ministry of Industry, -- Business and Financial Affairs"
+        },
+        {
+          "name": "Magnus Heunicke",
+          "title": "Minister for the Environment and Gender -- Equality"
+        },
+        {
+          "name": "Annemarie Lauritsen",
+          "title": "State Secretary, Ministry of the -- Environment and Gender Equality"
+        },
+        {
+          "name": "Ane Halsboe-Jørgensen",
+          "title": "Minister for Taxation"
+        },
+        {
+          "name": "Merete Agergaard",
+          "title": "State Secretary, Ministry of Taxation"
+        },
+        {
+          "name": "Mattias Tesfaye",
+          "title": "Minister for Children and Education"
+        },
+        {
+          "name": "Jakob Jensen",
+          "title": "State Secretary, Ministry of Children and -- Education"
+        },
+        {
+          "name": "Kaare Dybvad Bek",
+          "title": "Minister for Employment"
+        },
+        {
+          "name": "Sine Frederiksen",
+          "title": "State Secretary, Ministry of Employment"
+        },
+        {
+          "name": "Jeppe Bruus",
+          "title": "Minister for the Green Tripartite"
+        },
+        {
+          "name": "Maria Schack Vindum",
+          "title": "State Secretary, Ministry of the Green -- Tripartite"
+        },
+        {
+          "name": "Jacob Jensen",
+          "title": "Minister for Food, Agriculture and -- Fisheries"
+        },
+        {
+          "name": "Henrik Kjergaard",
+          "title": "State Secretary, Ministry of Food, -- Agriculture and Fisheries"
+        },
+        {
+          "name": "Thomas Danielsen",
+          "title": "Minister for Transport"
+        },
+        {
+          "name": "Jacob Heinsen",
+          "title": "State Secretary, Ministry of Transport"
+        },
+        {
+          "name": "Christina Egelund",
+          "title": "Minister for Higher Education and -- Science"
+        },
+        {
+          "name": "Hanne Meldgaard",
+          "title": "State Secretary, Ministry of Higher -- Education and Science"
+        },
+        {
+          "name": "Mette Kierkgaard",
+          "title": "Minister for Senior Citizens"
+        },
+        {
+          "name": "Janus Breck",
+          "title": "State Secretary, Ministry of Senior -- Citizens"
+        },
+        {
+          "name": "Lars Aagaard",
+          "title": "Minister for Climate, Energy and Utilities"
+        },
+        {
+          "name": "Lars Frelle- Petersen",
+          "title": "State Secretary, Ministry of Climate, -- Energy and Utilities"
+        },
+        {
+          "name": "Morten Dahlin",
+          "title": "Minister for Cities and Rural Districts, -- Minister for Ecclesiastical Affairs and -- Minister for Nordic Cooperation"
+        },
+        {
+          "name": "Christian Dons Christensen",
+          "title": "State Secretary, Ministry of Urban and -- Rural Affairs and Ecclesiastical Affairs"
+        },
+        {
+          "name": "Torsten Schack Pedersen",
+          "title": "Minister for Resilience and -- Preparedness"
+        },
+        {
+          "name": "Lisbet Zilmer-Johns",
+          "title": "State Secretary, Ministry of Resilience -- and Preparedness"
+        },
+        {
+          "name": "Sophie Hæstorp Andersen",
+          "title": "Minister for Social Affairs and Housing"
+        },
+        {
+          "name": "Jens Strunge Bonde",
+          "title": "State Secretary, Ministry of Social Affairs -- and Housing"
+        },
+        {
+          "name": "Rasmus Stoklund",
+          "title": "Minister for Immigration and Integration"
+        },
+        {
+          "name": "Pernille Breinholdt",
+          "title": "State Secretary, Ministry of Immigration -- and Integration"
+        },
+        {
+          "name": "Caroline Stage Olsen",
+          "title": "Minister for Digital Affairs"
+        },
+        {
+          "name": "Sophus Garfiel",
+          "title": "State Secretary, Ministry of Digital Affairs"
+        }
+      ]
+    },
+    "ESTONIA": {
+      "name": "ESTONIA",
+      "persons": [
+        {
+          "name": "Kristen Michal",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Margus Tsahkna",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Liisa Ly Pakosta",
+          "title": "Minister for Justice and Digital Affairs"
+        },
+        {
+          "name": "Hanno Pevkur",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Hendrik Johannes Terras",
+          "title": "Minister for Regional Affairs and -- Agriculture"
+        },
+        {
+          "name": "Heidy Purga",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Erkki Keldo",
+          "title": "Minister for Economic Affairs and -- Industry"
+        },
+        {
+          "name": "Andres Sutt",
+          "title": "Minister for Energy and the Environment"
+        },
+        {
+          "name": "Jürgen Ligi",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Igor Taro",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Karmen Joller",
+          "title": "Minister for Social Affairs"
+        },
+        {
+          "name": "Kristina Kallas",
+          "title": "Minister for Education and Research"
+        },
+        {
+          "name": "Kuldar Leis",
+          "title": "Minister for Infrastructure"
+        }
+      ]
+    },
+    "FINLAND": {
+      "name": "FINLAND",
+      "persons": [
+        {
+          "name": "Petteri Orpo",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Riikka Purra",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Joakim Strand",
+          "title": "Minister for European Affairs and -- Ownership Steering"
+        },
+        {
+          "name": "Elina Valtonen",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Ville Tavio",
+          "title": "Minister for Foreign Trade and -- Development"
+        },
+        {
+          "name": "Leena Meri",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Mari Rantanen",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Antti Häkkänen",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Anna-Kaisa Ikonen",
+          "title": "Minister for Local and Regional -- Government"
+        },
+        {
+          "name": "Anders Adlercreutz",
+          "title": "Minister for Education"
+        },
+        {
+          "name": "Mari-Leena Talvitie",
+          "title": "Minister for Science and Culture"
+        },
+        {
+          "name": "Mika Poutala",
+          "title": "Minister for Youth, Sport and Physical -- Activity"
+        },
+        {
+          "name": "Sari Essayah",
+          "title": "Minister for Agriculture and Forestry"
+        },
+        {
+          "name": "Lulu Ranne",
+          "title": "Minister for Transport and -- Communications"
+        },
+        {
+          "name": "Matias Marttinen",
+          "title": "Minister for Employment"
+        },
+        {
+          "name": "Sakari Puisto",
+          "title": "Minister for Economic Affairs"
+        },
+        {
+          "name": "Kaisa Juuso",
+          "title": "Minister for Social Affairs and Health"
+        },
+        {
+          "name": "Sanni Grahn-Laasonen",
+          "title": "Minister for Social Security"
+        },
+        {
+          "name": "Sari Multala",
+          "title": "Minister for the Environment and Climate"
+        },
+        {
+          "name": "Risto Artjoki",
+          "title": "State Secretary to Prime Minister Petteri -- Orpo"
+        },
+        {
+          "name": "Riikka Slunga-Poutsalo",
+          "title": "State Secretary to the Minister for -- Finance"
+        },
+        {
+          "name": "Pasi Rajala",
+          "title": "State Secretary to the Minister for -- Foreign Affairs"
+        },
+        {
+          "name": "Teija Makkonen",
+          "title": "State Secretary to the Minister for -- Foreign Trade and Development"
+        },
+        {
+          "name": "Teija Makkonen",
+          "title": "State Secretary to the Minister for -- Justice"
+        },
+        {
+          "name": "Heikki Tamminen",
+          "title": "State Secretary to the Minister for the -- Interior"
+        },
+        {
+          "name": "Pasi Rajala",
+          "title": "State Secretary to the Minister for -- Defence"
+        },
+        {
+          "name": "Kristiina Kokko",
+          "title": "State Secretary to the Minister for Local -- and Regional Government"
+        },
+        {
+          "name": "Mikaela Nylander",
+          "title": "State Secretary to the Minister for -- Education"
+        },
+        {
+          "name": "Kristiina Kokko",
+          "title": "State Secretary to the Minister for -- Science and Culture"
+        },
+        {
+          "name": "Päivi Nerg",
+          "title": "State Secretary to the Minister for Youth, -- Sport and Physical Activity"
+        },
+        {
+          "name": "Päivi Nerg",
+          "title": "State Secretary to the Minister for -- Agriculture and Forestry"
+        },
+        {
+          "name": "Marjo Lindgren",
+          "title": "State Secretary to the Minister for -- Transport and Communications"
+        },
+        {
+          "name": "Mika Nykänen",
+          "title": "State Secretary to the Minister for -- Employment"
+        },
+        {
+          "name": "Marjo Lindgren",
+          "title": "State Secretary to the Minister for -- Economic Affairs"
+        },
+        {
+          "name": "Laura Rissanen",
+          "title": "State Secretary to the Minister for Social -- Security"
+        },
+        {
+          "name": "Mika Nykänen",
+          "title": "State Secretary to the Minister for the -- Environment and Climate"
+        },
+        {
+          "name": "François Bayrou",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Gérald Darmanin",
+          "title": "Keeper of the Seals, Minister for Justice"
+        },
+        {
+          "name": "François Rebsamen",
+          "title": "Minister for Spatial Planning and -- Decentralisation"
+        },
+        {
+          "name": "Bruno Retailleau",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Élisabeth Borne",
+          "title": "Minister for National Education, Higher -- Education and Research"
+        },
+        {
+          "name": "Jean-Noël Barrot",
+          "title": "Minister for Europe and Foreign Affairs"
+        },
+        {
+          "name": "Rachida Dati",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Sébastien Lecornu",
+          "title": "Minister for the Armed Forces"
+        },
+        {
+          "name": "Agnès Pannier-Runacher",
+          "title": "Minister for the Ecological Transition, -- Biodiversity, Forestry, Maritime Affairs -- and Fisheries"
+        },
+        {
+          "name": "Éric Lombard",
+          "title": "Minister for Economic Affairs, Finance, -- and Industrial and Digital Sovereignty"
+        },
+        {
+          "name": "Catherine Vautrin",
+          "title": "Minister for Labour, Health, Solidarity -- and Families"
+        },
+        {
+          "name": "Aurore Bergé",
+          "title": "Minister with responsibility for Gender -- Equality and Anti-discrimination, -- attached to the Prime Minister"
+        },
+        {
+          "name": "Valérie Létard",
+          "title": "Minister with responsibility for Housing, -- attached to the Minister for Spatial -- Planning and Decentralisation"
+        },
+        {
+          "name": "Annie Genevard",
+          "title": "Minister for Agriculture and Food -- Sovereignty"
+        },
+        {
+          "name": "Astrid Panosyan-Bouvet",
+          "title": "Minister with responsibility for Labour -- and Employment, attached to the -- Minister for Labour, Health, Solidarity -- and Families"
+        },
+        {
+          "name": "Marie Barsacq",
+          "title": "Minister for Sport, Youth and the -- Voluntary Sector"
+        },
+        {
+          "name": "Philippe Baptiste",
+          "title": "Minister with responsibility for Higher -- Education and Research, attached to the -- Minister for National Education, Higher -- Education and Research"
+        },
+        {
+          "name": "Laurent Marcangeli",
+          "title": "Minister for Public Action, the Civil -- Service and Simplification"
+        },
+        {
+          "name": "Manuel Valls",
+          "title": "Minister for Overseas France"
+        },
+        {
+          "name": "Laurent Saint-Martin",
+          "title": "Minister with responsibility for Foreign -- Trade and French Nationals Abroad, -- attached to the Minister for Europe and -- Foreign Affairs"
+        },
+        {
+          "name": "Benjamin Haddad",
+          "title": "Minister with responsibility for Europe, -- attached to the Minister for Europe and -- Foreign Affairs"
+        },
+        {
+          "name": "Patrick Mignola",
+          "title": "Minister with responsibility for Relations -- with Parliament, attached to the Prime -- Minister"
+        },
+        {
+          "name": "Sophie Primas",
+          "title": "Minister attached to the Prime Minister, -- Government Spokesperson"
+        },
+        {
+          "name": "Françoise Gatel",
+          "title": "Minister with responsibility for Rural -- Affairs, attached to the Minister for -- Spatial Planning and Decentralisation"
+        },
+        {
+          "name": "Philippe Tabarot",
+          "title": "Minister with responsibility for Transport, -- attached to the Minister for Spatial -- Planning and Decentralisation"
+        },
+        {
+          "name": "Marc Ferracci",
+          "title": "Minister with responsibility for Industry -- and Energy, attached to the Minister for -- Economic Affairs, Finance, and Industrial -- and Digital Sovereignty"
+        },
+        {
+          "name": "Véronique Louwagie",
+          "title": "Minister with responsibility for Trade, -- Crafts, Small and Medium-sized -- Enterprises, and the Social and -- Cooperative Economy, attached to the -- Minister for Economic Affairs, Finance, -- and Industrial and Digital Sovereignty"
+        },
+        {
+          "name": "Nathalie Delattre",
+          "title": "Minister with responsibility for Tourism, -- attached to the Minister for Economic -- Affairs, Finance, and Industrial and -- Digital Sovereignty"
+        },
+        {
+          "name": "Thani Mohamed Soilihi",
+          "title": "Minister with responsibility for La -- Francophonie and International -- Partnerships, attached to the Minister for -- Europe and Foreign Affairs"
+        },
+        {
+          "name": "Clara Chappaz",
+          "title": "Minister with responsibility for Artificial -- Intelligence and Digital, attached to the -- Minister for Economic Affairs, Finance, -- and Industrial and Digital Sovereignty"
+        },
+        {
+          "name": "François-Noël Buffet",
+          "title": "Minister attached to the Minister for the -- Interior"
+        },
+        {
+          "name": "Yannick Neuder",
+          "title": "Minister with responsibility for Health and -- Access to Healthcare, attached to the -- Minister for Labour, Health, Solidarity -- and Families"
+        },
+        {
+          "name": "Charlotte Parmentier-Lecocq",
+          "title": "Minister with responsibility for Personal -- Independence and Disability, attached to -- the Minister for Labour, Health, Solidarity -- and Families"
+        },
+        {
+          "name": "Amélie De Montchalin",
+          "title": "Minister with responsibility for Public -- Accounts, attached to the Minister for -- Economic Affairs, Finance, and Industrial -- and Digital Sovereignty"
+        },
+        {
+          "name": "Patricia Mirallès",
+          "title": "Minister with responsibility for -- Remembrance and Veterans, attached to -- the Minister for the Armed Forces"
+        },
+        {
+          "name": "Juliette Méadel",
+          "title": "Minister with responsibility for Urban -- Affairs, attached to the Minister for -- Spatial Planning and Decentralisation"
+        }
+      ]
+    },
+    "GERMANY": {
+      "name": "GERMANY",
+      "persons": [
+        {
+          "name": "Friedrich Merz",
+          "title": "Federal Chancellor"
+        },
+        {
+          "name": "Lars Klingbeil",
+          "title": "Federal Minister for Finance"
+        },
+        {
+          "name": "Alexander Dobrindt",
+          "title": "Federal Minister for the Interior"
+        },
+        {
+          "name": "Johann Wadephul",
+          "title": "Federal Minister for Foreign Affairs"
+        },
+        {
+          "name": "Boris Pistorius",
+          "title": "Federal Minister for Defence"
+        },
+        {
+          "name": "Katherina Reiche",
+          "title": "Federal Minister for Economic Affairs -- and Energy"
+        },
+        {
+          "name": "Dorothee Bär",
+          "title": "Federal Minister for Research, -- Technology and Space"
+        },
+        {
+          "name": "Stefanie Hubig",
+          "title": "Federal Minister for Justice and -- Consumer Protection"
+        },
+        {
+          "name": "Karin Prien",
+          "title": "Federal Minister for Education, Family -- Affairs, Senior Citizens, Women and -- Youth"
+        },
+        {
+          "name": "Bärbel Bas",
+          "title": "Federal Minister for Labour and Social -- Affairs"
+        },
+        {
+          "name": "Karsten Wildberger",
+          "title": "Federal Minister for Digital -- Transformation and Government -- Modernisation"
+        },
+        {
+          "name": "Patrick Schnieder",
+          "title": "Federal Minister for Transport"
+        },
+        {
+          "name": "Carsten Schneider",
+          "title": "Federal Minister for the Environment, -- Climate Action, Nature Conservation and -- Nuclear Safety"
+        },
+        {
+          "name": "Nina Warken",
+          "title": "Federal Minister for Health"
+        },
+        {
+          "name": "Alois Rainer",
+          "title": "Federal Minister for Agriculture, Food -- and Regional Identity"
+        },
+        {
+          "name": "Reem Alabali Radovan",
+          "title": "Federal Minister for Economic -- Cooperation and Development"
+        },
+        {
+          "name": "Verena Hubertz",
+          "title": "Federal Minister for Housing, Urban -- Development and Building"
+        },
+        {
+          "name": "Thorsten Frei",
+          "title": "Federal Minister for Special Tasks and -- Head of the Federal Chancellery"
+        },
+        {
+          "name": "Elisabeth Kaiser",
+          "title": "Minister of State to the Federal Minister -- for Finance, Federal Government -- Commissioner for Eastern Germany"
+        },
+        {
+          "name": "Michael Meister",
+          "title": "Minister of State for Cooperation -- between the Federal Government and -- the Federal States"
+        },
+        {
+          "name": "Christiane Schenderlein",
+          "title": "Minister of State for Sport and -- Volunteering"
+        },
+        {
+          "name": "Wolfram Weimer",
+          "title": "Minister of State and Federal -- Government Commissioner for Culture -- and the Media"
+        },
+        {
+          "name": "Natalie Pawlik",
+          "title": "Minister of State to the Federal -- Minister for Labour and Social Affairs, -- Federal Government Commissioner for -- Migration, Refugees and Integration and -- Anti-Racism Commissioner"
+        },
+        {
+          "name": "Dennis Rohde",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Finance"
+        },
+        {
+          "name": "Michael Schrodi",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Finance"
+        },
+        {
+          "name": "Björn Böhning",
+          "title": "State Secretary, Federal Ministry of -- Finance"
+        },
+        {
+          "name": "Rolf Bösinger",
+          "title": "State Secretary, Federal Ministry of -- Finance"
+        },
+        {
+          "name": "Steffen Meyer",
+          "title": "State Secretary, Federal Ministry of -- Finance"
+        },
+        {
+          "name": "Jeanette Schwamberger",
+          "title": "State Secretary, Federal Ministry of -- Finance"
+        },
+        {
+          "name": "Christoph De Vries",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for the Interior"
+        },
+        {
+          "name": "Daniela Ludwig",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for the Interior"
+        },
+        {
+          "name": "Hans-Georg Engelke",
+          "title": "State Secretary, Federal Ministry of the -- Interior"
+        },
+        {
+          "name": "Bernd Krösser",
+          "title": "State Secretary, Federal Ministry of the -- Interior"
+        },
+        {
+          "name": "Gunther Krichbaum",
+          "title": "Minister of State for Europe, Federal -- Foreign Office"
+        },
+        {
+          "name": "Florian Hahn",
+          "title": "Minister of State, Federal Foreign Office"
+        },
+        {
+          "name": "Serap Güler",
+          "title": "Minister of State, Federal Foreign Office"
+        },
+        {
+          "name": "Bernhard Kotsch",
+          "title": "State Secretary, Federal Foreign Office"
+        },
+        {
+          "name": "Géza Andreas Von Geyr",
+          "title": "State Secretary, Federal Foreign Office"
+        },
+        {
+          "name": "Sebastian Hartmann",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Defence"
+        },
+        {
+          "name": "Nils Schmid",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Defence"
+        },
+        {
+          "name": "Benedikt Zimmer",
+          "title": "State Secretary, Federal Ministry of -- Defence"
+        },
+        {
+          "name": "Nils Hilmer",
+          "title": "State Secretary, Federal Ministry of -- Defence"
+        },
+        {
+          "name": "Gitta Connemann",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Economic Affairs -- and Energy"
+        },
+        {
+          "name": "Stefan Rouenhoff",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Economic Affairs -- and Energy"
+        },
+        {
+          "name": "Thomas Steffen",
+          "title": "State Secretary, Federal Ministry of -- Economic Affairs and Energy"
+        },
+        {
+          "name": "Frank Wetzel",
+          "title": "State Secretary, Federal Ministry of -- Economic Affairs and Energy"
+        },
+        {
+          "name": "Silke Launert",
+          "title": "Parliamentary State Secretary to -- the Federal Minister for Research, -- Technology and Space"
+        },
+        {
+          "name": "Matthias Hauer",
+          "title": "Parliamentary State Secretary to -- the Federal Minister for Research, -- Technology and Space"
+        },
+        {
+          "name": "Marcus Pleyer",
+          "title": "State Secretary, Federal Ministry of -- Research, Technology and Space"
+        },
+        {
+          "name": "Rolf-Dieter Jungk",
+          "title": "State Secretary, Federal Ministry of -- Research, Technology and Space"
+        },
+        {
+          "name": "Anette Kramme",
+          "title": "Parliamentary State Secretary to -- the Federal Minister for Justice and -- Consumer Protection"
+        },
+        {
+          "name": "Frank Schwabe",
+          "title": "Parliamentary State Secretary to -- the Federal Minister for Justice and -- Consumer Protection"
+        },
+        {
+          "name": "Eva Schmierer",
+          "title": "State Secretary, Federal Ministry of -- Justice and Consumer Protection"
+        },
+        {
+          "name": "Mareike Wulf",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Education, Family -- Affairs, Senior Citizens, Women and -- Youth"
+        },
+        {
+          "name": "Michael Brand",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Education, Family -- Affairs, Senior Citizens, Women and -- Youth"
+        },
+        {
+          "name": "Ingo Behnel",
+          "title": "State Secretary, Federal Ministry of -- Education, Family Affairs, Senior -- Citizens, Women and Youth"
+        },
+        {
+          "name": "Petra Bahr",
+          "title": "State Secretary, Federal Ministry of -- Education, Family Affairs, Senior -- Citizens, Women and Youth"
+        },
+        {
+          "name": "Katja Mast",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Labour and Social -- Affairs"
+        },
+        {
+          "name": "Kerstin Griese",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Labour and Social -- Affairs"
+        },
+        {
+          "name": "Michael Schäfer",
+          "title": "State Secretary and Head of -- Administration, Federal Ministry of -- Labour and Social Affairs"
+        },
+        {
+          "name": "Leonie Gebers",
+          "title": "State Secretary, Federal Ministry of -- Labour and Social Affairs"
+        },
+        {
+          "name": "Lilian Tschan",
+          "title": "State Secretary, Federal Ministry of -- Labour and Social Affairs"
+        },
+        {
+          "name": "Philipp Amthor",
+          "title": "Parliamentary State Secretary -- to the Federal Minister for Digital -- Transformation and Government -- Modernisation"
+        },
+        {
+          "name": "Thomas Jarzombek",
+          "title": "Parliamentary State Secretary -- to the Federal Minister for Digital -- Transformation and Government -- Modernisation"
+        },
+        {
+          "name": "Markus Richter",
+          "title": "State Secretary, Federal Ministry of -- Digital Transformation and Government -- Modernisation"
+        },
+        {
+          "name": "Luise Hölscher",
+          "title": "State Secretary, Federal Ministry of -- Digital Transformation and Government -- Modernisation"
+        },
+        {
+          "name": "Ulrich Lange",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Transport"
+        },
+        {
+          "name": "Christian Hirte",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Transport"
+        },
+        {
+          "name": "Stefan Schnorr",
+          "title": "State Secretary, Federal Ministry of -- Transport"
+        },
+        {
+          "name": "Claudia Elif Stutz",
+          "title": "State Secretary, Federal Ministry of -- Transport"
+        },
+        {
+          "name": "Rita Schwarzelühr-Sutter",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for the Environment, -- Climate Action, Nature Conservation and -- Nuclear Safety"
+        },
+        {
+          "name": "Carsten Träger",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for the Environment, -- Climate Action, Nature Conservation and -- Nuclear Safety"
+        },
+        {
+          "name": "Jochen Flasbarth",
+          "title": "State Secretary, Federal Ministry of the -- Environment, Climate Action, Nature -- Conservation and Nuclear Safety"
+        },
+        {
+          "name": "Tino Sorge",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Health"
+        },
+        {
+          "name": "Georg Kippels",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Health"
+        },
+        {
+          "name": "Katja Kohfeld",
+          "title": "State Secretary, Federal Ministry of -- Health"
+        },
+        {
+          "name": "Silvia Breher",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Agriculture, Food -- and Regional Identity"
+        },
+        {
+          "name": "Martina Englhardt-Kopf",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Agriculture, Food -- and Regional Identity"
+        },
+        {
+          "name": "Markus Schick",
+          "title": "State Secretary, Federal Ministry of -- Agriculture, Food and Regional Identity"
+        },
+        {
+          "name": "Johann Saathoff",
+          "title": "Parliamentary State Secretary to -- the Federal Minister for Economic -- Cooperation and Development"
+        },
+        {
+          "name": "Bärbel Kofler",
+          "title": "Parliamentary State Secretary to -- the Federal Minister for Economic -- Cooperation and Development"
+        },
+        {
+          "name": "Niels Annen",
+          "title": "State Secretary, Federal Ministry of -- Economic Cooperation and Development"
+        },
+        {
+          "name": "Sabine Poschmann",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Housing, Urban -- Development and Building"
+        },
+        {
+          "name": "Sören Bartol",
+          "title": "Parliamentary State Secretary to the -- Federal Minister for Housing, Urban -- Development and Building"
+        },
+        {
+          "name": "Olaf Thorsten Joachim",
+          "title": "State Secretary, Federal Ministry of -- Housing, Urban Development and -- Building"
+        },
+        {
+          "name": "Stefan Kornelius",
+          "title": "State Secretary, Government -- Spokesperson and Head of the Press -- and Information Office of the Federal -- Government"
+        },
+        {
+          "name": "Dörte Dinger",
+          "title": "State Secretary, Head of the Office of the -- Federal President"
+        },
+        {
+          "name": "Kyriakos Mitsotakis",
+          "title": ""
+        },
+        {
+          "name": "(Κυριάκος Μητσοτακης)",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "(Kostis) Chatzidakis (Κωνσταντίνος",
+          "title": ""
+        },
+        {
+          "name": "(Κωστής) Χατζηδακης)",
+          "title": "Vice-President of the Government"
+        },
+        {
+          "name": "Kyriakos Pierrakakis",
+          "title": ""
+        },
+        {
+          "name": "(Κυριάκος Πιερρακακης)",
+          "title": "Minister for the Economy and Finance"
+        },
+        {
+          "name": "Nikolaos Papathanasis",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Παπαθανασης)",
+          "title": "Deputy Minister for the Economy and -- Finance"
+        },
+        {
+          "name": "Georgios Kotsiras",
+          "title": ""
+        },
+        {
+          "name": "(Γεώργιος Κωτσηρας)",
+          "title": "State Secretary for the Economy and -- Finance"
+        },
+        {
+          "name": "Athanasios (Thanos) Petralias",
+          "title": ""
+        },
+        {
+          "name": "(Αθανάσιος (Θάνος) Πετραλιας)",
+          "title": "State Secretary for the Economy and -- Finance"
+        },
+        {
+          "name": "Georgios Gerapetritis",
+          "title": ""
+        },
+        {
+          "name": "(Γεώργιος Γεραπετριτης)",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Alexandra Papadopoulou",
+          "title": ""
+        },
+        {
+          "name": "(Αλεξάνδρα Παπαδοπουλου)",
+          "title": "State Secretary for Foreign Affairs"
+        },
+        {
+          "name": "Xaris Theocharis",
+          "title": ""
+        },
+        {
+          "name": "(Χάρης Θεοχαρης)",
+          "title": "State Secretary for Foreign Affairs"
+        },
+        {
+          "name": "Ioannis Loverdos",
+          "title": ""
+        },
+        {
+          "name": "(Ιωάννης Λοβερδος)",
+          "title": "State Secretary for Foreign Affairs with -- responsibility for Greeks Abroad"
+        },
+        {
+          "name": "Nikolaos-Georgios Dendias",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος-Γεώργιος Δενδιας)",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Athanasios Davakis",
+          "title": ""
+        },
+        {
+          "name": "(Αθανάσιος Δαβακης)",
+          "title": "State Secretary for Defence"
+        },
+        {
+          "name": "Theodoros Livanios",
+          "title": ""
+        },
+        {
+          "name": "(Θεόδωρος Λιβανιος)",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Vasileios Spanakis",
+          "title": ""
+        },
+        {
+          "name": "(Βασίλειος Σπανακης)",
+          "title": "State Secretary for the Interior"
+        },
+        {
+          "name": "Konstantinos Gkioulekas",
+          "title": ""
+        },
+        {
+          "name": "(Κωνσταντίνος Γκιουλεκας)",
+          "title": "State Secretary for the Interior with -- responsibility for Macedonia and Thrace"
+        },
+        {
+          "name": "Vivi Charalampogianni",
+          "title": ""
+        },
+        {
+          "name": "(Βιβή Χαραλαμπογιαννη)",
+          "title": "State Secretary for the Interior"
+        },
+        {
+          "name": "Sofia Zacharaki",
+          "title": ""
+        },
+        {
+          "name": "(Σοφία Ζαχαρακη)",
+          "title": "Minister for Education, Religious Affairs -- and Sport"
+        },
+        {
+          "name": "Ioannis Vroutsis",
+          "title": ""
+        },
+        {
+          "name": "(Ιωάννης Βρουτσης)",
+          "title": "Deputy Minister with responsibility for -- Sport"
+        },
+        {
+          "name": "Nikolaos Papaioannou",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Παπαϊωαννου)",
+          "title": "State Secretary for Education, Religious -- Affairs and Sport with responsibility for -- Higher Education"
+        },
+        {
+          "name": "Konstantinos Vlasis",
+          "title": ""
+        },
+        {
+          "name": "(Κωνσταντίνος Βλασης)",
+          "title": "State Secretary for Education, Religious -- Affairs and Sport"
+        },
+        {
+          "name": "Spyridon-Adonis Georgiadis",
+          "title": ""
+        },
+        {
+          "name": "(Σπυρίδων-Άδωνης Γεωργιαδης)",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Eirini Agapidaki",
+          "title": ""
+        },
+        {
+          "name": "(Ειρήνη Αγαπηδακη)",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Dimitris Vartzopoulos",
+          "title": ""
+        },
+        {
+          "name": "(Δημήτρης Βαρτζοπουλος)",
+          "title": "State Secretary for Health"
+        },
+        {
+          "name": "Marios Themistokleous",
+          "title": ""
+        },
+        {
+          "name": "(Μάριος Θεμιστοκλεους)",
+          "title": "State Secretary for Health"
+        },
+        {
+          "name": "Christos Dimas (Χρίστος Δημας)",
+          "title": "Minister for Infrastructure and Transport"
+        },
+        {
+          "name": "Konstantinos Kyranakis",
+          "title": ""
+        },
+        {
+          "name": "(Κωνσταντίνος Κυρανακης)",
+          "title": "Deputy Minister for Infrastructure and -- Transport with responsibility for Transport"
+        },
+        {
+          "name": "Nikolaos Tachiaos",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Ταχιαος)",
+          "title": "State Secretary for Infrastructure and -- Transport"
+        },
+        {
+          "name": "Stavros Papastavrou",
+          "title": ""
+        },
+        {
+          "name": "(Σταύρος Παπασταυρου)",
+          "title": "Minister for the Environment and Energy"
+        },
+        {
+          "name": "Nikolaos Tagaras",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Ταγαρας)",
+          "title": "State Secretary for the Environment and -- Energy"
+        },
+        {
+          "name": "Nikolaos Tsafos",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Τσαφος)",
+          "title": "State Secretary for the Environment and -- Energy with responsibility for Energy"
+        },
+        {
+          "name": "(Takis) Theodorikakos",
+          "title": ""
+        },
+        {
+          "name": "(Τάκης) Θεοδωρικακος)",
+          "title": "Minister for Development"
+        },
+        {
+          "name": "Stavros Kalafatis",
+          "title": ""
+        },
+        {
+          "name": "(Σταύρος Καλαφατης)",
+          "title": "State Secretary for Development -- with responsibility for Research and -- Innovation"
+        },
+        {
+          "name": "Lazaros Tsavdaridis",
+          "title": ""
+        },
+        {
+          "name": "(Λάζαρος Τσαβδαριδης)",
+          "title": "State Secretary for Development"
+        },
+        {
+          "name": "Niki Kerameus",
+          "title": ""
+        },
+        {
+          "name": "(Νίκη Κεραμεως)",
+          "title": "Minister for Labour and Social Security"
+        },
+        {
+          "name": "Konstantinos Karagounis",
+          "title": ""
+        },
+        {
+          "name": "(Κωνσταντίνος Καραγκουνης)",
+          "title": "State Secretary for Labour and Social -- Security"
+        },
+        {
+          "name": "Anna Efthymiou",
+          "title": ""
+        },
+        {
+          "name": "(Άννα Ευθυμιου)",
+          "title": "State Secretary for Labour and Social -- Security"
+        },
+        {
+          "name": "Michalis Chryssochoidis",
+          "title": ""
+        },
+        {
+          "name": "(Μιχάλης Χρυσοχοϊδης)",
+          "title": "Minister for Protection of the Citizen"
+        },
+        {
+          "name": "Ioannis Labropoulos",
+          "title": ""
+        },
+        {
+          "name": "(Ιωάννης Λαμπροπουλος)",
+          "title": "State Secretary for Protection of the -- Citizen"
+        },
+        {
+          "name": "Georgios Floridis",
+          "title": ""
+        },
+        {
+          "name": "(Γεώργιος Φλωριδης)",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Ioannis Bougas",
+          "title": ""
+        },
+        {
+          "name": "(Ιωάννης Μπουγας)",
+          "title": "State Secretary for Justice"
+        },
+        {
+          "name": "Styliani (Lina) Mendoni (Στυλιανή",
+          "title": ""
+        },
+        {
+          "name": "(Λίνα) Μενδωνη)",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Iasonas Fotilas",
+          "title": ""
+        },
+        {
+          "name": "(Ιάσωνας Φωτηλας)",
+          "title": "State Secretary for Culture"
+        },
+        {
+          "name": "Athanasios (Thanos) Plevris",
+          "title": ""
+        },
+        {
+          "name": "(Αθανάσιος (Θάνος) Πλευρης)",
+          "title": "Minister for Migration and Asylum"
+        },
+        {
+          "name": "Sevasti (Sevi) Voloudaki",
+          "title": ""
+        },
+        {
+          "name": "(Σεβαστή (Σέβη) Βολουδακη)",
+          "title": "State Secretary for Migration and Asylum"
+        },
+        {
+          "name": "Domna Maria Michailidou",
+          "title": ""
+        },
+        {
+          "name": "(Δόμνα Μαρία Μιχαηλιδου)",
+          "title": "Minister for Social Cohesion and Family"
+        },
+        {
+          "name": "Elena Rapti (Έλενα Ραπτη)",
+          "title": "State Secretary for Social Cohesion and -- Family"
+        },
+        {
+          "name": "Konstantinos (Kostas) Tsiaras",
+          "title": ""
+        },
+        {
+          "name": "(Κωνσταντίνος (Κώστας) Τσιαρας)",
+          "title": "Minister for Rural Development and -- Food"
+        },
+        {
+          "name": "Ioannis Andrianos",
+          "title": ""
+        },
+        {
+          "name": "(Ιωάννης Ανδριανος)",
+          "title": "State Secretary for Rural Development -- and Food"
+        },
+        {
+          "name": "Christos Kellas",
+          "title": ""
+        },
+        {
+          "name": "(Χρήστος Κελλας)",
+          "title": "State Secretary for Rural Development -- and Food"
+        },
+        {
+          "name": "Vasilios Kikilias",
+          "title": ""
+        },
+        {
+          "name": "(Βασίλειος Κικιλιας)",
+          "title": "Minister for Maritime Affairs and the -- Islands"
+        },
+        {
+          "name": "Stefanos Gkikas",
+          "title": ""
+        },
+        {
+          "name": "(Στέφανος Γκικας)",
+          "title": "State Secretary for Maritime Affairs and -- the Islands"
+        },
+        {
+          "name": "Olga Kefalogianni",
+          "title": ""
+        },
+        {
+          "name": "(Όλγα Κεφαλλογιαννη)",
+          "title": "Minister for Tourism"
+        },
+        {
+          "name": "Anna Karamanli",
+          "title": ""
+        },
+        {
+          "name": "(Άννα Καραμανλη)",
+          "title": "State Secretary for Tourism"
+        },
+        {
+          "name": "Dimitrios Papastergiou",
+          "title": ""
+        },
+        {
+          "name": "(Δημήτριος Παπαστεργιου)",
+          "title": "Minister for Digital Governance"
+        },
+        {
+          "name": "Christos Dermenzopoulos",
+          "title": ""
+        },
+        {
+          "name": "(Χρήστος Δερμεντζοπουλος)",
+          "title": "State Secretary for Digital Governance"
+        },
+        {
+          "name": "Ioannis Kefalogiannis",
+          "title": ""
+        },
+        {
+          "name": "(Ιωάννης Κεφαλογιαννης)",
+          "title": "Minister for Climate Crisis and Civil -- Protection"
+        },
+        {
+          "name": "Konstantinos Katsafados",
+          "title": ""
+        },
+        {
+          "name": "(Κωνσταντίνος Κατσαφαδος)",
+          "title": "State Secretary for Climate Crisis and -- Civil Protection"
+        },
+        {
+          "name": "Evangelos Tournas",
+          "title": ""
+        },
+        {
+          "name": "(Ευάγγελος Τουρνας)",
+          "title": "State Secretary for Climate Crisis and -- Civil Protection"
+        },
+        {
+          "name": "Christos-Georgios Skertsos",
+          "title": ""
+        },
+        {
+          "name": "(Χρήστος-Γεώργιος Σκερτσος)",
+          "title": "Minister of State"
+        },
+        {
+          "name": "Thanasis Kontogeorgis",
+          "title": ""
+        },
+        {
+          "name": "(Θανάσης Κοντογεωργης)",
+          "title": "State Secretary to the Prime Minister"
+        },
+        {
+          "name": "Pavlos Marinakis",
+          "title": ""
+        },
+        {
+          "name": "(Παύλος Μαρινακης)",
+          "title": "State Secretary to the Prime Minister -- and Government Spokesperson"
+        },
+        {
+          "name": "Georgios Mylonakis",
+          "title": ""
+        },
+        {
+          "name": "(Γεώργιος Μυλωνακης)",
+          "title": "State Secretary to the Prime Minister"
+        }
+      ]
+    },
+    "HUNGARY": {
+      "name": "HUNGARY",
+      "persons": [
+        {
+          "name": "Viktor Orbán",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Zsolt Semjén",
+          "title": "Minister for Nation Policy, Ethnic Policy, -- Church Policy and Church Diplomacy, -- and Deputy Prime Minister"
+        },
+        {
+          "name": "János Bóka",
+          "title": "Minister for European Union Affairs"
+        },
+        {
+          "name": "Gergely Gulyás",
+          "title": "Minister heading the Prime Minister’s -- Office"
+        },
+        {
+          "name": "Balázs Hankó",
+          "title": "Minister for Culture and Innovation"
+        },
+        {
+          "name": "Csaba Lantos",
+          "title": "Minister for Energy"
+        },
+        {
+          "name": "János Lázár",
+          "title": "Minister for Construction and Transport"
+        },
+        {
+          "name": "István Nagy",
+          "title": "Minister for Agriculture"
+        },
+        {
+          "name": "Márton Nagy",
+          "title": "Minister for the National Economy"
+        },
+        {
+          "name": "Tibor Navracsics",
+          "title": "Minister for Public Administration and -- Regional Development"
+        },
+        {
+          "name": "Sándor Pintér",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Antal Rogán",
+          "title": "Head of Cabinet of the Prime Minister"
+        },
+        {
+          "name": "Kristóf Szalay-Bobrovniczky",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Péter Szijjártó",
+          "title": "Minister for Foreign Affairs and Trade"
+        },
+        {
+          "name": "Bence Tuzson",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Tamás Andréka",
+          "title": "State Secretary for Public Administration, -- Ministry of Agriculture"
+        },
+        {
+          "name": "András Tállai",
+          "title": "State Secretary for Parliamentary Affairs, -- Ministry of Agriculture"
+        },
+        {
+          "name": "Imre Hubai",
+          "title": "State Secretary for Agriculture, Ministry -- of Agriculture"
+        },
+        {
+          "name": "András Rácz",
+          "title": "State Secretary for Nature Conservation, -- Ministry of Agriculture"
+        },
+        {
+          "name": "József Viski",
+          "title": "State Secretary for Agricultural and -- Rural Development Funding, Ministry of -- Agriculture"
+        },
+        {
+          "name": "Péter Zambó",
+          "title": "State Secretary for Forests and Land, -- Ministry of Agriculture"
+        },
+        {
+          "name": "Bence Rétvári",
+          "title": "Deputy Minister and State Secretary -- for Parliamentary Affairs, Ministry of the -- Interior"
+        },
+        {
+          "name": "László Felkai",
+          "title": "State Secretary for Public Administration, -- Ministry of the Interior"
+        },
+        {
+          "name": "Zoltán Bolcsik",
+          "title": "State Secretary for Law Enforcement, -- Ministry of the Interior"
+        },
+        {
+          "name": "Zoltán Maruzsa",
+          "title": "State Secretary for Public Education, -- Ministry of the Interior"
+        },
+        {
+          "name": "Attila Fülöp",
+          "title": "State Secretary for Care Policy, Ministry -- of the Interior"
+        },
+        {
+          "name": "Péter Takács",
+          "title": "State Secretary for Health, Ministry of -- the Interior"
+        },
+        {
+          "name": "Ádám Kósa",
+          "title": "State Secretary for Disability, Ministry of -- the Interior"
+        },
+        {
+          "name": "Attila Sztojka",
+          "title": "State Secretary for Social Opportunities -- and Roma Relations, Ministry of the -- Interior"
+        },
+        {
+          "name": "Gábor Czepek",
+          "title": "Deputy Minister and State Secretary for -- Parliamentary Affairs, Ministry of Energy"
+        },
+        {
+          "name": "Natália Borsos-Papp",
+          "title": "State Secretary for Public Administration, -- Ministry of Energy"
+        },
+        {
+          "name": "Attila Steiner",
+          "title": "State Secretary for Energy, Ministry of -- Energy"
+        },
+        {
+          "name": "Anikó Raisz",
+          "title": "State Secretary for Environmental -- Affairs, Ministry of Energy"
+        },
+        {
+          "name": "Zsolt V. Németh",
+          "title": "State Secretary for Water Management, -- Ministry of Energy"
+        },
+        {
+          "name": "Csaba Gondola",
+          "title": "State Secretary for the Circular Economy -- and Climate Policy, Ministry of Energy"
+        },
+        {
+          "name": "Károly Balázs Solymár",
+          "title": "State Secretary for Information and -- Communication, Ministry of Energy"
+        },
+        {
+          "name": "Nándor Csepreghy",
+          "title": "State Secretary for Parliamentary -- Affairs and Deputy Minister, Ministry of -- Construction and Transport"
+        },
+        {
+          "name": "Tünde Juhász",
+          "title": "State Secretary for Public Administration, -- Ministry of Construction and Transport"
+        },
+        {
+          "name": "Regő Lánszki",
+          "title": "State Secretary for Architecture, Ministry -- of Construction and Transport"
+        },
+        {
+          "name": "Bálint Nagy",
+          "title": "State Secretary for Transport, Ministry of -- Construction and Transport"
+        },
+        {
+          "name": "Péter Ágh",
+          "title": "State Secretary for Social Coordination -- of Public Development Projects, Ministry -- of Construction and Transport"
+        },
+        {
+          "name": "Nándor Pátkai",
+          "title": "State Secretary for Public Administration, -- Ministry of European Union Affairs"
+        },
+        {
+          "name": "Barna Pál Zsigmond",
+          "title": "State Secretary for Parliamentary Affairs, -- Ministry of European Union Affairs"
+        },
+        {
+          "name": "Zsolt Barthel-Rúzsa",
+          "title": "State Secretary for the Management -- of Military National Security, Ministry of -- Defence"
+        },
+        {
+          "name": "Ádám Schmidt",
+          "title": "State Secretary for Sports, Ministry of -- Defence"
+        },
+        {
+          "name": "Tamás Vargha",
+          "title": "State Secretary for Parliamentary Affairs -- and Deputy Minister, Ministry of Defence"
+        },
+        {
+          "name": "Árpád Vidoven",
+          "title": "State Secretary for Public Administration, -- Ministry of Defence"
+        },
+        {
+          "name": "Zsolt Krisztián Kutnyánszky",
+          "title": "State Secretary for Military Development -- and Defence Policy, Ministry of Defence"
+        },
+        {
+          "name": "Róbert Répássy",
+          "title": "State Secretary for Parliamentary Affairs -- and Deputy Minister, Ministry of Justice"
+        },
+        {
+          "name": "Tamás Pilz",
+          "title": "State Secretary for Public Administration, -- Ministry of Justice"
+        },
+        {
+          "name": "Zoltán Tóth",
+          "title": "State Secretary for Legislation, Ministry -- of Justice"
+        },
+        {
+          "name": "Szabolcs Ágostházy",
+          "title": "State Secretary for European Union- -- funded Developments, Ministry of -- Public Administration and Regional -- Development"
+        },
+        {
+          "name": "Miklós Dukai",
+          "title": "State Secretary for Municipal Affairs, -- Ministry of Public Administration and -- Regional Development"
+        },
+        {
+          "name": "István György",
+          "title": "State Secretary for Territorial -- Administration, Ministry of Public -- Administration and Regional -- Development"
+        },
+        {
+          "name": "Szilárd Horvát",
+          "title": "State Secretary for Public Administration, -- Ministry of Public Administration and -- Regional Development"
+        },
+        {
+          "name": "Csaba Latorcai",
+          "title": "State Secretary for Parliamentary -- Affairs and Deputy Minister for -- Public Administration and Regional -- Development, Ministry of Public -- Administration and Regional -- Development"
+        },
+        {
+          "name": "Judit Czunyiné Bertalan",
+          "title": "State Secretary for Regional -- Development, Ministry of Public -- Administration and Regional -- Development"
+        },
+        {
+          "name": "Máriusz Révész",
+          "title": "State Secretary for an Active Hungary, -- Ministry of Public Administration and -- Regional Development"
+        },
+        {
+          "name": "Veronika Varga-Bajusz",
+          "title": "State Secretary for Higher Education, -- Vocational and Adult Training, and -- Youth, Ministry of Culture and Innovation"
+        },
+        {
+          "name": "Róbert Vilmos Zsigó",
+          "title": "State Secretary for Parliamentary Affairs -- and Deputy Minister, Ministry of Culture -- and Innovation"
+        },
+        {
+          "name": "György Ujsághy",
+          "title": "State Secretary for Public Administration, -- Ministry of Culture and Innovation"
+        },
+        {
+          "name": "Zsófia Koncz",
+          "title": "State Secretary for Families, Ministry of -- Culture and Innovation"
+        },
+        {
+          "name": "Magdolna Závogyán",
+          "title": "State Secretary for Culture, Ministry of -- Culture and Innovation"
+        },
+        {
+          "name": "Anita Kiss-Hegyi",
+          "title": "State Secretary for Cultural Relations, -- Ministry of Culture and Innovation"
+        },
+        {
+          "name": "Levente Magyar",
+          "title": "State Secretary for Parliamentary Affairs -- and Deputy Minister, Ministry of Foreign -- Affairs and Trade"
+        },
+        {
+          "name": "Tristan Azbej",
+          "title": "State Secretary for Programmes -- Supporting Persecuted Christians, -- Ministry of Foreign Affairs and Trade"
+        },
+        {
+          "name": "Eszter Gyarmati",
+          "title": "State Secretary for Public Administration, -- Ministry of Foreign Affairs and Trade"
+        },
+        {
+          "name": "Boglárka Illés",
+          "title": "State Secretary for Bilateral Relations, -- Ministry of Foreign Affairs and Trade"
+        },
+        {
+          "name": "Péter Sztáray",
+          "title": "State Secretary for Security Policy and -- Energy Security, Ministry of Foreign -- Affairs and Trade"
+        },
+        {
+          "name": "Gábor Bordás",
+          "title": "State Secretary for Public Administration, -- Cabinet Office of the Prime Minister"
+        },
+        {
+          "name": "Örs Farkas",
+          "title": "State Secretary for the Civil National -- Security Services, Cabinet Office of the -- Prime Minister"
+        },
+        {
+          "name": "Balázs Hidvéghi",
+          "title": "State Secretary for Parliamentary Affairs -- and Deputy Minister, Cabinet Office of -- the Prime Minister"
+        },
+        {
+          "name": "Zoltán Kovács",
+          "title": "State Secretary for International -- Communication and Relations, Cabinet -- Office of the Prime Minister"
+        },
+        {
+          "name": "János Máté",
+          "title": "State Secretary heading the Programme -- Office of the Prime Minister, Cabinet -- Office of the Prime Minister"
+        },
+        {
+          "name": "János Nagy",
+          "title": "State Secretary heading the Office of -- the Prime Minister, Cabinet Office of the -- Prime Minister"
+        },
+        {
+          "name": "Krisztina Rédey",
+          "title": "State Secretary for Public Administration, -- Cabinet Office of the Prime Minister"
+        },
+        {
+          "name": "Eszter Vitályos",
+          "title": "State Secretary for Government -- Communication, Cabinet Office of the -- Prime Minister"
+        },
+        {
+          "name": "Márk Ádám Janó",
+          "title": "State Secretary for Public Administration, -- Prime Minister’s Office"
+        },
+        {
+          "name": "Miklós Panyi",
+          "title": "State Secretary for Parliamentary and -- Strategic Affairs and Deputy Minister, -- Prime Minister’s Office"
+        },
+        {
+          "name": "Lőrinc Nacsa",
+          "title": "State Secretary for Nation Policy, Prime -- Minister’s Office"
+        },
+        {
+          "name": "Miklós Soltész",
+          "title": "State Secretary for Relations with the -- Church and Ethnic Communities, Prime -- Minister’s Office"
+        },
+        {
+          "name": "János Fónagy",
+          "title": "State Secretary for Parliamentary Affairs -- and Deputy Minister, Ministry of the -- National Economy"
+        },
+        {
+          "name": "Anikó Túri",
+          "title": "State Secretary for Public Administration, -- Ministry of the National Economy"
+        },
+        {
+          "name": "Máté Lóga",
+          "title": "State Secretary for Economic -- Development and Industry, Ministry of -- the National Economy"
+        },
+        {
+          "name": "Sándor Czomba",
+          "title": "State Secretary for Employment Policy, -- Ministry of the National Economy"
+        },
+        {
+          "name": "Richárd Szabados",
+          "title": "State Secretary for Small and Medium- -- sized Enterprises Development, and -- Technology, Ministry of the National -- Economy"
+        },
+        {
+          "name": "Bence Gerlaki",
+          "title": "State Secretary for Taxation, Consumer -- Protection and Trade, Ministry of the -- National Economy"
+        },
+        {
+          "name": "Kornél Kisgergely",
+          "title": "State Secretary for Public Finances, -- Ministry of the National Economy"
+        },
+        {
+          "name": "Ferenc Vágujhelyi",
+          "title": "State Secretary for the Management -- of the National Tax and Customs -- Administration, Ministry of the National -- Economy"
+        }
+      ]
+    },
+    "IRELAND": {
+      "name": "IRELAND",
+      "persons": [
+        {
+          "name": "Micheál Martin",
+          "title": "Taoiseach"
+        },
+        {
+          "name": "Simon Harris",
+          "title": "Tánaiste and Minister for Finance"
+        },
+        {
+          "name": "Helen Mcentee",
+          "title": "Minister for Foreign Affairs and Trade; -- Minister for Defence"
+        },
+        {
+          "name": "Jack Chambers",
+          "title": "Minister for Public Expenditure, -- Infrastructure, Public Service Reform -- and Digitalisation"
+        },
+        {
+          "name": "Hildegarde Naughton",
+          "title": "Minister for Education and Youth"
+        },
+        {
+          "name": "Darragh O’Brien",
+          "title": "Minister for Climate, Energy and the -- Environment; Minister for Transport"
+        },
+        {
+          "name": "Norma Foley",
+          "title": "Minister for Children, Disability and -- Equality"
+        },
+        {
+          "name": "Peter Burke",
+          "title": "Minister for Enterprise, Tourism and -- Employment"
+        },
+        {
+          "name": "Dara Calleary",
+          "title": "Minister for Social Protection; Minister for -- Rural and Community Development and -- the Gaeltacht"
+        },
+        {
+          "name": "Patrick O’Donovan",
+          "title": "Minister for Culture, Communications -- and Sport"
+        },
+        {
+          "name": "Jennifer Carroll Macneill",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Séamus De Brúin",
+          "title": "Minister for Housing, Local Government -- and Heritage"
+        },
+        {
+          "name": "Jim O’Callaghan",
+          "title": "Minister for Justice, Home Affairs and -- Migration"
+        },
+        {
+          "name": "Martin Heydon",
+          "title": "Minister for Agriculture, Food and the -- Marine"
+        },
+        {
+          "name": "James Lawless",
+          "title": "Minister for Further and Higher -- Education, Research, Innovation and -- Science"
+        },
+        {
+          "name": "Mary Butler",
+          "title": "Minister of State at the Department of -- the Taoiseach with special responsibility -- as Government Chief Whip; and at the -- Department of Health with responsibility -- for Mental Health"
+        },
+        {
+          "name": "Emer Higgins",
+          "title": "Minister of State at the Department of -- Children, Disability and Equality with -- responsibility for Disability"
+        },
+        {
+          "name": "Noel Grealish",
+          "title": "Minister of State at the Department of -- Agriculture, Food and the Marine with -- responsibility for Food Promotion, New -- Markets, Research and Development"
+        },
+        {
+          "name": "Sean Canney",
+          "title": "Minister of State at the Department -- of Transport with responsibility for -- International and Road Transport, -- Logistics, Rail and Ports"
+        },
+        {
+          "name": "Thomas Byrne",
+          "title": "Minister of State at the Department of -- the Taoiseach and at the Department of -- Foreign Affairs and Trade with special -- responsibility for European Affairs; and -- at the Department of Defence"
+        },
+        {
+          "name": "Michael Moynihan",
+          "title": "Minister of State at the Department -- of Education and Youth with special -- responsibility for Special Education and -- Inclusion"
+        },
+        {
+          "name": "Charlie Mcconalogue",
+          "title": "Minister of State at the Department of -- Culture, Communications and Sport -- with special responsibility for Sport and -- Postal Policy"
+        },
+        {
+          "name": "Kevin ‘Boxer’ Moran",
+          "title": "Minister of State at the Department of -- Public Expenditure, Infrastructure, Public -- Service Reform and Digitalisation with -- responsibility for the Office of Public -- Works"
+        },
+        {
+          "name": "Frank Feighan",
+          "title": "Minister of State at the Department -- of Public Expenditure, Infrastructure, -- Public Service Reform and Digitalisation -- with special responsibility for Public -- Procurement, Digitalisation and -- eGovernment."
+        },
+        {
+          "name": "Jennifer Murnane O’Connor",
+          "title": "Minister of State at the Department -- of Health with special responsibility -- for Public Health, Wellbeing and the -- National Drugs Strategy"
+        },
+        {
+          "name": "Michael Healy-Rae",
+          "title": "Minister of State at the Department of -- Agriculture, Food and the Marine with -- special responsibility for Forestry, Farm -- Safety and Horticulture"
+        },
+        {
+          "name": "Neale Richmond",
+          "title": "Minister of State at the Department -- of Foreign Affairs and Trade with -- special responsibility for International -- Development and Diaspora"
+        },
+        {
+          "name": "Jerry Buttimer",
+          "title": "Minister of State at the Department of -- Rural and Community Development and -- the Gaeltacht with special responsibility -- for Community Development, Charities, -- the Gaeltacht and the Islands; and at -- the Department of Transport with special -- responsibility for Rural Transport"
+        },
+        {
+          "name": "John Cummins",
+          "title": "Minister of State at the Department -- of Housing, Local Government and -- Heritage with special responsibility for -- Local Government and Planning"
+        },
+        {
+          "name": "Christopher O’Sullivan",
+          "title": "Minister of State at the Department -- of Housing, Local Government and -- Heritage with special responsibility for -- Nature, Heritage and Biodiversity"
+        },
+        {
+          "name": "Kieran O’Donnell",
+          "title": "Minister of State at the Department of -- Health with special responsibility for -- Older People; and at the Department -- of Housing, Local Government and -- Heritage with special responsibility for -- Housing"
+        },
+        {
+          "name": "Robert Troy",
+          "title": "Minister of State at the Department of -- Finance with special responsibility for -- Financial Services, Credit Unions and -- Insurance"
+        },
+        {
+          "name": "Niall Collins",
+          "title": "Minister of State at the Department of -- Justice, Home Affairs and Migration with -- special responsibility for International -- Law, Law Reform and Youth Justice"
+        },
+        {
+          "name": "Niamh Smyth",
+          "title": "Minister of State at the Department of -- Enterprise, Tourism and Employment -- with special responsibility for Trade -- Promotion, Artificial Intelligence and -- Digital Transformation"
+        },
+        {
+          "name": "Alan Dillon",
+          "title": "Minister of State at the Department of -- Enterprise, Tourism and Employment -- with special responsibility for Small -- Businesses and Retail; and at the -- Department of Climate, Energy and the -- Environment with special responsibility -- for Circular Economy"
+        },
+        {
+          "name": "Timmy Dooley",
+          "title": "Minister of State at the Department -- of Agriculture, Food and the Marine -- with special responsibility for Fisheries; -- and at the Department of Climate, -- Energy and the Environment with special -- responsibility for the Marine"
+        },
+        {
+          "name": "Colm Brophy",
+          "title": "Minister of State at the Department of -- Justice, Home Affairs and Migration with -- special responsibility for Migration"
+        },
+        {
+          "name": "Marian Harkin",
+          "title": "Minister of State at the Department of -- Further and Higher Education, Research, -- Innovation and Science with special -- responsibility for Further Education, -- Apprenticeship, Construction and -- Climate Skills"
+        },
+        {
+          "name": "Giorgia Meloni",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Antonio Tajani",
+          "title": "Deputy Prime Minister and Minister -- for Foreign Affairs and International -- Cooperation"
+        },
+        {
+          "name": "Matteo Salvini",
+          "title": "Deputy Prime Minister and Minister for -- Infrastructure and Transport"
+        },
+        {
+          "name": "Matteo Piantedosi",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Carlo Nordio",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Guido Crosetto",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Giancarlo Giorgetti",
+          "title": "Minister for Economic Affairs and -- Finance"
+        },
+        {
+          "name": "Adolfo Urso",
+          "title": "Minister for Enterprises and Made in Italy"
+        },
+        {
+          "name": "Francesco Lollobrigida",
+          "title": "Minister for Agriculture, Food -- Sovereignty and Forestry"
+        },
+        {
+          "name": "Gilberto Pichetto Fratin",
+          "title": "Minister for the Environment and Energy -- Security"
+        },
+        {
+          "name": "Marina Elvira Calderone",
+          "title": "Minister for Labour and Social Policy"
+        },
+        {
+          "name": "Giuseppe Valditara",
+          "title": "Minister for Education and Merit"
+        },
+        {
+          "name": "Anna Maria Bernini",
+          "title": "Minister for Universities and Research"
+        },
+        {
+          "name": "Gennaro Sangiuliano",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Orazio Schillaci",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Daniela Garnero Santanchè",
+          "title": "Minister for Tourism"
+        },
+        {
+          "name": "Luca Ciriani",
+          "title": "Minister for Relations with Parliament"
+        },
+        {
+          "name": "Paolo Zangrillo",
+          "title": "Minister for Public Administration"
+        },
+        {
+          "name": "Roberto Calderoli",
+          "title": "Minister for Regional Affairs and -- Autonomies"
+        },
+        {
+          "name": "Sebastiano detto Nello Musumeci",
+          "title": "Minister for Civil Protection and Marine -- Policies"
+        },
+        {
+          "name": "Raffaele Fitto",
+          "title": "Minister for European Affairs, Cohesion -- Policies and the NRRP"
+        },
+        {
+          "name": "Andrea Abodi",
+          "title": "Minister for Sport and Youth"
+        },
+        {
+          "name": "Eugenia Maria Roccella",
+          "title": "Minister for the Family, the Birth Rate -- and Equal Opportunities"
+        },
+        {
+          "name": "Alessandra Locatelli",
+          "title": "Minister for Disabilities"
+        },
+        {
+          "name": "Maria Elisabetta Alberti",
+          "title": "Minister for Institutional Reforms and -- Regulatory Simplification"
+        },
+        {
+          "name": "Edmondo Cirielli",
+          "title": "Deputy Minister for Foreign Affairs and -- International Cooperation"
+        },
+        {
+          "name": "Francesco Paolo Sisto",
+          "title": "Deputy Minister for Justice"
+        },
+        {
+          "name": "Maurizio Leo",
+          "title": "Deputy Minister for Economic Affairs and -- Finance"
+        },
+        {
+          "name": "Valentino Valentini",
+          "title": "Deputy Minister for Enterprises and -- Made in Italy"
+        },
+        {
+          "name": "Vannia Gava",
+          "title": "Deputy Minister for the Environment and -- Energy Security"
+        },
+        {
+          "name": "Galeazzo Bignami",
+          "title": "Deputy Minister for Infrastructure and -- Transport"
+        },
+        {
+          "name": "Edoardo Rixi",
+          "title": "Deputy Minister for Infrastructure and -- Transport"
+        },
+        {
+          "name": "Maria Teresa Bellucci",
+          "title": "Deputy Minister for Labour and Social -- Policy"
+        },
+        {
+          "name": "Alfredo Mantovano",
+          "title": "State Secretary, Prime Minister’s Office -- (Cabinet Secretary)"
+        },
+        {
+          "name": "Alberto Barachini",
+          "title": "State Secretary, Prime Minister’s Office -- (Information and Publishing)"
+        },
+        {
+          "name": "Alessio Butti",
+          "title": "State Secretary, Prime Minister’s Office -- (Technological Innovation)"
+        },
+        {
+          "name": "Giuseppina Castiello",
+          "title": "State Secretary, Prime Minister’s Office -- (Relations with Parliament)"
+        },
+        {
+          "name": "Giovanbattista Fazzolari",
+          "title": "State Secretary, Prime Minister’s Office -- (Implementation of the Government -- Programme)"
+        },
+        {
+          "name": "Alessandro Morelli",
+          "title": "State Secretary, Prime Minister’s Office -- (Economic Policy Coordination)"
+        },
+        {
+          "name": "Matilde Siracusano",
+          "title": "State Secretary, Prime Minister’s Office -- (Relations with Parliament)"
+        },
+        {
+          "name": "Giorgio Silli",
+          "title": "State Secretary for Foreign Affairs and -- International Cooperation"
+        },
+        {
+          "name": "Maria Tripodi",
+          "title": "State Secretary for Foreign Affairs and -- International Cooperation"
+        },
+        {
+          "name": "Wanda Ferro",
+          "title": "State Secretary for the Interior"
+        },
+        {
+          "name": "Nicola Molteni",
+          "title": "State Secretary for the Interior"
+        },
+        {
+          "name": "Emanuele Prisco",
+          "title": "State Secretary for the Interior"
+        },
+        {
+          "name": "Andrea Delmastro Delle",
+          "title": "State Secretary for Justice"
+        },
+        {
+          "name": "Andrea Ostellari",
+          "title": "State Secretary for Justice"
+        },
+        {
+          "name": "Matteo Perego Di Cremnago",
+          "title": "State Secretary for Defence"
+        },
+        {
+          "name": "Isabella Rauti",
+          "title": "State Secretary for Defence"
+        },
+        {
+          "name": "Lucia Albano",
+          "title": "State Secretary for Economic Affairs and -- Finance"
+        },
+        {
+          "name": "Federico Freni",
+          "title": "State Secretary for Economic Affairs and -- Finance"
+        },
+        {
+          "name": "Sandra Savino",
+          "title": "State Secretary for Economic Affairs and -- Finance"
+        },
+        {
+          "name": "Fausta Bergamotto",
+          "title": "State Secretary for Enterprises and -- Made in Italy"
+        },
+        {
+          "name": "Massimo Bitonci",
+          "title": "State Secretary for Enterprises and -- Made in Italy"
+        },
+        {
+          "name": "Luigi D’Eramo",
+          "title": "State Secretary for Agriculture, Food -- Sovereignty and Forestry"
+        },
+        {
+          "name": "Patrizio Giacomo La Pietra",
+          "title": "State Secretary for Agriculture, Food -- Sovereignty and Forestry"
+        },
+        {
+          "name": "Claudio Barbaro",
+          "title": "State Secretary for the Environment and -- Energy Security"
+        },
+        {
+          "name": "Tullio Ferrante",
+          "title": "State Secretary for Infrastructure and -- Transport"
+        },
+        {
+          "name": "Claudio Durigon",
+          "title": "State Secretary for Labour and Social -- Policy"
+        },
+        {
+          "name": "Paola Frassinetti",
+          "title": "State Secretary for Education and Merit"
+        },
+        {
+          "name": "Augusta Montaruli",
+          "title": "State Secretary for Universities and -- Research"
+        },
+        {
+          "name": "Lucia Borgonzoni",
+          "title": "State Secretary for Culture"
+        },
+        {
+          "name": "Gianmarco Mazzi",
+          "title": "State Secretary for Culture"
+        },
+        {
+          "name": "Vittorio Sgarbi",
+          "title": "State Secretary for Culture"
+        },
+        {
+          "name": "Marcello Gemmato",
+          "title": "State Secretary for Health"
+        },
+        {
+          "name": "Evika Siliņa",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Andris Sprūds",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Aivars Puriņš",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Liene Gātere",
+          "title": "Parliamentary Secretary, Ministry of -- Defence"
+        },
+        {
+          "name": "Inese Lībiņa-Egnere",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Mihails Papsujevičs",
+          "title": "State Secretary, Ministry of Justice"
+        },
+        {
+          "name": "Lauma Paegļkalna",
+          "title": "Parliamentary Secretary, Ministry of -- Justice"
+        },
+        {
+          "name": "Baiba Braže",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Artjoms Uršuļskis",
+          "title": "Parliamentary Secretary, Ministry of -- Foreign Affairs"
+        },
+        {
+          "name": "Andžejs Viļumsons",
+          "title": "State Secretary, Ministry of Foreign -- Affairs"
+        },
+        {
+          "name": "Viktors Valainis",
+          "title": "Minister for the Economy"
+        },
+        {
+          "name": "Edmunds Valantis",
+          "title": "State Secretary, Ministry of the Economy"
+        },
+        {
+          "name": "Jurģis Miezainis",
+          "title": "Parliamentary Secretary, Ministry of the -- Economy"
+        },
+        {
+          "name": "Arvils Ašeradens",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Baiba Bāne",
+          "title": "State Secretary, Ministry of Finance"
+        },
+        {
+          "name": "Jānis Upenieks",
+          "title": "Parliamentary Secretary, Ministry of -- Finance"
+        },
+        {
+          "name": "Rihards Kozlovskis",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Dimitrijs Trofimovs",
+          "title": "State Secretary, Ministry of the Interior"
+        },
+        {
+          "name": "Igors Rajevs",
+          "title": "Parliamentary Secretary, Ministry of the -- Interior"
+        },
+        {
+          "name": "Dace Melbārde",
+          "title": "Minister for Education and Science"
+        },
+        {
+          "name": "Jānis Paiders",
+          "title": "Acting State Secretary, Ministry of -- Education and Science"
+        },
+        {
+          "name": "Dāvis Mārtiņš Daugavietis",
+          "title": "Parliamentary Secretary, Ministry of -- Education and Science"
+        },
+        {
+          "name": "Agnese Lāce",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Dace Vilsone",
+          "title": "State Secretary, Ministry of Culture"
+        },
+        {
+          "name": "Signe Grūbe",
+          "title": "Parliamentary Secretary, Ministry of -- Culture"
+        },
+        {
+          "name": "Reinis Uzulnieks",
+          "title": "Minister for Welfare"
+        },
+        {
+          "name": "Ingus Alliks",
+          "title": "State Secretary, Ministry of Welfare"
+        },
+        {
+          "name": "Krists Bergans-Berģis",
+          "title": "Parliamentary Secretary, Ministry of -- Welfare"
+        },
+        {
+          "name": "Atis Švinka",
+          "title": "Minister for Transport"
+        },
+        {
+          "name": "Andulis Židkovs",
+          "title": "State Secretary, Ministry of Transport"
+        },
+        {
+          "name": "Ģirts Dubkēvičs",
+          "title": "Parliamentary Secretary, Ministry of -- Transport"
+        },
+        {
+          "name": "Hosams Abu Meri",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Agnese Vaļuliene",
+          "title": "State Secretary, Ministry of Health"
+        },
+        {
+          "name": "Dace Kļaviņa",
+          "title": "Parliamentary Secretary, Ministry of -- Health"
+        },
+        {
+          "name": "Inga Bērziņa",
+          "title": "Minister for Smart Administration and -- Regional Development"
+        },
+        {
+          "name": "Edvīns Balševics",
+          "title": "State Secretary, Ministry of Smart -- Administration and Regional -- Development"
+        },
+        {
+          "name": "Ilze Dambīte-Damberga",
+          "title": "Parliamentary Secretary, Ministry of -- Smart Administration and Regional -- Development"
+        },
+        {
+          "name": "Armands Krauze",
+          "title": "Minister for Agriculture"
+        },
+        {
+          "name": "Ģirts Krūmiņš",
+          "title": "State Secretary, Ministry of Agriculture"
+        },
+        {
+          "name": "Normunds Šmits",
+          "title": "Parliamentary Secretary, Ministry of -- Agriculture"
+        },
+        {
+          "name": "Kaspars Melnis",
+          "title": "Minister for Climate and Energy"
+        },
+        {
+          "name": "Līga Kurevska",
+          "title": "State Secretary, Ministry of Climate and -- Energy"
+        },
+        {
+          "name": "Jānis Irbe",
+          "title": "Parliamentary Secretary, Ministry of -- Climate and Energy"
+        }
+      ]
+    },
+    "LITHUANIA": {
+      "name": "LITHUANIA",
+      "persons": [
+        {
+          "name": "Inga Ruginienė",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Laimonas Rudys",
+          "title": "Chancellor of the Government"
+        },
+        {
+          "name": "Justas Pankauskas",
+          "title": "First Deputy Chancellor of the -- Government"
+        },
+        {
+          "name": "Alminas Mačiulis",
+          "title": "Deputy Chancellor of the Government"
+        },
+        {
+          "name": "Juras Taminskas",
+          "title": "Minister for Transport and -- Communications"
+        },
+        {
+          "name": "Roderikas Žiobakas",
+          "title": "Deputy Minister for Transport and -- Communications"
+        },
+        {
+          "name": "Julijus Glebovas",
+          "title": "Deputy Minister for Transport and -- Communications"
+        },
+        {
+          "name": "Tomas Daukantas",
+          "title": "Chancellor of the Ministry of Transport -- and Communications"
+        },
+        {
+          "name": "Jūratė Zailskienė",
+          "title": "Minister for Social Security and Labour"
+        },
+        {
+          "name": "Aušra Putk",
+          "title": "Deputy Minister for Social Security and -- Labour"
+        },
+        {
+          "name": "Rita Grigalienė",
+          "title": "Deputy Minister for Social Security and -- Labour"
+        },
+        {
+          "name": "Deimantė Bukeikaitė",
+          "title": "Deputy Minister for Social Security and -- Labour"
+        },
+        {
+          "name": "Rasa Nuobaraitė",
+          "title": "Chancellor of the Ministry of Social -- Security and Labour"
+        },
+        {
+          "name": "Vladislav Kondratovič",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Vaidotas Jakštas",
+          "title": "Deputy Minister for the Interior"
+        },
+        {
+          "name": "Gintaras Aliksandravičius",
+          "title": "Deputy Minister for the Interior"
+        },
+        {
+          "name": "Alicija Ščerbaitė",
+          "title": "Deputy Minister for the Interior"
+        },
+        {
+          "name": "Dalius Kuliešius",
+          "title": "Chancellor of the Ministry of the Interior"
+        },
+        {
+          "name": "Edvinas Grikšas",
+          "title": "Minister for Economic Affairs and -- Innovation"
+        },
+        {
+          "name": "Darius Indriūnas",
+          "title": "Deputy Minister for Economic Affairs and -- Innovation"
+        },
+        {
+          "name": "Andžej Trachimovič",
+          "title": "Deputy Minister for Economic Affairs and -- Innovation"
+        },
+        {
+          "name": "Marius Stasiukaitis",
+          "title": "Deputy Minister for Economic Affairs and -- Innovation"
+        },
+        {
+          "name": "Agila Barzdienė",
+          "title": "Deputy Minister for Economic Affairs and -- Innovation"
+        },
+        {
+          "name": "Eglė Radišauskienė",
+          "title": "Chancellor of the Ministry of Economic -- Affairs and Innovation"
+        },
+        {
+          "name": "Kristupas Vaitiekūnas",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Darius Sadeckas",
+          "title": "Deputy Minister for Finance"
+        },
+        {
+          "name": "Mindaugas Šima",
+          "title": "Chancellor of the Ministry of Finance"
+        },
+        {
+          "name": "Andrius Palionis",
+          "title": "Minister for Agriculture"
+        },
+        {
+          "name": "Arūnas Jagminas",
+          "title": "Deputy Minister for Agriculture"
+        },
+        {
+          "name": "Kastytis Žuromskas",
+          "title": "Minister for the Environment"
+        },
+        {
+          "name": "Ramūnas Krugelis",
+          "title": "Deputy Minister for the Environment"
+        },
+        {
+          "name": "Giedrė Ričkutė",
+          "title": "Deputy Minister for the Environment"
+        },
+        {
+          "name": "Sigita Vasiljevaitė",
+          "title": "Chancellor of the Ministry of the -- Environment"
+        },
+        {
+          "name": "Dovilė Šakalienė",
+          "title": "Minister for National Defence"
+        },
+        {
+          "name": "Karolis Aleksa",
+          "title": "Deputy Minister for National Defence"
+        },
+        {
+          "name": "Tomas Godliauskas",
+          "title": "Deputy Minister for National Defence"
+        },
+        {
+          "name": "Orijana Mašalė",
+          "title": "Deputy Minister for National Defence"
+        },
+        {
+          "name": "Dainius Ivoškis",
+          "title": "Chancellor of the Ministry of National -- Defence"
+        },
+        {
+          "name": "Rita Tamašunienė",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Andrius Dubinas",
+          "title": "Deputy Minister for Justice"
+        },
+        {
+          "name": "Raminta Popovienė",
+          "title": "Minister for Education, Science and -- Sport"
+        },
+        {
+          "name": "Rolandas Zuoza",
+          "title": "Deputy Minister for Education, Science -- and Sport"
+        },
+        {
+          "name": "Regina Valutytė",
+          "title": "Deputy Minister for Education, Science -- and Sport"
+        },
+        {
+          "name": "Marija Jakubauskienė",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Laimutė Vaidelienė",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Jelena Čelutkienė",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Nerija Stasiulienė",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Daniel Naumovas",
+          "title": "Deputy Minister for Health"
+        },
+        {
+          "name": "Evaldas Raistenskis",
+          "title": "Chancellor of the Ministry of Health"
+        },
+        {
+          "name": "Kęstutis Budrys",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Sigitas Mitkus",
+          "title": "Deputy Minister for Foreign Affairs"
+        },
+        {
+          "name": "Gabija Grigaitė-Daugirdė",
+          "title": "Deputy Minister for Foreign Affairs"
+        },
+        {
+          "name": "Julius Pranevičius",
+          "title": "Deputy Minister for Foreign Affairs"
+        },
+        {
+          "name": "Audra Plepytė",
+          "title": "Deputy Minister for Foreign Affairs"
+        },
+        {
+          "name": "Aistė Stakėnienė",
+          "title": "Chancellor of the Ministry of Foreign -- Affairs"
+        },
+        {
+          "name": "Ignotas Adomavičius",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Ingrida Veliutė",
+          "title": "Deputy Minister for Culture"
+        },
+        {
+          "name": "Edita Klaunauskaitė",
+          "title": "Deputy Minister for Culture"
+        },
+        {
+          "name": "Regina Jaskelevičienė",
+          "title": "Chancellor of the Ministry of Culture"
+        },
+        {
+          "name": "Žygimantas Vaičiūnas",
+          "title": "Minister for Energy"
+        },
+        {
+          "name": "Arnoldas Pikžirnis",
+          "title": "Deputy Minister for Energy"
+        },
+        {
+          "name": "Edita Gudauskienė",
+          "title": "Deputy Minister for Energy"
+        },
+        {
+          "name": "Airidas Daukšas",
+          "title": "Deputy Minister for Energy"
+        },
+        {
+          "name": "Rasa Kiūdytė",
+          "title": "Chancellor of the Ministry of Energy"
+        }
+      ]
+    },
+    "LUXEMBOURG": {
+      "name": "LUXEMBOURG",
+      "persons": [
+        {
+          "name": "Luc Frieden",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Xavier Bettel",
+          "title": "Deputy Prime Minister, Minister -- for Foreign and European Affairs, -- Cooperation, Foreign Trade and for the -- Greater Region"
+        },
+        {
+          "name": "Martine Hansen",
+          "title": "Minister for Agriculture, Food and -- Viticulture"
+        },
+        {
+          "name": "Claude Meisch",
+          "title": "Minister for National Education, Children -- and Young People, Minister for Housing -- and Spatial Planning"
+        },
+        {
+          "name": "Lex Delles",
+          "title": "Minister for Economic Affairs, Small and -- Medium-Sized Enterprises, Energy and -- Tourism"
+        },
+        {
+          "name": "Yuriko Backes",
+          "title": "Minister for Defence, Minister for Gender -- Equality and Diversity, Minister for -- Mobility and Public Works"
+        },
+        {
+          "name": "Max Hahn",
+          "title": "Minister for Family Affairs, Solidarity, -- Living Together and Reception"
+        },
+        {
+          "name": "Gilles Roth",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Martine Deprez",
+          "title": "Minister for Health and Social Security"
+        },
+        {
+          "name": "Léon Gloden",
+          "title": "Minister for Home Affairs"
+        },
+        {
+          "name": "Stéphanie Obertin",
+          "title": "Minister for Digitalisation, Minister for -- Research and Higher Education"
+        },
+        {
+          "name": "Georges Mischo",
+          "title": "Minister for Sport, Minister for Labour"
+        },
+        {
+          "name": "Serge Wilmes",
+          "title": "Minister for the Environment, Climate -- and Biodiversity, Minister for the Civil -- Service"
+        },
+        {
+          "name": "Elisabeth Margue",
+          "title": "Minister for Justice, Deputy Minister -- for the Media and Communications, -- attached to the Prime Minister, -- Deputy Minister for Relations with -- the Parliament, attached to the Prime -- Minister"
+        },
+        {
+          "name": "Eric Thill",
+          "title": "Minister for Culture, Deputy Minister for -- Tourism"
+        },
+        {
+          "name": "Robert Abela",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Ian Borg",
+          "title": "Deputy Prime Minister and Minister for -- Foreign Affairs and Tourism"
+        },
+        {
+          "name": "Owen Bonnici",
+          "title": "Minister for the National Heritage, the -- Arts and Local Government"
+        },
+        {
+          "name": "Michael Falzon",
+          "title": "Minister for Social Policy and Children’s -- Rights"
+        },
+        {
+          "name": "Anton Refalo",
+          "title": "Minister for Agriculture, Fisheries and -- Animal Rights"
+        },
+        {
+          "name": "Roderick Galdes",
+          "title": "Minister for Social and Affordable -- Accommodation"
+        },
+        {
+          "name": "Silvio Schembri",
+          "title": "Minister for the Economy, Enterprise and -- Strategic Projects"
+        },
+        {
+          "name": "Julia Farrugia",
+          "title": "Minister for Inclusion and the Voluntary -- Sector"
+        },
+        {
+          "name": "Clint Camilleri",
+          "title": "Minister for Gozo and Planning"
+        },
+        {
+          "name": "Byron Camilleri",
+          "title": "Minister for Home Affairs, Security and -- Employment"
+        },
+        {
+          "name": "Miriam Dalli",
+          "title": "Minister for the Environment, Energy and -- Public Cleanliness"
+        },
+        {
+          "name": "Clyde Caruana",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Clifton Grima",
+          "title": "Minister for Education, Sport, Youth, -- Research and Innovation"
+        },
+        {
+          "name": "Stefan Zrinzo Azzopardi",
+          "title": "Minister for Lands and the -- Implementation of the Electoral -- Programme"
+        },
+        {
+          "name": "Jonathan Attard",
+          "title": "Minister for Justice and Reform of the -- Construction Sector"
+        },
+        {
+          "name": "Jo Etienne Abela",
+          "title": "Minister for Health and Active Ageing"
+        },
+        {
+          "name": "Chris Bonett",
+          "title": "Minister for Transport, Infrastructure and -- Public Works"
+        },
+        {
+          "name": "Andy Ellul",
+          "title": "Parliamentary Secretary for Social -- Dialogue in the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Alison Zerafa Civelli",
+          "title": "Parliamentary Secretary for Local -- Government in the Ministry of the -- National Heritage, the Arts and Local -- Government"
+        },
+        {
+          "name": "Keith Azzopardi Tanti",
+          "title": "Parliamentary Secretary for Youth, -- Research and Innovation in the Ministry -- of Education, Sport, Youth, Research -- and Innovation"
+        },
+        {
+          "name": "Rebecca Buttigieg",
+          "title": "Parliamentary Secretary for Reforms -- and Equality in the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Alicia Bugeja Said",
+          "title": "Parliamentary Secretary for Fisheries, -- Aquaculture and Animal Rights in the -- Ministry of Agriculture, Fisheries and -- Animal Rights"
+        },
+        {
+          "name": "Malcolm Paul Agius Galea",
+          "title": "Parliamentary Secretary for Active -- Ageing in the Ministry of Health and -- Active Ageing"
+        },
+        {
+          "name": "Omar Farrugia",
+          "title": "Parliamentary Secretary for Public -- Works in the Ministry of Transport, -- Infrastructure and Public Works"
+        },
+        {
+          "name": "Glenn Bedingfield",
+          "title": "Parliamentary Secretary for Public -- Cleanliness in the Ministry of the -- Environment, Energy and Public -- Cleanliness"
+        }
+      ]
+    },
+    "THE NETHERLANDS": {
+      "name": "THE NETHERLANDS",
+      "persons": [
+        {
+          "name": "Dick Schoof",
+          "title": "Prime Minister, Minister for General -- Affairs"
+        },
+        {
+          "name": "Sophie Hermans",
+          "title": "Minister for Climate Policy and Green -- Growth, First Deputy Prime Minister"
+        },
+        {
+          "name": "Mona Keijzer",
+          "title": "Minister for Housing and Spatial -- Planning, Minister for Asylum and -- Migration, Second Deputy Prime Minister"
+        },
+        {
+          "name": "David Van Weel",
+          "title": "Minister for Foreign Affairs, Minister for -- Asylum and Migration"
+        },
+        {
+          "name": "Foort Van Oosten",
+          "title": "Minister for Justice and Security"
+        },
+        {
+          "name": "Frank Rijkaart",
+          "title": "Minister for the Interior and Kingdom -- Relations"
+        },
+        {
+          "name": "Gouke Moes",
+          "title": "Minister for Education, Culture and -- Science"
+        },
+        {
+          "name": "Eelco Heinen",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Ruben Brekelmans",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Robert Tieman",
+          "title": "Minister for Infrastructure and Water -- Management"
+        },
+        {
+          "name": "Vincent Karremans",
+          "title": "Minister for Economic Affairs"
+        },
+        {
+          "name": "Femke Marije Wiersma",
+          "title": "Minister for Agriculture, Fisheries, Food -- Security and Nature"
+        },
+        {
+          "name": "Mariëlle Paul",
+          "title": "Minister for Social Affairs and -- Employment"
+        },
+        {
+          "name": "Jan Anthonie Bruijn",
+          "title": "Minister for Health, Welfare and Sport"
+        },
+        {
+          "name": "Aukje De Vries",
+          "title": "Minister for Foreign Trade and -- Development"
+        },
+        {
+          "name": "Arno Rutte",
+          "title": "Minister for Legal Protection"
+        },
+        {
+          "name": "Eddie Van Marum",
+          "title": "Minister for Digitalisation, Kingdom -- Relations and Reparations for Groningen"
+        },
+        {
+          "name": "Koen Becking",
+          "title": "Minister for Primary and Secondary -- Education and Equal Opportunities"
+        },
+        {
+          "name": "Eugène Heijnen",
+          "title": "Minister for Tax Affairs, the Tax -- Administration and Customs"
+        },
+        {
+          "name": "Sandra Palmen-Schlangen",
+          "title": "Minister for Benefits and Redress"
+        },
+        {
+          "name": "Gijs Tuinman",
+          "title": "Minister for Arms Procurement and -- Personnel"
+        },
+        {
+          "name": "Thierry Aartsen",
+          "title": "Minister for Public Transport and the -- Environment"
+        },
+        {
+          "name": "Jean Rummenie",
+          "title": "Minister for Fisheries, Food Security, -- Horticulture and Nature Conservation"
+        },
+        {
+          "name": "Jurgen Nobel",
+          "title": "Minister for Participation and Integration"
+        },
+        {
+          "name": "Nicki Pouw-Verweij",
+          "title": "Minister for Long-Term and Social Care"
+        },
+        {
+          "name": "Judith Tielen",
+          "title": "Minister for Youth, Prevention and Sport"
+        },
+        {
+          "name": "Donald Tusk",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Władysław Kosiniak-Kamysz",
+          "title": "Deputy Prime Minister, Minister for -- Defence"
+        },
+        {
+          "name": "Krzysztof Gawkowski",
+          "title": "Deputy Prime Minister, Minister for -- Digitalisation"
+        },
+        {
+          "name": "Adam Bodnar",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Agnieszka Buczyńska",
+          "title": "Minister for Civil Society, Chair of the -- Public Benefit Committee"
+        },
+        {
+          "name": "Borys Budka",
+          "title": "Minister for State Assets"
+        },
+        {
+          "name": "Marzena Czarnecka",
+          "title": "Minister for Industry"
+        },
+        {
+          "name": "Andrzej Domański",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Agnieszka Dziemianowicz-Bąk",
+          "title": "Minister for Family, Labour and Social -- Policy"
+        },
+        {
+          "name": "Paulina Hennig-Kloska",
+          "title": "Minister for Climate and Environment"
+        },
+        {
+          "name": "Krzysztof Hetman",
+          "title": "Minister for Development and -- Technology"
+        },
+        {
+          "name": "Marcin Kierwiński",
+          "title": "Minister for the Interior and -- Administration"
+        },
+        {
+          "name": "Dariusz Klimczak",
+          "title": "Minister for Infrastructure"
+        },
+        {
+          "name": "Katarzyna Kotula",
+          "title": "Minister for Equality"
+        },
+        {
+          "name": "Izabela Leszczyna",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Sławomir Nitras",
+          "title": "Minister for Sport and Tourism"
+        },
+        {
+          "name": "Barbara Nowacka",
+          "title": "Minister for Education"
+        },
+        {
+          "name": "Dariusz Wieczorek",
+          "title": "Minister for Science"
+        },
+        {
+          "name": "Marzena Okła-Drewnowicz",
+          "title": "Minister for Senior Policy"
+        },
+        {
+          "name": "Katarzyna Pełczyńska-Nałęcz",
+          "title": "Minister for Funds and Regional Policy"
+        },
+        {
+          "name": "Czesław Siekierski",
+          "title": "Minister for Agriculture and Rural -- Development"
+        },
+        {
+          "name": "Bartłomiej Sienkiewicz",
+          "title": "Minister for Culture and National -- Heritage"
+        },
+        {
+          "name": "Radosław Sikorski",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Adam Szłapka",
+          "title": "Minister for European Union Affairs"
+        },
+        {
+          "name": "Jan Grabiec",
+          "title": "Minister, Member of the Council of -- Ministers, Head of the Chancellery of the -- Prime Minister"
+        },
+        {
+          "name": "Maciej Berek",
+          "title": "Minister, Member of the Council of -- Ministers"
+        },
+        {
+          "name": "Tomasz Siemoniak",
+          "title": "Minister, Member of the Council of -- Ministers"
+        },
+        {
+          "name": "Grzegorz Karpiński",
+          "title": "State Secretary, Deputy Head of the -- Chancellery of the Prime Minister"
+        },
+        {
+          "name": "Magdalena Sobkowiak-",
+          "title": "Deputy State Secretary for European -- Union Affairs"
+        },
+        {
+          "name": "Władysław Teofil Bartoszewski",
+          "title": "State Secretary, Ministry of Foreign -- Affairs"
+        },
+        {
+          "name": "Andrzej Szejna",
+          "title": "State Secretary, Ministry of Foreign -- Affairs"
+        },
+        {
+          "name": "Henryka Mościcka-Dendys",
+          "title": "Deputy State Secretary, Ministry of -- Foreign Affairs"
+        },
+        {
+          "name": "Robert Kupiecki",
+          "title": "Deputy State Secretary, Ministry of -- Foreign Affairs"
+        },
+        {
+          "name": "Marek Prawda",
+          "title": "Deputy State Secretary, Ministry of -- Foreign Affairs"
+        },
+        {
+          "name": "Paweł Bejda",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Cezary Tomczyk",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Paweł Zalewski",
+          "title": "State Secretary, Ministry of Defence"
+        },
+        {
+          "name": "Stanisław Wziątek",
+          "title": "Deputy State Secretary, Ministry of -- Defence"
+        },
+        {
+          "name": "gen. Wiesław Kukuła",
+          "title": "Chief of the General Staff of the Polish -- Armed Forces"
+        },
+        {
+          "name": "Waldemar Sługocki",
+          "title": "State Secretary, Ministry of Development -- and Technology"
+        },
+        {
+          "name": "Jacek Tomczak",
+          "title": "State Secretary, Ministry of Development -- and Technology"
+        },
+        {
+          "name": "Marcin Łoboda",
+          "title": "State Secretary, Ministry of Finance, -- Head of the National Revenue -- Administration"
+        },
+        {
+          "name": "Zbigniew Stawicki",
+          "title": "Deputy State Secretary, Ministry of -- Finance, Deputy Head of the National -- Revenue Administration"
+        },
+        {
+          "name": "Hanna Majszczyk",
+          "title": "Deputy State Secretary, Ministry of -- Finance"
+        },
+        {
+          "name": "Paweł Karbownik",
+          "title": "Deputy State Secretary, Ministry of -- Finance"
+        },
+        {
+          "name": "Jurand Drop",
+          "title": "Deputy State Secretary, Ministry of -- Finance"
+        },
+        {
+          "name": "Jarosław Neneman",
+          "title": "Deputy State Secretary, Ministry of -- Finance"
+        },
+        {
+          "name": "Czesław Mroczek",
+          "title": "State Secretary, Ministry of the Interior -- and Administration"
+        },
+        {
+          "name": "Wiesław Szczepański",
+          "title": "State Secretary, Ministry of the Interior -- and Administration"
+        },
+        {
+          "name": "Tomasz Szymański",
+          "title": "State Secretary, Ministry of the Interior -- and Administration"
+        },
+        {
+          "name": "Wiesław Leśniakiewicz",
+          "title": "Deputy State Secretary, Ministry of the -- Interior and Administration"
+        },
+        {
+          "name": "Maciej Duszczyk",
+          "title": "Deputy State Secretary, Ministry of the -- Interior and Administration"
+        },
+        {
+          "name": "Arkadiusz Myrcha",
+          "title": "State Secretary, Ministry of Justice"
+        },
+        {
+          "name": "Krzysztof Śmiszek",
+          "title": "State Secretary, Ministry of Justice"
+        },
+        {
+          "name": "Maria Ejchart",
+          "title": "Deputy State Secretary, Ministry of -- Justice"
+        },
+        {
+          "name": "Dariusz Mazur",
+          "title": "Deputy State Secretary, Ministry of -- Justice"
+        },
+        {
+          "name": "Zuzanna Rudzińska-Bluszcz",
+          "title": "Deputy State Secretary, Ministry of -- Justice"
+        },
+        {
+          "name": "Maciej Lasek",
+          "title": "State Secretary, Ministry of Funds and -- Regional Policy"
+        },
+        {
+          "name": "Jacek Protas",
+          "title": "State Secretary, Ministry of Funds and -- Regional Policy"
+        },
+        {
+          "name": "Jan Szyszko",
+          "title": "State Secretary, Ministry of Funds and -- Regional Policy"
+        },
+        {
+          "name": "Monika Sikora",
+          "title": "Deputy State Secretary, Ministry of -- Funds and Regional Policy"
+        },
+        {
+          "name": "Konrad Wojnarowski",
+          "title": "Deputy State Secretary, Ministry of -- Funds and Regional Policy"
+        },
+        {
+          "name": "Robert Kropiwnicki",
+          "title": "State Secretary, Ministry of State Assets"
+        },
+        {
+          "name": "Marcin Kulasek",
+          "title": "State Secretary, Ministry of State Assets"
+        },
+        {
+          "name": "Zbigniew Ziejewski",
+          "title": "State Secretary, Ministry of State Assets"
+        },
+        {
+          "name": "Jacek Bartmiński",
+          "title": "Deputy State Secretary, Ministry of State -- Assets"
+        },
+        {
+          "name": "Łukasz Krasoń",
+          "title": "State Secretary, Ministry of Family, -- Labour and Social Policy, Government -- Plenipotentiary for Persons with -- Disabilities"
+        },
+        {
+          "name": "Aleksandra Gajewska",
+          "title": "State Secretary, Ministry of Family, -- Labour and Social Policy"
+        },
+        {
+          "name": "Sebastian Gajewski",
+          "title": "Deputy State Secretary, Ministry of -- Family, Labour and Social Policy"
+        },
+        {
+          "name": "Urszula Zielińska",
+          "title": "State Secretary, Ministry of Climate and -- Environment"
+        },
+        {
+          "name": "Mikołaj Dorożała",
+          "title": "Deputy State Secretary, Ministry of -- Climate and Environment"
+        },
+        {
+          "name": "Miłosz Motyka",
+          "title": "Deputy State Secretary, Ministry of -- Climate and Environment"
+        },
+        {
+          "name": "Anita Sowińska",
+          "title": "Deputy State Secretary, Ministry of -- Climate and Environment"
+        },
+        {
+          "name": "Wojciech Konieczny",
+          "title": "State Secretary, Ministry of Health"
+        },
+        {
+          "name": "Urszula Demkow",
+          "title": "Deputy State Secretary, Ministry of -- Health"
+        },
+        {
+          "name": "Marek Kos",
+          "title": "Deputy State Secretary, Ministry of -- Health"
+        },
+        {
+          "name": "Maciej Miłkowski",
+          "title": "Deputy State Secretary, Ministry of -- Health"
+        },
+        {
+          "name": "Arkadiusz Marchewka",
+          "title": "State Secretary, Ministry of Infrastructure"
+        },
+        {
+          "name": "Paweł Gancarz",
+          "title": "Deputy State Secretary, Ministry of -- Infrastructure"
+        },
+        {
+          "name": "Piotr Malepszak",
+          "title": "Deputy State Secretary, Ministry of -- Infrastructure"
+        },
+        {
+          "name": "Przemysław Koperski",
+          "title": "Deputy State Secretary, Ministry of -- Infrastructure"
+        },
+        {
+          "name": "Henryk Kiepura",
+          "title": "State Secretary, Ministry of National -- Education"
+        },
+        {
+          "name": "Katarzyna Lubnauer",
+          "title": "State Secretary, Ministry of National -- Education"
+        },
+        {
+          "name": "Joanna Mucha",
+          "title": "State Secretary, Ministry of National -- Education"
+        },
+        {
+          "name": "Izabela Ziętka",
+          "title": "Deputy State Secretary, Ministry of -- National Education"
+        },
+        {
+          "name": "Paulina Piechna-Więckiewicz",
+          "title": "Deputy State Secretary, Ministry of -- National Education"
+        },
+        {
+          "name": "Marek Gzik",
+          "title": "State Secretary, Ministry of Science and -- Higher Education"
+        },
+        {
+          "name": "Maria Mrówczyńska",
+          "title": "Deputy State Secretary, Ministry of -- Science and Higher Education"
+        },
+        {
+          "name": "Andrzej Szeptycki",
+          "title": "Deputy State Secretary, Ministry of -- Science and Higher Education"
+        },
+        {
+          "name": "Marek Gdula",
+          "title": "Deputy State Secretary, Ministry of -- Science and Higher Education"
+        },
+        {
+          "name": "Stefan Krajewski",
+          "title": "State Secretary, Ministry of Agriculture -- and Rural Development"
+        },
+        {
+          "name": "Jacek Czerniak",
+          "title": "State Secretary, Ministry of Agriculture -- and Rural Development"
+        },
+        {
+          "name": "Michał Kołodziejczak",
+          "title": "State Secretary, Ministry of Agriculture -- and Rural Development"
+        },
+        {
+          "name": "Adam Nowak",
+          "title": "Deputy State Secretary, Ministry of -- Agriculture and Rural Development"
+        },
+        {
+          "name": "Dariusz Standerski",
+          "title": "State Secretary, Ministry of Digitalisation"
+        },
+        {
+          "name": "Paweł Olszewski",
+          "title": "State Secretary, Ministry of Digitalisation"
+        },
+        {
+          "name": "Michał Gramatyka",
+          "title": "State Secretary, Ministry of Digitalisation"
+        },
+        {
+          "name": "Bożena Żelazowska",
+          "title": "State Secretary, Ministry of Culture and -- National Heritage"
+        },
+        {
+          "name": "Joanna Scheuring-Wielgus",
+          "title": "State Secretary, Ministry of Culture and -- National Heritage"
+        },
+        {
+          "name": "Andrzej Wyrobiec",
+          "title": "Deputy State Secretary, Ministry of -- Culture and National Heritage"
+        },
+        {
+          "name": "Marta Cienkowska",
+          "title": "Deputy State Secretary, Ministry of -- Culture and National Heritage"
+        },
+        {
+          "name": "Piotr Borys",
+          "title": "State Secretary, Ministry of Sport and -- Tourism"
+        },
+        {
+          "name": "Ireneusz Raś",
+          "title": "State Secretary, Ministry of Sport and -- Tourism"
+        },
+        {
+          "name": "Marcin Horała",
+          "title": "State Secretary, Ministry of Funds and -- Regional Policy"
+        },
+        {
+          "name": "Rafał Weber",
+          "title": "State Secretary, Ministry of Infrastructure"
+        },
+        {
+          "name": "Andrzej Bittel",
+          "title": "State Secretary, Ministry of -- Infrastructure, Government -- Plenipotentiary for Combating Transport -- Exclusion"
+        },
+        {
+          "name": "Marek Gróbarczyk",
+          "title": "State Secretary, Ministry of -- Infrastructure, Government -- Plenipotentiary for Maritime Economy -- and Investment in Maritime and Water -- Economy"
+        },
+        {
+          "name": "Grzegorz Witkowski",
+          "title": "Deputy State Secretary, Ministry of -- Infrastructure"
+        }
+      ]
+    },
+    "PORTUGAL": {
+      "name": "PORTUGAL",
+      "persons": [
+        {
+          "name": "Luís Montenegro",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Paulo Rangel",
+          "title": "Ministro de Estado, Minister for Foreign -- Affairs"
+        },
+        {
+          "name": "Joaquim Miranda Sarmento",
+          "title": "Ministro de Estado, Minister for Finance"
+        },
+        {
+          "name": "António Leitão Amaro",
+          "title": "Minister for the Prime Minister’s Office"
+        },
+        {
+          "name": "Manuel Castro Almeida",
+          "title": "Minister for the Economy and for -- Territorial Cohesion"
+        },
+        {
+          "name": "Gonçalo Matias",
+          "title": "Minister attached to the Prime Minister, -- Minister for State Reform"
+        },
+        {
+          "name": "Carlos Abreu Amorim",
+          "title": "Minister for Parliamentary Affairs"
+        },
+        {
+          "name": "Nuno Melo",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Miguel Pinto Luz",
+          "title": "Minister for Infrastructure and Housing"
+        },
+        {
+          "name": "Rita Alarcão Júdice",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Maria Lúcia Amaral",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Fernando Alexandre",
+          "title": "Minister for Education, Science and -- Innovation"
+        },
+        {
+          "name": "Ana Paula Martins",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Maria do Rosário Palma",
+          "title": "Minister for Employment, Solidarity and -- Social Security"
+        },
+        {
+          "name": "Maria da Graça Carvalho",
+          "title": "Minister for the Environment and Energy"
+        },
+        {
+          "name": "Margarida Balseiro Lopes",
+          "title": "Minister for Culture, Youth and Sport"
+        },
+        {
+          "name": "José Manuel Fernandes",
+          "title": "Minister for Agriculture and Maritime -- Affairs"
+        },
+        {
+          "name": "Inês Domingos",
+          "title": "State Secretary for European Affairs"
+        },
+        {
+          "name": "Ana Isabel Xavier",
+          "title": "State Secretary for Foreign Affairs and -- Cooperation"
+        },
+        {
+          "name": "Emídio Sousa",
+          "title": "State Secretary for the Portuguese -- Communities Abroad"
+        },
+        {
+          "name": "José Maria Brandão De Brito",
+          "title": "State Secretary attached to the Minister -- for Finance, with responsibility for the -- Budget"
+        },
+        {
+          "name": "Cláudia Reis Duarte",
+          "title": "State Secretary for Tax Affairs"
+        },
+        {
+          "name": "João Silva Lopes",
+          "title": "State Secretary for the Treasury and -- Finance"
+        },
+        {
+          "name": "Marisa Garrido",
+          "title": "State Secretary for Public Administration"
+        },
+        {
+          "name": "Rui Armindo Freitas",
+          "title": "State Secretary attached to the Prime -- Minister’s Office, with responsibility for -- Immigration"
+        },
+        {
+          "name": "Tiago Macieirinha",
+          "title": "State Secretary to the Presidency of the -- Council of Ministers"
+        },
+        {
+          "name": "João Valle E Azevedo",
+          "title": "State Secretary for the Prime Minister’s -- Office"
+        },
+        {
+          "name": "Hélder Reis",
+          "title": "State Secretary for Planning and -- Regional Development"
+        },
+        {
+          "name": "João Rui Ferreira",
+          "title": "State Secretary for the Economy"
+        },
+        {
+          "name": "Silvério Regalado",
+          "title": "State Secretary for Local Administration -- and Regional Planning"
+        },
+        {
+          "name": "Pedro Machado",
+          "title": "State Secretary for Tourism, Trade and -- Services"
+        },
+        {
+          "name": "Bernardo Correia",
+          "title": "State Secretary for Digitalisation"
+        },
+        {
+          "name": "Paulo Magro Da Luz",
+          "title": "State Secretary for Simplification"
+        },
+        {
+          "name": "Álvaro Castelo Branco",
+          "title": "State Secretary attached to the Minister -- for Defence"
+        },
+        {
+          "name": "Nuno Pinheiro Torres",
+          "title": "State Secretary attached to the Minister -- for Defence, with responsibility for -- Defence Policy"
+        },
+        {
+          "name": "Hugo Espírito Santo",
+          "title": "State Secretary for Infrastructure"
+        },
+        {
+          "name": "Cristina Pinto Dias",
+          "title": "State Secretary for Mobility"
+        },
+        {
+          "name": "Patrícia Gonçalves Costa",
+          "title": "State Secretary for Housing"
+        },
+        {
+          "name": "Gonçalo Da Cunha Pires",
+          "title": "State Secretary attached to the Minister -- for Justice"
+        },
+        {
+          "name": "Ana Luísa Machado",
+          "title": "State Secretary for Justice"
+        },
+        {
+          "name": "Paulo Simões Ribeiro",
+          "title": "State Secretary attached to the Minister -- for the Interior"
+        },
+        {
+          "name": "Telmo Correia",
+          "title": "State Secretary for the Interior"
+        },
+        {
+          "name": "Rui Rocha",
+          "title": "State Secretary for Civil Protection"
+        },
+        {
+          "name": "Alexandre Homem Cristo",
+          "title": "State Secretary attached to the Minister -- for Education, Science and Innovation, -- with responsibility for Education"
+        },
+        {
+          "name": "Maria Luísa Oliveira",
+          "title": "State Secretary for School -- Administration"
+        },
+        {
+          "name": "Helena Canhão",
+          "title": "State Secretary for Science and -- Innovation"
+        },
+        {
+          "name": "Cláudia Sarrico",
+          "title": "State Secretary for Higher Education"
+        },
+        {
+          "name": "Ana Povo",
+          "title": "State Secretary for Health"
+        },
+        {
+          "name": "Francisco Rocha Gonçalves",
+          "title": "State Secretary for Health Management"
+        },
+        {
+          "name": "Adriano Rafael Moreira",
+          "title": "State Secretary attached to the -- Minister for Employment, Solidarity and -- Social Security, with responsibility for -- Employment"
+        },
+        {
+          "name": "Susana Filipa Lima",
+          "title": "State Secretary for Social Security"
+        },
+        {
+          "name": "Clara Marques Mendes",
+          "title": "State Secretary for Social Action and -- Inclusion"
+        },
+        {
+          "name": "Jean Barroca",
+          "title": "State Secretary attached to the Minister -- for the Environment and Energy, with -- responsibility for Energy"
+        },
+        {
+          "name": "João Manuel Esteves",
+          "title": "State Secretary for the Environment"
+        },
+        {
+          "name": "Carla Rodrigues",
+          "title": "State Secretary attached to the Minister -- for Culture, Youth and Sport, with -- responsibility for Youth and Equality"
+        },
+        {
+          "name": "Alberto Santos",
+          "title": "State Secretary for Culture"
+        },
+        {
+          "name": "Pedro Dias",
+          "title": "State Secretary for Sports"
+        },
+        {
+          "name": "Salvador Malheiro",
+          "title": "State Secretary for Fisheries and -- Maritime Affairs"
+        },
+        {
+          "name": "João Moura",
+          "title": "State Secretary for Agriculture"
+        },
+        {
+          "name": "Rui Ladeira",
+          "title": "State Secretary for Forestry"
+        }
+      ]
+    },
+    "ROMANIA": {
+      "name": "ROMANIA",
+      "persons": [
+        {
+          "name": "Ilie-Gavril Bolojan",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Marian Neacşu",
+          "title": "Deputy Prime Minister"
+        },
+        {
+          "name": "Barna Tánczos",
+          "title": "Deputy Prime Minister"
+        },
+        {
+          "name": "Michael-Dragoş Anastasiu",
+          "title": "Deputy Prime Minister"
+        },
+        {
+          "name": "Marian-Cătălin Predoiu",
+          "title": "Deputy Prime Minister, Minister for -- Internal Affairs"
+        },
+        {
+          "name": "Liviu-Ionuţ Moşteanu",
+          "title": "Deputy Prime Minister, Minister for -- National Defence"
+        },
+        {
+          "name": "Ciprian-Constantin Şerban",
+          "title": "Minister for Transport and Infrastructure"
+        },
+        {
+          "name": "Alexandru Nazare",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Radu Marinescu",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Daniel-Ovidiu David",
+          "title": "Minister for Education and Research"
+        },
+        {
+          "name": "András István Demeter",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Oana-Silvia Ţoiu",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Bogdan-Gruia Ivan",
+          "title": "Minister for Energy"
+        },
+        {
+          "name": "Radu-Dinel Miruţă",
+          "title": "Minister for the Economy, Digitalisation, -- Entrepreneurship and Tourism"
+        },
+        {
+          "name": "Dragoş-Nicolae Pîslaru",
+          "title": "Minister for Investments and European -- Projects"
+        },
+        {
+          "name": "Attila-Zoltán Cseke",
+          "title": "Minister for Development, Public Works -- and Administration"
+        },
+        {
+          "name": "Alexandru-Florin Rogobete",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Florin-Ionuţ Barbu",
+          "title": "Minister for Agriculture and Rural -- Development"
+        },
+        {
+          "name": "Diana-Anda Buzoianu",
+          "title": "Minister for the Environment, Water and -- Forestry"
+        },
+        {
+          "name": "Petre-Florin Manole",
+          "title": "Minister for Labour, Family, Youth and -- Social Solidarity"
+        }
+      ]
+    },
+    "SLOVAKIA": {
+      "name": "SLOVAKIA",
+      "persons": [
+        {
+          "name": "Robert Fico",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Denisa Saková",
+          "title": "Deputy Prime Minister and Minister for -- the Economy"
+        },
+        {
+          "name": "Richard Raši",
+          "title": "Minister for Investment, Regional -- Development and Digitalisation"
+        },
+        {
+          "name": "Peter Kmec",
+          "title": "Deputy Prime Minister with responsibility -- for the Recovery and Resilience Plan -- and the Use of EU Funds"
+        },
+        {
+          "name": "Ladislav Kamenický",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Matúš Šutaj Eštok",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Boris Susko",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Juraj Blanár",
+          "title": "Minister for Foreign and European -- Affairs"
+        },
+        {
+          "name": "Jozef Ráž",
+          "title": "Minister for Transport"
+        },
+        {
+          "name": "Richard Takáč",
+          "title": "Minister for Agriculture and Rural -- Development"
+        },
+        {
+          "name": "Robert Kaliňák",
+          "title": "Deputy Prime Minister and Minister for -- Defence"
+        },
+        {
+          "name": "Erik Tomáš",
+          "title": "Minister for Labour, Social Affairs and -- the Family"
+        },
+        {
+          "name": "Tomáš Taraba",
+          "title": "Deputy Prime Minister and Minister for -- the Environment"
+        },
+        {
+          "name": "Tomáš Drucker",
+          "title": "Minister for Education, Science, -- Research and Sport"
+        },
+        {
+          "name": "Martina Šimkovičová",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Zuzana Dolinková",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Lucia Kurilovská",
+          "title": "State Secretary at the Ministry of the -- Interior"
+        },
+        {
+          "name": "Patrik Krauspe",
+          "title": "State Secretary at the Ministry of the -- Interior"
+        },
+        {
+          "name": "Pavol Gašpar",
+          "title": "State Secretary at the Ministry of Justice"
+        },
+        {
+          "name": "Milan Hodás",
+          "title": "State Secretary at the Ministry of Justice"
+        },
+        {
+          "name": "Radovan Majerský",
+          "title": "State Secretary at the Ministry of -- Finance"
+        },
+        {
+          "name": "Daniela Klučková",
+          "title": "State Secretary at the Ministry of -- Finance"
+        },
+        {
+          "name": "Marek Eštok",
+          "title": "State Secretary at the Ministry of Foreign -- and European Affairs"
+        },
+        {
+          "name": "Rastislav Chovanec",
+          "title": "State Secretary at the Ministry of Foreign -- and European Affairs"
+        },
+        {
+          "name": "Kamil Šaško",
+          "title": "State Secretary at the Ministry of the -- Economy"
+        },
+        {
+          "name": "Vladimír Šimoňák",
+          "title": "State Secretary at the Ministry of the -- Economy"
+        },
+        {
+          "name": "Michal Kaliňák",
+          "title": "State Secretary at the Ministry of -- Investment, Regional Development and -- Digitalisation"
+        },
+        {
+          "name": "Martin Bezek",
+          "title": "State Secretary at the Ministry of -- Investment, Regional Development and -- Digitalisation"
+        },
+        {
+          "name": "Igor Choma",
+          "title": "State Secretary at the Ministry of -- Transport"
+        },
+        {
+          "name": "Denisa Žiláková",
+          "title": "State Secretary at the Ministry of -- Transport"
+        },
+        {
+          "name": "Vladimír Vnuk",
+          "title": "State Secretary at the Ministry of -- Agriculture and Rural Development"
+        },
+        {
+          "name": "Mário Maruška",
+          "title": "State Secretary at the Ministry of -- Agriculture and Rural Development"
+        },
+        {
+          "name": "Štefan Kuffa",
+          "title": "State Secretary at the Ministry of Culture"
+        },
+        {
+          "name": "Slavomír Partila",
+          "title": "State Secretary at the Ministry of -- Education, Science, Research and Sport"
+        },
+        {
+          "name": "Róbert Zsembera",
+          "title": "State Secretary at the Ministry of -- Education, Science, Research and Sport"
+        },
+        {
+          "name": "Ján Krišanda",
+          "title": "State Secretary at the Ministry of -- Education, Science, Research and Sport"
+        },
+        {
+          "name": "Igor Melicher",
+          "title": "State Secretary at the Ministry of -- Defence"
+        },
+        {
+          "name": "Branislav Ondruš",
+          "title": "State Secretary at the Ministry of Labour, -- Social Affairs and the Family"
+        },
+        {
+          "name": "Filip Kuffa",
+          "title": "State Secretary at the Ministry of the -- Environment"
+        },
+        {
+          "name": "Jozef Smatana",
+          "title": "State Secretary at the Ministry of the -- Environment"
+        },
+        {
+          "name": "Michal Štofko",
+          "title": "State Secretary at the Ministry of Health"
+        },
+        {
+          "name": "Ladislav Slobodník",
+          "title": "State Secretary at the Ministry of Health"
+        }
+      ]
+    },
+    "SLOVENIA": {
+      "name": "SLOVENIA",
+      "persons": [
+        {
+          "name": "Robert Golob",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Tanja Fajon",
+          "title": "Deputy Prime Minister, Minister for -- Foreign and European Affairs"
+        },
+        {
+          "name": "Luka Mesec",
+          "title": "Deputy Prime Minister, Minister for -- Labour, Family, Social Affairs and Equal -- Opportunities"
+        },
+        {
+          "name": "Klemen Boštjančič",
+          "title": "Deputy Prime Minister, Minister for -- Finance"
+        },
+        {
+          "name": "Matej Arčon",
+          "title": "Deputy Prime Minister, Minister without -- portfolio, responsible for Relations -- between the Republic of Slovenia and -- the Autochthonous Slovenian National -- Community in Neighbouring Countries, -- and between the Republic of Slovenia -- and Slovenians Abroad"
+        },
+        {
+          "name": "Borut Sajovic",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Branko Zlobko",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Andreja Kokalj",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Franc Props",
+          "title": "Minister for Public Administration"
+        },
+        {
+          "name": "Valentina Prevolnik Rupel",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Simon Maljevac",
+          "title": "Minister for a Solidarity-Based Future"
+        },
+        {
+          "name": "Bojan Kumer",
+          "title": "Minister for the Environment, Climate -- and Energy"
+        },
+        {
+          "name": "Vinko Logaj",
+          "title": "Minister for Education"
+        },
+        {
+          "name": "Igor Papič",
+          "title": "Minister for Higher Education, Science -- and Innovation"
+        },
+        {
+          "name": "Matjaž Han",
+          "title": "Minister for the Economy, Tourism and -- Sport"
+        },
+        {
+          "name": "Asta Vrečko",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Mateja Čalušić",
+          "title": "Minister for Agriculture, Forestry and -- Food"
+        },
+        {
+          "name": "Alenka Bratušek",
+          "title": "Minister for Infrastructure"
+        },
+        {
+          "name": "Jože Novak",
+          "title": "Minister for Natural Resources and -- Spatial Planning"
+        },
+        {
+          "name": "Aleksander Jevšek",
+          "title": "Minister for Cohesion and Regional -- Development"
+        },
+        {
+          "name": "Ksenija Klampfer",
+          "title": "Minister for Digital Transformation"
+        },
+        {
+          "name": "Maša Kociper",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Igor Mally",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Nataša Lužar",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Vojko Volk",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Danijel Levičar",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Jure Leben",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Petra Aršič",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Metka Paragi",
+          "title": "State Secretary at the Office of the Prime -- Minister"
+        },
+        {
+          "name": "Neva Grašič",
+          "title": "State Secretary at the Ministry of Foreign -- and European Affairs"
+        },
+        {
+          "name": "Melita Gabrič",
+          "title": "State Secretary at the Ministry of Foreign -- and European Affairs"
+        },
+        {
+          "name": "Dan Juvan",
+          "title": "State Secretary at the Ministry of -- Labour, Family, Social Affairs and Equal -- Opportunities"
+        },
+        {
+          "name": "Igor Feketija",
+          "title": "State Secretary at the Ministry of -- Labour, Family, Social Affairs and Equal -- Opportunities"
+        },
+        {
+          "name": "Saša Jazbec",
+          "title": "State Secretary at the Ministry of -- Finance"
+        },
+        {
+          "name": "Nikolina Prah",
+          "title": "State Secretary at the Ministry of -- Finance"
+        },
+        {
+          "name": "Gordana Pipan",
+          "title": "State Secretary at the Ministry of -- Finance"
+        },
+        {
+          "name": "Katja Božič",
+          "title": "State Secretary at the Ministry of -- Finance"
+        },
+        {
+          "name": "Vesna Humar",
+          "title": "State Secretary at the Office of the -- Government of the Republic of Slovenia -- for Slovenians Abroad"
+        },
+        {
+          "name": "Marko Lovše",
+          "title": "State Secretary at the Ministry of -- Defence"
+        },
+        {
+          "name": "Boštjan Pavlin",
+          "title": "State Secretary at the Ministry of -- Defence"
+        },
+        {
+          "name": "Tina Heferle",
+          "title": "State Secretary at the Ministry of the -- Interior"
+        },
+        {
+          "name": "Helga Dobrin",
+          "title": "State Secretary at the Ministry of the -- Interior"
+        },
+        {
+          "name": "Maja Čarni Pretnar",
+          "title": "State Secretary at the Ministry of Justice"
+        },
+        {
+          "name": "Jure Trbič",
+          "title": "State Secretary at the Ministry of Public -- Administration"
+        },
+        {
+          "name": "Mojca Ramšak Pešec",
+          "title": "State Secretary at the Ministry of Public -- Administration"
+        },
+        {
+          "name": "Denis Kordež",
+          "title": "State Secretary at the Ministry of Health"
+        },
+        {
+          "name": "Klemen Ploštajner",
+          "title": "State Secretary at the Ministry for a -- Solidarity-Based Future"
+        },
+        {
+          "name": "Luka Omladič",
+          "title": "State Secretary at the Ministry for a -- Solidarity-Based Future"
+        },
+        {
+          "name": "Tina Seršen",
+          "title": "State Secretary at the Ministry of the -- Environment, Climate and Energy"
+        },
+        {
+          "name": "Uroš Vajgl",
+          "title": "State Secretary at the Ministry of the -- Environment, Climate and Energy"
+        },
+        {
+          "name": "Andrej Sotošek",
+          "title": "State Secretary at the Ministry of -- Education"
+        },
+        {
+          "name": "Janja Zupančič",
+          "title": "State Secretary at the Ministry of -- Education"
+        },
+        {
+          "name": "Urban Kodrič",
+          "title": "State Secretary at the Ministry of Higher -- Education, Science and Innovation"
+        },
+        {
+          "name": "Jure Gašparič",
+          "title": "State Secretary at the Ministry of Higher -- Education, Science and Innovation"
+        },
+        {
+          "name": "Dejan Židan",
+          "title": "State Secretary at the Ministry of the -- Economy, Tourism and Sport"
+        },
+        {
+          "name": "Matevž Frangež",
+          "title": "State Secretary at the Ministry of the -- Economy, Tourism and Sport"
+        },
+        {
+          "name": "Marko Rusjan",
+          "title": "State Secretary at the Ministry of Culture"
+        },
+        {
+          "name": "Matevž Čelik Vidmar",
+          "title": "State Secretary at the Ministry of Culture"
+        },
+        {
+          "name": "Maša Žagar",
+          "title": "State Secretary at the Ministry of -- Agriculture, Forestry and Food"
+        },
+        {
+          "name": "Andrej Rajh",
+          "title": "State Secretary at the Ministry of -- Infrastructure"
+        },
+        {
+          "name": "Miran Gajšek",
+          "title": "State Secretary at the Ministry of Natural -- Resources and Spatial Planning"
+        },
+        {
+          "name": "Marko Koprivc",
+          "title": "State Secretary at the Ministry of -- Cohesion and Regional Development"
+        },
+        {
+          "name": "Srečko Đurov",
+          "title": "State Secretary at the Ministry of -- Cohesion and Regional Development"
+        },
+        {
+          "name": "Aida Kamišalić Latifić",
+          "title": "State Secretary at the Ministry of Digital -- Transformation"
+        },
+        {
+          "name": "Miroslav Kranjc",
+          "title": "State Secretary at the Ministry of Digital -- Transformation"
+        },
+        {
+          "name": "Pedro Sánchez Pérez-",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "María Jesús Montero",
+          "title": "First Deputy Prime Minister and Minister -- for Finance"
+        },
+        {
+          "name": "Jesús Gascón Catalán",
+          "title": "State Secretary for Finance"
+        },
+        {
+          "name": "María José Gualda Romero",
+          "title": "State Secretary for the Budget and -- Expenditure"
+        },
+        {
+          "name": "Yolanda Díaz Pérez",
+          "title": "Second Deputy Prime Minister and -- Minister for Work and the Social -- Economy"
+        },
+        {
+          "name": "Joaquín Pérez Rey",
+          "title": "State Secretary for Employment"
+        },
+        {
+          "name": "María Amparo Merino Segovia",
+          "title": "State Secretary for the Social Economy"
+        },
+        {
+          "name": "Sara Aagesen Muñoz",
+          "title": "Third Deputy Prime Minister and Minister -- for the Ecological Transition and the -- Demographic Challenge"
+        },
+        {
+          "name": "Hugo Alfonso Morán",
+          "title": "State Secretary for the Environment"
+        },
+        {
+          "name": "Joan Groizard Payeras",
+          "title": "State Secretary for Energy"
+        },
+        {
+          "name": "José Manuel Albares Bueno",
+          "title": "Minister for Foreign Affairs, the -- European Union and Cooperation"
+        },
+        {
+          "name": "Diego Martínez Belío",
+          "title": "State Secretary for Foreign and Global -- Affairs"
+        },
+        {
+          "name": "Fernando Mariano Sampedro",
+          "title": "State Secretary for the European Union"
+        },
+        {
+          "name": "Eva Granados Galiano",
+          "title": "State Secretary for International -- Cooperation"
+        },
+        {
+          "name": "Susana Sumelzo Jordán",
+          "title": "State Secretary for Ibero-America and -- the Caribbean and Spanish around the -- World"
+        },
+        {
+          "name": "Félix Bolaños García",
+          "title": "Minister for the Prime Minister’s Office, -- Justice and Relations with Parliament"
+        },
+        {
+          "name": "Manuel Olmedo Palacios",
+          "title": "State Secretary for Justice"
+        },
+        {
+          "name": "Rafael Simancas Simancas",
+          "title": "State Secretary for Relations with -- Parliament and Constitutional Affairs"
+        },
+        {
+          "name": "Margarita Robles Fernández",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Amparo Valcarce García",
+          "title": "State Secretary for Defence"
+        },
+        {
+          "name": "Fernando Grande-Marlaska",
+          "title": "Minister for the Interior"
+        },
+        {
+          "name": "Ana María Calvo Sastre",
+          "title": "State Secretary for Security"
+        },
+        {
+          "name": "Óscar Puente Santiago",
+          "title": "Minister for Transport and Sustainable -- Mobility"
+        },
+        {
+          "name": "José Antonio Santano Clavero",
+          "title": "State Secretary for Transport and -- Sustainable Mobility"
+        },
+        {
+          "name": "María del Pilar Alegría",
+          "title": "Minister for Education, Vocational -- Training and Sport, Government -- Spokesperson"
+        },
+        {
+          "name": "Abelardo De La Rosa Díaz",
+          "title": "State Secretary for Education"
+        },
+        {
+          "name": "José Manuel Rodríguez Uribes",
+          "title": "President of the National Sports Council"
+        },
+        {
+          "name": "Jordi Hereu Boher",
+          "title": "Minister for Industry and Tourism"
+        },
+        {
+          "name": "Jordi García Brustenga",
+          "title": "State Secretary for Industry"
+        },
+        {
+          "name": "Rosario Sánchez Grau",
+          "title": "State Secretary for Tourism"
+        },
+        {
+          "name": "Luis Planas Puchades",
+          "title": "Minister for Agriculture, Fisheries and -- Food"
+        },
+        {
+          "name": "María Begoña García Bernal",
+          "title": "State Secretary for Agriculture and Food"
+        },
+        {
+          "name": "Ana Rodríguez Castaño",
+          "title": "Secretary-General for Agricultural -- Resources and Food Security"
+        },
+        {
+          "name": "María Isabel Artime García",
+          "title": "Secretary-General for Fisheries"
+        },
+        {
+          "name": "Ángel Víctor Torres Pérez",
+          "title": "Minister for Territorial Policy and -- Democratic Memory"
+        },
+        {
+          "name": "Fernando Martínez López",
+          "title": "State Secretary for Democratic Memory"
+        },
+        {
+          "name": "Arcadi España García",
+          "title": "State Secretary for Territorial Policy"
+        },
+        {
+          "name": "Isabel Rodríguez García",
+          "title": "Minister for Housing and the Urban -- Agenda"
+        },
+        {
+          "name": "Francisco David Lucas Parrón",
+          "title": "State Secretary for Housing and the -- Urban Agenda"
+        },
+        {
+          "name": "Ernest Urtasun Domènech",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Jordi Martí Grau",
+          "title": "State Secretary for Culture"
+        },
+        {
+          "name": "Carmen Páez Soria",
+          "title": "Undersecretary for Culture"
+        },
+        {
+          "name": "Carlos Cuerpo Caballero",
+          "title": "Minister for the Economy, Trade and -- Business"
+        },
+        {
+          "name": "Israel Arroyo Martínez",
+          "title": "State Secretary for Economic Affairs and -- Support for Business"
+        },
+        {
+          "name": "María Amparo López Senovilla",
+          "title": "State Secretary for Trade"
+        },
+        {
+          "name": "Paula Conthe Calvo",
+          "title": "Secretary-General of the Treasury and -- International Finance"
+        },
+        {
+          "name": "Mónica García Gómez",
+          "title": "Minister for Health"
+        },
+        {
+          "name": "Javier Padilla Bernáldez",
+          "title": "State Secretary for Health"
+        },
+        {
+          "name": "Pablo Bustinduy Amador",
+          "title": "Minister for Social Rights, Consumer -- Affairs and the 2030 Agenda"
+        },
+        {
+          "name": "María Rosa Martínez",
+          "title": "State Secretary for Social Rights"
+        },
+        {
+          "name": "Diana Morant Ripoll",
+          "title": "Minister for Science, Innovation and -- Universities"
+        },
+        {
+          "name": "Juan Cruz Cigudosa García",
+          "title": "State Secretary for Science, Innovation -- and Universities"
+        },
+        {
+          "name": "Ana María del Carmen Redondo",
+          "title": "Minister for Equality"
+        },
+        {
+          "name": "María Guijarros Ceballos",
+          "title": "State Secretary for Equality and for the -- Eradication of Violence against Women"
+        },
+        {
+          "name": "Elma Saiz Delgado",
+          "title": "Minister for Inclusion, Social Security -- and Migration"
+        },
+        {
+          "name": "Pilar Cancela Rodríguez",
+          "title": "State Secretary for Migration"
+        },
+        {
+          "name": "Borja Suárez Corujo",
+          "title": "State Secretary for Social Security and -- Pensions"
+        },
+        {
+          "name": "Óscar López Águeda",
+          "title": "Minister for Digital Transformation and -- the Civil Service"
+        },
+        {
+          "name": "María González Veracruz",
+          "title": "State Secretary for Digitalisation and -- Artificial Intelligence"
+        },
+        {
+          "name": "Antonio Hernando Vera",
+          "title": "State Secretary for Telecommunications -- and Digital Infrastructure"
+        },
+        {
+          "name": "Clara Mapelli Marchena",
+          "title": "State Secretary for the Civil Service"
+        },
+        {
+          "name": "Sira Abed Rego",
+          "title": "Minister for Youth and Children"
+        },
+        {
+          "name": "Rubén Pérez Correa",
+          "title": "State Secretary for Youth and Children"
+        },
+        {
+          "name": "Andrés Barragán Urbiola",
+          "title": "Secretary-General for Consumer Affairs -- and Gambling"
+        },
+        {
+          "name": "Ulf Kristersson",
+          "title": "Prime Minister"
+        },
+        {
+          "name": "Johan Stuart",
+          "title": "State Secretary to the Prime Minister"
+        },
+        {
+          "name": "Anna Dahlberg",
+          "title": "State Secretary to the Prime Minister"
+        },
+        {
+          "name": "Johan Jakobsson",
+          "title": "State Secretary to the Prime Minister"
+        },
+        {
+          "name": "Elisabeth Svantesson",
+          "title": "Minister for Finance"
+        },
+        {
+          "name": "Jesper Ahlgren",
+          "title": "State Secretary to the Minister for -- Finance"
+        },
+        {
+          "name": "Lars Hjälmered",
+          "title": "State Secretary to the Minister for -- Finance"
+        },
+        {
+          "name": "Carolina Lindholm",
+          "title": "State Secretary to the Minister for -- Finance"
+        },
+        {
+          "name": "Johanna Lybeck Lilja",
+          "title": "State Secretary to the Minister for -- Finance"
+        },
+        {
+          "name": "Parisa Liljestrand",
+          "title": "Minister for Culture"
+        },
+        {
+          "name": "Karin Svanborg-Sjövall",
+          "title": "State Secretary to the Minister for -- Culture"
+        },
+        {
+          "name": "Ebba Busch",
+          "title": "Minister for Energy, Business and -- Industry and Deputy Prime Minister"
+        },
+        {
+          "name": "Maja Lundbäck",
+          "title": "State Secretary to the Minister for -- Energy, Business and Industry"
+        },
+        {
+          "name": "Sara Modig",
+          "title": "State Secretary to the Minister for -- Energy, Business and Industry"
+        },
+        {
+          "name": "Romina Pourmokhtari",
+          "title": "Minister for Climate and the Environment"
+        },
+        {
+          "name": "Daniel Westlén",
+          "title": "State Secretary to the Minister for -- Climate and the Environment"
+        },
+        {
+          "name": "Helena Dyrssen",
+          "title": "State Secretary to the Minister for -- Climate and the Environment"
+        },
+        {
+          "name": "Peter Kullgren",
+          "title": "Minister for Rural Affairs"
+        },
+        {
+          "name": "Daniel Liljeberg",
+          "title": "State Secretary to the Minister for Rural -- Affairs"
+        },
+        {
+          "name": "Gunnar Strömmer",
+          "title": "Minister for Justice"
+        },
+        {
+          "name": "Charlotte Kugelberg",
+          "title": "State Secretary to the Minister for -- Justice"
+        },
+        {
+          "name": "Mikael Kullberg",
+          "title": "State Secretary to the Minister for -- Justice"
+        },
+        {
+          "name": "Johan Forssell",
+          "title": "Minister for Migration"
+        },
+        {
+          "name": "Anders Hall",
+          "title": "State Secretary to the Minister for -- Migration"
+        },
+        {
+          "name": "Simona Mohamsson",
+          "title": "Minister for Education and Integration"
+        },
+        {
+          "name": "David Lindberg",
+          "title": "State Secretary to the Minister for -- Education and Integration"
+        },
+        {
+          "name": "Adam Alfredsson",
+          "title": "State Secretary to the Minister for -- Education and Integration"
+        },
+        {
+          "name": "Oscar Wåglund Söderström",
+          "title": "State Secretary to the Minister for -- Education and Integration"
+        },
+        {
+          "name": "Lotta Edholm",
+          "title": "Minister for Upper Secondary School, -- Higher Education and Research"
+        },
+        {
+          "name": "Maria Nilsson",
+          "title": "State Secretary to the Minister for Upper -- Secondary School, Higher Education -- and Research"
+        },
+        {
+          "name": "Pål Jonson",
+          "title": "Minister for Defence"
+        },
+        {
+          "name": "Peter Sandwall",
+          "title": "State Secretary to the Minister for -- Defence"
+        },
+        {
+          "name": "Carl-Oskar Bohlin",
+          "title": "Minister for Civil Defence"
+        },
+        {
+          "name": "Johan Berggren",
+          "title": "State Secretary to the Minister for Civil -- Defence"
+        },
+        {
+          "name": "Andreas Carlson",
+          "title": "Minister for Infrastructure and Housing"
+        },
+        {
+          "name": "Johan Davidson",
+          "title": "State Secretary to the Minister for -- Infrastructure and Housing"
+        },
+        {
+          "name": "Johan Britz",
+          "title": "Minister for Employment"
+        },
+        {
+          "name": "Erik Scheller",
+          "title": "State Secretary to the Minister for -- Employment"
+        },
+        {
+          "name": "Nina Larsson",
+          "title": "Minister for Gender Equality"
+        },
+        {
+          "name": "Katarina Lundahl",
+          "title": "State Secretary to the Minister for -- Gender Equality"
+        },
+        {
+          "name": "Maria Malmer Stenergard",
+          "title": "Minister for Foreign Affairs"
+        },
+        {
+          "name": "Dag Hartelius",
+          "title": "Cabinet Secretary to the Minister for -- Foreign Affairs"
+        },
+        {
+          "name": "Benjamin Dousa",
+          "title": "Minister for International Development -- Cooperation and Foreign Trade"
+        },
+        {
+          "name": "Karin Juhlin",
+          "title": "State Secretary to the Minister for -- International Development Cooperation -- and Foreign Trade"
+        },
+        {
+          "name": "Diana Janse",
+          "title": "State Secretary to the Minister for -- International Development Cooperation -- and Foreign Trade"
+        },
+        {
+          "name": "Niklas Wykman",
+          "title": "Minister for Financial Markets"
+        },
+        {
+          "name": "Johan Almenberg",
+          "title": "State Secretary to the Minister for -- Financial Markets"
+        },
+        {
+          "name": "Erik Slottner",
+          "title": "Minister for Public Administration"
+        },
+        {
+          "name": "Natasa Ristic Davidson",
+          "title": "State Secretary to the Minister for Public -- Administration"
+        },
+        {
+          "name": "Jessica Rosencrantz",
+          "title": "Minister for EU Affairs"
+        },
+        {
+          "name": "Christian Danielsson",
+          "title": "State Secretary to the Minister for EU -- Affairs"
+        },
+        {
+          "name": "Anna Tenje",
+          "title": "Minister for the Elderly and Social -- Security"
+        },
+        {
+          "name": "Johan Höij",
+          "title": "State Secretary to the Minister for the -- Elderly and Social Security"
+        },
+        {
+          "name": "Jakob Forssmed",
+          "title": "Minister for Social Affairs"
+        },
+        {
+          "name": "Petra Noreback",
+          "title": "State Secretary to the Minister for Social -- Affairs"
+        },
+        {
+          "name": "Camilla Waltersson",
+          "title": "Minister for Social Services"
+        },
+        {
+          "name": "Minna Ljunggren",
+          "title": "State Secretary to the Minister for Social -- Services"
+        },
+        {
+          "name": "Elisabet Lann",
+          "title": "Minister for Health Care"
+        },
+        {
+          "name": "Michaela Hollis",
+          "title": "State Secretary to the Minister for Health -- Care"
+        }
+      ]
+    }
+  }
+}

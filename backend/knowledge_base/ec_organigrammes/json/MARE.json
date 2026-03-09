@@ -1,207 +1,255 @@
 {
   "dg_code": "MARE",
-  "dg_name": "Maritime Affairs and Fisheries",
-  "commissioner": "Costas Kadis",
-  "date_of_effect": "2025-11-01",
-  "director_general": {
-    "name": "Charlina Vitcheva",
-    "assistants": [
-      "Yasmin Schinasi Romeu",
-      "Francois Aubree"
-    ]
-  },
+  "dg_name": "Directorate-General for Maritime Affairs and Fisheries",
+  "commissioner": "",
+  "director_general": "Charlina Vitcheva",
+  "director_general_email": "Charlina.VITCHEVA@ec.europa.eu",
   "deputy_directors_general": [
     {
-      "name": "Kestutis Sadauskas"
-    }
-  ],
-  "principal_adviser": {
-    "name": "Stefan De Keersmaecker",
-    "area": "Strategic Support for the European Oceans Pact"
-  },
-  "agencies": [
-    {
-      "code": "EFCA",
-      "name": "European Fisheries Control Agency",
-      "director": "Michael Huebel"
-    }
-  ],
-  "advisers": [
-    {
-      "name": "Isabelle Garzon",
-      "area": "International Affairs"
+      "name": "Joao Aguiar Machado",
+      "email": "JOAO.AGUIAR-MACHADO@EC.EUROPA.EU",
+      "responsibilities": ""
     },
     {
-      "name": "Vincent Faynel",
-      "deputy": "Luca Arnasson",
-      "area": "Sustainable Blue Economy/CINEA D.3"
+      "name": "Kestutis Sadauskas",
+      "email": "Kestutis.SADAUSKAS@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "MARE.A",
-      "name": "Maritime Policy & Blue Economy",
+      "code": "",
+      "name": "General",
+      "director": "François Aubrée",
+      "director_email": "Francois.AUBREE@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Yasmin Schinasi Romeu",
+          "head_email": "Yasmina.SCHINASI-ROMEU@ec.europa.eu",
+          "head_phone": "+32 229-96446"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "MARITIME POLICY AND BLUE ECONOMY",
       "director": "Delilah Al Khudhairy",
+      "director_email": "Delilah.AL-KHUDHAIRY@ec.europa.eu",
       "units": [
         {
-          "code": "MARE.A.1",
-          "name": "Maritime Innovation, Marine Knowledge & Investment",
-          "head": "Andrea Stronchinesc",
-          "deputy": "Gwenaëlle Monget"
+          "code": "",
+          "name": "",
+          "head": "Andreea Strachinescu Olteanu",
+          "head_email": "OLTEANU@ec.europa.eu",
+          "head_phone": "+32 229-62488"
         },
         {
-          "code": "MARE.A.2",
-          "name": "Blue Economy Sectors, Aquaculture & Maritime Spatial Planning",
+          "code": "",
+          "name": "",
           "head": "Felix Leinemann",
-          "deputy": "Anita Laura Del Cru Dueñas"
+          "head_email": "Felix.LEINEMANN@ec.europa.eu",
+          "head_phone": "+32 229-83093"
         },
         {
-          "code": "MARE.A.3",
-          "name": "Seabasin Strategies: Maritime Regional Cooperation & Marine Security",
-          "head": "Laurent Geoffroy",
-          "deputy": "Silvia Tagova"
+          "code": "",
+          "name": "",
+          "head": "Christos Economou",
+          "head_email": "Christos.Economou@ec.europa.eu",
+          "head_phone": "+32 229-66310"
         },
         {
-          "code": "MARE.A.4",
-          "name": "Economic Analysis, Markets & Impact Assessment",
-          "head": "Sven Langejuik",
-          "deputy": "Maria Caño Calvo Santos"
+          "code": "",
+          "name": "",
+          "head": "Sven Langedijk",
+          "head_email": "Sven.LANGEDIJK@ec.europa.eu",
+          "head_phone": "+32 229-83979"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Luca Marangoni",
+          "head_email": "Luca.MARANGONI@ec.europa.eu",
+          "head_phone": "+32 229-80530"
         }
       ]
     },
     {
-      "code": "MARE.B",
-      "name": "International Ocean Governance & Sustainable Fisheries",
-      "director": "Fernando Andresen Guimaraes",
+      "code": "Dir B",
+      "name": "INTERNATIONAL OCEAN GOVERNANCE AND SUSTAINABLE FISHERIES",
+      "director": "Fernando Andresen",
+      "director_email": "GUIMARAES@ec.europa.eu",
       "units": [
         {
-          "code": "MARE.B.1",
-          "name": "Ocean Governance: Law of the Sea, Arctic Policy",
-          "head": "Raphaël Goulet",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Isabelle Garzon",
+          "head_email": "Isabelle.GARZON@ec.europa.eu",
+          "head_phone": "+32 229-51428"
         },
         {
-          "code": "MARE.B.2",
-          "name": "Regional Fisheries, Management Organisations",
-          "head": "Vacant",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Raphael Goulet",
+          "head_email": "Raphael.GOULET@ec.europa.eu",
+          "head_phone": "+32 229-92470"
         },
         {
-          "code": "MARE.B.3",
-          "name": "Sustainable Fisheries & Sustainable Fisheries Partnership Agreements (SFPA)",
+          "code": "",
+          "name": "",
+          "head": "Stijn Billiet",
+          "head_email": "Stijn.BILLIET@ec.europa.eu",
+          "head_phone": "+32 229-57641"
+        },
+        {
+          "code": "",
+          "name": "",
           "head": "Luis Molledo",
-          "deputy": "Viviane Rutto-Monnoyeur"
+          "head_email": "Luis.MOLLEDO@ec.europa.eu",
+          "head_phone": "+32 229-95026"
         },
         {
-          "code": "MARE.B.4",
-          "name": "Illegal, Unreported & Unregulated Fisheries Policy",
+          "code": "",
+          "name": "",
           "head": "Roberto Cesari",
-          "deputy": "Paulina Nixdorff"
+          "head_email": "Roberto.Cesari@ec.europa.eu",
+          "head_phone": "+32 229-94276"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stephen Davies",
+          "head_email": "Stephen.Davies@ec.europa.eu",
+          "head_phone": "+32 229-63248"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefaan De Rynck",
+          "head_email": "Stefaan.DE-RYNCK@ec.europa.eu",
+          "head_phone": "+32 229-63421"
         }
       ]
     },
     {
-      "code": "MARE.C",
-      "name": "Fisheries Policy Atlantic, North Sea, Baltic & Outermost Regions",
+      "code": "Dir C",
+      "name": "FISHERIES POLICY ATLANTIC, NORTH SEA, BALTIC AND OUTERMOST REGIONS",
       "director": "Fabrizio Donatella",
+      "director_email": "Fabrizio.Donatella@ec.europa.eu",
       "units": [
         {
-          "code": "MARE.C.1",
-          "name": "Fisheries Management Atlantic, North Sea & Baltic-Sea",
+          "code": "",
+          "name": "",
           "head": "Maja Kirchner",
-          "deputy": "Annemarie Keggelagers"
+          "head_email": "Maja.Kirchner@ec.europa.eu",
+          "head_phone": "+32 229-80508"
         },
         {
-          "code": "MARE.C.2",
-          "name": "Regional Support Atlantic, North Sea, Baltic Sea & Outermost Regions",
-          "head": "Vacant",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Vincent Favrel",
+          "head_email": "Vincent.FAVREL@ec.europa.eu",
+          "head_phone": "+32 229-93710"
         },
         {
-          "code": "MARE.C.3",
-          "name": "Scientific Advice & Data Collection",
+          "code": "",
+          "name": "",
           "head": "Raluca Ivanescu",
-          "deputy": "Armand Peytamont"
+          "head_email": "Raluca.IVANESCU@ec.europa.eu",
+          "head_phone": "+32 229-68667"
         },
         {
-          "code": "MARE.C.4",
-          "name": "Data Management",
-          "head": "Evgeniia Reushcher",
-          "deputy": "Alessandra M'Qerqum"
+          "code": "",
+          "name": "",
+          "head": "Eckehard Reussner",
+          "head_email": "Eckehard.REUSSNER@ec.europa.eu",
+          "head_phone": "+32 229-66924"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eva Maria Carballeira",
+          "head_email": "FERNANDEZ@ec.europa.eu",
+          "head_phone": "+32 229-52515"
         }
       ]
     },
     {
-      "code": "MARE.D",
-      "name": "Fisheries Policy Mediterranean & Black Sea",
-      "director": "Styllianos Mitollidis",
+      "code": "Dir D",
+      "name": "FISHERIES POLICY MEDITERRANEAN AND BLACK SEA",
+      "director": "Stylianos Mitolidis",
+      "director_email": "Stylianos.MITOLIDIS@ec.europa.eu",
       "units": [
         {
-          "code": "MARE.D.1",
-          "name": "Fisheries Management Mediterranean & Black Sea",
-          "head": "Helena Vitalova",
-          "deputy": "Damiano Borck"
+          "code": "",
+          "name": "",
+          "head": "Milena Mihaylova",
+          "head_email": "Milena.MIHAYLOVA@ec.europa.eu",
+          "head_phone": "+32 229-98671"
         },
         {
-          "code": "MARE.D.2",
-          "name": "Structural Support Mediterranean, Black Sea & Outermost Regions",
-          "head": "Ives Van Poede",
-          "deputy": "Domingos Diomara"
+          "code": "",
+          "name": "",
+          "head": "Yves Van Poeke",
+          "head_email": "Yves.Van-Poeke@ec.europa.eu",
+          "head_phone": "+32 229-93702"
         },
         {
-          "code": "MARE.D.3",
-          "name": "CFP & Structural Support: Policy Development & Coordination",
-          "head": "Vacant",
-          "deputy": "Eoin Mac Aodh"
+          "code": "",
+          "name": "",
+          "head": "Dovile Vaigauskaite",
+          "head_email": "Dovile.VAIGAUSKAITE@ec.europa.eu",
+          "head_phone": "+32 229-87637"
         },
         {
-          "code": "MARE.D.4",
-          "name": "Fisheries Control & Inspections",
-          "head": "Jerome Brocke",
-          "deputy": "Pablo Ganzetti"
+          "code": "",
+          "name": "",
+          "head": "Jérôme Broche",
+          "head_email": "Jerome.BROCHE@ec.europa.eu",
+          "head_phone": "+32 229-86128"
         }
       ]
     },
     {
-      "code": "MARE.E",
-      "name": "General Affairs & Resources",
-      "director": "Jürgen Müller",
+      "code": "Dir E",
+      "name": "GENERAL AFFAIRS AND RESOURCES",
+      "director": "Andrew Mathison",
+      "director_email": "Andrew.Mathison@ec.europa.eu",
       "units": [
         {
-          "code": "MARE.E.1",
-          "name": "Budget, Audit & Public Procurement",
-          "head": "Andrew Mathisin",
-          "deputy": "Aikaterine Georgeva"
+          "code": "",
+          "name": "",
+          "head": "Andrew Mathison",
+          "head_email": "Andrew.Mathison@ec.europa.eu",
+          "head_phone": "+32 229-56051"
         },
         {
-          "code": "MARE.E.2",
-          "name": "Inter-Institutional Matters, Strategic Programming & Communication",
-          "head": "Charo Preciada",
-          "deputy": "Barbara Pelvoert"
+          "code": "",
+          "name": "",
+          "head": "Carmen Preising",
+          "head_email": "Carmen.PREISING@ec.europa.eu",
+          "head_phone": "+32 229-86983"
         },
         {
-          "code": "MARE.E.3",
-          "name": "Performance, Audit, IT & Electronic Document Management",
-          "head": "Anna Pitko",
-          "deputy": "Zoltan Bolzinarte"
+          "code": "",
+          "name": "",
+          "head": "Anna Zito",
+          "head_email": "Anna.ZITO@ec.europa.eu",
+          "head_phone": "+32 229-95067"
         },
         {
-          "code": "MARE.E.4",
-          "name": "Legal Affairs",
-          "head": "Martina Coppierhammer",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Martina Doppelhammer",
+          "head_email": "Martina.DOPPELHAMMER@ec.europa.eu",
+          "head_phone": "+32 229-93660"
         }
       ]
-    },
-    {
-      "code": "MARE.C.5",
-      "name": "Management of Fisheries-Related with UK, Norway and Outermost Regions, External States",
-      "director": "Eva Maria Caballeira Fernandez",
-      "deputy": "Thomas Brogdeim"
     }
   ],
-  "notes": [
-    "D: Deputy to the Director",
-    "A: Mirror entity in Executive Agency"
-  ]
+  "num_directorates": 6,
+  "num_units": 26,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

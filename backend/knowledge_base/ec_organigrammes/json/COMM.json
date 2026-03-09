@@ -1,425 +1,499 @@
 {
   "dg_code": "COMM",
-  "dg_name": "Communication",
-  "full_name": "Directorate-General for Communication",
-  "date_of_effect": "2025-10-16",
-  "president": {
-    "name": "Ursula von der Leyen",
-    "title": "President"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "Dana Spinant",
-      "position": "Director-General"
+  "dg_name": "Directorate-General for Communication",
+  "commissioner": "",
+  "director_general": "Dana Spinant",
+  "director_general_email": "Dana.SPINANT@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Olivier Smith",
+      "email": "Olivier.SMITH@ec.europa.eu",
+      "responsibilities": ""
     },
-    "deputy_director_general": {
-      "name": "vacant",
-      "position": "Deputy Director-General"
-    },
-    "deputy_director_general_2": {
-      "name": "Sophia Eriksson Waterschoot",
-      "position": "Deputy Director-General"
-    },
-    "ec_chief_spokesperson": {
-      "name": "Paula Pinho",
-      "position": "EC Chief Spokesperson",
-      "note": "The EC Chief Spokesperson has an administrative reporting line to the Director General. The Spokesperson's Service is in charge of coordinating and delivering the political communication of the Commission under the direct political authority of the President"
-    },
-    "executive_communication_adviser": {
-      "name": "Jens Flosdorff",
-      "position": "Executive Communication Adviser"
-    },
-    "deputy_ec_chief_spokesperson": {
-      "name": "Arianna Podesta",
-      "position": "Deputy EC Chief Spokesperson",
-      "deputy": "Olof Gill"
-    },
-    "principal_advisers": [
-      {
-        "name": "Telmo Baltazar",
-        "title": "Principal Adviser",
-        "area": "Corporate & Political Communication"
-      },
-      {
-        "name": "vacant",
-        "title": "Principal Adviser",
-        "area": "Relations with Stakeholders, Civil Society, Think Tanks and Outreach"
-      }
-    ],
-    "dga_assistants": [
-      {
-        "name": "Sonia Plecita Brunstein",
-        "role": "Assistant to the DG"
-      },
-      {
-        "name": "Eveline Lecoq",
-        "role": "Assistant to the DG"
-      }
-    ],
-    "advisers": [
-      {
-        "name": "Anguel Konstantinov Beremliysky",
-        "title": "Adviser",
-        "area": "Strategy, Coordination & Governance",
-        "code": "COMM.02"
-      },
-      {
-        "name": "Renaud Soufflot de Magny",
-        "title": "Adviser",
-        "area": "Political Communication"
-      }
-    ],
-    "hr_correspondent": {
-      "name": "Carsten Luetz",
-      "code": "COMM.03",
-      "area": "HR Correspondent & Internal Communication"
-    },
-    "task_force": {
-      "name": "Dana Manescu",
-      "area": "Task Force for Strategic Communication & Countering Information Manipulation",
-      "code": "COMM.TF"
+    {
+      "name": "Sophia Eriksson",
+      "email": "Sophia.Eriksson@ec.europa.eu",
+      "responsibilities": ""
     }
-  },
-  "spokesperson_service": {
-    "spokesperson_unit_2": {
-      "code": "COMM.SP.02",
-      "name": "Spokesperson's Service",
-      "head": "Peter Valant"
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Eveline Lecoq",
+      "director_email": "Eveline.LECOQ@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sonia Plecita Ridzikova",
+          "head_email": "Sonia.PLECITA-RIDZIKOVA@ec.europa.eu",
+          "head_phone": "+32 229-97604"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Carsten Lietz",
+          "head_email": "Carsten.LIETZ@ec.europa.eu",
+          "head_phone": "+32 229-54119"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Konstantinov Beremliysky",
+          "head_email": "Konstantinov.BEREMLIYSKY@ec.europa.eu",
+          "head_phone": "+32 229-62846"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Telmo Baltazar",
+          "head_email": "Telmo.BALTAZAR@ec.europa.eu",
+          "head_phone": "+32 229-81384"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paula Pinho",
+          "head_email": "Paula.PINHO@ec.europa.eu",
+          "head_phone": "+32 229-20815"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jens Alexander Flosdorff",
+          "head_email": "Jens-Alexander.FLOSDORFF@ec.europa.eu",
+          "head_phone": "+32 229-52090"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Arianna Podesta",
+          "head_email": "Arianna.PODESTA@ec.europa.eu",
+          "head_phone": "+32 229-87024"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Olof Gill",
+          "head_email": "Olof.GILL@ec.europa.eu",
+          "head_phone": "+32 229-65966"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anitta Hipper",
+          "head_email": "Anitta.HIPPER@ec.europa.eu",
+          "head_phone": "+32 229-85691"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Peter Valant",
+          "head_email": "Peter.VALANT@ec.europa.eu",
+          "head_phone": "+32 229-54579"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Oana Hriscu",
+          "head_email": "Oana.HRISCU@ec.europa.eu",
+          "head_phone": "+32 229-54751"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Inga Höglund",
+          "head_email": "Inga.HOGLUND@ec.europa.eu",
+          "head_phone": "+32 229-56665"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "POLITICAL COMMUNICATION",
+      "director": "Stefan De Keersmaecker",
+      "director_email": "Stefan.DE-KEERSMAECKER@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Renaud Soufflot De Magny",
+          "head_email": "Renaud.Soufflot-De-Magny@ec.europa.eu",
+          "head_phone": "+32 229-54881"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Adalbert Jahnz",
+          "head_email": "Adalbert.JAHNZ@ec.europa.eu",
+          "head_phone": "+32 229-53156"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Elisaveta Dimitrova",
+          "head_email": "Elisaveta.DIMITROVA@ec.europa.eu",
+          "head_phone": "+32 229-58838"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Johanna Maria Pannebakker",
+          "head_email": "Johanna.Pannebakker@ec.europa.eu",
+          "head_phone": "+32 229-59655"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alain Taverriti",
+          "head_email": "Alain.TAVERRITI@ec.europa.eu",
+          "head_phone": "+32 229-62788"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "CITIZENS COMMUNICATION",
+      "director": "Sophia Eriksson",
+      "director_email": "Sophia.Eriksson@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Jens Mester",
+          "head_email": "Jens.MESTER@ec.europa.eu",
+          "head_phone": "+32 229-63973"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Patricia Libert",
+          "head_email": "Patricia.Libert@ec.europa.eu",
+          "head_phone": "+32 229-69230"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Karen Vandeweghe",
+          "head_email": "Karen.VANDEWEGHE@ec.europa.eu",
+          "head_phone": "+32 229-55427"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gaetane Ricard-Nihoul",
+          "head_email": "Gaetane.RICARD-NIHOUL@ec.europa.eu",
+          "head_phone": "+32 229-60331"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Annegret Ziller",
+          "head_email": "Annegret.ZILLER@ec.europa.eu",
+          "head_phone": "+32 229-91822"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "REPRESENTATIONS & COMMUNICATION IN MEMBER STATES",
+      "director": "Richard Kuehnel",
+      "director_email": "Richard.KUEHNEL@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Alessandro Giordani",
+          "head_email": "Alessandro.Giordani@ec.europa.eu",
+          "head_phone": "+32 229-54645"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dana Manescu",
+          "head_email": "Dana.MANESCU@ec.europa.eu",
+          "head_phone": "+32 229-54459"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Niovi Ringou",
+          "head_email": "Niovi.Ringou@ec.europa.eu",
+          "head_phone": "+30 210-7272134"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ramona Chiriac",
+          "head_email": "Ramona.CHIRIAC@ec.europa.eu",
+          "head_phone": "+40 21-2035400"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Barbara Gessler",
+          "head_email": "Barbara.GESSLER@ec.europa.eu",
+          "head_phone": "+32 229-56738"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefan Lock",
+          "head_email": "Stefan.LOCK@ec.europa.eu",
+          "head_phone": "+49 30-22802000"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wolfgang Buecherl",
+          "head_email": "Wolfgang.BUECHERL@ec.europa.eu",
+          "head_phone": "+49 30-22802000"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Peter Stano",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gabor Zupko",
+          "head_email": "Gabor.ZUPKO@ec.europa.eu",
+          "head_phone": "+32 229-89764"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Per Haugaard",
+          "head_email": "Per.Haugaard@ec.europa.eu",
+          "head_phone": "+45 33-144140"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Peter Power",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Elina Laurinen",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cecilia Thorfinn",
+          "head_email": "Cecilia.THORFINN@ec.europa.eu",
+          "head_phone": "+31 70-3135300"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sofia Moreira De Sousa",
+          "head_email": "Sofia.MOREIRA-DE-SOUSA@ec.europa.eu",
+          "head_phone": "+351 21-3509815"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jerneja Jug",
+          "head_email": "Jerneja.JUG@ec.europa.eu",
+          "head_phone": "+386 1-2528800"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne Calteux",
+          "head_email": "Anne.CALTEUX@ec.europa.eu",
+          "head_phone": "+352 4301-32515"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Elena Despott",
+          "head_email": "Maria-Elena.DESPOTT@ec.europa.eu",
+          "head_phone": "+32 229-99518"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniel Calleja Crespo",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nikolaos Isaris",
+          "head_email": "Nikolaos.ISARIS@ec.europa.eu",
+          "head_phone": "+357 22-817770"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Panicos Pourgourides",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jessica Larsson",
+          "head_email": "Jessica.LARSSON@ec.europa.eu",
+          "head_phone": "+33 1-40633800"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jessica Larsson",
+          "head_email": "Jessica.LARSSON@ec.europa.eu",
+          "head_phone": "+33 1-40633800"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Monika Ladmanova",
+          "head_email": "Monika.LADMANOVA@ec.europa.eu",
+          "head_phone": "+420 255708244"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andris Kuznieks",
+          "head_email": "Andris.KUZNIEKS@ec.europa.eu",
+          "head_phone": "+371 67085400"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Claudio Casini",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Elena Grech",
+          "head_email": "Elena.GRECH@ec.europa.eu",
+          "head_phone": "+39 06-69999100"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Yordanka Chobanova",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Annika Wäppling Korzinek",
+          "head_email": "KORZINEK@ec.europa.eu",
+          "head_phone": "+46 8-56244426"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ave Schank-Lukas",
+          "head_email": "Ave.SCHANK@ec.europa.eu",
+          "head_phone": "+372 6-264400"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katarzyna Smyk",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wojciech Wysocki",
+          "head_email": "Wojciech.WYSOCKI@ec.europa.eu",
+          "head_phone": "+48 71-3240909"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Patrick Lobis",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marius Vascega",
+          "head_email": "Marius.VASCEGA@ec.europa.eu",
+          "head_phone": "+370 5-2313191"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Thomas De Bethune",
+          "head_email": "Thomas.DE-BETHUNE@ec.europa.eu",
+          "head_phone": "+32 229-80944"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zrinka Ujevic",
+          "head_email": "Zrinka.UJEVIC@ec.europa.eu",
+          "head_phone": "+385 1-4681300"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "COMMUNICATION SUPPORT SERVICES",
+      "director": "Sylvain Hubert",
+      "director_email": "Sylvain.HUBERT@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Nathalie Davies",
+          "head_email": "Nathalie.Davies@ec.europa.eu",
+          "head_phone": "+32 229-64933"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Joachim Ott",
+          "head_email": "Joachim.Ott@ec.europa.eu",
+          "head_phone": "+32 229-61471"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stergios Vlachopoulos",
+          "head_email": "Stergios.VLACHOPOULOS@ec.europa.eu",
+          "head_phone": "+32 229-83012"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sonja Ziemer",
+          "head_email": "Sonja.ZIEMER@ec.europa.eu",
+          "head_phone": "+32 229-90748"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Rytis Martikonis",
+          "head_email": "Rytis.MARTIKONIS@ec.europa.eu",
+          "head_phone": "+32 229-55655"
+        }
+      ]
     }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "COMM.A",
-      "name": "Political Communication",
-      "director": {
-        "name": "Sophia Eriksson Waterschoot (acting)",
-        "position": "Director"
-      },
-      "units": {
-        "a1": {
-          "code": "COMM.A.1",
-          "name": "Social Media & Visual Communication",
-          "head_of_unit": {
-            "name": "Adalbert Jahnz",
-            "deputy": null
-          }
-        },
-        "a2": {
-          "code": "COMM.A.2",
-          "name": "Web Communication",
-          "head_of_unit": {
-            "name": "Elisaveta Dimitrova (acting)",
-            "deputy": null
-          }
-        },
-        "a3": {
-          "code": "COMM.A.3",
-          "name": "Media Monitoring & Analysis",
-          "head_of_unit": {
-            "name": "Johanna Pannebakker",
-            "deputy": null
-          }
-        },
-        "a4": {
-          "code": "COMM.A.4",
-          "name": "Audiovisual Service",
-          "head_of_unit": {
-            "name": "Nathalie Davies",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_b": {
-      "code": "COMM.B",
-      "name": "Citizens Communication",
-      "director": {
-        "name": "Stefanie Keersmaecker",
-        "position": "Director"
-      },
-      "units": {
-        "b1": {
-          "code": "COMM.B.1",
-          "name": "Campaign & Country Strategy",
-          "head_of_unit": {
-            "name": "Patricia Libert",
-            "deputy": null
-          }
-        },
-        "b2": {
-          "code": "COMM.B.2",
-          "name": "Youth",
-          "head_of_unit": {
-            "name": "Jovana Stojkovska (acting)",
-            "deputy": null
-          }
-        },
-        "b3": {
-          "code": "COMM.B.3",
-          "name": "Public Opinion & Citizens Engagement",
-          "head_of_unit": {
-            "name": "Gaetane Billard-Miskol",
-            "deputy": null
-          }
-        },
-        "b4": {
-          "code": "COMM.B.4",
-          "name": "Visitors",
-          "head_of_unit": {
-            "name": "Annegret Zeller",
-            "deputy": null
-          }
-        }
-      },
-      "adviser": {
-        "name": "vacant",
-        "area": "Corporate Communication Campaigns"
-      }
-    },
-    "directorate_c": {
-      "code": "COMM.C",
-      "name": "Representations & Communication in Member States",
-      "director": {
-        "name": "Richard Kuehnel",
-        "position": "Director"
-      },
-      "units": {
-        "c1": {
-          "code": "COMM.C.1",
-          "name": "Coordination",
-          "head_of_unit": {
-            "name": "Alessandro Giordani",
-            "deputy": null
-          }
-        },
-        "c2": {
-          "code": "COMM.C.2",
-          "name": "Legal Engagement, Europe Direct & Networks",
-          "head_of_unit": {
-            "name": "Dana Manescu",
-            "deputy": null
-          }
-        },
-        "c3": {
-          "code": "COMM.C.3",
-          "name": "Adviser for Communication in Member States",
-          "head_of_unit": {
-            "name": "Ierotheos Papadopoulos",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_d": {
-      "code": "COMM.D",
-      "name": "Communication Support Services",
-      "director": {
-        "name": "Fabrizio de Rosa",
-        "position": "Director"
-      },
-      "units": {
-        "d1": {
-          "code": "COMM.D.1",
-          "name": "Planning, Budget, Evaluation & Legal Affairs",
-          "head_of_unit": {
-            "name": "Sylvain Hubert",
-            "deputy": null
-          }
-        },
-        "d2": {
-          "code": "COMM.D.2",
-          "name": "Finance & Control",
-          "head_of_unit": {
-            "name": "Joachim Ott",
-            "deputy": null
-          }
-        },
-        "d3": {
-          "code": "COMM.D.3",
-          "name": "Procurement & Contract Solutions",
-          "head_of_unit": {
-            "name": "Stergios Vlachopoulos",
-            "deputy": null
-          }
-        },
-        "d4": {
-          "code": "COMM.D.4",
-          "name": "Digital Solutions",
-          "head_of_unit": {
-            "name": "Sonia Ziesemer",
-            "deputy": null
-          }
-        }
-      }
-    }
-  },
-  "representations_regional_representations": {
-    "representation_offices": [
-      {
-        "country": "Austria",
-        "location": "Vienna",
-        "head": "Patrick Lobis"
-      },
-      {
-        "country": "Belgium",
-        "location": "Brussels",
-        "head": "Thomas de Bethune"
-      },
-      {
-        "country": "Bulgaria",
-        "location": "Sofia",
-        "head": "Yordanka Chobanova"
-      },
-      {
-        "country": "Croatia",
-        "location": "Zagreb",
-        "head": "Zrinka Ujević"
-      },
-      {
-        "country": "Cyprus",
-        "location": "Nicosia",
-        "head": "Anna Damiti (acting)"
-      },
-      {
-        "country": "Czechia",
-        "location": "Prague",
-        "head": "Monika Ladmanova"
-      },
-      {
-        "country": "Denmark",
-        "location": "Copenhagen",
-        "head": "Per Haugaard"
-      },
-      {
-        "country": "Estonia",
-        "location": "Tallinn",
-        "head": "Ave Schank-Lukas"
-      },
-      {
-        "country": "Finland",
-        "location": "Helsinki",
-        "head": "Kati Laitinen (acting)"
-      },
-      {
-        "country": "France",
-        "location": "Paris",
-        "head": "Jessica Carlsson (acting)",
-        "regional": {
-          "location": "Marseille",
-          "head": "Pierre Loaec"
-        }
-      },
-      {
-        "country": "Germany",
-        "location": "Berlin",
-        "head": "Barbara Gessler",
-        "regional": [
-          {
-            "location": "Bonn",
-            "head": "Stefan Lock"
-          },
-          {
-            "location": "Munich",
-            "head": "Wolfgang Buechel"
-          }
-        ]
-      },
-      {
-        "country": "Greece",
-        "location": "Athens",
-        "head": "Nikos Riniou"
-      },
-      {
-        "country": "Hungary",
-        "location": "Budapest",
-        "head": "Gaborgyori"
-      },
-      {
-        "country": "Ireland",
-        "location": "Dublin",
-        "head": "Peter Power"
-      },
-      {
-        "country": "Italy",
-        "location": "Rome",
-        "head": "Claudio Cassini",
-        "regional": {
-          "location": "Milan",
-          "head": "Claudia Coila"
-        }
-      },
-      {
-        "country": "Latvia",
-        "location": "Riga",
-        "head": "Andris Kuzmiecs"
-      },
-      {
-        "country": "Lithuania",
-        "location": "Vilnius",
-        "head": "Marius Vaščega"
-      },
-      {
-        "country": "Luxembourg",
-        "location": "Luxembourg",
-        "head": "Anne Calteux"
-      },
-      {
-        "country": "Malta",
-        "location": "Valletta",
-        "head": "Maria Elena Despott"
-      },
-      {
-        "country": "Netherlands",
-        "location": "The Hague",
-        "head": "Cecilia Thorfinn (acting)"
-      },
-      {
-        "country": "Poland",
-        "location": "Warsaw",
-        "head": "Katarzyna Sayn",
-        "regional": {
-          "location": "Wroclaw",
-          "head": "Joanna Strzyrzyńska Lindberg"
-        }
-      },
-      {
-        "country": "Portugal",
-        "location": "Lisbon",
-        "head": "Sofia Moreira de Sousa"
-      },
-      {
-        "country": "Romania",
-        "location": "Bucharest",
-        "head": "Ramona Chiriac"
-      },
-      {
-        "country": "Slovakia",
-        "location": "Bratislava",
-        "head": "Radim Dindáček (acting)"
-      },
-      {
-        "country": "Slovenia",
-        "location": "Ljubljana",
-        "head": "Jerneja Jug Jerše"
-      },
-      {
-        "country": "Spain",
-        "location": "Madrid",
-        "head": "Nikolaos Isaris (acting)",
-        "regional": {
-          "location": "Barcelona",
-          "head": "Manuel Szapiro"
-        }
-      },
-      {
-        "country": "Sweden",
-        "location": "Stockholm",
-        "head": "Annika Wappling Korzinek"
-      }
-    ]
-  },
-  "notes": [
-    "The EC Chief Spokesperson has an administrative reporting line to the Director General. The Spokesperson's Service is in charge of coordinating and delivering the political communication of the Commission under the direct political authority of the President",
-    "COMM.SP.01 Spokesperson's Service has an administrative reporting line to Director A Political Communication"
-  ]
+  ],
+  "num_directorates": 5,
+  "num_units": 62,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

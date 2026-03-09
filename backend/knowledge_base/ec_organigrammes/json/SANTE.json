@@ -1,372 +1,408 @@
 {
   "dg_code": "SANTE",
-  "dg_name": "Directorate-General for Health & Food Safety",
-  "commissioner": {
-    "name": "Olivér Várhelyi",
-    "title": "Commissioner"
-  },
-  "director_general": {
-    "name": "Sandra Gallina",
-    "title": "Director-General",
-    "assistants": [
-      "Richard McGeehan",
-      "Luca Battistini"
-    ]
-  },
-  "principal_advisers": [
-    {
-      "name": "Vacant",
-      "role": "Health and Crisis Management"
-    },
-    {
-      "name": "Veronique Wasbauer",
-      "role": "Non-Communicable Diseases"
-    }
-  ],
-  "advisers": [
-    {
-      "name": "Wojciech Kalamarz",
-      "role": "International"
-    },
-    {
-      "name": "Francisco Perez Canado",
-      "role": "External Dimension of Health"
-    },
-    {
-      "name": "Johan Vernelen",
-      "role": "HR Correspondent"
-    },
-    {
-      "name": "Stefan Schreck",
-      "role": "Stakeholder Relations (deputising for the Director)"
-    }
-  ],
+  "dg_name": "Directorate-General for Health and Food Safety",
+  "commissioner": "",
+  "director_general": "Sandra Gallina",
+  "director_general_email": "Sandra.Gallina@ec.europa.eu",
   "deputy_directors_general": [
     {
-      "name": "Lorena Boix Alonso",
-      "title": "Deputy Director-General for Health",
-      "responsible_for": ["SANTE.B", "SANTE.C", "SANTE.D"],
-      "assistant": "Patricia Lamotte"
+      "name": "Sylvia Ferretti",
+      "email": "Sylvia.FERRETTI@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Marco Marsella",
+      "email": "Marco.Marsella@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Eva Maria Zamora Escribano",
+      "email": "Eva-Maria.Zamora-Escribano@ec.europa.eu",
+      "responsibilities": ""
     },
     {
       "name": "Claire Bury",
-      "title": "Deputy Director-General for Food Sustainability",
-      "responsible_for": ["SANTE.E", "SANTE.F", "SANTE.G"],
-      "assistant": "Julie Sainz"
-    }
-  ],
-  "special_units": [
-    {
-      "code": "SANTE.01",
-      "name": "Policy Strategy",
-      "head": "Cristina Modoran",
-      "deputy": "Thomas Van Cangh"
+      "email": "Claire.Bury@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "SANTE.A",
-      "name": "One Health",
+      "code": "",
+      "name": "General",
+      "director": "Richard Mcgeehan",
+      "director_email": "Richard.MCGEEHAN@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Cristina Modoran",
+          "head_email": "Cristina.Modoran@ec.europa.eu",
+          "head_phone": "+32 229-93665"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Johan Vernelen",
+          "head_email": "Johan.Vernelen@ec.europa.eu",
+          "head_phone": "+32 229-54737"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francisco Perez Canado",
+          "head_email": "Francisco.Perez-Canado@ec.europa.eu",
+          "head_phone": "+32 229-63851"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "ONE HEALTH",
       "director": "Roser Domenech Amado",
+      "director_email": "Roser.Domenech-Amado@ec.europa.eu",
       "units": [
         {
-          "code": "SANTE.A.1",
-          "name": "One Health, Antimicrobial Resistance",
+          "code": "",
+          "name": "",
+          "head": "Wojciech Kalamarz",
+          "head_email": "Wojciech.KALAMARZ@ec.europa.eu",
+          "head_phone": "+352 4301-34658"
+        },
+        {
+          "code": "",
+          "name": "",
           "head": "Ariane Vander Stappen",
-          "deputy": "Sigrid Weiland"
+          "head_email": "Ariane.VANDER-STAPPEN@ec.europa.eu",
+          "head_phone": "+32 229-80280"
         },
         {
-          "code": "SANTE.A.2",
-          "name": "Inter-Institutional Relations",
+          "code": "",
+          "name": "",
           "head": "Marta Moya Diaz",
-          "deputy": "Alina Timofte"
+          "head_email": "Marta.MOYA-DIAZ@ec.europa.eu",
+          "head_phone": "+32 229-94574"
         },
         {
-          "code": "SANTE.A.3",
-          "name": "Communication",
+          "code": "",
+          "name": "",
           "head": "Emer Traynor",
-          "deputy": "Frederic Vincent"
+          "head_email": "Emer.TRAYNOR@ec.europa.eu",
+          "head_phone": "+32 229-21548"
         },
         {
-          "code": "SANTE.A.4",
-          "name": "Multilateral International Relations",
+          "code": "",
+          "name": "",
           "head": "Florina Telea",
-          "deputy": "Sebastien Goux"
+          "head_email": "Florina.TELEA@ec.europa.eu",
+          "head_phone": "+32 229-81131"
         },
         {
-          "code": "SANTE.A.5",
-          "name": "Bilateral International Relations",
+          "code": "",
+          "name": "",
           "head": "Caroline Boeshertz",
-          "deputy": "Martin Pouliot"
+          "head_email": "Caroline.Boeshertz@ec.europa.eu",
+          "head_phone": "+32 229-62909"
         }
       ]
     },
     {
-      "code": "SANTE.B",
-      "name": "Public Health, Cancer and Health Security",
-      "director": "Antonio Parenti",
-      "units": [
-        {
-          "code": "SANTE.B.1",
-          "name": "Cancer, Health in All Policies",
-          "head": "Philippe Roux",
-          "deputy": "Matthias Schuppe"
-        },
-        {
-          "code": "SANTE.B.2",
-          "name": "Health Security",
-          "head": "Ingrid Keller",
-          "deputy": "Jaroslaw Waligora"
-        },
-        {
-          "code": "SANTE.B.3",
-          "name": "Health Monitoring and Cooperation, Health Networks",
-          "head": "Donata Meroni",
-          "deputy": "Nichola Larkins"
-        },
-        {
-          "code": "SANTE.B.4",
-          "name": "Disease Prevention and Health Promotion",
-          "head": "Marianne Takki"
-        }
-      ]
-    },
-    {
-      "code": "SANTE.C",
-      "name": "Digital, EU4Health and Health Systems Modernisation",
-      "director": "Marco Marsella",
-      "units": [
-        {
-          "code": "SANTE.C.1",
-          "name": "Digital Health",
-          "head": "Fulvia Raffaelli",
-          "deputy": "Martin Dorazil"
-        },
-        {
-          "code": "SANTE.C.2",
-          "name": "Health Technology Assessment",
-          "head": "Maya Matthews"
-        },
-        {
-          "code": "SANTE.C.3",
-          "name": "State of Health",
-          "head": "Vacant",
-          "deputy": "Dirk Van Den Steen"
-        },
-        {
-          "code": "SANTE.C.4",
-          "name": "EU4Health and Health Research",
-          "head": "Luca Battistini",
-          "deputy": "Adrian Peres"
-        }
-      ]
-    },
-    {
-      "code": "SANTE.D",
-      "name": "Medical Products and Innovation",
-      "director": "Rainer Becker",
-      "units": [
-        {
-          "code": "SANTE.D.1",
-          "name": "Medicines: Policy, Autorisation and Monitoring",
-          "head": "Olga Solomon",
-          "deputy": "Florian Schmidt"
-        },
-        {
-          "code": "SANTE.D.2",
-          "name": "Medical Products: Quality, Safety, Innovation",
-          "head": "Agnes Mathieu-Mendes",
-          "deputy": "Harald Mische"
-        },
-        {
-          "code": "SANTE.D.3",
-          "name": "Medical Devices",
-          "head": "Flora Giorgio"
-        },
-        {
-          "code": "SANTE.D.4",
-          "name": "Veterinary Medicines",
-          "head": "Eva Zamora Escribano",
-          "deputy": "Alfonso Las Heras"
-        }
-      ]
-    },
-    {
-      "code": "SANTE.E",
-      "name": "Food Safety, Sustainability and Innovation",
-      "director": "Klaus Berend",
-      "units": [
-        {
-          "code": "SANTE.E.1",
-          "name": "General Food Law, Food Waste and Food Information to Consumers",
-          "head": "Alexandra Nikolakopoulou",
-          "deputy": "Anastasia Alvizou"
-        },
-        {
-          "code": "SANTE.E.2",
-          "name": "Food Processing Technologies and Novel Foods",
-          "head": "Sabine Pelsser",
-          "deputy": "Frans Verstraete"
-        },
-        {
-          "code": "SANTE.E.3",
-          "name": "Biotechnology",
-          "head": "Irene Sacristan Sanchez",
-          "deputy": "Sirkku Heinimaa"
-        },
-        {
-          "code": "SANTE.E.4",
-          "name": "Pesticides and Biocides",
-          "head": "Almut Bitterhof"
-        }
-      ]
-    },
-    {
-      "code": "SANTE.F",
-      "name": "Health and Food Audits and Analysis",
-      "director": "Ruben Tascon (Acting)",
-      "note": "Entities located in Ireland (Grange)",
-      "units": [
-        {
-          "code": "SANTE.F.1",
-          "name": "Food",
-          "head": "Andrew Owen-Griffiths",
-          "deputy": "Javier Tellechea Vertiz"
-        },
-        {
-          "code": "SANTE.F.2",
-          "name": "Animals",
-          "head": "Ana Ramirez Vela",
-          "deputy": "Faye Ioannou"
-        },
-        {
-          "code": "SANTE.F.3",
-          "name": "Plants",
-          "head": "Aidan O'Connor",
-          "deputy": "Graeme Jones"
-        },
-        {
-          "code": "SANTE.F.4",
-          "name": "Trade Related Controls, Residues and Feed Safety",
-          "head": "Eric Thevenard",
-          "deputy": "Joanna Warnel"
-        },
-        {
-          "code": "SANTE.F.5",
-          "name": "Health Protection",
-          "head": "Ruben Tascon",
-          "deputy": "Sara Tavares"
-        }
-      ]
-    },
-    {
-      "code": "SANTE.G",
-      "name": "Crisis Preparedness in Food, Animals and Plants",
-      "director": "Bernard Van Goethem",
-      "units": [
-        {
-          "code": "SANTE.G.1",
-          "name": "Plant Health",
-          "head": "Sylvain Giraud",
-          "deputy": "Maria Kammenou"
-        },
-        {
-          "code": "SANTE.G.2",
-          "name": "Animal Health",
-          "head": "Francisco Reviriego Gordejo",
-          "deputy": "Barbara Logar"
-        },
-        {
-          "code": "SANTE.G.3",
-          "name": "Animal Welfare",
-          "head": "Andrea Gavinelli",
-          "deputy": "Lucie Carrouee"
-        },
-        {
-          "code": "SANTE.G.4",
-          "name": "Official Controls",
-          "head": "Peter Bokor",
-          "deputy": "Bruno Saimour"
-        },
-        {
-          "code": "SANTE.G.5",
-          "name": "Food Hygiene, Feed and Fraud",
-          "head": "Koen Van Dyck",
-          "deputy": "Eric Marin"
-        }
-      ]
-    },
-    {
-      "code": "SANTE.R",
-      "name": "Policy and Administrative Support",
+      "code": "Dir R",
+      "name": "POLICY AND ADMINISTRATIVE SUPPORT",
       "director": "Gabriella Fesus",
+      "director_email": "Gabriella.FESUS@ec.europa.eu",
       "units": [
         {
-          "code": "SANTE.R.1",
-          "name": "Better Regulation",
+          "code": "",
+          "name": "",
           "head": "Caterina Gozzi",
-          "deputy": "Nicolas Pradalie"
+          "head_email": "Caterina.GOZZI@ec.europa.eu",
+          "head_phone": "+32 229-60688"
         },
         {
-          "code": "SANTE.R.2",
-          "name": "Legal Affairs",
+          "code": "",
+          "name": "",
           "head": "Rossella Delfino",
-          "deputy": "Ville Jamsa"
+          "head_email": "Rossella.Delfino@ec.europa.eu",
+          "head_phone": "+32 229-96084"
         },
         {
-          "code": "SANTE.R.3",
-          "name": "Finance, Budget and Controls",
+          "code": "",
+          "name": "",
           "head": "Jeroen Lettens",
-          "deputy": "Stanislava Mihaylova"
+          "head_email": "Jeroen.Lettens@ec.europa.eu",
+          "head_phone": "+32 229-54032"
         },
         {
-          "code": "SANTE.R.4",
-          "name": "Information Systems",
+          "code": "",
+          "name": "",
           "head": "Giorgos Georgiannakis",
-          "deputy": "Didier Charneux"
+          "head_email": "Giorgos.GEORGIANNAKIS@ec.europa.eu",
+          "head_phone": "+32 229-54695"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jacques Remacle",
+          "head_email": "Jacques.Remacle@ec.europa.eu",
+          "head_phone": "+32 229-60771"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wolfgang Philipp",
+          "head_email": "Wolfgang.PHILIPP@ec.europa.eu",
+          "head_phone": "+32 229-68608"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "PUBLIC HEALTH, CANCER AND HEALTH SECURITY",
+      "director": "Antonio Parenti",
+      "director_email": "Antonio.PARENTI@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefan Schreck",
+          "head_email": "Stefan.Schreck@ec.europa.eu",
+          "head_phone": "+352 4301-38520"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Philippe Roux",
+          "head_email": "Philippe.ROUX@ec.europa.eu",
+          "head_phone": "+352 4301-35056"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ingrid Keller",
+          "head_email": "Ingrid.KELLER@ec.europa.eu",
+          "head_phone": "+352 4301-35330"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Donata Meroni",
+          "head_email": "Donata.MERONI@ec.europa.eu",
+          "head_phone": "+352 4301-32774"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marianne Takki",
+          "head_email": "Marianne.TAKKI@ec.europa.eu",
+          "head_phone": "+352 4301-31591"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "DIGITAL, EU4HEALTH AND HEALTH SYSTEMS MODERNISATION",
+      "director": "Marco Marsella",
+      "director_email": "Marco.Marsella@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Fulvia Raffaelli",
+          "head_email": "Fulvia.RAFFAELLI@ec.europa.eu",
+          "head_phone": "+32 229-59409"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maya Matthews",
+          "head_email": "Maya.MATTHEWS@ec.europa.eu",
+          "head_phone": "+32 229-64097"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dirk Van Den Steen",
+          "head_email": "Dirk.VAN-DEN-STEEN@ec.europa.eu",
+          "head_phone": "+32 229-67289"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Luca Battistini",
+          "head_email": "Luca.BATTISTINI@ec.europa.eu",
+          "head_phone": "+32 229-54099"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Angelo Marino",
+          "head_email": "Angelo.MARINO@ec.europa.eu",
+          "head_phone": "+32 229-66657"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "MEDICAL PRODUCTS AND INNOVATION",
+      "director": "Rainer Becker",
+      "director_email": "Rainer.BECKER@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Olga Solomon",
+          "head_email": "Olga.Solomon@ec.europa.eu",
+          "head_phone": "+32 229-55959"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Agnes Mathieu-Mendes",
+          "head_email": "Agnes.MATHIEU-MENDES@ec.europa.eu",
+          "head_phone": "+32 229-96320"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Flora Giorgio",
+          "head_email": "Flora.GIORGIO@ec.europa.eu",
+          "head_phone": "+32 229-52781"
+        }
+      ]
+    },
+    {
+      "code": "Dir E",
+      "name": "FOOD SAFETY, SUSTAINABILITY, AND INNOVATION",
+      "director": "Klaus Berend",
+      "director_email": "Klaus.Berend@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexandra Nikolakopoulou",
+          "head_email": "Alexandra.NIKOLAKOPOULOU@ec.europa.eu",
+          "head_phone": "+32 229-86854"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sabine Pelsser",
+          "head_email": "Sabine.PELSSER@ec.europa.eu",
+          "head_phone": "+32 229-84746"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Irene Sacristan Sanchez",
+          "head_email": "Irene.SACRISTAN-SANCHEZ@ec.europa.eu",
+          "head_phone": "+32 229-50278"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Almut Bitterhof",
+          "head_email": "Almut.Bitterhof@ec.europa.eu",
+          "head_phone": "+32 229-86758"
+        }
+      ]
+    },
+    {
+      "code": "Dir F",
+      "name": "HEALTH AND FOOD AUDITS AND ANALYSIS",
+      "director": "Ruben Tascon",
+      "director_email": "Ruben.TASCON@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Andrew Owen-Griffiths",
+          "head_email": "Andrew.Owen-Griffiths@ec.europa.eu",
+          "head_phone": "+353 469061-847"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ana Ramirez Vela",
+          "head_email": "Ana.RAMIREZ-VELA@ec.europa.eu",
+          "head_phone": "+353 469061-615"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Aidan O'Connor",
+          "head_email": "CONNOR@ec.europa.eu",
+          "head_phone": "+353 469061-740"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eric Thévenard",
+          "head_email": "Eric.Thevenard@ec.europa.eu",
+          "head_phone": "+353 469061-966"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ruben Tascon",
+          "head_email": "Ruben.TASCON@ec.europa.eu",
+          "head_phone": "+353 469061-830"
+        }
+      ]
+    },
+    {
+      "code": "Dir G",
+      "name": "CRISIS PREPAREDNESS IN FOOD, ANIMALS AND PLANTS",
+      "director": "Bernard Van Goethem",
+      "director_email": "Bernard.Van-Goethem@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sylvain Giraud",
+          "head_email": "Sylvain.GIRAUD@ec.europa.eu",
+          "head_phone": "+32 229-61767"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francisco Reviriego Gordejo",
+          "head_email": "GORDEJO@ec.europa.eu",
+          "head_phone": "+32 229-84799"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andrea Gavinelli",
+          "head_email": "Andrea.Gavinelli@ec.europa.eu",
+          "head_phone": "+32 229-66426"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Péter Bokor",
+          "head_email": "Peter.BOKOR@ec.europa.eu",
+          "head_phone": "+32 229-97889"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Koen Van Dyck",
+          "head_email": "Koen.Van-Dyck@ec.europa.eu",
+          "head_phone": "+32 229-84334"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marina Zanchi",
+          "head_email": "Marina.Zanchi@ec.europa.eu",
+          "head_phone": "+32 229-53814"
         }
       ]
     }
   ],
-  "linked_agency": {
-    "code": "HaDEA",
-    "name": "Health and Digital Executive Agency",
-    "director": "Marina Zanchi",
-    "departments": [
-      {
-        "code": "HaDEA.A",
-        "name": "Health and Food",
-        "director": "Angelo Marino",
-        "units": [
-          {
-            "code": "HaDEA.A.1",
-            "name": "EU4Health",
-            "head": "Vacant",
-            "deputy": "Nadia Elhaggagi"
-          },
-          {
-            "code": "HaDEA.A.2",
-            "name": "EU4Health / Single Market Programme - Food",
-            "head": "Vacant",
-            "deputy": "Nicolas Krieger"
-          }
-        ]
-      },
-      {
-        "code": "HaDEA.C",
-        "name": "Finance and Resources",
-        "director": "Jacques Remacle",
-        "units": [
-          {
-            "code": "HaDEA.C.3",
-            "name": "Staff, Communication and Support",
-            "head": "Sylvia Ferretti"
-          }
-        ]
-      }
-    ],
-    "note": "Entities located in Luxembourg"
-  },
-  "seconded_manager": "Annukka Ojala - seconded to the Cabinet of Executive Vice-President Minzatu",
-  "date_of_effect": "2025-11-01"
+  "num_directorates": 9,
+  "num_units": 43,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

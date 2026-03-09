@@ -1,0 +1,290 @@
+{
+  "institution": "EUROPEAN_COUNCIL",
+  "source": "euwhoiswho_europeancouncil.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 33,
+  "units": {
+    "PRESIDENT": {
+      "name": "PRESIDENT",
+      "persons": [
+        {
+          "name": "António Costa",
+          "title": "President"
+        }
+      ]
+    },
+    "Belgium": {
+      "name": "Belgium",
+      "persons": [
+        {
+          "name": "Bart De Wever",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Bulgaria": {
+      "name": "Bulgaria",
+      "persons": [
+        {
+          "name": "Rosen Zhelyazkov",
+          "title": ""
+        },
+        {
+          "name": "(Росен Желязков)",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Czechia": {
+      "name": "Czechia",
+      "persons": [
+        {
+          "name": "Andrej Babiš",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Denmark": {
+      "name": "Denmark",
+      "persons": [
+        {
+          "name": "Mette Frederiksen",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Germany": {
+      "name": "Germany",
+      "persons": [
+        {
+          "name": "Friedrich Merz",
+          "title": "Federal Chancellor"
+        }
+      ]
+    },
+    "Estonia": {
+      "name": "Estonia",
+      "persons": [
+        {
+          "name": "Kristen Michal",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Ireland": {
+      "name": "Ireland",
+      "persons": [
+        {
+          "name": "Micheál Martin",
+          "title": "Taoiseach (Prime Minister)"
+        }
+      ]
+    },
+    "Greece": {
+      "name": "Greece",
+      "persons": [
+        {
+          "name": "Kyriakos Mitsotakis",
+          "title": ""
+        },
+        {
+          "name": "(Κυριάκος Μητσοτακης)",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Spain": {
+      "name": "Spain",
+      "persons": [
+        {
+          "name": "Pedro Sánchez",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "France": {
+      "name": "France",
+      "persons": [
+        {
+          "name": "Emmanuel Macron",
+          "title": "President of the Republic"
+        }
+      ]
+    },
+    "Croatia": {
+      "name": "Croatia",
+      "persons": [
+        {
+          "name": "Andrej Plenković",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Italy": {
+      "name": "Italy",
+      "persons": [
+        {
+          "name": "Giorgia Meloni",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Cyprus": {
+      "name": "Cyprus",
+      "persons": [
+        {
+          "name": "Nikos Christodoulides",
+          "title": ""
+        },
+        {
+          "name": "(Νίκος Χριστοδουλίδης)",
+          "title": "President of the Republic"
+        }
+      ]
+    },
+    "Latvia": {
+      "name": "Latvia",
+      "persons": [
+        {
+          "name": "Evika Siliņa",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Lithuania": {
+      "name": "Lithuania",
+      "persons": [
+        {
+          "name": "Gitanas Nausėda",
+          "title": "President of the Republic"
+        }
+      ]
+    },
+    "Luxembourg": {
+      "name": "Luxembourg",
+      "persons": [
+        {
+          "name": "Luc Frieden",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Hungary": {
+      "name": "Hungary",
+      "persons": [
+        {
+          "name": "Viktor Orbán",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Malta": {
+      "name": "Malta",
+      "persons": [
+        {
+          "name": "Robert Abela",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Netherlands": {
+      "name": "Netherlands",
+      "persons": [
+        {
+          "name": "Rob Jetten",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Austria": {
+      "name": "Austria",
+      "persons": [
+        {
+          "name": "Christian Stocker",
+          "title": "Federal Chancellor"
+        }
+      ]
+    },
+    "Poland": {
+      "name": "Poland",
+      "persons": [
+        {
+          "name": "Donald Tusk",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Portugal": {
+      "name": "Portugal",
+      "persons": [
+        {
+          "name": "Luís Montenegro",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Romania": {
+      "name": "Romania",
+      "persons": [
+        {
+          "name": "Nicuşor Dan",
+          "title": "President"
+        }
+      ]
+    },
+    "Slovenia": {
+      "name": "Slovenia",
+      "persons": [
+        {
+          "name": "Robert Golob",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Slovakia": {
+      "name": "Slovakia",
+      "persons": [
+        {
+          "name": "Robert Fico",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Finland": {
+      "name": "Finland",
+      "persons": [
+        {
+          "name": "Petteri Orpo",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "Sweden": {
+      "name": "Sweden",
+      "persons": [
+        {
+          "name": "Ulf Kristersson",
+          "title": "Prime Minister"
+        }
+      ]
+    },
+    "European Commission": {
+      "name": "European Commission",
+      "persons": [
+        {
+          "name": "Ursula Von Der Leyen",
+          "title": "President"
+        }
+      ]
+    },
+    "CABINET OF THE PRESIDENT": {
+      "name": "CABINET OF THE PRESIDENT",
+      "persons": [
+        {
+          "name": "Pedro Lourtie",
+          "title": "Head of Cabinet of the President"
+        }
+      ]
+    }
+  }
+}

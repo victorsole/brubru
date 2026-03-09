@@ -1,484 +1,500 @@
 {
   "dg_code": "SG",
   "dg_name": "Secretariat-General",
-  "president": {
-    "name": "Ursula von der Leyen",
-    "title": "President"
-  },
-  "secretary_general": {
-    "name": "Ilze Juhansone",
-    "title": "Secretary-General",
-    "policy_assistants": [
-      "Giulia Astuti"
-    ],
-    "hr_correspondent": "Csaba Gergely"
-  },
-  "deputy_secretaries_general": [
-    {
-      "name": "Pascal Leardini",
-      "title": "Deputy Secretary-General - Chief Operating Officer"
-    },
-    {
-      "name": "Nils Behrndt",
-      "title": "Deputy Secretary-General - Policy Coordination"
-    },
-    {
-      "name": "John Watson",
-      "title": "Deputy Secretary-General - Interinstitutional & External Relations"
-    }
-  ],
-  "independent_bodies": [
-    {
-      "name": "Regulatory Scrutiny Board",
-      "chair": "Rytis Martikonis",
-      "members": [
-        "Alexander Gemberg-Wiesike",
-        "Marek Havrda",
-        "Rolf Höijer",
-        "Philippe Mengal",
-        "Arianna Vannini"
-      ],
-      "note": "The Secretariat of the Independent Regulatory Scrutiny Board is provided by the Secretariat-General"
-    },
-    {
-      "name": "European Fiscal Board",
-      "chair": "Pieter Hasekamp",
-      "members": [
-        "Eckhard Janeba",
-        "George Kopits",
-        "Benedicta Marzinotto",
-        "Lucia Rodriguez"
-      ],
-      "note": "The Secretariat of the Independent European Fiscal Board is administratively attached to the Secretariat-General. The members of the Secretariat are selected by the Head of the Secretariat in agreement with the Chair of the Board; they shall take instructions only from the Board"
-    }
-  ],
-  "special_services": [
-    {
-      "name": "Mediation Service",
-      "mediator": "Flaminia Bussacchini",
-      "deputy_mediator": "Georgios Mezelas"
-    },
-    {
-      "name": "Protocol Service",
-      "head": "Pernilla Sjölin"
-    },
-    {
-      "code": "SG.EFB",
-      "name": "European Fiscal Board Secretariat",
-      "head": "Martin Larch"
-    }
-  ],
-  "principal_advisers": [
-    {
-      "name": "Michelle Sutton",
-      "role": "Data Protection Officer of the Commission"
-    },
-    {
-      "name": "Elies Messaoudi",
-      "role": "Commission Representative to COREPER I (with functional reporting line)"
-    },
-    {
-      "name": "Michael Gremminger",
-      "role": "Pre-Enlargement Policy Reviews"
-    },
-    {
-      "name": "Clara Martinez Alberola",
-      "role": "Relations with Western European Partners"
-    },
-    {
-      "name": "Vacant",
-      "role": "Rule of Law"
-    },
-    {
-      "name": "Vacant",
-      "role": "Multiannual Financial Framework: National and Regional Partnership Plans"
-    }
-  ],
-  "task_force": {
-    "name": "EU's Future Competitiveness",
-    "head": "Heinz Jansen"
-  },
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
   "directorates": [
     {
-      "code": "SG.A",
-      "name": "Corporate Governance, Transparency & Resources",
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ilze Juhansone",
+          "head_email": "Ilze.JUHANSONE@ec.europa.eu",
+          "head_phone": "+32 229-80179"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jeremie Charles",
+          "head_email": "Jeremie.CHARLES@ec.europa.eu",
+          "head_phone": "+32 229-56632"
+        }
+      ]
+    },
+    {
+      "code": "Dir SP",
+      "name": "PROTOCOL SERVICE",
+      "director": "Pernilla Sjölin",
+      "director_email": "Pernilla.Sjolin@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Clara Martinez Alberola",
+          "head_email": "Clara.Martinez-Alberola@ec.europa.eu",
+          "head_phone": "+32 229-65730"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michael Gremminger",
+          "head_email": "Michael.Gremminger@ec.europa.eu",
+          "head_phone": "+32 229-53578"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Doriane Givord-Strassel",
+          "head_email": "Doriane.GIVORD-STRASSEL@ec.europa.eu",
+          "head_phone": "+32 229-50799"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Doriane Givord-Strassel",
+          "head_email": "Doriane.GIVORD-STRASSEL@ec.europa.eu",
+          "head_phone": "+32 229-50799"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Emmanuelle Maincent",
+          "head_email": "Emmanuelle.MAINCENT@ec.europa.eu",
+          "head_phone": "+32 229-90654"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Rolf Hoijer",
+          "head_email": "Rolf.HOIJER@ec.europa.eu",
+          "head_phone": "+32 229-13775"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Arianna Vannini",
+          "head_email": "Arianna.Vannini@ec.europa.eu",
+          "head_phone": "+32 229-64209"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marek Havrda",
+          "head_email": "Marek.HAVRDA@ec.europa.eu",
+          "head_phone": "+32 229-13630"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexander Gemberg-Wiesike",
+          "head_email": "WIESIKE@ec.europa.eu",
+          "head_phone": "+32 229-60882"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pascal Leardini",
+          "head_email": "Pascal.Leardini@ec.europa.eu",
+          "head_phone": "+32 229-61306"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Flaminia Bussacchini",
+          "head_email": "Flaminia.Bussacchini@ec.europa.eu",
+          "head_phone": "+32 229-69488"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Georgios Mezelas",
+          "head_email": "Georgios.Mezelas@ec.europa.eu",
+          "head_phone": "+32 229-62908"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michelle Sutton",
+          "head_email": "Michelle.SUTTON@ec.europa.eu",
+          "head_phone": "+32 229-60239"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "CORPORATE GOVERNANCE, TRANSPARENCY AND RESOURCES",
       "director": "Tatjana Verrier",
+      "director_email": "Tatjana.VERRIER@ec.europa.eu",
       "units": [
         {
-          "code": "SG.A.1",
-          "name": "Corporate Governance & Business Continuity",
-          "head": "Benjamin Desurmont"
+          "code": "",
+          "name": "",
+          "head": "Benjamin Desurmont",
+          "head_email": "Benjamin.DESURMONT@ec.europa.eu",
+          "head_phone": "+32 229-84236"
         },
         {
-          "code": "SG.A.2",
-          "name": "Document Management & Access to Documents",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Peter Van Landegem",
+          "head_email": "Peter.VAN-LANDEGEM@ec.europa.eu",
+          "head_phone": "+32 229-91552"
         },
         {
-          "code": "SG.A.3",
-          "name": "Transparency & Ethics",
-          "head": "Dorthe Christensen"
+          "code": "",
+          "name": "",
+          "head": "Julia Rapp",
+          "head_email": "Julia.RAPP@ec.europa.eu",
+          "head_phone": "+32 229-97774"
         },
         {
-          "code": "SG.A.4",
-          "name": "HR Correspondent, Finance & Corporate Training",
-          "head": "Robert Andrecs"
+          "code": "",
+          "name": "",
+          "head": "Dorthe Christensen",
+          "head_email": "Dorthe.CHRISTENSEN@ec.europa.eu",
+          "head_phone": "+32 229-56767"
         },
         {
-          "code": "SG.A.5",
-          "name": "Correspondence of the President",
-          "head": "Viviane D'Udekem D'Acoz"
+          "code": "",
+          "name": "",
+          "head": "Robert Andrecs",
+          "head_email": "Robert.ANDRECS@ec.europa.eu",
+          "head_phone": "+32 229-56072"
         },
         {
-          "code": "SG.A.6",
-          "name": "Digital Solutions & Process Efficiency",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Viviane D'Udekem D'Acoz",
+          "head_email": "Acoz@ec.europa.eu",
+          "head_phone": "+32 229-61919"
         },
         {
-          "code": "SG.A.1 ADV",
-          "name": "Adviser for Digital Transformation",
-          "head": "Peter Van Landegem"
+          "code": "",
+          "name": "",
+          "head": "Jeroen Casaer",
+          "head_email": "Jeroen.CASAER@ec.europa.eu",
+          "head_phone": "+32 229-21392"
         }
       ]
     },
     {
-      "code": "SG.B",
-      "name": "Decision-Making & Collegiality",
+      "code": "Dir B",
+      "name": "DECISION-MAKING & COLLEGIALITY",
       "director": "Martine Deprez",
+      "director_email": "Martine.Deprez@ec.europa.eu",
       "units": [
         {
-          "code": "SG.B.1",
-          "name": "Oral Procedure & College Meetings",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Marc Taquet-Graziani",
+          "head_email": "Marc.TAQUET-GRAZIANI@ec.europa.eu",
+          "head_phone": "+32 229-59102"
         },
         {
-          "code": "SG.B.2",
-          "name": "Written, Empowerment & Delegation Procedures",
-          "head": "Blanca Llinas Teres"
+          "code": "",
+          "name": "",
+          "head": "Blanca Llinas Teres",
+          "head_email": "Blanca.LLINAS-TERES@ec.europa.eu",
+          "head_phone": "+32 229-87954"
         },
         {
-          "code": "SG.B.3",
-          "name": "GRI Secretariat",
-          "head": "Henning Klaus"
+          "code": "",
+          "name": "",
+          "head": "Henning Klaus",
+          "head_email": "Henning.KLAUS@ec.europa.eu",
+          "head_phone": "+32 229-94310"
         },
         {
-          "code": "SG.B.4",
-          "name": "Working Methods & Decision-Making Process",
-          "head": "Irina Tanasescu"
+          "code": "",
+          "name": "",
+          "head": "IRINA Tanasescu",
+          "head_email": "Irina.TANASESCU@ec.europa.eu",
+          "head_phone": "+32 229-90124"
         }
       ]
     },
     {
-      "code": "SG.C",
-      "name": "Simplification, Implementation & Enforcement",
+      "code": "Dir C",
+      "name": "SIMPLIFICATION, IMPLEMENTATION & ENFORCEMENT",
       "director": "Michael Wimmer",
-      "adviser": {
-        "name": "Beata Kolecka",
-        "role": "Foresight (C. ADV)"
-      },
+      "director_email": "Michael.WIMMER@ec.europa.eu",
       "units": [
         {
-          "code": "SG.C.1",
-          "name": "Work Programme & Foresight",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Daniela Tidten",
+          "head_email": "Daniela.TIDTEN@ec.europa.eu",
+          "head_phone": "+32 229-51875"
         },
         {
-          "code": "SG.C.2",
-          "name": "Better Regulation & Simplification",
-          "head": "Antonina Cipollone"
+          "code": "",
+          "name": "",
+          "head": "Antonina Cipollone",
+          "head_email": "Antonina.CIPOLLONE@ec.europa.eu",
+          "head_phone": "+32 229-98785"
         },
         {
-          "code": "SG.C.3",
-          "name": "Implementation & Enforcement of EU Law",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Isabelle Burguet",
+          "head_email": "Isabelle.BURGUET@ec.europa.eu",
+          "head_phone": "+32 229-88221"
         },
         {
-          "code": "SG.C.4",
-          "name": "Implementation Support",
-          "head": "Raquel Lucas"
+          "code": "",
+          "name": "",
+          "head": "Raquel Lucas",
+          "head_email": "Raquel.LUCAS@ec.europa.eu",
+          "head_phone": "+32 229-80475"
         },
         {
-          "code": "SG.C.5",
-          "name": "MFF & Annual Management Cycle",
-          "head": "Christopher Becher"
+          "code": "",
+          "name": "",
+          "head": "Christopher Becher",
+          "head_email": "Christopher.BECHER@ec.europa.eu",
+          "head_phone": "+32 229-55600"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Beata Kolecka",
+          "head_email": "Beata.KOLECKA@ec.europa.eu",
+          "head_phone": "+32 229-67371"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nils Behrndt",
+          "head_email": "Nils.BEHRNDT@ec.europa.eu",
+          "head_phone": "+32 229-53539"
         }
       ]
     },
     {
-      "code": "SG.D",
-      "name": "Prosperity & Competitiveness",
+      "code": "Dir D",
+      "name": "PROSPERITY AND COMPETITIVENESS",
       "director": "Elisa Roller",
-      "adviser": {
-        "name": "Vincenzo Baccaro",
-        "role": "Legal Adviser (D.3. ADV)"
-      },
+      "director_email": "Elisa.ROLLER@ec.europa.eu",
       "units": [
         {
-          "code": "SG.D.1",
-          "name": "Single Market & Competition",
-          "head": "Stefan Fuehring"
+          "code": "",
+          "name": "",
+          "head": "Stefan Fuehring",
+          "head_email": "Stefan.FUEHRING@ec.europa.eu",
+          "head_phone": "+32 229-60086"
         },
         {
-          "code": "SG.D.2",
-          "name": "Clean Transition & One Health",
-          "head": "Vesa Terävä"
+          "code": "",
+          "name": "",
+          "head": "Vesa Terävä",
+          "head_email": "Vesa.TERAVA@ec.europa.eu",
+          "head_phone": "+32 229-92381"
         },
         {
-          "code": "SG.D.3",
-          "name": "Investment & Convergence",
-          "head": "Karola Maxianova"
+          "code": "",
+          "name": "",
+          "head": "Karola Maxianova",
+          "head_email": "Karola.MAXIANOVA@ec.europa.eu",
+          "head_phone": "+32 229-59227"
         },
         {
-          "code": "SG.D.4",
-          "name": "Skills, Jobs & Social Affairs",
-          "head": "Raquel Cortes Herrera"
+          "code": "",
+          "name": "",
+          "head": "Vincenzo Baccaro",
+          "head_email": "Vincenzo.Baccaro@ec.europa.eu",
+          "head_phone": "+32 229-65931"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Raquel Cortes Herrera",
+          "head_email": "Raquel.CORTES-HERRERA@ec.europa.eu",
+          "head_phone": "+32 229-67076"
         }
       ]
     },
     {
-      "code": "SG.E",
-      "name": "Democracy, Security & Technological Innovation",
-      "director": "Vacant",
+      "code": "Dir E",
+      "name": "DEMOCRACY, SECURITY & TECHNOLOGICAL INNOVATION",
+      "director": "Nacira Boulehouat",
+      "director_email": "Nacira.BOULEHOUAT@ec.europa.eu",
       "units": [
         {
-          "code": "SG.E.1",
-          "name": "Democracy, Rule of Law & Equality",
-          "head": "Marie Simonsen"
+          "code": "",
+          "name": "",
+          "head": "Marie Simonsen",
+          "head_email": "Marie.SIMONSEN@ec.europa.eu",
+          "head_phone": "+32 229-86996"
         },
         {
-          "code": "SG.E.2",
-          "name": "Migrations, Borders & Security",
-          "head": "Stephen Curzon"
+          "code": "",
+          "name": "",
+          "head": "Stephen Curzon",
+          "head_email": "Stephen.CURZON@ec.europa.eu",
+          "head_phone": "+32 229-53069"
         },
         {
-          "code": "SG.E.3",
-          "name": "Technological Sovereignty & Innovation",
-          "head": "Ioana Gligor"
+          "code": "",
+          "name": "",
+          "head": "Ioana-Maria Gligor",
+          "head_email": "Ioana-Maria.GLIGOR@ec.europa.eu",
+          "head_phone": "+32 229-85326"
         },
         {
-          "code": "SG.E.4",
-          "name": "Briefings",
-          "head": "Aleksandra Kulas"
+          "code": "",
+          "name": "",
+          "head": "Aleksandra Kulas",
+          "head_email": "Aleksandra.KULAS@ec.europa.eu",
+          "head_phone": "+32 229-64534"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Heinz Jansen",
+          "head_email": "Heinz.Jansen@ec.europa.eu",
+          "head_phone": "+32 229-53894"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "John Watson",
+          "head_email": "John.Watson@ec.europa.eu",
+          "head_phone": "+32 229-64166"
         }
       ]
     },
     {
-      "code": "SG.F",
-      "name": "Western European Partners",
+      "code": "Dir F",
+      "name": "WESTERN EUROPEAN PARTNERS",
       "director": "Richard Szostak",
+      "director_email": "Richard.SZOSTAK@ec.europa.eu",
       "units": [
         {
-          "code": "SG.F.1",
-          "name": "EU-UK Withdrawal Agreement",
-          "head": "Luiza Bara"
+          "code": "",
+          "name": "",
+          "head": "Luiza Bara",
+          "head_email": "Luiza.BARA@ec.europa.eu",
+          "head_phone": "+32 229-69485"
         },
         {
-          "code": "SG.F.2",
-          "name": "EU-UK Trade and Cooperation Agreement",
-          "head": "Nele Eichhorn"
+          "code": "",
+          "name": "",
+          "head": "Nele Eichhorn",
+          "head_email": "Nele.EICHHORN@ec.europa.eu",
+          "head_phone": "+32 229-87311"
         },
         {
-          "code": "SG.F.3",
-          "name": "EEA, Switzerland, Andorra, Monaco & San Marino",
-          "head": "Nicolas Von Lingen"
+          "code": "",
+          "name": "",
+          "head": "Nicolas Von Lingen",
+          "head_email": "Nicolas.VON-LINGEN@ec.europa.eu",
+          "head_phone": "+32 229-52595"
         }
       ]
     },
     {
-      "code": "SG.G",
-      "name": "External Relations",
+      "code": "Dir G",
+      "name": "EXTERNAL RELATIONS",
       "director": "Stefano Grassi",
-      "adviser": {
-        "name": "Florin Urseanu",
-        "role": "Preparedness and the EU Integrated Political Crisis Response (G. ADV)"
-      },
+      "director_email": "Stefano.GRASSI@ec.europa.eu",
       "units": [
         {
-          "code": "SG.G.1",
-          "name": "Coordination of External Policies & Enlargement",
-          "head": "Ruudiger Boogert"
+          "code": "",
+          "name": "",
+          "head": "Rudiger Boogert",
+          "head_email": "Rudiger.BOOGERT@ec.europa.eu",
+          "head_phone": "+32 229-92165"
         },
         {
-          "code": "SG.G.2",
-          "name": "G7/G20, Global Issues & Partnerships",
-          "head": "Lauma Buka"
+          "code": "",
+          "name": "",
+          "head": "Lauma Buka",
+          "head_email": "Lauma.BUKA@ec.europa.eu",
+          "head_phone": "+32 229-90667"
         },
         {
-          "code": "SG.G.3",
-          "name": "External Economic Policies",
-          "head": "Alejandro Cainzos"
+          "code": "",
+          "name": "",
+          "head": "Alejandro Cainzos",
+          "head_email": "Alejandro.CAINZOS@ec.europa.eu",
+          "head_phone": "+32 229-59562"
         },
         {
-          "code": "SG.G.4",
-          "name": "Defence & Preparedness",
-          "head": "Diego De Ojeda Pardo"
+          "code": "",
+          "name": "",
+          "head": "Diego De Ojeda Garcia-Pardo",
+          "head_email": "PARDO@ec.europa.eu",
+          "head_phone": "+32 229-50230"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Florin Urseanu",
+          "head_email": "Florin.URSEANU@ec.europa.eu",
+          "head_phone": "+32 229-62666"
         }
       ]
     },
     {
-      "code": "SG.H",
-      "name": "Interinstitutional Relations",
+      "code": "Dir H",
+      "name": "INTERINSTITUTIONAL RELATIONS",
       "director": "Enrico Forti",
+      "director_email": "Enrico.Forti@ec.europa.eu",
       "units": [
         {
-          "code": "SG.H.1",
-          "name": "Relations with the EP & National Parliaments",
-          "head": "Detlev Clemens"
+          "code": "",
+          "name": "",
+          "head": "Detlev Clemens",
+          "head_email": "Detlev.Clemens@ec.europa.eu",
+          "head_phone": "+32 229-58307"
         },
         {
-          "code": "SG.H.2",
-          "name": "Council & EUCO, COREPER I + II",
-          "head": "Dragomir Iliev"
+          "code": "",
+          "name": "",
+          "head": "Dragomir Iliev",
+          "head_email": "Dragomir.ILIEV@ec.europa.eu",
+          "head_phone": "+32 229-95419"
         },
         {
-          "code": "SG.H.3",
-          "name": "Institutional Affairs & Relations with EU Bodies",
-          "head": "Maria Olivan Aviles"
+          "code": "",
+          "name": "",
+          "head": "Maria Olivan Aviles",
+          "head_email": "Maria.Olivan-Aviles@ec.europa.eu",
+          "head_phone": "+32 229-94975"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Elies Messaoudi",
+          "head_email": "Elies.MESSAOUDI@ec.europa.eu",
+          "head_phone": "+32 229-51716"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Larch",
+          "head_email": "Martin.Larch@ec.europa.eu",
+          "head_phone": "+32 229-69244"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Selmayr",
+          "head_email": "Martin.SELMAYR@ec.europa.eu",
+          "head_phone": ""
         }
       ]
-    },
-    {
-      "code": "SG.0.1",
-      "name": "Office of the Secretary-General",
-      "head": "Jeremie Charles"
     }
   ],
-  "reform_and_investment_task_force": {
-    "name": "Reform and Investment Task Force (SG REFORM)",
-    "director_general": "Céline Gauer",
-    "deputy_director_general": "Vacant",
-    "departments": [
-      {
-        "code": "A",
-        "name": "Technical Support Instrument (TSI)",
-        "director": "Judit Rozsa",
-        "units": [
-          {
-            "code": "A.1",
-            "name": "Budget & Finance",
-            "head": "Hristo Tomov"
-          },
-          {
-            "code": "A.2",
-            "name": "Public Finances",
-            "head": "Christoph Schwierz"
-          },
-          {
-            "code": "A.3",
-            "name": "Sustainable Competitiveness, Netherlands",
-            "head": "Kaspar Richter"
-          },
-          {
-            "code": "A.4",
-            "name": "Governance & Public Administration",
-            "head": "Kjartan Bjornsson"
-          },
-          {
-            "code": "A.5",
-            "name": "European Pillar of Social Rights, Hungary",
-            "head": "Cornelis Van Duin"
-          }
-        ]
-      },
-      {
-        "code": "B",
-        "name": "Recovery & Resilience I (RRF I)",
-        "director": "Marie Donnay",
-        "units": [
-          {
-            "code": "B.1",
-            "name": "Belgium, France, Sweden, Interinstitutional",
-            "head": "Francesco Carlucci"
-          },
-          {
-            "code": "B.2",
-            "name": "Czechia, Denmark, Croatia, Slovenia",
-            "head": "Veronica Vecchio"
-          },
-          {
-            "code": "B.3",
-            "name": "Italy",
-            "head": "Magdalena Morgese Borys"
-          },
-          {
-            "code": "B.4",
-            "name": "Communication & Performance Management",
-            "head": "Roxane Crestian"
-          }
-        ]
-      },
-      {
-        "code": "C",
-        "name": "Recovery & Resilience II (RRF II)",
-        "director": "Maria Teresa Fabregas Fernandez",
-        "units": [
-          {
-            "code": "C.1",
-            "name": "Finland, Malta, Spain",
-            "head": "Alexander Schwan"
-          },
-          {
-            "code": "C.2",
-            "name": "Romania, Estonia, Lithuania",
-            "head": "Laura Rinaldi"
-          },
-          {
-            "code": "C.3",
-            "name": "Cyprus, Luxembourg, Portugal",
-            "head": "Reka Horvath"
-          },
-          {
-            "code": "C.4",
-            "name": "Austria, Ireland, Slovakia",
-            "head": "Julia Brockhoff"
-          }
-        ]
-      },
-      {
-        "code": "D",
-        "name": "Recovery & Resilience III (RRF III)",
-        "director": "Johannes Luebking",
-        "units": [
-          {
-            "code": "D.1",
-            "name": "Germany, Greece",
-            "head": "Marta Wieczorek"
-          },
-          {
-            "code": "D.2",
-            "name": "Bulgaria, Latvia",
-            "head": "Vacant"
-          },
-          {
-            "code": "D.3",
-            "name": "Poland, Do No Significant Harm (DNSH)",
-            "head": "Georgiana Capraru Ianus"
-          },
-          {
-            "code": "D.4",
-            "name": "Access to Finance, European Semester",
-            "head": "Heinrich Wollny"
-          }
-        ]
-      },
-      {
-        "code": "0.1",
-        "name": "Legal Affairs & Coordination",
-        "head": "Luca Rossi"
-      }
-    ]
-  },
-  "coordinator_positions": [
-    "Coordinator on Combating Antisemitism and Fostering Jewish Life",
-    "Coordinator for the Dialogue with Churches, Religious Associations and Philosophical and Non-Confessional Organisations",
-    "Coordinator on Combating Anti-Muslim Hatred"
-  ],
-  "seconded_managers": [
-    "Martin Selmayr (EEAS) - Seconded Hors Classe Adviser",
-    "Jivka Petkova - Seconded Principal Adviser to Cabinet of the President",
-    "Vivian Loonela - Seconded Head of Unit to Cabinet Kallas",
-    "Aleksandra Kordecka - Seconded Head of Unit"
-  ],
-  "note": "Coordinating the European Semester Officers",
-  "date_of_effect": "2025-11-01"
+  "num_directorates": 10,
+  "num_units": 58,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

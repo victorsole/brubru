@@ -1,0 +1,746 @@
+{
+  "institution": "EDPS",
+  "source": "euwhoiswho_edps.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 159,
+  "units": {
+    "SUP.CHAIR — SUPERVISOR/EDPB CHAIR/EDPB VICE CHAIR": {
+      "name": "SUP.CHAIR — SUPERVISOR/EDPB CHAIR/EDPB VICE CHAIR",
+      "persons": [
+        {
+          "name": "Wojciech Rafal Wiewiorowski",
+          "title": "",
+          "email": "wojciech.wiewiorowski@edps.europa.eu",
+          "phone": "+ 32 2 28 31902"
+        },
+        {
+          "name": "Chair and Vice chairs Edpb",
+          "title": ""
+        },
+        {
+          "name": "Z. Vukić",
+          "title": ""
+        },
+        {
+          "name": "J. VIRANT Burnik",
+          "title": ""
+        },
+        {
+          "name": "A. Talus",
+          "title": ""
+        }
+      ]
+    },
+    "SG — HEAD OF THE EDPS SECRETARIAT": {
+      "name": "SG — HEAD OF THE EDPS SECRETARIAT",
+      "persons": [
+        {
+          "name": "Leonardo Cervera Navas",
+          "title": "Head of EDPS Secretariat",
+          "email": "leonardo.cerveranavas@edps.europa.eu",
+          "phone": "+ 32 2 28 31903"
+        }
+      ]
+    },
+    "OFF — Office of the Secretary": {
+      "name": "OFF — Office of the Secretary",
+      "persons": [
+        {
+          "name": "M. CORDOBA Hernandez",
+          "title": "Administrative assistant"
+        },
+        {
+          "name": "Sonia Perez Romero",
+          "title": ""
+        },
+        {
+          "name": "N. Couvreur",
+          "title": ""
+        },
+        {
+          "name": "A. Pouliou",
+          "title": ""
+        },
+        {
+          "name": "M. Šukytė",
+          "title": ""
+        }
+      ]
+    },
+    "LS — Legal Service": {
+      "name": "LS — Legal Service",
+      "persons": [
+        {
+          "name": "F. Muller",
+          "title": ""
+        },
+        {
+          "name": "Daniele Nardi",
+          "title": "",
+          "email": "daniele.nardi@edps.europa.eu"
+        }
+      ]
+    },
+    "Cabinet of the Supervisor": {
+      "name": "Cabinet of the Supervisor",
+      "persons": [
+        {
+          "name": "M. J. SALAS Moreno",
+          "title": "Administrative assistant"
+        },
+        {
+          "name": "A. PAPA Manzillo",
+          "title": "Legal officer"
+        }
+      ]
+    },
+    "SE — Supervision and": {
+      "name": "SE — Supervision and",
+      "persons": [
+        {
+          "name": "Thomas Zerdick",
+          "title": "Head of Unit",
+          "email": "thomas.zerdick@edps.europa.eu",
+          "phone": "+ 32 2 28 31858"
+        },
+        {
+          "name": "F. Coudert",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "M. Trikka",
+          "title": "Administrative Agent"
+        },
+        {
+          "name": "A. Kitsiou",
+          "title": "Administrative Agent"
+        },
+        {
+          "name": "E. Pappa",
+          "title": "Administrative Agent"
+        },
+        {
+          "name": "Evanthia Chatziliasi",
+          "title": "Head of sector",
+          "email": "evanthia.chatziliasi@edps.europa.eu"
+        },
+        {
+          "name": "P. DE Locht",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "J. Parkin",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "J. Wauman",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "P. Dewitte",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "J. Čižauskaitė",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "M. Stefan",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "Bénédicte Raevens",
+          "title": "Head of sector",
+          "email": "benedicte.raevens@edps.europa.eu",
+          "phone": "+ 32 2 28 31917"
+        },
+        {
+          "name": "P. Candellier",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "Z. C. Szilvássy",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "G. Bakatsia",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "Anže Ogrinc",
+          "title": "Acting head of sector",
+          "email": "anze.ogrinc@edps.europa.eu"
+        },
+        {
+          "name": "Anže Ogrinc",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "X. Kapsosideri",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "M. Fila",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "S. Srdic",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "A. Zawila-Niedzwiecka",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "G. PACHECO Costa",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "C. Sakellari",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "S. DE Wolf",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "M. VAN DER Heijden",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "N. Lehtimäki",
+          "title": "Legal officer — Inspector"
+        },
+        {
+          "name": "M. AGUADO Solana",
+          "title": "Legal officer — Inspector"
+        }
+      ]
+    },
+    "PC — Policy and Legislative": {
+      "name": "PC — Policy and Legislative",
+      "persons": [
+        {
+          "name": "Brendan Van Alsenoy",
+          "title": "Acting Head of Unit",
+          "email": "brendan.vanalsenoy@edps.europa.eu"
+        },
+        {
+          "name": "Brendan Van Alsenoy",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "M. Tiganitaki",
+          "title": ""
+        },
+        {
+          "name": "A. S. JIMENEZ Menendez",
+          "title": "Administrative assistant"
+        },
+        {
+          "name": "Olivier Matter",
+          "title": "Head of sector",
+          "email": "olivier.matter@edps.europa.eu",
+          "phone": "+ 32 2 28 31922"
+        },
+        {
+          "name": "M. Dubrocard",
+          "title": "Legal officer"
+        },
+        {
+          "name": "M. Early",
+          "title": "Legal officer"
+        },
+        {
+          "name": "M. Pollmann",
+          "title": "Legal officer"
+        },
+        {
+          "name": "A. Furfaro",
+          "title": "Legal officer"
+        },
+        {
+          "name": "Plamen Angelov",
+          "title": "Head of Sector",
+          "email": "plamen.angelov@edps.europa.eu",
+          "phone": "+ 32 2 28 31885"
+        },
+        {
+          "name": "N. Stolic",
+          "title": "Legal officer"
+        },
+        {
+          "name": "Romain Robert",
+          "title": "Acting head of sector",
+          "phone": "+ 32 2 28 31999"
+        },
+        {
+          "name": "M. Guglielmetti",
+          "title": "Legal officer"
+        },
+        {
+          "name": "Romain Robert",
+          "title": ""
+        },
+        {
+          "name": "S. BRUÇÓ GERALDES De",
+          "title": ""
+        },
+        {
+          "name": "BARROS Vale",
+          "title": "Legal officer"
+        },
+        {
+          "name": "A. Zaporowicz",
+          "title": "Legal officer"
+        },
+        {
+          "name": "F. Buskermolen",
+          "title": "Legal officer"
+        }
+      ]
+    },
+    "TP — Technology and": {
+      "name": "TP — Technology and",
+      "persons": [
+        {
+          "name": "Luis Velasco",
+          "title": "Head of Unit",
+          "email": "luis.velasco@edps.europa.eu"
+        },
+        {
+          "name": "G. Kotsakis",
+          "title": "LISO — Local Information Security -- Officer"
+        },
+        {
+          "name": "K. Sgaier",
+          "title": "Administration assistant"
+        },
+        {
+          "name": "M. Attoresi",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "K. Wierinckx",
+          "title": "Administration assistant"
+        },
+        {
+          "name": "K. Vemou",
+          "title": "Technology and security officer — -- Privacy Expert"
+        },
+        {
+          "name": "Dina Kampouraki",
+          "title": "Head of sector",
+          "email": "dina.kampouraki@edps.europa.eu",
+          "phone": "+ 32 2 28 40604"
+        },
+        {
+          "name": "L. F. Cerrato",
+          "title": "Technology and security officer — -- Technology expert"
+        },
+        {
+          "name": "J. M. GONZALEZ Fraile",
+          "title": "Technology and security officer — -- Privacy Expert"
+        },
+        {
+          "name": "L. A. Cutillo",
+          "title": "Technology and security officer — -- Privacy Expert"
+        },
+        {
+          "name": "Xabier Lareo",
+          "title": "Head of sector",
+          "email": "xabier.lareo@edps.europa.eu",
+          "phone": "+ 32 2 28 31855"
+        },
+        {
+          "name": "A. Goldstein",
+          "title": "Technology and security officer — -- Privacy Expert"
+        },
+        {
+          "name": "V. Bernardo",
+          "title": "Technology and security officer — -- Privacy Expert"
+        },
+        {
+          "name": "K. S. Keskpaik",
+          "title": "Technology and security officer"
+        },
+        {
+          "name": "F. Wöstmann",
+          "title": "Technology and security officer"
+        },
+        {
+          "name": "A. Leao",
+          "title": "Team Leader — Operations and -- Support, Backup Cybersecurity Officer"
+        }
+      ]
+    },
+    "AI — Artificial Intelligence": {
+      "name": "AI — Artificial Intelligence",
+      "persons": [
+        {
+          "name": "Sonia Perez Romero",
+          "title": ""
+        },
+        {
+          "name": "A. Prisker",
+          "title": ""
+        },
+        {
+          "name": "E. Parisini",
+          "title": ""
+        },
+        {
+          "name": "M. Avramidou",
+          "title": ""
+        },
+        {
+          "name": "G. Raguckaja",
+          "title": ""
+        },
+        {
+          "name": "R. Andronico",
+          "title": ""
+        },
+        {
+          "name": "Sonia Perez Romero",
+          "title": ""
+        },
+        {
+          "name": "M. GARCIA Sanchez",
+          "title": ""
+        },
+        {
+          "name": "M. Macenaite",
+          "title": ""
+        },
+        {
+          "name": "F. Schiltz",
+          "title": ""
+        }
+      ]
+    },
+    "GIC — Governance & Internal": {
+      "name": "GIC — Governance & Internal",
+      "persons": [
+        {
+          "name": "T. Tsankov",
+          "title": "Legal Assistant"
+        },
+        {
+          "name": "M. Ketsetzi",
+          "title": "Internal control coordinator"
+        },
+        {
+          "name": "C. Chira-Pascanut",
+          "title": "Data Protection Officer"
+        },
+        {
+          "name": "Luisa Palla",
+          "title": "Head of Unit",
+          "email": "luisa.palla@edps.europa.eu",
+          "phone": "+ 32 2 28 31936"
+        },
+        {
+          "name": "D. Bolewicz",
+          "title": "Administrative assistant"
+        },
+        {
+          "name": "Concepcion Perez",
+          "title": "",
+          "email": "concepcion.perez@edps.europa.eu"
+        }
+      ]
+    },
+    "IC — Information and": {
+      "name": "IC — Information and",
+      "persons": [
+        {
+          "name": "A. Nyka",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "K. Wozniak",
+          "title": "Information and communication officer — -- Information & Communication Assistant"
+        },
+        {
+          "name": "V. Raskin",
+          "title": "Information and communication officer — -- Events Coordinator"
+        },
+        {
+          "name": "C. Delhez",
+          "title": "Finance and procurement officer"
+        },
+        {
+          "name": "F. Albinati",
+          "title": "Information and communication -- officer — Digital Media Coordinator -- — Deputy Head of Unit Information & -- Communication"
+        },
+        {
+          "name": "C. Freschi",
+          "title": "Information and communication officer — -- Graphic Designer"
+        },
+        {
+          "name": "Olivier Rossignol",
+          "title": "Head of Unit",
+          "email": "olivier.rossignol@edps.europa.eu",
+          "phone": "+ 32 2 28 31935"
+        },
+        {
+          "name": "M. Cakurdova",
+          "title": ""
+        }
+      ]
+    },
+    "HRBA — Human Resources,": {
+      "name": "HRBA — Human Resources,",
+      "persons": [
+        {
+          "name": "Helmut Keller",
+          "title": "Acting Head of Unit",
+          "email": "helmut.keller@edps.europa.eu"
+        },
+        {
+          "name": "Helmut Keller",
+          "title": "Deputy Head of Unit"
+        },
+        {
+          "name": "F.-M. Gonay",
+          "title": ""
+        },
+        {
+          "name": "N. Essbuechl",
+          "title": ""
+        },
+        {
+          "name": "S. Balan",
+          "title": ""
+        },
+        {
+          "name": "M. Tanyeri",
+          "title": ""
+        },
+        {
+          "name": "Anne-Francoise Reynders",
+          "title": "Head of sector",
+          "email": "anne-francoise.reynders@edps.europa.eu",
+          "phone": "+ 32 2 28 31930"
+        },
+        {
+          "name": "M. Oikonomou",
+          "title": "HRM Assistant-People Management — -- GECO"
+        },
+        {
+          "name": "P. Tsellos",
+          "title": ""
+        },
+        {
+          "name": "J. Wasowska",
+          "title": "HRM Assistant-People Management"
+        },
+        {
+          "name": "I. Vacarescu",
+          "title": ""
+        },
+        {
+          "name": "I. PEREZ Mugica",
+          "title": ""
+        },
+        {
+          "name": "A. Piekart",
+          "title": ""
+        },
+        {
+          "name": "J.-M. Verstaen",
+          "title": "Financial Assistant"
+        },
+        {
+          "name": "S. Vitanova",
+          "title": "Financial Assistant — PROCUREMENT -- ASSISTANT"
+        },
+        {
+          "name": "E. Humic",
+          "title": ""
+        },
+        {
+          "name": "J.-F. Castel",
+          "title": ""
+        },
+        {
+          "name": "D. Szymczak",
+          "title": ""
+        }
+      ]
+    },
+    "EDPB — Secretariat of the": {
+      "name": "EDPB — Secretariat of the",
+      "persons": [
+        {
+          "name": "Isabelle Vereecken",
+          "title": "Head of Unit",
+          "email": "isabelle.vereecken@edpb.europa.eu",
+          "phone": "+ 32 2 28 30654"
+        },
+        {
+          "name": "G. LE Grand",
+          "title": ""
+        },
+        {
+          "name": "M. Chome",
+          "title": ""
+        },
+        {
+          "name": "Carolina Foglia",
+          "title": "Head of sector",
+          "email": "carolina.foglia@edpb.europa.eu",
+          "phone": "+ 32 2 28 31841"
+        },
+        {
+          "name": "C. Allagnat",
+          "title": "Legal officer"
+        },
+        {
+          "name": "H. Dekeyser",
+          "title": "Legal officer — Coordinator of record -- management activities"
+        },
+        {
+          "name": "A. Lytra",
+          "title": "Legal officer"
+        },
+        {
+          "name": "M. Mcginley",
+          "title": "Legal officer"
+        },
+        {
+          "name": "E. Kazakevicius",
+          "title": "Legal officer"
+        },
+        {
+          "name": "J.-A. Defromont",
+          "title": "Legal officer"
+        },
+        {
+          "name": "S. Crouzet",
+          "title": "Legal officer"
+        },
+        {
+          "name": "A. Lepine",
+          "title": "Legal officer"
+        },
+        {
+          "name": "A. Drakou",
+          "title": ""
+        },
+        {
+          "name": "Myriam Gufflet",
+          "title": "Head of sector",
+          "email": "myriam.gufflet@edpb.europa.eu"
+        },
+        {
+          "name": "A. Ricci",
+          "title": ""
+        },
+        {
+          "name": "P. Kalyva",
+          "title": "Legal officer — Legal officer"
+        },
+        {
+          "name": "N. PERIS Brines",
+          "title": "Legal officer"
+        },
+        {
+          "name": "R. Muraro",
+          "title": "Legal officer — Transparency Officer"
+        },
+        {
+          "name": "A. Pinto",
+          "title": "Legal officer"
+        },
+        {
+          "name": "G. Pazereckaite",
+          "title": "Legal officer"
+        },
+        {
+          "name": "M. Akritidou",
+          "title": "Legal officer"
+        },
+        {
+          "name": "S. Mihail",
+          "title": ""
+        },
+        {
+          "name": "D. DE Cicco",
+          "title": "Legal officer"
+        },
+        {
+          "name": "S.-D. Feizidou",
+          "title": ""
+        },
+        {
+          "name": "N. Domanov",
+          "title": ""
+        },
+        {
+          "name": "Greet Gysen",
+          "title": "Head of sector",
+          "email": "greet.gysen@edpb.europa.eu",
+          "phone": "+ 32 2 28 31946"
+        },
+        {
+          "name": "V. Cozza",
+          "title": "Information and communication officer — -- Press and Social Media Officer"
+        },
+        {
+          "name": "A. Gragnaniello",
+          "title": "Information and communication officer"
+        },
+        {
+          "name": "M. Colonna",
+          "title": "Webmaster-Editor"
+        },
+        {
+          "name": "F. Mollet",
+          "title": "Administrative assistant — EDPB -- Secretariat Sector assistant"
+        },
+        {
+          "name": "M.-F. Demarcq",
+          "title": "Administrative assistant — -- Administrative assistant — EDPB -- Secretariat Sector assistant"
+        },
+        {
+          "name": "O. Domanska",
+          "title": "Administrative assistant"
+        },
+        {
+          "name": "E. Panagou",
+          "title": "Team Leader — Head of Sector"
+        },
+        {
+          "name": "V. Sarakinidou",
+          "title": ""
+        },
+        {
+          "name": "A.-B. BARRAN Senin",
+          "title": "Administrative assistant"
+        },
+        {
+          "name": "N. Tarala",
+          "title": ""
+        },
+        {
+          "name": "P. SANCHEZ Corral",
+          "title": ""
+        },
+        {
+          "name": "A. Immoun",
+          "title": ""
+        },
+        {
+          "name": "K. Andrianopoulos",
+          "title": ""
+        },
+        {
+          "name": "A. Jambert",
+          "title": "Technology and security officer"
+        }
+      ]
+    }
+  }
+}

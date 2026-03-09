@@ -1,0 +1,276 @@
+{
+  "dg_code": "NEAR",
+  "dg_name": "Directorate-General for Enlargement and Eastern Neighbourhood",
+  "commissioner": "",
+  "director_general": "Gert Jan Koopman",
+  "director_general_email": "Gert-Jan.Koopman@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Natalie Pauwels",
+      "email": "Natalie.PAUWELS@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Gert Jan Koopman",
+      "email": "Gert-Jan.Koopman@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Katarzyna Szczepanska",
+      "director_email": "Katarzyna.SZCZEPANSKA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Aleksandra Tomczak",
+          "head_email": "Aleksandra.TOMCZAK@ec.europa.eu",
+          "head_phone": "+32 229-55877"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "NEIGHBOURHOOD EAST & TÜRKIYE",
+      "director": "Adrienn Kiraly",
+      "director_email": "Adrienn.KIRALY@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Michael Voegele",
+          "head_email": "Michael.VOEGELE@ec.europa.eu",
+          "head_phone": "+32 229-98817"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Allan Jones",
+          "head_email": "Allan.Jones@ec.europa.eu",
+          "head_phone": "+32 229-52211"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Antoine Colombani",
+          "head_email": "Antoine.COLOMBANI@ec.europa.eu",
+          "head_phone": "+32 229-74513"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "David Cullen",
+          "head_email": "David.CULLEN@ec.europa.eu",
+          "head_phone": "+32 229-93174"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Luisa Wyganowski",
+          "head_email": "Maria-Luisa.WYGANOWSKI@ec.europa.eu",
+          "head_phone": "+32 229-68404"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "UKRAINE SERVICE",
+      "director": "Anna Jarosz-Friis",
+      "director_email": "Anna.JAROSZ-FRIIS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Elena Visnar Malinovska",
+          "head_email": "Elena.VISNAR-MALINOVSKA@ec.europa.eu",
+          "head_phone": "+32 229-67055"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Benoit Mesnard",
+          "head_email": "Benoit.MESNARD@ec.europa.eu",
+          "head_phone": "+32 229-94359"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wolfgang Nozar",
+          "head_email": "Wolfgang.NOZAR@ec.europa.eu",
+          "head_phone": "+32 229-96058"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Simon O'Connor",
+          "head_email": "CONNOR@ec.europa.eu",
+          "head_phone": "+32 229-67359"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefan Schleuning",
+          "head_email": "STEFAN.SCHLEUNING@EC.EUROPA.EU",
+          "head_phone": "+380 44-3908010"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "ENLARGEMENT COORDINATION, STRATEGY & INVESTMENTS",
+      "director": "Mathieu Bousquet",
+      "director_email": "Mathieu.BOUSQUET@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Thomas Hagleitner",
+          "head_email": "Thomas.Hagleitner@ec.europa.eu",
+          "head_phone": "+32 229-67203"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bernhard Windisch",
+          "head_email": "Bernhard.WINDISCH@ec.europa.eu",
+          "head_phone": "+32 229-66247"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hoa-Binh Adjemian",
+          "head_email": "Hoa-Binh.ADJEMIAN@ec.europa.eu",
+          "head_phone": "+32 229-82168"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Barbara Banki Gardinal",
+          "head_email": "Barbara.BANKI@ec.europa.eu",
+          "head_phone": "+32 229-57053"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Vezyroglou",
+          "head_email": "Anna.VEZYROGLOU@ec.europa.eu",
+          "head_phone": "+32 229-81997"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "WESTERN BALKANS",
+      "director": "Valentina Superti",
+      "director_email": "Valentina.Superti@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Wojciech Kowalski",
+          "head_email": "Wojciech.KOWALSKI@ec.europa.eu",
+          "head_phone": "+32 229-65423"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christophe Galand",
+          "head_email": "Christophe.GALAND@ec.europa.eu",
+          "head_phone": "+32 229-88458"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jiri Plecity",
+          "head_email": "Jiri.PLECITY@ec.europa.eu",
+          "head_phone": "+32 229-86660"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sigrid Brettel",
+          "head_email": "Sigrid.BRETTEL@ec.europa.eu",
+          "head_phone": "+32 229-86777"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Barbara Jesus-Gimeno",
+          "head_email": "Barbara.JESUS-GIMENO@ec.europa.eu",
+          "head_phone": "+32 229-99609"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "RESOURCES",
+      "director": "Victoria Gil Casado",
+      "director_email": "Victoria.GIL@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Fanny Marchal",
+          "head_email": "Fanny.MARCHAL@ec.europa.eu",
+          "head_phone": "+32 229-58451"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nathalie Thiberge",
+          "head_email": "Nathalie.THIBERGE@ec.europa.eu",
+          "head_phone": "+32 229-81443"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christelle Goulard",
+          "head_email": "Christelle.GOULARD@ec.europa.eu",
+          "head_phone": "+32 229-68699"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Janina Mank",
+          "head_email": "Janina.MANK@ec.europa.eu",
+          "head_phone": "+32 229-84079"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lawrence Meredith",
+          "head_email": "Lawrence.Meredith@ec.europa.eu",
+          "head_phone": "+32 229-57538"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katarina Mathernova",
+          "head_email": "Katarina.MATHERNOVA@eeas.europa.eu",
+          "head_phone": "+32 229-62873"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vassilis Maragos",
+          "head_email": "Vassilis.MARAGOS@ec.europa.eu",
+          "head_phone": "+32 229-57198"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michael Miller",
+          "head_email": "Michael.Miller@ec.europa.eu",
+          "head_phone": "+32 229-62771"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 6,
+  "num_units": 29,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

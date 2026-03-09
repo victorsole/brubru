@@ -1,298 +1,371 @@
 {
   "dg_code": "ENER",
-  "dg_name": "Energy",
-  "commissioner": "Dan Jørgensen",
-  "date_of_effect": "2025-01-10",
-  "director_general": {
-    "name": "Ditte Juul Jørgensen",
-    "assistants": [
-      "Julia Bernatonis",
-      "Jose Maria Barreiro"
-    ]
-  },
-  "principal_adviser": {
-    "name": "Tudor Constantinescu"
-  },
-  "adviser_for_policy_development": {
-    "name": "Ana Luisa De Castro"
-  },
+  "dg_name": "Directorate-General for Energy",
+  "commissioner": "",
+  "director_general": "Ditte Juul-Joergensen",
+  "director_general_email": "Ditte.JUUL-JOERGENSEN@ec.europa.eu",
   "deputy_directors_general": [
     {
-      "name": "Mechthild Wörsdörfer",
-      "responsibilities": "General"
+      "name": "Renatas Mazeika",
+      "email": "Renatas.MAZEIKA@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "name": "Massimo Garribba",
-      "responsibilities": "General",
-      "adviser_on_european_federations": {
-        "name": "Johann Makhorin"
-      }
-    }
-  ],
-  "ener_tfh": {
-    "name": "Task Force Housing (TFH)",
-    "deputy_director_general": "Matthew Baldwin",
-    "note": "The Housing Task Force directly reports to the Commissioner for the duration of the Commission mandate",
-    "partner_dg": {
-      "name": "Partner Housing Strategy and Coordination",
-      "head": "Stefan Hansen"
-    }
-  },
-  "agencies": [
-    {
-      "code": "ESA",
-      "name": "European Supply Agency",
-      "head": "Michael Huebel"
+      "name": "Mechthild Woersdoerfer",
+      "email": "Mechthild.Woersdoerfer@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "code": "LUX",
-      "name": "Staff based in Luxembourg",
-      "units": [
-        "ENER.1 - Nuclear Materials and Fuel Market",
-        "ENER.01 - HR Correspondent and Internal Communication",
-        "ENER.SRO - Shared Resource Directorate Movsener"
-      ]
+      "name": "Anca-Iulia Cimpeanu",
+      "email": "Anca-Iulia.CIMPEANU@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Michael Huebel",
+      "email": "Michael.Huebel@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "ENER.A",
-      "name": "Energy Policy, Strategy and Coordination",
+      "code": "",
+      "name": "General",
+      "director": "Markela Stamati",
+      "director_email": "Markela.STAMATI@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Nicolas Kuen",
+          "head_email": "Nicolas.KUEN@ec.europa.eu",
+          "head_phone": "+32 229-65479"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tudor Constantinescu",
+          "head_email": "Tudor.CONSTANTINESCU@ec.europa.eu",
+          "head_phone": "+32 229-69416"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Haitze Siemers",
+          "head_email": "Haitze-J.Siemers@ec.europa.eu",
+          "head_phone": "+32 229-90185"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marco Coppola",
+          "head_email": "Marco.Coppola@ec.europa.eu",
+          "head_phone": "+32 229-65055"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "ENERGY POLICY: STRATEGY AND COORDINATION",
       "director": "Pierre Schellekens",
+      "director_email": "Pierre.Schellekens@ec.europa.eu",
       "units": [
         {
-          "code": "ENER.A.1",
-          "name": "Energy Policy Coordination and Planning, Interinstitutional Relations and Governance",
-          "head": "Andreas Indrenius"
+          "code": "",
+          "name": "",
+          "head": "Paula Abreu Marques",
+          "head_email": "Paula.Abreu-Marques@ec.europa.eu",
+          "head_phone": "+32 229-53805"
         },
         {
-          "code": "ENER.A.2",
-          "name": "Energy Transition and Outreach",
-          "head": "Margrietus C. Van Loon"
+          "code": "",
+          "name": "",
+          "head": "Ewelina Hartstein",
+          "head_email": "Ewelina.HARTSTEIN@ec.europa.eu",
+          "head_phone": "+32 229-67269"
         },
         {
-          "code": "ENER.A.3",
-          "name": "Legal Affairs",
-          "head": "Claire M. Lajaunie"
+          "code": "",
+          "name": "",
+          "head": "Anne-Charlotte Bournoville",
+          "head_email": "Anne-Charlotte.Bournoville@ec.europa.eu",
+          "head_phone": "+32 229-67304"
         },
         {
-          "code": "ENER.A.4",
-          "name": "Energy Enforcement",
-          "head": "Antonis Lopez-Nicolas"
+          "code": "",
+          "name": "",
+          "head": "Antonio Lopez-Nicolas",
+          "head_email": "Antonio.LOPEZ-NICOLAS@ec.europa.eu",
+          "head_phone": "+32 229-89462"
         }
       ]
     },
     {
-      "code": "ENER.B",
-      "name": "Just Transition, Consumers, Energy Efficiency and Innovation",
+      "code": "Dir B",
+      "name": "JUST TRANSITION, CONSUMERS, EFFICIENCY AND INNOVATION",
       "director": "Rosalinde Van Der Vlies",
+      "director_email": "Rosalinde.VAN-DER-VLIES@ec.europa.eu",
       "units": [
         {
-          "code": "ENER.B.1",
-          "name": "Consumers, Local Initiatives, Just Transition",
-          "head": "Karel De Gucht"
+          "code": "",
+          "name": "",
+          "head": "Eero Ailio",
+          "head_email": "Eero.Ailio@ec.europa.eu",
+          "head_phone": "+32 229-68341"
         },
         {
-          "code": "ENER.B.2",
-          "name": "Energy Efficiency, Policy and Financing",
-          "head": "Maarten B Notten"
+          "code": "",
+          "name": "",
+          "head": "Alejandro Ulzurrun De Asanza",
+          "head_email": "",
+          "head_phone": ""
         },
         {
-          "code": "ENER.B.3",
-          "name": "Buildings and Products",
-          "head": "Paula Arias Ortiz"
+          "code": "",
+          "name": "",
+          "head": "Y Munoz",
+          "head_email": "Alejandro.Ulzurrun@ec.europa.eu",
+          "head_phone": "+32 229-54867"
         },
         {
-          "code": "ENER.B.4",
-          "name": "Innovation, Competitiveness, Research and Innovation",
-          "head": "Vincent Berrutto"
+          "code": "",
+          "name": "",
+          "head": "Margareta Djordjevic",
+          "head_email": "Margareta.DJORDJEVIC@ec.europa.eu",
+          "head_phone": "+32 229-13352"
         },
         {
-          "code": "ENER.B.5",
-          "name": "Adviser for Energy Transition and EU Governance",
-          "head": "Clara Malkassian"
+          "code": "",
+          "name": "",
+          "head": "Robert Nuij",
+          "head_email": "Robert.NUIJ@ec.europa.eu",
+          "head_phone": "+32 229-86183"
         },
         {
-          "code": "ENER.B.6",
-          "name": "Adviser for Energy Investment and Financing",
-          "head": "Olivier Lonjou"
+          "code": "",
+          "name": "",
+          "head": "Vincent Berrutto",
+          "head_email": "Vincent.BERRUTTO@ec.europa.eu",
+          "head_phone": "+32 229-68642"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Lange",
+          "head_email": "Martin.LANGE@ec.europa.eu",
+          "head_phone": "+32 229-56838"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hans Rhein",
+          "head_email": "Hans.RHEIN@ec.europa.eu",
+          "head_phone": "+32 229-87700"
         }
       ]
     },
     {
-      "code": "ENER.C",
-      "name": "Green Transition and Energy System Integration Policy",
+      "code": "Dir C",
+      "name": "GREEN TRANSITION AND ENERGY SYSTEM INTEGRATION",
       "director": "Lukasz Kolinski",
+      "director_email": "Lukasz.KOLINSKI@ec.europa.eu",
       "units": [
         {
-          "code": "ENER.C.1",
-          "name": "Energy and System Integration Policy",
-          "head": "Paola Garcia"
+          "code": "",
+          "name": "",
+          "head": "Tom Howes",
+          "head_email": "Tom.HOWES@ec.europa.eu",
+          "head_phone": "+32 229-51642"
         },
         {
-          "code": "ENER.C.2",
-          "name": "Decarbonisation and Energy Sources",
-          "head": "Keith Whiriskey"
+          "code": "",
+          "name": "",
+          "head": "Paula Rey Garcia",
+          "head_email": "Paula.REY-GARCIA@ec.europa.eu",
+          "head_phone": "+32 229-59114"
         },
         {
-          "code": "ENER.C.3",
-          "name": "Internal Energy Market",
-          "head": "Christof Lesener"
+          "code": "",
+          "name": "",
+          "head": "Kitti Nyitrai",
+          "head_email": "Kitti.NYITRAI@ec.europa.eu",
+          "head_phone": "+32 229-71579"
         },
         {
-          "code": "ENER.C.4",
-          "name": "Wholesale and Regional Cooperation",
-          "head": "Zachary Kalbac"
+          "code": "",
+          "name": "",
+          "head": "Christof Lessenich",
+          "head_email": "Christof.LESSENICH@ec.europa.eu",
+          "head_phone": "+32 229-66690"
         },
         {
-          "code": "ENER.C.5",
-          "name": "Adviser for Grid Transition and Target Regulation",
-          "head": "Eric Willett"
+          "code": "",
+          "name": "",
+          "head": "Joachim Balke",
+          "head_email": "Joachim.BALKE@ec.europa.eu",
+          "head_phone": "+32 229-62369"
         },
         {
-          "code": "ENER.C.6",
-          "name": "Adviser for Electricity and Renewable Energy Transition Mechanisms",
-          "head": "Laurent De Caunes"
+          "code": "",
+          "name": "",
+          "head": "Lina Baniene",
+          "head_email": "Lina.BANIENE@ec.europa.eu",
+          "head_phone": "+352 4301-31462"
         }
       ]
     },
     {
-      "code": "ENER.D",
-      "name": "Nuclear Energy, Safety and Nuclear Power Plant",
+      "code": "Dir D",
+      "name": "NUCLEAR ENERGY, SAFETY AND ITER",
       "director": "Jan Panek",
+      "director_email": "Jan.PANEK@ec.europa.eu",
       "units": [
         {
-          "code": "ENER.D.1",
-          "name": "Nuclear Policy Coordination",
-          "head": "Andrej Ferber (Acting)"
+          "code": "",
+          "name": "",
+          "head": "Charlotte Grevfors Ernoult",
+          "head_email": "ERNOULT@ec.europa.eu",
+          "head_phone": "+352 4301-35916"
         },
         {
-          "code": "ENER.D.2",
-          "name": "Radiation Protection and Nuclear Medicine",
-          "head": "Alicia Micol",
-          "deputy": "Simona Benedetti"
+          "code": "",
+          "name": "",
+          "head": "Gianfranco Brunetti",
+          "head_email": "Gianfranco.BRUNETTI@ec.europa.eu",
+          "head_phone": "+352 4301-36949"
         },
         {
-          "code": "ENER.D.3",
-          "name": "Radiation Protection Standards",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Ana Rita Lopes Ramos",
+          "head_email": "Ana-Rita.LOPES-RAMOS@ec.europa.eu",
+          "head_phone": "+352 4301-34659"
         },
         {
-          "code": "ENER.D.4",
-          "name": "Data Management",
-          "head": "Evgeniia Felitscher",
-          "deputy": "Anastasije Alagic"
+          "code": "",
+          "name": "",
+          "head": "Benoît Fourestie",
+          "head_email": "Benoit.FOURESTIE@ec.europa.eu",
+          "head_phone": "+352 4301-32706"
         }
       ]
     },
     {
-      "code": "ENER.E",
-      "name": "Euratom Safeguards",
-      "director": "Jan Panek",
+      "code": "Dir E",
+      "name": "EURATOM SAFEGUARDS",
+      "director": "Stephan Lechner",
+      "director_email": "Stephan.LECHNER@ec.europa.eu",
       "units": [
         {
-          "code": "ENER.E.1",
-          "name": "Safeguards & Technology",
-          "head": "Ricardo Jarrard Llavona"
+          "code": "",
+          "name": "",
+          "head": "Iuliana Gabriela Aluas",
+          "head_email": "Iuliana-Gabriela.ALUAS@ec.europa.eu",
+          "head_phone": "+352 4301-31498"
         },
         {
-          "code": "ENER.E.2",
-          "name": "Ministry of Support",
-          "head": "Susanna Santi"
+          "code": "",
+          "name": "",
+          "head": "Pascal Maillot",
+          "head_email": "Pascal.MAILLOT@ec.europa.eu",
+          "head_phone": "+352 4301-34391"
         },
         {
-          "code": "ENER.E.3",
-          "name": "Inspections, Enrichment, Fabrication and Reprocessing Sites",
-          "head": "Louis Carlier"
+          "code": "",
+          "name": "",
+          "head": "Nicolas Imbert",
+          "head_email": "Nicolas.IMBERT@ec.europa.eu",
+          "head_phone": "+352 4301-30166"
         },
         {
-          "code": "ENER.E.4",
-          "name": "Inspections, Reactors, Associated Fuel Cycle and Other Installations Including Sources",
-          "head": "Thomas Jones"
+          "code": "",
+          "name": "",
+          "head": "Florence Judes",
+          "head_email": "Florence.JUDES@ec.europa.eu",
+          "head_phone": "+352 4301-35791"
         },
         {
-          "code": "ENER.E.5",
-          "name": "Nuclear Accountability and Material Qualification",
-          "head": "Alessandro Pecci"
+          "code": "",
+          "name": "",
+          "head": "Alessandra Politi",
+          "head_email": "Alessandra.POLITI@ec.europa.eu",
+          "head_phone": "+352 4301-36360"
         }
       ]
     },
     {
-      "code": "ENER.F",
-      "name": "Energy Security and Renewable Energy Sources",
+      "code": "Dir F",
+      "name": "ENERGY SECURITY AND INTERNATIONAL RELATIONS",
       "director": "Cristina Lobillo Borrero",
+      "director_email": "Cristina.LOBILLO-BORRERO@ec.europa.eu",
       "units": [
         {
-          "code": "ENER.F.1",
-          "name": "Integration of RES into Electricity and Point per Design",
-          "head": "Barbara Westermann"
+          "code": "",
+          "name": "",
+          "head": "Brendan Devlin",
+          "head_email": "Brendan.DEVLIN@ec.europa.eu",
+          "head_phone": "+32 229-68433"
         },
         {
-          "code": "ENER.F.2",
-          "name": "Security of Supply for the Member States and Sustainability Regulations",
-          "head": "Yolanda Garcia Mezquita"
+          "code": "",
+          "name": "",
+          "head": "Maciej Ciszewski",
+          "head_email": "Maciej.CISZEWSKI@ec.europa.eu",
+          "head_phone": "+32 229-62731"
         },
         {
-          "code": "ENER.F.3",
-          "name": "International Relations",
-          "head": "Dan Valerio"
+          "code": "",
+          "name": "",
+          "head": "Yolanda Garcia Mezquita",
+          "head_email": "Yolanda.GARCIA-MEZQUITA@ec.europa.eu",
+          "head_phone": "+32 229-59687"
         },
         {
-          "code": "ENER.F.4",
-          "name": "Energy Security & Safety",
-          "head": "Monica Scudger"
+          "code": "",
+          "name": "",
+          "head": "Isaac Valero",
+          "head_email": "Isaac.VALERO@ec.europa.eu",
+          "head_phone": "+32 229-64971"
         },
         {
-          "code": "ENER.F.5",
-          "name": "Adviser for International and EU Industrial Options on Stu Clean Energy Issues",
-          "head": "Vacant"
-        }
-      ]
-    },
-    {
-      "code": "ENER.SRO",
-      "name": "Shared Resource Directorate Movsener",
-      "director": "Frédéric Versinnen (Acting)",
-      "units": [
-        {
-          "code": "ENER.SRO.1",
-          "name": "Assurance and Supervision",
-          "head": "Fredrik Wersand"
+          "code": "",
+          "name": "",
+          "head": "Monika Zsigri",
+          "head_email": "Monika.ZSIGRI@ec.europa.eu",
+          "head_phone": "+32 229-53922"
         },
         {
-          "code": "ENER.SRO.2",
-          "name": "Strategic Management and Compliance",
-          "head": "Michel Horsch"
+          "code": "",
+          "name": "",
+          "head": "Michael Huebel",
+          "head_email": "Michael.Huebel@ec.europa.eu",
+          "head_phone": "+352 4301-34023"
         },
         {
-          "code": "ENER.SRO.3",
-          "name": "Budget and Financial Management and Compliance",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Stefano Ciccarello",
+          "head_email": "Stefano.CICCARELLO@ec.europa.eu",
+          "head_phone": "+352 4301-36227"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Matthew Baldwin",
+          "head_email": "Matthew.Baldwin@ec.europa.eu",
+          "head_phone": "+32 229-81304"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefan Moser",
+          "head_email": "Stefan.Moser@ec.europa.eu",
+          "head_phone": "+32 229-65880"
         }
       ]
     }
   ],
-  "agencies_details": [
-    {
-      "code": "ACER",
-      "name": "Agency for the Cooperation of Energy Regulators",
-      "director": "Christian Zinglersen"
-    },
-    {
-      "code": "FAE",
-      "name": "Fusion for Energy",
-      "director": "Joke Chaise"
-    }
-  ],
-  "seconded_managers_and_advisers": [
-    "Michael Hüebel seconded to the cabinet of Executive Vice-President Domínguez",
-    "Paula Pinho seconded to the Commission's Spokesperson's Service",
-    "Miguel Del Tetre seconded to the cabinet of Executive Vice-President Ribera Rodriguez"
-  ],
-  "notes": [
-    "BXL: Staff based in Brussels",
-    "LUX: Staff based in Luxembourg",
-    "D: Deputy to the Director",
-    "A: Mirror entity in Executive Agencies"
-  ]
+  "num_directorates": 7,
+  "num_units": 40,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

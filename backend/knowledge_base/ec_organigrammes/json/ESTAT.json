@@ -1,0 +1,320 @@
+{
+  "dg_code": "ESTAT",
+  "dg_name": "Eurostat",
+  "commissioner": "",
+  "director_general": "Mariana Kotzeva",
+  "director_general_email": "Mariana.KOTZEVA@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Cristina Pereira De Sa",
+      "email": "Cristina.Sa@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Athanasios Thanopoulos",
+      "email": "Athanasios.THANOPOULOS@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Maja Islam",
+      "director_email": "Maja.ISLAM@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "L-2721 Luxembourg",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pierre Bischoff",
+          "head_email": "Pierre.Bischoff@ec.europa.eu",
+          "head_phone": "+32 229-80762"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Guillermo Davila Muro",
+          "head_email": "Guillermo.Davila@ec.europa.eu",
+          "head_phone": "+32 229-93434"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gorja Bartsch",
+          "head_email": "Gorja.BARTSCH@ec.europa.eu",
+          "head_phone": "+352 4301-34566"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alvaro Diez Soto",
+          "head_email": "Alvaro.DIEZ-SOTO@ec.europa.eu",
+          "head_phone": "+352 4301-30199"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Avis Benes",
+          "head_email": "Avis.BENES@ec.europa.eu",
+          "head_phone": "+352 4301-35823"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "STANDARDS; DISSEMINATION; ENLARGEMENT",
+      "director": "Jean-Pierre Poncelet",
+      "director_email": "Jean-Pierre.PONCELET@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Martina Hahn",
+          "head_email": "Martina.HAHN@ec.europa.eu",
+          "head_phone": "+352 4301-35031"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ioannis Xirouchakis",
+          "head_email": "Ioannis.XIROUCHAKIS@ec.europa.eu",
+          "head_phone": "+352 4301-31657"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Claudia Junker",
+          "head_email": "Claudia.Junker@ec.europa.eu",
+          "head_phone": "+352 4301-35774"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "MACRO-ECONOMIC STATISTICS",
+      "director": "Maria Antonia Martinez",
+      "director_email": "LUENGO@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "John Verrinder",
+          "head_email": "John.Verrinder@ec.europa.eu",
+          "head_phone": "+352 4301-34185"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paul Konijn",
+          "head_email": "Paulus.Konijn@ec.europa.eu",
+          "head_phone": "+352 4301-33438"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jukka Jalava",
+          "head_email": "Jukka.JALAVA@ec.europa.eu",
+          "head_phone": "+352 4301-38435"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ani Todorova",
+          "head_email": "Ani.TODOROVA@ec.europa.eu",
+          "head_phone": "+352 4301-35912"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "RESOURCES",
+      "director": "Christine Wirtz",
+      "director_email": "Christine.Wirtz@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Giorgio Benali",
+          "head_email": "Giorgio.Benali@ec.europa.eu",
+          "head_phone": "+352 4301-33680"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dagmara Koska",
+          "head_email": "Dagmara.KOSKA@ec.europa.eu",
+          "head_phone": "+352 4301-30941"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gonzalo Carrasco Barneto",
+          "head_email": "BARNETO@ec.europa.eu",
+          "head_phone": "+352 4301-32129"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Luc Briol",
+          "head_email": "Luc.Briol@ec.europa.eu",
+          "head_phone": "+352 4301-34450"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "GOVERNMENT FINANCE STATISTICS (GFS)",
+      "director": "Gabriele Semeraro",
+      "director_email": "Gabriele.SEMERARO@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Rasa Jurkonienė",
+          "head_email": "Rasa.JURKONIENE@ec.europa.eu",
+          "head_phone": "+352 4301-36632"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Malgorzata Szczesna",
+          "head_email": "Malgorzata.SZCZESNA@ec.europa.eu",
+          "head_phone": "+352 4301-37407"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Miguel Alonso",
+          "head_email": "Miguel.ALONSO@ec.europa.eu",
+          "head_phone": "+352 4301-38356"
+        }
+      ]
+    },
+    {
+      "code": "Dir E",
+      "name": "SECTORAL AND REGIONAL STATISTICS",
+      "director": "Paul Morrin",
+      "director_email": "Paul.MORRIN@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ruxandra Roman Enescu",
+          "head_email": "Ruxandra.ROMAN-ENESCU@ec.europa.eu",
+          "head_phone": "+352 4301-35813"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Arturo De La Fuente Nuño",
+          "head_email": "Arturo.De-La-Fuente@ec.europa.eu",
+          "head_phone": "+352 4301-32461"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nikolaos Roubanis",
+          "head_email": "Nikolaos.Roubanis@ec.europa.eu",
+          "head_phone": "+352 4301-32483"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Márta Nagy-Rothengass",
+          "head_email": "Marta.Nagy-Rothengass@ec.europa.eu",
+          "head_phone": "+352 4301-31680"
+        }
+      ]
+    },
+    {
+      "code": "Dir F",
+      "name": "SOCIAL STATISTICS",
+      "director": "Jarko Pasanen",
+      "director_email": "Jarko.PASANEN@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Jarko Pasanen",
+          "head_email": "Jarko.PASANEN@ec.europa.eu",
+          "head_phone": "+352 4301-36099"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Susanne Taillemite",
+          "head_email": "Susanne.TAILLEMITE@ec.europa.eu",
+          "head_phone": "+352 4301-37726"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ilze Burkevica",
+          "head_email": "Ilze.BURKEVICA@ec.europa.eu",
+          "head_phone": "+352 4301-32318"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sigita Geske",
+          "head_email": "Sigita.Geske@ec.europa.eu",
+          "head_phone": "+352 4301-31542"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gita Bergere",
+          "head_email": "Gita.BERGERE@ec.europa.eu",
+          "head_phone": "+352 4301-37644"
+        }
+      ]
+    },
+    {
+      "code": "Dir G",
+      "name": "BUSINESS AND TRADE STATISTICS",
+      "director": "Petra Sneijers",
+      "director_email": "Petra.Sneijers@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ioannis Sopranidis",
+          "head_email": "Ioannis.SOPRANIDIS@ec.europa.eu",
+          "head_phone": "+352 4301-36775"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Enrica Morganti",
+          "head_email": "Enrica.MORGANTI@ec.europa.eu",
+          "head_phone": "+352 4301-37144"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ulrich Eidmann",
+          "head_email": "Ulrich.Eidmann@ec.europa.eu",
+          "head_phone": "+352 4301-35444"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Irene Madsen",
+          "head_email": "Irene.MADSEN@ec.europa.eu",
+          "head_phone": "+352 4301-33926"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 8,
+  "num_units": 33,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

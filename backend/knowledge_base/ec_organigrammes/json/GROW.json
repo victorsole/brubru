@@ -1,298 +1,433 @@
 {
   "dg_code": "GROW",
-  "dg_name": "Internal Market, Industry, Entrepreneurship & SMEs",
-  "executive_vice_president": "Stéphane Séjourné",
-  "date_of_effect": "2025-11-01",
-  "director_general": {
-    "name": "Kerstin Jorna",
-    "assistants": [
-      "Louise Butelli",
-      "Fabian Junge",
-      "Olif Erikn"
-    ]
-  },
+  "dg_name": "Directorate-General for Internal Market, Industry, Entrepreneurship and",
+  "commissioner": "",
+  "director_general": "Kerstin Jorna",
+  "director_general_email": "GROW-DG-OFFICE@ec.europa.eu",
   "deputy_directors_general": [
     {
-      "name": "Maive Rute",
-      "responsibilities": "Investment & Innovation"
+      "name": "Fabian Junge",
+      "email": "Fabian.JUNGE@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "name": "Hubert Gambs",
-      "responsibilities": "Simplification, SMEs, Barrier Removal"
+      "name": "Maive Rute",
+      "email": "Maive.RUTE@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Natalia Martinez Paramo",
+      "email": "Natalia.MARTINEZ-PARAMO@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Kerstin Jorna",
+      "email": "GROW-DG-OFFICE@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Bonifacio Garcia Porras",
+      "email": "Bonifacio.Garcia-Porras@ec.europa.eu",
+      "responsibilities": ""
     },
     {
       "name": "Valère Moutarlier",
-      "responsibilities": "European Industry and Decarbonisation"
-    }
-  ],
-  "agencies": [
-    {
-      "code": "EUIPO",
-      "name": "European Union Intellectual Property Office",
-      "head": "João Negrão"
-    },
-    {
-      "code": "EUSPA",
-      "name": "European Chemicals Agency",
-      "head": "Cosmin Popa-Istivan",
-      "deputy": "Shawn W. Connors"
-    }
-  ],
-  "principal_advisers": [
-    {
-      "name": "Francois Villedieu",
-      "area": "Economy Policy & Programming and Interinstitutional Relation"
-    },
-    {
-      "name": "Not shown",
-      "area": "Strategic Support for the European Oceans Pact",
-      "location": "Stefan De Keersmaecker"
+      "email": "Valere.Moutarlier@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "GROW.01",
-      "name": "Inter-Institutional and Communication, Interinstitutional Relations and Research Strategy",
-      "director": "Marie-Francoise Vereecke",
-      "deputy": "Marie-Helene Hilberg"
-    },
-    {
-      "code": "GROW.A",
-      "name": "Single Market & Regulatory Environment, Business Analysis",
-      "director": "Denis Genton",
+      "code": "",
+      "name": "General",
+      "director": "Natalia Zebrowska",
+      "director_email": "Natalia.ZEBROWSKA@ec.europa.eu",
       "units": [
         {
-          "code": "GROW.A.1",
-          "name": "Single Market Strategy and Economic Value Chains",
-          "head": "Niels Orris Ewald Larsen",
-          "deputy": "Theodoros Mara"
-        },
-        {
-          "code": "GROW.A.2",
-          "name": "Regulatory Policy",
-          "head": "Per Ake Torell",
-          "deputy": "Pascal Descamps"
-        },
-        {
-          "code": "GROW.A.3",
-          "name": "Notification, International Value Chains",
-          "head": "Marie Geny",
-          "deputy": "Vacant"
-        },
-        {
-          "code": "GROW.A.4",
-          "name": "Business-Friendly Deregulation",
-          "head": "Not shown",
-          "deputy": "Not shown"
-        },
-        {
-          "code": "GROW.A.5",
-          "name": "Business Environment Assessment",
-          "head": "Philippe Adriaenssens",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Ulla Hudina",
+          "head_email": "Ulla.HUDINA@ec.europa.eu",
+          "head_phone": "+32 229-68064"
         }
       ]
     },
     {
-      "code": "GROW.B",
-      "name": "Innovation and Innovation Driven Growth",
-      "director": "Ditte Sonnichsen",
+      "code": "Dir C",
+      "name": "INVESTMENT & INVESTEU",
+      "director": "Maive Rute",
+      "director_email": "Maive.RUTE@ec.europa.eu",
       "units": [
         {
-          "code": "GROW.B.1",
-          "name": "European Innovation Initiative",
-          "head": "Eleni Tsipouri",
-          "deputy": "Themistoklis Efthimiou"
+          "code": "",
+          "name": "",
+          "head": "Aliénor Margerit",
+          "head_email": "Alienor.MARGERIT@ec.europa.eu",
+          "head_phone": "+32 229-96749"
         },
         {
-          "code": "GROW.B.2",
-          "name": "Industrial Policy, Research and Innovation, Aerospace and Finance",
-          "head": "Wim Vandenberghe",
-          "deputy": "Thomas Pierre Alvin Rousseau"
+          "code": "",
+          "name": "",
+          "head": "Agnieszka Skonieczna",
+          "head_email": "Maria.SKONIECZNA@ec.europa.eu",
+          "head_phone": "+32 229-58515"
         },
         {
-          "code": "GROW.B.3",
-          "name": "Digital Solutions",
-          "head": "Lilian Van Houwe",
-          "deputy": "Titus Maurer"
+          "code": "",
+          "name": "",
+          "head": "Kristine Kozlova",
+          "head_email": "Kristine.KOZLOVA@ec.europa.eu",
+          "head_phone": "+352 4301-35281"
         },
         {
-          "code": "GROW.B.4",
-          "name": "SME Financed Better Regulations, Entrepreneurship and SMEs Executive Agency",
-          "head": "Constantinos Dadiotis",
-          "deputy": "Eva Garot"
+          "code": "",
+          "name": "",
+          "head": "Antongiulio Marin",
+          "head_email": "Antongiulio.MARIN@ec.europa.eu",
+          "head_phone": "+352 4301-39284"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pedro Santos",
+          "head_email": "Pedro.SANTOS1@ec.europa.eu",
+          "head_phone": "+352 4301-31848"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Claudiu Ciprian Cristea",
+          "head_email": "Claudiu-Ciprian.CRISTEA@ec.europa.eu",
+          "head_phone": "+32 229-59314"
         }
       ]
     },
     {
-      "code": "GROW.C",
-      "name": "Investment Support",
-      "director": "Giorgio Champion Cagnin",
+      "code": "Dir D",
+      "name": "COMPETITIVENESS COORDINATION",
+      "director": "Nathalie Berger",
+      "director_email": "Nathalie.BERGER@ec.europa.eu",
       "units": [
         {
-          "code": "GROW.C.1",
-          "name": "SOLVIT & MARKET",
-          "head": "Notburga Seebacher"
+          "code": "",
+          "name": "",
+          "head": "Kirsi Ekroth-Manssila",
+          "head_email": "Kirsi.Ekroth-Manssila@ec.europa.eu",
+          "head_phone": "+32 229-50708"
         },
         {
-          "code": "GROW.C.2",
-          "name": "EU Projects and Budget Support: Public Investment",
-          "head": "Kristin Schreiber",
-          "deputy": "Alberto D. Combellas"
+          "code": "",
+          "name": "",
+          "head": "Henning Ehrenstein",
+          "head_email": "Henning.EHRENSTEIN@ec.europa.eu",
+          "head_phone": "+32 229-80393"
         },
         {
-          "code": "GROW.C.3",
-          "name": "Products & Standards and Industries",
-          "head": "Enrico Prigogine"
+          "code": "",
+          "name": "",
+          "head": "Kamil Kiljanski",
+          "head_email": "Kamil.KILJANSKI@ec.europa.eu",
+          "head_phone": "+32 229-66166"
         },
         {
-          "code": "GROW.C.4",
-          "name": "Company Law",
-          "head": "Roderick Jagmin",
-          "deputy": "Emer Traynor"
-        },
-        {
-          "code": "GROW.C.5",
-          "name": "Architect for Project Finance",
-          "head": "Lorenzo Segato"
+          "code": "",
+          "name": "",
+          "head": "Giuseppe Casella",
+          "head_email": "",
+          "head_phone": ""
         }
       ]
     },
     {
-      "code": "GROW.D",
-      "name": "Competitiveness Coordination",
-      "director": "Natalia Loudjani",
+      "code": "Dir B",
+      "name": "SIMPLIFICATION AND NETWORKS",
+      "director": "Anna Athanasopoulou",
+      "director_email": "Anna.ATHANASOPOULOU@ec.europa.eu",
       "units": [
         {
-          "code": "GROW.D.1",
-          "name": "Coordination Between Competitiveness and Public Procurement",
-          "head": "Paolo Mazzarovich",
-          "deputy": "Laura Castaldo"
+          "code": "",
+          "name": "",
+          "head": "Laurence De Richemont",
+          "head_email": "Laurence.De-Richemont@ec.europa.eu",
+          "head_phone": "+32 229-51996"
         },
         {
-          "code": "GROW.D.2",
-          "name": "Standardisation",
-          "head": "Philippe Rostin"
+          "code": "",
+          "name": "",
+          "head": "Anna Athanasopoulou",
+          "head_email": "Anna.ATHANASOPOULOU@ec.europa.eu",
+          "head_phone": "+32 229-97977"
         },
         {
-          "code": "GROW.D.3",
-          "name": "Intellectual Property",
-          "head": "Francesco De Carlo Vettier",
-          "deputy": "Aurelia Burian Popa"
+          "code": "",
+          "name": "",
+          "head": "Damir Hajduk",
+          "head_email": "Damir.HAJDUK@ec.europa.eu",
+          "head_phone": "+32 229-82081"
         },
         {
-          "code": "GROW.D.4",
-          "name": "Horizontal Cooperation and Competence",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Mariella Masselink",
+          "head_email": "Mariella.MASSELINK@ec.europa.eu",
+          "head_phone": "+32 229-68983"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stephane Lebrun",
+          "head_email": "Stephane.Lebrun@ec.europa.eu",
+          "head_phone": "+32 229-62530"
         }
       ]
     },
     {
-      "code": "GROW.E",
-      "name": "Single Market Implementation and Information",
-      "director": "Marta Garcia Figueroa",
+      "code": "Dir E",
+      "name": "SINGLE MARKET, ENFORCEMENT AND BARRIER REMOVAL",
+      "director": "Mary Veronica Tovsak",
+      "director_email": "PLETERSKI@ec.europa.eu",
       "units": [
         {
-          "code": "GROW.E.1",
-          "name": "Single Market",
-          "head": "Colm Donoghue"
+          "code": "",
+          "name": "",
+          "head": "Martin Frohn",
+          "head_email": "Martin.Frohn@ec.europa.eu",
+          "head_phone": "+32 229-96420"
         },
         {
-          "code": "GROW.E.2",
-          "name": "Professional Qualifications and Markets",
-          "head": "Joris Sluimers"
+          "code": "",
+          "name": "",
+          "head": "Salvatore D'Acunto",
+          "head_email": "Salvatore.Dacunto@ec.europa.eu",
+          "head_phone": "+32 229-50798"
         },
         {
-          "code": "GROW.E.3",
-          "name": "Regulatory Information",
-          "head": "Aivars Timofejevs",
-          "deputy": "Janis Evers"
+          "code": "",
+          "name": "",
+          "head": "Radek Maly",
+          "head_email": "Radek.MALY@ec.europa.eu",
+          "head_phone": "+32 229-20868"
         },
         {
-          "code": "GROW.E.4",
-          "name": "Implementation and European Semester",
-          "head": "Danuta Drewicz",
-          "deputy": "Ildefonso Hernandez Llorens"
+          "code": "",
+          "name": "",
+          "head": "Alvydas Stancikas",
+          "head_email": "Alvydas.STANCIKAS@ec.europa.eu",
+          "head_phone": "+32 229-63857"
         },
         {
-          "code": "GROW.E.5",
-          "name": "Single Entrance",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Mehdi Hocine",
+          "head_email": "Mehdi.Hocine@ec.europa.eu",
+          "head_phone": "+32 229-94646"
         }
       ]
     },
     {
-      "code": "GROW.F",
-      "name": "Chemicals",
-      "director": "Ana Ferrer"
-    },
-    {
-      "code": "GROW.G",
-      "name": "Consumer and Responsible Business Conduct",
-      "director": "Joelle Grosse"
-    },
-    {
-      "code": "GROW.H",
-      "name": "Construction, Manufacturing and Industry",
-      "director": "Roberto Gamaciaferri",
+      "code": "Dir G",
+      "name": "COMPLIANCE AND RESPONSIBLE BUSINESS CONDUCT",
+      "director": "Jakub Boratynski",
+      "director_email": "Jakub.BORATYNSKI@ec.europa.eu",
       "units": [
         {
-          "code": "GROW.H.1",
-          "name": "Manufacturing",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Amaryllis Verhoeven",
+          "head_email": "Amaryllis.VERHOEVEN@ec.europa.eu",
+          "head_phone": "+32 229-98356"
         },
         {
-          "code": "GROW.H.2",
-          "name": "Construction, Raw Materials, Equipment and R&D",
-          "head": "Fabrizio Barbaso",
-          "deputy": "Elena Glikhovaya"
-        },
-        {
-          "code": "GROW.H.3",
-          "name": "Standards Rules",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Stefka Dzhumalieva",
+          "head_email": "Stefka.DZHUMALIEVA@ec.europa.eu",
+          "head_phone": "+32 229-55708"
         }
       ]
     },
     {
-      "code": "GROW.I",
-      "name": "Decarbonisation, Mobility, Raw Materials",
-      "director": "Susanne Williams Jennings",
+      "code": "Dir F",
+      "name": "CHEMICALS, BIOECONOMY AND RETAIL",
+      "director": "Kristin Schreiber",
+      "director_email": "Kristin.Schreiber@ec.europa.eu",
       "units": [
         {
-          "code": "GROW.I.1",
-          "name": "Manufacturing, Decarbonisation and Material Resources",
-          "head": "Nicolina Nempveu"
+          "code": "",
+          "name": "",
+          "head": "Florina-Andreea Pantazi",
+          "head_email": "Florina-Andreea.PANTAZI@ec.europa.eu",
+          "head_phone": "+32 229-75791"
         },
         {
-          "code": "GROW.I.2",
-          "name": "Automotive Mobility Logistics",
-          "head": "Laurens Hendriks"
+          "code": "",
+          "name": "",
+          "head": "Hans Ingels",
+          "head_email": "Hans.Ingels@ec.europa.eu",
+          "head_phone": "+32 229-66441"
         },
         {
-          "code": "GROW.I.3",
-          "name": "Critical Raw Materials and Circular Economy Investment",
-          "head": "Jean-Philippe Marcaille"
-        },
-        {
-          "code": "GROW.I.4",
-          "name": "Supply and Manufacturing",
-          "head": "Roelof Engels",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Giulia Del Brenna",
+          "head_email": "Giulia.DEL-BRENNA@ec.europa.eu",
+          "head_phone": "+32 229-58090"
         }
       ]
     },
     {
-      "code": "HORUS.C.3",
-      "name": "Strategic Communication and Information",
-      "head": "Maria Cristina Hernandez Antonio",
-      "deputy": "Not shown"
+      "code": "Dir H",
+      "name": "CONSTRUCTION, MACHINERY AND MARKET SURVEILLANCE",
+      "director": "Barbara Bonvissuto",
+      "director_email": "Barbara.BONVISSUTO@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Barbara Bonvissuto",
+          "head_email": "Barbara.BONVISSUTO@ec.europa.eu",
+          "head_phone": "+32 229-98178"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ana Xavier",
+          "head_email": "Ana.XAVIER@ec.europa.eu",
+          "head_phone": "+32 229-88254"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Guillaume Roty",
+          "head_email": "Guillaume.ROTY@ec.europa.eu",
+          "head_phone": "+32 229-82260"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Felicia Stoica",
+          "head_email": "Felicia.STOICA@ec.europa.eu",
+          "head_phone": "+32 229-56779"
+        }
+      ]
+    },
+    {
+      "code": "Dir I",
+      "name": "DECARBONISATION, MOBILITY, RAW MATERIALS",
+      "director": "Joaquim Nunes De Almeida",
+      "director_email": "Joaquim.Nunes-De-Almeida@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Joan Canton",
+          "head_email": "Joan.CANTON@ec.europa.eu",
+          "head_phone": "+32 229-52155"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mark Nicklas",
+          "head_email": "Mark.NICKLAS@ec.europa.eu",
+          "head_phone": "+32 229-54181"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jacek Truszczyński",
+          "head_email": "Jacek.TRUSZCZYNSKI@ec.europa.eu",
+          "head_phone": "+32 229-72136"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefano Soro",
+          "head_email": "Stefano.Soro@ec.europa.eu",
+          "head_phone": "+32 229-67543"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Silke Obst",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne Van Bruggen",
+          "head_email": "Anne.VAN-BRUGGEN@ec.europa.eu",
+          "head_phone": "+32 229-65005"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "SUPPLY CHAINS AND BUSINESS ANALYSIS",
+      "director": "Outi Slotboom",
+      "director_email": "Outi.Slotboom@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Roman Arjona",
+          "head_email": "Roman.ARJONA-GRACIA@ec.europa.eu",
+          "head_phone": "+32 229-94570"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marie-Hélène Pradines",
+          "head_email": "Marie-Helene.PRADINES@ec.europa.eu",
+          "head_phone": "+32 229-90167"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sophie Mueller",
+          "head_email": "Sophie.MUELLER@ec.europa.eu",
+          "head_phone": "+32 229-85849"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ralph Schmitt-Nilson",
+          "head_email": "Ralph.SCHMITT-NILSON@ec.europa.eu",
+          "head_phone": "+32 229-75286"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Matthias Schmidt-Gerdts",
+          "head_email": "Matthias.SCHMIDT-GERDTS@ec.europa.eu",
+          "head_phone": "+32 229-60075"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vanessa Uytborck",
+          "head_email": "Vanessa.UYTBORCK@ec.europa.eu",
+          "head_phone": "+32 229-56216"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Iwona Piorko",
+          "head_email": "Iwona.PIORKO@ec.europa.eu",
+          "head_phone": "+65 63367919"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Merete Clausen",
+          "head_email": "Merete.CLAUSEN@ec.europa.eu",
+          "head_phone": "+32 229-50055"
+        }
+      ]
     }
   ],
-  "notes": [
-    "Portfolio of the team attached to the Director-General and Deputy Directors-General: Anne Van Bruggen (files managed by Units 01, A.1, A.3, A.4, A.5) Natalia Zebrowska (files managed by Directorate D, Directorate E, Directorate H), Fabian Junge (files managed by Unit A.2, Directorate B, Directorate G, Directorate F), Ulla Hudina (files managed by Directorate C, Directorate I)",
-    "The following members of management staff are seconded in the interest of the service: M. Clausen, E. Göger, I. Piorko.",
-    "D: Deputy to the Director",
-    "A: Staff seconded to Agencies"
-  ]
+  "num_directorates": 10,
+  "num_units": 44,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

@@ -1,267 +1,220 @@
 {
   "dg_code": "DEFIS",
-  "dg_name": "Defence Industry and Space",
-  "full_name": "Directorate-General for Defence Industry and Space",
-  "date_of_effect": "2025-10-16",
-  "commissioner": {
-    "name": "Andrius Kubilius",
-    "title": "Commissioner"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "Timo Pesonen",
-      "position": "Director-General",
-      "assistants": [
+  "dg_name": "Directorate-General for Defence Industry and Space",
+  "commissioner": "",
+  "director_general": "Micha Comnick",
+  "director_general_email": "Micha.COMNICK@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Hugues Parmentier",
+      "email": "Hugues.PARMENTIER@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Lorena Boix Alonso",
+      "email": "Lorena.BOIX-ALONSO@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Maria Vittoria D'Inzeo",
+      "director_email": "Maria-Vittoria.DINZEO@ec.europa.eu",
+      "units": [
         {
-          "name": "Maria Vittoria D'Inzeo",
-          "role": "Assistant to the DG"
+          "code": "",
+          "name": "",
+          "head": "Timo Pesonen",
+          "head_email": "Timo.PESONEN@ec.europa.eu",
+          "head_phone": "+32 229-57995"
         },
         {
-          "name": "Micha Comnick",
-          "role": "Assistant to the DG"
+          "code": "",
+          "name": "",
+          "head": "Herald Ruijters",
+          "head_email": "Herald.RUIJTERS@ec.europa.eu",
+          "head_phone": "+32 229-68372"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gustaf Winroth",
+          "head_email": "Gustaf.WINROTH@ec.europa.eu",
+          "head_phone": "+32 229-69022"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christophe Morand",
+          "head_email": "Christophe.MORAND@ec.europa.eu",
+          "head_phone": "+32 229-93495"
         }
       ]
     },
-    "deputy_director_general": {
-      "name": "Herald Ruijters (acting)",
-      "position": "Deputy Director-General"
-    },
-    "deputy_director_general_task_force": {
-      "name": "Herald Ruijters",
-      "position": "Deputy Director-General for Security Action for Europe (SAFE)",
-      "code": "DEFIS.TF"
-    },
-    "advisers": [
-      {
-        "name": "Christophe Morand",
-        "title": "Adviser",
-        "area": "Synergies between Space, Defence and Civil Industries"
-      },
-      {
-        "name": "Hugues Parmentier",
-        "title": "Head of Unit",
-        "area": "Strategy, Interinstitutional Relations and Security",
-        "code": "DEFIS.01",
-        "deputy": "Olivier Fedeliof"
-      }
-    ],
-    "principal_advisers": []
-  },
-  "task_force": {
-    "code": "DEFIS.TF",
-    "name": "Task Force Security Action for Europe (SAFE)",
-    "head": {
-      "name": "Herald Ruijters",
-      "position": "Deputy Director-General"
-    },
-    "units": {
-      "tf1": {
-        "code": "DEFIS.TF.1",
-        "name": "SAFE Implementation",
-        "head": {
-          "name": "Gustav Winroth (acting)",
-          "deputy": "Fabio Liberti (acting)"
+    {
+      "code": "Dir A",
+      "name": "DEFENCE POLICY",
+      "director": "Tomasz Husak",
+      "director_email": "Tomasz.HUSAK@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Guillaume De La Brosse",
+          "head_email": "guillaume.delabrosse@ec.europa.eu",
+          "head_phone": "+32 229-61585"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Arūnas Vinčiūnas",
+          "head_email": "Arunas.VINCIUNAS1@ec.europa.eu",
+          "head_phone": "+32 229-81840"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paraskevi Papantoniou",
+          "head_email": "Paraskevi.PAPANTONIOU@ec.europa.eu",
+          "head_phone": "+32 229-84844"
         }
-      }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "DEFENCE INDUSTRIAL PROGRAMMES",
+      "director": "Francois Arbault",
+      "director_email": "Francois.ARBAULT@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sylvia Kainz-Huber",
+          "head_email": "Sylvia.Kainz-Huber@ec.europa.eu",
+          "head_phone": "+32 229-64130"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nynke Tigchelaar",
+          "head_email": "Nynke.TIGCHELAAR@ec.europa.eu",
+          "head_phone": "+32 229-57278"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Milosz Momot",
+          "head_email": "Milosz.MOMOT@ec.europa.eu",
+          "head_phone": "+32 229-80750"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "SECURE AND CONNECTED SPACE",
+      "director": "Ekaterini Kavvada",
+      "director_email": "Catherine.Kavvada@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Jeremie Godet",
+          "head_email": "Jeremie.GODET@ec.europa.eu",
+          "head_phone": "+32 229-59530"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zuzana Mazanova",
+          "head_email": "Zuzana.MAZANOVA@ec.europa.eu",
+          "head_phone": "+32 229-90359"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Giancarlo Granero",
+          "head_email": "Giancarlo.GRANERO@ec.europa.eu",
+          "head_phone": "+32 229-99311"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marko Curavić",
+          "head_email": "Marko.CURAVIC@ec.europa.eu",
+          "head_phone": "+32 229-87425"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maciej Górka",
+          "head_email": "Maciej.GORKA@ec.europa.eu",
+          "head_phone": "+32 229-54714"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "SPACE POLICY, SATELLITE NAVIGATION AND EARTH OBSERVATION",
+      "director": "Christoph Kautz",
+      "director_email": "Christoph.Kautz@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Fernandez Molinero",
+          "head_email": "MOLINERO@ec.europa.eu",
+          "head_phone": "+32 229-55419"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paul Flament",
+          "head_email": "Paul.Flament@ec.europa.eu",
+          "head_phone": "+32 229-56342"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mauro Facchini",
+          "head_email": "Mauro.FACCHINI@ec.europa.eu",
+          "head_phone": "+32 229-84143"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "GENERAL AFFAIRS AND RESOURCES",
+      "director": "Lorena Boix Alonso",
+      "director_email": "Lorena.BOIX-ALONSO@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Jolanda Van Eijndthoven",
+          "head_email": "Jolanda.VAN-EIJNDTHOVEN@ec.europa.eu",
+          "head_phone": "+32 229-50144"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christine Bernot",
+          "head_email": "Christine.Bernot@ec.europa.eu",
+          "head_phone": "+32 229-92670"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Irena Novakova",
+          "head_email": "Irena.NOVAKOVA@ec.europa.eu",
+          "head_phone": "+32 229-99608"
+        }
+      ]
     }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "DEFIS.A",
-      "name": "Defence Policy",
-      "director": {
-        "name": "François Arbault (acting)",
-        "position": "Director"
-      },
-      "units": {
-        "a1": {
-          "code": "DEFIS.A.1",
-          "name": "Defence Policy & Innovation",
-          "head_of_unit": {
-            "name": "Guillaume de la Brosse",
-            "deputy": "Sivka Dinkova"
-          }
-        },
-        "a2": {
-          "code": "DEFIS.A.2",
-          "name": "Ukraine Support & Military Mobility",
-          "head_of_unit": {
-            "name": "Arunas Vinciunas",
-            "deputy": "Malgorzata Nowakowska"
-          }
-        },
-        "a3": {
-          "code": "DEFIS.A.3",
-          "name": "Defence Single Market & Hybrid Threats",
-          "head_of_unit": {
-            "name": "Paraskevi Papantoniou",
-            "deputy": "Vera Alexandrova"
-          }
-        }
-      }
-    },
-    "directorate_b": {
-      "code": "DEFIS.B",
-      "name": "Defence Industrial Programmes",
-      "director": {
-        "name": "François Arbault",
-        "position": "Director"
-      },
-      "units": {
-        "b1": {
-          "code": "DEFIS.B.1",
-          "name": "Defence Industrial Programming & Coordination",
-          "head_of_unit": {
-            "name": "Sylvia Kainz-Huber",
-            "deputy": "Khristo Preslavsky"
-          }
-        },
-        "b2": {
-          "code": "DEFIS.B.2",
-          "name": "Defence Technologies",
-          "head_of_unit": {
-            "name": "Nynke Tigchelaar",
-            "deputy": "Laurent Tournbach"
-          }
-        },
-        "b3": {
-          "code": "DEFIS.B.3",
-          "name": "Defence Systems",
-          "head_of_unit": {
-            "name": "Milosz Momot",
-            "deputy": "Eric Vandeweert"
-          }
-        }
-      }
-    },
-    "directorate_c": {
-      "code": "DEFIS.C",
-      "name": "Secure and Connected Space",
-      "director": {
-        "name": "Ekaterini Kavvada",
-        "position": "Director"
-      },
-      "units": {
-        "c1": {
-          "code": "DEFIS.C.1",
-          "name": "Secure Connectivity & Space Surveillance",
-          "head_of_unit": {
-            "name": "Jérémie Godet",
-            "deputy": "Anita Pietka"
-          }
-        },
-        "c2": {
-          "code": "DEFIS.C.2",
-          "name": "Space Single Market",
-          "head_of_unit": {
-            "name": "Zuzana Mazanova",
-            "deputy": "Vassilis Kokkoni"
-          }
-        },
-        "c3": {
-          "code": "DEFIS.C.3",
-          "name": "Space Economy",
-          "head_of_unit": {
-            "name": "Giancarlo Granero",
-            "deputy": "Anis Hanan"
-          }
-        }
-      },
-      "hadea_units": {
-        "c_hadea_4": {
-          "code": "DEFIS.C.HaDEA.4",
-          "name": "Space Research",
-          "head": "Marko Curavic"
-        },
-        "c_hadea_c2": {
-          "code": "DEFIS.C.HaDEA.C.2",
-          "name": "Financial Support",
-          "head": "Maciej Gorka"
-        }
-      }
-    },
-    "directorate_d": {
-      "code": "DEFIS.D",
-      "name": "Space Policy, Satellite Navigation and Earth Observation",
-      "director": {
-        "name": "Christoph Kautz",
-        "position": "Director"
-      },
-      "units": {
-        "d1": {
-          "code": "DEFIS.D.1",
-          "name": "Space Policy",
-          "head_of_unit": {
-            "name": "Marta Fernandez Molinero",
-            "deputy": "Arabella Poldrugo"
-          }
-        },
-        "d2": {
-          "code": "DEFIS.D.2",
-          "name": "Satellite Navigation",
-          "head_of_unit": {
-            "name": "Paul Flament",
-            "deputy": "Eric Chatre"
-          }
-        },
-        "d3": {
-          "code": "DEFIS.D.3",
-          "name": "Earth Observation",
-          "head_of_unit": {
-            "name": "Mauro Facchini",
-            "deputy": "Elisabeth Hamdouch-Fuehner"
-          }
-        }
-      },
-      "adviser": {
-        "name": "Tomasz Husak",
-        "title": "Adviser",
-        "area": "Relations with EUSPA & ESA"
-      },
-      "euspa": {
-        "name": "European Union Agency for the Space Programme (EUSPA)",
-        "head": "Rodrigo da Costa"
-      }
-    },
-    "directorate_r": {
-      "code": "DEFIS.R",
-      "name": "General Affairs & Resources",
-      "director": {
-        "name": "Christine Bernot (acting)",
-        "position": "Director"
-      },
-      "units": {
-        "r1": {
-          "code": "DEFIS.R.1",
-          "name": "Legal, International & Coordination",
-          "head_of_unit": {
-            "name": "Jolanda van Eijndhoven",
-            "deputy": "Dagmara Chodzicka"
-          }
-        },
-        "r2": {
-          "code": "DEFIS.R.2",
-          "name": "Financial Management & Internal Control",
-          "head_of_unit": {
-            "name": "Christine Bernot",
-            "deputy": "Olivier Lefebvre"
-          }
-        },
-        "r3": {
-          "code": "DEFIS.R.3",
-          "name": "Communication, Human Resources & Planning",
-          "head_of_unit": {
-            "name": "Irini Janovakova",
-            "deputy": "Julien Turpin"
-          },
-          "note": "HR Correspondent (1)"
-        }
-      }
-    }
-  },
-  "notes": [
-    "Deputy to the Director",
-    "Mirror Entity in Executive Agency",
-    "The HR correspondent has a functional reporting line to the Director-General"
-  ]
+  ],
+  "num_directorates": 6,
+  "num_units": 21,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

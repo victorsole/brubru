@@ -1,224 +1,250 @@
 {
   "dg_code": "FISMA",
-  "dg_name": "Financial Stability, Financial Services and Capital Markets Union",
-  "commissioner": "Maria Luís Albuquerque",
-  "date_of_effect": "2025-10-16",
-  "director_general": {
-    "name": "John Berrigan",
-    "policy_assistant": "Ward Möhlmann"
-  },
-  "deputy_director_general": {
-    "name": "Alexandra Jour-Schroeder"
-  },
-  "hr_correspondent": {
-    "name": "Chantal Hughes"
-  },
+  "dg_name": "Directorate-General for Financial Stability, Financial Services and Capital",
+  "commissioner": "",
+  "director_general": "John Berrigan",
+  "director_general_email": "John.Berrigan@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Ward Mohlmann",
+      "email": "Ward.MOHLMANN@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Alexandra Jour-Schroeder",
+      "email": "Alexandra.Jour-Schroeder@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Michael Stelzer",
+      "email": "Michael.STELZER@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Alexandra Jour-Schroeder",
+      "email": "Alexandra.Jour-Schroeder@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
   "directorates": [
     {
-      "code": "FISMA.01",
-      "name": "Finance, Internal Control & IT",
-      "director": "Anne-Françoise Melot",
-      "deputy": "Simon Davies"
-    },
-    {
-      "code": "FISMA.A",
-      "name": "General Affairs",
-      "director": "Alexandra Jour-Schroeder (Acting)",
+      "code": "Dir A",
+      "name": "GENERAL AFFAIRS",
+      "director": "Alexandra Jour-Schroeder",
+      "director_email": "Alexandra.Jour-Schroeder@ec.europa.eu",
       "units": [
         {
-          "code": "FISMA.A.1",
-          "name": "Policy Definition & Coordination",
+          "code": "",
+          "name": "",
           "head": "Anne Schaedle",
-          "deputy": "Piotr Plizga"
+          "head_email": "Anne.SCHAEDLE@ec.europa.eu",
+          "head_phone": "+32 229-95612"
         },
         {
-          "code": "FISMA.A.2",
-          "name": "Policy Planning & Implementation, Inter-Institutional Relations",
-          "head": "Dorota Zaliwska",
-          "deputy": "Tommy De Temmerman"
+          "code": "",
+          "name": "",
+          "head": "Dorota Kalina Zaliwska",
+          "head_email": "Dorota-Kalina.ZALIWSKA@ec.europa.eu",
+          "head_phone": "+32 229-66943"
         },
         {
-          "code": "FISMA.A.3",
-          "name": "Communication & Document Management",
+          "code": "",
+          "name": "",
           "head": "Chantal Hughes",
-          "deputy": "Florian Denis"
+          "head_email": "Chantal.HUGHES@ec.europa.eu",
+          "head_phone": "+32 229-64450"
         },
         {
-          "code": "FISMA.A.4",
-          "name": "International Affairs",
-          "head": "Raffaella Assetta",
-          "deputy": "Massimo Zaffiro"
+          "code": "",
+          "name": "",
+          "head": "Maria Raffaella Assetta",
+          "head_email": "Maria-Raffaella.ASSETTA@ec.europa.eu",
+          "head_phone": "+32 229-85032"
         },
         {
-          "code": "FISMA.A.5",
-          "name": "Economic Analysis & Evaluation",
+          "code": "",
+          "name": "",
           "head": "Leonie Bell",
-          "deputy": "Stan Maes"
+          "head_email": "Leonie.BELL@ec.europa.eu",
+          "head_phone": "+32 229-87916"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nigel Nagarajan",
+          "head_email": "Nigel.NAGARAJAN@ec.europa.eu",
+          "head_phone": "+32 229-87509"
         }
       ]
     },
     {
-      "code": "FISMA.B",
-      "name": "Horizontal Policies",
-      "director": "Eric Ducoulombier (Acting)",
+      "code": "Dir B",
+      "name": "HORIZONTAL POLICIES",
+      "director": "Didier Millerot",
+      "director_email": "Didier.Millerot@ec.europa.eu",
       "units": [
         {
-          "code": "FISMA.B.1",
-          "name": "Savings and Investments Union Coordination",
+          "code": "",
+          "name": "",
+          "head": "Peter Kerstens",
+          "head_email": "Peter.KERSTENS@ec.europa.eu",
+          "head_phone": "+32 229-61248"
+        },
+        {
+          "code": "",
+          "name": "",
           "head": "Andrea Beltramello",
-          "deputy": "Alessandra Atripaldi"
+          "head_email": "Andrea.BELTRAMELLO@ec.europa.eu",
+          "head_phone": "+32 229-91464"
         },
         {
-          "code": "FISMA.B.2",
-          "name": "Sustainable Finance",
+          "code": "",
+          "name": "",
           "head": "Didier Millerot",
-          "deputy": "Joanna Sikora-Wittnebel"
+          "head_email": "Didier.Millerot@ec.europa.eu",
+          "head_phone": "+32 229-69782"
         },
         {
-          "code": "FISMA.B.3",
-          "name": "Retail Financial Services and Payments",
-          "head": "Eric Ducoulombier",
-          "deputy": "Andrea Liesenfeld"
+          "code": "",
+          "name": "",
+          "head": "Andrea Liesenfeld",
+          "head_email": "Andrea.LIESENFELD@ec.europa.eu",
+          "head_phone": "+32 229-55159"
         },
         {
-          "code": "FISMA.B.4",
-          "name": "Digital Finance",
-          "head": "Mattias Levin (Acting)",
-          "deputy": "Mattias Levin"
-        }
-      ],
-      "advisers": [
-        {
-          "name": "Peter Kerstens",
-          "area": "Technological Innovation & Cyber Security"
-        },
-        {
-          "name": "Nigel Nagarajan",
-          "area": "Financial Services Strategy"
+          "code": "",
+          "name": "",
+          "head": "Mattias Levin",
+          "head_email": "Mattias.LEVIN@ec.europa.eu",
+          "head_phone": "+32 229-51811"
         }
       ]
     },
     {
-      "code": "FISMA.C",
-      "name": "Financial Markets",
-      "director": "Martin Merlin",
-      "units": [
-        {
-          "code": "FISMA.C.1",
-          "name": "Corporate Reporting, Audit & Credit Rating Agencies",
-          "head": "Sven Gentner",
-          "deputy": "Petr Wagner"
-        },
-        {
-          "code": "FISMA.C.2",
-          "name": "Financial Markets Infrastructure",
-          "head": "Jennifer Robertson",
-          "deputy": "Sebastijan Hrovatin"
-        },
-        {
-          "code": "FISMA.C.3",
-          "name": "Securities Markets",
-          "head": "Tanya Panova",
-          "deputy": "Agnès Le Thiec"
-        },
-        {
-          "code": "FISMA.C.4",
-          "name": "Asset Management",
-          "head": "Hélène Bussières",
-          "deputy": "Alessandro Malchiodi"
-        }
-      ]
-    },
-    {
-      "code": "FISMA.D",
-      "name": "Banking, Insurance & Financial Crime",
-      "director": "Ugo Bassi",
-      "units": [
-        {
-          "code": "FISMA.D.1",
-          "name": "Banking Regulation & Supervision",
-          "head": "Almorò Rubin De Cervin",
-          "deputy": "Marc Peters"
-        },
-        {
-          "code": "FISMA.D.2",
-          "name": "Financial Crime",
-          "head": "Raluca Pruna",
-          "deputy": "Claude Bocqueraz"
-        },
-        {
-          "code": "FISMA.D.3",
-          "name": "Resolution & Deposit Insurance",
-          "head": "Yann Germaine (Acting)",
-          "deputy": "Yann Germaine"
-        },
-        {
-          "code": "FISMA.D.4",
-          "name": "Insurance & Pensions",
-          "head": "Tilman Lueder",
-          "deputy": "Marc Horovitz"
-        },
-        {
-          "code": "FISMA.D.AMLA.TF",
-          "name": "Task Force Anti-Money Laundering Authority",
-          "head": "Dominique Thienpont (Acting)",
-          "deputy": "Chiara Bacci (Acting)"
-        }
-      ],
-      "advisers": [
-        {
-          "name": "Alain Deckers",
-          "area": "Adviser"
-        },
-        {
-          "name": "Ralf Jacob",
-          "area": "Financial Stability"
-        }
-      ],
-      "task_force": {
-        "name": "Resolution",
-        "head": "Silvia Scatizzi"
-      }
-    },
-    {
-      "code": "FISMA.E",
-      "name": "Financial Sector Stability and Security, Enforcement and Sanctions",
+      "code": "Dir E",
+      "name": "FINANCIAL SECTOR STABILITY AND SECURITY, ENFORCEMENT AND",
       "director": "Klaus Wiedner",
+      "director_email": "Klaus.Wiedner@ec.europa.eu",
       "units": [
         {
-          "code": "FISMA.E.1",
-          "name": "Macro-Finance and Macroprudential Policy",
+          "code": "",
+          "name": "",
           "head": "Emiliano Tornese",
-          "deputy": "Anca Grigorut"
+          "head_email": "Emiliano.TORNESE@ec.europa.eu",
+          "head_phone": "+32 229-85400"
         },
         {
-          "code": "FISMA.E.2",
-          "name": "National Financial Systems",
+          "code": "",
+          "name": "",
           "head": "Rainer Wichern",
-          "deputy": "Anna Grochowska"
+          "head_email": "Rainer.Wichern@ec.europa.eu",
+          "head_phone": "+32 229-96140"
         },
         {
-          "code": "FISMA.E.3",
-          "name": "Economic Security in Financial Services",
-          "head": "Jung-Duk Lichtenberger (Acting)",
-          "deputy": "Jung-Duk Lichtenberger"
+          "code": "",
+          "name": "",
+          "head": "Tommy De Temmerman",
+          "head_email": "Tommy.DE-TEMMERMAN@ec.europa.eu",
+          "head_phone": "+32 229-61117"
         },
         {
-          "code": "FISMA.E.4",
-          "name": "Free Movement of Capital & Application of EU Law",
+          "code": "",
+          "name": "",
           "head": "Tomasz Dolny",
-          "deputy": "Agita Sproge"
+          "head_email": "Tomasz.DOLNY@ec.europa.eu",
+          "head_phone": "+32 229-59614"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "FINANCIAL MARKETS",
+      "director": "Martin Merlin",
+      "director_email": "Martin.Merlin@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sven Gentner",
+          "head_email": "Sven.GENTNER@ec.europa.eu",
+          "head_phone": "+32 229-85365"
         },
         {
-          "code": "FISMA.E.5",
-          "name": "Sanctions",
-          "head": "Michael Stelzer",
-          "deputy": "Franca Poliani"
+          "code": "",
+          "name": "",
+          "head": "Jennifer Robertson",
+          "head_email": "Jennifer.ROBERTSON@ec.europa.eu",
+          "head_phone": "+32 229-62091"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tatyana Panova",
+          "head_email": "Tatyana.PANOVA@ec.europa.eu",
+          "head_phone": "+32 229-60361"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Helene Bussieres",
+          "head_email": "Helene.BUSSIERES@ec.europa.eu",
+          "head_phone": "+32 229-60798"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alain Deckers",
+          "head_email": "alain.deckers@ec.europa.eu",
+          "head_phone": "+32 229-92348"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "BANKING, INSURANCE AND FINANCIAL CRIME",
+      "director": "Ugo Bassi",
+      "director_email": "Ugo.Bassi@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Almoro Rubin De Cervin",
+          "head_email": "Almoro.RUBIN-DE-CERVIN@ec.europa.eu",
+          "head_phone": "+32 229-55008"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Raluca Pruna",
+          "head_email": "Raluca.PRUNA@ec.europa.eu",
+          "head_phone": "+32 229-80093"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Yann Germaine",
+          "head_email": "Yann.GERMAINE@ec.europa.eu",
+          "head_phone": "+32 229-57526"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tilman Lueder",
+          "head_email": "Tilman.Lueder@ec.europa.eu",
+          "head_phone": "+32 229-91548"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne-Francoise Melot",
+          "head_email": "Anne-Francoise.MELOT@ec.europa.eu",
+          "head_phone": "+32 229-80691"
         }
       ]
     }
   ],
-  "notes": [
-    "D: Deputy to the Director"
-  ]
+  "num_directorates": 5,
+  "num_units": 25,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

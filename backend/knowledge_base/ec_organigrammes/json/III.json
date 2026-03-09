@@ -1,0 +1,29 @@
+{
+  "dg_code": "III",
+  "dg_name": "Operations and",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesco Albore",
+          "head_email": "Francesco.ALBORE@ec.europa.eu",
+          "head_phone": "+32 229-58797"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 1,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

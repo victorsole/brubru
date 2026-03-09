@@ -1,0 +1,3548 @@
+{
+  "institution_code": "EP_GROUP_SEC",
+  "institution_name": "Political Groups' Secretariats of the European Parliament",
+  "source": "EU Who Is Who (op.europa.eu)",
+  "date_extracted": "2026-03-09",
+  "structure": [
+    {
+      "code": "EP_DATASET_EP_SGP_PPE",
+      "name": "PPE: Group of the European People’s Party (Christian Democrats)",
+      "units": [
+        {
+          "code": "EP_DPPEGP_6583",
+          "name": "Secretary-General",
+          "persons": [
+            {
+              "name": "Ms Ouarda BENSOUAG"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_6584",
+              "name": "Office of the Secretary-General",
+              "persons": [
+                {
+                  "name": "Ms Dorte HANSEN"
+                },
+                {
+                  "name": "Ms Violeta KAZAROVA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6586",
+              "name": "Chairman’s Office",
+              "persons": [
+                {
+                  "name": "Mr Thomas Sebastian KIESCHNICK"
+                },
+                {
+                  "name": "Ms Dafni ARGYRAKI"
+                },
+                {
+                  "name": "Ms Larisa-Mihaela BICA"
+                },
+                {
+                  "name": "Ms Barbara JAVORNIK"
+                },
+                {
+                  "name": "Ms Mariola Salesia VAN LANKVELT"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6588",
+                  "name": "Presidency, Bureau & Protocol"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6585",
+              "name": "Internal Auditor",
+              "persons": [
+                {
+                  "name": "Mr Piergiorgio DI BONITO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6570",
+              "name": "Internal Organisation",
+              "persons": [
+                {
+                  "name": "Ms Elke BALLON"
+                },
+                {
+                  "name": "Ms Eugenia BELLINO"
+                },
+                {
+                  "name": "Ms Carola MAERTIN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6571",
+                  "name": "Internal Organisation — Planning of Internal Meetings",
+                  "persons": [
+                    {
+                      "name": "Ms Carola MAERTIN"
+                    },
+                    {
+                      "name": "Ms Jasmin RASSADI-SEIFFERT"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6572",
+                  "name": "Internal Organisation — Offices GBI",
+                  "persons": [
+                    {
+                      "name": "Ms Karine PIFFERT"
+                    },
+                    {
+                      "name": "Ms Karoline Swenja VLK"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6574",
+                  "name": "Internal Organisation — Finance",
+                  "persons": [
+                    {
+                      "name": "Mr Patrick CHIANESE"
+                    },
+                    {
+                      "name": "Mr Jure BIZJAK"
+                    },
+                    {
+                      "name": "Ms Jana FASINOVA"
+                    },
+                    {
+                      "name": "Mr Christophe LAURIOUX"
+                    },
+                    {
+                      "name": "Ms Miriam MACEDO"
+                    },
+                    {
+                      "name": "Ms Martyna Jadwiga PIRET"
+                    },
+                    {
+                      "name": "Ms Daniela BUEHRIG"
+                    },
+                    {
+                      "name": "Ms Saar DE WAGTER"
+                    },
+                    {
+                      "name": "Ms Paula HERNÁNDEZ BARRAGAN"
+                    },
+                    {
+                      "name": "Mr Vincent Tonnie J JACQMARD"
+                    },
+                    {
+                      "name": "Mr Fabrizio PEDICONI"
+                    },
+                    {
+                      "name": "Ms Anne PROTAR"
+                    },
+                    {
+                      "name": "Mr Efstathios SAMARAS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6575",
+                  "name": "Internal Organisation — Human Resources",
+                  "persons": [
+                    {
+                      "name": "Ms Joanna Andzelika KOPEC"
+                    },
+                    {
+                      "name": "Ms Nathalie PEREZ CAMPAGNE"
+                    },
+                    {
+                      "name": "Ms Mihaela-Alice SANDU"
+                    },
+                    {
+                      "name": "Mr Olafs BERZINS"
+                    },
+                    {
+                      "name": "Ms Tatiana Lucie Marie-Rose GIUNTI"
+                    },
+                    {
+                      "name": "Ms Heidrun EBNER"
+                    },
+                    {
+                      "name": "Ms Joanna Agnieszka MROCZKOWSKA"
+                    },
+                    {
+                      "name": "Mr Simeon Grishev SIMEONOV"
+                    },
+                    {
+                      "name": "Ms Sophie TSORAKLIDIS"
+                    },
+                    {
+                      "name": "Ms Dària VALADZKO VALADZKO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6576",
+                  "name": "Internal Organisation — Information and Communication Technology",
+                  "persons": [
+                    {
+                      "name": "Mr Cédric IVRY"
+                    },
+                    {
+                      "name": "Mr Gianfranco EMANUELE"
+                    },
+                    {
+                      "name": "Ms Cristina Maria TIMOTEO TEIXEIRA"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6577",
+                      "name": "Internal Organisation — Information and Communication Technology — Data Analysis, Budget and Communication"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6578",
+                      "name": "Internal Organisation — Information and Communication Technology — IT Equipment and IT Support"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6579",
+                      "name": "Internal Organisation — Information and Communication Technology — Administrative Applications"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6580",
+                      "name": "Internal Organisation — Information and Communication Technology — System Administration"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6581",
+                      "name": "Internal Organisation — Information and Communication Technology — Internet and Webstreaming"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6566",
+              "name": "Strategy, Foresight & Network",
+              "persons": [
+                {
+                  "name": "Mr Carl Udo ZOLLEIS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6590",
+                  "name": "Strategy, Foresight & Network — Strategy Unit",
+                  "persons": [
+                    {
+                      "name": "Mr Carl Udo ZOLLEIS"
+                    },
+                    {
+                      "name": "Ms Nina TAVCAR"
+                    },
+                    {
+                      "name": "Lorenzo DI TORO",
+                      "phone": "+32-22834035"
+                    },
+                    {
+                      "name": "Ms Petra Isabell GRABICHLER"
+                    },
+                    {
+                      "name": "Mr Tommaso Furio CLERICI"
+                    },
+                    {
+                      "name": "Mr Juan SCHINAS ALVARGONZALEZ"
+                    },
+                    {
+                      "name": "Ms Alexandra TAWAIFI"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6567",
+                  "name": "Strategy, Foresight & Network — Outreach, Intercultural & Religious Dialogue",
+                  "persons": [
+                    {
+                      "name": "Mr Marcin TROJANOWSKI"
+                    },
+                    {
+                      "name": "Ms Elina Lazarova NATCHEVA-SKARBY OTTOSEN"
+                    },
+                    {
+                      "name": "Ms Georgeta VASILE"
+                    },
+                    {
+                      "name": "Mr Gabor TOROK"
+                    },
+                    {
+                      "name": "Ms Maria LAERA"
+                    },
+                    {
+                      "name": "Ms Cristina ALVAREZ DE VELASCO"
+                    },
+                    {
+                      "name": "Mr Patryk ANDRUSZYSZYN"
+                    },
+                    {
+                      "name": "Ms Eleni DIAMANTOUDI"
+                    },
+                    {
+                      "name": "Ms Nora KRAMER"
+                    },
+                    {
+                      "name": "Ms Josefina PELAEZ JIMENO"
+                    },
+                    {
+                      "name": "Ms Alessia PORRETTA"
+                    },
+                    {
+                      "name": "Mr Mark VAN KRANENBURG"
+                    },
+                    {
+                      "name": "Ms Alice VANIER"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6568",
+                      "name": "Strategy, Foresight & Network — Outreach, Intercultural & Religious Dialogue — External Office (Berlin)"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6563",
+                  "name": "Strategy, Foresight & Network — Events Unit",
+                  "persons": [
+                    {
+                      "name": "Ms Fiona KEARNS"
+                    },
+                    {
+                      "name": "Ms Veronique DE JONGHE"
+                    },
+                    {
+                      "name": "Mr Constantin DEACONESCU"
+                    },
+                    {
+                      "name": "Ms Laura GUDONAVIČIŪTĖ"
+                    },
+                    {
+                      "name": "Ms Marta KANIA CLOPPET"
+                    },
+                    {
+                      "name": "Ms Karina MILLAN"
+                    },
+                    {
+                      "name": "Ms Daniela STEINER"
+                    },
+                    {
+                      "name": "Ms Ioana-Denisa TAICHIȘ"
+                    },
+                    {
+                      "name": "Mr Jeroen VAN DE GUCHT"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6591",
+              "name": "Parliamentary Work — Internal Policies",
+              "persons": [
+                {
+                  "name": "Mr Tobias LINNEMANN"
+                },
+                {
+                  "name": "Ms Katerina KLEPSOVA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6592",
+                  "name": "Parliamentary Work — Internal Policies — Legislative Coordination",
+                  "persons": [
+                    {
+                      "name": "Ms Geraldine PHILIBERT"
+                    },
+                    {
+                      "name": "Mr Leon LESKOVEC"
+                    },
+                    {
+                      "name": "Ms Aleksandra Maria APOSTOL"
+                    },
+                    {
+                      "name": "Ms Hristiyana Krasimirova STOYANOVA"
+                    },
+                    {
+                      "name": "Ms Concepcion RIVERO CARMENA"
+                    },
+                    {
+                      "name": "Mr David ALMINANA"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6593",
+                  "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs",
+                  "persons": [
+                    {
+                      "name": "Ms Evangelia MITSOPOULOU"
+                    },
+                    {
+                      "name": "Ms Mateja MIKSA"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6594",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs — JURI"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6595",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs — LIBE"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6596",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs — AFCO"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6597",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs — PETI"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6598",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs — CULT"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6599",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs — FEMM"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6858",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Legal and Home Affairs — EUDS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6600",
+                  "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment",
+                  "persons": [
+                    {
+                      "name": "Mr Jan WISSWAESSER"
+                    },
+                    {
+                      "name": "Ms Lynn Kristin SUNDELIUS"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6601",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — FISC"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6602",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — ENVI"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6603",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — ECON"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6604",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — TRAN"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6605",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — IMCO"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6606",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — ITRE"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6607",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — EMPL"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6608",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — SANT"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6754",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Economy and Environment — HOUS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6609",
+                  "name": "Parliamentary Work — Internal Policies — Working Group Budget and Structural Policies",
+                  "persons": [
+                    {
+                      "name": "Ms Fani ZARIFOPOULOU"
+                    },
+                    {
+                      "name": "Ms Marie Noelle SCHOLZ"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6610",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Budget and Structural Policies — BUDG"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6611",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Budget and Structural Policies — CONT"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6612",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Budget and Structural Policies — AGRI"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6613",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Budget and Structural Policies — PECH"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6614",
+                      "name": "Parliamentary Work — Internal Policies — Working Group Budget and Structural Policies — REGI"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6615",
+              "name": "External Policies — Committees & Delegations",
+              "persons": [
+                {
+                  "name": "Mr Juan Manuel SALAFRANCA SANCHEZ-NEYRA"
+                },
+                {
+                  "name": "Ms Lidia DOCAMPO KCHOROSHANSKAIA"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6620",
+                  "name": "External Policies — Committees & Delegations — Working Group External Policies — INTA",
+                  "persons": [
+                    {
+                      "name": "Ms Kathryn Adele STACK"
+                    },
+                    {
+                      "name": "Ms Nina FERRUCCI"
+                    },
+                    {
+                      "name": "Ms Guillermina GONZALEZ PERINI"
+                    },
+                    {
+                      "name": "Ms Faniry SOLOFOSON"
+                    },
+                    {
+                      "name": "Ms Alina-Claudia TUTULAN"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6621",
+                  "name": "External Policies — Committees & Delegations — Working Group External Policies — DEVE",
+                  "persons": [
+                    {
+                      "name": "Ms Edyta TARCZYNSKA"
+                    },
+                    {
+                      "name": "Mr Andris PETERSONS"
+                    },
+                    {
+                      "name": "Mr Alejandro RIAL ALGABA"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6616",
+                  "name": "External Policies — Committees & Delegations — Urgencies",
+                  "persons": [
+                    {
+                      "name": "Mr Jan Willem VLASMAN"
+                    },
+                    {
+                      "name": "Mr Hugo Paul VAN DER WERFF"
+                    },
+                    {
+                      "name": "Mr Philippe Elias BARTELS"
+                    },
+                    {
+                      "name": "Carla-Marie GAROZZO"
+                    },
+                    {
+                      "name": "Ms Bozena MARCINIAK"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6863",
+                  "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement",
+                  "persons": [
+                    {
+                      "name": "Mr Robert GOLANSKI"
+                    },
+                    {
+                      "name": "Ms Jiyan ASLAN"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6619",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Working Group External Policies — AFET",
+                      "persons": [
+                        {
+                          "name": "Mr Robert GOLANSKI"
+                        },
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        },
+                        {
+                          "name": "Mr Blagoy KLIMOV"
+                        },
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        },
+                        {
+                          "name": "Mr Hugo Paul VAN DER WERFF"
+                        },
+                        {
+                          "name": "Ms Jiyan ASLAN"
+                        },
+                        {
+                          "name": "Mr Philippe Elias BARTELS"
+                        },
+                        {
+                          "name": "Mr Corrado CHIRICO"
+                        },
+                        {
+                          "name": "Carla-Marie GAROZZO",
+                          "phone": "+32-22830723"
+                        },
+                        {
+                          "name": "Ms Dominika KACZKOWSKA"
+                        },
+                        {
+                          "name": "Ms Bozena MARCINIAK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6623",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Working Group External Policies — SEDE",
+                      "persons": [
+                        {
+                          "name": "Mr Gerrit SCHLOMACH"
+                        },
+                        {
+                          "name": "Mr Philippe Elias BARTELS"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6622",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Working Group External Policies — Human Rights (Subcommittee DROI)",
+                      "persons": [
+                        {
+                          "name": "Mr Hugo Paul VAN DER WERFF"
+                        },
+                        {
+                          "name": "Ms Jiyan ASLAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6629",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement —  Western Balkans and Turkey — Turkey",
+                      "persons": [
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6627",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Western Balkans and Turkey — North Macedonia",
+                      "persons": [
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6864",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Western Balkans and Turkey — Bosnia and Herzegovina",
+                      "persons": [
+                        {
+                          "name": "Mr Blagoy KLIMOV"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6865",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Western Balkans and Turkey — Kosovo, Montenegro and Serbia",
+                      "persons": [
+                        {
+                          "name": "Mr Blagoy KLIMOV"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6628",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Western Balkans and Turkey — Albania",
+                      "persons": [
+                        {
+                          "name": "Mr Blagoy KLIMOV"
+                        },
+                        {
+                          "name": "Ms Bozena MARCINIAK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6633",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Russia and the Eastern Partnership States — Russia",
+                      "persons": [
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        },
+                        {
+                          "name": "Ms Lidia DOCAMPO KCHOROSHANSKAIA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6634",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Russia and the Eastern Partnership States — Ukraine",
+                      "persons": [
+                        {
+                          "name": "Mr Robert GOLANSKI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6636",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Russia and the Eastern Partnership States — South Caucasus",
+                      "persons": [
+                        {
+                          "name": "Mr Hugo Paul VAN DER WERFF"
+                        },
+                        {
+                          "name": "Ms Lidia DOCAMPO KCHOROSHANSKAIA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6635",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Russia and the Eastern Partnership States — Moldova",
+                      "persons": [
+                        {
+                          "name": "Mr Robert GOLANSKI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6637",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Russia and the Eastern Partnership States — Belarus",
+                      "persons": [
+                        {
+                          "name": "Mr Robert GOLANSKI"
+                        },
+                        {
+                          "name": "Ms Dominika KACZKOWSKA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6866",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Maghreb, Mashreq, Israel and Palestine",
+                      "persons": [
+                        {
+                          "name": "Mr Corrado CHIRICO"
+                        },
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6532",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Euronest PA",
+                      "persons": [
+                        {
+                          "name": "Mr Robert GOLANSKI"
+                        },
+                        {
+                          "name": "Ms Lidia DOCAMPO KCHOROSHANSKAIA"
+                        },
+                        {
+                          "name": "Ms Dominika KACZKOWSKA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6533",
+                      "name": "External Policies — Committees & Delegations — Committees AFET, SEDE, DROI, Neighbourhood Policy & Enlargement — Union for the Mediterranean PA",
+                      "persons": [
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        },
+                        {
+                          "name": "Mr Corrado CHIRICO"
+                        },
+                        {
+                          "name": "Mr Tomáš SLOVÁK"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6624",
+                  "name": "External Policies — Committees & Delegations — Delegations & Parliamentary Diplomacy",
+                  "persons": [
+                    {
+                      "name": "Mr Radu NEGREA"
+                    },
+                    {
+                      "name": "Ms Dominika KACZKOWSKA"
+                    },
+                    {
+                      "name": "Mr Tomáš SLOVÁK"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6625",
+                      "name": "Interparliamentary Delegation — Western Europe — United Kingdom",
+                      "persons": [
+                        {
+                          "name": "Ms Kathryn Adele STACK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6632",
+                      "name": "Interparliamentary Delegation — Western Europe — Switzerland, Iceland, Norway, European Economic Area and the North",
+                      "persons": [
+                        {
+                          "name": "Ms Nina FERRUCCI"
+                        },
+                        {
+                          "name": "Mr Tomáš SLOVÁK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6641",
+                      "name": "Interparliamentary Delegation — The Arab Peninsula, Iraq and Iran — The Arab Peninsula and Iran",
+                      "persons": [
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6642",
+                      "name": "Interparliamentary Delegation — The Arab Peninsula, Iraq and Iran — Iraq",
+                      "persons": [
+                        {
+                          "name": "Ms Lina STENLUND"
+                        },
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6512",
+                      "name": "Inrterparliamentary Delegation — The Arab Peninsula, Iraq and Iran — The Arab Peninsula",
+                      "persons": [
+                        {
+                          "name": "Mr Radu NEGREA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6513",
+                      "name": "Inrterparliamentary Delegation — The Americas — USA",
+                      "persons": [
+                        {
+                          "name": "Mr Radu NEGREA"
+                        },
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6514",
+                      "name": "Inrterparliamentary Delegation — The Americas — Canada",
+                      "persons": [
+                        {
+                          "name": "Ms Faniry SOLOFOSON"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6515",
+                      "name": "Inrterparliamentary Delegation — The Americas — Central America, Andean Community, Mercosur, Brazil, Mexico and Chile",
+                      "persons": [
+                        {
+                          "name": "Mr Juan Manuel SALAFRANCA SANCHEZ-NEYRA"
+                        },
+                        {
+                          "name": "Ms Kathryn Adele STACK"
+                        },
+                        {
+                          "name": "Mr Hugo Paul VAN DER WERFF"
+                        },
+                        {
+                          "name": "Ms Guillermina GONZALEZ PERINI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6517",
+                      "name": "Inrterparliamentary Delegation — The Americas — Cariforum",
+                      "persons": [
+                        {
+                          "name": "Ms Faniry SOLOFOSON"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6518",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — Japan",
+                      "persons": [
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6519",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — People’s Republic of China",
+                      "persons": [
+                        {
+                          "name": "Mr Radu NEGREA"
+                        },
+                        {
+                          "name": "Ms Nina FERRUCCI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6520",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — India",
+                      "persons": [
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6521",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — Afghanistan",
+                      "persons": [
+                        {
+                          "name": "Mr Hugo Paul VAN DER WERFF"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6522",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — Countries of South Asia",
+                      "persons": [
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6523",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — Countries of Central Asia",
+                      "persons": [
+                        {
+                          "name": "Ms Anna KACZMAREK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6524",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — Korean Peninsula",
+                      "persons": [
+                        {
+                          "name": "Ms Anna KACZMAREK"
+                        },
+                        {
+                          "name": "Mr Jan Willem VLASMAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6525",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — Australia and New Zealand",
+                      "persons": [
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6526",
+                      "name": "Interparliamentary Delegation — Asia/Pacific — ASEAN",
+                      "persons": [
+                        {
+                          "name": "Mr Markus ARENS"
+                        },
+                        {
+                          "name": "Ms Anita LINNEMANN"
+                        },
+                        {
+                          "name": "Ms Katja SCHROEDER"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6527",
+                      "name": "Interparliamentary Delegation — Africa — South Africa",
+                      "persons": [
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6528",
+                      "name": "Interparliamentary Delegation — Africa — Pan-African Parliament",
+                      "persons": [
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6529",
+                      "name": "Parliamentary Assemblies — EU-ACP JPA",
+                      "persons": [
+                        {
+                          "name": "Mr Benjamin OPPERMANN"
+                        },
+                        {
+                          "name": "Ms Edyta TARCZYNSKA"
+                        },
+                        {
+                          "name": "Mr Andris PETERSONS"
+                        },
+                        {
+                          "name": "Mr Alejandro RIAL ALGABA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6530",
+                      "name": "Parliamentary Assemblies — EuroLat PA",
+                      "persons": [
+                        {
+                          "name": "Mr Juan Manuel SALAFRANCA SANCHEZ-NEYRA"
+                        },
+                        {
+                          "name": "Ms Kathryn Adele STACK"
+                        },
+                        {
+                          "name": "Mr Hugo Paul VAN DER WERFF"
+                        },
+                        {
+                          "name": "Ms Guillermina GONZALEZ PERINI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6531",
+                      "name": "Parliamentary Assemblies — NATO PA",
+                      "persons": [
+                        {
+                          "name": "Mr Gerrit SCHLOMACH"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6555",
+              "name": "Media & Digital Communication — Campaigns",
+              "persons": [
+                {
+                  "name": "Mr Marek EVISON"
+                },
+                {
+                  "name": "Ms Jeanne KRMEK-RADOS"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6556",
+                  "name": "Media & Digital Communication — Campaigns — Digital Communication",
+                  "persons": [
+                    {
+                      "name": "Mr Marek EVISON"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6562",
+                      "name": "Media & Digital Communication — Campaigns — Digital Communication — Social Media",
+                      "persons": [
+                        {
+                          "name": "Mr Raimonds BRICIS"
+                        },
+                        {
+                          "name": "Mr Krzysztof STRZEPKA"
+                        },
+                        {
+                          "name": "Ms Maria Celina KREMER"
+                        },
+                        {
+                          "name": "Ms Tea VUCKIC"
+                        },
+                        {
+                          "name": "Ms Cristina TERCEIRO GUIMAREY"
+                        },
+                        {
+                          "name": "Ms Laura BARRIOS SOTO"
+                        },
+                        {
+                          "name": "Ms Janiika Liisa Kristiina VILKUNA RAESAENEN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6557",
+                      "name": "Media & Digital Communication — Campaigns — Digital Communication — Audiovisual",
+                      "persons": [
+                        {
+                          "name": "Mr Martin LAHOUSSE"
+                        },
+                        {
+                          "name": "Ms Evelyne MATTHYS"
+                        },
+                        {
+                          "name": "Ms Aikaterini MEXI"
+                        },
+                        {
+                          "name": "Mr Fabrice SCHNYDERS"
+                        },
+                        {
+                          "name": "Mr Stavros TZOVARAS"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6558",
+                      "name": "Media & Digital Communication — Campaigns — Digital Communication — Website",
+                      "persons": [
+                        {
+                          "name": "Mr Alberto ANDRADES VILLEGAS"
+                        },
+                        {
+                          "name": "Mr Mark DUNNE"
+                        },
+                        {
+                          "name": "Ms Katharina KURZ"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6534",
+              "name": "Press & Media",
+              "persons": [
+                {
+                  "name": "Mr Pedro LOPEZ DE PABLO"
+                },
+                {
+                  "name": "Ms Laure DE MONTAGNAC"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6535",
+                  "name": "Press & Media — European Press",
+                  "persons": [
+                    {
+                      "name": "Mr Daniel KOSTER"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6859",
+                      "name": "Press & Media — European Press — Communication on WG Budget and Structural Policies",
+                      "persons": [
+                        {
+                          "name": "Mr Vladislav Panayotov VELEV"
+                        },
+                        {
+                          "name": "Mr Jean-Luc FEIXA"
+                        },
+                        {
+                          "name": "Ms Marta OSOJNIK"
+                        },
+                        {
+                          "name": "Mr Jan DINGA"
+                        },
+                        {
+                          "name": "Ms Marta TRILLO-FIGUEROA MOLINUEVO"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6860",
+                      "name": "Press & Media — European Press — Communication on WG Economy and Environment",
+                      "persons": [
+                        {
+                          "name": "Mr Johannes HAENICKE"
+                        },
+                        {
+                          "name": "Ms Cliona CONNOLLY"
+                        },
+                        {
+                          "name": "Mr Sebastiano CHIALASTRI"
+                        },
+                        {
+                          "name": "Mr Koert Ronald DEKKER"
+                        },
+                        {
+                          "name": "Ms Rosaria Anna GERARDI"
+                        },
+                        {
+                          "name": "Ms Beatriz MARTINS VALENTE"
+                        },
+                        {
+                          "name": "Mr Michiel Christian Jan PETITJEAN"
+                        },
+                        {
+                          "name": "Mr Wolfgang TUCEK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6861",
+                      "name": "Press & Media — European Press — Communication on WG External Relations",
+                      "persons": [
+                        {
+                          "name": "Ms Agata BYCZEWSKA"
+                        },
+                        {
+                          "name": "Mr Theodoros GEORGITSOPOULOS"
+                        },
+                        {
+                          "name": "Mr Pete PAKARINEN"
+                        },
+                        {
+                          "name": "Ms Kaja SORG"
+                        },
+                        {
+                          "name": "Mr Mihnea-Vlad ZIGAROV"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6862",
+                      "name": "Press & Media — European Press — Communication on WG Legal and Home Affairs",
+                      "persons": [
+                        {
+                          "name": "Ms Linda BERZINA"
+                        },
+                        {
+                          "name": "Mr Alen LEGOVIC"
+                        },
+                        {
+                          "name": "Mr Jan OSÚCH"
+                        },
+                        {
+                          "name": "Ms Lina STENLUND"
+                        },
+                        {
+                          "name": "Ms Giedre UZDILAITE"
+                        },
+                        {
+                          "name": "Ms Constantina VOUTOUNOU"
+                        },
+                        {
+                          "name": "Ms Rosanne ZAMMIT"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6536",
+                  "name": "Press & Media — National Press",
+                  "persons": [
+                    {
+                      "name": "Mr Francisco DE ATHOUGUIA BELFORD CORREIA DA SILVA"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6751",
+                      "name": "Press & Media — National Press — Spanish Press",
+                      "persons": [
+                        {
+                          "name": "Ms Almudena DOCAVO MUNIZ"
+                        },
+                        {
+                          "name": "Ms Marta TRILLO-FIGUEROA MOLINUEVO"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6538",
+                      "name": "Press & Media — National Press — German Press",
+                      "persons": [
+                        {
+                          "name": "Mr Johannes HAENICKE"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6539",
+                      "name": "Press & Media — National Press — Finnish Press",
+                      "persons": [
+                        {
+                          "name": "Mr Pete PAKARINEN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6540",
+                      "name": "Press & Media — National Press — Irish Press",
+                      "persons": [
+                        {
+                          "name": "Ms Cliona CONNOLLY"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6541",
+                      "name": "Press & Media — National Press — Italian Press",
+                      "persons": [
+                        {
+                          "name": "Mr Sebastiano CHIALASTRI"
+                        },
+                        {
+                          "name": "Ms Rosaria Anna GERARDI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6542",
+                      "name": "Press & Media — National Press — Swedish Press",
+                      "persons": [
+                        {
+                          "name": "Ms Lina STENLUND"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6543",
+                      "name": "Press & Media — National Press — Greek Press",
+                      "persons": [
+                        {
+                          "name": "Mr Theodoros GEORGITSOPOULOS"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6544",
+                      "name": "Press & Media — National Press — Dutch Press",
+                      "persons": [
+                        {
+                          "name": "Mr Koert Ronald DEKKER"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6545",
+                      "name": "Press & Media — National Press — Belgian and Luxembourgish Press",
+                      "persons": [
+                        {
+                          "name": "Mr Michiel Christian Jan PETITJEAN"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6546",
+                      "name": "Press & Media — National Press — Austrian Press",
+                      "persons": [
+                        {
+                          "name": "Mr Wolfgang TUCEK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6547",
+                      "name": "Press & Media — National Press — Portuguese Press",
+                      "persons": [
+                        {
+                          "name": "Mr Francisco DE ATHOUGUIA BELFORD CORREIA DA SILVA"
+                        },
+                        {
+                          "name": "Ms Beatriz MARTINS VALENTE"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6548",
+                      "name": "Press & Media — National Press — Latvian Press",
+                      "persons": [
+                        {
+                          "name": "Ms Linda BERZINA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6549",
+                      "name": "Press & Media — National Press — French Press",
+                      "persons": [
+                        {
+                          "name": "Mr Jean-Luc FEIXA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6559",
+                      "name": "Press & Media — National Press — Cypriot Press",
+                      "persons": [
+                        {
+                          "name": "Ms Constantina VOUTOUNOU"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6857",
+                      "name": "Press & Media — National Press — Hungarian Press",
+                      "persons": [
+                        {
+                          "name": "Mr Zoltán GYÉVAI"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6560",
+                      "name": "Press & Media — National Press — Polish Press",
+                      "persons": [
+                        {
+                          "name": "Ms Agata BYCZEWSKA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6561",
+                      "name": "Press & Media — National Press — Estonian Press",
+                      "persons": [
+                        {
+                          "name": "Ms Kaja SORG"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6867",
+                      "name": "Press & Media — National Press — Maltese Press",
+                      "persons": [
+                        {
+                          "name": "Ms Rosanne ZAMMIT"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6868",
+                      "name": "Press & Media — National Press — Slovakian Press",
+                      "persons": [
+                        {
+                          "name": "Mr Jan DINGA"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6551",
+                      "name": "Press & Media — National Press — Slovenian Press",
+                      "persons": [
+                        {
+                          "name": "Ms Marta OSOJNIK"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6552",
+                      "name": "Press & Media — National Press — Croatian Press",
+                      "persons": [
+                        {
+                          "name": "Mr Alen LEGOVIC"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6553",
+                      "name": "Press & Media — National Press — Bulgarian Press",
+                      "persons": [
+                        {
+                          "name": "Mr Vladislav Panayotov VELEV"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6869",
+                      "name": "Press & Media — National Press — Romanian Press",
+                      "persons": [
+                        {
+                          "name": "Mr Mihnea-Vlad ZIGAROV"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6554",
+                      "name": "Press & Media — National Press — Czech Press",
+                      "persons": [
+                        {
+                          "name": "Mr Jan OSÚCH"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DATASET_EP_SGP_SD",
+      "name": "S&D: Group of the Progressive Alliance of Socialists and Democrats in the European Parliament",
+      "units": [
+        {
+          "code": "EP_DPPEGP_6750",
+          "name": "Secretary General",
+          "persons": [
+            {
+              "name": "Ms Fabrizia PANZETTI"
+            },
+            {
+              "name": "Ms Adetomi LANIPEKUN",
+              "phone": "+33-388172454"
+            },
+            {
+              "name": "Ms Andrea SZIRAKY",
+              "phone": "+32-22831145"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_6735",
+              "name": "Team Members",
+              "persons": [
+                {
+                  "name": "Ms Katrin MAHRENHOLZ"
+                },
+                {
+                  "name": "Ms Adetomi LANIPEKUN",
+                  "phone": "+32-22843962"
+                },
+                {
+                  "name": "Ms Andrea SZIRAKY",
+                  "phone": "+33-388164162"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6648",
+              "name": "Unit: Internal Coordination",
+              "persons": [
+                {
+                  "name": "Mr Francisco GUERRA"
+                },
+                {
+                  "name": "Ms Ana Filipa DE ALBUQUERQUE SANTOS",
+                  "phone": "+33-388164204"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6696",
+                  "name": "Group Meetings",
+                  "persons": [
+                    {
+                      "name": "Ms Valentina DI SIMONE",
+                      "phone": "+32-22832488"
+                    },
+                    {
+                      "name": "Ms Lenka MARTINEZ ZENKLOVÁ",
+                      "phone": "+32-22833275"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6697",
+                  "name": "Group Bureau, Heads Of Delegations",
+                  "persons": [
+                    {
+                      "name": "Ms Emilie APELL",
+                      "phone": "+32-22833369"
+                    },
+                    {
+                      "name": "Mr Álvaro GUTIERREZ BOADA",
+                      "phone": "+33-388164090"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6692",
+                  "name": "Coordination Of Plenary Activities, Plenary-Related Matters In The Conference Of Presidents And Secretaries General Meetings And Coordinators",
+                  "persons": [
+                    {
+                      "name": "Mr Francisco GUERRA",
+                      "phone": "+33-388164097"
+                    },
+                    {
+                      "name": "Ms Roxana Silvia RIZEA MACIAS",
+                      "phone": "+32-22843968"
+                    },
+                    {
+                      "name": "Ms Valentina BELCHEVA",
+                      "phone": "+32-22832730"
+                    },
+                    {
+                      "name": "Ms Loredana-Gina CALUIAN",
+                      "phone": "+32-22843925"
+                    },
+                    {
+                      "name": "Ms Ana Filipa DE ALBUQUERQUE SANTOS",
+                      "phone": "+32-22841038"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6649",
+              "name": "Unit: External Coordination",
+              "persons": [
+                {
+                  "name": "Ms Bogna SUDA"
+                },
+                {
+                  "name": "Ms Vilma BARIŠAUSKAITĖ",
+                  "phone": "+32-22831107"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6659",
+                  "name": "Conference Of Presidents And Secretaries-General (Except Plenary-Related Matters)",
+                  "persons": [
+                    {
+                      "name": "Ms Bogna SUDA",
+                      "phone": "+32-22831107"
+                    },
+                    {
+                      "name": "Ms Katrin MAHRENHOLZ",
+                      "phone": "+33-388174053"
+                    },
+                    {
+                      "name": "Ms Vilma BARIŠAUSKAITĖ",
+                      "phone": "+33-388174053"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6660",
+                  "name": "Ep Bureau And Quaestors",
+                  "persons": [
+                    {
+                      "name": "Mr Ivaylo DIMITROV",
+                      "phone": "+32-22832874"
+                    },
+                    {
+                      "name": "Ms Adetomi LANIPEKUN",
+                      "phone": "+32-22831781"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6700",
+                  "name": "Coordination Committee Chairs",
+                  "persons": [
+                    {
+                      "name": "Mr Christopher POLES",
+                      "phone": "+32-22831781"
+                    },
+                    {
+                      "name": "Ms Adetomi LANIPEKUN",
+                      "phone": "+33-388173291"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6661",
+                  "name": "Relations With Council And Commission",
+                  "persons": [
+                    {
+                      "name": "Mr Christopher POLES",
+                      "phone": "+33-388173291"
+                    },
+                    {
+                      "name": "Ms Katrin MAHRENHOLZ",
+                      "phone": "+33-388174247"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6705",
+                  "name": "Monitoring And Coordination Of Cross-Sectoral Political And Legislative Initiatives",
+                  "persons": [
+                    {
+                      "name": "Mr Christopher POLES"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6755",
+              "name": "Unit: Strategic Foresight And Policy Research",
+              "persons": [
+                {
+                  "name": "Mr Marcel MERSCH"
+                },
+                {
+                  "name": "Ms Josefina SANCHEZ MORIANO",
+                  "phone": "+33-388172870"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6762",
+                  "name": "Policy, Research And Development",
+                  "persons": [
+                    {
+                      "name": "Ms Irina DE SANCHO ALONSO",
+                      "phone": "+32-22843414"
+                    },
+                    {
+                      "name": "Mr Luca Michele FOSSATI",
+                      "phone": "+32-22841213"
+                    },
+                    {
+                      "name": "Mr Victor Maxime LACHENAIT",
+                      "phone": "+32-22834808"
+                    },
+                    {
+                      "name": "Ms Josefina SANCHEZ MORIANO",
+                      "phone": "+32-22843142"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6658",
+              "name": "President’s Cabinet",
+              "persons": [
+                {
+                  "name": "Mr Milton NUNES"
+                },
+                {
+                  "name": "Ms Ariana DOS REIS RAMALHO",
+                  "phone": "+32-22833021"
+                },
+                {
+                  "name": "Ms Susanne REITHER"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6702",
+                  "name": "President’s Team: President’s Spokesperson",
+                  "persons": [
+                    {
+                      "name": "Ms Andrea MACEIRAS CASTRO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6741",
+                  "name": "President’s Team: President’s Speechwriter",
+                  "persons": [
+                    {
+                      "name": "Mr Eduardo BLANCO BUZON"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6703",
+                  "name": "Cabinet Members",
+                  "persons": [
+                    {
+                      "name": "Ms Danae ANASTOPOULOS",
+                      "phone": "+32-22843124"
+                    },
+                    {
+                      "name": "Ms Rosa Maria BALAS TORRES",
+                      "phone": "+32-22830203"
+                    },
+                    {
+                      "name": "Mr Eduardo BLANCO BUZON",
+                      "phone": "+33-388172385"
+                    },
+                    {
+                      "name": "Ms Stephanie GRADSTEIN",
+                      "phone": "+32-22833194"
+                    },
+                    {
+                      "name": "Mr Juan Diego ROMERO PIÑAS",
+                      "phone": "+32-22833211"
+                    },
+                    {
+                      "name": "Mr Antoine VAROQUIÉ",
+                      "phone": "+32-22842129"
+                    },
+                    {
+                      "name": "Mr Robert Edward LODGE",
+                      "phone": "+32-22842887"
+                    },
+                    {
+                      "name": "Mr Boris Guy M VONCKX",
+                      "phone": "+32-22842035"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6645",
+              "name": "Department: Organisational And Administrative Affairs",
+              "persons": [
+                {
+                  "name": "Mr Alberto CORSINI"
+                },
+                {
+                  "name": "Ms Michèle KONIC",
+                  "phone": "+32-22843432"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6745",
+                  "name": "Security Of Ep Official Missions: Crisis Cell",
+                  "persons": [
+                    {
+                      "name": "Mr Alberto CORSINI",
+                      "phone": "+32-22843432"
+                    },
+                    {
+                      "name": "Ms Michèle KONIC"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6655",
+                  "name": "Unit: Human Resources",
+                  "persons": [
+                    {
+                      "name": "Ms Emmanuelle LE TEXIER"
+                    },
+                    {
+                      "name": "Ms Anahit KHATCHIKIAN",
+                      "phone": "+32-22832847"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6688",
+                      "name": "Personnel And Human Resources, Training, Trainees, Recruitment",
+                      "persons": [
+                        {
+                          "name": "Ms Lydia CASAGRANDE",
+                          "phone": "+32-22830429"
+                        },
+                        {
+                          "name": "Ms Anahit KHATCHIKIAN",
+                          "phone": "+32-22832539"
+                        },
+                        {
+                          "name": "Ms Eduarda Maria REIS PINTO",
+                          "phone": "+32-22832539"
+                        },
+                        {
+                          "name": "Ms Irene SANCHEZ PRIETO",
+                          "phone": "+32-22831440"
+                        },
+                        {
+                          "name": "Ms Ivana SUROVÁ",
+                          "phone": "+32-22843168"
+                        },
+                        {
+                          "name": "Ms Marianna THEOCHAROUS"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6654",
+                  "name": "Unit: Accounts",
+                  "persons": [
+                    {
+                      "name": "Mr Michael GERDAY"
+                    },
+                    {
+                      "name": "Ms Souad YAHIA",
+                      "phone": "+32-22842388"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6690",
+                      "name": "Accounting",
+                      "persons": [
+                        {
+                          "name": "Mr Johan DECLERCQ",
+                          "phone": "+32-22831425"
+                        },
+                        {
+                          "name": "Ms Annick DEMEULEMEESTER",
+                          "phone": "+32-22842851"
+                        },
+                        {
+                          "name": "Mr Thomas LESENFANTS",
+                          "phone": "+32-22843202"
+                        },
+                        {
+                          "name": "Ms Catrinel Irina PELIN",
+                          "phone": "+32-22842855"
+                        },
+                        {
+                          "name": "Ms Souad YAHIA",
+                          "phone": "+33-388164492"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6653",
+                  "name": "Unit: Financial Management And Ex-Ante Control",
+                  "persons": [
+                    {
+                      "name": "Ms Muriel COTTAVE-CLAUDET"
+                    },
+                    {
+                      "name": "Ms Luciana PEREZ-CATAN FLORES",
+                      "phone": "+32-22834243"
+                    },
+                    {
+                      "name": "Ms Ayten YARAS",
+                      "phone": "+32-22831292"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6747",
+                      "name": "Project Development",
+                      "persons": [
+                        {
+                          "name": "Ms Martina RITTER",
+                          "phone": "+32-22843204"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6756",
+                      "name": "Ex-Ante Controllers",
+                      "persons": [
+                        {
+                          "name": "Mr Sebastien DEMOITIE",
+                          "phone": "+32-22840632"
+                        },
+                        {
+                          "name": "Mr Nathan MAGEE",
+                          "phone": "+32-22843617"
+                        },
+                        {
+                          "name": "Ms Christiane Agnès M. METDEPENNINGEN",
+                          "phone": "+32-22830070"
+                        },
+                        {
+                          "name": "Mr Guy VAN BRANTEGEM",
+                          "phone": "+32-22843291"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6757",
+                      "name": "Initiating Agents",
+                      "persons": [
+                        {
+                          "name": "Mr Miki FESHA GEZHAGEN",
+                          "phone": "+32-22843054"
+                        },
+                        {
+                          "name": "Ms Beáta HAĽKOVÁ",
+                          "phone": "+32-22833274"
+                        },
+                        {
+                          "name": "Ms Maria Joanna HORODYSKA",
+                          "phone": "+32-22833245"
+                        },
+                        {
+                          "name": "Ms Jacinta Maria KAISER",
+                          "phone": "+32-22833572"
+                        },
+                        {
+                          "name": "Ms Michèle KONIC",
+                          "phone": "+32-22843673"
+                        },
+                        {
+                          "name": "Ms Salwa MEJBAR",
+                          "phone": "+32-22841156"
+                        },
+                        {
+                          "name": "Ms Beatrice MONDELLO",
+                          "phone": "+32-22834511"
+                        },
+                        {
+                          "name": "Ms Nadezda NOVAKOVA",
+                          "phone": "+32-22846574"
+                        },
+                        {
+                          "name": "Ms Sandra PIERARD PIZZIGATTI",
+                          "phone": "+32-22840059"
+                        },
+                        {
+                          "name": "Ms Constandina TSANACAS",
+                          "phone": "+32-22842137"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6656",
+                  "name": "Unit: Informatics",
+                  "persons": [
+                    {
+                      "name": "Mr Guido MUYLAERT"
+                    },
+                    {
+                      "name": "Ms Clotilde LANERY",
+                      "phone": "+32-22842424"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6691",
+                      "name": "Informatics"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6739",
+                  "name": "Unit: Internal Organisation",
+                  "persons": [
+                    {
+                      "name": "Mr Joseph ECINO"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6687",
+                      "name": "Calendar",
+                      "persons": [
+                        {
+                          "name": "Ms Cécile HUBERT",
+                          "phone": "+32-22842627"
+                        },
+                        {
+                          "name": "Ms Raquel PLAZA MESON",
+                          "phone": "+32-22840778"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6686",
+                      "name": "Logistics And Protocol",
+                      "persons": [
+                        {
+                          "name": "Mr Mohamed BOUCHNAFA",
+                          "phone": "+32-22842720"
+                        },
+                        {
+                          "name": "Ms Françoise MARON",
+                          "phone": "+32-22831446"
+                        },
+                        {
+                          "name": "Ms Claudine MONTALBETTI",
+                          "phone": "+32-22848287"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6708",
+              "name": "Department: Political Planning And Information Campaign",
+              "persons": [
+                {
+                  "name": "Mr Nicolas MACIAS"
+                },
+                {
+                  "name": "Ms Andrea Elisabeth HANSBAUER",
+                  "phone": "+32-22842867"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6758",
+                  "name": "Department Activities — Special Adviser",
+                  "persons": [
+                    {
+                      "name": "Mr Ioannis LATOUDIS"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6759",
+                  "name": "Group External Meetings — Special Adviser",
+                  "persons": [
+                    {
+                      "name": "Ms Mary Majella MCCONE"
+                    },
+                    {
+                      "name": "Ms Marie-Christine POHLEN",
+                      "phone": "+33-388172873"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6743",
+                  "name": "Unit: Strategic Planning And Information Campaign",
+                  "persons": [
+                    {
+                      "name": "Ms Julia Isabel FELDMANN"
+                    },
+                    {
+                      "name": "Ms Maria Esperanza MORENO FERNANDEZ",
+                      "phone": "+32-22831442"
+                    },
+                    {
+                      "name": "Ms Marie-Christine POHLEN",
+                      "phone": "+32-22842578"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6738",
+                      "name": "Strategic Planning And Information Campaign"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6657",
+                  "name": "Unit: Political Cooperation And Coordination With Strategic Partners",
+                  "persons": [
+                    {
+                      "name": "Ms Giovanna Maria PARESCHI"
+                    },
+                    {
+                      "name": "Ms Kathryn VAN ACHTEN-BEARD",
+                      "phone": "+33-388164847"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6694",
+                      "name": "Relations With National Parliaments"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6699",
+                      "name": "Relations With Cor, Eesc, Coe, With Social Partners And Ngos"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6695",
+                      "name": "Pes, Progressive Alliance, Yes, Feps And Foundations"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6693",
+                      "name": "Forward Planning And Monitoring Political Debates"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6719",
+              "name": "Department: Press And Communication",
+              "persons": [
+                {
+                  "name": "Ms Utta TUTTLIES"
+                },
+                {
+                  "name": "Mr Mark MEIRSMAN",
+                  "phone": "+32-22830678"
+                },
+                {
+                  "name": "Ms Valentina NAPPO",
+                  "phone": "+32-22830678"
+                },
+                {
+                  "name": "Mr Nicolas MACIAS"
+                },
+                {
+                  "name": "Ms Andrea Elisabeth HANSBAUER",
+                  "phone": "+33-388172575"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6760",
+                  "name": "Department Activities And Group Spokesperson",
+                  "persons": [
+                    {
+                      "name": "Ms Utta TUTTLIES"
+                    },
+                    {
+                      "name": "Ms Valentina NAPPO"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6720",
+                  "name": "Unit: Press And Communication",
+                  "persons": [
+                    {
+                      "name": "Ms Silvia PELZ"
+                    },
+                    {
+                      "name": "Mr Mark MEIRSMAN",
+                      "phone": "+32-22843822"
+                    },
+                    {
+                      "name": "Ms Dorothy NOLAN",
+                      "phone": "+32-22840951"
+                    },
+                    {
+                      "name": "Ms Anna Terezie TAUC",
+                      "phone": "+32-22834106"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6722",
+                      "name": "Social Media Team",
+                      "persons": [
+                        {
+                          "name": "Mr Nicolas GERSDORFF",
+                          "phone": "+32-22832407"
+                        },
+                        {
+                          "name": "Ms Dana-Georgiana CHIRU",
+                          "phone": "+32-22833145"
+                        },
+                        {
+                          "name": "Ms Irene Yaiza DE LA PUERTA MARCO",
+                          "phone": "+32-22843574"
+                        },
+                        {
+                          "name": "Mr Nicolo DI TOMMASI",
+                          "phone": "+32-22843126"
+                        },
+                        {
+                          "name": "Mr Alexander James WHITE",
+                          "phone": "+32-22830765"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6723",
+                      "name": "Audio-Visual Team",
+                      "persons": [
+                        {
+                          "name": "Mr Bernardo Miguel FOITO E CAMISAO",
+                          "phone": "+32-22841616"
+                        },
+                        {
+                          "name": "Ms Arantzazu Sandra HURTADO ANGÉ"
+                        },
+                        {
+                          "name": "Mr Diego SASTRE CALVO"
+                        }
+                      ]
+                    },
+                    {
+                      "code": "EP_DPPEGP_6721",
+                      "name": "Press Team",
+                      "persons": [
+                        {
+                          "name": "Ms Inga Magdalena CZERNY-GRIMM"
+                        },
+                        {
+                          "name": "Mr Nicolas DEROBERT"
+                        },
+                        {
+                          "name": "Ms Andrea MACEIRAS CASTRO"
+                        },
+                        {
+                          "name": "Ms Petra MIKLAVC"
+                        },
+                        {
+                          "name": "Ms Georgina Del Rosario MOMBO RASERO"
+                        },
+                        {
+                          "name": "Mr Robin James Philip MURPHY"
+                        },
+                        {
+                          "name": "Mr Alexander Stanislavov STANCHEV"
+                        },
+                        {
+                          "name": "Ms Anna Terezie TAUC",
+                          "phone": "+33-388174179"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6724",
+                  "name": "Unit: Website And Events/Publications",
+                  "persons": [
+                    {
+                      "name": "Mr Peter RUSZ"
+                    },
+                    {
+                      "name": "Ms Viktoria Eliza BENDE",
+                      "phone": "+32-22842687"
+                    },
+                    {
+                      "name": "Mr Ibán IMESTIR ANGÉ"
+                    },
+                    {
+                      "name": "Mr Mark MEIRSMAN"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6725",
+                      "name": "Website Team"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6726",
+                      "name": "Events And Publications Team"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6710",
+              "name": "Department Sustainable Development: Green, Social And Equal Europe",
+              "persons": [
+                {
+                  "name": "Mr Vincent BOCQUILLON"
+                },
+                {
+                  "name": "Ms Elise Isabelle Ghislaine COPPENOLLE",
+                  "phone": "+32-22830152"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6712",
+                  "name": "Digital Europe Wg",
+                  "persons": [
+                    {
+                      "name": "Mr Louis Francois Gilbert DANCOURT",
+                      "phone": "+32-22843026"
+                    },
+                    {
+                      "name": "Ms Elise Isabelle Ghislaine COPPENOLLE",
+                      "phone": "+33-388164840"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6647",
+                  "name": "Unit: Economic And Social Model Policy",
+                  "persons": [
+                    {
+                      "name": "Ms Livia JOURDAIN"
+                    },
+                    {
+                      "name": "Ms Kateryna Petrivna LOTOTSKA",
+                      "phone": "+32-22844629"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6667",
+                      "name": "Committee On Employment And Social Affairs"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6753",
+                      "name": "Special Committee On The Housing Crisis In The European Union (Hous)"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6668",
+                      "name": "Committee On Economic And Monetary Affairs"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6734",
+                      "name": "Subcommittee On Tax Matters"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6669",
+                      "name": "Committee On Internal Market And Consumer Protection"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6670",
+                      "name": "Committee On Culture And Education"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6671",
+                      "name": "Committee On Women’s Rights And Gender Equality"
+                    }
+                  ]
+                },
+                {
+                  "code": "EP_DPPEGP_6650",
+                  "name": "Unit: Sustainable Development And Competitiveness",
+                  "persons": [
+                    {
+                      "name": "Ms Sonja STEENHAUT"
+                    },
+                    {
+                      "name": "Ms Valentina FORTE"
+                    }
+                  ],
+                  "units": [
+                    {
+                      "code": "EP_DPPEGP_6672",
+                      "name": "Committee On The Environment, Climate And Food Safety"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6742",
+                      "name": "Committee On Public Health"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6673",
+                      "name": "Committee On Transport And Tourism"
+                    },
+                    {
+                      "code": "EP_DPPEGP_6674",
+                      "name": "Committee On Industry, Research And Energy"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6736",
+              "name": "Department: Budget Cohesion And Citizen’s Europe",
+              "persons": [
+                {
+                  "name": "Ms Annabel GARNIER-BOULAY"
+                },
+                {
+                  "name": "Ms Dina BROWN"
+                },
+                {
+                  "name": "Mr Inigo ECHEVERRIA-TORRES MONASTERIO"
+                },
+                {
+                  "name": "Ms Ekaterina Svetoslavova DONCHEVA",
+                  "phone": "+32-22843132"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6744",
+                  "name": "Department Activities And Data Protection Coordinator"
+                },
+                {
+                  "code": "EP_DPPEGP_6646",
+                  "name": "Unit: Eu Budget And Cohesion Policy"
+                },
+                {
+                  "code": "EP_DPPEGP_6651",
+                  "name": "Unit: Citizens’ Europe"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6709",
+              "name": "Department: External Action",
+              "persons": [
+                {
+                  "name": "Mr Zoltan SIMON"
+                },
+                {
+                  "name": "Ms Panagiota FOURLI"
+                },
+                {
+                  "name": "Ms Melanie KOELLER"
+                },
+                {
+                  "name": "Ms Ilona PFEIFFER",
+                  "phone": "+32-22834178"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6716",
+                  "name": "Department Activities And Plenary Coordination"
+                },
+                {
+                  "code": "EP_DPPEGP_6652",
+                  "name": "Unit: Foreign Affairs, Human Rights, Security And Defence"
+                },
+                {
+                  "code": "EP_DPPEGP_6711",
+                  "name": "Unit: International Trade, Development And Global Sustainability"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPEGP_PFE",
+      "name": "PfE: Patriots for Europe Group",
+      "units": [
+        {
+          "code": "EP_DPPEGP_6057",
+          "name": "Cabinet of the Presidency",
+          "persons": [
+            {
+              "name": "Mr Timothee ETCHECOPAR"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_5972",
+          "name": "Secretary General",
+          "persons": [
+            {
+              "name": "Mr Philip CLAEYS"
+            },
+            {
+              "name": "Mr Marco CAMPOMENOSI"
+            },
+            {
+              "name": "Mr Carl Gustaf STROEHM"
+            },
+            {
+              "name": "Mr Thibaut Georges Henri FRANCOIS"
+            },
+            {
+              "name": "Mr Marton VAJNA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_6059",
+              "name": "Human Resources Unit"
+            },
+            {
+              "code": "EP_DPPEGP_6060",
+              "name": "Financial Adminstration Unit"
+            },
+            {
+              "code": "EP_DPPEGP_6058",
+              "name": "Staff"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6056",
+          "name": "Chief Whip’s Office",
+          "persons": [
+            {
+              "name": "Mr Andrea CURRI"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DATASET_EP_SGP_ECR",
+      "name": "ECR: European Conservatives and Reformists Group",
+      "units": [
+        {
+          "code": "EP_DPPEGP_5903",
+          "name": "SECRETARY GENERAL",
+          "persons": [
+            {
+              "name": "Mr Frank BARRETT"
+            },
+            {
+              "name": "Ms Alessia PICCAROLO"
+            },
+            {
+              "name": "Ms Eva BENJAMIN BRADIKOVA"
+            },
+            {
+              "name": "Ms Monika KORDULA"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_5905",
+              "name": "INTERNAL AFFAIRS POLICIES"
+            },
+            {
+              "code": "EP_DPPEGP_5927",
+              "name": "EXTERNAL POLICIES"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DATASET_EP_SGP_RENEW",
+      "name": "Renew: Renew Europe Group",
+      "persons": [
+        {
+          "name": "Mr Philip DRAUZ"
+        },
+        {
+          "name": "Ms Veronique Josephine Gabrielle THOUROUDE"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPEGP_6232",
+          "name": "PLENARY AND COORDINATION",
+          "persons": [
+            {
+              "name": "Ms Anne-Christine DESNUELLE"
+            },
+            {
+              "name": "Ms Merlin Yukselova HALILOVA"
+            },
+            {
+              "name": "Ms Louise STOMMEN"
+            },
+            {
+              "name": "Ms Lara SZPIRO"
+            },
+            {
+              "name": "Ms Mari Gwenn LIDL"
+            },
+            {
+              "name": "Ms Brigitte AUGET"
+            },
+            {
+              "name": "Ms Ramona Ionela IVAN"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6225",
+          "name": "PRESS & COMMUNICATIONS",
+          "persons": [
+            {
+              "name": "Ms Marieke DEKKER"
+            },
+            {
+              "name": "Ms Anni Saga Maria HIRVELAE"
+            },
+            {
+              "name": "Mr Nicholas PETRE"
+            },
+            {
+              "name": "Mr Marco SCIPIONI"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_6230",
+              "name": "COMMUNICATIONS & CAMPAIGN UNIT"
+            },
+            {
+              "code": "EP_DPPEGP_6231",
+              "name": "PRESS UNIT"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6226",
+          "name": "INTER-INSTITUTIONAL RELATIONS, NATIONAL PARLIAMENTS, NETWORKING, and EP GOVERNING BODIES",
+          "persons": [
+            {
+              "name": "Mr Sylvain Edgard M MARECHAL"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_6233",
+              "name": "INTER-INSTITUTIONAL RELATIONS, NATIONAL PARLIAMENTS & NETWORKING UNIT",
+              "persons": [
+                {
+                  "name": "Mr Dorin Dan LAZEA"
+                },
+                {
+                  "name": "Mr Alexandre KRAUSS"
+                },
+                {
+                  "name": "Ms Diana Angelika MESSA"
+                },
+                {
+                  "name": "Mr Jacob STENDEVAD"
+                },
+                {
+                  "name": "Mr Milan MATLOVIČ"
+                },
+                {
+                  "name": "Ms Ai Phuong TRÂM"
+                },
+                {
+                  "name": "Mr Julien Pierre Armando VANHOUTTE"
+                },
+                {
+                  "name": "Ms Marie-Julie FAYARD"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6227",
+          "name": "PARLIAMENTARY WORK",
+          "units": [
+            {
+              "code": "EP_DPPEGP_6234",
+              "name": "WORKING GROUP A ECONOMY AND DIGITAL TRANSFORMATION",
+              "persons": [
+                {
+                  "name": "Mr Thierry MASSON"
+                },
+                {
+                  "name": "Ms Galyna TKACHENKO"
+                },
+                {
+                  "name": "Ms Petra SOLLI"
+                },
+                {
+                  "name": "Ms Tara O'DONNELL"
+                },
+                {
+                  "name": "Ms Claire Lucie DHERET"
+                },
+                {
+                  "name": "Ms Friederike KIES"
+                },
+                {
+                  "name": "Mr Dominykas MORDAS"
+                },
+                {
+                  "name": "Ms Beata BJÖRKVALL"
+                },
+                {
+                  "name": "Mr Axel MINAIRE"
+                },
+                {
+                  "name": "Mr Alberto BIGINELLI"
+                },
+                {
+                  "name": "Ms Clémence Madeleine Louisette GERBET"
+                },
+                {
+                  "name": "Ms Agata Weronika KOLODYNSKA"
+                },
+                {
+                  "name": "Ms Joanna Dorota JEZYK-MAJ"
+                },
+                {
+                  "name": "Ms Ozichi Chinedum Ibinye GEORGE BARON"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6235",
+              "name": "WORKING GROUP B EXTERNAL AFFAIRS",
+              "persons": [
+                {
+                  "name": "Mr Rune GLASBERG"
+                },
+                {
+                  "name": "Ms Elke PINGEL"
+                },
+                {
+                  "name": "Mr Paul-Ionel IVAN"
+                },
+                {
+                  "name": "Ms Itziar MUNOA SALAVERRIA"
+                },
+                {
+                  "name": "Ms Justina VITKAUSKAITE BERNARD"
+                },
+                {
+                  "name": "Mr Joost HERMANS"
+                },
+                {
+                  "name": "Ms Johanna LUNDBERG"
+                },
+                {
+                  "name": "Ms Ursa PONDELEK"
+                },
+                {
+                  "name": "Mr Sam Odo CALLEBAUT"
+                },
+                {
+                  "name": "Ms Theresa MURDOCK"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6236",
+              "name": "WORKING GROUP C SUSTAINABILITY AND STRUCTURAL POLICIES",
+              "persons": [
+                {
+                  "name": "Ms Claire DONLON"
+                },
+                {
+                  "name": "Ms Anne-Marie TURPEINEN"
+                },
+                {
+                  "name": "Mr Dominykas MORDAS"
+                },
+                {
+                  "name": "Mr Sasa BUTORAC"
+                },
+                {
+                  "name": "Ms Beata BJÖRKVALL"
+                },
+                {
+                  "name": "Mr Axel MINAIRE"
+                },
+                {
+                  "name": "Mr Wilhelm BARGUM"
+                },
+                {
+                  "name": "Ms Diana Angelika MESSA"
+                },
+                {
+                  "name": "Ms Sissel KVIST"
+                },
+                {
+                  "name": "Ms Eva DE TROIJ"
+                },
+                {
+                  "name": "Ms Katharina Sophia BURLAFINGER"
+                },
+                {
+                  "name": "Ms Maria Aranzazu ALCAIDE DE LA FUENTE"
+                },
+                {
+                  "name": "Ms Stephanie ANTOINE-JACQUEMARD"
+                },
+                {
+                  "name": "Ms Melek FIKRI BOLAT"
+                },
+                {
+                  "name": "Mr Colin Mark DUGGAN"
+                },
+                {
+                  "name": "Mr Jesper Joeker KROG"
+                },
+                {
+                  "name": "Ms Kristin MOUTSCHEN"
+                },
+                {
+                  "name": "Mr Henning SCHUCHNER"
+                },
+                {
+                  "name": "Mr Benjamin HAGELOCH"
+                },
+                {
+                  "name": "Ms Laura REAL"
+                },
+                {
+                  "name": "Mr Maarten Willem V SIEMERS"
+                },
+                {
+                  "name": "Ms Kateřina BOUCHER"
+                },
+                {
+                  "name": "Ms Marianna KOLYVA"
+                },
+                {
+                  "name": "Mr Isak Carl Richard ENGQVIST"
+                },
+                {
+                  "name": "Ms Francesca SANNA"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6237",
+              "name": "WORKING GROUP D VALUES AND DEMOCRACY",
+              "persons": [
+                {
+                  "name": "Ms Latifa AFAFE"
+                },
+                {
+                  "name": "Ms Natacha VANBRABANT"
+                },
+                {
+                  "name": "Mr Maxime Jérôme ROLLAND-CALLIGARO"
+                },
+                {
+                  "name": "Mr Vadim POLESTSUK"
+                },
+                {
+                  "name": "Ms Thaitmes EL BOUAZZAOUI"
+                },
+                {
+                  "name": "Mr Christian KROEKEL"
+                },
+                {
+                  "name": "Ms Indra MANGULE"
+                },
+                {
+                  "name": "Ms Emilie TAFANEL"
+                },
+                {
+                  "name": "Ms Adriana FLORIT BALLESTER"
+                },
+                {
+                  "name": "Mr Bjoern Gerbert Agnitus DE GROOT"
+                },
+                {
+                  "name": "Ms Ciara Mairéad DESMOND"
+                },
+                {
+                  "name": "Mr Sam Odo CALLEBAUT"
+                },
+                {
+                  "name": "Ms Claire Marie Pauline ROBERT"
+                },
+                {
+                  "name": "Ms Edel RETTMAN-CROSSE"
+                },
+                {
+                  "name": "Ms Sabine VAN CAUWENBERGH"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6790",
+          "name": "HUMAN RESSOURCES, FINANCE & IT",
+          "persons": [
+            {
+              "name": "Ms Renatka KRCOVA"
+            },
+            {
+              "name": "Mr Vesa KANGASLAHTI"
+            },
+            {
+              "name": "Mr Tomas NEJDL"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_6238",
+              "name": "HUMAN RESOURCES UNIT"
+            },
+            {
+              "code": "EP_DPPEGP_6239",
+              "name": "FINANCE UNIT"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6229",
+          "name": "LEADER’S OFFICE",
+          "persons": [
+            {
+              "name": "Mr Arnaud Eli J SCHOENAERTS"
+            },
+            {
+              "name": "Ms Agathe Mélodie BOCQUET"
+            },
+            {
+              "name": "Ms Egle KROPAITE"
+            },
+            {
+              "name": "Ms Catherine Laurence MARTENS-PREISS"
+            },
+            {
+              "name": "Ms Olga HARMEGNIES"
+            },
+            {
+              "name": "Ms Marie-Julie FAYARD"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DATASET_EP_SGP_GREEN_EFA",
+      "name": "Verts/ALE: Group of the Greens/European Free Alliance",
+      "units": [
+        {
+          "code": "EP_DPPEGP_5846",
+          "name": "General Secretariat",
+          "persons": [
+            {
+              "name": "Ms Maria Giovanna MANIERI"
+            },
+            {
+              "name": "Mr Christoph FUCHS"
+            },
+            {
+              "name": "Ms Rachel SHEPPARD"
+            },
+            {
+              "name": "Ms Saki INO"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_5847",
+              "name": "Central Secretariat"
+            },
+            {
+              "code": "EP_DPPEGP_5848",
+              "name": "Communication and strategy"
+            },
+            {
+              "code": "EP_DPPEGP_5887",
+              "name": "Outreach and Stakeholder Engagement"
+            },
+            {
+              "code": "EP_DPPEGP_6022",
+              "name": "Ecological Transition Cluster"
+            },
+            {
+              "code": "EP_DPPEGP_6023",
+              "name": "Green and Social Economy Cluster"
+            },
+            {
+              "code": "EP_DPPEGP_6024",
+              "name": "Rights and Democracy Cluster"
+            },
+            {
+              "code": "EP_DPPEGP_6025",
+              "name": "International Affairs Cluster"
+            },
+            {
+              "code": "EP_DPPEGP_6050",
+              "name": "Presidency"
+            },
+            {
+              "code": "EP_DPPEGP_5877",
+              "name": "European Free Alliance"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DPPEGP_THELEFT",
+      "name": "The Left: The Left group in the European Parliament — GUE/NGL",
+      "persons": [
+        {
+          "name": "Ms Maj ASLETT-RYDBJERG"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPEGP_5941",
+          "name": "General Secretaries",
+          "persons": [
+            {
+              "name": "Ms Maj ASLETT-RYDBJERG"
+            },
+            {
+              "name": "Mr Stelios CHRISTODOULOU"
+            },
+            {
+              "name": "Ms Panayota MANIOU"
+            },
+            {
+              "name": "Mr Ricardo Antonio DE SA FERREIRA"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_5942",
+          "name": "General Secretariat and Plenary Planning",
+          "persons": [
+            {
+              "name": "Ms Maria Julia GARLITO Y ROMO"
+            },
+            {
+              "name": "Ms Hülya TAPTI"
+            },
+            {
+              "name": "Ms Idoia LETONA CASTRILLO"
+            },
+            {
+              "name": "Ms Anastasia COJOCARU"
+            },
+            {
+              "name": "Ms Margot Camille Charlotte CAZIN"
+            },
+            {
+              "name": "Ms Esmeralda ALTMEYER"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_5889",
+          "name": "Internal Services",
+          "persons": [
+            {
+              "name": "Ms Nathalie MAZRAANI"
+            }
+          ],
+          "units": [
+            {
+              "code": "EP_DPPEGP_5893",
+              "name": "Technical Services (IT, GBI, Security)",
+              "persons": [
+                {
+                  "name": "Mr Axel Jacques François BONJEAN"
+                }
+              ],
+              "units": [
+                {
+                  "code": "EP_DPPEGP_6066",
+                  "name": "IT Unit"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_5894",
+              "name": "Accounts",
+              "persons": [
+                {
+                  "name": "Mr Francesco DE FEO"
+                },
+                {
+                  "name": "Ms Anna-Lucia ROCCA"
+                },
+                {
+                  "name": "Ms Nargis Jusufovna KHOJANAZAROVA"
+                },
+                {
+                  "name": "Ms Elsa SANTOS"
+                },
+                {
+                  "name": "Mr Konstantinos SIAMPANOPOULOS"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_5896",
+              "name": "Events",
+              "persons": [
+                {
+                  "name": "Ms Patricia CURZI"
+                },
+                {
+                  "name": "Mr Benjamin Chun Pang LEUNG"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6748",
+              "name": "Personel Admin, Staff Development",
+              "persons": [
+                {
+                  "name": "Mr Olivier Yolande Edgard WINANTS"
+                },
+                {
+                  "name": "Ms Alessandra LUCENTINI"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6067",
+          "name": "Logistic Services",
+          "persons": [
+            {
+              "name": "Mr Mohamed EL HACHMIOUI"
+            },
+            {
+              "name": "Ms Patricia CURZI"
+            },
+            {
+              "name": "Ms Alessandra LUCENTINI"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6068",
+          "name": "Security",
+          "persons": [
+            {
+              "name": "Mr Axel Jacques François BONJEAN"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_5891",
+          "name": "Communications Unit",
+          "persons": [
+            {
+              "name": "Mr Thomas Everett SHANNON"
+            },
+            {
+              "name": "Ms Sonja GIESE"
+            },
+            {
+              "name": "Mr Manus CARLISLE"
+            },
+            {
+              "name": "Mr José Luís DOS SANTOS GONÇALVES"
+            },
+            {
+              "name": "Ms Shanna ENNADI"
+            },
+            {
+              "name": "Ms Emma LEHBIB"
+            },
+            {
+              "name": "Mr Mathias Kurt MONTENEGRO KOENING"
+            },
+            {
+              "name": "Mr Jonathan PAU"
+            },
+            {
+              "name": "Ms Gaia PELLEGRINI"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_5892",
+          "name": "Committees",
+          "persons": [
+            {
+              "name": "Mr Nessim Vahé ACHOUCHE"
+            },
+            {
+              "name": "Mr Fabio AMATO"
+            },
+            {
+              "name": "Mr Niila Johannes ANTTILA"
+            },
+            {
+              "name": "Ms Amandine BACH"
+            },
+            {
+              "name": "Mr Antoine BAZANTAY"
+            },
+            {
+              "name": "Mr Alessandro BIANCHI"
+            },
+            {
+              "name": "Mr Boris Eric BOUZOL-BROITMAN"
+            },
+            {
+              "name": "Mr Brian CARTY"
+            },
+            {
+              "name": "Ms Stamatia CHATZIMARKOU"
+            },
+            {
+              "name": "Ms Niki CHEILAKOU"
+            },
+            {
+              "name": "Mr Loïs Marcel COMTE"
+            },
+            {
+              "name": "Mr Joel Ricardo CORDEIRO MORIANO"
+            },
+            {
+              "name": "Ms Aréke Corinne CORNELISSE"
+            },
+            {
+              "name": "Mr André José Michel CRESPIN"
+            },
+            {
+              "name": "Mr Lorenzo CRESTI"
+            },
+            {
+              "name": "Mr Jose Maria CRIADO GARCIA"
+            },
+            {
+              "name": "Mr Riccardo D'EMIDIO"
+            },
+            {
+              "name": "Ms Fabiana DADONE"
+            },
+            {
+              "name": "Ms Eva DANZI"
+            },
+            {
+              "name": "Mr Bram Wim G DERAEDEMAEKER"
+            },
+            {
+              "name": "Mr Guillaume François Guy DURIVAUX"
+            },
+            {
+              "name": "Ms Laura FERRARA"
+            },
+            {
+              "name": "Ms Jolana FRISOVA"
+            },
+            {
+              "name": "Mr Jonathan GUERAUD-PINET"
+            },
+            {
+              "name": "Mr Timo Juhani HARJUNIEMI"
+            },
+            {
+              "name": "Ms Christina Anna Birgitta HEDIN"
+            },
+            {
+              "name": "Ms Frederikke HELLEMANN"
+            },
+            {
+              "name": "Mr Martin HERBERG"
+            },
+            {
+              "name": "Ms Maria HERNANDEZ SANTOS"
+            },
+            {
+              "name": "Ms Lide IRUIN IBARZABAL"
+            },
+            {
+              "name": "Ms Ana Maria JARA GOMEZ"
+            },
+            {
+              "name": "Ms Emma-Lina Kristina JOHANSSON"
+            },
+            {
+              "name": "Mr Georgios KARATSIOUBANIS"
+            },
+            {
+              "name": "Mr Albert KLEIN"
+            },
+            {
+              "name": "Mr Lorenz KRAEMER"
+            },
+            {
+              "name": "Mr Marios LAGOU"
+            },
+            {
+              "name": "Mr Giorgio MARASA"
+            },
+            {
+              "name": "Ms Ana Rosa MOURA GONCALVES"
+            },
+            {
+              "name": "Mr John MCGILLOWAY"
+            },
+            {
+              "name": "Ms Sahar NASIRI"
+            },
+            {
+              "name": "Mr Simon Adam NEYHOUSER"
+            },
+            {
+              "name": "Mr Declan O'FARRELL"
+            },
+            {
+              "name": "Ms Maria Cecilia OLIVET"
+            },
+            {
+              "name": "Ms Julia OSUNA GARCIA"
+            },
+            {
+              "name": "Ms Sophie RAUSZER"
+            },
+            {
+              "name": "Ms Elisa RESCHINI"
+            },
+            {
+              "name": "Mr Emanuele SANGUINETI"
+            },
+            {
+              "name": "Mr Christian SCHOLZ ALVARADO"
+            },
+            {
+              "name": "Mr Ioannis SIDIROPOULOS"
+            },
+            {
+              "name": "Mr Nicolas STRAUCH"
+            },
+            {
+              "name": "Mr Damien Francis THOMSON"
+            },
+            {
+              "name": "Ms Ana VICENTE MORENO"
+            },
+            {
+              "name": "Mr Dominik ZGANEC"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6870",
+          "name": "Political planning",
+          "persons": [
+            {
+              "name": "Mr Francisco OROZCO DOPICO"
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_6871",
+          "name": "EU Lawyer",
+          "persons": [
+            {
+              "name": "Ms Irmina KOTIUK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "code": "EP_DATASET_EP_SGP_NI",
+      "name": "NI: Non-attached Members",
+      "persons": [
+        {
+          "name": "Mr Emmanuel BORDEZ"
+        },
+        {
+          "name": "Ms Maria CAIXEIRO"
+        }
+      ],
+      "units": [
+        {
+          "code": "EP_DPPEGP_6763",
+          "name": "Admin and Support",
+          "units": [
+            {
+              "code": "EP_DPPEGP_5898",
+              "name": "Human Resources",
+              "persons": [
+                {
+                  "name": "Mr Marc CARLOT"
+                },
+                {
+                  "name": "Ms Olga VOUNISIOU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_5899",
+              "name": "Information Technologies",
+              "persons": [
+                {
+                  "name": "Mr Marc CARLOT"
+                },
+                {
+                  "name": "Mr Stefaan Roger Gies LEPEZ"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6764",
+              "name": "Office and furniture management",
+              "persons": [
+                {
+                  "name": "Mr Marc CARLOT"
+                },
+                {
+                  "name": "Ms Olga VOUNISIOU"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6765",
+              "name": "Meeting rooms",
+              "persons": [
+                {
+                  "name": "Ms Maria CAIXEIRO"
+                }
+              ]
+            },
+            {
+              "code": "EP_DPPEGP_6766",
+              "name": "Financial assistance",
+              "persons": [
+                {
+                  "name": "Ms Olga VOUNISIOU"
+                },
+                {
+                  "name": "Ms Maria CAIXEIRO"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "code": "EP_DPPEGP_5900",
+          "name": "Parliamentary business",
+          "persons": [
+            {
+              "name": "Mr Antonio ANSELMI"
+            },
+            {
+              "name": "Ms Xhoela HODO"
+            },
+            {
+              "name": "Ms Magdalena DYMOWSKA"
+            },
+            {
+              "name": "Ms Maria Barbara GATTO"
+            },
+            {
+              "name": "Mr Ondrej MADR"
+            },
+            {
+              "name": "Mr Rezio PASINI"
+            },
+            {
+              "name": "Ms Catherine SALAGNAC"
+            },
+            {
+              "name": "Mr Evangelos KATSIAVAS"
+            },
+            {
+              "name": "Mr Peter POLZER"
+            },
+            {
+              "name": "Mr Lawrence URBAIN"
+            },
+            {
+              "name": "Ms Olga VOUNISIOU"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

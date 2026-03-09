@@ -1,325 +1,620 @@
 {
   "dg_code": "DGT",
-  "dg_name": "Translation",
-  "full_name": "Directorate-General for Translation",
-  "date_of_effect": "2025-11-01",
-  "commissioner": {
-    "name": "Piotr Serafin",
-    "title": "Commissioner"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "C. Ellinides",
-      "position": "Director-General",
-      "assistants": [
-        {
-          "name": "I. Zeljkovic",
-          "role": "Assistant to the DG"
-        },
-        {
-          "name": "J. Vrbata",
-          "role": "Assistant to the DG"
-        }
-      ]
+  "dg_name": "Directorate-General for Translation",
+  "commissioner": "",
+  "director_general": "Christos Ellinides",
+  "director_general_email": "Christos.ELLINIDES@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Monica Solombrino",
+      "email": "Monica.SOLOMBRINO@ec.europa.eu",
+      "responsibilities": ""
     },
-    "deputy_director_general": {
-      "name": "V. Darò (acting)",
-      "position": "Deputy Director-General",
-      "responsibility": "Responsible for Directorates A, B, C and D"
+    {
+      "name": "Ildikó Horváth",
+      "email": "Ildiko.HORVATH@ec.europa.eu",
+      "responsibilities": ""
     }
-  },
-  "units": {
-    "dgt_01": {
-      "code": "DGT.01",
-      "name": "Coordination & Institutional Affairs",
-      "head": "J. Hederström"
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "L-1014 Luxembourg",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Josefine Hederstroem",
+          "head_email": "Josefine.HEDERSTROEM@ec.europa.eu",
+          "head_phone": "+32 229-52962"
+        },
+        {
+          "code": "B, C, D and Unit DGT.03",
+          "name": "B, C, D and Unit DGT.03",
+          "head": "Ivana Zeljković",
+          "head_email": "Ivana.ZELJKOVIC@ec.europa.eu",
+          "head_phone": "+32 229-55898"
+        }
+      ]
     },
-    "dgt_02": {
-      "code": "DGT.02",
-      "name": "Communication",
-      "head": "M. Solombrino"
+    {
+      "code": "Dir A",
+      "name": "TRANSLATION",
+      "director": "Roxana Manuela Enciu",
+      "director_email": "Roxana-Manuela.ENCIU@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Arunas Butkevicius",
+          "head_email": "Arunas.BUTKEVICIUS@ec.europa.eu",
+          "head_phone": "+32 229-13711"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sevda Alendarova",
+          "head_email": "Sevda.ALENDAROVA@ec.europa.eu",
+          "head_phone": "+32 229-69994"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tatiana Telkedjiyska",
+          "head_email": "Tatiana.TELKEDJIYSKA@ec.europa.eu",
+          "head_phone": "+352 4301-36154"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sonia Peressini",
+          "head_email": "Sonia.Peressini@ec.europa.eu",
+          "head_phone": "+32 229-56884"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alessandra Orecchioni",
+          "head_email": "Alessandra.ORECCHIONI@ec.europa.eu",
+          "head_phone": "+352 4301-34804"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Graziella Galea",
+          "head_email": "Graziella.GALEA@ec.europa.eu",
+          "head_phone": "+352 4301-33419"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Reuben Seychell",
+          "head_email": "Reuben.SEYCHELL@ec.europa.eu",
+          "head_phone": "+352 4301-36654"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paola Rizzotto",
+          "head_email": "Paola.Rizzotto@ec.europa.eu",
+          "head_phone": "+32 229-91152"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kamila Adamkova",
+          "head_email": "Kamila.ADAMKOVA@ec.europa.eu",
+          "head_phone": "+352 4301-37540"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lenka Larsson Krausova",
+          "head_email": "Lenka.LARSSON-KRAUSOVA@ec.europa.eu",
+          "head_phone": "+352 4301-33636"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Johanna Barruel",
+          "head_email": "Johanna.BARRUEL@ec.europa.eu",
+          "head_phone": "+32 229-56570"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Aino Nyholm",
+          "head_email": "Aino.NYHOLM@ec.europa.eu",
+          "head_phone": "+352 4301-30002"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paola Rizzotto",
+          "head_email": "Paola.Rizzotto@ec.europa.eu",
+          "head_phone": "+32 229-91152"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Neel Walloe",
+          "head_email": "Neel.Walloe@ec.europa.eu",
+          "head_phone": "+32 229-55584"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Line Thomsen",
+          "head_email": "Line.THOMSEN@ec.europa.eu",
+          "head_phone": "+352 4301-33294"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Rita Dedoniene",
+          "head_email": "Rita.DEDONIENE@ec.europa.eu",
+          "head_phone": "+352 4301-37844"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Indre Sukaityte-Mikucioniene",
+          "head_email": "MIKUCIONIENE@ec.europa.eu",
+          "head_phone": "+352 4301-36908"
+        }
+      ]
     },
-    "dgt_03": {
-      "code": "DGT.03",
-      "name": "Demand Management",
-      "head": "R. Enciu (acting)",
-      "location": "Luxembourg"
+    {
+      "code": "Dir B",
+      "name": "TRANSLATION",
+      "director": "Marja Hennessy",
+      "director_email": "Marja.Hennessy@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "José Luis Vega Expósito",
+          "head_email": "Jose-Luis.Vega@ec.europa.eu",
+          "head_phone": "+32 229-60472"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Agnieszka Zukowska",
+          "head_email": "Agnieszka.ZUKOWSKA@ec.europa.eu",
+          "head_phone": "+352 4301-37248"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Joanna Jansen",
+          "head_email": "Joanna.JANSEN@ec.europa.eu",
+          "head_phone": "+352 4301-31535"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Teresa Bairos",
+          "head_email": "Teresa.BAIROS@ec.europa.eu",
+          "head_phone": "+32 229-83916"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hilario Leal Fontes",
+          "head_email": "Hilario.Fontes@ec.europa.eu",
+          "head_phone": "+352 4301-34766"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Monika Soderholm",
+          "head_email": "Monika.Soderholm@ec.europa.eu",
+          "head_phone": "+32 229-59160"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Annika Näslund",
+          "head_email": "Annika.NASLUND@ec.europa.eu",
+          "head_phone": "+352 4301-30515"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jozef Stefanik",
+          "head_email": "Jozef.STEFANIK@ec.europa.eu",
+          "head_phone": "+352 4301-33897"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Georgia Savvidou",
+          "head_email": "Georgia.SAVVIDOU@ec.europa.eu",
+          "head_phone": "+32 229-62287"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vassiliki Margoni",
+          "head_email": "Vassiliki.Margoni@ec.europa.eu",
+          "head_phone": "+352 4301-34781"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Viorel Florean",
+          "head_email": "Viorel.FLOREAN@ec.europa.eu",
+          "head_phone": "+32 229-51478"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Margareta Felicia Negru",
+          "head_email": "Margareta.NEGRU@ec.europa.eu",
+          "head_phone": "+352 4301-33547"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Helga Josette Zahra",
+          "head_email": "Helga-Josette.ZAHRA@ec.europa.eu",
+          "head_phone": "+352 4301-34496"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Helen Leht",
+          "head_email": "Helen.LEHT@ec.europa.eu",
+          "head_phone": "+352 4301-36996"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Leila Anupold",
+          "head_email": "Leila.ANUPOLD@ec.europa.eu",
+          "head_phone": "+352 4301-37473"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sergej Skackov",
+          "head_email": "Sergej.SKACKOV@ec.europa.eu",
+          "head_phone": "+352 4301-36068"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Karin Milkovicova",
+          "head_email": "Karin.MILKOVICOVA@ec.europa.eu",
+          "head_phone": "+352 4301-36680"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dieter Rummel",
+          "head_email": "Dieter.RUMMEL@ec.europa.eu",
+          "head_phone": "+352 4301-35174"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "TRANSLATION",
+      "director": "Jan Bednarich",
+      "director_email": "Jan.BEDNARICH@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Natalija Lujo",
+          "head_email": "Natalija.LUJO@ec.europa.eu",
+          "head_phone": "+32 229-55795"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ignacio Garrido Rodríguez",
+          "head_email": "RODRIGUEZ@ec.europa.eu",
+          "head_phone": "+32 229-52733"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Myriam Garcia De Leaniz",
+          "head_email": "HORTAL@ec.europa.eu",
+          "head_phone": "+352 4301-35660"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Aislínn Mccrory",
+          "head_email": "Aislinn.MCCRORY@ec.europa.eu",
+          "head_phone": "+32 229-55053"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Robert Gunning",
+          "head_email": "Robert.GUNNING@ec.europa.eu",
+          "head_phone": "+32 229-58903"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Liena Muskare",
+          "head_email": "Liena.MUSKARE@ec.europa.eu",
+          "head_phone": "+352 4301-31533"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Iveta Rancane-Abarte",
+          "head_email": "Iveta.RANCANE@ec.europa.eu",
+          "head_phone": "+352 4301-37596"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jan Bednarich",
+          "head_email": "Jan.BEDNARICH@ec.europa.eu",
+          "head_phone": "+352 4301-36963"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Samira Husremović",
+          "head_email": "Samira.HUSREMOVIC@ec.europa.eu",
+          "head_phone": "+32 229-58381"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Saša Sirovec",
+          "head_email": "Sasa.SIROVEC@ec.europa.eu",
+          "head_phone": "+352 4301-34550"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jaap Winsemius",
+          "head_email": "Jacob-Bernardus.WINSEMIUS@ec.europa.eu",
+          "head_phone": "+32 229-52626"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Geert Gysels",
+          "head_email": "Geert.GYSELS@ec.europa.eu",
+          "head_phone": "+352 4301-37780"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mareks Graudins",
+          "head_email": "Mareks.GRAUDINS@ec.europa.eu",
+          "head_phone": "+352 4301-33971"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ágota Kiss",
+          "head_email": "Agota.KISS@ec.europa.eu",
+          "head_phone": "+352 4301-37093"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sándor Kovács",
+          "head_email": "Sandor.KOVACS@ec.europa.eu",
+          "head_phone": "+352 4301-31654"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tanja Baraga",
+          "head_email": "Tanja.BARAGA@ec.europa.eu",
+          "head_phone": "+352 4301-37714"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tina Kosir",
+          "head_email": "Tina.KOSIR@ec.europa.eu",
+          "head_phone": "+352 4301-37084"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marcus Angioni",
+          "head_email": "Marcus.ANGIONI@ec.europa.eu",
+          "head_phone": "+352 4301-32908"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "TRANSLATION",
+      "director": "Marco Umberto Moricca",
+      "director_email": "Marco-Umberto.Moricca@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Wolfgang Kilb",
+          "head_email": "Wolfgang.KILB@ec.europa.eu",
+          "head_phone": "+352 4301-31994"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ulrike Sauter",
+          "head_email": "Ulrike.SAUTER@ec.europa.eu",
+          "head_phone": "+32 229-58621"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Judith Kremer",
+          "head_email": "Judith.Kremer@ec.europa.eu",
+          "head_phone": "+32 229-59645"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sabine Anschütz",
+          "head_email": "Sabine.ANSCHUTZ@ec.europa.eu",
+          "head_phone": "+352 4301-32984"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marcin Stryjecki",
+          "head_email": "Marcin.STRYJECKI@ec.europa.eu",
+          "head_phone": "+352 4301-30637"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jeroen Aspeslagh",
+          "head_email": "Jeroen.ASPESLAGH@ec.europa.eu",
+          "head_phone": "+32 229-54382"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Elizabeth Carmouche",
+          "head_email": "Elizabeth.Carmouche@ec.europa.eu",
+          "head_phone": "+32 229-63688"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zeta Field",
+          "head_email": "Zeta.Field@ec.europa.eu",
+          "head_phone": "+352 4301-35711"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michel Baut",
+          "head_email": "Michel.BAUT@ec.europa.eu",
+          "head_phone": "+352 4301-32627"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stefania Cossu",
+          "head_email": "Stefania.COSSU@ec.europa.eu",
+          "head_phone": "+32 229-51621"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Leloup",
+          "head_email": "Martin.LELOUP@ec.europa.eu",
+          "head_phone": "+32 229-52150"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Benoit Vermeersch",
+          "head_email": "Benoit.VERMEERSCH@ec.europa.eu",
+          "head_phone": "+352 4301-42831"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stella Clarke",
+          "head_email": "Stella.CLARKE@ec.europa.eu",
+          "head_phone": "+32 229-84006"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "RESOURCES",
+      "director": "Athanasios Maraslis",
+      "director_email": "Athanasios.MARASLIS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Klemen Perko",
+          "head_email": "Klemen.PERKO@ec.europa.eu",
+          "head_phone": "+352 4301-32710"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Costanza Schivi",
+          "head_email": "Costanza.SCHIVI@ec.europa.eu",
+          "head_phone": "+32 229-58608"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nikola Kunte",
+          "head_email": "Nikola.Kunte@ec.europa.eu",
+          "head_phone": "+32 229-63374"
+        }
+      ]
+    },
+    {
+      "code": "Dir T",
+      "name": "TECHNOLOGY",
+      "director": "Jörgen Gren",
+      "director_email": "Jorgen.Gren@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniel Chirita",
+          "head_email": "Daniel.CHIRITA@ec.europa.eu",
+          "head_phone": "+32 229-82248"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Artur Queiroz",
+          "head_email": "Artur.QUEIROZ@ec.europa.eu",
+          "head_phone": "+352 4301-38906"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Rzewuska-Waligora",
+          "head_email": "WALIGORA@ec.europa.eu",
+          "head_phone": "+352 4301-37728"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zsolt Varga",
+          "head_email": "Zsolt.VARGA1@ec.europa.eu",
+          "head_phone": "+352 4301-34987"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniel Kluvanec",
+          "head_email": "Daniel.KLUVANEC@ec.europa.eu",
+          "head_phone": "+352 4301-32768"
+        }
+      ]
     }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "DGT.A",
-      "name": "Translation",
-      "director": {
-        "name": "R. Enciu",
-        "position": "Director"
-      },
-      "location": "Luxembourg",
-      "language_departments": {
-        "ld_a1": {
-          "name": "LD A.1",
-          "head": "A. Butkevičius",
-          "note": "Deputy to the Director"
-        },
-        "ld_a2": {
-          "name": "LD A.2",
-          "head": "P. Rizzotto"
-        },
-        "ld_a3": {
-          "name": "LD A.3",
-          "head": "O. Manafova",
-          "location": "Luxembourg"
-        }
-      },
-      "units": {
-        "bg1": { "code": "BG.1", "head": "S. Alendarova" },
-        "bg2": { "code": "BG.2", "head": "T. Telkedjiyska", "location": "Luxembourg" },
-        "it1": { "code": "IT.1", "head": "S. Peressini" },
-        "it2": { "code": "IT.2", "head": "A. Orecchioni", "location": "Luxembourg" },
-        "mt1": { "code": "MT.1", "head": "G. Galea" },
-        "mt2": { "code": "MT.2", "head": "R. Seychell", "location": "Luxembourg" },
-        "cs1": { "code": "CS.1", "head": "K. Adámková", "location": "Luxembourg" },
-        "cs2": { "code": "CS.2", "head": "L. Larssonkrausova", "location": "Luxembourg" },
-        "fi1": { "code": "FI.1", "head": "J. Barruel" },
-        "fi2": { "code": "FI.2", "head": "A. Nyholm", "location": "Luxembourg" },
-        "da1": { "code": "DA.1", "head": "N. Walloe" },
-        "da2": { "code": "DA.2", "head": "B. Andersen (acting)", "location": "Luxembourg" },
-        "lt1": { "code": "LT.1", "head": "R. Dedonienė" },
-        "lt2": { "code": "LT.2", "head": "I. Sukaitytė-Mikucionienė", "location": "Luxembourg" }
-      }
-    },
-    "directorate_b": {
-      "code": "DGT.B",
-      "name": "Translation",
-      "director": {
-        "name": "M. Hennessy",
-        "position": "Director"
-      },
-      "location": "Luxembourg",
-      "language_departments": {
-        "ld_b1": {
-          "name": "LD B.1",
-          "head": "J. L. Vega Expósito",
-          "location": "Luxembourg",
-          "note": "Deputy to the Director"
-        },
-        "ld_b2": {
-          "name": "LD B.2",
-          "head": "J. Štefánik"
-        },
-        "ld_b3": {
-          "name": "LD B.3",
-          "head": "H. Zahra"
-        }
-      },
-      "units": {
-        "pl1": { "code": "PL.1", "head": "A. Zukowska", "location": "Luxembourg" },
-        "pl2": { "code": "PL.2", "head": "J. Jansen", "location": "Luxembourg" },
-        "pt1": { "code": "PT.1", "head": "T. Bairos" },
-        "pt2": { "code": "PT.2", "head": "H. Leal Fontes" },
-        "sv1": { "code": "SV.1", "head": "M. Söderholm" },
-        "sv2": { "code": "SV.2", "head": "A. Naslund", "location": "Luxembourg" },
-        "el1": { "code": "EL.1", "head": "G. Savvidou (acting)" },
-        "el2": { "code": "EL.2", "head": "V. Margoni", "location": "Luxembourg" },
-        "ro1": { "code": "RO.1", "head": "V. Florean" },
-        "ro2": { "code": "RO.2", "head": "M. Negru", "location": "Luxembourg" },
-        "et1": { "code": "ET.1", "head": "H. Leht" },
-        "et2": { "code": "ET.2", "head": "L. Anupõld", "location": "Luxembourg" },
-        "sk1": { "code": "SK.1", "head": "S. Skačkov" },
-        "sk2": { "code": "SK.2", "head": "K. Milkovičová", "location": "Luxembourg" }
-      },
-      "advisers": [
-        {
-          "name": "D. Rummel",
-          "title": "Adviser",
-          "area": "eDGT",
-          "location": "Luxembourg"
-        },
-        {
-          "name": "vacant",
-          "title": "Adviser",
-          "area": "Workflow Systems",
-          "location": "Luxembourg"
-        }
-      ]
-    },
-    "directorate_c": {
-      "code": "DGT.C",
-      "name": "Translation",
-      "director": {
-        "name": "J. Bednarich (acting)",
-        "position": "Director"
-      },
-      "location": "Luxembourg",
-      "language_departments": {
-        "ld_c1": {
-          "name": "LD C.1",
-          "head": "L. Muskare (acting)",
-          "location": "Luxembourg"
-        },
-        "ld_c2": {
-          "name": "LD C.2",
-          "head": "J. Bednarich",
-          "note": "Deputy to the Director"
-        }
-      },
-      "units": {
-        "es1": { "code": "ES.1", "head": "I. Garrido Rodriguez (acting)" },
-        "es2": { "code": "ES.2", "head": "M. Garcia de Leaniz Hortal", "location": "Luxembourg" },
-        "ga1": { "code": "GA.1", "head": "A. McCrory" },
-        "ga2": { "code": "GA.2", "head": "R. Gunning", "location": "Luxembourg" },
-        "lv1": { "code": "LV.1", "head": "L. Muskare" },
-        "lv2": { "code": "LV.2", "head": "I. Rancāne", "location": "Luxembourg" },
-        "hr1": { "code": "HR.1", "head": "N. Lujo", "location": "Luxembourg" },
-        "hr2": { "code": "HR.2", "head": "S. Sirovec", "location": "Luxembourg" },
-        "nl1": { "code": "NL.1", "head": "J. Winsemius" },
-        "nl2": { "code": "NL.2", "head": "G. Gysels", "location": "Luxembourg" },
-        "hu1": { "code": "HU.1", "head": "Á. Kiss", "location": "Luxembourg" },
-        "hu2": { "code": "HU.2", "head": "S. Kovács", "location": "Luxembourg" },
-        "sl1": { "code": "SL.1", "head": "T. Baraga", "location": "Luxembourg" },
-        "sl2": { "code": "SL.2", "head": "T. Košir", "location": "Luxembourg" }
-      },
-      "advisers": [
-        {
-          "name": "M. Angioni",
-          "title": "Adviser",
-          "area": "Interinstitutional Cooperation & CdT",
-          "location": "Luxembourg"
-        }
-      ]
-    },
-    "directorate_d": {
-      "code": "DGT.D",
-      "name": "Translation",
-      "director": {
-        "name": "V. Darò",
-        "position": "Director"
-      },
-      "language_departments": {
-        "ld_de": {
-          "name": "LD DE",
-          "head": "J. Oberhausen"
-        },
-        "ld_en": {
-          "name": "LD EN",
-          "head": "M. Stryjecki",
-          "area": "Translation & Editing Services",
-          "location": "Luxembourg",
-          "note": "Deputy to the Director"
-        },
-        "ld_fr": {
-          "name": "LD FR",
-          "head": "M. Baut"
-        }
-      },
-      "units": {
-        "de1": { "code": "DE.1", "head": "U. Sauter" },
-        "de2": { "code": "DE.2", "head": "J. Kremer" },
-        "de3": { "code": "DE.3", "head": "W. Kilb", "location": "Luxembourg" },
-        "en1": { "code": "EN.1", "name": "Editing Management", "head": "J. Aspeslagh" },
-        "en2": { "code": "EN.2", "name": "Translation & Editing", "head": "E. Carmouche" },
-        "en3": { "code": "EN.3", "name": "Translation & Editing", "head": "Z. Field", "location": "Luxembourg" },
-        "fr1": { "code": "FR.1", "head": "S. Cossu" },
-        "fr2": { "code": "FR.2", "head": "M. Leloup" },
-        "fr3": { "code": "FR.3", "head": "P. Wanlin (acting)", "location": "Luxembourg" }
-      },
-      "advisers": [
-        {
-          "name": "S. Clarke",
-          "title": "Adviser",
-          "area": "Editing Services",
-          "location": "Luxembourg"
-        }
-      ]
-    },
-    "directorate_r": {
-      "code": "DGT.R",
-      "name": "Resources",
-      "director": {
-        "name": "A. Maraslis",
-        "position": "Director"
-      },
-      "location": "Luxembourg",
-      "units": {
-        "r1": {
-          "code": "R.1",
-          "name": "Internal Administration & Facilities",
-          "head": "K. Perko",
-          "location": "Luxembourg"
-        },
-        "r2": {
-          "code": "R.2",
-          "name": "Budget & Finance",
-          "head": "C. Schivi",
-          "location": "Luxembourg",
-          "note": "Deputy to the Director"
-        },
-        "r3": {
-          "code": "R.3",
-          "name": "Knowledge Management",
-          "head": "N. Kunte",
-          "location": "Luxembourg"
-        },
-        "hrc": {
-          "code": "HRC",
-          "name": "HR Correspondent",
-          "head": "D. Meert",
-          "location": "Luxembourg"
-        }
-      }
-    },
-    "directorate_t": {
-      "code": "DGT.T",
-      "name": "Technology",
-      "director": {
-        "name": "J. Gren",
-        "position": "Director"
-      },
-      "units": {
-        "t1": {
-          "code": "T.1",
-          "name": "IT Services",
-          "head": "D. Chirita"
-        },
-        "t2": {
-          "code": "T.2",
-          "name": "AI-Based Services",
-          "head": "A. Queiroz",
-          "location": "Luxembourg"
-        },
-        "t3": {
-          "code": "T.3",
-          "name": "Data Management",
-          "head": "M. Rzewuska-Waligóra",
-          "location": "Luxembourg",
-          "note": "Deputy to the Director"
-        },
-        "t4": {
-          "code": "T.4",
-          "name": "Enterprise Architecture & Analytics",
-          "head": "Z. Varga"
-        }
-      },
-      "advisers": [
-        {
-          "name": "D. Kluvanec",
-          "title": "Adviser",
-          "area": "New Technologies",
-          "location": "Luxembourg"
-        }
-      ]
-    }
-  },
-  "special_units": {
-    "translation_centre_bodies_union": {
-      "code": "CdT",
-      "name": "Translation Centre for the Bodies of the European Union",
-      "location": "Luxembourg"
-    }
-  },
-  "notes": [
-    "Deputy to the Director",
-    "Management in Luxembourg",
-    "'Transardennaise' entity"
-  ]
+  ],
+  "num_directorates": 7,
+  "num_units": 77,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

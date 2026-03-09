@@ -1,426 +1,553 @@
 {
   "dg_code": "INTPA",
-  "dg_name": "International Partnerships",
-  "commissioner": "Jozef Síkela",
-  "date_of_effect": "2025-10-16",
-  "director_general": {
-    "name": "Koen Doens",
-    "assistants": [
-      "Margarita Nikolova",
-      "Tristan Le Berigot",
-      "Benedetta Ruffini"
-    ]
-  },
+  "dg_name": "Directorate-General for International Partnerships",
+  "commissioner": "",
+  "director_general": "Koen Doens",
+  "director_general_email": "Koen.DOENS@ec.europa.eu",
   "deputy_directors_general": [
     {
+      "name": "Benedetta Ruffini",
+      "email": "Benedetta.RUFFINI@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
       "name": "Myriam Ferran",
-      "responsibilities": "Directorates A, B & C"
+      "email": "Myriam.FERRAN@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Tom Corrie",
+      "email": "Tom.CORRIE@eeas.europa.eu",
+      "responsibilities": ""
     },
     {
       "name": "Marjeta Jager",
-      "responsibilities": "Directorates D, E & F"
+      "email": "Marjeta.JAGER@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "name": "Martin Seychell",
-      "responsibilities": "Directorates G & R"
+      "name": "Leonard Mizzi",
+      "email": "Leonard.MIZZI@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
-  "principal_advisers": [
-    {
-      "name": "Sandra Bartelt",
-      "area": "G7 and G20 Sustainable Development Agendas"
-    },
-    {
-      "name": "Antti Karhunen",
-      "area": "Financing for Development"
-    },
-    {
-      "name": "Mathieu Briens",
-      "area": "Emerging Donors",
-      "note": "Seconded to the EEAS as Director AFRICA.DMD"
-    }
-  ],
-  "hors_classe_adviser": {
-    "name": "Henrik Hololei"
-  },
   "directorates": [
     {
-      "code": "INTPA.01",
-      "name": "General Coordination & Inter-Institutional Relations",
-      "director": "Javier Raya Aguado",
-      "deputy": "Agathe Plauchut"
-    },
-    {
-      "code": "INTPA.02",
-      "name": "Political Strategy & Communication",
-      "director": "Mark Gray",
-      "deputy": "Lejla Haveric"
-    },
-    {
-      "code": "INTPA.A",
-      "name": "Africa",
-      "director": "Geza Strammer (Acting)",
+      "code": "",
+      "name": "General",
+      "director": "Margarita Nikolova",
+      "director_email": "Margarita.NIKOLOVA@ec.europa.eu",
       "units": [
         {
-          "code": "INTPA.A.1",
-          "name": "Strategic Partnerships with Africa & with the ACP",
+          "code": "",
+          "name": "",
+          "head": "Tristan Le Berigot",
+          "head_email": "Tristan.LE-BERIGOT@ec.europa.eu",
+          "head_phone": "+32 229-63433"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "AFRICA",
+      "director": "Stefano Signore",
+      "director_email": "Stefano.SIGNORE@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
           "head": "Domenico Rosa",
-          "deputy": "Genevieve-Anne Dehoux"
+          "head_email": "Domenico.Rosa@ec.europa.eu",
+          "head_phone": "+32 229-99815"
         },
         {
-          "code": "INTPA.A.2",
-          "name": "Regional & Multi-Country Programmes for Africa",
+          "code": "",
+          "name": "",
           "head": "Laurent Sillano",
-          "deputy": "Briac Deffobis"
+          "head_email": "Laurent.SILLANO@ec.europa.eu",
+          "head_phone": "+32 229-59361"
         },
         {
-          "code": "INTPA.A.3",
-          "name": "Western Africa",
-          "head": "Pilar Palmero Vaquero",
-          "deputy": "Fabio Di Stefano"
+          "code": "",
+          "name": "",
+          "head": "Maria Pilar Palmero Vaquero",
+          "head_email": "VAQUERO@ec.europa.eu",
+          "head_phone": "+32 229-57502"
         },
         {
-          "code": "INTPA.A.4",
-          "name": "Eastern & Central Africa",
-          "head": "Geza Strammer",
-          "deputy": "Virginie De Ruyt"
+          "code": "",
+          "name": "",
+          "head": "Virginie De Ruyt",
+          "head_email": "Virginie.DE-RUYT@ec.europa.eu",
+          "head_phone": "+32 229-60915"
         },
         {
-          "code": "INTPA.A.5",
-          "name": "Southern Africa, Indian Ocean",
+          "code": "",
+          "name": "",
           "head": "Philippe Latriche",
-          "deputy": "Ellen Kelly"
+          "head_email": "Philippe.LATRICHE@ec.europa.eu",
+          "head_phone": "+32 229-87128"
         },
         {
-          "code": "INTPA.A.6",
-          "name": "Finance & Contracts",
+          "code": "",
+          "name": "",
           "head": "Laurent Sarazin",
-          "deputy": "Kris Engelen"
-        }
-      ],
-      "cooperation_units": [
-        {
-          "location": "Mali",
-          "head": "Michel De Knoop (Acting)"
+          "head_email": "Laurent.Sarazin@ec.europa.eu",
+          "head_phone": "+32 229-99621"
         },
         {
-          "location": "Burkina Faso",
-          "head": "Marc Duponcel (Acting)"
+          "code": "",
+          "name": "",
+          "head": "Marc Duponcel",
+          "head_email": "Marc.DUPONCEL@eeas.europa.eu",
+          "head_phone": "+226 25492900"
         },
         {
-          "location": "Ethiopia",
-          "head": "Beatrice Neri (Acting)"
+          "code": "",
+          "name": "",
+          "head": "Daniel Hachez",
+          "head_email": "Daniel.HACHEZ@ec.europa.eu",
+          "head_phone": "+25132 2-3052600229-64737"
         },
         {
-          "location": "Niger",
-          "head": "Gerard Von Driessche (Acting)"
+          "code": "",
+          "name": "",
+          "head": "Maria Pilar Palmero Vaquero",
+          "head_email": "VAQUERO@ec.europa.eu",
+          "head_phone": "+32 229-57502"
         },
         {
-          "location": "Mozambique",
-          "head": "Paula Vazquez Horyaans"
+          "code": "",
+          "name": "",
+          "head": "Paula Vazquez Horyaans",
+          "head_email": "HORYAANS@EC.EUROPA.EU",
+          "head_phone": "+258 21-481000"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gerard Van Driessche",
+          "head_email": "Gerard.VAN-DRIESSCHE@eeas.europa.eu",
+          "head_phone": "+230 2071515"
         }
       ]
     },
     {
-      "code": "INTPA.B",
-      "name": "Latin America & the Caribbean; Relations with Overseas Countries & Territories",
+      "code": "Dir B",
+      "name": "LATIN AMERICA AND THE CARIBBEAN; RELATIONS WITH ALL OVERSEAS",
       "director": "Felix Fernandez-Shaw",
+      "director_email": "Felix.FERNANDEZ-SHAW@ec.europa.eu",
       "units": [
         {
-          "code": "INTPA.B.1",
-          "name": "Regional Programmes for Latin America & the Caribbean",
+          "code": "",
+          "name": "",
           "head": "Felice Zaccheo",
-          "deputy": "Diana Montero Melis"
+          "head_email": "Felice.ZACCHEO@ec.europa.eu",
+          "head_phone": "+32 229-66856"
         },
         {
-          "code": "INTPA.B.2",
-          "name": "Country Programmes for Latin America & the Caribbean",
+          "code": "",
+          "name": "",
           "head": "Olivier Luyckx",
-          "deputy": "Olga Baus Gibert"
+          "head_email": "Olivier.Luyckx@ec.europa.eu",
+          "head_phone": "+32 229-64110"
         },
         {
-          "code": "INTPA.B.3",
-          "name": "All Overseas Countries & Territories (OCTs)",
+          "code": "",
+          "name": "",
           "head": "Anna Burylo",
-          "deputy": "Aurelie Godefroy"
-        }
-      ],
-      "oct_offices": [
-        {
-          "location": "Noumea/New Caledonia (including French Polynesia, Wallis & Futuna)",
-          "head": "Vacant"
-        },
-        {
-          "location": "Nuuk/Greenland",
-          "head": "Simon Bojsen-Moller"
+          "head_email": "Anna.BURYLO@ec.europa.eu",
+          "head_phone": "+32 229-69810"
         }
       ]
     },
     {
-      "code": "INTPA.C",
-      "name": "Asia & Pacific",
+      "code": "Dir C",
+      "name": "ASIA AND PACIFIC",
       "director": "Peteris Ustubs",
+      "director_email": "Peteris.USTUBS@ec.europa.eu",
       "units": [
         {
-          "code": "INTPA.C.1",
-          "name": "Central Asia & Afghanistan",
+          "code": "",
+          "name": "",
           "head": "Charlotte Adriaen",
-          "deputy": "Fabienne Van Den Eede"
+          "head_email": "Charlotte.ADRIAEN@ec.europa.eu",
+          "head_phone": "+32 229-88031"
         },
         {
-          "code": "INTPA.C.2",
-          "name": "South & South-East Asia",
-          "head": "Mario Ronconi",
-          "deputy": "Ian Hoskins"
+          "code": "",
+          "name": "",
+          "head": "Ian Hoskins",
+          "head_email": "Ian.Hoskins@ec.europa.eu",
+          "head_phone": "+32 229-66891"
         },
         {
-          "code": "INTPA.C.3",
-          "name": "East Asia & the Pacific",
+          "code": "",
+          "name": "",
           "head": "Sarah Rinaldi",
-          "deputy": "Maria Barbara Chojnacka"
+          "head_email": "Sarah.RINALDI@ec.europa.eu",
+          "head_phone": "+32 229-85750"
         },
         {
-          "code": "INTPA.C.4",
-          "name": "Finance & Contracts (serves both Directorates B&C)",
-          "head": "Enrique Lobera Arguelles",
-          "deputy": "Armando Lama"
-        }
-      ],
-      "cooperation_units": [
-        {
-          "location": "Afghanistan",
-          "head": "Eric Beaume"
+          "code": "",
+          "name": "",
+          "head": "Armando Lama",
+          "head_email": "Armando.Lama@ec.europa.eu",
+          "head_phone": "+32 229-90968"
         },
         {
-          "location": "Bangladesh",
-          "head": "Michal Krejza"
+          "code": "",
+          "name": "",
+          "head": "Eric Beaume",
+          "head_email": "Eric.BEAUME@eeas.europa.eu",
+          "head_phone": "+93 20-2200457"
         },
         {
-          "location": "China, India, Malaysia, Mongolia, Thailand",
-          "head": "Tom Corrie (Acting)"
+          "code": "",
+          "name": "",
+          "head": "Michal Krejza",
+          "head_email": "Michal.KREJZA@eeas.europa.eu",
+          "head_phone": "+880 2-55668057"
         },
         {
-          "location": "Fiji & the Pacific Region",
-          "head": "Maurizio Cian"
+          "code": "",
+          "name": "",
+          "head": "Maurizio Cian",
+          "head_email": "MAURIZIO.CIAN@EC.EUROPA.EU",
+          "head_phone": "+679 3313633"
         }
       ]
     },
     {
-      "code": "INTPA.D",
-      "name": "Sustainable Development Policy & Coordination",
+      "code": "Dir D",
+      "name": "SUSTAINABLE DEVELOPMENT POLICY AND COORDINATION",
       "director": "Luc Bagur",
+      "director_email": "Luc.Bagur@ec.europa.eu",
       "units": [
         {
-          "code": "INTPA.D.1",
-          "name": "Effective Development Policy & Team Europe",
-          "head": "Isabelle Combes (Acting)",
-          "deputy": "Isabelle Combes"
+          "code": "",
+          "name": "",
+          "head": "Isabelle Combes",
+          "head_email": "Isabelle.Combes@ec.europa.eu",
+          "head_phone": "+32 229-58147"
         },
         {
-          "code": "INTPA.D.2",
-          "name": "Sustainable Development Policy & Global Partnerships with UN",
+          "code": "",
+          "name": "",
           "head": "Mathieu Remond",
-          "deputy": "Vacant"
+          "head_email": "Mathieu.REMOND@ec.europa.eu",
+          "head_phone": "+32 229-89664"
         },
         {
-          "code": "INTPA.D.3",
-          "name": "Coordination & Oversight of Financing Instruments",
+          "code": "",
+          "name": "",
           "head": "Vincent Grimaud",
-          "deputy": "Nicolas Stoetzel"
+          "head_email": "Vincent.GRIMAUD@ec.europa.eu",
+          "head_phone": "+32 229-63320"
         },
         {
-          "code": "INTPA.D.4",
-          "name": "Quality and Results, Evaluation, Knowledge Management",
-          "head": "Jean-Herve Ramat",
-          "deputy": "Malgorzata Peksa-Blanchard"
+          "code": "",
+          "name": "",
+          "head": "Jean-Hervé Ramat",
+          "head_email": "Jean-Herve.RAMAT@ec.europa.eu",
+          "head_phone": "+32 229-52621"
         }
       ]
     },
     {
-      "code": "INTPA.E",
-      "name": "Sustainable Finance, Investment & Jobs; Economy That Works for the People",
-      "director": "Karolina Leib (Acting)",
+      "code": "Dir E",
+      "name": "SUSTAINABLE FINANCE, INVESTMENT AND JOBS; ECONOMY THAT WORKS FOR",
+      "director": "Karolina Leib",
+      "director_email": "Karolina.LEIB@ec.europa.eu",
       "units": [
         {
-          "code": "INTPA.E.1",
-          "name": "Macro-Economic Analysis, Fiscal Policies & Budget Support, Global Partnerships with IFIs",
+          "code": "",
+          "name": "",
           "head": "Karolina Leib",
-          "deputy": "Silvina Ilieva"
+          "head_email": "Karolina.LEIB@ec.europa.eu",
+          "head_phone": "+32 229-81350"
         },
         {
-          "code": "INTPA.E.2",
-          "name": "Trade, Investment Climate, Entrepreneurship & Value Chains",
+          "code": "",
+          "name": "",
           "head": "Paz Velasco Velazquez",
-          "deputy": "Isabelle Magne"
+          "head_email": "Paz.VELASCO-VELAZQUEZ@ec.europa.eu",
+          "head_phone": "+32 229-89485"
         },
         {
-          "code": "INTPA.E.3",
-          "name": "Private Sector Engagement & Employment",
-          "head": "Rigo Belpaire (Acting)",
-          "deputy": "Rigo Belpaire"
+          "code": "",
+          "name": "",
+          "head": "Rigo Belpaire",
+          "head_email": "Rigo.BELPAIRE@ec.europa.eu",
+          "head_phone": "+32 229-65243"
         },
         {
-          "code": "INTPA.E.4",
-          "name": "Sustainable Finance Policy",
+          "code": "",
+          "name": "",
           "head": "Caroline Wellemans",
-          "deputy": "Peter Pontuch"
+          "head_email": "Caroline.WELLEMANS@ec.europa.eu",
+          "head_phone": "+32 229-54628"
         },
         {
-          "code": "INTPA.E.5",
-          "name": "External Action Guarantees",
-          "head": "Kay Parplies",
-          "deputy": "Filippo La Verghetta"
+          "code": "",
+          "name": "",
+          "head": "Filippo Gabriele La Verghetta",
+          "head_email": "VERGHETTA@ec.europa.eu",
+          "head_phone": "+32 229-69092"
         },
         {
-          "code": "INTPA.E.6",
-          "name": "Risk Management",
+          "code": "",
+          "name": "",
           "head": "Torsten Ewerbeck",
-          "deputy": "Celine Maertens"
+          "head_email": "Torsten.EWERBECK@ec.europa.eu",
+          "head_phone": "+32 229-69318"
         }
       ]
     },
     {
-      "code": "INTPA.F",
-      "name": "Green Deal, Digital Agenda",
-      "director": "Stefano Signore (Acting)",
-      "units": [
-        {
-          "code": "INTPA.F.1",
-          "name": "Climate Change & Sustainable Energy; Nuclear Safety",
-          "head": "Stefano Signore",
-          "deputy": "Arnaud Demoor"
-        },
-        {
-          "code": "INTPA.F.2",
-          "name": "Environment, Sustainable Natural Resources",
-          "head": "Chantal Marijnissen",
-          "deputy": "Thais Leray"
-        },
-        {
-          "code": "INTPA.F.3",
-          "name": "Sustainable Agri-Food Systems & Fisheries",
-          "head": "Leonard Mizzi",
-          "deputy": "Andrea Alfieri"
-        },
-        {
-          "code": "INTPA.F.4",
-          "name": "Sustainable Transport & Urban Development",
-          "head": "Sergio Oliete Josa",
-          "deputy": "Antonio Crespo Moreno"
-        },
-        {
-          "code": "INTPA.F.5",
-          "name": "Digital Transformation",
-          "head": "Ariane Labat",
-          "deputy": "Miguel Exposito Verdejo"
-        }
-      ],
-      "advisers": [
-        {
-          "name": "Vacant",
-          "area": "Food Systems"
-        },
-        {
-          "name": "Tomasz Husak",
-          "area": "Digital Agenda & Data Technologies"
-        }
-      ]
-    },
-    {
-      "code": "INTPA.G",
-      "name": "Human Development, Migration, Governance & Peace",
+      "code": "Dir F",
+      "name": "GREEN DEAL, DIGITAL AGENDA",
       "director": "Erica Gerretsen",
+      "director_email": "Erica.GERRETSEN@ec.europa.eu",
       "units": [
         {
-          "code": "INTPA.G.1",
-          "name": "Gender Equality, Human Rights & Democratic Governance",
-          "head": "Chiara Adamo",
-          "deputy": "Micha Ramakers"
+          "code": "",
+          "name": "",
+          "head": "Arnaud Demoor",
+          "head_email": "Arnaud.DEMOOR@ec.europa.eu",
+          "head_phone": "+32 229-56192"
         },
         {
-          "code": "INTPA.G.2",
-          "name": "Local Authorities, Civil Society Organisations & Foundations",
-          "head": "Marlene Holzner",
-          "deputy": "Camilla Lombard"
+          "code": "",
+          "name": "",
+          "head": "Chantal Marijnissen",
+          "head_email": "Chantal.MARIJNISSEN@ec.europa.eu",
+          "head_phone": "+32 229-86565"
         },
         {
-          "code": "INTPA.G.3",
-          "name": "Youth, Education & Research, Culture",
-          "head": "Annica Floren (Acting)",
-          "deputy": "Annica Floren"
+          "code": "",
+          "name": "",
+          "head": "Andrea Alfieri",
+          "head_email": "Andrea.ALFIERI@ec.europa.eu",
+          "head_phone": "+32 229-56431"
         },
         {
-          "code": "INTPA.G.4",
-          "name": "Social Inclusion & Protection, Health & Demography",
-          "head": "Cecile Billaux",
-          "deputy": "Zakaria Sbitri"
+          "code": "",
+          "name": "",
+          "head": "Sergio Oliete Josa",
+          "head_email": "Sergio.OLIETE-JOSA@ec.europa.eu",
+          "head_phone": "+32 229-66116"
         },
         {
-          "code": "INTPA.G.5",
-          "name": "Resilience, Peace, Security",
-          "head": "Sabine Zwaenepoel (Acting)",
-          "deputy": "Sabine Zwaenepoel"
+          "code": "",
+          "name": "",
+          "head": "Ariane Labat",
+          "head_email": "Ariane.LABAT@ec.europa.eu",
+          "head_phone": "+32 229-92848"
         },
         {
-          "code": "INTPA.G.6",
-          "name": "Migration & Forced Displacement",
-          "head": "Francesco Luciani",
-          "deputy": "Camilla Hagstrom"
+          "code": "",
+          "name": "",
+          "head": "Martin Seychell",
+          "head_email": "Martin.SEYCHELL@ec.europa.eu",
+          "head_phone": "+32 229-50675"
         }
       ]
     },
     {
-      "code": "INTPA.R",
-      "name": "Resources",
-      "director": "Didier Verse",
+      "code": "Dir G",
+      "name": "HUMAN DEVELOPMENT, MIGRATION, GOVERNANCE AND PEACE",
+      "director": "Erica Gerretsen",
+      "director_email": "Erica.GERRETSEN@ec.europa.eu",
       "units": [
         {
-          "code": "INTPA.R.1",
-          "name": "Human Resources, Learning & Development, Document Management, Internal Communication",
+          "code": "",
+          "name": "",
+          "head": "Chiara Adamo",
+          "head_email": "Chiara.ADAMO@ec.europa.eu",
+          "head_phone": "+32 229-96797"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marlene Holzner",
+          "head_email": "Marlene.HOLZNER@ec.europa.eu",
+          "head_phone": "+32 229-60196"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Annica Floren",
+          "head_email": "Annica.Floren@ec.europa.eu",
+          "head_phone": "+32 229-93136"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cecile Billaux",
+          "head_email": "Cecile.BILLAUX@ec.europa.eu",
+          "head_phone": "+32 229-57306"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sabine Zwaenepoel",
+          "head_email": "Sabine.Zwaenepoel@ec.europa.eu",
+          "head_phone": "+32 229-92018"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesco Luciani",
+          "head_email": "Francesco.LUCIANI@ec.europa.eu",
+          "head_phone": "+32 229-54941"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "RESOURCES",
+      "director": "Didier Verse",
+      "director_email": "Didier.VERSE@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
           "head": "Hannah Cole",
-          "deputy": "Damien Veyret"
+          "head_email": "Hannah.COLE@ec.europa.eu",
+          "head_phone": "+32 229-67930"
         },
         {
-          "code": "INTPA.R.2",
-          "name": "Planning, Budget, Reporting",
+          "code": "",
+          "name": "",
           "head": "Daniele D'Amico",
-          "deputy": "Yves Tielemans"
+          "head_email": "Amico@ec.europa.eu",
+          "head_phone": "+32 229-63292"
         },
         {
-          "code": "INTPA.R.3",
-          "name": "Audit & Control",
-          "head": "Emmanouil Papaioannou",
-          "deputy": "Daria Hasenclever"
+          "code": "",
+          "name": "",
+          "head": "Georgios Papaioannou",
+          "head_email": "Emmanouil.Papaioannou@ec.europa.eu",
+          "head_phone": "+32 229-69988"
         },
         {
-          "code": "INTPA.R.4",
-          "name": "Legal Affairs",
+          "code": "",
+          "name": "",
           "head": "Dolores Dominguez Perez",
-          "deputy": "Paolo Sergio"
+          "head_email": "Dolores.Dominguez-Perez@ec.europa.eu",
+          "head_phone": "+32 229-66552"
         },
         {
-          "code": "INTPA.R.5",
-          "name": "Data & Information Technology",
+          "code": "",
+          "name": "",
           "head": "Pavel Borkovec",
-          "deputy": "Samuel Cansse"
+          "head_email": "Pavel.BORKOVEC@ec.europa.eu",
+          "head_phone": "+32 229-82277"
         },
         {
-          "code": "INTPA.R.6",
-          "name": "Finance & Contracts for Centralised Operations (serves Directorates D, E, F, G & R, and Units 01 & 02)",
+          "code": "",
+          "name": "",
           "head": "Karine Genty",
-          "deputy": "Hilde Timmerman"
+          "head_email": "Karine.GENTY@ec.europa.eu",
+          "head_phone": "+32 229-68934"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sandra Bartelt",
+          "head_email": "Sandra.BARTELT@ec.europa.eu",
+          "head_phone": "+32 229-56828"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Antti Karhunen",
+          "head_email": "Antti.Karhunen@ec.europa.eu",
+          "head_phone": "+32 229-60281"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Javier Raya Aguado",
+          "head_email": "Javier.RAYA-AGUADO@ec.europa.eu",
+          "head_phone": "+32 229-87301"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mark Gray",
+          "head_email": "Mark-Stephen.GRAY@ec.europa.eu",
+          "head_phone": "+32 229-88644"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Rosario Bento Pais",
+          "head_email": "Rosario.BENTO@ec.europa.eu",
+          "head_phone": "+244 222-444449"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gwilym Jones",
+          "head_email": "Gwilym.JONES@ec.europa.eu",
+          "head_phone": "+222 4-5252724"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesca Di Mauro",
+          "head_email": "Francesca.DI-MAURO@eeas.europa.eu",
+          "head_phone": "+225 20-318350"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sandra Kramer",
+          "head_email": "Sandra.KRAMER@eeas.europa.eu",
+          "head_phone": "+27 12-4525200"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Diego Escalona Paturel",
+          "head_email": "PATUREL@EC.EUROPA.EU",
+          "head_phone": "+32 229-93223"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sylvie Millot",
+          "head_email": "Sylvie.MILLOT@eeas.europa.eu",
+          "head_phone": "+32 229-56047"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Fiona Ramsey",
+          "head_email": "Fiona.RAMSEY@eeas.europa.eu",
+          "head_phone": "+32 229-93524"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cecile Tassin",
+          "head_email": "Cecile.TASSIN-PELZER@ec.europa.eu",
+          "head_phone": "+32 229-66500"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kay Parplies",
+          "head_email": "Kay.Parplies@ec.europa.eu",
+          "head_phone": "+32 229-80104"
         }
       ]
     }
   ],
-  "seconded_managers": [
-    "S. Kramer as HoD South Africa",
-    "R. Bento-Pais as HoD Angola",
-    "G. Jones as HoD Togo",
-    "F. Di Mauro as HoD Ivory Coast",
-    "D. Escalona Paturel as HoD Central African Republic",
-    "F. Ramsey as HoD Barbados",
-    "S. Millot as HoD Cape Verde",
-    "D. Giorev seconded to UNOPS"
-  ]
+  "num_directorates": 9,
+  "num_units": 63,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

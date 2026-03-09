@@ -439,7 +439,8 @@ async def send_message(
         )
 
     except Exception as e:
-        logger.error(f"Failed to process chat message: {str(e)}")
+        import traceback
+        logger.error(f"Failed to process chat message: {str(e)}\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

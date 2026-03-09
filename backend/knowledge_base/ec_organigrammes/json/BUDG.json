@@ -1,413 +1,343 @@
 {
   "dg_code": "BUDG",
-  "dg_name": "Budget",
-  "full_name": "Directorate-General for Budget",
-  "date_of_effect": "2025-08-01",
-  "commissioner": {
-    "name": "Piotr Serafin",
-    "title": "Commissioner"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "Stéphanie Riso",
-      "position": "Director-General",
-      "assistants": [
+  "dg_name": "Directorate-General for Budget",
+  "commissioner": "",
+  "director_general": "Stephanie Riso",
+  "director_general_email": "Stephanie.Riso@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Beatriz Sanz Redrado",
+      "email": "Beatriz.SANZ-REDRADO@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Elena Kirova",
+      "director_email": "Elena.KIROVA@ec.europa.eu",
+      "units": [
         {
-          "name": "Leena Groen",
-          "role": "Assistant"
+          "code": "",
+          "name": "",
+          "head": "Felix Poirier",
+          "head_email": "Felix.POIRIER@ec.europa.eu",
+          "head_phone": "+32 229-78889"
         },
         {
-          "name": "Guido Gherbo",
-          "role": "Assistant"
+          "code": "",
+          "name": "",
+          "head": "Sebastiano Putoto",
+          "head_email": "Sebastiano.PUTOTO@ec.europa.eu",
+          "head_phone": "+32 229-95648"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lourdes Acedo Montoya",
+          "head_email": "Lourdes.ACEDO-MONTOYA@ec.europa.eu",
+          "head_phone": "+32 229-53648"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alina Burea",
+          "head_email": "Alina.BUREA@ec.europa.eu",
+          "head_phone": "+32 229-57336"
         }
       ]
     },
-    "deputy_director_general": {
-      "name": "Juan Casany Bernardo",
-      "position": "Deputy Director-General",
-      "responsibility": "Financial Rules, Controls & Reporting"
+    {
+      "code": "Dir A",
+      "name": "EXPENDITURE",
+      "director": "Lenka Filipkova",
+      "director_email": "Lenka.FILIPKOVA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Dessislava Velinova",
+          "head_email": "Dessislava.VELINOVA@ec.europa.eu",
+          "head_phone": "+32 229-60246"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nicolas Clisson",
+          "head_email": "Nicolas.CLISSON@ec.europa.eu",
+          "head_phone": "+32 229-98221"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marta Legutko",
+          "head_email": "Marta.LEGUTKO@ec.europa.eu",
+          "head_phone": "+32 229-52961"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lukas Holub",
+          "head_email": "Lukas.HOLUB@ec.europa.eu",
+          "head_phone": "+32 229-85659"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andrei Ion",
+          "head_email": "Andrei.ION@ec.europa.eu",
+          "head_phone": "+32 229-52632"
+        }
+      ]
     },
-    "advisers": [
-      {
-        "name": "Hors Classe Adviser",
-        "title": "Hors Classe Adviser",
-        "area": "Budget Transparency",
-        "role": "SG.EUR/BUHL",
-        "status": "vacant"
-      },
-      {
-        "name": "Principal Adviser",
-        "title": "Principal Adviser",
-        "area": "Own Resources & Member State Experts",
-        "role": "G. Heisig/Baldersheim",
-        "status": "vacant"
-      },
-      {
-        "name": "Principal Adviser",
-        "title": "Principal Adviser",
-        "area": "Audit, Recovery & New Programmes",
-        "role": "I. Pricopi/Popescu"
-      },
-      {
-        "name": "Principal Adviser",
-        "title": "Principal Adviser",
-        "area": "Legal, Sectoral Issues & Public Procurement Support",
-        "role": "G. Liedo/Ballerdick"
-      }
-    ],
-    "chief_risk_officer": {
-      "name": "Ilpo Athanasokolu",
-      "position": "Chief Risk Officer"
+    {
+      "code": "Dir B",
+      "name": "REVENUE AND MULTIANNUAL FINANCIAL FRAMEWORK",
+      "director": "Christiane Canenbley",
+      "director_email": "Christiane.CANENBLEY@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Franck Conrad",
+          "head_email": "Franck.CONRAD@ec.europa.eu",
+          "head_phone": "+32 229-88527"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Caroline Vandierendonck",
+          "head_email": "Caroline.VANDIERENDONCK@ec.europa.eu",
+          "head_phone": "+32 229-61725"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Irena Pereša",
+          "head_email": "Irena.PERESA@ec.europa.eu",
+          "head_phone": "+32 229-86838"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tomas Kucirek",
+          "head_email": "Tomas.KUCIREK@ec.europa.eu",
+          "head_phone": "+32 229-53616"
+        }
+      ]
+    },
+    {
+      "code": "Dir F",
+      "name": "FINANCIAL MARKET OPERATIONS",
+      "director": "Siegfried Ruhl",
+      "director_email": "Siegfried.RUHL@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Christian Engelen",
+          "head_email": "Christian.ENGELEN@ec.europa.eu",
+          "head_phone": "+32 229-93476"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Koen Dierckx",
+          "head_email": "Koen.DIERCKX@ec.europa.eu",
+          "head_phone": "+32 229-50853"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Turcanova",
+          "head_email": "Maria.TURCANOVA@ec.europa.eu",
+          "head_phone": "+352 4301-37776"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dimitris Papakonstantinou",
+          "head_email": "Dimitris.Papakonstantinou@ec.europa.eu",
+          "head_phone": "+352 4301-36553"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "RESOURCES AND IT",
+      "director": "Marco Abate",
+      "director_email": "Marco.Abate@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Marco Abate",
+          "head_email": "Marco.Abate@ec.europa.eu",
+          "head_phone": "+32 229-91866"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vincenzo Curiale",
+          "head_email": "Vincenzo.CURIALE@ec.europa.eu",
+          "head_phone": "+32 229-59234"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Volker Gundermann",
+          "head_email": "Volker.GUNDERMANN@ec.europa.eu",
+          "head_phone": "+32 229-94382"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marc Parmentier",
+          "head_email": "Marc.PARMENTIER@ec.europa.eu",
+          "head_phone": "+32 229-84310"
+        }
+      ]
+    },
+    {
+      "code": "Dir C",
+      "name": "TREASURY, ACCOUNTING, FINANCIAL CONTROL AND RECOVERIES",
+      "director": "Niall Bohan",
+      "director_email": "Niall.Bohan@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Juan Jose Lopez Lledo",
+          "head_email": "Juan-Jose.LOPEZ-LLEDO@ec.europa.eu",
+          "head_phone": "+32 229-51289"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Koehler",
+          "head_email": "Martin.KOEHLER@ec.europa.eu",
+          "head_phone": "+32 229-85215"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nicolas Ernie",
+          "head_email": "Nicolas.ERNIE@ec.europa.eu",
+          "head_phone": "+32 229-68828"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paola Icardi",
+          "head_email": "Paola.Icardi@ec.europa.eu",
+          "head_phone": "+32 229-67071"
+        }
+      ]
+    },
+    {
+      "code": "Dir D",
+      "name": "ACCOUNTABILITY, TRANSPARENCY AND PROTECTION OF THE UNION’S",
+      "director": "Tina Svendstrup",
+      "director_email": "Tina.SVENDSTRUP@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Simone Donzelli",
+          "head_email": "Simone.DONZELLI@ec.europa.eu",
+          "head_phone": "+32 229-53645"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katarzyna Kisiel",
+          "head_email": "Katarzyna.KISIEL@ec.europa.eu",
+          "head_phone": "+32 229-87075"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Myriam Cazzaniga",
+          "head_email": "Myriam.CAZZANIGA@ec.europa.eu",
+          "head_phone": "+32 229-83687"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ilona Loeser",
+          "head_email": "Ilona.Loeser@ec.europa.eu",
+          "head_phone": "+32 229-68525"
+        }
+      ]
+    },
+    {
+      "code": "Dir E",
+      "name": "CENTRAL FINANCIAL SERVICE",
+      "director": "Michael Erhart",
+      "director_email": "Michael.ERHART@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Yana Angelova",
+          "head_email": "Yana-Krasimirova.ANGELOVA@ec.europa.eu",
+          "head_phone": "+32 229-95623"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Boris Kasavetov",
+          "head_email": "Boris.KASAVETOV@ec.europa.eu",
+          "head_phone": "+32 229-64589"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zuzana Maluskova",
+          "head_email": "Zuzana.MALUSKOVA@ec.europa.eu",
+          "head_phone": "+352 4301-39840"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Olivier Waelbroeck",
+          "head_email": "Olivier.WAELBROECK@ec.europa.eu",
+          "head_phone": "+32 229-99803"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Siegfried Ruhl",
+          "head_email": "Siegfried.RUHL@ec.europa.eu",
+          "head_phone": "+352 4301-33295"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kai Wynands",
+          "head_email": "Kai.WYNANDS@ec.europa.eu",
+          "head_phone": "+32 229-90519"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Iliyana Tsanova",
+          "head_email": "Iliyana.TSANOVA@ec.europa.eu",
+          "head_phone": "+32 229-68900"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Iliyana Tsanova",
+          "head_email": "Iliyana.TSANOVA@ec.europa.eu",
+          "head_phone": "+32 229-68900"
+        }
+      ]
     }
-  },
-  "units": {
-    "budg_01": {
-      "code": "BUDG.01",
-      "name": "Risk Management",
-      "description": "Risk management"
-    },
-    "budg_02": {
-      "code": "BUDG.02",
-      "name": "Communication & Coordination",
-      "description": "Communication & Coordination"
-    }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "BUDG.A",
-      "name": "Programming",
-      "director": {
-        "name": "Lenka Filipova",
-        "position": "Director"
-      },
-      "units": {
-        "a1": {
-          "code": "BUDG.A.1",
-          "name": "Budgetary Architecture & Management Information System",
-          "head_of_unit": {
-            "name": "Desiglava Vilanova",
-            "deputy": null
-          }
-        },
-        "a2": {
-          "code": "BUDG.A.2",
-          "name": "SME and Structural Policies",
-          "head_of_unit": {
-            "name": "Ismael Grauwen",
-            "deputy": null
-          }
-        },
-        "a3": {
-          "code": "BUDG.A.3",
-          "name": "Internal Policies",
-          "head_of_unit": {
-            "name": "Mariapia Bellardi",
-            "deputy": null
-          }
-        },
-        "a4": {
-          "code": "BUDG.A.4",
-          "name": "External Policies",
-          "head_of_unit": {
-            "name": "Carola Grakau",
-            "deputy": null
-          }
-        },
-        "a5": {
-          "code": "BUDG.A.5",
-          "name": "Agriculture",
-          "head_of_unit": {
-            "name": "Bozalinda Birzei (acting)",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_b": {
-      "code": "BUDG.B",
-      "name": "Revenue and National, Financial and Legal Issues",
-      "director": {
-        "name": "Christine Carnbury",
-        "position": "Director"
-      },
-      "units": {
-        "b1": {
-          "code": "BUDG.B.1",
-          "name": "Legal, Financial Economics (I)",
-          "head_of_unit": {
-            "name": "Ledorado Aleiu Moronta",
-            "deputy": null
-          }
-        },
-        "b2": {
-          "code": "BUDG.B.2",
-          "name": "Own Resources: Statistics and Issues for Europe Platform (STEP)",
-          "head_of_unit": {
-            "name": "Caroline Vandenberghe",
-            "deputy": "Vandenberge"
-          }
-        },
-        "b3": {
-          "code": "BUDG.B.3",
-          "name": "Revenue Policy and Management",
-          "head_of_unit": {
-            "name": "Virgil Bana",
-            "deputy": null
-          }
-        },
-        "b4": {
-          "code": "BUDG.B.4",
-          "name": "Recovery, Budgeting, Checks and Sanctions",
-          "head_of_unit": {
-            "name": "Tomas Czesre",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_c": {
-      "code": "BUDG.C",
-      "name": "Treasury, Accounting, Financial Systems",
-      "director": {
-        "name": "Maria Beatriz Lima Miranda (2)",
-        "position": "Director"
-      },
-      "units": {
-        "c1": {
-          "code": "BUDG.C.1",
-          "name": "Treasury Management",
-          "head_of_unit": {
-            "name": "Juan Jose Lopez Llano",
-            "deputy": null
-          }
-        },
-        "c2": {
-          "code": "BUDG.C.2",
-          "name": "Accounting",
-          "head_of_unit": {
-            "name": "Ricardo Roselade",
-            "deputy": null
-          }
-        },
-        "c3": {
-          "code": "BUDG.C.3",
-          "name": "Management of Legal Systems and Advanced Partners",
-          "head_of_unit": {
-            "name": "Nicolas Cianu",
-            "deputy": null
-          }
-        },
-        "c4": {
-          "code": "BUDG.C.4",
-          "name": "Revenue Collection and Control",
-          "head_of_unit": {
-            "name": "Paola Scasi",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_d": {
-      "code": "BUDG.D",
-      "name": "Treasury, Accountancy, Financial Systems and Interests",
-      "director": {
-        "name": "Michael Schappe (acting)",
-        "position": "Director"
-      },
-      "units": {
-        "d1": {
-          "code": "BUDG.D.1",
-          "name": "Cohesion Policy Monitoring, Financial and Interests",
-          "head_of_unit": {
-            "name": "Alessandro Malzana",
-            "deputy": null
-          }
-        },
-        "d2": {
-          "code": "BUDG.D.2",
-          "name": "Agriculture, Marine and Fisheries with the European Court of Auditors",
-          "head_of_unit": {
-            "name": "Maria Panaourgola (acting)",
-            "deputy": null
-          }
-        },
-        "d3": {
-          "code": "BUDG.D.3",
-          "name": "Contacts Systems",
-          "head_of_unit": {
-            "name": "Iolanda Marsilai",
-            "deputy": null
-          },
-          "marker": "Deputy to director"
-        },
-        "d4": {
-          "code": "BUDG.D.4",
-          "name": "Financial Reporting and Data",
-          "head_of_unit": {
-            "name": "Elena Lazdescu",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_e": {
-      "code": "BUDG.E",
-      "name": "Audit and Internal Service",
-      "director": {
-        "name": "Michiel Garnaat",
-        "position": "Director"
-      },
-      "units": {
-        "e1": {
-          "code": "BUDG.E.1",
-          "name": "Monitoring, Continuous Accounting Framework",
-          "head_of_unit": {
-            "name": "Yana Angelova",
-            "deputy": null
-          }
-        },
-        "e2": {
-          "code": "BUDG.E.2",
-          "name": "Financial Rules: Direct Management",
-          "head_of_unit": {
-            "name": "Rosica Velakeva",
-            "deputy": null
-          }
-        },
-        "e3": {
-          "code": "BUDG.E.3",
-          "name": "Legal Affairs of Operations in Africa",
-          "head_of_unit": {
-            "name": "Olena Markkala (1)",
-            "deputy": null
-          }
-        },
-        "e4": {
-          "code": "BUDG.E.4",
-          "name": "Knowledge Management",
-          "head_of_unit": {
-            "name": "Algina Mandis (1)",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_f": {
-      "code": "BUDG.F",
-      "name": "Audit and Relation Operations",
-      "director": {
-        "name": "Karl Anian",
-        "position": "Director"
-      },
-      "units": {
-        "f1": {
-          "code": "BUDG.F.1",
-          "name": "Relation Guarantees, Accounting Framework - Continuity Operations",
-          "head_of_unit": {
-            "name": "Christian Markkela",
-            "deputy": null
-          }
-        },
-        "f2": {
-          "code": "BUDG.F.2",
-          "name": "Assets, Legal Continuity Committees, Financial Services & Info Reporting: Data Choice",
-          "head_of_unit": {
-            "name": "Marco Thelaroma",
-            "deputy": null
-          }
-        },
-        "f3": {
-          "code": "BUDG.F.3",
-          "name": "Support for Shared Actions, Finance Europe Affairs",
-          "head_of_unit": {
-            "name": "Ramon Trincarnosa",
-            "deputy": null
-          }
-        },
-        "f4": {
-          "code": "BUDG.F.4",
-          "name": "Investment",
-          "head_of_unit": {
-            "name": "Dimitris Papandreou (acting)",
-            "deputy": null
-          }
-        }
-      }
-    },
-    "directorate_g": {
-      "code": "BUDG.G",
-      "name": "Indirect Management",
-      "director": {
-        "name": "Hans Parmentier (acting)",
-        "position": "Director"
-      },
-      "units": {
-        "g1": {
-          "code": "BUDG.G.1",
-          "name": "EU Compliance National, Internal Control Systems",
-          "head_of_unit": {
-            "name": "Marco Arandelli",
-            "deputy": null
-          }
-        },
-        "g2": {
-          "code": "BUDG.G.2",
-          "name": "Flood Service Management for Community Funds & European Social Systems",
-          "head_of_unit": {
-            "name": "Vincenza Deremer",
-            "deputy": null
-          }
-        },
-        "g3": {
-          "code": "BUDG.G.3",
-          "name": "Good Service Management, Accounting and Reporting - Track Office",
-          "head_of_unit": {
-            "name": "Cassus Cairo Sanborn",
-            "deputy": null
-          }
-        },
-        "g4": {
-          "code": "BUDG.G.4",
-          "name": "EU Compliance Tools and Infrastructure",
-          "head_of_unit": {
-            "name": "Marc Panormois",
-            "deputy": null
-          },
-          "marker": "Deputy to director"
-        }
-      }
-    },
-    "directorate_h": {
-      "code": "BUDG.H",
-      "name": "Accounting Systems, Internal Control Systems",
-      "director": {
-        "name": "Joanna Sanna",
-        "position": "Director"
-      },
-      "units": {
-        "h1": {
-          "code": "BUDG.H.1",
-          "name": "EU Climate, Nature, Environment, Animals and Forestry",
-          "head_of_unit": {
-            "name": "Stefano Actalini",
-            "deputy": null
-          }
-        },
-        "h2": {
-          "code": "BUDG.H.2",
-          "name": "Natural Growth Tax Focus on Regions and Accounting Systems",
-          "head_of_unit": {
-            "name": "Virginie Delezelle",
-            "deputy": null
-          }
-        }
-      }
-    }
-  },
-  "notes": [
-    "(1) The Chief Risk Officer (CRO) reports directly to the Commissioner in charge of budget",
-    "(2) The Chief Accountant of the Commission",
-    "(3) The Chief Economist and the HR Correspondent have a functional reporting line to the Director-General",
-    "(4) The Head of Unit of BUDG.C.4 leads the informal task force on communication and knowledge management in DG BUDG"
-  ]
+  ],
+  "num_directorates": 8,
+  "num_units": 37,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

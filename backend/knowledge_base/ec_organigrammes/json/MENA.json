@@ -1,0 +1,974 @@
+{
+  "dg_code": "MENA",
+  "dg_name": "Directorate-General for the Middle East, North Africa and the Gulf",
+  "commissioner": "",
+  "director_general": "Michael Karnitschnig",
+  "director_general_email": "Michael.Karnitschnig@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Markus Lepine",
+      "email": "Markus.LEPINE@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Michael Karnitschnig",
+      "email": "Michael.Karnitschnig@ec.europa.eu",
+      "responsibilities": ""
+    }
+  ],
+  "directorates": [
+    {
+      "code": "Dir C",
+      "name": "Gulf",
+      "director": "Jivka Petkova",
+      "director_email": "Jivka.PETKOVA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ursula Von Der Leyen",
+          "head_email": "Ursula.VON-DER-LEYEN@ec.europa.eu",
+          "head_phone": "+32 229-56070"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bjoern Seibert",
+          "head_email": "Bjoern.SEIBERT@ec.europa.eu",
+          "head_phone": "+32 229-66300"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexandre Adam",
+          "head_email": "Alexandre.ADAM@ec.europa.eu",
+          "head_phone": "+32 229-93148"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Peter Van Kemseke",
+          "head_email": "Peter.VAN-KEMSEKE@ec.europa.eu",
+          "head_phone": "+32 229-61168"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Teresa Ribera",
+          "head_email": "Teresa.RIBERA@ec.europa.eu",
+          "head_phone": "+32 229-92801"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Miguel Gil Tertre",
+          "head_email": "Miguel.GIL-TERTRE@ec.europa.eu",
+          "head_phone": "+32 229-56493"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alina Nedea",
+          "head_email": "Alina.NEDEA@ec.europa.eu",
+          "head_phone": "+32 229-85068"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Vernet",
+          "head_email": "Anna.VERNET@ec.europa.eu",
+          "head_phone": "+32 229-68049"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Valvanera Ulargui Aparicio",
+          "head_email": "APARICIO@ec.europa.eu",
+          "head_phone": "+32 229-86809"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dorothe Dalheimer",
+          "head_email": "Dorothe.Dalheimer@ec.europa.eu",
+          "head_phone": "+32 229-50049"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wouter Wils",
+          "head_email": "Wouter.Wils@ec.europa.eu",
+          "head_phone": "+32 229-69412"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Henna Virkkunen",
+          "head_email": "Henna.VIRKKUNEN@ec.europa.eu",
+          "head_phone": "+32 229-92715"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Antti Timonen",
+          "head_email": "Antti.TIMONEN@ec.europa.eu",
+          "head_phone": "+32 229-13649"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marlene Rosemarie Madsen",
+          "head_email": "Marlene.MADSEN@ec.europa.eu",
+          "head_phone": "+32 229-98027"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Silvia Bartolini",
+          "head_email": "Silvia.BARTOLINI@ec.europa.eu",
+          "head_phone": "+32 229-58026"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexandra Cupsan-Catalin",
+          "head_email": "Alexandra.CUPSAN-CATALIN@ec.europa.eu",
+          "head_phone": "+32 229-92838"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Silke Dalton",
+          "head_email": "Silke.DALTON@ec.europa.eu",
+          "head_phone": "+32 229-88654"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Stéphane Sejourne",
+          "head_email": "Stephane.SEJOURNE@ec.europa.eu",
+          "head_phone": "+32 229-92908"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bertrand L'Huillier",
+          "head_email": "Bertrand.L-HUILLIER@ec.europa.eu",
+          "head_phone": "+32 229-60975"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Estelle Goeger",
+          "head_email": "Estelle.GOEGER@ec.europa.eu",
+          "head_phone": "+32 229-53746"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexandr Hobza",
+          "head_email": "Alexandr.HOBZA@ec.europa.eu",
+          "head_phone": "+32 229-86658"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Aleksandra Kordecka",
+          "head_email": "Aleksandra.KORDECKA@ec.europa.eu",
+          "head_phone": "+32 229-74070"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kaja Kallas",
+          "head_email": "Kaja.KALLAS@eeas.europa.eu",
+          "head_phone": "+32 229-64066"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vivian Loonela",
+          "head_email": "Vivian.LOONELA@ec.europa.eu",
+          "head_phone": "+32 229-90956"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Laure Chapuis",
+          "head_email": "Laure.CHAPUIS@ec.europa.eu",
+          "head_phone": "+32 229-69057"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sibylle Bikar",
+          "head_email": "Sibylle.BIKAR@ec.europa.eu",
+          "head_phone": "+32 229-83600"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Indrek Kannik",
+          "head_email": "Indrek.KANNIK@ec.europa.eu",
+          "head_phone": "+32 229-66319"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Calin-Ionut Ungur",
+          "head_email": "Calin-Ionut.UNGUR@ec.europa.eu",
+          "head_phone": "+32 229-53267"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Roxana Mînzatu",
+          "head_email": "Roxana.MINZATU@ec.europa.eu",
+          "head_phone": "+32 229-92871"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alina-Stefania Ujupan",
+          "head_email": "Alina-Stefania.UJUPAN@ec.europa.eu",
+          "head_phone": "+32 229-96043"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Max Uebe",
+          "head_email": "Max.UEBE@ec.europa.eu",
+          "head_phone": "+32 229-68272"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Catalin Gheran",
+          "head_email": "Ionut-Catalin.GHERAN@ec.europa.eu",
+          "head_phone": "+32 229-52608"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sonia Vila Nunez",
+          "head_email": "Sonia.VILA-NUNEZ@ec.europa.eu",
+          "head_phone": "+32 229-99362"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Raffaele Fitto",
+          "head_email": "Raffaele.FITTO@ec.europa.eu",
+          "head_phone": "+32 229-92875"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vincenzo Matano",
+          "head_email": "Vincenzo.MATANO@ec.europa.eu",
+          "head_phone": "+32 229-86597"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Felicia Stanescu",
+          "head_email": "Felicia.STANESCU@ec.europa.eu",
+          "head_phone": "+32 229-83065"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gabriele Giudice",
+          "head_email": "Gabriele.Giudice@ec.europa.eu",
+          "head_phone": "+32 229-63654"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Karl-Philipp Wojcik",
+          "head_email": "Karl-Philipp.WOJCIK@ec.europa.eu",
+          "head_phone": "+32 229-91028"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maroš Šefčovič",
+          "head_email": "Maros.SEFCOVIC@ec.europa.eu",
+          "head_phone": "+32 229-64373"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bernd Biervert-Lüth",
+          "head_email": "Bernd.Biervert@ec.europa.eu",
+          "head_phone": "+32 229-56887"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sofia Asteriadi",
+          "head_email": "Sofia.ASTERIADI@ec.europa.eu",
+          "head_phone": "+32 229-57103"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Adam Romanowski",
+          "head_email": "Adam.ROMANOWSKI@ec.europa.eu",
+          "head_phone": "+32 229-60847"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gustavo Luengo",
+          "head_email": "Gustavo.LUENGO@ec.europa.eu",
+          "head_phone": "+32 229-84751"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Valdis Dombrovskis",
+          "head_email": "Valdis.DOMBROVSKIS@ec.europa.eu",
+          "head_phone": "+32 229-55446"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michael Hager",
+          "head_email": "Michael.HAGER@ec.europa.eu",
+          "head_phone": "+32 229-58977"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zaneta Vegnere",
+          "head_email": "Zaneta.VEGNERE@ec.europa.eu",
+          "head_phone": "+32 229-57732"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pim Lescrauwaet",
+          "head_email": "Pim.LESCRAUWAET@ec.europa.eu",
+          "head_phone": "+32 229-67353"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dubravka Šuica",
+          "head_email": "Dubravka.SUICA@ec.europa.eu",
+          "head_phone": "+32 229-50660"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tena Misetic",
+          "head_email": "Tena.MISETIC@ec.europa.eu",
+          "head_phone": "+32 229-85106"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ivo Belet",
+          "head_email": "Ivo.BELET@ec.europa.eu",
+          "head_phone": "+32 229-92118"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vesna Loncaric",
+          "head_email": "Vesna.LONCARIC@ec.europa.eu",
+          "head_phone": "+32 229-50745"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Oliver Varhelyi",
+          "head_email": "Oliver.VARHELYI@ec.europa.eu",
+          "head_phone": "+32 229-90300"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Laszlo Kristoffy",
+          "head_email": "Laszlo.KRISTOFFY@ec.europa.eu",
+          "head_phone": "+32 229-69903"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katri Teedumäe",
+          "head_email": "Katri.TEEDUMAE@ec.europa.eu",
+          "head_phone": "+32 229-63224"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wopke Hoekstra",
+          "head_email": "Wopke.HOEKSTRA@ec.europa.eu",
+          "head_phone": "+32 229-80917"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Johannes Ten Broeke",
+          "head_email": "Johannes.TEN-BROEKE@ec.europa.eu",
+          "head_phone": "+32 229-13455"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Astrid Dentler",
+          "head_email": "Astrid.DENTLER@ec.europa.eu",
+          "head_phone": "+32 229-63310"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Patrice Pillet",
+          "head_email": "Patrice.Pillet@ec.europa.eu",
+          "head_phone": "+32 229-91040"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andrius Kubilius",
+          "head_email": "Andrius.KUBILIUS@ec.europa.eu",
+          "head_phone": "+32 229-92899"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Simonas Satunas",
+          "head_email": "Simonas.SATUNAS@ec.europa.eu",
+          "head_phone": "+32 229-13277"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne Fort",
+          "head_email": "Anne.FORT@ec.europa.eu",
+          "head_phone": "+32 229-58978"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Benjamin Hartmann",
+          "head_email": "Benjamin.HARTMANN@ec.europa.eu",
+          "head_phone": "+32 229-86984"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marta Kos",
+          "head_email": "Marta.KOS@ec.europa.eu",
+          "head_phone": "+32 229-93035"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Skander Nasra",
+          "head_email": "Skander.NASRA@ec.europa.eu",
+          "head_phone": "+32 229-13296"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Karolina Kottova",
+          "head_email": "Karolina.KOTTOVA@ec.europa.eu",
+          "head_phone": "+32 229-54748"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andreja Viher White",
+          "head_email": "Andreja.VIHER-WHITE@ec.europa.eu",
+          "head_phone": "+32 229-90895"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jozef Síkela",
+          "head_email": "Jozef.SIKELA@ec.europa.eu",
+          "head_phone": "+32 229-92845"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lucie Šestáková",
+          "head_email": "Lucie.SESTAKOVA@ec.europa.eu",
+          "head_phone": "+32 229-86853"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Roland Sourd",
+          "head_email": "Roland.SOURD@ec.europa.eu",
+          "head_phone": "+32 229-93435"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Natividad Lorenzo",
+          "head_email": "Natividad.Lorenzo@eeas.europa.eu",
+          "head_phone": "+32 229-80740"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cóstas Kadís",
+          "head_email": "Costas.KADIS@ec.europa.eu",
+          "head_phone": "+32 229-92913"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ioannis Hadjiyiannis",
+          "head_email": "Ioannis.HADJIYIANNIS@ec.europa.eu",
+          "head_phone": "+32 229-83594"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesca Arena",
+          "head_email": "Francesca.ARENA@ec.europa.eu",
+          "head_phone": "+32 229-61364"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Polyvios Eliofotou",
+          "head_email": "Polyvios.ELIOFOTOU@ec.europa.eu",
+          "head_phone": "+32 229-54726"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Luís Albuquerque",
+          "head_email": "Maria-Luis.ALBUQUERQUE@ec.europa.eu",
+          "head_phone": "+32 229-92896"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Cristina Dias",
+          "head_email": "Cristina.DIAS@ec.europa.eu",
+          "head_phone": "+32 229-96530"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Riikka Torppa",
+          "head_email": "Riikka.TORPPA@ec.europa.eu",
+          "head_phone": "+32 229-93458"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Larisa Dragomir",
+          "head_email": "Larisa.DRAGOMIR@ec.europa.eu",
+          "head_phone": "+32 229-87479"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hadja Lahbib",
+          "head_email": "Hadja.LAHBIB@ec.europa.eu",
+          "head_phone": "+32 229-92846"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jan Hoogmartens",
+          "head_email": "Jan.HOOGMARTENS@ec.europa.eu",
+          "head_phone": "+32 229-50881"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jasna Pajnkihar",
+          "head_email": "Jasna.PAJNKIHAR@ec.europa.eu",
+          "head_phone": "+32 229-93758"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lora Borissova",
+          "head_email": "Lora.BORISSOVA@ec.europa.eu",
+          "head_phone": "+32 229-65251"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Magnus Brunner",
+          "head_email": "Magnus.BRUNNER@ec.europa.eu",
+          "head_phone": "+32 229-92840"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexander Winterstein",
+          "head_email": "Alexander.Winterstein@ec.europa.eu",
+          "head_phone": "+32 229-93265"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Natasha Bertaud",
+          "head_email": "Natasha.BERTAUD@ec.europa.eu",
+          "head_phone": "+32 229-67456"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jessika Roswall",
+          "head_email": "Jessika.ROSWALL@ec.europa.eu",
+          "head_phone": "+32 229-92712"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Paulina Dejmek Hack",
+          "head_email": "Paulina.DEJMEK-HACK@ec.europa.eu",
+          "head_phone": "+32 229-91553"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "JAN Ceyssens",
+          "head_email": "Jan.CEYSSENS@ec.europa.eu",
+          "head_phone": "+32 229-81337"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vita Jukne",
+          "head_email": "Vita.JUKNE@ec.europa.eu",
+          "head_phone": "+32 229-57647"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Piotr Serafin",
+          "head_email": "Piotr.SERAFIN@ec.europa.eu",
+          "head_phone": "+32 229-92889"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Grzegorz Radziejewski",
+          "head_email": "Grzegorz.RADZIEJEWSKI@ec.europa.eu",
+          "head_phone": "+32 229-96437"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Florentine Hopmeier",
+          "head_email": "Florentine.HOPMEIER@ec.europa.eu",
+          "head_phone": "+32 229-59635"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne Funch Jensen",
+          "head_email": "anne-funch.jensen@consilium.europa.eu",
+          "head_phone": "+32 229-67565"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dan Jørgensen",
+          "head_email": "Dan.JORGENSEN@ec.europa.eu",
+          "head_phone": "+32 229-92903"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Engell-Rossen",
+          "head_email": "Martin.ENGELL-ROSSEN@ec.europa.eu",
+          "head_phone": "+32 229-86792"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wioletta Dunin-Majewska",
+          "head_email": "Wioletta.DUNIN-MAJEWSKA@ec.europa.eu",
+          "head_phone": "+32 229-86302"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tomas Anker Christensen",
+          "head_email": "Tomas-Anker.CHRISTENSEN@ec.europa.eu",
+          "head_phone": "+32 229-67025"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ekaterina Zaharieva",
+          "head_email": "Ekaterina.ZAHARIEVA@ec.europa.eu",
+          "head_phone": "+32 229-92901"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Andreas Schwarz",
+          "head_email": "Andreas.SCHWARZ@ec.europa.eu",
+          "head_phone": "+32 229-85476"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sophie Alexandrova",
+          "head_email": "Sophie.ALEXANDROVA@ec.europa.eu",
+          "head_phone": "+32 229-52782"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Manuel Aleixo",
+          "head_email": "Manuel.ALEIXO@ec.europa.eu",
+          "head_phone": "+32 229-60755"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michael Mcgrath",
+          "head_email": "Michael.MCGRATH@ec.europa.eu",
+          "head_phone": "+32 229-92837"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Fiona Knab-Lunny",
+          "head_email": "Fiona.KNAB-LUNNY@ec.europa.eu",
+          "head_phone": "+32 229-60220"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Joachim Herrmann",
+          "head_email": "Joachim.HERRMANN@ec.europa.eu",
+          "head_phone": "+32 229-54214"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Kevin Barrett",
+          "head_email": "Kevin.BARRETT@ec.europa.eu",
+          "head_phone": "+32 229-66098"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Apóstolos Tzitzikóstas",
+          "head_email": "Apostolos.TZITZIKOSTAS@ec.europa.eu",
+          "head_phone": "+32 229-92810"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Panagopoulou",
+          "head_email": "Anna.Panagopoulou@ec.europa.eu",
+          "head_phone": "+32 229-67894"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pierpaolo Settembri",
+          "head_email": "Pierpaolo.SETTEMBRI@ec.europa.eu",
+          "head_phone": "+32 229-63014"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anne Bergenfelt",
+          "head_email": "Anne.Bergenfelt@ec.europa.eu",
+          "head_phone": "+32 229-50850"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christophe Hansen",
+          "head_email": "Christophe.HANSEN@ec.europa.eu",
+          "head_phone": "+32 229-92766"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Esther De Lange",
+          "head_email": "Esther.DE-LANGE@ec.europa.eu",
+          "head_phone": "+32 229-95542"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Johannes Van Den Bossche",
+          "head_email": "BOSSCHE@ec.europa.eu",
+          "head_phone": "+32 229-88991"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alisa Tiganj",
+          "head_email": "Alisa.TIGANJ@ec.europa.eu",
+          "head_phone": "+32 229-85838"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Glenn Micallef",
+          "head_email": "Glenn.MICALLEF@ec.europa.eu",
+          "head_phone": "+32 229-92818"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Clint Tanti",
+          "head_email": "Clint.TANTI@ec.europa.eu",
+          "head_phone": "+32 229-86786"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Johanna Bernsel",
+          "head_email": "Johanna.BERNSEL@ec.europa.eu",
+          "head_phone": "+32 229-86699"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Wendy Ducatelle",
+          "head_email": "Wendy.DUCATELLE@ec.europa.eu",
+          "head_phone": "+32 229-88539"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Mathieu Briens",
+          "head_email": "Mathieu.BRIENS@ec.europa.eu",
+          "head_phone": "+32 229-58645"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jean-Charles Van Eeckhaute",
+          "head_email": "Jean-Charles.Van-Eeckhaute@ec.europa.eu",
+          "head_phone": "+32 229-91920"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ruta Zarnauskaite",
+          "head_email": "Ruta.ZARNAUSKAITE@ec.europa.eu",
+          "head_phone": "+32 229-97833"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Armelle Lidou",
+          "head_email": "Armelle.LIDOU@ec.europa.eu",
+          "head_phone": "+32 229-94462"
+        }
+      ]
+    },
+    {
+      "code": "",
+      "name": "General",
+      "director": "",
+      "director_email": "",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Gergo Pasqualetti",
+          "head_email": "Gergo.PASQUALETTI@ec.europa.eu",
+          "head_phone": "+32 229-65667"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christos Komninos",
+          "head_email": "Christos.KOMNINOS@ec.europa.eu",
+          "head_phone": "+32 229-59208"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maja Kocijancic",
+          "head_email": "Maja.KOCIJANCIC@ec.europa.eu",
+          "head_phone": "+32 229-86570"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "NORTH AFRICA",
+      "director": "Francisco Joaquin Gaztelu",
+      "director_email": "MEZQUIRIZ@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Florian Ermacora",
+          "head_email": "Florian.ERMACORA@ec.europa.eu",
+          "head_phone": "+32 229-85126"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katerina Wolfova",
+          "head_email": "Katerina.WOLFOVA@ec.europa.eu",
+          "head_phone": "+32 229-64678"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Fulvio Capurso",
+          "head_email": "Fulvio.CAPURSO@ec.europa.eu",
+          "head_phone": "+32 229-52079"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Eric Trotemann",
+          "head_email": "Eric.TROTEMANN@ec.europa.eu",
+          "head_phone": "+32 229-53586"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "MIDDLE EAST",
+      "director": "Henrike Trautmann",
+      "director_email": "Henrike.Trautmann@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ana Pires",
+          "head_email": "Ana.PIRES@ec.europa.eu",
+          "head_phone": "+32 229-81473"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesca Pessina",
+          "head_email": "Francesca.PESSINA@ec.europa.eu",
+          "head_phone": "+32 229-53277"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Guillaume Fine",
+          "head_email": "Guillaume.FINE@ec.europa.eu",
+          "head_phone": "+32 229-62817"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 4,
+  "num_units": 131,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

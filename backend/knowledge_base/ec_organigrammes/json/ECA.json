@@ -1,0 +1,1307 @@
+{
+  "institution": "ECA",
+  "source": "euwhoiswho_eca.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 235,
+  "units": {
+    "Members of the Court and their cabinets": {
+      "name": "Members of the Court and their cabinets",
+      "persons": [
+        {
+          "name": "Tony Murphy",
+          "title": "President of the Court",
+          "phone": "+352 4398-47784"
+        },
+        {
+          "name": "Wolfgang Stolz",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45502"
+        },
+        {
+          "name": "Brian Murphy",
+          "title": "Attaché",
+          "phone": "+352 4398-47638"
+        },
+        {
+          "name": "Peter Borsos",
+          "title": "Attaché",
+          "phone": "+352 4398-47787"
+        },
+        {
+          "name": "Nikolaos Milionis",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Μηλιωνης)",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45258"
+        },
+        {
+          "name": "Kristian Sniter",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47355"
+        },
+        {
+          "name": "Aris Konstantinidis",
+          "title": "Attaché",
+          "phone": "+352 4398-45426"
+        },
+        {
+          "name": "Klaus-Heiner Lehne",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45271"
+        },
+        {
+          "name": "Thomas Arntz",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47556"
+        },
+        {
+          "name": "Marc-Oliver Heidkamp",
+          "title": "Attaché",
+          "phone": "+352 4398-47622"
+        },
+        {
+          "name": "Iliana Ivanova",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47999"
+        },
+        {
+          "name": "Mariana Hristcheva",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47971"
+        },
+        {
+          "name": "Mariya Byalkova",
+          "title": "Attaché",
+          "phone": "+352 4398-45731"
+        },
+        {
+          "name": "Bettina Jakobsen",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47144"
+        },
+        {
+          "name": "Katja Mattfolk",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47428"
+        },
+        {
+          "name": "Paolo Rexha",
+          "title": "Attaché",
+          "phone": "+352 4398-47786"
+        },
+        {
+          "name": "Jan Gregor",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45559"
+        },
+        {
+          "name": "Werner Vlasselaer",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45434"
+        },
+        {
+          "name": "Radka Papoušková",
+          "title": "Attaché",
+          "phone": "+352 4398-47575"
+        },
+        {
+          "name": "Mihails Kozlovs",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45569"
+        },
+        {
+          "name": "Edite Dzalbe",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45583"
+        },
+        {
+          "name": "Laura Graudiņa",
+          "title": "Attaché",
+          "phone": "+352 4398-45691"
+        },
+        {
+          "name": "Ildikó Gáll-Pelcz",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47053"
+        },
+        {
+          "name": "Claudia Bara",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47131"
+        },
+        {
+          "name": "Raymond Larkin",
+          "title": "Attaché",
+          "phone": "+352 4398-45759"
+        },
+        {
+          "name": "Annemie Turtelboom",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47387"
+        },
+        {
+          "name": "Eric Braucourt",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45297"
+        },
+        {
+          "name": "Guido Fara",
+          "title": "Attaché",
+          "phone": "+352 4398-47142"
+        },
+        {
+          "name": "Ivana Maletić",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45633"
+        },
+        {
+          "name": "Ana Jurak",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47471"
+        },
+        {
+          "name": "Joëlle Elvinger",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47378"
+        },
+        {
+          "name": "Charlotta Torneling",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45390"
+        },
+        {
+          "name": "Annabelle Miller",
+          "title": "Attaché",
+          "phone": "+352 4398-45841"
+        },
+        {
+          "name": "Helga Berger",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45084"
+        },
+        {
+          "name": "Silvia Janik",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45276"
+        },
+        {
+          "name": "Franz Ebermann",
+          "title": "Attaché",
+          "phone": "+352 4398-45200"
+        },
+        {
+          "name": "Marek Opioła",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45309"
+        },
+        {
+          "name": "Kinga Wiśniewska-Danek",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45753"
+        },
+        {
+          "name": "Bernard Witkoś",
+          "title": "Attaché",
+          "phone": "+352 4398-47217"
+        },
+        {
+          "name": "Jorg Kristijan Petrovič",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47243"
+        },
+        {
+          "name": "Martin Puc",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47667"
+        },
+        {
+          "name": "Mirko Iaconisi",
+          "title": "Attaché",
+          "phone": "+352 4398-47098"
+        },
+        {
+          "name": "Stephanus Abraham Blok",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47447"
+        },
+        {
+          "name": "Johan Adriaan Lok",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45415"
+        },
+        {
+          "name": "Laurence Szwajkajzer",
+          "title": "Attaché",
+          "phone": "+352 4398-47232"
+        },
+        {
+          "name": "George Marius Hyzler",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47467"
+        },
+        {
+          "name": "Romuald Kayibanda",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47177"
+        },
+        {
+          "name": "Annette Farrugia",
+          "title": "Attaché",
+          "phone": "+352 4398-45185"
+        },
+        {
+          "name": "Lefteris Christoforou",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47506"
+        },
+        {
+          "name": "Theodosis Tsiolas",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47579"
+        },
+        {
+          "name": "Panagiota Liapi",
+          "title": "Attaché",
+          "phone": "+352 4398-47845"
+        },
+        {
+          "name": "Laima Liucija Andrikienė",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47613"
+        },
+        {
+          "name": "Tomas Mackevicius",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47618"
+        },
+        {
+          "name": "Aldona Dregvaite",
+          "title": "Attaché",
+          "phone": "+352 4398-47648"
+        },
+        {
+          "name": "Keit Pentus-Rosimannus",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47660"
+        },
+        {
+          "name": "Annikky Lamp",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47736"
+        },
+        {
+          "name": "Daria Bochnar",
+          "title": "Attaché",
+          "phone": "+352 4398-45267"
+        },
+        {
+          "name": "Katarína Kaszasová",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45550"
+        },
+        {
+          "name": "James Verity",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45682"
+        },
+        {
+          "name": "Iveta Turcanova",
+          "title": "Attaché",
+          "phone": "+352 4398-45950"
+        },
+        {
+          "name": "João Leão",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45878"
+        },
+        {
+          "name": "Paula Betencourt",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45059"
+        },
+        {
+          "name": "Sofia Batalha",
+          "title": "Attaché",
+          "phone": "+352 4398-47256"
+        },
+        {
+          "name": "Alejandro Blanco Fernández",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45872"
+        },
+        {
+          "name": "Calin-Ion Chira",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45860"
+        },
+        {
+          "name": "Juan Antonio Vazquez Rivera",
+          "title": "Attaché",
+          "phone": "+352 4398-47389"
+        },
+        {
+          "name": "Carlo Alberto Manfredi",
+          "title": "Member",
+          "phone": "+352 4398-47114"
+        },
+        {
+          "name": "Daniela Morgante",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47121"
+        },
+        {
+          "name": "Matteo Tartaggia",
+          "title": "Attaché",
+          "phone": "+352 4398-45065"
+        },
+        {
+          "name": "Petri Sarvamaa",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47111"
+        },
+        {
+          "name": "Benjamin Jakob",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47056"
+        },
+        {
+          "name": "Elmo Torppa",
+          "title": "Attaché",
+          "phone": "+352 4398-47155"
+        },
+        {
+          "name": "Hans Lindblad",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47112"
+        },
+        {
+          "name": "Kristina Maksinen",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47151"
+        },
+        {
+          "name": "Johanna Modigsson",
+          "title": "Attaché",
+          "phone": "+352 4398-47332"
+        },
+        {
+          "name": "Lucian Romaşcanu",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45708"
+        },
+        {
+          "name": "Cezarina-Roxana Banica",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-45777"
+        },
+        {
+          "name": "Dorel Tanase",
+          "title": "Attaché",
+          "phone": "+352 4398-45294"
+        },
+        {
+          "name": "Pierre Moscovici",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45412"
+        }
+      ]
+    },
+    "Presidency": {
+      "name": "Presidency",
+      "persons": [
+        {
+          "name": "Tony Murphy",
+          "title": "President of the Court",
+          "phone": "+352 4398-47784"
+        }
+      ]
+    },
+    "Institutional Liaison": {
+      "name": "Institutional Liaison",
+      "persons": [
+        {
+          "name": "Gerhard Ross",
+          "title": "Director",
+          "phone": "+352 4398-45988"
+        },
+        {
+          "name": "Niels-Erik Brokopp-Spiermann",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45579"
+        },
+        {
+          "name": "Helena Piron Mäki-Korvela",
+          "title": "Chief Institutional Relations Officer",
+          "phone": "+352 4398-45314"
+        },
+        {
+          "name": "Sebastian Mitrowski",
+          "title": "Institutional Relations Officer",
+          "phone": "+352 4398-47359"
+        }
+      ]
+    },
+    "Corporate Strategy": {
+      "name": "Corporate Strategy",
+      "persons": [
+        {
+          "name": "Svetoslav Hristov",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47790"
+        }
+      ]
+    },
+    "Communication": {
+      "name": "Communication",
+      "persons": [
+        {
+          "name": "Elisabeth Franco",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45484"
+        },
+        {
+          "name": "Matthias Beermann",
+          "title": "Spokesperson",
+          "phone": "+352 4398-45027"
+        },
+        {
+          "name": "Vincent Bourgeais",
+          "title": "Press Officer",
+          "phone": "+352 4398-47502"
+        },
+        {
+          "name": "Damijan Fišer",
+          "title": "Press Officer",
+          "phone": "+352 4398-47300"
+        },
+        {
+          "name": "Claudia Spiti",
+          "title": "Press Officer",
+          "phone": "+352 4398-45547"
+        },
+        {
+          "name": "Simona Wist",
+          "title": "Press Officer",
+          "phone": "+352 4398-47488"
+        },
+        {
+          "name": "Fabrice Mercade",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45486"
+        }
+      ]
+    },
+    "Legal Service": {
+      "name": "Legal Service",
+      "persons": [
+        {
+          "name": "Birgit Schaefer",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47592"
+        }
+      ]
+    },
+    "Internal Audit": {
+      "name": "Internal Audit",
+      "persons": [
+        {
+          "name": "Bernard François",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45884"
+        }
+      ]
+    },
+    "CHAMBER I — SUSTAINABLE USE OF NATURAL RESOURCES": {
+      "name": "CHAMBER I — SUSTAINABLE USE OF NATURAL RESOURCES",
+      "persons": [
+        {
+          "name": "Joëlle Elvinger",
+          "title": "Dean",
+          "phone": "+352 4398-47378"
+        },
+        {
+          "name": "Klaus-Heiner Lehne",
+          "title": "Member",
+          "phone": "+352 4398-45271"
+        },
+        {
+          "name": "Iliana Ivanova",
+          "title": "Member",
+          "phone": "+352 4398-47999"
+        },
+        {
+          "name": "Ildikó Gáll-Pelcz",
+          "title": "Member",
+          "phone": "+352 4398-47053"
+        },
+        {
+          "name": "Keit Pentus-Rosimannus",
+          "title": "Member",
+          "phone": "+352 4398-47660"
+        },
+        {
+          "name": "Mariusz Pomieński",
+          "title": "Director",
+          "phone": "+352 4398-47671"
+        },
+        {
+          "name": "Florence Fornaroli",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45014"
+        },
+        {
+          "name": "James Mcquade",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45906"
+        },
+        {
+          "name": "Judit Oroszki",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47404"
+        },
+        {
+          "name": "Jose Parente",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45962"
+        },
+        {
+          "name": "Emmanuel Rauch",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45919"
+        }
+      ]
+    },
+    "CHAMBER II — INVESTMENT FOR COHESION, GROWTH AND INCLUSION": {
+      "name": "CHAMBER II — INVESTMENT FOR COHESION, GROWTH AND INCLUSION",
+      "persons": [
+        {
+          "name": "Annemie Turtelboom",
+          "title": "Dean",
+          "phone": "+352 4398-47387"
+        },
+        {
+          "name": "Jorg Kristijan Petrovič",
+          "title": "Member",
+          "phone": "+352 4398-47243"
+        },
+        {
+          "name": "Stephanus Abraham Blok",
+          "title": "Member",
+          "phone": "+352 4398-47447"
+        },
+        {
+          "name": "Alejandro Blanco Fernández",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45872"
+        },
+        {
+          "name": "Carlo Alberto Manfredi",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47114"
+        },
+        {
+          "name": "Geoffrey Simpson",
+          "title": "Director",
+          "phone": "+352 4398-45347"
+        },
+        {
+          "name": "Marion Colonerus",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45237"
+        },
+        {
+          "name": "Gediminas Macys",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47263"
+        },
+        {
+          "name": "Torielle Perreur-Lloyd",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45349"
+        },
+        {
+          "name": "Valeria Rota",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45421"
+        },
+        {
+          "name": "Friedemann Zippel",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45488"
+        }
+      ]
+    },
+    "CHAMBER III — EXTERNAL ACTION, SECURITY AND JUSTICE": {
+      "name": "CHAMBER III — EXTERNAL ACTION, SECURITY AND JUSTICE",
+      "persons": [
+        {
+          "name": "Bettina Jakobsen",
+          "title": "Dean",
+          "phone": "+352 4398-47144"
+        },
+        {
+          "name": "Nikolaos Milionis",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Μηλιωνης)",
+          "title": "Member",
+          "phone": "+352 4398-45258"
+        },
+        {
+          "name": "Marek Opioła",
+          "title": "Member",
+          "phone": "+352 4398-45309"
+        },
+        {
+          "name": "George Marius Hyzler",
+          "title": "Member",
+          "phone": "+352 4398-47467"
+        },
+        {
+          "name": "Laima Liucija Andrikienė",
+          "title": "Member",
+          "phone": "+352 4398-47613"
+        },
+        {
+          "name": "Bertrand Albugues",
+          "title": "Director",
+          "phone": "+352 4398-45769"
+        },
+        {
+          "name": "Ramona Bortnowschi",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47167"
+        },
+        {
+          "name": "Cyril Messein",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45064"
+        },
+        {
+          "name": "Pietro Puricella",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45674"
+        },
+        {
+          "name": "Margit Spindelegger",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45955"
+        }
+      ]
+    },
+    "CHAMBER IV — REGULATION OF MARKETS AND COMPETITIVE ECONOMY": {
+      "name": "CHAMBER IV — REGULATION OF MARKETS AND COMPETITIVE ECONOMY",
+      "persons": [
+        {
+          "name": "Petri Sarvamaa",
+          "title": "Dean",
+          "phone": "+352 4398-47111"
+        },
+        {
+          "name": "Mihails Kozlovs",
+          "title": "Member",
+          "phone": "+352 4398-45569"
+        },
+        {
+          "name": "Ivana Maletić",
+          "title": "Member",
+          "phone": "+352 4398-45633"
+        },
+        {
+          "name": "João Leão",
+          "title": "Member",
+          "phone": "+352 4398-45878"
+        },
+        {
+          "name": "Lucian Romaşcanu",
+          "title": "Member",
+          "phone": "+352 4398-45708"
+        },
+        {
+          "name": "Martin Weber",
+          "title": "Director",
+          "phone": "+352 4398-45151"
+        },
+        {
+          "name": "Alberto Gasperoni",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45110"
+        },
+        {
+          "name": "Juan Ignacio González",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45117"
+        },
+        {
+          "name": "Kamila Łepkowska",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47117"
+        },
+        {
+          "name": "Michał Machowski",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47305"
+        },
+        {
+          "name": "Maria Eulàlia Reverté I Casas",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45287"
+        },
+        {
+          "name": "John Sweeney",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45526"
+        }
+      ]
+    },
+    "CHAMBER V — FINANCING AND ADMINISTERING THE UNION": {
+      "name": "CHAMBER V — FINANCING AND ADMINISTERING THE UNION",
+      "persons": [
+        {
+          "name": "Jan Gregor",
+          "title": "Dean",
+          "phone": "+352 4398-45559"
+        },
+        {
+          "name": "Lefteris Christoforou",
+          "title": "Member",
+          "phone": "+352 4398-47506"
+        },
+        {
+          "name": "Katarína Kaszasová",
+          "title": "Member",
+          "phone": "+352 4398-45550"
+        },
+        {
+          "name": "Hans Lindblad",
+          "title": "Member",
+          "phone": "+352 4398-47112"
+        },
+        {
+          "name": "Pierre Moscovici",
+          "title": "Member",
+          "phone": "+352 4398-45412"
+        },
+        {
+          "name": "Alejandro Ballester",
+          "title": "Director",
+          "phone": "+352 4398-45272"
+        },
+        {
+          "name": "Andreas Bolkart",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47717"
+        },
+        {
+          "name": "Jindrich Dolezal",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47363"
+        },
+        {
+          "name": "Bogna Kuczyńska",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47368"
+        },
+        {
+          "name": "Nikolaos Kylonis",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47772"
+        },
+        {
+          "name": "Paul Sime",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47823"
+        }
+      ]
+    },
+    "Audit Quality Control Committee": {
+      "name": "Audit Quality Control Committee",
+      "persons": [
+        {
+          "name": "Helga Berger",
+          "title": "Member for Audit Quality Control",
+          "phone": "+352 4398-45084"
+        },
+        {
+          "name": "Keit Pentus-Rosimannus",
+          "title": "Member",
+          "phone": "+352 4398-47660"
+        },
+        {
+          "name": "Laima Liucija Andrikienė",
+          "title": "Member",
+          "phone": "+352 4398-47613"
+        },
+        {
+          "name": "Alejandro Blanco Fernández",
+          "title": "Member",
+          "phone": "+352 4398-45872"
+        },
+        {
+          "name": "Ivana Maletić",
+          "title": "Member",
+          "phone": "+352 4398-45633"
+        },
+        {
+          "name": "Katarína Kaszasová",
+          "title": "Member",
+          "phone": "+352 4398-45550"
+        },
+        {
+          "name": "Ioanna Metaxopoulou",
+          "title": ""
+        },
+        {
+          "name": "(Ιωάννα Μεταξοπουλου)",
+          "title": "Director",
+          "phone": "+352 4398-47561"
+        },
+        {
+          "name": "Anna Ludwikowska",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45784"
+        },
+        {
+          "name": "Mihaela Pavel",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47286"
+        },
+        {
+          "name": "Spyridon Pilos",
+          "title": ""
+        },
+        {
+          "name": "(Σπυρίδων Πηλος)",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47939"
+        }
+      ]
+    },
+    "Administrative Committee": {
+      "name": "Administrative Committee",
+      "persons": [
+        {
+          "name": "Tony Murphy",
+          "title": "President of the Court",
+          "phone": "+352 4398-47784"
+        },
+        {
+          "name": "Keit Pentus-Rosimannus",
+          "title": "Member for Institutional Relations",
+          "phone": "+352 4398-47660"
+        },
+        {
+          "name": "Helga Berger",
+          "title": "Member for Audit Quality Control",
+          "phone": "+352 4398-45084"
+        },
+        {
+          "name": "Joëlle Elvinger",
+          "title": "Dean of Chamber I",
+          "phone": "+352 4398-47378"
+        },
+        {
+          "name": "Annemie Turtelboom",
+          "title": "Dean of Chamber II",
+          "phone": "+352 4398-47387"
+        },
+        {
+          "name": "Bettina Jakobsen",
+          "title": "Dean of Chamber III",
+          "phone": "+352 4398-47144"
+        },
+        {
+          "name": "Petri Sarvamaa",
+          "title": "Dean of Chamber IV",
+          "phone": "+352 4398-47111"
+        },
+        {
+          "name": "Jan Gregor",
+          "title": "Dean of Chamber V",
+          "phone": "+352 4398-45559"
+        },
+        {
+          "name": "Ivana Maletić",
+          "title": "Audit Quality Control Committee",
+          "phone": "+352 4398-45633"
+        },
+        {
+          "name": "Iliana Ivanova",
+          "title": "Chamber I",
+          "phone": "+352 4398-47999"
+        },
+        {
+          "name": "Stephanus Abraham Blok",
+          "title": "Chamber II",
+          "phone": "+352 4398-47447"
+        },
+        {
+          "name": "Nikolaos Milionis",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Μηλιωνης)",
+          "title": "Chamber III",
+          "phone": "+352 4398-45258"
+        },
+        {
+          "name": "Mihails Kozlovs",
+          "title": "Chamber IV",
+          "phone": "+352 4398-45569"
+        }
+      ]
+    },
+    "Ethics Committee": {
+      "name": "Ethics Committee",
+      "persons": [
+        {
+          "name": "Lefteris Christoforou",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47506"
+        },
+        {
+          "name": "George Marius Hyzler",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47467"
+        },
+        {
+          "name": "Allan Rosas",
+          "title": "Member"
+        },
+        {
+          "name": "Nikolaos Milionis",
+          "title": ""
+        },
+        {
+          "name": "(Νικόλαος Μηλιωνης)",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45258"
+        },
+        {
+          "name": "Hans Lindblad",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47112"
+        },
+        {
+          "name": "Maria Eugénia Martins De",
+          "title": ""
+        },
+        {
+          "name": "NAZARÉ Ribeiro",
+          "title": "Member"
+        }
+      ]
+    },
+    "Internal Audit Committee": {
+      "name": "Internal Audit Committee",
+      "persons": [
+        {
+          "name": "Katarína Kaszasová",
+          "title": "Member of the Court",
+          "phone": "+352 4398-45550"
+        },
+        {
+          "name": "Stephanus Abraham Blok",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47447"
+        },
+        {
+          "name": "Carlo Alberto Manfredi",
+          "title": "Member of the Court",
+          "phone": "+352 4398-47114"
+        },
+        {
+          "name": "Leticia Lucas",
+          "title": "Member"
+        }
+      ]
+    },
+    "Secretariat-General": {
+      "name": "Secretariat-General",
+      "persons": [
+        {
+          "name": "Zacharias Kolias",
+          "title": ""
+        },
+        {
+          "name": "(Ζαχαρίας Κολιας)",
+          "title": "Secretary-General",
+          "phone": "+352 4398-45907"
+        },
+        {
+          "name": "Aglika Ganova (Аглика Ганова)",
+          "title": "Head of Cabinet",
+          "phone": "+352 4398-47186"
+        },
+        {
+          "name": "Bernadett Soós-Petek",
+          "title": "Attaché",
+          "phone": "+352 4398-47302"
+        }
+      ]
+    },
+    "SUPPORT OF ADMINISTRATIVE SERVICES": {
+      "name": "SUPPORT OF ADMINISTRATIVE SERVICES",
+      "persons": [
+        {
+          "name": "Peter Welch",
+          "title": "Senior Advisor",
+          "phone": "+352 4398-45275"
+        }
+      ]
+    },
+    "THE DIRECTORATE OF HUMAN RESOURCES, FINANCE AND GENERAL SERVICES": {
+      "name": "THE DIRECTORATE OF HUMAN RESOURCES, FINANCE AND GENERAL SERVICES",
+      "persons": [
+        {
+          "name": "Veronica Ardelean",
+          "title": "Director",
+          "phone": "+352 4398-47193"
+        }
+      ]
+    },
+    "Human resources": {
+      "name": "Human resources",
+      "persons": [
+        {
+          "name": "Enrico Grassi",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45478"
+        }
+      ]
+    },
+    "Accounting": {
+      "name": "Accounting",
+      "persons": [
+        {
+          "name": "Beatrix Lesiewicz",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45920"
+        }
+      ]
+    },
+    "Professional Training": {
+      "name": "Professional Training",
+      "persons": [
+        {
+          "name": "Andrej Minarovič",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47668"
+        }
+      ]
+    },
+    "THE DIRECTORATE OF INFORMATION, WORKPLACE AND INNOVATION": {
+      "name": "THE DIRECTORATE OF INFORMATION, WORKPLACE AND INNOVATION",
+      "persons": [
+        {
+          "name": "Marco Barros Lourenço",
+          "title": "Director",
+          "phone": "+352 4398-47970"
+        },
+        {
+          "name": "José Carrascosa Moreno",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47307"
+        },
+        {
+          "name": "Pavel Čáp",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47188"
+        },
+        {
+          "name": "Roland Van Waas",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47062"
+        }
+      ]
+    },
+    "LANGUAGE AND EDITORIAL DIRECTORATE": {
+      "name": "LANGUAGE AND EDITORIAL DIRECTORATE",
+      "persons": [
+        {
+          "name": "Pilar Calvo Fuentes",
+          "title": "Director",
+          "phone": "+352 4398-45787"
+        }
+      ]
+    },
+    "Document Management": {
+      "name": "Document Management",
+      "persons": [
+        {
+          "name": "Christine Stark",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45191"
+        }
+      ]
+    },
+    "Language Teams": {
+      "name": "Language Teams",
+      "persons": [
+        {
+          "name": "Miroslava Chakalova-Siddy",
+          "title": ""
+        },
+        {
+          "name": "(Мирослава Чакалова-Сиди)",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45978"
+        },
+        {
+          "name": "Eija Raittinen",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45675"
+        },
+        {
+          "name": "Martin Krejza",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47360"
+        },
+        {
+          "name": "Eija Raittinen",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45675"
+        },
+        {
+          "name": "Martin Krejza",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47360"
+        },
+        {
+          "name": "Madis Rausi",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47827"
+        },
+        {
+          "name": "Thomas Everett",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47090"
+        },
+        {
+          "name": "Zoe Bolanaki",
+          "title": ""
+        },
+        {
+          "name": "(Ζωή Μπολανακη)",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45701"
+        },
+        {
+          "name": "Thomas Everett",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47090"
+        },
+        {
+          "name": "Rudy Di Nucci",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45584"
+        },
+        {
+          "name": "Martin Krejza",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47360"
+        },
+        {
+          "name": "Rudy Di Nucci",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45584"
+        },
+        {
+          "name": "Ingrid Van Gent",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45521"
+        },
+        {
+          "name": "Miroslava Chakalova-Siddy",
+          "title": ""
+        },
+        {
+          "name": "(Мирослава Чакалова-Сиди)",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45978"
+        },
+        {
+          "name": "Madis Rausi",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47827"
+        },
+        {
+          "name": "Ingrid Van Gent",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45521"
+        },
+        {
+          "name": "Thomas Everett",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47090"
+        },
+        {
+          "name": "Zoe Bolanaki",
+          "title": ""
+        },
+        {
+          "name": "(Ζωή Μπολανακη)",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45701"
+        },
+        {
+          "name": "Martin Krejza",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47360"
+        },
+        {
+          "name": "Madis Rausi",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47827"
+        },
+        {
+          "name": "Martin Krejza",
+          "title": "Principal Manager",
+          "phone": "+352 4398-47360"
+        },
+        {
+          "name": "Eija Raittinen",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45675"
+        },
+        {
+          "name": "Eija Raittinen",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45675"
+        },
+        {
+          "name": "Zoe Bolanaki",
+          "title": ""
+        },
+        {
+          "name": "(Ζωή Μπολανακη)",
+          "title": "Principal Manager",
+          "phone": "+352 4398-45701"
+        }
+      ]
+    },
+    "DATA PROTECTION": {
+      "name": "DATA PROTECTION",
+      "persons": [
+        {
+          "name": "Elena Mapelle",
+          "title": "Data Protection Officer",
+          "phone": "+352 4398-45463"
+        }
+      ]
+    },
+    "INFORMATION SECURITY": {
+      "name": "INFORMATION SECURITY",
+      "persons": [
+        {
+          "name": "Frédéric Dupeux",
+          "title": "Information Security Officer",
+          "phone": "+352 4398-45671"
+        }
+      ]
+    }
+  }
+}

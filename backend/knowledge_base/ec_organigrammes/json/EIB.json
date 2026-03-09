@@ -1,0 +1,1490 @@
+{
+  "institution": "EIB",
+  "source": "euwhoiswho_eib.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 273,
+  "units": {
+    "LIST OF BUILDINGS (CODES)": {
+      "name": "LIST OF BUILDINGS (CODES)",
+      "persons": [
+        {
+          "name": "JOHNKENNEDY15 Luxembourg",
+          "title": ""
+        },
+        {
+          "name": "PIERREFRIEDEN43 Luxembourg",
+          "title": ""
+        }
+      ]
+    },
+    "MANAGEMENT COMMITTEE": {
+      "name": "MANAGEMENT COMMITTEE",
+      "persons": [
+        {
+          "name": "Nadia Calviño",
+          "title": "President of the EIB and Chairman of its -- Board of Directors"
+        },
+        {
+          "name": "Ambroise Fayolle",
+          "title": "Vice-President of the EIB"
+        },
+        {
+          "name": "Teresa Czerwinska",
+          "title": "Vice-President of the EIB"
+        },
+        {
+          "name": "Gelsomina Vigliotti",
+          "title": "Vice-President of the EIB"
+        },
+        {
+          "name": "Nicola Beer",
+          "title": "Vice-President of the EIB"
+        },
+        {
+          "name": "Ioannis Tsakiris",
+          "title": "Vice-President of the EIB"
+        },
+        {
+          "name": "Robert De Groot",
+          "title": "Vice-President of the EIB"
+        },
+        {
+          "name": "Karl Nehammer",
+          "title": "Vice-President of the EIB"
+        },
+        {
+          "name": "Marek Mora",
+          "title": "Vice-President of the EIB"
+        }
+      ]
+    },
+    "GENERAL SECRETARIAT": {
+      "name": "GENERAL SECRETARIAT",
+      "persons": [
+        {
+          "name": "Barbara Balke",
+          "title": "Secretary General"
+        },
+        {
+          "name": "Mikołaj Dowgielewicz",
+          "title": "Director General and Deputy Secretary -- General"
+        },
+        {
+          "name": "Christian Zinglersen",
+          "title": "Director General and Deputy Secretary -- General"
+        }
+      ]
+    },
+    "the United Nations": {
+      "name": "the United Nations",
+      "persons": [
+        {
+          "name": "Markus Berndt",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Communication": {
+      "name": "Communication",
+      "persons": [
+        {
+          "name": "Fabian Breuer",
+          "title": "Director"
+        },
+        {
+          "name": "Valentina Kalk",
+          "title": "Head of Division -- Head of Division"
+        },
+        {
+          "name": "Thierry Fontenelle",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Garth Grisbrook",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Institutional Matters": {
+      "name": "Institutional Matters",
+      "persons": [
+        {
+          "name": "Sonja Ingrid Malkki",
+          "title": "Director -- Head of Division"
+        },
+        {
+          "name": "Filipe Diaz",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Dieter Bachlmair",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Responsibilities": {
+      "name": "Responsibilities",
+      "persons": [
+        {
+          "name": "Martim Passos",
+          "title": "Director"
+        },
+        {
+          "name": "Dirk Ellerkmann",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Rocío Ortiz-Escario Y Olalla",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Wiebke Jardet",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "EIB Institute": {
+      "name": "EIB Institute",
+      "persons": [
+        {
+          "name": "Jean-Pierre Vidal",
+          "title": "Director (acting)"
+        },
+        {
+          "name": "Anna Canato",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Brussels": {
+      "name": "Brussels",
+      "persons": [
+        {
+          "name": "Christian Zinglersen",
+          "title": "Director General and Permanent -- Representative of the EIB Group to the -- EU"
+        },
+        {
+          "name": "Luciana Tomozei Schwandt",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Stéphane Saurel",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "EIB Group Strategy": {
+      "name": "EIB Group Strategy",
+      "persons": [
+        {
+          "name": "Sean Fitzpatrick",
+          "title": "Director"
+        },
+        {
+          "name": "Angelika Buss",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Carlota Cenalmor",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Oskar Nelvin",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Economics": {
+      "name": "Economics",
+      "persons": [
+        {
+          "name": "Debora Revoltella",
+          "title": "Director"
+        },
+        {
+          "name": "Barbara Marchitto",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Laurent Maurin",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Emily Sinnott",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "LEGAL DIRECTORATE": {
+      "name": "LEGAL DIRECTORATE",
+      "persons": [
+        {
+          "name": "José María Fernández Martín",
+          "title": "Director General and General Counsel"
+        },
+        {
+          "name": "Hubert Makosz",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "EU Operations": {
+      "name": "EU Operations",
+      "persons": [
+        {
+          "name": "Jacopo Lensi Orlandi Cardini",
+          "title": "Director"
+        },
+        {
+          "name": "Francisca Rossi",
+          "title": "Head of Division -- Head of Division"
+        },
+        {
+          "name": "Andéol Du Trémolet De",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Julia Nienhaus",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Hanna Karczewska",
+          "title": "Head of Division -- Expertise"
+        },
+        {
+          "name": "Imanol Lecue Gurtubay",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Operations": {
+      "name": "Operations",
+      "persons": [
+        {
+          "name": "Ruth Niland",
+          "title": "Director"
+        },
+        {
+          "name": "Donald Fitzpatrick",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Leonie Carroll",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Carolina Vento Sánchez",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Sara De Maria",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Maria-Teresa Massaad",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Helen Williams",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Corporate": {
+      "name": "Corporate",
+      "persons": [
+        {
+          "name": "Emer Falvey",
+          "title": "Director -- Head of Division"
+        },
+        {
+          "name": "Tom Gilliams",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Kamil Sugar",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Tero Pietila",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "HUMAN RESOURCES DIRECTORATE": {
+      "name": "HUMAN RESOURCES DIRECTORATE",
+      "persons": [
+        {
+          "name": "Barbara Levéel",
+          "title": "Director General -- Head of Division -- Head of Division"
+        },
+        {
+          "name": "Pascale Hecker",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "and Employee Services": {
+      "name": "and Employee Services",
+      "persons": [
+        {
+          "name": "Laure Salducci",
+          "title": "Director"
+        },
+        {
+          "name": "Georgeta Stanica",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Christian Lendvai",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Talent and Culture": {
+      "name": "Talent and Culture",
+      "persons": [
+        {
+          "name": "Mirko Becker",
+          "title": "Director"
+        },
+        {
+          "name": "Minna-Maria Cepun",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Sandra De Greef",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "OPERATIONS DIRECTORATE": {
+      "name": "OPERATIONS DIRECTORATE",
+      "persons": [
+        {
+          "name": "Jean-Christophe Laloux",
+          "title": "Director General — Head of EU Lending -- and Advisory Operations"
+        },
+        {
+          "name": "Elina Roine",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Massimiliano Soddu",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Support": {
+      "name": "Support",
+      "persons": [
+        {
+          "name": "Elina Roine",
+          "title": "Director"
+        },
+        {
+          "name": "Alexandrina Boyanova",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Giorgos Hadjigregoriou",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Steven De Gruyter",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Mandate Management": {
+      "name": "Mandate Management",
+      "persons": [
+        {
+          "name": "Hristo Stoykov",
+          "title": "Director"
+        },
+        {
+          "name": "Gabriela Macejko Magurova",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Andrea Bua",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Fotini Koutzoukou",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Patrick Wortmann",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Andra Migiu",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Project Finance": {
+      "name": "Project Finance",
+      "persons": [
+        {
+          "name": "Alessandro Izzo",
+          "title": "Director"
+        },
+        {
+          "name": "Irene Gálvez Verdú",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Sciences — Equity and": {
+      "name": "Sciences — Equity and",
+      "persons": [
+        {
+          "name": "Yu Zhang",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Jussi Hätönen",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Angel Ferrero",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Matthias Woitok",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Advisory — Growth Capital": {
+      "name": "Advisory — Growth Capital",
+      "persons": [
+        {
+          "name": "Juan Antonio Magaña-Campos",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Financial Institutions": {
+      "name": "Financial Institutions",
+      "persons": [
+        {
+          "name": "Gemma Feliciani",
+          "title": "Director"
+        },
+        {
+          "name": "Juan Basora",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Catherine Bender",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Károly Taksz",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Mariateresa Di Giacomo",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Advisory — Financial": {
+      "name": "Advisory — Financial",
+      "persons": [
+        {
+          "name": "Frank Lee",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Public Sector": {
+      "name": "Public Sector",
+      "persons": [
+        {
+          "name": "Gilles Badot",
+          "title": "Director"
+        }
+      ]
+    },
+    "Advisory — Public and": {
+      "name": "Advisory — Public and",
+      "persons": [
+        {
+          "name": "Julien Chebbo",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Maria Serrano Hernandez",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Karine Measson",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Milena Messori",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Ilona Kotecka Fernandes",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Timo Kiiha",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Europe — Public Sector": {
+      "name": "Europe — Public Sector",
+      "persons": [
+        {
+          "name": "Manuel Dueñas",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Ioannis Kaltsas",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Nuno Ascenso Pires",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Corporates": {
+      "name": "Corporates",
+      "persons": [
+        {
+          "name": "Pilar Solano",
+          "title": "Director"
+        },
+        {
+          "name": "Sanjoy Rajan",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Antonio Lorenzo",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Nathalie Climence",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Romolo Isaia",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Björn Domke",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Europe — Corporates": {
+      "name": "Europe — Corporates",
+      "persons": [
+        {
+          "name": "Anders Risberg",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "EIB GLOBAL DIRECTORATE": {
+      "name": "EIB GLOBAL DIRECTORATE",
+      "persons": [
+        {
+          "name": "Andrew Mcdowell",
+          "title": "Director General"
+        }
+      ]
+    },
+    "Partnerships for Impact": {
+      "name": "Partnerships for Impact",
+      "persons": [
+        {
+          "name": "Richard Amor",
+          "title": "Director"
+        },
+        {
+          "name": "Ioanna-Victoria Kyritsi",
+          "title": "Head of Division -- Head of Division -- Head of Division"
+        }
+      ]
+    },
+    "International Partners": {
+      "name": "International Partners",
+      "persons": [
+        {
+          "name": "Thouraya Triki",
+          "title": "Director"
+        }
+      ]
+    },
+    "Public Sector — Latin": {
+      "name": "Public Sector — Latin",
+      "persons": [
+        {
+          "name": "Joana Sarmento Coelho",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Public Sector — Sub-": {
+      "name": "Public Sector — Sub-",
+      "persons": [
+        {
+          "name": "Diederick Zambon",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Public Sector — Asia and": {
+      "name": "Public Sector — Asia and",
+      "persons": [
+        {
+          "name": "Edvardas Bumsteinas",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Christophe Litt",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Neighbourhood": {
+      "name": "Neighbourhood",
+      "persons": [
+        {
+          "name": "Lionel Rapaille",
+          "title": "Director"
+        },
+        {
+          "name": "Kristina Kanapinskaite",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Public Sector — Southern": {
+      "name": "Public Sector — Southern",
+      "persons": [
+        {
+          "name": "Ulrich Brunnhuber",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Matteo Rivellini",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Marion Hoenicke",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Global Activities": {
+      "name": "Global Activities",
+      "persons": [
+        {
+          "name": "Andrea Clerici",
+          "title": "Director"
+        },
+        {
+          "name": "Joyce Liyan",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Paloma Pérez De Vega",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Ferran Minguella",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Matthieu Ducorroy",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "FINANCE DIRECTORATE": {
+      "name": "FINANCE DIRECTORATE",
+      "persons": [
+        {
+          "name": "Cyril Rousseau",
+          "title": "Director General -- Head of Division"
+        }
+      ]
+    },
+    "Capital Markets": {
+      "name": "Capital Markets",
+      "persons": [
+        {
+          "name": "Marco Zimmermann",
+          "title": "Director"
+        },
+        {
+          "name": "Silke Weiss",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Sandeep Dhawan",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Peter Munro",
+          "title": "Head of Division -- Head of Division"
+        }
+      ]
+    },
+    "Treasury": {
+      "name": "Treasury",
+      "persons": [
+        {
+          "name": "Marco Zimmermann",
+          "title": "Director"
+        },
+        {
+          "name": "Marcello Graziuso",
+          "title": "Head of Division -- Head of Division"
+        },
+        {
+          "name": "Éric Banon",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "of Operations": {
+      "name": "of Operations",
+      "persons": [
+        {
+          "name": "Georgia Koutsiana",
+          "title": "Director"
+        },
+        {
+          "name": "Nikos Giannaris",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Omar Aghzinnay",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Sara Germano",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Pavel Harvanek",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Business Support": {
+      "name": "Business Support",
+      "persons": [
+        {
+          "name": "Peter Balaz",
+          "title": "Director"
+        },
+        {
+          "name": "Véronique Bastin",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Dino Fabbro",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Yassine Boudghene",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "PROJECTS DIRECTORATE": {
+      "name": "PROJECTS DIRECTORATE",
+      "persons": [
+        {
+          "name": "Laura Piovesan",
+          "title": "Director General"
+        },
+        {
+          "name": "Christoph Kuhn",
+          "title": "Deputy Director General"
+        }
+      ]
+    },
+    "Management": {
+      "name": "Management",
+      "persons": [
+        {
+          "name": "Christoph Kuhn",
+          "title": "Director"
+        },
+        {
+          "name": "Stephen O’Driscoll",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Alaleh Motamedi",
+          "title": "Head of Procurement"
+        },
+        {
+          "name": "Ann-Louise Aktiv Vimont",
+          "title": "Head of Division"
+        },
+        {
+          "name": "David Kerins",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Alessandro Boschi",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Mobility": {
+      "name": "Mobility",
+      "persons": [
+        {
+          "name": "Max Jensen",
+          "title": "Director"
+        },
+        {
+          "name": "Inge Vermeersch",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Pierre Poinsignon",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Matthieu Bertrand",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Jane Feehan",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Piers Vickers",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Maja Roginska",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Energy and Environment": {
+      "name": "Energy and Environment",
+      "persons": [
+        {
+          "name": "Nicola Pochettino",
+          "title": "Director"
+        },
+        {
+          "name": "Ralf Goldmann",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Dirk Roos",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Julia Chambers",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Ismini Kyriazopoulou",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Hendrik Engelmann-Pilger",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Édouard Pérard",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Louise White",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Competitiveness": {
+      "name": "Competitiveness",
+      "persons": [
+        {
+          "name": "Felicitas Riedl",
+          "title": "Director"
+        },
+        {
+          "name": "Dana Burduja",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Tanja Tanayama",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Emmanuel Chaponniere",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Sebastian Hyzyk",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Antonello Locci",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Dominik Ruderer",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Felipe Ortega Schlingmann",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Regions": {
+      "name": "Regions",
+      "persons": [
+        {
+          "name": "Tanguy Desrousseaux",
+          "title": "Director"
+        },
+        {
+          "name": "Elena Campelo Aubarell",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Monica Scatasta",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Neil Valentine",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Luis Hebrero Rodriguez",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Patricia Castellarnau",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "EIB GROUP RISK AND COMPLIANCE DIRECTORATE": {
+      "name": "EIB GROUP RISK AND COMPLIANCE DIRECTORATE",
+      "persons": [
+        {
+          "name": "Román Escolano",
+          "title": "EIB Group Chief Risk Officer"
+        },
+        {
+          "name": "EIB Group Risk And",
+          "title": ""
+        },
+        {
+          "name": "Reneta Dimitrova",
+          "title": "Head of Division"
+        },
+        {
+          "name": "EIB Group Risk Strategy",
+          "title": ""
+        },
+        {
+          "name": "Sarah Stölting",
+          "title": "Head of Division"
+        },
+        {
+          "name": "EIB Group Model Validation",
+          "title": ""
+        },
+        {
+          "name": "Pierre Tychon",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Credit and Climate Risk": {
+      "name": "Credit and Climate Risk",
+      "persons": [
+        {
+          "name": "Adrian Kamenitzer",
+          "title": "Deputy Director General and EIB Group -- Chief Credit and Climate Risk Officer"
+        },
+        {
+          "name": "Michael Kaiser",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Polixeni Dimou",
+          "title": "Head of Division"
+        },
+        {
+          "name": "James Whittall",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Jitka Bures",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "EIB Group Financial Risk": {
+      "name": "EIB Group Financial Risk",
+      "persons": [
+        {
+          "name": "Ondrej Mates",
+          "title": "Director"
+        }
+      ]
+    },
+    "ALM — Asset-Liability": {
+      "name": "ALM — Asset-Liability",
+      "persons": [
+        {
+          "name": "Sebastien Vanaudenhove",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Maciej Winnicki",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Eva Ribarits",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Giovanni Gentili",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Risk": {
+      "name": "Risk",
+      "persons": [
+        {
+          "name": "Giancarlo Sardelli",
+          "title": "Director"
+        },
+        {
+          "name": "Paraskevi Dimou",
+          "title": "Head of Division -- Head of Division"
+        },
+        {
+          "name": "Carlos Freixa",
+          "title": "Head of Division"
+        },
+        {
+          "name": "EIB Group Internal Modelling",
+          "title": ""
+        },
+        {
+          "name": "Davide Gallan",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Marie-Carmen González",
+          "title": "Director"
+        },
+        {
+          "name": "Johnny Benavides",
+          "title": "Head of Division -- Head of Division"
+        }
+      ]
+    },
+    "OFFICE OF THE EIB GROUP CHIEF COMPLIANCE OFFICER": {
+      "name": "OFFICE OF THE EIB GROUP CHIEF COMPLIANCE OFFICER",
+      "persons": [
+        {
+          "name": "Roberto Garcia Piriz",
+          "title": "EIB Group Chief Compliance Officer and -- Deputy Director General"
+        },
+        {
+          "name": "Pelopidas Donos",
+          "title": "Data Protection officer"
+        }
+      ]
+    },
+    "and Integrity": {
+      "name": "and Integrity",
+      "persons": [
+        {
+          "name": "Michèle Liebermann",
+          "title": "Director"
+        },
+        {
+          "name": "Jaroslav Salac",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Daniel Schilling",
+          "title": "Head of Division"
+        },
+        {
+          "name": "AML/CFT* and Tax",
+          "title": ""
+        },
+        {
+          "name": "Branimir Berkovic",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "INSPECTORATE GENERAL": {
+      "name": "INSPECTORATE GENERAL",
+      "persons": [
+        {
+          "name": "Monique Koning",
+          "title": "Inspector General"
+        },
+        {
+          "name": "Emmanuel Pondard",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Michael Bushell",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Vasco Amaral Cunha",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Nina Van Doren",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "CHIEF FINANCIAL CONTROLLER DIRECTORATE": {
+      "name": "CHIEF FINANCIAL CONTROLLER DIRECTORATE",
+      "persons": [
+        {
+          "name": "Oliver Russmann",
+          "title": "Director General and Group Chief -- Financial Controller"
+        },
+        {
+          "name": "Sonia Hidalgo Bodega",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Emily O’Brien",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Accounting": {
+      "name": "Accounting",
+      "persons": [
+        {
+          "name": "Gwenael Robert",
+          "title": "Director"
+        },
+        {
+          "name": "Linda Chirila",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Georgios Diakoilias",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Susanne Quest",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Planning and Control": {
+      "name": "Planning and Control",
+      "persons": [
+        {
+          "name": "Filippo Zanzi",
+          "title": "Director"
+        },
+        {
+          "name": "Robert Bistričić",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Helga Serboni",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Simona Bovha",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Corporate Real Estate": {
+      "name": "Corporate Real Estate",
+      "persons": [
+        {
+          "name": "Sonia Hidalgo Bodega",
+          "title": "Director"
+        },
+        {
+          "name": "Razvan Rujoiu",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Kanha Pou",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Anna Fernandez Font",
+          "title": "Head of Division"
+        },
+        {
+          "name": "John Lee",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "INTERNAL AUDIT DEPARTMENT": {
+      "name": "INTERNAL AUDIT DEPARTMENT",
+      "persons": [
+        {
+          "name": "Séverine Beroard",
+          "title": "Director"
+        }
+      ]
+    },
+    "Internal Audit — EIB": {
+      "name": "Internal Audit — EIB",
+      "persons": [
+        {
+          "name": "Andras Nagy",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Internal Audit — EIF and": {
+      "name": "Internal Audit — EIF and",
+      "persons": [
+        {
+          "name": "Sami Elleuch",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "PORTFOLIO MANAGEMENT AND MONITORING DIRECTORATE": {
+      "name": "PORTFOLIO MANAGEMENT AND MONITORING DIRECTORATE",
+      "persons": [
+        {
+          "name": "Luca Lazzaroli",
+          "title": "Director General"
+        },
+        {
+          "name": "Dominique Courbin",
+          "title": "Deputy Director General"
+        },
+        {
+          "name": "Petra Cutková",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Tammo Kauth",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Counterparty Management": {
+      "name": "Counterparty Management",
+      "persons": [
+        {
+          "name": "Anna Fusari",
+          "title": "Director"
+        }
+      ]
+    },
+    "Financial Institutions — EU": {
+      "name": "Financial Institutions — EU",
+      "persons": [
+        {
+          "name": "Milena Stevanovic",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Nikolaus Bahn",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Céline Bruhe",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Neil Sheridan",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Public Sector — EU": {
+      "name": "Public Sector — EU",
+      "persons": [
+        {
+          "name": "Luigi Armeli",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Public Sector — Non-EU": {
+      "name": "Public Sector — Non-EU",
+      "persons": [
+        {
+          "name": "Lourdes Rodriguez",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Joint Middle Office": {
+      "name": "Joint Middle Office",
+      "persons": [
+        {
+          "name": "Boryana Radeva",
+          "title": "Director"
+        },
+        {
+          "name": "Monika Mroczek-Comparetto",
+          "title": "Head of Division -- Head of Division"
+        },
+        {
+          "name": "Paula Juaristi",
+          "title": "Head of Division"
+        },
+        {
+          "name": "and Kyc Centre Of Expertise",
+          "title": ""
+        },
+        {
+          "name": "Virginie Marc",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Transaction Management": {
+      "name": "Transaction Management",
+      "persons": [
+        {
+          "name": "Aleksander Skórnik",
+          "title": "Director"
+        },
+        {
+          "name": "Manuel Neto Pinto",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Steve Wagner",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Virginie Kammer",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Geoffroy Van Der Straeten",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "GROUP INFORMATION SYSTEMS DIRECTORATE": {
+      "name": "GROUP INFORMATION SYSTEMS DIRECTORATE",
+      "persons": [
+        {
+          "name": "Magí Clavé Badia",
+          "title": "Director General -- Head of Division"
+        },
+        {
+          "name": "Valérie Guillemet",
+          "title": "Head of Division -- Head of Division"
+        },
+        {
+          "name": "EIF Business Applications",
+          "title": ""
+        },
+        {
+          "name": "Mihai Giurgiu",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Business Solutions": {
+      "name": "Business Solutions",
+      "persons": [
+        {
+          "name": "Paulo Moreira",
+          "title": "Director -- Head of Division"
+        },
+        {
+          "name": "Guillaume Dalloz",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Gerd Lamberty",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Cyril Renard",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Solutions": {
+      "name": "Solutions",
+      "persons": [
+        {
+          "name": "Vanessa Butera",
+          "title": "Director"
+        },
+        {
+          "name": "Nicolas Lucien",
+          "title": "Head of Division -- Head of Division"
+        },
+        {
+          "name": "Ole Folstad",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Rute Vendeirinho",
+          "title": "Head of Division"
+        }
+      ]
+    },
+    "Platforms and Services": {
+      "name": "Platforms and Services",
+      "persons": [
+        {
+          "name": "Abraham Takom",
+          "title": "Director"
+        },
+        {
+          "name": "Domenico Chiarappa",
+          "title": "Head of Division"
+        },
+        {
+          "name": "Dimitris Kampranis",
+          "title": "Head of Division -- Head of Division"
+        }
+      ]
+    },
+    "OFFICE OF THE OMBUDSPERSON": {
+      "name": "OFFICE OF THE OMBUDSPERSON",
+      "persons": [
+        {
+          "name": "Bálint Balassa",
+          "title": "Ombudsperson"
+        }
+      ]
+    }
+  }
+}

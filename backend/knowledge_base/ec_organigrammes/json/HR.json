@@ -1,336 +1,421 @@
 {
   "dg_code": "HR",
-  "dg_name": "Human Resources & Security",
-  "commissioner": "Piotr Serafin",
-  "date_of_effect": "2025-05-16",
-  "director_general": {
-    "name": "Stephen Quest",
-    "assistants": [
-      "Lucia Sirakova",
-      "Ana Handjiyska"
-    ]
-  },
-  "deputy_director_general": {
-    "name": "Christian Roques",
-    "responsibilities": "Operations"
-  },
-  "deputy_director_general_2": {
-    "name": "Ilkka Salmi",
-    "responsibilities": "Workplace & Wellbeing"
-  },
-  "chief_confidential_counsellor": {
-    "name": "Lene Maesager",
-    "note": "Has a direct reporting line to the Member of the Commission responsible for Budget and Administration for all responsibilities defined in Commission Decision C(2023)8630"
-  },
-  "hr_directorate": {
-    "code": "HR.DIO",
-    "name": "Diversity & Inclusion Office",
-    "principal_adviser": "Ana-Ivana Dizon",
-    "hr_strategic_foresight_and_innovation": "Henrik Hübner"
-  },
-  "units_without_directorate": [
+  "dg_name": "Directorate-General for Human Resources and Security",
+  "commissioner": "",
+  "director_general": "Stephen Quest",
+  "director_general_email": "Stephen.Quest@ec.europa.eu",
+  "deputy_directors_general": [
     {
-      "code": "HR.02",
-      "name": "Expertise and Selection",
-      "head": "Vacant",
-      "deputy": "Eveline Dimitrieva"
+      "name": "Adrian Dusa",
+      "email": "Adrian.DUSA@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "code": "HR.01",
-      "name": "Planning & Policy Coordination",
-      "head": "Antoine Labay",
-      "deputy": "Vacant"
+      "name": "Christian Roques",
+      "email": "Christian.Roques@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "code": "NERP5",
-      "name": "IT Applications Solutions & Business Process Efficiency",
-      "head": "Penna Pavlos"
+      "name": "Julio Escudero Bustamante",
+      "email": "Julio.Escudero-Bustamante@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "code": "HR.01",
-      "name": "Strategic Foresight and The Commission",
-      "head": "Paulo Silva-Guesdes",
-      "deputy": "Gavin Maculeavy"
+      "name": "Ilkka Salmi",
+      "email": "Ilkka.SALMI@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "HR.A",
-      "name": "Organisation, Design & Development",
-      "director": "Vacant (Acting)",
+      "code": "",
+      "name": "General",
+      "director": "Klaudie Mrkusova",
+      "director_email": "Klaudie.MRKUSOVA@ec.europa.eu",
       "units": [
         {
-          "code": "HR.A.1",
-          "name": "Learning & Development",
-          "head": "Loris De Juan Barbero (Acting)"
+          "code": "",
+          "name": "",
+          "head": "Milena Mathe",
+          "head_email": "Milena.MATHE@ec.europa.eu",
+          "head_phone": "+32 229-91495"
         },
         {
-          "code": "HR.A.2",
-          "name": "Capability, Allocation & Structures",
-          "head": "Irvi Jablonsky"
+          "code": "",
+          "name": "",
+          "head": "Mihai Serban Dumitrache",
+          "head_email": "Mihai-Serban.DUMITRACHE@ec.europa.eu",
+          "head_phone": "+32 229-56084"
         },
         {
-          "code": "HR.A.3",
-          "name": "Organisational Development",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Lene Naesager",
+          "head_email": "Lene.Naesager@ec.europa.eu",
+          "head_phone": "+32 229-50015"
         },
         {
-          "code": "HR.A.4",
-          "name": "Strategic Communication",
-          "head": "Arno De Mayo"
+          "code": "Diversity and Inclusion Office",
+          "name": "Diversity and Inclusion Office",
+          "head": "Geraldine Dufort",
+          "head_email": "Geraldine.DUFORT@ec.europa.eu",
+          "head_phone": "+32 229-88040"
         },
         {
-          "code": "HR.A.5",
-          "name": "HR Data & Analytics",
-          "head": "Daniela Cunha"
+          "code": "Diversity and Inclusion Office",
+          "name": "Diversity and Inclusion Office",
+          "head": "Paul Mcaleavey",
+          "head_email": "Paul.MCALEAVEY@ec.europa.eu",
+          "head_phone": "+32 229-93641"
+        },
+        {
+          "code": "Diversity and Inclusion Office",
+          "name": "Diversity and Inclusion Office",
+          "head": "Isabelle Krauss",
+          "head_email": "Isabelle.Krauss@ec.europa.eu",
+          "head_phone": "+32 229-66929"
+        },
+        {
+          "code": "Diversity and Inclusion Office",
+          "name": "Diversity and Inclusion Office",
+          "head": "Sebastien Renaud",
+          "head_email": "Sebastien.RENAUD@ec.europa.eu",
+          "head_phone": "+32 229-69713"
         }
       ]
     },
     {
-      "code": "HR.B",
-      "name": "Expertise, Recruitment & Mobility",
-      "director": "Vacant",
+      "code": "Dir B",
+      "name": "TRAINEESHIPS, RECRUITMENT & MOBILITY",
+      "director": "Emanuele Baldacci",
+      "director_email": "Emanuele.BALDACCI@ec.europa.eu",
       "units": [
         {
-          "code": "HR.B.1",
-          "name": "Talent Attraction, Selection & Assessment",
-          "head": "Francesco Gambini-Lamberg",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Kyriacos Charalambous",
+          "head_email": "Kyriacos.CHARALAMBOUS@ec.europa.eu",
+          "head_phone": "+32 229-97712"
         },
         {
-          "code": "HR.B.2",
-          "name": "Mobility and Interprofessionalism Talent",
-          "head": "Vacant",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Anne Delwart",
+          "head_email": "Anne.DELWART@ec.europa.eu",
+          "head_phone": "+32 229-65695"
         },
         {
-          "code": "HR.B.3",
-          "name": "Selection and Mobility, Other Agency",
-          "head": "Fabrizio Alonzi",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Enrico Maria Armani",
+          "head_email": "Enricomaria.Armani@ec.europa.eu",
+          "head_phone": "+32 229-93371"
         },
         {
-          "code": "HR.B.4",
-          "name": "Centre for Psycho & HR Technology",
-          "head": "Mikko Aaltonen"
+          "code": "",
+          "name": "",
+          "head": "Mojca Boltin",
+          "head_email": "Mojca.BOLTIN@ec.europa.eu",
+          "head_phone": "+32 229-84802"
         }
       ]
     },
     {
-      "code": "HR.C",
-      "name": "Careers & Staff Development",
-      "director": "Marina Vlahović",
+      "code": "Dir C",
+      "name": "CAREERS & STAFF DEVELOPMENT",
+      "director": "Valérie Tankink",
+      "director_email": "Valerie.TANKINK@ec.europa.eu",
       "units": [
         {
-          "code": "HR.C.1",
-          "name": "Performance Management",
-          "head": "Tania Utreras"
+          "code": "",
+          "name": "",
+          "head": "Harald Spitzer",
+          "head_email": "Harald.Spitzer@ec.europa.eu",
+          "head_phone": "+32 229-91633"
         },
         {
-          "code": "HR.C.2",
-          "name": "Talent Spotting & Career Guidance",
-          "head": "Andrea Blas Linares"
+          "code": "",
+          "name": "",
+          "head": "Guillaume Laplatte",
+          "head_email": "Guillaume.LAPLATTE@ec.europa.eu",
+          "head_phone": "+32 229-84436"
         },
         {
-          "code": "HR.C.3",
-          "name": "Team Leader & Management Support",
-          "head": "Valérie Tambone"
+          "code": "",
+          "name": "",
+          "head": "Koen Binon",
+          "head_email": "Koen.BINON@ec.europa.eu",
+          "head_phone": "+32 229-80669"
         },
         {
-          "code": "HR.C.4",
-          "name": "Continuous Learning",
-          "head": "Monika Sonnteville"
-        },
-        {
-          "code": "HR.C.5",
-          "name": "Adviser",
-          "head": "Valérie Bergmann"
+          "code": "",
+          "name": "",
+          "head": "Valérie Tankink",
+          "head_email": "Valerie.TANKINK@ec.europa.eu",
+          "head_phone": "+32 229-87430"
         }
       ]
     },
     {
-      "code": "HR.D",
-      "name": "Workplace & Wellbeing",
-      "director": "Sandrine Mwilter",
+      "code": "Dir E",
+      "name": "HR FOR SPECIFIC SITES & SERVICES",
+      "director": "Emanuele Baldacci",
+      "director_email": "Emanuele.BALDACCI@ec.europa.eu",
       "units": [
         {
-          "code": "HR.D.1",
-          "name": "Managing Workplace Health & Family Issues",
-          "head": "Robertamy Casit Albro",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Katarzyna Makowska",
+          "head_email": "Katarzyna.MAKOWSKA@ec.europa.eu",
+          "head_phone": "+32 229-66806"
         },
         {
-          "code": "HR.D.2",
-          "name": "Managing for Active & Hybrid State",
-          "head": "Paola Renata Amaraj",
-          "deputy": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Nancy Vanhaverbeke-Merckx",
+          "head_email": "MERCKX@ec.europa.eu",
+          "head_phone": "+32 229-54178"
         },
         {
-          "code": "HR.D.3",
-          "name": "Wellbeing: Medical Service Structure",
-          "head": "Guillermo-Garcia Vara"
+          "code": "",
+          "name": "",
+          "head": "Kirsten Wentzel-Froberg",
+          "head_email": "Kirsten.WENTZEL-FROBERG@ec.europa.eu",
+          "head_phone": "+352 4301-33448"
         },
         {
-          "code": "HR.D.4",
-          "name": "Psychological Counselling",
-          "head": "Vacant"
-        },
-        {
-          "code": "HR.D.5",
-          "name": "Medical",
-          "head": "Claus-Christoph-Giere Geier Dalen"
-        },
-        {
-          "code": "HR.D.6",
-          "name": "Medical Awareness, Other",
-          "head": "Vacant"
-        },
-        {
-          "code": "HR.D.7",
-          "name": "Health, Safety & Wellbeing",
-          "head": "Laurie Lebedew"
-        },
-        {
-          "code": "HR.D.8",
-          "name": "Adviser for Medical Policy Questions",
-          "head": "Vacant"
-        },
-        {
-          "code": "HR.D.9",
-          "name": "Wellbeing",
-          "head": "Anne-Louise Rademacher"
+          "code": "",
+          "name": "",
+          "head": "James Gray",
+          "head_email": "James.GRAY@ec.europa.eu",
+          "head_phone": "+39 033278-5875"
         }
       ]
     },
     {
-      "code": "HR.E",
-      "name": "HR for Specific Sites & Services",
-      "director": "Daniella Raillard",
+      "code": "Dir F",
+      "name": "FINANCE, LEGAL & PARTNERSHIPS",
+      "director": "Christian Linder",
+      "director_email": "Christian.LINDER@ec.europa.eu",
       "units": [
         {
-          "code": "HR.E.1",
-          "name": "People, Sp & Integrations, Health Services",
-          "head": "James Gabay"
+          "code": "",
+          "name": "",
+          "head": "Jean-François Salomon",
+          "head_email": "Jean-Francois.SALOMON@ec.europa.eu",
+          "head_phone": "+32 229-94629"
         },
         {
-          "code": "HR.E.2",
-          "name": "People, Social Legal, Social Security",
-          "head": "Vincent Juri"
+          "code": "",
+          "name": "",
+          "head": "Thierry Sonmereyn",
+          "head_email": "Thierry.Sonmereyn@ec.europa.eu",
+          "head_phone": "+32 229-69989"
         },
         {
-          "code": "HR.E.3",
-          "name": "Benefits: Families & Services",
-          "head": "Joana-Pereira Mello"
+          "code": "",
+          "name": "",
+          "head": "Christina Vlassis",
+          "head_email": "Christina.VLASSIS@ec.europa.eu",
+          "head_phone": "+32 229-98954"
         },
         {
-          "code": "HR.E.4",
-          "name": "Legal & Social Services",
-          "head": "Stanislawa Denis Duwelskyi (Acting)",
-          "deputy": "Stanislawa Denis Duwelskyi"
+          "code": "",
+          "name": "",
+          "head": "Marta Silva Mendes",
+          "head_email": "Marta.SILVA-MENDES@ec.europa.eu",
+          "head_phone": "+32 229-52261"
         },
         {
-          "code": "HR.E.5",
-          "name": "Ethical Conduct",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Stanislav Demirdjiev",
+          "head_email": "Stanislav.DEMIRDJIEV@ec.europa.eu",
+          "head_phone": "+32 229-69098"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ewoud Sakkers",
+          "head_email": "Ewoud.Sakkers@ec.europa.eu",
+          "head_phone": "+32 229-66352"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lars Albath",
+          "head_email": "Lars.ALBATH@ec.europa.eu",
+          "head_phone": "+32 229-69401"
         }
       ]
     },
     {
-      "code": "HR.F",
-      "name": "Finance, Legal, & Partnerships",
-      "director": "Christian Rasinski",
+      "code": "Dir D",
+      "name": "WORKPLACE & WELLBEING",
+      "director": "Susan Panter",
+      "director_email": "Susan.PANTER@ec.europa.eu",
       "units": [
         {
-          "code": "HR.F.1",
-          "name": "Legal",
-          "head": "Thierry Demoison"
+          "code": "",
+          "name": "",
+          "head": "Octavian Purcarea",
+          "head_email": "Octavian.PURCAREA@ec.europa.eu",
+          "head_phone": "+32 229-87704"
         },
         {
-          "code": "HR.F.2",
-          "name": "Deployment, Contracts & Internal Control",
-          "head": "Christina Watson",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Anne Louise Friedrichsen",
+          "head_email": "Anne-Louise.Friedrichsen@ec.europa.eu",
+          "head_phone": "+32 229-91232"
         },
         {
-          "code": "HR.F.3",
-          "name": "Supporting Capacities & External Organization",
-          "head": "Vacant",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Bertrand Saint Aubin",
+          "head_email": "Bertrand.SAINT-AUBIN@ec.europa.eu",
+          "head_phone": "+32 229-87655"
         },
         {
-          "code": "HR.F.4",
-          "name": "IT & Social Security",
-          "head": "Vacant",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Felipe Moreno Madrid",
+          "head_email": "Felipe.MORENO-MADRID@ec.europa.eu",
+          "head_phone": "+32 229-88127"
         },
         {
-          "code": "HR.F.5",
-          "name": "Ethical Conduct",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Laura Manzano Baena",
+          "head_email": "Laura.MANZANO-BAENA@ec.europa.eu",
+          "head_phone": "+32 229-86337"
         },
         {
-          "code": "HR.F.6",
-          "name": "Appeals & Local Monitoring",
-          "head": "Laurent Robison"
+          "code": "",
+          "name": "",
+          "head": "Maria Klimathianaki",
+          "head_email": "Maria.KLIMATHIANAKI@ec.europa.eu",
+          "head_phone": "+352 4301-32592"
         },
         {
-          "code": "HR.F.7",
-          "name": "Adviser Legal-Finance",
-          "head": "Jean-François Salomon"
+          "code": "",
+          "name": "",
+          "head": "Italo Lombardi",
+          "head_email": "Italo.LOMBARDI@ec.europa.eu",
+          "head_phone": "+39 033278-6775"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dimo Iliev",
+          "head_email": "Dimo.ILIEV@ec.europa.eu",
+          "head_phone": "+32 229-91930"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Laure Ledoux",
+          "head_email": "Laure.LEDOUX@ec.europa.eu",
+          "head_phone": "+32 229-57384"
         }
       ]
     },
     {
-      "code": "HR.IDOC",
-      "name": "Investigation & Disciplinary Office",
-      "director": "Valentina Nicola",
+      "code": "Dir DS",
+      "name": "SECURITY",
+      "director": "Pearse O'Donohue",
+      "director_email": "Donohue@ec.europa.eu",
       "units": [
         {
-          "code": "HR.IDOC.1",
-          "name": "Investigation & Compliance",
-          "head": "Vacant",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Bart Raeymaekers",
+          "head_email": "Bart.RAEYMAEKERS@ec.europa.eu",
+          "head_phone": "+32 229-54171"
         },
         {
-          "code": "HR.IDOC.2",
-          "name": "Disciplinary Procedures",
-          "head": "Vacant",
-          "deputy": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Attila Lajos",
+          "head_email": "Attila.LAJOS@ec.europa.eu",
+          "head_phone": "+32 229-92625"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nicolas Bessot",
+          "head_email": "Nicolas.BESSOT@ec.europa.eu",
+          "head_phone": "+32 229-97994"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maresa Meissl",
+          "head_email": "Maresa.MEISSL@ec.europa.eu",
+          "head_phone": "+32 229-56214"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Emmanuelle Cretin-Magand",
+          "head_email": "MAGAND@ec.europa.eu",
+          "head_phone": "+32 229-56875"
         }
       ]
     },
     {
-      "code": "HR.DS",
-      "name": "Security",
-      "director": "Petros Chamouridis",
+      "code": "Dir A",
+      "name": "ORGANISATIONAL DESIGN & DEVELOPMENT",
+      "director": "Jennifer Brown",
+      "director_email": "Jennifer.BROWN@ec.europa.eu",
       "units": [
         {
-          "code": "HR.DS.1",
-          "name": "Security Policy & Operations",
-          "head": "Guy-Ivan Timmermans"
+          "code": "",
+          "name": "",
+          "head": "Tomislav Horvat",
+          "head_email": "Tomislav.HORVAT1@ec.europa.eu",
+          "head_phone": "+32 229-51264"
         },
         {
-          "code": "HR.DS.2",
-          "name": "Physical & Analysis",
-          "head": "Petros Karanis"
+          "code": "",
+          "name": "",
+          "head": "Antje Ewertz",
+          "head_email": "Antje.EWERTZ@ec.europa.eu",
+          "head_phone": "+32 229-96955"
         },
         {
-          "code": "HR.DS.3",
-          "name": "Document, Resources, Coordination & Infrastructure",
-          "head": "Not shown"
+          "code": "",
+          "name": "",
+          "head": "Stephen Collins",
+          "head_email": "Stephen.COLLINS@ec.europa.eu",
+          "head_phone": "+32 229-98436"
         },
         {
-          "code": "HR.DS.4",
-          "name": "Security Operations & Inspections",
-          "head": "Mariano Nipius"
+          "code": "",
+          "name": "",
+          "head": "Krisztina Nagy",
+          "head_email": "Krisztina.NAGY@ec.europa.eu",
+          "head_phone": "+32 229-88663"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Camelia Csora",
+          "head_email": "Camelia.CSORA@ec.europa.eu",
+          "head_phone": "+32 229-52491"
+        },
+        {
+          "code": "Office",
+          "name": "Office",
+          "head": "Georgeta Luminita Nicolaie",
+          "head_email": "Georgeta-Luminita.NICOLAIE@ec.europa.eu",
+          "head_phone": "+32 229-64789"
         }
       ]
     }
   ],
-  "notes": [
-    "DG HR members of management staff seconded in the interest of the service: J. Escudero Bustamante & S. Alexandrova",
-    "Including the HR Correspondent, Wivica Stagell, and the Local Customer Support",
-    "The Chief Confidential Counsellor has a direct reporting line to the Member of the Commission responsible for Budget and Administration for all responsibilities defined in Commission Decision C(2023)8630",
-    "D: Deputy to the Director"
-  ]
+  "num_directorates": 8,
+  "num_units": 46,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

@@ -1,492 +1,537 @@
 {
   "dg_code": "COMP",
-  "dg_name": "Competition",
-  "full_name": "Directorate-General for Competition",
-  "date_of_effect": "2025-09-16",
-  "executive_vice_president": {
-    "name": "Teresa Ribera",
-    "title": "Executive Vice-President (Acting)"
-  },
-  "leadership": {
-    "acting_director_general": {
-      "name": "Linsey McCallum",
-      "position": "Acting Director-General"
+  "dg_name": "Directorate-General for Competition",
+  "commissioner": "",
+  "director_general": "Linsey Mccallum",
+  "director_general_email": "Linsey.Mc-Callum@ec.europa.eu",
+  "deputy_directors_general": [
+    {
+      "name": "Stefan Siebert",
+      "email": "Stefan.SIEBERT@ec.europa.eu",
+      "responsibilities": ""
     },
-    "deputy_director_generals": [
-      {
-        "name": "Guillaume Loriot",
-        "position": "Deputy Director-General - Mergers",
-        "responsibility": "Mergers"
-      },
-      {
-        "name": "Linsey McCallum",
-        "position": "Deputy Director-General - Antitrust & Regulation of Digital",
-        "responsibility": "Antitrust & Regulation of Digital"
-      },
-      {
-        "name": "Anthony Whelan",
-        "position": "Deputy Director-General - State Aid",
-        "responsibility": "State Aid"
-      }
-    ],
-    "advisers": [
-      {
-        "name": "Andreas Schwab",
-        "title": "Adviser to Environment",
-        "area": "Environment"
-      },
-      {
-        "name": "vacant",
-        "title": "Adviser, Cartels",
-        "area": "Cartels"
-      }
-    ],
-    "chief_technology_officer": {
-      "code": "COMP.CTO",
-      "name": "vacant",
-      "position": "Chief Technology Officer"
+    {
+      "name": "Linsey Mccallum",
+      "email": "Linsey.Mc-Callum@ec.europa.eu",
+      "responsibilities": ""
     },
-    "chief_economist": {
-      "name": "Penelope Papandropoulou",
-      "position": "Chief Economist"
+    {
+      "name": "Guillaume Loriot",
+      "email": "Guillaume.LORIOT@ec.europa.eu",
+      "responsibilities": ""
     },
-    "principal_advisers": [
-      {
-        "name": "vacant",
-        "title": "Principal Adviser",
-        "area": "Economic Evaluation, Damage/Emittith"
-      }
-    ]
-  },
-  "units": {
-    "comp_01": {
-      "code": "COMP.01",
-      "name": "Commissioner's Priorities & Strategic Coordination",
-      "head_of_unit": {
-        "name": "Romina Lupu (acting)",
-        "deputy": null
-      }
-    },
-    "comp_cto1": {
-      "code": "COMP.CTO.1",
-      "name": "Data Analysis & Technology",
-      "head_of_unit": {
-        "name": "Nicholas Cohen (acting)",
-        "deputy": null
-      }
+    {
+      "name": "Anthony Whelan",
+      "email": "Anthony.WHELAN@ec.europa.eu",
+      "responsibilities": ""
     }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "COMP.A",
-      "name": "Policy & Strategy",
-      "director": {
-        "name": "Marco Biancarelli",
-        "position": "Director"
-      },
-      "units": {
-        "a1": {
-          "code": "COMP.A.1",
-          "name": "Policy & Support & Rules",
-          "head_of_unit": {
-            "name": "Serge Morens",
-            "deputy": "Deputy to the Director"
-          }
+  ],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Simon Genevaz",
+      "director_email": "Simon.GENEVAZ@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Felix Schulyok",
+          "head_email": "Felix.SCHULYOK@ec.europa.eu",
+          "head_phone": "+32 229-58799"
         },
-        "a2": {
-          "code": "COMP.A.2",
-          "name": "Support for State Aid & Policy",
-          "head_of_unit": {
-            "name": "Daniel Gal",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Emanuele Tarantino",
+          "head_email": "Emanuele.TARANTINO@ec.europa.eu",
+          "head_phone": "+32 229-66120"
         },
-        "a3": {
-          "code": "COMP.A.3",
-          "name": "Strategic Communications & Policy",
-          "head_of_unit": {
-            "name": "Mercedes Lara",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Lluis Sauri Romero",
+          "head_email": "Lluis.SAURI-ROMERO@ec.europa.eu",
+          "head_phone": "+32 229-59080"
         },
-        "a4": {
-          "code": "COMP.A.4",
-          "name": "International Cooperation & Rules",
-          "head_of_unit": {
-            "name": "Macarena Arias",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Hans Zenger",
+          "head_email": "Hans.ZENGER@ec.europa.eu",
+          "head_phone": "+32 229-13469"
         },
-        "a5": {
-          "code": "COMP.A.5",
-          "name": "Procedural Relations & Policy",
-          "head_of_unit": {
-            "name": "Maria Luisa Simone Chiarello",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Yves-Alexandre De Montjoye",
+          "head_email": "MONTJOYE@ec.europa.eu",
+          "head_phone": "+32 229-60376"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Penelope Papandropoulos",
+          "head_email": "Penelope.PAPANDROPOULOS@ec.europa.eu",
+          "head_phone": "+32 229-96721"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Thomas Deisenhofer",
+          "head_email": "Thomas.DEISENHOFER@ec.europa.eu",
+          "head_phone": "+32 229-85081"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Astrid Cousin",
+          "head_email": "Astrid.COUSIN@ec.europa.eu",
+          "head_phone": "+32 229-66602"
+        },
+        {
+          "code": "HR Correspondent Team",
+          "name": "HR Correspondent Team",
+          "head": "Salim Medghoul",
+          "head_email": "Salim.Medghoul@ec.europa.eu",
+          "head_phone": "+32 229-56533"
         }
-      }
+      ]
     },
-    "directorate_b": {
-      "code": "COMP.B",
-      "name": "Markets & Cases I: Energy & Environment",
-      "director": {
-        "name": "Philippe Grospernin",
-        "position": "Director"
-      },
-      "units": {
-        "b1": {
-          "code": "COMP.B.1",
-          "name": "Energy & Environment",
-          "head_of_unit": {
-            "name": "Maria Schaunchez",
-            "deputy": null
-          },
-          "marker": "Deputy to the Director"
+    {
+      "code": "Dir A",
+      "name": "POLICY AND STRATEGY",
+      "director": "Inge Bernaerts",
+      "director_email": "Inge.BERNAERTS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sophie Moonen",
+          "head_email": "Sophie.MOONEN@ec.europa.eu",
+          "head_phone": "+32 229-81807"
         },
-        "b2": {
-          "code": "COMP.B.2",
-          "name": "Energy",
-          "head_of_unit": {
-            "name": "Stefan Kalt",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniele Calisti",
+          "head_email": "Daniele.CALISTI@ec.europa.eu",
+          "head_phone": "+32 229-54651"
         },
-        "b3": {
-          "code": "COMP.B.3",
-          "name": "Energy",
-          "head_of_unit": {
-            "name": "Manuel Campa",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Andrea Bomhoff",
+          "head_email": "Andrea.BOMHOFF@ec.europa.eu",
+          "head_phone": "+32 229-87100"
         },
-        "b4": {
-          "code": "COMP.B.4",
-          "name": "Environment & Climate",
-          "head_of_unit": {
-            "name": "Alexandra Kok",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Massimiliano Kadar",
+          "head_email": "Massimiliano.KADAR@ec.europa.eu",
+          "head_phone": "+32 229-89483"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "María Luisa Tierno Centella",
+          "head_email": "CENTELLA@ec.europa.eu",
+          "head_phone": "+32 229-90269"
         }
-      }
+      ]
     },
-    "directorate_c": {
-      "code": "COMP.C",
-      "name": "Markets & Cases II: Information Technology, Communications & Media",
-      "director": {
-        "name": "Carmen Arnauld",
-        "position": "Director"
-      },
-      "units": {
-        "c1": {
-          "code": "COMP.C.1",
-          "name": "Telecom & Internet: Communications",
-          "head_of_unit": {
-            "name": "Apostolos Chatsivaias",
-            "deputy": null
-          }
+    {
+      "code": "Dir B",
+      "name": "MARKETS AND CASES I: ENERGY AND ENVIRONMENT",
+      "director": "Anna Colucci",
+      "director_email": "Anna.Colucci@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Marieke Scholz",
+          "head_email": "Marieke.SCHOLZ@ec.europa.eu",
+          "head_phone": "+32 229-54804"
         },
-        "c2": {
-          "code": "COMP.C.2",
-          "name": "Technology Market: Wares",
-          "head_of_unit": {
-            "name": "Euclades Sanchez Worces",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Nicola Pesaresi",
+          "head_email": "Nicola.Pesaresi@ec.europa.eu",
+          "head_phone": "+32 229-92906"
         },
-        "c3": {
-          "code": "COMP.C.3",
-          "name": "Digital Platforms",
-          "head_of_unit": {
-            "name": "Nick Hauk",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Peer Ritter",
+          "head_email": "Peer.RITTER@ec.europa.eu",
+          "head_phone": "+32 229-66490"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Natacha Callens",
+          "head_email": "Natacha.CALLENS@ec.europa.eu",
+          "head_phone": "+32 229-62693"
         }
-      }
+      ]
     },
-    "directorate_d": {
-      "code": "COMP.D",
-      "name": "Markets & Cases III: Financial Services",
-      "director": {
-        "name": "vacant",
-        "position": "Director"
-      },
-      "units": {
-        "d1": {
-          "code": "COMP.D.1",
-          "name": "Financial Services Systems",
-          "head_of_unit": {
-            "name": "Luis Rodriguez Campiro",
-            "deputy": null
-          },
-          "marker": "Deputy to the Director"
+    {
+      "code": "Dir C",
+      "name": "MARKETS AND CASES II: INFORMATION TECHNOLOGY, COMMUNICATION AND",
+      "director": "Carlota Reyners Fontana",
+      "director_email": "Carlota.REYNERS-FONTANA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "João Vareda",
+          "head_email": "Joao.VAREDA@ec.europa.eu",
+          "head_phone": "+32 229-65382"
         },
-        "d2": {
-          "code": "COMP.D.2",
-          "name": "State Aid - Financial Services & Financial Markets",
-          "head_of_unit": {
-            "name": "Eva Gizanges Sampello",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Friedrich Wenzel Bulst",
+          "head_email": "Friedrich-Wenzel.BULST@ec.europa.eu",
+          "head_phone": "+32 229-51278"
         },
-        "d3": {
-          "code": "COMP.D.3",
-          "name": "Insurance & Portfolio Operations",
-          "head_of_unit": {
-            "name": "Pierre Jandemaciop",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Brice Allibert",
+          "head_email": "Brice.Allibert@ec.europa.eu",
+          "head_phone": "+32 229-99396"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Carlota Reyners Fontana",
+          "head_email": "Carlota.REYNERS-FONTANA@ec.europa.eu",
+          "head_phone": "+32 229-62223"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Annemiek Wilpshaar",
+          "head_email": "Annemiek.WILPSHAAR@ec.europa.eu",
+          "head_phone": "+32 229-77548"
         }
-      }
+      ]
     },
-    "directorate_e": {
-      "code": "COMP.E",
-      "name": "Markets & Cases IV: Basic Industries, Manufacturing & Agriculture",
-      "director": {
-        "name": "Luis Roberto",
-        "position": "Director"
-      },
-      "units": {
-        "e1": {
-          "code": "COMP.E.1",
-          "name": "Basic Industries",
-          "head_of_unit": {
-            "name": "Bela Sandorly",
-            "deputy": null
-          }
+    {
+      "code": "Dir D",
+      "name": "MARKETS AND CASES III: FINANCIAL SERVICES",
+      "director": "Maria Velentza",
+      "director_email": "Maria.Velentza@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Monique Negenman",
+          "head_email": "Monique.Negenman@ec.europa.eu",
+          "head_phone": "+32 229-55228"
         },
-        "e2": {
-          "code": "COMP.E.2",
-          "name": "Manufacturing",
-          "head_of_unit": {
-            "name": "Mikael Petrotors",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Konstantina Strouvali",
+          "head_email": "Konstantina.STROUVALI@ec.europa.eu",
+          "head_phone": "+32 229-90222"
         },
-        "e3": {
-          "code": "COMP.E.3",
-          "name": "Agriculture",
-          "head_of_unit": {
-            "name": "Carsten Godefroy",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Pierre-Arnaud Proux",
+          "head_email": "Pierre-Arnaud.PROUX@ec.europa.eu",
+          "head_phone": "+32 229-94834"
         },
-        "e4": {
-          "code": "COMP.E.4",
-          "name": "Forestry & Packaging, Food & Agriculture",
-          "head_of_unit": {
-            "name": "Vivien Raidford",
-            "deputy": null
-          }
-        },
-        "e5": {
-          "code": "COMP.E.5",
-          "name": "Agriculture, Food & Agri-Business",
-          "head_of_unit": {
-            "name": "vacant",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Franck Dupont",
+          "head_email": "Franck.DUPONT@ec.europa.eu",
+          "head_phone": "+32 229-69679"
         }
-      }
+      ]
     },
-    "directorate_f": {
-      "code": "COMP.F",
-      "name": "Markets & Cases V: Transport, Post & Other Services",
-      "director": {
-        "name": "Filipa Rodigues",
-        "position": "Director"
-      },
-      "units": {
-        "f1": {
-          "code": "COMP.F.1",
-          "name": "Transport",
-          "head_of_unit": {
-            "name": "Eveina Rodrigues",
-            "deputy": null
-          }
+    {
+      "code": "Dir E",
+      "name": "MARKETS AND CASES IV: BASIC INDUSTRIES, MANUFACTURING AND",
+      "director": "Inge Bernaerts",
+      "director_email": "Inge.BERNAERTS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ulla Schwager",
+          "head_email": "Ulla.SCHWAGER@ec.europa.eu",
+          "head_phone": "+32 229-75680"
         },
-        "f2": {
-          "code": "COMP.F.2",
-          "name": "State Aid - Post, TV & Other Services",
-          "head_of_unit": {
-            "name": "Carsten Sataria",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Gerald Miersch",
+          "head_email": "Gerald.Miersch@ec.europa.eu",
+          "head_phone": "+32 229-96504"
         },
-        "f3": {
-          "code": "COMP.F.3",
-          "name": "Post & Other Services",
-          "head_of_unit": {
-            "name": "Evelina Rodriguez",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Flavio Laina",
+          "head_email": "Flavio.Laina@ec.europa.eu",
+          "head_phone": "+32 229-69669"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Teresa Vecchi",
+          "head_email": "Teresa.VECCHI@ec.europa.eu",
+          "head_phone": "+32 229-60275"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Philippe Chauve",
+          "head_email": "Philippe.Chauve@ec.europa.eu",
+          "head_phone": "+32 229-62013"
         }
-      }
+      ]
     },
-    "directorate_g": {
-      "code": "COMP.G",
-      "name": "Cartels",
-      "director": {
-        "name": "Carles Esteva Mosso",
-        "position": "Director"
-      },
-      "units": {
-        "g1": {
-          "code": "COMP.G.1",
-          "name": "Cartels I",
-          "head_of_unit": {
-            "name": "Olivier Guersent",
-            "deputy": null
-          }
+    {
+      "code": "Dir F",
+      "name": "MARKETS AND CASES V: TRANSPORT, POST AND OTHER SERVICES",
+      "director": "Barbara Brandtner",
+      "director_email": "Barbara.Brandtner@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniel Boeshertz",
+          "head_email": "Daniel.Boeshertz@ec.europa.eu",
+          "head_phone": "+32 229-66437"
         },
-        "g2": {
-          "code": "COMP.G.2",
-          "name": "Cartels II",
-          "head_of_unit": {
-            "name": "Claudine Lesueur",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Christina Siaterli",
+          "head_email": "Christina.SIATERLI@ec.europa.eu",
+          "head_phone": "+32 229-67053"
         },
-        "g3": {
-          "code": "COMP.G.3",
-          "name": "Cartels III - Support for Cartels & Policy",
-          "head_of_unit": {
-            "name": "Bogdan Molodvijan",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Barbara Brandtner",
+          "head_email": "Barbara.Brandtner@ec.europa.eu",
+          "head_phone": "+32 229-51563"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Birthe Panhans",
+          "head_email": "Birthe.PANHANS@ec.europa.eu",
+          "head_phone": "+32 229-61373"
         }
-      }
+      ]
     },
-    "directorate_h": {
-      "code": "COMP.H",
-      "name": "State Aid: General Scrutiny & Enforcement",
-      "director": {
-        "name": "Klaus Wiedner",
-        "position": "Director"
-      },
-      "units": {
-        "h1": {
-          "code": "COMP.H.1",
-          "name": "State Aid I: General & Innovations",
-          "head_of_unit": {
-            "name": "Isabel Speranta",
-            "deputy": null
-          },
-          "marker": "Deputy to the Director"
+    {
+      "code": "Dir G",
+      "name": "CARTELS",
+      "director": "Maria Jaspers",
+      "director_email": "Maria.JASPERS@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sari Suurnakki",
+          "head_email": "Sari.Suurnakki@ec.europa.eu",
+          "head_phone": "+32 229-91828"
         },
-        "h2": {
-          "code": "COMP.H.2",
-          "name": "State Aid II: General & Innovations II",
-          "head_of_unit": {
-            "name": "Russ Speranta",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Claudia De Cesaris",
+          "head_email": "Claudia.De-Cesaris@ec.europa.eu",
+          "head_phone": "+32 229-61733"
         },
-        "h3": {
-          "code": "COMP.H.3",
-          "name": "Recovery, Monitoring",
-          "head_of_unit": {
-            "name": "Anita Uurten",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Brigitta Renner-Loquenz",
+          "head_email": "Brigitta.Renner@ec.europa.eu",
+          "head_phone": "+32 229-54569"
         },
-        "h4": {
-          "code": "COMP.H.4",
-          "name": "Audit, Recoury & Monitoring",
-          "head_of_unit": {
-            "name": "Angela Flakston",
-            "deputy": null
-          }
-        },
-        "h5": {
-          "code": "COMP.H.5",
-          "name": "Case Support, Members & Records",
-          "head_of_unit": {
-            "name": "vacant",
-            "deputy": null
-          }
-        },
-        "h6": {
-          "code": "COMP.H.6",
-          "name": "State Aid - General & Governance",
-          "head_of_unit": {
-            "name": "Paula Harford",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Jaspers",
+          "head_email": "Maria.JASPERS@ec.europa.eu",
+          "head_phone": "+32 229-62577"
         }
-      }
+      ]
     },
-    "directorate_j": {
-      "code": "COMP.J",
-      "name": "Markets & Cases VI: Digital Platforms & Licensing Control",
-      "director": {
-        "name": "Alin Claparton Colls",
-        "position": "Director"
-      },
-      "units": {
-        "j1": {
-          "code": "COMP.J.1",
-          "name": "Digital Platforms I",
-          "head_of_unit": {
-            "name": "Leeza Dionova",
-            "deputy": null
-          }
+    {
+      "code": "Dir H",
+      "name": "STATE AID: GENERAL SCRUTINY AND ENFORCEMENT",
+      "director": "Koen Van De Casteele",
+      "director_email": "Koen.Van-De-Casteele@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Hubert De Broca",
+          "head_email": "Hubert.De-Broca@ec.europa.eu",
+          "head_phone": "+32 229-96660"
         },
-        "j2": {
-          "code": "COMP.J.2",
-          "name": "Digital Platforms II",
-          "head_of_unit": {
-            "name": "vacant",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Yizhou Ren",
+          "head_email": "Yizhou.REN@ec.europa.eu",
+          "head_phone": "+32 229-94889"
         },
-        "j3": {
-          "code": "COMP.J.3",
-          "name": "Digital Platforms III",
-          "head_of_unit": {
-            "name": "Micha Platform III",
-            "deputy": null
-          }
+        {
+          "code": "",
+          "name": "",
+          "head": "Max Lienemeyer",
+          "head_email": "Max.LIENEMEYER@ec.europa.eu",
+          "head_phone": "+32 229-86243"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Natalia Lazarova",
+          "head_email": "Natalia.LAZAROVA@ec.europa.eu",
+          "head_phone": "+32 229-58857"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Harold Nyssens",
+          "head_email": "Harold.NYSSENS@ec.europa.eu",
+          "head_phone": "+32 229-68702"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "María Muñoz De Juan",
+          "head_email": "maria.munoz@ec.europa.eu",
+          "head_phone": "+32 229-60463"
         }
-      }
+      ]
     },
-    "directorate_k": {
-      "code": "COMP.K",
-      "name": "Horizontal",
-      "director": {
-        "name": "Karl Soukup",
-        "position": "Director"
-      }
+    {
+      "code": "Dir I",
+      "name": "GENERAL AFFAIRS",
+      "director": "Stina Soewarta",
+      "director_email": "Stina.SOEWARTA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Kristine Liljeberg",
+          "head_email": "Kristine.LILJEBERG@ec.europa.eu",
+          "head_phone": "+32 229-84630"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tim Beuckelaers",
+          "head_email": "Tim.BEUCKELAERS@ec.europa.eu",
+          "head_phone": "+32 229-61480"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dimitrios Athanasiadis",
+          "head_email": "Dimitrios.ATHANASIADIS@ec.europa.eu",
+          "head_phone": "+32 229-58826"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Téa Katarina Broms",
+          "head_email": "Tea-Katarina.BROMS@ec.europa.eu",
+          "head_phone": "+32 229-54436"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ana Garcia Castillo",
+          "head_email": "Ana.GARCIA-CASTILLO@ec.europa.eu",
+          "head_phone": "+32 229-60494"
+        }
+      ]
     },
-    "directorate_k1": {
-      "code": "COMP.K.1",
-      "name": "Foreign Subsidies",
-      "director": {
-        "name": "vacant",
-        "position": "Director",
-        "marker": "Deputy to the Director"
-      }
+    {
+      "code": "Dir J",
+      "name": "MARKETS AND CASES VI: DIGITAL PLATFORMS",
+      "director": "Alberto Bacchiega",
+      "director_email": "Alberto.Bacchiega@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Lucia Bonova",
+          "head_email": "Lucia.BONOVA@ec.europa.eu",
+          "head_phone": "+32 229-61312"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michael Koenig",
+          "head_email": "Michael.KOENIG@ec.europa.eu",
+          "head_phone": "+32 229-92108"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Thomas Kramler",
+          "head_email": "Thomas.KRAMLER@ec.europa.eu",
+          "head_phone": "+32 229-86716"
+        }
+      ]
     },
-    "directorate_k2": {
-      "code": "COMP.K.2",
-      "name": "Cartels",
-      "director": {
-        "name": "Alin Colcampeli",
-        "position": "Director"
-      }
-    },
-    "directorate_k3": {
-      "code": "COMP.K.3",
-      "name": "Abuse",
-      "director": {
-        "name": "Patrik Grefrath III",
-        "position": "Director"
-      }
+    {
+      "code": "Dir K",
+      "name": "FOREIGN SUBSIDIES",
+      "director": "Karl Soukup",
+      "director_email": "Karl.Soukup@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Eddy De Smijter",
+          "head_email": "Eddy.DE-SMIJTER@ec.europa.eu",
+          "head_phone": "+32 229-51380"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Agata Mazurkiewicz",
+          "head_email": "Agata.MAZURKIEWICZ@ec.europa.eu",
+          "head_phone": "+32 229-97779"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Glykeria Demataki",
+          "head_email": "Glykeria.Demataki@ec.europa.eu",
+          "head_phone": "+32 229-53334"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Henri Piffaut",
+          "head_email": "Henri.PIFFAUT@ec.europa.eu",
+          "head_phone": "+32 229-13669"
+        }
+      ]
     }
-  },
-  "notes": [
-    "Deputy to the Director",
-    "Seconded Managers and Advisers: II Fin - seconded to the Cabinet of the President of the Council. II G Graise - seconded to the European Court of Auditors",
-    "Seconded managers and advisers: Michele Periciano, seconded to the Cabinet of the President von der Leyen; Hanna Antilanen, seconded to the Cabinet of EVP Séjourné; Anna Vernet, seconded to the Cabinet of EVP Ribera"
-  ]
+  ],
+  "num_directorates": 12,
+  "num_units": 58,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

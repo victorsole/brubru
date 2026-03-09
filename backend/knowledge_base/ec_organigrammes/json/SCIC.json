@@ -1,208 +1,308 @@
 {
   "dg_code": "SCIC",
   "dg_name": "Directorate-General for Interpretation",
-  "commissioner": {
-    "name": "Piotr Serafin",
-    "title": "Commissioner"
-  },
-  "director_general": {
-    "name": "Genoveva Ruiz Calavera",
-    "title": "Director-General",
-    "assistant": "Anne-Laure Hubert"
-  },
-  "deputy_director_general": {
-    "name": "Colin Scicluna",
-    "title": "Deputy Director-General"
-  },
-  "principal_adviser": {
-    "name": "Janek Poniatowski",
-    "role": "Principal Adviser"
-  },
-  "special_units": [
+  "commissioner": "",
+  "director_general": "Genoveva Ruiz Calavera",
+  "director_general_email": "Genoveva.Ruiz-Calavera@ec.europa.eu",
+  "deputy_directors_general": [
     {
-      "code": "SCIC.01",
-      "name": "Strategy, Policy and Communication",
-      "head": "Javier Hernandez Saseta"
+      "name": "Jarek Porejski",
+      "email": "Jaroslaw.POREJSKI@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Colin Scicluna",
+      "email": "colin.scicluna@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
-  "departments": [
+  "directorates": [
     {
-      "code": "SCIC.A",
-      "name": "Interpreters",
-      "director": "Alexandru Panagarou",
-      "interpretation_departments": [
-        {
-          "name": "Interpretation Department I",
-          "head": "Alexandru Panagarou (Acting)",
-          "units": [
-            {
-              "code": "SCIC.A.AS",
-              "head": "Anna Janowska"
-            },
-            {
-              "code": "SCIC.A.DA",
-              "head": "Hannah Nielsen"
-            },
-            {
-              "code": "SCIC.A.ES",
-              "head": "Maria Adelaida De Francia Caudin"
-            },
-            {
-              "code": "SCIC.A.LT",
-              "head": "Surnanti Marujaskrene"
-            },
-            {
-              "code": "SCIC.A.RO",
-              "head": "Maria Kordonau"
-            },
-            {
-              "code": "SCIC.A.SL",
-              "head": "Katja Zuemer"
-            }
-          ]
-        },
-        {
-          "name": "Interpretation Department II",
-          "head": "Marjana Rupnik",
-          "units": [
-            {
-              "code": "SCIC.A.BG",
-              "head": "Katja Zuemer (Acting)"
-            },
-            {
-              "code": "SCIC.A.DE",
-              "head": "Monika Schober"
-            },
-            {
-              "code": "SCIC.A.EL",
-              "head": "Evgenia Papakirou"
-            },
-            {
-              "code": "SCIC.A.IT",
-              "head": "Maria Graziagoletta Bauer"
-            },
-            {
-              "code": "SCIC.A.PL",
-              "head": "Dorota Mofska Seranyi"
-            },
-            {
-              "code": "SCIC.A.SK",
-              "head": "Zuzana Kriels-Lalinova"
-            },
-            {
-              "code": "SCIC.A.SV",
-              "head": "Daniel Pagiley"
-            }
-          ]
-        },
-        {
-          "name": "Interpretation Department III",
-          "head": "Verena Korper",
-          "units": [
-            {
-              "code": "SCIC.A.EN.A",
-              "head": "Noraad Heath"
-            },
-            {
-              "code": "SCIC.A.FI",
-              "head": "Riikka Vespalajnen"
-            },
-            {
-              "code": "SCIC.A.HR",
-              "head": "Patricia Magolaski"
-            },
-            {
-              "code": "SCIC.A.HU",
-              "head": "Maria Kordonau (Acting)"
-            },
-            {
-              "code": "SCIC.A.LV",
-              "head": "Uldis Sprogis"
-            },
-            {
-              "code": "SCIC.A.MT",
-              "head": "Peter Mifsud"
-            },
-            {
-              "code": "SCIC.A.NL",
-              "head": "Margo Sujs"
-            },
-            {
-              "code": "SCIC.A.PT",
-              "head": "Julio Monteiro"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "code": "SCIC.B",
-      "name": "Interpretation Services Management and Professional Support",
-      "director": "Filip Majcen",
-      "units": [
-        {
-          "code": "SCIC.B.1",
-          "name": "Talent Development",
-          "head": "Daniele Morganti"
-        },
-        {
-          "code": "SCIC.B.2",
-          "name": "Programming of Interpretation",
-          "head": "Ana Moudomde Neiuromdue"
-        },
-        {
-          "code": "SCIC.B.3",
-          "name": "Interinstitutional Interpretation and Info Delivery Modes",
-          "head": "Susannah Mangiameli"
-        },
-        {
-          "code": "SCIC.B.4",
-          "name": "External Partnerships & Supporting Agent",
-          "head": "Jaroslav Stepren (Acting)"
-        }
-      ]
-    },
-    {
-      "code": "SCIC.C",
-      "name": "Resources and Corporate Services",
+      "code": "Dir C",
+      "name": "RESOURCES AND CORPORATE SERVICES",
       "director": "Gianluca Pecchi",
+      "director_email": "Gianluca.PECCHI@ec.europa.eu",
       "units": [
         {
-          "code": "SCIC.C.1",
-          "name": "Conference Services",
-          "head": "Ildefonso Bartoletto"
+          "code": "",
+          "name": "",
+          "head": "Elisabetta Degiampietro",
+          "head_email": "Elisabetta.DEGIAMPIETRO@ec.europa.eu",
+          "head_phone": "+32 229-90589"
         },
         {
-          "code": "SCIC.C.2",
-          "name": "Budget and Financial Management",
-          "head": "Stamatis Safitis"
+          "code": "",
+          "name": "",
+          "head": "Stamatios Anthis",
+          "head_email": "Stamatios.ANTHIS@ec.europa.eu",
+          "head_phone": "+32 229-58491"
         },
         {
-          "code": "SCIC.C.3",
-          "name": "ICT, Finance Planning, HR-Hospital, Internal Control, and Logistics",
-          "head": "Maria Gonzalez Cabello"
+          "code": "",
+          "name": "",
+          "head": "Marc Berthiaume",
+          "head_email": "Marc.Berthiaume@ec.europa.eu",
+          "head_phone": "+32 229-59493"
         },
         {
-          "code": "SCIC.C.4",
-          "name": "Communication and Customer Services",
-          "head": "Magdalena Collins"
+          "code": "",
+          "name": "",
+          "head": "Magdalena Collins",
+          "head_email": "Magdalena.COLLINS@ec.europa.eu",
+          "head_phone": "+32 229-59117"
         },
         {
-          "code": "SCIC.C.5",
-          "name": "Admin Services, Solutions and Sound Quality",
-          "head": "Vacant"
+          "code": "",
+          "name": "",
+          "head": "Lode De Raedt",
+          "head_email": "Lode.De-Raedt@ec.europa.eu",
+          "head_phone": "+32 229-59142"
         },
         {
-          "code": "SCIC.C.6",
-          "name": "IT and Digital Transformation",
-          "head": "Petrus Dahigrenblauberg"
+          "code": "",
+          "name": "",
+          "head": "Florin Adrian Sbarciog",
+          "head_email": "Florin-Adrian.SBARCIOG@ec.europa.eu",
+          "head_phone": "+32 229-86866"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Javier Hernandez Saseta",
+          "head_email": "Javier.Hernandez-Saseta@ec.europa.eu",
+          "head_phone": "+32 229-85377"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "INTERPRETERS",
+      "director": "Alexandra Panagakou",
+      "director_email": "Alexandra.Panagakou@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Pascal Mathieu",
+          "head_email": "Pascal.Mathieu@ec.europa.eu",
+          "head_phone": "+32 229-90651"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hana Jungova",
+          "head_email": "Hana.JUNGOVA@ec.europa.eu",
+          "head_phone": "+32 229-80012"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hannah Nielsen",
+          "head_email": "Hannah.Nielsen@ec.europa.eu",
+          "head_phone": "+32 229-81499"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alexia De Francia Cachon",
+          "head_email": "Alexia.DE-FRANCIA@ec.europa.eu",
+          "head_phone": "+32 229-52771"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Pascal Mathieu",
+          "head_email": "Pascal.Mathieu@ec.europa.eu",
+          "head_phone": "+32 229-90651"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Skirmante Marijauskiene",
+          "head_email": "Skirmante.MARIJAUSKIENE@ec.europa.eu",
+          "head_phone": "+32 229-87919"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Koroknai",
+          "head_email": "Maria.KOROKNAI@ec.europa.eu",
+          "head_phone": "+32 229-92128"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katja Zumer",
+          "head_email": "Katja.ZUMER@ec.europa.eu",
+          "head_phone": "+32 229-53639"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marjana Rupnik",
+          "head_email": "Marjana.RUPNIK@ec.europa.eu",
+          "head_phone": "+32 229-91998"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Katja Zumer",
+          "head_email": "Katja.ZUMER@ec.europa.eu",
+          "head_phone": "+32 229-53639"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Monika Schorr",
+          "head_email": "Monika.SCHORR@ec.europa.eu",
+          "head_phone": "+32 229-52736"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Evgenia Paparouni",
+          "head_email": "Evgenia.Paparouni@ec.europa.eu",
+          "head_phone": "+32 229-87652"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Merje Laht",
+          "head_email": "Merje.LAHT@ec.europa.eu",
+          "head_phone": "+32 229-89271"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Grazia Coletta",
+          "head_email": "Maria-Grazia.COLETTA@ec.europa.eu",
+          "head_phone": "+32 229-87660"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Dorota Nofska-Sierant",
+          "head_email": "Dorota.SIERANT@ec.europa.eu",
+          "head_phone": "+32 229-90650"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Zuzana Krell-Laluhova",
+          "head_email": "Zuzana.KRELL-LALUHOVA@ec.europa.eu",
+          "head_phone": "+32 229-89669"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Daniel Pashley",
+          "head_email": "Daniel.PASHLEY@ec.europa.eu",
+          "head_phone": "+32 229-83569"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Verena Skerra",
+          "head_email": "Verena.Skerra@ec.europa.eu",
+          "head_phone": "+32 229-83238"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Morag Neath",
+          "head_email": "Morag.Neath@ec.europa.eu",
+          "head_phone": "+32 229-85277"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Riikka Vepsalainen",
+          "head_email": "Riikka.Vepsalainen@ec.europa.eu",
+          "head_phone": "+32 229-84872"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tatjana Zagajski",
+          "head_email": "Tatjana.ZAGAJSKI@ec.europa.eu",
+          "head_phone": "+32 229-81515"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maria Koroknai",
+          "head_email": "Maria.KOROKNAI@ec.europa.eu",
+          "head_phone": "+32 229-92128"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Uldis Sprogis",
+          "head_email": "Uldis.SPROGIS@ec.europa.eu",
+          "head_phone": "+32 229-82948"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Peter Mifsud",
+          "head_email": "Peter.MIFSUD@ec.europa.eu",
+          "head_phone": "+32 229-92237"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Margo Sijs",
+          "head_email": "Margo.SIJS@ec.europa.eu",
+          "head_phone": "+32 229-89259"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Júlio Monteiro",
+          "head_email": "julio.monteiro@ec.europa.eu",
+          "head_phone": "+32 229-89617"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "INTERPRETATION SERVICES MANAGEMENT AND PROFESSIONAL SUPPORT",
+      "director": "Filip Majcen",
+      "director_email": "Filip.MAJCEN@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Manuela Brovarone",
+          "head_email": "Manuela.Brovarone@ec.europa.eu",
+          "head_phone": "+32 229-80357"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ana Mouzinho De",
+          "head_email": "Ana.Albuquerque@ec.europa.eu",
+          "head_phone": "+32 229-96896"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Carlos Hoyos Fernandez-",
+          "head_email": "Carlos.Hoyos@ec.europa.eu",
+          "head_phone": "+32 229-59068"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Jaroslaw Stepien",
+          "head_email": "Jaroslaw.STEPIEN@ec.europa.eu",
+          "head_phone": "+32 229-56913"
         }
       ]
     }
   ],
-  "notes": [
-    "Including the HR Correspondent: J Pelconen",
-    "Including Meetings Services in Luxembourg"
-  ],
-  "date_of_effect": "2025-11-01"
+  "num_directorates": 3,
+  "num_units": 37,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

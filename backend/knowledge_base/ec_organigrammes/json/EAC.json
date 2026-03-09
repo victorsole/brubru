@@ -1,125 +1,367 @@
 {
   "dg_code": "EAC",
-  "dg_name": "Education, Youth, Sport and Culture",
-  "full_name": "Directorate-General for Education, Youth, Sport and Culture",
-  "date_of_effect": "2025-08-01",
-  "commissioners": [
+  "dg_name": "Directorate-General for Education, Youth, Sport and Culture",
+  "commissioner": "",
+  "director_general": "Pia Ahrenkilde Hansen",
+  "director_general_email": "Pia.Ahrenkilde-Hansen@ec.europa.eu",
+  "deputy_directors_general": [
     {
-      "name": "Ekaterina Zaharieva",
-      "title": "Commissioner"
+      "name": "Adrienn Geges",
+      "email": "Adrienn.GEGES@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "name": "Glenn Micallef",
-      "title": "Commissioner"
+      "name": "Normunds Popens",
+      "email": "Normunds.POPENS@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
-  "executive_vice_president": {
-    "name": "Roxana M\u00eenzatu",
-    "title": "Executive Vice-President"
-  },
-  "leadership": {
-    "director_general": {
-      "name": "Pia Ahrenkilde Hansen",
-      "position": "Director-General",
-      "assistants": [
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Naïs Rigollet",
+      "director_email": "Nais.RIGOLLET@ec.europa.eu",
+      "units": [
         {
-          "name": "Akvile Normantiene",
-          "role": "Assistant to the DG"
-        },
-        {
-          "name": "Na\u00efs Rigollet",
-          "role": "Assistant to the DG"
+          "code": "",
+          "name": "",
+          "head": "Akvile Normantiene",
+          "head_email": "Akvile.NORMANTIENE@ec.europa.eu",
+          "head_phone": "+32 229-50438"
         }
       ]
     },
-    "deputy_director_general": {
-      "name": "Normunds Popens",
-      "position": "Deputy Director-General",
-      "assistant": {
-        "name": "Kate Moriarty",
-        "role": "Assistant to the Deputy Director-General"
-      }
+    {
+      "code": "Dir C",
+      "name": "INNOVATION, DIGITAL EDUCATION AND INTERNATIONAL COOPERATION",
+      "director": "Antoaneta Angelova-Krasteva",
+      "director_email": "KRASTEVA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Luca Perego",
+          "head_email": "Luca.PEREGO@ec.europa.eu",
+          "head_phone": "+32 229-90064"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Claire Morel",
+          "head_email": "Claire.MOREL@ec.europa.eu",
+          "head_phone": "+32 229-93925"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Filip Van Depoele",
+          "head_email": "Filip.Van-Depoele@ec.europa.eu",
+          "head_phone": "+32 229-95667"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Georgi Dimitrov",
+          "head_email": "Georgi.DIMITROV@ec.europa.eu",
+          "head_phone": "+32 229-90623"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Theo Duivenvoorde",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Bodo Richter",
+          "head_email": "Bodo.Richter@ec.europa.eu",
+          "head_phone": "+32 229-90067"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Klaus Haupt",
+          "head_email": "Klaus.Haupt@ec.europa.eu",
+          "head_phone": "+32 229-69923"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Fredrik Olsson Hector",
+          "head_email": "Fredrik.Olsson-Hector@ec.europa.eu",
+          "head_phone": "+32 229-64255"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Monika Holik",
+          "head_email": "Monika.HOLIK@ec.europa.eu",
+          "head_phone": "+32 229-85807"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Graham Wilkie",
+          "head_email": "Graham.Wilkie@ec.europa.eu",
+          "head_phone": "+32 229-59300"
+        }
+      ]
     },
-    "principal_advisers": [
-      {
-        "name": "Sophie Beernaerts",
-        "title": "Principal Adviser EAC"
-      },
-      {
-        "name": "Tam\u00e1s Sz\u0171cs",
-        "title": "Principal Adviser",
-        "area": "International Dimension of Policies and Programmes"
-      }
-    ],
-    "hors_class_adviser": {
-      "name": "Vladimir \u0160ucha",
-      "title": "Hors-Class Adviser"
+    {
+      "code": "Dir D",
+      "name": "CULTURE, CREATIVITY AND SPORT",
+      "director": "Georg Haeusler",
+      "director_email": "Georg.Haeusler@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Catherine Magnant",
+          "head_email": "Catherine.Magnant@ec.europa.eu",
+          "head_phone": "+32 229-65376"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Judith Videcoq",
+          "head_email": "Judith.VIDECOQ@ec.europa.eu",
+          "head_phone": "+32 229-95722"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Giorgio Guazzugli Marini",
+          "head_email": "Giorgio.GUAZZUGLI-MARINI@ec.europa.eu",
+          "head_phone": "+32 229-81370"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gilles Pelayo",
+          "head_email": "Gilles.Pelayo@ec.europa.eu",
+          "head_phone": "+32 229-67864"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vladimir Sucha",
+          "head_email": "Vladimir.SUCHA@ec.europa.eu",
+          "head_phone": "+32 229-67513"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Tamas Szucs",
+          "head_email": "Tamas.SZUCS@ec.europa.eu",
+          "head_phone": "+32 229-92273"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "POLICY STRATEGY AND EVALUATION",
+      "director": "Stefaan Hermans",
+      "director_email": "Stefaan.Hermans@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Sergej Koperdak",
+          "head_email": "Sergej.KOPERDAK@ec.europa.eu",
+          "head_phone": "+32 229-62209"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Gyula Cserey",
+          "head_email": "Gyula.CSEREY@ec.europa.eu",
+          "head_phone": "+32 229-51662"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Christoph Schwierz",
+          "head_email": "Christoph.SCHWIERZ@ec.europa.eu",
+          "head_phone": "+32 229-60752"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sonya Gospodinova",
+          "head_email": "Sonya.GOSPODINOVA@ec.europa.eu",
+          "head_phone": "+32 229-66953"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Philippe Cattoir",
+          "head_email": "Philippe.Cattoir@ec.europa.eu",
+          "head_phone": "+32 229-55692"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Florence Mondin",
+          "head_email": "Florence.MONDIN@ec.europa.eu",
+          "head_phone": "+32 229-86374"
+        }
+      ]
+    },
+    {
+      "code": "Dir B",
+      "name": "YOUTH, EDUCATION AND ERASMUS+",
+      "director": "Diana Jablonska",
+      "director_email": "Diana.JABLONSKA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Ioannis Malekos",
+          "head_email": "Ioannis.MALEKOS@ec.europa.eu",
+          "head_phone": "+32 229-52902"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Susanne Conze",
+          "head_email": "Susanne.CONZE@ec.europa.eu",
+          "head_phone": "+32 229-80236"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Monika Kepe-Holmberg",
+          "head_email": "Monika.KEPE@ec.europa.eu",
+          "head_phone": "+32 229-85150"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ingrid Bellander Todino",
+          "head_email": "Ingrid.BELLANDER-TODINO@ec.europa.eu",
+          "head_phone": "+32 229-87539"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Michael Teutsch",
+          "head_email": "Michael.TEUTSCH@ec.europa.eu",
+          "head_phone": "+32 229-92317"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Frederic Fimeyer",
+          "head_email": "Frederic.FIMEYER@ec.europa.eu",
+          "head_phone": "+32 229-95296"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Walter Zampieri",
+          "head_email": "Walter.ZAMPIERI@ec.europa.eu",
+          "head_phone": "+32 229-98974"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Vasiliki Mourtou",
+          "head_email": "Vasiliki.MOURTOU@ec.europa.eu",
+          "head_phone": "+32 229-90653"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Armin Bosch",
+          "head_email": "Armin.Bosch@ec.europa.eu",
+          "head_phone": "+32 229-91295"
+        }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "PERFORMANCE MANAGEMENT, SUPERVISION AND RESOURCES",
+      "director": "Marisa Atienza Morales",
+      "director_email": "Marisa.ATIENZA@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Francesca Crippa",
+          "head_email": "Francesca.CRIPPA@ec.europa.eu",
+          "head_phone": "+32 229-91935"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Djahanguir Talebzadeh",
+          "head_email": "Djahanguir.TALEBZADEH@ec.europa.eu",
+          "head_phone": "+32 229-68557"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Corina-Andreea Vereha",
+          "head_email": "Corina-Andreea.VEREHA@ec.europa.eu",
+          "head_phone": "+32 229-52295"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Nicholas O'Cuilleanain",
+          "head_email": "CUILLEANAIN@ec.europa.eu",
+          "head_phone": "+32 229-58432"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Alessandra Luchetti",
+          "head_email": "Alessandra.Luchetti@ec.europa.eu",
+          "head_phone": "+32 229-60874"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ulrich Sondermann",
+          "head_email": "Ulrich.SONDERMANN@ec.europa.eu",
+          "head_phone": "+32 229-85311"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Marco Carnaccini",
+          "head_email": "Marco.Carnaccini@ec.europa.eu",
+          "head_phone": "+32 229-92618"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Florencia Van Houdt",
+          "head_email": "",
+          "head_phone": ""
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Markus Rester",
+          "head_email": "Markus.RESTER@ec.europa.eu",
+          "head_phone": "+32 229-88431"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sophie Beernaerts",
+          "head_email": "Sophie.Beernaerts@ec.europa.eu",
+          "head_phone": "+32 229-66315"
+        }
+      ]
     }
-  },
-  "units": {
-    "eac_dg_01": {
-      "code": "EAC.DG.01",
-      "name": "Policy Coordination and Interinstitutional Relations",
-      "head": {
-        "name": "Adrienn Geges",
-        "deputy": "Oona Van Landuyt"
-      }
-    }
-  },
-  "directorates": {
-    "directorate_a": {
-      "code": "EAC.A",
-      "name": "Policy Strategy and Evaluation",
-      "director": {
-        "name": "Stefaan Hermans",
-        "position": "Director"
-      }
-    },
-    "directorate_b": {
-      "code": "EAC.B",
-      "name": "Youth, Education and Erasmus+",
-      "director": {
-        "name": "Michael Teutsch (acting)",
-        "position": "Director"
-      }
-    },
-    "directorate_c": {
-      "code": "EAC.C",
-      "name": "Innovation, Digital Education and International Cooperation",
-      "director": {
-        "name": "Antoaneta Angelova-Krasteva",
-        "position": "Director"
-      }
-    },
-    "directorate_d": {
-      "code": "EAC.D",
-      "name": "Culture, Creativity and Sport",
-      "director": {
-        "name": "Georg Haeusler",
-        "position": "Director"
-      }
-    },
-    "directorate_r": {
-      "code": "EAC.R",
-      "name": "Performance Management, Supervision and Resources",
-      "director": {
-        "name": "Normunds Popens (acting)",
-        "position": "Director"
-      }
-    }
-  },
-  "executive_agency": {
-    "code": "EACEA",
-    "name": "Education, Audiovisual and Culture Executive Agency",
-    "director": {
-      "name": "Fr\u00e9d\u00e9ric Fimeyer",
-      "position": "Director"
-    }
-  },
-  "notes": [
-    "Deputy to the Director",
-    "Mirror Entity in an Executive Agency",
-    "Seconded Manager: Vanessa Debiais-Sainton",
-    "Including HR Correspondent"
-  ]
+  ],
+  "num_directorates": 6,
+  "num_units": 42,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

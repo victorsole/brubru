@@ -1,0 +1,303 @@
+{
+  "institution": "OMBUDSMAN",
+  "source": "euwhoiswho_ombudsman.pdf",
+  "data_date": "2026-02-27",
+  "total_persons": 50,
+  "units": {
+    "European Ombudsman": {
+      "name": "European Ombudsman",
+      "persons": [
+        {
+          "name": "(postal office Box: Postal address: Cs 30403 - 67001 - Strasbourg Cedex)",
+          "title": "",
+          "phone": "+33 3881-79062"
+        },
+        {
+          "name": "Teresa Anjinho",
+          "title": "European Ombudsman"
+        }
+      ]
+    },
+    "CABINET OF THE EUROPEAN OMBUDSMAN": {
+      "name": "CABINET OF THE EUROPEAN OMBUDSMAN",
+      "persons": [
+        {
+          "name": "Lampros Papadias",
+          "title": "Head of Cabinet"
+        },
+        {
+          "name": "Diana Riochet",
+          "title": "Legal adviser"
+        }
+      ]
+    },
+    "SECRETARIAT-GENERAL": {
+      "name": "SECRETARIAT-GENERAL",
+      "persons": [
+        {
+          "name": "Murielle Richardson",
+          "title": "Administrator",
+          "phone": "+0033 3881-72388 ("
+        },
+        {
+          "name": "Maria Silvia Bartolucci",
+          "title": "Policy Adviser",
+          "phone": "+0032 228-30856 ("
+        }
+      ]
+    },
+    "DIRECTORATE OF INQUIRIES": {
+      "name": "DIRECTORATE OF INQUIRIES",
+      "persons": [
+        {
+          "name": "Rosita Hickey",
+          "title": "Director of Inquiries",
+          "phone": "+0032 228-42542 ("
+        },
+        {
+          "name": "Marta Hirsch-Ziembińska",
+          "title": "Principal Adviser on Charter compliance",
+          "phone": "+0033 3881-72746 ("
+        },
+        {
+          "name": "Peter Dyrberg",
+          "title": "Inquiries and Process Expert",
+          "phone": "+0032 228-32752 ("
+        },
+        {
+          "name": "Jennifer King",
+          "title": "Legal Expert",
+          "phone": "+0032 228-41541 ("
+        },
+        {
+          "name": "Christophe Lesauvage",
+          "title": "Legal Expert",
+          "phone": "+0032 228-43039"
+        },
+        {
+          "name": "Alice Bernard",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-42367 ("
+        },
+        {
+          "name": "Tanja Ehnert",
+          "title": "Inquiries Coordinator",
+          "phone": "+0032 228-46768 ("
+        },
+        {
+          "name": "Silvia Fuller",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-43831 ("
+        },
+        {
+          "name": "Michaela Gehring",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-33418 ("
+        },
+        {
+          "name": "Nicholas Hernanz",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-30068 ("
+        },
+        {
+          "name": "Michal Krajewski",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-44464 ("
+        },
+        {
+          "name": "Amandine Le Bellec",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-31550 ("
+        },
+        {
+          "name": "Tereza Mandjukova",
+          "title": "Inquiries Officer",
+          "phone": "+0033 3881-72092 ("
+        },
+        {
+          "name": "Oana Marin",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-30992 ("
+        },
+        {
+          "name": "Koen Roovers",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-41141 ("
+        },
+        {
+          "name": "Markus Spoerer",
+          "title": "Policy Adviser",
+          "phone": "+0032 228-32152"
+        },
+        {
+          "name": "Paulien Van De Velde-Van",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-34731 ("
+        }
+      ]
+    },
+    "Case-handling Unit": {
+      "name": "Case-handling Unit",
+      "persons": [
+        {
+          "name": "Tina Nilsson",
+          "title": "Head of the Case-handling Unit",
+          "phone": "+0032 228-41417 ("
+        },
+        {
+          "name": "Francesca Abbo",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-33440 ("
+        },
+        {
+          "name": "Ludovica Aquino",
+          "title": "Inquiries Officer"
+        },
+        {
+          "name": "Vieri Biondi",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-33438 ("
+        },
+        {
+          "name": "Peter Bonnor",
+          "title": "Inquiries Officer",
+          "phone": "+0033 3881-72541 ("
+        },
+        {
+          "name": "Pablo Gonzalez Perez",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-42003 ("
+        },
+        {
+          "name": "Mathieu Greuet",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-42206 ("
+        },
+        {
+          "name": "Jean Lusweti",
+          "title": "Case handling assistant"
+        },
+        {
+          "name": "Richard More O'Ferrall",
+          "title": "Inquiries Coordinator",
+          "phone": "+0032 228-43044 ("
+        },
+        {
+          "name": "Josef Nejedlý",
+          "title": "Inquiries Officer",
+          "phone": "+0033 3881-64148 ("
+        },
+        {
+          "name": "Eija Salonen",
+          "title": "Inquiries Officer",
+          "phone": "+0033 3881-72429 ("
+        },
+        {
+          "name": "Valentina Stoeva",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-43527 ("
+        },
+        {
+          "name": "Konstantinos Tsaklidis",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-33401 ("
+        },
+        {
+          "name": "Emily Tullberg",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-42032 ("
+        },
+        {
+          "name": "Rutger Van Kammen",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-33430 ("
+        },
+        {
+          "name": "Kristina Wittkopp",
+          "title": "Inquiries Officer",
+          "phone": "+0032 228-42034 ("
+        }
+      ]
+    },
+    "DIRECTORATE FOR ADMINISTRATION": {
+      "name": "DIRECTORATE FOR ADMINISTRATION",
+      "persons": [
+        {
+          "name": "Marie-Pierre Darchy",
+          "title": "Director for Administration",
+          "phone": "+0032 228-33332 ("
+        }
+      ]
+    },
+    "team": {
+      "name": "team",
+      "persons": [
+        {
+          "name": "Alessandro Del Bon",
+          "title": "Head of Process & Document -- Management, Business Continuity and -- Infrastructure",
+          "phone": "+0033 3881-72382 ("
+        },
+        {
+          "name": "Marc Kamran Amir-Tahmasseb",
+          "title": "Administrator - Web and Software -- Development Officer",
+          "phone": "+0033 3881-74410 ("
+        },
+        {
+          "name": "Marjorie Fuchs",
+          "title": "Administrator",
+          "phone": "+0033 3881-74078 ("
+        }
+      ]
+    },
+    "Budget and finance team": {
+      "name": "Budget and finance team",
+      "persons": [
+        {
+          "name": "Véronique Vandaele",
+          "title": "Head of Budget and Finance",
+          "phone": "+0032 228-42300 ("
+        }
+      ]
+    },
+    "Human resources team": {
+      "name": "Human resources team",
+      "persons": [
+        {
+          "name": "Zina Assimakopoulou",
+          "title": "Head of Human Resources",
+          "phone": "+0032 228-33558 ("
+        },
+        {
+          "name": "Francesca Pavesi",
+          "title": "Administrator",
+          "phone": "+0032 228-30067 ("
+        },
+        {
+          "name": "Gundi Gadesmann",
+          "title": "Head of Cabinet",
+          "phone": "+0032 228-42609 ("
+        },
+        {
+          "name": "Honor Louise Mahony",
+          "title": "Head of Communication",
+          "phone": "+0032 228-434733 ("
+        },
+        {
+          "name": "Enrico Portelli",
+          "title": "Team Leader, Digital Communication",
+          "phone": "+0032 228-32013 ("
+        }
+      ]
+    },
+    "DATA PROTECTION OFFICER": {
+      "name": "DATA PROTECTION OFFICER",
+      "persons": [
+        {
+          "name": "Francesca Pavesi",
+          "title": "Data Protection Officer",
+          "phone": "+0032 228-30067 ("
+        }
+      ]
+    }
+  }
+}

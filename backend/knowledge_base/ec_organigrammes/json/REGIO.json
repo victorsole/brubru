@@ -1,300 +1,320 @@
 {
   "dg_code": "REGIO",
-  "dg_name": "Directorate-General for Regional & Urban Policy",
-  "executive_vice_president": {
-    "name": "Raffaele Fitto",
-    "title": "Executive Vice-President"
-  },
-  "director_general": {
-    "name": "Themis Christophidou",
-    "title": "Director-General",
-    "policy_assistants": [
-      "Carlo Girlanda",
-      "Iris Petsa"
-    ],
-    "hr_correspondent": "Davinia Wood"
-  },
-  "deputy_director_general": {
-    "name": "Hugo Sobral",
-    "title": "Deputy Director-General for Programme Implementation",
-    "assistant": "Patricia Lamotte"
-  },
-  "special_units": [
+  "dg_name": "Directorate-General for Regional and Urban Policy",
+  "commissioner": "",
+  "director_general": "Themis Christophidou",
+  "director_general_email": "Themis.CHRISTOPHIDOU@ec.europa.eu",
+  "deputy_directors_general": [
     {
-      "code": "REGIO.01",
-      "name": "Political Coordination, Strategic Management & Inter-Institutional Relations",
-      "head": "Davinia Wood",
-      "deputy": "Michaela Stahl"
+      "name": "Agnieszka Krolikowska",
+      "email": "Agnieszka.KROLIKOWSKA@ec.europa.eu",
+      "responsibilities": ""
     },
     {
-      "code": "REGIO.02",
-      "name": "Coordination of Programmes",
-      "head": "Iulia-Mirela Șerban",
-      "deputy": "Vacant"
-    },
-    {
-      "code": "REGIO.03",
-      "name": "Cities, Communities, People",
-      "head": "Kadri Uustal",
-      "deputy": "Gergana Miladinova"
-    },
-    {
-      "code": "REGIO.04",
-      "name": "Cyprus Settlement Support",
-      "head": "Giulia Bertezzolo",
-      "deputy": "Jutta Pomoell-Segurola"
+      "name": "Hugo Sobral",
+      "email": "Hugo.SOBRAL@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "REGIO.A",
-      "name": "Budget, Communication & General Affairs",
-      "director": "Davinia Wood (Acting)",
+      "code": "",
+      "name": "General",
+      "director": "Maria Janczak",
+      "director_email": "Maria.JANCZAK@ec.europa.eu",
       "units": [
         {
-          "code": "REGIO.A.1",
-          "name": "Outermost Regions",
+          "code": "",
+          "name": "",
+          "head": "Carlo Girlanda",
+          "head_email": "Carlo.GIRLANDA@ec.europa.eu",
+          "head_phone": "+32 229-87447"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Davinia Wood",
+          "head_email": "Davinia.WOOD@ec.europa.eu",
+          "head_phone": "+32 229-51017"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "BUDGET, COMMUNICATION AND GENERAL AFFAIRS",
+      "director": "Davinia Wood",
+      "director_email": "Davinia.WOOD@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
           "head": "Axel Badrichani",
-          "deputy": "Germán Esteban"
+          "head_email": "Axel.BADRICHANI@ec.europa.eu",
+          "head_phone": "+32 229-68480"
         },
         {
-          "code": "REGIO.A.2",
-          "name": "Communication",
+          "code": "",
+          "name": "",
           "head": "Klavdija Cernilogar Dwyer",
-          "deputy": "Elina Hakonen-Meddings"
+          "head_email": "DWYER@ec.europa.eu",
+          "head_phone": "+32 229-88157"
         },
         {
-          "code": "REGIO.A.3",
-          "name": "Budget & Financial Management",
-          "head": "Momchil Sabev",
-          "deputy": "Gabor Miklósi"
+          "code": "",
+          "name": "",
+          "head": "Gabor Miklosi",
+          "head_email": "Gabor.MIKLOSI@ec.europa.eu",
+          "head_phone": "+32 229-90585"
         },
         {
-          "code": "REGIO.A.4",
-          "name": "IT Implementation & IT Governance",
+          "code": "",
+          "name": "",
           "head": "Morten Greve",
-          "deputy": "Daniel Coman"
+          "head_email": "Morten.GREVE@ec.europa.eu",
+          "head_phone": "+32 229-81182"
         }
-      ],
-      "mirror_entity": {
-        "code": "REGIO.A3.EISMEA.C.01",
-        "head": "Ioanna Kokkori"
-      }
+      ]
     },
     {
-      "code": "REGIO.B",
-      "name": "Policy",
+      "code": "Dir B",
+      "name": "POLICY",
       "director": "Peter Berkowitz",
+      "director_email": "Peter.Berkowitz@ec.europa.eu",
       "units": [
         {
-          "code": "REGIO.B.1",
-          "name": "Policy Development & Evaluation",
+          "code": "",
+          "name": "",
           "head": "Anna Wagner",
-          "deputy": "Enrico Pesaresi"
+          "head_email": "Anna.WAGNER@ec.europa.eu",
+          "head_phone": "+32 229-55285"
         },
         {
-          "code": "REGIO.B.2",
-          "name": "European Semester & Economic Analysis",
+          "code": "",
+          "name": "",
           "head": "Stefan Appel",
-          "deputy": "Francisco Barros Castro"
+          "head_email": "Stefan.Appel@ec.europa.eu",
+          "head_phone": "+32 229-54596"
         },
         {
-          "code": "REGIO.B.3",
-          "name": "Financial Instruments & Relations with International Financial Institutions",
+          "code": "",
+          "name": "",
           "head": "Jonathan Denness",
-          "deputy": "Benoit Nadler"
+          "head_email": "Jonathan.Denness@ec.europa.eu",
+          "head_phone": "+32 229-65038"
         },
         {
-          "code": "REGIO.B.4",
-          "name": "Legal Affairs",
-          "head": "Eveline Petrat Charléty",
-          "deputy": "Margaret Butler"
+          "code": "",
+          "name": "",
+          "head": "Eveline Petrat",
+          "head_email": "Eveline.PETRAT@ec.europa.eu",
+          "head_phone": "+32 229-85147"
         }
       ]
     },
     {
-      "code": "DAC",
-      "name": "Joint Audit Directorate for Cohesion",
+      "code": "Dir EMPL.DAC",
+      "name": "JOINT AUDIT DIRECTORATE FOR COHESION",
       "director": "Franck Sébert",
-      "note": "Joint Directorate with DG EMPL as specified in Commission Decision SEC(2021)194",
+      "director_email": "Franck.Sebert@ec.europa.eu",
       "units": [
         {
-          "code": "DAC.1",
-          "name": "Audit I",
-          "head": "Cristina Asturias",
-          "deputy": "Brian Debattista"
-        },
-        {
-          "code": "DAC.2",
-          "name": "Audit II",
+          "code": "",
+          "name": "",
           "head": "Ilse Van Den Abeele",
-          "deputy": "Jarosław Hawrysz"
+          "head_email": "Ilse.VAN-DEN-ABEELE@ec.europa.eu",
+          "head_phone": "+32 229-98962"
         },
         {
-          "code": "DAC.3",
-          "name": "Audit III",
-          "head": "Miriam Fernandez Jutz",
-          "deputy": "Vladislava Glietz"
+          "code": "",
+          "name": "",
+          "head": "Rafael Lopez Sanchez",
+          "head_email": "Rafael.LOPEZ-SANCHEZ@ec.europa.eu",
+          "head_phone": "+32 229-85461"
         },
         {
-          "code": "DAC.4",
-          "name": "Audit IV",
-          "head": "Rafael López Sánchez",
-          "deputy": "Olivia Jordan"
+          "code": "",
+          "name": "",
+          "head": "Marcela Buzoi",
+          "head_email": "Marcela.BUZOI@ec.europa.eu",
+          "head_phone": "+32 229-64725"
         },
         {
-          "code": "DAC.5",
-          "name": "Audit V",
-          "head": "Cendrine De Buggenoms",
-          "deputy": "Beatrice Stanciu"
+          "code": "",
+          "name": "",
+          "head": "Iulia-Mirela Serban",
+          "head_email": "Iulia-Mirela.SERBAN@ec.europa.eu",
+          "head_phone": "+32 229-67327"
         },
         {
-          "code": "DAC.6",
-          "name": "Audit VI",
-          "head": "Marcela Buzoi (Acting)",
-          "deputy": "Marcela Buzoi"
+          "code": "",
+          "name": "",
+          "head": "Kadri Uustal",
+          "head_email": "Kadri.UUSTAL@ec.europa.eu",
+          "head_phone": "+32 229-68787"
         },
         {
-          "code": "DAC.7",
-          "name": "Coordination, Relations with ECA and OLAF",
-          "head": "Agnieszka Krolikowska",
-          "deputy": "Dinos Alevizopoulos"
+          "code": "",
+          "name": "",
+          "head": "Giulia Bertezzolo",
+          "head_email": "Giulia.BERTEZZOLO@ec.europa.eu",
+          "head_phone": "+32 229-85252"
         }
       ]
     },
     {
-      "code": "REGIO.D",
-      "name": "European Territorial Cooperation, Macro-Regions, Interreg & Programmes Implementation I",
-      "director": "Hugo Sobral (Acting)",
+      "code": "Dir D",
+      "name": "EUROPEAN TERRITORIAL COOPERATION, MACRO-REGIONS, INTERREG AND",
+      "director": "Hugo Sobral",
+      "director_email": "Hugo.SOBRAL@ec.europa.eu",
       "units": [
         {
-          "code": "REGIO.D.1",
-          "name": "Macro-Regions, Transnational/Interregional/External Cooperation, Enlargement",
+          "code": "",
+          "name": "",
           "head": "Moray Gilland",
-          "deputy": "Oana Dordain"
+          "head_email": "Moray.Gilland@ec.europa.eu",
+          "head_phone": "+32 229-69289"
         },
         {
-          "code": "REGIO.D.2",
-          "name": "Interreg, Cross-Border Cooperation, Internal Borders",
-          "head": "Simona Pohlová (Acting)",
-          "deputy": "Simona Pohlová"
+          "code": "",
+          "name": "",
+          "head": "Simona Pohlova",
+          "head_email": "Simona.POHLOVA@ec.europa.eu",
+          "head_phone": "+32 229-64037"
         },
         {
-          "code": "REGIO.D.3",
-          "name": "Belgium, France, Luxembourg",
+          "code": "",
+          "name": "",
           "head": "Carsten Rasmussen",
-          "deputy": "Jordi Torrebadella Aguila"
+          "head_email": "Carsten.Rasmussen@ec.europa.eu",
+          "head_phone": "+32 229-63446"
         },
         {
-          "code": "REGIO.D.4",
-          "name": "Estonia, Finland, Latvia & Lithuania",
-          "head": "Agnès Monfret",
-          "deputy": "Linda Sproge"
+          "code": "",
+          "name": "",
+          "head": "Agnes Monfret",
+          "head_email": "Agnes.MONFRET@ec.europa.eu",
+          "head_phone": "+32 229-65402"
         }
       ]
     },
     {
-      "code": "REGIO.E",
-      "name": "Administrative Capacity Building & Programmes Implementation II",
+      "code": "Dir E",
+      "name": "ADMINISTRATIVE CAPACITY BUILDING AND PROGRAMME IMPLEMENTATION II",
       "director": "Sofia Alves",
+      "director_email": "Sofia.ALVES@ec.europa.eu",
       "units": [
         {
-          "code": "REGIO.E.1",
-          "name": "Administrative Capacity Building & Solidarity Instruments",
+          "code": "",
+          "name": "",
           "head": "Loredana Von Buttlar",
-          "deputy": "Simeon Shenev"
+          "head_email": "Loredana.VON-BUTTLAR@ec.europa.eu",
+          "head_phone": "+32 229-59774"
         },
         {
-          "code": "REGIO.E.2",
-          "name": "Croatia & Romania",
-          "head": "Aida Liha Matejiček",
-          "deputy": "Krzysztof Kasprzyk"
+          "code": "",
+          "name": "",
+          "head": "Aida Liha Matejicek",
+          "head_email": "Aida.LIHA-MATEJICEK@ec.europa.eu",
+          "head_phone": "+32 229-91625"
         },
         {
-          "code": "REGIO.E.3",
-          "name": "Bulgaria, Hungary & Slovenia",
+          "code": "",
+          "name": "",
           "head": "Andreas Von Busch",
-          "deputy": "Zsolt Szokolai"
+          "head_email": "Andreas.VON-BUSCH@ec.europa.eu",
+          "head_phone": "+32 229-55108"
         },
         {
-          "code": "REGIO.E.4",
-          "name": "Denmark, Ireland, Sweden & The United Kingdom",
+          "code": "",
+          "name": "",
           "head": "Marek Teplansky",
-          "deputy": "Vacant",
-          "note": "As stipulated in the withdrawal agreement between the EU and UK, the implementation and the closure of the UK programmes are carried out in the same way as for the programmes of EU Member states"
+          "head_email": "Marek.TEPLANSKY@ec.europa.eu",
+          "head_phone": "+32 229-53296"
         }
       ]
     },
     {
-      "code": "REGIO.F",
-      "name": "Better Implementation, Closure & Programme Implementation III",
+      "code": "Dir F",
+      "name": "BETTER IMPLEMENTATION, CLOSURE AND PROGRAMME IMPLEMENTATION III",
       "director": "Emma Toledano Laredo",
+      "director_email": "Emma.Toledano-Laredo@ec.europa.eu",
       "units": [
         {
-          "code": "REGIO.F.1",
-          "name": "Better Implementation & Closure",
+          "code": "",
+          "name": "",
           "head": "Charlie Grant",
-          "deputy": "Sabine Vandermotten"
+          "head_email": "Charlie.Grant@ec.europa.eu",
+          "head_phone": "+32 229-96865"
         },
         {
-          "code": "REGIO.F.2",
-          "name": "Austria, Germany & The Netherlands",
+          "code": "",
+          "name": "",
           "head": "Nicolas Gibert-Morin",
-          "deputy": "Anna-Lena Zademach-Schwierz"
+          "head_email": "Nicolas.GIBERT-MORIN@ec.europa.eu",
+          "head_phone": "+32 229-91120"
         },
         {
-          "code": "REGIO.F.3",
-          "name": "Poland",
+          "code": "",
+          "name": "",
           "head": "Angela Martinez Sarasola",
-          "deputy": "Kai Stryczynski"
+          "head_email": "Angela.Martinez-Sarasola@ec.europa.eu",
+          "head_phone": "+32 229-51711"
         },
         {
-          "code": "REGIO.F.4",
-          "name": "Czech Republic & Slovakia",
+          "code": "",
+          "name": "",
           "head": "Pascal Boijmans",
-          "deputy": "Kateřina Kapounová"
+          "head_email": "Pascal.Boijmans@ec.europa.eu",
+          "head_phone": "+32 229-66620"
         }
       ]
     },
     {
-      "code": "REGIO.G",
-      "name": "Smart & Sustainable Growth & Programmes Implementation IV",
+      "code": "Dir G",
+      "name": "SMART AND SUSTAINABLE GROWTH AND PROGRAMME IMPLEMENTATION IV",
       "director": "Nicola De Michelis",
+      "director_email": "Nicola.De-Michelis@ec.europa.eu",
       "units": [
         {
-          "code": "REGIO.G.1",
-          "name": "Smart & Sustainable Growth",
+          "code": "",
+          "name": "",
+          "head": "Eva Nussmueller",
+          "head_email": "Eva.NUSSMUELLER@ec.europa.eu",
+          "head_phone": "+32 229-57119"
+        },
+        {
+          "code": "",
+          "name": "",
           "head": "Catherine Wendt",
-          "deputy": "Eva Nussmueller"
+          "head_email": "Catherine.WENDT@ec.europa.eu",
+          "head_phone": "+32 229-98257"
         },
         {
-          "code": "REGIO.G.2",
-          "name": "Portugal & Spain",
+          "code": "",
+          "name": "",
           "head": "Caroline Callens",
-          "deputy": "Diego Villalba De Miguel"
+          "head_email": "Caroline.Callens@ec.europa.eu",
+          "head_phone": "+32 229-93927"
         },
         {
-          "code": "REGIO.G.3",
-          "name": "Cyprus & Greece",
-          "head": "Panagiotis Padazatos (Acting)",
-          "deputy": "Panagiotis Padazatos"
+          "code": "",
+          "name": "",
+          "head": "Panagiotis Padazatos",
+          "head_email": "Panagiotis.Padazatos@ec.europa.eu",
+          "head_phone": "+32 229-66696"
         },
         {
-          "code": "REGIO.G.4",
-          "name": "Italy & Malta",
+          "code": "",
+          "name": "",
           "head": "Carmen Gonzalez Hernandez",
-          "deputy": "Luca Mattiotti"
+          "head_email": "HERNANDEZ@ec.europa.eu",
+          "head_phone": "+32 229-59839"
         }
-      ],
-      "mirror_entity": {
-        "code": "REGIO.G1.EISMEA.I.01",
-        "head": "Gérald Cultot"
-      }
+      ]
     }
   ],
-  "seconded_managers": [
-    "D. Srsen seconded to a Cabinet",
-    "K. Kottova seconded to a Cabinet"
-  ],
-  "date_of_effect": "2025-10-16"
+  "num_directorates": 8,
+  "num_units": 33,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

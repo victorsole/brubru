@@ -1,274 +1,376 @@
 {
   "dg_code": "TRADE",
   "dg_name": "Directorate-General for Trade and Economic Security",
-  "commissioner": {
-    "name": "Maroš Šefčovič",
-    "title": "Commissioner"
-  },
-  "director_general": {
-    "name": "Sabine Weyand",
-    "title": "Director-General",
-    "assistants": [
-      "Maite Ranider",
-      "Miriam Garcia Ferrer"
-    ]
-  },
+  "commissioner": "",
+  "director_general": "Sabine Weyand",
+  "director_general_email": "Sabine.Weyand@ec.europa.eu",
   "deputy_directors_general": [
     {
-      "name": "Maria Martin Prat",
-      "title": "Deputy Director-General"
+      "name": "Stephanie Leupold",
+      "email": "Stephanie.LEUPOLD@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Maria Martin-Prat",
+      "email": "Maria.MARTIN-PRAT@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Cristina-Adriana Vasile",
+      "email": "Cristina-Adriana.VASILE@ec.europa.eu",
+      "responsibilities": ""
     },
     {
       "name": "Leopoldo Rubinacci",
-      "title": "Deputy Director-General"
+      "email": "Leopoldo.Rubinacci@ec.europa.eu",
+      "responsibilities": ""
+    },
+    {
+      "name": "Pauline Weinzierl",
+      "email": "Pauline.WEINZIERL@ec.europa.eu",
+      "responsibilities": ""
     },
     {
       "name": "Denis Redonnet",
-      "title": "Deputy Director-General - Chief Trade Enforcement Officer"
+      "email": "Denis.Redonnet@ec.europa.eu",
+      "responsibilities": ""
     }
   ],
   "directorates": [
     {
-      "code": "TRADE.A",
-      "name": "Multilateral Affairs, Strategy and Analysis, Legal Affairs",
+      "code": "",
+      "name": "General",
+      "director": "Máté Kander",
+      "director_email": "Mate.KANDER@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Miriam Garcia Ferrer",
+          "head_email": "Miriam.GARCIA-FERRER@ec.europa.eu",
+          "head_phone": "+32 229-99075"
+        }
+      ]
+    },
+    {
+      "code": "Dir A",
+      "name": "MULTILATERAL AFFAIRS, STRATEGY AND ANALYSIS, LEGAL AFFAIRS",
       "director": "Myrto Zambarta",
+      "director_email": "Myrto.ZAMBARTA@ec.europa.eu",
       "units": [
         {
-          "code": "TRADE.A.1",
-          "name": "Multilateral Affairs & WTO Reform, Competition, Export Finance",
-          "head": "Fabien Gehl"
+          "code": "",
+          "name": "",
+          "head": "Carlos Gimeno",
+          "head_email": "Carlos.GIMENO@ec.europa.eu",
+          "head_phone": "+32 229-63118"
         },
         {
-          "code": "TRADE.A.2",
-          "name": "Strategy and Analysis, Chief Economist",
-          "head": "Eduardo Rubio"
+          "code": "",
+          "name": "",
+          "head": "Fabien Gehl",
+          "head_email": "Fabien.GEHL@ec.europa.eu",
+          "head_phone": "+32 229-99079"
         },
         {
-          "code": "TRADE.A.3",
-          "name": "Legal Affairs and Dispute Settlement",
-          "head": "Stephanie Leopold"
+          "code": "",
+          "name": "",
+          "head": "Edouard Bourcieu",
+          "head_email": "Edouard.BOURCIEU@ec.europa.eu",
+          "head_phone": "+32 229-86099"
         }
-      ],
-      "adviser": {
-        "name": "Carlo Giovanni Ferro",
-        "role": "Adviser on G7/G8, OECD & WTO"
-      }
+      ]
     },
     {
-      "code": "TRADE.B",
-      "name": "Asia (I), Services & Investment, Digital Trade, Intellectual Property and Public Procurement",
+      "code": "Dir B",
+      "name": "ASIA (I), SERVICES AND INVESTMENT, DIGITAL TRADE, INTELLECTUAL",
       "director": "Joanna Szychowska",
+      "director_email": "Joanna.SZYCHOWSKA@ec.europa.eu",
       "units": [
         {
-          "code": "TRADE.B.1",
-          "name": "Far East",
-          "head": "Marco Ferrillo (Acting)"
+          "code": "",
+          "name": "",
+          "head": "Marco Chirullo",
+          "head_email": "Marco.CHIRULLO@ec.europa.eu",
+          "head_phone": "+32 229-51320"
         },
         {
-          "code": "TRADE.B.2",
-          "name": "Services & Investment",
-          "head": "Jorge Vitorino"
+          "code": "",
+          "name": "",
+          "head": "Jorge Vitorino",
+          "head_email": "Jorge.VITORINO@ec.europa.eu",
+          "head_phone": "+32 229-86054"
         },
         {
-          "code": "TRADE.B.3",
-          "name": "Digital Trade, Intellectual Property & Public Procurement",
-          "head": "Agata Gerba"
-        }
-      ],
-      "delegations": [
-        {
-          "code": "TRADE.B.001",
-          "name": "Trade & Economic Section in the EU Delegation to China",
-          "head": "Maap Flikkenschild"
+          "code": "",
+          "name": "",
+          "head": "Agata Gerba",
+          "head_email": "Agata.GERBA@ec.europa.eu",
+          "head_phone": "+32 229-68756"
         },
         {
-          "code": "TRADE.B.002",
-          "name": "Trade & Economic Section in the EU Delegation to Japan",
-          "head": "Adeline Hinderer"
+          "code": "",
+          "name": "",
+          "head": "Marjut Hannonen",
+          "head_email": "MARJUT.HANNONEN@EC.EUROPA.EU",
+          "head_phone": "+86 10-84548000"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Adeline Hinderer",
+          "head_email": "Adeline.HINDERER@ec.europa.eu",
+          "head_phone": "+81 3-54226001"
         }
       ]
     },
     {
-      "code": "TRADE.C",
-      "name": "Africa & Pacific, Asia (II), Trade & Sustainable Development, Green Deal",
+      "code": "Dir C",
+      "name": "AFRICA, PACIFIC, ASIA (II), TRADE AND SUSTAINABLE DEVELOPMENT, GREEN",
       "director": "Dora Correia",
+      "director_email": "Dora.Correia@ec.europa.eu",
       "units": [
         {
-          "code": "TRADE.C.1",
-          "name": "Africa & Pacific, Overseas Countries & Territories",
-          "head": "Cristina Merino Gonzalez"
+          "code": "",
+          "name": "",
+          "head": "Sergio Balibrea",
+          "head_email": "Sergio.BALIBREA@ec.europa.eu",
+          "head_phone": "+32 229-86077"
         },
         {
-          "code": "TRADE.C.2",
-          "name": "South & South East Asia, Australia, New Zealand",
-          "head": "Christophe Kiener"
+          "code": "",
+          "name": "",
+          "head": "Cristina Miranda Gozalvez",
+          "head_email": "Cristina.MIRANDA-GOZALVEZ@ec.europa.eu",
+          "head_phone": "+32 229-89304"
         },
         {
-          "code": "TRADE.C.3",
-          "name": "Bilateral Relations in Trade & Sustainable Development, Generalised Scheme of Preferences",
-          "head": "Fong Wai Hahn"
+          "code": "",
+          "name": "",
+          "head": "Christophe Kiener",
+          "head_email": "Christophe.KIENER@ec.europa.eu",
+          "head_phone": "+32 229-84581"
         },
         {
-          "code": "TRADE.C.4",
-          "name": "Multilateral Trade and Sustainable Development Policy, Green Deal, Conflict Minerals",
-          "head": "Cristina Vasile"
-        }
-      ],
-      "adviser": {
-        "name": "Sergio Balibrea",
-        "role": "Adviser on Sustainable Development"
-      }
-    },
-    {
-      "code": "TRADE.D",
-      "name": "The Americas, Agriculture & Food Safety",
-      "director": "Matthias Jorgensen (Acting)",
-      "units": [
-        {
-          "code": "TRADE.D.1",
-          "name": "US, Canada",
-          "head": "Matthias Jorgensen"
-        },
-        {
-          "code": "TRADE.D.2",
-          "name": "Latin America and Caribbean",
-          "head": "Paolo Garzotti"
-        },
-        {
-          "code": "TRADE.D.3",
-          "name": "Agriculture, Fish, Food & Sanitary & Phytosanitary Matters",
-          "head": "Flavio Ferroni"
-        }
-      ],
-      "delegations": [
-        {
-          "code": "TRADE.D.001",
-          "name": "Trade & Economic Section in the EU Delegation to the US",
-          "head": "Michelangelo Margherita"
+          "code": "",
+          "name": "",
+          "head": "Jörg Wojahn",
+          "head_email": "Jorg.WOJAHN@ec.europa.eu",
+          "head_phone": "+32 229-65588"
         }
       ]
     },
     {
-      "code": "TRADE.E",
-      "name": "Neighbouring Countries, Trade in Goods and Industrial Policy",
-      "director": "Leon Delvaux",
+      "code": "Dir D",
+      "name": "THE AMERICAS, AGRICULTURE AND FOOD SAFETY",
+      "director": "Matthias Jorgensen",
+      "director_email": "Matthias.JORGENSEN@ec.europa.eu",
       "units": [
         {
-          "code": "TRADE.E.1",
-          "name": "Europe & Eastern Neighbourhood",
-          "head": "Eva Valle Lagares"
+          "code": "",
+          "name": "",
+          "head": "Matthias Jorgensen",
+          "head_email": "Matthias.JORGENSEN@ec.europa.eu",
+          "head_phone": "+32 229-88567"
         },
         {
-          "code": "TRADE.E.2",
-          "name": "Southern Neighbourhood, Middle East, Turkey, Russia & Central Asia",
-          "head": "Ignacio Iruarrizaga"
+          "code": "",
+          "name": "",
+          "head": "Paolo Garzotti",
+          "head_email": "Paolo.Garzotti@ec.europa.eu",
+          "head_phone": "+32 229-59488"
         },
         {
-          "code": "TRADE.E.3",
-          "name": "Trade in Goods, Technical Barriers to Trade, Customs & Origin",
-          "head": "Lut Caremans"
+          "code": "",
+          "name": "",
+          "head": "Flavio Coturni",
+          "head_email": "Flavio.Coturni@ec.europa.eu",
+          "head_phone": "+32 229-67585"
         },
         {
-          "code": "TRADE.E.4",
-          "name": "Trade and Industrial Policy",
-          "head": "Paulina Wunschizer"
+          "code": "",
+          "name": "",
+          "head": "Michelangelo Margherita",
+          "head_email": "MICHELANGELO.MARGHERITA@EC.EUROPA.EU",
+          "head_phone": "+1 202-8629500"
         }
       ]
     },
     {
-      "code": "TRADE.F",
-      "name": "Economic Security",
+      "code": "Dir E",
+      "name": "NEIGHBOURING COUNTRIES, TRADE IN GOODS AND INDUSTRIAL POLICY",
+      "director": "Léon Delvaux",
+      "director_email": "Leon.DELVAUX@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Eva Valle Lagares",
+          "head_email": "Eva.Valle@ec.europa.eu",
+          "head_phone": "+32 229-69340"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ignacio Iruarrizaga Díez",
+          "head_email": "Ignacio.Iruarrizaga@ec.europa.eu",
+          "head_phone": "+32 229-52863"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Lucian Cernat",
+          "head_email": "Lucian.CERNAT@ec.europa.eu",
+          "head_phone": "+32 229-51446"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Damien Levie",
+          "head_email": "Damien.LEVIE@ec.europa.eu",
+          "head_phone": "+32 229-81670"
+        }
+      ]
+    },
+    {
+      "code": "Dir F",
+      "name": "ECONOMIC SECURITY",
       "director": "Peter Sandler",
+      "director_email": "Peter.Sandler@ec.europa.eu",
       "units": [
         {
-          "code": "TRADE.F.1",
-          "name": "Economic Security Policy and Cooperation",
-          "head": "Piotr Rychtowski"
+          "code": "",
+          "name": "",
+          "head": "Piotr Rydzkowski",
+          "head_email": "Piotr.RYDZKOWSKI@ec.europa.eu",
+          "head_phone": "+32 229-80732"
         },
         {
-          "code": "TRADE.F.2",
-          "name": "Economic Security Instruments I - FDI Screening, Outbound Investment and Anti-Coercion",
-          "head": "Claudia Yen Lachini"
+          "code": "",
+          "name": "",
+          "head": "Alexandra Koutoglidou",
+          "head_email": "Alexandra.KOUTOGLIDOU@ec.europa.eu",
+          "head_phone": "+32 229-67230"
         },
         {
-          "code": "TRADE.F.3",
-          "name": "Economic Security Instruments 2 - Dual Use, Export Controls and Sanctions",
-          "head": "Coy De Rohan"
-        }
-      ],
-      "adviser": {
-        "name": "Vacant",
-        "role": "Adviser on Economic Security tools and technology"
-      }
-    },
-    {
-      "code": "TRADE.G",
-      "name": "Trade Defence",
-      "director": "Martin Lukas",
-      "units": [
-        {
-          "code": "TRADE.G.1",
-          "name": "General Policy, WTO Relations, Relations with Industry",
-          "head": "Fabrice D'Aprile"
-        },
-        {
-          "code": "TRADE.G.2",
-          "name": "Investigations I, Relations with Member States for Trade Defence Matters",
-          "head": "Zsusanna Jambor"
-        },
-        {
-          "code": "TRADE.G.3",
-          "name": "Investigations II, Anticircumvention",
-          "head": "Pedro Velasco Martins"
-        },
-        {
-          "code": "TRADE.G.4",
-          "name": "Investigations III, Monitoring of Implementation",
-          "head": "Carolina Cumbo Nacheli"
-        },
-        {
-          "code": "TRADE.G.5",
-          "name": "Investigations IV, Relations with Third Countries for Trade Defence Matters",
-          "head": "Eva Ronau"
+          "code": "",
+          "name": "",
+          "head": "Colin Brown",
+          "head_email": "Colin.BROWN@ec.europa.eu",
+          "head_phone": "+32 229-67350"
         }
       ]
     },
     {
-      "code": "TRADE.R",
-      "name": "Interinstitutional, Outreach, Communication & Resources",
-      "director": "Sofia Munoz Albarran",
+      "code": "Dir G",
+      "name": "TRADE DEFENCE",
+      "director": "Martin Lukas",
+      "director_email": "Martin.Lukas@ec.europa.eu",
       "units": [
         {
-          "code": "TRADE.R.1",
-          "name": "Interinstitutional Relations & Policy Coordination",
-          "head": "Carla Pettinato"
+          "code": "",
+          "name": "",
+          "head": "Fabrice D'Aprile",
+          "head_email": "APRILE@ec.europa.eu",
+          "head_phone": "+32 229-85133"
         },
         {
-          "code": "TRADE.R.2",
-          "name": "Single Entry Point for Implementation, Outreach and Transparency, SMEs",
-          "head": "Peter Balas"
+          "code": "",
+          "name": "",
+          "head": "Zsuzsanna Jambor",
+          "head_email": "Zsuzsanna.JAMBOR@ec.europa.eu",
+          "head_phone": "+32 229-87436"
         },
         {
-          "code": "TRADE.R.3",
-          "name": "Communication & Briefings",
-          "head": "Maud Labat"
+          "code": "",
+          "name": "",
+          "head": "Pedro Velasco Martins",
+          "head_email": "Pedro.Velasco-Martins@ec.europa.eu",
+          "head_phone": "+32 229-68893"
         },
         {
-          "code": "TRADE.R.4",
-          "name": "Information Technology & IT Systems",
-          "head": "Fabrice Van Rose"
+          "code": "",
+          "name": "",
+          "head": "Carolina Cumbo Nacheli",
+          "head_email": "VALLECILLO@ec.europa.eu",
+          "head_phone": "+32 229-87792"
         },
         {
-          "code": "TRADE.R.5",
-          "name": "Resources, HR Correspondent and Planning",
-          "head": "Silvia Basle"
+          "code": "",
+          "name": "",
+          "head": "Jon Nyman",
+          "head_email": "Jon.NYMAN@ec.europa.eu",
+          "head_phone": "+32 229-74417"
         }
-      ],
-      "adviser": {
-        "name": "Geraldine Emberger",
-        "role": "Adviser on Simplification and Implementation"
-      }
+      ]
+    },
+    {
+      "code": "Dir R",
+      "name": "INTERINSTITUTIONAL, OUTREACH, COMMUNICATIONS AND RESOURCES",
+      "director": "Sofia Munoz Albarran",
+      "director_email": "Sofia.Munoz@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Carlo Pettinato",
+          "head_email": "Carlo.Pettinato@ec.europa.eu",
+          "head_phone": "+32 229-80445"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Peter Berz",
+          "head_email": "Peter.BERZ@ec.europa.eu",
+          "head_phone": "+32 229-63083"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Maud Labat",
+          "head_email": "Maud.LABAT@ec.europa.eu",
+          "head_phone": "+32 229-52184"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Fabrice Van Oost",
+          "head_email": "Fabrice.Van-Oost@ec.europa.eu",
+          "head_phone": "+32 229-69550"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sylvia Baule",
+          "head_email": "Sylvia.BAULE@ec.europa.eu",
+          "head_phone": "+32 229-86234"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Geraldine Emberger",
+          "head_email": "Geraldine.Emberger@ec.europa.eu",
+          "head_phone": "+32 229-92068"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Hiddo Houben",
+          "head_email": "Hiddo.HOUBEN@ec.europa.eu",
+          "head_phone": "+41 22-7395111"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Antonio Fernandez-Martos",
+          "head_email": "MARTOS@ec.europa.eu",
+          "head_phone": "+32 229-56010"
+        }
+      ]
     }
   ],
-  "date_of_effect": "2025-09-02"
+  "num_directorates": 9,
+  "num_units": 37,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
 }

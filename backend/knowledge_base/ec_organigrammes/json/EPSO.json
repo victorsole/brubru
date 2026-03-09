@@ -1,0 +1,64 @@
+{
+  "dg_code": "EPSO",
+  "dg_name": "European Personnel Selection Office",
+  "commissioner": "",
+  "director_general": "",
+  "director_general_email": "",
+  "deputy_directors_general": [],
+  "directorates": [
+    {
+      "code": "",
+      "name": "General",
+      "director": "Olivier Salles",
+      "director_email": "Olivier.Salles@ec.europa.eu",
+      "units": [
+        {
+          "code": "",
+          "name": "",
+          "head": "Martin Ohridski",
+          "head_email": "Martin.OHRIDSKI@ec.europa.eu",
+          "head_phone": "+32 229-50258"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Angela Heberling",
+          "head_email": "Angela.Heberling@ec.europa.eu",
+          "head_phone": "+32 229-90386"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Sandra Cavallo",
+          "head_email": "Sandra.CAVALLO@ec.europa.eu",
+          "head_phone": "+32 229-53522"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Ingrid Balthazart",
+          "head_email": "Ingrid.BALTHAZART@ec.europa.eu",
+          "head_phone": "+32 229-65923"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Agne Martikoniene",
+          "head_email": "Agne.MARTIKONIENE@ec.europa.eu",
+          "head_phone": "+32 229-60199"
+        },
+        {
+          "code": "",
+          "name": "",
+          "head": "Anna Mitelman",
+          "head_email": "Anna.MITELMAN-NIELSEN@ec.europa.eu",
+          "head_phone": "+32 229-93302"
+        }
+      ]
+    }
+  ],
+  "num_directorates": 1,
+  "num_units": 6,
+  "source": "euwhoiswho_commission.pdf",
+  "data_date": "2026-03-02"
+}

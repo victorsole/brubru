@@ -167,11 +167,38 @@ POLICY_TO_DG = {
 
 # Contact-intent phrases that trigger broader DG code detection
 CONTACT_INTENT_PHRASES = [
+    # English
     'who should i contact', 'who to contact', 'who to talk to',
     'who is responsible', 'who is in charge', 'who handles',
     'who deals with', 'contact person', 'point of contact',
     'who can i reach', 'who works on', 'who do i contact',
     'who should i reach out to', 'who should i write to',
+    'who heads', 'who leads', 'who runs', 'who directs',
+    'director of', 'head of unit', 'head of', 'director-general',
+    # Spanish
+    'quién es el responsable', 'a quién contactar', 'persona de contacto',
+    'quién se encarga', 'quién dirige', 'quién lidera',
+    'director general de', 'jefe de unidad', 'jefe de',
+    'quién trabaja en', 'contacto de',
+    # Catalan
+    'qui és el responsable', 'a qui contactar', 'persona de contacte',
+    'qui s\'encarrega', 'qui dirigeix', 'qui lidera',
+    'director general de', 'cap d\'unitat', 'cap de',
+    'qui treballa a', 'contacte de',
+    # French
+    'qui est responsable', 'qui contacter', 'personne de contact',
+    'qui est en charge', 'qui dirige', 'qui gère',
+    'directeur général de', 'chef d\'unité', 'chef de',
+    'qui travaille', 'point de contact',
+    # Dutch
+    'wie is verantwoordelijk', 'wie contacteren', 'contactpersoon',
+    'wie is belast met', 'wie leidt', 'wie beheert',
+    'directeur-generaal van', 'hoofd van', 'wie werkt bij',
+    # Italian
+    'chi è il responsabile', 'chi contattare', 'persona di contatto',
+    'chi è incaricato', 'chi dirige', 'chi gestisce',
+    'direttore generale di', 'capo unità', 'capo di',
+    'chi lavora', 'punto di contatto',
 ]
 
 # Country name to demonym mapping for rapporteur-by-country queries
@@ -732,8 +759,8 @@ class ContextBuilder:
             # EC personnel
             # Safety net: if contact-intent detected but no DG codes found,
             # do a broader keyword scan to ensure we fetch real people
+            query_lower = user_message.lower()
             if not entities.dg_codes:
-                query_lower = user_message.lower()
                 is_contact_query = any(kw in query_lower for kw in CONTACT_INTENT_PHRASES)
                 if is_contact_query:
                     for keyword, dg_list in POLICY_TO_DG.items():
@@ -743,7 +770,7 @@ class ContextBuilder:
                             )
 
             if entities.dg_codes:
-                tasks.append(self._fetch_ec_personnel(entities.dg_codes[:self.max_live_api_calls]))
+                tasks.append(self._fetch_ec_personnel(entities.dg_codes[:self.max_live_api_calls], query_lower))
             else:
                 tasks.append(empty_result())
         else:
@@ -1100,6 +1127,286 @@ class ContextBuilder:
                 for dg in dg_list:
                     if dg not in dg_codes:
                         dg_codes.append(dg)
+
+        # Pattern 4: Non-Commission institutions (Council, European Council, COREPER)
+        # These map to organigramme JSONs: EURCOU.json, GSC.json, COREPER.json, GOVREP.json
+        INSTITUTION_KEYWORDS = {
+            # === European Council ===
+            'european council': 'EURCOU', 'euco': 'EURCOU',
+            'council presidency': 'EURCOU',
+            'heads of state': 'EURCOU', 'heads of government': 'EURCOU',
+            # ES
+            'consejo europeo': 'EURCOU', 'jefes de estado': 'EURCOU',
+            'presidencia del consejo': 'EURCOU',
+            # CA
+            'consell europeu': 'EURCOU', 'caps d\'estat': 'EURCOU',
+            'presidència del consell': 'EURCOU',
+            # FR
+            'conseil européen': 'EURCOU', 'chefs d\'état': 'EURCOU',
+            'présidence du conseil': 'EURCOU',
+            # NL
+            'europese raad': 'EURCOU', 'staatshoofden': 'EURCOU',
+            # IT
+            'consiglio europeo': 'EURCOU', 'capi di stato': 'EURCOU',
+
+            # === General Secretariat of the Council ===
+            'general secretariat of the council': 'GSC',
+            'council secretariat': 'GSC', 'gsc': 'GSC',
+            'secretariat-general of the council': 'GSC',
+            # ES
+            'secretaría general del consejo': 'GSC',
+            # CA
+            'secretaria general del consell': 'GSC',
+            # FR
+            'secrétariat général du conseil': 'GSC',
+            # NL
+            'secretariaat-generaal van de raad': 'GSC',
+            # IT
+            'segretariato generale del consiglio': 'GSC',
+
+            # === COREPER ===
+            'coreper': 'COREPER',
+            'permanent representative': 'COREPER',
+            'permanent representation': 'COREPER',
+            # ES
+            'representante permanente': 'COREPER',
+            'representación permanente': 'COREPER',
+            # CA
+            'representant permanent': 'COREPER',
+            'representació permanent': 'COREPER',
+            # FR
+            'représentant permanent': 'COREPER',
+            'représentation permanente': 'COREPER',
+            # NL
+            'permanente vertegenwoordiger': 'COREPER',
+            'permanente vertegenwoordiging': 'COREPER',
+            # IT
+            'rappresentante permanente': 'COREPER',
+            'rappresentanza permanente': 'COREPER',
+
+            'government representative': 'GOVREP',
+
+            # === European Parliament ===
+            'ep secretariat': 'EP_SG', 'ep secretary general': 'EP_SG',
+            'secretariat general of the parliament': 'EP_SG',
+            'secretariat-general of the european parliament': 'EP_SG',
+            'ep directorate': 'EP_SG', 'ep dg': 'EP_SG',
+            # ES
+            'secretaría general del parlamento': 'EP_SG',
+            'parlamento europeo secretaría': 'EP_SG',
+            # CA
+            'secretaria general del parlament': 'EP_SG',
+            'parlament europeu secretaria': 'EP_SG',
+            # FR
+            'secrétariat général du parlement': 'EP_SG',
+            'parlement européen secrétariat': 'EP_SG',
+            # NL
+            'secretariaat-generaal van het parlement': 'EP_SG',
+            'europees parlement secretariaat': 'EP_SG',
+            # IT
+            'segretariato generale del parlamento': 'EP_SG',
+            'parlamento europeo segretariato': 'EP_SG',
+
+            'political group secretariat': 'EP_GROUP_SEC',
+            'group secretariat': 'EP_GROUP_SEC',
+            # ES/CA/FR/IT
+            'secretaría del grupo': 'EP_GROUP_SEC',
+            'secretaria del grup': 'EP_GROUP_SEC',
+            'secrétariat du groupe': 'EP_GROUP_SEC',
+            'segretariato del gruppo': 'EP_GROUP_SEC',
+
+            # === European Central Bank ===
+            'ecb': 'ECB', 'bce': 'ECB',
+            'european central bank': 'ECB',
+            'central bank': 'ECB',
+            # ES
+            'banco central europeo': 'ECB',
+            # CA
+            'banc central europeu': 'ECB',
+            # FR
+            'banque centrale européenne': 'ECB',
+            # NL
+            'europese centrale bank': 'ECB',
+            # IT
+            'banca centrale europea': 'ECB',
+
+            # === Court of Justice ===
+            'court of justice': 'ECJ', 'cjeu': 'ECJ', 'ecj': 'ECJ',
+            'general court': 'ECJ',
+            # ES
+            'tribunal de justicia': 'ECJ', 'tjue': 'ECJ',
+            'tribunal general': 'ECJ',
+            # CA
+            'tribunal de justícia': 'ECJ',
+            # FR
+            'cour de justice': 'ECJ',
+            'tribunal général': 'ECJ',
+            # NL
+            'hof van justitie': 'ECJ',
+            'gerecht': 'ECJ',
+            # IT
+            'corte di giustizia': 'ECJ',
+            'tribunale generale': 'ECJ',
+
+            # === Court of Auditors ===
+            'court of auditors': 'ECA', 'eca': 'ECA',
+            # ES
+            'tribunal de cuentas': 'ECA',
+            # CA
+            'tribunal de comptes': 'ECA',
+            # FR
+            'cour des comptes': 'ECA',
+            # NL
+            'rekenkamer': 'ECA',
+            # IT
+            'corte dei conti': 'ECA',
+
+            # === EEAS ===
+            'eeas': 'EEAS',
+            'external action service': 'EEAS',
+            'eu delegations': 'EEAS',
+            # ES
+            'servicio europeo de acción exterior': 'EEAS',
+            'seae': 'EEAS',
+            'delegaciones de la ue': 'EEAS',
+            # CA
+            'servei europeu d\'acció exterior': 'EEAS',
+            'delegacions de la ue': 'EEAS',
+            # FR
+            'service européen pour l\'action extérieure': 'EEAS',
+            'délégations de l\'ue': 'EEAS',
+            # NL
+            'europese dienst voor extern optreden': 'EEAS',
+            'edeo': 'EEAS',
+            # IT
+            'servizio europeo per l\'azione esterna': 'EEAS',
+            'delegazioni dell\'ue': 'EEAS',
+
+            # === Committee of the Regions ===
+            'committee of the regions': 'COR', 'cor': 'COR',
+            # ES
+            'comité de las regiones': 'COR', 'cdr': 'COR',
+            # CA
+            'comitè de les regions': 'COR',
+            # FR
+            'comité des régions': 'COR',
+            # NL
+            'comité van de regio\'s': 'COR',
+            # IT
+            'comitato delle regioni': 'COR',
+
+            # === EESC ===
+            'economic and social committee': 'EESC', 'eesc': 'EESC',
+            # ES
+            'comité económico y social': 'EESC', 'cese': 'EESC',
+            # CA
+            'comitè econòmic i social': 'EESC',
+            # FR
+            'comité économique et social': 'EESC',
+            # NL
+            'economisch en sociaal comité': 'EESC',
+            # IT
+            'comitato economico e sociale': 'EESC',
+
+            # === EIB ===
+            'european investment bank': 'EIB', 'eib': 'EIB', 'bei': 'EIB',
+            # ES
+            'banco europeo de inversiones': 'EIB',
+            # CA
+            'banc europeu d\'inversions': 'EIB',
+            # FR
+            'banque européenne d\'investissement': 'EIB',
+            # NL
+            'europese investeringsbank': 'EIB',
+            # IT
+            'banca europea per gli investimenti': 'EIB',
+
+            # === EDPS ===
+            'data protection supervisor': 'EDPS', 'edps': 'EDPS', 'edpb': 'EDPS',
+            # ES
+            'supervisor europeo de protección de datos': 'EDPS',
+            'protección de datos': 'EDPS',
+            # CA
+            'supervisor europeu de protecció de dades': 'EDPS',
+            'protecció de dades': 'EDPS',
+            # FR
+            'contrôleur européen de la protection des données': 'EDPS',
+            'protection des données': 'EDPS',
+            # NL
+            'europese toezichthouder voor gegevensbescherming': 'EDPS',
+            'gegevensbescherming': 'EDPS',
+            # IT
+            'garante europeo della protezione dei dati': 'EDPS',
+            'protezione dei dati': 'EDPS',
+
+            # === Ombudsman ===
+            'ombudsman': 'OMBUDSMAN',
+            # ES
+            'defensor del pueblo europeo': 'OMBUDSMAN',
+            # CA
+            'defensor del poble europeu': 'OMBUDSMAN',
+            # FR
+            'médiateur européen': 'OMBUDSMAN',
+            # NL
+            'europese ombudsman': 'OMBUDSMAN',
+            # IT
+            'mediatore europeo': 'OMBUDSMAN',
+
+            # === Agencies ===
+            'eu agencies': 'AGENCIES',
+            # ES
+            'agencias de la ue': 'AGENCIES', 'agencias europeas': 'AGENCIES',
+            # CA
+            'agències de la ue': 'AGENCIES', 'agències europees': 'AGENCIES',
+            # FR
+            'agences de l\'ue': 'AGENCIES', 'agences européennes': 'AGENCIES',
+            # NL
+            'eu-agentschappen': 'AGENCIES', 'europese agentschappen': 'AGENCIES',
+            # IT
+            'agenzie dell\'ue': 'AGENCIES', 'agenzie europee': 'AGENCIES',
+
+            # === European Parliament (institution queries) ===
+            'european parliament': 'EP',
+            # ES
+            'parlamento europeo': 'EP',
+            # CA
+            'parlament europeu': 'EP',
+            # FR
+            'parlement européen': 'EP',
+            # NL
+            'europees parlement': 'EP',
+            # IT
+            'parlamento europeo': 'EP',
+
+            # === European Commission (full institution) ===
+            'european commission': 'COMMISSION',
+            # ES
+            'comisión europea': 'COMMISSION',
+            # CA
+            'comissió europea': 'COMMISSION',
+            # FR
+            'commission européenne': 'COMMISSION',
+            # NL
+            'europese commissie': 'COMMISSION',
+            # IT
+            'commissione europea': 'COMMISSION',
+        }
+        for keyword, inst_code in INSTITUTION_KEYWORDS.items():
+            if keyword in text_lower and inst_code not in dg_codes:
+                dg_codes.append(inst_code)
+
+        # Also detect "council" in personnel context (who works at, head of, director)
+        if any(kw in text_lower for kw in CONTACT_INTENT_PHRASES):
+            # Council detection (EN/ES/CA/FR/NL/IT)
+            council_patterns = r'\b(?:council|consejo|consell|conseil|raad|consiglio)\b'
+            eu_council_patterns = r'(?:european council|consejo europeo|consell europeu|conseil européen|europese raad|consiglio europeo)'
+            if re.search(council_patterns, text_lower) and not re.search(eu_council_patterns, text_lower):
+                if 'GSC' not in dg_codes:
+                    dg_codes.append('GSC')
+            # EP personnel queries (EN/ES/CA/FR/NL/IT)
+            if re.search(r'\b(?:parliament|parlamento|parlament|parlement|parlamento)\b|\bep\b', text_lower):
+                if 'EP_SG' not in dg_codes:
+                    dg_codes.append('EP_SG')
 
         return list(set(dg_codes))  # Remove duplicates
 
@@ -1600,7 +1907,8 @@ class ContextBuilder:
 
     async def _fetch_ec_personnel(
         self,
-        dg_codes: List[str]
+        dg_codes: List[str],
+        query_text: str = ""
     ) -> List[Dict[str, Any]]:
         """
         Fetch European Commission personnel information from organigrammes.
@@ -1608,24 +1916,64 @@ class ContextBuilder:
         Includes director-general, deputy DGs, directorate directors, and unit heads
         with standard EC email format (firstname.lastname@ec.europa.eu).
 
+        For large institutions (>200 persons, e.g. EP with 6,591), filters units
+        to only those matching query keywords to avoid context window overflow.
+
         Args:
             dg_codes: List of DG codes (e.g., ['GROW', 'CLIMA'])
+            query_text: Lowercased query text for filtering large institutions
 
         Returns:
             List of EC personnel information dictionaries
         """
         personnel_data = []
 
-        def _generate_ec_email(name: str) -> str:
-            """Generate standard EC email from name (firstname.lastname@ec.europa.eu)"""
-            if not name or name in ('Not shown', 'Vacant', 'Unknown'):
+        def _generate_eu_email(name: str, domain: str = 'ec.europa.eu') -> str:
+            """Generate standard EU institution email from name.
+            Domains: ec.europa.eu (Commission), consilium.europa.eu (Council/GSC),
+            europarl.europa.eu (EP officials and MEPs)."""
+            if not name or name.lower() in ('not shown', 'vacant', 'unknown', ''):
                 return ''
-            parts = name.strip().split()
+            # Strip honorifics (Mr, Ms, Mrs)
+            clean = name.strip()
+            clean = re.sub(r'^(Mr|Ms|Mrs|Dr)\s+', '', clean)
+            parts = clean.split()
             if len(parts) < 2:
                 return ''
-            first = parts[0].lower().replace('é', 'e').replace('è', 'e').replace('ë', 'e').replace('ö', 'o').replace('ü', 'u').replace('ñ', 'n').replace('á', 'a').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ç', 'c')
-            last = parts[-1].lower().replace('é', 'e').replace('è', 'e').replace('ë', 'e').replace('ö', 'o').replace('ü', 'u').replace('ñ', 'n').replace('á', 'a').replace('í', 'i').replace('ó', 'o').replace('ú', 'u').replace('ç', 'c')
-            return f"{first}.{last}@ec.europa.eu"
+            # Use first and last name parts, normalise diacritics
+            diacritics = {'é': 'e', 'è': 'e', 'ë': 'e', 'ê': 'e',
+                          'ö': 'o', 'ó': 'o', 'ô': 'o', 'ő': 'o',
+                          'ü': 'u', 'ú': 'u', 'û': 'u', 'ű': 'u',
+                          'ñ': 'n', 'ń': 'n', 'ņ': 'n',
+                          'á': 'a', 'à': 'a', 'â': 'a', 'ä': 'a', 'ã': 'a',
+                          'í': 'i', 'î': 'i', 'ï': 'i',
+                          'ç': 'c', 'č': 'c', 'ć': 'c',
+                          'š': 's', 'ś': 's', 'ș': 's',
+                          'ž': 'z', 'ź': 'z', 'ż': 'z',
+                          'ř': 'r', 'ł': 'l', 'đ': 'd', 'ð': 'd',
+                          'ț': 't', 'ý': 'y', 'ă': 'a', 'ī': 'i',
+                          'ū': 'u', 'ē': 'e', 'ā': 'a', 'ļ': 'l',
+                          'ķ': 'k', 'ģ': 'g'}
+            def normalise(s):
+                s = s.lower()
+                for k, v in diacritics.items():
+                    s = s.replace(k, v)
+                return s
+            first = normalise(parts[0])
+            last = normalise(parts[-1])
+            return f"{first}.{last}@{domain}"
+
+        def _generate_ec_email(name: str) -> str:
+            """Shortcut for Commission emails."""
+            return _generate_eu_email(name, 'ec.europa.eu')
+
+        # Non-Commission institution codes that use tree-structured JSONs
+        NON_COMMISSION_CODES = {
+            'EURCOU', 'GSC', 'COREPER', 'GOVREP', 'EP', 'EP_SG', 'EP_MEPS', 'EP_GROUP_SEC',
+            # New PDF-parsed institution files
+            'COMMISSION', 'COUNCIL_EU', 'EUROPEAN_COUNCIL', 'ECB', 'ECJ', 'ECA',
+            'EEAS', 'COR', 'EESC', 'EIB', 'EIF', 'EDPS', 'OMBUDSMAN', 'AGENCIES',
+        }
 
         for dg_code in dg_codes:
             try:
@@ -1634,6 +1982,14 @@ class ContextBuilder:
 
                 if not org:
                     logger.warning(f"No organigramme data found for DG {dg_code}")
+                    continue
+
+                # Handle non-Commission institutions (tree-structured JSONs)
+                if dg_code.upper() in NON_COMMISSION_CODES:
+                    personnel_data.append(
+                        self._format_institution_organigramme(dg_code.upper(), org, query_text)
+                    )
+                    logger.debug(f"Fetched institution personnel for {dg_code}")
                     continue
 
                 # Director-General (handle both old and new JSON formats, plus acting/secretary variants)
@@ -1717,6 +2073,259 @@ class ContextBuilder:
                 logger.error(f"Failed to fetch EC personnel for DG {dg_code}: {str(e)}")
 
         return personnel_data
+
+    def _format_institution_organigramme(
+        self, inst_code: str, org: Dict[str, Any], query_text: str = ""
+    ) -> Dict[str, Any]:
+        """
+        Format non-Commission institution organigrammes (EURCOU, GSC, COREPER,
+        GOVREP, EP, EP_SG, EP_GROUP_SEC) into a structure compatible with the
+        ec_personnel formatting pipeline.
+
+        These JSONs use a tree structure with 'structure'/'units'/'persons' instead of
+        the Commission's flat 'directorates'/'units' format.
+
+        For large institutions (>200 persons), filters to units matching query keywords.
+        """
+        inst_name = org.get('institution_name', inst_code)
+
+        # Determine email domain based on institution
+        INSTITUTION_EMAIL_DOMAINS = {
+            'GSC': 'consilium.europa.eu',
+            'EURCOU': 'consilium.europa.eu',
+            'COREPER': '',  # varies by country
+            'GOVREP': '',   # varies by country
+            'EP': 'europarl.europa.eu',
+            'EP_SG': 'europarl.europa.eu',
+            'EP_MEPS': 'europarl.europa.eu',
+            'EP_GROUP_SEC': 'europarl.europa.eu',
+            'COMMISSION': 'ec.europa.eu',
+            'COUNCIL_EU': 'consilium.europa.eu',
+            'EUROPEAN_COUNCIL': 'consilium.europa.eu',
+            'ECB': 'ecb.europa.eu',
+            'ECJ': 'curia.europa.eu',
+            'ECA': 'eca.europa.eu',
+            'EEAS': 'eeas.europa.eu',
+            'COR': 'cor.europa.eu',
+            'EESC': 'eesc.europa.eu',
+            'EIB': 'eib.org',
+            'EIF': 'eif.org',
+            'EDPS': 'edps.europa.eu',
+            'OMBUDSMAN': 'ombudsman.europa.eu',
+            'AGENCIES': '',  # varies by agency
+        }
+        email_domain = INSTITUTION_EMAIL_DOMAINS.get(inst_code, '')
+
+        def _make_email(name: str) -> str:
+            if not email_domain or not name:
+                return ''
+            # Strip honorifics
+            clean = re.sub(r'^(Mr|Ms|Mrs|Dr)\s+', '', name.strip())
+            parts = clean.split()
+            if len(parts) < 2:
+                return ''
+            diacritics = {'é': 'e', 'è': 'e', 'ë': 'e', 'ê': 'e',
+                          'ö': 'o', 'ó': 'o', 'ô': 'o', 'ő': 'o',
+                          'ü': 'u', 'ú': 'u', 'û': 'u', 'ű': 'u',
+                          'ñ': 'n', 'ń': 'n', 'ņ': 'n',
+                          'á': 'a', 'à': 'a', 'â': 'a', 'ä': 'a', 'ã': 'a',
+                          'í': 'i', 'î': 'i', 'ï': 'i',
+                          'ç': 'c', 'č': 'c', 'ć': 'c',
+                          'š': 's', 'ś': 's', 'ș': 's',
+                          'ž': 'z', 'ź': 'z', 'ż': 'z',
+                          'ř': 'r', 'ł': 'l', 'đ': 'd',
+                          'ț': 't', 'ý': 'y', 'ă': 'a', 'ī': 'i',
+                          'ū': 'u', 'ē': 'e', 'ā': 'a', 'ļ': 'l',
+                          'ķ': 'k', 'ģ': 'g'}
+            def norm(s):
+                s = s.lower()
+                for k, v in diacritics.items():
+                    s = s.replace(k, v)
+                return s
+            first = norm(parts[0])
+            last = norm(parts[-1])
+            return f"{first}.{last}@{email_domain}"
+
+        def _flatten_tree(nodes, depth=0, max_depth=4):
+            """Flatten tree nodes into directorate-like entries."""
+            directorates = []
+            for node in nodes:
+                if not isinstance(node, dict):
+                    continue
+                code = node.get('code', '')
+                name = node.get('name', '')
+                persons = node.get('persons', [])
+                sub_units = node.get('units', [])
+
+                # Top-level nodes become "directorates", sub-nodes become "units"
+                director_name = persons[0]['name'] if persons else ''
+                units = []
+                for sub in sub_units:
+                    sub_persons = sub.get('persons', [])
+                    sub_head = sub_persons[0]['name'] if sub_persons else ''
+                    if sub_head:
+                        units.append({
+                            'code': sub.get('code', ''),
+                            'name': sub.get('name', ''),
+                            'head': sub_head,
+                            'head_email': _make_email(sub_head)
+                        })
+                    # Recurse one more level for deeper units
+                    for subsub in sub.get('units', []):
+                        ss_persons = subsub.get('persons', [])
+                        ss_head = ss_persons[0]['name'] if ss_persons else ''
+                        if ss_head:
+                            units.append({
+                                'code': subsub.get('code', ''),
+                                'name': subsub.get('name', ''),
+                                'head': ss_head,
+                                'head_email': _make_email(ss_head)
+                            })
+
+                directorates.append({
+                    'code': code,
+                    'name': name,
+                    'director': director_name,
+                    'director_email': _make_email(director_name),
+                    'units': units
+                })
+            return directorates
+
+        # NEW FORMAT: PDF-parsed JSONs have "units" dict with persons lists
+        if 'units' in org and isinstance(org.get('units'), dict):
+            all_units = org['units']
+            total_persons = sum(len(u.get('persons', [])) for u in all_units.values())
+
+            # For large institutions (>200 persons), filter to query-relevant units
+            # and person name matches to avoid context window overflow
+            MAX_UNITS_TO_INJECT = 20
+            if total_persons > 200 and query_text:
+                # Use meaningful keywords (>=4 chars), skip stopwords
+                stopwords = {
+                    'what', 'who', 'where', 'when', 'which', 'that', 'this',
+                    'with', 'from', 'have', 'does', 'about', 'their', 'there',
+                    'been', 'the', 'and', 'for', 'are', 'but', 'not', 'you',
+                    'all', 'can', 'her', 'was', 'one', 'our', 'out',
+                    'european', 'parliament', 'commission', 'council',
+                    # Structural words that match too many units
+                    'committee', 'directorate', 'unit', 'head', 'chair',
+                    'director', 'general', 'secretariat', 'service',
+                    'delegation', 'office', 'group', 'member', 'works',
+                    'contact', 'email', 'phone', 'person', 'people',
+                    'affairs', 'policy', 'policies',
+                }
+                query_words = [
+                    w for w in query_text.split()
+                    if len(w) >= 4 and w not in stopwords
+                ]
+                if not query_words:
+                    query_words = [w for w in query_text.split() if len(w) >= 3 and w not in stopwords]
+
+                filtered_units = {}
+                name_matches = {}
+                for uname, udata in all_units.items():
+                    uname_lower = uname.lower()
+                    # Match unit name against query words (word boundary)
+                    if any(re.search(r'\b' + re.escape(w) + r'\b', uname_lower) for w in query_words):
+                        filtered_units[uname] = udata
+                        continue
+                    # Match person names within the unit (surname match)
+                    for p in udata.get('persons', []):
+                        pname = p.get('name', '').lower()
+                        if any(w in pname for w in query_words):
+                            if uname not in name_matches:
+                                name_matches[uname] = udata
+                            break
+                filtered_units.update(name_matches)
+                if filtered_units:
+                    # Cap at MAX_UNITS_TO_INJECT even after filtering
+                    all_units = dict(list(filtered_units.items())[:MAX_UNITS_TO_INJECT])
+                    logger.info(
+                        f"Filtered {inst_code} from {len(org['units'])} to "
+                        f"{len(all_units)} units for query"
+                    )
+                else:
+                    # No match found -- include just the top-level leadership units
+                    all_units = dict(list(org['units'].items())[:10])
+                    logger.info(
+                        f"No unit match for {inst_code}, showing top 10 of "
+                        f"{len(org['units'])} units"
+                    )
+            elif total_persons > 200:
+                # No query text -- just show top leadership
+                all_units = dict(list(org['units'].items())[:MAX_UNITS_TO_INJECT])
+
+            directorates = []
+            for unit_name, unit_data in all_units.items():
+                persons_list = unit_data.get('persons', [])
+                director_name = ''
+                units = []
+                for p in persons_list:
+                    name = p.get('name', '')
+                    title = p.get('title', '')
+                    email = p.get('email', '')
+                    phone = p.get('phone', '')
+                    if not director_name:
+                        director_name = name
+                        continue
+                    entry = {
+                        'code': '',
+                        'name': title or name,
+                        'head': name,
+                        'head_email': email or _make_email(name),
+                    }
+                    if phone:
+                        entry['phone'] = phone
+                    units.append(entry)
+
+                directorates.append({
+                    'code': '',
+                    'name': unit_name,
+                    'director': director_name,
+                    'director_email': (
+                        persons_list[0].get('email', '') if persons_list
+                        else _make_email(director_name)
+                    ),
+                    'units': units
+                })
+
+            return {
+                'dg_code': inst_code,
+                'dg_name': org.get('institution', inst_name),
+                'commissioner': '',
+                'director_general': '',
+                'director_general_email': '',
+                'deputy_directors_general': [],
+                'directorates': directorates,
+                'num_directorates': len(directorates),
+                'num_units': sum(len(d.get('units', [])) for d in directorates),
+                'num_agencies': 0,
+                'is_non_commission': True,
+                'total_persons': org.get('total_persons', 0),
+            }
+
+        # OLD FORMAT: tree-structured JSONs (EURCOU, GSC, COREPER, etc.)
+        structure = org.get('structure', org.get('countries', []))
+
+        # For GSC/EP_SG, the secretary-general is the top person
+        sg = org.get('secretary_general', org.get('president', {}))
+        sg_name = sg.get('name', '') if isinstance(sg, dict) else ''
+
+        directorates = _flatten_tree(structure)
+
+        return {
+            'dg_code': inst_code,
+            'dg_name': inst_name,
+            'commissioner': '',
+            'director_general': sg_name,
+            'director_general_email': _make_email(sg_name),
+            'deputy_directors_general': [],
+            'directorates': directorates,
+            'num_directorates': len(directorates),
+            'num_units': sum(len(d.get('units', [])) for d in directorates),
+            'num_agencies': 0,
+            'is_non_commission': True
+        }
 
     async def _fetch_recent_rss(
         self,
@@ -4116,9 +4725,17 @@ class ContextBuilder:
 
                 sections.append("")
 
-        # EC Personnel (Commission organigrammes)
+        # EC Personnel (Commission organigrammes) and other institution organigrammes
         if context_data.ec_personnel:
-            sections.append(f"\nEUROPEAN COMMISSION PERSONNEL ({len(context_data.ec_personnel)} DGs):")
+            # Split Commission vs non-Commission entries
+            commission_entries = [p for p in context_data.ec_personnel if not p.get('is_non_commission')]
+            institution_entries = [p for p in context_data.ec_personnel if p.get('is_non_commission')]
+
+            if commission_entries:
+                sections.append(f"\nEUROPEAN COMMISSION PERSONNEL ({len(commission_entries)} DGs):")
+            if institution_entries:
+                for inst in institution_entries:
+                    sections.append(f"\n{inst['dg_name'].upper()} PERSONNEL:")
             for personnel in context_data.ec_personnel:
                 sections.append(f"- {personnel['dg_name']} ({personnel['dg_code']})")
 
