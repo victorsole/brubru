@@ -9,8 +9,8 @@
     "name": "Sabine Weyand",
     "title": "Director-General",
     "assistants": [
-      "Inta Gainare",
-      "Walter Metzger Ferber"
+      "Maite Ranider",
+      "Miriam Garcia Ferrer"
     ]
   },
   "deputy_directors_general": [
@@ -24,239 +24,250 @@
     },
     {
       "name": "Denis Redonnet",
-      "title": "Deputy Director-General - Chief Enforcement Officer",
-      "adviser": {
-        "name": "Vacant",
-        "role": "For Enforcement"
-      }
+      "title": "Deputy Director-General - Chief Trade Enforcement Officer"
     }
   ],
   "directorates": [
     {
       "code": "TRADE.A",
-      "name": "Multilateral Affairs, Strategy and Analysis, Legal",
-      "director": "Emily Zammata",
+      "name": "Multilateral Affairs, Strategy and Analysis, Legal Affairs",
+      "director": "Myrto Zambarta",
       "units": [
         {
           "code": "TRADE.A.1",
-          "name": "Horizontal Affairs & Wto Reform",
-          "head": "Taddeu"
+          "name": "Multilateral Affairs & WTO Reform, Competition, Export Finance",
+          "head": "Fabien Gehl"
         },
         {
           "code": "TRADE.A.2",
           "name": "Strategy and Analysis, Chief Economist",
-          "head": "Jan-willem Potters"
+          "head": "Eduardo Rubio"
         },
         {
           "code": "TRADE.A.3",
-          "name": "Legal",
-          "head": "Yves Venclovas"
+          "name": "Legal Affairs and Dispute Settlement",
+          "head": "Stephanie Leopold"
         }
-      ]
+      ],
+      "adviser": {
+        "name": "Carlo Giovanni Ferro",
+        "role": "Adviser on G7/G8, OECD & WTO"
+      }
     },
     {
       "code": "TRADE.B",
-      "name": "Markets & Asia-Pac, Aus-Nz, Trade Investment, Digital Trade, Intellectual Property",
-      "director": "Jovanna Szychowska",
+      "name": "Asia (I), Services & Investment, Digital Trade, Intellectual Property and Public Procurement",
+      "director": "Joanna Szychowska",
       "units": [
         {
           "code": "TRADE.B.1",
-          "name": "Financial Services",
-          "head": "Jonathan Stoner"
+          "name": "Far East",
+          "head": "Marco Ferrillo (Acting)"
         },
         {
           "code": "TRADE.B.2",
-          "name": "Investment, Digital Trade, Intellectual Property & Services",
-          "head": "Martin Berkes"
+          "name": "Services & Investment",
+          "head": "Jorge Vitorino"
         },
         {
           "code": "TRADE.B.3",
-          "name": "Australia & New Zealand",
-          "head": "John Donne"
+          "name": "Digital Trade, Intellectual Property & Public Procurement",
+          "head": "Agata Gerba"
+        }
+      ],
+      "delegations": [
+        {
+          "code": "TRADE.B.001",
+          "name": "Trade & Economic Section in the EU Delegation to China",
+          "head": "Maap Flikkenschild"
+        },
+        {
+          "code": "TRADE.B.002",
+          "name": "Trade & Economic Section in the EU Delegation to Japan",
+          "head": "Adeline Hinderer"
         }
       ]
     },
     {
       "code": "TRADE.C",
-      "name": "Mercosur, Mexico, Asc Asia-Pac, Asociaba, Afa, Juz, Trade & Sustainable Development, Procurement",
-      "director": "Ian Layton",
+      "name": "Africa & Pacific, Asia (II), Trade & Sustainable Development, Green Deal",
+      "director": "Dora Correia",
       "units": [
         {
           "code": "TRADE.C.1",
-          "name": "Agreement Services - Services",
-          "head": "Mariana Valeiro"
+          "name": "Africa & Pacific, Overseas Countries & Territories",
+          "head": "Cristina Merino Gonzalez"
         },
         {
           "code": "TRADE.C.2",
-          "name": "Asian Tiger Economies & Proximity Approach For Trade And Sustainable Development, Avul Weir Teun",
-          "head": "Heinz Knast Elg, Agrorzma"
+          "name": "South & South East Asia, Australia, New Zealand",
+          "head": "Christophe Kiener"
         },
         {
           "code": "TRADE.C.3",
-          "name": "Asian Trade Economies & Proximity",
-          "head": "Helia Bietzla"
+          "name": "Bilateral Relations in Trade & Sustainable Development, Generalised Scheme of Preferences",
+          "head": "Fong Wai Hahn"
         },
         {
           "code": "TRADE.C.4",
-          "name": "Trade And Proximity Policy",
-          "head": "Philippe Perard"
-        },
-        {
-          "code": "TRADE.C.5",
-          "name": "Emerging Trade And Associates",
-          "head": "Leo Coucham"
-        },
-        {
-          "code": "TRADE.C.6",
-          "name": "Trade And Sustainable Development On Sustainable Development",
-          "head": "Christina Gianna"
+          "name": "Multilateral Trade and Sustainable Development Policy, Green Deal, Conflict Minerals",
+          "head": "Cristina Vasile"
         }
-      ]
+      ],
+      "adviser": {
+        "name": "Sergio Balibrea",
+        "role": "Adviser on Sustainable Development"
+      }
     },
     {
       "code": "TRADE.D",
-      "name": "Neighbours, Agri-Food & Turkey",
-      "director": "Mathieu Garchery",
+      "name": "The Americas, Agriculture & Food Safety",
+      "director": "Matthias Jorgensen (Acting)",
       "units": [
         {
           "code": "TRADE.D.1",
-          "name": "Us, Canada",
-          "head": "Lisa Ochileira"
+          "name": "US, Canada",
+          "head": "Matthias Jorgensen"
         },
         {
           "code": "TRADE.D.2",
-          "name": "Acp",
-          "head": "Lyan Oberra Mrs Carrigan"
+          "name": "Latin America and Caribbean",
+          "head": "Paolo Garzotti"
         },
         {
           "code": "TRADE.D.3",
-          "name": "Neighbours - Agreement, Usa, Eurostar",
-          "head": "Alianca Gotman"
+          "name": "Agriculture, Fish, Food & Sanitary & Phytosanitary Matters",
+          "head": "Flavio Ferroni"
+        }
+      ],
+      "delegations": [
+        {
+          "code": "TRADE.D.001",
+          "name": "Trade & Economic Section in the EU Delegation to the US",
+          "head": "Michelangelo Margherita"
         }
       ]
     },
     {
       "code": "TRADE.E",
-      "name": "Modernisation Of Exports, Trade In Goods And Industrial Products",
-      "director": "Lucille Liheb",
+      "name": "Neighbouring Countries, Trade in Goods and Industrial Policy",
+      "director": "Leon Delvaux",
       "units": [
         {
           "code": "TRADE.E.1",
-          "name": "Trade In Agro Bermudamons",
-          "head": "Lubon Hernamdez Saugurons"
+          "name": "Europe & Eastern Neighbourhood",
+          "head": "Eva Valle Lagares"
         },
         {
           "code": "TRADE.E.2",
-          "name": "Southern Neighbors, Mgios Euc",
-          "head": "Noria Laga Liascherama"
+          "name": "Southern Neighbourhood, Middle East, Turkey, Russia & Central Asia",
+          "head": "Ignacio Iruarrizaga"
         },
         {
           "code": "TRADE.E.3",
-          "name": "Clisicostema",
-          "head": "Lukastoroma"
+          "name": "Trade in Goods, Technical Barriers to Trade, Customs & Origin",
+          "head": "Lut Caremans"
+        },
+        {
+          "code": "TRADE.E.4",
+          "name": "Trade and Industrial Policy",
+          "head": "Paulina Wunschizer"
         }
       ]
     },
     {
       "code": "TRADE.F",
       "name": "Economic Security",
-      "director": "Peter Sampler",
+      "director": "Peter Sandler",
       "units": [
         {
           "code": "TRADE.F.1",
-          "name": "Sanctions & Other Policy Amp",
-          "head": "Vacant"
+          "name": "Economic Security Policy and Cooperation",
+          "head": "Piotr Rychtowski"
         },
         {
           "code": "TRADE.F.2",
-          "name": "Sanctions, Other With Monkeurs, Apl, Kus, Evalt, Security And & Tro",
-          "head": "Herein Tut"
+          "name": "Economic Security Instruments I - FDI Screening, Outbound Investment and Anti-Coercion",
+          "head": "Claudia Yen Lachini"
         },
         {
           "code": "TRADE.F.3",
-          "name": "China & Access To Trade Controls And",
-          "head": "Olivier Gossum"
+          "name": "Economic Security Instruments 2 - Dual Use, Export Controls and Sanctions",
+          "head": "Coy De Rohan"
         }
-      ]
+      ],
+      "adviser": {
+        "name": "Vacant",
+        "role": "Adviser on Economic Security tools and technology"
+      }
     },
     {
       "code": "TRADE.G",
       "name": "Trade Defence",
-      "director": "Martin Luiga",
+      "director": "Martin Lukas",
       "units": [
         {
           "code": "TRADE.G.1",
-          "name": "A; C, G, Ant-Wto Affairs, Appeals, A Avitsocals, Appeal & Other Steel Contact Law",
-          "head": "Michel Lambert"
+          "name": "General Policy, WTO Relations, Relations with Industry",
+          "head": "Fabrice D'Aprile"
         },
         {
           "code": "TRADE.G.2",
-          "name": "Saadet Dept Point For",
-          "head": "Jan Truchars"
+          "name": "Investigations I, Relations with Member States for Trade Defence Matters",
+          "head": "Zsusanna Jambor"
         },
         {
           "code": "TRADE.G.3",
-          "name": "Arlecadult, Investigations, With Mavers",
-          "head": "Olivier Fontenu"
+          "name": "Investigations II, Anticircumvention",
+          "head": "Pedro Velasco Martins"
         },
         {
           "code": "TRADE.G.4",
-          "name": "New Evry Mori-Martines, Freduralvado Mannery",
-          "head": "Marion Liary"
+          "name": "Investigations III, Monitoring of Implementation",
+          "head": "Carolina Cumbo Nacheli"
         },
         {
           "code": "TRADE.G.5",
-          "name": "Advance, Im Crossplicent And",
-          "head": "Christine Macmay"
+          "name": "Investigations IV, Relations with Third Countries for Trade Defence Matters",
+          "head": "Eva Ronau"
         }
       ]
     },
     {
-      "code": "TRADE.H",
-      "name": "Communication & Resources",
-      "director": "Silke Schaug",
+      "code": "TRADE.R",
+      "name": "Interinstitutional, Outreach, Communication & Resources",
+      "director": "Sofia Munoz Albarran",
       "units": [
         {
-          "code": "TRADE.H.1",
-          "name": "Communication Relations &",
-          "head": "Agne Barauskiene"
+          "code": "TRADE.R.1",
+          "name": "Interinstitutional Relations & Policy Coordination",
+          "head": "Carla Pettinato"
         },
         {
-          "code": "TRADE.H.2",
-          "name": "Single Entry Point For",
-          "head": "Claudia Cornellissen"
+          "code": "TRADE.R.2",
+          "name": "Single Entry Point for Implementation, Outreach and Transparency, SMEs",
+          "head": "Peter Balas"
         },
         {
-          "code": "TRADE.H.3",
-          "name": "It And Knowlment, And Partnership, Outreach,",
-          "head": "Miyoti Laort"
+          "code": "TRADE.R.3",
+          "name": "Communication & Briefings",
+          "head": "Maud Labat"
         },
         {
-          "code": "TRADE.H.4",
-          "name": "Management Exchanges And Ev 3-2 Systems",
-          "head": "Julie Ulam Juno"
+          "code": "TRADE.R.4",
+          "name": "Information Technology & IT Systems",
+          "head": "Fabrice Van Rose"
         },
         {
-          "code": "TRADE.H.5",
-          "name": "Advance, Im Crossplicent And",
-          "head": "Aga Balaszewscha"
+          "code": "TRADE.R.5",
+          "name": "Resources, HR Correspondent and Planning",
+          "head": "Silvia Basle"
         }
-      ]
-    },
-    {
-      "code": "TRADE.DG01",
-      "name": "Trade & Economic Sector Im The Eu Delegation In China",
-      "head": "Pablo Martin Y Pera Losada"
-    },
-    {
-      "code": "TRADE.DG01",
-      "name": "Trade & Economic Sector Im The Eu Delegation To Peru",
-      "head": "Christian Ehrnroek"
-    },
-    {
-      "code": "TRADE.DG01",
-      "name": "Adviser: Verification And Information",
-      "head": "Ivo Hoefkens"
+      ],
+      "adviser": {
+        "name": "Geraldine Emberger",
+        "role": "Adviser on Simplification and Implementation"
+      }
     }
   ],
   "date_of_effect": "2025-09-02"

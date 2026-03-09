@@ -38,30 +38,53 @@
       {
         "name": "Telmo Baltazar",
         "title": "Principal Adviser",
-        "area": "Corporate Political Communication"
+        "area": "Corporate & Political Communication"
       },
       {
         "name": "vacant",
         "title": "Principal Adviser",
-        "area": "Relations with Stakeholders, Civil Society Movements and Outreach"
+        "area": "Relations with Stakeholders, Civil Society, Think Tanks and Outreach"
       }
     ],
     "dga_assistants": [
       {
-        "name": "Christelle Ritz",
-        "role": "Strategic Communication"
+        "name": "Sonia Plecita Brunstein",
+        "role": "Assistant to the DG"
       },
       {
-        "name": "John Plecita Brunstein",
-        "role": "Digital Readiness"
+        "name": "Eveline Lecoq",
+        "role": "Assistant to the DG"
       }
-    ]
+    ],
+    "advisers": [
+      {
+        "name": "Anguel Konstantinov Beremliysky",
+        "title": "Adviser",
+        "area": "Strategy, Coordination & Governance",
+        "code": "COMM.02"
+      },
+      {
+        "name": "Renaud Soufflot de Magny",
+        "title": "Adviser",
+        "area": "Political Communication"
+      }
+    ],
+    "hr_correspondent": {
+      "name": "Carsten Luetz",
+      "code": "COMM.03",
+      "area": "HR Correspondent & Internal Communication"
+    },
+    "task_force": {
+      "name": "Dana Manescu",
+      "area": "Task Force for Strategic Communication & Countering Information Manipulation",
+      "code": "COMM.TF"
+    }
   },
   "spokesperson_service": {
     "spokesperson_unit_2": {
       "code": "COMM.SP.02",
       "name": "Spokesperson's Service",
-      "head": "Pieter Valks"
+      "head": "Peter Valant"
     }
   },
   "directorates": {
@@ -75,49 +98,33 @@
       "units": {
         "a1": {
           "code": "COMM.A.1",
-          "name": "Communication",
+          "name": "Social Media & Visual Communication",
           "head_of_unit": {
-            "name": "Gustavo Arranca",
-            "deputy": "Guillermo Werner"
+            "name": "Adalbert Jahnz",
+            "deputy": null
           }
         },
         "a2": {
           "code": "COMM.A.2",
-          "name": "New Communication",
+          "name": "Web Communication",
           "head_of_unit": {
-            "name": "Cecilia Marmounou",
+            "name": "Elisaveta Dimitrova (acting)",
             "deputy": null
           }
         },
         "a3": {
           "code": "COMM.A.3",
-          "name": "Editorial Communication",
+          "name": "Media Monitoring & Analysis",
           "head_of_unit": {
-            "name": "Katarina Eivares",
+            "name": "Johanna Pannebakker",
             "deputy": null
           }
         },
         "a4": {
           "code": "COMM.A.4",
-          "name": "Visitor",
+          "name": "Audiovisual Service",
           "head_of_unit": {
-            "name": "Anneliese Zeller",
-            "deputy": null
-          }
-        },
-        "a5": {
-          "code": "COMM.A.5",
-          "name": "Structural Communication",
-          "head_of_unit": {
-            "name": "vacant",
-            "deputy": null
-          }
-        },
-        "a6": {
-          "code": "COMM.A.6",
-          "name": "Communication Campaign",
-          "head_of_unit": {
-            "name": "vacant",
+            "name": "Nathalie Davies",
             "deputy": null
           }
         }
@@ -127,31 +134,31 @@
       "code": "COMM.B",
       "name": "Citizens Communication",
       "director": {
-        "name": "Stephanie Resenoneu",
+        "name": "Stefanie Keersmaecker",
         "position": "Director"
       },
       "units": {
         "b1": {
           "code": "COMM.B.1",
-          "name": "Europe Direct",
+          "name": "Campaign & Country Strategy",
           "head_of_unit": {
-            "name": "Patrizia Leboef",
+            "name": "Patricia Libert",
             "deputy": null
           }
         },
         "b2": {
           "code": "COMM.B.2",
-          "name": "Direct Network",
+          "name": "Youth",
           "head_of_unit": {
-            "name": "Joanna Strajewska-Polanka",
+            "name": "Jovana Stojkovska (acting)",
             "deputy": null
           }
         },
         "b3": {
           "code": "COMM.B.3",
-          "name": "Public Dialogue & Citizens",
+          "name": "Public Opinion & Citizens Engagement",
           "head_of_unit": {
-            "name": "Gaetano Bilard-Wendol",
+            "name": "Gaetane Billard-Miskol",
             "deputy": null
           }
         },
@@ -159,41 +166,45 @@
           "code": "COMM.B.4",
           "name": "Visitors",
           "head_of_unit": {
-            "name": "Gaetani Bilard-Wendol",
+            "name": "Annegret Zeller",
             "deputy": null
           }
         }
+      },
+      "adviser": {
+        "name": "vacant",
+        "area": "Corporate Communication Campaigns"
       }
     },
     "directorate_c": {
       "code": "COMM.C",
       "name": "Representations & Communication in Member States",
       "director": {
-        "name": "Richard Worskel",
+        "name": "Richard Kuehnel",
         "position": "Director"
       },
       "units": {
         "c1": {
           "code": "COMM.C.1",
-          "name": "Citizens Exchange",
+          "name": "Coordination",
           "head_of_unit": {
-            "name": "Alejandro Loreman",
+            "name": "Alessandro Giordani",
             "deputy": null
           }
         },
         "c2": {
           "code": "COMM.C.2",
-          "name": "Direct Network",
+          "name": "Legal Engagement, Europe Direct & Networks",
           "head_of_unit": {
-            "name": "Caro Martini",
+            "name": "Dana Manescu",
             "deputy": null
           }
         },
         "c3": {
           "code": "COMM.C.3",
-          "name": "Citizens Exchanges",
+          "name": "Adviser for Communication in Member States",
           "head_of_unit": {
-            "name": "Beatrice Papakonstou",
+            "name": "Ierotheos Papadopoulos",
             "deputy": null
           }
         }
@@ -203,47 +214,39 @@
       "code": "COMM.D",
       "name": "Communication Support Services",
       "director": {
-        "name": "Fabriozide Rosa",
+        "name": "Fabrizio de Rosa",
         "position": "Director"
       },
       "units": {
         "d1": {
           "code": "COMM.D.1",
-          "name": "Events, Partering & Stakeholders",
+          "name": "Planning, Budget, Evaluation & Legal Affairs",
           "head_of_unit": {
-            "name": "vacant",
+            "name": "Sylvain Hubert",
             "deputy": null
           }
         },
         "d2": {
           "code": "COMM.D.2",
-          "name": "Digital Solutions & Data Talent",
+          "name": "Finance & Control",
           "head_of_unit": {
-            "name": "Enzo Cordin",
+            "name": "Joachim Ott",
             "deputy": null
           }
         },
         "d3": {
           "code": "COMM.D.3",
-          "name": "Business Tools & Contract",
+          "name": "Procurement & Contract Solutions",
           "head_of_unit": {
-            "name": "Stavros Kalakonoros",
+            "name": "Stergios Vlachopoulos",
             "deputy": null
           }
         },
         "d4": {
           "code": "COMM.D.4",
-          "name": "Campus Resource & Digital Solutions",
-          "head_of_unit": {
-            "name": "Carlo Candolino",
-            "deputy": null
-          }
-        },
-        "d5": {
-          "code": "COMM.D.5",
           "name": "Digital Solutions",
           "head_of_unit": {
-            "name": "Stavros Kalakonoros",
+            "name": "Sonia Ziesemer",
             "deputy": null
           }
         }
@@ -253,94 +256,170 @@
   "representations_regional_representations": {
     "representation_offices": [
       {
-        "code": "REP.06",
-        "location": "Athens",
-        "head": "Petros Louris"
+        "country": "Austria",
+        "location": "Vienna",
+        "head": "Patrick Lobis"
       },
       {
-        "code": "REP.18",
+        "country": "Belgium",
+        "location": "Brussels",
+        "head": "Thomas de Bethune"
+      },
+      {
+        "country": "Bulgaria",
+        "location": "Sofia",
+        "head": "Yordanka Chobanova"
+      },
+      {
+        "country": "Croatia",
+        "location": "Zagreb",
+        "head": "Zrinka Ujević"
+      },
+      {
+        "country": "Cyprus",
+        "location": "Nicosia",
+        "head": "Anna Damiti (acting)"
+      },
+      {
+        "country": "Czechia",
+        "location": "Prague",
+        "head": "Monika Ladmanova"
+      },
+      {
+        "country": "Denmark",
+        "location": "Copenhagen",
+        "head": "Per Haugaard"
+      },
+      {
+        "country": "Estonia",
+        "location": "Tallinn",
+        "head": "Ave Schank-Lukas"
+      },
+      {
+        "country": "Finland",
+        "location": "Helsinki",
+        "head": "Kati Laitinen (acting)"
+      },
+      {
+        "country": "France",
         "location": "Paris",
-        "head": "Pierre Schatz"
+        "head": "Jessica Carlsson (acting)",
+        "regional": {
+          "location": "Marseille",
+          "head": "Pierre Loaec"
+        }
       },
       {
-        "code": "REP.22",
-        "location": "Madrid",
-        "head": "Marga Pedro Lomaz"
+        "country": "Germany",
+        "location": "Berlin",
+        "head": "Barbara Gessler",
+        "regional": [
+          {
+            "location": "Bonn",
+            "head": "Stefan Lock"
+          },
+          {
+            "location": "Munich",
+            "head": "Wolfgang Buechel"
+          }
+        ]
       },
       {
-        "code": "REP.09",
-        "location": "Belgium",
-        "head": "Jordi Ayet Puigarnau"
+        "country": "Greece",
+        "location": "Athens",
+        "head": "Nikos Riniou"
       },
       {
-        "code": "REP.20",
-        "location": "Ittoria",
-        "head": "Pavis Commi"
+        "country": "Hungary",
+        "location": "Budapest",
+        "head": "Gaborgyori"
       },
       {
-        "code": "REP.21",
-        "location": "Latvia",
-        "head": "Zane Zilverst"
-      },
-      {
-        "code": "REP.23",
-        "location": "Austria, Slovenia",
-        "head": "Julian Clausen Costa"
-      },
-      {
-        "code": "REP.10",
-        "location": "Germany",
-        "head": "Jakob Weinmaier"
-      },
-      {
-        "code": "REP.25",
-        "location": "Czech",
-        "head": "Michal Casarni"
-      },
-      {
-        "code": "REP.02",
-        "location": "Estonia",
-        "head": "Toomas Taluvo"
-      },
-      {
-        "code": "REP.13",
-        "location": "Ireland",
-        "head": "Atanasios Vergullus"
-      },
-      {
-        "code": "REP.01",
-        "location": "Croatia",
-        "head": "Branislav Grois (acting)"
-      },
-      {
-        "code": "REP.03",
-        "location": "Portugal",
-        "head": "Catarina Anambel"
-      },
-      {
-        "code": "REP.04",
+        "country": "Ireland",
         "location": "Dublin",
-        "head": "Marco Comisio"
+        "head": "Peter Power"
       },
       {
-        "code": "REP.07",
-        "location": "Bulgaria States (acting)",
-        "head": "Juan Andreas Icakus"
+        "country": "Italy",
+        "location": "Rome",
+        "head": "Claudio Cassini",
+        "regional": {
+          "location": "Milan",
+          "head": "Claudia Coila"
+        }
       },
       {
-        "code": "REP.11",
+        "country": "Latvia",
+        "location": "Riga",
+        "head": "Andris Kuzmiecs"
+      },
+      {
+        "country": "Lithuania",
         "location": "Vilnius",
-        "head": "Andrius Devassicus"
+        "head": "Marius Vaščega"
       },
       {
-        "code": "REP.12",
-        "location": "Digital Solutions",
-        "head": "Giulia Demaro"
+        "country": "Luxembourg",
+        "location": "Luxembourg",
+        "head": "Anne Calteux"
+      },
+      {
+        "country": "Malta",
+        "location": "Valletta",
+        "head": "Maria Elena Despott"
+      },
+      {
+        "country": "Netherlands",
+        "location": "The Hague",
+        "head": "Cecilia Thorfinn (acting)"
+      },
+      {
+        "country": "Poland",
+        "location": "Warsaw",
+        "head": "Katarzyna Sayn",
+        "regional": {
+          "location": "Wroclaw",
+          "head": "Joanna Strzyrzyńska Lindberg"
+        }
+      },
+      {
+        "country": "Portugal",
+        "location": "Lisbon",
+        "head": "Sofia Moreira de Sousa"
+      },
+      {
+        "country": "Romania",
+        "location": "Bucharest",
+        "head": "Ramona Chiriac"
+      },
+      {
+        "country": "Slovakia",
+        "location": "Bratislava",
+        "head": "Radim Dindáček (acting)"
+      },
+      {
+        "country": "Slovenia",
+        "location": "Ljubljana",
+        "head": "Jerneja Jug Jerše"
+      },
+      {
+        "country": "Spain",
+        "location": "Madrid",
+        "head": "Nikolaos Isaris (acting)",
+        "regional": {
+          "location": "Barcelona",
+          "head": "Manuel Szapiro"
+        }
+      },
+      {
+        "country": "Sweden",
+        "location": "Stockholm",
+        "head": "Annika Wappling Korzinek"
       }
     ]
   },
   "notes": [
     "The EC Chief Spokesperson has an administrative reporting line to the Director General. The Spokesperson's Service is in charge of coordinating and delivering the political communication of the Commission under the direct political authority of the President",
-    "COMM.SP.01 Spokesperson's Service has an administrative reporting line to the Director"
+    "COMM.SP.01 Spokesperson's Service has an administrative reporting line to Director A Political Communication"
   ]
 }

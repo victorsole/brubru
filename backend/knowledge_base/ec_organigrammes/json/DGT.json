@@ -9,21 +9,21 @@
   },
   "leadership": {
     "director_general": {
-      "name": "C Ellindes",
+      "name": "C. Ellinides",
       "position": "Director-General",
       "assistants": [
         {
-          "name": "I. Zelicovic",
+          "name": "I. Zeljkovic",
           "role": "Assistant to the DG"
         },
         {
-          "name": "J. Virrata",
+          "name": "J. Vrbata",
           "role": "Assistant to the DG"
         }
       ]
     },
     "deputy_director_general": {
-      "name": "V. Dario (acting)",
+      "name": "V. Darò (acting)",
       "position": "Deputy Director-General",
       "responsibility": "Responsible for Directorates A, B, C and D"
     }
@@ -32,12 +32,18 @@
     "dgt_01": {
       "code": "DGT.01",
       "name": "Coordination & Institutional Affairs",
-      "head": "J. Hederstr\u00f6m"
+      "head": "J. Hederström"
     },
     "dgt_02": {
       "code": "DGT.02",
       "name": "Communication",
-      "head": "M. Solombono"
+      "head": "M. Solombrino"
+    },
+    "dgt_03": {
+      "code": "DGT.03",
+      "name": "Demand Management",
+      "head": "R. Enciu (acting)",
+      "location": "Luxembourg"
     }
   },
   "directorates": {
@@ -47,6 +53,39 @@
       "director": {
         "name": "R. Enciu",
         "position": "Director"
+      },
+      "location": "Luxembourg",
+      "language_departments": {
+        "ld_a1": {
+          "name": "LD A.1",
+          "head": "A. Butkevičius",
+          "note": "Deputy to the Director"
+        },
+        "ld_a2": {
+          "name": "LD A.2",
+          "head": "P. Rizzotto"
+        },
+        "ld_a3": {
+          "name": "LD A.3",
+          "head": "O. Manafova",
+          "location": "Luxembourg"
+        }
+      },
+      "units": {
+        "bg1": { "code": "BG.1", "head": "S. Alendarova" },
+        "bg2": { "code": "BG.2", "head": "T. Telkedjiyska", "location": "Luxembourg" },
+        "it1": { "code": "IT.1", "head": "S. Peressini" },
+        "it2": { "code": "IT.2", "head": "A. Orecchioni", "location": "Luxembourg" },
+        "mt1": { "code": "MT.1", "head": "G. Galea" },
+        "mt2": { "code": "MT.2", "head": "R. Seychell", "location": "Luxembourg" },
+        "cs1": { "code": "CS.1", "head": "K. Adámková", "location": "Luxembourg" },
+        "cs2": { "code": "CS.2", "head": "L. Larssonkrausova", "location": "Luxembourg" },
+        "fi1": { "code": "FI.1", "head": "J. Barruel" },
+        "fi2": { "code": "FI.2", "head": "A. Nyholm", "location": "Luxembourg" },
+        "da1": { "code": "DA.1", "head": "N. Walloe" },
+        "da2": { "code": "DA.2", "head": "B. Andersen (acting)", "location": "Luxembourg" },
+        "lt1": { "code": "LT.1", "head": "R. Dedonienė" },
+        "lt2": { "code": "LT.2", "head": "I. Sukaitytė-Mikucionienė", "location": "Luxembourg" }
       }
     },
     "directorate_b": {
@@ -55,44 +94,225 @@
       "director": {
         "name": "M. Hennessy",
         "position": "Director"
-      }
+      },
+      "location": "Luxembourg",
+      "language_departments": {
+        "ld_b1": {
+          "name": "LD B.1",
+          "head": "J. L. Vega Expósito",
+          "location": "Luxembourg",
+          "note": "Deputy to the Director"
+        },
+        "ld_b2": {
+          "name": "LD B.2",
+          "head": "J. Štefánik"
+        },
+        "ld_b3": {
+          "name": "LD B.3",
+          "head": "H. Zahra"
+        }
+      },
+      "units": {
+        "pl1": { "code": "PL.1", "head": "A. Zukowska", "location": "Luxembourg" },
+        "pl2": { "code": "PL.2", "head": "J. Jansen", "location": "Luxembourg" },
+        "pt1": { "code": "PT.1", "head": "T. Bairos" },
+        "pt2": { "code": "PT.2", "head": "H. Leal Fontes" },
+        "sv1": { "code": "SV.1", "head": "M. Söderholm" },
+        "sv2": { "code": "SV.2", "head": "A. Naslund", "location": "Luxembourg" },
+        "el1": { "code": "EL.1", "head": "G. Savvidou (acting)" },
+        "el2": { "code": "EL.2", "head": "V. Margoni", "location": "Luxembourg" },
+        "ro1": { "code": "RO.1", "head": "V. Florean" },
+        "ro2": { "code": "RO.2", "head": "M. Negru", "location": "Luxembourg" },
+        "et1": { "code": "ET.1", "head": "H. Leht" },
+        "et2": { "code": "ET.2", "head": "L. Anupõld", "location": "Luxembourg" },
+        "sk1": { "code": "SK.1", "head": "S. Skačkov" },
+        "sk2": { "code": "SK.2", "head": "K. Milkovičová", "location": "Luxembourg" }
+      },
+      "advisers": [
+        {
+          "name": "D. Rummel",
+          "title": "Adviser",
+          "area": "eDGT",
+          "location": "Luxembourg"
+        },
+        {
+          "name": "vacant",
+          "title": "Adviser",
+          "area": "Workflow Systems",
+          "location": "Luxembourg"
+        }
+      ]
     },
     "directorate_c": {
       "code": "DGT.C",
       "name": "Translation",
       "director": {
-        "name": "J. Bernarich (acting)",
+        "name": "J. Bednarich (acting)",
         "position": "Director"
-      }
+      },
+      "location": "Luxembourg",
+      "language_departments": {
+        "ld_c1": {
+          "name": "LD C.1",
+          "head": "L. Muskare (acting)",
+          "location": "Luxembourg"
+        },
+        "ld_c2": {
+          "name": "LD C.2",
+          "head": "J. Bednarich",
+          "note": "Deputy to the Director"
+        }
+      },
+      "units": {
+        "es1": { "code": "ES.1", "head": "I. Garrido Rodriguez (acting)" },
+        "es2": { "code": "ES.2", "head": "M. Garcia de Leaniz Hortal", "location": "Luxembourg" },
+        "ga1": { "code": "GA.1", "head": "A. McCrory" },
+        "ga2": { "code": "GA.2", "head": "R. Gunning", "location": "Luxembourg" },
+        "lv1": { "code": "LV.1", "head": "L. Muskare" },
+        "lv2": { "code": "LV.2", "head": "I. Rancāne", "location": "Luxembourg" },
+        "hr1": { "code": "HR.1", "head": "N. Lujo", "location": "Luxembourg" },
+        "hr2": { "code": "HR.2", "head": "S. Sirovec", "location": "Luxembourg" },
+        "nl1": { "code": "NL.1", "head": "J. Winsemius" },
+        "nl2": { "code": "NL.2", "head": "G. Gysels", "location": "Luxembourg" },
+        "hu1": { "code": "HU.1", "head": "Á. Kiss", "location": "Luxembourg" },
+        "hu2": { "code": "HU.2", "head": "S. Kovács", "location": "Luxembourg" },
+        "sl1": { "code": "SL.1", "head": "T. Baraga", "location": "Luxembourg" },
+        "sl2": { "code": "SL.2", "head": "T. Košir", "location": "Luxembourg" }
+      },
+      "advisers": [
+        {
+          "name": "M. Angioni",
+          "title": "Adviser",
+          "area": "Interinstitutional Cooperation & CdT",
+          "location": "Luxembourg"
+        }
+      ]
     },
     "directorate_d": {
       "code": "DGT.D",
       "name": "Translation",
       "director": {
-        "name": "V. Dario",
+        "name": "V. Darò",
         "position": "Director"
-      }
+      },
+      "language_departments": {
+        "ld_de": {
+          "name": "LD DE",
+          "head": "J. Oberhausen"
+        },
+        "ld_en": {
+          "name": "LD EN",
+          "head": "M. Stryjecki",
+          "area": "Translation & Editing Services",
+          "location": "Luxembourg",
+          "note": "Deputy to the Director"
+        },
+        "ld_fr": {
+          "name": "LD FR",
+          "head": "M. Baut"
+        }
+      },
+      "units": {
+        "de1": { "code": "DE.1", "head": "U. Sauter" },
+        "de2": { "code": "DE.2", "head": "J. Kremer" },
+        "de3": { "code": "DE.3", "head": "W. Kilb", "location": "Luxembourg" },
+        "en1": { "code": "EN.1", "name": "Editing Management", "head": "J. Aspeslagh" },
+        "en2": { "code": "EN.2", "name": "Translation & Editing", "head": "E. Carmouche" },
+        "en3": { "code": "EN.3", "name": "Translation & Editing", "head": "Z. Field", "location": "Luxembourg" },
+        "fr1": { "code": "FR.1", "head": "S. Cossu" },
+        "fr2": { "code": "FR.2", "head": "M. Leloup" },
+        "fr3": { "code": "FR.3", "head": "P. Wanlin (acting)", "location": "Luxembourg" }
+      },
+      "advisers": [
+        {
+          "name": "S. Clarke",
+          "title": "Adviser",
+          "area": "Editing Services",
+          "location": "Luxembourg"
+        }
+      ]
     },
     "directorate_r": {
       "code": "DGT.R",
       "name": "Resources",
       "director": {
-        "name": "A. Mara\u0161lis",
+        "name": "A. Maraslis",
         "position": "Director"
+      },
+      "location": "Luxembourg",
+      "units": {
+        "r1": {
+          "code": "R.1",
+          "name": "Internal Administration & Facilities",
+          "head": "K. Perko",
+          "location": "Luxembourg"
+        },
+        "r2": {
+          "code": "R.2",
+          "name": "Budget & Finance",
+          "head": "C. Schivi",
+          "location": "Luxembourg",
+          "note": "Deputy to the Director"
+        },
+        "r3": {
+          "code": "R.3",
+          "name": "Knowledge Management",
+          "head": "N. Kunte",
+          "location": "Luxembourg"
+        },
+        "hrc": {
+          "code": "HRC",
+          "name": "HR Correspondent",
+          "head": "D. Meert",
+          "location": "Luxembourg"
+        }
       }
     },
     "directorate_t": {
       "code": "DGT.T",
       "name": "Technology",
       "director": {
-        "name": "K. Erben",
+        "name": "J. Gren",
         "position": "Director"
-      }
+      },
+      "units": {
+        "t1": {
+          "code": "T.1",
+          "name": "IT Services",
+          "head": "D. Chirita"
+        },
+        "t2": {
+          "code": "T.2",
+          "name": "AI-Based Services",
+          "head": "A. Queiroz",
+          "location": "Luxembourg"
+        },
+        "t3": {
+          "code": "T.3",
+          "name": "Data Management",
+          "head": "M. Rzewuska-Waligóra",
+          "location": "Luxembourg",
+          "note": "Deputy to the Director"
+        },
+        "t4": {
+          "code": "T.4",
+          "name": "Enterprise Architecture & Analytics",
+          "head": "Z. Varga"
+        }
+      },
+      "advisers": [
+        {
+          "name": "D. Kluvanec",
+          "title": "Adviser",
+          "area": "New Technologies",
+          "location": "Luxembourg"
+        }
+      ]
     }
   },
   "special_units": {
     "translation_centre_bodies_union": {
-      "code": "E.dT",
+      "code": "CdT",
       "name": "Translation Centre for the Bodies of the European Union",
       "location": "Luxembourg"
     }
@@ -100,6 +320,6 @@
   "notes": [
     "Deputy to the Director",
     "Management in Luxembourg",
-    "'Transadministre' entity"
+    "'Transardennaise' entity"
   ]
 }
