@@ -70,12 +70,32 @@ def _unsubscribe_url(email: str) -> str:
     return f"{API_URL}/api/daily-brief/unsubscribe?email={encoded}"
 
 
+def _build_brubru_news_html(news_items: List[str]) -> str:
+    """Build the 'New in Brubru' section with a list of product news items."""
+    if not news_items:
+        return ""
+    items_html = "".join(
+        f'<li style="margin-bottom: 4px;">{item}</li>' for item in news_items
+    )
+    return f"""
+      <!-- Brubru News -->
+      <div style="margin-top: 20px; padding: 16px; background: #f0f9ff; border-radius: 8px; border: 1px solid #bae6fd;">
+        <p style="font-size: 13px; font-weight: 600; color: #0693e3; margin: 0 0 8px 0;">
+          New in Brubru
+        </p>
+        <ul style="font-size: 13px; color: #374151; line-height: 1.5; margin: 0; padding-left: 18px;">
+          {items_html}
+        </ul>
+      </div>"""
+
+
 def _build_brief_email_html(
     headlines: List[dict],
     brief_date: str,
     email: str,
     is_welcome: bool = False,
     is_registered_user: bool = False,
+    brubru_news: Optional[List[str]] = None,
 ) -> str:
     """Build the full HTML email for the daily brief."""
 
@@ -155,6 +175,8 @@ def _build_brief_email_html(
         {headline_rows}
       </table>
 
+      {_build_brubru_news_html(brubru_news or [])}
+
       <!-- CTA -->
       <div style="text-align: center; margin-top: 24px;">
         <a href="{BRUBRU_CHAT_URL}" style="display: inline-block; padding: 10px 24px; background: #0693e3; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500;">
@@ -188,7 +210,7 @@ def _build_brief_email_html(
 def _feature_line(is_welcome: bool) -> str:
     features = [
         "500+ legislative files",
-        "29 policy knowledge guides",
+        "54 policy knowledge guides",
         "6 EU institutional calendars",
     ]
     if is_welcome:
@@ -294,7 +316,7 @@ def _get_all_recipient_emails(db_session) -> tuple:
     return registered_emails, preuser_only
 
 
-def send_daily_brief_batch(db_session) -> dict:
+def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None) -> dict:
     """Send today's brief to all subscribers (users + pre-users). Called from /news routine."""
     headlines, brief_date = _fetch_headlines(db_session)
 
@@ -318,6 +340,7 @@ def send_daily_brief_batch(db_session) -> dict:
                 headlines, brief_date, email,
                 is_welcome=False,
                 is_registered_user=is_registered,
+                brubru_news=brubru_news,
             )
             success = service.send(
                 to=email,

@@ -169,6 +169,19 @@ Arts 27(3), 31(3), 32(3), 36(3), 39(3), 50(3), 53(3) of Regulation (EU) 2018/113
 | **Bruegel** | AI omnibus risks prolonging regulatory uncertainty. Sandbox provision should be broadened. Data Act anti-competitive provisions untouched. "EU needs more than a digital omnibus" |
 | **EFF / Civil society** | "Guts GDPR Privacy Rights" (4 December 2025). Oppose loosening personal data definition |
 
+## OJ L Corrigenda (10 March 2026)
+
+The following corrigenda to related legislation were published in OJ L on 10 March 2026:
+
+| Act | Corrigendum CELEX | Note |
+|-----|-------------------|------|
+| **AI Act** (Regulation (EU) 2024/1689) | 32024R1083R(04) | Technical corrections to AI Act text |
+| **CSDDD** (Directive (EU) 2024/1760) | 32024L1760R(03) | Technical corrections to due diligence directive |
+| **Data Act** (Regulation (EU) 2023/2854) | 32023R2854R(05) | Technical corrections to Data Act text |
+| **Shareholder Rights Directive** (Directive (EU) 2017/828) | 32017L0828R(03) | Technical corrections |
+
+Always refer to the consolidated versions on EUR-Lex for up-to-date text of these acts.
+
 ## Digital Fitness Check Timeline
 
 | Year | Planned Reviews |

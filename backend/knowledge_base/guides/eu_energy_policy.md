@@ -17,7 +17,7 @@ Long-term goal: climate neutrality by 2050. Energy poverty affects over 46 milli
 
 ## 2026 Energy Package (College adoption: 10 March 2026)
 
-The Commission is adopting a major Energy Package on 10 March 2026, led by Executive VP Teresa Ribera and Commissioner Wopke Hoekstra. Three main pillars:
+The Commission adopted the Energy Package on 10 March 2026, led by Executive VP Teresa Ribera and EVP Stephane Sejourne. Three main pillars:
 
 ### Small Modular Reactors (SMRs)
 - EU strategy for small modular reactors as part of the energy mix

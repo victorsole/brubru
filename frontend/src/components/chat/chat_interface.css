@@ -22,8 +22,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: var(--space-8);
-  max-width: 600px;
+  padding: var(--space-6) var(--space-4);
+  max-width: 680px;
   margin: 0 auto;
   animation: fadeIn var(--transition-base);
 }
@@ -31,81 +31,8 @@
 .chat-interface__empty h2 {
   color: var(--color-primary);
   margin-bottom: var(--space-4);
+  font-size: var(--font-size-xl);
   animation: slideUp var(--transition-base);
-}
-
-.chat-interface__empty p {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--space-2);
-  animation: slideUp var(--transition-base) 0.1s;
-}
-
-.chat-interface__empty-hint {
-  font-size: var(--font-size-base);
-  color: var(--color-text-muted);
-  font-style: italic;
-}
-
-.chat-interface__examples {
-  margin-top: var(--space-6);
-  text-align: left;
-  max-width: 500px;
-  animation: slideUp var(--transition-base) 0.2s;
-}
-
-.chat-interface__examples h3 {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
-  margin-bottom: var(--space-3);
-}
-
-.chat-interface__examples-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.chat-interface__example-btn {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  margin: 0;
-  padding: var(--space-2) var(--space-3);
-  background-color: var(--color-gray-50);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  text-align: left;
-  cursor: pointer;
-}
-
-.chat-interface__examples-list .chat-interface__example-btn:nth-child(1) {
-  animation: staggerFadeIn var(--transition-base) 0.3s;
-}
-
-.chat-interface__examples-list .chat-interface__example-btn:nth-child(2) {
-  animation: staggerFadeIn var(--transition-base) 0.4s;
-}
-
-.chat-interface__examples-list .chat-interface__example-btn:nth-child(3) {
-  animation: staggerFadeIn var(--transition-base) 0.5s;
-}
-
-.chat-interface__examples-list .chat-interface__example-btn:nth-child(4) {
-  animation: staggerFadeIn var(--transition-base) 0.6s;
-}
-
-.chat-interface__example-btn:hover {
-  background-color: var(--color-gray-100);
-  color: var(--color-text);
-  transform: translateX(4px);
-}
-
-.chat-interface__example-btn:active {
-  transform: scale(0.98);
 }
 
 .chat-interface__typing {
@@ -254,15 +181,12 @@
   }
 
   .chat-interface__empty {
-    padding: var(--space-4);
+    padding: var(--space-3) var(--space-2);
   }
 
   .chat-interface__empty h2 {
-    font-size: var(--font-size-2xl);
-  }
-
-  .chat-interface__empty p {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--space-3);
   }
 
   .chat-interface__input-container {

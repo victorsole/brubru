@@ -134,6 +134,21 @@ Adopted by the Commission in October 2020 (COM(2020) 667). The overarching polic
 | **EFSA** | Food safety aspects of chemicals (pesticides, food additives) |
 | **EMA** | Pharmaceutical aspects of chemical safety |
 
+## Safe and Sustainable by Design (SSbD) Framework
+
+### Commission Recommendation (EU) 2026/510
+CELEX: 32026H0510
+Published: 10 March 2026 (OJ L)
+
+On 6 March 2026, the Commission published a revised European assessment framework for safe and sustainable by design (SSbD) chemicals and materials. This recommendation:
+
+- Updates the SSbD criteria for assessing whether chemicals and materials are designed to be safe and sustainable throughout their lifecycle
+- Aligns with the Chemicals Strategy for Sustainability (CSS) objective of promoting innovation in safer alternatives
+- Provides voluntary guidance for industry, research institutions, and public authorities on evaluating chemical safety and sustainability from the design stage
+- Supports the transition to toxic-free material cycles under the European Green Deal
+
+**Relevance to REACH:** The SSbD framework complements REACH by encouraging upstream innovation in safer chemical design, reducing the need for downstream restrictions and authorisations. Companies developing alternative substances can use the SSbD criteria to demonstrate safety and sustainability advantages.
+
 ## Recent Amending Regulations
 
 | Regulation | Year | What it changed |

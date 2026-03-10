@@ -71,11 +71,11 @@ def preview(db):
     print(f"  Run with --send to deliver\n")
 
 
-def send(db):
+def send(db, brubru_news=None):
     """Send the daily brief to all subscribers."""
     from services.daily_brief_email import send_daily_brief_batch
 
-    result = send_daily_brief_batch(db)
+    result = send_daily_brief_batch(db, brubru_news=brubru_news)
     print(f"\n  Daily Brief Send Results:")
     print(f"  Sent: {result.get('sent', 0)}")
     print(f"  Failed: {result.get('failed', 0)}")
@@ -92,6 +92,8 @@ def main():
     parser = argparse.ArgumentParser(description="Send daily brief emails")
     parser.add_argument("--send", action="store_true", help="Send to all subscribers")
     parser.add_argument("--list", action="store_true", help="List all subscriber emails")
+    parser.add_argument("--news", nargs="+", metavar="ITEM",
+                        help="Brubru product news items to include in the email")
     args = parser.parse_args()
 
     db = SessionLocal()
@@ -99,7 +101,7 @@ def main():
         if args.list:
             list_subscribers(db)
         elif args.send:
-            send(db)
+            send(db, brubru_news=args.news)
         else:
             preview(db)
     finally:

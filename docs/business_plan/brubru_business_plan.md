@@ -3,7 +3,7 @@
 **Company:** Beresol BV
 **Product:** Brubru -- AI-Powered Strategic Advocacy Platform for EU Policy
 **Version:** 1.0
-**Date:** February 2026
+**Date:** March 2026
 **Stage:** Pre-revenue, product built
 **Location:** Brussels, Belgium
 
@@ -1129,6 +1129,6 @@ Brubru operates in a market with comparable dynamics to these companies but in a
 
 ---
 
-*Brubru Business Plan v1.0 -- February 2026*
+*Brubru Business Plan v1.0 -- March 2026*
 *Beresol BV | Brussels, Belgium*
 *Contact: hello@beresol.eu | brubru.beresol.eu*

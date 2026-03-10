@@ -79,6 +79,10 @@ The AI Act uses a staggered enforcement approach from the date of entry into for
 | **General-purpose AI (GPAI)** | AI model trained on broad data, capable of performing a wide range of tasks (e.g. large language models) |
 | **Systemic risk GPAI** | GPAI model with high-impact capabilities (trained with >10^25 FLOPs or equivalent) |
 
+## Corrigendum (10 March 2026)
+
+CELEX: 32024R1083R(04) -- Corrigendum to Regulation (EU) 2024/1689 published in OJ L on 10 March 2026. Technical corrections to the AI Act text. Always refer to the consolidated version on EUR-Lex for the most up-to-date text.
+
 ## Digital Omnibus on AI
 
 For full details on the Digital Omnibus Package (COM(2025) 836 and COM(2025) 837), including all 33 AI Act amendments, GDPR/ePrivacy changes, and stakeholder positions, see the dedicated guide: `digital_omnibus_package.md`.

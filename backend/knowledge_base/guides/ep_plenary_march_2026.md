@@ -83,6 +83,50 @@ Notable: Energy Package presentation, Copyright and GenAI vote, Housing Crisis r
 - WTO negotiations vote
 
 ## Key Appointments This Session
-- ECB Vice-President
-- EBA Chairperson
-- European Chief Prosecutor
+- ECB Vice-President (vote: Tuesday 10 March, rapporteur Aurore Lalucq, ECON)
+- EBA Chairperson (vote: Tuesday 10 March, rapporteur Aurore Lalucq, ECON)
+- European Chief Prosecutor (vote: Tuesday 10 March, rapporteur Javier Zarzalejos, LIBE)
+
+## Committee Developments (Week of 9-12 March)
+
+### LIBE Committee
+- **EU Return Rules reform adopted** (9 March 2026): LIBE committee adopted a reform of EU return rules for irregular migrants. This feeds into plenary debate/vote in a future session.
+- **European Chief Prosecutor appointment** [2025/0803(NLE)]: LIBE adopted appointment report
+- **Ban on conversion practices ECI** [2026/2539(RSP)]: European Citizens' Initiative discussed
+- **AMLA Executive Board appointment** [2025/0905(NLE)]: Anti-Money Laundering Authority
+
+### PETI Committee
+- **Public access to documents** [2011/0073(COD)]: Amendment to Regulation 1049/2001 -- long-running file, draft report adopted
+- **EU law application monitoring** [2025/2016(INI)]: Report on monitoring EU law application 2023-2025
+- **Disability rights strategy post-2024** [2025/2057(INI)]: INI report on future disability strategy
+- **MFF 2028-2034** [2025/0571(APP)]: Opinion on next Multiannual Financial Framework
+- **EPSO organisational mismanagement** [2025/2880(RSP)]: Resolution on personnel selection issues
+
+### AFCO Committee
+- **Common European Defence Union** [2025/2212(INI)]: Institutional aspects report
+- **Proxy voting during pregnancy** [2025/2195(INL)]: Electoral act amendment
+- **EP-Commission Framework Agreement** [2025/2243(ACI)]: Revised interinstitutional relations
+- **Interinstitutional Agreement on budgetary discipline** [2025/2159(ACI)]
+
+## Commission Developments (10 March 2026)
+
+### Energy Package Adopted by College
+The Commission adopted the **Energy Package** on 10 March 2026, comprising:
+1. **Small Modular Reactors (SMRs)** -- regulatory framework for next-generation nuclear
+2. **Clean Energy Investment Strategy** -- mobilising capital for clean energy transition
+3. **Citizens Energy Package** -- consumer empowerment and energy affordability
+
+Responsible Commissioners: Teresa Ribera (EVP, Clean and Just Transition), Stephane Sejourne (EVP, Industrial Strategy)
+
+### DMA Compliance Reports
+Gatekeepers published updated DMA compliance reports (9 March 2026). The Digital Markets Act enforcement is ongoing with 2 non-compliance decisions confirmed in April 2025.
+
+### LIFE Strategic Projects
+Commission invested over EUR 103 million in European strategic environment and climate projects (IP/26/542).
+
+## Political Context (Week of 9-12 March)
+
+- **Germany/Italy/Belgium** hosting EU leaders' meeting on energy prices and regulatory simplification (Politico, 10 March 2026)
+- **EPP-S&D** grand coalition under pressure; party leaders exploring new cooperation formats
+- **EU civil protection**: 356 citizens evacuated from Middle East amid Iran war developments (IP/26/577)
+- **ECA Special Report 10/2026**: Energy communities -- "Potential yet to be fulfilled" (OJ C, 10 March 2026)

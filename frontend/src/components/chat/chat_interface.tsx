@@ -110,7 +110,6 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   const [useContext] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [personalizedGreeting, setPersonalizedGreeting] = useState<string | null>(null);
-  const [personalizedSubGreeting, setPersonalizedSubGreeting] = useState<string | null>(null);
   const [detectedEntities, setDetectedEntities] = useState<DetectedEntities | null>(null);
   const [preUserQueryCount, setPreUserQueryCount] = useState<number>(getPreUserQueryCount());
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -129,8 +128,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   useEffect(() => {
     // Pre-user: show generic welcome + track page_load
     if (!isAuthenticated) {
-      setPersonalizedGreeting('Welcome to Brubru, your AI partner for EU affairs!');
-      setPersonalizedSubGreeting('Ask me about any EU policy, legislation, committee, or institutional process. I can help you track legislation, identify key decision-makers, analyse regulatory impact, and much more.');
+      setPersonalizedGreeting('Welcome to Brubru! Ask me anything about EU policy.');
       trackPreUserEvent(getPreUserId(), 'page_load');
       return;
     }
@@ -644,51 +642,21 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         {messages.length === 0 ? (
           <div className="chat-interface__empty">
             <h2>{personalizedGreeting || t('chat.welcome')}</h2>
-            {personalizedSubGreeting && <h3>{personalizedSubGreeting}</h3>}
-            <p>{t('chat.tagline')}</p>
 
-            {/* Daily EU Brief + Knowledge Stats */}
-            <DailyBrief onQueryClick={(query) => {
-              setInputValue(query);
-              requestAnimationFrame(() => textareaRef.current?.focus());
-            }} />
-
-            <p className="chat-interface__empty-hint">
-              {t('chat.startConversation')}
-            </p>
-            <div className="chat-interface__examples">
-              <h3>{t('chat.tryAsking')}</h3>
-              <div className="chat-interface__examples-list">
-                {examplePrompts && examplePrompts.length > 0 ? (
-                  examplePrompts.map((ex) => (
-                    <button
-                      key={ex.id}
-                      type="button"
-                      className="chat-interface__example-btn"
-                      onClick={() => handleExampleClick(ex)}
-                      aria-label={`Use example: ${ex.text}`}
-                    >
-                      "{ex.text}"
-                    </button>
-                  ))
-                ) : (
-                  <>
-                    <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example1'))}>
-                      "{t('chat.example1')}"
-                    </button>
-                    <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example2'))}>
-                      "{t('chat.example2')}"
-                    </button>
-                    <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example3'))}>
-                      "{t('chat.example3')}"
-                    </button>
-                    <button type="button" className="chat-interface__example-btn" onClick={() => handleExampleClick(t('chat.example4'))}>
-                      "{t('chat.example4')}"
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
+            {/* Dashboard grid: headlines + example prompts + stats */}
+            <DailyBrief
+              onQueryClick={(query) => {
+                setInputValue(query);
+                requestAnimationFrame(() => textareaRef.current?.focus());
+              }}
+              examplePrompts={examplePrompts && examplePrompts.length > 0 ? examplePrompts : [
+                { id: 'f1', text: t('chat.example1') },
+                { id: 'f2', text: t('chat.example2') },
+                { id: 'f3', text: t('chat.example3') },
+                { id: 'f4', text: t('chat.example4') },
+              ]}
+              onExampleClick={handleExampleClick}
+            />
           </div>
         ) : (
           <MessageList
