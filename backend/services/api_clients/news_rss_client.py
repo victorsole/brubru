@@ -5,14 +5,17 @@ Monitors major EU policy news outlets:
 - Euractiv - Pan-European policy news network
 - Politico Europe - Brussels insider coverage
 - Euronews My Europe - EU institutional affairs
+- Contexte EU - Brussels policy analysis (HTML-scraped, no RSS)
 
 Documentation:
 - Euractiv: https://www.euractiv.com/
 - Politico Europe: https://www.politico.eu/
 - Euronews: https://www.euronews.com/my-europe
+- Contexte EU: https://www.contexte.com/eu/
 """
 
 import logging
+import re
 from typing import Optional, List, Dict, Any
 from datetime import datetime, timedelta
 
@@ -216,6 +219,92 @@ class NewsRSSClient:
         logger.info(f"Found {len(articles)} Euronews My Europe articles")
         return articles
 
+    async def get_contexte_eu(
+        self,
+        hours: int = 24
+    ) -> List[Dict[str, Any]]:
+        """
+        Get latest Contexte EU articles via HTML scraping (no RSS available).
+
+        Contexte is a paywalled Brussels policy publication. We scrape public
+        headlines from their EU edition page.
+
+        Args:
+            hours: Get news from last N hours (not date-filterable, returns latest)
+
+        Returns:
+            List of news articles
+        """
+        logger.info("Fetching Contexte EU headlines via HTML scrape")
+
+        articles = []
+        try:
+            import httpx
+            from bs4 import BeautifulSoup
+
+            async with httpx.AsyncClient(timeout=20.0, follow_redirects=True) as client:
+                resp = await client.get(
+                    "https://www.contexte.com/eu/",
+                    headers={
+                        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                      "Chrome/120.0.0.0 Safari/537.36",
+                        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                        "Accept-Language": "en-GB,en;q=0.9",
+                    }
+                )
+                if resp.status_code != 200:
+                    logger.warning(f"Contexte EU returned {resp.status_code}")
+                    return articles
+
+                soup = BeautifulSoup(resp.text, 'html.parser')
+
+                # Contexte uses <h4> tags for article headlines inside <a> wrappers
+                seen_titles = set()
+                for heading in soup.find_all('h4', limit=20):
+                    link = heading.find_parent('a', href=True) or heading.find('a', href=True)
+                    if not link:
+                        continue
+                    title = heading.get_text(strip=True)
+                    href = link.get('href', '')
+                    if not title or len(title) < 15 or title in seen_titles:
+                        continue
+                    seen_titles.add(title)
+
+                    # Normalise URL
+                    if href.startswith('/'):
+                        href = f"https://www.contexte.com{href}"
+
+                    # Only include EU edition articles (skip /fr/ French edition)
+                    if '/fr/' in href and '/eu/' not in href:
+                        continue
+
+                    # Extract category from URL pattern /eu/article/{category}/...
+                    category = ""
+                    cat_match = re.search(r'/eu/article/(\w+)/', href)
+                    if cat_match:
+                        category = cat_match.group(1)
+
+                    articles.append({
+                        "title": title,
+                        "link": href,
+                        "published": datetime.now().isoformat(),
+                        "summary": "",
+                        "content": "",
+                        "source": "contexte_eu",
+                        "categories": [category] if category else ["eu_policy"],
+                        "author": ""
+                    })
+
+            logger.info(f"Found {len(articles)} Contexte EU articles")
+
+        except ImportError:
+            logger.warning("httpx/beautifulsoup4 not installed, skipping Contexte EU")
+        except Exception as e:
+            logger.error(f"Failed to scrape Contexte EU: {str(e)[:80]}")
+
+        return articles
+
     async def get_all_news(
         self,
         hours: int = 24
@@ -259,6 +348,13 @@ class NewsRSSClient:
                     "author": entry.author
                 })
 
+        # Add Contexte EU (HTML-scraped, no RSS)
+        try:
+            contexte_articles = await self.get_contexte_eu(hours=hours)
+            all_news.extend(contexte_articles)
+        except Exception as e:
+            logger.error(f"Failed to include Contexte EU: {str(e)[:60]}")
+
         # Sort by published date (most recent first)
         all_news.sort(key=lambda x: x["published"], reverse=True)
 
@@ -287,6 +383,7 @@ class NewsRSSClient:
         logger.info(f"Searching news for '{query}' in last {days} days")
 
         # Select feeds based on sources filter
+        include_contexte = True
         if sources:
             feed_urls = []
             source_map = {
@@ -294,6 +391,7 @@ class NewsRSSClient:
                 "politico_europe": self.RSS_FEEDS["politico_europe"],
                 "euronews_europe": self.RSS_FEEDS["euronews_my_europe"]
             }
+            include_contexte = "contexte_eu" in sources
             for source in sources:
                 if source in source_map:
                     feed_urls.append(source_map[source])
@@ -326,6 +424,17 @@ class NewsRSSClient:
                         "categories": entry.categories,
                         "author": entry.author
                     })
+
+        # Include Contexte EU in search
+        if include_contexte:
+            try:
+                contexte = await self.get_contexte_eu(hours=days * 24)
+                for article in contexte:
+                    if (query_lower in article["title"].lower() or
+                        query_lower in article.get("summary", "").lower()):
+                        results.append(article)
+            except Exception:
+                pass
 
         # Sort by published date
         results.sort(key=lambda x: x["published"], reverse=True)
@@ -380,6 +489,15 @@ class NewsRSSClient:
                     "author": entry.author,
                     "age_hours": (datetime.now() - entry.published).total_seconds() / 3600
                 })
+
+        # Include Contexte EU headlines
+        try:
+            contexte = await self.get_contexte_eu(hours=hours)
+            for article in contexte:
+                article["age_hours"] = 0  # No timestamp available from HTML scrape
+                breaking_news.append(article)
+        except Exception:
+            pass
 
         # Sort by most recent first
         breaking_news.sort(key=lambda x: x["published"], reverse=True)

@@ -7,7 +7,7 @@ Centralized service for aggregating RSS feeds from all EU institutions and news 
 - OEIL (6 feeds)
 - Council of EU (17+ feeds)
 - Think Tank (20+ feeds)
-- News Media (3 feeds: Euractiv, Politico Europe, Euronews)
+- News Media (4 sources: Euractiv, Politico Europe, Euronews, Contexte EU)
 
 Features:
 - Concurrent feed fetching
@@ -83,7 +83,7 @@ class RSSAggregator:
             "think_tank": 1
         }
 
-        logger.info("Initialized RSS Aggregator with news media sources")
+        logger.info("Initialized RSS Aggregator with news media sources (incl. Contexte EU)")
 
     async def fetch_all_feeds(
         self,
@@ -283,8 +283,8 @@ class RSSAggregator:
         self,
         since: Optional[datetime]
     ) -> List[AggregatedFeedEntry]:
-        """Fetch News Media RSS feeds (Euractiv, Politico, Euronews)"""
-        logger.debug("Fetching News Media feeds")
+        """Fetch News Media RSS feeds (Euractiv, Politico, Euronews) + Contexte EU (HTML)"""
+        logger.debug("Fetching News Media feeds (incl. Contexte EU)")
 
         feeds = await self.news_client.get_all_feeds(since=since)
 
@@ -315,6 +315,27 @@ class RSSAggregator:
                     language=entry.language,
                     author=entry.author
                 ))
+
+        # Contexte EU (HTML-scraped, no RSS feed available)
+        try:
+            contexte_articles = await self.news_client.get_contexte_eu()
+            for article in contexte_articles:
+                entries.append(AggregatedFeedEntry(
+                    id=article["link"],
+                    title=article["title"],
+                    link=article["link"],
+                    published=datetime.fromisoformat(article["published"]),
+                    summary=article.get("summary", ""),
+                    content=article.get("content", ""),
+                    source="contexte_eu",
+                    feed_name="news",
+                    categories=article.get("categories", []),
+                    language="en",
+                    author=article.get("author", "")
+                ))
+            logger.info(f"Added {len(contexte_articles)} Contexte EU articles")
+        except Exception as e:
+            logger.warning(f"Contexte EU scrape failed: {str(e)[:60]}")
 
         return entries
 
@@ -354,7 +375,7 @@ class RSSAggregator:
             return await self._fetch_council_feeds(since)
         elif source == "think_tank":
             return await self._fetch_think_tank_feeds(since)
-        elif source in ["news_media", "euractiv", "politico_europe", "euronews_europe"]:
+        elif source in ["news_media", "euractiv", "politico_europe", "euronews_europe", "contexte_eu"]:
             # Fetch all news media feeds, then filter if specific source requested
             all_news = await self._fetch_news_media_feeds(since)
             if source == "news_media":

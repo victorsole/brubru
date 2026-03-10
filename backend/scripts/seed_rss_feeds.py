@@ -131,6 +131,15 @@ EU_RSS_FEEDS = [
         "description": "Independent EU news and analysis",
         "is_active": True
     },
+    {
+        "name": "Contexte EU - Brussels Policy",
+        "url": "https://www.contexte.com/eu/",
+        "source": "Contexte EU",
+        "language": "en",
+        "category": "General",
+        "description": "Brussels policy analysis: power, energy, trade, lobbying (HTML-scraped)",
+        "is_active": True
+    },
 
     # EUR-Lex - Recent Publications
     {

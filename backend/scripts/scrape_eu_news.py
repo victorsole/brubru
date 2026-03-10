@@ -166,6 +166,10 @@ PORTALS = [
     {"url": "https://www.politico.eu/feed/",
      "source": "Politico EU", "category": "ec", "priority": 1, "type": "politico_eu"},
 
+    # ── Contexte EU Edition (HTML scrape, no RSS available) ──────────────
+    {"url": "https://www.contexte.com/eu/",
+     "source": "Contexte EU", "category": "ec", "priority": 2},
+
     # ── ECB Press Releases (via RSS) ─────────────────────────────────
     {"url": "https://www.ecb.europa.eu/rss/press.html",
      "source": "ECB", "category": "ecb", "priority": 2},
