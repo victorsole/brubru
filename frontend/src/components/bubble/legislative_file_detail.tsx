@@ -31,6 +31,7 @@ import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { StagePipeline } from './stage_pipeline';
 import { TrackFileButton } from '../shared/track_file_button';
+import { getEultUrl } from '../../utils/eu_links';
 import './legislative_file_detail.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -338,6 +339,14 @@ export const LegislativeFileDetail = () => {
                       rel="noopener noreferrer"
                     >
                       {selectedFile.oeil_procedure_ref}
+                    </a>
+                    {' | '}
+                    <a
+                      href={getEultUrl(selectedFile.oeil_procedure_ref) || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      EU Law Tracker
                     </a>
                   </div>
                 )}

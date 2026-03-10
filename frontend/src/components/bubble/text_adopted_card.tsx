@@ -16,6 +16,7 @@ import {
 } from '@mdi/js';
 import type { TextAdopted } from '../../hooks/use_texts_adopted';
 import { TEXT_TYPE_INFO } from '../../hooks/use_texts_adopted';
+import { getEultUrl } from '../../utils/eu_links';
 import './text_adopted_card.css';
 
 interface TextAdoptedCardProps {
@@ -29,6 +30,7 @@ export const TextAdoptedCard = ({ item }: TextAdoptedCardProps) => {
   const oeilUrl = item.procedure_ref
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.procedure_ref)}`
     : null;
+  const eultUrl = item.procedure_ref ? getEultUrl(item.procedure_ref) : null;
 
   return (
     <div className="text-adopted-card">
@@ -104,6 +106,17 @@ export const TextAdoptedCard = ({ item }: TextAdoptedCardProps) => {
           >
             <Icon path={mdiOpenInNew} size={0.7} />
             OEIL
+          </a>
+        )}
+        {eultUrl && (
+          <a
+            href={eultUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-adopted-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            EU Law Tracker
           </a>
         )}
       </div>

@@ -15,6 +15,7 @@ import {
 } from '@mdi/js';
 import type { CommissionDocItem } from '../../hooks/use_commission_documents';
 import { DOC_TYPE_INFO } from '../../hooks/use_commission_documents';
+import { getEultUrl } from '../../utils/eu_links';
 import './commission_document_card.css';
 
 interface CommissionDocumentCardProps {
@@ -27,6 +28,7 @@ export const CommissionDocumentCard = ({ item }: CommissionDocumentCardProps) =>
   const oeilUrl = item.procedure_ref
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.procedure_ref)}`
     : null;
+  const eultUrl = item.procedure_ref ? getEultUrl(item.procedure_ref) : null;
 
   return (
     <div className="commission-document-card">
@@ -91,6 +93,17 @@ export const CommissionDocumentCard = ({ item }: CommissionDocumentCardProps) =>
           >
             <Icon path={mdiOpenInNew} size={0.7} />
             OEIL
+          </a>
+        )}
+        {eultUrl && (
+          <a
+            href={eultUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="commission-document-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            EU Law Tracker
           </a>
         )}
       </div>

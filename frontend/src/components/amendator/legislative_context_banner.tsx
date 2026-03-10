@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
+import { getEultUrl } from '../../utils/eu_links';
 import './legislative_context_banner.css';
 
 interface LegislativeContextBannerProps {
@@ -156,8 +157,18 @@ export const LegislativeContextBanner = ({
               rel="noopener noreferrer"
               className="legislative-context-banner__action-link"
             >
-              Open in OEIL →
+              OEIL →
             </a>
+            {matchedFile.oeil_procedure_ref && getEultUrl(matchedFile.oeil_procedure_ref) && (
+              <a
+                href={getEultUrl(matchedFile.oeil_procedure_ref)!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="legislative-context-banner__action-link"
+              >
+                EU Law Tracker →
+              </a>
+            )}
           </div>
         </div>
       )}

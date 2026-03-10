@@ -40,6 +40,7 @@ import type { TextAdopted as TextAdoptedType } from '../../hooks/use_texts_adopt
 import { TextAdoptedCard } from './text_adopted_card';
 import { useCommissionDocuments } from '../../hooks/use_commission_documents';
 import type { CommissionDocType } from '../../hooks/use_commission_documents';
+import { getEultUrl } from '../../utils/eu_links';
 import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import './my_tracked_files_tab.css';
@@ -943,6 +944,7 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
   const oeilUrl = file.oeil_procedure_ref
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(file.oeil_procedure_ref)}`
     : null;
+  const eultUrl = file.oeil_procedure_ref ? getEultUrl(file.oeil_procedure_ref) : null;
 
   return (
     <div className="tracked-file-card">
@@ -1018,6 +1020,17 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
             OEIL
           </a>
         )}
+        {eultUrl && (
+          <a
+            href={eultUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="tracked-file-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            EU Law Tracker
+          </a>
+        )}
         <button
           className="tracked-file-card__action-btn tracked-file-card__action-btn--danger"
           onClick={onUntrack}
@@ -1049,6 +1062,7 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(item.procedure_ref)}`
     : null
   );
+  const eultUrl = item.procedure_ref ? getEultUrl(item.procedure_ref) : null;
 
   return (
     <div className="committee-work-card">
@@ -1102,7 +1116,18 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
             className="committee-work-card__action-btn"
           >
             <Icon path={mdiOpenInNew} size={0.7} />
-            View in OEIL
+            OEIL
+          </a>
+        )}
+        {eultUrl && (
+          <a
+            href={eultUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="committee-work-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            EU Law Tracker
           </a>
         )}
         {item.ep_page_url && (

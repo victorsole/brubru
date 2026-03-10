@@ -7,6 +7,7 @@ import { mdiMedalOutline, mdiEmoticonConfusedOutline, mdiAlertCircleOutline, mdi
 import axios from 'axios';
 import type { Message, Citation, DetectedEntities, ChatAction } from './chat_interface';
 import { ActionButtons } from './action_buttons';
+import { getEultUrl } from '../../utils/eu_links';
 import './message_list.css';
 
 interface MessageListProps {
@@ -186,13 +187,17 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
     );
   };
 
-  // Link procedure references to OEIL (only in text content, not inside HTML tags/attributes)
+  // Link procedure references to OEIL + EU Law Tracker (only in text content, not inside HTML tags/attributes)
   const linkProcedureReferences = (text: string): string => {
     return text.replace(
       /(<[^>]*>)|(\b\d{4}\/\d{4}\([A-Z]{2,5}\)\b)/g,
       (_match, htmlTag, procRef) => {
         if (htmlTag) return htmlTag; // Return HTML tags unchanged
-        return `<a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${procRef}" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--procedure">${procRef}</a>`;
+        const eultUrl = getEultUrl(procRef);
+        const eultLink = eultUrl
+          ? ` <a href="${eultUrl}" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--procedure">EULT</a>`
+          : '';
+        return `<a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${procRef}" target="_blank" rel="noopener noreferrer" class="message-list__link message-list__link--procedure">${procRef}</a>${eultLink}`;
       }
     );
   };
