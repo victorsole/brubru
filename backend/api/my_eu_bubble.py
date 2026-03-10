@@ -1147,8 +1147,8 @@ async def fetch_rss_entries(
                                 continue
                             new_entry = RSSEntry(
                                 feed_id=feed.id,
-                                title=article.get("title", ""),
-                                link=link,
+                                title=article.get("title", "")[:500],
+                                link=link[:1000],
                                 summary=article.get("summary", ""),
                                 content=article.get("content", ""),
                                 published_at=datetime.now(),
@@ -1168,8 +1168,8 @@ async def fetch_rss_entries(
 
                     # Process latest 10 entries
                     for entry in parsed.entries[:10]:
-                        title = entry.get('title', 'Untitled')
-                        link = entry.get('link', '')
+                        title = entry.get('title', 'Untitled')[:500]
+                        link = entry.get('link', '')[:1000]
                         summary = entry.get('summary', entry.get('description', ''))
 
                         if not link:
