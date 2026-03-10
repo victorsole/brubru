@@ -1130,47 +1130,75 @@ async def fetch_rss_entries(
 
         for feed in feeds:
             try:
-                # Fetch feed
-                parsed = feedparser.parse(
-                    feed.url,
-                    agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                )
-
                 entries_added = 0
 
-                # Process latest 10 entries
-                for entry in parsed.entries[:10]:
-                    title = entry.get('title', 'Untitled')
-                    link = entry.get('link', '')
-                    summary = entry.get('summary', entry.get('description', ''))
-
-                    if not link:
-                        continue
-
-                    # Check if entry already exists
-                    existing = db.query(RSSEntry).filter(RSSEntry.link == link).first()
-                    if existing:
-                        continue
-
-                    # Parse published date
-                    published_date = None
-                    if hasattr(entry, 'published_parsed') and entry.published_parsed:
-                        published_date = datetime(*entry.published_parsed[:6])
-
-                    # Create entry
-                    new_entry = RSSEntry(
-                        feed_id=feed.id,
-                        title=title,
-                        link=link,
-                        summary=summary,
-                        content=summary,
-                        published_at=published_date,
-                        institution=feed.source,
-                        categories=[feed.category] if feed.category else []
+                # Contexte EU: HTML scrape (no RSS feed available)
+                if "contexte.com" in feed.url:
+                    from services.api_clients.news_rss_client import NewsRSSClient
+                    news_client = NewsRSSClient()
+                    try:
+                        contexte_articles = await news_client.get_contexte_eu()
+                        for article in contexte_articles:
+                            link = article.get("link", "")
+                            if not link:
+                                continue
+                            existing = db.query(RSSEntry).filter(RSSEntry.link == link).first()
+                            if existing:
+                                continue
+                            new_entry = RSSEntry(
+                                feed_id=feed.id,
+                                title=article.get("title", ""),
+                                link=link,
+                                summary=article.get("summary", ""),
+                                content=article.get("content", ""),
+                                published_at=datetime.now(),
+                                institution=feed.source,
+                                categories=article.get("categories", ["eu_policy"])
+                            )
+                            db.add(new_entry)
+                            entries_added += 1
+                    finally:
+                        await news_client.close()
+                else:
+                    # Standard RSS feed
+                    parsed = feedparser.parse(
+                        feed.url,
+                        agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
                     )
 
-                    db.add(new_entry)
-                    entries_added += 1
+                    # Process latest 10 entries
+                    for entry in parsed.entries[:10]:
+                        title = entry.get('title', 'Untitled')
+                        link = entry.get('link', '')
+                        summary = entry.get('summary', entry.get('description', ''))
+
+                        if not link:
+                            continue
+
+                        # Check if entry already exists
+                        existing = db.query(RSSEntry).filter(RSSEntry.link == link).first()
+                        if existing:
+                            continue
+
+                        # Parse published date
+                        published_date = None
+                        if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                            published_date = datetime(*entry.published_parsed[:6])
+
+                        # Create entry
+                        new_entry = RSSEntry(
+                            feed_id=feed.id,
+                            title=title,
+                            link=link,
+                            summary=summary,
+                            content=summary,
+                            published_at=published_date,
+                            institution=feed.source,
+                            categories=[feed.category] if feed.category else []
+                        )
+
+                        db.add(new_entry)
+                        entries_added += 1
 
                 db.commit()
 
