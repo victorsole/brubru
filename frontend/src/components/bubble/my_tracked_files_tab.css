@@ -296,6 +296,7 @@
 
 .tracked-file-card__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
@@ -1256,5 +1257,10 @@
 
   .my-tracked-files-tab__commission-docs-list {
     grid-template-columns: 1fr;
+  }
+
+  .tracked-file-card__action-btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
   }
 }
