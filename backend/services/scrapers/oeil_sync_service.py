@@ -162,6 +162,10 @@ class OEILSyncService:
                 f"skipped={result['skipped']}, errors={result['errors']}"
             )
 
+            # Refresh stale statuses from cached key events (no external requests)
+            refresh = self.refresh_stale_statuses()
+            result['status_refreshed'] = refresh['updated']
+
             return result
 
         finally:
@@ -333,7 +337,97 @@ class OEILSyncService:
         if item.link:
             carriage.url = item.link
 
+        # Refresh status from cached key events if available
+        if carriage.oeil_key_events:
+            self._refresh_status_from_events(carriage)
+
         carriage.last_updated = datetime.now(timezone.utc)
+
+    # Status progression order (higher index = further along)
+    _STATUS_RANK = {
+        CarriageStatusEnum.ANNOUNCED: 0,
+        CarriageStatusEnum.LEGISLATIVE_INITIATIVE: 1,
+        CarriageStatusEnum.TABLED: 2,
+        CarriageStatusEnum.CLOSE_TO_ADOPTION: 3,
+        CarriageStatusEnum.COMPLETED: 4,
+        CarriageStatusEnum.ADOPTED: 5,
+    }
+
+    def _refresh_status_from_events(self, carriage: LegislativeCarriage) -> bool:
+        """
+        Re-evaluate carriage status from its cached oeil_key_events.
+        Only advances status forward (never regresses).
+        Returns True if status was updated.
+        """
+        events = carriage.oeil_key_events
+        if not events:
+            return False
+
+        event_types_lower = [(e.get('event_type') or '').lower() for e in events]
+
+        # Infer status from strongest to weakest signal
+        inferred = None
+        if any('final act signed' in et for et in event_types_lower):
+            inferred = CarriageStatusEnum.ADOPTED
+        elif any('final act published' in et for et in event_types_lower):
+            inferred = CarriageStatusEnum.ADOPTED
+        elif any('entry into force' in et for et in event_types_lower):
+            inferred = CarriageStatusEnum.ADOPTED
+        elif any('act adopted by council' in et for et in event_types_lower):
+            inferred = CarriageStatusEnum.COMPLETED
+        elif any('decision by parliament' in et for et in event_types_lower):
+            inferred = CarriageStatusEnum.COMPLETED
+        elif any('committee report' in et or 'vote in committee' in et for et in event_types_lower):
+            inferred = CarriageStatusEnum.CLOSE_TO_ADOPTION
+        elif any('legislative proposal' in et or 'committee referral' in et for et in event_types_lower):
+            inferred = CarriageStatusEnum.TABLED
+
+        if not inferred:
+            return False
+
+        current_rank = self._STATUS_RANK.get(carriage.current_status, -1)
+        inferred_rank = self._STATUS_RANK.get(inferred, -1)
+
+        if inferred_rank > current_rank:
+            old = carriage.current_status.value
+            carriage.current_status = inferred
+            carriage.last_updated = datetime.now(timezone.utc)
+            logger.info(f"[INFO] Status refreshed: {carriage.oeil_procedure_ref} {old} -> {inferred.value}")
+            return True
+
+        return False
+
+    def refresh_stale_statuses(self) -> Dict[str, Any]:
+        """
+        Re-evaluate status for all carriages that have cached oeil_key_events
+        but may have a stale current_status. No external requests needed.
+        Called automatically after sync_all.
+        """
+        result = {'checked': 0, 'updated': 0, 'changes': []}
+
+        carriages = self.db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.oeil_key_events != None,
+            LegislativeCarriage.current_status != CarriageStatusEnum.ADOPTED,
+            LegislativeCarriage.current_status != CarriageStatusEnum.WITHDRAWN
+        ).all()
+
+        result['checked'] = len(carriages)
+
+        for carriage in carriages:
+            old_status = carriage.current_status.value
+            if self._refresh_status_from_events(carriage):
+                result['updated'] += 1
+                result['changes'].append(
+                    f"{carriage.oeil_procedure_ref}: {old_status} -> {carriage.current_status.value}"
+                )
+
+        if result['updated'] > 0:
+            self.db.commit()
+            logger.info(f"[OK] Status refresh: {result['updated']}/{result['checked']} carriages updated")
+        else:
+            logger.info(f"[INFO] Status refresh: {result['checked']} carriages checked, none updated")
+
+        return result
 
     def _generate_description(self, item: OEILFeedItem) -> str:
         """

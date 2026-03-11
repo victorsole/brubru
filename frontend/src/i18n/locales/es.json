@@ -47,7 +47,12 @@
     "noDocuments": "No hay documentos subidos",
     "documentsUploaded": "Documentos subidos",
     "dragDrop": "Arrastra y suelta archivos aquí o haz clic para explorar",
-    "supported": "Compatibles: PDF, Word, Texto, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "supported": "Compatibles:",
+    "uploadSuccess": "Documento listo para analizar",
+    "uploadHint": "Ahora pregunta a Brubru sobre este documento en el chat. Por ejemplo:",
+    "uploadExample1": "Resume los puntos clave de este documento",
+    "uploadExample2": "Cuales son los principales cambios legislativos propuestos?",
+    "uploadExample3": "Redacta una enmienda basada en este texto",
     "maxSize": "Máximo 10MB por archivo",
     "tooLarge": "es demasiado grande. El tamaño máximo es 10MB."
   },

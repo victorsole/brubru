@@ -200,6 +200,20 @@ export const DocumentUpload = ({ onUpload }: DocumentUploadProps = {}) => {
               </button>
             </div>
           ))}
+
+          {/* Post-upload guidance */}
+          <div className="document-upload__guidance">
+            <p className="document-upload__guidance-title">
+              <span className="mdi mdi-check-circle document-upload__guidance-icon"></span>
+              {t('docs.uploadSuccess')}
+            </p>
+            <p className="document-upload__guidance-hint">{t('docs.uploadHint')}</p>
+            <ul className="document-upload__guidance-examples">
+              <li>{t('docs.uploadExample1')}</li>
+              <li>{t('docs.uploadExample2')}</li>
+              <li>{t('docs.uploadExample3')}</li>
+            </ul>
+          </div>
         </div>
       )}
     </div>

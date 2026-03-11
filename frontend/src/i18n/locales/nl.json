@@ -47,7 +47,12 @@
     "noDocuments": "Geen documenten geüpload",
     "documentsUploaded": "Documenten geüpload",
     "dragDrop": "Sleep bestanden hierheen of klik om te bladeren",
-    "supported": "Ondersteund: PDF, Word, Tekst, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "supported": "Ondersteund:",
+    "uploadSuccess": "Document klaar voor analyse",
+    "uploadHint": "Stel nu een vraag aan Brubru over dit document in de chat. Bijvoorbeeld:",
+    "uploadExample1": "Vat de belangrijkste punten van dit document samen",
+    "uploadExample2": "Wat zijn de belangrijkste voorgestelde wetswijzigingen?",
+    "uploadExample3": "Stel een amendement op op basis van deze tekst",
     "maxSize": "Max 10MB per bestand",
     "tooLarge": "is te groot. Maximale grootte is 10MB."
   },

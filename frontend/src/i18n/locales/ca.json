@@ -47,7 +47,12 @@
     "noDocuments": "No hi ha documents pujats",
     "documentsUploaded": "Documents pujats",
     "dragDrop": "Arrossega i deixa anar fitxers aquí o fes clic per explorar",
-    "supported": "Compatibles: PDF, Word, Text, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "supported": "Compatibles:",
+    "uploadSuccess": "Document preparat per a l'analisi",
+    "uploadHint": "Ara pregunta a Brubru sobre aquest document al xat. Per exemple:",
+    "uploadExample1": "Resumeix els punts clau d'aquest document",
+    "uploadExample2": "Quins son els principals canvis legislatius proposats?",
+    "uploadExample3": "Redacta una esmena basada en aquest text",
     "maxSize": "Màxim 10MB per fitxer",
     "tooLarge": "és massa gran. La mida màxima és 10MB."
   },

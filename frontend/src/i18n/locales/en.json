@@ -47,7 +47,12 @@
     "noDocuments": "No documents uploaded",
     "documentsUploaded": "Documents uploaded",
     "dragDrop": "Drag & drop files here or click to browse",
-    "supported": "Supported: PDF, Word, Text, Markdown, PowerPoint, Excel, PNG, JPEG",
+    "supported": "Supported:",
+    "uploadSuccess": "Document ready for analysis",
+    "uploadHint": "Now ask Brubru about this document in the chat. For example:",
+    "uploadExample1": "Summarise the key points of this document",
+    "uploadExample2": "What are the main legislative changes proposed?",
+    "uploadExample3": "Draft an amendment based on this text",
     "maxSize": "Max 10MB per file",
     "tooLarge": "is too large. Maximum size is 10MB."
   },
