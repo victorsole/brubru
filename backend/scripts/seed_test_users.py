@@ -135,6 +135,14 @@ TEST_USERS = [
         "is_trainer": True,
     },
     {
+        "full_name": "María Alemany",
+        "email": "maria.alemany29@gmail.com",
+        "password": "test123",
+        "subscription_tier": "blue",
+        "policy_interests": ["Council", "EU Law Tracker"],
+        "is_trainer": True,
+    },
+    {
         "full_name": "Victor",
         "email": "victor@hellobo.eu",
         "password": "test123",

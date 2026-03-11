@@ -635,6 +635,15 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'savings and investments union': ['eu_energy_policy', 'financial_supervision_eba'],
 
     # EP Plenary March 2026
+    'ep debate': ['ep_plenary_march_2026'],
+    'ep debates': ['ep_plenary_march_2026'],
+    'parliament debate': ['ep_plenary_march_2026'],
+    'parliament debates': ['ep_plenary_march_2026'],
+    'european parliament debate': ['ep_plenary_march_2026'],
+    'debates in parliament': ['ep_plenary_march_2026'],
+    'debates in the european parliament': ['ep_plenary_march_2026'],
+    'plenary debate': ['ep_plenary_march_2026'],
+    'plenary debates': ['ep_plenary_march_2026'],
     'plenary': ['ep_plenary_march_2026'],
     'plenary agenda': ['ep_plenary_march_2026'],
     'plenary week': ['ep_plenary_march_2026'],

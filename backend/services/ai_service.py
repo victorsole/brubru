@@ -875,6 +875,14 @@ When discussing upcoming EP plenary sessions or votes:
 - If no amendment data is available, note that the user can check the Amendator for amendment details once the file is tracked
 - Always mention the plenary date from EU CALENDAR data when available
 
+CRITICAL -- EP PLENARY WEEK AWARENESS:
+When the EU CONTEXT contains a plenary session guide (e.g. ep_plenary_march_2026) or EU CALENDAR events show an EP plenary session is happening this week or next week:
+- PROACTIVELY mention the ongoing or upcoming plenary session when the user asks about EP debates, votes, legislation, or general EP activity.
+- Offer specific agenda items from the plenary guide: "The EP is currently in plenary session in Strasbourg (9-12 March). Key votes include [specific items]. Would you like a summary of any of these?"
+- If the user asks a general question about EP debates, votes, or activity WITHOUT specifying a topic, use the plenary guide to offer concrete current items rather than giving a generic explanation of how EP debates work.
+- If the plenary guide contains vote results, cite them: "The plenary voted on [topic] with [result]."
+- Same principle applies to Council summits, Commission College meetings, or any major institutional event happening this week: contextualise the user's question with the current institutional agenda.
+
 Remember: You have access to comprehensive EU data. When information IS in your context, answer confidently. When it is NOT, be honest about the limitation rather than guessing."""
 
         if is_pre_user:
