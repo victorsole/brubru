@@ -87,6 +87,21 @@ Notable: Energy Package presentation, Copyright and GenAI vote, Housing Crisis r
 - EBA Chairperson (vote: Tuesday 10 March, rapporteur Aurore Lalucq, ECON)
 - European Chief Prosecutor (vote: Tuesday 10 March, rapporteur Javier Zarzalejos, LIBE)
 
+## Plenary Vote Results (10 March 2026)
+
+| File | Vote | Result |
+|------|------|--------|
+| Housing Crisis (A10-0025/2026) | 367-166-84 | ADOPTED |
+| Copyright and GenAI (A10-0019/2026) | 460-71-88 | ADOPTED |
+| Boris Vujcic as ECB VP (A10-0038/2026) | -- | ADOPTED |
+
+## New Committee Draft Reports with Amendments (March 2026)
+
+| Committee | Procedure | Title | Rapporteur | Amendments | Status |
+|-----------|-----------|-------|------------|------------|--------|
+| ECON | 2025/0580(CNS) | Tobacco Taxation Directive (recast) | Tomas Kubin (PfE) | 61 (PE784.398) | Draft report, awaiting committee vote. Indicative plenary: Jul 2026 |
+| IMCO | 2025/0590(COD) | Single Market and Customs Programme 2028-2034 | Adnan Dibrani (S&D) | 56 (PE785.258) | Draft report, awaiting committee vote |
+
 ## Committee Developments (Week of 9-12 March)
 
 ### LIBE Committee

@@ -17,27 +17,39 @@ Long-term goal: climate neutrality by 2050. Energy poverty affects over 46 milli
 
 ## 2026 Energy Package (College adoption: 10 March 2026)
 
-The Commission adopted the Energy Package on 10 March 2026, led by Executive VP Teresa Ribera and EVP Stephane Sejourne. Three main pillars:
+The Commission adopted the Energy Package on 10 March 2026, led by Executive VP Teresa Ribera and EVP Stephane Sejourne. Three Communications adopted simultaneously. **Each has a dedicated Brubru knowledge guide with full details.**
 
-### Small Modular Reactors (SMRs)
-- EU strategy for small modular reactors as part of the energy mix
-- SMRs are nuclear reactors with output up to 300 MWe, designed for factory fabrication and modular deployment
-- Aims to establish an EU SMR industrial alliance and streamline licensing
-- Part of the broader nuclear energy renaissance in EU policy
+### Clean Energy Investment Strategy -- COM(2026) 116
+- Closes the EUR 660 billion/year investment gap in clean energy
+- CEF-Energy budget fivefold increase to EUR 29.91 billion (2028-2034 MFF)
+- EIB commitment: EUR 75+ billion over 3 years; SII Fund (EUR 500 million); EUR 200 million InvestEU nuclear top-up
+- New Energy Transition Investment Council (first meeting Q2 2026)
+- **Full guide: `clean_energy_investment_strategy.md`**
 
-### Clean Energy Investment Strategy
-- Framework for mobilising public and private investment in clean energy
-- Addresses the investment gap estimated at EUR 500 billion annually to 2030
-- Links to the Clean Industrial Deal and InvestEU programme
-- Focus on grid infrastructure, storage, and renewable capacity
+### Small Modular Reactors (SMRs) Strategy -- COM(2026) 117
+- 9 actions to deploy first EU SMRs by early 2030s
+- EU capacity target: 17-53 GW by 2050 (PINC, COM(2026) 120)
+- European Industrial Alliance on SMRs (~400 members), IPCEI in design phase
+- EUR 30 million Euratom research (2024) + EUR 15 million (2026-27)
+- **Full guide: `smr_strategy_nuclear.md`**
 
-### Citizens Energy Package
-- Measures to protect consumers from energy price volatility
-- Strengthening energy communities and prosumer rights
-- Addressing energy poverty (affecting 46+ million Europeans)
-- Building on the Electricity Market Design reform (Regulation (EU) 2024/1747)
+### Citizens Energy Package -- COM(2026) 115
+- 4 pillars, 9 actions on affordability, consumer rights, energy poverty
+- Lower electricity taxes to EU minimum = EUR 200/year savings per household
+- 42 million Europeans in energy poverty; Social Climate Fund: EUR 86.7 billion (2026-2032)
+- 8,000+ energy communities; target 90 GW community energy by 2030
+- **Full guide: `citizens_energy_package.md`**
 
-This package is being debated at the EP plenary on 10 March 2026 (Strasbourg) and will require legislative follow-up from the Commission in subsequent months.
+### Accompanying OJ Recommendations (10 March 2026)
+
+| Recommendation | CELEX | Subject |
+|----------------|-------|---------|
+| Recommendation (EU) 2026/536 | 32026H0536 | One-stop shops for energy efficiency and building renovation |
+| Recommendation (EU) 2026/537 | 32026H0537 | Unlocking private investment in energy efficiency (EUR 170B/year gap) |
+
+### Upcoming: Energy Package II (19 May 2026)
+
+A second energy package is scheduled for College adoption on 19 May 2026, covering Energy Security, Electrification Action Plan, and Heating & Cooling strategy.
 
 ## Key Legislation
 

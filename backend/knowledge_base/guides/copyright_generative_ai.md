@@ -6,9 +6,10 @@ Procedure: 2025/2058(INI) (own-initiative report)
 Committee: JURI (Legal Affairs)
 Rapporteur: Axel Voss (EPP, Germany)
 Committee vote: 28 January 2026 (17 for, 3 against, 2 abstentions)
-Plenary vote: 10 March 2026
+Plenary vote: 10 March 2026 -- ADOPTED (460 for, 71 against, 88 abstentions)
 Type: Non-legislative resolution (political signal to Commission)
 Key message: GenAI providers must comply with EU copyright law, transparency is mandatory, creators deserve fair compensation
+Note: Adopted by large majority, strong political signal for Commission to act urgently
 
 ## Core Problem
 
@@ -54,6 +55,17 @@ Generative AI systems are trained on copyrighted material without creator consen
 - Establish EUIPO Copyright Knowledge Centre
 - Commission to urgently assess whether existing copyright acquis covers GenAI
 - Propose immediate solutions without waiting for broader copyright framework review
+
+## Plenary Vote Highlights (10 March 2026)
+
+Adopted with an overwhelming majority (460-71-88) during the Strasbourg plenary (9-12 March 2026). The strong vote (87% in favour) sends a clear political signal to the Commission:
+
+- EU copyright law applies to all genAI systems on the EU market regardless of where training occurred (territoriality principle)
+- Full compensation required for news outlets whose traffic/revenue is diverted by AI systems
+- Mandatory itemised lists of all copyrighted works used in training datasets
+- EUIPO-managed opt-out registry for rightsholders
+- AI-generated content explicitly excluded from copyright protection
+- Protection against dissemination of manipulated/AI-generated content
 
 ## Political Context
 - Balances innovation (EU competitiveness in AI) with rights protection (creator compensation)

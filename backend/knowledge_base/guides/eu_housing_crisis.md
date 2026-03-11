@@ -5,9 +5,10 @@ Report: A10-0025/2026
 Procedure: 2025/2070(INI) (own-initiative report)
 Committee: HOUS (Special Committee on the Housing Crisis)
 Rapporteur: Borja Gimenez Larraz (EPP, Spain)
-Plenary vote: 10 March 2026
+Plenary vote: 10 March 2026 -- ADOPTED (367 for, 166 against, 84 abstentions)
 Type: Non-legislative resolution (first report from the new HOUS committee)
 Key message: Housing affordability is a crisis requiring EU-level coordination on supply, finance, skills, and tenant protection
+HOUS Committee chair: Irene Tinagli (S&D, Italy)
 
 ## Crisis in Numbers
 
@@ -17,6 +18,16 @@ Key message: Housing affordability is a crisis requiring EU-level coordination o
 - Approximately 1.3 million people homeless on any given night in the EU
 - Young adults leave parental homes at average age 26.3
 - Only 7% of Recovery and Resilience Facility (RRF) funds allocated to social housing
+
+## Plenary Vote Highlights (10 March 2026)
+
+The resolution was adopted with a strong majority (367-166-84) during the Strasbourg plenary (9-12 March 2026). Key additions beyond the committee report:
+
+- Tax incentives for low/middle-income first-time buyers, removal of registration fee barriers
+- Reallocation of unused Recovery and Resilience Plan funds toward social/affordable housing
+- Mandatory quality standards for new dwellings (insulation, energy efficiency, air quality)
+- Minimum "Made in EU" origin requirements for EU co-financed construction projects
+- Balanced regulation of short-term rentals (platform accountability)
 
 ## Key Recommendations
 
