@@ -44,21 +44,37 @@ def _category_label(cat: str) -> str:
     return labels.get(cat, "EU Institutions")
 
 
-def _build_headline_html(headline: str, url: str, source: str, category: str, suggested_query: Optional[str] = None) -> str:
+HEADLINE_HOVER_COLORS = [
+    "#0693e3",  # Brubru blue
+    "#9b51e0",  # purple
+    "#059669",  # green
+    "#d97706",  # amber
+    "#dc2626",  # red
+    "#0693e3",  # blue
+    "#9b51e0",  # purple
+    "#059669",  # green
+    "#d97706",  # amber
+    "#dc2626",  # red
+]
+
+
+def _build_headline_html(headline: str, url: str, source: str, category: str,
+                         suggested_query: Optional[str] = None, index: int = 0) -> str:
     """Build a single headline row with source link and Brubru query link."""
     cat_label = _category_label(category)
     brubru_link = f"{BRUBRU_CHAT_URL}?q={urllib.parse.quote(suggested_query)}" if suggested_query else BRUBRU_CHAT_URL
+    color = HEADLINE_HOVER_COLORS[index % len(HEADLINE_HOVER_COLORS)]
 
     return f"""
-    <tr>
-      <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6;">
-        <a href="{url}" style="color: #111827; text-decoration: none; font-size: 15px; font-weight: 500; line-height: 1.4;">
+    <tr class="headline-row headline-{index}">
+      <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; border-left: 3px solid transparent; transition: border-color 0.2s;">
+        <a href="{url}" class="headline-link-{index}" style="color: #111827; text-decoration: none; font-size: 15px; font-weight: 500; line-height: 1.4;">
           {headline}
         </a>
         <div style="margin-top: 4px; font-size: 12px; color: #9ca3af;">
           {cat_label} &middot;
           <a href="{url}" style="color: #6b7280; text-decoration: underline;">Source</a> &middot;
-          <a href="{brubru_link}" style="color: #0693e3; text-decoration: underline;">Ask Brubru about this</a>
+          <a href="{brubru_link}" style="color: {color}; text-decoration: underline;">Ask Brubru about this</a>
         </div>
       </td>
     </tr>"""
@@ -102,9 +118,9 @@ def _build_brief_email_html(
     headline_rows = "\n".join(
         _build_headline_html(
             h["headline"], h["url"], h["source"], h["category"],
-            h.get("suggested_query")
+            h.get("suggested_query"), index=i
         )
-        for h in headlines
+        for i, h in enumerate(headlines)
     )
 
     # Format date nicely
@@ -149,9 +165,26 @@ def _build_brief_email_html(
 
     unsub_link = _unsubscribe_url(email)
 
+    # Build hover CSS for each headline row
+    hover_css = "\n".join(
+        f"      .headline-{i} td:hover {{ border-left-color: {HEADLINE_HOVER_COLORS[i % len(HEADLINE_HOVER_COLORS)]} !important; }}\n"
+        f"      .headline-{i} td:hover .headline-link-{i} {{ color: {HEADLINE_HOVER_COLORS[i % len(HEADLINE_HOVER_COLORS)]} !important; }}"
+        for i in range(len(headlines))
+    )
+
     return f"""<!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+      .cta-btn:hover {{
+        background: linear-gradient(135deg, #0693e3 0%, #9b51e0 50%, #059669 100%) !important;
+        box-shadow: 0 4px 12px rgba(6, 147, 227, 0.35) !important;
+      }}
+{hover_css}
+  </style>
+</head>
 <body style="margin: 0; padding: 0; background: #f9fafb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <div style="max-width: 560px; margin: 0 auto; padding: 32px 16px;">
 
@@ -179,7 +212,7 @@ def _build_brief_email_html(
 
       <!-- CTA -->
       <div style="text-align: center; margin-top: 24px;">
-        <a href="{BRUBRU_CHAT_URL}" style="display: inline-block; padding: 10px 24px; background: #0693e3; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500;">
+        <a href="{BRUBRU_CHAT_URL}" class="cta-btn" style="display: inline-block; padding: 12px 28px; background: #0693e3; color: #ffffff; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 600; transition: background 0.3s, box-shadow 0.3s;">
           Ask Brubru anything about EU policy
         </a>
       </div>
@@ -231,7 +264,7 @@ def _fetch_headlines(db_session) -> tuple:
         db_session.query(DailyBrief)
         .filter(DailyBrief.brief_date == today)
         .order_by(DailyBrief.priority.asc())
-        .limit(5)
+        .limit(10)
         .all()
     )
 
@@ -241,7 +274,7 @@ def _fetch_headlines(db_session) -> tuple:
             db_session.query(DailyBrief)
             .filter(DailyBrief.brief_date == yesterday)
             .order_by(DailyBrief.priority.asc())
-            .limit(5)
+            .limit(10)
             .all()
         )
         brief_date = yesterday
@@ -316,24 +349,67 @@ def _get_all_recipient_emails(db_session) -> tuple:
     return registered_emails, preuser_only
 
 
-def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None) -> dict:
-    """Send today's brief to all subscribers (users + pre-users). Called from /news routine."""
+def _get_already_sent(db_session, brief_date: str) -> set:
+    """Get emails that already received today's brief (prevents duplicate sends on retries)."""
+    from sqlalchemy import text
+    rows = db_session.execute(
+        text("SELECT email FROM daily_brief_sends WHERE brief_date = :d"),
+        {"d": brief_date},
+    ).fetchall()
+    return {r[0] for r in rows}
+
+
+def _record_sent(db_session, email: str, brief_date: str):
+    """Record that this email received today's brief."""
+    from sqlalchemy import text
+    try:
+        db_session.execute(
+            text("INSERT INTO daily_brief_sends (email, brief_date) VALUES (:e, :d) ON CONFLICT DO NOTHING"),
+            {"e": email, "d": brief_date},
+        )
+        db_session.commit()
+    except Exception:
+        db_session.rollback()
+
+
+def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
+                           extra_recipients: Optional[List[str]] = None) -> dict:
+    """Send today's brief to all subscribers (users + pre-users + extra recipients).
+
+    Tracks successful sends per date to prevent duplicate emails on retries.
+
+    Args:
+        extra_recipients: Additional email addresses to include (e.g. from brussels.md campaign list)
+    """
     headlines, brief_date = _fetch_headlines(db_session)
 
     if not headlines:
         return {"sent": 0, "error": "No headlines for today"}
 
     registered_emails, preuser_emails = _get_all_recipient_emails(db_session)
-    all_emails = list(registered_emails) + list(preuser_emails)
+    all_existing = registered_emails | preuser_emails
+    extra_set = {e.strip().lower() for e in (extra_recipients or []) if e and e.strip()} - all_existing
+    all_emails = list(registered_emails) + list(preuser_emails) + sorted(extra_set)
 
     if not all_emails:
         return {"sent": 0, "error": "No subscribers yet"}
+
+    # Skip recipients who already received today's brief
+    already_sent = _get_already_sent(db_session, brief_date)
+    pending_emails = [e for e in all_emails if e not in already_sent]
+    skipped = len(all_emails) - len(pending_emails)
+
+    if not pending_emails:
+        return {"sent": 0, "skipped": skipped, "error": "All recipients already received today's brief"}
+
+    if skipped:
+        logger.info(f"[INFO] Skipping {skipped} recipients who already received today's brief")
 
     service = EmailService()
     sent = 0
     failed = 0
 
-    for email in all_emails:
+    for email in pending_emails:
         try:
             is_registered = email in registered_emails
             html = _build_brief_email_html(
@@ -349,17 +425,20 @@ def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None) 
             )
             if success:
                 sent += 1
+                _record_sent(db_session, email, brief_date)
             else:
                 failed += 1
         except Exception as e:
             logger.warning(f"[WARN] Failed to send brief to {email[:3]}***: {e}")
             failed += 1
 
-    logger.info(f"[OK] Daily brief sent to {sent}/{len(all_emails)} ({len(registered_emails)} users, {len(preuser_emails)} pre-users)")
+    logger.info(f"[OK] Daily brief sent to {sent}/{len(pending_emails)} ({len(registered_emails)} users, {len(preuser_emails)} pre-users, {len(extra_set)} extra, {skipped} skipped)")
     return {
         "sent": sent,
         "failed": failed,
+        "skipped": skipped,
         "registered_users": len(registered_emails),
         "pre_users": len(preuser_emails),
+        "extra_recipients": len(extra_set),
         "total_recipients": len(all_emails),
     }

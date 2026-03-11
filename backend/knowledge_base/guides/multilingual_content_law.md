@@ -1,5 +1,19 @@
 # EU Multilingual, Translation and Content Localisation Law
 
+## QUICK FACTS
+- Topic: EU language regime, multilingual compliance, content localisation, translation obligations
+- Scope: Legal framework for language requirements across digital services, media, consumer protection, and sector-specific products
+- Foundational regulation: Regulation No 1/1958 (EEC), CELEX 31958R0001 (24 official EU languages)
+- Charter basis: Article 22 Charter of Fundamental Rights (linguistic diversity)
+- DSA (Regulation (EU) 2022/2065): Terms in all official languages, notice mechanisms in local language, content moderation across all EU languages
+- AVMSD (Directive 2018/1808/EU): 30% European works quota for VOD, accessibility via subtitling/audio description
+- EMFA (Regulation (EU) 2024/1083): Media pluralism protection across linguistic markets
+- EAA (Directive 2019/882/EU): Accessibility including captioning, plain language, deadline 28 June 2025
+- AI Act (Regulation (EU) 2024/1689): Instructions for high-risk AI in local language
+- Sector-specific: MDR, IVDR, food labelling (Reg 1169/2011), cosmetics (Reg 1223/2009), pharma (Dir 2001/83/EC) all require local-language labelling
+- DG Translation: ~2,300 staff, ~2 million pages/year, eTranslation supports 24 official languages + Icelandic, Norwegian, Ukrainian
+- Translation standard: EN 17100:2015
+
 Guide for professionals working on content, translation, localisation and multilingual compliance in the EU. Covers the legal framework governing language requirements, content accessibility, audiovisual rules, and sector-specific translation obligations.
 
 ## Foundational Language Regime

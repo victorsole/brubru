@@ -1,5 +1,19 @@
 # Employment Policy and the Future of Work
 
+## QUICK FACTS
+- Topic: EU employment policy, platform work, AI and labour markets, youth employment, social rights
+- Responsible DG: DG EMPL (Employment, Social Affairs and Inclusion)
+- Council configuration: EPSCO (Employment, Social Policy, Health and Consumer Affairs)
+- Platform Work Directive: (EU) 2024/2831 -- employment status, algorithmic management, transposition by 2 December 2026
+- ESF+ Regulation: (EU) 2021/1057 -- EUR 88 billion shared management + EUR 762 million EaSI strand (2021-2027)
+- Just Transition Fund: (EU) 2021/1056 -- EUR 17.5 billion for climate transition territories (2021-2027)
+- AI Act: (EU) 2024/1689 -- high-risk AI systems in employment (recruitment, evaluation, task allocation)
+- Youth Guarantee: Council Recommendation 2020 -- quality offer within 4 months for under-30s
+- Quality Traineeships Directive: Commission proposal March 2024, under co-decision
+- Posting of Workers Directive: 96/71/EC amended by 2018/957 -- equal pay at same place
+- European Pillar of Social Rights 2030 targets: 78% employment rate, 60% adult learning, -15 million at risk of poverty
+- Union of Skills: Flagship Commission initiative launched 2025, skills partnerships and digital skills acceleration
+
 Guide for DG EMPL policy officers and social affairs professionals covering platform work, AI and labour markets, youth employment, and the European Pillar of Social Rights.
 
 ## Platform Work Directive (EU) 2024/2831

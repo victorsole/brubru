@@ -1,5 +1,16 @@
 # Understanding the European Commission
 
+## QUICK FACTS
+- Topic: European Commission -- structure, legislative process, and stakeholder engagement
+- Institution: European Commission (sole right of legislative initiative in the EU)
+- President: Ursula von der Leyen
+- College: 27 Commissioners (one per Member State), meets weekly on Wednesdays
+- DGs listed: 18 key Directorate-Generals by policy area (AGRI, CLIMA, COMP, CONNECT, ECFIN, EAC, EMPL, ENER, ENV, FISMA, GROW, HOME, JUST, MOVE, RTD, SANTE, TAXUD, TRADE)
+- Legislative pipeline: 7 steps (Political Guidelines, Work Programme, Roadmap, Public Consultation, Impact Assessment, Inter-service Consultation, College Adoption)
+- Public consultation window: Usually 12 weeks via Have Your Say portal
+- Key engagement tools: Public consultations, expert groups, stakeholder events, Transparency Register meetings
+- Von der Leyen I priorities (2019-2024): 6 (Green Deal, Digital Age, Economy for People, Stronger in World, European Way of Life, European Democracy)
+
 How the Commission works and how to engage with it.
 
 ## Structure

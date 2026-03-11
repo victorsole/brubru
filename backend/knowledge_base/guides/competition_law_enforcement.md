@@ -1,5 +1,20 @@
 # EU Competition Law Enforcement
 
+## QUICK FACTS
+- Topic: EU antitrust enforcement -- Articles 101 and 102 TFEU
+- Legal basis: TFEU Articles 101-109
+- Article 101: Prohibits anti-competitive agreements (price fixing, market sharing, bid rigging)
+- Article 102: Prohibits abuse of dominant position (predatory pricing, tying, refusal to supply)
+- Procedural framework: Regulation (EC) 1/2003
+- Lead DG: DG Competition (DG COMP)
+- Max fine: 10% of worldwide annual turnover
+- Leniency: Full immunity for first applicant; 20-50% reduction for subsequent cooperators
+- Settlement discount: 10% fine reduction
+- ECN+ Directive: Directive (EU) 2019/1 -- harmonises NCA powers across Member States
+- Private enforcement: Damages Directive 2014/104/EU
+- Judicial review: General Court (full review + unlimited jurisdiction on fines), Court of Justice (points of law)
+- Largest cartel fine: EUR 2.93 billion (truck cartel, 2016)
+
 Guide to EU antitrust enforcement by DG Competition, covering Articles 101 and 102 TFEU, procedural rules under Regulation 1/2003, and the ECN+ Directive cooperation framework.
 
 ## Treaty Provisions

@@ -1,5 +1,19 @@
 # EU Financial Regulation and Public Procurement
 
+## QUICK FACTS
+- Topic: EU institutional procurement under the Financial Regulation
+- Legal basis: Financial Regulation (EU, Euratom) 2018/1046, Title V (Public Contracts)
+- Key principles: Transparency, proportionality, equal treatment, non-discrimination, sound financial management
+- Thresholds: <EUR 15,000 single tender; EUR 15,000-144,000 negotiated (min 3 candidates); >EUR 144,000 open/restricted procedure
+- Procedure types: Open, restricted, negotiated, competitive dialogue
+- Evaluation: Minimum 3 committee members from 2+ organisational entities
+- Award methods: Best price-quality ratio (typical 60/40 or 70/30), lowest price, lowest cost
+- Framework contracts: Max 4 years (single operator, cascade, reopening, or mixed)
+- Payment deadline: 30 days from receipt of valid invoice
+- Conflict of interest: Article 61 -- declaration required from all evaluation committee members
+- Publication: TED (ted.europa.eu), eForms mandatory from October 2023
+- Related directive: Directive 2014/24/EU (Member State general procurement)
+
 Guide for EU institutional staff managing procurement procedures under the Financial Regulation (EU, Euratom) 2018/1046. Covers contracting authority responsibilities from planning through contract management.
 
 ## Legal Framework

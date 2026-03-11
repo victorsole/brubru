@@ -40,7 +40,7 @@ import type { TextAdopted as TextAdoptedType } from '../../hooks/use_texts_adopt
 import { TextAdoptedCard } from './text_adopted_card';
 import { useCommissionDocuments } from '../../hooks/use_commission_documents';
 import type { CommissionDocType } from '../../hooks/use_commission_documents';
-import { getEultUrl } from '../../utils/eu_links';
+import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
 import './my_tracked_files_tab.css';
@@ -172,18 +172,35 @@ export const MyTrackedFilesTab = () => {
     }
   };
 
-  // Load available files when modal opens
-  const loadAvailableFiles = async () => {
+  // Load available files when modal opens (or when searching server-side)
+  const loadAvailableFiles = async (searchTerm?: string) => {
     setIsLoadingFiles(true);
     try {
+      const params = new URLSearchParams({ limit: '500' });
+      if (searchTerm && searchTerm.trim()) {
+        params.set('search', searchTerm.trim());
+      }
       const response = await axios.get<{ carriages: SearchableFile[]; total: number }>(
-        `${API_BASE}/api/legislative-train/carriages?limit=500`
+        `${API_BASE}/api/legislative-train/carriages?${params.toString()}`
       );
       setAvailableFiles(response.data.carriages || []);
     } catch (error) {
       console.error('Failed to load files:', error);
     } finally {
       setIsLoadingFiles(false);
+    }
+  };
+
+  // Debounced server-side search
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
+    if (value.trim().length >= 3) {
+      searchTimeoutRef.current = setTimeout(() => loadAvailableFiles(value), 400);
+    } else if (value.trim().length === 0) {
+      // Reset to full list when search is cleared
+      searchTimeoutRef.current = setTimeout(() => loadAvailableFiles(), 200);
     }
   };
 
@@ -276,19 +293,13 @@ export const MyTrackedFilesTab = () => {
     return { year: 0, number: 0 };
   };
 
-  // Filter files based on search query and status
+  // Filter files based on status (search is now handled server-side)
   const filteredFiles = availableFiles.filter((file) => {
     // Status filter
     if (statusFilter !== 'all' && file.current_status !== statusFilter) {
       return false;
     }
-    // Search query filter
-    if (!searchQuery.trim()) return true;
-    const query = searchQuery.toLowerCase();
-    return (
-      file.title.toLowerCase().includes(query) ||
-      (file.oeil_procedure_ref?.toLowerCase().includes(query))
-    );
+    return true;
   });
 
   // Sort filtered files based on sortOrder
@@ -792,11 +803,11 @@ export const MyTrackedFilesTab = () => {
                   type="text"
                   placeholder="Search by title or procedure reference..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   autoFocus
                 />
                 {searchQuery && (
-                  <button onClick={() => setSearchQuery('')}>
+                  <button onClick={() => handleSearchChange('')}>
                     <Icon path={mdiClose} size={0.7} />
                   </button>
                 )}
@@ -945,6 +956,7 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
     ? `https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=${encodeURIComponent(file.oeil_procedure_ref)}`
     : null;
   const eultUrl = file.oeil_procedure_ref ? getEultUrl(file.oeil_procedure_ref) : null;
+  const regDelUrl = file.oeil_procedure_ref ? getRegDelUrl(file.oeil_procedure_ref) : null;
 
   return (
     <div className="tracked-file-card">
@@ -1031,6 +1043,17 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
             EU Law Tracker
           </a>
         )}
+        {regDelUrl && (
+          <a
+            href={regDelUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="tracked-file-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            RegDel Register
+          </a>
+        )}
         <button
           className="tracked-file-card__action-btn tracked-file-card__action-btn--danger"
           onClick={onUntrack}
@@ -1063,6 +1086,7 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
     : null
   );
   const eultUrl = item.procedure_ref ? getEultUrl(item.procedure_ref) : null;
+  const regDelUrl = item.procedure_ref ? getRegDelUrl(item.procedure_ref) : null;
 
   return (
     <div className="committee-work-card">
@@ -1128,6 +1152,17 @@ const CommitteeWorkCard = ({ item }: CommitteeWorkCardProps) => {
           >
             <Icon path={mdiOpenInNew} size={0.7} />
             EU Law Tracker
+          </a>
+        )}
+        {regDelUrl && (
+          <a
+            href={regDelUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="committee-work-card__action-btn"
+          >
+            <Icon path={mdiOpenInNew} size={0.7} />
+            RegDel Register
           </a>
         )}
         {item.ep_page_url && (

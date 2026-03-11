@@ -31,7 +31,7 @@ import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import { StagePipeline } from './stage_pipeline';
 import { TrackFileButton } from '../shared/track_file_button';
-import { getEultUrl } from '../../utils/eu_links';
+import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import './legislative_file_detail.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -340,14 +340,30 @@ export const LegislativeFileDetail = () => {
                     >
                       {selectedFile.oeil_procedure_ref}
                     </a>
-                    {' | '}
-                    <a
-                      href={getEultUrl(selectedFile.oeil_procedure_ref) || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      EU Law Tracker
-                    </a>
+                    {getEultUrl(selectedFile.oeil_procedure_ref) && (
+                      <>
+                        {' | '}
+                        <a
+                          href={getEultUrl(selectedFile.oeil_procedure_ref)!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          EU Law Tracker
+                        </a>
+                      </>
+                    )}
+                    {getRegDelUrl(selectedFile.oeil_procedure_ref) && (
+                      <>
+                        {' | '}
+                        <a
+                          href={getRegDelUrl(selectedFile.oeil_procedure_ref)!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          RegDel Register
+                        </a>
+                      </>
+                    )}
                   </div>
                 )}
                 {selectedFile.celex_numbers && selectedFile.celex_numbers.length > 0 && (

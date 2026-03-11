@@ -1,5 +1,18 @@
 # Linguistic Patterns of EU Directives
 
+## QUICK FACTS
+- Topic: Linguistic patterns and drafting conventions for EU directives
+- Legal basis: Article 288 TFEU (binding as to result, Member States choose form and methods of transposition)
+- Source corpus: 5 EP+Council directives -- (EU) 2019/1 (ECN+), (EU) 2023/977 (law enforcement info exchange), (EU) 2020/1828 (representative actions), (EU) 2016/800 (children's procedural safeguards), (EU) 2024/2823 (design protection recast)
+- Defining construction: "Member States shall ensure that..." (77-92% of all substantive obligations)
+- Closing formula: "This Directive is addressed to the Member States."
+- Transposition article: Mandatory; tripartite formula ("laws, regulations and administrative provisions"); typical deadline 2-3 years
+- Harmonisation spectrum: Minimum ("at least", "Member States may", non-regression clause) vs Full (direct substantive rules, no flexibility markers)
+- Modal verb rules: Same as regulations -- "shall" in enacting terms only, "should" in recitals only, "must" virtually absent
+- JHA-specific features: Protocol 21 (Ireland opt-in/out), Protocol 22 (Denmark opt-out), Schengen acquis recitals
+- Recast features: "(recast)" title marker, selective transposition article, correlation table annex
+- Policy domains covered: Competition, police/JHA cooperation, consumer protection, criminal justice/fundamental rights, intellectual property
+
 Training reference for understanding, drafting, and amending EU directives (acts requiring national transposition under Article 288 TFEU). Based on analysis of five EP+Council directives across different policy domains:
 
 - **Directive (EU) 2019/1** -- ECN+ Directive, empowering competition authorities (antitrust/internal market)

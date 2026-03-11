@@ -85,7 +85,7 @@ class AIService:
         api_key: str,
         context_builder: ContextBuilder,
         model: str = MODEL_SONNET,
-        temperature: float = 0.7,
+        temperature: float = 0.3,
         max_output_tokens: int = 4000,
         use_fallback: bool = True
     ):
@@ -575,6 +575,9 @@ CRITICAL - Accuracy over confidence:
 - Only state facts that are in the provided EU CONTEXT
 - If specific details (dates, fines, percentages, deadlines) are NOT in the context, say: "I don't have the specific [detail] in my verified sources."
 - NEVER invent numbers, dates, or statistics
+
+CRITICAL - GROUNDING STEP (do this before every answer):
+Before composing your response, mentally identify the exact names, dates, CELEX numbers, procedure references, and legal act numbers found in the EU CONTEXT provided below. Your answer must ONLY use these verified references. Do not supplement with outside knowledge for specific facts like case numbers, fine amounts, deadlines, or personnel names. If a fact is not in the context, either omit it or say you do not have it.
 
 CRITICAL - Every item must be DIRECTLY relevant:
 - When listing regulations or legislation in response to a query, EVERY item must be DIRECTLY and obviously relevant to the topic asked about.

@@ -1,5 +1,17 @@
 # Working with Parliamentary Assistants (APAs)
 
+## QUICK FACTS
+- Topic: Engaging effectively with Accredited Parliamentary Assistants in the European Parliament
+- APA types: Accredited Parliamentary Assistants (Brussels/Strasbourg), Local Assistants (constituencies), Specialised Service Providers, Trainees
+- Key role: Gatekeepers who decide what reaches the MEP's desk; also researchers, speechwriters, schedulers, negotiators
+- Three tests every request faces: Ideological (fits MEP's political line?), Practical (feasible?), Political (worth the capital?)
+- Email pattern: firstname.surname@europarl.europa.eu (all lowercase, no accents)
+- Assistant directory: europarl.europa.eu/meps/en/assistants
+- Meeting prep: Research MEP voting record, prepare a one-pager with clear ask, anticipate questions, define success
+- Time blocks: APAs work in 15-minute blocks; be concise, precise, and prepared
+- Cardinal rule: Never bypass the APA to contact the MEP directly
+- Common mistakes: 50-page position papers, meetings without clear purpose, over-promising and under-delivering
+
 Guide to effectively engaging with Accredited Parliamentary Assistants in the European Parliament.
 
 ## Understanding APAs

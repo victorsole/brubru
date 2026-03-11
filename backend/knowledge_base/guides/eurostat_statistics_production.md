@@ -1,5 +1,18 @@
 # Eurostat Statistics Production
 
+## QUICK FACTS
+- Topic: European Statistical System, data collection methodologies, quality frameworks, international trade in services statistics
+- Scope: EU statistics production and dissemination
+- Responsible institution: Eurostat (statistical office of the EU), coordinating with 27 National Statistical Institutes
+- Framework regulation: European Business Statistics Regulation (EU) 2019/2152 (replaced 10 previous regulations)
+- Confidentiality regulation: Regulation (EC) 223/2009
+- Code of Practice: 16 principles in 3 areas (institutional environment, statistical processes, statistical output)
+- ITSS classification: EBOPS 2010 (12 service categories: SA-SL)
+- Quality dimensions: Relevance, accuracy, timeliness, punctuality, comparability, coherence, accessibility
+- Peer reviews: Every 5 years per NSI (self-assessment + independent expert visit)
+- Validation stages: Pre-validation, plausibility checks, anomaly detection, bilateral queries, revision analysis, publication clearance
+- Embargo: Publications embargoed until official release time (typically 11:00 CET)
+
 Guide for Eurostat statisticians and data analysts covering the European Statistical System, data collection methodologies, quality frameworks, and international trade in services statistics.
 
 ## European Statistical System (ESS)

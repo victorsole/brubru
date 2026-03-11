@@ -1,5 +1,16 @@
 # European Semester Annual Report 2026 -- EP Reports
 
+## QUICK FACTS
+- Topic: EP own-initiative reports on the 2026 European Semester (economic coordination + employment)
+- ECON report procedure: 2025/2182(INI), rapporteur Kira Marie Peter-Hansen (Greens/EFA, Denmark)
+- EMPL report procedure: 2025/2183(INI), rapporteur Nela Riehl (Greens/EFA, Germany), reference A10-0033/2026
+- EMPL committee vote: 38 in favour, 11 against, 3 abstentions (adopted 27 February 2026)
+- Plenary vote: Scheduled 10 March 2026 (Strasbourg, joint debate)
+- Legal basis: TFEU Articles 121-126, Regulation (EU) 2024/1263 (reformed SGP), Regulation (EU) 2021/241 (RRF)
+- Commission Autumn Package (November 2025): ASGS 2026, AMR 2026, JER draft, euro area recommendation, Article 126 TFEU report
+- CSRs expected: May 2026 (Spring Package)
+- Council endorsement of CSRs: June-July 2026
+
 The European Parliament produces two annual own-initiative reports (INI) on the European Semester each year: one from ECON on economic policy coordination, and one from EMPL on employment and social priorities. Both are debated and voted together in a joint plenary debate.
 
 ## 2026 Reports Overview

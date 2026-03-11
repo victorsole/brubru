@@ -1,5 +1,13 @@
 # Essential EU Websites & Resources
 
+## QUICK FACTS
+- Topic: Online resources for EU policy monitoring and research
+- Scope: Legislative tracking, EP tools, Council databases, Commission portals, voting transparency, tenders, think tanks
+- Resource categories: 8 (Legislative Tracking, European Parliament, Council, Commission, Voting & Transparency, Tenders & Funding, Think Tanks, Other)
+- Key portals: EUR-Lex, OEIL, Legislative Train, Have Your Say, TED, Transparency Register, Council Document Register
+- Think tanks covered: Bruegel, European Policy Centre (EPC), CEPS, Egmont Institute
+- Total resources listed: 25+ websites and databases
+
 Key online resources for EU policy monitoring and research.
 
 ## Legislative Tracking

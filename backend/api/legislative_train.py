@@ -114,6 +114,7 @@ async def get_carriages(
     committee: Optional[str] = Query(None, description="Filter by committee"),
     is_blocked: Optional[bool] = Query(None, description="Filter blocked files"),
     policy_areas: Optional[str] = Query(None, description="Filter by policy areas (comma-separated)"),
+    search: Optional[str] = Query(None, description="Full-text search on title and procedure reference"),
     limit: int = Query(50, ge=1, le=500),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db)
@@ -121,6 +122,24 @@ async def get_carriages(
     """Get carriages with filters"""
     try:
         query = db.query(LegislativeCarriage)
+
+        # Full-text search on title (uses GIN index) + exact match on procedure ref
+        if search and search.strip():
+            search_term = search.strip()
+            # Try procedure reference match first (exact substring)
+            ref_filter = LegislativeCarriage.oeil_procedure_ref.ilike(f"%{search_term}%")
+            # PostgreSQL full-text search on title using the existing GIN index
+            # Convert search terms to tsquery: split words and join with &
+            words = [w for w in search_term.split() if len(w) > 1]
+            if words:
+                ts_query = " & ".join(words)
+                from sqlalchemy import func, text as sa_text
+                title_filter = func.to_tsvector('english', LegislativeCarriage.title).match(ts_query)
+                # Also try simple ILIKE as fallback for partial matches
+                ilike_filter = LegislativeCarriage.title.ilike(f"%{search_term}%")
+                query = query.filter(ref_filter | title_filter | ilike_filter)
+            else:
+                query = query.filter(ref_filter)
 
         # Apply filters
         if train_id:

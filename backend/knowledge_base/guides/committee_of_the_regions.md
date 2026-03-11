@@ -1,5 +1,19 @@
 # European Committee of the Regions (CoR)
 
+## QUICK FACTS
+- Full name: European Committee of the Regions (CoR)
+- Type: EU advisory body representing local and regional authorities
+- Treaty basis: Articles 300, 305-307 TFEU; established by Maastricht Treaty (1992)
+- Members: 329 members + 329 alternates from 27 Member States
+- Current mandate: 2025-2030
+- President: Kata Tutto (Hungary, PES) -- until summer 2027
+- Seat: Rue Belliard 101, 1040 Brussels (shared with EESC)
+- Thematic commissions: 6 (CIVEX, COTER, ECON, ENVE, NAT, SEDEC)
+- Political groups: 6 (EPP, PES, Renew Europe, ECR, European Alliance, The Greens and Progressives)
+- Plenary sessions: Up to 6 per year; 170th plenary held 4-5 March 2026
+- Priorities 2025-2030: Cohesion, Resilience, Proximity, Ukraine
+- Key power: May refer subsidiarity violations to CJEU (Article 8, Protocol No 2)
+
 ## Overview
 
 The **European Committee of the Regions (CoR)** is the EU advisory body representing local and regional authorities. Established by the Maastricht Treaty (1992), it gives regions, cities, and municipalities a direct voice in EU decision-making. The CoR must be consulted on legislation affecting regional and local government, and may also issue own-initiative opinions.

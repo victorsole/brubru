@@ -66,7 +66,7 @@ class AIProvider(ABC):
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7
+        temperature: float = 0.3
     ) -> ProviderResponse:
         """Generate a response from the AI model"""
         pass
@@ -100,7 +100,7 @@ class MistralProvider(AIProvider):
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7
+        temperature: float = 0.3
     ) -> ProviderResponse:
         if not self.is_available:
             raise RuntimeError("Mistral provider not configured")
@@ -167,7 +167,7 @@ class AnthropicHaikuProvider(AIProvider):
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7
+        temperature: float = 0.3
     ) -> ProviderResponse:
         if not self.is_available:
             raise RuntimeError("Anthropic Haiku provider not configured")
@@ -213,7 +213,7 @@ class AnthropicProvider(AIProvider):
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7
+        temperature: float = 0.3
     ) -> ProviderResponse:
         if not self.is_available:
             raise RuntimeError("Anthropic provider not configured")
@@ -263,7 +263,7 @@ class OpenAIProvider(AIProvider):
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7
+        temperature: float = 0.3
     ) -> ProviderResponse:
         if not self.is_available:
             raise RuntimeError("OpenAI provider not configured")
@@ -339,7 +339,7 @@ class GeminiProvider(AIProvider):
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7
+        temperature: float = 0.3
     ) -> ProviderResponse:
         if not self.is_available:
             raise RuntimeError("Gemini provider not configured")
@@ -487,7 +487,7 @@ class MultiProviderService:
         system_prompt: str,
         messages: List[Dict[str, Any]],
         max_tokens: int = 4000,
-        temperature: float = 0.7,
+        temperature: float = 0.3,
         prefer_claude: bool = False
     ) -> ProviderResponse:
         """

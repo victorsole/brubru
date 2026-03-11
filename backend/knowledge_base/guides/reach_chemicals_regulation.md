@@ -1,5 +1,20 @@
 # REACH and EU Chemicals Regulation
 
+## QUICK FACTS
+- Full name: Regulation (EC) No 1907/2006 -- Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH)
+- CELEX: 32006R1907
+- Type: Regulation (directly applicable)
+- Entry into force: 1 June 2007
+- Targeted revision proposal: COM(2023) 245, procedure 2023/0234(COD)
+- Lead EP committee: ENVI (Environment, Public Health and Food Safety)
+- Key agency: ECHA (European Chemicals Agency, Helsinki)
+- Lead DGs: DG ENV (policy), DG GROW (industry), DG SANTE (health)
+- Core principles: Registration, Evaluation, Authorisation, Restriction
+- Major restriction: Universal PFAS restriction (~10,000 substances) -- submitted January 2023, decision expected 2026-2027
+- Microplastics restriction: Regulation (EU) 2023/2055 (CELEX 32023R2055), first restrictions October 2023
+- Policy framework: Chemicals Strategy for Sustainability (COM(2020) 667, October 2020)
+- SSbD framework: Recommendation (EU) 2026/510 (CELEX 32026H0510), published 10 March 2026
+
 Guide for professionals working on EU chemicals policy, REACH compliance, and related environmental regulations. Covers the REACH framework, ongoing reform, key restriction proposals, and institutional landscape.
 
 ## REACH Regulation - Regulation (EC) No 1907/2006

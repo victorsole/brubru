@@ -1,5 +1,16 @@
 # EU Policy Monitoring: Pro Tips
 
+## QUICK FACTS
+- Topic: Practical methodology for tracking EU policy developments
+- Scope: Daily workflow, monitoring tools (free and paid), source curation, file tracking, early warning signals
+- Core principles: 4 (systemise don't scroll, relevance rule, go deep on one tool, signal over noise)
+- Morning routine: 30-minute daily check of monitoring folder, scan, flag, brief
+- Free tools covered: Google Alerts, RSS feeds (Feedly/Inoreader), official calendars
+- Paid platforms mentioned: EU Issue Tracker, VoteWatch, Politico Pro, Euractiv Pro, Dixit Platform
+- File tracking checkpoints: 5 (Legislative Train, OEIL, EUR-Lex, committee page, Council register)
+- Key dates to track per file: 10 (from Commission proposal to transposition deadline)
+- LinkedIn strategy: Curated list of 50 key people with targeted notifications
+
 How to efficiently track EU policy without drowning in PDFs.
 
 ## Core Principles

@@ -1,5 +1,19 @@
 # European Semester and Economic Communication
 
+## QUICK FACTS
+- Topic: European Semester cycle, economic forecasts, RRF implementation, DG ECFIN communication
+- Scope: EU economic policy coordination and institutional communication
+- Responsible DG: DG ECFIN (Economic and Financial Affairs)
+- Key cycle documents: Annual Sustainable Growth Survey (ASGS), Alert Mechanism Report (AMR), Country-Specific Recommendations (CSRs)
+- Forecast schedule: Winter (February), Spring (May), Summer (July), Autumn (November)
+- RRF legal basis: Regulation (EU) 2021/241
+- RRF total envelope: EUR 723.8 billion (EUR 338 billion grants + EUR 385.8 billion loans)
+- RRF duration: Commitments by end 2023, payments by end 2026
+- Digital euro proposal: COM(2023) 369
+- Reformed SGP: Regulation (EU) 2024/1263 (single net expenditure benchmark, 4-7 year adjustment paths)
+- Key legal references: TFEU Art. 121-126, Regulation (EU) 2021/241, Regulation (EU) 2024/1263, MFF Regulation (EU, Euratom) 2020/2093
+- Flagship event: Brussels Economic Forum (BEF), held annually in June
+
 Guide for DG ECFIN communication officers and economic policy professionals covering the Semester cycle, economic forecasts, RRF implementation, and institutional communication.
 
 ## European Semester Annual Cycle

@@ -1,5 +1,19 @@
 # EU Rare Diseases Policy Framework
 
+## QUICK FACTS
+- Topic: EU rare diseases policy, European Reference Networks, orphan medicines, diagnostics
+- EU prevalence: 27-36 million people (~8% of population), 6,000-8,000 rare diseases identified
+- Lead DG: DG SANTE (Health and Food Safety); DG RTD for research funding
+- Orphan Regulation: (EC) No 141/2000 (CELEX 32000R0141) -- 10-year market exclusivity, ~3,010 designations, 261+ authorisations by end 2024
+- Cross-border Healthcare Directive: 2011/24/EU (CELEX 32011L0024) -- legal basis for 24 ERNs across 1,600+ centres
+- HTA Regulation: (EU) 2021/2282 (CELEX 32021R2282) -- joint clinical assessments for orphan medicines from January 2028
+- EHDS Regulation: (EU) 2025/327 (CELEX 32025R0327) -- health data access, Orphanet integration
+- EP Action Plan INL: 2025/2130(INL) -- rapporteur Nicolas Gonzalez Casares (S&D, Spain), SANT Committee
+- ERDERA Partnership: EUR 380 million (2024-2031), 170+ partners across 37 countries under Horizon Europe
+- EU research investment: Over EUR 5 billion in rare disease research over past 25 years
+- ERN funding: EUR 77.4 million (EU4Health 2023-2027) + EUR 18.75 million Joint Action JARDIN (2024-2027)
+- Average diagnostic delay: 4.7 years; ~90-95% of rare diseases lack approved therapy
+
 ## Overview
 
 Rare diseases are defined in the EU as conditions affecting no more than 5 persons per 10,000 (1 in 2,000). An estimated 27-36 million people in the EU (approximately 8% of the population) live with a rare disease. Between 6,000 and 8,000 rare diseases have been identified, approximately 72-80% are genetic in origin, and around 70% manifest in childhood. About 90-95% of rare diseases currently lack an approved therapy. The average diagnostic delay ("diagnostic odyssey") is 4.7 years, with women experiencing delays 1.7 years longer than men on average.

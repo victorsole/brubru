@@ -44,6 +44,7 @@ CSV_FILES = [
     os.path.join(EMAIL_DIR, "omb_emails.csv"),
     os.path.join(EMAIL_DIR, "edps_emails.csv"),
     os.path.join(EMAIL_DIR, "cor_emails.csv"),
+    os.path.join(EMAIL_DIR, "lobby_orgs_emails.csv"),
 ]
 
 # Patterns that indicate a bounce message
@@ -66,19 +67,9 @@ BOUNCE_SUBJECTS = [
 ]
 
 # Regex to find bounced email addresses in bounce message body
+# Match any email address in bounce messages (not just EU institutions)
 EMAIL_PATTERN = re.compile(
-    r"[\w.\-+]+@(?:"
-    r"europarl\.europa\.eu|ec\.europa\.eu|consilium\.europa\.eu|"
-    r"eeas\.europa\.eu|ema\.europa\.eu|euipo\.europa\.eu|cdt\.europa\.eu|"
-    r"gsa\.europa\.eu|euda\.europa\.eu|eurofound\.europa\.eu|cpvo\.europa\.eu|"
-    r"eurohpc-ju\.europa\.eu|cedefop\.europa\.eu|eea\.europa\.eu|efsa\.europa\.eu|"
-    r"osha\.europa\.eu|era\.europa\.eu|cepol\.europa\.eu|frontex\.europa\.eu|"
-    r"echa\.europa\.eu|berec\.europa\.eu|enisa\.europa\.eu|efca\.europa\.eu|"
-    r"eige\.europa\.eu|chips-ju\.europa\.eu|euaa\.europa\.eu|ihi\.europa\.eu|"
-    r"eulisa\.europa\.eu|eib\.org|ecb\.europa\.eu|eca\.europa\.eu|"
-    r"eesc\.europa\.eu|cor\.europa\.eu|ombudsman\.europa\.eu|edps\.europa\.eu|"
-    r"curia\.europa\.eu"
-    r")",
+    r"[\w.\-+]+@[\w.\-]+\.\w{2,}",
     re.IGNORECASE,
 )
 
@@ -212,7 +203,9 @@ def remove_from_csv(csv_path: str, bounced: set[str]) -> tuple[int, int]:
         rows = list(reader)
 
     original_count = len(rows)
-    filtered = [r for r in rows if r.get("email", "").lower() not in bounced]
+    # Support both "email" and "contact_email" column names
+    email_col = "contact_email" if "contact_email" in (fieldnames or []) else "email"
+    filtered = [r for r in rows if r.get(email_col, "").lower() not in bounced]
     removed = original_count - len(filtered)
 
     if removed > 0:

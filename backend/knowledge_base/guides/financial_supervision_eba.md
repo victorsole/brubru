@@ -1,5 +1,19 @@
 # EU Financial Supervision: ESAs, MiCA, and DORA
 
+## QUICK FACTS
+- Topic: EU financial supervision -- ESAs, MiCA crypto-asset oversight, DORA digital resilience
+- ESAs: EBA (Paris, banking), EIOPA (Frankfurt, insurance/pensions), ESMA (Paris, securities/markets)
+- EBA founding regulation: Regulation (EU) 1093/2010
+- ESA Review: Regulation (EU) 2019/2175 -- enhanced governance, supervisory convergence, direct supervision powers
+- MiCA: Regulation (EU) 2023/1114 -- Markets in Crypto-Assets (ARTs, EMTs, other crypto-assets)
+- MiCA significance thresholds: >10M holders, >EUR 5B market cap, >2.5M transactions/day
+- MiCA: EBA directly supervises significant ART/EMT issuers; ESMA convergence role for CASPs
+- DORA: Regulation (EU) 2022/2554 -- Digital Operational Resilience Act (ICT risk management for financial sector)
+- DORA CTPP oversight: ESAs designate Critical Third-Party Providers via Joint Committee
+- Regulatory tools: RTS (binding), ITS (binding), Guidelines (comply-or-explain), Q&As, Opinions
+- Joint Committee: Cross-sectoral coordination -- consumer protection, AML, financial conglomerates
+- CASP own funds: EUR 50,000 to EUR 150,000 depending on services
+
 Guide for European Supervisory Authority staff covering prudential supervision, MiCA crypto-asset oversight, DORA digital operational resilience, and supervisory convergence tools.
 
 ## European Supervisory Authorities (ESAs)

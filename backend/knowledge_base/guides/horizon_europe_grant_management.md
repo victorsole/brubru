@@ -1,5 +1,19 @@
 # Horizon Europe Grant Management
 
+## QUICK FACTS
+- Topic: Horizon Europe grant lifecycle -- from proposal selection to project closure
+- Programme regulation: Regulation (EU) 2021/695
+- Financial basis: Financial Regulation (EU, Euratom) 2018/1046
+- Grant Agreement Preparation (GAP): 3-5 months; target 8 months from call deadline to signature
+- Indirect costs: 25% flat rate of eligible direct costs
+- CFS threshold: Certificate on Financial Statements required if EU contribution >EUR 430,000
+- Pre-financing: Up to 50% of maximum grant amount within 30 days of signature
+- Lump sum grants: Payment triggered by work package completion (no detailed cost reporting)
+- Open science: Mandatory open access to publications (CC-BY), FAIR data principles
+- Audit window: Up to 2 years after final payment (OLAF and ECA have independent audit rights)
+- Key portal: Funding & Tenders Portal (ec.europa.eu)
+- Common audit findings: Ineligible personnel costs, double funding, unapproved subcontracting, insufficient documentation
+
 Comprehensive guide to managing Horizon Europe grants from a Joint Undertaking or DG RTD perspective, covering the full grant lifecycle from proposal selection to project closure.
 
 ## Grant Agreement Preparation (GAP)

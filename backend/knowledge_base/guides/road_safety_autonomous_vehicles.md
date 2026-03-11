@@ -1,5 +1,20 @@
 # EU Road Safety, Autonomous Vehicles and ADAS Regulation
 
+## QUICK FACTS
+- Topic: Road safety, ADAS, autonomous driving, vehicle type-approval
+- Core regulation: General Safety Regulation (EU) 2019/2144, CELEX 32019R2144
+- Type-approval framework: Regulation (EU) 2018/858, CELEX 32018R0858
+- Responsible DG: DG MOVE (Mobility and Transport)
+- GSR key dates: 6 July 2022 (new type-approvals), 7 July 2024 (all new vehicles sold)
+- Mandatory ADAS: 13 systems including ISA, AEBS, ELKS, EDR, drowsiness warning, reversing detection
+- UNECE R157 (ALKS): First Level 3 automated driving regulation (motorway, extended to 130 km/h)
+- Road infrastructure: Directive (EU) 2019/1936 (safety management beyond TEN-T)
+- Cross-border enforcement: Directive (EU) 2024/1258 (traffic offence information exchange)
+- Driving licence revision: 2023/0053(COD), COM(2023) 127 (digital licence, graduated licensing)
+- Cybersecurity: UNECE R155 (CSMS) and R156 (SUMS) referenced in EU type-approval
+- Vision Zero: Zero road deaths by 2050, halve deaths/injuries by 2030 (vs 2019)
+- eCall: Regulation (EU) 2015/758, mandatory since April 2018 (M1/N1)
+
 Guide for professionals working on road safety, advanced driver assistance systems (ADAS), autonomous/automated driving, and vehicle type-approval in the EU. Covers the regulatory framework from vehicle safety requirements through to connected and automated mobility.
 
 ## Core Vehicle Safety Framework

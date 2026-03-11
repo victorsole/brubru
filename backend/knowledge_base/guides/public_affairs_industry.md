@@ -1,6 +1,17 @@
 # What Professional EU Public Affairs Looks Like
 
-This guide shows you what top-tier EU advocacy involves - the same services that major organisations pay €100,000+ for. With Brubru, you have access to these capabilities.
+## QUICK FACTS
+- Topic: Overview of professional EU public affairs services and quality benchmarks
+- Scope: Policy intelligence, strategic analysis, document drafting, campaign planning
+- Key deliverables: Position papers (max 2 pages), amendments (MEP-ready text), meeting briefs (with specific ask), stakeholder maps
+- Position paper structure: Executive Summary, Context, Key Concerns (max 3), Recommendations (with draft text), About
+- Engagement hierarchy: Direct meetings > Strategic events > Written submissions > Coalition actions > Media > Digital presence
+- Quality test for amendments: Could an MEP table this without changes?
+- Quality test for meetings: Made 3 points, left with a next step, official remembers you positively
+- Professional vs amateur: Anticipate proposals vs react; specific amendments vs generic objections; prioritised engagement vs whoever is available
+- Retainer market rate: EUR 10,000/month for top-tier consultancy advocacy services
+
+This guide shows you what top-tier EU advocacy involves - the same services that major organisations pay EUR 100,000+ for. With Brubru, you have access to these capabilities.
 
 ## The Services You Now Have Access To
 

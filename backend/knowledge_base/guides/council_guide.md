@@ -1,5 +1,18 @@
 # Understanding the Council of the EU
 
+## QUICK FACTS
+- Topic: Council of the EU -- structure, decision-making, and advocacy strategy
+- Institution: Council of the EU (co-legislator with European Parliament)
+- Treaty basis: TEU and TFEU
+- Configurations: 10 (GAC, FAC, ECOFIN, JHA, EPSCO, COMPET, TTE, AGRIFISH, ENVI, EYCS)
+- Working parties: 150+ technical groups of national experts
+- COREPER: Two levels -- COREPER II (Ambassadors, prepared by Antici Group) and COREPER I (Deputies, prepared by Mertens Group)
+- QMV threshold: 55% of states + 65% of population
+- Presidency: Rotating 6-month system with 18-month trio coordination
+- Key documents: Presidency compromise texts, room documents, Council conclusions, general approach
+- Access points for advocacy: Permanent Representations, capital ministries, Presidency team, working party delegates
+- Special committees: SCA (Agriculture), PSC (CFSP/CSDP), Trade Policy Committee
+
 How the Council works and how to navigate it.
 
 ## Structure Overview

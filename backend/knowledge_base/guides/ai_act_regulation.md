@@ -1,5 +1,23 @@
 # EU Artificial Intelligence Act (AI Act)
 
+## QUICK FACTS
+- Full name: Regulation (EU) 2024/1689 -- Artificial Intelligence Act
+- CELEX: 32024R1689
+- Type: Regulation (directly applicable)
+- Procedure: 2021/0106(COD) (Ordinary Legislative Procedure)
+- Commission proposal: COM(2021) 206, 21 April 2021
+- EP adoption: 13 March 2024 (523 for, 46 against, 49 abstentions)
+- Entry into force: 1 August 2024
+- Lead EP committees: IMCO + LIBE (joint procedure)
+- Co-rapporteurs: Brando Benifei (S&D) and Dragos Tudorache (Renew)
+- Risk categories: Prohibited, High-risk, Limited risk, Minimal risk
+- Prohibited practices apply from: 2 February 2025
+- GPAI obligations apply from: 2 August 2025
+- High-risk Annex III applies from: 2 August 2026
+- Max penalty: 35 million euro or 7% of global turnover (prohibited practices)
+- Central enforcement: AI Office (European Commission)
+- Corrigendum: 32024R1083R(04), published 10 March 2026
+
 Guide for professionals working on AI regulation, compliance, and EU digital policy. Covers the AI Act framework, risk categories, enforcement timeline, institutional landscape, and the Digital Omnibus amendments.
 
 ## AI Act - Regulation (EU) 2024/1689

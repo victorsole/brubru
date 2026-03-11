@@ -1,5 +1,21 @@
 # EU Social Dialogue and Collective Bargaining
 
+## QUICK FACTS
+- Topic: European Social Dialogue, collective bargaining, social partner agreements, posted workers
+- Legal basis: Articles 151-155 TFEU
+- Responsible DG: DG EMPL (Employment, Social Affairs and Inclusion)
+- EP committee: EMPL
+- Council configuration: EPSCO
+- Cross-industry social partners: ETUC (workers), BusinessEurope (private employers), SGI Europe (public services), SMEunited (SMEs)
+- Sectoral dialogue: 44 committees (Commission Decision 98/500/EC), ~185 million workers, ~6 million firms
+- Key directives: Adequate Minimum Wages (2022/2041, transposition Nov 2024), Pay Transparency (2023/970, transposition Jun 2026), Platform Work (2024/2831)
+- Social partner agreements implemented by Council: Parental leave (1995), part-time work (1997), fixed-term work (1999)
+- Autonomous agreements: Telework (2002), work-related stress (2004), digitalisation (2020)
+- Pending: EWC Directive revision 2024/0006(COD)
+- Landmark CJEU cases: Viking Line (C-438/05), Laval (C-341/05), Albany (C-67/96)
+- European Pillar of Social Rights: Principle 8 (social dialogue and involvement of workers)
+- Key agencies: European Labour Authority (ELA, Bratislava), Eurofound (Dublin)
+
 ## Overview
 
 European Social Dialogue is the process through which EU-level social partners (employers' and workers' organisations) are consulted, negotiate, and conclude agreements on employment and social policy. It is distinct from collective bargaining, which is the negotiation process between employers and trade unions on working conditions, typically at national, sectoral, or company level.

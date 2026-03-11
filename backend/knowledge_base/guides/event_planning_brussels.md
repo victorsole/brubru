@@ -1,5 +1,16 @@
 # Organising EU Policy Events in Brussels
 
+## QUICK FACTS
+- Topic: Practical event planning for EU policy professionals in Brussels
+- Scope: Venue selection, speaker management, audience building, logistics, follow-up
+- Key venue zone: Walking distance from the European Parliament (Schuman/Luxembourg area)
+- Best day: Wednesday (highest MEP availability during committee weeks)
+- Ideal lead time: 12+ weeks for a quality event; 6 weeks minimum realistic timeline
+- Avoid: Strasbourg plenary weeks, European Council summits, August, Christmas-New Year
+- Event formats: Roundtable (influence), panel discussion (awareness), reception (networking), press presentation (launch), expert workshop (technical input)
+- Budget tip: EP premises are free if an MEP hosts the event
+- Practical tips count: 7 common pitfalls, 5-point logistics checklist categories, 6-step promotion timeline
+
 Practical guide for planning successful events in the EU bubble.
 
 ## Before You Start

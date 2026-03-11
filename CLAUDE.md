@@ -25,6 +25,16 @@ Always verify your own work:
 - For UI changes, describe what should be tested manually
 - **The AI doesn't just write code—it proves the code works**
 
+### Checkpoint Commits During Long Sessions
+
+During multi-step work sessions (morning routine, feature builds, knowledge base overhauls), commit checkpoints after each logical phase:
+
+- After knowledge guide updates: `chore: checkpoint -- N guides updated`
+- After system prompt changes: `chore: checkpoint -- system prompt rules added`
+- After context builder fixes: `chore: checkpoint -- context builder improvements`
+
+This enables "try and rollback" methodology: if a later step breaks something, revert to the last checkpoint. Start from a clean git state, commit frequently, accept or roll back.
+
 ### Quality Over Speed
 
 Use thorough reasoning. The "compute tax" upfront eliminates the "correction tax" later. Fewer corrections = faster overall.

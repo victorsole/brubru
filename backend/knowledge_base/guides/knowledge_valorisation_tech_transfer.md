@@ -1,5 +1,18 @@
 # Knowledge Valorisation and Technology Transfer
 
+## QUICK FACTS
+- Topic: ERA knowledge valorisation, technology transfer, IP management in publicly funded research, EIC instruments
+- Scope: Research-to-market pathways in the European Research Area
+- Key policy: Commission Recommendation C(2022) 2391 (Guiding Principles for Knowledge Valorisation, 5 principles)
+- ERA Policy Agenda: Council Recommendation November 2021, 20 priority actions (Action 7 central to valorisation)
+- IP framework: Horizon Europe MGA Art. 16-17 (background IP, foreground results, access rights)
+- TRL scale: 1-9 (Valley of Death at TRL 4-6)
+- EIC Pathfinder: TRL 1-4, up to EUR 3-4M grant (100% funding)
+- EIC Transition: TRL 4-6, up to EUR 2.5M grant (100% funding)
+- EIC Accelerator: TRL 5-9, up to EUR 2.5M grant + EUR 15M equity (blended)
+- Standardisation strategy: COM(2022) 31 (pre-normative research, SEPs, CEN/CENELEC/ETSI)
+- Key legal references: Horizon Europe Regulation (EU) 2021/695, EU Standardisation Regulation (EU) 1025/2012, InvestEU Regulation (EU) 2021/523
+
 Guide for R&I policy officers covering ERA knowledge valorisation, technology transfer, IP management in publicly funded research, and EIC instruments for innovation support.
 
 ## ERA Policy Agenda: Knowledge Valorisation

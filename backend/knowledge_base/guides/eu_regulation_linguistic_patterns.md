@@ -1,5 +1,16 @@
 # Linguistic Patterns of EU Regulations
 
+## QUICK FACTS
+- Topic: Linguistic patterns and drafting conventions for EU regulations
+- Legal basis: Article 288 TFEU (binding in entirety, directly applicable in all Member States)
+- Source corpus: 5 EP+Council regulations -- (EU) 2017/746 (IVD), (EU) 2024/1348 (asylum), (EU) 2024/1183 (eIDAS 2), (EU) No 536/2014 (clinical trials), (EU) 2020/1503 (crowdfunding)
+- Modal verb rules: "shall" = binding obligation (enacting terms only, 300-450 per act); "should" = policy intent (recitals only, 150-200 per act); "may" = discretion (30-70 per act); "must" = virtually absent (0-2 per act)
+- Typical structure: 75-110 recitals, 50-113 articles across 6-19 chapters, 18-74 definitions
+- Closing formula: "This Regulation shall be binding in its entirety and directly applicable in all Member States."
+- Amendment technique: Alphanumeric insertion convention (Article 5a, paragraph 2a, point (c)(ia))
+- Key cross-reference phrases: "in accordance with" (80-100 per act), "pursuant to" (40-80), "as referred to in" (30-60)
+- Policy domains covered: Internal market, financial services, asylum/migration, health/pharma, digital/technology
+
 Training reference for understanding, drafting, and amending EU regulations (acts with direct effect under Article 288 TFEU). Based on analysis of five EP+Council regulations across different policy domains:
 
 - **Regulation (EU) 2017/746** -- In vitro diagnostic medical devices (health/internal market)

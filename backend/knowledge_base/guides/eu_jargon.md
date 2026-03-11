@@ -1,5 +1,12 @@
 # EU Jargon Glossary
 
+## QUICK FACTS
+- Topic: EU institutional terminology and acronyms
+- Scope: Council/COREPER, European Parliament, legislative process, Commission, budget and finance
+- Categories covered: 7 (Council & COREPER, European Parliament, Legislative Process, Commission, Budget & Finance, Other Key Terms)
+- Key terms defined: ~30 terms including COREPER, trilogue, OLP, QMV, DG, MFF, rapporteur, APA, comitology
+- Audience: EU policy professionals, public affairs practitioners, newcomers to EU affairs
+
 Essential terminology for EU policy professionals.
 
 ## Council & COREPER

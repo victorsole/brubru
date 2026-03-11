@@ -1,5 +1,20 @@
 # EU Space Programme and Defence
 
+## QUICK FACTS
+- Full name: EU Space Programme
+- Type: Regulation
+- Legal reference: Regulation (EU) 2021/696
+- Total budget: EUR 14.88 billion (MFF 2021-2027)
+- Responsible DG: DG DEFIS
+- Operational agency: EUSPA (Prague)
+- Components: Galileo (GNSS, EUR 9.0B), Copernicus (Earth observation, EUR 5.4B), IRIS2 (secure connectivity, EUR 6.0B incl. private), SSA/SST (EUR 0.5B), GOVSATCOM (EUR 0.5B)
+- Galileo constellation: 30 satellites in MEO (23,222 km), 5 services (Open, HAS, PRS, SAR, SoL)
+- Copernicus satellites: Sentinel-1 through Sentinel-6, free/full/open data policy
+- IRIS2 timeline: Initial services 2027, full operational capability 2029
+- EU Space Act: Commission proposal expected 2025, EP lead committee ITRE
+- European Defence Fund: Regulation (EU) 2021/697, EUR 7.95 billion (2021-2027)
+- European launchers: Ariane 6 (operational July 2024), Vega-C (return to flight 2025)
+
 Guide for DG DEFIS policy officers and space industry professionals covering the EU Space Programme components, EU Space Act, defence synergies, and EUSPA governance.
 
 ## EU Space Programme (Regulation (EU) 2021/696)

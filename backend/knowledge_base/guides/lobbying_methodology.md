@@ -1,5 +1,16 @@
 # EU Lobbying Methodology
 
+## QUICK FACTS
+- Topic: Strategic framework for influencing EU policy outcomes
+- Scope: Full advocacy lifecycle from policy mapping to post-vote debrief
+- Framework: 6-step advocacy process (Policy Mapping, Stakeholder Mapping, Position Development, Coalition Building, Strategic Engagement, Monitoring and Adaptation)
+- Key principle: 80% of legislative text is locked once the Commission publishes a proposal -- engage early
+- Position paper max length: 2 pages
+- Engagement hierarchy: Direct meetings > Events/roundtables > Written submissions > Informal contacts > Public campaigns
+- Intervention windows: Commission phase (highest influence), Parliament phase (highest visibility), Council phase (most opaque), Trilogue phase (final stretch)
+- Common mistakes: 8 pitfalls including engaging too late, overloading messages, ignoring the Council
+- EU calendar cycle: Sep-Dec (autumn push), Jan-Mar (new initiatives), Apr-Jun (pre-summer sprint), Jul-Aug (recess)
+
 A strategic framework for influencing EU policy outcomes. This guide transforms you from passive observer to active participant in the EU legislative process.
 
 ## The 6-Step Advocacy Process

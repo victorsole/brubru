@@ -1,5 +1,19 @@
 # EU Digital Omnibus Package (19 November 2025)
 
+## QUICK FACTS
+- Full name: Digital Omnibus Package -- four proposals to simplify the EU digital rulebook
+- Published: 19 November 2025
+- Digital Omnibus on AI: COM(2025) 836, procedure 2025/0359(COD)
+- Digital Omnibus on Data & Cybersecurity: COM(2025) 837
+- Type: Amendments to existing legislation (not standalone regulations)
+- AI Act amendments: 33 total, including high-risk timeline postponement, SMC extension, bias detection data for all AI systems
+- GDPR amendments: Clarified personal data definition, scientific research as legitimate interest, AI model training on public data
+- Cookie/ePrivacy changes: ~60% of cookies no longer require consent; mandatory single-click consent buttons
+- Cybersecurity: Single Entry Point (SEP) operated by ENISA for incident reporting
+- Regulations repealed: Free Flow of Data, Platform-to-Business, Data Governance Act, Open Data Directive (provisions moved to Data Act)
+- Estimated savings: Up to 1.34 billion euro/year; up to 5.05 billion euro by 2029 (businesses)
+- EPRS Briefing: BRI(2026)782651, "Digital Omnibus on AI" by Maria Niestadt (9 February 2026)
+
 Guide for professionals working on EU digital simplification, AI regulation amendments, GDPR reform, data governance consolidation, cybersecurity reporting, and the broader Digital Fitness Check.
 
 ## Overview

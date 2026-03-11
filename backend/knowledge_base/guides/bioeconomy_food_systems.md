@@ -1,5 +1,19 @@
 # Bioeconomy and Food Systems R&I Policy
 
+## QUICK FACTS
+- Topic: EU Bioeconomy Strategy, Food2030 framework, alternative proteins, Horizon Europe Cluster 6
+- Responsible DGs: DG RTD (Research and Innovation), DG SANTE (Health and Food Safety), DG AGRI (Agriculture)
+- Bioeconomy Strategy: COM(2018) 673, updated November 2025 -- 5 objectives, 14 action areas
+- Farm to Fork Strategy: COM(2020) 381 -- sustainable food system targets for 2030
+- CMO Regulation amendment: 2024/0319(COD) -- farmers' food supply chain position, trilogue agreed 5 March 2026, rapporteur Celine Imart (EPP, France), AGRI Committee
+- Novel Food Regulation: (EU) 2015/2283 -- authorisation for insects, cultured meat, novel proteins
+- CBE JU Regulation: (EU) 2021/2085 -- Circular Bio-based Europe Joint Undertaking
+- Horizon Europe Cluster 6: Food, Bioeconomy, Natural Resources, Agriculture and Environment -- 6 destinations
+- SCAR: Standing Committee on Agricultural Research, advisory body with 5 strategic working groups
+- Food2030 priorities: Nutrition, Climate, Circularity, Innovation
+- Alternative proteins: 6 technology categories tracked (plant-based, precision fermentation, cellular agriculture, insects, algae, mycoprotein)
+- EU global food security contribution: EUR 4.6 billion/year (development cooperation)
+
 Guide for DG RTD policy officers and research programme managers covering the EU Bioeconomy Strategy, Food2030 framework, SCAR governance, alternative proteins, and Horizon Europe Cluster 6 calls.
 
 ## EU Bioeconomy Strategy

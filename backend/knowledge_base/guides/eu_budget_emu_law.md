@@ -1,5 +1,19 @@
 # EU Budget and Economic & Monetary Union Law
 
+## QUICK FACTS
+- Topic: EU budgetary framework, own resources, financial governance, anti-fraud, and EMU instruments
+- Legal basis: TFEU Part Six, Title II (Articles 310-325)
+- MFF 2021-2027: EUR 1,211 billion (2018 prices) across 7 headings -- Regulation (EU, Euratom) 2020/2093
+- NextGenerationEU: EUR 806.9 billion (RRF: EUR 723.8 billion)
+- Own Resources Decision: 2020/2053 (customs duties, VAT-based, GNI-based, plastics-based)
+- Annual budgetary procedure: Article 314 TFEU (Commission draft -> Council -> EP -> Conciliation -> Adoption)
+- Financial Regulation: (EU, Euratom) 2018/1046
+- Anti-fraud: OLAF (Regulation 883/2013, administrative investigations) and EPPO (Regulation 2017/1939, criminal prosecution in 22 Member States)
+- ESM: Intergovernmental treaty; backstop to SRF from January 2024
+- InvestEU: EUR 26.2 billion EU guarantee, expected to mobilise EUR 372 billion -- Regulation (EU) 2021/523
+- Stability and Growth Pact: Reformed 2024 -- net expenditure benchmark, country-specific debt sustainability analysis -- Regulation (EU) 2024/1263
+- Discharge procedure: Article 319 TFEU (ECA report -> Council recommendation -> EP CONT -> EP plenary)
+
 Guide covering the EU's budgetary framework, own resources system, financial governance, anti-fraud mechanisms, and key EMU instruments for Legal Service lawyers, DG ECFIN economists, and budget specialists.
 
 ## Multiannual Financial Framework (MFF) 2021-2027

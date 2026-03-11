@@ -1,5 +1,21 @@
 # EU Energy Policy Framework
 
+## QUICK FACTS
+- Topic: EU energy policy framework -- legislation, targets, and institutional landscape
+- Legal basis: Article 194 TFEU (shared competence; taxation remains national/unanimity)
+- 2030 renewable target: 42.5% binding (45% aspirational) -- RED III, Directive (EU) 2023/2413
+- 2030 energy efficiency target: 11.7% reduction vs 2020 projections -- EED recast, Directive (EU) 2023/1791
+- 2030 GHG target: -55% vs 1990 levels -- European Climate Law, Regulation (EU) 2021/1119
+- Long-term goal: Climate neutrality by 2050
+- Lead DG: DG ENER (Energy)
+- Lead EP committee: ITRE
+- Council configuration: TTE (Transport, Telecommunications and Energy)
+- Key agency: ACER (EU Agency for Cooperation of Energy Regulators)
+- Clean Energy Package: 7 regulations/directives adopted 2018-2019 (core energy legislative framework)
+- REPowerEU (2022-2023): End Russian fossil fuel dependency by 2027
+- 2026 Energy Package: Adopted 10 March 2026 -- Clean Energy Investment Strategy, SMR Strategy, Citizens Energy Package
+- Fit for 55: 14 energy-related acts adopted 2023-2024
+
 ## Overview
 
 EU energy policy is governed by Article 194 TFEU, which establishes four key objectives: ensuring the functioning of the energy market, ensuring security of supply, promoting energy efficiency and renewables, and promoting interconnection of energy networks. Energy policy is a shared competence between the EU and Member States, with taxation remaining a national prerogative (unanimity required in Council).

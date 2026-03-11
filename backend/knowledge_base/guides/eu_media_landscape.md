@@ -1,5 +1,17 @@
 # EU Media Landscape: Brussels Policy Press
 
+## QUICK FACTS
+- Topic: Media outlets covering EU policy, institutions, and the Brussels bubble
+- Audience size: Estimated 30,000-50,000 Brussels bubble professionals
+- Tier 1 (dedicated EU media): POLITICO Europe, Contexte, Euractiv, The Parliament Magazine, EU Observer
+- Tier 2 (wire services/international): Agence Europe, Reuters, AFP, Bloomberg, Financial Times, MLex
+- Tier 3 (specialist/sectoral): Global Competition Review, Science|Business, Table.Media, Ends Europe, Borderlex
+- Key think tanks with media operations: Bruegel, CEPS, EPC, Carnegie Europe, Friends of Europe, ECIPE
+- Dominant language: English; French remains important; German influence growing
+- Business models: Pure subscription (Contexte, EU Observer), hybrid (POLITICO, Euractiv), wire service (Agence Europe, MLex), think tank (research funding)
+- Accredited journalists: ~1,000 at Commission, ~500 at Parliament
+- Contexte revenue: EUR 10.7 million (2024), ~1,500 organisation subscribers, employee-owned
+
 Guide to the key media outlets covering EU policy, institutions, and the Brussels bubble.
 
 ## Tier 1: Dedicated EU Policy Media

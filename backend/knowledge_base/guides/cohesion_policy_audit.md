@@ -1,5 +1,18 @@
 # Cohesion Policy Audit
 
+## QUICK FACTS
+- Topic: Cohesion policy audit framework, error rate methodology, Arachne risk scoring, assurance chain
+- Scope: Shared management auditing for 8 EU funds (ERDF, ESF+, Cohesion Fund, JTF, EMFAF, AMIF, ISF, BMVI)
+- Framework regulation: Common Provisions Regulation (EU) 2021/1060
+- Responsible DGs: DG REGIO, DG EMPL
+- Audit body: Joint Audit Directorate for Cohesion (DAC), 5 geographic sectors + 1 horizontal
+- Materiality threshold: <2% acceptable, 2-5% concerning, >5% material (payment interruption/suspension), >10% critical
+- Flat-rate corrections: 5% (minor), 10% (significant), 25% (serious), 100% (total failure)
+- Arachne: Data-mining risk scoring tool (green/yellow/orange/red), mandatory from 2021-2027 for certain checks
+- Annual assurance deadline: 15 February (MA declaration, AA audit opinion, accounts)
+- Commission review deadline: 31 May (acceptance of accounts)
+- Key legal references: Regulation (EU) 2021/1060, Delegated Regulation (EU) 2021/1702, ERDF/CF Regulation (EU) 2021/1058, ESF+ Regulation (EU) 2021/1057, JTF Regulation (EU) 2021/1056
+
 Guide for Joint Audit Directorate for Cohesion (DAC) auditors and shared management control officers covering the audit framework, error rate methodology, Arachne risk scoring, and assurance chain.
 
 ## Shared Management Framework

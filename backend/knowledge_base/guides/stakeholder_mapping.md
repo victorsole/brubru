@@ -1,5 +1,19 @@
 # Stakeholder Mapping for EU Public Affairs
 
+## QUICK FACTS
+- Topic: Stakeholder identification, analysis, and engagement prioritisation for EU advocacy
+- Scope: European Parliament, European Commission, Council of the EU, informal influencers
+- Core tool: Influence x Attitude Matrix (XY Matrix) with 4 priority quadrants
+- Priority 1: High Influence + Hostile -- convert or neutralise
+- Priority 2: High Influence + Supportive -- mobilise as champions
+- Priority 3: Low Influence + Supportive -- build coalitions
+- Priority 4: Low Influence + Hostile -- monitor only, do not engage
+- EP priority order: Rapporteur > Shadow rapporteurs > Coordinators > Committee members
+- Commission priority order: Cabinet > DG/Director > Head of Unit
+- Council entry point: Your national Permanent Representation
+- Mapping steps: 6 (Identify file, Map formal actors, Map informal influencers, Assess attitude, Assess influence, Prioritise)
+- Key rule: Focus on 15-20 stakeholders that matter; reassess at each legislative phase
+
 A practical framework for identifying, analysing, and engaging the people who shape EU policy outcomes.
 
 ## Why Stakeholder Mapping Matters
