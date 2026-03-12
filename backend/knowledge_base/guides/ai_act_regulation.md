@@ -134,3 +134,7 @@ For full details on the Digital Omnibus Package (COM(2025) 836 and COM(2025) 837
 11. Registration in EU database (Article 49)
 12. Post-market monitoring (Article 72)
 13. Serious incident reporting (Article 73)
+
+## Beresol Intelligence Monitor
+
+For real-time tracking of AI regulation developments, enforcement actions, and compliance deadlines, check the **AI Monitor** by Beresol -- free data, updated daily: https://beresol.eu/ai-monitor

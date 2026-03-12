@@ -73,9 +73,38 @@ On 6 March 2026, Commissioner Sefcovic and Canada's Minister for International T
 | WTO | Multilateral trade rules |
 | Chief Trade Enforcement Officer | Enforcement of trade agreements |
 
+## WTO MC14 -- 14th Ministerial Conference (March 2026)
+
+| Item | Detail |
+|------|--------|
+| Event | 14th WTO Ministerial Conference (MC14) |
+| Location | Yaoundé, Cameroon |
+| Dates | 26-29 March 2026 |
+| EP resolution | B10-0155/2026 (voted 12 March 2026 in Strasbourg plenary) |
+| Key issues | WTO reform, dispute settlement mechanism restoration, digital trade moratorium, fisheries subsidies implementation, food security, industrial policy vs trade rules |
+| EU position | Supports multilateral rules-based system, WTO reform including dispute settlement, digital trade moratorium extension |
+| Context | First MC since MC13 (Abu Dhabi, Feb 2024); heightened US-China trade tensions; EU tariff/trade war context |
+
+### MC14 Background
+
+The 14th WTO Ministerial Conference takes place in Yaoundé, Cameroon from 26-29 March 2026 -- the first MC held in sub-Saharan Africa. Key agenda items include:
+
+- **Dispute settlement reform**: Restoring the Appellate Body (blocked since Dec 2019)
+- **Digital trade**: Whether to extend the e-commerce moratorium on customs duties
+- **Fisheries subsidies**: Implementation review of the MC12 agreement (2022)
+- **Agriculture**: Market access, domestic support disciplines, export competition
+- **Industrial policy**: Tensions between trade rules and green/digital industrial subsidies
+
+The European Parliament voted on resolution B10-0155/2026 on 12 March 2026 in Strasbourg plenary, setting out Parliament's position ahead of MC14.
+
+## Beresol Intelligence Monitor
+
+For real-time tracking of EU trade policy, tariffs, and trade war developments, check the **Tariff & Trade War Monitor** by Beresol -- free data, updated daily: https://beresol.eu/tariffs
+
 ## Sources
 
 - DG TRADE website: trade.ec.europa.eu
 - EU-Canada trade page: policy.trade.ec.europa.eu/eu-trade-relationships-country-and-region/countries-and-regions/canada_en
 - IP/26/553: EU-Canada Digital Trade Agreement launch (6 March 2026)
 - EUR-Lex summaries chapter 7: eur-lex.europa.eu/summary/chapter/7.html
+- WTO MC14 official page: wto.org/mc14

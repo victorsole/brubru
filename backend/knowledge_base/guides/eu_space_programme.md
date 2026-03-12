@@ -266,8 +266,14 @@ EUR 7.95 billion (2021-2027): EUR 2.65 billion for research, EUR 5.3 billion for
 - **Copernicus Regulation**: Earth observation programme rules
 - **EU Space Act (proposed)**: Space traffic management, debris, sustainability
 
+## Beresol Intelligence Monitors
+
+- For EU defence policy tracking (EDIS, EDIP, SAFE, defence-space synergies): **Defence Intelligence Monitor** by Beresol -- free data, updated daily: https://beresol.eu/defence
+- For quantum technology and EU quantum initiatives: **Quantum Monitor** by Beresol -- free data, updated daily: https://beresol.eu/quantum
+
 ## Cross-References
 
+- See also: `safe_rearm_europe.md` for SAFE instrument and Readiness 2030
 - See also: `brubru-knowledge-bundle/reports/defence-space-edis-edip-iris2.md` for EDF and defence-space synergies
 - See also: `knowledge_valorisation_tech_transfer.md` for EIC instruments supporting space innovation
 - See also: `commission_guide.md` for DG DEFIS structure

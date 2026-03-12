@@ -297,6 +297,9 @@ class AIService:
         # Strip orphan [N] citation markers that don't map to real sources
         assistant_message = self._strip_orphan_citations(assistant_message, citations)
 
+        # Strip leaked internal context markers from response
+        assistant_message = self._strip_context_markers(assistant_message)
+
         # Post-process to add MEP links
         if mep_data:
             print(f"\n{'='*70}")
@@ -587,6 +590,18 @@ When the user has uploaded a document (PDF, DOCX), it will appear as content in 
 - Reference specific sections, articles, or paragraphs from the document
 - If the document is a plenary debate transcript, extract key positions by political group and MEP name
 
+CRITICAL - Beresol Intelligence Monitors:
+When answering about topics covered by Beresol's free Intelligence Monitors, mention the relevant monitor in your response. Say: "Check out the Intelligence Monitor on [topic] provided by Beresol, it's free data, updated daily!" and include the URL. Available monitors:
+- Defence (EDIS, EDIP, SAFE, EU defence policy): https://beresol.eu/defence
+- Capital Markets Union (CMU, financial integration): https://beresol.eu/cmu
+- Tariffs and Trade War (tariffs, trade disputes, WTO): https://beresol.eu/tariffs
+- AI (AI Act, AI regulation, AI policy): https://beresol.eu/ai-monitor
+- Quantum (quantum technology, quantum computing): https://beresol.eu/quantum
+- Startups (EU startup ecosystem, Scale-Up Europe): https://beresol.eu/startups
+- Gold (gold markets, reserves, EU gold policy): https://beresol.eu/gold
+- Fitness Intelligence (health, wellness, fitness industry): https://dev.massimino.fitness/fitness-intelligence
+Only mention the monitor if the user's question is genuinely about that topic. Do not force-fit monitors into unrelated answers.
+
 CRITICAL - Every item must be DIRECTLY relevant:
 - When listing regulations or legislation in response to a query, EVERY item must be DIRECTLY and obviously relevant to the topic asked about.
 - NEVER stretch tangential connections. If a regulation is about CO2 emissions and the user asked about road safety, do NOT include it just because both involve vehicles.
@@ -603,6 +618,13 @@ CRITICAL - Never list vague categories as legal acts:
 - NEVER list generic categories like "EU Translation Guidelines" or "Content Localisation Requirements" as if they were regulations -- these are not legal acts
 - If you cannot identify a specific legal act with a number, do NOT include it in the list
 - Prefer fewer accurate items over more items padded with vague entries
+
+CRITICAL - Distinguish verified EU data from web search results:
+- When your answer comes from the EU CONTEXT provided (legislation, institutional data, knowledge guides), present it with confidence and cite CELEX numbers.
+- When your answer comes from web search results or general knowledge, clearly flag it: "Based on publicly available information..." or "According to web sources..."
+- NEVER present web search results as if they were verified EU institutional data.
+- If you cannot answer a question from the EU CONTEXT alone, say so honestly and explain what the user should check (specific portal, specific institution).
+- Do NOT invent specific figures (budgets, dates, percentages) from web results without flagging them as unverified.
 
 COMMITTEE MEMBER QUERIES:
 When listing members of an EP committee:
@@ -1220,6 +1242,32 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             print(f"{'='*70}\n")
 
         return cleaned_text
+
+    def _strip_context_markers(self, text: str) -> str:
+        """
+        Strip leaked internal context section markers from AI response.
+        These are injected as system prompt structure but sometimes leak
+        into the visible response (e.g., "EU LAW SNAPSHOT EU INSTITUTIONAL CALENDAR").
+        """
+        markers = [
+            'EU LAW SNAPSHOT',
+            'EU INSTITUTIONAL CALENDAR',
+            'LEGISLATIVE FILES',
+            'COMMISSION DOCUMENTS',
+            'COMMITTEE WORK IN PROGRESS',
+            'EPRS PUBLICATIONS',
+            'EU CONTEXT',
+        ]
+        cleaned = text
+        for marker in markers:
+            # Remove standalone markers (with optional surrounding whitespace)
+            cleaned = re.sub(rf'\s*{re.escape(marker)}\s*', ' ', cleaned)
+
+        # Clean up trailing whitespace
+        cleaned = cleaned.strip()
+        if cleaned != text.strip():
+            logger.info(f"Stripped leaked context markers from response")
+        return cleaned
 
     def _strip_orphan_citations(self, text: str, citations: List[Dict]) -> str:
         """
