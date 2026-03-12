@@ -430,8 +430,8 @@ class MultiProviderService:
         self.providers: List[AIProvider] = []
         self.haiku_provider: Optional[AIProvider] = None
 
-        # Daily spend cap for Claude Haiku ($1.00/day = ~$25 lasts 25 days)
-        self._haiku_daily_cap_usd = 1.00
+        # Daily spend cap for Claude Haiku ($2.50/day = ~$25 lasts 10 days)
+        self._haiku_daily_cap_usd = 2.50
         self._haiku_daily_tokens = 0
         self._haiku_daily_date = date.today()
 

@@ -1477,6 +1477,17 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'politique commerciale': ['eu_trade_policy'],
     'politica comercial ue': ['eu_trade_policy'],
     'handelspolitik': ['eu_trade_policy'],
+    'tariff': ['eu_trade_policy'],
+    'tariffs': ['eu_trade_policy'],
+    'trade war': ['eu_trade_policy'],
+    'trump tariff': ['eu_trade_policy'],
+    'us tariff': ['eu_trade_policy'],
+    'retaliatory tariff': ['eu_trade_policy'],
+    'grids package': ['eu_energy_policy', 'clean_energy_investment_strategy'],
+    'electricity grid': ['eu_energy_policy'],
+    'power grid': ['eu_energy_policy'],
+    'grid integration': ['eu_energy_policy'],
+    'energy council': ['eu_energy_policy'],
 
     # EU Customs Electronic Systems
     'customs electronic': ['eu_customs_electronic_systems'],

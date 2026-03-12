@@ -361,6 +361,18 @@ STRIPE_EP_MONTHLY_PRICE_ID / STRIPE_EP_ANNUAL_PRICE_ID
 
 *When Claude makes a mistake, add a rule below so it never happens again.*
 
+### Gmail Daily Send Volume Planning (March 2026)
+
+Google Workspace has a ~2,000 recipient/day limit, but in practice Gmail closes SMTP connections after ~100-150 individual sends per session. When combining daily brief (~100 recipients) + campaigns in the same day, the second batch gets rate-limited.
+
+**Rule:** Plan email volume across the day:
+1. Daily brief first (~100 recipients, highest priority)
+2. Campaigns with remaining capacity (~100 sends before limit)
+3. News alerts last (BCC batches of 90, most recipients)
+4. If limit hit, retry next day. Gmail resets at midnight Pacific.
+
+**Never schedule daily brief + large campaign + news alerts all on the same day.** Pick two.
+
 ### Legislative Train Scraper - Data Source Unification ✅ RESOLVED (January 2025)
 
 The `LegislativeTrainScraper` had TWO scraping methods with only 23% overlap. This is now **SOLVED**.
