@@ -447,6 +447,32 @@
       color: var(--color-muted);
     }
 
+    /* Business plan nav */
+    .bp-nav {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.5rem 2rem;
+      background: var(--color-bg-alt, #f3f4f6);
+      border-bottom: 1px solid var(--color-border, #e5e7eb);
+      font-size: 0.82rem;
+    }
+    .bp-nav a {
+      color: var(--color-secondary, #6b7280);
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .bp-nav a:hover {
+      background: rgba(6, 147, 227, 0.08);
+      color: #0693e3;
+    }
+    .bp-nav a.active {
+      background: rgba(6, 147, 227, 0.12);
+      color: #0693e3;
+      font-weight: 600;
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
       .phase-grid { grid-template-columns: repeat(2, 1fr); }
@@ -478,6 +504,13 @@
       <div class="header__subtitle">Beresol BV — March 2026</div>
     </div>
   </div>
+
+  <nav class="bp-nav">
+    <a href="brubru_business_plan.html">Business Plan</a>
+    <a href="strategy.html" class="active">Strategy</a>
+    <a href="competitive_learnings.html">Competitive Learnings</a>
+    <a href="investment_memo.html">Investment Memo</a>
+  </nav>
 
   <div class="container">
 

@@ -361,6 +361,10 @@ STRIPE_EP_MONTHLY_PRICE_ID / STRIPE_EP_ANNUAL_PRICE_ID
 
 *When Claude makes a mistake, add a rule below so it never happens again.*
 
+### Founder Name: Victor Solé (March 2026)
+
+The founder's surname is **Solé** (with an accent on the e). Never write "Sole" without the accent. In HTML, use `Sol&eacute;`. This applies to all contexts: emails, documents, business plans, investment memos, and code comments.
+
 ### Gmail Daily Send Volume Planning (March 2026)
 
 Google Workspace has a ~2,000 recipient/day limit, but in practice Gmail closes SMTP connections after ~100-150 individual sends per session. When combining daily brief (~100 recipients) + campaigns in the same day, the second batch gets rate-limited.
@@ -372,6 +376,17 @@ Google Workspace has a ~2,000 recipient/day limit, but in practice Gmail closes 
 4. If limit hit, retry next day. Gmail resets at midnight Pacific.
 
 **Never schedule daily brief + large campaign + news alerts all on the same day.** Pick two.
+
+### Daily Brief URL Verification (March 2026)
+
+EP Texts Adopted URLs use sequential reference numbers (TA-10-2026-NNNN) that **cannot be guessed**. A wrong number = 404 = broken link sent to all subscribers.
+
+**Rule:** Before inserting any EP document URL into `daily_briefs`, **verify it exists** by fetching the actual Texts Adopted TOC page:
+- `https://www.europarl.europa.eu/doceo/document/TA-10-2026-MM-DD-TOC_EN.html`
+- Find the exact TA number for the resolution title
+- Always append `_EN.html` suffix to TA URLs
+
+**Never guess EP document reference numbers.** Always look them up from the TOC or plenary results page. This applies to all EP document types (TA, A, B, P, RC).
 
 ### Legislative Train Scraper - Data Source Unification ✅ RESOLVED (January 2025)
 

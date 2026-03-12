@@ -2774,6 +2774,32 @@
       .hero__subtitle { font-size: 11pt !important; }
       .hero__company { font-size: 9pt !important; }
     }
+    /* Business plan nav */
+    .bp-nav {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.5rem 2rem;
+      background: var(--color-gray-100, #f3f4f6);
+      border-bottom: 1px solid var(--color-border, #e5e7eb);
+      font-size: 0.82rem;
+      font-family: var(--font-family, 'Adobe Caslon Pro', Georgia, serif);
+    }
+    .bp-nav a {
+      color: var(--color-text-secondary, #6b7280);
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .bp-nav a:hover {
+      background: rgba(6, 147, 227, 0.08);
+      color: #0693e3;
+    }
+    .bp-nav a.active {
+      background: rgba(6, 147, 227, 0.12);
+      color: #0693e3;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body class="locked">
@@ -2819,6 +2845,13 @@
     </div>
   </header>
 
+  <nav class="bp-nav">
+    <a href="brubru_business_plan.html" class="active">Business Plan</a>
+    <a href="strategy.html">Strategy</a>
+    <a href="competitive_learnings.html">Competitive Learnings</a>
+    <a href="investment_memo.html">Investment Memo</a>
+  </nav>
+
   <!-- ========== NAVIGATION ========== -->
   <nav class="nav-tabs" id="navTabs">
     <button class="nav-tab nav-tab--active" onclick="showSection('overview', this)">
@@ -2841,6 +2874,9 @@
     </button>
     <button class="nav-tab" onclick="showSection('technology', this)">
       <span class="mdi mdi-chip"></span> Technology
+    </button>
+    <button class="nav-tab" onclick="showSection('training', this)">
+      <span class="mdi mdi-school-outline"></span> Daily Training
     </button>
     <button class="nav-tab" onclick="showSection('financials', this)">
       <span class="mdi mdi-chart-line"></span> Financials
@@ -4635,7 +4671,210 @@
     </section>
 
     <!-- ========================================
-         SECTION 7: FINANCIALS
+         SECTION 7: DAILY TRAINING
+         ======================================== -->
+    <section id="training" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Daily Training: How Brubru Gets Smarter Every Day</div>
+        <div class="section-header__subtitle">A 7-phase daily operational routine that turns user queries into product improvements within hours, not sprints</div>
+      </div>
+
+      <div class="metric-grid reveal">
+        <div class="metric-card metric-card--blue">
+          <div class="metric-card__icon"><span class="mdi mdi-book-open-page-variant-outline"></span></div>
+          <div class="metric-card__label">Knowledge Guides</div>
+          <div class="metric-card__value">58+</div>
+          <div class="metric-card__detail">Verified policy domain coverage</div>
+        </div>
+        <div class="metric-card metric-card--green">
+          <div class="metric-card__icon"><span class="mdi mdi-key-chain-variant"></span></div>
+          <div class="metric-card__label">Keyword Triggers</div>
+          <div class="metric-card__value">400+</div>
+          <div class="metric-card__detail">Multilingual query matching</div>
+        </div>
+        <div class="metric-card metric-card--purple">
+          <div class="metric-card__icon"><span class="mdi mdi-cog-sync-outline"></span></div>
+          <div class="metric-card__label">Daily Phases</div>
+          <div class="metric-card__value">7</div>
+          <div class="metric-card__detail">Automated improvement pipeline</div>
+        </div>
+        <div class="metric-card metric-card--gold">
+          <div class="metric-card__icon"><span class="mdi mdi-shield-star-outline"></span></div>
+          <div class="metric-card__label">Brubru Trainers</div>
+          <div class="metric-card__value">5</div>
+          <div class="metric-card__detail">Beta users with gold shield badge</div>
+        </div>
+      </div>
+
+      <!-- The Pipeline -->
+      <div class="card reveal" style="margin-top: 1.5rem;">
+        <div class="card__title"><span class="mdi mdi-transit-connection-variant"></span> The Daily Pipeline</div>
+        <p style="color: var(--color-text-secondary); margin: 0.75rem 0 1.25rem;">Every morning, the founder runs this 7-phase routine using AI orchestration (Claude Code). Each phase builds on the previous one, creating a compound improvement loop.</p>
+
+        <div style="display: grid; gap: 0;">
+          <!-- Phase 1 -->
+          <div style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border);">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(6,147,227,0.1); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              <span class="mdi mdi-newspaper-variant-outline"></span>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge--blue" style="font-size: 0.7rem;">Phase 1</span>
+                <strong>EU News Scan</strong>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Scrape 44 EU institutional news portals. Prioritise headlines. Update chatbot example questions with today's hot topics.</div>
+            </div>
+          </div>
+
+          <!-- Phase 2 -->
+          <div style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border);">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(220,38,38,0.1); color: var(--color-accent-red); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              <span class="mdi mdi-magnify-scan"></span>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge--red" style="font-size: 0.7rem;">Phase 2</span>
+                <strong>Query Audit</strong>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Pull every real user query from the previous day. Diagnose each answer against a quality checklist: factual accuracy, language match, citation integrity, completeness, follow-up quality.</div>
+            </div>
+          </div>
+
+          <!-- Phase 3 -->
+          <div style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border);">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(5,150,105,0.1); color: var(--color-accent-green); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              <span class="mdi mdi-book-plus-outline"></span>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge--green" style="font-size: 0.7rem;">Phase 3</span>
+                <strong>Knowledge Improvements</strong>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Implement fixes identified from the audit. Create new knowledge guides, add keyword triggers, update system prompt rules, fix context builder logic. Every diagnosed failure becomes a permanent improvement.</div>
+            </div>
+          </div>
+
+          <!-- Phase 4 -->
+          <div style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border);">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(155,81,224,0.1); color: var(--color-accent-purple); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              <span class="mdi mdi-rocket-launch-outline"></span>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge--purple" style="font-size: 0.7rem;">Phase 4</span>
+                <strong>Deploy</strong>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Push backend improvements to production (Railway.app). Build and pre-render frontend if changed (SiteGround). Brubru is live with today's improvements before noon.</div>
+            </div>
+          </div>
+
+          <!-- Phase 5 -->
+          <div style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border);">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(6,147,227,0.1); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              <span class="mdi mdi-email-fast-outline"></span>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge--blue" style="font-size: 0.7rem;">Phase 5</span>
+                <strong>Daily Brief Email</strong>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Compose 10 curated EU policy headlines in Brubru style. Send to all subscribers and the Brussels network. Product news items highlight what improved today.</div>
+            </div>
+          </div>
+
+          <!-- Phase 6 -->
+          <div style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border);">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(217,119,6,0.1); color: var(--color-accent-gold); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              <span class="mdi mdi-bell-ring-outline"></span>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge--gold" style="font-size: 0.7rem;">Phase 6</span>
+                <strong>News Alerts</strong>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Targeted policy alerts to EU Transparency Register organisations whose lobbying area matches today's hot topics. 3,000+ organisations across 12 policy clusters.</div>
+            </div>
+          </div>
+
+          <!-- Phase 7 -->
+          <div style="display: flex; gap: 1rem; padding: 1rem 0;">
+            <div style="flex-shrink: 0; width: 44px; height: 44px; border-radius: var(--radius-md); background: rgba(5,150,105,0.1); color: var(--color-accent-green); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem;">
+              <span class="mdi mdi-clipboard-check-outline"></span>
+            </div>
+            <div style="flex: 1;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="badge badge--green" style="font-size: 0.7rem;">Phase 7</span>
+                <strong>Session Summary</strong>
+              </div>
+              <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Review what changed, what worked, what broke. Update institutional memory files. Propose new rules to prevent recurring mistakes. The AI learns from every session.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brubru Trainers Programme -->
+      <div class="card reveal" style="margin-top: 1.5rem;">
+        <div class="card__title"><span class="mdi mdi-shield-star-outline"></span> The Brubru Trainers Programme</div>
+        <div class="grid-2" style="margin-top: 1rem; gap: 1.5rem;">
+          <div>
+            <p style="color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+              Brubru Trainers are trusted beta users who actively test the chatbot and report quality issues. They are the human feedback loop that makes the daily pipeline effective.
+            </p>
+            <p style="color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 1rem;">
+              Each Trainer receives a distinctive <strong style="color: var(--color-accent-gold);">gold shield badge</strong> (BT monogram) that appears next to their name throughout the platform. Their avatar is surrounded by a rotating ring of 12 gold stars, and their name shimmers with a gradient glow effect.
+            </p>
+            <p style="font-weight: 600; color: var(--color-text); line-height: 1.7;">Trainers help identify:</p>
+            <ul style="list-style: none; padding: 0; margin-top: 0.5rem;">
+              <li style="padding: 0.35rem 0; color: var(--color-text-secondary); font-size: 0.9rem;"><span class="mdi mdi-alert-circle-outline" style="color: var(--color-accent-red); margin-right: 0.5rem;"></span>Hallucinated facts and wrong CELEX numbers</li>
+              <li style="padding: 0.35rem 0; color: var(--color-text-secondary); font-size: 0.9rem;"><span class="mdi mdi-translate" style="color: var(--color-primary); margin-right: 0.5rem;"></span>Language switching errors</li>
+              <li style="padding: 0.35rem 0; color: var(--color-text-secondary); font-size: 0.9rem;"><span class="mdi mdi-text-box-remove-outline" style="color: var(--color-accent-gold); margin-right: 0.5rem;"></span>Incomplete answers and missing policy domains</li>
+              <li style="padding: 0.35rem 0; color: var(--color-text-secondary); font-size: 0.9rem;"><span class="mdi mdi-link-off" style="color: var(--color-accent-purple); margin-right: 0.5rem;"></span>Broken citations and outdated references</li>
+            </ul>
+            <p style="color: var(--color-text-secondary); line-height: 1.7; margin-top: 1rem;">
+              Every piece of feedback becomes a permanent fix: a new knowledge guide, a system prompt rule, a context builder improvement. <strong style="color: var(--color-text);">The goal: every user query that fails today works perfectly tomorrow.</strong>
+            </p>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <div style="text-align: center;">
+              <svg width="120" height="120" viewBox="0 0 24 24" style="filter: drop-shadow(0 4px 12px rgba(217,119,6,0.3));">
+                <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z" fill="#d97706"/>
+                <text x="12" y="14.5" text-anchor="middle" fill="white" font-family="Adobe Caslon Pro, Georgia, serif" font-size="7" font-weight="700">BT</text>
+              </svg>
+              <div style="margin-top: 0.75rem; font-weight: 700; color: var(--color-accent-gold); font-size: 0.9rem;">Brubru Trainer Badge</div>
+              <div style="font-size: 0.8rem; color: var(--color-text-secondary); margin-top: 0.25rem;">Gold shield with rotating star ring</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Insights -->
+      <div class="insight-strip reveal" style="margin-top: 1.5rem;">
+        <div class="insight-item">
+          <div class="insight-item__icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);">
+            <span class="mdi mdi-lightning-bolt-outline"></span>
+          </div>
+          <div class="insight-item__title">Zero-sprint improvement cycle</div>
+          <div class="insight-item__desc">Traditional SaaS ships fixes in 2-week sprints. Brubru's daily pipeline means a broken answer at 9am is fixed and deployed by noon. Users never wait for "the next release."</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-item__icon" style="background: rgba(5,150,105,0.1); color: var(--color-accent-green);">
+            <span class="mdi mdi-chart-timeline-variant-shimmer"></span>
+          </div>
+          <div class="insight-item__title">Compound knowledge advantage</div>
+          <div class="insight-item__desc">Every day adds 3-10 keyword triggers, 0-2 new guides, and 1-5 system prompt rules. After 6 months, this compounds into domain coverage no competitor can replicate without the same daily discipline.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-item__icon" style="background: rgba(155,81,224,0.1); color: var(--color-accent-purple);">
+            <span class="mdi mdi-account-cog-outline"></span>
+          </div>
+          <div class="insight-item__title">Human-AI collaboration, not automation</div>
+          <div class="insight-item__desc">The founder reviews every audit finding, approves every email, and verifies every fix. The AI orchestrates and executes; the human provides judgement, domain expertise, and quality control.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 8: FINANCIALS
          ======================================== -->
     <section id="financials" class="section">
       <div class="section-header reveal">
@@ -4857,8 +5096,8 @@
 
       <div class="grid-2 reveal">
         <div class="team-card">
-          <div class="team-card__avatar"><img src="victor.JPG" alt="Victor Sole"></div>
-          <div class="team-card__name">Victor Sole</div>
+          <div class="team-card__avatar"><img src="victor.JPG" alt="Victor Sol&eacute;"></div>
+          <div class="team-card__name">Victor Sol&eacute;</div>
           <div class="team-card__role">Founder & CEO</div>
           <div class="team-card__bio">
             7+ years at the European Parliament. 10+ years EU policy advisory (trade, digital, regulatory affairs).

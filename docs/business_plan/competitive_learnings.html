@@ -381,6 +381,32 @@
       font-size: 0.85rem;
     }
 
+    /* Business plan nav */
+    .bp-nav {
+      display: flex;
+      gap: 0.25rem;
+      padding: 0.5rem 2rem;
+      background: var(--color-bg-alt, #f3f4f6);
+      border-bottom: 1px solid var(--color-border, #e5e7eb);
+      font-size: 0.82rem;
+    }
+    .bp-nav a {
+      color: var(--color-secondary, #6b7280);
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .bp-nav a:hover {
+      background: rgba(6, 147, 227, 0.08);
+      color: #0693e3;
+    }
+    .bp-nav a.active {
+      background: rgba(6, 147, 227, 0.12);
+      color: #0693e3;
+      font-weight: 600;
+    }
+
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .page-header { padding: 2rem 1rem; }
@@ -402,6 +428,13 @@
   <div class="subtitle">What Brubru Can Learn and Emulate</div>
   <div class="meta">Last updated: 9 March 2026 | Source: competitive_benchmarking.md | Beresol BV, Brussels</div>
 </header>
+
+<nav class="bp-nav">
+  <a href="brubru_business_plan.html">Business Plan</a>
+  <a href="strategy.html">Strategy</a>
+  <a href="competitive_learnings.html" class="active">Competitive Learnings</a>
+  <a href="investment_memo.html">Investment Memo</a>
+</nav>
 
 <!-- TABLE OF CONTENTS -->
 <nav class="toc">
@@ -721,7 +754,7 @@
       <tr><td><strong>AdminActivityLog</strong></td><td>Audit trail pattern</td><td><span class="reuse-tag">P4 reuses pattern</span></td></tr>
       <tr><td><strong>EP Voting models</strong></td><td>3 models for parliamentary votes</td><td><span class="reuse-tag">P3 reuses vote data</span></td></tr>
       <tr><td><strong>Document Generator</strong></td><td>3 doc types, multi-provider AI</td><td><span class="reuse-tag">P8 adds grant type</span></td></tr>
-      <tr><td><strong>My EU Bubble</strong></td><td>9 tabs fully built (incl. EU Calendar, MEP Amendments)</td><td>P2, P7, P9 add tabs</td></tr>
+      <tr><td><strong>My EU Bubble</strong></td><td>9 tabs fully built (incl. My EU Calendar, MEP Amendments)</td><td>P2, P7, P9 add tabs</td></tr>
       <tr><td><strong>Amendator</strong></td><td>10 components, 2-tab sidebar + MEP comparison</td><td>P3 adds 3rd tab; P6 adds sharing</td></tr>
       <tr><td><strong>Scraper infrastructure</strong></td><td>35 scrapers, BaseScraper class</td><td>P3, P7, P9 inherit</td></tr>
       <tr><td><strong>WebSocket</strong></td><td style="color: var(--color-accent-red);">None</td><td>P6 stretch goal from scratch</td></tr>
