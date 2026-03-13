@@ -210,8 +210,17 @@ Ethics requirements are listed in Annex 5 and may include:
 - Programme Guide: detailed guidance on Horizon Europe work programme structure
 - LEAR designation guide: process for appointing Legal Entity Appointed Representative
 
+## FP10 and the Post-2027 Landscape
+
+The current Horizon Europe programme (2021-2027) will be succeeded by FP10 (Horizon Europe 2028-2034). The Commission proposed a €175 billion budget for FP10 on 16 July 2025, nearly doubling the current €95.5B. FP10 will be "tightly connected" to the new European Competitiveness Fund (ECF, COM(2025)555), which consolidates 14 current MFF instruments into one framework. The ECF focuses on scaling up and deployment, while FP10 retains the mission of excellence-driven research and innovation.
+
+For full details on FP10, the ECF, their linkage, and the ongoing legislative debate, see: `fp10_ecf_competitiveness.md`.
+
 ## Cross-References
 
+- See also: `fp10_ecf_competitiveness.md` for FP10 (2028-2034) and the European Competitiveness Fund
+- See also: `mff_2028_2034.md` for the overall MFF 2028-2034 budget architecture
 - See also: `eu_financial_regulation_procurement.md` for procurement rules that apply to JU operational procurement
 - See also: `commission_guide.md` for understanding DG RTD and Research Executive Agency structure
+- See also: `eu_funding_ipa_enlargement.md` for IPA III and pre-accession funding instruments
 - See also: Beresol Knowledge Bundle reports for specific Horizon Europe programme analyses
