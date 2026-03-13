@@ -8,6 +8,7 @@
 - Adopted: 14 May 2024 (part of the New Pact on Migration and Asylum)
 - Entry into force: 11 June 2024; application date: 12 June 2026
 - Implementing Decision: Commission Implementing Decision (EU) 2026/533 (application rules, published 12 March 2026)
+- Eurodac implementing rules: Commission Implementing Decision (EU) 2026/533 (CELEX: 32026D0533, adopted 11 March 2026) on content and statistics for central repository
 - Purpose: EU biometric database for asylum seekers, irregular migrants, and persons apprehended crossing external borders
 - Biometrics: Fingerprints (10 fingers) + facial images (new under recast)
 - Age threshold: Lowered from 14 to 6 years old (new under recast)
@@ -73,9 +74,29 @@ Eurodac is one of 10 legislative instruments adopted as part of the Pact:
 | 12 March 2026 | Implementing Decision (EU) 2026/533 published |
 | 12 June 2026 | Application date (Member States must comply) |
 
+## Iran Conflict and Migration Pressure (March 2026)
+
+The ongoing Iran conflict has created a new stress test for the EU's migration and asylum framework. Key developments:
+
+- **EU repatriation**: Over 8,000 EU citizens repatriated from the Middle East as of 12 March 2026
+- **Migration pressure**: EU fears the conflict will trigger secondary displacement and increased asylum applications, particularly via Turkey and the Eastern Mediterranean route
+- **New Pact stress test**: The Pact on Migration and Asylum (adopted 2024, implementation deadline June 2026) faces its first major real-world test before Member States have fully transposed it
+- **Eurodac readiness**: The upgraded Eurodac system (Regulation (EU) 2024/1358) is critical for managing any surge in asylum registrations, but full implementation is not yet complete
+
+Additional considerations:
+- The Crisis Regulation (EU) 2024/1359 allows temporary derogations from asylum procedures during mass influx
+- Frontex and EUAA deployment capacity under strain
+- Member States' preparedness for simultaneous implementation and crisis response
+
 ## Sources
 
 - Regulation (EU) 2024/1358 (CELEX 32024R1358)
 - Commission Implementing Decision (EU) 2026/533
 - EUR-Lex New Pact on Migration and Asylum summary
 - eu-LISA: Eurodac system page
+
+## Related Brubru Guides
+
+- `eu_energy_policy` -- Energy dimension of the Iran crisis (oil/gas market impact)
+- `safe_rearm_europe` -- Defence dimension (SAFE instrument, EU rearmament)
+- `energy_grids_package` -- Grid resilience in the context of energy security

@@ -116,6 +116,28 @@ The Committee on Women's Rights and Gender Equality (FEMM) is the lead EP commit
 | LIBE Committee (EP) | Associated (violence against women, victims' rights) |
 | EPSCO Council | Council configuration |
 
+## Consent-Based Rape Legislation Report (March 2026)
+
+The FEMM and LIBE committees jointly produced report **A10-0047/2026** on the importance of consent-based rape legislation in the EU.
+
+| Detail | Value |
+|--------|-------|
+| Procedure | 2025/2040(INI) |
+| Type | Own-initiative report (INI) |
+| Rapporteurs | Joanna Scheuring-Wielgus (FEMM) and Evin Incir (LIBE) |
+| Report reference | A10-0047/2026 |
+| Context | Follows the adoption of the Violence Against Women Directive (EU) 2024/1385, which harmonised criminal offences but left rape definition to Member States |
+
+The report calls on Member States to adopt consent-based definitions of rape in national criminal law, aligning with the Istanbul Convention (Article 36). Currently, only about one-third of EU Member States have consent-based rape legislation. The report argues that the absence of a harmonised EU-level definition undermines the effectiveness of the Violence Against Women Directive.
+
+## Commissioner Lahbib on Eliminating Violence Against Women (12 March 2026)
+
+Commissioner Hadja Lahbib delivered a speech on 12 March 2026 addressing the elimination of violence against women, emphasising:
+- Implementation of the Violence Against Women Directive (EU) 2024/1385 (transposition deadline: 14 June 2027)
+- The link between online and offline gender-based violence
+- The role of the Gender Equality Strategy 2026-2030 in driving systemic change
+- Support for the FEMM-LIBE consent-based rape legislation report
+
 ## Sources
 
 - Commission press release: IP/26/526 (5 March 2026)
@@ -123,3 +145,8 @@ The Committee on Women's Rights and Gender Equality (FEMM) is the lead EP commit
 - Factsheet: FS/26/529
 - Previous strategy: COM(2020)152
 - FEMM committee documents: europarl.europa.eu/committees/en/femm/documents
+
+## Related Brubru Guides
+
+- `employment_future_of_work` -- Social rights and equality dimension
+- `ep_plenary_march_2026` -- March 2026 plenary (context for the vote)

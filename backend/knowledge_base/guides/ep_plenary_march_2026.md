@@ -1,11 +1,12 @@
 # EP Plenary Session: 9-12 March 2026 (Strasbourg)
 
 ## QUICK FACTS
-Session: 9-12 March 2026
+Session: 9-12 March 2026 (CONCLUDED)
 Location: Strasbourg
 Type: Plenary session of the European Parliament (10th legislature)
+Status: CONCLUDED (10-13 March 2026)
 Key votes: Tuesday 10 March and Wednesday 11 March
-Notable: Energy Package presentation, Copyright and GenAI vote, Housing Crisis report, Defence debates, European Council preparation (19-20 March)
+Notable: Energy Package presentation, Copyright and GenAI vote, Housing Crisis report, Defence debates, European Council preparation (19-20 March), Package Travel Directive, Human rights resolutions
 
 ## Monday 9 March: Debates
 
@@ -139,9 +140,51 @@ Gatekeepers published updated DMA compliance reports (9 March 2026). The Digital
 ### LIFE Strategic Projects
 Commission invested over EUR 103 million in European strategic environment and climate projects (IP/26/542).
 
+## Adopted Texts (10-12 March 2026)
+
+### Key Votes -- Final Results
+
+| File | Vote | Result | Date |
+|------|------|--------|------|
+| Housing Crisis (A10-0025/2026) | 367-166-84 | ADOPTED | 10 March |
+| Copyright and GenAI (A10-0019/2026) | 460-71-88 | ADOPTED | 10 March |
+| Boris Vujcic as ECB VP (A10-0038/2026) | -- | ADOPTED | 10 March |
+| Package Travel Directive (A10-0140/2025) | -- | ADOPTED | 12 March |
+
+### Package Travel Directive
+
+New consumer protection rules adopted under the Package Travel Directive revision (A10-0140/2025, IMCO committee). Strengthens traveller rights for package holidays and linked travel arrangements. For full details, see dedicated guide: `package_travel_directive.md`
+
+### Human Rights Resolutions (Rule 150)
+
+The following human rights resolutions were adopted on 12 March 2026:
+- **Russia**: Resolution on human trafficking and Russian recruitment for the Ukraine war
+- **Niger**: Resolution on the arbitrary detention of President Mohamed Bazoum
+- **Georgia**: Resolution on the case of Elene Khoshtaria and Georgian political prisoners
+
 ## Political Context (Week of 9-12 March)
 
 - **Germany/Italy/Belgium** hosting EU leaders' meeting on energy prices and regulatory simplification (Politico, 10 March 2026)
 - **EPP-S&D** grand coalition under pressure; party leaders exploring new cooperation formats
 - **EU civil protection**: 356 citizens evacuated from Middle East amid Iran war developments (IP/26/577)
 - **ECA Special Report 10/2026**: Energy communities -- "Potential yet to be fulfilled" (OJ C, 10 March 2026)
+
+## Adopted Texts (12-13 March 2026)
+
+### Package Travel Directive Revision
+The EP adopted at first reading the revision of the Package Travel Directive (original: Directive (EU) 2015/2302). The new rules extend consumer protection to dynamic packages booked through online platforms, improve insolvency protection, and introduce a 14-day refund deadline for cancellations. For full details, see the dedicated Brubru guide: `package_travel_directive`.
+
+### Human Rights Resolutions
+The EP adopted urgency resolutions on human rights violations in:
+- **Russia**: Ongoing repression of civil society and political opposition
+- **Niger**: Deteriorating human rights situation following the July 2023 coup
+- **Georgia**: Democratic backsliding and the foreign agents law
+
+### Consent-Based Rape Legislation
+Joint FEMM-LIBE report A10-0047/2026 on the importance of consent-based rape legislation in the EU (rapporteurs: Scheuring-Wielgus, Incir). See `gender_equality_strategy` guide.
+
+## Related Brubru Guides
+
+- `package_travel_directive` -- Package Travel Directive revision (adopted 12 March 2026)
+- `eurodac_asylum_migration` -- Migration and asylum (Iran conflict context)
+- `gender_equality_strategy` -- Gender equality and consent-based rape legislation

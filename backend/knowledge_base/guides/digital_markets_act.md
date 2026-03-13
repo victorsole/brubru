@@ -198,6 +198,17 @@ Article 6(2) prohibits gatekeepers from combining personal data collected across
 ### FRAND Access
 Article 6(12) requires gatekeepers to apply fair, reasonable, and non-discriminatory (FRAND) general conditions of access to their app stores, search engines, and social networking services. The Commission may determine FRAND terms if gatekeepers and business users cannot agree.
 
+## DMA-GDPR Interplay Guidelines (March 2026)
+
+On 12 March 2026, the European Commission and the European Data Protection Board (EDPB) published their contributions to the consultation on draft joint guidelines on the interplay between the DMA and GDPR. This is a significant development because:
+
+- **Consent bundling**: How gatekeepers can comply with DMA Article 5(2) (prohibition on combining personal data across services without consent) while also meeting GDPR consent requirements
+- **Legitimate interest**: Whether gatekeepers can rely on GDPR Article 6(1)(f) (legitimate interests) for data processing that the DMA restricts
+- **Data portability**: Interaction between DMA data portability obligations and GDPR Article 20 (right to data portability)
+- **Enforcement coordination**: How the Commission (DMA enforcer) and national data protection authorities (GDPR enforcers) will coordinate on overlapping cases
+
+The consultation is open to stakeholders and will shape the final guidelines expected later in 2026.
+
 ## Sources
 
 - Regulation (EU) 2022/1925 (DMA): https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1925
@@ -207,3 +218,9 @@ Article 6(12) requires gatekeepers to apply fair, reasonable, and non-discrimina
 - OEIL procedure 2022/0003(COD): https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0003(COD)
 - EPRS_ATA(2025)772826: "Digital Markets Act enforcement -- state of play" by Polona Car (April 2025)
 - DG CNECT news (9 March 2026): Updated gatekeeper compliance reports published
+
+## Related Brubru Guides
+
+- `dsa_enforcement` -- Digital Services Act enforcement (companion platform regulation)
+- `digital_omnibus_package` -- Omnibus simplification of digital rules
+- `copyright_generative_ai` -- AI and intellectual property in digital markets

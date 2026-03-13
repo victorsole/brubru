@@ -107,12 +107,23 @@ SMRs are not just for electricity -- they serve multiple industrial applications
 - **NUCLEARSKILLS project** (101213280) -- European Nuclear Skills Initiative
 - European Skills Intelligence Observatory for workforce planning
 
+## Nuclear Illustrative Programme (PINC) -- March 2026
+
+The Commission published the Nuclear Illustrative Programme (COM(2026)0120) and accompanying Staff Working Document (SWD(2026)0084) in March 2026. The PINC is the Commission's comprehensive assessment of nuclear energy investment, capacity, and safety across the EU, required under Article 40 of the Euratom Treaty.
+
+Key aspects:
+- Assessment of nuclear energy's role post-adoption of the SMR Strategy
+- Investment needs for existing fleet life extensions and new builds (including SMRs)
+- Nuclear fuel supply chain resilience (reducing dependency on Russian enrichment)
+- Safety and waste management framework under Directives 2009/71/Euratom and 2011/70/Euratom
+- Workforce and skills requirements for the nuclear sector
+
 ## Key Legislative References
 
 | Document | Reference | Subject |
 |----------|-----------|---------|
 | SMR Strategy | COM(2026) 117 | This strategy |
-| Nuclear Illustrative Programme (PINC) | COM(2026) 120 | Nuclear capacity projections |
+| Nuclear Illustrative Programme (PINC) | COM(2026) 120 + SWD(2026) 084 | Nuclear capacity projections and comprehensive assessment |
 | Industrial Accelerator Act | COM(2026) 100 | Local content, supply chain |
 | Net-Zero Industry Act (NZIA) | OJ L 2024/1735 | Nuclear in net-zero tech list |
 | InvestEU Regulation | Regulation (EU) 2021/523 | Investment programme |
@@ -150,3 +161,9 @@ SMRs are not just for electricity -- they serve multiple industrial applications
 - **Brubru Chat**: Ask about SMR deployment timelines, funding, Alliance members, nuclear policy
 - **EU Calendar**: Monitor TTE Energy Council meetings, Euratom Council, Alliance assemblies
 - **Predictions**: Analyse EP/Council positions on nuclear energy files
+
+## Related Brubru Guides
+
+- `eu_energy_policy` -- EU energy policy framework (nuclear within the energy mix)
+- `energy_grids_package` -- Grid integration for nuclear baseload power
+- `clean_energy_investment_strategy` -- Investment framework including nuclear

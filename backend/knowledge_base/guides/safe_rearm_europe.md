@@ -61,6 +61,19 @@ The SAFE instrument is the EU's first large-scale defence financing mechanism. A
 | IRIS2 Regulation (EU) 2023/588 | 32023R0588 | Secure satellite connectivity |
 | ASAP Regulation (EU) 2023/1525 | 32023R1525 | Ammunition production support |
 | EDIRPA Regulation (EU) 2023/2418 | 32023R2418 | Joint procurement incentive |
+| Common Military List of the EU | 52026XG01640 | Updated export controls list (adopted 23 Feb 2026). Defines equipment subject to EU arms export controls under Common Position 2008/944/CFSP |
+
+## Defence Procurement Gap
+
+According to the EPRS briefing "EU joint defence procurement" (13 March 2026), EU collaborative defence procurement remains far below targets:
+
+- **Current rate**: Only 18% of EU defence procurement is collaborative (2023 data)
+- **Target**: 35% by 2030 (Council benchmark)
+- **Obstacles**: National industrial preferences, fragmented demand, production capacity constraints, third-country dependency (especially for components)
+- **Common Military List**: Updated 23 February 2026 (CELEX: 52026XG01640), defines 22 categories of military items subject to EU export controls
+- **European preference clause**: SAFE loans incentivise procurement of EU-manufactured equipment to strengthen the Defence Technological and Industrial Base (DTIB)
+- National defence industrial bases remain fragmented, with 178 separate weapon systems in the EU vs 30 in the US
+- SAFE's conditionality mechanism (loans tied to defence investment plans) is designed to steer Member States toward joint procurement
 
 ## Beresol Intelligence Monitor
 
@@ -74,3 +87,11 @@ See also: Beresol Open Report "Defence and Space: EDIS, EDIP, the EU Space Strat
 - European Council conclusions, March 2025: Readiness 2030
 - Beresol Open Report: Defence and Space (February 2026)
 - Council of the EU: SAFE adoption, May 2025
+- EPRS briefing: "EU joint defence procurement" (13 March 2026)
+
+## Related Brubru Guides
+
+- `eu_common_military_list` -- Export controls framework (Common Position 2008/944/CFSP)
+- `eu_defence_procurement` -- Joint procurement instruments (EDIP, EDF, SAFE)
+- `mff_2028_2034` -- Defence spending in the 2028-2034 budget
+- `eu_trade_policy` -- Dual-use export controls

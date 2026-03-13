@@ -250,9 +250,38 @@ The Fit for 55 legislative package (July 2021) included major energy legislation
 | Gas and hydrogen market directive | Adopted Jun 2024 | 32024L1788 |
 | Ecodesign for Sustainable Products (ESPR) | Adopted Jun 2024 | 32024R1781 |
 
+## European Grids Package
+
+Cross-border grid integration is a critical enabler of the energy transition. The TEN-E Regulation (EU) 2022/869 is being revised to accelerate grid infrastructure. Key facts:
+
+- **Investment needed**: EUR 584 billion to modernise and expand European electricity grids (Commission estimate)
+- **Energy Council 16 March 2026**: Ministers to discuss grid investment, permitting acceleration, and cross-border interconnection targets
+- **TEN-E revision**: Focus on hydrogen-ready grids, offshore wind grid integration, smart grids, and removing bottlenecks for renewable integration
+- **Grid congestion**: Renewable curtailment due to insufficient grid capacity is rising across Member States, threatening 2030 targets
+- **Dedicated guide**: For full details on the European Grids Package, see `energy_grids_package.md`
+
+## Oil and Gas Market Coordination (March 2026)
+
+The Iran conflict has direct implications for EU energy security. On 13 March 2026, the Commission and Member States are coordinating oil and gas markets in response to Middle East instability:
+
+- **Oil supply**: Iran accounts for approximately 2% of global oil production; disruption could spike Brent crude above USD 100/barrel
+- **Gas/LNG**: Middle East LNG supplies (Qatar, Oman) transit through the Strait of Hormuz; any disruption affects EU LNG diversification strategy
+- **Commission Security College**: Coordinating geopolitical energy risk assessment alongside the Energy Union Task Force
+- **Strategic reserves**: EU gas storage at ~45% capacity (March 2026); mandatory 90% filling target by 1 November 2026 under Regulation (EU) 2022/1032
+- **Market monitoring**: ACER and ENTSO-E/ENTSO-G activated enhanced monitoring protocols for price volatility and supply disruption scenarios
+- **IEA coordination**: Fatih Birol visited the College on 6 March 2026 for an orientation debate on energy prices; the Commission is assessing the situation in coordination with the IEA
+
 ## Related Brubru Features
 
 - **My EU Bubble**: Track energy legislative files through the Legislative Train
 - **Predictions**: Analyse voting patterns for energy legislation in EP and Council
 - **Amendator**: Draft amendments to energy directives and regulations
 - **EU Calendar**: Monitor TTE Council meetings, ITRE committee sessions
+
+## Related Brubru Guides
+
+- `energy_grids_package` -- European Grids Package (TEN-E revision, grid investment)
+- `clean_energy_investment_strategy` -- EUR 660B/year clean energy investment gap
+- `smr_strategy_nuclear` -- Nuclear energy strategy including Nuclear Illustrative Programme
+- `citizens_energy_package` -- Consumer protection in energy markets
+- `industrial_accelerator_act` -- Industrial decarbonisation and clean energy
