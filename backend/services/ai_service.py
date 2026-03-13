@@ -256,7 +256,10 @@ class AIService:
             # Use multi-provider fallback chain
             # Route to Claude Haiku when knowledge guides are matched
             has_knowledge = bool(
-                context_data and context_data.internal_knowledge
+                context_data and (
+                    context_data.internal_knowledge
+                    or context_data.eu_institutional_results
+                )
             )
             try:
                 provider_response = await self.multi_provider.generate(
@@ -665,7 +668,8 @@ SOURCE HIERARCHY (trust in order):
 2. OEIL legislative observatory, EP official data - authoritative
 3. EU institutional news/RSS - timely but verify against Tier 1
 4. Knowledge base/EPRS analysis - curated but may be outdated
-5. Web search results - use with caution, always verify
+4.5. EU institutional source search - from .europa.eu domains and trusted policy media (Politico, Contexte, Bruegel, Euractiv). When using these, ALWAYS name the source: "According to Bruegel...", "Euractiv reports...", "The European Commission published...". Include the URL.
+5. General web search results - use with caution, always verify
 
 CRITICAL -- HYPERLINK ALL LEGISLATIVE REFERENCES:
 When you mention a COM document, CELEX number, regulation, directive, or procedure reference, ALWAYS hyperlink it:

@@ -71,6 +71,9 @@ SOURCE_TIERS = {
     'search_result': 4,
     'internal': 4,
 
+    # Tier 4.5: EU institutional search (official .europa.eu + trusted policy media)
+    'eu_institutional_search': 4,
+
     # Tier 5: Real-time web search (lowest authority, needs verification)
     'web_search': 5,
     'tavily': 5,
@@ -537,6 +540,9 @@ class ContextData:
     # CELLAR on-demand legislation (EuroVoc fallback when no guides match)
     cellar_legislation: Optional[List[Dict[str, Any]]] = None
 
+    # EU institutional source search (Tavily fallback when no guides match)
+    eu_institutional_results: Optional[List[Dict[str, Any]]] = None
+
     # Rapporteur-by-country results (for "Spanish MEPs who are rapporteurs" queries)
     rapporteur_by_country: Optional[List[Dict[str, Any]]] = None
     rapporteur_country: Optional[str] = None
@@ -959,6 +965,18 @@ class ContextBuilder:
                 except Exception as e:
                     logger.warning(f"[CELLAR] On-demand fallback failed: {e}")
 
+        # EU institutional source search fallback: when no knowledge guides matched,
+        # search trusted EU institutional websites and policy media for authoritative content.
+        # Runs in parallel with CELLAR (both triggered by empty internal_knowledge).
+        eu_institutional_results = []
+        if not internal_knowledge and self.tavily_client and self.enable_web_search:
+            try:
+                eu_institutional_results = await self._fetch_eu_institutional_search(
+                    query=user_message
+                )
+            except Exception as e:
+                logger.warning(f"[EU-SEARCH] Institutional fallback failed: {e}")
+
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
 
@@ -987,7 +1005,8 @@ class ContextBuilder:
             len(user_uploaded_documents) +  # User uploaded documents
             len(mep_amendments_summary) +  # MEP amendments
             len(eu_calendar_events) +  # EU Calendar events
-            len(cellar_legislation)  # CELLAR on-demand fallback
+            len(cellar_legislation) +  # CELLAR on-demand fallback
+            len(eu_institutional_results)  # EU institutional source search
         )
 
         context_data = ContextData(
@@ -1014,6 +1033,7 @@ class ContextBuilder:
             mep_amendments_summary=mep_amendments_summary,  # MEP amendments
             eu_calendar_events=eu_calendar_events,  # EU Calendar events
             cellar_legislation=cellar_legislation if cellar_legislation else None,  # CELLAR fallback
+            eu_institutional_results=eu_institutional_results if eu_institutional_results else None,  # EU source search
             tender_context=tender_context,  # Phase 8: Tender data
             drafting_intent=drafting_intent if drafting_intent.is_drafting_query else None,
             rapporteur_by_country=rapporteur_by_country if rapporteur_by_country else None,
@@ -1040,7 +1060,8 @@ class ContextBuilder:
             f"{len(user_uploaded_documents)} user uploads, "
             f"{len(mep_amendments_summary)} MEP amendments, "
             f"{len(eu_calendar_events)} calendar events, "
-            f"{len(cellar_legislation)} CELLAR) in {search_time:.2f}ms"
+            f"{len(cellar_legislation)} CELLAR, "
+            f"{len(eu_institutional_results)} EU-search) in {search_time:.2f}ms"
         )
 
         return context_data
@@ -4228,6 +4249,130 @@ class ContextBuilder:
 
         return web_results
 
+    # Trusted EU institutional domains for fallback search
+    EU_INSTITUTIONAL_DOMAINS = [
+        # Official EU institutions
+        "eur-lex.europa.eu",
+        "europarl.europa.eu",
+        "consilium.europa.eu",
+        "ec.europa.eu",
+        "commission.europa.eu",
+        "cor.europa.eu",
+        "eesc.europa.eu",
+        "curia.europa.eu",
+        "ecb.europa.eu",
+        "op.europa.eu",
+        "data.europa.eu",
+        # EU agencies
+        "eba.europa.eu",
+        "esma.europa.eu",
+        "eiopa.europa.eu",
+        # DG subdomains (covered by ec.europa.eu but explicit for Tavily)
+        "joint-research-centre.ec.europa.eu",
+        # EP Think Tank
+        "epthinktank.eu",
+        # Policy media and think tanks (MUST include)
+        "politico.eu",
+        "contexte.com",
+        "bruegel.org",
+        "euractiv.com",
+        # Other media
+        "euronews.com",
+    ]
+
+    # Map domains to human-readable source names for AI attribution
+    DOMAIN_TO_SOURCE_NAME = {
+        "eur-lex.europa.eu": "EUR-Lex",
+        "europarl.europa.eu": "European Parliament",
+        "epthinktank.eu": "EP Think Tank (EPRS)",
+        "consilium.europa.eu": "Council of the EU",
+        "ec.europa.eu": "European Commission",
+        "commission.europa.eu": "European Commission",
+        "cor.europa.eu": "Committee of the Regions",
+        "eesc.europa.eu": "European Economic and Social Committee",
+        "curia.europa.eu": "Court of Justice of the EU",
+        "ecb.europa.eu": "European Central Bank",
+        "op.europa.eu": "EU Publications Office",
+        "data.europa.eu": "EU Open Data Portal",
+        "eba.europa.eu": "European Banking Authority",
+        "esma.europa.eu": "European Securities and Markets Authority",
+        "eiopa.europa.eu": "European Insurance and Occupational Pensions Authority",
+        "joint-research-centre.ec.europa.eu": "Joint Research Centre (JRC)",
+        "politico.eu": "Politico Europe",
+        "contexte.com": "Contexte",
+        "bruegel.org": "Bruegel",
+        "euractiv.com": "Euractiv",
+        "euronews.com": "Euronews",
+    }
+
+    @staticmethod
+    def _extract_source_name(url: str) -> str:
+        """Extract a human-readable source name from a URL."""
+        if not url:
+            return "Unknown"
+        try:
+            from urllib.parse import urlparse
+            hostname = urlparse(url).hostname or ""
+            # Try exact match first, then partial match on parent domain
+            for domain, name in ContextBuilder.DOMAIN_TO_SOURCE_NAME.items():
+                if hostname == domain or hostname.endswith("." + domain):
+                    return name
+            # Fallback: use hostname cleaned up
+            return hostname.replace("www.", "").split(".")[0].capitalize()
+        except Exception:
+            return "Unknown"
+
+    async def _fetch_eu_institutional_search(
+        self,
+        query: str,
+        max_results: int = 5
+    ) -> List[Dict[str, Any]]:
+        """
+        Search trusted EU institutional sources via Tavily.
+
+        Only called when no knowledge guides matched (fallback).
+        Scoped to official .europa.eu domains plus key policy media
+        (Politico, Contexte, Bruegel, Euractiv).
+
+        Results include a 'source_name' field for AI attribution:
+        the AI MUST cite the source by name when using these results.
+        """
+        results = []
+
+        if not self.tavily_client:
+            return results
+
+        try:
+            response = await self.tavily_client.search(
+                query=query,
+                search_depth="advanced",
+                max_results=max_results,
+                include_domains=self.EU_INSTITUTIONAL_DOMAINS,
+            )
+
+            for result in response.results:
+                source_name = self._extract_source_name(result.url)
+                results.append({
+                    'title': result.title,
+                    'url': result.url,
+                    'content': result.content[:600] if result.content else '',
+                    'score': result.score,
+                    'published_date': result.published_date,
+                    'source': 'eu_institutional_search',
+                    'source_name': source_name,
+                })
+
+            if results:
+                logger.info(
+                    f"[EU-SEARCH] Institutional fallback returned "
+                    f"{len(results)} results in {response.response_time:.2f}s"
+                )
+
+        except Exception as e:
+            logger.warning(f"[EU-SEARCH] Institutional fallback failed: {e}")
+
+        return results
+
     async def _fetch_beresol_content(
         self,
         query: str
@@ -4991,6 +5136,23 @@ class ContextBuilder:
                     sections.append(f"  [FULL TEXT AVAILABLE: {full_text_len:,} characters]")
 
                 sections.append(f"  Source: {law.get('source', 'local_database')}")
+                sections.append("")
+
+        # EU institutional source search (Tavily fallback, scoped to .europa.eu + policy media)
+        if context_data.eu_institutional_results:
+            sections.append(f"\nEU INSTITUTIONAL SOURCES ({len(context_data.eu_institutional_results)} results):")
+            sections.append("These results come from official EU institutional websites and trusted policy media.")
+            sections.append("IMPORTANT: When citing these results, ALWAYS name the source explicitly")
+            sections.append("(e.g., 'According to Bruegel...', 'Euractiv reports that...', 'The European Parliament published...').")
+            sections.append("Include the URL so the user can verify.\n")
+
+            for result in context_data.eu_institutional_results:
+                source_name = result.get('source_name', 'Unknown')
+                sections.append(f"- [{source_name}] {result['title']}")
+                if result.get('published_date'):
+                    sections.append(f"  Published: {result['published_date']}")
+                sections.append(f"  {result['content'][:600]}")
+                sections.append(f"  URL: {result['url']}")
                 sections.append("")
 
         # Real-time web search results (Tavily)
