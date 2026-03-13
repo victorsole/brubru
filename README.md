@@ -42,7 +42,7 @@
 - **EU Law Comply:** Automated compliance checking and gap analysis for EU regulations
 - **Legislative Tracking:** Real-time monitoring of EU legislative procedures and timelines
 - **Document Generator:** AI-powered generation of position papers, MEP briefings, and talking points
-- **Multilingual:** Full support for all 23 official EU languages
+- **Multilingual:** Available in 6 languages (EN, FR, NL, ES, CA, IT)
 
 ---
 
@@ -855,7 +855,7 @@ python3.12 scripts/clean_bounced_emails.py --days 7 --apply
 - **Phase 5:** RSS feeds (My EU Bubble)
 - **Phase 6:** Compliance checker (EU Law Comply)
 - **Phase 7:** Subscription system (Stripe integration)
-- **Phase 8:** Multi-language support (i18next, 23 languages)
+- **Phase 8:** Multi-language support (i18next, 6 languages)
 - **Phase 14:** Predictions (Feb 2026)
   - Timeline and outcome predictions
   - EP political group vote breakdown

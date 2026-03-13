@@ -95,7 +95,7 @@ brubru/
 │   ├── components/     # UI components by feature
 │   ├── services/       # API clients
 │   ├── hooks/          # Custom React hooks
-│   └── i18n/           # Internationalization (23 EU languages)
+│   └── i18n/           # Internationalization (6 languages: EN, FR, NL, ES, CA, IT)
 │
 ├── backend/
 │   ├── api/            # FastAPI routers
@@ -125,7 +125,7 @@ brubru/
 - **Scrapers:** `backend/services/scrapers/` fetch data from 15+ EU sources
 - **Auth:** Custom JWT with Google/LinkedIn OAuth (no Supabase SDK dependency)
 - **Payments:** Stripe integration for modular subscriptions (9 products, 18 price IDs)
-- **i18n:** All frontend text supports 6 human-reviewed locales (en, es, ca, fr, it, nl) via i18next
+- **i18n:** 6 supported languages: English, French, Dutch, Spanish, Catalan, Italian (the languages Victor speaks). **Never claim 23 EU languages.** i18next locales: en, es, ca, fr, it, nl
 
 ## Environment Variables
 
@@ -360,6 +360,10 @@ STRIPE_EP_MONTHLY_PRICE_ID / STRIPE_EP_ANNUAL_PRICE_ID
 ## Learned Rules (Add corrections here)
 
 *When Claude makes a mistake, add a rule below so it never happens again.*
+
+### Brubru Supports 6 Languages, Not 23 (March 2026)
+
+Brubru supports **6 languages**: English, French, Dutch, Spanish, Catalan, and Italian. These are the languages Victor speaks and can support users in directly. **Never claim 23 EU languages** in any material, code comment, tour step, application, or business plan. The EU has 24 official languages, but Brubru's interface and support covers 6. i18next locales: `en, fr, nl, es, ca, it`.
 
 ### Founder Name: Victor Solé (March 2026)
 

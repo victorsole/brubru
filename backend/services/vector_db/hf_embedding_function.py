@@ -2,7 +2,7 @@
 Hugging Face Embedding Function for ChromaDB
 
 Custom embedding function that uses Hugging Face's BAAI/bge-m3 model
-for multilingual semantic search across all 23 EU languages.
+for multilingual semantic search across Brubru's 6 supported languages.
 
 This replaces the default OpenAI embeddings with:
 - BAAI/bge-m3: Multilingual embeddings (100+ languages including all EU languages)

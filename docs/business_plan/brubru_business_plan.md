@@ -550,7 +550,7 @@ Revenue is well-distributed across plan types. Professional bundle drives the la
 | Search | BM25 + Semantic (hybrid, 60/40 weighted) | Best of keyword and semantic retrieval |
 | Vector DB | ChromaDB | Lightweight, sufficient for current scale |
 | ML | HuggingFace (multilingual embeddings, classification) | Open-source, no API dependency |
-| i18n | i18next (6 languages live, 23 supported) | All official EU languages planned |
+| i18n | i18next (6 languages: EN, FR, NL, ES, CA, IT) | Languages Victor speaks and supports directly |
 | Payments | Stripe | Industry standard, EU-compliant |
 | Frontend hosting | SiteGround | Static build, European CDN |
 | Backend hosting | Railway.app | Auto-deploy from main branch |
@@ -822,7 +822,7 @@ This model validates willingness-to-pay at higher price points and can operate a
 | Item | Cost/Month | Notes |
 |------|-----------|-------|
 | AI APIs (Mistral primary) | EUR 0-200 | EUR 5-8/user depending on plan |
-| Google Translate | EUR 0-50 | 23 languages |
+| Google Translate | EUR 0-50 | 6 languages |
 | Tavily Search | EUR 0-29 | Web intelligence |
 | **Subtotal variable** | **EUR 0-279** | |
 

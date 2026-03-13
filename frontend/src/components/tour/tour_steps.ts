@@ -12,7 +12,7 @@ export const tourSteps: Record<TourKey, Step[]> = {
       target: '.chat-interface__input-container',
       title: 'Ask Brubru Anything',
       content:
-        'Type questions about EU legislation, MEPs, policy areas, or paste documents for analysis. Brubru understands all 23 EU languages.',
+        'Type questions about EU legislation, MEPs, policy areas, or paste documents for analysis. Brubru is available in 6 languages.',
       placement: 'top',
       disableBeacon: true,
     },
@@ -27,7 +27,7 @@ export const tourSteps: Record<TourKey, Step[]> = {
       target: '.header__language',
       title: 'Choose Your Language',
       content:
-        'Brubru speaks all 23 official EU languages. Select your preferred language for the interface.',
+        'Brubru is available in English, French, Dutch, Spanish, Catalan, and Italian. Select your preferred language.',
       placement: 'bottom',
     },
   ],

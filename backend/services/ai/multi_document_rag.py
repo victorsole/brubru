@@ -2,7 +2,7 @@
 Multi-Document RAG Enhancement
 
 Enhances the context builder with advanced multi-document capabilities:
-- Cross-language legal search (23 EU languages) using 50k+ LEG_2025-11 database
+- Cross-language legal search (6 supported languages) using 50k+ LEG_2025-11 database
 - Document relationship mapping via CELEX, citations, legal_basis
 - Relevance re-ranking with Saul-7B
 - Context synthesis across multiple sources
@@ -57,7 +57,7 @@ class MultiDocumentRAG:
     - Automatic document clustering by topic and legal relationships
     """
 
-    # EU official languages (all 23)
+    # EU official languages (reference list for document processing)
     EU_LANGUAGES = {
         'en': 'English',
         'fr': 'French',
