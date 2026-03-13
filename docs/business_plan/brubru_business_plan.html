@@ -505,6 +505,10 @@
       grid-template-columns: repeat(3, 1fr);
     }
 
+    .metric-grid--5 {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
     .metric-card {
       background: white;
       border-radius: var(--radius-xl);
@@ -1421,23 +1425,45 @@
     }
 
     .cta-btn--primary {
-      background: white;
+      background-size: 300% 100%;
+      background-image: linear-gradient(
+        90deg,
+        #ffffff,
+        #dbeafe,
+        #d1fae5,
+        #ede9fe,
+        #fef3c7,
+        #ffffff
+      );
       color: var(--color-primary);
+      animation: cta-rainbow-shift 4s ease infinite;
     }
 
     .cta-btn--primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
     }
 
     .cta-btn--secondary {
       background: transparent;
       color: white;
-      border: 2px solid white;
+      border: 2px solid rgba(255,255,255,0.5);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .cta-btn--secondary:hover {
-      background: rgba(255,255,255,0.1);
+      background-image: linear-gradient(90deg, var(--color-primary), var(--color-accent-green), var(--color-accent-purple), var(--color-accent-gold), var(--color-primary));
+      background-size: 300% 100%;
+      animation: cta-rainbow-shift 4s ease infinite;
+      border-color: transparent;
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25);
+    }
+
+    @keyframes cta-rainbow-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* ============================================
@@ -1951,7 +1977,7 @@
     .fb-process-item__title {
       font-size: 0.82rem;
       font-weight: 700;
-      font-family: var(--font-mono);
+      font-family: var(--font-family);
       margin-bottom: 0.15rem;
     }
 
@@ -2600,8 +2626,12 @@
        RESPONSIVE
        ============================================ */
 
+    @media (max-width: 1200px) {
+      .metric-grid--5 { grid-template-columns: repeat(3, 1fr); }
+    }
+
     @media (max-width: 1024px) {
-      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+      .metric-grid, .metric-grid--5 { grid-template-columns: repeat(2, 1fr); }
       .feature-grid { grid-template-columns: 1fr 1fr; }
       .grid-2, .grid-3, .grid-2-1 { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
@@ -2904,7 +2934,7 @@
         </div>
       </div>
 
-      <div class="metric-grid reveal">
+      <div class="metric-grid metric-grid--5 reveal">
         <div class="metric-card metric-card--blue">
           <div class="metric-card__icon"><span class="mdi mdi-cube-outline"></span></div>
           <div class="metric-card__label">Product Status</div>
@@ -4680,7 +4710,7 @@
         <div class="section-header__subtitle">A 7-phase daily operational routine that turns user queries into product improvements within hours, not sprints</div>
       </div>
 
-      <div class="metric-grid reveal">
+      <div class="metric-grid metric-grid--5 reveal">
         <div class="metric-card metric-card--blue">
           <div class="metric-card__icon"><span class="mdi mdi-account-group-outline"></span></div>
           <div class="metric-card__label">Registered users</div>
@@ -5525,14 +5555,19 @@
     /* ============================
        PASSWORD GATE
        ============================ */
+    function unlockGate() {
+      document.getElementById('gate').classList.add('gate--hidden');
+      document.body.classList.remove('locked');
+      sessionStorage.setItem('bp_unlocked', '1');
+      initRevealObserver();
+      animateCounters();
+    }
+
     function checkPassword(e) {
       e.preventDefault();
       var val = document.getElementById('gateInput').value.trim().toLowerCase();
       if (val === 'open to invest') {
-        document.getElementById('gate').classList.add('gate--hidden');
-        document.body.classList.remove('locked');
-        initRevealObserver();
-        animateCounters();
+        unlockGate();
       } else {
         var err = document.getElementById('gateError');
         err.classList.add('gate__error--visible');
@@ -5540,6 +5575,11 @@
         setTimeout(function() { err.classList.remove('gate__error--visible'); }, 2500);
       }
       return false;
+    }
+
+    /* Auto-unlock if already authenticated in this session */
+    if (sessionStorage.getItem('bp_unlocked') === '1') {
+      unlockGate();
     }
 
     /* ============================
