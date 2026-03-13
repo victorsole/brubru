@@ -61,7 +61,7 @@ HEADLINE_HOVER_COLORS = [
 def _build_headline_html(headline: str, url: str, source: str, category: str,
                          suggested_query: Optional[str] = None, index: int = 0) -> str:
     """Build a single headline row with source link and Brubru query link."""
-    cat_label = _category_label(category)
+    source_label = source if source else _category_label(category)
     brubru_link = f"{BRUBRU_CHAT_URL}?q={urllib.parse.quote(suggested_query)}" if suggested_query else BRUBRU_CHAT_URL
     color = HEADLINE_HOVER_COLORS[index % len(HEADLINE_HOVER_COLORS)]
 
@@ -72,7 +72,7 @@ def _build_headline_html(headline: str, url: str, source: str, category: str,
           {headline}
         </a>
         <div style="margin-top: 4px; font-size: 12px; color: #9ca3af;">
-          {cat_label} &middot;
+          {source_label} &middot;
           <a href="{url}" style="color: #6b7280; text-decoration: underline;">Source</a> &middot;
           <a href="{brubru_link}" style="color: {color}; text-decoration: underline;">Ask Brubru about this</a>
         </div>
@@ -241,9 +241,10 @@ def _build_brief_email_html(
 
 
 def _feature_line(is_welcome: bool) -> str:
+    # Update these numbers as the knowledge base grows
     features = [
         "500+ legislative files",
-        "54 policy knowledge guides",
+        "69 policy knowledge guides",
         "6 EU institutional calendars",
     ]
     if is_welcome:
