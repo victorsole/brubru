@@ -84,14 +84,14 @@ class CalendarEventResponse(BaseModel):
     ep_committee_code: Optional[str] = None
     commission_dg: Optional[str] = None
 
-    policy_areas: List[str] = []
+    policy_areas: Optional[List[str]] = []
     status: EventStatus = EventStatus.SCHEDULED
 
     source_url: Optional[str] = None
     agenda_url: Optional[str] = None
 
-    procedure_refs: List[str] = []
-    related_documents: Dict[str, Any] = {}
+    procedure_refs: Optional[List[str]] = []
+    related_documents: Optional[Dict[str, Any]] = {}
 
     source: str
     external_id: Optional[str] = None
