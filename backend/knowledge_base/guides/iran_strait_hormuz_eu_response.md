@@ -1,0 +1,102 @@
+# Iran War, Strait of Hormuz and EU Crisis Response
+
+## QUICK FACTS
+Crisis: Iran war (started early March 2026), US-led military operations against Iran
+Strait of Hormuz: Carries approximately 20% of global oil shipments; transit disruption threatens EU energy security
+Oil price impact: Brent crude spiking, potential to exceed USD 100/barrel
+EU response: FAC (16 March 2026) discussing additional ships for EU maritime mission; Energy Council same day discussing oil reserves
+European Council: 19-20 March 2026 summit will address Iran/Middle East alongside Ukraine, competitiveness, MFF, defence
+Key actors: Kaja Kallas (EU foreign policy chief), Dan Jorgensen (Energy Commissioner), Teresa Ribera (EVP, energy/climate)
+Former HR/VP Borrell: Criticised EU for not standing up to Trump, called for suspending EU-US trade deal implementation
+Trump: Pressing NATO allies to secure Strait of Hormuz; warned of "very bad future" for non-compliant allies
+Iran strikes: Indiscriminate attacks on Gulf states; EU expressed "full solidarity with the people of the region"
+Ukraine dimension: Spiking oil prices refill Russian coffers; demand for US weapons in Iran war may deprive Kyiv of arms
+EU institutional response: Joint declaration by presidents of three EU institutions on 4th anniversary of Russian invasion
+Energy Council agenda: Oil reserves release, energy price containment, inflation management
+
+## EU Diplomatic Response
+
+### Foreign Affairs Council (16 March 2026)
+The FAC is meeting in Brussels to discuss:
+- Kallas pushing for additional ships deployed to the EU's maritime mission in the region
+- Coordination with NATO on Strait of Hormuz security
+- Humanitarian response to Gulf states affected by Iranian strikes
+- Impact on Ukraine support (weapons diversion, oil revenue for Russia)
+
+### European Council (19-20 March 2026)
+EU leaders will address:
+- **Middle East/Iran**: Condemnation of Iranian attacks, solidarity with Gulf states, Hormuz security
+- **Ukraine**: Ensuring continued support despite Iran crisis diversion
+- **Competitiveness and Single Market**: Original summit focus now competing with crisis management
+- **MFF 2028-2034**: Long-term budget negotiations
+- **European Defence**: Defence spending and industrial capacity
+- **Euro Summit** (19 March): Economic situation, international role of the euro, savings and investment union
+
+UN Secretary-General Antonio Guterres will attend to discuss the Middle East situation.
+
+### Political Fault Lines
+- **Spain-led camp** (Sanchez): Pushing Council conclusions calling for international law to be upheld (indirect rebuke to Trump/Netanyahu)
+- **Germany-led camp** (Merz): Wary of irritating the US and imperilling the EU-US trade deal
+- **Borrell criticism**: Former HR/VP accuses von der Leyen of "systematically biased in favour of the US and Israel" and of overstepping her functions in foreign policy
+
+## Energy Impact
+
+### Oil Market
+- Iran accounts for approximately 2% of global oil production
+- Strait of Hormuz disruption could spike Brent crude above USD 100/barrel
+- EU ministers discussing release of strategic oil reserves to contain prices and inflation
+- Nordic countries + Spain defending the EU Emissions Trading System (ETS), arguing renewables increase autonomy
+
+### Gas/LNG
+- Middle East LNG supplies (Qatar, Oman) transit through the Strait of Hormuz
+- Any disruption affects EU LNG diversification strategy (post-Russian gas dependency)
+- Norway positioning itself as reliable energy lifeline amid geopolitical turmoil
+
+### EU Energy Security Measures
+- EU gas storage at approximately 45% capacity (March 2026)
+- Mandatory 90% filling target by 1 November 2026 under Regulation (EU) 2022/1032
+- ACER and ENTSO-E/ENTSO-G activated enhanced monitoring for price volatility
+- Commission Security College coordinating geopolitical energy risk assessment
+- IEA coordination ongoing (Fatih Birol visited College on 6 March 2026)
+- Energy Council (TTE) debating European Grids Package alongside crisis measures
+
+### EU Grids Package
+The 2025 Grids Package aims to build a connected energy network across borders, creating a single EU energy market and reducing import dependency. The European Grids Summit is planned for April 2026.
+
+## Defence Dimension
+
+- Iran war raises questions about European defence autonomy and NATO burden-sharing
+- Trump pressing NATO for "very bad future" if allies don't secure Hormuz
+- Opportunity for European defence industry: Ukraine sending anti-drone operators and counter-drone technology to Gulf states
+- EU defence industrial capacity could fill gap while US weapons are diverted to Iran theatre
+- Commission College (25 March 2026): Qualitative Military Edge and AGILE (defence innovation) on agenda
+
+## EU-UK Dimension
+
+The EU-UK Parliamentary Partnership Assembly (16-17 March 2026) is meeting in Brussels amid the crisis. Topics include:
+- Research and innovation cooperation (Horizon Europe association)
+- Digital cooperation (AI, cybersecurity)
+- Youth mobility (possible Youth Experience Scheme)
+- Brexit minister Nick Thomas-Symonds meeting EP President Metsola
+- UK tuition fees for EU students as condition for "Brexit reset"
+
+## Timeline
+
+| Date | Event |
+|------|-------|
+| Early March 2026 | Iran war begins; US military operations |
+| 6 March 2026 | IEA Director Fatih Birol visits Commission College (energy prices orientation debate) |
+| 13 March 2026 | Commission/Member States coordinate oil and gas market response |
+| 15 March 2026 | Iran launches strikes on Gulf states; France local elections first round |
+| 16 March 2026 | FAC + Energy Council in Brussels; EU-UK PPA Day 1 |
+| 17 March 2026 | Environment Council; GAC (EUCO preparation) |
+| 18 March 2026 | College of Commissioners (28th Regime, Innovation Act); Tripartite Social Summit |
+| 19-20 March 2026 | European Council summit + Euro Summit |
+
+## Related Brubru Guides
+
+- `eu_energy_policy` -- EU energy policy framework, oil/gas market coordination
+- `energy_grids_package` -- European Grids Package
+- `safe_rearm_europe` -- EU defence spending and industrial capacity
+- `eu_us_trade_deal_2026` -- EU-US trade deal (under EP pressure)
+- `mff_2028_2034` -- MFF negotiations (defence integration, Global Europe heading)

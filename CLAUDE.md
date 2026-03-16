@@ -629,9 +629,23 @@ Header uses animated MDI icon buttons (icon-only, expand on hover). Nav colours:
 
 **Never mark a phase "PARTIAL" and move on.** Either complete it or document what's blocking completion.
 
-### Multi-Provider AI System (January 2026)
+### Multi-Provider AI System (January 2026, updated March 2026)
 
-4-tier fallback: Mistral (`mistral-small-latest`, primary, 15x cheaper) -> Claude (`claude-sonnet-4-20250514`) -> GPT-4 -> Gemini. Key file: `backend/services/ai/multi_provider_service.py`.
+4-tier fallback: Mistral (`mistral-small-latest`) -> Claude (`claude-sonnet-4-20250514`) -> GPT-4 -> Gemini. Key file: `backend/services/ai/multi_provider_service.py`.
+
+**Hybrid routing (March 2026):** Claude Haiku 4.5 is now the de facto primary model. Routing signal: `has_knowledge = internal_knowledge OR eu_institutional_results`. Since EU institutional search (Tavily) fires for all no-guide queries, virtually all queries route to Haiku. Mistral only used when Haiku daily cap ($2.50/day) is reached.
+
+### EU Institutional Source Search Fallback (March 2026)
+
+When no knowledge guide matches a user query, Brubru searches 25 trusted EU domains via Tavily before generating an answer. Results are injected into context with source attribution so the AI cites sources by name.
+
+**Key files:**
+- `backend/services/ai/context_builder.py` — `_fetch_eu_institutional_search()`, `EU_INSTITUTIONAL_DOMAINS` (25 domains), `DOMAIN_TO_SOURCE_NAME` (21 mappings)
+- `backend/services/ai_service.py` — `has_knowledge` routing includes `eu_institutional_results`, source hierarchy tier 4.5
+
+**Domains searched:** eur-lex.europa.eu, europarl.europa.eu, consilium.europa.eu, ec.europa.eu, commission.europa.eu, cor.europa.eu, eesc.europa.eu, curia.europa.eu, ecb.europa.eu, op.europa.eu, data.europa.eu, eba.europa.eu, esma.europa.eu, eiopa.europa.eu, joint-research-centre.ec.europa.eu, epthinktank.eu, politico.eu, contexte.com, bruegel.org, euractiv.com, euronews.com
+
+**Source attribution rule:** When using EU institutional search results, the AI MUST name the source explicitly: "According to Bruegel...", "Euractiv reports that...", "The European Commission published...". Include the URL.
 
 ### RSS AI Enrichment - On-Demand Only (January 2026)
 

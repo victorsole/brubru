@@ -160,6 +160,58 @@ After sending, update `memory/email_sending_log.md` with the results:
 - Brubru news items included
 - Any issues encountered
 
+## Headline Writing Rules (MANDATORY)
+
+### Brubru Style
+Headlines must be engaging, concise, and written for busy policy professionals who scan quickly. They are NOT institutional press releases. Good Brubru headlines:
+- Lead with the "so what" or the tension, not the procedure number
+- Use active voice and present tense where possible
+- Name specific people, institutions, and stakes
+- Add context that makes the reader want to click (deadlines, numbers, consequences)
+- Never use em-dashes or "--", use colons and commas instead
+
+**Bad:** "Commission Implementing Decision (EU) 2026/582 of 11 March 2026 concerning certain emergency measures relating to foot and mouth disease in Cyprus"
+**Good:** "Foot-and-mouth emergency in Cyprus: Commission extends import controls"
+
+**Bad:** "Energy ministers prepare to give the grids package a political jolt"
+**Good:** "Energy Council on Monday 16 March: can ministers agree on the EUR 584 billion Grids Package?"
+
+### Dates Must Include Day Names
+Every date in a headline MUST include the day of the week. Never write just "16 March" -- write "Monday 16 March". For ranges: "Monday 16 to Tuesday 24 March". This helps readers immediately orient themselves in the institutional calendar.
+
+### People Must Include Role and Origin
+When mentioning a person, always include their role and country/institution. Never write just "Commissioner Kos" -- write "Commissioner Marta Kos (Enlargement, Slovenia)". For MEPs: include political group and country.
+
+### Source URL Verification (MANDATORY)
+Every headline URL must point to the correct, working source. Before sending the test email:
+1. Verify each URL is reachable (HTTP 200 or 301/302 redirect, NOT 404/500)
+2. Verify the URL matches the headline topic (e.g., a headline about TikTok DSA must link to DSA enforcement content, not a random EUR-Lex page)
+3. Prefer official institutional sources: EUR-Lex for legislation, OEIL for procedures, europarl.europa.eu for EP documents, ec.europa.eu for Commission publications
+4. For Politico/Contexte/media sources, keep the original scraper URL (these are the actual article links)
+5. Never use placeholder or guessed URLs. If unsure, use the institutional landing page rather than a broken deep link.
+
+### Source Attribution (MANDATORY)
+The source label shown under each headline must reflect the **actual source** (Politico EU, Contexte EU, Official Journal, etc.), NOT the institutional category. The `source` field in the `daily_briefs` table has the real source name. The code already uses `source` over `_category_label(category)`. When reviewing the test email, verify that no headline says "European Commission" or "EU Institutions" when the article actually came from Politico, Contexte, or another media outlet.
+
+### Chatbot Coverage Verification (MANDATORY)
+Before finalising headlines, verify that every headline's `suggested_query` will be answered well by Brubru's chatbot. For each headline:
+
+1. Run the suggested query through the knowledge loader to check guide matching
+2. If NO guide matches, either:
+   - Rewrite the suggested query to match existing triggers, or
+   - Flag it as a gap (the user may want to skip this headline or create a guide)
+3. Never send a daily brief that directs users to ask questions Brubru cannot answer
+
+```python
+from knowledge_base.knowledge_loader import KnowledgeLoader
+loader = KnowledgeLoader()
+loader.load_all()
+for query in suggested_queries:
+    results = loader.search_guides(query)
+    if not results:
+        print(f'[WARN] No guide for: {query}')
+```
+
 ## Important Notes
 
 - Use `python3.12` (not `python3`)

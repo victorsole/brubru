@@ -95,10 +95,8 @@ def connect_imap() -> imaplib.IMAP4_SSL:
 
 
 def find_bounced_emails(conn: imaplib.IMAP4_SSL, days_back: int = 7) -> set[str]:
-    """Search inbox for bounce messages and extract bounced addresses."""
+    """Search Inbox, Trash, and Spam for bounce messages and extract bounced addresses."""
     bounced = set()
-
-    conn.select("INBOX")
 
     since_date = (datetime.now() - timedelta(days=days_back)).strftime("%d-%b-%Y")
 
@@ -115,79 +113,107 @@ def find_bounced_emails(conn: imaplib.IMAP4_SSL, days_back: int = 7) -> set[str]
         f'(SUBJECT "Address not found" SINCE {since_date})',
     ]
 
-    all_msg_ids = set()
-    for query in search_queries:
-        try:
-            status, data = conn.search(None, query)
-            if status == "OK" and data[0]:
-                msg_ids = data[0].split()
-                all_msg_ids.update(msg_ids)
-        except Exception as e:
-            logger.warning(f"[WARN] Search failed for {query}: {e}")
+    # Check all three folders: Inbox, Trash, and Spam
+    folders = ["INBOX", "[Gmail]/Trash", "[Gmail]/Spam"]
+    all_msg_ids_by_folder = {}
 
-    logger.info(f"[INFO] Found {len(all_msg_ids)} bounce messages")
+    for folder in folders:
+        try:
+            status, _ = conn.select(folder)
+            if status != "OK":
+                logger.warning(f"[WARN] Could not select {folder}")
+                continue
+        except Exception as e:
+            logger.warning(f"[WARN] Error selecting {folder}: {e}")
+            continue
+
+        folder_msg_ids = set()
+        for query in search_queries:
+            try:
+                status, data = conn.search(None, query)
+                if status == "OK" and data[0]:
+                    msg_ids = data[0].split()
+                    folder_msg_ids.update(msg_ids)
+            except Exception as e:
+                logger.warning(f"[WARN] Search failed for {query} in {folder}: {e}")
+
+        if folder_msg_ids:
+            all_msg_ids_by_folder[folder] = folder_msg_ids
+        logger.info(f"[{folder}] {len(folder_msg_ids)} bounce messages")
+
+    total_msgs = sum(len(ids) for ids in all_msg_ids_by_folder.values())
+    logger.info(f"[INFO] Found {total_msgs} bounce messages total")
 
     # Fetch messages in batches with reconnection on failure
-    msg_id_list = sorted(all_msg_ids)
     BATCH_SIZE = 20
-    for batch_start in range(0, len(msg_id_list), BATCH_SIZE):
-        batch = msg_id_list[batch_start : batch_start + BATCH_SIZE]
-        batch_num = batch_start // BATCH_SIZE + 1
-        total_batches = (len(msg_id_list) + BATCH_SIZE - 1) // BATCH_SIZE
-        logger.info(f"[INFO] Fetching batch {batch_num}/{total_batches} ({len(batch)} messages)...")
+    SKIP_SENDERS = {"beresol", "google.com", "mailer-daemon", "postmaster"}
 
-        for msg_id in batch:
-            try:
-                status, msg_data = conn.fetch(msg_id, "(RFC822)")
-                if status != "OK":
-                    continue
+    for folder, folder_msg_ids in all_msg_ids_by_folder.items():
+        # Select the folder before fetching
+        try:
+            conn.select(folder)
+        except Exception:
+            conn = connect_imap()
+            conn.select(folder)
 
-                raw_email = msg_data[0][1]
-                msg = email.message_from_bytes(raw_email)
+        msg_id_list = sorted(folder_msg_ids)
+        for batch_start in range(0, len(msg_id_list), BATCH_SIZE):
+            batch = msg_id_list[batch_start : batch_start + BATCH_SIZE]
+            batch_num = batch_start // BATCH_SIZE + 1
+            total_batches = (len(msg_id_list) + BATCH_SIZE - 1) // BATCH_SIZE
+            logger.info(f"[INFO] {folder} batch {batch_num}/{total_batches} ({len(batch)} messages)...")
 
-                # Extract body text
-                body = ""
-                if msg.is_multipart():
-                    for part in msg.walk():
-                        content_type = part.get_content_type()
-                        if content_type in ("text/plain", "text/html", "message/delivery-status"):
-                            try:
-                                payload = part.get_payload(decode=True)
-                                if payload:
-                                    body += payload.decode("utf-8", errors="replace")
-                            except Exception:
-                                pass
-                else:
-                    try:
-                        payload = msg.get_payload(decode=True)
-                        if payload:
-                            body = payload.decode("utf-8", errors="replace")
-                    except Exception:
-                        pass
-
-                # Find EU institution emails in the bounce body
-                found = EMAIL_PATTERN.findall(body)
-                for addr in found:
-                    addr_lower = addr.lower()
-                    # Skip our own address
-                    if "beresol" in addr_lower:
-                        continue
-                    bounced.add(addr_lower)
-
-            except (imaplib.IMAP4.abort, imaplib.IMAP4.error, OSError) as e:
-                logger.warning(f"[WARN] Connection lost at message {msg_id}, reconnecting...")
+            for msg_id in batch:
                 try:
-                    conn = connect_imap()
-                    conn.select("INBOX")
-                except Exception as reconn_err:
-                    logger.warning(f"[WARN] Reconnect failed: {reconn_err}")
-                    break
-            except Exception as e:
-                logger.warning(f"[WARN] Failed to parse message {msg_id}: {e}")
+                    status, msg_data = conn.fetch(msg_id, "(RFC822)")
+                    if status != "OK":
+                        continue
 
-        # Small delay between batches to avoid Gmail throttling
-        if batch_start + BATCH_SIZE < len(msg_id_list):
-            time.sleep(1)
+                    raw_email = msg_data[0][1]
+                    msg = email.message_from_bytes(raw_email)
+
+                    # Extract body text
+                    body = ""
+                    if msg.is_multipart():
+                        for part in msg.walk():
+                            content_type = part.get_content_type()
+                            if content_type in ("text/plain", "text/html", "message/delivery-status"):
+                                try:
+                                    payload = part.get_payload(decode=True)
+                                    if payload:
+                                        body += payload.decode("utf-8", errors="replace")
+                                except Exception:
+                                    pass
+                    else:
+                        try:
+                            payload = msg.get_payload(decode=True)
+                            if payload:
+                                body = payload.decode("utf-8", errors="replace")
+                        except Exception:
+                            pass
+
+                    # Find bounced email addresses in the bounce body
+                    found = EMAIL_PATTERN.findall(body)
+                    for addr in found:
+                        addr_lower = addr.lower()
+                        if any(skip in addr_lower for skip in SKIP_SENDERS):
+                            continue
+                        bounced.add(addr_lower)
+
+                except (imaplib.IMAP4.abort, imaplib.IMAP4.error, OSError) as e:
+                    logger.warning(f"[WARN] Connection lost at message {msg_id}, reconnecting...")
+                    try:
+                        conn = connect_imap()
+                        conn.select(folder)
+                    except Exception as reconn_err:
+                        logger.warning(f"[WARN] Reconnect failed: {reconn_err}")
+                        break
+                except Exception as e:
+                    logger.warning(f"[WARN] Failed to parse message {msg_id}: {e}")
+
+            # Small delay between batches to avoid Gmail throttling
+            if batch_start + BATCH_SIZE < len(msg_id_list):
+                time.sleep(1)
 
     return bounced
 
