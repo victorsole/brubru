@@ -16,7 +16,7 @@ import logging
 import re
 import asyncio
 from typing import List, Dict, Any, Optional, Set, Tuple
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from dataclasses import dataclass
 
 from services.search.hybrid_search import HybridSearch, get_hybrid_search
@@ -384,6 +384,15 @@ def detect_drafting_intent(query: str) -> DraftingIntent:
         "cos'e", "quali sono", "mostrami", "cercami",
         # Dutch
         "wat is", "wat zijn", "laat me zien", "zoek",
+        # Plenary debate queries (summarise a debate = information, not drafting)
+        "plenary debate", "debate in parliament", "ep debate", "meps discussed",
+        "what did meps say", "parliament debate", "parliament discussed",
+        "debate on", "debated in plenary", "debate transcript",
+        "who spoke in plenary", "speakers in the debate",
+        "summarise the debate", "summarize the debate",
+        "summarise the plenary", "summarize the plenary",
+        "debat en pleniere", "debat au parlement", "debate en el pleno",
+        "debat al plenari", "dibattito in plenaria", "plenair debat",
     ]
     for phrase in INFO_INTENT_PHRASES:
         if phrase in query_lower:
@@ -546,6 +555,9 @@ class ContextData:
     # Rapporteur-by-country results (for "Spanish MEPs who are rapporteurs" queries)
     rapporteur_by_country: Optional[List[Dict[str, Any]]] = None
     rapporteur_country: Optional[str] = None
+
+    # EP plenary debate transcript (CRE)
+    plenary_debate_transcript: Optional[str] = None
 
 
 class ContextBuilder:
@@ -965,6 +977,19 @@ class ContextBuilder:
                 except Exception as e:
                     logger.warning(f"[CELLAR] On-demand fallback failed: {e}")
 
+        # EP plenary debate transcript (CRE): detect debate intent and fetch on demand
+        plenary_debate_transcript = None
+        debate_date = self._detect_plenary_debate_intent(user_message)
+        if debate_date:
+            try:
+                plenary_debate_transcript = await self._fetch_plenary_debate(
+                    user_message, debate_date
+                )
+                if plenary_debate_transcript:
+                    logger.info(f"[CRE] Injected plenary debate transcript ({len(plenary_debate_transcript)} chars)")
+            except Exception as e:
+                logger.warning(f"[CRE] Failed to fetch plenary debate: {e}")
+
         # EU institutional source search fallback: when no knowledge guides matched,
         # search trusted EU institutional websites and policy media for authoritative content.
         # Runs in parallel with CELLAR (both triggered by empty internal_knowledge).
@@ -1038,6 +1063,7 @@ class ContextBuilder:
             drafting_intent=drafting_intent if drafting_intent.is_drafting_query else None,
             rapporteur_by_country=rapporteur_by_country if rapporteur_by_country else None,
             rapporteur_country=detected_country if rapporteur_by_country else None,
+            plenary_debate_transcript=plenary_debate_transcript,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -4322,6 +4348,163 @@ class ContextBuilder:
         except Exception:
             return "Unknown"
 
+    # ── EP Plenary Debate Transcripts (CRE) ──────────────────────────────
+
+    DEBATE_INTENT_PHRASES = [
+        # English
+        "plenary debate", "debate in parliament", "ep debate", "meps discussed",
+        "what did meps say", "parliament debate", "parliament discussed",
+        "plenary session debate", "debate on", "debated in plenary",
+        "summarise the debate", "summarize the debate", "plenary discussion",
+        "what was said in plenary", "debate transcript", "cre transcript",
+        "who spoke in plenary", "speakers in the debate",
+        # French
+        "debat en pleniere", "debat au parlement", "discussion en pleniere",
+        # Spanish
+        "debate en el pleno", "debate en el parlamento", "sesion plenaria debate",
+        # Catalan
+        "debat al plenari", "debat al parlament",
+        # Italian
+        "dibattito in plenaria", "dibattito al parlamento",
+        # Dutch
+        "debat in de plenaire", "plenair debat",
+    ]
+
+    def _detect_plenary_debate_intent(self, query: str) -> Optional[date]:
+        """Detect if user is asking about an EP plenary debate and extract the date.
+
+        Returns the plenary session date if debate intent is detected, None otherwise.
+        """
+        date_type = date  # alias for clarity
+        query_lower = query.lower()
+
+        # Check for debate intent phrases
+        has_debate_intent = any(phrase in query_lower for phrase in self.DEBATE_INTENT_PHRASES)
+        if not has_debate_intent:
+            return None
+
+        # Try to extract a date from the query
+        # Pattern 1: "March 10" / "10 March" / "march 10 2026"
+        date_patterns = [
+            r'(\d{1,2})\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s*(\d{4})?',
+            r'(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{1,2})(?:\s*,?\s*(\d{4}))?',
+            r'(\d{4})-(\d{2})-(\d{2})',
+            r'(\d{1,2})/(\d{1,2})/(\d{4})',
+        ]
+
+        import re as _re
+        month_names = {
+            'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5, 'june': 6,
+            'july': 7, 'august': 8, 'september': 9, 'october': 10, 'november': 11, 'december': 12,
+        }
+
+        # Day Month [Year]
+        m = _re.search(r'(\d{1,2})\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s*(\d{4})?', query_lower)
+        if m:
+            day = int(m.group(1))
+            month = month_names[m.group(2)]
+            year = int(m.group(3)) if m.group(3) else date_type.today().year
+            try:
+                return date_type(year, month, day)
+            except ValueError:
+                pass
+
+        # Month Day [Year]
+        m = _re.search(r'(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{1,2})(?:\s*,?\s*(\d{4}))?', query_lower)
+        if m:
+            month = month_names[m.group(1)]
+            day = int(m.group(2))
+            year = int(m.group(3)) if m.group(3) else date_type.today().year
+            try:
+                return date_type(year, month, day)
+            except ValueError:
+                pass
+
+        # ISO date
+        m = _re.search(r'(\d{4})-(\d{2})-(\d{2})', query_lower)
+        if m:
+            try:
+                return date_type(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+            except ValueError:
+                pass
+
+        # Relative dates: "last week", "this week", "yesterday", "today"
+        today = date_type.today()
+        if "yesterday" in query_lower:
+            return today - timedelta(days=1)
+        if "last monday" in query_lower or "last tuesday" in query_lower or "last wednesday" in query_lower or "last thursday" in query_lower:
+            # Find last occurrence of that weekday
+            day_names = {"monday": 0, "tuesday": 1, "wednesday": 2, "thursday": 3, "friday": 4}
+            for day_name, weekday in day_names.items():
+                if f"last {day_name}" in query_lower:
+                    days_back = (today.weekday() - weekday) % 7
+                    if days_back == 0:
+                        days_back = 7
+                    return today - timedelta(days=days_back)
+
+        # "this week" or "last week" with debate topic -> try to find the most recent plenary
+        if "this week" in query_lower or "last week" in query_lower:
+            # Most recent Monday-Thursday (plenary days)
+            offset = 7 if "last week" in query_lower else 0
+            for i in range(offset, offset + 7):
+                d = today - timedelta(days=i)
+                if d.weekday() in (0, 1, 2, 3):  # Mon-Thu
+                    return d
+
+        # No date found but debate intent detected -> try most recent plenary week
+        # Return last Monday-Thursday
+        for i in range(0, 14):
+            d = today - timedelta(days=i)
+            if d.weekday() in (0, 1, 2, 3):
+                return d
+
+        return None
+
+    async def _fetch_plenary_debate(self, query: str, session_date: date) -> Optional[str]:
+        """Fetch CRE transcript and find the matching debate for a user query."""
+        from services.api_clients.cre_client import get_cre_client
+
+        client = get_cre_client()
+        session = await client.fetch_session(session_date)
+
+        if not session or not session.debates:
+            # Try adjacent days (plenary sessions span Mon-Thu)
+            from datetime import timedelta
+            for offset in [-1, 1, -2, 2]:
+                alt_date = session_date + timedelta(days=offset)
+                session = await client.fetch_session(alt_date)
+                if session and session.debates:
+                    break
+
+        if not session or not session.debates:
+            return None
+
+        # Extract topic from query (remove debate intent phrases)
+        import re as _re
+        topic = query.lower()
+        for phrase in self.DEBATE_INTENT_PHRASES:
+            topic = topic.replace(phrase, "")
+        # Remove date-related and stop words using word boundaries
+        stop_words = {"march", "april", "may", "june", "monday", "tuesday", "wednesday",
+                      "thursday", "friday", "last", "this", "week", "2026", "2025",
+                      "the", "on", "about", "of", "what", "did", "was", "summarise",
+                      "summarize", "summary", "tell", "me", "10", "11", "12", "13"}
+        words = topic.split()
+        topic = " ".join(w for w in words if w.strip(".,;:!?") not in stop_words)
+        topic = topic.strip()
+
+        # Try to find specific debate by topic
+        debate = client.search_debate_by_topic(session, topic)
+        if debate:
+            return client.format_debate_for_context(debate)
+
+        # If no specific topic match, return session overview + largest debate
+        result = client.format_session_overview(session)
+        if session.debates:
+            largest = max(session.debates, key=lambda d: d.speaker_count)
+            result += "\n\n" + client.format_debate_for_context(largest)
+        return result
+
     async def _fetch_eu_institutional_search(
         self,
         query: str,
@@ -5154,6 +5337,11 @@ class ContextBuilder:
                 sections.append(f"  {result['content'][:600]}")
                 sections.append(f"  URL: {result['url']}")
                 sections.append("")
+
+        # EP plenary debate transcript (CRE)
+        if context_data.plenary_debate_transcript:
+            sections.append(f"\n{context_data.plenary_debate_transcript}")
+            sections.append("")
 
         # Real-time web search results (Tavily)
         if context_data.web_search_results:

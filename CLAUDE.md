@@ -647,6 +647,39 @@ When no knowledge guide matches a user query, Brubru searches 25 trusted EU doma
 
 **Source attribution rule:** When using EU institutional search results, the AI MUST name the source explicitly: "According to Bruegel...", "Euractiv reports that...", "The European Commission published...". Include the URL.
 
+### EP Plenary Debate Transcripts (CRE) (March 2026)
+
+On-demand fetch of official EP verbatim debate records (CRE XML) from Doceo. No database storage -- fetched live when user asks about a plenary debate.
+
+**Key files:**
+- `services/api_clients/cre_client.py` -- CREClient: fetch, parse, search, format
+- `services/ai/context_builder.py` -- `_detect_plenary_debate_intent()`, `_fetch_plenary_debate()`, `DEBATE_INTENT_PHRASES`
+- `services/ai_service.py` -- CRITICAL system prompt section for debate summary structure
+
+**URL pattern:** `https://www.europarl.europa.eu/doceo/document/CRE-10-{YYYY-MM-DD}_EN.xml`
+**Publication delay:** 3-5 days after plenary session.
+**Intent triggers:** "plenary debate", "EP debate", "what did MEPs say", "debate on", "who spoke in plenary" (22 phrases, 6 languages).
+**Context injection:** Max 4,000 chars per debate. Commission/Council positions first, then by political group (3 speakers per group, 200 chars each).
+**Spec:** `docs/maria/ep_cre_transcripts.md` (Phase 1 complete, Phase 2-3 pending).
+
+### Featured Chatbot Questions Source (March 2026)
+
+The 4 featured question cards on the Brubru Chat page come from the **`chat_example_prompts`** table (scope=`'main_chat'`, is_active=`true`, ordered by `sort_order`). They do NOT come from `daily_briefs.suggested_query`.
+
+**API endpoint:** `GET /api/chat/examples?scope=main_chat&limit=4`
+**Fallback:** If the API returns no results, the frontend uses i18n keys `chat.example1` through `chat.example4` from `frontend/src/i18n/locales/en.json`.
+**Key files:** `backend/api/chat_examples.py`, `frontend/src/components/chat/chat_interface.tsx` (line ~170), `frontend/src/components/chat/daily_brief.tsx`
+
+To update featured questions, insert into `chat_example_prompts` with `scope='main_chat'` and `is_active=true`. Deactivate old ones first.
+
+### EPRS Enrichment: Skip During Morning Routine (March 2026)
+
+`python3.12 scripts/sync_eprs_publications.py --enrich` downloads PDFs and runs CPU-only embedding (BAAI/bge-m3). This takes **15+ minutes** for even a handful of publications. **Do not run `--enrich` during the `/morning` routine.** Run metadata-only sync (`--days 7` without `--enrich`) instead. Schedule `--enrich` overnight or skip entirely.
+
+### Daily Brief BCC Batching (March 2026)
+
+`send_daily_brief_batch()` in `services/daily_brief_email.py` now uses **BCC batching** (90 recipients per SMTP connection) instead of individual sends. This avoids the Gmail rate limit (~80-100 individual sends per session). Greeting is generic ("Good morning") with no personalisation. The `daily_brief_sends` table still tracks per-recipient duplicate prevention.
+
 ### RSS AI Enrichment - On-Demand Only (January 2026)
 
 AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to avoid $5/day cost. Trigger via `POST /api/rss/entries/{entry_id}/enrich`. Files: `services/rss/rss_processor.py`, `api/rss_feeds.py`.
