@@ -541,6 +541,31 @@ doc_metadata: Optional[Dict[str, Any]] = None
 - `backend/models/user_document.py`
 - `backend/schemas/user_document_schemas.py`
 
+### Frontend Services Must Include Auth Headers (March 2026)
+
+**Every frontend API service** must include Authorization headers on authenticated endpoints. There is no global axios interceptor -- each service is responsible for its own auth.
+
+**Pattern:**
+```typescript
+import { useAuth } from '../hooks/use_auth';
+
+function authHeaders() {
+  const token = useAuth.getState().token;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+// Then on every axios call:
+const response = await axios.get(`${API_BASE}/endpoint`, { headers: authHeaders() });
+```
+
+**Root cause of bug:** `eu_calendar_service.ts` was created in February 2026 without auth headers. Every calendar API call returned 401 silently. The calendar showed zero events for ALL users for over a month. Fixed 16 March 2026.
+
+**Checklist for new frontend services:**
+1. Import `useAuth` from hooks
+2. Add `authHeaders()` helper
+3. Apply to every `axios.get/post/put/delete` call
+4. Test that authenticated endpoints return data (not 401)
+
 ### Development Server Ports (January 2025)
 
 **Frontend must always run on port 5173.** Before starting the frontend dev server, kill any process occupying port 5173:
