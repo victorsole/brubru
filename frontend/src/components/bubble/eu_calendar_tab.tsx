@@ -36,6 +36,7 @@ import {
   POLICY_AREA_CODES,
 } from '../../hooks/use_eu_calendar';
 import type { ViewMode } from '../../hooks/use_eu_calendar';
+import { useAuth } from '../../hooks/use_auth';
 import {
   INSTITUTION_CONFIG,
   POLICY_AREA_CONFIG,
@@ -66,14 +67,15 @@ const MAX_EVENTS_PER_CELL = 4;
 
 function MyEUTodayDigest() {
   const { todayDigest, isLoadingDigest, fetchTodayDigest } = useEUCalendar();
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const [isOpen, setIsOpen] = useState(() => {
     const stored = localStorage.getItem('brubru_eu_today_open');
     return stored !== 'false';
   });
 
   useEffect(() => {
-    fetchTodayDigest();
-  }, [fetchTodayDigest]);
+    if (isAuthenticated) fetchTodayDigest();
+  }, [fetchTodayDigest, isAuthenticated]);
 
   useEffect(() => {
     localStorage.setItem('brubru_eu_today_open', String(isOpen));
@@ -831,10 +833,14 @@ function formatDateISO(d: Date): string {
 
 export const EUCalendarTab = () => {
   const { viewMode, isLoading, fetchEvents } = useEUCalendar();
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
 
   useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
+    // Wait for auth to hydrate from localStorage before fetching
+    if (isAuthenticated) {
+      fetchEvents();
+    }
+  }, [fetchEvents, isAuthenticated]);
 
   const renderView = () => {
     if (isLoading) {
