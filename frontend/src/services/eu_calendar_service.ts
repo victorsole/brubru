@@ -8,8 +8,14 @@
  */
 
 import axios from 'axios';
+import { useAuth } from '../hooks/use_auth';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || ''}/api/eu-calendar`;
+
+function authHeaders() {
+  const token = useAuth.getState().token;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 // ============================================================================
 // Types
@@ -212,7 +218,7 @@ export const euCalendarService = {
     if (policyArea) params.append('policy_area', policyArea);
     if (committeeCode) params.append('committee_code', committeeCode);
 
-    const response = await axios.get(`${API_BASE}/events/range?${params.toString()}`);
+    const response = await axios.get(`${API_BASE}/events/range?${params.toString()}`, { headers: authHeaders() });
     return response.data;
   },
 
@@ -239,7 +245,7 @@ export const euCalendarService = {
     queryParams.append('limit', String(params.limit || 50));
     queryParams.append('offset', String(params.offset || 0));
 
-    const response = await axios.get(`${API_BASE}/events?${queryParams.toString()}`);
+    const response = await axios.get(`${API_BASE}/events?${queryParams.toString()}`, { headers: authHeaders() });
     return response.data;
   },
 
@@ -247,7 +253,7 @@ export const euCalendarService = {
    * Get single event by ID
    */
   getEvent: async (id: string): Promise<CalendarEvent> => {
-    const response = await axios.get(`${API_BASE}/events/${id}`);
+    const response = await axios.get(`${API_BASE}/events/${id}`, { headers: authHeaders() });
     return response.data;
   },
 
@@ -255,7 +261,7 @@ export const euCalendarService = {
    * Get today's digest (My EU Today)
    */
   getTodayDigest: async (): Promise<TodayDigest> => {
-    const response = await axios.get(`${API_BASE}/events/today`);
+    const response = await axios.get(`${API_BASE}/events/today`, { headers: authHeaders() });
     return response.data;
   },
 
@@ -263,7 +269,7 @@ export const euCalendarService = {
    * Get list of institutions
    */
   getInstitutions: async (): Promise<InstitutionInfo[]> => {
-    const response = await axios.get(`${API_BASE}/institutions`);
+    const response = await axios.get(`${API_BASE}/institutions`, { headers: authHeaders() });
     return response.data;
   },
 
@@ -271,7 +277,7 @@ export const euCalendarService = {
    * Get list of policy areas
    */
   getPolicyAreas: async (): Promise<PolicyAreaInfo[]> => {
-    const response = await axios.get(`${API_BASE}/policy-areas`);
+    const response = await axios.get(`${API_BASE}/policy-areas`, { headers: authHeaders() });
     return response.data;
   },
 
@@ -279,7 +285,7 @@ export const euCalendarService = {
    * Trigger sync (Blue/Admin only)
    */
   triggerSync: async (): Promise<SyncAllResult> => {
-    const response = await axios.post(`${API_BASE}/sync`);
+    const response = await axios.post(`${API_BASE}/sync`, {}, { headers: authHeaders() });
     return response.data;
   },
 };
