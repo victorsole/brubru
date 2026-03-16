@@ -152,13 +152,44 @@ DAILY BRIEF SENT
   Breakdown: A users + B pre-users + C extras
 ```
 
-## Step 6: Log Results
+## Step 6: Check Unsubscribes and Bounces
+
+Immediately after sending, check for new unsubscribes and bounces:
+
+```sql
+-- New unsubscribes
+SELECT email, preferences->>'daily_brief_unsubscribed' as unsubscribed
+FROM users
+WHERE preferences->>'daily_brief_unsubscribed' = 'true'
+ORDER BY email;
+
+-- Bounce/unsubscribe events today
+SELECT event_type, event_metadata->>'email' as email, created_at
+FROM pre_user_events
+WHERE event_type IN ('unsubscribe', 'daily_brief_unsubscribe', 'email_bounce')
+AND created_at >= CURRENT_DATE
+ORDER BY created_at DESC;
+```
+
+Report:
+
+```
+UNSUBSCRIBE CHECK:
+  Total unsubscribed: X
+  New today: Y (list emails if any)
+  Notable: any paying users who unsubscribed
+```
+
+If a paying subscriber (yellow/blue tier) has unsubscribed, flag it to the user as a retention concern.
+
+## Step 7: Log Results
 
 After sending, update `memory/email_sending_log.md` with the results:
 - Date
 - Recipients sent/failed/skipped
 - Brubru news items included
 - Any issues encountered
+- Unsubscribe count (total + new)
 
 ## Headline Writing Rules (MANDATORY)
 

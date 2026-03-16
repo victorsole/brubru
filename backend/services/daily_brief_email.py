@@ -16,8 +16,11 @@ Style rules:
 """
 
 import logging
+import smtplib
 import urllib.parse
 from datetime import date
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from typing import List, Optional
 
 from services.email_service import EmailService
@@ -373,9 +376,16 @@ def _record_sent(db_session, email: str, brief_date: str):
         db_session.rollback()
 
 
+BCC_BATCH_SIZE = 90
+
+
 def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
                            extra_recipients: Optional[List[str]] = None) -> dict:
-    """Send today's brief to all subscribers (users + pre-users + extra recipients).
+    """Send today's brief to all subscribers via BCC batching.
+
+    Uses BCC batches of 90 recipients per SMTP connection to avoid Gmail
+    rate limits (~100 individual sends per session). Greeting is generic
+    ("Good morning") rather than personalised.
 
     Tracks successful sends per date to prevent duplicate emails on retries.
 
@@ -406,34 +416,54 @@ def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
     if skipped:
         logger.info(f"[INFO] Skipping {skipped} recipients who already received today's brief")
 
+    # Build a single generic HTML (no personalisation)
+    html = _build_brief_email_html(
+        headlines, brief_date, "subscriber",
+        is_welcome=False,
+        is_registered_user=False,
+        brubru_news=brubru_news,
+    )
+
+    subject = f"Brubru Daily Brief: {brief_date}"
     service = EmailService()
     sent = 0
     failed = 0
 
-    for email in pending_emails:
-        try:
-            is_registered = email in registered_emails
-            html = _build_brief_email_html(
-                headlines, brief_date, email,
-                is_welcome=False,
-                is_registered_user=is_registered,
-                brubru_news=brubru_news,
-            )
-            success = service.send(
-                to=email,
-                subject=f"Brubru Daily Brief: {brief_date}",
-                html_body=html,
-            )
-            if success:
-                sent += 1
-                _record_sent(db_session, email, brief_date)
-            else:
-                failed += 1
-        except Exception as e:
-            logger.warning(f"[WARN] Failed to send brief to {email[:3]}***: {e}")
-            failed += 1
+    # Send in BCC batches
+    for i in range(0, len(pending_emails), BCC_BATCH_SIZE):
+        batch = pending_emails[i:i + BCC_BATCH_SIZE]
+        batch_num = (i // BCC_BATCH_SIZE) + 1
+        total_batches = (len(pending_emails) + BCC_BATCH_SIZE - 1) // BCC_BATCH_SIZE
 
-    logger.info(f"[OK] Daily brief sent to {sent}/{len(pending_emails)} ({len(registered_emails)} users, {len(preuser_emails)} pre-users, {len(extra_set)} extra, {skipped} skipped)")
+        msg = MIMEMultipart("alternative")
+        msg["From"] = service._from_address()
+        msg["To"] = service.user
+        msg["Subject"] = subject
+
+        text_fallback = f"{subject}\n\nView this email in HTML for the full content."
+        msg.attach(MIMEText(text_fallback, "plain", "utf-8"))
+        msg.attach(MIMEText(html, "html", "utf-8"))
+
+        try:
+            with smtplib.SMTP(service.host, service.port, timeout=30) as server:
+                server.ehlo()
+                server.starttls()
+                server.ehlo()
+                server.login(service.user, service.password)
+                all_recipients = [service.user] + batch
+                server.sendmail(service.user, all_recipients, msg.as_string())
+
+            sent += len(batch)
+            for email in batch:
+                _record_sent(db_session, email, brief_date)
+            logger.info(f"[OK] Batch {batch_num}/{total_batches}: {len(batch)} recipients sent")
+
+        except Exception as e:
+            failed += len(batch)
+            logger.error(f"[ERROR] Batch {batch_num}/{total_batches} failed: {e}")
+
+    db_session.commit()
+    logger.info(f"[OK] Daily brief sent to {sent}/{len(pending_emails)} via BCC ({len(registered_emails)} users, {len(preuser_emails)} pre-users, {len(extra_set)} extra, {skipped} skipped)")
     return {
         "sent": sent,
         "failed": failed,
