@@ -8,7 +8,7 @@
 - Legal basis: Articles 206-207 TFEU (Common Commercial Policy)
 - EU has exclusive competence on trade policy (since Lisbon Treaty)
 - Active FTAs: 40+ trade agreements covering 70+ countries
-- Key current negotiations: EU-Australia, EU-India, EU-Indonesia, EU-Mercosur, EU-Canada DTA
+- Key current negotiations: EU-Australia (near conclusion, March 2026), EU-India, EU-Indonesia, EU-Mercosur (ratification), EU-Canada DTA
 
 ## Key Trade Agreements
 
@@ -28,6 +28,11 @@ On 6 March 2026, Commissioner Sefcovic and Canada's Minister for International T
 - Covers: Argentina, Brazil, Uruguay, Paraguay
 - Awaiting legal scrubbing and ratification
 - Significant agricultural import implications
+
+### EU-Australia FTA (March 2026)
+- **Status:** Negotiations nearing conclusion (March 2026). Von der Leyen visiting Australia 23-25 March 2026.
+- **Context:** Talks relaunched after stalling in 2023. Australia is a "trusted, like-minded partner."
+- **Significance:** If concluded, first major new FTA under von der Leyen II mandate. Signals EU trade diversification away from China dependency.
 
 ### Other Active Agreements
 

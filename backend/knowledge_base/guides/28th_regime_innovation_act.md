@@ -9,7 +9,7 @@ Responsible Commissioner: Henna Virkkunen (28th Regime/digital), Stephane Sejour
 Context: Adopted just before European Council summit (19-20 March) where competitiveness is on the agenda
 Draghi Report influence: September 2024 competitiveness report called for removing barriers to cross-border business
 Letta Single Market Report: Called for deepening single market integration
-Status: Commission proposal stage (March 2026)
+Status: Commission proposal adopted 18 March 2026
 
 ## The 28th Regime
 
@@ -18,12 +18,19 @@ The "28th regime" creates an optional EU-wide corporate legal framework that com
 
 - Companies can incorporate under a single EU framework valid across all Member States
 - Eliminates the need to navigate 27 different national corporate law regimes
-- Aims to reduce compliance costs for cross-border operations
+- All administrative procedures throughout the company lifecycle must be exclusively digital (no paper alternatives)
+- Digital Business Wallet for authentication, document storage, and secure sharing (EU Company Certificate, digital powers of attorney)
+- All procedural payments via widely available cross-border payment services
+- At least one director must be resident in the EU
+- General meetings may be held remotely
+- Minority shareholders have the right to have the company buy their shares in cases of serious harm
+- Simplified company closure: deregistration in ~3 months for companies without assets/debts; simplified insolvency in max 6 months for micro-enterprises
 - Builds on precedents like the Societas Europaea (SE), but with broader scope and simpler procedures
 
 ### Rationale
 - The Draghi Report (September 2024) identified regulatory fragmentation as a key barrier to EU competitiveness
 - Companies operating across the single market face 27 different sets of corporate law rules
+- Europe creates more startups than the US but most fail to scale within the continent
 - Start-ups and scale-ups disproportionately affected by cross-border compliance costs
 - The 28th regime aims to make it as easy to do business across the EU as within a single Member State
 

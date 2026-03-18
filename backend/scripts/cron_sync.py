@@ -11,9 +11,12 @@ Usage:
     python scripts/cron_sync.py
 """
 
+import json
 import os
 import sys
-import requests
+import urllib.request
+import urllib.error
+import urllib.parse
 
 BACKEND_URL = os.environ.get(
     "BACKEND_URL",
@@ -27,20 +30,23 @@ def main():
         print("[ERROR] CRON_SECRET environment variable not set")
         sys.exit(1)
 
-    url = f"{BACKEND_URL}/api/cron/sync/all"
+    params = urllib.parse.urlencode({"days": 7})
+    url = f"{BACKEND_URL}/api/cron/sync/all?{params}"
     headers = {"Authorization": f"Bearer {CRON_SECRET}"}
 
     print(f"[CRON] Calling {url}")
 
     try:
-        response = requests.post(url, headers=headers, params={"days": 7}, timeout=300)
-        response.raise_for_status()
+        req = urllib.request.Request(url, method="POST", headers=headers)
+        with urllib.request.urlopen(req, timeout=300) as resp:
+            data = json.loads(resp.read().decode())
+            print(f"[OK] Sync complete: {data}")
 
-        data = response.json()
-        print(f"[OK] Sync complete: {data}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"[ERROR] Sync failed: {e}")
+    except urllib.error.HTTPError as e:
+        print(f"[ERROR] HTTP {e.code}: {e.reason}")
+        sys.exit(1)
+    except urllib.error.URLError as e:
+        print(f"[ERROR] Connection failed: {e.reason}")
         sys.exit(1)
 
     sys.exit(0)
