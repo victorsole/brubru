@@ -426,7 +426,7 @@
 <header class="page-header">
   <h1>Competitive learnings</h1>
   <div class="subtitle">What Brubru can learn and emulate</div>
-  <div class="meta">Last updated: 9 March 2026 | Source: competitive_benchmarking.md | <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid currentColor;"><strong>Beresol BV</strong></a>, Brussels</div>
+  <div class="meta">Last updated: 19 March 2026 | Source: competitive_benchmarking.md | <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid currentColor;"><strong>Beresol BV</strong></a>, Brussels</div>
 </header>
 
 <nav class="bp-nav">
@@ -455,6 +455,7 @@
     <a href="#euractiv">12. Euractiv Pro</a>
     <a href="#spaak">13. Spaak</a>
     <a href="#fed10">14. Fed10 (USA)</a>
+    <a href="#prismos">15. Prismos (Brussels)</a>
     <a href="#priority-matrix">Priority Matrix</a>
     <a href="#strategic-insight">Strategic insight</a>
     <a href="#implementation">Implementation Strategy</a>
@@ -686,6 +687,30 @@
       <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> Fed10's "policy impact assessment" feature (AI that analyses how a specific bill affects a specific business, maps to a potential Brubru feature: automated impact analysis of EU legislation on a user's organisation). This would combine EU Law Comply's gap analysis with My EU Bubble's legislative tracking into a proactive "this regulation affects you because..." alert.</td></tr>
       <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Platform:</strong> Fed10 prices as consultant replacement ($10K-$50K saved), not as SaaS ($X/month). Brubru's Professional plan at EUR 99/month (EUR 1,188/year) is a fraction of one position paper commission (EUR 5-15K). Frame pricing around deliverable value, not feature access.</td></tr>
       <tr><td><span class="badge badge-short" style="background: rgba(6,147,227,0.15); color: #0693e3;">Insight</span></td><td><strong>Brubru's advantage over Fed10 (Mar 2026):</strong> Fed10 is observation-only (monitor bills, flag impacts). Brubru is observation + action (monitor AND draft amendments, generate documents, check compliance, predict votes). If Fed10 validates the US market for AI policy intelligence, Brubru validates the same thesis for EU, but with a deeper product. The EU market has no Fed10 equivalent. Brubru occupies both the Fed10 lane (monitoring/intelligence) and lanes Fed10 hasn't entered (drafting, compliance, predictions).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- COMPETITOR 15: PRISMOS -->
+<section class="section" id="prismos">
+  <h2 class="purple">15. Prismos (Brussels): AI-native EU policy monitoring startup</h2>
+  <table class="competitor-table">
+    <tbody>
+      <tr><td>Founded</td><td>2024 (Brussels). Co-founders: Pepijn Mores (CEO, data/AI engineering background) and Christophe Geudens. 2-10 employees.</td></tr>
+      <tr><td>Funding</td><td>Pre-seed US$ 162.5K (August 2024) from imec.istart. Winner of EU FinTech Pitch Battle 2025 (Startup Pitch, Prize of the Jury).</td></tr>
+      <tr><td>Product</td><td>AI-powered EU policy monitoring platform. Real-time debate transcription (EP and Belgian parliament) with AI analysis. Chat interface for policy Q&amp;A. "AI Prisms" that create digital representations of business interests to filter relevant signals. Push notifications with summaries and relevance explanations. Dual-language transcript display (original + English). Named entity recognition and entity linking.</td></tr>
+      <tr><td>Target</td><td>Public affairs teams (corporate), trade associations, NGOs, media, PA consultancies.</td></tr>
+      <tr><td>Positioning</td><td>"See regulation through your own lens." Positions against "surface-level scrapers" and "local niche players." Claims cross-border, multi-jurisdiction capability (EU + US state bills). AI-first architecture "trained on political speech, legal jargon, and institutional formats."</td></tr>
+      <tr><td>Pricing</td><td>Not public. Demo-based sales model.</td></tr>
+      <tr><td>Strengths vs Brubru</td><td><strong>Real-time debate transcription</strong> (Brubru's CRE transcripts have a 3-5 day delay). Multi-jurisdiction ambition (EU + US). Institutional backing (imec.istart). Team of 2-10 vs. solo founder. Growing LinkedIn community (693 followers).</td></tr>
+      <tr><td>Weaknesses vs Brubru</td><td><strong>No legislative tools</strong> (no Amendator, no EU Law Comply, no Document Generator, no Predictions, no Calendar). No transparent pricing. No curated knowledge base (70+ guides). No founder with EU institutional experience. Monitoring-only, not a workflow platform.</td></tr>
+      <tr><td>Threat level</td><td><strong>Medium.</strong> Direct overlap on monitoring and chat. But fundamentally a monitoring tool, not a legislative workflow platform. Same competitive category as Spaak: breadth of sources vs. Brubru's depth of tools.</td></tr>
+      <tr><td>What Brubru can learn</td><td>Real-time debate transcription is a genuine differentiator. Belgian parliament coverage shows national-level expansion potential. "AI Prisms" (personalised relevance filtering) is a strong UX concept. Demo-based sales model may convert better than self-serve for enterprise clients.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>My EU Bubble:</strong> Accelerate CRE transcript integration (Phase 2-3 of ep_cre_transcripts.md spec). Even without real-time, faster-than-3-days access to debate content would close part of the gap.</td></tr>
+      <tr><td><span class="badge badge-short">Short</span></td><td><strong>Platform:</strong> Add a demo/booking CTA alongside self-serve signup. Prismos, Spaak, and Dixit all use demo-based sales. Brubru's transparent pricing is a strength, but adding a "Book a walkthrough" option captures enterprise leads who prefer guided onboarding.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>My EU Bubble:</strong> Implement personalised relevance scoring ("AI Prisms" concept). Users define their policy interests, Brubru scores incoming items by relevance to their profile. This turns generic monitoring into personalised intelligence.</td></tr>
+      <tr><td><span class="badge badge-mid">Mid</span></td><td><strong>Brubru Chat:</strong> Add Belgian parliament / national parliament coverage as a future expansion vector. Prismos already covers Belgian debates, which appeals to Brussels-based PA teams working on both EU and national files.</td></tr>
+      <tr><td><span class="badge badge-long">Long</span></td><td><strong>Platform:</strong> Live debate streaming with real-time AI transcription and analysis. This would require speech-to-text infrastructure (Whisper or similar) and websocket streaming. High effort, high differentiation.</td></tr>
     </tbody>
   </table>
 </section>

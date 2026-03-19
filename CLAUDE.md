@@ -476,6 +476,18 @@ explainers = await service.find_explainers(procedure_ref="2021/0106(COD)")
 
 **OEIL XML feed limit:** The procedures feed has a **30-day server-side limit** (`maxDays=30`). For older procedures, use `OEILClient.lookup_procedure(ref)` or `OEILSyncService.sync_single_procedure(ref)` which scrape individual OEIL pages. API: `POST /api/legislative-train/sync/oeil/lookup?reference=2025/0726(COD)` (Blue tier).
 
+### Knowledge Guide Truncation (March 2026)
+
+The context builder truncates knowledge guide content before injecting it into the AI prompt. Current limit: **5,000 characters** per guide (increased from 3,000 on 19 March 2026).
+
+**Why it matters:** Guides longer than the limit get cut. If key detail (e.g., article-by-article analysis) is beyond the truncation point, the AI says "I don't have detailed information" even though the guide file contains it.
+
+**Rule:** For large guides (>5,000 chars), put the most important detail in the **QUICK FACTS** block at the top. The QUICK FACTS block should contain key-value summaries of all major topics, not just metadata. Example: the EU Inc. guide has EU-ESO, SAFE/KISS, fast-track liquidation, and prohibited requirements summarised in QUICK FACTS.
+
+**Review scheduled:** 10 April 2026, assess per-guide dynamic truncation based on query cost/token data since launch.
+
+**Affected files:** `backend/services/ai/context_builder.py` (lines ~2520, ~2541: `guide_content[:5000]`)
+
 ### Data-Driven Chat Follow-Ups (February 2026)
 
 When Brubru Chat matches a legislative file, it enriches the AI context with **structured procedural metadata** scraped from OEIL (Documentation Gateway + procedure page). The AI uses this to craft follow-up questions grounded in real data.
@@ -628,6 +640,12 @@ Use `marked` library: `<div dangerouslySetInnerHTML={{ __html: marked.parse(cont
 | **Paths** | Use **relative paths** (`../assets/`, `../New-Yorker-Font/`) so files work both locally and when served |
 
 **Font:** Use `@font-face` with Adobe Caslon Pro (Regular/Semibold/Bold `.otf` from `New-Yorker-Font/`). Use **relative paths** (`../New-Yorker-Font/`, `../assets/`) since files live in `public/analytics/`.
+
+**Additional style rules (March 2026):**
+- **No double dashes (`--`)** anywhere in content. Use em-dashes, parentheses, commas, or colons instead.
+- **CTAs must match the landing page rainbow gradient**: `background-image: linear-gradient(90deg, blue, green, purple, amber, blue)`, `background-size: 300% 100%`, animated shift, scale+glow on hover.
+- **After a colon (`:`)**, never a capital letter unless it is a proper noun.
+- **Logo file**: Use `brubru_mainlogo.png` (NOT `brubru_logo_word.png` which does not exist in `frontend/public/assets/`).
 
 ### Header Icon Navigation (January 2025)
 
