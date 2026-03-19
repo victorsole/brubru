@@ -105,6 +105,24 @@ CELEX: 32024R1083R(04) -- Corrigendum to Regulation (EU) 2024/1689 published in 
 
 For full details on the Digital Omnibus Package (COM(2025) 836 and COM(2025) 837), including all 33 AI Act amendments, GDPR/ePrivacy changes, and stakeholder positions, see the dedicated guide: `digital_omnibus_package.md`.
 
+## EP Position on AI Act Omnibus (18 March 2026)
+
+On 18 March 2026, the EP committees IMCO and LIBE (joint procedure) adopted their negotiating mandate on the Digital Omnibus on AI (COM(2025) 836). Key positions:
+
+**Postponement of high-risk AI deadlines:**
+- High-risk AI systems in Annex III (biometrics, critical infrastructure, education, employment, law enforcement, justice, border management): MEPs propose **2 December 2027** (instead of 2 August 2026)
+- High-risk AI systems covered by EU sectorial safety/market surveillance legislation: MEPs propose **2 August 2028**
+
+**Watermarking extension:** MEPs accept extending the deadline for AI-generated content watermarking (audio, image, video, text) but propose a shorter extension to **2 November 2026** (Commission proposed 2 February 2027).
+
+**Ban on nudifier apps:** MEPs introduce a new ban on AI systems that create or manipulate sexually explicit or intimate images resembling identifiable real persons without consent. Exception: systems with effective safety measures preventing such creation. This is a new prohibition not in the original Commission proposal.
+
+**SME support:** Measures to increase flexibility and support for small and mid-cap enterprises.
+
+**Co-rapporteurs:** Deirdre Clune (EPP, IE) for IMCO, Michael McNamara (Renew, IE) for LIBE.
+
+**Next steps:** EP plenary vote on the mandate expected **26 March 2026**. Once adopted, negotiations with Council begin.
+
 ## Related Legislation
 
 | Legislation | CELEX | Relevance |

@@ -81,6 +81,18 @@ For comprehensive analysis of EU defence policy, including EDIS, EDIP, SAFE, and
 
 See also: Beresol Open Report "Defence and Space: EDIS, EDIP, the EU Space Strategy for Security and Defence, and IRIS2" (February 2026) for in-depth analysis.
 
+## Council Conclusions on Hybrid Threats (17 March 2026)
+
+On 17 March 2026, the Council adopted conclusions on advancing the EU's capacity to counter hybrid threats, calling for a coordinated and strategic EU approach. Key points:
+- EU must strengthen capacity to detect, attribute, and respond to hybrid attacks (cyber, disinformation, economic coercion, instrumentalisation of migration)
+- Calls for updated 2022 threat assessment based on a 360-degree analysis (to be prepared by HR/VP)
+- Member States urged to ensure concrete defence capability projects are launched in the coming months
+- Links to Readiness 2030 objectives and the European Defence Readiness 2030 targets
+
+Also on 17 March 2026: Joint statement by Presidents von der Leyen and Costa on the Druzhba pipeline (energy security dimension of EU defence posture).
+
+The EUCO summit (19-20 March 2026) is expected to take stock of progress on defence readiness and potentially invite Member States to update the threat assessment. The draft conclusions also highlight the threat posed by Russian ex-combatants to the EU's internal security.
+
 ## Sources
 
 - COM(2025) 120: SAFE Regulation proposal

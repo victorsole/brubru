@@ -29,6 +29,8 @@ On 6 March 2026, Commissioner Sefcovic and Canada's Minister for International T
 - Awaiting legal scrubbing and ratification
 - Significant agricultural import implications
 
+**Regulation (EU) 2026/687** (published OJ 19 March 2026): Regulation of the European Parliament and of the Council of 11 March 2026 implementing the bilateral safeguard clauses of the EU-Mercosur Partnership Agreement (EMPA) and the EU-Mercosur Interim Trade Agreement (ITA) for agricultural products. This is the safeguard mechanism that protects EU farmers from surges in agricultural imports from Mercosur countries. It allows the EU to temporarily suspend tariff preferences or reintroduce duties if imports of specific agricultural products increase to levels that cause or threaten to cause serious injury to EU producers. CELEX: 32026R0687. The regulation covers both the full Partnership Agreement and the Interim Trade Agreement that applies before the EMPA enters into force.
+
 ### EU-Australia FTA (March 2026)
 - **Status:** Negotiations nearing conclusion (March 2026). Von der Leyen visiting Australia 23-25 March 2026.
 - **Context:** Talks relaunched after stalling in 2023. Australia is a "trusted, like-minded partner."
