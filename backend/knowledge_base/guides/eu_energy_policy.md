@@ -14,6 +14,8 @@
 - Clean Energy Package: 7 regulations/directives adopted 2018-2019 (core energy legislative framework)
 - REPowerEU (2022-2023): End Russian fossil fuel dependency by 2027
 - 2026 Energy Package: Adopted 10 March 2026 -- Clean Energy Investment Strategy, SMR Strategy, Citizens Energy Package
+- Renewables milestone (Eurostat, 19 March 2026): 47% of EU electricity came from renewables in 2025
+- Fusion energy (19 March 2026): EU to invest EUR 330 million to accelerate fusion energy and support nuclear technologies/skills
 - Fit for 55: 14 energy-related acts adopted 2023-2024
 
 ## Overview

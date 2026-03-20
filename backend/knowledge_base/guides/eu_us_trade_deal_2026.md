@@ -7,6 +7,7 @@ Implementing Regulation 2: COM(2025)472 -- Non-application of customs duties on 
 Rapporteur for both: Bernd Lange (S&D, Germany), INTA chair
 Council position: Adopted 21 November 2025
 EP status: INTA suspended work on 21 January 2026 "until the US decides to re-engage on a path of cooperation rather than confrontation"
+EP vote (19 March 2026): MEPs backed the lowering of tariffs on US agricultural and industrial products. Vote signals willingness to maintain trade dialogue despite broader tensions.
 EP vote: Expected late March/early April 2026 but outcome uncertain and "bitterly contentious"
 Context: Iran war and Trump tariff threats creating pressure on both sides
 Trump tariffs: Baseline 15% on EU exports; 50% on steel, aluminium, copper; Section 232 investigations on pharma, semiconductors, lumber

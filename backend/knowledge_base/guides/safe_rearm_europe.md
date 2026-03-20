@@ -15,6 +15,7 @@
 - DG: DG DEFIS
 - NATO context: New 5% GDP defence spending target by 2035 (up from 2%)
 - Geopolitical driver: US strategic reorientation under Trump presidency, Russia-Ukraine war
+- European Council 19-20 March 2026: EU leaders discussed defence spending, competitiveness, and Ukraine. Von der Leyen/Costa joint statement. Politico: "EU leaders find themselves incapable of action despite wars so close to home." Metsola: "We must be an economic force to speak language of power."
 - Related: EDIS (COM(2024) 150), EDIP (Regulation (EU) 2025/2643, CELEX 32025R2643)
 
 ## Overview

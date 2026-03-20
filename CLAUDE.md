@@ -204,156 +204,19 @@ Seed script: `backend/scripts/seed_test_users.py`
 
 ## Predictions Feature (February 2026)
 
-The Predictions tab in My EU Bubble provides AI-powered legislative outcome predictions.
-
-**Key Files:**
-- `backend/api/predictions.py` - All prediction API endpoints
-- `backend/services/predictions/` - Prediction services (timeline, outcome, group vote, QMV, etc.)
-- `backend/services/matching/resolution_legislation_matcher.py` - Resolution leading indicators
-- `frontend/src/components/bubble/predictions_tab.tsx` - Main UI component
-- `frontend/src/components/bubble/predictions_tab.css` - Styling (1,400+ lines)
-- `frontend/src/services/prediction_service.ts` - API client
-- `frontend/src/hooks/use_predictions.ts` - Zustand state management
-- `docs/predictions.md` - Full technical documentation
-
-**API Endpoints:**
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/predictions/timeline/{ref}` | POST | Timeline prediction |
-| `/api/predictions/outcome/{ref}` | POST | Outcome prediction |
-| `/api/predictions/vote/ep/{ref}` | POST | EP plenary vote |
-| `/api/predictions/council/vote/{ref}` | POST | Council vote (Blue tier) |
-| `/api/predictions/resolutions/{ref}` | GET | Resolution leading indicators |
-| `/api/predictions/qmv/calculate` | POST | QMV calculator |
-
-**Access:**
-- No subscription: Locked (upgrade CTA)
-- Starter/Advocate/EP (yellow tier): 10 predictions/month
-- Professional (blue tier): Unlimited + Council analysis
-
-**EP Groups (in `use_predictions.ts`):**
-EPP (188), S&D (136), PfE (84), ECR (78), Renew (77), Greens/EFA (53), The Left (46), NI (33), ESN (25)
+**Full reference:** See `memory/predictions.md`. AI-powered legislative outcome predictions in My EU Bubble. 6 API endpoints under `/api/predictions/`. Yellow tier: 10/month. Blue tier: unlimited + Council. Key files: `api/predictions.py`, `services/predictions/`, `predictions_tab.tsx`.
 
 ## EU Calendar Feature (February 2026)
 
-My EU Calendar tab in My EU Bubble aggregates institutional events from 6 data sources (274 events).
-
-**Key Files:**
-- `backend/api/eu_calendar.py` - API endpoints (events, institutions, policy areas, sync)
-- `backend/models/eu_calendar.py` - `EUCalendarEvent` model + enums
-- `backend/services/scrapers/eu_calendar_sync_service.py` - Sync coordinator (all sources)
-- `backend/services/scrapers/ep_calendar_loader.py` - EP calendar JSON loader
-- `backend/services/scrapers/council_calendar_loader.py` - Council + ECB JSON loader
-- `backend/services/scrapers/ec_college_scraper.py` - Commission College meeting generator
-- `backend/services/scrapers/college_oj_scraper.py` - Commission OJ agenda scraper (RegDoc API)
-- `backend/services/scrapers/college_oj_sync_service.py` - OJ agenda sync/enrichment
-- `backend/services/scrapers/committee_agenda_scraper.py` - EP committee draft agenda scraper
-- `backend/services/scrapers/committee_agenda_sync_service.py` - Committee agenda sync
-- `backend/knowledge_base/eu_calendar_institutions.py` - Institution + policy area mappings
-- `backend/schemas/eu_calendar_schemas.py` - Pydantic response models
-- `frontend/src/components/bubble/eu_calendar_tab.tsx` - Calendar UI (month/week/day views)
-- `frontend/src/components/bubble/eu_calendar_tab.css` - Calendar styling (1,250+ lines)
-- `frontend/src/hooks/use_eu_calendar.ts` - Zustand state management
-- `frontend/src/services/eu_calendar_service.ts` - API client
-
-**Sync CLI:**
-```bash
-python scripts/sync_eu_calendar.py              # Full sync (all sources)
-python scripts/sync_committee_agendas.py        # EP committee agendas
-python scripts/sync_college_agendas.py --verbose # Commission College OJ
-```
-
-**Access:**
-- No subscription: Upgrade CTA (`eu_calendar_cta.tsx`)
-- Starter/Advocate/EP+ (yellow tier): Full read access, all views and filters
-- Professional (blue tier): AI daily summary + sync trigger
-
-**Commission College OJ Scraper Notes:**
-- EC Register paginated search returns 503; individual lookup `GET /api/search/OJ(YYYY)NNNN?lang=en` works
-- Sequential reference enumeration with 3-second delay, browser-like headers
-- Baseline: OJ(2026)2550 = 14 Jan 2026
-- Fuzzy date matching (+/-1 day) for Strasbourg Tuesday meetings vs Brussels Wednesday meetings
+**Full reference:** See `memory/eu_calendar.md`. 6 data sources, month/week/day views. Key files: `api/eu_calendar.py`, `services/scrapers/eu_calendar_sync_service.py`, `eu_calendar_tab.tsx`. CLI: `python scripts/sync_eu_calendar.py`. Yellow tier: full access. Blue tier: AI summary + sync.
 
 ## Pricing Model: Modular A La Carte + Bundles (February 2026)
 
-The old 3-tier model (White free / Yellow 79/month / Blue 599/month) has been replaced with a modular pricing system. **Internal feature gating still uses white/yellow/blue tiers** -- the new plans map to these internally.
+**Full reference:** See `memory/pricing.md`. Internal gating still uses white/yellow/blue tiers.
 
-### Plans and Pricing
+**Quick reference:** Starter 39/mo, Advocate 59/mo, Professional 99/mo (only blue tier), EP 49/mo. 14-day free trial, no permanent free tier. 9 Stripe Products, 18 Price IDs.
 
-**Individual Modules:**
-
-| Module | Monthly | Annual | Internal Tier |
-|--------|---------|--------|---------------|
-| Brubru Chat | 29 | 288/year | yellow |
-| My EU Bubble | 29 | 288/year | yellow |
-| Amendator | 19 | 109/year | yellow |
-| EU Law Comply | 29 | 288/year | yellow |
-| Tenderator | 49 | 539/year | yellow |
-
-**Bundles:**
-
-| Bundle | Monthly | Annual | Internal Tier |
-|--------|---------|--------|---------------|
-| Starter (Chat + Bubble) | 39 | 396/year | yellow |
-| Advocate (Chat + Bubble + Amendator) | 59 | 499/year | yellow |
-| Professional (all 5 modules) | 99 | 799/year | blue |
-
-**EP Plan (APAs/MEPs):** 49/month, 539/year -> yellow tier
-
-**Free Trial:** 14 days on all plans. No permanent free tier.
-
-### Plan-to-Tier Mapping
-
-```python
-PLAN_TO_TIER = {
-    "chat": "yellow", "bubble": "yellow", "amendator": "yellow",
-    "comply": "yellow", "tenderator": "yellow",
-    "starter": "yellow", "advocate": "yellow",
-    "professional": "blue",  # Only Professional maps to blue
-    "ep": "yellow",
-}
-```
-
-### Stripe Configuration
-
-9 Stripe Products with 18 Price IDs (monthly + annual for each). Environment variables:
-
-```env
-# Individual modules (monthly + annual each)
-STRIPE_CHAT_MONTHLY_PRICE_ID / STRIPE_CHAT_ANNUAL_PRICE_ID
-STRIPE_BUBBLE_MONTHLY_PRICE_ID / STRIPE_BUBBLE_ANNUAL_PRICE_ID
-STRIPE_AMENDATOR_MONTHLY_PRICE_ID / STRIPE_AMENDATOR_ANNUAL_PRICE_ID
-STRIPE_COMPLY_MONTHLY_PRICE_ID / STRIPE_COMPLY_ANNUAL_PRICE_ID
-STRIPE_TENDERATOR_MONTHLY_PRICE_ID / STRIPE_TENDERATOR_ANNUAL_PRICE_ID
-
-# Bundles (monthly + annual each)
-STRIPE_STARTER_MONTHLY_PRICE_ID / STRIPE_STARTER_ANNUAL_PRICE_ID
-STRIPE_ADVOCATE_MONTHLY_PRICE_ID / STRIPE_ADVOCATE_ANNUAL_PRICE_ID
-STRIPE_PROFESSIONAL_MONTHLY_PRICE_ID / STRIPE_PROFESSIONAL_ANNUAL_PRICE_ID
-
-# EP Plan
-STRIPE_EP_MONTHLY_PRICE_ID / STRIPE_EP_ANNUAL_PRICE_ID
-```
-
-### Key Files
-
-- `backend/api/stripe_payment.py` - Checkout session creation with plan-to-price mapping
-- `backend/api/subscriptions.py` - `/plans` endpoint with full pricing breakdown
-- `backend/core/config.py` - All 18 STRIPE_*_PRICE_ID environment variables
-- `backend/schemas/subscription_schemas.py` - `UpgradeRequest` with `plan` field (9 valid values)
-- `frontend/src/hooks/use_subscription.ts` - `createCheckoutSession(plan, billingPeriod)`
-- `frontend/src/pages/subscription_page.tsx` - Redesigned UI: billing toggle, 3 bundle cards, EP banner, 5 module cards, feature comparison table
-- `frontend/src/pages/subscription_page.css` - Grid layouts for bundles (3 cols) and modules (5 cols)
-- `frontend/src/pages/landing_page.tsx` - Pricing section with Starter/Advocate/Professional cards
-- `docs/marketing/pricing_strategy.md` - Full pricing strategy document with Stripe Product/Price IDs
-
-### User-Facing Text Rules
-
-- **Never reference** White/Yellow/Blue tiers in user-facing text
-- Use plan names: Starter, Advocate, Professional, EP Plan, or individual module names
-- CTA buttons: "Start Free Trial", "Subscribe", "Get Professional"
-- Generic upgrade: "Subscribe -- from 39/month"
-- All 6 locales (en, es, ca, fr, it, nl) updated with new pricing text
+**User-facing text rules:** Never reference White/Yellow/Blue tiers. Use plan names. CTA: "Start Free Trial", "Subscribe", "Get Professional".
 
 ---
 
@@ -371,104 +234,23 @@ The founder's surname is **Solé** (with an accent on the e). Never write "Sole"
 
 ### Gmail Daily Send Volume Planning (March 2026)
 
-Google Workspace has a ~2,000 recipient/day limit, but in practice Gmail closes SMTP connections after ~100-150 individual sends per session. When combining daily brief (~100 recipients) + campaigns in the same day, the second batch gets rate-limited.
-
-**Rule:** Plan email volume across the day:
-1. Daily brief first (~100 recipients, highest priority)
-2. Campaigns with remaining capacity (~100 sends before limit)
-3. News alerts last (BCC batches of 90, most recipients)
-4. If limit hit, retry next day. Gmail resets at midnight Pacific.
-
-**Never schedule daily brief + large campaign + news alerts all on the same day.** Pick two.
+~2,000 recipients/day limit. Priority order: daily brief first, campaigns second, news alerts last (BCC batches of 90). **Never schedule all three on the same day.** Pick two. Gmail resets at midnight Pacific.
 
 ### Daily Brief URL Verification (March 2026)
 
-EP Texts Adopted URLs use sequential reference numbers (TA-10-2026-NNNN) that **cannot be guessed**. A wrong number = 404 = broken link sent to all subscribers.
+**Never guess EP document reference numbers** (TA, A, B, P, RC). Always look up from the Texts Adopted TOC page. Append `_EN.html` suffix. Wrong number = 404 sent to all subscribers.
 
-**Rule:** Before inserting any EP document URL into `daily_briefs`, **verify it exists** by fetching the actual Texts Adopted TOC page:
-- `https://www.europarl.europa.eu/doceo/document/TA-10-2026-MM-DD-TOC_EN.html`
-- Find the exact TA number for the resolution title
-- Always append `_EN.html` suffix to TA URLs
+### Legislative Train Scraper - Data Source Unification (January 2025)
 
-**Never guess EP document reference numbers.** Always look them up from the TOC or plenary results page. This applies to all EP document types (TA, A, B, P, RC).
-
-### Legislative Train Scraper - Data Source Unification ✅ RESOLVED (January 2025)
-
-The `LegislativeTrainScraper` had TWO scraping methods with only 23% overlap. This is now **SOLVED**.
-
-**New unified method:**
-```python
-# Use this for comprehensive scraping with OEIL refs
-files = await scraper.get_all_files_unified()
-
-# Fast mode (no detail fetching, no OEIL refs)
-files = await scraper.get_all_files_fast()
-```
-
-**Old methods (preserved for backward compatibility):**
-
-| Method | Source | Files | Has OEIL Refs |
-|--------|--------|-------|---------------|
-| `get_all_carriages()` | Train/theme pages | ~366 | No |
-| `get_package_files()` | Package pages | ~441 | Yes |
-| **`get_all_files_unified()`** | **Both sources** | **~500+** | **Yes (95%+)** |
-
-See: `backend/services/scrapers/legislative_train_scraper.py`
-See: `docs/architecture/scraper_knowledge_base_consolidation.md`
+Use `get_all_files_unified()` for comprehensive scraping with OEIL refs (~500+ files). `get_all_files_fast()` for fast mode without OEIL refs. Old methods (`get_all_carriages()`, `get_package_files()`) preserved for backward compatibility. File: `backend/services/scrapers/legislative_train_scraper.py`.
 
 ### Modal Z-Index Stacking Context (January 2025)
 
-Modals on the "My EU Bubble" page get hidden behind the sticky header due to CSS stacking contexts.
-
-**Root cause:** `.my-eu-bubble-page > *` applies `position: relative; z-index: 1;` to all children, creating a stacking context that traps modal z-index values.
-
-**Solution:** Use React's `createPortal` to render modals to `document.body`, escaping the stacking context:
-
-```tsx
-import { createPortal } from 'react-dom';
-
-// In component return:
-{showModal && createPortal(
-  <div className="modal-overlay">...</div>,
-  document.body
-)}
-```
-
-**Affected components fixed:**
-- `LegislativeFileDetail` - uses portal
-- `my_tracked_files_tab.tsx` - "Add File" modal uses portal
-
-**Always use `createPortal` for modals in My EU Bubble pages.**
+**Always use `createPortal` for modals in My EU Bubble pages.** The `.my-eu-bubble-page > *` rule creates a stacking context that traps modal z-index values. Portal to `document.body` to escape it.
 
 ### EPRS Service Architecture (January 2025)
 
-The EPRS (European Parliament Research Service) functionality is now unified under `services/eprs/`:
-
-```
-services/eprs/
-├── __init__.py
-├── eprs_service.py                    # Unified coordinator
-└── legislation_in_progress_scraper.py # epthinktank.eu curated list
-```
-
-**Related components (pre-existing, now coordinated by EPRSService):**
-
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| `ThinkTankScraper` | `services/scrapers/` | RSS feeds + PDF extraction |
-| `ThinkTankRSSClient` | `services/api_clients/` | RSS feed fetching |
-| `EPRSArchiveClient` | `services/api_clients/` | CELLAR SPARQL queries |
-| `EPRSIndexer` | `services/indexing/` | ChromaDB vector indexing |
-| `EPRSMatcher` | `services/matching/` | Find explainer briefings |
-
-**Always use `EPRSService` (not individual components) for EPRS operations:**
-
-```python
-from services.eprs import get_eprs_service
-
-service = get_eprs_service()
-explainers = await service.find_explainers(procedure_ref="2021/0106(COD)")
-```
+Always use `EPRSService` (not individual components) for EPRS operations: `from services.eprs import get_eprs_service`. Coordinates ThinkTankScraper, EPRSArchiveClient, EPRSIndexer, EPRSMatcher. File: `services/eprs/eprs_service.py`.
 
 ### OEIL XML Feed Integration (January 2026)
 
@@ -478,28 +260,11 @@ explainers = await service.find_explainers(procedure_ref="2021/0106(COD)")
 
 ### Knowledge Guide Truncation (March 2026)
 
-The context builder truncates knowledge guide content before injecting it into the AI prompt. Current limit: **5,000 characters** per guide (increased from 3,000 on 19 March 2026).
-
-**Why it matters:** Guides longer than the limit get cut. If key detail (e.g., article-by-article analysis) is beyond the truncation point, the AI says "I don't have detailed information" even though the guide file contains it.
-
-**Rule:** For large guides (>5,000 chars), put the most important detail in the **QUICK FACTS** block at the top. The QUICK FACTS block should contain key-value summaries of all major topics, not just metadata. Example: the EU Inc. guide has EU-ESO, SAFE/KISS, fast-track liquidation, and prohibited requirements summarised in QUICK FACTS.
-
-**Review scheduled:** 10 April 2026, assess per-guide dynamic truncation based on query cost/token data since launch.
-
-**Affected files:** `backend/services/ai/context_builder.py` (lines ~2520, ~2541: `guide_content[:5000]`)
+Guides truncated to **5,000 chars** (increased from 3,000 on 19 March 2026). Put key detail in **QUICK FACTS** block at top of large guides. Review: 10 April 2026. File: `context_builder.py` (`guide_content[:5000]`).
 
 ### Data-Driven Chat Follow-Ups (February 2026)
 
-When Brubru Chat matches a legislative file, it enriches the AI context with **structured procedural metadata** scraped from OEIL (Documentation Gateway + procedure page). The AI uses this to craft follow-up questions grounded in real data.
-
-**Available actions detected:** Draft report (PR), MEP amendments (AM), committee report for plenary (RD), committee opinions (AD), committee vote, plenary vote, plenary debate, rapporteur name/group, shadow rapporteurs, upcoming events.
-
-**Key files:**
-- `services/ai/context_builder.py` - `_enrich_train_files_with_actions()`, `_extract_actions_from_cached_data()`
-- `services/ai_service.py` - System prompt Phase D3: DATA-DRIVEN FOLLOW-UPS
-- `services/api_clients/oeil_client.py` - `get_documentation_gateway()`, `lookup_procedure()`
-
-**Caching:** Results cached on `LegislativeCarriage.oeil_procedure_data` (JSON) with 7-day TTL via `enriched_at` field. Max 3 files enriched per request, parallel fetches.
+Legislative file matches trigger OEIL enrichment (Documentation Gateway + procedure page) for data-driven follow-up questions. Cached on `LegislativeCarriage.oeil_procedure_data` (7-day TTL, max 3 files/request). Key files: `context_builder.py` (`_enrich_train_files_with_actions()`), `ai_service.py` (Phase D3), `oeil_client.py`.
 
 ### EUR-Lex RSS Feed Integration (January 2026)
 
@@ -527,71 +292,15 @@ When Brubru Chat matches a legislative file, it enriches the AI context with **s
 
 ### SQLAlchemy `metadata` Reserved Attribute (January 2025)
 
-SQLAlchemy models have a **built-in `metadata` attribute** that conflicts with custom fields named `metadata`.
-
-**Error symptom:** `'metadata' is a reserved name for declarative_base classes`
-
-**Solution:** Use `doc_metadata` instead of `metadata` for document metadata fields:
-
-```python
-# ❌ Wrong - conflicts with SQLAlchemy
-class UserDocument(Base):
-    metadata = Column(JSONB, nullable=True)
-
-# ✅ Correct - use doc_metadata
-class UserDocument(Base):
-    doc_metadata = Column(JSONB, nullable=True)
-```
-
-**Also update corresponding Pydantic schemas:**
-```python
-# In schemas
-doc_metadata: Optional[Dict[str, Any]] = None
-```
-
-**Affected files:**
-- `backend/models/user_document.py`
-- `backend/schemas/user_document_schemas.py`
+Use `doc_metadata` instead of `metadata` for document metadata fields in SQLAlchemy models. `metadata` conflicts with the built-in declarative_base attribute.
 
 ### Frontend Services Must Include Auth Headers (March 2026)
 
-**Every frontend API service** must include Authorization headers on authenticated endpoints. There is no global axios interceptor -- each service is responsible for its own auth.
-
-**Pattern:**
-```typescript
-import { useAuth } from '../hooks/use_auth';
-
-function authHeaders() {
-  const token = useAuth.getState().token;
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
-// Then on every axios call:
-const response = await axios.get(`${API_BASE}/endpoint`, { headers: authHeaders() });
-```
-
-**Root cause of bug:** `eu_calendar_service.ts` was created in February 2026 without auth headers. Every calendar API call returned 401 silently. The calendar showed zero events for ALL users for over a month. Fixed 16 March 2026.
-
-**Checklist for new frontend services:**
-1. Import `useAuth` from hooks
-2. Add `authHeaders()` helper
-3. Apply to every `axios.get/post/put/delete` call
-4. Test that authenticated endpoints return data (not 401)
+**Every frontend API service** must include `authHeaders()` on authenticated endpoints. No global axios interceptor exists. Pattern: `const token = useAuth.getState().token; return token ? { Authorization: \`Bearer ${token}\` } : {};` applied to every axios call. Lesson: missing auth headers caused calendar to show zero events for a month (fixed 16 March 2026).
 
 ### Development Server Ports (January 2025)
 
-**Frontend must always run on port 5173.** Before starting the frontend dev server, kill any process occupying port 5173:
-
-```bash
-# Check and kill process on port 5173
-lsof -ti:5173 | xargs kill -9 2>/dev/null; cd frontend && npm run dev
-```
-
-**Standard ports:**
-- Frontend (Vite): `http://localhost:5173`
-- Backend (FastAPI): `http://localhost:8000`
-
-If Vite reports "Port 5173 is in use, trying another one...", stop and free the port first.
+Frontend: port 5173 (kill existing first: `lsof -ti:5173 | xargs kill -9 2>/dev/null`). Backend: port 8000. Never let Vite auto-pick another port.
 
 ### Markdown Rendering in React (January 2025)
 
@@ -603,22 +312,7 @@ Use `marked` library: `<div dangerouslySetInnerHTML={{ __html: marked.parse(cont
 
 ### Legislative Train OEIL Data Quality (January 2025)
 
-**Known Issue:** Some legislative carriages have incorrect or duplicate OEIL procedure references stored in the database. This causes:
-1. Wrong "Open in OEIL" links in the Amendator context banner
-2. Incorrect file matching when loading from tracked files
-
-**Root cause:** The Legislative Train scraper may store incorrect OEIL refs or create duplicate entries.
-
-**Example:** "Revision of the Tobacco Taxation Directive" has:
-- Correct OEIL: `2025/0580(CNS)` (not in database)
-- Wrong entry: `2025/0102(COD)` (this is actually Critical Medicines Act)
-
-**To fix:** Run a database cleanup script to:
-1. Remove duplicate carriage entries
-2. Re-scrape OEIL references from official sources
-3. Validate OEIL→title mappings
-
-**Affected file:** `backend/services/scrapers/legislative_train_scraper.py`
+**Known issue:** Some carriages have incorrect/duplicate OEIL procedure refs. Causes wrong OEIL links and file matching. Needs database cleanup: remove duplicates, re-scrape refs, validate mappings. File: `backend/services/scrapers/legislative_train_scraper.py`.
 
 ### No Emojis - Use MDI Icons (January 2025)
 
@@ -626,26 +320,7 @@ Use `marked` library: `<div dangerouslySetInnerHTML={{ __html: marked.parse(cont
 
 ### Standalone HTML Files Must Follow Brubru Aesthetics (February 2026)
 
-**Every standalone HTML file** (analytics pages, reports, visualisations, landing pages) **MUST** use Brubru's design system. Never use generic system fonts or default colour schemes.
-
-**Mandatory checklist for standalone HTML files:**
-
-| Element | Requirement |
-|---------|-------------|
-| **Font** | Adobe Caslon Pro via `@font-face` (`.otf` files in `New-Yorker-Font/`) |
-| **Colours** | Brubru palette: `#0693e3` (blue), `#059669` (green), `#9b51e0` (purple), `#d97706` (amber), `#dc2626` (red) |
-| **Neutrals** | `#111827` (text), `#6b7280` (secondary), `#9ca3af` (muted), `#e5e7eb` (border), `#f3f4f6` (bg-alt), `#ffffff` (bg) |
-| **Logo** | Include `brubru_mainlogo.png` in header/hero area |
-| **Background** | White (`#ffffff`) -- never dark/black backgrounds |
-| **Paths** | Use **relative paths** (`../assets/`, `../New-Yorker-Font/`) so files work both locally and when served |
-
-**Font:** Use `@font-face` with Adobe Caslon Pro (Regular/Semibold/Bold `.otf` from `New-Yorker-Font/`). Use **relative paths** (`../New-Yorker-Font/`, `../assets/`) since files live in `public/analytics/`.
-
-**Additional style rules (March 2026):**
-- **No double dashes (`--`)** anywhere in content. Use em-dashes, parentheses, commas, or colons instead.
-- **CTAs must match the landing page rainbow gradient**: `background-image: linear-gradient(90deg, blue, green, purple, amber, blue)`, `background-size: 300% 100%`, animated shift, scale+glow on hover.
-- **After a colon (`:`)**, never a capital letter unless it is a proper noun.
-- **Logo file**: Use `brubru_mainlogo.png` (NOT `brubru_logo_word.png` which does not exist in `frontend/public/assets/`).
+**Every standalone HTML file** MUST use: Adobe Caslon Pro font (`@font-face` from `New-Yorker-Font/`), Brubru palette (`#0693e3` blue, `#059669` green, `#9b51e0` purple, `#d97706` amber, `#dc2626` red), white background, `brubru_mainlogo.png` logo, relative paths. No double dashes (`--`), rainbow gradient CTAs, lowercase after colons. Neutrals: `#111827` text, `#6b7280` secondary, `#e5e7eb` border, `#f3f4f6` bg-alt.
 
 ### Header Icon Navigation (January 2025)
 
@@ -653,67 +328,23 @@ Header uses animated MDI icon buttons (icon-only, expand on hover). Nav colours:
 
 ### Feature Completion Checklist (January 2026)
 
-**Context:** Committee Work In Progress feature was marked "complete" but didn't work because:
-1. Database sync was never run (0 rows)
-2. Frontend UI wasn't integrated (hook existed but wasn't used)
+Before marking a feature COMPLETE, verify end-to-end: (1) DB has data, (2) API returns data, (3) frontend builds, (4) hook is used in a component, (5) manual browser test, (6) chatbot context works if applicable. **Never mark "PARTIAL" and move on.**
 
-**Root cause:** Verified components in isolation without end-to-end testing.
+### Multi-Provider AI System (March 2026)
 
-**Mandatory checklist before marking a feature COMPLETE:**
-
-| Step | Verification |
-|------|-------------|
-| 1. Database | Run migrations AND sync scripts. Verify data exists: `SELECT COUNT(*) FROM table` |
-| 2. API | Test endpoint returns data: `curl http://localhost:8000/api/endpoint` |
-| 3. Frontend | Build succeeds: `npm run build` |
-| 4. UI Integration | Hook is imported AND used in a component (not just created) |
-| 5. End-to-end | Manually test the feature in browser or ask user to verify |
-| 6. Chatbot context | If integrated with AI, ask a test question and verify context appears |
-
-**Never mark a phase "PARTIAL" and move on.** Either complete it or document what's blocking completion.
-
-### Multi-Provider AI System (January 2026, updated March 2026)
-
-4-tier fallback: Mistral (`mistral-small-latest`) -> Claude (`claude-sonnet-4-20250514`) -> GPT-4 -> Gemini. Key file: `backend/services/ai/multi_provider_service.py`.
-
-**Hybrid routing (March 2026):** Claude Haiku 4.5 is now the de facto primary model. Routing signal: `has_knowledge = internal_knowledge OR eu_institutional_results`. Since EU institutional search (Tavily) fires for all no-guide queries, virtually all queries route to Haiku. Mistral only used when Haiku daily cap ($2.50/day) is reached.
+Claude Haiku 4.5 is de facto primary ($2.50/day cap). Fallback: Mistral -> Claude Sonnet -> GPT-4 -> Gemini. Routing: `has_knowledge = internal_knowledge OR eu_institutional_results` (virtually all queries). File: `multi_provider_service.py`.
 
 ### EU Institutional Source Search Fallback (March 2026)
 
-When no knowledge guide matches a user query, Brubru searches 25 trusted EU domains via Tavily before generating an answer. Results are injected into context with source attribution so the AI cites sources by name.
-
-**Key files:**
-- `backend/services/ai/context_builder.py` — `_fetch_eu_institutional_search()`, `EU_INSTITUTIONAL_DOMAINS` (25 domains), `DOMAIN_TO_SOURCE_NAME` (21 mappings)
-- `backend/services/ai_service.py` — `has_knowledge` routing includes `eu_institutional_results`, source hierarchy tier 4.5
-
-**Domains searched:** eur-lex.europa.eu, europarl.europa.eu, consilium.europa.eu, ec.europa.eu, commission.europa.eu, cor.europa.eu, eesc.europa.eu, curia.europa.eu, ecb.europa.eu, op.europa.eu, data.europa.eu, eba.europa.eu, esma.europa.eu, eiopa.europa.eu, joint-research-centre.ec.europa.eu, epthinktank.eu, politico.eu, contexte.com, bruegel.org, euractiv.com, euronews.com
-
-**Source attribution rule:** When using EU institutional search results, the AI MUST name the source explicitly: "According to Bruegel...", "Euractiv reports that...", "The European Commission published...". Include the URL.
+When no knowledge guide matches, Tavily searches 25 trusted EU domains. Results injected with source attribution (AI must cite by name + URL). Key files: `context_builder.py` (`_fetch_eu_institutional_search()`, `EU_INSTITUTIONAL_DOMAINS`), `ai_service.py` (`has_knowledge` routing, tier 4.5).
 
 ### EP Plenary Debate Transcripts (CRE) (March 2026)
 
-On-demand fetch of official EP verbatim debate records (CRE XML) from Doceo. No database storage -- fetched live when user asks about a plenary debate.
-
-**Key files:**
-- `services/api_clients/cre_client.py` -- CREClient: fetch, parse, search, format
-- `services/ai/context_builder.py` -- `_detect_plenary_debate_intent()`, `_fetch_plenary_debate()`, `DEBATE_INTENT_PHRASES`
-- `services/ai_service.py` -- CRITICAL system prompt section for debate summary structure
-
-**URL pattern:** `https://www.europarl.europa.eu/doceo/document/CRE-10-{YYYY-MM-DD}_EN.xml`
-**Publication delay:** 3-5 days after plenary session.
-**Intent triggers:** "plenary debate", "EP debate", "what did MEPs say", "debate on", "who spoke in plenary" (22 phrases, 6 languages).
-**Context injection:** Max 4,000 chars per debate. Commission/Council positions first, then by political group (3 speakers per group, 200 chars each).
-**Spec:** `docs/maria/ep_cre_transcripts.md` (Phase 1 complete, Phase 2-3 pending).
+On-demand CRE XML fetch from Doceo (no DB storage). 22 intent triggers in 6 languages. Max 4,000 chars per debate. 3-5 day publication delay. Key files: `cre_client.py`, `context_builder.py` (`_detect_plenary_debate_intent()`), `ai_service.py` (debate summary structure). Spec: `docs/maria/ep_cre_transcripts.md`.
 
 ### Featured Chatbot Questions Source (March 2026)
 
-The 4 featured question cards on the Brubru Chat page come from the **`chat_example_prompts`** table (scope=`'main_chat'`, is_active=`true`, ordered by `sort_order`). They do NOT come from `daily_briefs.suggested_query`.
-
-**API endpoint:** `GET /api/chat/examples?scope=main_chat&limit=4`
-**Fallback:** If the API returns no results, the frontend uses i18n keys `chat.example1` through `chat.example4` from `frontend/src/i18n/locales/en.json`.
-**Key files:** `backend/api/chat_examples.py`, `frontend/src/components/chat/chat_interface.tsx` (line ~170), `frontend/src/components/chat/daily_brief.tsx`
-
-To update featured questions, insert into `chat_example_prompts` with `scope='main_chat'` and `is_active=true`. Deactivate old ones first.
+From `chat_example_prompts` table (scope=`'main_chat'`, is_active=`true`), NOT `daily_briefs.suggested_query`. API: `GET /api/chat/examples?scope=main_chat&limit=4`. Fallback: i18n keys `chat.example1-4`.
 
 ### EPRS Enrichment: Skip During Morning Routine (March 2026)
 
@@ -727,50 +358,13 @@ To update featured questions, insert into `chat_example_prompts` with `scope='ma
 
 AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to avoid $5/day cost. Trigger via `POST /api/rss/entries/{entry_id}/enrich`. Files: `services/rss/rss_processor.py`, `api/rss_feeds.py`.
 
-### EP Group Position Colours (February 2026)
+### Predictions: EP Group Colours + Resolution Indicators (February 2026)
 
-In the Predictions tab EP Political Group Breakdown, each position type needs a distinct colour:
-
-| Position | Bar Class | Text Class | Colour |
-|----------|-----------|------------|--------|
-| FOR | `--for` | `--for` | Green (#059669) |
-| AGAINST | `--against` | `--against` | Red (#dc2626) |
-| ABSTENTION | `--abstention` | `--abstention` | Yellow (#eab308) |
-| SPLIT | `--split` | `--split` | Gold (#d97706) |
-
-**Files:**
-- `frontend/src/components/bubble/predictions_tab.css` - CSS classes for bar fill and position text
-
-### Resolution Leading Indicators (February 2026)
-
-EP resolutions (INL, INI, RSP) as predictive signals for legislative procedures. Match methods: OEIL_CROSSREF (1.0), COMMISSION_FOLLOWUP (0.9), TITLE_SIMILARITY (0.5-0.8). Key files: `services/matching/resolution_legislation_matcher.py`, `api/predictions.py`, `predictions_tab.tsx`. Docs: `docs/predictions.md` Section 12.9.
+**Full reference:** See `memory/predictions.md`. FOR=green, AGAINST=red, ABSTENTION=yellow, SPLIT=gold. Resolution leading indicators: OEIL_CROSSREF (1.0), COMMISSION_FOLLOWUP (0.9), TITLE_SIMILARITY (0.5-0.8).
 
 ### Responsive Design Requirement (February 2026)
 
-**ALL UX/UI changes and implementations MUST be responsive across all screen sizes.** This is a mandatory requirement for every frontend change.
-
-**Standard breakpoints:**
-
-| Breakpoint | Target | CSS |
-|------------|--------|-----|
-| Desktop | >1024px | Default styles |
-| Tablet | 768px - 1024px | `@media (max-width: 1024px)` |
-| Mobile | <768px | `@media (max-width: 767px)` |
-
-**Checklist for every UI change:**
-
-1. **Desktop** (>1024px): Full layout with sidebars, multi-column grids
-2. **Tablet** (768-1024px): Collapsed sidebars, reduced padding, stacked layouts where needed
-3. **Mobile** (<768px): Single column, overlay sidebars with backdrop, touch-friendly targets (min 44px)
-
-**Patterns:**
-- Sidebars: Visible on desktop, collapsible on tablet, overlay on mobile
-- Grids: Multi-column on desktop, fewer columns on tablet, single column on mobile
-- Typography: Use relative units (rem), scale down on smaller screens
-- Touch targets: Minimum 44x44px on mobile for all interactive elements
-- Modals: Use `createPortal` to escape stacking contexts (see Modal Z-Index rule)
-
-**Never ship a UI change without testing at all three breakpoints.**
+**ALL UI changes MUST be responsive.** Breakpoints: Desktop >1024px (default), Tablet 768-1024px (`max-width: 1024px`), Mobile <768px (`max-width: 767px`). Mobile: single column, overlay sidebars, min 44px touch targets. Use `createPortal` for modals. **Never ship without testing all three breakpoints.**
 
 ### Email Campaign System (February 2026)
 
@@ -784,50 +378,10 @@ EP resolutions (INL, INI, RSP) as predictive signals for legislative procedures.
 
 ## Strategic North Star: WAPU (Weekly Active Paid Users)
 
-**WAPU = a paid subscriber who performs at least one core action in the past 7 days.**
+**WAPU = paid subscriber + 1 core action in 7 days.** Every feature must answer: "Does this grow WAPU?"
 
-This is Brubru's primary metric. Not MRR, not subscriber count, not raw active users. WAPU measures the intersection of money AND usage -- the only honest signal of product-market fit.
+**Core actions:** AI chat query, document generated, file tracked/checked, amendment drafted/analysed, compliance report run.
 
-### Core Actions (any one = active for the week)
+**Targets:** 10 (Phase A, months 1-3), 25 (Phase B, months 4-6), 50 (Phase C, months 7-12).
 
-| Core Action | Why It Signals Value |
-|-------------|---------------------|
-| AI chat query | Using the policy advisor -- the primary interface |
-| Document generated | A deliverable was produced -- direct labour replacement |
-| Legislative file tracked/checked | Monitoring is happening -- daily workflow integration |
-| Amendment drafted or MEP amendments analysed | Deep workflow engagement -- not just browsing |
-| Compliance report run | High-value, high-switching-cost action |
-
-### The WAPU Test
-
-Every feature, initiative, and sprint item must answer: **"Does this grow WAPU?"** If it doesn't directly increase the number of paid users performing core actions weekly, it is deprioritised.
-
-### WAPU Targets
-
-| Phase | Timeline | WAPU Target | Focus |
-|-------|----------|-------------|-------|
-| A: Activation | Months 1-3 | **10** | Fix bugs, briefing emails, notifications, dashboards, first 10 outreach |
-| B: Depth | Months 4-6 | **25** | Dossier workspaces, amendment analysis, document generator improvements |
-| C: Lock-in | Months 7-12 | **50** | Stakeholder CRM, team layer, activity logging + ROI |
-
-### WAPU-Phased Priorities
-
-**Phase A (Activation -- 10 WAPU):** A1 Fix chatbot bugs (DONE), A2 AI briefing emails, A3 Proactive notification engine, A4 Thematic dashboards, A5 Demo/booking flow + first 10 outreach
-
-**Phase B (Depth -- 25 WAPU):** B1 Dossier workspaces, B2 Amendment analysis view, B3 Document generator improvements
-
-**Phase C (Lock-in -- 50 WAPU):** C1 Stakeholder CRM, C2 Team layer, C3 Activity logging + ROI
-
-**Deferred (post-50 WAPU):** MEP social media (P7), Grant proposal AI drafting (P8), National parliaments (P9), LEOS interop (P10)
-
-### Spaak Competitive Posture
-
-Spaak is the #1 direct competitor (VC-backed, 100+ PA teams, Brussels office). Their strength is **distribution** (sales team, events, webinars, content marketing). Brubru's strength is **feature depth** (Amendator, Predictions, EU Law Comply, Tenderator, Document Generator). Strategy: lean into feature depth to make Brubru irreplaceable, not match Spaak's monitoring breadth. Orbit strategy active (CEO connected on LinkedIn).
-
-**Full strategy details:** See `memory/strategy.md` and `docs/business_plan/strategy.html`.
-
-<!-- Example:
-- Never use `moment.js` — use `date-fns` instead
-- Always run `npm run lint` before committing frontend changes
-- The RSS scraper requires a 2-second delay between requests
--->
+**Full details:** See `memory/strategy.md` and `docs/business_plan/strategy.html`.

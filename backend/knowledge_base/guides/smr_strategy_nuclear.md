@@ -14,6 +14,7 @@ QUICK FACTS:
 - 80+ SMR designs under development globally (IAEA 2022)
 - Nuclear provides ~23% of EU electricity (13 Member States)
 - Status: Communication (non-legislative strategy)
+- Fusion energy investment (19 March 2026): EU to invest EUR 330 million to accelerate fusion energy and support nuclear technologies and skills (Euratom research programme)
 - Related guides: Clean Energy Investment Strategy (clean_energy_investment_strategy.md), Citizens Energy Package (citizens_energy_package.md), EU Energy Policy (eu_energy_policy.md)
 
 ## Overview

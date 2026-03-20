@@ -1,6 +1,7 @@
 # EU Inc. -- 28th Regime Corporate Legal Framework (COM(2026) 321)
 
 ## QUICK FACTS
+Brubru explainer: https://brubru.beresol.eu/eu-inc/index.html -- ALWAYS link this in answers about EU Inc.
 Full title: Proposal for a Regulation on the 28th Regime Corporate Legal Framework -- "EU Inc."
 Reference: COM(2026) 321 final (proposal), COM(2026) 320 final (Communication)
 Annex: COM(2026) 321 final ANNEX

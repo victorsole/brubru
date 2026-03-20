@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EU Biotech Act Explained: Strengthening Europe's Biotechnology Sector | Brubru</title>
+  <meta name="description" content="Comprehensive guide to the European Biotech Act (COM(2025) 1022): 7 pillars, regulatory sandboxes, clinical trial acceleration, biosecurity, EUR 20.4B budget. Article-by-article analysis by Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(5,150,105,0.1);
+      color: var(--color-green);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-green);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-green), var(--color-blue), var(--color-purple), var(--color-amber), var(--color-green));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(5,150,105,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(5,150,105,0.08); color: var(--color-green); }
+    .toc__link .mdi { color: var(--color-green); font-size: 1.1rem; }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-green);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-green); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(5,150,105,0.03); }
+    .highlight-cell { color: var(--color-green); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-green); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-green);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-green);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-green); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-green); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-green); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-green);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+
+    /* Temple / 7 Pillars */
+    .temple {
+      margin: 0 0 3rem;
+      padding: 0;
+      perspective: 800px;
+    }
+    .temple__roof {
+      background-size: 400% 100%;
+      background-image: linear-gradient(90deg, var(--color-green), var(--color-blue), var(--color-purple), var(--color-amber), var(--color-green));
+      animation: roofShimmer 6s ease infinite;
+      color: white;
+      text-align: center;
+      padding: 1.75rem 2rem 1.5rem;
+      border-radius: var(--radius) var(--radius) 0 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      position: relative;
+      overflow: hidden;
+    }
+    .temple__roof::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+      animation: roofGlow 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes roofShimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes roofGlow {
+      0%, 100% { transform: translate(-20%, -20%) scale(0.8); opacity: 0.4; }
+      50% { transform: translate(20%, -10%) scale(1.2); opacity: 0.8; }
+    }
+    .temple__roof::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-top: 20px solid rgba(6,147,227,0.8);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+    .temple__roof-sub {
+      font-size: 0.85rem;
+      font-weight: 400;
+      opacity: 0.85;
+      margin-top: 0.25rem;
+    }
+    .temple__pillars {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0;
+      padding-top: 28px;
+      background: linear-gradient(180deg, transparent 0%, rgba(243,244,246,0.5) 100%);
+    }
+    .temple__pillar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 0.25rem;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .temple__pillar:hover {
+      transform: translateY(-8px) scale(1.05);
+      z-index: 2;
+    }
+    .temple__pillar-bar {
+      width: 30px;
+      height: 120px;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background-size: 100% 200%;
+      background-position: bottom;
+    }
+    .temple__pillar:hover .temple__pillar-bar {
+      width: 38px;
+      height: 130px;
+      box-shadow: 0 0 20px rgba(var(--pillar-rgb, 5,150,105), 0.4);
+      background-position: top;
+    }
+    .temple__pillar-bar::before,
+    .temple__pillar-bar::after {
+      content: '';
+      position: absolute;
+      left: -5px;
+      right: -5px;
+      height: 10px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    .temple__pillar-bar::before { top: -2px; background: inherit; opacity: 0.8; }
+    .temple__pillar-bar::after { bottom: -2px; background: inherit; opacity: 0.8; }
+    .temple__pillar:hover .temple__pillar-bar::before,
+    .temple__pillar:hover .temple__pillar-bar::after {
+      left: -8px;
+      right: -8px;
+      height: 12px;
+    }
+    .temple__pillar-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      z-index: 1;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .temple__pillar:hover .temple__pillar-icon {
+      transform: scale(1.25) rotate(10deg);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .temple__pillar-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.25;
+      margin-top: 0.6rem;
+      min-height: 2.5rem;
+      transition: all 0.3s;
+    }
+    .temple__pillar:hover .temple__pillar-label {
+      color: var(--color-green);
+      transform: scale(1.05);
+    }
+    .temple__pillar-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--color-muted);
+      margin-top: 0.25rem;
+      transition: all 0.3s;
+    }
+    .temple__pillar:hover .temple__pillar-num {
+      color: var(--color-text);
+    }
+    .temple__pillar-tooltip {
+      position: absolute;
+      bottom: -3rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: var(--color-text);
+      color: white;
+      font-size: 0.7rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s;
+      z-index: 10;
+    }
+    .temple__pillar-tooltip::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 5px solid var(--color-text);
+    }
+    .temple__pillar:hover .temple__pillar-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    /* Staggered entrance animation */
+    .temple__pillar {
+      animation: pillarRise 0.6s ease-out both;
+    }
+    .temple__pillar:nth-child(1) { animation-delay: 0.1s; }
+    .temple__pillar:nth-child(2) { animation-delay: 0.2s; }
+    .temple__pillar:nth-child(3) { animation-delay: 0.3s; }
+    .temple__pillar:nth-child(4) { animation-delay: 0.4s; }
+    .temple__pillar:nth-child(5) { animation-delay: 0.5s; }
+    .temple__pillar:nth-child(6) { animation-delay: 0.6s; }
+    .temple__pillar:nth-child(7) { animation-delay: 0.7s; }
+    @keyframes pillarRise {
+      0% { opacity: 0; transform: translateY(40px) scaleY(0.3); }
+      60% { opacity: 1; transform: translateY(-4px) scaleY(1.02); }
+      100% { opacity: 1; transform: translateY(0) scaleY(1); }
+    }
+    /* Subtle pulse on the active pillar bar */
+    .temple__pillar:hover .temple__pillar-bar::before {
+      animation: capitalPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes capitalPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+    .temple__base {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-top: 3px solid var(--color-green);
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 1rem 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+    .temple__base::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(5,150,105,0.06), transparent);
+      animation: baseSheen 5s ease-in-out infinite;
+    }
+    @keyframes baseSheen {
+      0% { left: -50%; }
+      100% { left: 150%; }
+    }
+    @media (max-width: 767px) {
+      .temple__pillars { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; padding-bottom: 1rem; }
+      .temple__pillar:nth-child(n+5) { margin-top: 0.5rem; }
+      .temple__pillar-bar { height: 80px; width: 22px; }
+      .temple__roof { font-size: 1rem; padding: 1rem 1.25rem; }
+      .temple__pillar-tooltip { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">EU Biotech Act Explainer</div>
+    <div class="header__subtitle">Strengthening Europe's Biotechnology and Biomanufacturing</div>
+  </div>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://health.ec.europa.eu/document/download/ec1475b7-e3f9-409e-b927-fc7e69306a8c_en" target="_blank" rel="noopener">COM(2025) 1022</a> | Proposed 16 December 2025</div>
+  <h1 class="hero__title">European Biotech Act: <span>7 Pillars to Close<br>the Innovation Gap</span></h1>
+  <p class="hero__subtitle">
+    The Commission's proposal to transform Europe's biotechnology and biomanufacturing sector.
+    Strategic projects, regulatory sandboxes, clinical trial acceleration, biosecurity, and EUR 20.4 billion in funding.
+    Here is everything you need to know.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-dna"></i> 10 Chapters, 7 Pillars</span>
+    <span><i class="mdi mdi-scale-balance"></i> Regulation (directly applicable)</span>
+    <span><i class="mdi mdi-calendar-check"></i> Procedure: 2025/0406 (COD)</span>
+  </div>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">EUR 20.4B</div>
+    <div class="figure-card__label">Proposed budget (MFF 2028-2034)</div>
+  </div>
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">913K</div>
+    <div class="figure-card__label">Jobs in EU biotech (2022)</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">7%</div>
+    <div class="figure-card__label">EU share of global biotech VC</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">75 days</div>
+    <div class="figure-card__label">New clinical trial authorisation target</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structure of the Proposal</div>
+  <div class="toc__grid">
+    <a href="#gap" class="toc__link"><i class="mdi mdi-alert-circle-outline"></i> The competitiveness gap</a>
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Scope and Definitions</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Strategic Projects</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Access to Funding</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> SPC Extension</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Biosimilars</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> AI and Data</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Novel Products</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Biosecurity</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Legislative Simplification</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Final Provisions</a>
+    <a href="#comparison" class="toc__link"><i class="mdi mdi-swap-horizontal"></i> Before vs. After</a>
+    <a href="#timeline" class="toc__link"><i class="mdi mdi-timeline-clock-outline"></i> Timeline</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official Sources</a>
+  </div>
+</nav>
+
+<!-- 7 Pillars Temple -->
+<div class="temple">
+  <div class="temple__roof">
+    European Biotech Act
+    <div class="temple__roof-sub">COM(2025) 1022 final | 7 pillars for EU biotech competitiveness</div>
+  </div>
+  <div class="temple__pillars">
+    <a href="#ch2" class="temple__pillar" style="text-decoration:none;">
+      <div class="temple__pillar-icon" style="background: var(--color-blue);"><i class="mdi mdi-rocket-launch-outline"></i></div>
+      <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(6,147,227,0.6), var(--color-blue));"></div>
+      <div class="temple__pillar-label">Strategic Projects</div>
+      <div class="temple__pillar-num">Pillar 1</div>
+      <div class="temple__pillar-tooltip">Chapter II: 10-month fast-track permitting</div>
+    </a>
+    <a href="#ch3" class="temple__pillar" style="text-decoration:none;">
+      <div class="temple__pillar-icon" style="background: var(--color-amber);"><i class="mdi mdi-cash-multiple"></i></div>
+      <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(217,119,6,0.6), var(--color-amber));"></div>
+      <div class="temple__pillar-label">Access to Funding</div>
+      <div class="temple__pillar-num">Pillar 2</div>
+      <div class="temple__pillar-tooltip">Chapter III: EIB investment pilot</div>
+    </a>
+    <a href="#ch5" class="temple__pillar" style="text-decoration:none;">
+      <div class="temple__pillar-icon" style="background: var(--color-green);"><i class="mdi mdi-pill"></i></div>
+      <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(5,150,105,0.6), var(--color-green));"></div>
+      <div class="temple__pillar-label">Biosimilars</div>
+      <div class="temple__pillar-num">Pillar 3</div>
+      <div class="temple__pillar-tooltip">Chapters IV-V: SPC + biosimilar competitiveness</div>
+    </a>
+    <a href="#ch6" class="temple__pillar" style="text-decoration:none;">
+      <div class="temple__pillar-icon" style="background: var(--color-purple);"><i class="mdi mdi-brain"></i></div>
+      <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(155,81,224,0.6), var(--color-purple));"></div>
+      <div class="temple__pillar-label">AI and Data</div>
+      <div class="temple__pillar-num">Pillar 4</div>
+      <div class="temple__pillar-tooltip">Chapter VI: EMA AI guidance + sandboxes</div>
+    </a>
+    <a href="#ch7" class="temple__pillar" style="text-decoration:none;">
+      <div class="temple__pillar-icon" style="background: #0ea5e9;"><i class="mdi mdi-flask-outline"></i></div>
+      <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(14,165,233,0.6), #0ea5e9);"></div>
+      <div class="temple__pillar-label">Novel Products</div>
+      <div class="temple__pillar-num">Pillar 5</div>
+      <div class="temple__pillar-tooltip">Chapter VII: foresight panel + regulatory sandbox</div>
+    </a>
+    <a href="#ch8" class="temple__pillar" style="text-decoration:none;">
+      <div class="temple__pillar-icon" style="background: var(--color-red);"><i class="mdi mdi-shield-alert-outline"></i></div>
+      <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(220,38,38,0.6), var(--color-red));"></div>
+      <div class="temple__pillar-label">Biosecurity</div>
+      <div class="temple__pillar-num">Pillar 6</div>
+      <div class="temple__pillar-tooltip">Chapter VIII: 24h suspicious transaction reporting</div>
+    </a>
+    <a href="#ch9" class="temple__pillar" style="text-decoration:none;">
+      <div class="temple__pillar-icon" style="background: #6366f1;"><i class="mdi mdi-file-edit-outline"></i></div>
+      <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(99,102,241,0.6), #6366f1);"></div>
+      <div class="temple__pillar-label">Legislative Simplification</div>
+      <div class="temple__pillar-num">Pillar 7</div>
+      <div class="temple__pillar-tooltip">Chapter IX: 6 regulations amended</div>
+    </a>
+  </div>
+  <div class="temple__base">
+    Legal basis: Articles 114, 168(4), and 173(3) TFEU | Ordinary legislative procedure (COD) | EUR 20.4 billion proposed (MFF 2028-2034)
+  </div>
+</div>
+
+<!-- The competitiveness gap -->
+<section class="section" id="gap">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-alert-outline"></i></div>
+    <h2 class="section__title">The Competitiveness Gap</h2>
+  </div>
+  <p class="section__subtitle">Europe leads in science but lags in commercialisation</p>
+
+  <div class="info-box">
+    <h3>World-class research, structural barriers</h3>
+    <p>The EU biotechnology industry has grown more than twice as fast as the overall EU economy and accounted for EUR 38.1 billion of Union GDP in 2022. Each job in industrial biotech generates 3.4 additional jobs. Yet the EU captures only <strong>7% of global health biotech VC</strong> (vs 63% for the US, 14% for China). US biopharma start-ups receive 9 times more late-stage funding than EU equivalents.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Venture capital gap</div>
+      <div class="article-card__title">EUR 25B vs EUR 219B</div>
+      <div class="article-card__desc">Total health biotech VC invested in the EU vs the US between 2015 and 2025. 66 out of 67 EU biotech companies that went public in the last six years listed on non-EU stock exchanges.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Clinical trial decline</div>
+      <div class="article-card__title">22% down to 12%</div>
+      <div class="article-card__desc">EU share of commercially sponsored clinical trials in the EEA dropped from 22% in 2013 to 12% in 2023. China rose from 5% to 18%. EU authorisation takes 113 days on average; competitors manage 60.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Scientific output</div>
+      <div class="article-card__title">21% of top publications</div>
+      <div class="article-card__desc">The EU produces 21% of the world's top 10% most-cited publications in biology, biomedical research, and clinical medicine. Comparable to the US (22%) and China (24%).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Pharmaceutical spending</div>
+      <div class="article-card__title">41% biological</div>
+      <div class="article-card__desc">Biological medicines now represent 41% of EU pharmaceutical spending (EUR 95 billion out of EUR 228 billion in 2024). Biosimilars are a major growth driver.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter I -->
+<section class="section" id="ch1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-book-open-page-variant-outline"></i></div>
+    <h2 class="section__title">Chapter I: Scope and Definitions</h2>
+  </div>
+  <p class="section__subtitle">Subject matter, scope, and key definitions</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-target" style="color: var(--color-green);"></i> Three objectives</div>
+    <p><strong>1.</strong> Improve the functioning of the internal market by strengthening the competitiveness of the health biotech sector, from research to production.</p>
+    <p><strong>2.</strong> Create conditions for the development and timely placing on the EU market of biotech innovations, products, and services.</p>
+    <p><strong>3.</strong> Safeguard high standards for human and animal health, environment, ethics, quality, food and feed safety, and biosecurity.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-text-box-outline" style="color: var(--color-blue);"></i> Key definitions</div>
+    <p><strong>Biotechnology:</strong> the application of science and technology to living organisms, their parts, products, or models, to alter living or non-living materials for the production of knowledge, goods, and services.</p>
+    <p><strong>Health biotechnology:</strong> the application of biotechnology in the human medical, veterinary, pharmaceutical, and phytosanitary areas for the development of biotechnology products and services.</p>
+    <p><strong>Scope:</strong> covers the entire lifecycle: research, access to funding, development, innovation, testing, validation, manufacturing, placing on the market, and use.</p>
+  </div>
+</section>
+
+<!-- Chapter II: Strategic Projects (Pillar 1) -->
+<section class="section" id="ch2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-rocket-launch-outline"></i></div>
+    <h2 class="section__title">Chapter II: Strategic Projects</h2>
+  </div>
+  <p class="section__subtitle">Pillar 1: recognising and supporting biotechnology strategic projects</p>
+
+  <div class="info-box">
+    <h3>Two categories of strategic projects</h3>
+    <p>The Act creates a framework for recognising <strong>health biotechnology strategic projects</strong> at Member State level and <strong>high-impact health biotechnology strategic projects</strong> at EU level. Both receive accelerated permitting, priority administrative support, and "highest national significance" designation under national law.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Member State level</div>
+      <div class="article-card__title">Strategic projects</div>
+      <div class="article-card__desc">Recognised by national authorities. Criteria: contribute to competitiveness, resilience, or security of the Union's biotech sector. Permit-granting capped at 10 months.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">EU level</div>
+      <div class="article-card__title">High-impact strategic projects</div>
+      <div class="article-card__desc">Two-tier recognition: Member State assessment + Commission decision. Permit-granting capped at 8 months, with possible 3-month extension. Public interest override for Habitats, Birds, and Water Framework Directives.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Strategic mapping</div>
+      <div class="article-card__title">Within 6 months</div>
+      <div class="article-card__desc">The Commission will conduct a strategic mapping of the Union's biotech ecosystem within 6 months of entry into force: capacities, infrastructure, gaps, dependencies, and investment needs.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Governance</div>
+      <div class="article-card__title">Steering Group and Support Network</div>
+      <div class="article-card__desc">European Health Biotechnology Steering Group (Member States + Commission). EU Health Biotechnology Support Network of national and regional antennas to support SMEs, start-ups, and innovators.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter III: Access to Funding (Pillar 2) -->
+<section class="section" id="ch3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-cash-multiple"></i></div>
+    <h2 class="section__title">Chapter III: Access to Funding</h2>
+  </div>
+  <p class="section__subtitle">Pillar 2: EU health biotechnology investment pilot</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-bank" style="color: var(--color-amber);"></i> Investment pilot with the EIB Group</div>
+    <p><strong>Partnership:</strong> the Commission will establish an EU health biotechnology investment pilot with the European Investment Bank Group and other implementing partners.</p>
+    <p><strong>Instruments:</strong> equity instruments and venture-style debt tailored to biotechnology-specific risk profiles, targeting the Series B, C, and growth-stage funding gap.</p>
+    <p><strong>Capital Booster Pilot:</strong> projects contributing to a late-stage capital booster may be recognised as high-impact strategic projects.</p>
+    <p><strong>State aid:</strong> all funding measures must comply with applicable State aid rules.</p>
+  </div>
+</section>
+
+<!-- Chapter IV: SPC Extension (Pillar 3 partial) -->
+<section class="section" id="ch4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-shield-check-outline"></i></div>
+    <h2 class="section__title">Chapter IV: SPC Extension</h2>
+  </div>
+  <p class="section__subtitle">Extending supplementary protection certificates for biotech products</p>
+
+  <div class="card">
+    <p><strong>12-month extension</strong> of the Supplementary Protection Certificate (SPC) for medicinal products developed by means of biotechnology processes and for Advanced Therapy Medicinal Products (ATMPs).</p>
+    <p><strong>Rationale:</strong> incentivise the development of products using innovative biotechnology technologies that bring a therapeutic advantage to patients.</p>
+    <p><strong>Conditions:</strong> subject to compliance with applicable competition rules.</p>
+  </div>
+</section>
+
+<!-- Chapter V: Biosimilars (Pillar 3) -->
+<section class="section" id="ch5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-pill"></i></div>
+    <h2 class="section__title">Chapter V: Biosimilars Competitiveness</h2>
+  </div>
+  <p class="section__subtitle">Pillar 3: enhancing EU competitiveness in biosimilars</p>
+
+  <div class="card">
+    <p><strong>EMA guidelines</strong> to facilitate the authorisation of biosimilar medicinal products.</p>
+    <p><strong>Strategic projects</strong> focused on biosimilar research, development, manufacturing, and marketing authorisation.</p>
+    <p><strong>International cooperation</strong> for biosimilar clusters between economic operators and biotechnology clusters.</p>
+    <p><strong>Context:</strong> biological medicines represent 41% of EU pharmaceutical spending. Biosimilars are critical for affordability and access.</p>
+  </div>
+</section>
+
+<!-- Chapter VI: AI and Data (Pillar 4) -->
+<section class="section" id="ch6">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-brain"></i></div>
+    <h2 class="section__title">Chapter VI: AI and Data as Enablers</h2>
+  </div>
+  <p class="section__subtitle">Pillar 4: integrating artificial intelligence and data into biotechnology</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">EMA guidance</div>
+      <div class="article-card__title">AI across the product lifecycle</div>
+      <div class="article-card__desc">The European Medicines Agency will issue guidance on using AI across the entire medicinal product lifecycle: research, testing, manufacturing, and post-market surveillance.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Testing environments</div>
+      <div class="article-card__title">Trusted AI sandboxes</div>
+      <div class="article-card__desc">Creation of trusted AI testing environments and data-quality accelerators to advance safe AI-enabled biotechnology. High-impact project status available for AI-driven biotech projects.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter VII: Novel Products (Pillar 5) -->
+<section class="section" id="ch7">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-flask-outline"></i></div>
+    <h2 class="section__title">Chapter VII: Novel Health Biotech Products</h2>
+  </div>
+  <p class="section__subtitle">Pillar 5: regulatory tools for products outside existing frameworks</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-eye-outline" style="color: var(--color-purple);"></i> Anticipatory governance</div>
+    <p><strong>Regulatory status repository:</strong> Union-wide, cross-framework repository compiling opinions, recommendations, decisions, and guidance on novel biotech product classification.</p>
+    <p><strong>Foresight Panel for Emerging Health Innovation:</strong> horizon-scanning and cross-framework dialogue on forthcoming scientific and technological developments.</p>
+    <p><strong>Regulatory sandboxes:</strong> Union-level sandbox for health biotech products at an early stage of development that fall outside existing health legal frameworks.</p>
+  </div>
+</section>
+
+<!-- Chapter VIII: Biosecurity (Pillar 6) -->
+<section class="section" id="ch8">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-alert-outline"></i></div>
+    <h2 class="section__title">Chapter VIII: Biosecurity and Biodefence</h2>
+  </div>
+  <p class="section__subtitle">Pillar 6: preventing the misuse of biotechnology</p>
+
+  <div class="info-box">
+    <h3>24-hour suspicious transaction reporting</h3>
+    <p>Economic operators and online marketplaces must report suspicious transactions involving "biotechnology products of concern" to national contact points within 24 hours. Red flags include: unclear customer identity, orders inconsistent with normal business practices, unusual labelling or shipping requests, and deliveries to addresses lacking legitimate biotech justification.</p>
+  </div>
+
+  <div class="card">
+    <p><strong>EU biodefence capability projects</strong> eligible for high-impact strategic project status.</p>
+    <p><strong>Linked to</strong> the EU Dual Use Regulation (2021/821) and the Preparedness Union Strategy.</p>
+    <p><strong>Screening:</strong> provisions for screening, reporting, and tracking biotechnology products of concern, with enforcement mechanisms to ensure compliance.</p>
+  </div>
+</section>
+
+<!-- Chapter IX: Legislative Simplification (Pillar 7) -->
+<section class="section" id="ch9">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-file-edit-outline"></i></div>
+    <h2 class="section__title">Chapter IX: Legislative Simplification</h2>
+  </div>
+  <p class="section__subtitle">Pillar 7: amending 6 existing EU regulations to reduce time-to-market</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-clock-fast" style="color: var(--color-green);"></i> Clinical Trials Regulation (EU) 536/2014</div>
+    <p><strong>Multinational trial authorisation:</strong> 106 days reduced to 75 days (including validation and ethical review).</p>
+    <p><strong>Initial authorisation (no info request):</strong> 75 days reduced to 47 days.</p>
+    <p><strong>Substantial modification:</strong> 96 days reduced to 47 days (with parallel options).</p>
+    <p><strong>ATMP extra time:</strong> additional 50-day assessment period eliminated.</p>
+    <p><strong>New features:</strong> "minimal-intervention clinical trials" category, mandatory EU harmonised templates, single core dossier, clinical trial sandboxes, AI uptake fostered.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">ATMP Regulation</div>
+      <div class="article-card__title">(EC) 1394/2007</div>
+      <div class="article-card__desc">GMO environmental risk assessment exemption for advanced investigational therapy products presenting negligible risk. Delegated acts to update ATMP definitions for scientific advancement.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">General Food Law</div>
+      <div class="article-card__title">(EC) 178/2002</div>
+      <div class="article-card__desc">EFSA pre-submission advice broadened to scientific matters. Study notification delay cut from 6 to 3 months. EFSA staff to chair panels. Regulatory sandboxes for food innovation.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Veterinary Medicines</div>
+      <div class="article-card__title">(EU) 2019/6</div>
+      <div class="article-card__desc">Duplicate GMO assessment removed. Extra year of SPC for veterinary biotech products targeting zoonotic diseases. Regulatory sandboxes for animal health innovation.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">STEP + SoHO</div>
+      <div class="article-card__title">(EU) 2024/795 and (EU) 2024/1938</div>
+      <div class="article-card__desc">Biotech strategic projects deemed to contribute to STEP objectives. Regulatory sandbox for substances of human origin as starting materials for innovative medicinal products.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter X -->
+<section class="section" id="ch10">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-flag-checkered"></i></div>
+    <h2 class="section__title">Chapter X: Final Provisions</h2>
+  </div>
+  <p class="section__subtitle">Monitoring, evaluation, delegation, and entry into force</p>
+
+  <div class="card">
+    <p><strong>Monitoring:</strong> continuous evidence base through regularly updated strategic mapping and project lists.</p>
+    <p><strong>Evaluation:</strong> 5 years after entry into application, then every 5 years. Report to EP, Council, EESC, and CoR.</p>
+    <p><strong>Delegation:</strong> Commission empowered to adopt delegated acts for technical updates.</p>
+    <p><strong>Entry into force:</strong> 20 days after publication in the Official Journal.</p>
+    <p><strong>Confidential information:</strong> provisions on handling sensitive business and security data.</p>
+  </div>
+</section>
+
+<!-- Comparison table -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-swap-horizontal"></i></div>
+    <h2 class="section__title">Before vs. After the Biotech Act</h2>
+  </div>
+  <p class="section__subtitle">Key changes introduced by the proposal</p>
+
+  <table>
+    <thead>
+      <tr><th>Aspect</th><th>Current situation</th><th>With the Biotech Act</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Multinational clinical trial authorisation</td><td class="dim-cell">106 days</td><td class="highlight-cell">75 days</td></tr>
+      <tr><td>Initial clinical trial (no info request)</td><td class="dim-cell">75 days</td><td class="highlight-cell">47 days</td></tr>
+      <tr><td>Substantial modification assessment</td><td class="dim-cell">96 days</td><td class="highlight-cell">47 days</td></tr>
+      <tr><td>ATMP extra assessment time</td><td class="dim-cell">50 additional days</td><td class="highlight-cell">Eliminated</td></tr>
+      <tr><td>Study notification delay (food law)</td><td class="dim-cell">6 months</td><td class="highlight-cell">3 months</td></tr>
+      <tr><td>Biotech strategic project recognition</td><td class="dim-cell">No framework</td><td class="highlight-cell">10 months (MS) / 8 months (EU)</td></tr>
+      <tr><td>Regulatory sandboxes for biotech</td><td class="dim-cell">None at EU level</td><td class="highlight-cell">5 types (health, clinical, food, vet, SoHO)</td></tr>
+      <tr><td>Biosecurity reporting</td><td class="dim-cell">Fragmented national rules</td><td class="highlight-cell">24-hour mandatory reporting</td></tr>
+      <tr><td>Late-stage biotech funding</td><td class="dim-cell">7% of global VC</td><td class="highlight-cell">EIB investment pilot + Capital Booster</td></tr>
+      <tr><td>SPC for biotech products</td><td class="dim-cell">Standard duration</td><td class="highlight-cell">+12 months for biotech processes and ATMPs</td></tr>
+      <tr><td>AI guidance for medicines</td><td class="dim-cell">Ad hoc</td><td class="highlight-cell">Systematic EMA guidance + sandbox</td></tr>
+      <tr><td>GMO assessment (vet products)</td><td class="dim-cell">Dual assessment (ERA + GMO)</td><td class="highlight-cell">ERA only (duplicate removed)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- EU Global Comparison -->
+<section class="section" id="global">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-earth"></i></div>
+    <h2 class="section__title">EU vs Global Competitors</h2>
+  </div>
+  <p class="section__subtitle">How Europe compares to the US and China in biotechnology</p>
+
+  <table>
+    <thead>
+      <tr><th>Metric</th><th>EU</th><th>USA</th><th>China</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Top 10% publications (biology, biomedical)</td><td>21%</td><td>22%</td><td>24%</td></tr>
+      <tr><td>Share of global health biotech VC (2015-2025)</td><td class="dim-cell">7%</td><td class="highlight-cell">63%</td><td>14%</td></tr>
+      <tr><td>Health biotech VC volume (2015-2025)</td><td class="dim-cell">EUR 25B</td><td class="highlight-cell">EUR 219B</td><td>n/a</td></tr>
+      <tr><td>Clinical trial authorisation time</td><td class="dim-cell">113 days</td><td class="highlight-cell">~60 days</td><td class="highlight-cell">~60 days</td></tr>
+      <tr><td>Share of commercially sponsored trials</td><td class="dim-cell">12%</td><td>Stable</td><td>18%</td></tr>
+      <tr><td>Biotech IPOs on local exchanges (6 years)</td><td class="dim-cell">1</td><td class="highlight-cell">66</td><td>n/a</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Legislative Timeline</h2>
+  </div>
+  <p class="section__subtitle">From political guidelines to application</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">July 2024</div>
+      <div class="timeline__text">Commission President von der Leyen announces Biotech Act in Political Guidelines 2024-2029</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">March 2024</div>
+      <div class="timeline__text">Commission Communication "Building the future with nature" (COM(2024) 137)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">September 2024</div>
+      <div class="timeline__text">Draghi Report identifies biotech competitiveness gap as strategic priority</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">May-June 2025</div>
+      <div class="timeline__text">Call for evidence: 222 valid contributions from industry, NGOs, academia, public authorities</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">July 2025</div>
+      <div class="timeline__text">EP resolution on the future of EU biotechnology and biomanufacturing</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">August-November 2025</div>
+      <div class="timeline__text">Public consultation: 359 contributions (91 companies, 61 business associations, 47 NGOs, 44 academic institutions)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">September 2025</div>
+      <div class="timeline__text">Council conclusions "A call for action on life sciences for the Union's competitiveness" (13323/25)</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">16 December 2025</div>
+      <div class="timeline__text"><strong>Commission adopts the European Biotech Act: COM(2025) 1022 final</strong></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 March 2026</div>
+      <div class="timeline__text">Commissioner Varhelyi exchange of views with EP SANTE-ITRE Committee</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Q2 2026</div>
+      <div class="timeline__text">EP committee assignment (expected: SANTE/ITRE lead, ENVI/AGRI opinions)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2026</div>
+      <div class="timeline__text">Biotech Act II: Commission to address non-health biotech sectors (agriculture, industrial, energy)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2027-2028</div>
+      <div class="timeline__text">Target for political agreement and date of application</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official Sources</h2>
+  </div>
+  <p class="section__subtitle">All documents used to produce this analysis</p>
+
+  <div class="card">
+    <p><strong>Proposal (Regulation):</strong> <a href="https://health.ec.europa.eu/document/download/ec1475b7-e3f9-409e-b927-fc7e69306a8c_en?filename=biotech_reg-com2025-1022_act_en.pdf" target="_blank" rel="noopener">COM(2025) 1022 final (PDF)</a></p>
+    <p><strong>Companion Directive:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2025)1031&lang=en" target="_blank" rel="noopener">COM(2025) 1031</a> (genetically modified micro-organisms and organ processing)</p>
+    <p><strong>Analytical document:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2025)1055&lang=en" target="_blank" rel="noopener">SWD(2025) 1055 final</a></p>
+    <p><strong>Official page:</strong> <a href="https://health.ec.europa.eu/biotechnology_en" target="_blank" rel="noopener">DG SANTE: Biotechnology</a></p>
+    <p><strong>Independent analysis:</strong> <a href="https://www.eu-biotech-act.com/" target="_blank" rel="noopener">eu-biotech-act.com</a> (Cyber Risk GmbH regulatory analysis)</p>
+    <p><strong>Background:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2024)137&lang=en" target="_blank" rel="noopener">COM(2024) 137</a> "Building the future with nature: Boosting Biotechnology and Biomanufacturing in the EU"</p>
+    <p><strong>Life sciences strategy:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2025)525&lang=en" target="_blank" rel="noopener">COM(2025) 525</a> "Choose Europe for life sciences"</p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Produced by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol BV</a>. See also: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p style="margin-top: 0.5rem;">Analysis based on COM(2025) 1022 final, proposed 16 December 2025. This is an independent analysis, not an official EU document.</p>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
