@@ -35,7 +35,7 @@ class ExamplePrompt(BaseModel):
     subscription_tiers: Optional[List[str]]
     is_active: bool
     sort_order: int
-    usage_count: int
+    usage_count: Optional[int] = 0
 
 
 class ExamplePromptCreate(BaseModel):
