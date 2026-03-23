@@ -260,7 +260,7 @@ Always use `EPRSService` (not individual components) for EPRS operations: `from 
 
 ### Knowledge Guide Truncation (March 2026)
 
-Guides truncated to **5,000 chars** (increased from 3,000 on 19 March 2026). Put key detail in **QUICK FACTS** block at top of large guides. Review: 10 April 2026. File: `context_builder.py` (`guide_content[:5000]`).
+Two truncation points: **storage** at 8,000 chars (`guide_content[:8000]` in search results), **AI prompt injection** at 4,000 chars (`item['content'][:4000]` in `format_context_for_ai`). The prompt injection was the real bottleneck: it was 1,000 chars until 23 March 2026, causing document references (T9-xxx, A9-xxx) at char 1424+ to be invisible to the AI. Put key detail in **QUICK FACTS** block at top of guides. File: `context_builder.py`.
 
 ### Data-Driven Chat Follow-Ups (February 2026)
 
@@ -332,11 +332,11 @@ Before marking a feature COMPLETE, verify end-to-end: (1) DB has data, (2) API r
 
 ### Multi-Provider AI System (March 2026)
 
-Claude Haiku 4.5 is de facto primary ($2.50/day cap). Fallback: Mistral -> Claude Sonnet -> GPT-4 -> Gemini. Routing: `has_knowledge = internal_knowledge OR eu_institutional_results` (virtually all queries). File: `multi_provider_service.py`.
+**Claude Sonnet 4 is the primary model** (switched from Haiku 4.5 on 23 March 2026). $10/day cap. Haiku was ignoring document retrieval instructions. Fallback: Mistral -> GPT-4 -> Gemini. Routing: `has_knowledge = internal_knowledge OR eu_institutional_results` (virtually all queries). File: `multi_provider_service.py`.
 
 ### EU Institutional Source Search Fallback (March 2026)
 
-When no knowledge guide matches, Tavily searches 25 trusted EU domains. Results injected with source attribution (AI must cite by name + URL). Key files: `context_builder.py` (`_fetch_eu_institutional_search()`, `EU_INSTITUTIONAL_DOMAINS`), `ai_service.py` (`has_knowledge` routing, tier 4.5).
+When no knowledge guide matches, Tavily searches 25 trusted EU domains. **Also fires when user has procedure-intent keywords** (timeline, status, rapporteur, vote, INI, COD) even if a generic guide matched, as long as no procedure details were found. Additionally, OEIL topic search via Tavily fires when keyword OR results are noise (no confident title match). Key files: `context_builder.py` (`_fetch_eu_institutional_search()`, `_fetch_legislative_train_files()` OEIL topic search block).
 
 ### EP Plenary Debate Transcripts (CRE) (March 2026)
 
@@ -353,6 +353,14 @@ From `chat_example_prompts` table (scope=`'main_chat'`, is_active=`true`), NOT `
 ### Daily Brief BCC Batching (March 2026)
 
 `send_daily_brief_batch()` in `services/daily_brief_email.py` now uses **BCC batching** (90 recipients per SMTP connection) instead of individual sends. This avoids the Gmail rate limit (~80-100 individual sends per session). Greeting is generic ("Good morning") with no personalisation. The `daily_brief_sends` table still tracks per-recipient duplicate prevention.
+
+### Document Retrieval Rule (March 2026)
+
+The AI MUST present all document references (T9-xxx, A9-xxx, PE-xxx, COM-xxx) from knowledge guides immediately with clickable URLs. NEVER say "I don't have the texts" when the guide lists them. NEVER tell users to "search EUR-Lex yourself." NEVER ask "which version do you need?" This is Brubru's core value: fetching buried EU documents and delivering them efficiently. System prompt rule in `ai_service.py`. Also: Document Gateway references with doceo URLs are now injected via `key_documents` in `available_actions` from `context_builder.py`.
+
+### Audit Queries: Check User Identity (March 2026)
+
+Always join `chat_messages -> chats (user_id) -> users (email)` when auditing queries. Victor's test queries (victor@hellobo.eu) should be noted but not treated as real user issues. Focus on external users. The EU-ESOP queries on 19 March were all Victor's tests, not real users.
 
 ### RSS AI Enrichment - On-Demand Only (January 2026)
 
