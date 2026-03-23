@@ -24,7 +24,7 @@ export const DEEP_DIVES: DeepDive[] = [
     comReference: 'COM(2026) 321',
     procedureRef: '2026/0074(COD)',
     basePath: '/eu-inc',
-    languages: ['en', 'fr', 'es', 'it', 'nl'],
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
     color: '#0693e3',
     icon: 'mdi-domain',
   },
@@ -34,7 +34,7 @@ export const DEEP_DIVES: DeepDive[] = [
     comReference: 'COM(2025) 1022',
     procedureRef: '2025/0406(COD)',
     basePath: '/biotech-act',
-    languages: ['en', 'fr', 'es', 'it', 'nl'],
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
     color: '#059669',
     icon: 'mdi-dna',
   },
@@ -44,7 +44,7 @@ export const DEEP_DIVES: DeepDive[] = [
     comReference: 'COM(2026) 100',
     procedureRef: '2026/0068(COD)',
     basePath: '/industrial-accelerator-act',
-    languages: ['en', 'fr', 'es', 'it', 'nl'],
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
     color: '#9b51e0',
     icon: 'mdi-factory',
   },
@@ -72,6 +72,7 @@ const LANG_LABELS: Record<string, string> = {
   es: 'ES',
   it: 'IT',
   nl: 'NL',
+  ca: 'CA',
 };
 
 export { LANG_LABELS };

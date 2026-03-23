@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Llei d'Acceleració Industrial explicada: el pla de la UE per reindustrialitzar Europa | Brubru</title>
+  <meta name="description" content="Guia completa sobre la Llei d'Acceleració Industrial (COM(2026) 100): acceleració de llicències, etiquetes de baix carboni per a l'acer i el ciment, requisits d'origen de la UE, control d'inversions estrangeres. Anàlisi article per article amb xifres de l'avaluació d'impacte.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Disclaimer banner */
+    .disclaimer-banner {
+      background: #fef3c7;
+      border-bottom: 2px solid #d97706;
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .header__lang {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .header__lang:hover, .header__lang:focus { border-color: var(--color-blue); }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    /* Comparison table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    /* Chapter article grid */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Footer */
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Avís de traducció -->
+<div class="disclaimer-banner">
+  El català no és una llengua oficial de la Unió Europea. No existeix cap versió oficial en català d'aquest text a EUR-Lex. Aquesta traducció ha estat preparada per Brubru per servir la comunitat catalanoparlant de professionals dels afers europeus.
+</div>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Llei d'Acceleració Industrial: anàlisi detallada</div>
+    <div class="header__subtitle">Reindustrialització de la UE i reforma de les llicències</div>
+  </div>
+  <select class="header__lang" onchange="location.href=this.value" aria-label="Selector de llengua">
+    <option value="index.html">English</option>
+    <option value="fr.html">Français</option>
+    <option value="es.html">Español</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html" selected>Català</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Prova Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN" target="_blank" rel="noopener">COM(2026) 100</a> | 4 de març de 2026</div>
+  <h1 class="hero__title">La <span>Llei d'Acceleració Industrial</span></h1>
+  <p class="hero__subtitle">
+    Fer créixer la indústria de la UE i assegurar llocs de treball per al futur.
+    La proposta de la Comissió Europea per accelerar les llicències, introduir etiquetes de baix carboni per als materials bàsics,
+    establir requisits d'origen de la UE en la contractació pública i controlar les inversions estrangeres en sectors estratègics.
+    Aquí trobaràs tot el que necessites saber.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar-check"></i> 4 de març de 2026</span>
+    <span><i class="mdi mdi-scale-balance"></i> Reglament (COD)</span>
+    <span><i class="mdi mdi-domain"></i> DG GROW</span>
+    <span><i class="mdi mdi-account-outline"></i> S&eacute;journ&eacute;</span>
+  </div>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">20%</div>
+    <div class="figure-card__label">Objectiu de participació de la indústria manufacturera en el PIB el 2035</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">148.352</div>
+    <div class="figure-card__label">Llocs de treball creats o mantinguts el 2030</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">30,58 Mt</div>
+    <div class="figure-card__label">Reducció d'emissions equivalents de CO2</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">240 M EUR</div>
+    <div class="figure-card__label">Estalvi en costos de llicències</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Estructura de la proposta</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Disposicions generals (Arts 1-5)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Acceleració de llicències (Arts 6-16)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Contractació i ajudes estatals (Arts 17-29)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Inversió estrangera (Arts 30-35)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Disposicions finals (Arts 36-42)</a>
+  </div>
+</nav>
+
+<!-- Chapter I -->
+<section class="section" id="ch1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-gavel"></i></div>
+    <h2 class="section__title">Capítol I: disposicions generals</h2>
+  </div>
+  <p class="section__subtitle">Articles 1-5: àmbit d'aplicació, definicions, sectors estratègics i l'objectiu d'industrialització</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 1</div>
+      <div class="article-card__title">Objecte i àmbit d'aplicació</div>
+      <div class="article-card__desc">Estableix un marc per accelerar les llicències, introduir etiquetes de materials de baix carboni, fixar requisits d'origen de la UE per a la contractació pública i controlar les inversions estrangeres en sectors industrials estratègics.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 2</div>
+      <div class="article-card__title">Definicions</div>
+      <div class="article-card__desc">Definicions clau: sectors estratègics, materials de baix carboni, origen de la Unió, Zones d'Acceleració Industrial, indústries d'alta intensitat energètica (IAE), tecnologia de zero emissions netes, classes d'intensitat de carboni i autoritat competent en matèria de llicències.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 3</div>
+      <div class="article-card__title">Sectors estratègics</div>
+      <div class="article-card__desc">Identifica els sectors coberts: indústries d'alta intensitat energètica (acer, ciment, alumini, productes químics), fabricació d'automòbils i producció de tecnologia de zero emissions netes (solar, eòlica, bateries, bombes de calor).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 4</div>
+      <div class="article-card__title">Objectiu d'industrialització</div>
+      <div class="article-card__desc">Fixa l'objectiu principal: augmentar la participació de la indústria manufacturera en el PIB de la UE del 14,3% al <strong>20% el 2035</strong>. Els estats membres han d'adoptar estratègies industrials nacionals alineades amb aquest objectiu a escala de la Unió.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 5</div>
+      <div class="article-card__title">Relació amb altres normes de la Unió</div>
+      <div class="article-card__desc">Clarifica la interacció amb la legislació vigent: la Llei d'Indústria de Zero Emissions Netes, la Llei de Matèries Primeres Crítiques, el Reglament de control d'IED i les directives de contractació pública de la UE. La LAI complementa però no substitueix.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter II -->
+<section class="section" id="ch2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-lightning-bolt"></i></div>
+    <h2 class="section__title">Capítol II: acceleració de llicències</h2>
+  </div>
+  <p class="section__subtitle">Articles 6-16: llicències unificades, tramitació digital, Zones d'Acceleració Industrial i projectes prioritaris</p>
+
+  <div class="info-box">
+    <h3>Zones d'Acceleració Industrial</h3>
+    <p>Zones designades on les avaluacions ambientals de zona substitueixen les revisions projecte per projecte. Els projectes dins d'aquestes zones es beneficien d'<strong>aprovació tàcita</strong> si l'autoritat competent supera el seu termini, de llicències simplificades mitjançant permisos de zona i d'accés accelerat als fons de la UE. La Comissió adopta actes delegats que estableixen els criteris de designació d'aquestes zones.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 6</div>
+      <div class="article-card__title">Llicència única</div>
+      <div class="article-card__desc">Introdueix el principi "un projecte, una sol·licitud". Tots els permisos necessaris per a un projecte industrial es consoliden en una única sol·licitud a una única autoritat, eliminant la fragmentació entre organismes.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 7</div>
+      <div class="article-card__title">Punts de contacte i autoritats competents</div>
+      <div class="article-card__desc">Els estats membres designen un únic punt de contacte per regió per orientar els sol·licitants i coordinar-se amb totes les autoritats pertinents. El punt de contacte fa el seguiment de la sol·licitud i garanteix el compliment dels terminis.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 8</div>
+      <div class="article-card__title">Llicències digitals via Cartera d'Empresa Europea</div>
+      <div class="article-card__desc">Totes les sol·licituds, presentacions i decisions de llicències es gestionen digitalment a través de la infraestructura de la Cartera d'Empresa Europea. Sense presentació en paper. Formats llegibles per màquina per a la interoperabilitat.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 9</div>
+      <div class="article-card__title">Terminis per a la concessió de llicències</div>
+      <div class="article-card__desc">Estableix terminis màxims vinculants per a les decisions sobre permisos. Les autoritats competents han de tramitar les sol·licituds dins dels terminis definits, amb terminis més curts per als projectes en Zones d'Acceleració Industrial.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 10</div>
+      <div class="article-card__title">Projectes de descarbonització d'indústries d'alta intensitat energètica</div>
+      <div class="article-card__desc">Via ràpida específica per a inversions en descarbonització d'IAE: captura de carboni, canvi de combustible, electrificació i integració d'hidrogen en plantes d'acer, ciment, alumini i productes químics.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 11</div>
+      <div class="article-card__title">Projectes d'indústria de zero emissions netes</div>
+      <div class="article-card__desc">Alineat amb la Llei d'Indústria de Zero Emissions Netes (NZIA). Els projectes de fabricació de panells solars, aerogeneradors, bateries, bombes de calor i electrolitzadors es beneficien d'una llicència accelerada en virtut d'aquest capítol.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 12</div>
+      <div class="article-card__title">Zones d'Acceleració Industrial</div>
+      <div class="article-card__desc">Zones designades on els estats membres realitzen avaluacions d'impacte ambiental de zona per endavant. Els projectes individuals dins d'aquestes zones s'alliberen de la revisió ambiental a nivell de projecte, reduint significativament els terminis.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 13</div>
+      <div class="article-card__title">Aprovació tàcita</div>
+      <div class="article-card__desc">Si l'autoritat competent supera el termini per a la decisió sobre el permís, el permís es considera <strong>concedit</strong> (aprovació tàcita). Un mecanisme de salvaguarda: no s'aplica si es plantegen formalment problemes ambientals o de seguretat abans del termini.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 14</div>
+      <div class="article-card__title">Permisos de zona</div>
+      <div class="article-card__desc">Dins de les Zones d'Acceleració Industrial, un únic permís de zona cobreix múltiples projectes. Redueix la duplicació d'avaluacions ambientals i de procediments administratius en instal·lacions industrials similars.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 15</div>
+      <div class="article-card__title">Criteris de designació</div>
+      <div class="article-card__desc">La Comissió adopta actes delegats que defineixen els criteris de designació de les Zones d'Acceleració Industrial: densitat industrial, disponibilitat d'infraestructures, proximitat de mà d'obra i condicions ambientals de referència.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 16</div>
+      <div class="article-card__title">Projectes prioritaris</div>
+      <div class="article-card__desc">Els projectes prioritaris designats reben accés preferent als fons de la UE, llicències per via ràpida i suport dedicat del punt de contacte únic. Els criteris inclouen la creació d'ocupació, l'impacte en la descarbonització i l'autonomia estratègica.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter III -->
+<section class="section" id="ch3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-cart-outline"></i></div>
+    <h2 class="section__title">Capítol III: contractació i ajudes estatals</h2>
+  </div>
+  <p class="section__subtitle">Articles 17-29: etiquetes de baix carboni, requisits d'origen de la UE, classes d'intensitat de carboni i mercats de referència</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 17</div>
+      <div class="article-card__title">Àmbit d'aplicació</div>
+      <div class="article-card__desc">S'aplica als contractes de contractació pública per sobre dels llindars de la UE. Cobreix contractes de construcció, infraestructures i subministrament industrial on l'acer, el formigó, l'alumini, els vehicles o els productes químics siguin inputs significatius.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 18</div>
+      <div class="article-card__title">Acer de baix carboni</div>
+      <div class="article-card__desc">Els contractes públics han d'exigir un mínim del <strong>25% d'acer de baix carboni</strong> (mesurat per classe d'intensitat de carboni). S'aplica a la contractació de construcció, infraestructures i fabricació per sobre dels valors llindar.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 19</div>
+      <div class="article-card__title">Formigó i morter</div>
+      <div class="article-card__desc">Mínim del <strong>5% de formigó/morter de baix carboni</strong> amb requisits d'origen de la UE. Garanteix que els projectes d'infraestructura pública impulsin la producció nacional de materials de construcció de baixes emissions.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 20</div>
+      <div class="article-card__title">Alumini</div>
+      <div class="article-card__desc">Mínim del <strong>25% d'alumini de baix carboni</strong> amb requisits d'origen de la UE en la contractació pública. S'orienta a la capacitat de fosa i reciclatge descarbonitzada dins de la Unió.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 21</div>
+      <div class="article-card__title">Origen de la UE per als vehicles</div>
+      <div class="article-card__desc">La contractació pública de vehicles (compres de flotes, transport públic) ha d'incloure condicions d'origen de la UE. Recolza la indústria automobilística europea i la seva transició cap als vehicles elèctrics.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 22</div>
+      <div class="article-card__title">Actes delegats per al sector químic</div>
+      <div class="article-card__desc">La Comissió pot adoptar actes delegats que ampliïn els requisits de baix carboni i d'origen de la UE a productes químics específics utilitzats en la contractació pública, basant-se en avaluacions de preparació sectorial.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 23</div>
+      <div class="article-card__title">Etiquetatge d'intensitat de carboni de classe A/B/C</div>
+      <div class="article-card__desc">Introdueix una classificació obligatòria en tres nivells: <strong>Classe A</strong> (carboni més baix), <strong>Classe B</strong> (carboni mitjà), <strong>Classe C</strong> (carboni més alt). S'aplica a l'acer, el ciment, l'alumini i altres materials bàsics. Etiquetes visibles als productes i a les bases de dades de contractació.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 24</div>
+      <div class="article-card__title">Metodologia per a la intensitat de carboni</div>
+      <div class="article-card__desc">La Comissió defineix la metodologia de càlcul de la intensitat de carboni per categoria de producte: emissions d'abast 1 i 2, llindars de referència per a cada classe, verificació per tercers i recalibració periòdica.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 25</div>
+      <div class="article-card__title">Disposicions sobre mercats de referència</div>
+      <div class="article-card__desc">Crea mercats de referència per a materials de baix carboni a través de la demanda pública garantida. Les autoritats contractants poden atorgar punts addicionals a les ofertes que superin els llindars mínims de baix carboni.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 26</div>
+      <div class="article-card__title">Condicions dels règims de suport públic</div>
+      <div class="article-card__desc">Les ajudes estatals i els subsidis públics per a projectes industrials poden incloure condicions sobre mètodes de producció de baix carboni, origen de la UE dels inputs i compliment de l'etiquetatge d'intensitat de carboni.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 27</div>
+      <div class="article-card__title">Compatibilitat amb l'ACP de l'OMC</div>
+      <div class="article-card__desc">Garanteix que els requisits d'origen de la UE i de baix carboni compleixin les obligacions derivades de l'Acord de Contractació Pública de l'OMC. Les exempcions i els períodes de transició s'ajusten als compromisos del comerç internacional.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 28</div>
+      <div class="article-card__title">Seguiment i informes</div>
+      <div class="article-card__desc">Els estats membres informen anualment sobre els volums de contractació de baix carboni, la distribució de classes d'intensitat de carboni i el compliment dels requisits d'origen de la UE. La Comissió publica un marcador agregat.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 29</div>
+      <div class="article-card__title">Clàusula de revisió</div>
+      <div class="article-card__desc">La Comissió revisa aquest capítol <strong>3 anys</strong> després de l'entrada en vigor. La revisió cobreix l'eficàcia dels llindars de baix carboni, els requisits d'origen, l'impacte en el mercat i la possible extensió a sectors addicionals.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter IV -->
+<section class="section" id="ch4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-search"></i></div>
+    <h2 class="section__title">Capítol IV: inversió estrangera</h2>
+  </div>
+  <p class="section__subtitle">Articles 30-35: condicions d'inversió específiques per sector en indústries estratègiques</p>
+
+  <div class="info-box">
+    <h3>Control de la inversió estrangera</h3>
+    <p>S'aplica a les inversions estrangeres que superin els <strong>100 milions d'EUR</strong> en sectors estratègics: bateries, vehicles elèctrics, fabricació solar i processament de matèries primeres crítiques. Els inversors han de complir condicions sobre ocupació (mínim del 50% de treballadors de la Unió), contingut local, transparència de la propietat, transferència de coneixement i activitat de R+D dins de la UE. La Comissió avalua i pot imposar condicions vinculants o prohibir transaccions que perjudiquin els interessos estratègics de la Unió.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 30</div>
+      <div class="article-card__title">Àmbit d'aplicació</div>
+      <div class="article-card__desc">S'aplica a les inversions que superin els <strong>100 milions d'EUR</strong> en bateries, vehicles elèctrics, fabricació solar i processament de matèries primeres crítiques. Cobreix transaccions greenfield, brownfield i d'adquisició per part d'entitats no pertanyents a la UE.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 31</div>
+      <div class="article-card__title">Condicions d'ocupació</div>
+      <div class="article-card__desc">Els inversors han de garantir un mínim del <strong>50% de treballadors de la Unió</strong> a la plantilla de la instal·lació subvencionada o autoritzada. El compliment es verifica en finalitzar el projecte i anualment a partir de llavors.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 32</div>
+      <div class="article-card__title">Condicions de contingut local</div>
+      <div class="article-card__desc">Una proporció definida dels inputs, components o béns intermedis s'ha d'obtenir dins de la Unió. Les percentuals es fixen per sector mitjançant actes d'execució, amb períodes de transició per a l'adaptació de la cadena de subministrament.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 33</div>
+      <div class="article-card__title">Propietat i transferència de coneixement</div>
+      <div class="article-card__desc">Els inversors han de declarar el propietari beneficiari últim. Quan hi ha fons públics o actius estratègics, les condicions poden exigir acords de transferència de coneixement que garanteixin a les entitats de la UE l'accés a tecnologies clau.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 34</div>
+      <div class="article-card__title">Condicions d'activitat de R+D</div>
+      <div class="article-card__desc">Els inversors estrangers en sectors estratègics han de comprometre una proporció mínima de la despesa en R+D relacionada amb el projecte dins de la Unió. Recolza la retenció de la capacitat d'innovació i dels llocs de treball d'alt valor a la UE.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 35</div>
+      <div class="article-card__title">Procediment de notificació i avaluació</div>
+      <div class="article-card__desc">Notificació obligatòria a la Comissió per a les transaccions cobertes. Avaluació en 90 dies. La Comissió pot aprovar incondicionalment, aprovar amb condicions o prohibir. Recurs davant el Tribunal de Justícia.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter V -->
+<section class="section" id="ch5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-flag-checkered"></i></div>
+    <h2 class="section__title">Capítol V: disposicions finals</h2>
+  </div>
+  <p class="section__subtitle">Articles 36-42: actes delegats, procediment de comitè, informes, revisió i entrada en vigor</p>
+
+  <div class="card">
+    <p><strong>Actes delegats (Art 36):</strong> la Comissió adopta actes delegats per als criteris de designació de les Zones d'Acceleració Industrial, les metodologies de càlcul de la intensitat de carboni, els percentuals de contingut local i els llindars específics per sector.</p>
+    <p><strong>Procediment de comitè (Art 37):</strong> procediment d'examen per als actes d'execució. Consulta d'experts dels estats membres via comitologia.</p>
+    <p><strong>Informes (Art 38):</strong> els estats membres informen biennalment sobre els terminis de concessió de llicències, els volums de contractació de baix carboni, les decisions de control d'inversions i els progressos cap a l'objectiu del 20% del PIB manufacturero.</p>
+    <p><strong>Revisió (Art 39):</strong> la Comissió revisa el Reglament 5 anys després de l'entrada en vigor, amb avaluació intermèdia als 3 anys per a les disposicions de contractació.</p>
+    <p><strong>Esmenes (Art 40):</strong> esmenes consegüents a la Llei d'Indústria de Zero Emissions Netes, el Reglament de control d'IED i les Directives de Contractació Pública.</p>
+    <p><strong>Entrada en vigor (Arts 41-42):</strong> 20 dies després de la publicació al Diari Oficial. S'aplica 12 mesos més tard, amb una transició de 24 mesos per a les disposicions de contractació i etiquetatge.</p>
+  </div>
+</section>
+
+<!-- Comparison table -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-swap-horizontal"></i></div>
+    <h2 class="section__title">Abans i després de la LAI</h2>
+  </div>
+  <p class="section__subtitle">Comparació dels canvis clau</p>
+
+  <table>
+    <thead>
+      <tr><th>Característica</th><th>Abans (dret vigent)</th><th>Després (LAI)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Llicències</td><td class="dim-cell">Múltiples permisos, fragmentats entre organismes</td><td class="highlight-cell">Un projecte, una sol·licitud</td></tr>
+      <tr><td>Etiquetes de baix carboni</td><td class="dim-cell">Cap (només voluntàries)</td><td class="highlight-cell">Sistema obligatori de classe A/B/C</td></tr>
+      <tr><td>Contractació d'acer</td><td class="dim-cell">Sense requisits de carboni</td><td class="highlight-cell">Mínim 25% d'acer de baix carboni</td></tr>
+      <tr><td>Inversió estrangera</td><td class="dim-cell">Control general (Reglament IED)</td><td class="highlight-cell">Condicions específiques per sector per sobre de 100 M EUR</td></tr>
+      <tr><td>Zones industrials</td><td class="dim-cell">Sense marc de la UE</td><td class="highlight-cell">Zones d'Acceleració Industrial amb aprovació tàcita</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Impact Assessment -->
+<section class="section" id="impact">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-chart-line"></i></div>
+    <h2 class="section__title">Avaluació d'impacte</h2>
+  </div>
+  <p class="section__subtitle">Xifres clau de l'avaluació d'impacte de la Comissió</p>
+
+  <div class="figures" style="margin-top: 1rem;">
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number" style="font-size: 1.6rem;">10.387 M EUR</div>
+      <div class="figure-card__label">Augment del valor afegit brut (VAB)</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number" style="font-size: 1.6rem;">3.058 M EUR</div>
+      <div class="figure-card__label">Estalvi en emissions de GEH</div>
+    </div>
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number" style="font-size: 1.6rem;">240 M EUR</div>
+      <div class="figure-card__label">Estalvi en costos de llicències</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number" style="font-size: 1.6rem;">8,92 M EUR</div>
+      <div class="figure-card__label">Costos administratius per any</div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Calendari legislatiu</h2>
+  </div>
+  <p class="section__subtitle">De la Brúixola de Competitivitat a la primera lectura</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">29 de gener de 2025</div>
+      <div class="timeline__text">La Comissió publica la Brúixola de Competitivitat, identificant la política industrial com a prioritat</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 de febrer de 2025</div>
+      <div class="timeline__text">Adopció de la Comunicació del Clean Industrial Deal, que anuncia propostes legislatives de reindustrialització</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 de juny de 2025</div>
+      <div class="timeline__text">Resolució del Parlament Europeu sobre el Clean Industrial Deal i la competitivitat industrial</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">4 de març de 2026</div>
+      <div class="timeline__text"><strong>La Comissió adopta la proposta de la Llei d'Acceleració Industrial (COM(2026) 100)</strong></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">T3 2026 (previst)</div>
+      <div class="timeline__text">Informe de la comissió del PE: ITRE com a líder, opinions previstes d'ENVI/IMCO</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">T1 2027 (previst)</div>
+      <div class="timeline__text">Primera lectura: posicions del Parlament Europeu i del Consell</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Fonts oficials</h2>
+  </div>
+  <p class="section__subtitle">Tots els documents utilitzats per elaborar aquesta anàlisi</p>
+
+  <div class="card">
+    <p><strong>Proposta:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN" target="_blank" rel="noopener">COM(2026) 100 final</a></p>
+    <p><strong>Annexos:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/99174b0d-bcda-4039-9157-62725439d010_en" target="_blank" rel="noopener">Annexos a la proposta (PDF)</a></p>
+    <p><strong>Avaluació d'impacte:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/ef967653-d886-4c14-a68a-65ea6ef25bce_en" target="_blank" rel="noopener">Informe d'avaluació d'impacte (PDF)</a></p>
+    <p><strong>Resum executiu:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/f89f405e-74e4-49f9-b8ab-e7e7976b8877_en" target="_blank" rel="noopener">Resum executiu de l'avaluació d'impacte (PDF)</a></p>
+    <p><strong>Full informatiu:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/9c7fa301-c4cf-4600-8c00-34243ee26e45_en" target="_blank" rel="noopener">Full informatiu de la Llei d'Acceleració Industrial (PDF)</a></p>
+    <p><strong>Procediment OEIL:</strong> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)" target="_blank" rel="noopener">2026/0068(COD)</a></p>
+    <p><strong>Tren Legislatiu:</strong> <a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-industrial-decarbonisation-accelerator-act" target="_blank" rel="noopener">Calendari del Tren Legislatiu del PE</a></p>
+    <p><strong>Nota de premsa:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_515" target="_blank" rel="noopener">IP/26/515</a></p>
+    <p><strong>Preguntes i respostes:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_516" target="_blank" rel="noopener">QANDA/26/516</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Elaborat per <a href="https://brubru.beresol.eu">Brubru</a>, l'assistent de política de la UE basat en IA de <a href="https://beresol.eu">Beresol BV</a>. Vegeu també: <a href="https://beresol.eu/startups">Monitor de startups de Beresol</a>.</p>
+  <p style="margin-top: 0.5rem;">Anàlisi basada en COM(2026) 100 final, adoptat el 4 de març de 2026. Aquesta és una anàlisi independent, no un document oficial de la UE.</p>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
