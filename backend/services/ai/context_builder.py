@@ -3070,6 +3070,7 @@ class ContextBuilder:
             'lead_committee': carriage.lead_committee,
             'has_celex': bool(carriage.celex_numbers),
             'upcoming_events': [],
+            'key_documents': [],  # Document Gateway references with URLs
         }
 
         if not oeil_data:
@@ -3093,6 +3094,30 @@ class ContextBuilder:
                 committee = doc.get('committee')
                 if committee and committee not in actions['has_committee_opinions']:
                     actions['has_committee_opinions'].append(committee)
+
+        # --- Extract key document references with URLs ---
+        # These are injected into the AI context so it can present clickable
+        # links to EP texts adopted, committee reports, amendments, and opinions.
+        for doc in doc_gateway:
+            ref = doc.get('a_reference') or doc.get('pe_reference') or doc.get('reference', '')
+            url = doc.get('doceo_url') or doc.get('url', '')
+            code = doc.get('doc_type_code', '')
+            doc_type_text = doc.get('doc_type_text', '')
+            date = doc.get('date', '')
+            committee = doc.get('committee', '')
+
+            if ref and url:
+                actions['key_documents'].append({
+                    'reference': ref,
+                    'url': url,
+                    'type': code,
+                    'type_text': doc_type_text,
+                    'date': date,
+                    'committee': committee,
+                })
+
+        # Cap at 15 documents to avoid bloating context
+        actions['key_documents'] = actions['key_documents'][:15]
 
         # --- Key Players (from full OEIL dump) ---
         key_players = oeil_data.get('key_players', {})
@@ -5308,6 +5333,19 @@ class ContextBuilder:
                     if actions.get('upcoming_events'):
                         for ev in actions['upcoming_events']:
                             action_lines.append(f"Upcoming: {ev['event_type']} ({ev['date']})")
+
+                    # Document Gateway: actual document references with URLs
+                    if actions.get('key_documents'):
+                        action_lines.append("DOCUMENT GATEWAY (present these links to users who ask for texts):")
+                        for doc in actions['key_documents']:
+                            ref = doc.get('reference', '')
+                            url = doc.get('url', '')
+                            dtype = doc.get('type_text', doc.get('type', ''))
+                            date = doc.get('date', '')
+                            comm = doc.get('committee', '')
+                            parts = [f"{dtype}" if dtype else '', f"{ref}" if ref else '', f"({comm})" if comm else '', f"[{date}]" if date else '']
+                            label = ' '.join(p for p in parts if p)
+                            action_lines.append(f"  {label}: {url}")
 
                     if action_lines:
                         sections.append("  AVAILABLE DATA FOR THIS FILE:")
