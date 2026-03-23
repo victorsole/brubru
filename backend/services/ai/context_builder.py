@@ -5369,7 +5369,7 @@ class ContextBuilder:
             for item in context_data.internal_knowledge:
                 sections.append(f"- {item['title']}")
                 sections.append(f"  Type: {item['type']}")
-                sections.append(f"  {item['content'][:1000]}...")
+                sections.append(f"  {item['content'][:4000]}")
                 sections.append("")
 
         # CELLAR on-demand legislation (EuroVoc fallback when no guides match)

@@ -146,9 +146,11 @@ class MistralProvider(AIProvider):
 
 
 class AnthropicHaikuProvider(AIProvider):
-    """Anthropic Claude Haiku provider (knowledge-heavy queries)"""
+    """Anthropic Claude Sonnet provider (primary for knowledge-heavy queries).
+    Upgraded from Haiku to Sonnet on 23 March 2026 for better instruction-following
+    on document retrieval and complex multi-source answers."""
 
-    MODEL = "claude-haiku-4-5-20251001"
+    MODEL = "claude-sonnet-4-20250514"
 
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or settings.ANTHROPIC_API_KEY
@@ -430,8 +432,8 @@ class MultiProviderService:
         self.providers: List[AIProvider] = []
         self.haiku_provider: Optional[AIProvider] = None
 
-        # Daily spend cap for Claude Haiku ($2.50/day = ~$25 lasts 10 days)
-        self._haiku_daily_cap_usd = 2.50
+        # Daily spend cap for Claude Sonnet ($10/day, upgraded from Haiku $2.50)
+        self._haiku_daily_cap_usd = 10.00
         self._haiku_daily_tokens = 0
         self._haiku_daily_date = date.today()
 
@@ -514,17 +516,17 @@ class MultiProviderService:
                 self._haiku_daily_tokens = 0
                 self._haiku_daily_date = today
 
-            # Estimate cost: Haiku = $0.80/1M input + $4.00/1M output
-            # Average query ~5K tokens. $1/day cap = ~200 queries/day (plenty)
-            estimated_daily_cost = (self._haiku_daily_tokens / 1_000_000) * 4.00
+            # Estimate cost: Sonnet = $3.00/1M input + $15.00/1M output
+            # Average query ~5K tokens. $10/day cap = ~50-100 queries/day
+            estimated_daily_cost = (self._haiku_daily_tokens / 1_000_000) * 15.00
             if estimated_daily_cost >= self._haiku_daily_cap_usd:
                 logger.warning(
-                    f"Claude Haiku daily cap reached (${estimated_daily_cost:.2f}/"
+                    f"Claude Sonnet daily cap reached (${estimated_daily_cost:.2f}/"
                     f"${self._haiku_daily_cap_usd:.2f}). Falling back to Mistral."
                 )
             else:
                 try:
-                    logger.info("Routing to Claude Haiku (knowledge guide matched)")
+                    logger.info("Routing to Claude Sonnet (knowledge guide matched)")
                     start = datetime.now()
                     response = await self.haiku_provider.generate(
                         system_prompt=system_prompt,
@@ -535,13 +537,13 @@ class MultiProviderService:
                     elapsed = (datetime.now() - start).total_seconds()
                     self._haiku_daily_tokens += response.tokens_used
                     logger.info(
-                        f"Claude Haiku succeeded in {elapsed:.2f}s "
+                        f"Claude Sonnet succeeded in {elapsed:.2f}s "
                         f"({response.tokens_used} tokens, "
                         f"daily: {self._haiku_daily_tokens} tokens)"
                     )
                     return response
                 except Exception as e:
-                    logger.warning(f"Claude Haiku failed, falling back to chain: {e}")
+                    logger.warning(f"Claude Sonnet primary failed, falling back to chain: {e}")
 
         errors = []
 
