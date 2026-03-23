@@ -460,9 +460,115 @@
   background: white;
 }
 
+/* Deep Dive Library */
+.analytics-tab__section-subtitle {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: -0.5rem 0 1.5rem 0;
+}
+
+.analytics-tab__deep-dive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.analytics-tab__deep-dive-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-top: 4px solid #0693e3;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.analytics-tab__deep-dive-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.analytics-tab__deep-dive-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.analytics-tab__deep-dive-icon {
+  font-size: 1.4rem;
+}
+
+.analytics-tab__deep-dive-ref {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-family: monospace;
+}
+
+.analytics-tab__deep-dive-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0.25rem 0 0 0;
+  line-height: 1.3;
+}
+
+.analytics-tab__deep-dive-procedure {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.analytics-tab__deep-dive-langs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.analytics-tab__deep-dive-lang {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.analytics-tab__deep-dive-lang:hover {
+  background-color: currentColor;
+  color: #fff !important;
+}
+
+.analytics-tab__deep-dive-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  transition: opacity 0.15s ease;
+}
+
+.analytics-tab__deep-dive-cta:hover {
+  opacity: 0.85;
+}
+
 @media (max-width: 1024px) {
   .analytics-tab__charts-grid {
     grid-template-columns: 1fr;
+  }
+
+  .analytics-tab__deep-dive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
 }
 
@@ -529,5 +635,17 @@
   .analytics-tab__export-btn {
     width: 100%;
     text-align: center;
+  }
+
+  .analytics-tab__deep-dive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-tab__deep-dive-card {
+    padding: 1rem;
+  }
+
+  .analytics-tab__deep-dive-title {
+    font-size: 0.95rem;
   }
 }

@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reglamento acelerador industrial explicado: el plan de la UE para reindustrializar Europa | Brubru</title>
+  <meta name="description" content="Guía completa sobre el Reglamento acelerador industrial (COM(2026)100): aceleración de permisos, etiquetas bajas en carbono para el acero y el cemento, requisitos de origen UE, control de inversiones extranjeras. Análisis artículo por artículo con datos de la evaluación de impacto.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Disclaimer banner */
+    .disclaimer-banner {
+      background: #fffbeb;
+      border-bottom: 2px solid #d97706;
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .header__lang:hover, .header__lang:focus { border-color: var(--color-blue); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    /* Comparison table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    /* Chapter article grid */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Footer */
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Disclaimer banner -->
+<div class="disclaimer-banner">
+  Este análisis se basa en la versión inglesa de COM(2026) 100. La versión oficial en español aún no ha sido publicada en EUR-Lex. Esta traducción ha sido preparada por Brubru y puede diferir de la versión oficial una vez disponible.
+</div>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Reglamento acelerador industrial: análisis</div>
+    <div class="header__subtitle">Reindustrialización de la UE y reforma de los procedimientos de autorización</div>
+  </div>
+  <select class="header__lang" onchange="location.href=this.value" aria-label="Selector de idioma">
+    <option value="index.html">English</option>
+    <option value="fr.html">Français</option>
+    <option value="es.html" selected>Español</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Prueba Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN" target="_blank" rel="noopener">COM(2026) 100</a> | 4 de marzo de 2026</div>
+  <h1 class="hero__title">El <span>Reglamento acelerador industrial</span></h1>
+  <p class="hero__subtitle">
+    Impulsar la industria de la UE y asegurar empleos para el futuro.
+    La propuesta de la Comisión Europea para acelerar los procedimientos de autorización, introducir etiquetas bajas en carbono para los materiales básicos,
+    establecer requisitos de origen UE en la contratación pública y controlar las inversiones extranjeras en sectores estratégicos.
+    Todo lo que necesita saber.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar-check"></i> 4 de marzo de 2026</span>
+    <span><i class="mdi mdi-scale-balance"></i> Reglamento (COD)</span>
+    <span><i class="mdi mdi-domain"></i> DG GROW</span>
+    <span><i class="mdi mdi-account-outline"></i> S&eacute;journ&eacute;</span>
+  </div>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">20%</div>
+    <div class="figure-card__label">Objetivo de participación de la producción en el PIB para 2035</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">148.352</div>
+    <div class="figure-card__label">Empleos creados o mantenidos para 2030</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">30,58 Mt</div>
+    <div class="figure-card__label">Reducción de emisiones de CO2 equivalente</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">EUR 240M</div>
+    <div class="figure-card__label">Ahorro en costes de autorización</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Estructura de la propuesta</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Disposiciones generales (Art. 1-5)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Aceleración de autorizaciones (Art. 6-16)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Contratación pública y ayudas estatales (Art. 17-29)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Inversión extranjera (Art. 30-35)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Disposiciones finales (Art. 36-42)</a>
+  </div>
+</nav>
+
+<!-- Chapter I -->
+<section class="section" id="ch1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-gavel"></i></div>
+    <h2 class="section__title">Capítulo I: Disposiciones generales</h2>
+  </div>
+  <p class="section__subtitle">Artículos 1-5: ámbito de aplicación, definiciones, sectores estratégicos y objetivo de industrialización</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artículo 1</div>
+      <div class="article-card__title">Objeto y ámbito de aplicación</div>
+      <div class="article-card__desc">Establece un marco para acelerar los procedimientos de autorización, introducir etiquetas bajas en carbono para los materiales, fijar requisitos de origen UE para la contratación pública y controlar las inversiones extranjeras en sectores industriales estratégicos.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 2</div>
+      <div class="article-card__title">Definiciones</div>
+      <div class="article-card__desc">Definiciones clave: sectores estratégicos, materiales bajos en carbono, origen de la Unión, zonas de aceleración industrial, industrias de alta intensidad energética (IIE), tecnología de cero emisiones netas, clases de intensidad de carbono y autoridad competente para las autorizaciones.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 3</div>
+      <div class="article-card__title">Sectores estratégicos</div>
+      <div class="article-card__desc">Identifica los sectores cubiertos: industrias de alta intensidad energética (acero, cemento, aluminio, productos químicos), fabricación de automóviles y producción de tecnologías de cero emisiones netas (solar, eólica, baterías, bombas de calor).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 4</div>
+      <div class="article-card__title">Objetivo de industrialización</div>
+      <div class="article-card__desc">Establece el objetivo principal: aumentar la participación de la producción en el PIB de la UE del 14,3 % al <strong>20 % para 2035</strong>. Los Estados miembros adoptan estrategias industriales nacionales alineadas con este objetivo a escala de la Unión.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 5</div>
+      <div class="article-card__title">Relación con otras disposiciones del Derecho de la Unión</div>
+      <div class="article-card__desc">Clarifica la interacción con la legislación vigente: el Reglamento sobre la industria de cero emisiones netas, el Reglamento sobre materias primas críticas, el Reglamento de control de la IED y las Directivas de contratación pública de la UE. El RAI complementa sin sustituir.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter II -->
+<section class="section" id="ch2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-lightning-bolt"></i></div>
+    <h2 class="section__title">Capítulo II: Aceleración de autorizaciones</h2>
+  </div>
+  <p class="section__subtitle">Artículos 6-16: autorización única, tramitación digital, zonas de aceleración industrial y proyectos prioritarios</p>
+
+  <div class="info-box">
+    <h3>Zonas de aceleración industrial</h3>
+    <p>Zonas designadas donde las evaluaciones medioambientales zonales sustituyen a los exámenes proyecto a proyecto. Los proyectos situados en estas zonas se benefician de una <strong>aprobación tácita</strong> si la autoridad competente supera su plazo, de un procedimiento de autorización simplificado mediante permisos zonales y de acceso acelerado a los fondos de la UE. La Comisión adopta actos delegados que establecen los criterios de designación de estas zonas.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artículo 6</div>
+      <div class="article-card__title">Autorización única</div>
+      <div class="article-card__desc">Introduce el principio de «un proyecto, una solicitud». Todas las autorizaciones necesarias para un proyecto industrial se consolidan en una única solicitud ante una única autoridad, eliminando la fragmentación de los procedimientos entre organismos.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 7</div>
+      <div class="article-card__title">Puntos de contacto y autoridades competentes</div>
+      <div class="article-card__desc">Los Estados miembros designan un punto de contacto único por región para orientar a los solicitantes y coordinar con todas las autoridades pertinentes. El punto de contacto hace un seguimiento de la solicitud y vela por el cumplimiento de los plazos.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 8</div>
+      <div class="article-card__title">Autorización digital a través de la Cartera europea de empresas</div>
+      <div class="article-card__desc">Todas las solicitudes de autorización, presentaciones y decisiones se tramitan digitalmente a través de la infraestructura de la Cartera europea de empresas. Sin presentación en papel. Formatos legibles por máquina para la interoperabilidad.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 9</div>
+      <div class="article-card__title">Plazos para la concesión de autorizaciones</div>
+      <div class="article-card__desc">Establece plazos máximos vinculantes para las decisiones de autorización. Las autoridades competentes deben tramitar las solicitudes dentro de plazos definidos, con plazos más cortos para los proyectos en zonas de aceleración industrial.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 10</div>
+      <div class="article-card__title">Proyectos de descarbonización de industrias de alta intensidad energética</div>
+      <div class="article-card__desc">Procedimiento acelerado específico para inversiones de descarbonización de las IIE: captura de carbono, sustitución de combustibles, electrificación e integración del hidrógeno en acerías, cementeras, alumineras e instalaciones químicas.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 11</div>
+      <div class="article-card__title">Proyectos industriales de cero emisiones netas</div>
+      <div class="article-card__desc">Alineado con el Reglamento sobre la industria de cero emisiones netas (NZIA). Los proyectos de fabricación de paneles solares, aerogeneradores, baterías, bombas de calor y electrolizadores se benefician de una autorización acelerada en este capítulo.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 12</div>
+      <div class="article-card__title">Zonas de aceleración industrial</div>
+      <div class="article-card__desc">Zonas designadas donde los Estados miembros realizan evaluaciones de impacto ambiental zonales de forma anticipada. Los proyectos individuales dentro de estas zonas no necesitan evaluación ambiental a nivel de proyecto, lo que reduce considerablemente los plazos.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 13</div>
+      <div class="article-card__title">Aprobación tácita</div>
+      <div class="article-card__desc">Si la autoridad competente supera el plazo de decisión sobre la autorización, el permiso se considera <strong>concedido</strong> (aprobación tácita). Mecanismo de salvaguardia: no se aplica cuando se plantean formalmente preocupaciones medioambientales o de seguridad antes del plazo.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 14</div>
+      <div class="article-card__title">Permisos zonales</div>
+      <div class="article-card__desc">Dentro de las zonas de aceleración industrial, un único permiso zonal cubre varios proyectos. Reduce la duplicación de evaluaciones medioambientales y procedimientos administrativos entre instalaciones industriales similares.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 15</div>
+      <div class="article-card__title">Criterios de designación</div>
+      <div class="article-card__desc">La Comisión adopta actos delegados que definen los criterios de designación de las zonas de aceleración industrial: densidad industrial, disponibilidad de infraestructuras, proximidad de mano de obra y condiciones medioambientales de referencia.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 16</div>
+      <div class="article-card__title">Proyectos prioritarios</div>
+      <div class="article-card__desc">Los proyectos prioritarios designados obtienen acceso preferente a los fondos de la UE, autorización acelerada y apoyo dedicado del punto de contacto único. Los criterios incluyen la creación de empleo, el impacto en la descarbonización y la autonomía estratégica.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter III -->
+<section class="section" id="ch3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-cart-outline"></i></div>
+    <h2 class="section__title">Capítulo III: Contratación pública y ayudas estatales</h2>
+  </div>
+  <p class="section__subtitle">Artículos 17-29: etiquetas bajas en carbono, requisitos de origen UE, clases de intensidad de carbono y mercados piloto</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artículo 17</div>
+      <div class="article-card__title">Ámbito de aplicación</div>
+      <div class="article-card__desc">Se aplica a los contratos de contratación pública que superen los umbrales de contratación pública de la UE. Cubre contratos de construcción, infraestructura y suministro industrial en los que el acero, el hormigón, el aluminio, los vehículos o los productos químicos sean insumos significativos.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 18</div>
+      <div class="article-card__title">Acero bajo en carbono</div>
+      <div class="article-card__desc">Los contratos públicos deben exigir un mínimo del <strong>25 % de acero bajo en carbono</strong> (medido por clase de intensidad de carbono). Se aplica a la contratación de construcción, infraestructura y fabricación por encima de los valores umbrales.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 19</div>
+      <div class="article-card__title">Hormigón y mortero</div>
+      <div class="article-card__desc">Mínimo del <strong>5 % de hormigón/mortero bajo en carbono</strong> con requisitos de origen UE. Garantiza que los proyectos de infraestructura pública apoyen la producción nacional de materiales de construcción de bajas emisiones.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 20</div>
+      <div class="article-card__title">Aluminio</div>
+      <div class="article-card__desc">Mínimo del <strong>25 % de aluminio bajo en carbono</strong> con requisitos de origen UE en la contratación pública. Apunta a la capacidad de fundición y reciclaje descarbonizada dentro de la Unión.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 21</div>
+      <div class="article-card__title">Origen UE para vehículos</div>
+      <div class="article-card__desc">La contratación pública de vehículos (adquisición de flotas, transporte público) debe incluir condiciones de origen UE. Apoya a la industria automovilística europea y su transición hacia los vehículos eléctricos.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 22</div>
+      <div class="article-card__title">Actos delegados para el sector químico</div>
+      <div class="article-card__desc">La Comisión puede adoptar actos delegados que extiendan los requisitos bajos en carbono y de origen UE a productos químicos específicos utilizados en la contratación pública, sobre la base de evaluaciones de madurez sectorial.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 23</div>
+      <div class="article-card__title">Etiquetado de intensidad de carbono de clase A/B/C</div>
+      <div class="article-card__desc">Introduce una clasificación obligatoria de tres niveles: <strong>Clase A</strong> (menor emisión de carbono), <strong>Clase B</strong> (emisión media), <strong>Clase C</strong> (mayor emisión de carbono). Se aplica al acero, cemento, aluminio y otros materiales básicos. Etiquetas visibles en los productos y en las bases de datos de contratación pública.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 24</div>
+      <div class="article-card__title">Metodología para la intensidad de carbono</div>
+      <div class="article-card__desc">La Comisión define la metodología de cálculo de la intensidad de carbono por categoría de producto: emisiones de los alcances 1 y 2, umbrales de referencia para cada clase, verificación por terceros y recalibración periódica.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 25</div>
+      <div class="article-card__title">Disposiciones sobre mercados piloto</div>
+      <div class="article-card__desc">Crea mercados piloto para los materiales bajos en carbono mediante una demanda pública garantizada. Los poderes adjudicadores pueden conceder puntos adicionales a las ofertas que superen los umbrales mínimos bajos en carbono.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 26</div>
+      <div class="article-card__title">Condiciones de los regímenes de apoyo público</div>
+      <div class="article-card__desc">Las ayudas estatales y las subvenciones públicas para proyectos industriales pueden incluir condiciones sobre métodos de producción bajos en carbono, el origen UE de los insumos y el cumplimiento del etiquetado de intensidad de carbono.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 27</div>
+      <div class="article-card__title">Compatibilidad con el ACP de la OMC</div>
+      <div class="article-card__desc">Garantiza que los requisitos de origen UE y bajos en carbono cumplan con las obligaciones del Acuerdo sobre Contratación Pública de la OMC. Exenciones y períodos de introducción gradual calibrados en función de los compromisos comerciales internacionales.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 28</div>
+      <div class="article-card__title">Seguimiento e informes</div>
+      <div class="article-card__desc">Los Estados miembros informan anualmente sobre los volúmenes de contratación baja en carbono, la distribución por clase de intensidad de carbono y el cumplimiento de los requisitos de origen UE. La Comisión publica un cuadro de indicadores agregado.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 29</div>
+      <div class="article-card__title">Cláusula de revisión</div>
+      <div class="article-card__desc">La Comisión revisa este capítulo <strong>3 años</strong> después de su entrada en vigor. La revisión abarca la eficacia de los umbrales bajos en carbono, los requisitos de origen, el impacto en el mercado y la posible ampliación a sectores adicionales.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter IV -->
+<section class="section" id="ch4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-search"></i></div>
+    <h2 class="section__title">Capítulo IV: Inversión extranjera</h2>
+  </div>
+  <p class="section__subtitle">Artículos 30-35: condiciones de inversión específicas por sector para las industrias estratégicas</p>
+
+  <div class="info-box">
+    <h3>Control de inversiones extranjeras</h3>
+    <p>Se aplica a las inversiones extranjeras que superen <strong>100 millones EUR</strong> en sectores estratégicos: baterías, vehículos eléctricos, fabricación solar y procesamiento de materias primas críticas. Los inversores deben cumplir condiciones relativas al empleo (mínimo 50 % de trabajadores de la Unión), al contenido local, a la transparencia de la propiedad, a la transferencia de conocimientos y a las actividades de I+D dentro de la UE. La Comisión evalúa y puede imponer condiciones vinculantes o prohibir transacciones que menoscaben los intereses estratégicos de la Unión.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artículo 30</div>
+      <div class="article-card__title">Ámbito de aplicación</div>
+      <div class="article-card__desc">Se aplica a las inversiones que superen <strong>100 millones EUR</strong> en baterías, vehículos eléctricos, fabricación solar y procesamiento de materias primas críticas. Cubre transacciones greenfield, brownfield y de adquisición por entidades no pertenecientes a la UE.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 31</div>
+      <div class="article-card__title">Condiciones de empleo</div>
+      <div class="article-card__desc">Los inversores deben garantizar un mínimo del <strong>50 % de trabajadores de la Unión</strong> en la plantilla de la instalación subvencionada o autorizada. Cumplimiento verificado a la finalización del proyecto y anualmente a partir de entonces.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 32</div>
+      <div class="article-card__title">Condiciones de contenido local</div>
+      <div class="article-card__desc">Una parte definida de los insumos, componentes o bienes intermedios debe obtenerse dentro de la Unión. Porcentajes fijados por sector mediante actos de ejecución, con períodos de transición para la adaptación de las cadenas de suministro.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 33</div>
+      <div class="article-card__title">Propiedad y transferencia de conocimientos</div>
+      <div class="article-card__desc">Los inversores deben revelar la propiedad efectiva final. Cuando estén implicados fondos públicos o activos estratégicos, las condiciones pueden exigir acuerdos de transferencia de conocimientos que garanticen a las entidades de la UE el acceso a las tecnologías clave.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 34</div>
+      <div class="article-card__title">Condiciones relativas a las actividades de I+D</div>
+      <div class="article-card__desc">Los inversores extranjeros en sectores estratégicos deben comprometerse a destinar una parte mínima del gasto en I+D relacionado con el proyecto dentro de la Unión. Apoya el mantenimiento de la capacidad innovadora y los empleos de alto valor en la UE.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artículo 35</div>
+      <div class="article-card__title">Procedimiento de notificación y evaluación</div>
+      <div class="article-card__desc">Notificación obligatoria a la Comisión para las transacciones incluidas. Evaluación en un plazo de 90 días. La Comisión puede aprobar sin condiciones, aprobar con condiciones o prohibir. Recurso ante el Tribunal de Justicia.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter V -->
+<section class="section" id="ch5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-flag-checkered"></i></div>
+    <h2 class="section__title">Capítulo V: Disposiciones finales</h2>
+  </div>
+  <p class="section__subtitle">Artículos 36-42: actos delegados, procedimiento de comité, informes, revisión y entrada en vigor</p>
+
+  <div class="card">
+    <p><strong>Actos delegados (Art. 36):</strong> la Comisión adopta actos delegados para los criterios de designación de las zonas de aceleración industrial, las metodologías de cálculo de la intensidad de carbono, los porcentajes de contenido local y los umbrales sectoriales.</p>
+    <p><strong>Procedimiento de comité (Art. 37):</strong> procedimiento de examen para los actos de ejecución. Expertos de los Estados miembros consultados mediante comitología.</p>
+    <p><strong>Informes (Art. 38):</strong> los Estados miembros informan bienalmente sobre los plazos de autorización, los volúmenes de contratación baja en carbono, las decisiones de control de inversiones y los avances hacia el objetivo del 20 % del PIB manufacturero.</p>
+    <p><strong>Revisión (Art. 39):</strong> la Comisión revisa el Reglamento 5 años después de su entrada en vigor, con una evaluación intermedia a los 3 años para las disposiciones relativas a la contratación pública.</p>
+    <p><strong>Modificaciones (Art. 40):</strong> modificaciones consiguientes del Reglamento sobre la industria de cero emisiones netas, el Reglamento de control de la IED y las Directivas sobre contratación pública.</p>
+    <p><strong>Entrada en vigor (Art. 41-42):</strong> 20 días después de la publicación en el Diario Oficial. Se aplica 12 meses después, con un período de transición de 24 meses para las disposiciones relativas a la contratación pública y el etiquetado.</p>
+  </div>
+</section>
+
+<!-- Comparison table -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-swap-horizontal"></i></div>
+    <h2 class="section__title">Antes y después del RAI</h2>
+  </div>
+  <p class="section__subtitle">Una comparación lado a lado de los principales cambios</p>
+
+  <table>
+    <thead>
+      <tr><th>Elemento</th><th>Antes (legislación vigente)</th><th>Después (RAI)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Autorizaciones</td><td class="dim-cell">Permisos múltiples, fragmentados entre organismos</td><td class="highlight-cell">Un proyecto, una solicitud</td></tr>
+      <tr><td>Etiquetas bajas en carbono</td><td class="dim-cell">Ninguna (solo voluntaria)</td><td class="highlight-cell">Sistema obligatorio de clase A/B/C</td></tr>
+      <tr><td>Contratación de acero</td><td class="dim-cell">Sin requisitos de carbono</td><td class="highlight-cell">Mín. 25 % de acero bajo en carbono</td></tr>
+      <tr><td>Inversión extranjera</td><td class="dim-cell">Control general (Reglamento IED)</td><td class="highlight-cell">Condiciones sectoriales específicas por encima de 100 M EUR</td></tr>
+      <tr><td>Zonas industriales</td><td class="dim-cell">Sin marco de la UE</td><td class="highlight-cell">Zonas de aceleración industrial con aprobación tácita</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Impact Assessment -->
+<section class="section" id="impact">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-chart-line"></i></div>
+    <h2 class="section__title">Evaluación de impacto</h2>
+  </div>
+  <p class="section__subtitle">Cifras clave de la evaluación de impacto de la Comisión</p>
+
+  <div class="figures" style="margin-top: 1rem;">
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 10.387M</div>
+      <div class="figure-card__label">Aumento del valor añadido bruto (VAB)</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 3.058M</div>
+      <div class="figure-card__label">Ahorro en emisiones de GEI</div>
+    </div>
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 240M</div>
+      <div class="figure-card__label">Ahorro en costes de autorización</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 8,92M</div>
+      <div class="figure-card__label">Costes administrativos al año</div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Calendario legislativo</h2>
+  </div>
+  <p class="section__subtitle">Desde la Brújula de Competitividad hasta la primera lectura</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">29 de enero de 2025</div>
+      <div class="timeline__text">La Comisión publica la Brújula de Competitividad, identificando la política industrial como una prioridad</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 de febrero de 2025</div>
+      <div class="timeline__text">Adoptada la Comunicación sobre el Pacto Industrial Limpio, que anuncia propuestas legislativas para la reindustrialización</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 de junio de 2025</div>
+      <div class="timeline__text">Resolución del Parlamento Europeo sobre el Pacto Industrial Limpio y la competitividad industrial</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">4 de marzo de 2026</div>
+      <div class="timeline__text"><strong>La Comisión adopta la propuesta de Reglamento acelerador industrial (COM(2026) 100)</strong></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">T3 2026 (previsto)</div>
+      <div class="timeline__text">Informe de la comisión del Parlamento Europeo: ITRE como comisión principal, dictámenes de ENVI/IMCO previstos</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">T1 2027 (previsto)</div>
+      <div class="timeline__text">Primera lectura: posiciones del Parlamento Europeo y del Consejo</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Fuentes oficiales</h2>
+  </div>
+  <p class="section__subtitle">Todos los documentos utilizados para elaborar este análisis</p>
+
+  <div class="card">
+    <p><strong>Propuesta:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN" target="_blank" rel="noopener">COM(2026) 100 final</a></p>
+    <p><strong>Anexos:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/99174b0d-bcda-4039-9157-62725439d010_en" target="_blank" rel="noopener">Anexos de la propuesta (PDF)</a></p>
+    <p><strong>Evaluación de impacto:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/ef967653-d886-4c14-a68a-65ea6ef25bce_en" target="_blank" rel="noopener">Informe de evaluación de impacto (PDF)</a></p>
+    <p><strong>Resumen ejecutivo:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/f89f405e-74e4-49f9-b8ab-e7e7976b8877_en" target="_blank" rel="noopener">Resumen ejecutivo de la evaluación de impacto (PDF)</a></p>
+    <p><strong>Ficha informativa:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/9c7fa301-c4cf-4600-8c00-34243ee26e45_en" target="_blank" rel="noopener">Ficha informativa del Reglamento acelerador industrial (PDF)</a></p>
+    <p><strong>Procedimiento OEIL:</strong> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)" target="_blank" rel="noopener">2026/0068(COD)</a></p>
+    <p><strong>Tren legislativo:</strong> <a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-industrial-decarbonisation-accelerator-act" target="_blank" rel="noopener">Programa del tren legislativo del PE</a></p>
+    <p><strong>Nota de prensa:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_515" target="_blank" rel="noopener">IP/26/515</a></p>
+    <p><strong>P&amp;R:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_516" target="_blank" rel="noopener">QANDA/26/516</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Producido por <a href="https://brubru.beresol.eu">Brubru</a>, el asistente de política de la UE impulsado por inteligencia artificial de <a href="https://beresol.eu">Beresol BV</a>. Véase también: <a href="https://beresol.eu/startups">Monitor de startups de Beresol</a>.</p>
+  <p style="margin-top: 0.5rem;">Análisis basado en COM(2026) 100 final, adoptado el 4 de marzo de 2026. Se trata de un análisis independiente, no de un documento oficial de la UE.</p>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

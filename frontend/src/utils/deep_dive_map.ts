@@ -1,0 +1,77 @@
+/**
+ * Deep Dive Map
+ *
+ * Maps procedure references to deep-dive HTML page URLs.
+ * Used by both the Analytics tab (Deep Dive Library) and
+ * My Files tracked file cards (Deep Dive link button).
+ */
+
+export interface DeepDive {
+  title: string;
+  shortTitle: string;
+  comReference: string;
+  procedureRef: string;
+  basePath: string;
+  languages: string[];
+  color: string;
+  icon: string;
+}
+
+export const DEEP_DIVES: DeepDive[] = [
+  {
+    title: 'EU Inc.: the 28th Regime for European Companies',
+    shortTitle: 'EU Inc.',
+    comReference: 'COM(2026) 321',
+    procedureRef: '2026/0074(COD)',
+    basePath: '/eu-inc',
+    languages: ['en', 'fr', 'es', 'it', 'nl'],
+    color: '#0693e3',
+    icon: 'mdi-domain',
+  },
+  {
+    title: 'European Biotech Act',
+    shortTitle: 'Biotech Act',
+    comReference: 'COM(2025) 1022',
+    procedureRef: '2025/0406(COD)',
+    basePath: '/biotech-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl'],
+    color: '#059669',
+    icon: 'mdi-dna',
+  },
+  {
+    title: 'Industrial Accelerator Act',
+    shortTitle: 'Industrial Accelerator',
+    comReference: 'COM(2026) 100',
+    procedureRef: '2026/0068(COD)',
+    basePath: '/industrial-accelerator-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl'],
+    color: '#9b51e0',
+    icon: 'mdi-factory',
+  },
+];
+
+/**
+ * Lookup deep dive by procedure reference.
+ * Returns the deep dive entry or undefined if no match.
+ */
+export function getDeepDiveForProcedure(procedureRef: string): DeepDive | undefined {
+  return DEEP_DIVES.find(d => d.procedureRef === procedureRef);
+}
+
+/**
+ * Get the URL for a deep dive in a given language.
+ */
+export function getDeepDiveUrl(deepDive: DeepDive, lang: string = 'en'): string {
+  if (lang === 'en') return `${deepDive.basePath}/index.html`;
+  return `${deepDive.basePath}/${lang}.html`;
+}
+
+const LANG_LABELS: Record<string, string> = {
+  en: 'EN',
+  fr: 'FR',
+  es: 'ES',
+  it: 'IT',
+  nl: 'NL',
+};
+
+export { LANG_LABELS };

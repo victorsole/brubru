@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EU Inc. uitgelegd: het 28e stelsel voor Europese ondernemingen | Brubru</title>
+  <meta name="description" content="Uitgebreide gids voor het EU Inc.-voorstel (COM(2026) 321): de nieuwe pan-Europese rechtsvorm met registratie in 48 uur, minimumkapitaal van 0 EUR en volledig digitale procedures. Analyse artikel per artikel.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Disclaimer banner */
+    .disclaimer-banner {
+      background: #fffbeb;
+      border-bottom: 2px solid #d97706;
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    /* Comparison table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    /* Chapter article grid */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Footer */
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Disclaimer banner -->
+<div class="disclaimer-banner">
+  Deze analyse is gebaseerd op de Engelse versie van COM(2026) 321. De officiële Nederlandse versie is nog niet gepubliceerd op EUR-Lex. Deze vertaling is opgesteld door Brubru en kan afwijken van de officiële versie zodra deze beschikbaar is.
+</div>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">EU Inc.: gedetailleerde analyse</div>
+    <div class="header__subtitle">Het vennootschapsrechtelijk kader van het 28e stelsel</div>
+  </div>
+  <select onchange="window.location.href=this.value" aria-label="Taal" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html">Français</option>
+    <option value="es.html">Español</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html" selected>Nederlands</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Probeer Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2026)321&lang=en" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">COM(2026) 321</a> | Aangenomen op 18 maart 2026</div>
+  <h1 class="hero__title">EU Inc.: <span>één rechtsvorm,<br>27 lidstaten</span></h1>
+  <p class="hero__subtitle">
+    Het voorstel van de Europese Commissie voor een nieuwe pan-Europese vennootschapsvorm.
+    Registreer een onderneming in 48 uur, voor maximaal 100 EUR, volledig online, zonder minimumkapitaal.
+    Hier is alles wat u moet weten.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-file-document-outline"></i> 109 artikelen, 12 hoofdstukken</span>
+    <span><i class="mdi mdi-scale-balance"></i> Verordening (rechtstreeks toepasselijk)</span>
+    <span><i class="mdi mdi-calendar-check"></i> Beoogde toepassing: 2028</span>
+  </div>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">48u</div>
+    <div class="figure-card__label">Registratie van de onderneming (snelle procedure)</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">0 EUR</div>
+    <div class="figure-card__label">Vereist minimumkapitaal</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">100 EUR</div>
+    <div class="figure-card__label">Maximale registratiekosten</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">308.000</div>
+    <div class="figure-card__label">Geraamde ondernemingen over 10 jaar</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structuur van het voorstel</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Algemene beginselen (artt. 1-12)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Registratie en inschrijving (artt. 13-24)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Grensoverschrijdende informatie (artt. 25-35)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Grensoverschrijdende filialen (artt. 36-41)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Organisatie (artt. 42-52)</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> Aandelen en overdrachten (artt. 53-60)</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Financiering (artt. 61-77)</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Personeelsopties (artt. 78-79)</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Sluiting van solvente vennootschappen (artt. 80-87)</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Insolventie (artt. 88-102)</a>
+    <a href="#ch11" class="toc__link"><span class="toc__num">XI</span> Verboden vereisten (art. 103)</a>
+    <a href="#ch12" class="toc__link"><span class="toc__num">XII</span> Slotbepalingen (artt. 104-109)</a>
+  </div>
+</nav>
+
+<!-- What and Why -->
+<section class="section" id="what">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-lightbulb-outline"></i></div>
+    <h2 class="section__title">Wat is EU Inc.?</h2>
+  </div>
+  <p class="section__subtitle">een nieuwe facultatieve rechtsvorm voor de gehele Europese interne markt</p>
+
+  <div class="info-box">
+    <h3>Het concept van het «28e stelsel»</h3>
+    <p>EU Inc. creëert een nieuwe, geharmoniseerde rechtsvorm die <strong>naast</strong> de 27 nationale vennootschapsrechtelijke stelsels bestaat. Elke oprichter (natuurlijke of rechtspersoon) kan ervoor kiezen om een vennootschap op te richten onder dit ene pakket EU-brede regels in plaats van onder nationaal vennootschapsrecht. De vennootschap wordt geregistreerd in een lidstaat, maar wordt in alle 27 lidstaten erkend zonder aanvullende formaliteiten.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Het probleem</div>
+      <div class="article-card__title">27 stelsels, één markt</div>
+      <div class="article-card__desc">Europa creëert meer startups dan de VS, maar de meeste slagen er niet in op te schalen. 27 verschillende vennootschapsrechtelijke stelsels zorgen voor fragmentatie, hoge nalevingskosten over de grens en prikkels om buiten de EU te verhuizen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">De oplossing</div>
+      <div class="article-card__title">Één set regels, overal</div>
+      <div class="article-card__desc">EU Inc. biedt één volledig digitaal ondernemingskader dat de gehele levenscyclus beslaat: oprichting, bestuur, financiering, aandelenoverdrachten, personeelsopties, ontbinding en insolventie.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Anders dan de Societas Europaea</div>
+      <div class="article-card__title">Toegankelijk voor iedereen, niet alleen voor grote ondernemingen</div>
+      <div class="article-card__desc">De SE vereist een minimumkapitaal van 120.000 EUR en kan alleen worden opgericht vanuit bestaande grensoverschrijdende vennootschappen. EU Inc. heeft geen minimumkapitaal en kan van de grond af aan door elke persoon worden opgericht.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Politieke context</div>
+      <div class="article-card__title">Draghi, Letta, Competitiviteitscompas</div>
+      <div class="article-card__desc">Gevraagd door de Europese Raad (maart 2025), als follow-up op het rapport-Draghi en het rapport-Letta over de interne markt. Onderdeel van de Unie van Spaargelden en Investeringen en de Strategie voor de interne markt.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter I -->
+<section class="section" id="ch1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-gavel"></i></div>
+    <h2 class="section__title">Hoofdstuk I: algemene beginselen</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 1-12: grondslagen van de EU Inc.-rechtsvorm</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 1-2</div>
+      <div class="article-card__title">Onderwerp en definities</div>
+      <div class="article-card__desc">Creëert de EU Inc.-rechtsvorm, het centrale EU-interface, het eenmaligheidsbeginsel en 30 kernbegrippen (BRIS, EUID, digitaal aandelenregister, converteerbare instrumenten, warrants, enz.).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 3</div>
+      <div class="article-card__title">Vennootschap met beperkte aansprakelijkheid</div>
+      <div class="article-card__desc">Aandeelhouders zijn niet aansprakelijk voor de verplichtingen van de vennootschap. Rechtspersoonlijkheid bij registratie. Kan worden opgericht door natuurlijke of rechtspersonen, ex nihilo of via omzettingen/fusies.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 4-9</div>
+      <div class="article-card__title">Regels, rechtspersoonlijkheid, naam, statuten, kantoor</div>
+      <div class="article-card__desc">Geregeld door deze Verordening en de statuten. Lacunes worden aangevuld door het nationale recht van de statutaire zetel. De naam moet «EU Inc.» bevatten. Digitale, machineleesbare statuten. Statutaire zetel en centrale administratie in de EU.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 10-12</div>
+      <div class="article-card__title">Uitsluitend digitaal, betalingen, werknemers</div>
+      <div class="article-card__desc"><strong>Alle procedures zijn 100% online.</strong> Geen papier. Betalingen via grensoverschrijdende onlinediensten. De medezeggeningsregels van de lidstaat van de statutaire zetel zijn van toepassing. Het nationale arbeidsrecht blijft ongewijzigd.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter II -->
+<section class="section" id="ch2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-rocket-launch-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk II: registratie en inschrijving</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 13-24: hoe een EU Inc. oprichten</p>
+
+  <div class="info-box">
+    <h3>Drie oprichtingsroutes</h3>
+    <p><strong>1. Snelle procedure via het centrale EU-interface</strong> (art. 16): met EU-modelstatuten, registratie in 48 uur, maximaal 100 EUR. <strong>2. Maatwerk-statuten via het centrale EU-interface</strong> (art. 17): 5 werkdagen. <strong>3. Rechtstreeks bij het nationale handelsregister</strong> (art. 18): volledig online, dezelfde termijnen. Alle routes gebruiken hetzelfde geharmoniseerde aanvraagformulier (art. 13), met eIDAS-elektronische identificatie en automatische gegevensuitwisseling met fiscale, btw- en socialezekerheidsautoriteiten (art. 20).</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 13</div>
+      <div class="article-card__title">Geharmoniseerd aanvraagformulier</div>
+      <div class="article-card__desc">Volledig digitaal en machineleesbaar. Bestuurders geïdentificeerd via eIDAS. Verzamelt oprichtingsgegevens, BTW-nummer/fiscaal nummer/uiteindelijk begunstigden. Automatische merkencontrole via BRIS-EUIPO-koppeling.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 14-15</div>
+      <div class="article-card__title">Preventieve controle en centraal EU-interface</div>
+      <div class="article-card__desc">Statuten geverifieerd (bestuursrechtelijk, gerechtelijk of notarieel). De Commissie beheert het centrale EU-interface via BRIS. Registratiebeslissing blijft nationaal. Realtime opvolging.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 16-18</div>
+      <div class="article-card__title">48 uur, maximaal 100 EUR</div>
+      <div class="article-card__desc">Snelle procedure (EU-modellen): 48 uur, 100 EUR. Maatwerk-statuten: 5 werkdagen. Rechtstreekse nationale route: zelfde termijnen. Dochterondernemingen hergebruiken automatisch moedermaatschappijgegevens uit BRIS (art. 19).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 20-24</div>
+      <div class="article-card__title">Eenmaligheidsbeginsel, omzettingen, digitale inschrijving</div>
+      <div class="article-card__desc">Handelsregister deelt automatisch gegevens met fiscale, btw-, sociale zekerheids- en UBO-autoriteiten. EU Inc. kan worden opgericht via binnenlandse of grensoverschrijdende omzetting/fusie/splitsing (wachttijd van 2 jaar). Digitale handtekeningen via eIDAS.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter III -->
+<section class="section" id="ch3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-earth"></i></div>
+    <h2 class="section__title">Hoofdstuk III: grensoverschrijdende informatie</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 25-35: transparantie, certificaten en het eenmaligheidsbeginsel</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 25-27</div>
+      <div class="article-card__title">Openbaarmaking via registers en BRIS</div>
+      <div class="article-card__desc">Uitgebreide vennootschappsinformatie openbaar beschikbaar: naam, zetel, NACE-code, statuten, bestuurders, jaarrekeningen, liquidatiestatus. Kerndocumenten gratis. Wijzigingen binnen 5 dagen ingeschreven.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 28</div>
+      <div class="article-card__title">Eenmaligheidsbeginsel</div>
+      <div class="article-card__desc">Overheidsdiensten moeten BRIS rechtstreeks raadplegen. De EU Inc. hoeft nooit informatie opnieuw in te dienen die al in het handelsregister staat, tenzij fraude of misbruik wordt vermoed.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 30-31</div>
+      <div class="article-card__title">Europees vennootschapscertificaat en volmacht</div>
+      <div class="article-card__desc">Meertalig certificaat aanvaard in alle 27 lidstaten als bewijs van oprichting. Digitale Europese volmacht in alle EU-talen. Beide compatibel met Europese bedrijfsportemonnees.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 32-35</div>
+      <div class="article-card__title">Geen legalisatie, AI-vertaling, centraal register</div>
+      <div class="article-card__desc">Vrijgesteld van apostille/legalisatie. AI-vertalingsagenten aanvaard (goedgekeurd door lidstaten). Commissie ontwikkelt centraal digitaal register. Alle BRIS-inhoud doorzoekbaar in alle EU-talen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter IV -->
+<section class="section" id="ch4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-domain"></i></div>
+    <h2 class="section__title">Hoofdstuk IV: grensoverschrijdende filialen</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 36-41: moeiteloos filialen openen in de gehele EU</p>
+
+  <div class="card">
+    <p>EU Inc.-vennootschappen kunnen filialen openen in elke andere lidstaat. Registratie via het centrale EU-interface (zelfde termijn van 48 uur, maximum van 100 EUR) of rechtstreeks bij het nationale handelsregister. Het filiaal haalt automatisch moedermaatschappijgegevens op uit BRIS, waardoor dubbele indieningen worden geëlimineerd. Eenmalige gegevensuitwisseling met fiscale, btw- en socialezekerheidsautoriteiten. Grensoverschrijdende omzettingen, splitsingen en fusies volgen Richtlijn 2017/1132.</p>
+  </div>
+</section>
+
+<!-- Chapter V -->
+<section class="section" id="ch5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk V: organisatie</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 42-52: bestuur, directeuren, aandeelhouders</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 42-44</div>
+      <div class="article-card__title">Raad van bestuur</div>
+      <div class="article-card__desc">Één of meer natuurlijke personen. Ten minste één in de EU woonachtige bestuurder. De raad bestuurt de vennootschap. Algemene vergadering benoemt/ontslaat. Plichten bestuurders: goede trouw, redelijke zorgvuldigheid. Veilige haven voor eerlijke zakelijke beslissingen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 45-46</div>
+      <div class="article-card__title">Belangenconflicten en verbonden partijen</div>
+      <div class="article-card__desc">Bestuurders moeten conflicten melden en zich onthouden tenzij gemachtigd. Transacties met verbonden partijen kunnen goedkeuring vereisen op grond van de statuten. Eenpersoonsvennootschap: contracten met enige aandeelhouder schriftelijk.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 47-49</div>
+      <div class="article-card__title">Online vergaderingen, schriftelijke besluiten, meerderheden</div>
+      <div class="article-card__desc">Vergaderingen volledig online of hybride. Lidstaten kunnen dit niet beperken. Schriftelijke besluiten via elektronische middelen. Quorum: gewone meerderheid aanwezig. Besluiten: gewone meerderheid. Statutenwijzigingen: tweederde meerderheid.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 50-52</div>
+      <div class="article-card__title">Wijzigingen, categorierechten, uittreding aandeelhouder</div>
+      <div class="article-card__desc">Statuten gewijzigd bij tweederde stemming. Wijzigingen in categorierechten vereisen goedkeuring van de categorie. Benadeelde aandeelhouders kunnen de rechter verzoeken om uitkoop tegen reële waarde.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter VI -->
+<section class="section" id="ch6">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-certificate-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk VI: aandelen en aandelenoverdrachten</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 53-60: gedematerialiseerde aandelen, digitale overdrachten, openbare markten</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 53-54</div>
+      <div class="article-card__title">Digitaal aandelenregister</div>
+      <div class="article-card__desc">Alle aandelen gedematerialiseerd in een digitaal register (kan gebruik maken van gedistribueerde-ledgertechnologie). Geen toonderaandelen. Register bijhoudt: aandeelhoudersidentiteit, aandelencategorie, bezwaringen, overdrachtshistorie. Digitale aandelencertificaten automatisch afgegeven.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 55-57</div>
+      <div class="article-card__title">Aandelencategorieën en stemrechten</div>
+      <div class="article-card__desc">Standaard: gelijke rechten. Statuten mogen meerdere categorieën creëren met verschillende rechten (preferenties, meervoudig stemrecht, veto, bestuur). Één aandeel = één stem (standaard). Aandelen zonder stemrecht uitgesloten van quorum.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 58-59</div>
+      <div class="article-card__title">Volledig digitale overdrachten, geen notaris</div>
+      <div class="article-card__desc">Aandelen vrij overdraagbaar. Overdrachten volledig online via gekwalificeerde elektronische handtekeningen (eIDAS) of bedrijfsportemonnee. <strong>Geen notariële akte vereist.</strong> Vennootschap beoordeelt binnen 3 werkdagen. Werking bij inschrijving in digitaal register.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 60</div>
+      <div class="article-card__title">Toegang tot openbare markten</div>
+      <div class="article-card__desc">Lidstaten mogen EU Inc. niet verbieden toegang te krijgen tot mkb-groeimarkten of multilaterale handelsfaciliteiten. Lidstaten mogen ook toelating tot gereglementeerde markten toestaan via nationale wetgeving.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter VII -->
+<section class="section" id="ch7">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-cash-multiple"></i></div>
+    <h2 class="section__title">Hoofdstuk VII: financiering</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 61-77: kapitaal, aandelen, uitkeringen en moderne financieringsinstrumenten</p>
+
+  <div class="info-box">
+    <h3>Nul minimumkapitaal, maximale flexibiliteit</h3>
+    <p>EU Inc. heeft <strong>geen minimumkapitaalvereiste</strong> en geen verplichte wettelijke reserves. Aandelen zijn standaard zonder nominale waarde. De tegenprestatie voor aandelen kan in geld of in natura zijn (behalve werk/diensten). Moderne instrumenten zoals <strong>SAFE's en KISS-notes</strong> zijn uitdrukkelijk mogelijk gemaakt. Crediteurenbescherming via balanstests en solvabiliteitstests in plaats van minimumkapitaal.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 61-63</div>
+      <div class="article-card__title">Aandelen zonder nominale waarde, kapitaal 0 EUR</div>
+      <div class="article-card__desc">Standaard: aandelen zonder nominale waarde (geen nominale waarde, geen fractie van kapitaal). Optionele nominale waarde. Niet combineerbaar. Geen minimumkapitaal. Geen wettelijke reserves. Kapitaal in EUR of nationale valuta.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 64-67</div>
+      <div class="article-card__title">Inbreng, in natura, uitgifte van aandelen</div>
+      <div class="article-card__desc">Aandelen uitgegeven tegen kapitaalinbreng of niet-kapitaalinbreng (of beide). Inbreng in natura vereist deskundigenverslag (verzichtbaar). Eerste aandelen in statuten; nieuwe aandelen volledig online, geen notaris.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 68-69</div>
+      <div class="article-card__title">SAFE, KISS, converteerbaar, voorkeursrecht</div>
+      <div class="article-card__desc">Converteerbare instrumenten (SAFE, KISS) en warrants uitdrukkelijk mogelijk gemaakt. Bestuur kan worden gemachtigd tot uitgifte. Voorkeursrechttermijn van 14 dagen. Geen voorkeursrecht op aandelen uit converteerbare instrumenten.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikelen 70-77</div>
+      <div class="article-card__title">Kapitaalwijzigingen, uitkeringen, eigen aandelen, inkoopbaar</div>
+      <div class="article-card__desc">Uitkeringen alleen indien balanstests (activa > passiva + kapitaal) EN solvabiliteitstest (12 maanden). Bestuurders persoonlijk aansprakelijk. Eigen aandelen alleen uit uitkeerbare fondsen. Inkoopbare aandelen met vesting van 24 maanden.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter VIII -->
+<section class="section" id="ch8">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-account-heart-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk VIII: EU-personeelsopties</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 78-79: het EU-ESO-plan met geharmoniseerde uitgestelde belastingheffing</p>
+
+  <div class="info-box">
+    <h3>Één personeelsoptieplan, 27 landen, één belastingmoment</h3>
+    <p>Het EU-ESO is een geharmoniseerd personeelsoptieplan dat het grootste pijnpunt voor grensoverschrijdende startups oplost: <strong>personeelsopties die in elke lidstaat anders worden belast</strong>. Met EU-ESO geen belasting bij toekenning, geen belasting bij vesting, geen belasting bij uitoefening. Belasting ontstaat <strong>alleen wanneer aandelen worden verkocht</strong>. Het belastbare bedrag is het verschil tussen verkoopprijs en verwervingskosten. Lidstaten bepalen het tarief, maar moeten EU-ESO niet minder gunstig behandelen dan nationale regelingen.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-format-list-checks" style="color: var(--color-amber);"></i> Kernregels van het EU-ESO</div>
+    <p><strong>In aanmerking komend:</strong> bestuursleden en werknemers van de vennootschap en haar dochterondernemingen</p>
+    <p><strong>Niet in aanmerking komend:</strong> personen die meer dan 25% van de stemrechten houden</p>
+    <p><strong>Vesting:</strong> minimaal 24 maanden</p>
+    <p><strong>Niet-overdraagbaar:</strong> warrants kunnen niet worden verkocht</p>
+    <p><strong>Uitoefening:</strong> tegenprestatie betaald in geld, volledig gestort bij uitgifte</p>
+    <p><strong>Geen voorkeursrecht:</strong> bestaande aandeelhouders hebben geen voorkeursrecht op EU-ESO-aandelen</p>
+    <p><strong>Voldoening:</strong> bestuur geeft nieuwe aandelen uit of draagt eigen aandelen over</p>
+  </div>
+</section>
+
+<!-- Chapter IX -->
+<section class="section" id="ch9">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-close-circle-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk IX: sluiting van solvente vennootschappen</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 80-87: snelle liquidatie in circa 3 maanden</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-lightning-bolt" style="color: var(--color-red);"></i> Snelle liquidatie</div>
+    <p>Solvente EU Inc.-vennootschappen kunnen worden gesloten via een snelle procedure indien zij de economische activiteit hebben gestaakt, geen activa hebben (of deze hebben uitgekeerd), geen passiva hebben (of crediteurenmachtiging hebben) en geen lopende procedures hebben.</p>
+    <p><strong>Proces:</strong> gelijktijdige indiening van de ontbinding en het verzoek tot doorhaling (alles online). Bestuurders ondertekenen verklaring met gekwalificeerde elektronische handtekeningen. Crediteuren hebben 30 dagen om bezwaar te maken. Belastingautoriteit heeft 30 dagen voor vrijgave (stilzwijgen geldt als veronderstelde goedkeuring). Na termijnen: doorhaling uit register.</p>
+    <p><strong>Waarborgen:</strong> bestuurders hoofdelijk en persoonlijk aansprakelijk voor valse verklaringen. Boeken 6 jaar bewaard. Crediteuren behouden rechten jegens bestuurders na doorhaling.</p>
+  </div>
+</section>
+
+<!-- Chapter X -->
+<section class="section" id="ch10">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-alert-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk X: vereenvoudigde insolventie</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 88-102: snellere en goedkopere afwikkeling voor innovatieve startups</p>
+
+  <div class="info-box">
+    <h3>Uitsluitend voor innovatieve EU Inc.-startups</h3>
+    <p>Dit hoofdstuk is uitsluitend van toepassing op EU Inc.-vennootschappen die zich kwalificeren als <strong>innovatieve startups</strong> (zoals gedefinieerd in de Aanbeveling van de Commissie). De vereenvoudigde procedure moet worden afgesloten binnen <strong>6 maanden</strong> (eenmalig verlengbaar). Geen advocaat vereist. Standaardformulier voor indiening. Uitsluitend digitale communicatie. Activa worden verkocht via elektronische veilingplatforms die in de gehele EU onderling verbonden zijn via het Europees e-Justitieportaal.</p>
+  </div>
+</section>
+
+<!-- Chapter XI -->
+<section class="section" id="ch11">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-shield-check-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk XI: non-discriminatie</h2>
+  </div>
+  <p class="section__subtitle">Artikel 103: verboden nationale vereisten</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-cancel" style="color: var(--color-red);"></i> Wat lidstaten NIET mogen doen</div>
+    <p>Openbare steun (subsidies, bijdragen) aan EU Inc.-vennootschappen weigeren op basis van de vestigingsplaats van hun hoofdkantoor</p>
+    <p>Vergunningsvereisten opleggen op basis van de locatie van de statutaire zetel</p>
+    <p>Een lokale vertegenwoordiger of fysieke aanwezigheid vereisen voor een EU Inc. uit een andere lidstaat</p>
+    <p>Het gebruik van in een andere lidstaat geopende betaalrekeningen weigeren</p>
+  </div>
+</section>
+
+<!-- Chapter XII -->
+<section class="section" id="ch12">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-flag-checkered"></i></div>
+    <h2 class="section__title">Hoofdstuk XII: slotbepalingen</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 104-109: gegevensbescherming, boekhouding, sancties, evaluatie</p>
+
+  <div class="card">
+    <p><strong>Gegevensbescherming:</strong> onderworpen aan de AVG en Verordening 2018/1725.</p>
+    <p><strong>Boekhouding:</strong> het nationale recht van de statutaire zetel is van toepassing.</p>
+    <p><strong>Sancties:</strong> lidstaten moeten doeltreffende sancties voorzien voor niet-naleving (nalaten in te schrijven, valse verklaringen).</p>
+    <p><strong>Evaluatie:</strong> de Commissie evalueert 5 jaar na toepassing. Het maximum van 100 EUR wordt elke 5 jaar herzien (inflatiegecorrigeerd).</p>
+    <p><strong>Inwerkingtreding:</strong> 20 dagen na publicatie in het Publicatieblad. Van toepassing 12 maanden later.</p>
+  </div>
+</section>
+
+<!-- Comparison table -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-swap-horizontal"></i></div>
+    <h2 class="section__title">EU Inc. versus nationaal vennootschapsrecht</h2>
+  </div>
+  <p class="section__subtitle">een vergelijking van de belangrijkste verschillen naast elkaar</p>
+
+  <table>
+    <thead>
+      <tr><th>Kenmerk</th><th>EU Inc.</th><th>Typisch nationaal recht</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Minimumkapitaal</td><td class="highlight-cell">0 EUR</td><td class="dim-cell">1 EUR tot 120.000 EUR</td></tr>
+      <tr><td>Registratietijd</td><td class="highlight-cell">48 uur (snelle procedure)</td><td class="dim-cell">Dagen tot weken</td></tr>
+      <tr><td>Registratiekosten</td><td class="highlight-cell">Maximaal 100 EUR</td><td class="dim-cell">Sterk variërend</td></tr>
+      <tr><td>Procedure</td><td class="highlight-cell">100% digitaal</td><td class="dim-cell">Vaak papier of persoonlijk</td></tr>
+      <tr><td>Aandelenoverdrachten</td><td class="highlight-cell">Digitaal, geen notaris</td><td class="dim-cell">Notaris vaak vereist</td></tr>
+      <tr><td>Aandelen</td><td class="highlight-cell">Gedematerialiseerd, digitaal register</td><td class="dim-cell">Papieren certificaten gangbaar</td></tr>
+      <tr><td>Nominale waarde</td><td class="highlight-cell">Optioneel (standaard zonder nominale waarde)</td><td class="dim-cell">Doorgaans verplicht</td></tr>
+      <tr><td>SAFE / KISS-instrumenten</td><td class="highlight-cell">Uitdrukkelijk mogelijk gemaakt</td><td class="dim-cell">Rechtsonzekerheid</td></tr>
+      <tr><td>Personeelsopties</td><td class="highlight-cell">EU-ESO met uitgestelde belasting</td><td class="dim-cell">27 verschillende regelingen</td></tr>
+      <tr><td>Grensoverschrijdende filialen</td><td class="highlight-cell">Met één klik via BRIS</td><td class="dim-cell">Afzonderlijke nationale procedures</td></tr>
+      <tr><td>Startupinsolventie</td><td class="highlight-cell">Vereenvoudigd, 6 maanden, digitaal</td><td class="dim-cell">Langdurig en duur</td></tr>
+      <tr><td>Solvente sluiting</td><td class="highlight-cell">Circa 3 maanden (snelle procedure)</td><td class="dim-cell">Vaak 12 maanden of meer</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Impact -->
+<section class="section" id="impact">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-chart-line"></i></div>
+    <h2 class="section__title">Effectbeoordeling</h2>
+  </div>
+  <p class="section__subtitle">Kerngegevens uit <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2026)321&lang=en" target="_blank" rel="noopener" style="color: var(--color-secondary);">SWD(2026) 321</a> en <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2026)322&lang=en" target="_blank" rel="noopener" style="color: var(--color-secondary);">SWD(2026) 322</a></p>
+
+  <div class="figures" style="margin-top: 1rem;">
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number" style="font-size: 1.6rem;">328-440 mln EUR</div>
+      <div class="figure-card__label">Besparing op administratieve lasten (10 jaar)</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number" style="font-size: 1.6rem;">2,7 mln EUR</div>
+      <div class="figure-card__label">Eenmalige IT-kosten (alle lidstaten)</div>
+    </div>
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number" style="font-size: 1.6rem;">59,9 mln EUR</div>
+      <div class="figure-card__label">EU-begroting 2028-2034</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number" style="font-size: 1.6rem;">52%</div>
+      <div class="figure-card__label">Achtte minimumkapitaal overbodig</div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Wetgevingstijdlijn</h2>
+  </div>
+  <p class="section__subtitle">van het rapport-Draghi tot de datum van toepassing</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">September 2024</div>
+      <div class="timeline__text">Het Draghi-rapport over concurrentievermogen identificeert regelgevingsfragmentatie als voornaamste belemmering</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Januari 2025</div>
+      <div class="timeline__text">Het Competitiviteitscompas kondigt de oprichting van het «28e stelsel» aan</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Maart 2025</div>
+      <div class="timeline__text">De Europese Raad verzoekt de Commissie een optioneel vennootschapsrechtelijk stelsel voor te stellen</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">18 maart 2026</div>
+      <div class="timeline__text"><strong>De Commissie neemt het EU Inc.-voorstel aan (COM(2026) 321)</strong></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19-20 maart 2026</div>
+      <div class="timeline__text">De Europese Raad bespreekt concurrentievermogen en de agenda «One Europe, One Market»</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">K2 2026</div>
+      <div class="timeline__text">Toewijzing aan commissie van het Europees Parlement (verwacht: JURI als verantwoordelijke commissie, adviezen IMCO/ECON)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">Eind 2026</div>
+      <div class="timeline__text">Doelstelling van de Commissie voor een politiek akkoord tussen het Europees Parlement en de Raad</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2027</div>
+      <div class="timeline__text">Vaststelling van uitvoeringshandelingen (modellen, formulieren, BRIS-specificaties)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">2028</div>
+      <div class="timeline__text">Datum van toepassing: EU Inc. wordt beschikbaar in alle lidstaten</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Officiële bronnen</h2>
+  </div>
+  <p class="section__subtitle">alle documenten gebruikt voor de totstandkoming van deze analyse</p>
+
+  <div class="card">
+    <p><strong>Voorstel:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2026)321&lang=en" target="_blank" rel="noopener">COM(2026) 321 final</a> | <a href="https://commission.europa.eu/document/download/3e9822aa-8cef-40a1-904e-a53fc68e7265_en" target="_blank" rel="noopener">Voorstel voor EU Inc.-rechtskader (PDF)</a></p>
+    <p><strong>Bijlage:</strong> <a href="https://commission.europa.eu/document/download/18ee8f50-ab9f-43cd-af1b-92fec29a9754_en" target="_blank" rel="noopener">Bijlage: minimuminhoud van de statuten (PDF)</a></p>
+    <p><strong>Mededeling:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2026)320&lang=en" target="_blank" rel="noopener">COM(2026) 320 final</a> | <a href="https://commission.europa.eu/document/download/2d1b62a4-7807-4808-aed1-36f1f58ac1e7_en" target="_blank" rel="noopener">Op weg naar een 28e stelsel voor EU-vennootschappen (PDF)</a></p>
+    <p><strong>Persbericht:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_614" target="_blank" rel="noopener">IP/26/614</a></p>
+    <p><strong>V&amp;A:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_615" target="_blank" rel="noopener">QANDA/26/615</a></p>
+    <p><strong>Factsheet:</strong> <a href="https://commission.europa.eu/document/download/0d717491-03b4-47e6-8960-d16412d018c1_en" target="_blank" rel="noopener">EU Inc.-factsheet (PDF)</a></p>
+    <p><strong>Officiële pagina:</strong> <a href="https://commission.europa.eu/eu-inc-new-harmonised-corporate-legal-regime_en" target="_blank" rel="noopener">EU Inc.: een nieuw geharmoniseerd rechtskader voor vennootschappen</a></p>
+    <p><strong>Effectbeoordeling:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2026)321&lang=en" target="_blank" rel="noopener">SWD(2026) 321 final</a> | <a href="https://commission.europa.eu/document/download/e996b973-9421-4e4b-a95a-d38eb14dd8ad_en" target="_blank" rel="noopener">Samenvatting</a> | <a href="https://commission.europa.eu/document/download/38805451-8ffd-4512-8c46-fd76de0e9c9c_en" target="_blank" rel="noopener">Deel 1</a> | <a href="https://commission.europa.eu/document/download/4df0e523-df7b-433b-9805-bc5dcd95a8d3_en" target="_blank" rel="noopener">Deel 2</a> | <a href="https://commission.europa.eu/document/download/f3e9230d-3262-4115-ac9a-fed91dd68d0c_en" target="_blank" rel="noopener">Deel 3</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Geproduceerd door <a href="https://brubru.beresol.eu">Brubru</a>, de AI-gestuurde EU-beleidsassistent van <a href="https://beresol.eu">Beresol BV</a>. Zie ook: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p style="margin-top: 0.5rem;">Analyse gebaseerd op COM(2026) 321 final, aangenomen op 18 maart 2026. Dit is een onafhankelijke analyse, geen officieel EU-document.</p>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

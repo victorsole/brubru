@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Industriële versnellingsverordening uitgelegd: het EU-plan om Europa te reindustrialiseren | Brubru</title>
+  <meta name="description" content="Uitgebreide gids over de Industriële versnellingsverordening (COM(2026)100): versnelling van vergunningen, koolstofarme labels voor staal en cement, EU-oorsprongsvereisten, screening van buitenlandse investeringen. Artikel-voor-artikel analyse met gegevens uit de effectbeoordeling.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    /* Disclaimer banner */
+    .disclaimer-banner {
+      background: #fffbeb;
+      border-bottom: 2px solid #d97706;
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
+    }
+
+    /* Header */
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__lang {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .header__lang:hover, .header__lang:focus { border-color: var(--color-blue); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Container */
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* Key figures strip */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* TOC Navigation */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Section */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* Card */
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* Info box */
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    /* Comparison table */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+
+    /* Chapter article grid */
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-blue);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-blue); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    /* Pill badges */
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    /* Footer */
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* Smooth scroll */
+    html { scroll-behavior: smooth; }
+
+    /* Back to top */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Disclaimer banner -->
+<div class="disclaimer-banner">
+  Deze analyse is gebaseerd op de Engelse versie van COM(2026) 100. De officiële Nederlandse versie is nog niet gepubliceerd op EUR-Lex. Deze vertaling is opgesteld door Brubru en kan afwijken van de officiële versie zodra deze beschikbaar is.
+</div>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Industriële versnellingsverordening: analyse</div>
+    <div class="header__subtitle">Reindustrialisering van de EU en hervorming van de vergunningsprocedures</div>
+  </div>
+  <select class="header__lang" onchange="location.href=this.value" aria-label="Taalkiezer">
+    <option value="index.html">English</option>
+    <option value="fr.html">Français</option>
+    <option value="es.html">Español</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html" selected>Nederlands</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Probeer Brubru gratis</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN" target="_blank" rel="noopener">COM(2026) 100</a> | 4 maart 2026</div>
+  <h1 class="hero__title">De <span>Industriële versnellingsverordening</span></h1>
+  <p class="hero__subtitle">
+    De EU-industrie versterken en banen veiligstellen voor de toekomst.
+    Het voorstel van de Europese Commissie om vergunningsprocedures te versnellen, koolstofarme labels in te voeren voor basismateriaal,
+    EU-oorsprongsvereisten vast te stellen in de overheidsaanbesteding en buitenlandse investeringen in strategische sectoren te screenen.
+    Alles wat u moet weten.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-calendar-check"></i> 4 maart 2026</span>
+    <span><i class="mdi mdi-scale-balance"></i> Verordening (COD)</span>
+    <span><i class="mdi mdi-domain"></i> DG GROW</span>
+    <span><i class="mdi mdi-account-outline"></i> S&eacute;journ&eacute;</span>
+  </div>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">20%</div>
+    <div class="figure-card__label">Doelstelling voor het aandeel van de industrie in het bbp tegen 2035</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">148.352</div>
+    <div class="figure-card__label">Gecreëerde of behouden banen tegen 2030</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">30,58 Mt</div>
+    <div class="figure-card__label">Vermindering van CO2-equivalente emissies</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">EUR 240M</div>
+    <div class="figure-card__label">Besparingen op vergunningskosten</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structuur van het voorstel</div>
+  <div class="toc__grid">
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Algemene bepalingen (Art. 1-5)</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Vergunningsversnelling (Art. 6-16)</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Aanbesteding en staatssteun (Art. 17-29)</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Buitenlandse investeringen (Art. 30-35)</a>
+    <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Slotbepalingen (Art. 36-42)</a>
+  </div>
+</nav>
+
+<!-- Chapter I -->
+<section class="section" id="ch1">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-gavel"></i></div>
+    <h2 class="section__title">Hoofdstuk I: Algemene bepalingen</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 1-5: toepassingsgebied, definities, strategische sectoren en industrialisatiedoelstelling</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 1</div>
+      <div class="article-card__title">Onderwerp en toepassingsgebied</div>
+      <div class="article-card__desc">Stelt een kader in voor het versnellen van vergunningsprocedures, het invoeren van koolstofarme labels voor materiaal, het vaststellen van EU-oorsprongsvereisten voor overheidsaanbesteding en het controleren van buitenlandse investeringen in strategische industriële sectoren.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 2</div>
+      <div class="article-card__title">Definities</div>
+      <div class="article-card__desc">Kernbegrippen: strategische sectoren, koolstofarme materialen, oorsprong van de Unie, industriële versnellingszones, energie-intensieve industrieën (EII's), netto-nulemissietechnologie, koolstofintensiteitsklassen en bevoegde vergunningsinstantie.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 3</div>
+      <div class="article-card__title">Strategische sectoren</div>
+      <div class="article-card__desc">Identificeert de gedekte sectoren: energie-intensieve industrieën (staal, cement, aluminium, chemische producten), automobielfabricage en productie van netto-nulemissietechnologie (zonne-energie, wind, batterijen, warmtepompen).</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 4</div>
+      <div class="article-card__title">Industrialisatiedoelstelling</div>
+      <div class="article-card__desc">Stelt de hoofddoelstelling vast: het aandeel van de industrie in het EU-bbp verhogen van 14,3 % naar <strong>20 % tegen 2035</strong>. Lidstaten nemen nationale industriestrategieën aan die zijn afgestemd op deze Uniedoelstelling.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 5</div>
+      <div class="article-card__title">Verhouding tot andere bepalingen van het Unierecht</div>
+      <div class="article-card__desc">Verduidelijkt de wisselwerking met bestaande wetgeving: de Verordening netto-nul-industrie, de Verordening kritieke grondstoffen, de Verordening screening buitenlandse directe investeringen en de EU-Richtlijnen overheidsopdrachten. De IVV vult aan zonder te vervangen.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter II -->
+<section class="section" id="ch2">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-lightning-bolt"></i></div>
+    <h2 class="section__title">Hoofdstuk II: Vergunningsversnelling</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 6-16: enkelvoudige vergunning, digitale verwerking, industriële versnellingszones en prioritaire projecten</p>
+
+  <div class="info-box">
+    <h3>Industriële versnellingszones</h3>
+    <p>Aangewezen zones waar gebiedsdekkende milieubeoordelingen de projectspecifieke toetsingen vervangen. Projecten in deze zones profiteren van <strong>stilzwijgende goedkeuring</strong> als de bevoegde instantie haar deadline overschrijdt, van vereenvoudigde vergunningsprocedures via gebiedsdekkende vergunningen en van versnelde toegang tot EU-fondsen. De Commissie stelt gedelegeerde handelingen vast met de aanwijzingscriteria voor deze zones.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 6</div>
+      <div class="article-card__title">Enkelvoudige vergunning</div>
+      <div class="article-card__desc">Introduceert het beginsel "één project, één aanvraag". Alle voor een industrieel project vereiste vergunningen worden gebundeld in één aanvraag bij één instantie, waardoor de versnippering van procedures over meerdere organen wordt weggenomen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 7</div>
+      <div class="article-card__title">Contactpunten en bevoegde instanties</div>
+      <div class="article-card__desc">Lidstaten wijzen per regio één contactpunt aan om aanvragers te begeleiden en met alle relevante instanties te coördineren. Het contactpunt volgt de aanvraag en zorgt voor naleving van de termijnen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 8</div>
+      <div class="article-card__title">Digitale vergunningverlening via de Europese bedrijvenportemonnee</div>
+      <div class="article-card__desc">Alle vergunningsaanvragen, ingediende stukken en beslissingen worden digitaal verwerkt via de infrastructuur van de Europese bedrijvenportemonnee. Geen papieren indieningen. Machineleesbare formats voor interoperabiliteit.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 9</div>
+      <div class="article-card__title">Termijnen voor vergunningverlening</div>
+      <div class="article-card__desc">Stelt bindende maximumtermijnen vast voor vergunningsbeslissingen. Bevoegde instanties moeten aanvragen binnen vastgestelde termijnen verwerken, met kortere termijnen voor projecten in industriële versnellingszones.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 10</div>
+      <div class="article-card__title">Decarbonisatieprojecten voor energie-intensieve industrieën</div>
+      <div class="article-card__desc">Specifieke versnelde procedure voor EII-decarbonisatie-investeringen: koolstofafvang, brandstofomschakeling, elektrificatie en waterstofintegratie in staal-, cement-, aluminium- en chemische installaties.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 11</div>
+      <div class="article-card__title">Netto-nul-industrie projecten</div>
+      <div class="article-card__desc">In lijn met de Verordening netto-nul-industrie (NZIA). Projecten voor de productie van zonnepanelen, windturbines, batterijen, warmtepompen en elektrolyseurs profiteren van versnelde vergunningverlening in dit hoofdstuk.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 12</div>
+      <div class="article-card__title">Industriële versnellingszones</div>
+      <div class="article-card__desc">Aangewezen zones waar lidstaten vooraf gebiedsdekkende milieueffectbeoordelingen uitvoeren. Individuele projecten in deze zones hoeven geen milieubeoordeling op projectniveau te ondergaan, wat de doorlooptijden aanzienlijk verkort.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 13</div>
+      <div class="article-card__title">Stilzwijgende goedkeuring</div>
+      <div class="article-card__desc">Als de bevoegde instantie de deadline voor de vergunningsbeslissing overschrijdt, wordt de vergunning geacht te zijn <strong>verleend</strong> (stilzwijgende goedkeuring). Vrijwaringsmechanisme: niet van toepassing wanneer milieu- of veiligheidsbezwaren formeel vóór de deadline worden ingediend.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 14</div>
+      <div class="article-card__title">Gebiedsdekkende vergunningen</div>
+      <div class="article-card__desc">Binnen industriële versnellingszones dekt één gebiedsdekkende vergunning meerdere projecten. Vermindert de duplicatie van milieubeoordelingen en administratieve procedures bij vergelijkbare industriële installaties.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 15</div>
+      <div class="article-card__title">Aanwijzingscriteria</div>
+      <div class="article-card__desc">De Commissie stelt gedelegeerde handelingen vast die de aanwijzingscriteria voor industriële versnellingszones bepalen: industriële dichtheid, beschikbaarheid van infrastructuur, nabijheid van arbeidskrachten en milieubasisomstandigheden.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 16</div>
+      <div class="article-card__title">Prioritaire projecten</div>
+      <div class="article-card__desc">Aangewezen prioritaire projecten krijgen preferentiële toegang tot EU-fondsen, versnelde vergunningverlening en specifieke ondersteuning van het enkelvoudige contactpunt. Criteria omvatten banengroei, decarbonisatie-impact en strategische autonomie.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter III -->
+<section class="section" id="ch3">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-cart-outline"></i></div>
+    <h2 class="section__title">Hoofdstuk III: Aanbesteding en staatssteun</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 17-29: koolstofarme labels, EU-oorsprongsvereisten, koolstofintensiteitsklassen en leidende markten</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 17</div>
+      <div class="article-card__title">Toepassingsgebied</div>
+      <div class="article-card__desc">Van toepassing op overheidsopdrachten boven de EU-aanbestedingsdrempelwaarden. Omvat bouw-, infrastructuur- en industriële leveringscontracten waarbij staal, beton, aluminium, voertuigen of chemische producten significante inputs zijn.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 18</div>
+      <div class="article-card__title">Koolstofarm staal</div>
+      <div class="article-card__desc">Overheidsopdrachten moeten een minimum van <strong>25 % koolstofarm staal</strong> vereisen (gemeten per koolstofintensiteitsklasse). Van toepassing op bouw-, infrastructuur- en fabricageaanbestedingen boven de drempelwaarden.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 19</div>
+      <div class="article-card__title">Beton en mortel</div>
+      <div class="article-card__desc">Minimaal <strong>5 % koolstofarm beton/mortel</strong> met EU-oorsprongsvereisten. Zorgt ervoor dat openbare infrastructuurprojecten de binnenlandse productie van laag-emissie bouwmateriaal ondersteunen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 20</div>
+      <div class="article-card__title">Aluminium</div>
+      <div class="article-card__desc">Minimaal <strong>25 % koolstofarm aluminium</strong> met EU-oorsprongsvereisten in overheidsopdrachten. Richt zich op gedecarboniseerde smelt- en recyclingcapaciteit binnen de Unie.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 21</div>
+      <div class="article-card__title">EU-oorsprong voor voertuigen</div>
+      <div class="article-card__desc">Overheidsopdrachten voor voertuigen (vlootaankopen, openbaar vervoer) moeten EU-oorsprongsvoorwaarden bevatten. Ondersteunt de Europese automobielindustrie en haar overgang naar elektrische voertuigen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 22</div>
+      <div class="article-card__title">Gedelegeerde handelingen voor de chemische sector</div>
+      <div class="article-card__desc">De Commissie kan gedelegeerde handelingen vaststellen die koolstofarme en EU-oorsprongsvereisten uitbreiden naar specifieke chemische producten die worden gebruikt bij overheidsopdrachten, op basis van beoordelingen van de sectorale gereedheid.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 23</div>
+      <div class="article-card__title">Koolstofintensiteitslabeling klasse A/B/C</div>
+      <div class="article-card__desc">Introduceert een verplichte driedelige indeling: <strong>Klasse A</strong> (laagste koolstofintensiteit), <strong>Klasse B</strong> (gemiddeld), <strong>Klasse C</strong> (hoogste koolstofintensiteit). Toegepast op staal, cement, aluminium en andere basismaterialen. Labels zichtbaar op producten en in aanbestedingsdatabases.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 24</div>
+      <div class="article-card__title">Methodologie voor koolstofintensiteit</div>
+      <div class="article-card__desc">De Commissie bepaalt de berekeningswijze van de koolstofintensiteit per productcategorie: scope 1- en 2-emissies, referentiedrempelwaarden per klasse, verificatie door derden en periodieke herziening.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 25</div>
+      <div class="article-card__title">Bepalingen inzake leidende markten</div>
+      <div class="article-card__desc">Creëert leidende markten voor koolstofarme materialen via gegarandeerde publieke vraag. Aanbestedende diensten kunnen extra punten toekennen aan inschrijvingen die de minimale koolstofarme drempels overschrijden.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 26</div>
+      <div class="article-card__title">Voorwaarden voor publieke steunregelingen</div>
+      <div class="article-card__desc">Staatssteun en overheidssubsidies voor industriële projecten kunnen voorwaarden bevatten inzake koolstofarme productiemethoden, EU-oorsprong van inputs en naleving van de koolstofintensiteitslabeling.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 27</div>
+      <div name="article-card__title">WTO GPA-compatibiliteit</div>
+      <div class="article-card__desc">Garandeert dat EU-oorsprongs- en koolstofarme vereisten in overeenstemming zijn met de verplichtingen van de WTO-Overeenkomst inzake overheidsopdrachten. Uitzonderingen en ingroeperiodes zijn afgestemd op internationale handelsverplichtingen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 28</div>
+      <div class="article-card__title">Monitoring en rapportage</div>
+      <div class="article-card__desc">Lidstaten rapporteren jaarlijks over koolstofarme aanbestedingsvolumes, verdeling per koolstofintensiteitsklasse en naleving van EU-oorsprongsvereisten. De Commissie publiceert een geaggregeerd scorebord.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 29</div>
+      <div class="article-card__title">Herzieningsclausule</div>
+      <div class="article-card__desc">De Commissie herziet dit hoofdstuk <strong>3 jaar</strong> na inwerkingtreding. De herziening betreft de effectiviteit van koolstofarme drempels, oorsprongsvereisten, marktimpact en mogelijke uitbreiding naar aanvullende sectoren.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter IV -->
+<section class="section" id="ch4">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-shield-search"></i></div>
+    <h2 class="section__title">Hoofdstuk IV: Buitenlandse investeringen</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 30-35: sectorspecifieke investeringsvoorwaarden voor strategische industrieën</p>
+
+  <div class="info-box">
+    <h3>Screening van buitenlandse investeringen</h3>
+    <p>Van toepassing op buitenlandse investeringen van meer dan <strong>EUR 100 miljoen</strong> in strategische sectoren: batterijen, elektrische voertuigen, zonnepanelenproductie en verwerking van kritieke grondstoffen. Investeerders moeten voldoen aan voorwaarden inzake werkgelegenheid (minimaal 50 % werknemers uit de Unie), lokale inhoud, transparantie van eigendom, kennisoverdracht en O&amp;O-activiteiten binnen de EU. De Commissie beoordeelt transacties en kan bindende voorwaarden opleggen of transacties verbieden die de strategische belangen van de Unie ondermijnen.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 30</div>
+      <div class="article-card__title">Toepassingsgebied</div>
+      <div class="article-card__desc">Van toepassing op investeringen van meer dan <strong>EUR 100 miljoen</strong> in batterijen, elektrische voertuigen, zonnepanelenproductie en verwerking van kritieke grondstoffen. Omvat greenfield-, brownfield- en overnametransacties door niet-EU-entiteiten.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 31</div>
+      <div class="article-card__title">Werkgelegenheidsvoorwaarden</div>
+      <div class="article-card__desc">Investeerders moeten zorgen voor minimaal <strong>50 % werknemers uit de Unie</strong> in de arbeidsplaats van de gesubsidieerde of vergunde faciliteit. Naleving wordt geverifieerd bij voltooiing van het project en daarna jaarlijks.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 32</div>
+      <div class="article-card__title">Voorwaarden voor lokale inhoud</div>
+      <div class="article-card__desc">Een bepaald aandeel van inputs, componenten of halffabricaten moet binnen de Unie worden betrokken. Percentages worden per sector vastgesteld via uitvoeringshandelingen, met overgangsperioden voor aanpassing van de toeleveringsketen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 33</div>
+      <div class="article-card__title">Eigendom en kennisoverdracht</div>
+      <div class="article-card__desc">Investeerders moeten het uiteindelijke eigendom openbaar maken. Wanneer publieke middelen of strategische activa betrokken zijn, kunnen voorwaarden kennisoverdrachtovereenkomsten vereisen die EU-entiteiten toegang garanderen tot sleuteltechnologieën.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 34</div>
+      <div class="article-card__title">Voorwaarden voor O&amp;O-activiteiten</div>
+      <div class="article-card__desc">Buitenlandse investeerders in strategische sectoren moeten zich ertoe verbinden een minimaal aandeel van de projectgerelateerde O&amp;O-uitgaven binnen de Unie te doen. Ondersteunt het behoud van innovatiecapaciteit en hoogwaardige banen in de EU.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 35</div>
+      <div class="article-card__title">Kennisgevings- en beoordelingsprocedure</div>
+      <div class="article-card__desc">Verplichte kennisgeving aan de Commissie voor gedekte transacties. Beoordeling binnen 90 dagen. De Commissie kan onvoorwaardelijk goedkeuren, goedkeuren met voorwaarden of verbieden. Beroep bij het Hof van Justitie.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Chapter V -->
+<section class="section" id="ch5">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-flag-checkered"></i></div>
+    <h2 class="section__title">Hoofdstuk V: Slotbepalingen</h2>
+  </div>
+  <p class="section__subtitle">Artikelen 36-42: gedelegeerde handelingen, comitéprocedure, rapportage, herziening en inwerkingtreding</p>
+
+  <div class="card">
+    <p><strong>Gedelegeerde handelingen (Art. 36):</strong> de Commissie stelt gedelegeerde handelingen vast voor aanwijzingscriteria van industriële versnellingszones, berekeningswijzen van koolstofintensiteit, percentages lokale inhoud en sectorspecifieke drempelwaarden.</p>
+    <p><strong>Comitéprocedure (Art. 37):</strong> onderzoeksprocedure voor uitvoeringshandelingen. Deskundigen van lidstaten geraadpleegd via comitologie.</p>
+    <p><strong>Rapportage (Art. 38):</strong> lidstaten rapporteren tweejaarlijks over vergunningtermijnen, koolstofarme aanbestedingsvolumes, screeningsbeslissingen voor investeringen en voortgang richting de 20%-doelstelling voor het industrieel bbp-aandeel.</p>
+    <p><strong>Herziening (Art. 39):</strong> de Commissie herziet de Verordening 5 jaar na inwerkingtreding, met een tussentijdse beoordeling na 3 jaar voor de aanbestedingsbepalingen.</p>
+    <p><strong>Wijzigingen (Art. 40):</strong> gevolgswijzigingen in de Verordening netto-nul-industrie, de Verordening screening buitenlandse directe investeringen en de Richtlijnen overheidsopdrachten.</p>
+    <p><strong>Inwerkingtreding (Art. 41-42):</strong> 20 dagen na bekendmaking in het Publicatieblad. Van toepassing 12 maanden later, met een overgangsperiode van 24 maanden voor aanbestedings- en labelingbepalingen.</p>
+  </div>
+</section>
+
+<!-- Comparison table -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-swap-horizontal"></i></div>
+    <h2 class="section__title">Voor en na de IVV</h2>
+  </div>
+  <p class="section__subtitle">Een zij-aan-zij vergelijking van de belangrijkste veranderingen</p>
+
+  <table>
+    <thead>
+      <tr><th>Element</th><th>Voor (huidige wetgeving)</th><th>Na (IVV)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Vergunningen</td><td class="dim-cell">Meerdere vergunningen, verspreid over instanties</td><td class="highlight-cell">Één project, één aanvraag</td></tr>
+      <tr><td>Koolstofarme labels</td><td class="dim-cell">Geen (alleen vrijwillig)</td><td class="highlight-cell">Verplicht klasse A/B/C-systeem</td></tr>
+      <tr><td>Staalinkoop</td><td class="dim-cell">Geen koolstofvereisten</td><td class="highlight-cell">Min. 25 % koolstofarm staal</td></tr>
+      <tr><td>Buitenlandse investeringen</td><td class="dim-cell">Algemene screening (BDI-Verordening)</td><td class="highlight-cell">Sectorspecifieke voorwaarden boven EUR 100 M</td></tr>
+      <tr><td>Industriezones</td><td class="dim-cell">Geen EU-kader</td><td class="highlight-cell">Industriële versnellingszones met stilzwijgende goedkeuring</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Impact Assessment -->
+<section class="section" id="impact">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-chart-line"></i></div>
+    <h2 class="section__title">Effectbeoordeling</h2>
+  </div>
+  <p class="section__subtitle">Kerncijfers uit de effectbeoordeling van de Commissie</p>
+
+  <div class="figures" style="margin-top: 1rem;">
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 10.387M</div>
+      <div class="figure-card__label">Toename van de bruto toegevoegde waarde (btw)</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 3.058M</div>
+      <div class="figure-card__label">Besparingen op broeikasgasemissies</div>
+    </div>
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 240M</div>
+      <div class="figure-card__label">Besparingen op vergunningskosten</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number" style="font-size: 1.6rem;">EUR 8,92M</div>
+      <div class="figure-card__label">Administratieve kosten per jaar</div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Wetgevingstijdlijn</h2>
+  </div>
+  <p class="section__subtitle">Van het Competitiviteitskompas tot de eerste lezing</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">29 januari 2025</div>
+      <div class="timeline__text">De Commissie publiceert het Competitiviteitskompas, waarin industriebeleid als prioriteit wordt aangemerkt</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 februari 2025</div>
+      <div class="timeline__text">Mededeling over de Schone Industriedeal aangenomen, met aankondiging van wetgevingsvoorstellen voor reindustrialisering</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 juni 2025</div>
+      <div class="timeline__text">Resolutie van het Europees Parlement over de Schone Industriedeal en industrieel concurrentievermogen</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">4 maart 2026</div>
+      <div class="timeline__text"><strong>De Commissie neemt het voorstel voor de Industriële versnellingsverordening aan (COM(2026) 100)</strong></div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">K3 2026 (verwacht)</div>
+      <div class="timeline__text">Verslag van de commissie van het Europees Parlement: ITRE als leidende commissie, adviezen van ENVI/IMCO verwacht</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">K1 2027 (verwacht)</div>
+      <div class="timeline__text">Eerste lezing: standpunten van het Europees Parlement en de Raad</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Officiële bronnen</h2>
+  </div>
+  <p class="section__subtitle">Alle documenten die zijn gebruikt voor deze analyse</p>
+
+  <div class="card">
+    <p><strong>Voorstel:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN" target="_blank" rel="noopener">COM(2026) 100 final</a></p>
+    <p><strong>Bijlagen:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/99174b0d-bcda-4039-9157-62725439d010_en" target="_blank" rel="noopener">Bijlagen bij het voorstel (PDF)</a></p>
+    <p><strong>Effectbeoordeling:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/ef967653-d886-4c14-a68a-65ea6ef25bce_en" target="_blank" rel="noopener">Rapport effectbeoordeling (PDF)</a></p>
+    <p><strong>Samenvatting:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/f89f405e-74e4-49f9-b8ab-e7e7976b8877_en" target="_blank" rel="noopener">Samenvatting effectbeoordeling (PDF)</a></p>
+    <p><strong>Fiche:</strong> <a href="https://single-market-economy.ec.europa.eu/document/download/9c7fa301-c4cf-4600-8c00-34243ee26e45_en" target="_blank" rel="noopener">Fiche Industriële versnellingsverordening (PDF)</a></p>
+    <p><strong>OEIL-procedure:</strong> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)" target="_blank" rel="noopener">2026/0068(COD)</a></p>
+    <p><strong>Wetgevingstrein:</strong> <a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-industrial-decarbonisation-accelerator-act" target="_blank" rel="noopener">EP-wetgevingstreinprogramma</a></p>
+    <p><strong>Persbericht:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/ip_26_515" target="_blank" rel="noopener">IP/26/515</a></p>
+    <p><strong>V&amp;A:</strong> <a href="https://ec.europa.eu/commission/presscorner/detail/en/qanda_26_516" target="_blank" rel="noopener">QANDA/26/516</a></p>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Geproduceerd door <a href="https://brubru.beresol.eu">Brubru</a>, de AI-gedreven EU-beleidsassistent van <a href="https://beresol.eu">Beresol BV</a>. Zie ook: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p style="margin-top: 0.5rem;">Analyse gebaseerd op COM(2026) 100 final, aangenomen op 4 maart 2026. Dit is een onafhankelijke analyse, geen officieel EU-document.</p>
+</footer>
+
+<!-- Back to top button -->
+<a href="#top" class="back-to-top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
+
+<script>
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

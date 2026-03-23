@@ -7,8 +7,9 @@
 
 import { useEffect, useState, useMemo, useRef } from 'react';
 import Icon from '@mdi/react';
-import { mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox, mdiOpenInNew } from '@mdi/js';
+import { mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox, mdiOpenInNew, mdiBookOpenPageVariantOutline } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
+import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
 import './analytics_tab.css';
 
 export const AnalyticsTab = () => {
@@ -369,6 +370,55 @@ export const AnalyticsTab = () => {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Deep Dive Library */}
+      <div className="analytics-tab__section">
+        <h3>
+          <Icon path={mdiBookOpenPageVariantOutline} size={0.9} />
+          {' '}Brubru Deep Dive Library
+        </h3>
+        <p className="analytics-tab__section-subtitle">
+          Article-by-article analysis of major EU legislative proposals, with impact assessment figures and official sources.
+        </p>
+        <div className="analytics-tab__deep-dive-grid">
+          {DEEP_DIVES.map((dd) => (
+            <div key={dd.procedureRef} className="analytics-tab__deep-dive-card" style={{ borderTopColor: dd.color }}>
+              <div className="analytics-tab__deep-dive-header">
+                <span className="analytics-tab__deep-dive-icon" style={{ color: dd.color }}>
+                  <span className={`mdi ${dd.icon}`} />
+                </span>
+                <span className="analytics-tab__deep-dive-ref">{dd.comReference}</span>
+              </div>
+              <h4 className="analytics-tab__deep-dive-title">{dd.title}</h4>
+              <p className="analytics-tab__deep-dive-procedure">{dd.procedureRef}</p>
+              <div className="analytics-tab__deep-dive-langs">
+                {dd.languages.map((lang) => (
+                  <a
+                    key={lang}
+                    href={getDeepDiveUrl(dd, lang)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="analytics-tab__deep-dive-lang"
+                    style={{ borderColor: dd.color, color: dd.color }}
+                  >
+                    {LANG_LABELS[lang] || lang.toUpperCase()}
+                  </a>
+                ))}
+              </div>
+              <a
+                href={getDeepDiveUrl(dd, 'en')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="analytics-tab__deep-dive-cta"
+                style={{ backgroundColor: dd.color }}
+              >
+                <Icon path={mdiOpenInNew} size={0.7} />
+                Read analysis
+              </a>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Export Section */}

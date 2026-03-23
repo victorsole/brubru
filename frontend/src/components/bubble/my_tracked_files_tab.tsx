@@ -28,8 +28,10 @@ import {
   mdiFilterVariant,
   mdiTextBoxCheckOutline,
   mdiFileDocumentMultipleOutline,
+  mdiBookOpenPageVariantOutline,
 } from '@mdi/js';
 import { useNavigate } from 'react-router-dom';
+import { getDeepDiveForProcedure, getDeepDiveUrl } from '../../utils/deep_dive_map';
 import axios from 'axios';
 import { useLegislativeTrains } from '../../hooks/use_legislative_trains';
 import type { TrackedFile } from '../../hooks/use_legislative_trains';
@@ -1021,6 +1023,17 @@ const TrackedFileCard = ({ file, onViewDetail, onUntrack, onDraftAmendment, getS
           <Icon path={mdiPencilOutline} size={0.7} />
           Draft Amendment
         </button>
+        {file.oeil_procedure_ref && getDeepDiveForProcedure(file.oeil_procedure_ref) && (
+          <a
+            href={getDeepDiveUrl(getDeepDiveForProcedure(file.oeil_procedure_ref)!, 'en')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="tracked-file-card__action-btn tracked-file-card__action-btn--deep-dive"
+          >
+            <Icon path={mdiBookOpenPageVariantOutline} size={0.7} />
+            Deep Dive
+          </a>
+        )}
         {oeilUrl && (
           <a
             href={oeilUrl}

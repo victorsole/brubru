@@ -347,6 +347,18 @@
   border-color: #e65100;
 }
 
+.tracked-file-card__action-btn--deep-dive {
+  background: #f3e8ff;
+  color: #7c3aed;
+  border-color: #c4b5fd;
+}
+
+.tracked-file-card__action-btn--deep-dive:hover {
+  background: #7c3aed;
+  color: white;
+  border-color: #7c3aed;
+}
+
 .tracked-file-card__action-btn--danger:hover {
   background: #ffebee;
   color: #f44336;

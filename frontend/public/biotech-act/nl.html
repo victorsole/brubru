@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EU Biotech Act Explained: Strengthening Europe's Biotechnology Sector | Brubru</title>
-  <meta name="description" content="Comprehensive guide to the European Biotech Act (COM(2025) 1022): 7 pillars, regulatory sandboxes, clinical trial acceleration, biosecurity, EUR 20.4B budget. Article-by-article analysis by Brubru.">
+  <title>Europese biotechnologiewet uitgelegd: versterking van de biotechnologiesector in Europa | Brubru</title>
+  <meta name="description" content="Uitgebreide gids over de Europese biotechnologiewet (COM(2025) 1022): 7 pijlers, regelgevende sandboxen, versnelling van klinische proeven, bioveiligheid, begroting van 20,4 miljard euro. Artikel-voor-artikel analyse door Brubru.">
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
   <style>
     @font-face {
@@ -47,6 +47,15 @@
       color: var(--color-text);
       line-height: 1.7;
       font-size: 1.05rem;
+    }
+
+    .disclaimer-banner {
+      background: #fffbeb;
+      border-bottom: 2px solid #d97706;
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
     }
 
     .header {
@@ -393,7 +402,7 @@
     .back-to-top.visible { opacity: 1; }
     .back-to-top:hover { transform: translateY(-2px); }
 
-    /* Temple / 7 Pillars */
+    /* Tempel / 7 Pijlers */
     .temple {
       margin: 0 0 3rem;
       padding: 0;
@@ -579,7 +588,6 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-    /* Staggered entrance animation */
     .temple__pillar {
       animation: pillarRise 0.6s ease-out both;
     }
@@ -595,7 +603,6 @@
       60% { opacity: 1; transform: translateY(-4px) scaleY(1.02); }
       100% { opacity: 1; transform: translateY(0) scaleY(1); }
     }
-    /* Subtle pulse on the active pillar bar */
     .temple__pillar:hover .temple__pillar-bar::before {
       animation: capitalPulse 1.5s ease-in-out infinite;
     }
@@ -640,545 +647,550 @@
 </head>
 <body>
 
+<!-- Disclaimer -->
+<div class="disclaimer-banner">
+  Deze analyse is gebaseerd op de Engelse versie van COM(2025) 1022. De officiële Nederlandse versie is nog niet gepubliceerd op EUR-Lex. Deze vertaling is opgesteld door Brubru en kan afwijken van de officiële versie zodra deze beschikbaar is.
+</div>
+
 <!-- Header -->
 <header class="header" id="top">
   <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
   <div class="header__text">
-    <div class="header__title">EU Biotech Act Explainer</div>
-    <div class="header__subtitle">Strengthening Europe's Biotechnology and Biomanufacturing</div>
+    <div class="header__title">Europese biotechnologiewet</div>
+    <div class="header__subtitle">Versterking van de biotechnologie en biofabricage in Europa</div>
   </div>
   <select onchange="location.href=this.value" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-size:0.85rem;font-family:inherit;background:var(--color-bg);color:var(--color-text);cursor:pointer;">
-    <option value="index.html" selected>English</option>
+    <option value="index.html">English</option>
     <option value="fr.html">Français</option>
     <option value="es.html">Español</option>
     <option value="it.html">Italiano</option>
-    <option value="nl.html">Nederlands</option>
+    <option value="nl.html" selected>Nederlands</option>
   </select>
-  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+  <a href="https://brubru.beresol.eu" class="header__cta">Probeer Brubru gratis</a>
 </header>
 
 <div class="container">
 
 <!-- Hero -->
 <section class="hero">
-  <div class="hero__tag"><a href="https://health.ec.europa.eu/document/download/ec1475b7-e3f9-409e-b927-fc7e69306a8c_en" target="_blank" rel="noopener">COM(2025) 1022</a> | Proposed 16 December 2025</div>
-  <h1 class="hero__title">European Biotech Act: <span>7 Pillars to Close<br>the Innovation Gap</span></h1>
+  <div class="hero__tag"><a href="https://health.ec.europa.eu/document/download/ec1475b7-e3f9-409e-b927-fc7e69306a8c_en" target="_blank" rel="noopener">COM(2025) 1022</a> | Voorgesteld op 16 december 2025</div>
+  <h1 class="hero__title">Europese biotechnologiewet: <span>7 pijlers om de<br>innovatiekloof te dichten</span></h1>
   <p class="hero__subtitle">
-    The Commission's proposal to transform Europe's biotechnology and biomanufacturing sector.
-    Strategic projects, regulatory sandboxes, clinical trial acceleration, biosecurity, and EUR 20.4 billion in funding.
-    Here is everything you need to know.
+    Het voorstel van de Commissie om de biotechnologie- en biofabricagesector in Europa te transformeren.
+    Strategische projecten, regelgevende sandboxen, versnelling van klinische proeven, bioveiligheid en 20,4 miljard euro aan financiering.
+    Dit is alles wat u moet weten.
   </p>
   <div class="hero__meta">
-    <span><i class="mdi mdi-dna"></i> 10 Chapters, 7 Pillars</span>
-    <span><i class="mdi mdi-scale-balance"></i> Regulation (directly applicable)</span>
+    <span><i class="mdi mdi-dna"></i> 10 hoofdstukken, 7 pijlers</span>
+    <span><i class="mdi mdi-scale-balance"></i> Verordening (rechtstreeks toepasselijk)</span>
     <span><i class="mdi mdi-calendar-check"></i> Procedure: 2025/0406 (COD)</span>
   </div>
 </section>
 
-<!-- Key figures -->
+<!-- Kerncijfers -->
 <div class="figures">
   <div class="figure-card fc-green">
-    <div class="figure-card__number">EUR 20.4B</div>
-    <div class="figure-card__label">Proposed budget (MFF 2028-2034)</div>
+    <div class="figure-card__number">20,4 Mrd€</div>
+    <div class="figure-card__label">Voorgesteld budget (MFK 2028-2034)</div>
   </div>
   <div class="figure-card fc-blue">
-    <div class="figure-card__number">913K</div>
-    <div class="figure-card__label">Jobs in EU biotech (2022)</div>
+    <div class="figure-card__number">913.000</div>
+    <div class="figure-card__label">Banen in EU-biotech (2022)</div>
   </div>
   <div class="figure-card fc-purple">
     <div class="figure-card__number">7%</div>
-    <div class="figure-card__label">EU share of global biotech VC</div>
+    <div class="figure-card__label">EU-aandeel in wereldwijd biotech-risicokapitaal</div>
   </div>
   <div class="figure-card fc-amber">
-    <div class="figure-card__number">75 days</div>
-    <div class="figure-card__label">New clinical trial authorisation target</div>
+    <div class="figure-card__number">75 dagen</div>
+    <div class="figure-card__label">Doelstelling voor toelating klinische proeven</div>
   </div>
 </div>
 
-<!-- TOC -->
+<!-- Inhoudsopgave -->
 <nav class="toc">
-  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structure of the Proposal</div>
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Structuur van het voorstel</div>
   <div class="toc__grid">
-    <a href="#gap" class="toc__link"><i class="mdi mdi-alert-circle-outline"></i> The competitiveness gap</a>
-    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Scope and Definitions</a>
-    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Strategic Projects</a>
-    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Access to Funding</a>
-    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> SPC Extension</a>
+    <a href="#gap" class="toc__link"><i class="mdi mdi-alert-circle-outline"></i> De concurrentiekloof</a>
+    <a href="#ch1" class="toc__link"><span class="toc__num">I</span> Doel en definities</a>
+    <a href="#ch2" class="toc__link"><span class="toc__num">II</span> Strategische projecten</a>
+    <a href="#ch3" class="toc__link"><span class="toc__num">III</span> Toegang tot financiering</a>
+    <a href="#ch4" class="toc__link"><span class="toc__num">IV</span> Verlenging ABC</a>
     <a href="#ch5" class="toc__link"><span class="toc__num">V</span> Biosimilars</a>
-    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> AI and Data</a>
-    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Novel Products</a>
-    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Biosecurity</a>
-    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Legislative Simplification</a>
-    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Final Provisions</a>
-    <a href="#comparison" class="toc__link"><i class="mdi mdi-swap-horizontal"></i> Before vs. After</a>
-    <a href="#timeline" class="toc__link"><i class="mdi mdi-timeline-clock-outline"></i> Timeline</a>
-    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official Sources</a>
+    <a href="#ch6" class="toc__link"><span class="toc__num">VI</span> AI en data</a>
+    <a href="#ch7" class="toc__link"><span class="toc__num">VII</span> Innovatieve producten</a>
+    <a href="#ch8" class="toc__link"><span class="toc__num">VIII</span> Bioveiligheid</a>
+    <a href="#ch9" class="toc__link"><span class="toc__num">IX</span> Wetgevingsvereenvoudiging</a>
+    <a href="#ch10" class="toc__link"><span class="toc__num">X</span> Slotbepalingen</a>
+    <a href="#comparison" class="toc__link"><i class="mdi mdi-swap-horizontal"></i> Voor en na</a>
+    <a href="#timeline" class="toc__link"><i class="mdi mdi-timeline-clock-outline"></i> Tijdlijn</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Officiële bronnen</a>
   </div>
 </nav>
 
-<!-- 7 Pillars Temple -->
+<!-- Tempel van de 7 pijlers -->
 <div class="temple">
   <div class="temple__roof">
-    European Biotech Act
-    <div class="temple__roof-sub">COM(2025) 1022 final | 7 pillars for EU biotech competitiveness</div>
+    Europese biotechnologiewet
+    <div class="temple__roof-sub">COM(2025) 1022 final | 7 pijlers voor de EU-biotechconcurrentiekracht</div>
   </div>
   <div class="temple__pillars">
     <a href="#ch2" class="temple__pillar" style="text-decoration:none;">
       <div class="temple__pillar-icon" style="background: var(--color-blue);"><i class="mdi mdi-rocket-launch-outline"></i></div>
       <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(6,147,227,0.6), var(--color-blue));"></div>
-      <div class="temple__pillar-label">Strategic Projects</div>
-      <div class="temple__pillar-num">Pillar 1</div>
-      <div class="temple__pillar-tooltip">Chapter II: 10-month fast-track permitting</div>
+      <div class="temple__pillar-label">Strategische projecten</div>
+      <div class="temple__pillar-num">Pijler 1</div>
+      <div class="temple__pillar-tooltip">Hoofdstuk II: versnelde vergunningverlening in 10 maanden</div>
     </a>
     <a href="#ch3" class="temple__pillar" style="text-decoration:none;">
       <div class="temple__pillar-icon" style="background: var(--color-amber);"><i class="mdi mdi-cash-multiple"></i></div>
       <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(217,119,6,0.6), var(--color-amber));"></div>
-      <div class="temple__pillar-label">Access to Funding</div>
-      <div class="temple__pillar-num">Pillar 2</div>
-      <div class="temple__pillar-tooltip">Chapter III: EIB investment pilot</div>
+      <div class="temple__pillar-label">Toegang tot financiering</div>
+      <div class="temple__pillar-num">Pijler 2</div>
+      <div class="temple__pillar-tooltip">Hoofdstuk III: EIB-investeringspilot</div>
     </a>
     <a href="#ch5" class="temple__pillar" style="text-decoration:none;">
       <div class="temple__pillar-icon" style="background: var(--color-green);"><i class="mdi mdi-pill"></i></div>
       <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(5,150,105,0.6), var(--color-green));"></div>
       <div class="temple__pillar-label">Biosimilars</div>
-      <div class="temple__pillar-num">Pillar 3</div>
-      <div class="temple__pillar-tooltip">Chapters IV-V: SPC + biosimilar competitiveness</div>
+      <div class="temple__pillar-num">Pijler 3</div>
+      <div class="temple__pillar-tooltip">Hoofdstukken IV-V: ABC + concurrentiekracht biosimilars</div>
     </a>
     <a href="#ch6" class="temple__pillar" style="text-decoration:none;">
       <div class="temple__pillar-icon" style="background: var(--color-purple);"><i class="mdi mdi-brain"></i></div>
       <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(155,81,224,0.6), var(--color-purple));"></div>
-      <div class="temple__pillar-label">AI and Data</div>
-      <div class="temple__pillar-num">Pillar 4</div>
-      <div class="temple__pillar-tooltip">Chapter VI: EMA AI guidance + sandboxes</div>
+      <div class="temple__pillar-label">AI en data</div>
+      <div class="temple__pillar-num">Pijler 4</div>
+      <div class="temple__pillar-tooltip">Hoofdstuk VI: EMA AI-richtsnoeren + sandboxen</div>
     </a>
     <a href="#ch7" class="temple__pillar" style="text-decoration:none;">
       <div class="temple__pillar-icon" style="background: #0ea5e9;"><i class="mdi mdi-flask-outline"></i></div>
       <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(14,165,233,0.6), #0ea5e9);"></div>
-      <div class="temple__pillar-label">Novel Products</div>
-      <div class="temple__pillar-num">Pillar 5</div>
-      <div class="temple__pillar-tooltip">Chapter VII: foresight panel + regulatory sandbox</div>
+      <div class="temple__pillar-label">Innovatieve producten</div>
+      <div class="temple__pillar-num">Pijler 5</div>
+      <div class="temple__pillar-tooltip">Hoofdstuk VII: prospectief panel + regelgevende sandbox</div>
     </a>
     <a href="#ch8" class="temple__pillar" style="text-decoration:none;">
       <div class="temple__pillar-icon" style="background: var(--color-red);"><i class="mdi mdi-shield-alert-outline"></i></div>
       <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(220,38,38,0.6), var(--color-red));"></div>
-      <div class="temple__pillar-label">Biosecurity</div>
-      <div class="temple__pillar-num">Pillar 6</div>
-      <div class="temple__pillar-tooltip">Chapter VIII: 24h suspicious transaction reporting</div>
+      <div class="temple__pillar-label">Bioveiligheid</div>
+      <div class="temple__pillar-num">Pijler 6</div>
+      <div class="temple__pillar-tooltip">Hoofdstuk VIII: melding verdachte transacties binnen 24 uur</div>
     </a>
     <a href="#ch9" class="temple__pillar" style="text-decoration:none;">
       <div class="temple__pillar-icon" style="background: #6366f1;"><i class="mdi mdi-file-edit-outline"></i></div>
       <div class="temple__pillar-bar" style="background: linear-gradient(180deg, rgba(99,102,241,0.6), #6366f1);"></div>
-      <div class="temple__pillar-label">Legislative Simplification</div>
-      <div class="temple__pillar-num">Pillar 7</div>
-      <div class="temple__pillar-tooltip">Chapter IX: 6 regulations amended</div>
+      <div class="temple__pillar-label">Wetgevingsvereenvoudiging</div>
+      <div class="temple__pillar-num">Pijler 7</div>
+      <div class="temple__pillar-tooltip">Hoofdstuk IX: 6 verordeningen gewijzigd</div>
     </a>
   </div>
   <div class="temple__base">
-    Legal basis: Articles 114, 168(4), and 173(3) TFEU | Ordinary legislative procedure (COD) | EUR 20.4 billion proposed (MFF 2028-2034)
+    Rechtsgrondslag: artikelen 114, 168(4) en 173(3) VWEU | Gewone wetgevingsprocedure (COD) | 20,4 miljard euro voorgesteld (MFK 2028-2034)
   </div>
 </div>
 
-<!-- The competitiveness gap -->
+<!-- De concurrentiekloof -->
 <section class="section" id="gap">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-alert-outline"></i></div>
-    <h2 class="section__title">The Competitiveness Gap</h2>
+    <h2 class="section__title">De concurrentiekloof</h2>
   </div>
-  <p class="section__subtitle">Europe leads in science but lags in commercialisation</p>
+  <p class="section__subtitle">Europa loopt voorop in wetenschap maar loopt achter in commercialisering</p>
 
   <div class="info-box">
-    <h3>World-class research, structural barriers</h3>
-    <p>The EU biotechnology industry has grown more than twice as fast as the overall EU economy and accounted for EUR 38.1 billion of Union GDP in 2022. Each job in industrial biotech generates 3.4 additional jobs. Yet the EU captures only <strong>7% of global health biotech VC</strong> (vs 63% for the US, 14% for China). US biopharma start-ups receive 9 times more late-stage funding than EU equivalents.</p>
+    <h3>Wereldklasse onderzoek, structurele belemmeringen</h3>
+    <p>De EU-biotechnologiesector is meer dan twee keer zo snel gegroeid als de gehele EU-economie en was in 2022 goed voor 38,1 miljard euro van het bbp van de Unie. Elke baan in de industriële biotech genereert 3,4 extra banen. Toch vangt de EU slechts <strong>7% van het wereldwijde risicokapitaal in gezondheidsbiotech</strong> (versus 63% voor de VS en 14% voor China). Amerikaanse biofarmaceutische start-ups ontvangen 9 keer meer financiering in latere fases dan hun Europese tegenhangers.</p>
   </div>
 
   <div class="article-grid">
     <div class="article-card">
-      <div class="article-card__num">Venture capital gap</div>
-      <div class="article-card__title">EUR 25B vs EUR 219B</div>
-      <div class="article-card__desc">Total health biotech VC invested in the EU vs the US between 2015 and 2025. 66 out of 67 EU biotech companies that went public in the last six years listed on non-EU stock exchanges.</div>
+      <div class="article-card__num">Risicokapitaalkloof</div>
+      <div class="article-card__title">25 Mrd€ versus 219 Mrd€</div>
+      <div class="article-card__desc">Totaal risicokapitaal in gezondheidsbiotech geïnvesteerd in de EU versus de VS tussen 2015 en 2025. 66 van de 67 EU-biotechbedrijven die de afgelopen zes jaar naar de beurs gingen, noteerden op niet-Europese beurzen.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">Clinical trial decline</div>
-      <div class="article-card__title">22% down to 12%</div>
-      <div class="article-card__desc">EU share of commercially sponsored clinical trials in the EEA dropped from 22% in 2013 to 12% in 2023. China rose from 5% to 18%. EU authorisation takes 113 days on average; competitors manage 60.</div>
+      <div class="article-card__num">Teruggang klinische proeven</div>
+      <div class="article-card__title">Van 22% naar 12%</div>
+      <div class="article-card__desc">Het EU-aandeel in commercieel gesponsorde klinische proeven in de EER daalde van 22% in 2013 naar 12% in 2023. China steeg van 5% naar 18%. EU-toelating duurt gemiddeld 113 dagen; concurrenten doen het in circa 60 dagen.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">Scientific output</div>
-      <div class="article-card__title">21% of top publications</div>
-      <div class="article-card__desc">The EU produces 21% of the world's top 10% most-cited publications in biology, biomedical research, and clinical medicine. Comparable to the US (22%) and China (24%).</div>
+      <div class="article-card__num">Wetenschappelijke output</div>
+      <div class="article-card__title">21% van de beste publicaties</div>
+      <div class="article-card__desc">De EU produceert 21% van de meest geciteerde publicaties wereldwijd (top 10%) in biologie, biomedisch onderzoek en klinische geneeskunde. Vergelijkbaar met de VS (22%) en China (24%).</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">Pharmaceutical spending</div>
-      <div class="article-card__title">41% biological</div>
-      <div class="article-card__desc">Biological medicines now represent 41% of EU pharmaceutical spending (EUR 95 billion out of EUR 228 billion in 2024). Biosimilars are a major growth driver.</div>
+      <div class="article-card__num">Farmaceutische uitgaven</div>
+      <div class="article-card__title">41% biologisch</div>
+      <div class="article-card__desc">Biologische geneesmiddelen vertegenwoordigen nu 41% van de EU-farmaceutische uitgaven (95 miljard euro van de 228 miljard in 2024). Biosimilars zijn een belangrijke groeimotor.</div>
     </div>
   </div>
 </section>
 
-<!-- Chapter I -->
+<!-- Hoofdstuk I -->
 <section class="section" id="ch1">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-book-open-page-variant-outline"></i></div>
-    <h2 class="section__title">Chapter I: Scope and Definitions</h2>
+    <h2 class="section__title">Hoofdstuk I: doel en definities</h2>
   </div>
-  <p class="section__subtitle">Subject matter, scope, and key definitions</p>
+  <p class="section__subtitle">Onderwerp, toepassingsgebied en kerndefinities</p>
 
   <div class="card">
-    <div class="card__title"><i class="mdi mdi-target" style="color: var(--color-green);"></i> Three objectives</div>
-    <p><strong>1.</strong> Improve the functioning of the internal market by strengthening the competitiveness of the health biotech sector, from research to production.</p>
-    <p><strong>2.</strong> Create conditions for the development and timely placing on the EU market of biotech innovations, products, and services.</p>
-    <p><strong>3.</strong> Safeguard high standards for human and animal health, environment, ethics, quality, food and feed safety, and biosecurity.</p>
+    <div class="card__title"><i class="mdi mdi-target" style="color: var(--color-green);"></i> Drie doelstellingen</div>
+    <p><strong>1.</strong> Het verbeteren van de werking van de interne markt door versterking van de concurrentiekracht van de gezondheidsbiotecsector, van onderzoek tot productie.</p>
+    <p><strong>2.</strong> Het scheppen van voorwaarden voor de ontwikkeling en tijdige introductie op de EU-markt van biotechnologische innovaties, producten en diensten.</p>
+    <p><strong>3.</strong> Het waarborgen van hoge normen voor de gezondheid van mens en dier, milieu, ethiek, kwaliteit, voedselveiligheid en bioveiligheid.</p>
   </div>
 
   <div class="card">
-    <div class="card__title"><i class="mdi mdi-text-box-outline" style="color: var(--color-blue);"></i> Key definitions</div>
-    <p><strong>Biotechnology:</strong> the application of science and technology to living organisms, their parts, products, or models, to alter living or non-living materials for the production of knowledge, goods, and services.</p>
-    <p><strong>Health biotechnology:</strong> the application of biotechnology in the human medical, veterinary, pharmaceutical, and phytosanitary areas for the development of biotechnology products and services.</p>
-    <p><strong>Scope:</strong> covers the entire lifecycle: research, access to funding, development, innovation, testing, validation, manufacturing, placing on the market, and use.</p>
+    <div class="card__title"><i class="mdi mdi-text-box-outline" style="color: var(--color-blue);"></i> Kerndefinities</div>
+    <p><strong>Biotechnologie:</strong> de toepassing van wetenschap en technologie op levende organismen, hun onderdelen, producten of modellen, om levend of niet-levend materiaal te wijzigen ten behoeve van de productie van kennis, goederen en diensten.</p>
+    <p><strong>Gezondheids-biotechnologie:</strong> de toepassing van biotechnologie op het humaan-medische, veterinaire, farmaceutische en fytosanitaire gebied voor de ontwikkeling van biotechnologische producten en diensten.</p>
+    <p><strong>Toepassingsgebied:</strong> bestrijkt de gehele levenscyclus: onderzoek, toegang tot financiering, ontwikkeling, innovatie, testen, validatie, vervaardiging, in de handel brengen en gebruik.</p>
   </div>
 </section>
 
-<!-- Chapter II: Strategic Projects (Pillar 1) -->
+<!-- Hoofdstuk II: Strategische projecten (Pijler 1) -->
 <section class="section" id="ch2">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-rocket-launch-outline"></i></div>
-    <h2 class="section__title">Chapter II: Strategic Projects</h2>
+    <h2 class="section__title">Hoofdstuk II: strategische projecten</h2>
   </div>
-  <p class="section__subtitle">Pillar 1: recognising and supporting biotechnology strategic projects</p>
+  <p class="section__subtitle">Pijler 1: erkenning en ondersteuning van strategische biotechnologieprojecten</p>
 
   <div class="info-box">
-    <h3>Two categories of strategic projects</h3>
-    <p>The Act creates a framework for recognising <strong>health biotechnology strategic projects</strong> at Member State level and <strong>high-impact health biotechnology strategic projects</strong> at EU level. Both receive accelerated permitting, priority administrative support, and "highest national significance" designation under national law.</p>
+    <h3>Twee categorieën strategische projecten</h3>
+    <p>De wet creëert een kader voor de erkenning van <strong>strategische projecten in gezondheids-biotechnologie</strong> op het niveau van de lidstaten en van <strong>strategische projecten in gezondheids-biotechnologie met grote impact</strong> op EU-niveau. Beide profiteren van versnelde vergunningverlening, prioritaire administratieve ondersteuning en de aanwijzing als "project van hoogste nationaal belang" op grond van nationaal recht.</p>
   </div>
 
   <div class="article-grid">
     <div class="article-card">
-      <div class="article-card__num">Member State level</div>
-      <div class="article-card__title">Strategic projects</div>
-      <div class="article-card__desc">Recognised by national authorities. Criteria: contribute to competitiveness, resilience, or security of the Union's biotech sector. Permit-granting capped at 10 months.</div>
+      <div class="article-card__num">Niveau lidstaat</div>
+      <div class="article-card__title">Strategische projecten</div>
+      <div class="article-card__desc">Erkend door nationale autoriteiten. Criteria: bijdragen aan de concurrentiekracht, veerkracht of veiligheid van de biotechsector van de Unie. Vergunningverlening gemaximeerd op 10 maanden.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">EU level</div>
-      <div class="article-card__title">High-impact strategic projects</div>
-      <div class="article-card__desc">Two-tier recognition: Member State assessment + Commission decision. Permit-granting capped at 8 months, with possible 3-month extension. Public interest override for Habitats, Birds, and Water Framework Directives.</div>
+      <div class="article-card__num">EU-niveau</div>
+      <div class="article-card__title">Strategische projecten met grote impact</div>
+      <div class="article-card__desc">Erkenning in twee stappen: beoordeling door lidstaat en besluit van de Commissie. Vergunningverlening gemaximeerd op 8 maanden, met mogelijke verlenging van 3 maanden. Overschrijding van openbaar belang voor de Habitatrichtlijn, Vogelrichtlijn en Kaderrichtlijn water.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">Strategic mapping</div>
-      <div class="article-card__title">Within 6 months</div>
-      <div class="article-card__desc">The Commission will conduct a strategic mapping of the Union's biotech ecosystem within 6 months of entry into force: capacities, infrastructure, gaps, dependencies, and investment needs.</div>
+      <div class="article-card__num">Strategische kartering</div>
+      <div class="article-card__title">Binnen 6 maanden</div>
+      <div class="article-card__desc">De Commissie voert binnen 6 maanden na inwerkingtreding een strategische kartering uit van het biotechsecosysteem van de Unie: capaciteiten, infrastructuur, leemten, afhankelijkheden en investeringsbehoeften.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">Governance</div>
-      <div class="article-card__title">Steering Group and Support Network</div>
-      <div class="article-card__desc">European Health Biotechnology Steering Group (Member States + Commission). EU Health Biotechnology Support Network of national and regional antennas to support SMEs, start-ups, and innovators.</div>
+      <div class="article-card__num">Bestuur</div>
+      <div class="article-card__title">Stuurgroep en ondersteuningsnetwerk</div>
+      <div class="article-card__desc">Europese stuurgroep voor gezondheids-biotechnologie (lidstaten en Commissie). Europees ondersteuningsnetwerk voor gezondheids-biotechnologie met nationale en regionale antennes ter ondersteuning van kmo's, start-ups en innovators.</div>
     </div>
   </div>
 </section>
 
-<!-- Chapter III: Access to Funding (Pillar 2) -->
+<!-- Hoofdstuk III: Toegang tot financiering (Pijler 2) -->
 <section class="section" id="ch3">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-cash-multiple"></i></div>
-    <h2 class="section__title">Chapter III: Access to Funding</h2>
+    <h2 class="section__title">Hoofdstuk III: toegang tot financiering</h2>
   </div>
-  <p class="section__subtitle">Pillar 2: EU health biotechnology investment pilot</p>
+  <p class="section__subtitle">Pijler 2: EU-investeringspilot voor gezondheids-biotechnologie</p>
 
   <div class="card">
-    <div class="card__title"><i class="mdi mdi-bank" style="color: var(--color-amber);"></i> Investment pilot with the EIB Group</div>
-    <p><strong>Partnership:</strong> the Commission will establish an EU health biotechnology investment pilot with the European Investment Bank Group and other implementing partners.</p>
-    <p><strong>Instruments:</strong> equity instruments and venture-style debt tailored to biotechnology-specific risk profiles, targeting the Series B, C, and growth-stage funding gap.</p>
-    <p><strong>Capital Booster Pilot:</strong> projects contributing to a late-stage capital booster may be recognised as high-impact strategic projects.</p>
-    <p><strong>State aid:</strong> all funding measures must comply with applicable State aid rules.</p>
+    <div class="card__title"><i class="mdi mdi-bank" style="color: var(--color-amber);"></i> Investeringspilot met de EIB-groep</div>
+    <p><strong>Partnerschap:</strong> de Commissie zal een EU-investeringspilot voor gezondheids-biotechnologie opzetten met de Europese Investeringsbankgroep en andere uitvoeringspartners.</p>
+    <p><strong>Instrumenten:</strong> aandeleinstrumenten en venture-achtige schuldinstrumenten afgestemd op biotechspecifieke risicoprofielen, gericht op de financieringskloof in de Series B-, C- en groeifasen.</p>
+    <p><strong>Capital Booster-pilot:</strong> projecten die bijdragen aan een kapitaalversterkingsmechanisme in latere fases kunnen worden erkend als strategische projecten met grote impact.</p>
+    <p><strong>Staatssteun:</strong> alle financieringsmaatregelen moeten voldoen aan de toepasselijke staatssteunregels.</p>
   </div>
 </section>
 
-<!-- Chapter IV: SPC Extension (Pillar 3 partial) -->
+<!-- Hoofdstuk IV: Verlenging ABC (Pijler 3 gedeeltelijk) -->
 <section class="section" id="ch4">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-shield-check-outline"></i></div>
-    <h2 class="section__title">Chapter IV: SPC Extension</h2>
+    <h2 class="section__title">Hoofdstuk IV: verlenging aanvullende beschermingscertificaten</h2>
   </div>
-  <p class="section__subtitle">Extending supplementary protection certificates for biotech products</p>
+  <p class="section__subtitle">Verlenging van ABC's voor biotechnologische producten</p>
 
   <div class="card">
-    <p><strong>12-month extension</strong> of the Supplementary Protection Certificate (SPC) for medicinal products developed by means of biotechnology processes and for Advanced Therapy Medicinal Products (ATMPs).</p>
-    <p><strong>Rationale:</strong> incentivise the development of products using innovative biotechnology technologies that bring a therapeutic advantage to patients.</p>
-    <p><strong>Conditions:</strong> subject to compliance with applicable competition rules.</p>
+    <p><strong>Verlenging met 12 maanden</strong> van het aanvullend beschermingscertificaat (ABC) voor geneesmiddelen ontwikkeld via biotechnologische processen en voor geavanceerde therapiegeneesmiddelen (ATG).</p>
+    <p><strong>Motivering:</strong> het stimuleren van de ontwikkeling van producten die gebruik maken van innovatieve biotechnologische technologieën die een therapeutisch voordeel bieden voor patiënten.</p>
+    <p><strong>Voorwaarden:</strong> onderworpen aan naleving van de toepasselijke mededingingsregels.</p>
   </div>
 </section>
 
-<!-- Chapter V: Biosimilars (Pillar 3) -->
+<!-- Hoofdstuk V: Biosimilars (Pijler 3) -->
 <section class="section" id="ch5">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-pill"></i></div>
-    <h2 class="section__title">Chapter V: Biosimilars Competitiveness</h2>
+    <h2 class="section__title">Hoofdstuk V: concurrentiekracht biosimilars</h2>
   </div>
-  <p class="section__subtitle">Pillar 3: enhancing EU competitiveness in biosimilars</p>
+  <p class="section__subtitle">Pijler 3: versterking van de EU-concurrentiekracht in biosimilars</p>
 
   <div class="card">
-    <p><strong>EMA guidelines</strong> to facilitate the authorisation of biosimilar medicinal products.</p>
-    <p><strong>Strategic projects</strong> focused on biosimilar research, development, manufacturing, and marketing authorisation.</p>
-    <p><strong>International cooperation</strong> for biosimilar clusters between economic operators and biotechnology clusters.</p>
-    <p><strong>Context:</strong> biological medicines represent 41% of EU pharmaceutical spending. Biosimilars are critical for affordability and access.</p>
+    <p><strong>EMA-richtsnoeren</strong> ter vergemakkelijking van de toelating van biosimilaire geneesmiddelen.</p>
+    <p><strong>Strategische projecten</strong> gericht op onderzoek, ontwikkeling, vervaardiging en vergunningverlening voor biosimilars.</p>
+    <p><strong>Internationale samenwerking</strong> voor biosimilarclusters tussen marktdeelnemers en biotechclusters.</p>
+    <p><strong>Context:</strong> biologische geneesmiddelen vertegenwoordigen 41% van de EU-farmaceutische uitgaven. Biosimilars zijn cruciaal voor betaalbaarheid en toegang.</p>
   </div>
 </section>
 
-<!-- Chapter VI: AI and Data (Pillar 4) -->
+<!-- Hoofdstuk VI: AI en data (Pijler 4) -->
 <section class="section" id="ch6">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-brain"></i></div>
-    <h2 class="section__title">Chapter VI: AI and Data as Enablers</h2>
+    <h2 class="section__title">Hoofdstuk VI: AI en data als enablers</h2>
   </div>
-  <p class="section__subtitle">Pillar 4: integrating artificial intelligence and data into biotechnology</p>
+  <p class="section__subtitle">Pijler 4: integratie van kunstmatige intelligentie en data in de biotechnologie</p>
 
   <div class="article-grid">
     <div class="article-card">
-      <div class="article-card__num">EMA guidance</div>
-      <div class="article-card__title">AI across the product lifecycle</div>
-      <div class="article-card__desc">The European Medicines Agency will issue guidance on using AI across the entire medicinal product lifecycle: research, testing, manufacturing, and post-market surveillance.</div>
+      <div class="article-card__num">EMA-richtsnoeren</div>
+      <div class="article-card__title">AI gedurende de volledige productlevenscyclus</div>
+      <div class="article-card__desc">Het Europees Geneesmiddelenbureau zal richtsnoeren uitvaardigen over het gebruik van AI gedurende de volledige levenscyclus van het geneesmiddel: onderzoek, testen, vervaardiging en post-markttoezicht.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">Testing environments</div>
-      <div class="article-card__title">Trusted AI sandboxes</div>
-      <div class="article-card__desc">Creation of trusted AI testing environments and data-quality accelerators to advance safe AI-enabled biotechnology. High-impact project status available for AI-driven biotech projects.</div>
+      <div class="article-card__num">Testomgevingen</div>
+      <div class="article-card__title">Vertrouwde AI-sandboxen</div>
+      <div class="article-card__desc">Oprichting van vertrouwde AI-testomgevingen en datakwaliteitsaccelerators voor de bevordering van veilige AI-gestuurde biotechnologie. Status van project met grote impact beschikbaar voor AI-gedreven biotechprojecten.</div>
     </div>
   </div>
 </section>
 
-<!-- Chapter VII: Novel Products (Pillar 5) -->
+<!-- Hoofdstuk VII: Innovatieve producten (Pijler 5) -->
 <section class="section" id="ch7">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-flask-outline"></i></div>
-    <h2 class="section__title">Chapter VII: Novel Health Biotech Products</h2>
+    <h2 class="section__title">Hoofdstuk VII: nieuwe gezondheids-biotechnologieproducten</h2>
   </div>
-  <p class="section__subtitle">Pillar 5: regulatory tools for products outside existing frameworks</p>
+  <p class="section__subtitle">Pijler 5: regelgevende instrumenten voor producten buiten bestaande kaders</p>
 
   <div class="card">
-    <div class="card__title"><i class="mdi mdi-eye-outline" style="color: var(--color-purple);"></i> Anticipatory governance</div>
-    <p><strong>Regulatory status repository:</strong> Union-wide, cross-framework repository compiling opinions, recommendations, decisions, and guidance on novel biotech product classification.</p>
-    <p><strong>Foresight Panel for Emerging Health Innovation:</strong> horizon-scanning and cross-framework dialogue on forthcoming scientific and technological developments.</p>
-    <p><strong>Regulatory sandboxes:</strong> Union-level sandbox for health biotech products at an early stage of development that fall outside existing health legal frameworks.</p>
+    <div class="card__title"><i class="mdi mdi-eye-outline" style="color: var(--color-purple);"></i> Anticiperend bestuur</div>
+    <p><strong>Register van regelgevingsstatus:</strong> Uniebred, kaderoverkoepelend register met adviezen, aanbevelingen, besluiten en richtsnoeren over de classificatie van nieuwe biotechproducten.</p>
+    <p><strong>Prospectief panel voor opkomende gezondsheidsinnovatie:</strong> horizonverkenning en kaderoverkoepelende dialoog over toekomstige wetenschappelijke en technologische ontwikkelingen.</p>
+    <p><strong>Regelgevende sandboxen:</strong> sandbox op Unieniveau voor gezondheids-biotechnologieproducten in een vroeg ontwikkelingsstadium die buiten bestaande wettelijke gezondheidskaders vallen.</p>
   </div>
 </section>
 
-<!-- Chapter VIII: Biosecurity (Pillar 6) -->
+<!-- Hoofdstuk VIII: Bioveiligheid (Pijler 6) -->
 <section class="section" id="ch8">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-shield-alert-outline"></i></div>
-    <h2 class="section__title">Chapter VIII: Biosecurity and Biodefence</h2>
+    <h2 class="section__title">Hoofdstuk VIII: bioveiligheid en biobescherming</h2>
   </div>
-  <p class="section__subtitle">Pillar 6: preventing the misuse of biotechnology</p>
+  <p class="section__subtitle">Pijler 6: misbruik van biotechnologie voorkomen</p>
 
   <div class="info-box">
-    <h3>24-hour suspicious transaction reporting</h3>
-    <p>Economic operators and online marketplaces must report suspicious transactions involving "biotechnology products of concern" to national contact points within 24 hours. Red flags include: unclear customer identity, orders inconsistent with normal business practices, unusual labelling or shipping requests, and deliveries to addresses lacking legitimate biotech justification.</p>
+    <h3>Melding van verdachte transacties binnen 24 uur</h3>
+    <p>Marktdeelnemers en onlineplatforms moeten verdachte transacties met "zorgwekkende biotechnologieproducten" binnen 24 uur melden bij nationale contactpunten. Rode vlaggen omvatten: onduidelijke klantidentiteit, bestellingen die niet overeenstemmen met normale zakelijke praktijken, ongebruikelijke etikettering of verzendverzoeken, en leveringen aan adressen zonder legitieme biotechrechtvaardiging.</p>
   </div>
 
   <div class="card">
-    <p><strong>EU biodefence capability projects</strong> eligible for high-impact strategic project status.</p>
-    <p><strong>Linked to</strong> the EU Dual Use Regulation (2021/821) and the Preparedness Union Strategy.</p>
-    <p><strong>Screening:</strong> provisions for screening, reporting, and tracking biotechnology products of concern, with enforcement mechanisms to ensure compliance.</p>
+    <p><strong>EU-biobeschermingscapaciteitsprojecten</strong> komen in aanmerking voor de status van strategisch project met grote impact.</p>
+    <p><strong>Gekoppeld aan</strong> de EU-verordening inzake producten voor tweeërlei gebruik (2021/821) en de Strategie voor een Unie van paraatheid.</p>
+    <p><strong>Screening:</strong> bepalingen voor de screening, melding en opvolging van zorgwekkende biotechnologieproducten, met handhavingsmechanismen om de naleving te waarborgen.</p>
   </div>
 </section>
 
-<!-- Chapter IX: Legislative Simplification (Pillar 7) -->
+<!-- Hoofdstuk IX: Wetgevingsvereenvoudiging (Pijler 7) -->
 <section class="section" id="ch9">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-file-edit-outline"></i></div>
-    <h2 class="section__title">Chapter IX: Legislative Simplification</h2>
+    <h2 class="section__title">Hoofdstuk IX: wetgevingsvereenvoudiging</h2>
   </div>
-  <p class="section__subtitle">Pillar 7: amending 6 existing EU regulations to reduce time-to-market</p>
+  <p class="section__subtitle">Pijler 7: wijziging van 6 bestaande EU-verordeningen om de tijd tot marktintroductie te verkorten</p>
 
   <div class="card">
-    <div class="card__title"><i class="mdi mdi-clock-fast" style="color: var(--color-green);"></i> Clinical Trials Regulation (EU) 536/2014</div>
-    <p><strong>Multinational trial authorisation:</strong> 106 days reduced to 75 days (including validation and ethical review).</p>
-    <p><strong>Initial authorisation (no info request):</strong> 75 days reduced to 47 days.</p>
-    <p><strong>Substantial modification:</strong> 96 days reduced to 47 days (with parallel options).</p>
-    <p><strong>ATMP extra time:</strong> additional 50-day assessment period eliminated.</p>
-    <p><strong>New features:</strong> "minimal-intervention clinical trials" category, mandatory EU harmonised templates, single core dossier, clinical trial sandboxes, AI uptake fostered.</p>
+    <div class="card__title"><i class="mdi mdi-clock-fast" style="color: var(--color-green);"></i> Verordening klinische proeven (EU) 536/2014</div>
+    <p><strong>Goedkeuring multinationale proef:</strong> teruggebracht van 106 naar 75 dagen (inclusief validatie en ethische toetsing).</p>
+    <p><strong>Initiële goedkeuring (geen informatieverzoek):</strong> teruggebracht van 75 naar 47 dagen.</p>
+    <p><strong>Wezenlijke wijziging:</strong> teruggebracht van 96 naar 47 dagen (met parallelle opties).</p>
+    <p><strong>Extra ATG-tijd:</strong> aanvullende beoordelingsperiode van 50 dagen afgeschaft.</p>
+    <p><strong>Nieuwe kenmerken:</strong> categorie "klinische proeven met minimale interventie", verplichte EU-geharmoniseerde sjablonen, één kernsdossier, sandboxen voor klinische proeven, bevordering van AI-gebruik.</p>
   </div>
 
   <div class="article-grid">
     <div class="article-card">
-      <div class="article-card__num">ATMP Regulation</div>
-      <div class="article-card__title">(EC) 1394/2007</div>
-      <div class="article-card__desc">GMO environmental risk assessment exemption for advanced investigational therapy products presenting negligible risk. Delegated acts to update ATMP definitions for scientific advancement.</div>
+      <div class="article-card__num">ATG-verordening</div>
+      <div class="article-card__title">(EG) 1394/2007</div>
+      <div class="article-card__desc">Vrijstelling van milieu-risicobeoordeling voor GGO's voor geavanceerde onderzoekstherapieproducten met verwaarloosbaar risico. Gedelegeerde handelingen om ATG-definities bij te werken naar wetenschappelijke vooruitgang.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">General Food Law</div>
-      <div class="article-card__title">(EC) 178/2002</div>
-      <div class="article-card__desc">EFSA pre-submission advice broadened to scientific matters. Study notification delay cut from 6 to 3 months. EFSA staff to chair panels. Regulatory sandboxes for food innovation.</div>
+      <div class="article-card__num">Algemene levensmiddelenwetgeving</div>
+      <div class="article-card__title">(EG) 178/2002</div>
+      <div class="article-card__desc">EFSA-pre-submissieadvies uitgebreid naar wetenschappelijke kwesties. Aanmeldingstermijn voor studies teruggebracht van 6 naar 3 maanden. EFSA-personeel voor het voorzitten van panels. Regelgevende sandboxen voor voedselinnovatie.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">Veterinary Medicines</div>
+      <div class="article-card__num">Diergeneesmiddelen</div>
       <div class="article-card__title">(EU) 2019/6</div>
-      <div class="article-card__desc">Duplicate GMO assessment removed. Extra year of SPC for veterinary biotech products targeting zoonotic diseases. Regulatory sandboxes for animal health innovation.</div>
+      <div class="article-card__desc">Dubbele GGO-beoordeling afgeschaft. Extra jaar ABC voor veterinaire biotechproducten gericht op zoönotische ziekten. Regelgevende sandboxen voor innovatie in diergezondheid.</div>
     </div>
     <div class="article-card">
-      <div class="article-card__num">STEP + SoHO</div>
-      <div class="article-card__title">(EU) 2024/795 and (EU) 2024/1938</div>
-      <div class="article-card__desc">Biotech strategic projects deemed to contribute to STEP objectives. Regulatory sandbox for substances of human origin as starting materials for innovative medicinal products.</div>
+      <div class="article-card__num">STEP en SoHO</div>
+      <div class="article-card__title">(EU) 2024/795 en (EU) 2024/1938</div>
+      <div class="article-card__desc">Strategische biotechprojecten worden geacht bij te dragen aan STEP-doelstellingen. Regelgevende sandbox voor stoffen van menselijke oorsprong als uitgangsmateriaal voor innovatieve geneesmiddelen.</div>
     </div>
   </div>
 </section>
 
-<!-- Chapter X -->
+<!-- Hoofdstuk X -->
 <section class="section" id="ch10">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-flag-checkered"></i></div>
-    <h2 class="section__title">Chapter X: Final Provisions</h2>
+    <h2 class="section__title">Hoofdstuk X: slotbepalingen</h2>
   </div>
-  <p class="section__subtitle">Monitoring, evaluation, delegation, and entry into force</p>
+  <p class="section__subtitle">Monitoring, evaluatie, delegatie en inwerkingtreding</p>
 
   <div class="card">
-    <p><strong>Monitoring:</strong> continuous evidence base through regularly updated strategic mapping and project lists.</p>
-    <p><strong>Evaluation:</strong> 5 years after entry into application, then every 5 years. Report to EP, Council, EESC, and CoR.</p>
-    <p><strong>Delegation:</strong> Commission empowered to adopt delegated acts for technical updates.</p>
-    <p><strong>Entry into force:</strong> 20 days after publication in the Official Journal.</p>
-    <p><strong>Confidential information:</strong> provisions on handling sensitive business and security data.</p>
+    <p><strong>Monitoring:</strong> continue bewijsbasis via regelmatig bijgewerkte strategische kartering en projectlijsten.</p>
+    <p><strong>Evaluatie:</strong> 5 jaar na het begin van de toepassing, daarna elke 5 jaar. Verslag aan het Europees Parlement, de Raad, het EESC en het CvdR.</p>
+    <p><strong>Delegatie:</strong> de Commissie is gemachtigd gedelegeerde handelingen vast te stellen voor technische actualisering.</p>
+    <p><strong>Inwerkingtreding:</strong> 20 dagen na bekendmaking in het Publicatieblad.</p>
+    <p><strong>Vertrouwelijke informatie:</strong> bepalingen over de behandeling van gevoelige bedrijfsgegevens en veiligheidsgegevens.</p>
   </div>
 </section>
 
-<!-- Comparison table -->
+<!-- Vergelijkingstabel -->
 <section class="section" id="comparison">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-swap-horizontal"></i></div>
-    <h2 class="section__title">Before vs. After the Biotech Act</h2>
+    <h2 class="section__title">Voor en na de biotechnologiewet</h2>
   </div>
-  <p class="section__subtitle">Key changes introduced by the proposal</p>
+  <p class="section__subtitle">Belangrijkste wijzigingen die door het voorstel worden ingevoerd</p>
 
   <table>
     <thead>
-      <tr><th>Aspect</th><th>Current situation</th><th>With the Biotech Act</th></tr>
+      <tr><th>Aspect</th><th>Huidige situatie</th><th>Met de biotechnologiewet</th></tr>
     </thead>
     <tbody>
-      <tr><td>Multinational clinical trial authorisation</td><td class="dim-cell">106 days</td><td class="highlight-cell">75 days</td></tr>
-      <tr><td>Initial clinical trial (no info request)</td><td class="dim-cell">75 days</td><td class="highlight-cell">47 days</td></tr>
-      <tr><td>Substantial modification assessment</td><td class="dim-cell">96 days</td><td class="highlight-cell">47 days</td></tr>
-      <tr><td>ATMP extra assessment time</td><td class="dim-cell">50 additional days</td><td class="highlight-cell">Eliminated</td></tr>
-      <tr><td>Study notification delay (food law)</td><td class="dim-cell">6 months</td><td class="highlight-cell">3 months</td></tr>
-      <tr><td>Biotech strategic project recognition</td><td class="dim-cell">No framework</td><td class="highlight-cell">10 months (MS) / 8 months (EU)</td></tr>
-      <tr><td>Regulatory sandboxes for biotech</td><td class="dim-cell">None at EU level</td><td class="highlight-cell">5 types (health, clinical, food, vet, SoHO)</td></tr>
-      <tr><td>Biosecurity reporting</td><td class="dim-cell">Fragmented national rules</td><td class="highlight-cell">24-hour mandatory reporting</td></tr>
-      <tr><td>Late-stage biotech funding</td><td class="dim-cell">7% of global VC</td><td class="highlight-cell">EIB investment pilot + Capital Booster</td></tr>
-      <tr><td>SPC for biotech products</td><td class="dim-cell">Standard duration</td><td class="highlight-cell">+12 months for biotech processes and ATMPs</td></tr>
-      <tr><td>AI guidance for medicines</td><td class="dim-cell">Ad hoc</td><td class="highlight-cell">Systematic EMA guidance + sandbox</td></tr>
-      <tr><td>GMO assessment (vet products)</td><td class="dim-cell">Dual assessment (ERA + GMO)</td><td class="highlight-cell">ERA only (duplicate removed)</td></tr>
+      <tr><td>Goedkeuring multinationale klinische proef</td><td class="dim-cell">106 dagen</td><td class="highlight-cell">75 dagen</td></tr>
+      <tr><td>Initiële klinische proef (geen informatieverzoek)</td><td class="dim-cell">75 dagen</td><td class="highlight-cell">47 dagen</td></tr>
+      <tr><td>Beoordeling wezenlijke wijziging</td><td class="dim-cell">96 dagen</td><td class="highlight-cell">47 dagen</td></tr>
+      <tr><td>Extra beoordelingstijd ATG</td><td class="dim-cell">50 extra dagen</td><td class="highlight-cell">Afgeschaft</td></tr>
+      <tr><td>Aanmeldingstermijn studies (levensmiddelenwet)</td><td class="dim-cell">6 maanden</td><td class="highlight-cell">3 maanden</td></tr>
+      <tr><td>Erkenning strategische biotechprojecten</td><td class="dim-cell">Geen kader</td><td class="highlight-cell">10 maanden (LS) / 8 maanden (EU)</td></tr>
+      <tr><td>Regelgevende sandboxen voor biotech</td><td class="dim-cell">Geen op EU-niveau</td><td class="highlight-cell">5 typen (gezondheid, klinisch, voedsel, veterinair, SoHO)</td></tr>
+      <tr><td>Bioveiligheidsmelding</td><td class="dim-cell">Gefragmenteerde nationale regels</td><td class="highlight-cell">Verplichte melding binnen 24 uur</td></tr>
+      <tr><td>Biotechfinanciering in latere fases</td><td class="dim-cell">7% van wereldwijd risicokapitaal</td><td class="highlight-cell">EIB-investeringspilot + Capital Booster</td></tr>
+      <tr><td>ABC voor biotechproducten</td><td class="dim-cell">Standaardduur</td><td class="highlight-cell">+12 maanden voor biotechprocessen en ATG's</td></tr>
+      <tr><td>AI-richtsnoeren voor geneesmiddelen</td><td class="dim-cell">Ad hoc</td><td class="highlight-cell">Systematische EMA-richtsnoeren + sandbox</td></tr>
+      <tr><td>GGO-beoordeling (diergeneesmiddelen)</td><td class="dim-cell">Dubbele beoordeling (ERA + GGO)</td><td class="highlight-cell">Alleen ERA (duplicaat verwijderd)</td></tr>
     </tbody>
   </table>
 </section>
 
-<!-- EU Global Comparison -->
+<!-- Wereldwijde vergelijking -->
 <section class="section" id="global">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-earth"></i></div>
-    <h2 class="section__title">EU vs Global Competitors</h2>
+    <h2 class="section__title">EU versus wereldwijde concurrenten</h2>
   </div>
-  <p class="section__subtitle">How Europe compares to the US and China in biotechnology</p>
+  <p class="section__subtitle">Hoe Europa zich verhoudt tot de VS en China op het gebied van biotechnologie</p>
 
   <table>
     <thead>
-      <tr><th>Metric</th><th>EU</th><th>USA</th><th>China</th></tr>
+      <tr><th>Indicator</th><th>EU</th><th>VS</th><th>China</th></tr>
     </thead>
     <tbody>
-      <tr><td>Top 10% publications (biology, biomedical)</td><td>21%</td><td>22%</td><td>24%</td></tr>
-      <tr><td>Share of global health biotech VC (2015-2025)</td><td class="dim-cell">7%</td><td class="highlight-cell">63%</td><td>14%</td></tr>
-      <tr><td>Health biotech VC volume (2015-2025)</td><td class="dim-cell">EUR 25B</td><td class="highlight-cell">EUR 219B</td><td>n/a</td></tr>
-      <tr><td>Clinical trial authorisation time</td><td class="dim-cell">113 days</td><td class="highlight-cell">~60 days</td><td class="highlight-cell">~60 days</td></tr>
-      <tr><td>Share of commercially sponsored trials</td><td class="dim-cell">12%</td><td>Stable</td><td>18%</td></tr>
-      <tr><td>Biotech IPOs on local exchanges (6 years)</td><td class="dim-cell">1</td><td class="highlight-cell">66</td><td>n/a</td></tr>
+      <tr><td>Top 10% publicaties (biologie, biomedicijn)</td><td>21%</td><td>22%</td><td>24%</td></tr>
+      <tr><td>Aandeel wereldwijd risicokapitaal gezondheidsbiotech (2015-2025)</td><td class="dim-cell">7%</td><td class="highlight-cell">63%</td><td>14%</td></tr>
+      <tr><td>Volume risicokapitaal gezondheidsbiotech (2015-2025)</td><td class="dim-cell">25 Mrd€</td><td class="highlight-cell">219 Mrd€</td><td>n.v.t.</td></tr>
+      <tr><td>Doorlooptijd toelating klinische proeven</td><td class="dim-cell">113 dagen</td><td class="highlight-cell">~60 dagen</td><td class="highlight-cell">~60 dagen</td></tr>
+      <tr><td>Aandeel commercieel gesponsorde proeven</td><td class="dim-cell">12%</td><td>Stabiel</td><td>18%</td></tr>
+      <tr><td>Biotech-IPO's op lokale beurzen (6 jaar)</td><td class="dim-cell">1</td><td class="highlight-cell">66</td><td>n.v.t.</td></tr>
     </tbody>
   </table>
 </section>
 
-<!-- Timeline -->
+<!-- Tijdlijn -->
 <section class="section" id="timeline">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-timeline-clock-outline"></i></div>
-    <h2 class="section__title">Legislative Timeline</h2>
+    <h2 class="section__title">Wetgevingstijdlijn</h2>
   </div>
-  <p class="section__subtitle">From political guidelines to application</p>
+  <p class="section__subtitle">Van politieke richtsnoeren tot toepassing</p>
 
   <div class="timeline">
     <div class="timeline__item">
-      <div class="timeline__date">July 2024</div>
-      <div class="timeline__text">Commission President von der Leyen announces Biotech Act in Political Guidelines 2024-2029</div>
+      <div class="timeline__date">Juli 2024</div>
+      <div class="timeline__text">Commissievoorzitter Von der Leyen kondigt de biotechnologiewet aan in de Politieke Richtsnoeren 2024-2029</div>
     </div>
     <div class="timeline__item">
-      <div class="timeline__date">March 2024</div>
-      <div class="timeline__text">Commission Communication "Building the future with nature" (COM(2024) 137)</div>
+      <div class="timeline__date">Maart 2024</div>
+      <div class="timeline__text">Mededeling van de Commissie "De toekomst bouwen met de natuur" (COM(2024) 137)</div>
     </div>
     <div class="timeline__item">
       <div class="timeline__date">September 2024</div>
-      <div class="timeline__text">Draghi Report identifies biotech competitiveness gap as strategic priority</div>
+      <div class="timeline__text">Het Draghi-rapport identificeert de biotechconcurrentiekloof als strategische prioriteit</div>
     </div>
     <div class="timeline__item">
-      <div class="timeline__date">May-June 2025</div>
-      <div class="timeline__text">Call for evidence: 222 valid contributions from industry, NGOs, academia, public authorities</div>
+      <div class="timeline__date">Mei-juni 2025</div>
+      <div class="timeline__text">Oproep tot bijdragen: 222 geldige bijdragen van industrie, ngo's, academische wereld en overheidsinstanties</div>
     </div>
     <div class="timeline__item">
-      <div class="timeline__date">July 2025</div>
-      <div class="timeline__text">EP resolution on the future of EU biotechnology and biomanufacturing</div>
+      <div class="timeline__date">Juli 2025</div>
+      <div class="timeline__text">Resolutie van het Europees Parlement over de toekomst van EU-biotechnologie en -biofabricage</div>
     </div>
     <div class="timeline__item">
-      <div class="timeline__date">August-November 2025</div>
-      <div class="timeline__text">Public consultation: 359 contributions (91 companies, 61 business associations, 47 NGOs, 44 academic institutions)</div>
+      <div class="timeline__date">Augustus-november 2025</div>
+      <div class="timeline__text">Openbare raadpleging: 359 bijdragen (91 bedrijven, 61 brancheorganisaties, 47 ngo's, 44 academische instellingen)</div>
     </div>
     <div class="timeline__item">
       <div class="timeline__date">September 2025</div>
-      <div class="timeline__text">Council conclusions "A call for action on life sciences for the Union's competitiveness" (13323/25)</div>
+      <div class="timeline__text">Conclusies van de Raad "Een oproep tot actie voor levenswetenschappen ten behoeve van de concurrentiekracht van de Unie" (13323/25)</div>
     </div>
     <div class="timeline__item timeline__item--active">
-      <div class="timeline__date">16 December 2025</div>
-      <div class="timeline__text"><strong>Commission adopts the European Biotech Act: COM(2025) 1022 final</strong></div>
+      <div class="timeline__date">16 december 2025</div>
+      <div class="timeline__text"><strong>De Commissie stelt de Europese biotechnologiewet vast: COM(2025) 1022 final</strong></div>
     </div>
     <div class="timeline__item">
-      <div class="timeline__date">19 March 2026</div>
-      <div class="timeline__text">Commissioner Varhelyi exchange of views with EP SANTE-ITRE Committee</div>
+      <div class="timeline__date">19 maart 2026</div>
+      <div class="timeline__text">Gedachtewisseling van commissaris Várhelyi met de SANTE-ITRE-commissie van het Europees Parlement</div>
     </div>
     <div class="timeline__item">
-      <div class="timeline__date">Q2 2026</div>
-      <div class="timeline__text">EP committee assignment (expected: SANTE/ITRE lead, ENVI/AGRI opinions)</div>
+      <div class="timeline__date">K2 2026</div>
+      <div class="timeline__text">Commissietoewijzing in het Europees Parlement (verwacht: SANTE/ITRE als leidende commissie, adviezen ENVI/AGRI)</div>
     </div>
     <div class="timeline__item">
       <div class="timeline__date">2026</div>
-      <div class="timeline__text">Biotech Act II: Commission to address non-health biotech sectors (agriculture, industrial, energy)</div>
+      <div class="timeline__text">Biotechnologiewet II: de Commissie zal niet-gezondheids-biotechsectoren behandelen (landbouw, industrie, energie)</div>
     </div>
     <div class="timeline__item">
       <div class="timeline__date">2027-2028</div>
-      <div class="timeline__text">Target for political agreement and date of application</div>
+      <div class="timeline__text">Streefdatum voor politiek akkoord en datum van toepassing</div>
     </div>
   </div>
 </section>
 
-<!-- Sources -->
+<!-- Bronnen -->
 <section class="section" id="sources">
   <div class="section__header">
     <div class="section__icon" style="background: var(--color-muted);"><i class="mdi mdi-link-variant"></i></div>
-    <h2 class="section__title">Official Sources</h2>
+    <h2 class="section__title">Officiële bronnen</h2>
   </div>
-  <p class="section__subtitle">All documents used to produce this analysis</p>
+  <p class="section__subtitle">Alle documenten gebruikt voor de opstelling van deze analyse</p>
 
   <div class="card">
-    <p><strong>Proposal (Regulation):</strong> <a href="https://health.ec.europa.eu/document/download/ec1475b7-e3f9-409e-b927-fc7e69306a8c_en?filename=biotech_reg-com2025-1022_act_en.pdf" target="_blank" rel="noopener">COM(2025) 1022 final (PDF)</a></p>
-    <p><strong>Companion Directive:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2025)1031&lang=en" target="_blank" rel="noopener">COM(2025) 1031</a> (genetically modified micro-organisms and organ processing)</p>
-    <p><strong>Analytical document:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2025)1055&lang=en" target="_blank" rel="noopener">SWD(2025) 1055 final</a></p>
-    <p><strong>Official page:</strong> <a href="https://health.ec.europa.eu/biotechnology_en" target="_blank" rel="noopener">DG SANTE: Biotechnology</a></p>
-    <p><strong>Independent analysis:</strong> <a href="https://www.eu-biotech-act.com/" target="_blank" rel="noopener">eu-biotech-act.com</a> (Cyber Risk GmbH regulatory analysis)</p>
-    <p><strong>Background:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2024)137&lang=en" target="_blank" rel="noopener">COM(2024) 137</a> "Building the future with nature: Boosting Biotechnology and Biomanufacturing in the EU"</p>
-    <p><strong>Life sciences strategy:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2025)525&lang=en" target="_blank" rel="noopener">COM(2025) 525</a> "Choose Europe for life sciences"</p>
+    <p><strong>Voorstel (Verordening):</strong> <a href="https://health.ec.europa.eu/document/download/ec1475b7-e3f9-409e-b927-fc7e69306a8c_en?filename=biotech_reg-com2025-1022_act_en.pdf" target="_blank" rel="noopener">COM(2025) 1022 final (PDF)</a></p>
+    <p><strong>Begeleidende Richtlijn:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2025)1031&lang=en" target="_blank" rel="noopener">COM(2025) 1031</a> (genetisch gemodificeerde micro-organismen en orgaanverwerking)</p>
+    <p><strong>Analytisch document:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=SWD(2025)1055&lang=en" target="_blank" rel="noopener">SWD(2025) 1055 final</a></p>
+    <p><strong>Officiële pagina:</strong> <a href="https://health.ec.europa.eu/biotechnology_en" target="_blank" rel="noopener">DG SANTE: biotechnologie</a></p>
+    <p><strong>Onafhankelijke analyse:</strong> <a href="https://www.eu-biotech-act.com/" target="_blank" rel="noopener">eu-biotech-act.com</a> (regelgevingsanalyse van Cyber Risk GmbH)</p>
+    <p><strong>Achtergrond:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2024)137&lang=en" target="_blank" rel="noopener">COM(2024) 137</a> "De toekomst bouwen met de natuur: Biotechnologie en biofabricage in de EU versterken"</p>
+    <p><strong>Strategie voor levenswetenschappen:</strong> <a href="https://ec.europa.eu/transparency/documents-register/detail?ref=COM(2025)525&lang=en" target="_blank" rel="noopener">COM(2025) 525</a> "Kies Europa voor levenswetenschappen"</p>
   </div>
 </section>
 
 </div><!-- /container -->
 
-<!-- Footer -->
+<!-- Voettekst -->
 <footer class="footer">
-  <p>Produced by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol BV</a>. See also: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
-  <p style="margin-top: 0.5rem;">Analysis based on COM(2025) 1022 final, proposed 16 December 2025. This is an independent analysis, not an official EU document.</p>
+  <p>Geproduceerd door <a href="https://brubru.beresol.eu">Brubru</a>, de AI-aangedreven EU-beleidsassistent van <a href="https://beresol.eu">Beresol BV</a>. Zie ook: <a href="https://beresol.eu/startups">Beresol Startup Monitor</a>.</p>
+  <p style="margin-top: 0.5rem;">Analyse gebaseerd op COM(2025) 1022 final, voorgesteld op 16 december 2025. Dit is een onafhankelijke analyse, geen officieel EU-document.</p>
 </footer>
 
-<!-- Back to top button -->
+<!-- Terug naar boven knop -->
 <a href="#top" class="back-to-top" id="backToTop"><i class="mdi mdi-chevron-up"></i></a>
 
 <script>
