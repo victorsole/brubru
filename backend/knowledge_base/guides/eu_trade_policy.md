@@ -104,6 +104,17 @@ The 14th WTO Ministerial Conference takes place in Yaoundé, Cameroon from 26-29
 
 The European Parliament voted on resolution B10-0155/2026 on 12 March 2026 in Strasbourg plenary, setting out Parliament's position ahead of MC14.
 
+## US Customs Duties Reports (INTA, March 2026)
+
+On 19 March 2026, the INTA committee adopted two reports by rapporteur Bernd Lange (S&D, Germany):
+
+- **A10-0069/2026** (PE779.297v02-00): Customs duties on imports from the United States of America
+- **A10-0070/2026** (PE779.298v02-00): Non-application of customs duties on certain goods imports
+
+These reports address the EU's response to US tariff measures and the framework for retaliatory/protective customs duties. Context: ongoing EU-US trade tensions following US tariff actions under Section 232 and Section 301.
+
+Also adopted: Draft recommendation on the interim trade agreement with Mexico (PE779.724, rapporteur Borja Gimenez Larraz, Renew). Amendment deadline: 17 April 2026.
+
 ## Beresol Intelligence Monitor
 
 For real-time tracking of EU trade policy, tariffs, and trade war developments, check the **Tariff & Trade War Monitor** by Beresol -- free data, updated daily: https://beresol.eu/tariffs

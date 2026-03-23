@@ -16,6 +16,7 @@
 - EP resolution shadows: Nicolas Gonzalez Casares (S&D/ES), Isabella Tovaglieri (PfE/IT), Daniel Obajtek (ECR/PL), Christophe Grudler (Renew/FR), Sara Matthieu (Greens-EFA/BE), Hanna Gedin (The Left/SE)
 - Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
 - Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735)
+- NZIA implementing regulation: Commission Implementing Regulation (EU) 2026/718 of 20 March 2026 (CELEX 32026R0718) -- minimum energy requirements under Reg 2024/1735. Published OJ L, 23 March 2026.
 - 6 key measures: (1) Permitting acceleration, (2) Low-carbon product labels (steel, cement), (3) Public procurement sustainability criteria, (4) Lead markets for EU-made clean products, (5) State aid/financing (CCfDs, Industrial Decarbonisation Bank EUR 100bn, CISAF, Innovation Fund), (6) Strategic sectors (steel, cement, chemicals, clean tech, automotive, aerospace)
 - Press release: IP/26/515
 - Impact assessment: SWD(2026)71

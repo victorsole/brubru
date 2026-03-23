@@ -175,6 +175,14 @@ The European Parliamentary Research Service briefing "EU joint defence procureme
 | 2025 | SAFE -- defence loans (Article 122 TFEU) | EUR 150B |
 | 2028+ | Next MFF defence instruments (under negotiation) | TBD |
 
+## Military Equipment Transport Framework (March 2026)
+
+The SEDE subcommittee published a joint draft report (PE784.420, 17 March 2026) on a proposed framework for military equipment transport across the Union. Co-rapporteurs: Michal Szczerba and Roberts Zile. Amendment deadline: 9 April 2026.
+
+This proposal addresses a critical capability gap: the EU currently lacks harmonised rules for moving military equipment across Member State borders, causing delays of days or weeks for cross-border military logistics. The framework aims to standardise permits, customs procedures, and infrastructure requirements for military mobility -- complementing NATO's military mobility initiative.
+
+Linked to the College meeting of 25 March 2026, which will discuss the Qualitative Military Edge communication and AGILE (defence innovation agency).
+
 ## Sources
 
 - Regulation (EU) 2025/2643 (EDIP), CELEX 32025R2643

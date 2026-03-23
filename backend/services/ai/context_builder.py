@@ -990,17 +990,40 @@ class ContextBuilder:
             except Exception as e:
                 logger.warning(f"[CRE] Failed to fetch plenary debate: {e}")
 
-        # EU institutional source search fallback: when no knowledge guides matched,
-        # search trusted EU institutional websites and policy media for authoritative content.
-        # Runs in parallel with CELLAR (both triggered by empty internal_knowledge).
+        # EU institutional source search fallback.
+        # Primary trigger: no knowledge guides matched.
+        # Secondary trigger: user asks about a specific procedure (timeline, status,
+        # rapporteur, vote) but we found no procedure details -- even if a generic
+        # guide matched. This catches cases like "what is the timeline of the INI
+        # on trade and economic security?" where the trade guide matches but has
+        # no data about that specific procedure.
         eu_institutional_results = []
-        if not internal_knowledge and self.tavily_client and self.enable_web_search:
-            try:
-                eu_institutional_results = await self._fetch_eu_institutional_search(
-                    query=user_message
-                )
-            except Exception as e:
-                logger.warning(f"[EU-SEARCH] Institutional fallback failed: {e}")
+        if self.tavily_client and self.enable_web_search:
+            procedure_intent_phrases = [
+                'timeline', 'status', 'rapporteur', 'shadow', 'deadline',
+                'vote', 'adopted', 'tabled', 'reading', 'trilogue',
+                'committee report', 'plenary vote', 'amendment deadline',
+                'ini ', ' ini', 'own-initiative', 'cod ', ' cod',
+                'procedure', 'legislative procedure',
+            ]
+            has_procedure_intent = any(p in query_lower for p in procedure_intent_phrases)
+            # Even with train files, if none were found via procedure ref
+            # (all came from loose keyword OR), the user's specific procedure
+            # question is unanswered. Check if any result was a direct ref match.
+            no_procedure_data = not procedure_details
+
+            should_search = (
+                not internal_knowledge  # primary: no guides matched at all
+                or (has_procedure_intent and no_procedure_data)  # secondary: procedure question unanswered
+            )
+
+            if should_search:
+                try:
+                    eu_institutional_results = await self._fetch_eu_institutional_search(
+                        query=user_message
+                    )
+                except Exception as e:
+                    logger.warning(f"[EU-SEARCH] Institutional fallback failed: {e}")
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -2910,6 +2933,96 @@ class ContextBuilder:
 
                     except ImportError:
                         logger.warning("[OEIL-ONDEMAND] OEILScraper not available")
+
+            # OEIL topic search fallback: when no procedure ref was extracted
+            # and DB keyword search returned no confident results, use Tavily
+            # scoped to OEIL to find the specific procedure by topic.
+            # This catches queries like "timeline of the INI on trade and
+            # economic security" where the user describes a procedure by topic.
+            # "No confident results" means: either no results at all, OR the
+            # OR-keyword results don't contain any file whose title matches
+            # at least 2 of the query's content words (i.e., all noise).
+            has_confident_match = False
+            if train_files:
+                content_words = [
+                    w for w in query_lower.split()
+                    if len(w) > 3 and w not in {
+                        'what', 'which', 'where', 'when', 'does', 'have',
+                        'this', 'that', 'with', 'from', 'they', 'been',
+                        'were', 'will', 'would', 'could', 'should', 'there',
+                        'their', 'some', 'more', 'than', 'very', 'just',
+                        'also', 'timeline', 'status', 'role',
+                    }
+                ]
+                for f in train_files:
+                    title_lower = (f.get('file_title') or '').lower()
+                    matches = sum(1 for w in content_words if w in title_lower)
+                    if matches >= 2:
+                        has_confident_match = True
+                        break
+
+            if not entities.procedure_references and not has_confident_match:
+                procedure_topic_phrases = [
+                    'timeline', 'status', 'rapporteur', 'shadow', 'deadline',
+                    'vote', 'adopted', 'tabled', 'reading', 'trilogue',
+                    'committee report', 'amendment deadline', 'ini ',
+                    ' ini', 'own-initiative', 'procedure',
+                ]
+                has_procedure_topic_intent = any(
+                    p in query_lower for p in procedure_topic_phrases
+                )
+
+                if has_procedure_topic_intent and self.tavily_client:
+                    try:
+                        logger.info(
+                            f"[OEIL-TOPIC] No procedure ref and no DB matches, "
+                            f"searching OEIL by topic for: {query[:80]}"
+                        )
+                        oeil_response = await self.tavily_client.search(
+                            query=query,
+                            search_depth="basic",
+                            max_results=3,
+                            include_domains=[
+                                "oeil.secure.europarl.europa.eu",
+                                "europarl.europa.eu",
+                            ],
+                        )
+
+                        for result in oeil_response.results:
+                            # Extract procedure ref from OEIL URL if present
+                            import re as _re
+                            proc_match = _re.search(
+                                r'reference=(\d{4}/\d{4}\([A-Z]+\))',
+                                result.url or ''
+                            )
+                            found_ref = proc_match.group(1) if proc_match else None
+
+                            train_files.append({
+                                'train_name': 'OEIL (topic search)',
+                                'train_priority': None,
+                                'file_title': result.title or '',
+                                'current_status': 'unknown',
+                                'days_in_current_status': None,
+                                'is_blocked': False,
+                                'committees': [],
+                                'oeil_ref': found_ref,
+                                'celex_numbers': [],
+                                'source': 'OEIL (topic search)',
+                                'first_seen': None,
+                                'description': (result.content or '')[:400],
+                                'source_url': result.url,
+                            })
+
+                        if train_files:
+                            logger.info(
+                                f"[OEIL-TOPIC] Found {len(train_files)} results "
+                                f"via topic search"
+                            )
+
+                    except Exception as e:
+                        logger.warning(
+                            f"[OEIL-TOPIC] Topic search failed: {e}"
+                        )
 
             db.close()
 

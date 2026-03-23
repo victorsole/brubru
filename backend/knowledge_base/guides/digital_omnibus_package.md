@@ -229,6 +229,12 @@ Reporting obligations referencing old instruments must be migrated by 31 Decembe
 | Data Governance Act | 32022R0868 | Repealed by COM(2025) 837 |
 | Platform-to-Business | 32019R1150 | Repealed by COM(2025) 837 |
 
+## IMCO Report: Digital Omnibus on AI (A10-0073/2026)
+
+On 19 March 2026, the IMCO committee adopted its report (A10-0073/2026, PE782.530v02-00) on the Digital Omnibus on AI proposal. Co-rapporteurs: Michael McNamee and Arba Kokalari. The TRAN committee also adopted an opinion (PE785.326, rapporteur Vivien Costanzo, 18 March 2026).
+
+This is a key legislative milestone: the IMCO report now goes to plenary for a vote, likely in the 27-30 April plenary session. The report addresses the simplification of AI Act high-risk requirements, SMC extensions, and harmonised conformity assessment procedures.
+
 ## Child Safety Online (March 2026)
 
 On 5 March 2026, the Commission held the **first meeting of the Special Panel on Child Safety Online**, hosted by President von der Leyen (announced in the 2025 State of the Union).

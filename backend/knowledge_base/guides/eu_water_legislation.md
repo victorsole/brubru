@@ -80,6 +80,18 @@ COM(2025)280, launched 8 December 2025:
 - 85% of bathing sites at excellent quality
 - 90%+ urban wastewater treatment compliance
 
+## ENVI 2nd Reading: Environmental Quality Standards (March 2026)
+
+On 18 March 2026, the ENVI committee adopted a recommendation for second reading (A10-0063/2026, PE785.254v02-00) on the revision of water policy directives concerning environmental quality standards. Rapporteur: Javi Lopez (S&D, Spain).
+
+This revision updates the priority substances list under the Environmental Quality Standards Directive (2008/105/EC), adding new pollutants including PFAS (per- and polyfluoroalkyl substances), pharmaceutical residues, and microplastics. It also strengthens monitoring requirements and introduces watch list mechanisms for emerging contaminants.
+
+The 2nd reading recommendation signals near-completion of this legislative file, likely heading to EP plenary vote in Q2 2026.
+
+## Market Stability Reserve for Buildings and Transport (ETS BRT)
+
+ENVI amendments (PE786.675, 17 March 2026) by rapporteur Danuse Nerudova (EPP, Czechia) on the market stability reserve mechanism for the new ETS covering buildings and road transport (ETS2/BRT). 111 amendments tabled, deadline for committee vote pending.
+
 ## Related Brubru Guides
 - `reach_chemicals_regulation` -- REACH, chemicals policy
 - `european_climate_law` -- Climate law (water-climate nexus)

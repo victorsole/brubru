@@ -516,6 +516,37 @@ TRANSLATIONS = {
         "free_notice": "Brubru e gratuito. Nessuna carta di credito richiesta.",
         "unsubscribe": "Se non desiderate piu ricevere e-mail da noi, rispondete semplicemente a questo messaggio.",
     },
+    "ca": {
+        "subject_cluster": "Brubru: eines d'IA per a professionals de {name}",
+        "subject_generic": "Brubru: assistent d'IA per a professionals d'afers europeus",
+        "header_subtitle": "Eines d'IA per a polítiques de la UE",
+        "greeting": "Benvolgut/da col·lega,",
+        "intro_cluster": (
+            "Si la vostra organització treballa en polítiques de <strong>{name}</strong> a la UE, "
+            "<strong>Brubru</strong> us pot ser útil. És un assistent d'IA gratuït "
+            "dissenyat específicament per a professionals de polítiques europees, desenvolupat per "
+            "<strong>Beresol</strong>, una consultora d'afers públics amb seu a Brussel·les."
+        ),
+        "intro_generic": (
+            "Com a organització activa en afers europeus, <strong>Brubru</strong> us pot ser útil. "
+            "És un assistent d'IA gratuït dissenyat específicament per a professionals de polítiques europees, "
+            "desenvolupat per <strong>Beresol</strong>, una consultora d'afers públics amb seu a Brussel·les."
+        ),
+        "section_cluster": "Com Brubru us ajuda amb {name}:",
+        "section_generic": "Què pot fer Brubru per a vosaltres:",
+        "feat_questions": "<strong>Feu preguntes sobre polítiques</strong> &mdash; obteniu respostes instantànies sobre legislació de {topic}, incloent-hi {file}, amb fonts citades",
+        "feat_questions_generic": "<strong>Responeu preguntes sobre polítiques de la UE</strong> &mdash; pregunteu sobre reglaments, directives o processos institucionals, amb fonts",
+        "feat_amendments": "<strong>Redacteu esmenes</strong> &mdash; utilitzeu l'Amendator per crear esmenes legislatives professionals a expedients com {file}",
+        "feat_amendments_generic": "<strong>Redacteu esmenes</strong> &mdash; utilitzeu l'Amendator per crear esmenes legislatives professionals amb assistència d'IA",
+        "feat_track": "<strong>Seguiu el treball de {committee}</strong> &mdash; superviseu el treball en curs de les comissions, feeds RSS de més de 15 fonts de la UE i novetats legislatives",
+        "feat_track_generic": "<strong>Seguiu la legislació</strong> &mdash; superviseu el treball de les comissions, feeds RSS de més de 15 fonts de la UE i novetats legislatives",
+        "feat_generate": "<strong>Genereu documents</strong> &mdash; position papers, briefings per a eurodiputats i punts de discussió sobre {topic} en segons",
+        "feat_generate_generic": "<strong>Genereu documents</strong> &mdash; position papers, briefings per a eurodiputats i punts de discussió en segons",
+        "key_files_heading": "Expedients clau de la UE que Brubru cobreix en {name}:",
+        "cta_button": "Proveu Brubru gratis",
+        "free_notice": "Brubru és gratuït. No cal targeta de crèdit.",
+        "unsubscribe": "Si no voleu rebre més correus electrònics nostres, simplement responeu a aquest missatge.",
+    },
     "nl": {
         "subject_cluster": "Brubru - AI-tools voor {name} beleidsprofessionals",
         "subject_generic": "Brubru - AI-assistent voor professionals in Europese zaken",
@@ -601,7 +632,27 @@ def classify_all(orgs: list[dict]) -> dict[str, list[dict]]:
 
 
 def get_lang_for_org(org: dict) -> str:
-    """Determine the email language for an org based on its country."""
+    """Determine the email language for an org based on its country and domain.
+
+    .cat domains and Barcelona-based orgs get Catalan (ca).
+    Spanish orgs without .cat get Spanish (es).
+    """
+    domain = org.get("domain", "").strip().lower()
+    email = org.get("contact_email", "").strip().lower()
+    name = org.get("original_name", "").lower()
+
+    # .cat TLD is the strongest Catalan signal
+    if domain.endswith(".cat") or email.endswith(".cat"):
+        return "ca"
+
+    # Catalan org names or city indicators
+    catalan_signals = [
+        "catalunya", "catalonia", "generalitat", "barcelona",
+        "associació", "fundació", "institut català",
+    ]
+    if any(signal in name for signal in catalan_signals):
+        return "ca"
+
     country = org.get("head_country", "").strip().upper()
     return COUNTRY_LANGUAGE_MAP.get(country, "en")
 
@@ -876,15 +927,19 @@ def main():
         name = CLUSTERS.get(key, {}).get("name", "Other")
         logger.info(f"{name:<30} {count:>7} {pct:>5.1f}%")
 
-    # Show country breakdown if filtering
+    # Show country + language breakdown if filtering
     if country_filter or args.classify_only:
         from collections import Counter
+        lang_counts = Counter(get_lang_for_org(o) for o in orgs_with_email)
+        country_counts = Counter(o.get("head_country", "UNKNOWN").strip().upper() for o in orgs_with_email)
         logger.info(f"\n{'Country':<20} {'Count':>7} {'Language':>8}")
         logger.info("-" * 37)
-        country_counts = Counter(o.get("head_country", "UNKNOWN").strip().upper() for o in orgs_with_email)
         for country, count in country_counts.most_common():
-            lang = COUNTRY_LANGUAGE_MAP.get(country, "en")
-            logger.info(f"{country:<20} {count:>7} {lang:>8}")
+            logger.info(f"{country:<20} {count:>7}")
+        logger.info(f"\n{'Language':<20} {'Count':>7}")
+        logger.info("-" * 28)
+        for lang, count in lang_counts.most_common():
+            logger.info(f"{lang:<20} {count:>7}")
 
     if args.classify_only:
         return
