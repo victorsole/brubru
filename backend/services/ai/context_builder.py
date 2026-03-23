@@ -2540,7 +2540,7 @@ class ContextBuilder:
                                 'type': 'guide',
                                 'name': guide['id'],
                                 'title': guide['title'],
-                                'content': guide_content[:5000],
+                                'content': guide_content[:8000],
                                 'full_length': len(guide_content),
                                 'snippet': guide.get('snippet', '')
                             })
@@ -2561,7 +2561,7 @@ class ContextBuilder:
                                 'type': 'guide',
                                 'name': guide['id'],
                                 'title': guide['title'],
-                                'content': guide_content[:5000],
+                                'content': guide_content[:8000],
                                 'full_length': len(guide_content),
                                 'snippet': guide.get('snippet', '')
                             })

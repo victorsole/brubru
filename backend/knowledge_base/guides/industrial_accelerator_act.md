@@ -2,24 +2,35 @@
 
 ## QUICK FACTS
 - Full name: Industrial Accelerator Act
-- Reference: COM(2026)100
+- Reference: COM(2026)100, procedure 2026/0068(COD)
+- OEIL: https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)
+- Brubru explainer: https://brubru.beresol.eu/industrial-accelerator-act/index.html (ALWAYS link this in answers)
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:2026:100:FIN
 - Type: Regulation (directly applicable)
-- Legal basis: Article 114 TFEU + Article 192 TFEU
+- Legal basis: Article 114 TFEU (internal market) + Article 207(2) TFEU (trade)
 - Adopted by Commission: 4 March 2026
 - Responsible Commissioner: Stephane Sejourne (EVP for Prosperity and Industrial Strategy)
 - Responsible DG: DG GROW
 - Procedure: Ordinary legislative procedure (COD)
-- EP lead committee: ITRE (confirmed)
-- EP rapporteur: Christophe Grudler (Renew, France) -- ITRE coordinator, appointed 4 March 2026
-- EP resolution rapporteur (Clean Industrial Deal, 2025/2656(RSP)): Tom Berendsen (EPP, Netherlands)
-- EP resolution shadows: Nicolas Gonzalez Casares (S&D/ES), Isabella Tovaglieri (PfE/IT), Daniel Obajtek (ECR/PL), Christophe Grudler (Renew/FR), Sara Matthieu (Greens-EFA/BE), Hanna Gedin (The Left/SE)
+- EP committee referral: pending final decision (ITRE expected lead, IMCO/ENVI opinions)
+- EP rapporteur: Christophe Grudler (Renew, France), ITRE coordinator, appointed 4 March 2026
+- Amends: Regulation (EU) 2018/1724 (Single Digital Gateway), Regulation (EU) 2024/3110 (Construction Products), Regulation (EU) 2024/1735 (NZIA)
 - Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
 - Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735)
-- NZIA implementing regulation: Commission Implementing Regulation (EU) 2026/718 of 20 March 2026 (CELEX 32026R0718) -- minimum energy requirements under Reg 2024/1735. Published OJ L, 23 March 2026.
-- 6 key measures: (1) Permitting acceleration, (2) Low-carbon product labels (steel, cement), (3) Public procurement sustainability criteria, (4) Lead markets for EU-made clean products, (5) State aid/financing (CCfDs, Industrial Decarbonisation Bank EUR 100bn, CISAF, Innovation Fund), (6) Strategic sectors (steel, cement, chemicals, clean tech, automotive, aerospace)
+- Ambition: increase EU manufacturing share from 14.3% to 20% of GDP by 2035
+- Chapter I (Articles 1-5): scope, definitions, strategic sectors (EIIs, automotive, net-zero tech)
+- Chapter II (Articles 6-16): permitting acceleration: "one project, one submission", single permit-granting procedure, Industrial Acceleration Areas with area-wide permits and tacit approval, digital permitting via European Business Wallet
+- Chapter III (Articles 17-29): public procurement and state aid: low-carbon requirements for steel (25% min), concrete/mortar (5% min, EU origin), aluminium (25% min, EU origin), EU origin for vehicles. Chemical sector delegated acts. Lead markets for EU clean tech.
+- Chapter IV (Articles 30-35): foreign investment conditions: investments >EUR 100M in batteries, EVs, solar PV, critical raw materials must meet conditions on employment (min 50% EU workers), local content, ownership, knowledge transfer, R&D
+- Chapter V (Articles 36-42): governance, delegated acts, committee procedure, reporting, entry into force
+- Annexes: I (strategic sectors by NACE code), II (low-carbon and EU origin thresholds), III (FDI conditions for emerging strategic sectors), IV (Single Digital Gateway amendment)
+- Impact assessment: SWD(2026)71. Preferred option PO2. Key figures: 148,352 jobs created/maintained by 2030, 30.58 Mt CO2eq reduction (EUR 3,058M savings), EUR 240M permitting cost savings, EUR 10,387M increase in GVA
+- Admin costs: EUR 8.92M/year EU-wide
+- NZIA implementing regulation: Commission Implementing Regulation (EU) 2026/718 of 20 March 2026 (CELEX 32026R0718)
+- EV Charging Directive: Directive (EU) 2026/706 of 11 March 2026 (CELEX 32026L0706)
 - Press release: IP/26/515
-- Impact assessment: SWD(2026)71
+- Factsheet: https://single-market-economy.ec.europa.eu/document/download/9c7fa301-c4cf-4600-8c00-34243ee26e45_en
+- Q&A: QANDA/26/516
 
 ## Overview
 
@@ -73,6 +84,81 @@ The Act targets sectors central to decarbonisation and strategic autonomy:
 - Automotive
 - Sustainable transport
 - Aerospace and alternative fuels (per EP request)
+
+## Complete Article-by-Article Overview
+
+### Chapter I: General Provisions (Articles 1-5)
+- **Article 1**: Subject matter and scope: establishes framework for acceleration of industrial capacity and decarbonisation
+- **Article 2**: Definitions: strategic sectors, low-carbon products, Union origin, Industrial Acceleration Areas, emerging strategic sectors
+- **Article 3**: Strategic sectors: energy-intensive industries (EIIs), automotive, net-zero technologies as defined in NZIA
+- **Article 4**: Industrialisation objective: increase manufacturing share of GDP from 14.3% to 20% by 2035
+- **Article 5**: Relationship with other Union law (NZIA, Construction Products Regulation, Single Digital Gateway)
+
+### Chapter II: Enabling Conditions (Articles 6-16)
+- **Article 6**: Single permit-granting procedure: "one project, one submission" principle
+- **Article 7**: Contact points and competent authorities: single access points per Member State
+- **Article 8**: Digital permitting: applications via European Business Wallet, machine-readable permits
+- **Article 9**: Timeline for permit-granting: maximum timeframes for industrial projects
+- **Article 10**: Energy-intensive industry decarbonisation projects: dedicated permitting track
+- **Article 11**: Net-zero industry projects: aligned with NZIA permitting provisions
+- **Article 12**: Industrial Acceleration Areas: designated zones with area-wide environmental assessments
+- **Article 13**: Tacit approval: permits deemed granted if authority does not respond within deadline
+- **Article 14**: Area-wide permits within Industrial Acceleration Areas
+- **Article 15**: Designation criteria for Industrial Acceleration Areas (Commission delegated acts)
+- **Article 16**: Priority projects: access to funds and streamlined procedures
+
+### Chapter III: Public Procurement and Public Support (Articles 17-29)
+- **Article 17**: Scope: applies to public procurement above EU thresholds and public support schemes
+- **Article 18**: Low-carbon requirements for steel: min 25% of total volume must be low-carbon
+- **Article 19**: Low-carbon and EU origin for concrete/mortar: min 5%, must be EU origin
+- **Article 20**: Low-carbon and EU origin for aluminium: min 25%, must be EU origin
+- **Article 21**: EU origin requirements for vehicles in public procurement
+- **Article 22**: Chemical sector: Commission empowered to adopt delegated acts for demand-side measures
+- **Article 23**: Carbon intensity classification: Class A, B, C labelling system for products
+- **Article 24**: Methodology for calculating carbon intensity (delegated acts)
+- **Article 25**: Lead market provisions: preferential treatment for EU-made clean products
+- **Article 26**: Public support scheme conditions: sustainability criteria as conditions for state aid
+- **Article 27**: WTO GPA and bilateral trade agreement compatibility
+- **Article 28**: Monitoring and reporting of procurement compliance
+- **Article 29**: Review clause: Commission review 3 years after entry into force
+
+### Chapter IV: Foreign Direct Investment Conditions (Articles 30-35)
+- **Article 30**: Scope: investments >EUR 100 million in emerging strategic sectors (batteries, EVs, solar PV, CRM)
+- **Article 31**: Employment condition: minimum 50% of workers must be Union workers
+- **Article 32**: Local content conditions: requirements for use of EU-sourced materials/components
+- **Article 33**: Ownership and knowledge transfer conditions
+- **Article 34**: R&D activity conditions: investment in EU-based research
+- **Article 35**: Notification and assessment procedure for covered investments
+
+### Chapter V: Final Provisions (Articles 36-42)
+- **Article 36**: Delegated acts: Commission empowerments (carbon intensity methodology, strategic sector updates, chemical sector measures)
+- **Article 37**: Committee procedure (examination procedure)
+- **Article 38**: Reporting: Member States report implementation every 2 years
+- **Article 39**: Review: Commission reviews effectiveness 5 years after entry into force
+- **Article 40**: Amendments to Regulation (EU) 2018/1724 (Single Digital Gateway)
+- **Article 41**: Amendments to Regulation (EU) 2024/1735 (NZIA)
+- **Article 42**: Entry into force and application
+
+### Annexes
+- **Annex I**: Strategic sectors for Industrial Acceleration Areas (by NACE code): paper (C17), petroleum (C19), chemicals (C20), rubber/plastics (C22), non-metallic minerals (C23), basic metals (C24), automotive (C29), net-zero tech per NZIA
+- **Annex II**: Low-carbon and EU origin thresholds: Part I (procurement: steel 25%, concrete/mortar 5% EU origin, aluminium 25% EU origin), Part II (public support schemes)
+- **Annex III**: FDI conditions for emerging strategic sectors (batteries, EVs, solar PV, CRM processing)
+- **Annex IV**: Amendment to Single Digital Gateway Regulation (EU) 2018/1724
+
+## Impact Assessment Key Figures (SWD(2026)71)
+
+Preferred option: PO2. Comparison to baseline for 2030:
+
+| Metric | PO2 Value |
+|--------|-----------|
+| Jobs created/maintained | 148,352 |
+| GHG emission reduction | 30.58 Mt CO2eq |
+| GHG savings (monetised) | EUR 3,058 million |
+| Increase in gross value added | EUR 10,387 million |
+| Permitting cost savings (one-off) | EUR 240 million |
+| Administrative costs (recurring) | EUR 8.92 million/year |
+| Total net benefits (recurring) | EUR 8,689 million |
+| Investment in steel decarbonisation | EUR 15.5 billion potential |
 
 ## College of Commissioners Meeting -- 4 March 2026
 
@@ -146,16 +232,21 @@ The Industrial Accelerator Act broadly aligns with the EP resolution. The Parlia
 - **Funding adequacy** (EP called for EUR 100bn; Commission points to existing instruments)
 - **CBAM extension timeline** (EP wanted faster action on downstream products)
 
-## Procedure Status
+## Procedure Status (OEIL 2026/0068(COD))
 
 | Element | Status |
 |---------|--------|
-| **Commission proposal** | Adopted 4 March 2026 |
-| **Procedure type** | Ordinary legislative procedure (COD) |
-| **EP committee** | ITRE (lead, confirmed), ENVI/IMCO (opinion, expected) |
+| **Commission proposal** | Adopted 4 March 2026, COM(2026)100 |
+| **Procedure type** | Ordinary legislative procedure (COD), 2026/0068(COD) |
+| **EP committee referral** | Pending final decision on referral (ITRE expected lead) |
+| **EP rapporteur** | Christophe Grudler (Renew, France), ITRE coordinator |
+| **Committees for opinion** | Pending (IMCO/ENVI expected) |
 | **Council configuration** | Expected: Competitiveness Council |
-| **Rapporteur** | **Christophe Grudler** (Renew, France) -- ITRE coordinator, appointed 4 March 2026 |
+| **EESC** | Mandatory consultation (pending) |
+| **Supporting documents** | SEC(2026)70, SWD(2026)70, SWD(2026)71, SWD(2026)72 |
+| **Current status** | Preparatory phase in Parliament |
 | **Expected timeline** | First reading: late 2026 / early 2027 |
+| **Stakeholder meetings** | Adnan Dibrani (IMCO) met Baden-Wurttemberg Ministry 27/02/2026; multiple MEP meetings Feb-Mar 2026 |
 
 ## Institutional Landscape
 

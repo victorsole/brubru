@@ -181,7 +181,15 @@ The SEDE subcommittee published a joint draft report (PE784.420, 17 March 2026) 
 
 This proposal addresses a critical capability gap: the EU currently lacks harmonised rules for moving military equipment across Member State borders, causing delays of days or weeks for cross-border military logistics. The framework aims to standardise permits, customs procedures, and infrastructure requirements for military mobility -- complementing NATO's military mobility initiative.
 
-Linked to the College meeting of 25 March 2026, which will discuss the Qualitative Military Edge communication and AGILE (defence innovation agency).
+## Commission College Meeting: Wednesday 25 March 2026
+
+The College of Commissioners meets Wednesday 25 March 2026 with a defence-heavy agenda:
+
+1. **Qualitative Military Edge** communication: sets out the EU's strategy for maintaining technological superiority in defence, covering AI, quantum, hypersonics, autonomous systems, and space. Led by Commissioner Virkkunen.
+2. **AGILE** (Agency for Defence Innovation): proposed new EU agency to accelerate defence innovation, bridge the gap between civilian R&D and military applications, and coordinate dual-use technology development. Led by Commissioner Minzatu.
+3. **Wildfire Risk Management**: Commission communication on EU-wide wildfire prevention and response coordination.
+
+This College meeting is a milestone for the EU's defence innovation agenda, building on the EDIS (2024) and EDIP (2025) frameworks.
 
 ## Sources
 
