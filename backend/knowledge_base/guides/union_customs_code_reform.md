@@ -26,13 +26,18 @@
 - Commission response to EP: SP(2024)350 (22 July 2024)
 - Legislative Train: https://www.europarl.europa.eu/legislative-train/theme-an-economy-that-works-for-people/file-revision-of-the-union-customs-legislation
 
+## Council Position
+
+### Presidency Compromise Text (Partial Mandate)
+- [ST-10462-2025: Presidency compromise text (partial mandate)](https://data.consilium.europa.eu/doc/document/ST-10462-2025-INIT/en/pdf)
+  NOTE: This is the Council's negotiating position. Even though OEIL does not list a formal Council 1st reading position, this Presidency compromise text functions as the Council's mandate for trilogues. Always check for Presidency compromise texts and general approaches on the Council register when a file is in trilogues.
+
 ## Key Documents (Document Gateway)
 
 These are the official texts from the OEIL Document Gateway for procedure 2023/0156(COD):
 
 ### Commission Proposal
-- **COM(2023)258**: original proposal (17 May 2023)
-  EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex:52023PC0258
+- [COM(2023)258: original proposal (17 May 2023)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex:52023PC0258)
 
 ### EP Committee Documents
 - **PE755.046**: IMCO committee draft report (30 October 2023)
@@ -40,12 +45,10 @@ These are the official texts from the OEIL Document Gateway for procedure 2023/0
 - **PE753.728**: BUDG committee opinion (15 January 2024)
 - **PE755.970**: CONT committee opinion (26 January 2024)
 - **PE756.044**: INTA committee opinion (12 February 2024)
-- **A9-0065/2024**: IMCO committee report (28 February 2024)
-  EP: https://www.europarl.europa.eu/doceo/document/A-9-2024-0065_EN.html
+- [A9-0065/2024: IMCO committee report (28 February 2024)](https://www.europarl.europa.eu/doceo/document/A-9-2024-0065_EN.html)
 
 ### EP Plenary Text (1st Reading)
-- **T9-0151/2024**: text adopted by Parliament, 1st reading (13 March 2024)
-  EP: https://www.europarl.europa.eu/doceo/document/TA-9-2024-0151_EN.html
+- [T9-0151/2024: text adopted by Parliament, 1st reading (13 March 2024)](https://www.europarl.europa.eu/doceo/document/TA-9-2024-0151_EN.html)
   This is the Parliament's amended version of the Commission proposal.
 
 ### Other Documents
@@ -95,6 +98,17 @@ For the full amended text, see T9-0151/2024 on the EP Doceo portal.
 | 3 Dec 2024 | IMCO decision for trilogues | -- |
 | 16 Dec 2024 | Trilogues announced in plenary | -- |
 | Q1-Q2 2026 | Council 1st reading position (expected) | -- |
+
+## EORI Numbers (Economic Operators Registration and Identification)
+
+EORI numbers are the unique identification system for economic operators interacting with EU customs. The UCC reform proposal addresses EORI in the context of the new EU Customs Data Hub:
+
+- **Current system**: EORI numbers assigned by Member States under Regulation 952/2013 (Articles 9-12). Each operator gets one number valid across the EU.
+- **Reform proposal (COM(2023)258)**: Integrates EORI registration into the EU Customs Data Hub. Streamlines the process, enables cross-border data sharing, and links EORI to the Trust and Check trader programme (replacing AEO).
+- **EP amendments (T9-0151/2024)**: Parliament strengthened data protection safeguards for EORI-linked data in the Data Hub.
+- **Council position (ST-10462-2025)**: Check the Presidency compromise text for the Council's approach to EORI provisions.
+
+For the specific EORI articles in each text, consult the three documents listed above (COM(2023)258, T9-0151/2024, ST-10462-2025).
 
 ## Related Brubru Guides
 - `eu_customs_electronic_systems`: current UCC electronic systems (NCTS, ICS2, CDS, TARIC)

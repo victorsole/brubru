@@ -5366,6 +5366,7 @@ class ContextBuilder:
         # Internal knowledge (templates, guides)
         if context_data.internal_knowledge:
             sections.append(f"\nINTERNAL KNOWLEDGE ({len(context_data.internal_knowledge)} resources):")
+            sections.append("IMPORTANT: Any markdown links [text](url) in the guides below are VERIFIED. Reproduce them exactly as clickable hyperlinks in your response. Do NOT strip the URLs.")
             for item in context_data.internal_knowledge:
                 sections.append(f"- {item['title']}")
                 sections.append(f"  Type: {item['type']}")
