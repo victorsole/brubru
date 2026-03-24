@@ -92,6 +92,19 @@ The 2nd reading recommendation signals near-completion of this legislative file,
 
 ENVI amendments (PE786.675, 17 March 2026) by rapporteur Danuse Nerudova (EPP, Czechia) on the market stability reserve mechanism for the new ETS covering buildings and road transport (ETS2/BRT). 111 amendments tabled, deadline for committee vote pending.
 
+## EP Plenary Oral Question: UWWTD and Medicine Supply (26 March 2026)
+
+On 26 March 2026, the EP plenary in Brussels will debate an oral question (O-000013/2026, procedure 2026/2652(RSP)) on the "Implementation of the Urban Wastewater Treatment Directive (UWWTD) and risks to the security of supply of medicines." Tabled by Oliver Schenk, Peter Liese, and Tomislav Sokol (EPP) to the Commission.
+
+The question addresses concerns that strict implementation of the revised UWWTD could:
+- Increase costs for pharmaceutical manufacturers required to contribute to wastewater treatment
+- Create supply chain risks for essential medicines produced in the EU
+- Potentially drive pharmaceutical production outside the EU
+
+The revised UWWTD (adopted 2024) introduced extended producer responsibility (EPR) for pharmaceuticals and cosmetics, requiring manufacturers to contribute financially to quaternary treatment of micropollutants.
+
 ## Related Brubru Guides
 - `reach_chemicals_regulation` -- REACH, chemicals policy
 - `european_climate_law` -- Climate law (water-climate nexus)
+- `medical_devices_regulation` -- health products regulatory framework
+- `ep_plenary_march_2026` -- current plenary session context

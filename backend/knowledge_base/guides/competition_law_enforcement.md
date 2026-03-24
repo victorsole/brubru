@@ -17,6 +17,20 @@
 
 Guide to EU antitrust enforcement by DG Competition, covering Articles 101 and 102 TFEU, procedural rules under Regulation 1/2003, and the ECN+ Directive cooperation framework.
 
+## Recent State Aid Decisions (March 2026)
+
+### Danish Offshore Wind (23 March 2026)
+- Commission approved EUR 5 billion Danish State aid scheme for offshore wind energy
+- Legal basis: Article 107(3)(c) TFEU + CEEAG (Climate, Energy and Environmental Aid Guidelines)
+
+### French Renewable Hydrogen (23 March 2026)
+- Commission approved French State aid scheme for production of renewable and low-carbon hydrogen
+- Part of EU hydrogen strategy and REPowerEU objectives
+
+### FIFA World Cup Ticket Pricing (24 March 2026)
+- FIFA hit with complaint to EU over World Cup ticket pricing practices
+- Potential abuse of dominant position (Article 102 TFEU) or anti-competitive practices in ticket distribution
+
 ## Treaty Provisions
 
 ### Article 101 TFEU -- Anti-Competitive Agreements

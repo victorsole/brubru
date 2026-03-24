@@ -16,6 +16,7 @@
 - 2026 Energy Package: Adopted 10 March 2026 -- Clean Energy Investment Strategy, SMR Strategy, Citizens Energy Package
 - Renewables milestone (Eurostat, 19 March 2026): 47% of EU electricity came from renewables in 2025
 - Fusion energy (19 March 2026): EU to invest EUR 330 million to accelerate fusion energy and support nuclear technologies/skills
+- Middle East energy disruption (23 March 2026): Commission calls on Member States to prepare for winter amid Strait of Hormuz disruption (see `iran_strait_hormuz_eu_response.md`)
 - Fit for 55: 14 energy-related acts adopted 2023-2024
 
 ## Overview

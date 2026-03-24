@@ -1,12 +1,12 @@
-# EP Plenary Session: 9-12 March 2026 (Strasbourg)
+# EP Plenary Sessions: March 2026
 
 ## QUICK FACTS
-Session: 9-12 March 2026 (CONCLUDED)
-Location: Strasbourg
-Type: Plenary session of the European Parliament (10th legislature)
-Status: CONCLUDED (10-13 March 2026)
-Key votes: Tuesday 10 March and Wednesday 11 March
-Notable: Energy Package presentation, Copyright and GenAI vote, Housing Crisis report, Defence debates, European Council preparation (19-20 March), Package Travel Directive, Human rights resolutions
+Session 1: 9-12 March 2026, Strasbourg (CONCLUDED)
+Session 2: 25-26 March 2026, Brussels (UPCOMING)
+Type: Plenary sessions of the European Parliament (10th legislature)
+Session 1 key votes: Housing Crisis, Copyright and GenAI, ECB VP, Package Travel Directive
+Session 2 key votes: Anti-Corruption Directive (2nd reading), Global Gateway report, UWWTD oral question
+Notable: Energy Package presentation (9 Mar), EU-Australia trade deal signed (24 Mar)
 
 ## Monday 9 March: Debates
 
@@ -183,8 +183,40 @@ The EP adopted urgency resolutions on human rights violations in:
 ### Consent-Based Rape Legislation
 Joint FEMM-LIBE report A10-0047/2026 on the importance of consent-based rape legislation in the EU (rapporteurs: Scheuring-Wielgus, Incir). See `gender_equality_strategy` guide.
 
+## EP Plenary: 25-26 March 2026 (Brussels)
+
+### Tuesday 25 March 2026
+
+#### Key Vote
+- **Anti-Corruption Directive** (2nd reading) -- 2023/0135(COD), LIBE committee
+  - Replaces Framework Decision 2003/568/JHA and the Convention on corruption involving EU officials
+  - Amends Directive (EU) 2017/1371 (PIF Directive)
+  - Full guide: `anti_corruption_directive.md`
+
+- One-minute speeches (Rule 179)
+
+### Thursday 26 March 2026
+
+#### Debates (09:00-10:50)
+- **Global Gateway -- past impacts and future orientation** (A10-0045/2026)
+  - INI report by Chloe Ridel (S&D) and Hildegard Bentele (EPP)
+  - Procedure: 2025/2073(INI), AFET + DEVE committees
+  - Full guide: `global_gateway_strategy.md`
+
+- **Implementation of the UWWTD and risks to security of supply of medicines**
+  - Oral question O-000013/2026 by Schenk, Liese, Sokol (EPP) to Commission
+  - Procedure: 2026/2652(RSP)
+  - Full guide: `eu_water_legislation.md`
+
+#### Votes (11:00-13:00)
+- Votes followed by explanations of votes
+
 ## Related Brubru Guides
 
 - `package_travel_directive` -- Package Travel Directive revision (adopted 12 March 2026)
 - `eurodac_asylum_migration` -- Migration and asylum (Iran conflict context)
 - `gender_equality_strategy` -- Gender equality and consent-based rape legislation
+- `anti_corruption_directive` -- Anti-Corruption Directive (2nd reading vote 25 March)
+- `global_gateway_strategy` -- Global Gateway INI report (debate 26 March)
+- `eu_water_legislation` -- UWWTD oral question (debate 26 March)
+- `eu_australia_trade_agreement` -- EU-Australia trade deal signed 24 March

@@ -15,6 +15,7 @@
 - Solidarity mechanism: mandatory, flexible (relocation, financial contributions, or operational support)
 - Border procedures: mandatory screening plus asylum procedure at borders for certain applicants
 - Safe third country concept: expanded, applicable when third country connection exists
+- EPRS briefing (23 March 2026): "Safe third country concept in the EU pact on migration and asylum" -- analyses the Asylum Procedure Regulation's approach to applicants from safe third countries
 - Common implementation plan: COM(2024)251, 12 June 2024
 - Facilitation Directive reform: COM(2023)755, companion package (see dedicated guide)
 - Controversy: Hungary and Poland voted against, civil society criticism of border procedure rights

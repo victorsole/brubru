@@ -13,6 +13,8 @@ Iran strikes: Indiscriminate attacks on Gulf states; EU expressed "full solidari
 Ukraine dimension: Spiking oil prices refill Russian coffers; demand for US weapons in Iran war may deprive Kyiv of arms
 EU institutional response: Joint declaration by presidents of three EU institutions on 4th anniversary of Russian invasion
 Energy Council agenda: Oil reserves release, energy price containment, inflation management
+Commission winter preparation (23 March 2026): Commission calls on EU countries to start preparing for winter amid Middle East energy disruption
+EU-Australia trade deal (24 March 2026): Trade diversification deal signed amid geopolitical instability (see `eu_australia_trade_agreement.md`)
 
 ## EU Diplomatic Response
 
