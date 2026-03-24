@@ -48,6 +48,16 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#9b51e0',
     icon: 'mdi-factory',
   },
+  {
+    title: 'Late Payments Regulation',
+    shortTitle: 'Late Payments',
+    comReference: 'COM(2023) 533',
+    procedureRef: '2023/0323(COD)',
+    basePath: '/late-payments',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#dc2626',
+    icon: 'mdi-clock-alert-outline',
+  },
 ];
 
 /**
