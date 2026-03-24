@@ -673,6 +673,7 @@ NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
         )
 
         content = await self._generate(prompt)
+        content = self._format_ep_resolution(content)
         sections = self._parse_sections(content)
 
         return GeneratedDocument(
@@ -746,6 +747,77 @@ NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
             legislative_context=legislative_context,
             editable_sections=list(sections.keys())
         )
+
+    def _format_ep_resolution(self, text: str) -> str:
+        """
+        Post-process an EP resolution to fix formatting issues where the AI
+        collapses line breaks between structural elements.
+
+        Fixes:
+        1. Each "-- having regard to" on its own line
+        2. Each lettered recital (A. whereas, B. whereas) on its own line
+        3. Operative paragraphs numbered (1., 2., 3., ...)
+        4. Last operative paragraph ends with a period
+        """
+        import re
+
+        # Step 1: Ensure each "-- having regard to" starts on a new line
+        # Match cases where they're concatenated without line breaks
+        text = re.sub(r',\s*--\s*having regard to', ',\n\n-- having regard to', text)
+
+        # Step 2: Ensure each lettered recital starts on a new line
+        # Match "A. whereas", "B. whereas", etc. that are not at line start
+        text = re.sub(r';\s*([A-Z])\.\s{1,2}whereas', r';\n\n\1.  whereas', text)
+
+        # Step 3: Number operative paragraphs if unnumbered
+        # Detect operative verbs at the start of what should be numbered points
+        operative_verbs = [
+            'Calls', 'Urges', 'Condemns', 'Expresses', 'Welcomes', 'Stresses',
+            'Requests', 'Emphasises', 'Proposes', 'Underlines', 'Recalls',
+            'Notes', 'Considers', 'Insists', 'Invites', 'Deplores', 'Regrets',
+            'Recommends', 'Reiterates', 'Demands', 'Takes note of', 'Instructs',
+            'Highlights', 'Supports', 'Acknowledges', 'Affirms', 'Believes',
+        ]
+        verb_pattern = '|'.join(re.escape(v) for v in operative_verbs)
+
+        # First, ensure line breaks before operative paragraphs
+        text = re.sub(r';\s*(' + verb_pattern + r')', r';\n\n\1', text)
+
+        # Check if operative paragraphs are already numbered
+        lines = text.split('\n')
+        has_numbering = any(re.match(r'^\d+\.\s{1,2}(' + verb_pattern + ')', line.strip()) for line in lines)
+
+        if not has_numbering:
+            # Number the operative paragraphs
+            counter = 0
+            new_lines = []
+            for line in lines:
+                stripped = line.strip()
+                if re.match(r'^(' + verb_pattern + r')\b', stripped):
+                    counter += 1
+                    new_lines.append(f'{counter}.  {stripped}')
+                else:
+                    new_lines.append(line)
+            text = '\n'.join(new_lines)
+
+        # Step 4: Ensure last operative paragraph ends with a period
+        # Find the last numbered point (the "Instructs its President" line)
+        text = re.sub(r'(Instructs its President[^.;]*?)(Observatory|States|bodies|institutions)([.;]?\s*)$',
+                      r'\1\2.', text, flags=re.MULTILINE)
+
+        # Generic: ensure the very last line with a numbered point ends with "."
+        lines = text.rstrip().split('\n')
+        for i in range(len(lines) - 1, -1, -1):
+            stripped = lines[i].strip()
+            if re.match(r'^\d+\.\s', stripped):
+                if stripped.endswith(';'):
+                    lines[i] = lines[i].rstrip()[:-1] + '.'
+                elif not stripped.endswith('.'):
+                    lines[i] = lines[i].rstrip() + '.'
+                break
+        text = '\n'.join(lines)
+
+        return text
 
     async def _generate(self, prompt: str) -> str:
         """
