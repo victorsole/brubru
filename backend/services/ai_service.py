@@ -325,6 +325,12 @@ class AIService:
                 logger.warning(f"No MEP names found in response to link")
                 logger.info(f"Full MEP names available: {[mep_data[k]['name'] for k in list(mep_data.keys())[:10]]}")
 
+        # Post-process: Inject document URLs from knowledge guides
+        if context_data and context_data.internal_knowledge:
+            assistant_message = self._inject_guide_document_links(
+                assistant_message, context_data.internal_knowledge
+            )
+
         # Post-process: Add EUR-Lex links for legislation acronyms
         logger.info("Post-processing response with legislation acronyms")
         assistant_message = self._linkify_legislation(assistant_message)
@@ -1432,6 +1438,70 @@ Please answer using the EU context provided above. Include citations [1], [2], e
             logger.info(f"Added {links_added} MEP profile links to response")
         else:
             logger.warning(f"No MEP names found to link despite having {len(mep_data)} MEP profiles")
+
+        return text
+
+    def _inject_guide_document_links(self, text: str, knowledge_items: list) -> str:
+        """
+        Post-process AI response to inject clickable URLs for document references
+        mentioned in the response, using URLs from knowledge guide content.
+
+        The AI model often lists document references (T9-0299/2024, A9-0156/2024,
+        COM(2023)533, ST-10462-2025) without making them clickable, even when the
+        guide provides the URLs. This method fixes that by scanning the guide for
+        markdown links and injecting them into the response.
+        """
+        # Extract all markdown links from guide content: [label](url)
+        doc_urls = {}  # reference_key -> (label, url)
+        for item in knowledge_items:
+            content = item.get('content', '')
+            # Find all markdown links in guide content
+            # Simple approach: find [label]( then extract URL with balanced parens
+            for match in re.finditer(r'\[([^\]]+)\]\(', content):
+                label = match.group(1)
+                # Extract URL: start after the ( and find matching )
+                url_start = match.end()
+                depth = 1
+                i = url_start
+                while i < len(content) and depth > 0:
+                    if content[i] == '(':
+                        depth += 1
+                    elif content[i] == ')':
+                        depth -= 1
+                    i += 1
+                url = content[url_start:i - 1]
+                if not url.startswith('http'):
+                    continue
+                # Extract document reference from the label
+                # Match patterns like T9-0299/2024, A9-0156/2024, COM(2023)533, ST-10462-2025, PE756.002
+                for ref_match in re.finditer(
+                    r'(T9-\d{4}/\d{4}|A9-\d{4}/\d{4}|COM\(\d{4}\)\d+|ST-\d+-\d+|PE\d+\.\d+|SWD\(\d{4}\)\d+)',
+                    label
+                ):
+                    ref = ref_match.group(1)
+                    doc_urls[ref] = (label, url)
+
+        if not doc_urls:
+            return text
+
+        links_injected = 0
+        for ref, (label, url) in doc_urls.items():
+            escaped_ref = re.escape(ref)
+            # Only match references NOT already inside a markdown link
+            # Pattern: ref that is NOT preceded by [ or followed by ](
+            # Match bold or plain references like **T9-0299/2024** or T9-0299/2024
+            pattern = r'(?<!\[)(\*{0,2})(' + escaped_ref + r')(\*{0,2})(?!\]\()'
+            # Check if this ref appears unlinked in the text
+            if re.search(pattern, text):
+                # Replace first unlinked occurrence with a markdown link
+                def make_link(m):
+                    nonlocal links_injected
+                    links_injected += 1
+                    return f'[{m.group(1)}{m.group(2)}{m.group(3)}]({url})'
+                text = re.sub(pattern, make_link, text, count=1)
+
+        if links_injected > 0:
+            logger.info(f"Injected {links_injected} document links from knowledge guides")
 
         return text
 
