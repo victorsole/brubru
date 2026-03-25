@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R&egrave;glement sur les retards de paiement : COM(2023)533 | Brubru</title>
+  <meta name="description" content="Analyse approfondie du r&egrave;glement de l'UE sur les retards de paiement (COM(2023)533)&nbsp;: d&eacute;lais de paiement de 30 jours, p&eacute;nalit&eacute;s automatiques, cadre d'application. Propositions du rapporteur, amendements des d&eacute;put&eacute;s, texte adopt&eacute; par le PE, positions des parties prenantes. Actuellement bloqu&eacute; au Conseil.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(220,38,38,0.1);
+      color: var(--color-red);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.06) 0%, rgba(217,119,6,0.06) 100%);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.06) 100%);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+    .red-cell { color: var(--color-red); font-weight: 600; }
+    .green-cell { color: var(--color-green); font-weight: 600; }
+
+    .article-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num { font-size: 0.75rem; font-weight: 700; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -2rem; top: 0.5rem; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--color-blue); background: white; }
+    .timeline__item--active::before { background: var(--color-red); border-color: var(--color-red); }
+    .timeline__item--done::before { background: var(--color-green); border-color: var(--color-green); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .stakeholder-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .stakeholder-card__header {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;
+    }
+    .stakeholder-card__name { font-weight: 700; font-size: 1.05rem; }
+    .stakeholder-card__position { font-size: 0.9rem; color: var(--color-secondary); }
+
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px;
+      border-radius: 50%; background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- En-t&ecirc;te -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Retards de paiement&nbsp;: analyse approfondie</div>
+    <div class="header__subtitle">Lutte contre le retard de paiement dans les transactions commerciales</div>
+  </div>
+  <select onchange="location.href=this.value" aria-label="Langue" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html" selected>Fran&ccedil;ais</option>
+    <option value="es.html">Espa&ntilde;ol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html">Catal&agrave;</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- H&eacute;ro -->
+<section class="hero">
+  <div class="hero__tag"><span class="mdi mdi-alert-circle-outline"></span> Bloqu&eacute; au Conseil</div>
+  <h1 class="hero__title">R&egrave;glement sur les retards de paiement&nbsp;: <span>30 jours pour payer,<br>sans exception</span></h1>
+  <p class="hero__subtitle">
+    La proposition de la Commission europ&eacute;enne visant &agrave; remplacer la directive 2011/7/UE par un r&egrave;glement d&rsquo;application directe.
+    D&eacute;lais de paiement plus stricts, p&eacute;nalit&eacute;s automatiques et autorit&eacute;s d&rsquo;ex&eacute;cution ind&eacute;pendantes pour prot&eacute;ger les PME.
+  </p>
+  <div class="hero__meta">
+    <span><span class="mdi mdi-file-document-outline"></span> <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2023/0533/COM_COM(2023)0533_EN.pdf" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">COM(2023)533</a></span>
+    <span><span class="mdi mdi-calendar"></span> 12 septembre 2023</span>
+    <span><span class="mdi mdi-gavel"></span> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0323(COD)" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">2023/0323(COD)</a></span>
+    <span><span class="mdi mdi-account-group"></span> Commission IMCO</span>
+  </div>
+</section>
+
+<!-- Chiffres cl&eacute;s -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">30 jours</div>
+    <div class="figure-card__label">D&eacute;lai de paiement maximal</div>
+  </div>
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">Bloqu&eacute;</div>
+    <div class="figure-card__label">Statut au Conseil</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">33-10-2</div>
+    <div class="figure-card__label">Vote en commission IMCO</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">405</div>
+    <div class="figure-card__label">Amendements d&eacute;pos&eacute;s</div>
+  </div>
+</div>
+
+<!-- Table des mati&egrave;res -->
+<nav class="toc">
+  <div class="toc__title">Table des mati&egrave;res</div>
+  <div class="toc__grid">
+    <a href="#problem" class="toc__link"><span class="toc__num">1</span> Le probl&egrave;me</a>
+    <a href="#proposal" class="toc__link"><span class="toc__num">2</span> Proposition de la Commission</a>
+    <a href="#rapporteur" class="toc__link"><span class="toc__num">3</span> Approche du rapporteur</a>
+    <a href="#amendments" class="toc__link"><span class="toc__num">4</span> Amendements des d&eacute;put&eacute;s</a>
+    <a href="#adopted" class="toc__link"><span class="toc__num">5</span> Texte adopt&eacute; par le PE</a>
+    <a href="#comparison" class="toc__link"><span class="toc__num">6</span> Comparaison en trois colonnes</a>
+    <a href="#stakeholders" class="toc__link"><span class="toc__num">7</span> Positions des parties prenantes</a>
+    <a href="#council" class="toc__link"><span class="toc__num">8</span> Blocage au Conseil</a>
+    <a href="#timeline" class="toc__link"><span class="toc__num">9</span> Calendrier l&eacute;gislatif</a>
+    <a href="#sources" class="toc__link"><span class="toc__num">10</span> Sources officielles</a>
+    <a href="#actors" class="toc__link"><span class="toc__num">11</span> Acteurs cl&eacute;s</a>
+  </div>
+</nav>
+
+<!-- Section 1 : Le probl&egrave;me -->
+<section class="section" id="problem">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><span class="mdi mdi-alert-outline"></span></div>
+    <h2 class="section__title">Le probl&egrave;me&nbsp;: les retards de paiement tuent les PME</h2>
+  </div>
+  <p class="section__subtitle">Pourquoi la Commission a propos&eacute; de remplacer la directive de 2011 par un r&egrave;glement</p>
+
+  <div class="info-box info-box--red">
+    <h3>Le probl&egrave;me central</h3>
+    <p>Des milliers de petites et moyennes entreprises font faillite chaque ann&eacute;e en attendant le paiement de leurs factures. Les retards de paiement constituent la principale cause de probl&egrave;mes de tr&eacute;sorerie pour les PME, et la directive de 2011 n&rsquo;a pas r&eacute;solu le probl&egrave;me car les &Eacute;tats membres l&rsquo;ont transpos&eacute;e de mani&egrave;re incoh&eacute;rente et l&rsquo;application est rest&eacute;e insuffisante.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Directive 2011/7/UE</div>
+      <div class="article-card__title">Cadre actuel</div>
+      <div class="article-card__desc">Autorit&eacute;s publiques&nbsp;: 30 jours (exceptionnellement 60). Entreprises&nbsp;: 60 jours sauf accord contraire. Compensation minimale de 40&nbsp;EUR. Int&eacute;r&ecirc;ts l&eacute;gaux de 8&nbsp;% au-dessus du taux de r&eacute;f&eacute;rence de la BCE. Mais l&rsquo;application reste incoh&eacute;rente.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Pourquoi un r&egrave;glement&nbsp;?</div>
+      <div class="article-card__title">Application directe</div>
+      <div class="article-card__desc">Un r&egrave;glement s&rsquo;applique directement dans tous les &Eacute;tats membres sans transposition nationale. Cela &eacute;limine la mise en &oelig;uvre incoh&eacute;rente qui avait affaibli la directive de 2011 et cr&eacute;e des conditions uniformes dans l&rsquo;ensemble du march&eacute; int&eacute;rieur.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2 : Proposition de la Commission -->
+<section class="section" id="proposal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-file-document-outline"></span></div>
+    <h2 class="section__title">Proposition de la Commission</h2>
+  </div>
+  <p class="section__subtitle">COM(2023)533, publi&eacute;e le 12 septembre 2023. Faisant partie du paquet de soutien aux PME.</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 1</div>
+      <div class="article-card__title">Champ d&rsquo;application</div>
+      <div class="article-card__desc">S&rsquo;applique aux transactions commerciales entre entreprises (B2B) et entre entreprises et pouvoirs publics (B2G) portant sur la livraison de biens ou la prestation de services contre r&eacute;mun&eacute;ration. Exclut les relations avec les consommateurs (B2C), les indemnisations pour dommages et les dettes soumises aux proc&eacute;dures d&rsquo;insolvabilit&eacute;.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 3</div>
+      <div class="article-card__title">D&eacute;lais de paiement</div>
+      <div class="article-card__desc">Maximum 30 jours civils &agrave; compter de la r&eacute;ception de la facture pour toutes les transactions commerciales. Aucune libert&eacute; contractuelle permettant de d&eacute;passer 30 jours. Il s&rsquo;agit de la disposition la plus contest&eacute;e.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 5</div>
+      <div class="article-card__title">Int&eacute;r&ecirc;ts pour retard de paiement</div>
+      <div class="article-card__desc">Les int&eacute;r&ecirc;ts courent automatiquement &agrave; compter du lendemain de l&rsquo;&eacute;ch&eacute;ance du d&eacute;lai de paiement. Le cr&eacute;ancier doit fournir toutes les informations n&eacute;cessaires &agrave; la facturation. Les int&eacute;r&ecirc;ts courent jusqu&rsquo;au paiement int&eacute;gral du principal.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 6</div>
+      <div class="article-card__title">Taux d&rsquo;int&eacute;r&ecirc;t</div>
+      <div class="article-card__desc">Harmonis&eacute; dans l&rsquo;ensemble de l&rsquo;UE. Nouvelle disposition remplacant les approches nationales fragmentaires de la directive de 2011.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 8</div>
+      <div class="article-card__title">Compensation pour les frais de recouvrement</div>
+      <div class="article-card__desc">Forfait par transaction&nbsp;: 50&nbsp;EUR (factures jusqu&rsquo;&agrave; 1&nbsp;500&nbsp;EUR), 100&nbsp;EUR (de 1&nbsp;501 &agrave; 15&nbsp;000&nbsp;EUR), 150&nbsp;EUR (au-del&agrave; de 15&nbsp;000&nbsp;EUR). Payable sans mise en demeure pr&eacute;alable.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 9</div>
+      <div class="article-card__title">Clauses contractuelles abusives</div>
+      <div class="article-card__desc">Nulles et non avenues&nbsp;: toute clause contractuelle excluant les int&eacute;r&ecirc;ts ou la compensation, prorogeant le paiement au-del&agrave; de 30 jours, ou manifestement in&eacute;quitable pour le cr&eacute;ancier. Remplace l&rsquo;article 7 de la directive de 2011.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 12</div>
+      <div class="article-card__title">Proc&eacute;dures acc&eacute;l&eacute;r&eacute;es</div>
+      <div class="article-card__desc">Les cr&eacute;anciers doivent obtenir un titre ex&eacute;cutoire dans les 90 jours civils suivant l&rsquo;introduction d&rsquo;une action, pour les cr&eacute;ances incontestes quel qu&rsquo;en soit le montant.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 13</div>
+      <div class="article-card__title">Autorit&eacute;s charg&eacute;es de l&rsquo;application</div>
+      <div class="article-card__desc">Chaque &Eacute;tat membre doit d&eacute;signer des autorit&eacute;s charg&eacute;es de l&rsquo;application pour garantir le respect du r&egrave;glement. Elles peuvent prendre des mesures pour s&rsquo;assurer que les d&eacute;lais de paiement sont respect&eacute;s.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3 : Approche du rapporteur -->
+<section class="section" id="rapporteur">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><span class="mdi mdi-account-star"></span></div>
+    <h2 class="section__title">Approche du rapporteur</h2>
+  </div>
+  <p class="section__subtitle">Roza Thun und Hohenstein (Renew, Pologne) a d&eacute;pos&eacute; le projet de rapport IMCO (PE756.002) le 14 novembre 2023</p>
+
+  <div class="info-box">
+    <h3>La philosophie du rapporteur</h3>
+    <p>Le rapporteur a globalement soutenu la proposition de la Commission, tout en introduisant des modifications cl&eacute;s pour &eacute;quilibrer la protection des PME et la flexibilit&eacute; commerciale. Ses principales contributions ont &eacute;t&eacute;&nbsp;: introduire une flexibilit&eacute; de paiement jusqu&rsquo;&agrave; 60 jours pour le B2B lorsque les parties en conviennent mutuellement ; exiger que les autorit&eacute;s d&rsquo;ex&eacute;cution soient ind&eacute;pendantes des organismes de march&eacute;s publics ; ajouter une exemption pour le secteur de la distribution concernant les biens &agrave; rotation lente ou saisonn&onniers ; et cr&eacute;er un cadre de publication pour les pratiques de paiement des pouvoirs adjudicateurs.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-clock-edit-outline" style="color: var(--color-purple);"></span> Flexibilit&eacute; du paiement</div>
+    <p>Tout en maintenant le d&eacute;lai par d&eacute;faut de 30 jours, le rapporteur a propos&eacute; d&rsquo;autoriser des d&eacute;lais de paiement B2B allant jusqu&rsquo;&agrave; 60 jours lorsque les parties en conviennent express&eacute;ment. Il s&rsquo;agissait de l&rsquo;&eacute;cart le plus significatif par rapport au texte de la Commission, qui n&rsquo;autorisait aucune flexibilit&eacute;.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-shield-check" style="color: var(--color-green);"></span> Application ind&eacute;pendante</div>
+    <p>Le rapporteur a insist&eacute; pour que les autorit&eacute;s charg&eacute;es de l&rsquo;application soient ind&eacute;pendantes des autres autorit&eacute;s publiques, notamment celles impliqu&eacute;es dans les proc&eacute;dures de march&eacute;s publics. L&rsquo;objectif &eacute;tait de pr&eacute;venir les conflits d&rsquo;int&eacute;r&ecirc;ts lorsque les pouvoirs publics sont eux-m&ecirc;mes des d&eacute;biteurs en retard.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-store" style="color: var(--color-amber);"></span> Exemption pour le secteur de la distribution</div>
+    <p>Des d&eacute;lais de paiement allant jusqu&rsquo;&agrave; 120 jours ont &eacute;t&eacute; propos&eacute;s pour le secteur de la distribution traitant des biens &agrave; rotation lente ou saisonn&onniers. Cela tenait compte des sp&eacute;cificit&eacute;s des flux de tr&eacute;sorerie dans les cha&icirc;nes d&rsquo;approvisionnement de la distribution.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-chart-bar" style="color: var(--color-blue);"></span> Rapports de transparence</div>
+    <p>Les pouvoirs adjudicateurs doivent publier annuellement leurs pratiques de paiement, en classifiant les paiements par intervalles (1-30, 31-60, 61-90, plus de 90 jours) et en indiquant le d&eacute;lai de paiement moyen. Les rapports doivent &ecirc;tre transmis aux autorit&eacute;s charg&eacute;es de l&rsquo;application et &ecirc;tre accessibles au public.</p>
+  </div>
+</section>
+
+<!-- Section 4 : Amendements des d&eacute;put&eacute;s -->
+<section class="section" id="amendments">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
+    <h2 class="section__title">Amendements des d&eacute;put&eacute;s en commission IMCO</h2>
+  </div>
+  <p class="section__subtitle">405 amendements d&eacute;pos&eacute;s (PE757.130&nbsp;: amendements 26-223&nbsp;; PE757.363&nbsp;: amendements 224-405)</p>
+
+  <div class="info-box">
+    <h3>La bataille des amendements</h3>
+    <p>Les membres de la commission IMCO ont d&eacute;pos&eacute; 405 amendements au projet de rapport du rapporteur, refl&eacute;tant de profondes divisions sur l&rsquo;&eacute;quilibre entre la protection des PME et la libert&eacute; contractuelle. Le principal champ de bataille &eacute;tait la dur&eacute;e maximale du d&eacute;lai de paiement&nbsp;: la Commission voulait une limite stricte de 30 jours sans exception, le rapporteur proposait une flexibilit&eacute; B2B jusqu&rsquo;&agrave; 60 jours, et plusieurs d&eacute;put&eacute;s plaidaient pour une plus grande flexibilit&eacute; ou des exemptions sectorielles.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-clock-outline" style="color: var(--color-blue);"></span> D&eacute;lais de paiement (point central contest&eacute;)</div>
+    <p>Plusieurs amendements visaient &agrave; modifier le cadre des d&eacute;lais de paiement. Certains d&eacute;put&eacute;s soutenaient la limite stricte de 30 jours de la Commission, faisant valoir que toute flexibilit&eacute; serait exploit&eacute;e par les grandes entreprises au d&eacute;triment des PME. D&rsquo;autres plaidaient pour des exemptions plus larges, notamment des d&eacute;lais de 90 jours pour des secteurs sp&eacute;cifiques tels que la construction et l&rsquo;agriculture.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-cash-remove" style="color: var(--color-red);"></span> Renonciation &agrave; la compensation</div>
+    <p>L&rsquo;amendement 51 a supprim&eacute; la formulation &laquo;&nbsp;sans qu&rsquo;une mise en demeure soit n&eacute;cessaire&nbsp;&raquo; concernant le forfait d&rsquo;indemnisation. Le texte adopt&eacute; pr&eacute;voit que la compensation est exigible automatiquement, mais ne contraint pas le d&eacute;biteur &agrave; payer sans y &ecirc;tre invit&eacute;. Des restrictions ont &eacute;t&eacute; ajout&eacute;es concernant la renonciation aux droits lorsque le d&eacute;biteur est un pouvoir public ou une grande entreprise.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-gavel" style="color: var(--color-green);"></span> Ind&eacute;pendance de l&rsquo;application (amendement 65)</div>
+    <p>Les autorit&eacute;s charg&eacute;es de l&rsquo;application doivent &ecirc;tre ind&eacute;pendantes des autres autorit&eacute;s publiques, notamment celles impliqu&eacute;es dans les proc&eacute;dures de march&eacute;s publics. Cette pr&eacute;cision a &eacute;t&eacute; explicitement ajout&eacute;e pour pr&eacute;venir les conflits d&rsquo;int&eacute;r&ecirc;ts, les pouvoirs publics &eacute;tant souvent eux-m&ecirc;mes des d&eacute;biteurs en retard.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-scale-balance" style="color: var(--color-purple);"></span> Proportionnalit&eacute; (amendement 66)</div>
+    <p>Les autorit&eacute;s charg&eacute;es de l&rsquo;application doivent prendre des mesures &laquo;&nbsp;proportionn&eacute;es&nbsp;&raquo; (terme ajout&eacute;) pour garantir le respect des d&eacute;lais de paiement. L&rsquo;objectif &eacute;tait d&rsquo;&eacute;viter une application trop agressive susceptible de perturber les relations commerciales.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-account-group-outline" style="color: var(--color-amber);"></span> Transparence (amendement 67)</div>
+    <p>Les autorit&eacute;s charg&eacute;es de l&rsquo;application doivent rendre publiques des informations agr&eacute;g&eacute;es sur le nombre de plaintes d&eacute;pos&eacute;es contre des entreprises et des pouvoirs publics pour violation de l&rsquo;article 3 (d&eacute;lais de paiement).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> P&eacute;riode de gr&acirc;ce pour les micro-entreprises</div>
+    <p>Les micro-entreprises (moins de 10 salari&eacute;s) b&eacute;n&eacute;ficient d&rsquo;une p&eacute;riode de gr&acirc;ce suppl&eacute;mentaire de 12 mois en tant que d&eacute;bitrices, tenant compte de leur vuln&eacute;rabilit&eacute; particuli&egrave;re face aux changements r&eacute;glementaires soudains en mati&egrave;re de pratiques de paiement.</p>
+  </div>
+</section>
+
+<!-- Section 5 : Texte adopt&eacute; par le PE -->
+<section class="section" id="adopted">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><span class="mdi mdi-vote"></span></div>
+    <h2 class="section__title">Texte adopt&eacute; par le Parlement europ&eacute;en</h2>
+  </div>
+  <p class="section__subtitle">T9-0299/2024, adopt&eacute; le 23 avril 2024. Vote en commission IMCO&nbsp;: 33 pour, 10 contre, 2 abstentions.</p>
+
+  <div class="info-box info-box--green">
+    <h3>Ce sur quoi le Parlement s&rsquo;est accord&eacute;</h3>
+    <p>Le Parlement europ&eacute;en a adopt&eacute; sa position en premi&egrave;re lecture le 23 avril 2024, int&eacute;grant les principales modifications du rapporteur et plusieurs amendements de commission. Le texte maintient le d&eacute;lai par d&eacute;faut de 30 jours, mais ajoute une flexibilit&eacute; significative pour les relations B2B, des am&eacute;nagements sectoriels et des garanties d&rsquo;application renforc&eacute;es. Il a &eacute;t&eacute; adopt&eacute; avec une large majorit&eacute; (33-10-2 en commission), bien que l&rsquo;opposition refl&egrave;te les pr&eacute;occupations de l&rsquo;industrie quant &agrave; la libert&eacute; contractuelle.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">D&eacute;lais de paiement (texte adopt&eacute;)</div>
+      <div class="article-card__title">30 jours par d&eacute;faut, 60 jours B2B, 120 jours distribution</div>
+      <div class="article-card__desc">Maximum par d&eacute;faut&nbsp;: 30 jours civils. Flexibilit&eacute; B2B&nbsp;: jusqu&rsquo;&agrave; 60 jours convenu mutuellement par &eacute;crit. Secteur de la distribution&nbsp;: jusqu&rsquo;&agrave; 120 jours pour les biens &agrave; rotation lente ou saisonn&onniers.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Application (texte adopt&eacute;)</div>
+      <div class="article-card__title">Autorit&eacute;s ind&eacute;pendantes avec rapports publics</div>
+      <div class="article-card__desc">Autorit&eacute;s charg&eacute;es de l&rsquo;application ind&eacute;pendantes dans chaque &Eacute;tat membre. Plaintes anonymes autoris&eacute;es. Publication des donn&eacute;es sur les plaintes. Proc&eacute;dure d&rsquo;obtention de titre ex&eacute;cutoire r&eacute;duite de 90 &agrave; 60 jours civils. [Am.65, 66, 67, 80]</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Outils num&eacute;riques (texte adopt&eacute;)</div>
+      <div class="article-card__title">Article 17&nbsp;: application num&eacute;rique</div>
+      <div class="article-card__desc">Les &Eacute;tats membres doivent utiliser des outils num&eacute;riques pour une application efficace. Des outils de gestion des factures et du cr&eacute;dit, notamment l&rsquo;affacturage, ainsi que des formations &agrave; la culture financi&egrave;re doivent &ecirc;tre disponibles et accessibles aux PME. [Am.80]</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Champ d&rsquo;application (texte adopt&eacute;)</div>
+      <div class="article-card__title">Assurances incluses, micro-entreprises prot&eacute;g&eacute;es</div>
+      <div class="article-card__desc">Les paiements dans le cadre des contrats d&rsquo;assurance sont inclus (revenant sur l&rsquo;exclusion de la Commission). Les micro-entreprises b&eacute;n&eacute;ficient d&rsquo;une p&eacute;riode de gr&acirc;ce suppl&eacute;mentaire de 12 mois en tant que d&eacute;bitrices. Les contrats de consignation sont autoris&eacute;s dans le cadre de la libert&eacute; contractuelle.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 6 : Comparaison en trois colonnes -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-table-column"></span></div>
+    <h2 class="section__title">Comparaison en trois colonnes</h2>
+  </div>
+  <p class="section__subtitle">Proposition de la Commission vs. texte adopt&eacute; par le PE vs. directive 2011/7/UE en vigueur</p>
+
+  <div style="overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Disposition</th>
+        <th>Directive 2011/7/UE (en vigueur)</th>
+        <th>COM(2023)533 (Commission)</th>
+        <th>T9-0299/2024 (PE adopt&eacute;)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Type d&rsquo;instrument</strong></td>
+        <td class="dim-cell">Directive (n&eacute;cessite une transposition)</td>
+        <td class="highlight-cell">R&egrave;glement (effet direct)</td>
+        <td class="highlight-cell">R&egrave;glement (effet direct)</td>
+      </tr>
+      <tr>
+        <td><strong>D&eacute;lai de paiement B2B</strong></td>
+        <td>60 jours (sauf accord contraire)</td>
+        <td class="red-cell">30 jours (sans flexibilit&eacute;)</td>
+        <td class="green-cell">30 jours par d&eacute;faut, 60 jours si convenu</td>
+      </tr>
+      <tr>
+        <td><strong>D&eacute;lai de paiement G2B</strong></td>
+        <td>30 jours (exceptionnellement 60)</td>
+        <td>30 jours</td>
+        <td>30 jours</td>
+      </tr>
+      <tr>
+        <td><strong>Exception pour la distribution</strong></td>
+        <td class="dim-cell">Aucune</td>
+        <td class="dim-cell">Aucune</td>
+        <td class="green-cell">Jusqu&rsquo;&agrave; 120 jours (biens saisonn&onniers)</td>
+      </tr>
+      <tr>
+        <td><strong>Forfait de compensation</strong></td>
+        <td>Minimum 40&nbsp;EUR</td>
+        <td>50/100/150&nbsp;EUR (par paliers)</td>
+        <td>50/100/150&nbsp;EUR (par paliers)</td>
+      </tr>
+      <tr>
+        <td><strong>D&eacute;clenchement de la compensation</strong></td>
+        <td>Manuel (le cr&eacute;ancier doit r&eacute;clamer)</td>
+        <td>Automatique (sans mise en demeure)</td>
+        <td>Automatique (disposition assouplie)</td>
+      </tr>
+      <tr>
+        <td><strong>Application</strong></td>
+        <td class="dim-cell">Aucun organisme d&eacute;di&eacute; requis</td>
+        <td>Autorit&eacute;s nationales requises</td>
+        <td class="green-cell">Autorit&eacute;s ind&eacute;pendantes requises</td>
+      </tr>
+      <tr>
+        <td><strong>Titre ex&eacute;cutoire acc&eacute;l&eacute;r&eacute;</strong></td>
+        <td class="dim-cell">Non pr&eacute;cis&eacute;</td>
+        <td>90 jours civils</td>
+        <td class="green-cell">60 jours civils</td>
+      </tr>
+      <tr>
+        <td><strong>Rapports publics</strong></td>
+        <td class="dim-cell">Aucun</td>
+        <td class="dim-cell">Limit&eacute;</td>
+        <td class="green-cell">Les pouvoirs adjudicateurs doivent publier un rapport annuel</td>
+      </tr>
+      <tr>
+        <td><strong>Protection des micro-entreprises</strong></td>
+        <td class="dim-cell">Aucune</td>
+        <td class="dim-cell">Aucune</td>
+        <td class="green-cell">P&eacute;riode de gr&acirc;ce de 12 mois en tant que d&eacute;bitrices</td>
+      </tr>
+      <tr>
+        <td><strong>Paiements d&rsquo;assurance</strong></td>
+        <td>Incertain</td>
+        <td class="dim-cell">Exclus</td>
+        <td class="green-cell">Inclus</td>
+      </tr>
+      <tr>
+        <td><strong>Outils num&eacute;riques</strong></td>
+        <td class="dim-cell">Non mentionn&eacute;</td>
+        <td class="dim-cell">Non mentionn&eacute;</td>
+        <td class="green-cell">Article 17&nbsp;: application num&eacute;rique et formation</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- Section 7 : Positions des parties prenantes -->
+<section class="section" id="stakeholders">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-account-voice"></span></div>
+    <h2 class="section__title">Positions des parties prenantes</h2>
+  </div>
+  <p class="section__subtitle">L&rsquo;industrie, les associations de PME et les organisations professionnelles ont pris des positions fortes</p>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--red">Opposants</span>
+      <span class="stakeholder-card__name">BusinessEurope, Eurochambres, EuroCommerce</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>Dans une <a href="https://www.eurochambres.eu/wp-content/uploads/2025/03/250313-Joint-statement-on-the-proposed-Late-Payment-Regulation.pdf" target="_blank" rel="noopener">d&eacute;claration commune (mars 2025)</a>, ces trois grandes f&eacute;d&eacute;rations patronales ont demand&eacute; &agrave; la Commission de <strong>retirer enti&egrave;rement la proposition</strong>. Leurs pr&eacute;occupations&nbsp;:</p>
+      <ul style="color: var(--color-secondary); margin-top: 0.5rem; padding-left: 1.5rem;">
+        <li>Des d&eacute;lais de paiement stricts <strong>limitent la libert&eacute; contractuelle</strong> dans les relations commerciales B2B</li>
+        <li>Les amendements du PE, bien qu&rsquo;apportant plus de flexibilit&eacute;, cr&eacute;ent un <strong>cadre complexe</strong> avec des cat&eacute;gories et exemptions d&eacute;routantes pour les entreprises</li>
+        <li>Risque de <strong>r&eacute;duction du nombre de fournisseurs</strong>, p&eacute;nalisant probablement les PME soumises &agrave; des exigences plus rigides</li>
+        <li>Pourrait n&eacute;cessiter <strong>2 000 milliards d&rsquo;EUR de financements suppl&eacute;mentaires</strong> et augmenter les charges d&rsquo;int&eacute;r&ecirc;ts des entreprises de 100 milliards d&rsquo;EUR</li>
+        <li>Risque d&rsquo;inciter aux &eacute;changes avec des <strong>partenaires non europ&eacute;ens</strong> non couverts par le r&egrave;glement</li>
+        <li>Une majorit&eacute; d&rsquo;&Eacute;tats membres s&rsquo;y oppose &eacute;galement (voir leur non-document du 7 juin 2024)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--amber">Pr&eacute;occup&eacute;s</span>
+      <span class="stakeholder-card__name">ICISA (Association internationale du cr&eacute;dit &agrave; l&rsquo;exportation et des soci&eacute;t&eacute;s de caution)</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p><a href="https://icisa.org/news/update-on-late-payment-regulation-2/" target="_blank" rel="noopener">L&rsquo;ICISA indique</a> que si un soutien limit&eacute; &agrave; une r&eacute;glementation plus stricte a &eacute;t&eacute; exprim&eacute;, de nombreux organismes repr&eacute;sentant les entreprises ont appel&eacute; &agrave; <strong>davantage de flexibilit&eacute; et &agrave; une remise &agrave; plat</strong>. La version du Parlement a assoupli certaines propositions mais a &laquo;&nbsp;finalement maintenu l&rsquo;affaiblissement de la libert&eacute; contractuelle&nbsp;&raquo;. Les &Eacute;tats membres ont exprim&eacute; des pr&eacute;occupations quant &agrave; l&rsquo;interaction avec les r&eacute;gimes nationaux existants.</p>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--blue">Analytiques</span>
+      <span class="stakeholder-card__name">AccountancyEurope</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>Dans leur <a href="https://accountancyeurope.eu/wp-content/uploads/2024/02/LPR-factsheet-2024.pdf?v1" target="_blank" rel="noopener">fiche d&rsquo;information</a>, AccountancyEurope propose une analyse &eacute;quilibr&eacute;e. Le r&egrave;glement devrait avoir un impact consid&eacute;rable sur les PME&nbsp;: am&eacute;lioration de la liquidit&eacute;, r&eacute;duction de la charge administrative li&eacute;e aux relances de paiement et &eacute;galit&eacute; des conditions de concurrence. Ils soulignent toutefois que les PME en tant que d&eacute;bitrices doivent &eacute;galement s&rsquo;assurer de pouvoir payer dans le d&eacute;lai de 30 jours, ce qui a des implications importantes pour leur bilan.</p>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--green">Consultatifs</span>
+      <span class="stakeholder-card__name">CESE et Comit&eacute; des r&eacute;gions</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>Le Comit&eacute; &eacute;conomique et social europ&eacute;en (CES3705/2023, 17 janvier 2024) et le Comit&eacute; des r&eacute;gions (CDR4941/2023, 31 janvier 2024) ont tous deux rendu des avis sur la proposition. Ces organes consultatifs ont g&eacute;n&eacute;ralement soutenu l&rsquo;objectif de lutte contre les retards de paiement, tout en soulevant des pr&eacute;occupations quant aux difficult&eacute;s de mise en &oelig;uvre pour les petites autorit&eacute;s publiques.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section 8 : Blocage au Conseil -->
+<section class="section" id="council">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><span class="mdi mdi-block-helper"></span></div>
+    <h2 class="section__title">Blocage au Conseil</h2>
+  </div>
+  <p class="section__subtitle">Une majorit&eacute; d&rsquo;&Eacute;tats membres s&rsquo;oppose &agrave; la proposition</p>
+
+  <div class="info-box info-box--red">
+    <h3>Pourquoi le Conseil a bloqu&eacute; la proposition</h3>
+    <p>Apr&egrave;s l&rsquo;adoption de sa position en premi&egrave;re lecture par le Parlement europ&eacute;en en avril 2024, la proposition a &eacute;t&eacute; transmise au Conseil. Or, une majorit&eacute; d&rsquo;&Eacute;tats membres ont exprim&eacute; leur opposition par le biais d&rsquo;un non-document dat&eacute; du 7 juin 2024. Leurs pr&eacute;occupations font &eacute;cho aux positions de l&rsquo;industrie&nbsp;:</p>
+    <ul style="color: var(--color-secondary); margin-top: 0.5rem; padding-left: 1.5rem;">
+      <li><strong>Perte de libert&eacute; contractuelle</strong> dans les relations B2B</li>
+      <li><strong>Interaction avec les r&eacute;gimes nationaux existants</strong> dont de nombreux &Eacute;tats membres sont satisfaits</li>
+      <li><strong>Manque de flexibilit&eacute;</strong> m&ecirc;me dans la version amend&eacute;e par le PE</li>
+      <li><strong>Pr&eacute;occupations de proportionnalit&eacute;</strong> quant au remplacement d&rsquo;une directive par un r&egrave;glement</li>
+    </ul>
+    <p style="margin-top: 0.75rem;">Aucune orientation g&eacute;n&eacute;rale ni aucun texte de compromis de pr&eacute;sidence n&rsquo;ont &eacute;t&eacute; publi&eacute;s. Le dossier est de fait bloqu&eacute;, et BusinessEurope, Eurochambres et EuroCommerce ont demand&eacute; &agrave; la Commission de retirer enti&egrave;rement la proposition.</p>
+  </div>
+</section>
+
+<!-- Section 9 : Calendrier l&eacute;gislatif -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-timeline-clock-outline"></span></div>
+    <h2 class="section__title">Calendrier l&eacute;gislatif</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">12 septembre 2023</div>
+      <div class="timeline__text">La Commission publie COM(2023)533 dans le cadre du paquet de soutien aux PME</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">2 octobre 2023</div>
+      <div class="timeline__text">Renvoi en commission annonc&eacute; (IMCO d&eacute;sign&eacute;e comme commission comp&eacute;tente au fond)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">14 novembre 2023</div>
+      <div class="timeline__text">La rapporteure Roza Thun und Hohenstein d&eacute;pose le projet de rapport IMCO (PE756.002)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">15-18 d&eacute;cembre 2023</div>
+      <div class="timeline__text">405 amendements d&eacute;pos&eacute;s par les d&eacute;put&eacute;s (PE757.130, PE757.363)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">17 janvier 2024</div>
+      <div class="timeline__text">Avis du CESE (CES3705/2023)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">31 janvier 2024</div>
+      <div class="timeline__text">Avis du Comit&eacute; des r&eacute;gions (CDR4941/2023)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">20 mars 2024</div>
+      <div class="timeline__text">Vote en commission IMCO&nbsp;: 33 pour, 10 contre, 2 abstentions. Rapport A9-0156/2024 d&eacute;pos&eacute;.</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">23 avril 2024</div>
+      <div class="timeline__text">Le PE adopte sa position en premi&egrave;re lecture (T9-0299/2024)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">7 juin 2024</div>
+      <div class="timeline__text">Une majorit&eacute; d&rsquo;&Eacute;tats membres s&rsquo;oppose &agrave; la proposition (non-document du Conseil)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">8 ao&ucirc;t 2024</div>
+      <div class="timeline__text">R&eacute;ponse de la Commission aux amendements du PE (SP(2024)394)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">3 octobre 2024</div>
+      <div class="timeline__text">Nouveau rapporteur&nbsp;: Ivars Ijabs (Renew, Lettonie) remplace Thun und Hohenstein apr&egrave;s les &eacute;lections europ&eacute;ennes</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">2025</div>
+      <div class="timeline__text">BLOQU&Eacute; au Conseil. Aucune orientation g&eacute;n&eacute;rale. L&rsquo;industrie demande le retrait.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 10 : Acteurs cl&eacute;s -->
+<section class="section" id="actors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><span class="mdi mdi-account-multiple"></span></div>
+    <h2 class="section__title">Acteurs cl&eacute;s</h2>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>R&ocirc;le</th><th>Nom</th><th>Groupe / Institution</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Rapporteur actuel</strong></td><td>Ivars Ijabs</td><td>Renew, Lettonie (IMCO)</td></tr>
+      <tr><td><strong>Rapporteure pr&eacute;c&eacute;dente</strong></td><td>Roza Thun und Hohenstein</td><td>Renew, Pologne (IMCO)</td></tr>
+      <tr><td><strong>Rapporteur fictif (PPE)</strong></td><td>Regina Doherty</td><td>PPE, Irlande</td></tr>
+      <tr><td><strong>Rapporteur fictif (S&amp;D)</strong></td><td>Tsvetelina Penkova</td><td>S&amp;D, Bulgarie</td></tr>
+      <tr><td><strong>Rapporteur fictif (PfE)</strong></td><td>Jorge Martin Frias</td><td>PfE, Espagne</td></tr>
+      <tr><td><strong>Rapporteur fictif (ECR)</strong></td><td>Reinis Poznjaks</td><td>ECR, Lettonie</td></tr>
+      <tr><td><strong>Rapporteur fictif (Verts)</strong></td><td>Reinier van Lanschot</td><td>Verts/ALE, Pays-Bas</td></tr>
+      <tr><td><strong>Commissaire d&rsquo;origine</strong></td><td>Thierry Breton</td><td>DG GROW</td></tr>
+      <tr><td><strong>DG responsable</strong></td><td>DG GROW</td><td>March&eacute; int&eacute;rieur, industrie, entrepreneuriat et PME</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section 11 : Sources officielles -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><span class="mdi mdi-link-variant"></span></div>
+    <h2 class="section__title">Sources officielles</h2>
+  </div>
+  <p class="section__subtitle">Tous les documents r&eacute;f&eacute;renc&eacute;s dans cette analyse</p>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-bank" style="color: var(--color-blue);"></span> Commission</div>
+    <p><a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2023/0533/COM_COM(2023)0533_EN.pdf" target="_blank" rel="noopener">COM(2023)533&nbsp;: proposition de la Commission (PDF)</a></p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A52023SC0314" target="_blank" rel="noopener">SWD(2023)314&nbsp;: &eacute;tude d&rsquo;impact</a></p>
+    <p><a href="https://single-market-economy.ec.europa.eu/smes/challenges-and-resilience/late-payment_en" target="_blank" rel="noopener">DG GROW&nbsp;: page sur les retards de paiement</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-account-group" style="color: var(--color-purple);"></span> Parlement europ&eacute;en</div>
+    <p><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0323(COD)" target="_blank" rel="noopener">Page de proc&eacute;dure OEIL&nbsp;: 2023/0323(COD)</a></p>
+    <p><a href="https://www.europarl.europa.eu/legislative-train/theme-a-europe-fit-for-the-digital-age/file-late-payments-directive-revision" target="_blank" rel="noopener">Tableau de bord l&eacute;gislatif</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-PR-756002_EN.html" target="_blank" rel="noopener">PE756.002&nbsp;: projet de rapport IMCO (rapporteur)</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-AM-757130_EN.html" target="_blank" rel="noopener">PE757.130&nbsp;: amendements 26-223</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-AM-757363_EN.html" target="_blank" rel="noopener">PE757.363&nbsp;: amendements 224-405</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/A-9-2024-0156_EN.html" target="_blank" rel="noopener">A9-0156/2024&nbsp;: rapport de la commission IMCO</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/TA-9-2024-0299_EN.html" target="_blank" rel="noopener">T9-0299/2024&nbsp;: texte adopt&eacute; par le Parlement (1&egrave;re lecture)</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-briefcase-variant" style="color: var(--color-amber);"></span> Documents des parties prenantes</div>
+    <p><a href="https://www.businesseurope.eu/publications/joint-statement-on-the-proposed-late-payment-regulation/" target="_blank" rel="noopener">BusinessEurope&nbsp;: d&eacute;claration commune</a></p>
+    <p><a href="https://www.eurochambres.eu/wp-content/uploads/2025/03/250313-Joint-statement-on-the-proposed-Late-Payment-Regulation.pdf" target="_blank" rel="noopener">Eurochambres&nbsp;: d&eacute;claration commune (mars 2025, PDF)</a></p>
+    <p><a href="https://icisa.org/news/update-on-late-payment-regulation-2/" target="_blank" rel="noopener">ICISA&nbsp;: mise &agrave; jour sur le r&egrave;glement relatif aux retards de paiement</a></p>
+    <p><a href="https://accountancyeurope.eu/wp-content/uploads/2024/02/LPR-factsheet-2024.pdf?v1" target="_blank" rel="noopener">AccountancyEurope&nbsp;: fiche d&rsquo;information (PDF)</a></p>
+  </div>
+</section>
+
+</div>
+
+<!-- Pied de page -->
+<footer class="footer">
+  <p>
+    Analyse approfondie par <a href="https://brubru.beresol.eu">Brubru</a>, l&rsquo;assistant de politique europ&eacute;enne bas&eacute; sur l&rsquo;IA, par <a href="https://beresol.eu">Beresol</a>.
+    <br>Sources&nbsp;: Commission europ&eacute;enne, Parlement europ&eacute;en (OEIL, Doceo), BusinessEurope, Eurochambres, ICISA, AccountancyEurope.
+    <br><a href="https://beresol.eu/public-affairs">Beresol Affaires publiques</a> | <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+</footer>
+
+<!-- Retour en haut -->
+<a href="#top" class="back-to-top" id="backToTop"><span class="mdi mdi-chevron-up"></span></a>
+
+<script>
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 400) { btn.classList.add('visible'); }
+    else { btn.classList.remove('visible'); }
+  });
+  document.getElementById('backToTop').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

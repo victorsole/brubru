@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reglament sobre morositat : COM(2023)533 | Brubru</title>
+  <meta name="description" content="An&agrave;lisi completa del Reglament de la UE sobre morositat (COM(2023)533): terminis m&agrave;xims de pagament de 30 dies, penalitzacions autom&agrave;tiques, marc d&apos;execuci&oacute;. Propostes del ponent, esmenes dels eurodiputats, text adoptat pel PE, posicions de les parts interessades. Actualment bloquejat al Consell.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(220,38,38,0.1);
+      color: var(--color-red);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.06) 0%, rgba(217,119,6,0.06) 100%);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.06) 100%);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+    .red-cell { color: var(--color-red); font-weight: 600; }
+    .green-cell { color: var(--color-green); font-weight: 600; }
+
+    .article-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num { font-size: 0.75rem; font-weight: 700; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -2rem; top: 0.5rem; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--color-blue); background: white; }
+    .timeline__item--active::before { background: var(--color-red); border-color: var(--color-red); }
+    .timeline__item--done::before { background: var(--color-green); border-color: var(--color-green); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .stakeholder-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .stakeholder-card__header {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;
+    }
+    .stakeholder-card__name { font-weight: 700; font-size: 1.05rem; }
+    .stakeholder-card__position { font-size: 0.9rem; color: var(--color-secondary); }
+
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    .disclaimer-banner {
+      background: #fef3c7;
+      border-bottom: 2px solid #d97706;
+      padding: 0.75rem 2rem;
+      font-size: 0.85rem;
+      color: #92400e;
+      text-align: center;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px;
+      border-radius: 50%; background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Av&iacute;s de traducci&oacute; -->
+<div class="disclaimer-banner">
+  El catal&agrave; no &eacute;s una llengua oficial de la Uni&oacute; Europea. No existeix cap versi&oacute; oficial en catal&agrave; d'aquest text a EUR-Lex. Aquesta traducci&oacute; ha estat preparada per Brubru per servir la comunitat catalanoparlant de professionals dels afers europeus.
+</div>
+
+<!-- Cap&ccedil;alera -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Morositat: an&agrave;lisi en profunditat</div>
+    <div class="header__subtitle">Lluita contra la morositat en les operacions comercials</div>
+  </div>
+  <select onchange="location.href=this.value" aria-label="Idioma" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html">Fran&ccedil;ais</option>
+    <option value="es.html">Espa&ntilde;ol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html" selected>Catal&agrave;</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><span class="mdi mdi-alert-circle-outline"></span> Bloquejat al Consell</div>
+  <h1 class="hero__title">Reglament sobre morositat: <span>30 dies per pagar,<br>sense excepcions</span></h1>
+  <p class="hero__subtitle">
+    La proposta de la Comissi&oacute; Europea per substituir la Directiva 2011/7/UE per un Reglament d&apos;aplicaci&oacute; directa.
+    Terminis de pagament m&eacute;s estrictes, penalitzacions autom&agrave;tiques i autoritats d&apos;execuci&oacute; independents per protegir les pimes.
+  </p>
+  <div class="hero__meta">
+    <span><span class="mdi mdi-file-document-outline"></span> <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2023/0533/COM_COM(2023)0533_EN.pdf" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">COM(2023)533</a></span>
+    <span><span class="mdi mdi-calendar"></span> 12 de setembre de 2023</span>
+    <span><span class="mdi mdi-gavel"></span> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0323(COD)" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">2023/0323(COD)</a></span>
+    <span><span class="mdi mdi-account-group"></span> Comissi&oacute; IMCO</span>
+  </div>
+</section>
+
+<!-- Xifres clau -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">30 dies</div>
+    <div class="figure-card__label">Termini m&agrave;xim de pagament</div>
+  </div>
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">Bloquejat</div>
+    <div class="figure-card__label">Estat al Consell</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">33-10-2</div>
+    <div class="figure-card__label">Votaci&oacute; a la comissi&oacute; IMCO</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">405</div>
+    <div class="figure-card__label">Esmenes presentades</div>
+  </div>
+</div>
+
+<!-- &Iacute;ndex -->
+<nav class="toc">
+  <div class="toc__title">&Iacute;ndex de continguts</div>
+  <div class="toc__grid">
+    <a href="#problem" class="toc__link"><span class="toc__num">1</span> El problema</a>
+    <a href="#proposal" class="toc__link"><span class="toc__num">2</span> Proposta de la Comissi&oacute;</a>
+    <a href="#rapporteur" class="toc__link"><span class="toc__num">3</span> Enfocament del ponent</a>
+    <a href="#amendments" class="toc__link"><span class="toc__num">4</span> Esmenes dels eurodiputats</a>
+    <a href="#adopted" class="toc__link"><span class="toc__num">5</span> Text adoptat pel PE</a>
+    <a href="#comparison" class="toc__link"><span class="toc__num">6</span> Comparaci&oacute; en tres columnes</a>
+    <a href="#stakeholders" class="toc__link"><span class="toc__num">7</span> Posicions de les parts interessades</a>
+    <a href="#council" class="toc__link"><span class="toc__num">8</span> Bloqueig al Consell</a>
+    <a href="#timeline" class="toc__link"><span class="toc__num">9</span> Calendari legislatiu</a>
+    <a href="#sources" class="toc__link"><span class="toc__num">10</span> Fonts oficials</a>
+    <a href="#actors" class="toc__link"><span class="toc__num">11</span> Actors clau</a>
+  </div>
+</nav>
+
+<!-- Secci&oacute; 1: El problema -->
+<section class="section" id="problem">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><span class="mdi mdi-alert-outline"></span></div>
+    <h2 class="section__title">El problema: la morositat destrueix pimes</h2>
+  </div>
+  <p class="section__subtitle">Per qu&egrave; la Comissi&oacute; va proposar substituir la Directiva de 2011 per un Reglament</p>
+
+  <div class="info-box info-box--red">
+    <h3>El problema de fons</h3>
+    <p>Milers de petites i mitjanes empreses fan fallida cada any esperant que els paguin les factures. La morositat &eacute;s la principal causa de problemes de tresoreria per a les pimes, i la Directiva de 2011 no ha resolt el problema perqu&egrave; els estats membres la van aplicar de manera inconsistent i l&apos;execuci&oacute; va ser feble.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Directiva 2011/7/UE</div>
+      <div class="article-card__title">Marc actual</div>
+      <div class="article-card__desc">Autoritats p&uacute;bliques: 30 dies (excepcionalment 60). Empreses: 60 dies llevat que s&apos;acordi una altra cosa. Compensaci&oacute; m&iacute;nima de 40 EUR. Inter&egrave;s legal del 8% sobre el tipus de refer&egrave;ncia del BCE. Per&ograve; l&apos;execuci&oacute; &eacute;s inconsistent.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Per qu&egrave; un Reglament?</div>
+      <div class="article-card__title">Aplicabilitat directa</div>
+      <div class="article-card__desc">Un Reglament s&apos;aplica directament a tots els estats membres sense transposici&oacute; nacional. Aix&ograve; elimina l&apos;aplicaci&oacute; inconsistent que va debilitar la Directiva de 2011 i crea un terreny de joc uniforme a tot el Mercat &Uacute;nic.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Secci&oacute; 2: Proposta de la Comissi&oacute; -->
+<section class="section" id="proposal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-file-document-outline"></span></div>
+    <h2 class="section__title">Proposta de la Comissi&oacute;</h2>
+  </div>
+  <p class="section__subtitle">COM(2023)533, publicada el 12 de setembre de 2023. Part del Paquet de mesures per a les pimes.</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Article 1</div>
+      <div class="article-card__title">&Agrave;mbit d&apos;aplicaci&oacute;</div>
+      <div class="article-card__desc">S&apos;aplica a les operacions comercials entre empreses (B2B) i entre empreses i administracions (B2G) (lliurament de b&eacute;ns o prestaci&oacute; de serveis a t&iacute;tol oneros). Exclou les relacions B2C, les indemnitzacions per danys i els deutes subjectes a procediments concursals.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 3</div>
+      <div class="article-card__title">Terminis de pagament</div>
+      <div class="article-card__desc">M&agrave;xim de 30 dies naturals des de la recepci&oacute; de la factura per a totes les operacions comercials. Cap llibertat contractual per ampliar m&eacute;s enll&agrave; dels 30 dies. Aquesta &eacute;s la disposici&oacute; m&eacute;s controvertida.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 5</div>
+      <div class="article-card__title">Interessos de demora</div>
+      <div class="article-card__desc">Els interessos meritaran autom&agrave;ticament a partir de l&apos;endem&agrave; del venciment del termini de pagament. El creditor ha de proporcionar tota la informaci&oacute; necess&agrave;ria de la factura. Els interessos corren fins al pagament complet del principal.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 6</div>
+      <div class="article-card__title">Tipus d&apos;inter&egrave;s</div>
+      <div class="article-card__desc">Harmonitzat a tota la UE. Nova disposici&oacute; que substitueix els enfocaments nacionals fragmentats de la Directiva de 2011.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 8</div>
+      <div class="article-card__title">Compensaci&oacute; pels costos de cobrament</div>
+      <div class="article-card__desc">Import fix per transacci&oacute;: 50 EUR (factures fins a 1.500 EUR), 100 EUR (de 1.501 a 15.000 EUR), 150 EUR (per sobre de 15.000 EUR). Pagador sense necessitat de recordatori.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 9</div>
+      <div class="article-card__title">Cl&agrave;usules contractuals abusives</div>
+      <div class="article-card__desc">Nul&middot;les i sense efecte: qualsevol cl&agrave;usula contractual que exclogui els interessos o la compensaci&oacute;, allargui el pagament m&eacute;s enll&agrave; de 30 dies, o sigui manifestament injusta per al creditor. Substitueix l&apos;article 7 de la Directiva de 2011.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 12</div>
+      <div class="article-card__title">Procediments accelerats</div>
+      <div class="article-card__desc">Els creditors obtindran un t&iacute;tol executiu en un m&agrave;xim de 90 dies naturals des de la presentaci&oacute; d&apos;una acci&oacute;, per a cr&egrave;dits no impugnats independentment del seu import.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Article 13</div>
+      <div class="article-card__title">Autoritats d&apos;execuci&oacute;</div>
+      <div class="article-card__desc">Cada estat membre ha de designar autoritats d&apos;execuci&oacute; per garantir el compliment. Poden adoptar mesures per assegurar que es respecten els terminis de pagament.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Secci&oacute; 3: Enfocament del ponent -->
+<section class="section" id="rapporteur">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><span class="mdi mdi-account-star"></span></div>
+    <h2 class="section__title">Enfocament del ponent</h2>
+  </div>
+  <p class="section__subtitle">Roza Thun und Hohenstein (Renew, Pol&ograve;nia) va presentar l&apos;informe provisional IMCO (PE756.002) el 14 de novembre de 2023</p>
+
+  <div class="info-box">
+    <h3>La filosofia del ponent</h3>
+    <p>El ponent va donar suport en termes generals a la proposta de la Comissi&oacute;, per&ograve; va introduir modificacions clau per equilibrar la protecci&oacute; de les pimes amb la flexibilitat empresarial. Les seves principals aportacions van ser: introduir flexibilitat de pagament fins a 60 dies per a les relacions B2B quan es pact&eacute;s m&uacute;tuament; exigir que les autoritats d&apos;execuci&oacute; siguin independents dels &ograve;rgans de contractaci&oacute; p&uacute;blica; afegir una exempci&oacute; per al sector del comer&ccedil; al detall per a productes de rotaci&oacute; lenta i estacionals; i crear un marc de presentaci&oacute; d&apos;informes p&uacute;blics sobre les pr&agrave;ctiques de pagament dels poders adjudicadors.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-clock-edit-outline" style="color: var(--color-purple);"></span> Flexibilitat en el pagament</div>
+    <p>Tot mantenint el termini per defecte de 30 dies, el ponent va proposar permetre terminis de pagament B2B de fins a 60 dies quan les parts ho acordessin expressament. Aquesta va ser la desviaci&oacute; m&eacute;s significativa respecte al text de la Comissi&oacute;, que no permetia cap flexibilitat.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-shield-check" style="color: var(--color-green);"></span> Execuci&oacute; independent</div>
+    <p>El ponent va insistir que les autoritats d&apos;execuci&oacute; han de ser independents d&apos;altres autoritats p&uacute;bliques, incloses les que intervenen en procediments de contractaci&oacute; p&uacute;blica. Aix&ograve; estava dissenyat per evitar conflictes d&apos;inter&egrave;s quan les pr&ograve;pies autoritats p&uacute;bliques s&oacute;n moroses.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-store" style="color: var(--color-amber);"></span> Exempci&oacute; per al comer&ccedil; al detall</div>
+    <p>Es van proposar terminis de pagament ampliats de fins a 120 dies per al sector del comer&ccedil; al detall que treballa amb productes de rotaci&oacute; lenta o estacionals. Aix&ograve; reconeixia la din&agrave;mica espec&iacute;fica de tresoreria de les cadenes de subministrament del comer&ccedil; al detall.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-chart-bar" style="color: var(--color-blue);"></span> Informe de transparen&ccedil;a</div>
+    <p>Els poders adjudicadors haurien d&apos;informar anualment sobre les seves pr&agrave;ctiques de pagament, categoritzant els pagaments per intervals (1-30, 31-60, 61-90, m&eacute;s de 90 dies) i informant del temps mitj&agrave; de pagament. Els informes s&apos;han de presentar a les autoritats d&apos;execuci&oacute; i ser p&uacute;blicament accessibles.</p>
+  </div>
+</section>
+
+<!-- Secci&oacute; 4: Esmenes dels eurodiputats -->
+<section class="section" id="amendments">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
+    <h2 class="section__title">Esmenes dels eurodiputats a la comissi&oacute; IMCO</h2>
+  </div>
+  <p class="section__subtitle">405 esmenes presentades (PE757.130: esmenes 26-223; PE757.363: esmenes 224-405)</p>
+
+  <div class="info-box">
+    <h3>La batalla de les esmenes</h3>
+    <p>Els membres de la comissi&oacute; IMCO van presentar 405 esmenes a l&apos;informe provisional del ponent, reflectint profundes divisions sobre l&apos;equilibri entre la protecci&oacute; de les pimes i la llibertat contractual. El principal camp de batalla era el termini m&agrave;xim de pagament: la Comissi&oacute; volia un l&iacute;mit estricte de 30 dies sense excepcions, el ponent proposava flexibilitat B2B de 60 dies, i diversos eurodiputats van defensar una flexibilitat encara m&eacute;s gran o exempcions sectorials.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-clock-outline" style="color: var(--color-blue);"></span> Terminis de pagament (principal &agrave;rea de controv&egrave;rsia)</div>
+    <p>Diverses esmenes van buscar modificar el marc dels terminis de pagament. Alguns eurodiputats van donar suport al l&iacute;mit estricte de 30 dies de la Comissi&oacute;, argumentant que qualsevol flexibilitat seria aprofitada per les grans empreses a costa de les pimes. D&apos;altres van defensar exempcions m&eacute;s &agrave;mplies, incloent terminis de 90 dies per a sectors espec&iacute;fics com la construcci&oacute; i l&apos;agricultura.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-cash-remove" style="color: var(--color-red);"></span> Ren&uacute;ncia a la compensaci&oacute;</div>
+    <p>L&apos;esmena 51 va eliminar el text &laquo;sense necessitat de recordatori&raquo; per a la compensaci&oacute; de tarifa plana. El text adoptat exigeix que la compensaci&oacute; sigui pagadora autom&agrave;ticament, per&ograve; no requereix que el deutor pagui sense ser-ne requerit. Es van afegir restriccions sobre la ren&uacute;ncia als drets quan el deutor &eacute;s una autoritat p&uacute;blica o una gran empresa.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-gavel" style="color: var(--color-green);"></span> Independ&egrave;ncia de l&apos;execuci&oacute; (esmena 65)</div>
+    <p>Les autoritats d&apos;execuci&oacute; han de ser independents d&apos;altres autoritats p&uacute;bliques, incloses les que intervenen en procediments de contractaci&oacute; p&uacute;blica. Aix&ograve; es va afegir expl&iacute;citament per evitar conflictes d&apos;inter&egrave;s, atesos que les autoritats p&uacute;bliques s&oacute;n sovint les pr&ograve;pies moroses.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-scale-balance" style="color: var(--color-purple);"></span> Proporcionalitat (esmena 66)</div>
+    <p>Les autoritats d&apos;execuci&oacute; adoptaran mesures &laquo;proporcionades&raquo; (paraula afegida) per garantir el compliment dels terminis de pagament. Aix&ograve; estava dissenyat per evitar una execuci&oacute; excessivament agressiva que pogués pertorbar les relacions comercials.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-account-group-outline" style="color: var(--color-amber);"></span> Transparen&ccedil;a (esmena 67)</div>
+    <p>Les autoritats d&apos;execuci&oacute; han de posar a disposici&oacute; del p&uacute;blic informaci&oacute; agregada sobre el nombre de reclamacions presentades contra empreses i autoritats p&uacute;bliques per infraccions de l&apos;article 3 (terminis de pagament).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> Per&iacute;ode de gr&agrave;cia per a les microempreses</div>
+    <p>Les microempreses (menys de 10 empleats) reben un per&iacute;ode de gr&agrave;cia addicional de 12 mesos com a deutors, reconeixent la seva vulnerabilitat particular als canvis regulatoris sobtats en les pr&agrave;ctiques de pagament.</p>
+  </div>
+</section>
+
+<!-- Secci&oacute; 5: Text adoptat pel PE -->
+<section class="section" id="adopted">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><span class="mdi mdi-vote"></span></div>
+    <h2 class="section__title">Text adoptat pel Parlament Europeu</h2>
+  </div>
+  <p class="section__subtitle">T9-0299/2024, adoptat el 23 d&apos;abril de 2024. Votaci&oacute; IMCO: 33 a favor, 10 en contra, 2 abstencions.</p>
+
+  <div class="info-box info-box--green">
+    <h3>En qu&egrave; va coincidir el Parlament</h3>
+    <p>El Parlament Europeu va adoptar la seva posici&oacute; en primera lectura el 23 d&apos;abril de 2024, incorporant les modificacions clau del ponent i diverses esmenes de la comissi&oacute;. El text mant&eacute; el termini per defecte de 30 dies, per&ograve; afegeix una flexibilitat significativa per a les relacions B2B, adaptacions sectorials espec&iacute;fiques i garanties d&apos;execuci&oacute; m&eacute;s robustes. Va ser adoptat amb una majoria c&ograve;moda (33-10-2 en comissi&oacute;), tot i que l&apos;oposici&oacute; reflecteix les preocupacions del sector privat sobre la llibertat contractual.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Terminis de pagament (text adoptat)</div>
+      <div class="article-card__title">30 dies per defecte, 60 dies B2B, 120 dies comer&ccedil; al detall</div>
+      <div class="article-card__desc">M&agrave;xim per defecte: 30 dies naturals. Flexibilitat B2B: fins a 60 dies quan es pact&iacute;s m&uacute;tuament per escrit. Sector del comer&ccedil; al detall: fins a 120 dies per a productes de rotaci&oacute; lenta o estacionals.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Execuci&oacute; (text adoptat)</div>
+      <div class="article-card__title">Autoritats independents amb informes p&uacute;blics</div>
+      <div class="article-card__desc">Autoritats d&apos;execuci&oacute; independents a cada estat membre. Es permeten reclamacions an&ograve;nimes. Informes p&uacute;blics de dades sobre reclamacions. Procediments accelerats per obtenir t&iacute;tol executiu reduIts de 90 a 60 dies naturals. [Esm.65, 66, 67, 80]</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Eines digitals (text adoptat)</div>
+      <div class="article-card__title">Article 17: execuci&oacute; digital</div>
+      <div class="article-card__desc">Els estats membres han d&apos;utilitzar eines digitals per a una execuci&oacute; eficaç. Les eines de gesti&oacute; de factures i cr&egrave;dit, incloent el factoring, i la formaci&oacute; en liter&agrave;cia financera han d&apos;estar disponibles i ser accessibles per a les pimes. [Esm.80]</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">&Agrave;mbit d&apos;aplicaci&oacute; (text adoptat)</div>
+      <div class="article-card__title">Assegurances incl&ograve;ses, microempreses protegides</div>
+      <div class="article-card__desc">Els pagaments de contractes d&apos;asseguran&ccedil;a s&apos;inclouen (revertint l&apos;exclusi&oacute; de la Comissi&oacute;). Les microempreses reben un per&iacute;ode de gr&agrave;cia addicional de 12 mesos com a deutors. Els contractes de consignaci&oacute; estan permesos en virtut de la llibertat contractual.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Secci&oacute; 6: Comparaci&oacute; en tres columnes -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-table-column"></span></div>
+    <h2 class="section__title">Comparaci&oacute; en tres columnes</h2>
+  </div>
+  <p class="section__subtitle">Proposta de la Comissi&oacute; vs. text adoptat pel PE vs. Directiva 2011/7/UE vigent</p>
+
+  <div style="overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Disposici&oacute;</th>
+        <th>Directiva 2011/7/UE (vigent)</th>
+        <th>COM(2023)533 (Comissi&oacute;)</th>
+        <th>T9-0299/2024 (PE adoptat)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Tipus d&apos;instrument</strong></td>
+        <td class="dim-cell">Directiva (requereix transposici&oacute;)</td>
+        <td class="highlight-cell">Reglament (efecte directe)</td>
+        <td class="highlight-cell">Reglament (efecte directe)</td>
+      </tr>
+      <tr>
+        <td><strong>Termini de pagament B2B</strong></td>
+        <td>60 dies (llevat que s&apos;acordi una altra cosa)</td>
+        <td class="red-cell">30 dies (sense flexibilitat)</td>
+        <td class="green-cell">30 dies per defecte, 60 dies si s&apos;acorda</td>
+      </tr>
+      <tr>
+        <td><strong>Termini de pagament G2B</strong></td>
+        <td>30 dies (excepcionalment 60)</td>
+        <td>30 dies</td>
+        <td>30 dies</td>
+      </tr>
+      <tr>
+        <td><strong>Exempci&oacute; comer&ccedil; al detall</strong></td>
+        <td class="dim-cell">Cap</td>
+        <td class="dim-cell">Cap</td>
+        <td class="green-cell">Fins a 120 dies (productes estacionals)</td>
+      </tr>
+      <tr>
+        <td><strong>Compensaci&oacute; de tarifa plana</strong></td>
+        <td>M&iacute;nim 40 EUR</td>
+        <td>50/100/150 EUR (per trams)</td>
+        <td>50/100/150 EUR (per trams)</td>
+      </tr>
+      <tr>
+        <td><strong>Activaci&oacute; de la compensaci&oacute;</strong></td>
+        <td>Manual (el creditor ha de reclamar)</td>
+        <td>Autom&agrave;tica (sense necessitat de recordatori)</td>
+        <td>Autom&agrave;tica (disposici&oacute; de recordatori suavitzada)</td>
+      </tr>
+      <tr>
+        <td><strong>Execuci&oacute;</strong></td>
+        <td class="dim-cell">No es requereix cap &ograve;rgan dedicat</td>
+        <td>Autoritats nacionals requerides</td>
+        <td class="green-cell">Autoritats independents requerides</td>
+      </tr>
+      <tr>
+        <td><strong>T&iacute;tol executiu accelerat</strong></td>
+        <td class="dim-cell">No especificat</td>
+        <td>90 dies naturals</td>
+        <td class="green-cell">60 dies naturals</td>
+      </tr>
+      <tr>
+        <td><strong>Informes p&uacute;blics</strong></td>
+        <td class="dim-cell">Cap</td>
+        <td class="dim-cell">Limitat</td>
+        <td class="green-cell">Els poders adjudicadors han d&apos;informar anualment</td>
+      </tr>
+      <tr>
+        <td><strong>Protecci&oacute; de les microempreses</strong></td>
+        <td class="dim-cell">Cap</td>
+        <td class="dim-cell">Cap</td>
+        <td class="green-cell">Per&iacute;ode de gr&agrave;cia de 12 mesos com a deutors</td>
+      </tr>
+      <tr>
+        <td><strong>Pagaments d&apos;asseguran&ccedil;a</strong></td>
+        <td>Poc clar</td>
+        <td class="dim-cell">Exclosos</td>
+        <td class="green-cell">Inclosos</td>
+      </tr>
+      <tr>
+        <td><strong>Eines digitals</strong></td>
+        <td class="dim-cell">No esmentades</td>
+        <td class="dim-cell">No esmentades</td>
+        <td class="green-cell">Article 17: execuci&oacute; digital + formaci&oacute;</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- Secci&oacute; 7: Posicions de les parts interessades -->
+<section class="section" id="stakeholders">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-account-voice"></span></div>
+    <h2 class="section__title">Posicions de les parts interessades</h2>
+  </div>
+  <p class="section__subtitle">El sector industrial, les associacions de pimes i els organismes professionals han pres posicions fermes</p>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--red">Oposi&oacute;</span>
+      <span class="stakeholder-card__name">BusinessEurope, Eurochambres, EuroCommerce</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>En una <a href="https://www.eurochambres.eu/wp-content/uploads/2025/03/250313-Joint-statement-on-the-proposed-Late-Payment-Regulation.pdf" target="_blank" rel="noopener">declaraci&oacute; conjunta (mar&ccedil; de 2025)</a>, aquestes tres grans federacions empresarials van demanar a la Comissi&oacute; que <strong>retir&eacute;s completament la proposta</strong>. Les seves preocupacions:</p>
+      <ul style="color: var(--color-secondary); margin-top: 0.5rem; padding-left: 1.5rem;">
+        <li>Els terminis de pagament estrictes <strong>limiten la llibertat contractual</strong> en les relacions comercials B2B</li>
+        <li>Les esmenes del PE, tot afegint flexibilitat, creen un <strong>marc complex</strong> amb categories i exempcions que confonen les empreses</li>
+        <li>Risc de <strong>reduir el nombre de prove&iuml;dors</strong>, cosa que penalitzaria probablement les pimes, que s&apos;enfrontarien a requisits m&eacute;s r&iacute;gids</li>
+        <li>Podria requerir <strong>2 bilions d&apos;EUR de finan&ccedil;ament addicional</strong> i augmentar els pagaments d&apos;interessos de les empreses en 100.000 milions d&apos;EUR</li>
+        <li>Pot incentivar el comer&ccedil; amb <strong>s&ograve;cis no comunitaris</strong> no subjectes al Reglament</li>
+        <li>Una majoria d&apos;estats membres tamb&eacute; s&apos;hi oposen (vegeu el seu document informal del 7 de juny de 2024)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--amber">Preocupaci&oacute;</span>
+      <span class="stakeholder-card__name">ICISA (International Credit Insurance and Surety Association)</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p><a href="https://icisa.org/news/update-on-late-payment-regulation-2/" target="_blank" rel="noopener">ICISA informa</a> que, tot i que es va expressar un suport limitat a una regulaci&oacute; m&eacute;s estricta, molts organismes que representen empreses van demanar <strong>m&eacute;s flexibilitat i una reconsideraci&oacute;</strong>. La versi&oacute; del Parlament va suavitzar algunes propostes, per&ograve; &laquo;en &uacute;ltima inst&agrave;ncia va mantenir el debilitament de la llibertat contractual&raquo;. Els estats membres van expressar preocupaci&oacute; per la interacci&oacute; amb els reg&igrave;ms nacionals existents.</p>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--blue">An&agrave;lisi</span>
+      <span class="stakeholder-card__name">AccountancyEurope</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>En el seu <a href="https://accountancyeurope.eu/wp-content/uploads/2024/02/LPR-factsheet-2024.pdf?v1" target="_blank" rel="noopener">full informatiu</a>, AccountancyEurope ofereix una an&agrave;lisi equilibrada. S&apos;espera que el Reglament tingui un gran impacte en les pimes: millora de la liquiditat, menys c&agrave;rrega administrativa per perseguir pagaments i igualtat de condicions. No obstant aix&ograve;, assenyalen que les pimes com a deutores tamb&eacute; han de garantir que poden pagar dins del termini de 30 dies, amb implicacions significatives per al balan&ccedil; comptable.</p>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--green">Consultiu</span>
+      <span class="stakeholder-card__name">CESE i Comit&egrave; de les Regions</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>El Comit&egrave; Econ&ograve;mic i Social Europeu (CES3705/2023, 17 de gener de 2024) i el Comit&egrave; de les Regions (CDR4941/2023, 31 de gener de 2024) van emetre opinions sobre la proposta. Aquests &ograve;rgans consultius van donar suport en general a l&apos;objectiu de lluitar contra la morositat, tot plantejant preocupacions sobre els reptes d&apos;implementaci&oacute; per a les autoritats p&uacute;bliques m&eacute;s petites.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Secci&oacute; 8: Bloqueig al Consell -->
+<section class="section" id="council">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><span class="mdi mdi-block-helper"></span></div>
+    <h2 class="section__title">Bloqueig al Consell</h2>
+  </div>
+  <p class="section__subtitle">Una majoria d&apos;estats membres s&apos;oposa a la proposta</p>
+
+  <div class="info-box info-box--red">
+    <h3>Per qu&egrave; el Consell ha bloquejat la proposta</h3>
+    <p>Despr&eacute;s que el Parlament Europeu adopt&eacute;s la seva posici&oacute; en primera lectura l&apos;abril de 2024, la proposta va passar al Consell. No obstant aix&ograve;, una majoria d&apos;estats membres han expressat la seva oposici&oacute; mitjan&ccedil;ant un document informal datat el 7 de juny de 2024. Les seves principals preocupacions coincideixen amb les del sector industrial:</p>
+    <ul style="color: var(--color-secondary); margin-top: 0.5rem; padding-left: 1.5rem;">
+      <li><strong>P&egrave;rdua de la llibertat contractual</strong> en les relacions B2B</li>
+      <li><strong>Interacci&oacute; amb els reg&igrave;ms nacionals existents</strong>, amb els quals molts estats membres estan satisfets</li>
+      <li><strong>Falta de flexibilitat</strong> fins i tot en la versi&oacute; esmena pel PE</li>
+      <li><strong>Preocupacions de proporcionalitat</strong> sobre la substituci&oacute; d&apos;una directiva per un reglament</li>
+    </ul>
+    <p style="margin-top: 0.75rem;">No s&apos;ha publicat cap enfocament general ni cap text de compromi&iacute;s de la Presid&egrave;ncia. El dossier est&agrave; efectivament aturat, i BusinessEurope, Eurochambres i EuroCommerce han demanat a la Comissi&oacute; que retiri completament la proposta.</p>
+  </div>
+</section>
+
+<!-- Secci&oacute; 9: Calendari legislatiu -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-timeline-clock-outline"></span></div>
+    <h2 class="section__title">Calendari legislatiu</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">12 de setembre de 2023</div>
+      <div class="timeline__text">La Comissi&oacute; publica COM(2023)533 com a part del Paquet de mesures per a les pimes</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">2 d&apos;octubre de 2023</div>
+      <div class="timeline__text">Anunci de la remissi&oacute; a la comissi&oacute; (IMCO com a comissi&oacute; competent)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">14 de novembre de 2023</div>
+      <div class="timeline__text">La ponent Roza Thun und Hohenstein presenta l&apos;informe provisional IMCO (PE756.002)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">15-18 de desembre de 2023</div>
+      <div class="timeline__text">405 esmenes presentades pels eurodiputats (PE757.130, PE757.363)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">17 de gener de 2024</div>
+      <div class="timeline__text">Dictamen del CESE (CES3705/2023)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">31 de gener de 2024</div>
+      <div class="timeline__text">Dictamen del Comit&egrave; de les Regions (CDR4941/2023)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">20 de mar&ccedil; de 2024</div>
+      <div class="timeline__text">Votaci&oacute; a la comissi&oacute; IMCO: 33 a favor, 10 en contra, 2 abstencions. Informe A9-0156/2024 presentat.</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">23 d&apos;abril de 2024</div>
+      <div class="timeline__text">El Ple del PE adopta la posici&oacute; en primera lectura (T9-0299/2024)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">7 de juny de 2024</div>
+      <div class="timeline__text">Una majoria d&apos;estats membres s&apos;oposa a la proposta (document informal del Consell)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">8 d&apos;agost de 2024</div>
+      <div class="timeline__text">Resposta de la Comissi&oacute; a les esmenes del PE (SP(2024)394)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">3 d&apos;octubre de 2024</div>
+      <div class="timeline__text">Nou ponent: Ivars Ijabs (Renew, Let&ograve;nia) substitueix Thun und Hohenstein despr&eacute;s de les eleccions europees</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">2025</div>
+      <div class="timeline__text">BLOQUEJAT al Consell. Cap enfocament general. El sector industrial demana la retirada.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Secci&oacute; 10: Actors clau -->
+<section class="section" id="actors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><span class="mdi mdi-account-multiple"></span></div>
+    <h2 class="section__title">Actors clau</h2>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Funci&oacute;</th><th>Nom</th><th>Grup / Instituci&oacute;</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Ponent actual</strong></td><td>Ivars Ijabs</td><td>Renew, Let&ograve;nia (IMCO)</td></tr>
+      <tr><td><strong>Ponent anterior</strong></td><td>Roza Thun und Hohenstein</td><td>Renew, Pol&ograve;nia (IMCO)</td></tr>
+      <tr><td><strong>Ponent ombra (PPE)</strong></td><td>Regina Doherty</td><td>PPE, Irlanda</td></tr>
+      <tr><td><strong>Ponent ombra (S&amp;D)</strong></td><td>Tsvetelina Penkova</td><td>S&amp;D, Bulg&agrave;ria</td></tr>
+      <tr><td><strong>Ponent ombra (PfE)</strong></td><td>Jorge Martin Frias</td><td>PfE, Espanya</td></tr>
+      <tr><td><strong>Ponent ombra (ECR)</strong></td><td>Reinis Poznjaks</td><td>ECR, Let&ograve;nia</td></tr>
+      <tr><td><strong>Ponent ombra (Verds)</strong></td><td>Reinier van Lanschot</td><td>Verds/ALE, Pa&iuml;sos Baixos</td></tr>
+      <tr><td><strong>Comissari original</strong></td><td>Thierry Breton</td><td>DG GROW</td></tr>
+      <tr><td><strong>DG responsable</strong></td><td>DG GROW</td><td>Mercat Interior, Ind&uacute;stria, Emprenedoria i Pimes</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Secci&oacute; 11: Fonts oficials -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><span class="mdi mdi-link-variant"></span></div>
+    <h2 class="section__title">Fonts oficials</h2>
+  </div>
+  <p class="section__subtitle">Tots els documents referenciats en aquesta an&agrave;lisi</p>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-bank" style="color: var(--color-blue);"></span> Comissi&oacute; Europea</div>
+    <p><a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2023/0533/COM_COM(2023)0533_EN.pdf" target="_blank" rel="noopener">COM(2023)533: proposta de la Comissi&oacute; (PDF)</a></p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A52023SC0314" target="_blank" rel="noopener">SWD(2023)314: avaluaci&oacute; d&apos;impacte</a></p>
+    <p><a href="https://single-market-economy.ec.europa.eu/smes/challenges-and-resilience/late-payment_en" target="_blank" rel="noopener">DG GROW: p&agrave;gina sobre morositat</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-account-group" style="color: var(--color-purple);"></span> Parlament Europeu</div>
+    <p><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0323(COD)" target="_blank" rel="noopener">P&agrave;gina OEIL del procediment: 2023/0323(COD)</a></p>
+    <p><a href="https://www.europarl.europa.eu/legislative-train/theme-a-europe-fit-for-the-digital-age/file-late-payments-directive-revision" target="_blank" rel="noopener">Calendari legislatiu (Legislative Train Schedule)</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-PR-756002_EN.html" target="_blank" rel="noopener">PE756.002: informe provisional IMCO (ponent)</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-AM-757130_EN.html" target="_blank" rel="noopener">PE757.130: esmenes 26-223</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-AM-757363_EN.html" target="_blank" rel="noopener">PE757.363: esmenes 224-405</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/A-9-2024-0156_EN.html" target="_blank" rel="noopener">A9-0156/2024: informe de la comissi&oacute; IMCO</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/TA-9-2024-0299_EN.html" target="_blank" rel="noopener">T9-0299/2024: text adoptat pel Parlament (1a lectura)</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-briefcase-variant" style="color: var(--color-amber);"></span> Documents de les parts interessades</div>
+    <p><a href="https://www.businesseurope.eu/publications/joint-statement-on-the-proposed-late-payment-regulation/" target="_blank" rel="noopener">BusinessEurope: declaraci&oacute; conjunta</a></p>
+    <p><a href="https://www.eurochambres.eu/wp-content/uploads/2025/03/250313-Joint-statement-on-the-proposed-Late-Payment-Regulation.pdf" target="_blank" rel="noopener">Eurochambres: declaraci&oacute; conjunta (mar&ccedil; de 2025, PDF)</a></p>
+    <p><a href="https://icisa.org/news/update-on-late-payment-regulation-2/" target="_blank" rel="noopener">ICISA: actualitzaci&oacute; sobre el Reglament de morositat</a></p>
+    <p><a href="https://accountancyeurope.eu/wp-content/uploads/2024/02/LPR-factsheet-2024.pdf?v1" target="_blank" rel="noopener">AccountancyEurope: full informatiu (PDF)</a></p>
+  </div>
+</section>
+
+</div>
+
+<!-- Peu de p&agrave;gina -->
+<footer class="footer">
+  <p>
+    An&agrave;lisi en profunditat de <a href="https://brubru.beresol.eu">Brubru</a>, l&apos;assistent d&apos;IA per a pol&iacute;tiques de la UE creat per <a href="https://beresol.eu">Beresol</a>.
+    <br>Fonts de dades: Comissi&oacute; Europea, Parlament Europeu (OEIL, Doceo), BusinessEurope, Eurochambres, ICISA, AccountancyEurope.
+    <br><a href="https://beresol.eu/public-affairs">Beresol Public Affairs</a> | <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+</footer>
+
+<!-- Tornar a dalt -->
+<a href="#top" class="back-to-top" id="backToTop"><span class="mdi mdi-chevron-up"></span></a>
+
+<script>
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 400) { btn.classList.add('visible'); }
+    else { btn.classList.remove('visible'); }
+  });
+  document.getElementById('backToTop').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>

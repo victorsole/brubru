@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verordening betalingsachterstand : COM(2023)533 | Brubru</title>
+  <meta name="description" content="Uitgebreide analyse van de EU-verordening betalingsachterstand (COM(2023)533): maximale betalingstermijn van 30 dagen, automatische sancties, handhavingskader. Voorstellen rapporteur, amendementen EP-leden, aangenomen tekst EP, standpunten belanghebbenden. Momenteel geblokkeerd in de Raad.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(220,38,38,0.1);
+      color: var(--color-red);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-blue);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-blue); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--color-blue);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(6,147,227,0.06) 0%, rgba(155,81,224,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+    .info-box--red {
+      background: linear-gradient(135deg, rgba(220,38,38,0.06) 0%, rgba(217,119,6,0.06) 100%);
+    }
+    .info-box--green {
+      background: linear-gradient(135deg, rgba(5,150,105,0.06) 0%, rgba(6,147,227,0.06) 100%);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700; font-size: 0.85rem; text-transform: uppercase;
+      letter-spacing: 0.03em; color: var(--color-secondary); background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+    .highlight-cell { color: var(--color-blue); font-weight: 600; }
+    .dim-cell { color: var(--color-muted); }
+    .red-cell { color: var(--color-red); font-weight: 600; }
+    .green-cell { color: var(--color-green); font-weight: 600; }
+
+    .article-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-blue); transform: translateY(-1px); }
+    .article-card__num { font-size: 0.75rem; font-weight: 700; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.5rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -2rem; top: 0.5rem; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--color-blue); background: white; }
+    .timeline__item--active::before { background: var(--color-red); border-color: var(--color-red); }
+    .timeline__item--done::before { background: var(--color-green); border-color: var(--color-green); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    .pill { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 12px; font-size: 0.78rem; font-weight: 600; }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .stakeholder-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .stakeholder-card__header {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;
+    }
+    .stakeholder-card__name { font-weight: 700; font-size: 1.05rem; }
+    .stakeholder-card__position { font-size: 0.9rem; color: var(--color-secondary); }
+
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px;
+      border-radius: 50%; background: var(--color-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.3s; z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">Betalingsachterstand: diepgaande analyse</div>
+    <div class="header__subtitle">Bestrijding van betalingsachterstand bij handelstransacties</div>
+  </div>
+  <select onchange="location.href=this.value" aria-label="Taal" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html">English</option>
+    <option value="fr.html">Fran&ccedil;ais</option>
+    <option value="es.html">Espa&ntilde;ol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html" selected>Nederlands</option>
+    <option value="ca.html">Catal&agrave;</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><span class="mdi mdi-alert-circle-outline"></span> Geblokkeerd in de Raad</div>
+  <h1 class="hero__title">Verordening betalingsachterstand: <span>30 dagen om te betalen,<br>zonder uitzonderingen</span></h1>
+  <p class="hero__subtitle">
+    Het voorstel van de Europese Commissie om Richtlijn 2011/7/EU te vervangen door een rechtstreeks toepasselijke Verordening.
+    Strengere betalingstermijnen, automatische sancties en onafhankelijke handhavingsinstanties ter bescherming van het mkb.
+  </p>
+  <div class="hero__meta">
+    <span><span class="mdi mdi-file-document-outline"></span> <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2023/0533/COM_COM(2023)0533_EN.pdf" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">COM(2023)533</a></span>
+    <span><span class="mdi mdi-calendar"></span> 12 september 2023</span>
+    <span><span class="mdi mdi-gavel"></span> <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0323(COD)" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">2023/0323(COD)</a></span>
+    <span><span class="mdi mdi-account-group"></span> IMCO-commissie</span>
+  </div>
+</section>
+
+<!-- Key Figures -->
+<div class="figures">
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">30 dagen</div>
+    <div class="figure-card__label">Maximale betalingstermijn</div>
+  </div>
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">Geblokkeerd</div>
+    <div class="figure-card__label">Status in de Raad</div>
+  </div>
+  <div class="figure-card fc-green">
+    <div class="figure-card__number">33-10-2</div>
+    <div class="figure-card__label">Stemming IMCO-commissie</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">405</div>
+    <div class="figure-card__label">Ingediende amendementen</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title">Inhoudsopgave</div>
+  <div class="toc__grid">
+    <a href="#problem" class="toc__link"><span class="toc__num">1</span> Het probleem</a>
+    <a href="#proposal" class="toc__link"><span class="toc__num">2</span> Commissievoorstel</a>
+    <a href="#rapporteur" class="toc__link"><span class="toc__num">3</span> Aanpak rapporteur</a>
+    <a href="#amendments" class="toc__link"><span class="toc__num">4</span> Amendementen EP-leden</a>
+    <a href="#adopted" class="toc__link"><span class="toc__num">5</span> Aangenomen tekst EP</a>
+    <a href="#comparison" class="toc__link"><span class="toc__num">6</span> Driekolommenvergelijking</a>
+    <a href="#stakeholders" class="toc__link"><span class="toc__num">7</span> Standpunten belanghebbenden</a>
+    <a href="#council" class="toc__link"><span class="toc__num">8</span> Blokkade in de Raad</a>
+    <a href="#timeline" class="toc__link"><span class="toc__num">9</span> Wetgevingskalender</a>
+    <a href="#sources" class="toc__link"><span class="toc__num">10</span> Officiële bronnen</a>
+    <a href="#actors" class="toc__link"><span class="toc__num">11</span> Belangrijkste actoren</a>
+  </div>
+</nav>
+
+<!-- Section 1: Het probleem -->
+<section class="section" id="problem">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><span class="mdi mdi-alert-outline"></span></div>
+    <h2 class="section__title">Het probleem: betalingsachterstand bedreigt het mkb</h2>
+  </div>
+  <p class="section__subtitle">Waarom de Commissie voorstelde de Richtlijn van 2011 te vervangen door een Verordening</p>
+
+  <div class="info-box info-box--red">
+    <h3>De kern van het probleem</h3>
+    <p>Elk jaar gaan duizenden kleine en middelgrote ondernemingen failliet terwijl ze wachten op betaling van hun facturen. Betalingsachterstand is de grootste oorzaak van liquiditeitsproblemen voor het mkb. De Richtlijn van 2011 heeft het probleem niet opgelost omdat de lidstaten haar inconsistent hebben omgezet en de handhaving zwak was.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Richtlijn 2011/7/EU</div>
+      <div class="article-card__title">Huidig kader</div>
+      <div class="article-card__desc">Overheidsinstanties: 30 dagen (uitzonderlijk 60). Bedrijven: 60 dagen tenzij anders overeengekomen. Minimumvergoeding van EUR 40. Wettelijke rente van 8% boven de ECB-referentierente. De handhaving is echter inconsistent.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Waarom een Verordening?</div>
+      <div class="article-card__title">Rechtstreekse toepasselijkheid</div>
+      <div class="article-card__desc">Een Verordening is rechtstreeks toepasselijk in alle lidstaten zonder nationale omzetting. Dit elimineert de inconsistente uitvoering die de Richtlijn van 2011 heeft verzwakt en creëert een gelijk speelveld op de interne markt.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 2: Commissievoorstel -->
+<section class="section" id="proposal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-file-document-outline"></span></div>
+    <h2 class="section__title">Commissievoorstel</h2>
+  </div>
+  <p class="section__subtitle">COM(2023)533, gepubliceerd op 12 september 2023. Onderdeel van het mkb-ondersteuningspakket.</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Artikel 1</div>
+      <div class="article-card__title">Toepassingsgebied</div>
+      <div class="article-card__desc">Van toepassing op B2B- en B2G-handelstransacties (levering van goederen of diensten tegen vergoeding). Uitgesloten: B2C, schadevergoedingen en schulden die onder insolventieprocedures vallen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 3</div>
+      <div class="article-card__title">Betalingstermijnen</div>
+      <div class="article-card__desc">Maximaal 30 kalenderdagen vanaf ontvangst van de factuur voor alle handelstransacties. Geen contractuele vrijheid om de termijn te verlengen tot meer dan 30 dagen. Dit is de meest omstreden bepaling.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 5</div>
+      <div class="article-card__title">Rente bij betalingsachterstand</div>
+      <div class="article-card__desc">Rente loopt automatisch vanaf de dag na het verstrijken van de betalingstermijn. De schuldeiser moet alle nodige factureringsgegevens verstrekken. De rente loopt tot de volledige betaling van de hoofdsom.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 6</div>
+      <div class="article-card__title">Rentevoet</div>
+      <div class="article-card__desc">Geharmoniseerd in de gehele EU. Nieuwe bepaling ter vervanging van de gefragmenteerde nationale benaderingen onder de Richtlijn van 2011.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 8</div>
+      <div class="article-card__title">Vergoeding voor invorderingskosten</div>
+      <div class="article-card__desc">Vaste vergoeding per transactie: EUR 50 (facturen tot EUR 1.500), EUR 100 (EUR 1.501 tot EUR 15.000), EUR 150 (boven EUR 15.000). Verschuldigd zonder aanmaning.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 9</div>
+      <div class="article-card__title">Onbillijke contractuele bedingen</div>
+      <div class="article-card__desc">Nietig en van onwaarde: elk contractueel beding dat rente of vergoeding uitsluit, de betalingstermijn verlengt tot meer dan 30 dagen of kennelijk onbillijk is voor de schuldeiser. Vervangt artikel 7 van de Richtlijn van 2011.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 12</div>
+      <div class="article-card__title">Versnelde procedures</div>
+      <div class="article-card__desc">Schuldeisers moeten binnen 90 kalenderdagen na het instellen van een vordering een executoriale titel verkrijgen, voor onbetwiste vorderingen ongeacht het bedrag.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Artikel 13</div>
+      <div class="article-card__title">Handhavingsinstanties</div>
+      <div class="article-card__desc">Elke lidstaat moet handhavingsinstanties aanwijzen om de naleving te waarborgen. Deze kunnen maatregelen nemen om ervoor te zorgen dat de betalingstermijnen worden nageleefd.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Aanpak rapporteur -->
+<section class="section" id="rapporteur">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><span class="mdi mdi-account-star"></span></div>
+    <h2 class="section__title">Aanpak rapporteur</h2>
+  </div>
+  <p class="section__subtitle">Roza Thun und Hohenstein (Renew, Polen) diende het IMCO-ontwerpverslag (PE756.002) in op 14 november 2023</p>
+
+  <div class="info-box">
+    <h3>De filosofie van de rapporteur</h3>
+    <p>De rapporteur steunde het Commissievoorstel in grote lijnen, maar introduceerde belangrijke aanpassingen om bescherming van het mkb in evenwicht te brengen met zakelijke flexibiliteit. Haar belangrijkste bijdragen waren: invoering van betalingsflexibiliteit tot 60 dagen voor B2B bij wederzijdse overeenstemming; vereiste dat handhavingsinstanties onafhankelijk zijn van aanbestedende diensten; toevoeging van een uitzondering voor de detailhandelssector voor traaglopende en seizoensgebonden goederen; en de invoering van een openbaar rapportagekader voor de betalingspraktijken van aanbestedende diensten.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-clock-edit-outline" style="color: var(--color-purple);"></span> Betalingsflexibiliteit</div>
+    <p>Met behoud van de standaardtermijn van 30 dagen stelde de rapporteur voor B2B-betalingstermijnen toe te staan van maximaal 60 dagen wanneer partijen dit uitdrukkelijk overeenkomen. Dit was de meest ingrijpende afwijking van de Commissietekst, die geen enkele flexibiliteit toestond.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-shield-check" style="color: var(--color-green);"></span> Onafhankelijke handhaving</div>
+    <p>De rapporteur stond erop dat handhavingsinstanties onafhankelijk moeten zijn van andere overheidsinstanties, ook van instanties die betrokken zijn bij aanbestedingsprocedures. Dit was bedoeld om belangenconflicten te voorkomen wanneer overheidsinstanties zelf te laat betalen.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-store" style="color: var(--color-amber);"></span> Uitzondering detailhandelssector</div>
+    <p>Verlengde betalingstermijnen van maximaal 120 dagen werden voorgesteld voor de detailhandelssector die te maken heeft met traaglopende of seizoensgebonden goederen. Dit erkende de specifieke liquiditeitsdynamiek van toeleveringsketens in de detailhandel.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-chart-bar" style="color: var(--color-blue);"></span> Transparantierapportage</div>
+    <p>Aanbestedende diensten dienen jaarlijks te rapporteren over hun betalingspraktijken, waarbij betalingen worden ingedeeld in intervallen (1-30, 31-60, 61-90, 90+ dagen) en de gemiddelde betaaltermijn wordt vermeld. Rapporten moeten worden ingediend bij de handhavingsinstanties en openbaar toegankelijk zijn.</p>
+  </div>
+</section>
+
+<!-- Section 4: Amendementen EP-leden -->
+<section class="section" id="amendments">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-pencil-box-multiple-outline"></span></div>
+    <h2 class="section__title">Amendementen EP-leden in IMCO</h2>
+  </div>
+  <p class="section__subtitle">405 ingediende amendementen (PE757.130: amendementen 26-223; PE757.363: amendementen 224-405)</p>
+
+  <div class="info-box">
+    <h3>De amendementsstrijd</h3>
+    <p>IMCO-leden dienden 405 amendementen in op het ontwerpverslag van de rapporteur, wat de diepe verdeeldheid weerspiegelt over het evenwicht tussen bescherming van het mkb en contractuele vrijheid. Het belangrijkste strijdpunt was de maximale betalingstermijn: de Commissie wilde een strikte limiet van 30 dagen zonder uitzonderingen, de rapporteur stelde B2B-flexibiliteit van 60 dagen voor, en meerdere EP-leden pleitten voor nog meer flexibiliteit of sectorspecifieke uitzonderingen.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-clock-outline" style="color: var(--color-blue);"></span> Betalingstermijnen (voornaamste discussiepunt)</div>
+    <p>Meerdere amendementen beoogden het kader voor betalingstermijnen te wijzigen. Sommige EP-leden steunden de strikte limiet van 30 dagen van de Commissie, met het argument dat elke flexibiliteit door grote ondernemingen zou worden misbruikt ten koste van het mkb. Anderen pleitten voor bredere uitzonderingen, waaronder termijnen van 90 dagen voor specifieke sectoren zoals bouw en landbouw.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-cash-remove" style="color: var(--color-red);"></span> Afstand van vergoedingen</div>
+    <p>Amendement 51 schrapte de formulering "zonder dat een aanmaning vereist is" voor de vaste vergoeding. In de aangenomen tekst is de vergoeding automatisch verschuldigd, maar wordt de schuldenaar niet verplicht te betalen zonder te zijn aangemand. Beperkingen werden toegevoegd voor het afzien van rechten wanneer de schuldenaar een overheidsinstantie of grote onderneming is.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-gavel" style="color: var(--color-green);"></span> Onafhankelijkheid handhaving (Amendement 65)</div>
+    <p>Handhavingsinstanties moeten onafhankelijk zijn van andere overheidsinstanties, ook van instanties die betrokken zijn bij aanbestedingsprocedures. Dit werd uitdrukkelijk toegevoegd om belangenconflicten te voorkomen, aangezien overheidsinstanties zelf vaak te laat betalen.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-scale-balance" style="color: var(--color-purple);"></span> Evenredigheid (Amendement 66)</div>
+    <p>Handhavingsinstanties nemen "evenredige" maatregelen (toegevoegd woord) om ervoor te zorgen dat de betalingstermijnen worden nageleefd. Dit was bedoeld om een al te agressieve handhaving te voorkomen die zakelijke relaties zou kunnen verstoren.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-account-group-outline" style="color: var(--color-amber);"></span> Transparantie (Amendement 67)</div>
+    <p>Handhavingsinstanties moeten geaggregeerde informatie openbaar beschikbaar stellen over het aantal klachten dat is ingediend tegen ondernemingen en overheidsinstanties wegens schending van artikel 3 (betalingstermijnen).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-briefcase-variant-outline" style="color: var(--color-blue);"></span> Overgangsperiode micro-ondernemingen</div>
+    <p>Micro-ondernemingen (minder dan 10 werknemers) krijgen als schuldenaar een extra overgangsperiode van 12 maanden, vanwege hun bijzondere kwetsbaarheid voor plotselinge regelgevingswijzigingen op het gebied van betalingspraktijken.</p>
+  </div>
+</section>
+
+<!-- Section 5: Aangenomen tekst EP -->
+<section class="section" id="adopted">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><span class="mdi mdi-vote"></span></div>
+    <h2 class="section__title">Aangenomen tekst EP</h2>
+  </div>
+  <p class="section__subtitle">T9-0299/2024, aangenomen op 23 april 2024. Stemming IMCO: 33 voor, 10 tegen, 2 onthoudingen.</p>
+
+  <div class="info-box info-box--green">
+    <h3>Waarover het Parlement overeenstemming bereikte</h3>
+    <p>Het Europees Parlement nam zijn standpunt in eerste lezing aan op 23 april 2024, met de belangrijkste aanpassingen van de rapporteur en meerdere commissieamendementen. De tekst handhaaft de standaardtermijn van 30 dagen, maar voorziet in aanzienlijke flexibiliteit voor B2B-relaties, sectorspecifieke accommodaties en sterkere handhavingswaarborgen. De tekst werd aangenomen met een comfortabele meerderheid (33-10-2 in commissie), hoewel de oppositie de zorgen van de industrie over contractuele vrijheid weerspiegelt.</p>
+  </div>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Betalingstermijnen (aangenomen)</div>
+      <div class="article-card__title">30 dagen standaard, 60 dagen B2B, 120 dagen detailhandel</div>
+      <div class="article-card__desc">Standaard maximum: 30 kalenderdagen. B2B-flexibiliteit: tot 60 dagen bij schriftelijke wederzijdse overeenstemming. Detailhandelssector: tot 120 dagen voor traaglopende of seizoensgebonden goederen.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Handhaving (aangenomen)</div>
+      <div class="article-card__title">Onafhankelijke instanties met openbare rapportage</div>
+      <div class="article-card__desc">Onafhankelijke handhavingsinstanties in elke lidstaat. Anonieme klachten toegestaan. Openbare rapportage van klachtengegevens. Versnelde titelprocedure teruggebracht van 90 naar 60 kalenderdagen. [Am.65, 66, 67, 80]</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Digitale instrumenten (aangenomen)</div>
+      <div class="article-card__title">Artikel 17: digitale handhaving</div>
+      <div class="article-card__desc">Lidstaten moeten digitale instrumenten gebruiken voor effectieve handhaving. Factuur- en kredietbeheerhulpmiddelen, inclusief factoring, en financieel geletterdheidsopleidingen moeten beschikbaar en toegankelijk zijn voor het mkb. [Am.80]</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Toepassingsgebied (aangenomen)</div>
+      <div class="article-card__title">Verzekering opgenomen, micro-ondernemingen beschermd</div>
+      <div class="article-card__desc">Betalingen uit verzekeringscontracten opgenomen (terugdraaiing van uitsluiting door Commissie). Micro-ondernemingen krijgen als schuldenaar een extra overgangsperiode van 12 maanden. Consignatiecontracten toegestaan op grond van contractvrijheid.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 6: Driekolommenvergelijking -->
+<section class="section" id="comparison">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-table-column"></span></div>
+    <h2 class="section__title">Driekolommenvergelijking</h2>
+  </div>
+  <p class="section__subtitle">Commissievoorstel versus aangenomen tekst EP versus huidige Richtlijn 2011/7/EU</p>
+
+  <div style="overflow-x: auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>Bepaling</th>
+        <th>Richtlijn 2011/7/EU (huidig)</th>
+        <th>COM(2023)533 (Commissie)</th>
+        <th>T9-0299/2024 (EP aangenomen)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Instrumenttype</strong></td>
+        <td class="dim-cell">Richtlijn (omzetting vereist)</td>
+        <td class="highlight-cell">Verordening (rechtstreekse werking)</td>
+        <td class="highlight-cell">Verordening (rechtstreekse werking)</td>
+      </tr>
+      <tr>
+        <td><strong>B2B-betalingstermijn</strong></td>
+        <td>60 dagen (tenzij anders overeengekomen)</td>
+        <td class="red-cell">30 dagen (geen flexibiliteit)</td>
+        <td class="green-cell">30 dagen standaard, 60 dagen indien overeengekomen</td>
+      </tr>
+      <tr>
+        <td><strong>G2B-betalingstermijn</strong></td>
+        <td>30 dagen (uitzonderlijk 60)</td>
+        <td>30 dagen</td>
+        <td>30 dagen</td>
+      </tr>
+      <tr>
+        <td><strong>Uitzondering detailhandel</strong></td>
+        <td class="dim-cell">Geen</td>
+        <td class="dim-cell">Geen</td>
+        <td class="green-cell">Tot 120 dagen (seizoensgebonden goederen)</td>
+      </tr>
+      <tr>
+        <td><strong>Vaste vergoeding</strong></td>
+        <td>Minimum EUR 40</td>
+        <td>EUR 50/100/150 (gelaagd)</td>
+        <td>EUR 50/100/150 (gelaagd)</td>
+      </tr>
+      <tr>
+        <td><strong>Vergoedingsdrempel</strong></td>
+        <td>Handmatig (schuldeiser moet vorderen)</td>
+        <td>Automatisch (geen aanmaning vereist)</td>
+        <td>Automatisch (aanmaningsbepaling afgezwakt)</td>
+      </tr>
+      <tr>
+        <td><strong>Handhaving</strong></td>
+        <td class="dim-cell">Geen specifiek orgaan vereist</td>
+        <td>Nationale instanties vereist</td>
+        <td class="green-cell">Onafhankelijke instanties vereist</td>
+      </tr>
+      <tr>
+        <td><strong>Versnelde executoriale titel</strong></td>
+        <td class="dim-cell">Niet gespecificeerd</td>
+        <td>90 kalenderdagen</td>
+        <td class="green-cell">60 kalenderdagen</td>
+      </tr>
+      <tr>
+        <td><strong>Openbare rapportage</strong></td>
+        <td class="dim-cell">Geen</td>
+        <td class="dim-cell">Beperkt</td>
+        <td class="green-cell">Aanbestedende diensten rapporteren jaarlijks</td>
+      </tr>
+      <tr>
+        <td><strong>Bescherming micro-ondernemingen</strong></td>
+        <td class="dim-cell">Geen</td>
+        <td class="dim-cell">Geen</td>
+        <td class="green-cell">Overgangsperiode van 12 maanden als schuldenaar</td>
+      </tr>
+      <tr>
+        <td><strong>Verzekeringsbetalingen</strong></td>
+        <td>Onduidelijk</td>
+        <td class="dim-cell">Uitgesloten</td>
+        <td class="green-cell">Opgenomen</td>
+      </tr>
+      <tr>
+        <td><strong>Digitale instrumenten</strong></td>
+        <td class="dim-cell">Niet vermeld</td>
+        <td class="dim-cell">Niet vermeld</td>
+        <td class="green-cell">Artikel 17: digitale handhaving + opleiding</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- Section 7: Standpunten belanghebbenden -->
+<section class="section" id="stakeholders">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><span class="mdi mdi-account-voice"></span></div>
+    <h2 class="section__title">Standpunten belanghebbenden</h2>
+  </div>
+  <p class="section__subtitle">De industrie, mkb-organisaties en beroepsverenigingen hebben duidelijke standpunten ingenomen</p>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--red">Tegenstander</span>
+      <span class="stakeholder-card__name">BusinessEurope, Eurochambres, EuroCommerce</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>In een <a href="https://www.eurochambres.eu/wp-content/uploads/2025/03/250313-Joint-statement-on-the-proposed-Late-Payment-Regulation.pdf" target="_blank" rel="noopener">gezamenlijke verklaring (maart 2025)</a> riepen deze drie grote ondernemingsfederaties de Commissie op om het voorstel <strong>volledig in te trekken</strong>. Hun bezwaren:</p>
+      <ul style="color: var(--color-secondary); margin-top: 0.5rem; padding-left: 1.5rem;">
+        <li>Strikte betalingstermijnen <strong>beperken de contractuele vrijheid</strong> in B2B-handelsbetrekkingen</li>
+        <li>De amendementen van het EP creëren, ondanks de extra flexibiliteit, een <strong>complex kader</strong> met categorieën en uitzonderingen die bedrijven in verwarring brengen</li>
+        <li>Risico op <strong>vermindering van het aantal leveranciers</strong>, waarbij het mkb waarschijnlijk de dupe wordt van rigidere eisen</li>
+        <li>Kan <strong>EUR 2 biljoen aan extra financiering</strong> vereisen en de rentelasten van ondernemingen met EUR 100 miljard verhogen</li>
+        <li>Kan handel aanmoedigen met <strong>niet-EU-partners</strong> die niet onder de Verordening vallen</li>
+        <li>Een meerderheid van de lidstaten is ook tegen (zie hun niet-paper van 7 juni 2024)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--amber">Bezorgd</span>
+      <span class="stakeholder-card__name">ICISA (International Credit Insurance and Surety Association)</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p><a href="https://icisa.org/news/update-on-late-payment-regulation-2/" target="_blank" rel="noopener">ICISA meldt</a> dat hoewel beperkte steun werd geuit voor strengere regelgeving, veel organisaties die ondernemingen vertegenwoordigen pleitten voor <strong>meer flexibiliteit en heroverweging</strong>. De versie van het Parlement verzachtte enkele voorstellen maar "handhaafde uiteindelijk de verzwakking van de contractuele vrijheid." Lidstaten uitten bezorgdheid over de wisselwerking met bestaande nationale regelingen.</p>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--blue">Analytisch</span>
+      <span class="stakeholder-card__name">AccountancyEurope</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>In hun <a href="https://accountancyeurope.eu/wp-content/uploads/2024/02/LPR-factsheet-2024.pdf?v1" target="_blank" rel="noopener">factsheet</a> geeft AccountancyEurope een evenwichtige analyse. De Verordening zal naar verwachting een grote impact hebben op het mkb: verbeterde liquiditeit, minder administratieve lasten bij het innen van betalingen en een gelijk speelveld. Ze merken echter op dat het mkb als schuldenaar ook moet zorgen dat het binnen 30 dagen kan betalen, wat aanzienlijke balansimplicaties heeft.</p>
+    </div>
+  </div>
+
+  <div class="stakeholder-card">
+    <div class="stakeholder-card__header">
+      <span class="pill pill--green">Adviserend</span>
+      <span class="stakeholder-card__name">EESC en Comité van de Regio's</span>
+    </div>
+    <div class="stakeholder-card__position">
+      <p>Het Europees Economisch en Sociaal Comité (CES3705/2023, 17 januari 2024) en het Comité van de Regio's (CDR4941/2023, 31 januari 2024) brachten beiden adviezen uit over het voorstel. Deze adviesorganen steunden over het algemeen de doelstelling om betalingsachterstand te bestrijden, maar uitten bezorgdheid over uitdagingen bij de uitvoering voor kleinere overheidsinstanties.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Section 8: Blokkade in de Raad -->
+<section class="section" id="council">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><span class="mdi mdi-block-helper"></span></div>
+    <h2 class="section__title">Blokkade in de Raad</h2>
+  </div>
+  <p class="section__subtitle">Een meerderheid van de lidstaten is tegen het voorstel</p>
+
+  <div class="info-box info-box--red">
+    <h3>Waarom de Raad het voorstel blokkeerde</h3>
+    <p>Nadat het Europees Parlement in april 2024 zijn standpunt in eerste lezing had aangenomen, ging het voorstel naar de Raad. Een meerderheid van de lidstaten heeft echter bezwaar geuit via een niet-paper van 7 juni 2024. Hun voornaamste bezwaren weerspiegelen die van de industrie:</p>
+    <ul style="color: var(--color-secondary); margin-top: 0.5rem; padding-left: 1.5rem;">
+      <li><strong>Verlies van contractuele vrijheid</strong> in B2B-relaties</li>
+      <li><strong>Wisselwerking met bestaande nationale regelingen</strong> waarmee veel lidstaten tevreden zijn</li>
+      <li><strong>Gebrek aan flexibiliteit</strong> ook in de door het EP gewijzigde versie</li>
+      <li><strong>Evenredigheidsbezwaren</strong> over de vervanging van een richtlijn door een verordening</li>
+    </ul>
+    <p style="margin-top: 0.75rem;">Er is geen algemene aanpak of compromistekst van het voorzitterschap gepubliceerd. Het dossier ligt effectief stil, en BusinessEurope, Eurochambres en EuroCommerce hebben de Commissie opgeroepen het voorstel volledig in te trekken.</p>
+  </div>
+</section>
+
+<!-- Section 9: Wetgevingskalender -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><span class="mdi mdi-timeline-clock-outline"></span></div>
+    <h2 class="section__title">Wetgevingskalender</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">12 september 2023</div>
+      <div class="timeline__text">Commissie publiceert COM(2023)533 als onderdeel van het mkb-ondersteuningspakket</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">2 oktober 2023</div>
+      <div class="timeline__text">Commissieverwijzing aangekondigd (IMCO als bevoegde commissie)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">14 november 2023</div>
+      <div class="timeline__text">Rapporteur Roza Thun und Hohenstein dient IMCO-ontwerpverslag in (PE756.002)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">15-18 december 2023</div>
+      <div class="timeline__text">405 amendementen ingediend door EP-leden (PE757.130, PE757.363)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">17 januari 2024</div>
+      <div class="timeline__text">EESC-advies (CES3705/2023)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">31 januari 2024</div>
+      <div class="timeline__text">Advies Comité van de Regio's (CDR4941/2023)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">20 maart 2024</div>
+      <div class="timeline__text">Stemming IMCO-commissie: 33 voor, 10 tegen, 2 onthoudingen. Verslag A9-0156/2024 ingediend.</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">23 april 2024</div>
+      <div class="timeline__text">EP-plenaire vergadering neemt standpunt in eerste lezing aan (T9-0299/2024)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">7 juni 2024</div>
+      <div class="timeline__text">Meerderheid lidstaten is tegen het voorstel (niet-paper Raad)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">8 augustus 2024</div>
+      <div class="timeline__text">Commissierespons op amendementen EP (SP(2024)394)</div>
+    </div>
+    <div class="timeline__item timeline__item--done">
+      <div class="timeline__date">3 oktober 2024</div>
+      <div class="timeline__text">Nieuwe rapporteur: Ivars Ijabs (Renew, Letland) vervangt Thun und Hohenstein na Europese verkiezingen</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">2025</div>
+      <div class="timeline__text">GEBLOKKEERD in de Raad. Geen algemene aanpak. Industrie pleit voor intrekking.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 10: Belangrijkste actoren -->
+<section class="section" id="actors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><span class="mdi mdi-account-multiple"></span></div>
+    <h2 class="section__title">Belangrijkste actoren</h2>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Rol</th><th>Naam</th><th>Fractie / Instelling</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Huidige rapporteur</strong></td><td>Ivars Ijabs</td><td>Renew, Letland (IMCO)</td></tr>
+      <tr><td><strong>Vorige rapporteur</strong></td><td>Roza Thun und Hohenstein</td><td>Renew, Polen (IMCO)</td></tr>
+      <tr><td><strong>Schaduwrapporteur (EVP)</strong></td><td>Regina Doherty</td><td>EVP, Ierland</td></tr>
+      <tr><td><strong>Schaduwrapporteur (S&D)</strong></td><td>Tsvetelina Penkova</td><td>S&D, Bulgarije</td></tr>
+      <tr><td><strong>Schaduwrapporteur (PfE)</strong></td><td>Jorge Martin Frias</td><td>PfE, Spanje</td></tr>
+      <tr><td><strong>Schaduwrapporteur (ECR)</strong></td><td>Reinis Poznjaks</td><td>ECR, Letland</td></tr>
+      <tr><td><strong>Schaduwrapporteur (Groenen)</strong></td><td>Reinier van Lanschot</td><td>Groenen/EVA, Nederland</td></tr>
+      <tr><td><strong>Oorspronkelijke Commissaris</strong></td><td>Thierry Breton</td><td>DG GROW</td></tr>
+      <tr><td><strong>Verantwoordelijk DG</strong></td><td>DG GROW</td><td>Interne Markt, Industrie, Ondernemerschap en mkb</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section 11: Officiële bronnen -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><span class="mdi mdi-link-variant"></span></div>
+    <h2 class="section__title">Officiële bronnen</h2>
+  </div>
+  <p class="section__subtitle">Alle documenten waarnaar in deze analyse wordt verwezen</p>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-bank" style="color: var(--color-blue);"></span> Commissie</div>
+    <p><a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2023/0533/COM_COM(2023)0533_EN.pdf" target="_blank" rel="noopener">COM(2023)533: Commissievoorstel (PDF)</a></p>
+    <p><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A52023SC0314" target="_blank" rel="noopener">SWD(2023)314: Effectbeoordeling</a></p>
+    <p><a href="https://single-market-economy.ec.europa.eu/smes/challenges-and-resilience/late-payment_en" target="_blank" rel="noopener">DG GROW: Pagina betalingsachterstand</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-account-group" style="color: var(--color-purple);"></span> Europees Parlement</div>
+    <p><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0323(COD)" target="_blank" rel="noopener">OEIL-procedurepagina: 2023/0323(COD)</a></p>
+    <p><a href="https://www.europarl.europa.eu/legislative-train/theme-a-europe-fit-for-the-digital-age/file-late-payments-directive-revision" target="_blank" rel="noopener">Wetgevingstrein</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-PR-756002_EN.html" target="_blank" rel="noopener">PE756.002: IMCO-ontwerpverslag (rapporteur)</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-AM-757130_EN.html" target="_blank" rel="noopener">PE757.130: Amendementen 26-223</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/IMCO-AM-757363_EN.html" target="_blank" rel="noopener">PE757.363: Amendementen 224-405</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/A-9-2024-0156_EN.html" target="_blank" rel="noopener">A9-0156/2024: IMCO-commissieverslag</a></p>
+    <p><a href="https://www.europarl.europa.eu/doceo/document/TA-9-2024-0299_EN.html" target="_blank" rel="noopener">T9-0299/2024: Door het Parlement aangenomen tekst (1e lezing)</a></p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><span class="mdi mdi-briefcase-variant" style="color: var(--color-amber);"></span> Documenten belanghebbenden</div>
+    <p><a href="https://www.businesseurope.eu/publications/joint-statement-on-the-proposed-late-payment-regulation/" target="_blank" rel="noopener">BusinessEurope: gezamenlijke verklaring</a></p>
+    <p><a href="https://www.eurochambres.eu/wp-content/uploads/2025/03/250313-Joint-statement-on-the-proposed-Late-Payment-Regulation.pdf" target="_blank" rel="noopener">Eurochambres: gezamenlijke verklaring (maart 2025, PDF)</a></p>
+    <p><a href="https://icisa.org/news/update-on-late-payment-regulation-2/" target="_blank" rel="noopener">ICISA: update over de verordening betalingsachterstand</a></p>
+    <p><a href="https://accountancyeurope.eu/wp-content/uploads/2024/02/LPR-factsheet-2024.pdf?v1" target="_blank" rel="noopener">AccountancyEurope: factsheet (PDF)</a></p>
+  </div>
+</section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>
+    Diepgaande analyse door <a href="https://brubru.beresol.eu">Brubru</a>, de AI-assistent voor EU-beleid van <a href="https://beresol.eu">Beresol</a>.
+    <br>Gegevensbronnen: Europese Commissie, Europees Parlement (OEIL, Doceo), BusinessEurope, Eurochambres, ICISA, AccountancyEurope.
+    <br><a href="https://beresol.eu/public-affairs">Beresol Public Affairs</a> | <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+</footer>
+
+<!-- Back to top -->
+<a href="#top" class="back-to-top" id="backToTop"><span class="mdi mdi-chevron-up"></span></a>
+
+<script>
+  window.addEventListener('scroll', function() {
+    var btn = document.getElementById('backToTop');
+    if (window.scrollY > 400) { btn.classList.add('visible'); }
+    else { btn.classList.remove('visible'); }
+  });
+  document.getElementById('backToTop').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
