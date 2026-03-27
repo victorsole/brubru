@@ -94,6 +94,10 @@ Also on 17 March 2026: Joint statement by Presidents von der Leyen and Costa on 
 
 The EUCO summit (19-20 March 2026) is expected to take stock of progress on defence readiness and potentially invite Member States to update the threat assessment. The draft conclusions also highlight the threat posed by Russian ex-combatants to the EU's internal security.
 
+## SAFE Funding Approvals (March 2026)
+
+On 26 March 2026, DG DEFIS announced SAFE approvals unlocking defence funding for Czechia and France -- the first concrete disbursements under the SAFE instrument. This marks a milestone: EU-borrowed funds reaching Member States for defence investment.
+
 ## Sources
 
 - COM(2025) 120: SAFE Regulation proposal
@@ -104,7 +108,9 @@ The EUCO summit (19-20 March 2026) is expected to take stock of progress on defe
 
 ## Related Brubru Guides
 
-- `eu_common_military_list` -- Export controls framework (Common Position 2008/944/CFSP)
-- `eu_defence_procurement` -- Joint procurement instruments (EDIP, EDF, SAFE)
-- `mff_2028_2034` -- Defence spending in the 2028-2034 budget
-- `eu_trade_policy` -- Dual-use export controls
+- **eu_defence_procurement** -- Joint procurement instruments (EDIP, EDF) and AGILE Programme (EUR 115M rapid defence innovation for SMEs/start-ups, COM(2026) 135)
+- **eu_common_military_list** -- Export controls framework (Common Position 2008/944/CFSP)
+- **eu_space_programme** -- EU Space Programme (Galileo, Copernicus, IRIS2), same DG DEFIS and Commissioner Kubilius
+- **mff_2028_2034** -- Defence spending in the 2028-2034 budget, next-generation EDIP/AGILE funding
+- **eu_trade_policy** -- Dual-use export controls
+- **iran_strait_hormuz_eu_response** -- Geopolitical context driving EU defence rearmament

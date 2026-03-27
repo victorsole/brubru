@@ -8,7 +8,7 @@ Rapporteur for both: Bernd Lange (S&D, Germany), INTA chair
 Council position: Adopted 21 November 2025
 EP status: INTA suspended work on 21 January 2026 "until the US decides to re-engage on a path of cooperation rather than confrontation"
 EP vote (19 March 2026): MEPs backed the lowering of tariffs on US agricultural and industrial products. Vote signals willingness to maintain trade dialogue despite broader tensions.
-EP vote: Expected late March/early April 2026 but outcome uncertain and "bitterly contentious"
+EP plenary vote (26 March 2026): MEPs adopted 1st reading position on Bernd Lange reports A10-0069/2026 and A10-0070/2026. Includes suspension clause (immediate tariff suspension if US imposes new tariffs) and sunrise clause (new tariffs only effective when US respects commitments). Mandate for trilogue negotiations with Council.
 Context: Iran war and Trump tariff threats creating pressure on both sides
 Trump tariffs: Baseline 15% on EU exports; 50% on steel, aluminium, copper; Section 232 investigations on pharma, semiconductors, lumber
 EU response: Proposed zero-for-zero tariffs on all industrial goods; paused rebalancing measures on steel/aluminium for 90 days
@@ -80,7 +80,9 @@ Both are rapporteur Bernd Lange (S&D, Germany), who is also INTA chair. The Coun
 | 21 January 2026 | INTA suspends work on both files (Trump/Greenland tariff threats) |
 | 10 February 2026 | EP position adopted (formal, but INTA work suspended) |
 | 5 March 2026 | Council decision |
-| March 2026 | EP vote timing uncertain; "bitterly contentious" |
+| 19 March 2026 | EP backed lowering tariffs on US agricultural and industrial products |
+| 25 March 2026 | EP plenary debate on EU-US trade deal (Brussels mini-plenary) |
+| 26 March 2026 | EP adopted 1st reading position: A10-0069/2026 (tariff adjustment) and A10-0070/2026 (duty non-application). Suspension clause + sunrise clause added by INTA. Mandate for trilogue with Council |
 
 ## Key Legal References
 

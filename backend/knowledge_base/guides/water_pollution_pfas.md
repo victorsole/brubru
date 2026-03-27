@@ -7,7 +7,7 @@
 - Surface water EQS: PFOS inland 0.65 ng/L; coastal 0.13 ng/L; biota 9.1 microg/kg
 - Commission proposal (October 2022): EQS for 24 PFAS at 4.4 ng/L (as PFOA equivalents) in surface/groundwater
 - Universal PFAS restriction: under ECHA assessment, results expected end of 2026
-- EP plenary vote on updated water pollution rules: 26 March 2026 (PFAS, pharmaceuticals, microplastics, antimicrobial resistance)
+- EP plenary vote: 26 March 2026 -- ADOPTED at 2nd reading. Rapporteur: Javi Lopez (S&D), report A10-0063/2026. Procedure: 2022/0344(COD). Amends WFD 2000/60/EC, Groundwater Directive 2006/118/EC, EQS Directive 2008/105/EC.
 - Zero Pollution Action Plan mid-term review (January 2026): water pollution NOT on track for 2030 targets
 - PFAS health costs: EUR 39.5 billion/year (2024); EUR 440 billion cumulative by 2050 under business-as-usual
 - Water treatment costs: EUR 1 trillion+ without action by 2050
@@ -46,7 +46,7 @@ Parliament is expected to greenlight updated rules on groundwater and surface wa
 - Industrial substances and pesticides
 - Microplastics
 - Antimicrobial resistance indicators
-Parliament and Council concluded an agreement; Council adopted its first reading position. Once formally endorsed by Parliament, the new legislation will be published in the Official Journal.
+Parliament formally endorsed the Council position at 2nd reading on 26 March 2026 (report A10-0063/2026, rapporteur Javi Lopez). The new legislation will now be published in the Official Journal and enter into force.
 
 ## Scale of PFAS Contamination
 EEA data (2018-2022):

@@ -3,15 +3,19 @@ Send Daily Brief Email to All Subscribers
 
 Usage:
     python3.12 scripts/send_daily_brief.py              # Preview (dry run)
+    python3.12 scripts/send_daily_brief.py --test        # Send ONLY to hello@beresol.eu (TEST MODE)
     python3.12 scripts/send_daily_brief.py --send        # Send to all subscribers
     python3.12 scripts/send_daily_brief.py --send --extra-file path/to/emails.txt
     python3.12 scripts/send_daily_brief.py --list        # List all subscriber emails
+
+IMPORTANT: Always run --test first and verify the email before running --send.
 """
 
 import argparse
 import os
 import re
 import sys
+import urllib.request
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -53,6 +57,80 @@ def _load_extra_recipients(file_path: str) -> list:
         real.append(e)
 
     return real
+
+
+def verify_headline_urls(db) -> bool:
+    """Verify all headline URLs return HTTP 200. Blocks send if any fail."""
+    from models.daily_brief import DailyBrief
+    from datetime import date
+
+    today = date.today().isoformat()
+    items = (
+        db.query(DailyBrief)
+        .filter(DailyBrief.brief_date == today)
+        .order_by(DailyBrief.priority.asc())
+        .limit(10)
+        .all()
+    )
+
+    if not items:
+        print("  [WARN] No headlines found for today")
+        return False
+
+    print(f"\n  Verifying {len(items)} headline URLs...\n")
+    all_ok = True
+    for item in items:
+        try:
+            req = urllib.request.Request(item.url, method='HEAD', headers={
+                'User-Agent': 'Mozilla/5.0 (Brubru URL checker)'
+            })
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                status = resp.status
+        except Exception as e:
+            status = getattr(e, 'code', 0) or 0
+
+        if 200 <= status < 400:
+            print(f"  [OK]   {status} {item.url}")
+        else:
+            print(f"  [FAIL] {status} {item.url}")
+            print(f"         Headline: {item.headline}")
+            all_ok = False
+
+    if not all_ok:
+        print("\n  [ERROR] Some URLs failed verification. Fix them before sending.")
+    else:
+        print("\n  [OK] All URLs verified.")
+    return all_ok
+
+
+def send_test(db, brubru_news=None):
+    """Send the daily brief ONLY to hello@beresol.eu for testing."""
+    from services.daily_brief_email import _fetch_headlines, _build_brief_email_html
+    from services.email_service import EmailService
+
+    headlines, brief_date = _fetch_headlines(db)
+    if not headlines:
+        print("  [WARN] No headlines found for today")
+        return
+
+    test_email = "hello@beresol.eu"
+    html = _build_brief_email_html(
+        headlines, brief_date, test_email,
+        is_welcome=False, is_registered_user=True,
+        brubru_news=brubru_news
+    )
+
+    from datetime import date
+    formatted = date.fromisoformat(brief_date).strftime("%d %B %Y")
+    subject = f"[TEST] Brubru Daily EU Brief -- {formatted}"
+
+    service = EmailService()
+    success = service.send(to=test_email, subject=subject, html_body=html)
+    if success:
+        print(f"\n  [OK] Test email sent to {test_email}")
+        print(f"  Check your inbox, then run --send to deliver to all subscribers.")
+    else:
+        print(f"\n  [ERROR] Failed to send test email to {test_email}")
 
 
 def list_subscribers(db):
@@ -110,9 +188,18 @@ def preview(db, extra_recipients=None):
     print(f"  Run with --send to deliver\n")
 
 
-def send(db, brubru_news=None, extra_recipients=None):
-    """Send the daily brief to all subscribers."""
+def send(db, brubru_news=None, extra_recipients=None, skip_url_check=False):
+    """Send the daily brief to all subscribers. Verifies URLs first."""
     from services.daily_brief_email import send_daily_brief_batch
+
+    # GUARDRAIL: Verify all URLs before sending to real subscribers
+    if not skip_url_check:
+        urls_ok = verify_headline_urls(db)
+        if not urls_ok:
+            print("\n  [BLOCKED] Daily brief send blocked due to URL verification failures.")
+            print("  Fix the URLs in the database, then retry.")
+            print("  To skip this check (NOT recommended): --send --skip-url-check")
+            return
 
     result = send_daily_brief_batch(db, brubru_news=brubru_news, extra_recipients=extra_recipients)
     print(f"\n  Daily Brief Send Results:")
@@ -130,7 +217,13 @@ def send(db, brubru_news=None, extra_recipients=None):
 
 def main():
     parser = argparse.ArgumentParser(description="Send daily brief emails")
+    parser.add_argument("--test", action="store_true",
+                        help="Send ONLY to hello@beresol.eu (always do this first)")
     parser.add_argument("--send", action="store_true", help="Send to all subscribers")
+    parser.add_argument("--verify-urls", action="store_true",
+                        help="Only verify headline URLs, do not send")
+    parser.add_argument("--skip-url-check", action="store_true",
+                        help="Skip URL verification before --send (NOT recommended)")
     parser.add_argument("--list", action="store_true", help="List all subscriber emails")
     parser.add_argument("--news", nargs="+", metavar="ITEM",
                         help="Brubru product news items to include in the email")
@@ -140,8 +233,15 @@ def main():
                         help="Additional recipient email addresses")
     args = parser.parse_args()
 
+    # Permanent extras: individually approved recipients who should always receive the brief
+    PERMANENT_EXTRAS = [
+        'silvia.gambino@europarl.europa.eu',
+        'raquel.correadomenech@europarl.europa.eu',
+    ]
+
     # Collect extra recipients
-    extra = list(args.extra or [])
+    extra = list(PERMANENT_EXTRAS)
+    extra.extend(args.extra or [])
     if args.extra_file:
         extra.extend(_load_extra_recipients(args.extra_file))
     extra = extra if extra else None
@@ -150,8 +250,14 @@ def main():
     try:
         if args.list:
             list_subscribers(db)
+        elif args.verify_urls:
+            verify_headline_urls(db)
+        elif args.test:
+            verify_headline_urls(db)
+            send_test(db, brubru_news=args.news)
         elif args.send:
-            send(db, brubru_news=args.news, extra_recipients=extra)
+            send(db, brubru_news=args.news, extra_recipients=extra,
+                 skip_url_check=args.skip_url_check)
         else:
             preview(db, extra_recipients=extra)
     finally:

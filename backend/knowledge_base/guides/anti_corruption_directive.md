@@ -10,7 +10,7 @@
 - Replaces: Council Framework Decision 2003/568/JHA + Convention on corruption involving EU officials
 - Amends: Directive (EU) 2017/1371 (PIF Directive)
 - Legal basis: Articles 83(1) and 83(2) TFEU
-- EP plenary 2nd reading: 25 March 2026 (Brussels)
+- EP plenary 2nd reading: 25-26 March 2026 (Brussels) -- ADOPTED. First EU-wide criminal anti-corruption framework.
 
 ## Overview
 
@@ -51,7 +51,9 @@ The directive establishes minimum rules on:
 | 3 May 2023 | Commission proposal COM(2023)234 |
 | 2023-2024 | LIBE committee examination, 1st reading |
 | 2025 | Council general approach, trilogue negotiations |
-| 25 March 2026 | EP plenary 2nd reading vote (Brussels) |
+| 25 March 2026 | EP plenary debate on corruption directive (Brussels mini-plenary). Rapporteur: Raquel Garcia Hermida-Van Der Walle. Report: A9-0048/2024 |
+| 25-26 March 2026 | EP plenary adopted at 2nd reading (Brussels mini-plenary). First EU-wide criminal anti-corruption law. |
+| Q2-Q3 2026 | Expected publication in Official Journal and entry into force |
 
 ## Related Guides
 - `eu_migration_asylum_pact.md` -- DG HOME legislative portfolio

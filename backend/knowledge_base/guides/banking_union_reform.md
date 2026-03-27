@@ -6,7 +6,7 @@
 - SRM: Regulation (EU) No 806/2014, CELEX 32014R0806, procedure 2023/0111(COD)
 - BRRD: Directive 2014/59/EU, CELEX 32014L0059, procedure 2023/0112(COD)
 - DGSD: Directive 2014/49/EU, CELEX 32014L0049, procedure 2023/0113(COD)
-- Stage: EP ECON committee recommendations for 2nd reading (19 March 2026)
+- Stage: ADOPTED -- EP plenary 2nd reading (26 March 2026). Awaiting OJ publication.
 - ECON rapporteur (SRM): Irene Tinagli (S&D, Italy)
 - ECON rapporteur (BRRD): Ludek Niedermayer (EPP, Czechia)
 - ECON rapporteur (DGSD): Kira Marie Peter-Hansen (Greens/EFA, Denmark)
@@ -68,8 +68,8 @@ Key stakeholders:
 | February 2024 | EP 1st reading (ECON) |
 | 2024-2025 | Trilogue negotiations |
 | 19 March 2026 | ECON 2nd reading recommendations adopted |
-| Q2 2026 | Expected EP plenary vote on 2nd reading |
-| H2 2026 | Expected entry into force |
+| 25-26 March 2026 | EP mini-plenary adopted all three files at 2nd reading (Brussels): DGSD2 (A10-0065), BRRD3 (A10-0066), SRMR3 (A10-0067). Landmark final adoption of banking crisis management toolbox |
+| Q2-Q3 2026 | Publication in Official Journal and entry into force |
 
 ## Related Brubru Guides
 - `eu_budget_emu_law` -- EMU governance and fiscal framework

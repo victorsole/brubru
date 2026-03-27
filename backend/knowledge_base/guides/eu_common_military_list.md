@@ -150,5 +150,6 @@ The list ensures that this increased defence trade remains subject to consistent
 ## Related Brubru Guides
 
 - **safe_rearm_europe** -- SAFE instrument and Readiness 2030 package, the broader EU defence financing context within which export-controlled items are procured
+- **eu_defence_procurement** -- Joint procurement instruments (EDIP, EDF, AGILE) that increase the volume of controlled military goods traded within and outside the EU
+- **eu_space_programme** -- EU Space Programme under same DG DEFIS, defence-space dual-use technologies
 - **eu_trade_policy** -- EU trade policy framework, including trade defence instruments and strategic export controls
-- **eu_defence_procurement** -- Joint procurement instruments (EDIP, EDF) that increase the volume of controlled military goods traded within and outside the EU

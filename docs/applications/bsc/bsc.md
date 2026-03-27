@@ -65,3 +65,25 @@ The EU public affairs market is valued at EUR 3-5 billion, encompassing lobbying
 Description of how the project fits the BSC AI Factory environment. Applicants must explain what the startup brings to the space, how it plans to use and occupy the Incubation Space, and which AI Factory services, infrastructure, or expertise are relevant for the development of the solution.
 
 Beresol brings to the BSC AI Factory a production-ready, revenue-stage AI product operating in the high-value intersection of natural language processing, information retrieval, and public policy. Our presence enriches the ecosystem with a concrete use case of applied AI in the govtech/regtech domain, an area underrepresented among typical AI startups. We plan to occupy the Barcelona incubation space as our primary development hub during the programme, using it for daily product development, user testing, and investor preparation. The BSC AI Factory's technical infrastructure and expertise are directly relevant to three of our key engineering challenges: first, scaling our hybrid retrieval pipeline (BM25 + semantic vector search across 25+ database models) where access to HPC resources and guidance on efficient embedding models would significantly accelerate performance; second, fine-tuning domain-specific language models on EU legislative corpora, where BSC's expertise in large-scale model training and its compute infrastructure could help us move from API-dependent models to proprietary ones, reducing costs and increasing differentiation; and third, optimising our multi-provider AI orchestration and prediction engine (11 forecasting services), where BSC's research in machine learning could help us refine our legislative outcome prediction algorithms with more sophisticated approaches. The networking dimension is equally valuable: access to investors, industrial partners, and the broader Barcelona AI ecosystem would support our seed fundraising timeline (targeting month 12-18) and help establish partnerships for our planned expansion beyond Brussels.
+
+---
+
+## BSC AI Factory Timeline
+
+| Date | Event |
+|------|-------|
+| 12 Mar 2026 | Applied to Call 2 as Beresol |
+| 24 Mar 2026 | Waitlisted for Call 2. Victor emailed Arnau Cuatrecasas asking about Call 3 (September), citing Catalan EU acquis translation project needing BSC compute for AINA/Salamandra 7B fine-tuning. Also noted family constraint (small child, can't be 3 days/week in Barcelona). |
+| 25 Mar 2026 | Arnau confirmed Call 3 application is possible (September 2026). Connected Victor with Santi Trujillo (Key Account Manager, Startups) to discuss AI Factory services in the meantime. |
+
+## Contacts
+
+- **Arnau Cuatrecasas Bergnes de las Casas** -- AI Factory Space Manager, BSC
+- **Santi Trujillo** -- Key Account Manager, Startups, BSC
+
+## Next Steps
+
+1. Reply to Arnau + Santi with update on Catalan translation progress (GDPR + AI Act done, 28,500 to go)
+2. Schedule meeting with Santi to discuss AI Factory services (compute for fine-tuning, incubation)
+3. Apply to Call 3 in September 2026
+4. By September: have 10+ flagship regulations translated, fine-tuning dataset prepared, clear compute needs documented

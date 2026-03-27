@@ -31,7 +31,36 @@ Natura 2000 is the EU's network of protected natural areas, covering approximate
 - Natura 2000 implementation is monitored via the State of Nature reporting (Article 17 Habitats Directive reports)
 - DG ENV oversees Natura 2000 policy, with CINEA managing LIFE programme funding for site management
 
+## Climate Adaptation Guidance for Natura 2000 (25 March 2026)
+
+On 25 March 2026, DG ENV published "Guidance on adapting Natura 2000 sites to climate change" (C(2026) 2031). This guidance clarifies how the Birds and Habitats Directives apply when designating and managing Natura 2000 sites in the context of climate change.
+
+### Key Topics
+- How climate change affects Natura 2000 habitats and species
+- Adapting site management plans to shifting climate conditions
+- Fire management within Natura 2000 sites (linked to wildfire risk management communication adopted same day)
+- Handling species range shifts: facilitating movement to other sites, translocation where necessary
+- Designating additional sites to compensate for climate-driven habitat loss
+- Complementary measures outside Natura 2000 boundaries
+
+### Wildfire-Specific Guidance
+- Areas and ecosystems that did not normally burn are becoming vulnerable due to prolonged drought
+- Absence of historical fire means large fuel build-up, leading to particularly severe fires when they occur
+- Forest management measures taken for conservation objectives in Natura 2000 sites can also boost fire resilience
+- Wildfire risk management in Natura 2000 must balance fire prevention with conservation objectives
+
+### Practical Implications
+- Member States must consider climate projections when setting conservation objectives
+- Environmental impact assessments should account for climate-driven changes in habitat suitability
+- Where climate change threatens a significant proportion of a habitat or species population in a site, complementary measures in other areas should be considered
+- Available in all 24 EU official languages
+
 ## Related Legislation
 - Council Directive 92/43/EEC (Habitats Directive), CELEX: 31992L0043
 - Directive 2009/147/EC (Birds Directive), CELEX: 32009L0147
 - Regulation (EU) 2024/1991 (Nature Restoration Regulation), CELEX: 32024R1991
+- Guidance C(2026) 2031: Adapting Natura 2000 sites to climate change (25 March 2026)
+
+## Related Brubru Guides
+- **wildfire_risk_management** -- EU wildfire prevention, UCPM, RescEU, EFFIS
+- **european_climate_law** -- EU climate targets and adaptation framework

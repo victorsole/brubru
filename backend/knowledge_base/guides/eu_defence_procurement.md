@@ -16,6 +16,8 @@
 - Fragmentation: 27 national defence markets, 178 weapon system types (vs. 30 in the US)
 - European Defence Agency (EDA): Capability planning and joint procurement coordination
 - Predecessor instruments: EDIRPA (Regulation (EU) 2023/2418), ASAP (Regulation (EU) 2023/1525)
+- AGILE Programme: COM(2026) 135, procedure 2026/0078(COD), EUR 115M (2027), Article 173 TFEU
+- AGILE: targets 20-30 projects, up to 100% funding, 4-month time-to-grant, 1-3 year deployment
 - Related guides: safe_rearm_europe, eu_common_military_list, mff_2028_2034
 
 ## Overview
@@ -181,15 +183,55 @@ The SEDE subcommittee published a joint draft report (PE784.420, 17 March 2026) 
 
 This proposal addresses a critical capability gap: the EU currently lacks harmonised rules for moving military equipment across Member State borders, causing delays of days or weeks for cross-border military logistics. The framework aims to standardise permits, customs procedures, and infrastructure requirements for military mobility -- complementing NATO's military mobility initiative.
 
+## AGILE -- Programme for Agile and Rapid Defence Innovation (EUR 115 million, 2027)
+
+Adopted by the College of Commissioners on 25 March 2026. On 26 March 2026, DG DEFIS published EUR 115 million AGILE call details. The AGILE Programme targets "New Defence" players -- SMEs, start-ups, and tech innovators from both defence and civilian sectors -- to accelerate the deployment of disruptive technologies to European armed forces.
+
+| Feature | Detail |
+|---------|--------|
+| Full name | Programme for agile and rapid defence innovation (AGILE) |
+| Proposal | COM(2026) 135, 25 March 2026 |
+| Procedure | 2026/0078(COD), ordinary legislative procedure |
+| Legal basis | Article 173 TFEU (competitiveness of EU defence industry) |
+| Budget | EUR 115 million (1 January 2027 -- 31 December 2027) |
+| Projects | 20-30 projects funded |
+| Funding rate | Up to 100% of eligible costs |
+| Time-to-grant | 4 months (unprecedented speed) |
+| Deployment timeline | Technologies reach defence forces in 1-3 years |
+| Retroactive clause | Companies can claim expenses from 3 months before call closing |
+| Commissioner | Andrius Kubilius (Defence and Space) + Henna Virkkunen (EVP, Tech Sovereignty) |
+| Lead DG | DG DEFIS |
+| Next MFF | Expected to continue with larger resources (2028-2035) |
+
+### Work Programme
+Two main types of activities:
+1. **Mission-driven development**: Disruptive defence products and technologies aligned with Member States' most pressing needs
+2. **Market delivery**: Helping defence solutions reach actual markets and armed forces
+
+### Key Innovation Areas
+- Artificial Intelligence (AI)
+- Quantum technologies
+- Robotics
+- Cyber defence
+- Space technologies
+- Autonomous systems
+- Drones and counter-drone systems
+
+### Context
+Russia's war against Ukraine demonstrated that modern warfare depends on short innovation cycles -- developing, testing, and deploying new technologies in weeks or months. Commissioner Kubilius: "Since we are able to use only EUR 115 million for 2027, we can expect that only 20-30 European SMEs will be able to enjoy the benefits. If we shall manage to assist those companies to become a new European 'Helsing SE' or 'Frankenburg Technologies', that would be a great success."
+
+### Relationship to Other Instruments
+- **EDF** (EUR 7.95B): Upstream R&D. AGILE bridges the gap between EDF research outputs and rapid deployment.
+- **EDIP** (EUR 1.5B): Joint procurement of mature systems. AGILE targets earlier-stage disruptive innovation.
+- **SAFE** (EUR 150B loans): National defence investment. AGILE complements by funding the innovation that SAFE-procured systems will incorporate.
+
 ## Commission College Meeting: Wednesday 25 March 2026
 
-The College of Commissioners meets Wednesday 25 March 2026 with a defence-heavy agenda:
+The College adopted three defence/preparedness items on 25 March 2026:
 
-1. **Qualitative Military Edge** communication: sets out the EU's strategy for maintaining technological superiority in defence, covering AI, quantum, hypersonics, autonomous systems, and space. Led by Commissioner Virkkunen.
-2. **AGILE** (Agency for Defence Innovation): proposed new EU agency to accelerate defence innovation, bridge the gap between civilian R&D and military applications, and coordinate dual-use technology development. Led by Commissioner Minzatu.
-3. **Wildfire Risk Management**: Commission communication on EU-wide wildfire prevention and response coordination.
-
-This College meeting is a milestone for the EU's defence innovation agenda, building on the EDIS (2024) and EDIP (2025) frameworks.
+1. **Qualitative Military Edge** communication: EU strategy for maintaining technological superiority (AI, quantum, hypersonics, autonomous systems, space). Led by EVP Virkkunen.
+2. **AGILE Programme**: EUR 115M for rapid defence innovation (see section above). Led by Commissioner Kubilius/EVP Virkkunen.
+3. **Wildfire Risk Management**: Commission communication on EU-wide wildfire prevention and response coordination. Led by Commissioner Lahbib. See guide: **wildfire_risk_management**.
 
 ## Sources
 
@@ -202,6 +244,8 @@ This College meeting is a milestone for the EU's defence innovation agenda, buil
 
 ## Related Brubru Guides
 
-- **safe_rearm_europe** -- Full details on the SAFE instrument, Readiness 2030 package, and EUR 800 billion defence mobilisation plan
+- **safe_rearm_europe** -- Full details on the SAFE instrument, Readiness 2030 package, EUR 800 billion defence mobilisation plan, and national escape clause
 - **eu_common_military_list** -- The harmonised list of military items subject to export controls, defining what counts as "military equipment" in the procurement context
-- **mff_2028_2034** -- Next Multiannual Financial Framework negotiations, where the successor to EDIP and the future of EU defence funding will be decided
+- **eu_space_programme** -- EU Space Programme (Galileo, Copernicus, IRIS2), same DG DEFIS and Commissioner Kubilius, defence-space synergies
+- **mff_2028_2034** -- Next Multiannual Financial Framework negotiations, where the successor to EDIP/AGILE and the future of EU defence funding will be decided
+- **iran_strait_hormuz_eu_response** -- Geopolitical context driving EU defence rearmament and the urgency behind SAFE/AGILE

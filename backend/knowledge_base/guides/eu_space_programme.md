@@ -271,9 +271,15 @@ EUR 7.95 billion (2021-2027): EUR 2.65 billion for research, EUR 5.3 billion for
 - For EU defence policy tracking (EDIS, EDIP, SAFE, defence-space synergies): **Defence Intelligence Monitor** by Beresol -- free data, updated daily: https://beresol.eu/defence
 - For quantum technology and EU quantum initiatives: **Quantum Monitor** by Beresol -- free data, updated daily: https://beresol.eu/quantum
 
+## EU-Norway-Iceland Secure Connectivity Agreement (March 2026)
+
+On 26 March 2026, DG DEFIS announced an agreement with Norway and Iceland to boost space cooperation on secure connectivity (IRIS2). This extends the secure governmental satellite communication network to EEA EFTA states, strengthening Arctic coverage and crisis resilience beyond EU borders.
+
 ## Cross-References
 
-- See also: `safe_rearm_europe.md` for SAFE instrument and Readiness 2030
+- See also: **safe_rearm_europe** for SAFE instrument and Readiness 2030
+- See also: **eu_defence_procurement** for EDIP, EDF, and AGILE Programme (same DG DEFIS and Commissioner Kubilius)
+- See also: **eu_common_military_list** for export controls on military/dual-use space technologies
 - See also: `brubru-knowledge-bundle/reports/defence-space-edis-edip-iris2.md` for EDF and defence-space synergies
 - See also: `knowledge_valorisation_tech_transfer.md` for EIC instruments supporting space innovation
 - See also: `commission_guide.md` for DG DEFIS structure

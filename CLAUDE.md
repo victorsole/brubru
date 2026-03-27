@@ -382,6 +382,14 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 
 **Full reference:** See `memory/deployment.md`. Production deploy: `npm run build:prerender`. 9 public routes pre-rendered with Puppeteer. `main.tsx` uses conditional hydration. Add new public routes to `ROUTES` array in `frontend/scripts/prerender.mjs`. AI crawler rules in `frontend/public/robots.txt`.
 
+### Daily Brief Send Protocol (March 2026)
+
+**CRITICAL.** On 25 March 2026, daily brief was sent to 70 subscribers with fabricated URLs (404 errors). Two compounding failures: (1) used `--send --extra` which sends to ALL subscribers not just test address, (2) constructed URLs from patterns instead of verifying they exist. **Mandatory protocol:** (1) `--verify-urls` to check all headline URLs return HTTP 200, (2) `--test` to send ONLY to hello@beresol.eu, (3) wait for Victor's OK, (4) only then `--send`. Code guardrails added: `--send` now blocks if any URL fails verification. File: `scripts/send_daily_brief.py`.
+
+### Catalan Legal Translation Glossary (March 2026)
+
+Softcatala NMT does not distinguish legal context. Key corrections applied via `GLOSSARY_CORRECTIONS` in `scripts/catalan_translate.py`: "Mentre que:" -> "Atenent que:" (EU recitals "Whereas"), "d'implementacio" -> "d'execucio" (Implementing), "ha aconseguit" -> "ha adoptat" (has adopted). "Having regard to" -> "Tenint en compte" is already correct. Confirmed by Catalan legal expert (25 March 2026). After any glossary update, patch existing translated HTML files too.
+
 ---
 
 ## Strategic North Star: WAPU (Weekly Active Paid Users)
@@ -393,3 +401,17 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 **Targets:** 10 (Phase A, months 1-3), 25 (Phase B, months 4-6), 50 (Phase C, months 7-12).
 
 **Full details:** See `memory/strategy.md` and `docs/business_plan/strategy.html`.
+
+---
+
+## Catalan EU Legislation Translation Pipeline (March 2026)
+
+**Primary engine:** Softcatala NMT (`eng-cat-2024-09-24`, CTranslate2, local, free). **Fallback:** Claude Sonnet (`--engine sonnet`). Post-processing glossary corrects known errors (d'execució, ha adoptat, Comitè dels Estats membres). When in doubt on terminology, check Spanish EUR-Lex and assess the Catalan equivalent.
+
+**Source:** 28,513 Formex V4 XML files in `docs/LEG_2025-11/`. **Output:** `frontend/public/legislacio-ue-catala/[celex]/index.html`.
+
+**CLI:** `cd backend && python3.12 scripts/catalan_translate.py --translate path/to.xml --celex 32016R0679`. Add `--engine sonnet` for paid high-quality.
+
+**Key files:** `backend/scripts/catalan_translate.py` (parser + translation + HTML generator). Spec: `docs/catalan-implementation.md`. Skill: `/catalan`. Memory: `memory/catalan_translation.md`.
+
+**Brubru Catalan standard:** D'execució (not d'implementació), Ha adoptat (not ha aconseguit), Tenint en compte, Dictamen, Paràgraf, Comitè dels Estats membres. Always regenerate `frontend/public/guides/index.html` after guide changes.

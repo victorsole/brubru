@@ -28,6 +28,9 @@ Thumbs.db
 *.swp
 *.swo
 uploads/
+
+# Catalan EU legislation translations (28K+ HTML files, uploaded to SiteGround via FileZilla)
+data/legislacio-ue-catala/
 chroma_db/
 # Google Cloud credentials
 backend/services/*.json

@@ -1,14 +1,62 @@
 # EP Plenary Sessions: March 2026
 
 ## QUICK FACTS
-Session 1: 9-12 March 2026, Strasbourg (CONCLUDED)
-Session 2: 25-26 March 2026, Brussels (UPCOMING)
+LATEST SESSION: 25-26 March 2026, Brussels mini-plenary (NOT Strasbourg). CONCLUDED.
+Previous session: 9-12 March 2026, Strasbourg (CONCLUDED)
+Next session: 27-30 April 2026, Strasbourg
 Type: Plenary sessions of the European Parliament (10th legislature)
-Session 1 key votes: Housing Crisis, Copyright and GenAI, ECB VP, Package Travel Directive
-Session 2 key votes: Anti-Corruption Directive (2nd reading), Global Gateway report, UWWTD oral question
-Notable: Energy Package presentation (9 Mar), EU-Australia trade deal signed (24 Mar)
 
-## Monday 9 March: Debates
+VOTES ADOPTED 25-26 MARCH 2026 (Brussels):
+- Banking Union reform: DGSD2 (A10-0065), BRRD3 (A10-0066), SRMR3 (A10-0067) -- 2nd reading ADOPTED. Landmark bank crisis management toolbox.
+- Anti-Corruption Directive -- 2nd reading ADOPTED. First EU-wide criminal anti-corruption law.
+- EU-US trade deal: tariff adjustment (A10-0069, Bernd Lange) + duty non-application (A10-0070) -- 1st reading position adopted. Suspension + sunrise clauses.
+- Water pollution / PFAS: surface and groundwater pollutants (A10-0063, Javi Lopez) -- 2nd reading ADOPTED.
+- AI Act amendments: nudification ban + high-risk delay -- 1st reading position adopted.
+- Return Regulation: mandate for trilogue negotiations adopted.
+- EGF Austria (KTM, A10-0060) and EGF Belgium (Casa, A10-0061) -- adopted.
+- EU-China tariff rate quotas (A10-0026, Decerle) -- adopted.
+- Immunity waivers: Nikos Pappas, Grzegorz Braun.
+
+DEBATES 25 MARCH (15:00-23:00): Energy security (Council/Commission statements), European Council 19 March conclusions, Banking Union joint debate, Anti-Corruption, Iran death penalty threats, Ban on conversion practices ECI.
+DEBATES 26 MARCH (09:00-10:50): EU-US trade deal joint debate, Global Gateway (A10-0045/2026, Ridel/Bentele), UWWTD and pharma supply (oral question).
+
+## EP Plenary: 25-26 March 2026 (Brussels) -- FULL AGENDA
+
+### Wednesday 25 March 2026
+
+#### Debates (15:00-23:00)
+- **Energy security, independence and supply** -- Council and Commission statements [2026/2653(RSP)]
+- **European Council conclusions (19 March 2026)** -- Council and Commission statements [2026/2623(RSP)]
+- **European Citizens' Initiative: Ban on conversion practices** [2026/2539(RSP)]
+- **Joint debate: Deposit protection and early intervention measures** (2nd reading)
+  - SRM Regulation reform (A10-0067/2026, Tinagli)
+  - BRRD revision (A10-0066/2026, Niedermayer)
+  - DGSD revision (A10-0065/2026, Peter-Hansen)
+- **Anti-Corruption Directive** (2nd reading) -- 2023/0135(COD), LIBE
+- **Iran death penalty threats** -- Commission statement [2026/2664(RSP)]
+
+### Thursday 26 March 2026
+
+#### Debates (09:00-10:50)
+- **EU-US Trade Deal** (A10-0069 + A10-0070, Bernd Lange)
+- **Global Gateway** (A10-0045/2026, Ridel/Bentele)
+- **UWWTD and pharma supply** -- oral question O-000013/2026
+
+#### Votes (11:00-13:00) -- ALL ADOPTED
+- Banking Union: DGSD2, BRRD3, SRMR3 (2nd reading ADOPTED)
+- Anti-Corruption Directive (2nd reading ADOPTED)
+- EU-US trade deal (1st reading position ADOPTED)
+- Water pollution / PFAS (2nd reading ADOPTED, A10-0063, Javi Lopez)
+- AI Act amendments: nudification ban (1st reading ADOPTED)
+- Return Regulation (mandate for trilogue ADOPTED)
+- EGF Austria (KTM) + Belgium (Casa)
+- EU-China tariff quotas (A10-0026, Decerle)
+
+---
+
+## SESSION 1: 9-12 March 2026 (Strasbourg) -- CONCLUDED
+
+### Monday 9 March: Debates
 
 - Framework Agreement on EP-Commission relations (A10-0031/2026, AFCO, rapporteur Sven Simon)
 - Better Law-Making report 2023-2024 (A10-0020/2026, JURI, rapporteur Jörgen Warborn)
@@ -183,40 +231,15 @@ The EP adopted urgency resolutions on human rights violations in:
 ### Consent-Based Rape Legislation
 Joint FEMM-LIBE report A10-0047/2026 on the importance of consent-based rape legislation in the EU (rapporteurs: Scheuring-Wielgus, Incir). See `gender_equality_strategy` guide.
 
-## EP Plenary: 25-26 March 2026 (Brussels)
-
-### Tuesday 25 March 2026
-
-#### Key Vote
-- **Anti-Corruption Directive** (2nd reading) -- 2023/0135(COD), LIBE committee
-  - Replaces Framework Decision 2003/568/JHA and the Convention on corruption involving EU officials
-  - Amends Directive (EU) 2017/1371 (PIF Directive)
-  - Full guide: `anti_corruption_directive.md`
-
-- One-minute speeches (Rule 179)
-
-### Thursday 26 March 2026
-
-#### Debates (09:00-10:50)
-- **Global Gateway -- past impacts and future orientation** (A10-0045/2026)
-  - INI report by Chloe Ridel (S&D) and Hildegard Bentele (EPP)
-  - Procedure: 2025/2073(INI), AFET + DEVE committees
-  - Full guide: `global_gateway_strategy.md`
-
-- **Implementation of the UWWTD and risks to security of supply of medicines**
-  - Oral question O-000013/2026 by Schenk, Liese, Sokol (EPP) to Commission
-  - Procedure: 2026/2652(RSP)
-  - Full guide: `eu_water_legislation.md`
-
-#### Votes (11:00-13:00)
-- Votes followed by explanations of votes
-
 ## Related Brubru Guides
 
+- `banking_union_reform` -- Banking Union CMDI package (DGSD2, BRRD3, SRM -- 2nd reading votes)
+- `anti_corruption_directive` -- Anti-Corruption Directive (2nd reading vote)
+- `eu_us_trade_deal_2026` -- EU-US trade deal (Bernd Lange debate and vote 26 March)
 - `package_travel_directive` -- Package Travel Directive revision (adopted 12 March 2026)
 - `eurodac_asylum_migration` -- Migration and asylum (Iran conflict context)
 - `gender_equality_strategy` -- Gender equality and consent-based rape legislation
-- `anti_corruption_directive` -- Anti-Corruption Directive (2nd reading vote 25 March)
-- `global_gateway_strategy` -- Global Gateway INI report (debate 26 March)
 - `eu_water_legislation` -- UWWTD oral question (debate 26 March)
 - `eu_australia_trade_agreement` -- EU-Australia trade deal signed 24 March
+- `safe_rearm_europe` -- Defence context (European Council conclusions debate)
+- `iran_strait_hormuz_eu_response` -- Iran death penalty statement context

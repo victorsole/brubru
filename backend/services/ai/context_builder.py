@@ -997,6 +997,10 @@ class ContextBuilder:
         # guide matched. This catches cases like "what is the timeline of the INI
         # on trade and economic security?" where the trade guide matches but has
         # no data about that specific procedure.
+        # Tertiary trigger: guides matched but ONLY via content-search fallback
+        # (no keyword trigger hits), meaning the matches are low-confidence and
+        # likely irrelevant. Also fire when the query contains current-event
+        # signals (decision, announced, ban, new rule) that suggest breaking news.
         eu_institutional_results = []
         if self.tavily_client and self.enable_web_search:
             procedure_intent_phrases = [
@@ -1012,9 +1016,28 @@ class ContextBuilder:
             # question is unanswered. Check if any result was a direct ref match.
             no_procedure_data = not procedure_details
 
+            # Check if all matched guides are content-fallback only (no trigger hits)
+            has_trigger_match = any(
+                item.get('trigger_matched', False)
+                for item in internal_knowledge
+                if item.get('type') == 'guide'
+            )
+            only_content_fallback = bool(internal_knowledge) and not has_trigger_match
+
+            # Current-event signals: queries about recent decisions, announcements,
+            # bans, new rules -- these are likely about breaking news not in guides
+            current_event_phrases = [
+                'decision to', 'decided to', 'announced', 'just announced',
+                'new rule', 'new ban', 'ban on', 'banned', 'prevent',
+                'launched', 'just launched', 'unveiled', 'proposed today',
+                'yesterday', 'this week', 'this morning', 'today',
+            ]
+            has_current_event_signal = any(p in query_lower for p in current_event_phrases)
+
             should_search = (
                 not internal_knowledge  # primary: no guides matched at all
                 or (has_procedure_intent and no_procedure_data)  # secondary: procedure question unanswered
+                or (only_content_fallback and has_current_event_signal)  # tertiary: low-confidence matches + current event
             )
 
             if should_search:
@@ -2563,7 +2586,8 @@ class ContextBuilder:
                                 'title': guide['title'],
                                 'content': guide_content[:8000],
                                 'full_length': len(guide_content),
-                                'snippet': guide.get('snippet', '')
+                                'snippet': guide.get('snippet', ''),
+                                'trigger_matched': guide.get('trigger_matched', False)
                             })
 
                     logger.debug(f"Found {len(matching_guides)} guide matches for query: {query}")

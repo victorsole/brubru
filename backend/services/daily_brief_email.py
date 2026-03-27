@@ -247,7 +247,7 @@ def _feature_line(is_welcome: bool) -> str:
     # Update these numbers as the knowledge base grows
     features = [
         "500+ legislative files",
-        "69 policy knowledge guides",
+        "99 policy knowledge guides",
         "6 EU institutional calendars",
     ]
     if is_welcome:
