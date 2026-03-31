@@ -113,6 +113,10 @@ DORA establishes uniform requirements for ICT risk management in the financial s
 - ICT third-party risk management
 - Critical Third-Party Provider (CTPP) oversight framework
 
+### DORA Implementing Technical Standards (ITS) Update (March 2026)
+
+**Regulation (EU) 2026/722** (CELEX: 32026R0722) -- Commission Implementing Regulation of 26 March 2026 amending the implementing technical standards laid down in Implementing Regulation (EU) 2024/3172 as regards the implementation and use of templates for ICT-related incident reporting under DORA. This updates the incident reporting templates that financial entities must use when reporting major ICT-related incidents to their competent authorities.
+
 ### CTPP Designation
 
 The ESAs (through the Joint Committee) designate CTPPs based on:

@@ -390,6 +390,14 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 
 Softcatala NMT does not distinguish legal context. Key corrections applied via `GLOSSARY_CORRECTIONS` in `scripts/catalan_translate.py`: "Mentre que:" -> "Atenent que:" (EU recitals "Whereas"), "d'implementacio" -> "d'execucio" (Implementing), "ha aconseguit" -> "ha adoptat" (has adopted). "Having regard to" -> "Tenint en compte" is already correct. Confirmed by Catalan legal expert (25 March 2026). After any glossary update, patch existing translated HTML files too.
 
+### macOS Tahoe iCloud File Eviction (March 2026)
+
+If `~/Documents` is synced to iCloud with "Optimise Mac Storage" enabled, macOS Tahoe (26.x) can evict git pack files and working tree files to iCloud, marking them `compressed,dataless`. Any process trying to read them gets `Need authenticator` (errno 81). `com.apple.provenance` xattr is a red herring -- the real cause is `dataless`. **Fix:** Disable iCloud optimisation for the GitHub folder, or move it outside iCloud-synced directories. To recover a broken repo: `rm -rf .git && git init && git remote add origin <url> && git fetch origin && git reset origin/main`, then `rm -f` and `git checkout origin/main --` for any locked working tree files.
+
+### EUR-Lex Cellar API for Document Fetch (March 2026)
+
+EUR-Lex WAF (`eur-lex.europa.eu`) blocks all automated requests (returns HTTP 202 / 0 bytes or WAF cookie challenge). **Bypass:** Use `publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml, text/html` and `Accept-Language: eng` for document content (follows redirects through Cellar UUID). Returns OJ-format XHTML. Also works with `Accept: application/rdf+xml` for metadata. **OJ discovery:** RSS feed at `eur-lex.europa.eu/EN/display-feed/OJ/L/rss.xml` works from non-sandboxed environments but may be WAF-blocked from Claude Code. Fallback: SPARQL at `publications.europa.eu/webapi/rdf/sparql` (may have indexing delay for same-day OJ). CLI: `python3.12 scripts/catalan_translate.py --cellar 32026R0722`.
+
 ---
 
 ## Strategic North Star: WAPU (Weekly Active Paid Users)

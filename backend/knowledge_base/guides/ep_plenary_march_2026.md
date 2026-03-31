@@ -12,6 +12,7 @@ VOTES ADOPTED 25-26 MARCH 2026 (Brussels):
 - EU-US trade deal: tariff adjustment (A10-0069, Bernd Lange) + duty non-application (A10-0070) -- 1st reading position adopted. Suspension + sunrise clauses.
 - Water pollution / PFAS: surface and groundwater pollutants (A10-0063, Javi Lopez) -- 2nd reading ADOPTED.
 - AI Act amendments: nudification ban + high-risk delay -- 1st reading position adopted.
+- Global Gateway Strategy assessment (A10-0045/2026, Ridel/Bentele) -- AFET/DEVE own-initiative report adopted. Recommends governance restructuring and demand-driven approach.
 - Return Regulation: mandate for trilogue negotiations adopted.
 - EGF Austria (KTM, A10-0060) and EGF Belgium (Casa, A10-0061) -- adopted.
 - EU-China tariff rate quotas (A10-0026, Decerle) -- adopted.
@@ -48,6 +49,7 @@ DEBATES 26 MARCH (09:00-10:50): EU-US trade deal joint debate, Global Gateway (A
 - EU-US trade deal (1st reading position ADOPTED)
 - Water pollution / PFAS (2nd reading ADOPTED, A10-0063, Javi Lopez)
 - AI Act amendments: nudification ban (1st reading ADOPTED)
+- Global Gateway Strategy assessment (A10-0045/2026, Ridel/Bentele, AFET/DEVE own-initiative report ADOPTED)
 - Return Regulation (mandate for trilogue ADOPTED)
 - EGF Austria (KTM) + Belgium (Casa)
 - EU-China tariff quotas (A10-0026, Decerle)

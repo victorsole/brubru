@@ -58,6 +58,26 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#dc2626',
     icon: 'mdi-clock-alert-outline',
   },
+  {
+    title: 'EU Pharmaceutical Laws: The Complete Framework',
+    shortTitle: 'EU Pharma Laws',
+    comReference: 'COM(2023) 192 + COM(2023) 193',
+    procedureRef: '2023/0131(COD)',
+    basePath: '/pharma-laws',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#d97706',
+    icon: 'mdi-pill',
+  },
+  {
+    title: 'Digital Networks Act: Rewiring Europe\'s Telecoms',
+    shortTitle: 'Digital Networks Act',
+    comReference: 'COM(2026) 16',
+    procedureRef: '2026/0013(COD)',
+    basePath: '/digital-networks-act',
+    languages: ['en', 'fr', 'es', 'it', 'nl', 'ca'],
+    color: '#9b51e0',
+    icon: 'mdi-access-point-network',
+  },
 ];
 
 /**

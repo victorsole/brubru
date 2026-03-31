@@ -16,6 +16,7 @@
 - Fragmentation: 27 national defence markets, 178 weapon system types (vs. 30 in the US)
 - European Defence Agency (EDA): Capability planning and joint procurement coordination
 - Predecessor instruments: EDIRPA (Regulation (EU) 2023/2418), ASAP (Regulation (EU) 2023/1525)
+- EUNAVFOR MED IRINI: EU military operation in the Mediterranean (established March 2020), enforces UN arms embargo on Libya, trains Libyan Coast Guard, disrupts human smuggling. New Force Commander appointed March 2026 (Decision (CFSP) 2026/768, CELEX 32026D0768).
 - AGILE Programme: COM(2026) 135, procedure 2026/0078(COD), EUR 115M (2027), Article 173 TFEU
 - AGILE: targets 20-30 projects, up to 100% funding, 4-month time-to-grant, 1-3 year deployment
 - Related guides: safe_rearm_europe, eu_common_military_list, mff_2028_2034
@@ -232,6 +233,17 @@ The College adopted three defence/preparedness items on 25 March 2026:
 1. **Qualitative Military Edge** communication: EU strategy for maintaining technological superiority (AI, quantum, hypersonics, autonomous systems, space). Led by EVP Virkkunen.
 2. **AGILE Programme**: EUR 115M for rapid defence innovation (see section above). Led by Commissioner Kubilius/EVP Virkkunen.
 3. **Wildfire Risk Management**: Commission communication on EU-wide wildfire prevention and response coordination. Led by Commissioner Lahbib. See guide: **wildfire_risk_management**.
+
+## EDIP Work Programme Adopted (31 March 2026)
+
+On 31 March 2026, the Commission adopted the first **EDIP work programme** worth EUR 1.5 billion, with first calls for proposals published on the EU Funding & Tenders portal. The programme covers:
+
+- **Production of key defence components**: Scaling EU defence manufacturing capacity
+- **Ukraine cooperation**: Support to rebuild Ukraine's defence industry through joint procurement and technology sharing
+- **Common procurement**: Co-financing joint procurement of defence equipment by consortia of 3+ Member States
+- **Defence start-ups**: Dedicated funding stream for innovative defence SMEs and start-ups
+
+This work programme operationalises the EDIP Regulation (EU) 2025/2643 adopted in 2025. Combined with the AGILE programme (EUR 115M for rapid innovation, calls opened 26 March 2026), the EU has now deployed EUR 1.615 billion in defence industrial grants for 2025-2027.
 
 ## Sources
 

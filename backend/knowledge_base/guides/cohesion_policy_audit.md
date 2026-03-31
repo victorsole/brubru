@@ -244,6 +244,16 @@ Arachne is a data-mining and enrichment tool that cross-references EU-funded pro
 - **OLAF Regulation (EU, Euratom) 883/2013**: Anti-fraud investigations
 - **European Court of Auditors Annual Reports**: Benchmark for audit findings
 
+## Cohesion Policy Mid-Term Review (March 2026)
+
+DG REGIO published the results of the mid-term review of cohesion policy programmes (2021-2027) on 27 March 2026. The mid-term review assesses the performance of all cohesion policy programmes and may lead to:
+- Reallocation of funds between priority axes within programmes
+- Transfer of resources between funds (e.g., from ERDF to ESF+ or vice versa)
+- Adjustments to programme targets and milestones
+- Updated performance frameworks
+
+EVP Raffaele Fitto discussed the future cohesion policy framework during a visit to Austria (27 March 2026), signalling the Commission's early thinking on post-2027 cohesion policy design.
+
 ## Cross-References
 
 - See also: `eu_budget_emu_law.md` for OLAF/EPPO and discharge procedure

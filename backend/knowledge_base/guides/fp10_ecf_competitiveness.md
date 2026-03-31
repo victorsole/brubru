@@ -13,6 +13,7 @@ ECF impact assessment: SWD(2025)555, SWD(2025)556
 ECF envelope: Part of wider EUR 451 billion allocation under MFF Heading 2
 ECF structure: Policy windows (AI/digital, space, clean tech, biotech, defence, health)
 ECF consolidates: 14 existing funding instruments into one framework
+STEP platform: Strategic Technologies for Europe Platform, turns 2 in March 2026, EUR 29 billion mobilised to boost EU competitiveness. STEP was the precursor to the ECF, established under the current MFF to channel investment into critical technologies (AI, semiconductors, biotech, clean tech, space, defence). STEP breakdown: EUR 14 billion from Commission-managed programmes (Innovation Fund, Digital Europe, EDF, EU4Health, Horizon Europe) + EUR 15 billion from cohesion policy funds deployed by 20 Member States. STEP is described as a "key pilot project on access to funding" proving the importance of simplification and strategic focus, as ECF negotiations continue.
 FP10-ECF link: FP10 autonomous but "tightly connected" to ECF, especially via Pillar II (Competitiveness and Society)
 Synergy mechanism: Competitiveness Seal -- high-quality ECF projects eligible for national/regional co-funding
 EP BUDG rapporteurs: Siegfried Muresan (EPP) and Carla Tavares (S&D) -- call for 10% budget increase vs proposal

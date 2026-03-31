@@ -5,6 +5,11 @@
   RewriteEngine On
   RewriteBase /
 
+  # Exclude static content directories from SPA routing
+  RewriteRule ^legislacio-ue-catala/ - [L]
+  RewriteRule ^late-payments/ - [L]
+  RewriteRule ^guides/ - [L]
+
   # If the requested file or directory doesn't exist, serve index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

@@ -103,6 +103,34 @@ Treaty basis: Article 194 TFEU (energy policy, shared competence).
 | ITRE Committee (EP) | Lead EP committee |
 | TTE Council | Council configuration |
 
+## JRC Global Energy and Climate Outlook (GECO 2025) -- Key Findings (March 2026)
+
+The JRC published its Global Energy and Climate Outlook (GECO) 2025 report on 27 March 2026, providing the evidence base for clean energy investment priorities.
+
+### Technology Competitiveness Assessment
+
+The JRC finds that **4 out of 15 clean energy technologies** needed for 1.5C are already cost-competitive with fossil fuel alternatives:
+
+| Maturity | Technologies | Status |
+|----------|-------------|--------|
+| **Competitive** (80%+ deployment alignment) | Solar, wind, electric vehicles, biofuels | Cost-competitive, sufficient market support |
+| **Advancing** (50-80%) | Nuclear, power storage, low-emission heavy transport | Progressing but need continued support |
+| **Emerging** (<50%) | Synthetic fuels, CO2 capture, electric industrial heat | Require targeted innovation + investment |
+
+### Key Data Points
+- Solar and wind are now **among the lowest-cost generation options** in many markets
+- Global EV fleet expected to increase **more than forty-fold by 2050**
+- Synthetic fuel mandates (ReFuelEU Aviation) are fostering CO2 capture and hydrogen supply chains
+- Electric trucks require **sustained policy support** for deployment
+
+### Trade Fragmentation Warning
+The JRC warns that trade fragmentation may **reduce emissions but does so inefficiently**, causing larger GDP losses than emissions reductions. This has direct implications for EU-China clean tech trade tensions and the EU's Carbon Border Adjustment Mechanism (CBAM).
+
+### Policy Implication
+The full portfolio of clean energy technologies -- from mature renewables to emerging negative emissions technologies -- must be deployed simultaneously to achieve 1.5C alignment. This supports the Clean Energy Investment Strategy's approach of investing across the entire technology spectrum (Action 3: Technology De-Risking).
+
+Source: JRC, "Strengthening clean energy competitiveness is key to keeping the 1.5C goal within reach", 27 March 2026.
+
 ## Connection to Other Energy Package Guides
 
 - **SMR Strategy** (COM(2026) 117): Action 3b of this strategy directly funds SMR/AMR de-risking via EUR 200 million InvestEU top-up. See `smr_strategy_nuclear.md`

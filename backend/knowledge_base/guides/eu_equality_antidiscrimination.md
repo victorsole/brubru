@@ -16,6 +16,11 @@
 - Responsible Commissioner: Michael McGrath (Democracy, Justice, Rule of Law)
 - Key CJEU cases: C-507/18 (NH v Associazione Avvocatura LGBTI), C-356/21 (J.K. v TP S.A.)
 
+## Recent Developments (March 2026)
+
+### European Citizens' Initiative: Ban on Conversion Practices
+**Decision (EU) 2026/770** (CELEX: 32026D0770) -- Commission Implementing Decision of 25 March 2026 registering a European Citizens' Initiative to ban conversion practices across the EU. Conversion practices (sometimes called "conversion therapy") are interventions aimed at changing, suppressing or diverting a person's sexual orientation, gender identity or gender expression. The registration means the organisers can start collecting signatures (1 million needed from at least 7 Member States within 12 months). The EP debated this topic on 25 March 2026 in the Brussels mini-plenary.
+
 ## Overview
 
 EU equality law is a layered framework combining primary law (treaties and Charter), secondary legislation (directives), and soft-law strategies. The core principle is that all persons are equal before the law and must be protected from discrimination on grounds of sex, racial or ethnic origin, religion or belief, disability, age, and sexual orientation. The grounds are not treated uniformly: some grounds enjoy broader protection (race, sex) while others (religion, disability, age, sexual orientation) are currently limited to the employment sphere only.

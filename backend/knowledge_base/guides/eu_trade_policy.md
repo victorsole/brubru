@@ -61,6 +61,24 @@ On 6 March 2026, Commissioner Sefcovic and Canada's Minister for International T
 | International Procurement Instrument (IPI) | Regulation (EU) 2022/1031, CELEX 32022R1031 | Reciprocal procurement access |
 | CBAM | Regulation (EU) 2023/956, CELEX 32023R0956 | Carbon border adjustment |
 
+## EU Designs Regulation Codification (March 2026)
+
+**Regulation (EU) 2026/715** (CELEX: 32026R0715) -- Regulation of the European Parliament and of the Council of 11 March 2026 on European Union designs (codification). This codification consolidates the existing EU design protection framework into a single, streamlined legal text. It replaces Council Regulation (EC) No 6/2002 on Community designs, incorporating all subsequent amendments. The regulation covers registered and unregistered Community designs, administered by EUIPO (EU Intellectual Property Office) in Alicante, Spain. This is a technical codification (no policy changes), but it simplifies the legal reference for practitioners.
+
+## Recent Trade Defence Actions (March 2026)
+
+### Anti-Dumping: Chinese Polyamide Yarns
+- **Regulation (EU) 2026/734** (CELEX: 32026R0734)
+- Commission Implementing Regulation of 26 March 2026 imposing a **provisional anti-dumping duty** on imports of yarns of polyamide originating in the People's Republic of China
+- Sector: Textiles/industrial yarns
+- Context: Part of broader EU trade defence actions against Chinese industrial overcapacity
+
+### Safeguard Investigation: Grain-Oriented Electrical Steel (GOES)
+- **Initiated 27 March 2026** by DG TRADE
+- Product: Grain-oriented flat-rolled products of silicon-electrical steel (GOES)
+- Used in: Power transformers, distribution transformers -- critical for energy grid infrastructure
+- Context: Follows global overcapacity concerns; GOES is essential for EU energy transition (grid expansion under the Grids Package)
+
 ## Related Legislation
 
 | Legislation | CELEX | Relationship |
@@ -90,14 +108,39 @@ On 6 March 2026, Commissioner Sefcovic and Canada's Minister for International T
 | Event | 14th WTO Ministerial Conference (MC14) |
 | Location | Yaoundé, Cameroon |
 | Dates | 26-29 March 2026 |
+| Outcome | **Ended with no deal** (29 March 2026) |
 | EP resolution | B10-0155/2026 (voted 12 March 2026 in Strasbourg plenary) |
 | Key issues | WTO reform, dispute settlement mechanism restoration, digital trade moratorium, fisheries subsidies implementation, food security, industrial policy vs trade rules |
 | EU position | Supports multilateral rules-based system, WTO reform including dispute settlement, digital trade moratorium extension |
 | Context | First MC since MC13 (Abu Dhabi, Feb 2024); heightened US-China trade tensions; EU tariff/trade war context |
 
+### MC14 Outcome (30 March 2026)
+
+MC14 closed early on 30 March 2026 with a narrow set of decisions but failed to resolve the major dossiers. US tactics and India's blocking positions deepened the WTO rift.
+
+**What was achieved:**
+- **Investment Facilitation for Development (IFD) Agreement**: 165 of 166 WTO members supported incorporation into the WTO rulebook (dedicated Ministerial session on 28 March). The 129 parties issued a Joint Ministerial Declaration.
+- **E-commerce moratorium**: 66 WTO members (representing ~70% of global trade) adopted interim arrangements to extend the moratorium on customs duties for electronic transmissions.
+- **EU-CPTPP Joint Ministerial Statement**: EU and CPTPP members reaffirmed support for the rules-based multilateral trading system.
+- **MPIA**: DG TRADE confirmed continued support for the Multi-Party Interim Appeal Arbitration Arrangement.
+
+**What failed:**
+- No agreement on dispute settlement reform (Appellate Body restoration)
+- No progress on fisheries subsidies implementation review
+- No agricultural market access deal
+- WTO reform work programme: Draft Yaounde Ministerial Statement on WTO Reform (prepared by facilitator Ambassador Petter Olberg of Norway) was not adopted
+
+### EU-CPTPP Joint Ministerial Statement at MC14
+
+The EU and the members of the Comprehensive and Progressive Agreement for Trans-Pacific Partnership (CPTPP) issued a joint ministerial statement at MC14, reaffirming support for the rules-based multilateral trading system. This signals alignment between the EU and CPTPP members (Australia, Canada, Japan, New Zealand, Singapore, Vietnam, among others) on WTO reform.
+
+### MPIA (Multi-Party Interim Appeal Arbitration Arrangement)
+
+DG TRADE issued a statement on supporting the rules-based multilateral trading system through the MPIA -- the interim mechanism that allows participating WTO members to appeal dispute settlement rulings while the Appellate Body remains blocked. The EU is a founding participant.
+
 ### MC14 Background
 
-The 14th WTO Ministerial Conference takes place in Yaoundé, Cameroon from 26-29 March 2026 -- the first MC held in sub-Saharan Africa. Key agenda items include:
+The 14th WTO Ministerial Conference took place in Yaoundé, Cameroon from 26-29 March 2026 -- the first MC held in sub-Saharan Africa. Key agenda items included:
 
 - **Dispute settlement reform**: Restoring the Appellate Body (blocked since Dec 2019)
 - **Digital trade**: Whether to extend the e-commerce moratorium on customs duties

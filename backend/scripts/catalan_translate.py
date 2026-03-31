@@ -221,11 +221,97 @@ def parse_formex(xml_path: str) -> dict:
     return result
 
 
+def _parse_consolidated_html(soup, html_path: str, celex: str = '') -> dict:
+    """
+    Parse consolidated EUR-Lex HTML format (e.g. from 'Consolidated TEXT' pages).
+    These use classes: title-doc-first, title-article-norm, stitle-article-norm,
+    norm, eli-subdivision, eli-title, etc. Consolidated texts typically have no
+    preamble (no visas or recitals).
+    """
+    result = {
+        'source_file': html_path,
+        'metadata': {'celex': celex, 'language': 'EN'},
+        'title': '',
+        'preamble_init': '',
+        'visas': [],
+        'recitals_init': '',
+        'recitals': [],
+        'preamble_final': '',
+        'chapters': [],
+        'articles': [],
+        'final': '',
+    }
+
+    # Title: <p class="title-doc-first"> elements
+    title_els = soup.select('p.title-doc-first')
+    if title_els:
+        result['title'] = ' '.join(el.get_text(strip=True) for el in title_els)
+
+    # Articles: <div class="eli-subdivision" id="art_N">
+    art_divs = soup.select('div.eli-subdivision[id^="art_"]')
+    for art_div in art_divs:
+        # Article number from title
+        art_title_el = art_div.select_one('p.title-article-norm')
+        art_text = art_title_el.get_text(strip=True) if art_title_el else ''
+        art_num_match = re.search(r'Article\s+(\d+[a-z]?)', art_text)
+        art_num = art_num_match.group(1) if art_num_match else art_text
+
+        # Subtitle (e.g. "Aim and scope")
+        subtitle_el = art_div.select_one('div.eli-title, p.stitle-article-norm')
+        subtitle = subtitle_el.get_text(strip=True) if subtitle_el else ''
+        full_title = f'{art_text} - {subtitle}' if subtitle else art_text
+
+        art_data = {
+            'identifier': f'ART_{art_num}',
+            'title': full_title,
+            'paragraphs': [],
+        }
+
+        # Paragraphs: <div class="norm"> elements inside the article
+        norm_divs = art_div.select('div.norm')
+        raw_texts = []
+        for norm in norm_divs:
+            # Clean amendment markers (consolidated text artefacts)
+            text = norm.get_text(strip=True)
+            # Remove consolidation markers like ►M3 ◄ ►C1 ◄ ▼B ▼M3 etc.
+            text = re.sub(r'[►▼][A-Z]\d*\s*', '', text)
+            text = re.sub(r'◄\s*', '', text)
+            if text:
+                raw_texts.append(text)
+
+        # Merge standalone point labels like "(a)", "(1)" with next text
+        merged = []
+        i = 0
+        while i < len(raw_texts):
+            text = raw_texts[i]
+            if re.match(r'^\([a-z]+\)$', text) or re.match(r'^\([ivxlcdm]+\)$', text) or re.match(r'^\(\d+\)$', text):
+                if i + 1 < len(raw_texts):
+                    merged.append(f'{text} {raw_texts[i + 1]}')
+                    i += 2
+                    continue
+            merged.append(text)
+            i += 1
+        art_data['paragraphs'] = merged
+
+        if art_data['title'] or art_data['paragraphs']:
+            result['articles'].append(art_data)
+
+    # Final/signature block
+    for p in soup.find_all('p'):
+        text = p.get_text(strip=True)
+        if text and text.startswith('Done at'):
+            result['final'] = text
+            break
+
+    return result
+
+
 def parse_oj_html(html_path: str, celex: str = '') -> dict:
     """
     Parse an OJ-format HTML file (from EUR-Lex or Cellar XHTML) and extract
     the same structure as parse_formex(). This enables translating legislation
     fetched from the Cellar API when Formex XML is not available.
+    Also supports consolidated EUR-Lex HTML (class: title-article-norm, norm, etc.)
     """
     from bs4 import BeautifulSoup
 
@@ -247,6 +333,11 @@ def parse_oj_html(html_path: str, celex: str = '') -> dict:
         'articles': [],
         'final': '',
     }
+
+    # Detect consolidated EUR-Lex format
+    is_consolidated = bool(soup.select('p.title-article-norm'))
+    if is_consolidated:
+        return _parse_consolidated_html(soup, html_path, celex)
 
     # Title: <p class="oj-doc-ti"> elements
     title_els = soup.select('p.oj-doc-ti')
@@ -416,6 +507,8 @@ GLOSSARY_CORRECTIONS = [
     ("ha aconseguit", "ha adoptat"),
     ("d'implementació", "d'execució"),
     ("D'IMPLEMENTACIÓ", "D'EXECUCIÓ"),
+    ("d'Implementació", "d'Execució"),
+    ("Implementació", "Execució"),
     ("Comitè Estatal Membre", "Comitè dels Estats membres"),
     ("Comitè de l'Agència de l'Estat membre", "Comitè dels Estats membres"),
     # EU legal context corrections (25 March 2026, feedback from Catalan legal expert)

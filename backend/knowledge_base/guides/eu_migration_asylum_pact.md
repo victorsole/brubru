@@ -84,6 +84,22 @@ This provision is particularly relevant for cooperation with North African and W
 | 12 June 2026 | All Member States must have implemented and applied the Pact |
 | Ongoing | Commission monitors transposition; infringement proceedings possible from June 2026 |
 
+## Entry/Exit System (EES) -- Operational 10 April 2026
+
+The Entry/Exit System (EES) will become **fully operational on 10 April 2026** (announced by DG HOME on 30 March 2026). The EES is an automated IT system that registers entry, exit, and refusal of entry of non-EU nationals crossing the external borders of the Schengen area. It replaces manual passport stamping with electronic records including biometric data (fingerprints and facial images).
+
+| Feature | Detail |
+|---|---|
+| Legal basis | Regulation (EU) 2017/2226 (CELEX: 32017R2226) |
+| Go-live | 10 April 2026 |
+| Scope | All third-country nationals crossing Schengen external borders (short stays up to 90 days) |
+| Data collected | Name, travel document, biometric data, entry/exit date and border crossing point |
+| Managed by | eu-LISA (European Union Agency for the Operational Management of Large-Scale IT Systems) |
+| Linked systems | ETIAS (European Travel Information and Authorisation System), SIS, VIS |
+| Impact | Automated overstay detection, end of manual passport stamping, enhanced border security |
+
+The EES is a key component of the EU's Smart Borders package and complements the Pact on Migration and Asylum by strengthening external border controls and providing data for identifying overstayers.
+
 ## Related Brubru Guides
 - Facilitation Directive Reform - anti-smuggling package, companion to the Pact
 - EU Equality and Anti-Discrimination - non-discrimination obligations and reception conditions

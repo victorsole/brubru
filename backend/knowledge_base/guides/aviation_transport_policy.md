@@ -115,6 +115,18 @@
 | Director, Directorate E (Aviation) | Filip Cornelis |
 | Key officials | Eddy Liegeois, Carlos Bermejo Acosta, Maria De Las Flores Diaz Pulido, Christine Berg |
 
+## Surface Transport: Rail, Inland Waterways, and Multimodal
+
+### State Aid GBER for Rail/Inland Waterways/Multimodal (March 2026)
+
+**Regulation (EU) 2026/562** (CELEX: 32026R0562) -- Commission Regulation of 16 March 2026 declaring certain categories of aid in the rail, inland waterways and multimodal transport sector compatible with the internal market in application of Articles 107 and 108 TFEU. This is a new General Block Exemption Regulation (GBER) for surface transport state aid, allowing Member States to grant aid for:
+- Rail infrastructure and rolling stock investments
+- Inland waterway infrastructure modernisation
+- Multimodal transport hubs and intermodal terminals
+- Shift from road to rail/waterway (modal shift incentives)
+
+This removes the need for prior Commission notification for qualifying aid measures, significantly reducing administrative burden for Member States investing in sustainable transport.
+
 ## Related Brubru Guides
 
 - **eu_energy_policy** -- Energy costs affecting aviation fuel prices
