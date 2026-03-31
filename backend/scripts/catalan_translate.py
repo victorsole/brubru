@@ -1014,6 +1014,130 @@ def _translate_one_html(html_path: str, celex: str, engine: str, output: str):
             caffeinate_proc.terminate()
 
 
+# ============================================================
+# Step 5: FTP Deploy to SiteGround
+# ============================================================
+
+SITEGROUND_REMOTE_DIR = 'brubru.beresol.eu/public_html/legislacio-ue-catala'
+
+
+def _get_ftp_credentials() -> tuple:
+    """Get FTP credentials from environment variables or .env file."""
+    from dotenv import load_dotenv
+    env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+    load_dotenv(env_path)
+
+    host = os.environ.get('SITEGROUND_FTP_HOST')
+    user = os.environ.get('SITEGROUND_FTP_USER')
+    password = os.environ.get('SITEGROUND_FTP_PASS')
+    port = int(os.environ.get('SITEGROUND_FTP_PORT', '21'))
+
+    if not all([host, user, password]):
+        raise RuntimeError(
+            'FTP credentials not set. Add SITEGROUND_FTP_HOST, SITEGROUND_FTP_USER, '
+            'SITEGROUND_FTP_PASS to backend/.env'
+        )
+    return host, user, password, port
+
+
+def deploy_to_siteground(celex: str) -> bool:
+    """Deploy a single translation to SiteGround via FTP."""
+    import ftplib
+
+    local_dir = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        '..', 'data', 'legislacio-ue-catala', celex
+    )
+    local_file = os.path.join(local_dir, 'index.html')
+
+    if not os.path.isfile(local_file):
+        print(f'[ERROR] No translation found at {local_file}')
+        return False
+
+    host, user, password, port = _get_ftp_credentials()
+
+    try:
+        ftp = ftplib.FTP()
+        ftp.connect(host, port, timeout=30)
+        ftp.login(user, password)
+        ftp.cwd(SITEGROUND_REMOTE_DIR)
+
+        # Create directory if needed
+        remote_dirs = ftp.nlst()
+        if celex not in remote_dirs:
+            ftp.mkd(celex)
+            print(f'  [FTP] Created directory {celex}/')
+
+        ftp.cwd(celex)
+
+        # Upload index.html
+        size = os.path.getsize(local_file)
+        with open(local_file, 'rb') as f:
+            ftp.storbinary('STOR index.html', f)
+
+        print(f'  [FTP] Uploaded {celex}/index.html ({size // 1024}KB)')
+        ftp.quit()
+        return True
+
+    except Exception as e:
+        print(f'[ERROR] FTP deploy failed for {celex}: {e}')
+        return False
+
+
+def deploy_all_to_siteground():
+    """Deploy all local translations to SiteGround."""
+    import ftplib
+
+    translations_dir = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        '..', 'data', 'legislacio-ue-catala'
+    )
+
+    host, user, password, port = _get_ftp_credentials()
+
+    ftp = ftplib.FTP()
+    ftp.connect(host, port, timeout=30)
+    ftp.login(user, password)
+    ftp.cwd(SITEGROUND_REMOTE_DIR)
+
+    remote_dirs = set(ftp.nlst())
+    deployed = 0
+    skipped = 0
+
+    for entry in sorted(os.listdir(translations_dir)):
+        local_file = os.path.join(translations_dir, entry, 'index.html')
+        if not os.path.isfile(local_file):
+            continue
+        if entry.endswith('-softcatala'):
+            continue
+
+        celex = entry
+
+        # Create directory if needed
+        if celex not in remote_dirs:
+            ftp.mkd(celex)
+
+        ftp.cwd(celex)
+
+        size = os.path.getsize(local_file)
+        with open(local_file, 'rb') as f:
+            ftp.storbinary('STOR index.html', f)
+
+        ftp.cwd('..')
+        deployed += 1
+        print(f'  [FTP] {celex}/index.html ({size // 1024}KB)')
+
+    # Also upload the landing page
+    landing = os.path.join(translations_dir, 'index.html')
+    if os.path.isfile(landing):
+        with open(landing, 'rb') as f:
+            ftp.storbinary('STOR index.html', f)
+        print(f'  [FTP] index.html (landing page)')
+
+    ftp.quit()
+    print(f'[OK] Deployed {deployed} translations to SiteGround')
+
+
 # CLI
 # ============================================================
 
@@ -1030,6 +1154,12 @@ def main():
     parser.add_argument('--output', type=str, default='', help='Output HTML path (default: auto)')
     parser.add_argument('--batch', type=str, default='',
                         help='Batch file with one "xml_path|celex" per line for overnight translation')
+    parser.add_argument('--deploy', action='store_true',
+                        help='Deploy a translated CELEX to SiteGround via FTP after translation')
+    parser.add_argument('--deploy-all', action='store_true',
+                        help='Deploy ALL local translations to SiteGround via FTP')
+    parser.add_argument('--deploy-only', type=str, default='',
+                        help='Deploy a specific CELEX to SiteGround without translating (e.g. --deploy-only 32024R1689)')
     args = parser.parse_args()
 
     if args.find:
@@ -1063,6 +1193,8 @@ def main():
         celex = args.cellar
         html_path = fetch_from_cellar(celex)
         _translate_one_html(html_path, celex, args.engine, args.output)
+        if args.deploy:
+            deploy_to_siteground(celex)
         return
 
     if args.html:
@@ -1070,10 +1202,23 @@ def main():
             print('[ERROR] --celex is required with --html (e.g. --html file.html --celex 32026R0129)')
             return
         _translate_one_html(args.html, args.celex, args.engine, args.output)
+        if args.deploy:
+            deploy_to_siteground(args.celex)
+        return
+
+    # Deploy-only commands (no translation)
+    if args.deploy_all:
+        deploy_all_to_siteground()
+        return
+
+    if args.deploy_only:
+        deploy_to_siteground(args.deploy_only)
         return
 
     if args.translate:
         _translate_one(args.translate, args.celex, args.engine, args.output)
+        if args.deploy and args.celex:
+            deploy_to_siteground(args.celex)
         return
 
     if args.batch:
