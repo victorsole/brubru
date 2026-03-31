@@ -2379,6 +2379,21 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'stretto di hormuz': ['iran_strait_hormuz_eu_response'],
     'straat van hormuz': ['iran_strait_hormuz_eu_response'],
     'estret dhormuz': ['iran_strait_hormuz_eu_response'],
+    'red sea': ['iran_strait_hormuz_eu_response'],
+    'red sea crisis': ['iran_strait_hormuz_eu_response'],
+    'aspides': ['iran_strait_hormuz_eu_response'],
+    'eunavfor': ['iran_strait_hormuz_eu_response', 'eu_defence_procurement'],
+    'eunavfor atalanta': ['iran_strait_hormuz_eu_response', 'eu_defence_procurement'],
+    'atalanta': ['iran_strait_hormuz_eu_response'],
+    'indian ocean maritime': ['iran_strait_hormuz_eu_response'],
+    'maritime operations red sea': ['iran_strait_hormuz_eu_response'],
+    'houthi': ['iran_strait_hormuz_eu_response'],
+
+    # Bosnia sanctions / Western Balkans restrictive measures
+    'bosnia sanctions': ['eu_funding_ipa_enlargement'],
+    'bosnia restrictive measures': ['eu_funding_ipa_enlargement'],
+    'bosnia and herzegovina sanctions': ['eu_funding_ipa_enlargement'],
+    'western balkans sanctions': ['eu_funding_ipa_enlargement'],
 
     # EU Inc. -- 28th Regime Corporate Legal Framework
     'eu inc': ['28th_regime_innovation_act'],
