@@ -3439,6 +3439,17 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'ifd agreement': ['eu_trade_policy'],
     'e-commerce moratorium': ['eu_trade_policy'],
 
+    # April 2026 plenary (31 Mar 2026)
+    'april plenary': ['ep_plenary_march_2026'],
+    'plenary april': ['ep_plenary_march_2026'],
+    'next plenary': ['ep_plenary_march_2026'],
+    'april strasbourg': ['ep_plenary_march_2026'],
+    '27-30 april': ['ep_plenary_march_2026'],
+    'april 2026 plenary': ['ep_plenary_march_2026'],
+    'ukraine 90 billion loan': ['ep_plenary_march_2026'],
+    'eu magnitsky act': ['ep_plenary_march_2026'],
+    'air passenger rights': ['ep_plenary_march_2026', 'aviation_transport_policy'],
+
     # EDIP work programme (31 Mar 2026)
     'edip work programme': ['eu_defence_procurement'],
     'defence calls': ['eu_defence_procurement'],

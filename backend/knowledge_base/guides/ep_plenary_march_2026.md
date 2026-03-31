@@ -1,10 +1,28 @@
-# EP Plenary Sessions: March 2026
+# EP Plenary Sessions: March-April 2026
 
 ## QUICK FACTS
 LATEST SESSION: 25-26 March 2026, Brussels mini-plenary (NOT Strasbourg). CONCLUDED.
 Previous session: 9-12 March 2026, Strasbourg (CONCLUDED)
-Next session: 27-30 April 2026, Strasbourg
+NEXT SESSION: 27-30 April 2026, Strasbourg (UPCOMING -- draft agenda published 12 March 2026, final agenda adopted by Conference of Presidents on 22 April 2026)
 Type: Plenary sessions of the European Parliament (10th legislature)
+
+APRIL 2026 PLENARY HIGHLIGHTS (27-30 April, Strasbourg):
+- Ukraine EUR 90bn loan: fast-track vote on enhanced cooperation (24 Member States) + Ukraine Support Loan 2026-2027 + Ukraine Facility amendment
+- EU-US relations: assessment report vote + press conference
+- Mercosur: EP position on EU Court opinion
+- Digital Networks Act: Commission presentation [2026/2576(RSP)]
+- Cybersecurity Act: Commission presentation [2026/2563(RSP)]
+- Air passenger rights: report by Andrey Novakov (A10-0001/2026) [2013/0072(COD)], TRAN committee
+- EU Magnitsky Act: report by Antonio Lopez-Isturiz White (A10-0266/2025) [2025/2049(INI)], AFET committee
+- Georgia: debate with HR/VP Kallas on peaceful democratic transition
+- EU-India summit preparations [2026/2567(RSP)]
+- Solvency II: delegated regulation (114(3) procedure)
+- Migration returns: topical debate requested by EPP
+- Greenland: territorial integrity and sovereignty of Denmark [2026/2562(RSP)]
+- Lithuania public broadcaster: democratic threat debate [2026/2568(RSP)]
+- Iran: brutal repression against protesters [2026/2565(RSP)]
+- Drug trafficking: murder of Mehdi Kessaci, urgent European action [2025/3020(RSP)]
+- Online piracy: sports and live events [2026/2569(RSP)]
 
 VOTES ADOPTED 25-26 MARCH 2026 (Brussels):
 - Banking Union reform: DGSD2 (A10-0065), BRRD3 (A10-0066), SRMR3 (A10-0067) -- 2nd reading ADOPTED. Landmark bank crisis management toolbox.
