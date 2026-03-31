@@ -163,6 +163,13 @@ EP report on European technological sovereignty supports:
 | Radio Spectrum Policy Programme Decision 243/2012/EU | 32012D0243 | Repealed |
 | ePrivacy Directive 2002/58/EC | 32002L0058 | Amended (calling line ID, malicious call blocking incorporated into DNA) |
 
+## Brubru Deep Dive
+
+Brubru has a full deep-dive analysis of the Digital Networks Act available in 6 languages:
+https://brubru.beresol.eu/digital-networks-act/
+
+The deep dive covers the full legislative proposal, impact assessment, stakeholder positions, and institutional timeline. Available in English, French, Spanish, Italian, Dutch, and Catalan.
+
 ## Related Brubru Guides
 - `digital_omnibus_package` -- Digital simplification package
 - `ai_act_regulation` -- AI Act (network infrastructure AI)
