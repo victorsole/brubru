@@ -460,6 +460,89 @@
   background: white;
 }
 
+/* Hero section (Deep Dive Library at top) */
+.analytics-tab__section--hero {
+  margin-top: 0;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+/* Collapsible section header */
+.analytics-tab__collapsible-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.analytics-tab__collapsible-header h3 {
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.analytics-tab__collapsible-summary {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  flex: 1;
+}
+
+.analytics-tab__collapsible-header:hover .analytics-tab__collapsible-summary {
+  color: #6b7280;
+}
+
+/* NEW badge on deep dive cards */
+.analytics-tab__deep-dive-badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  background: #059669;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+/* Empty state for Your Activity */
+.analytics-tab__empty-state {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background: #f8f9fa;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+}
+
+.analytics-tab__empty-state h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  color: #374151;
+}
+
+.analytics-tab__empty-state p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Disabled export */
+.analytics-tab__export--disabled {
+  opacity: 0.5;
+}
+
+.analytics-tab__export-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 /* Deep Dive Library */
 .analytics-tab__section-subtitle {
   color: #6b7280;

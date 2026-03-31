@@ -1,13 +1,16 @@
 /**
  * Analytics Tab Component
  *
- * Displays analytics, charts, and engagement metrics.
+ * Displays deep dives, EU law analytics, and engagement metrics.
  * Part of My EU Bubble - Phase 3: Frontend
  */
 
 import { useEffect, useState, useMemo, useRef } from 'react';
 import Icon from '@mdi/react';
-import { mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox, mdiOpenInNew, mdiBookOpenPageVariantOutline } from '@mdi/js';
+import {
+  mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox,
+  mdiOpenInNew, mdiBookOpenPageVariantOutline, mdiChevronDown, mdiChevronUp,
+} from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
 import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
 import './analytics_tab.css';
@@ -39,29 +42,25 @@ export const AnalyticsTab = () => {
   const [euSnapshot, setEuSnapshot] = useState<Snapshot | null>(null);
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [lightbox, setLightbox] = useState<null | { src: string; title: string }>(null);
+  const [policyOpen, setPolicyOpen] = useState(false);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-    // Load pre-rendered snapshot from public assets
     fetch('/analytics/eu_law_snapshot.json')
       .then((r) => r.json())
       .then((data: Snapshot) => {
         setEuSnapshot(data);
         setSelectedAreas(data.policy_areas || []);
       })
-      .catch(() => {
-        // no-op if snapshot not available
-      });
+      .catch(() => {});
   }, []);
 
-  // Lightbox: keyboard close on ESC and focus management
   useEffect(() => {
     if (!lightbox) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setLightbox(null);
     };
     window.addEventListener('keydown', onKey);
-    // focus close button after opening
     const t = setTimeout(() => closeBtnRef.current?.focus(), 0);
     return () => {
       window.removeEventListener('keydown', onKey);
@@ -87,117 +86,81 @@ export const AnalyticsTab = () => {
     return areaRows.filter((r) => set.has(r.area));
   }, [euSnapshot, areaRows, selectedAreas]);
 
+  const totalActs = useMemo(() => {
+    if (!euSnapshot) return 0;
+    return areaRows.reduce((sum, r) => sum + r.total, 0);
+  }, [areaRows, euSnapshot]);
+
   const readingTimeMinutes = userStats?.average_reading_time_seconds
     ? Math.round(userStats.average_reading_time_seconds / 60)
     : 0;
+
+  // Check if user has any activity data worth showing
+  const hasActivity = (documentStats?.total_documents || 0) > 0
+    || (userStats?.total_reads || 0) > 0
+    || (userStats?.active_subscriptions || 0) > 0
+    || (userStats?.total_saves || 0) > 0;
+
+  // Most recent deep dive gets a "NEW" badge
+  const newestIdx = DEEP_DIVES.length - 1;
 
   return (
     <div className="analytics-tab">
       <h2>Analytics & Insights</h2>
 
-      {/* Key Metrics */}
-      <div className="analytics-tab__metrics-grid">
-        <div className="analytics-tab__metric-card">
-          <div className="analytics-tab__metric-icon">
-            <Icon path={mdiChartBar} size={1.5} color="#0693E3" />
-          </div>
-          <div className="analytics-tab__metric-value">
-            {documentStats?.total_documents || 0}
-          </div>
-          <div className="analytics-tab__metric-label">Total Documents</div>
-        </div>
-
-        <div className="analytics-tab__metric-card">
-          <div className="analytics-tab__metric-icon">
-            <Icon path={mdiBookOpen} size={1.5} color="#0693E3" />
-          </div>
-          <div className="analytics-tab__metric-value">
-            {userStats?.total_reads || 0}
-          </div>
-          <div className="analytics-tab__metric-label">Articles Read</div>
-        </div>
-
-        <div className="analytics-tab__metric-card">
-          <div className="analytics-tab__metric-icon">
-            <Icon path={mdiClockOutline} size={1.5} color="#0693E3" />
-          </div>
-          <div className="analytics-tab__metric-value">
-            {readingTimeMinutes}m
-          </div>
-          <div className="analytics-tab__metric-label">Avg. Reading Time</div>
-        </div>
-
-        <div className="analytics-tab__metric-card">
-          <div className="analytics-tab__metric-icon">
-            <Icon path={mdiTextBox} size={1.5} color="#0693E3" />
-          </div>
-          <div className="analytics-tab__metric-value">
-            {documentStats?.total_word_count?.toLocaleString() || 0}
-          </div>
-          <div className="analytics-tab__metric-label">Total Words Written</div>
+      {/* ---- 1. DEEP DIVE LIBRARY (hero section) ---- */}
+      <div className="analytics-tab__section analytics-tab__section--hero">
+        <h3>
+          <Icon path={mdiBookOpenPageVariantOutline} size={0.9} />
+          {' '}Brubru Deep Dive Library
+        </h3>
+        <p className="analytics-tab__section-subtitle">
+          Article-by-article analysis of major EU legislative proposals, with impact assessment figures and official sources.
+        </p>
+        <div className="analytics-tab__deep-dive-grid">
+          {DEEP_DIVES.map((dd, idx) => (
+            <div key={dd.procedureRef} className="analytics-tab__deep-dive-card" style={{ borderTopColor: dd.color }}>
+              <div className="analytics-tab__deep-dive-header">
+                <span className="analytics-tab__deep-dive-icon" style={{ color: dd.color }}>
+                  <span className={`mdi ${dd.icon}`} />
+                </span>
+                <span className="analytics-tab__deep-dive-ref">{dd.comReference}</span>
+                {idx === newestIdx && (
+                  <span className="analytics-tab__deep-dive-badge">NEW</span>
+                )}
+              </div>
+              <h4 className="analytics-tab__deep-dive-title">{dd.title}</h4>
+              <p className="analytics-tab__deep-dive-procedure">{dd.procedureRef}</p>
+              <div className="analytics-tab__deep-dive-langs">
+                {dd.languages.map((lang) => (
+                  <a
+                    key={lang}
+                    href={getDeepDiveUrl(dd, lang)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="analytics-tab__deep-dive-lang"
+                    style={{ borderColor: dd.color, color: dd.color }}
+                  >
+                    {LANG_LABELS[lang] || lang.toUpperCase()}
+                  </a>
+                ))}
+              </div>
+              <a
+                href={getDeepDiveUrl(dd, 'en')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="analytics-tab__deep-dive-cta"
+                style={{ backgroundColor: dd.color }}
+              >
+                <Icon path={mdiOpenInNew} size={0.7} />
+                Read analysis
+              </a>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Charts Row */}
-      <div className="analytics-tab__charts-grid">
-        {/* Documents by Type */}
-        <div className="analytics-tab__chart-card">
-          <h3 className="analytics-tab__chart-title">Documents by Type</h3>
-          <div className="analytics-tab__chart">
-            {documentStats && Object.keys(documentStats.by_type || {}).length > 0 ? (
-              <div className="analytics-tab__bar-chart">
-                {Object.entries(documentStats.by_type || {}).map(([type, count]) => {
-                  const percentage = (count / (documentStats.total_documents || 1)) * 100;
-                  return (
-                    <div key={type} className="analytics-tab__bar-row">
-                      <div className="analytics-tab__bar-label">{type}</div>
-                      <div className="analytics-tab__bar-container">
-                        <div
-                          className="analytics-tab__bar-fill"
-                          style={{ width: `${percentage}%` }}
-                          data-type={type}
-                        />
-                      </div>
-                      <div className="analytics-tab__bar-value">{count}</div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="analytics-tab__chart-empty">
-                No data available yet
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Top Policy Areas */}
-        <div className="analytics-tab__chart-card">
-          <h3 className="analytics-tab__chart-title">Top Policy Areas</h3>
-          <div className="analytics-tab__chart">
-            {documentStats && Object.keys(documentStats.by_policy_area || {}).length > 0 ? (
-              <div className="analytics-tab__policy-list">
-                {Object.entries(documentStats.by_policy_area || {})
-                  .sort(([, a], [, b]) => b - a)
-                  .slice(0, 8)
-                  .map(([area, count], idx) => (
-                    <div key={area} className="analytics-tab__policy-row">
-                      <div className="analytics-tab__policy-rank">{idx + 1}</div>
-                      <div className="analytics-tab__policy-name">{area}</div>
-                      <div className="analytics-tab__policy-count">{count}</div>
-                    </div>
-                  ))}
-              </div>
-            ) : (
-              <div className="analytics-tab__chart-empty">
-                No policy area data yet
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* EU Law Analytics (Static) */}
+      {/* ---- 2. EU LAW ANALYTICS (static charts) ---- */}
       <div className="analytics-tab__section">
         <h3>
           EU Law Analytics (Regulations & Directives)
@@ -245,51 +208,69 @@ export const AnalyticsTab = () => {
         </div>
       </div>
 
-      {/* Interactive Policy Areas (snapshot-driven) */}
+      {/* ---- 3. POLICY AREAS EXPLORER (collapsible) ---- */}
       {euSnapshot && (
         <div className="analytics-tab__section">
-          <h3>Policy Areas Selector</h3>
-          <div className="analytics-tab__selector">
-            <div className="analytics-tab__selector-actions">
-              <button onClick={() => setSelectedAreas(euSnapshot.policy_areas)}>Select All</button>
-              <button onClick={() => setSelectedAreas([])}>Clear All</button>
-            </div>
-            <div className="analytics-tab__selector-list">
-              {(euSnapshot.policy_areas || []).map((a) => (
-                <label key={a} className="analytics-tab__selector-item">
-                  <input
-                    type="checkbox"
-                    checked={selectedAreas.includes(a)}
-                    onChange={(e) => {
-                      setSelectedAreas((prev) =>
-                        e.target.checked ? [...prev, a] : prev.filter((x) => x !== a)
-                      );
-                    }}
-                  />
-                  <span>{a}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+          <button
+            className="analytics-tab__collapsible-header"
+            onClick={() => setPolicyOpen(!policyOpen)}
+            aria-expanded={policyOpen}
+          >
+            <h3>Policy Areas Explorer</h3>
+            <span className="analytics-tab__collapsible-summary">
+              {euSnapshot.policy_areas.length} policy areas, {totalActs.toLocaleString()} acts
+            </span>
+            <Icon path={policyOpen ? mdiChevronUp : mdiChevronDown} size={1} />
+          </button>
 
-          <div className="analytics-tab__barlist">
-            {visibleRows.map((row) => (
-              <div key={row.area} className="analytics-tab__barrow">
-                <div className="analytics-tab__barrow-label">{row.area}</div>
-                <div className="analytics-tab__barrow-bar">
-                  <div
-                    className="analytics-tab__barrow-fill"
-                    style={{ width: `${row.pct}%` }}
-                    title={`${row.total} acts`}
-                  />
+          {policyOpen && (
+            <>
+              <div className="analytics-tab__selector">
+                <div>
+                  <div className="analytics-tab__selector-actions">
+                    <button onClick={() => setSelectedAreas(euSnapshot.policy_areas)}>Select All</button>
+                    <button onClick={() => setSelectedAreas([])}>Clear All</button>
+                  </div>
+                  <div className="analytics-tab__selector-list">
+                    {(euSnapshot.policy_areas || []).map((a) => (
+                      <label key={a} className="analytics-tab__selector-item">
+                        <input
+                          type="checkbox"
+                          checked={selectedAreas.includes(a)}
+                          onChange={(e) => {
+                            setSelectedAreas((prev) =>
+                              e.target.checked ? [...prev, a] : prev.filter((x) => x !== a)
+                            );
+                          }}
+                        />
+                        <span>{a}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
-                <div className="analytics-tab__barrow-value">{row.total}</div>
+                <div />
               </div>
-            ))}
-            {visibleRows.length === 0 && (
-              <div className="analytics-tab__chart-empty">No policy areas selected</div>
-            )}
-          </div>
+
+              <div className="analytics-tab__barlist">
+                {visibleRows.map((row) => (
+                  <div key={row.area} className="analytics-tab__barrow">
+                    <div className="analytics-tab__barrow-label">{row.area}</div>
+                    <div className="analytics-tab__barrow-bar">
+                      <div
+                        className="analytics-tab__barrow-fill"
+                        style={{ width: `${row.pct}%` }}
+                        title={`${row.total} acts`}
+                      />
+                    </div>
+                    <div className="analytics-tab__barrow-value">{row.total}</div>
+                  </div>
+                ))}
+                {visibleRows.length === 0 && (
+                  <div className="analytics-tab__chart-empty">No policy areas selected</div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       )}
 
@@ -321,118 +302,181 @@ export const AnalyticsTab = () => {
         </div>
       )}
 
-      {/* Activity Summary */}
-      <div className="analytics-tab__activity">
-        <h3>Feed Activity Summary</h3>
-        <div className="analytics-tab__activity-grid">
-          <div className="analytics-tab__activity-card">
-            <div className="analytics-tab__activity-label">Active Subscriptions</div>
-            <div className="analytics-tab__activity-value">
-              {userStats?.active_subscriptions || 0}
-              <span className="analytics-tab__activity-total">
-                / {userStats?.total_subscriptions || 0}
-              </span>
-            </div>
-          </div>
-
-          <div className="analytics-tab__activity-card">
-            <div className="analytics-tab__activity-label">Saved Articles</div>
-            <div className="analytics-tab__activity-value">
-              {userStats?.total_saves || 0}
-            </div>
-          </div>
-        </div>
-
-        {/* Favorite Sources */}
-        {userStats && userStats.favorite_sources.length > 0 && (
-          <div className="analytics-tab__favorites">
-            <h4>Your Favorite News Sources</h4>
-            <div className="analytics-tab__source-chips">
-              {userStats.favorite_sources.map((source, idx) => (
-                <div key={idx} className="analytics-tab__source-chip">
-                  {source}
+      {/* ---- 4. YOUR ACTIVITY (only if user has data) ---- */}
+      {hasActivity ? (
+        <div className="analytics-tab__section">
+          <h3>Your Activity</h3>
+          <div className="analytics-tab__metrics-grid">
+            {(documentStats?.total_documents || 0) > 0 && (
+              <div className="analytics-tab__metric-card">
+                <div className="analytics-tab__metric-icon">
+                  <Icon path={mdiChartBar} size={1.5} color="#0693E3" />
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Most Read Categories */}
-        {userStats && userStats.most_read_categories.length > 0 && (
-          <div className="analytics-tab__favorites">
-            <h4>Most Read Categories</h4>
-            <div className="analytics-tab__source-chips">
-              {userStats.most_read_categories.map((category, idx) => (
-                <div key={idx} className="analytics-tab__category-chip">
-                  {category}
+                <div className="analytics-tab__metric-value">
+                  {documentStats?.total_documents || 0}
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Deep Dive Library */}
-      <div className="analytics-tab__section">
-        <h3>
-          <Icon path={mdiBookOpenPageVariantOutline} size={0.9} />
-          {' '}Brubru Deep Dive Library
-        </h3>
-        <p className="analytics-tab__section-subtitle">
-          Article-by-article analysis of major EU legislative proposals, with impact assessment figures and official sources.
-        </p>
-        <div className="analytics-tab__deep-dive-grid">
-          {DEEP_DIVES.map((dd) => (
-            <div key={dd.procedureRef} className="analytics-tab__deep-dive-card" style={{ borderTopColor: dd.color }}>
-              <div className="analytics-tab__deep-dive-header">
-                <span className="analytics-tab__deep-dive-icon" style={{ color: dd.color }}>
-                  <span className={`mdi ${dd.icon}`} />
-                </span>
-                <span className="analytics-tab__deep-dive-ref">{dd.comReference}</span>
+                <div className="analytics-tab__metric-label">Total Documents</div>
               </div>
-              <h4 className="analytics-tab__deep-dive-title">{dd.title}</h4>
-              <p className="analytics-tab__deep-dive-procedure">{dd.procedureRef}</p>
-              <div className="analytics-tab__deep-dive-langs">
-                {dd.languages.map((lang) => (
-                  <a
-                    key={lang}
-                    href={getDeepDiveUrl(dd, lang)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="analytics-tab__deep-dive-lang"
-                    style={{ borderColor: dd.color, color: dd.color }}
-                  >
-                    {LANG_LABELS[lang] || lang.toUpperCase()}
-                  </a>
+            )}
+
+            {(userStats?.total_reads || 0) > 0 && (
+              <div className="analytics-tab__metric-card">
+                <div className="analytics-tab__metric-icon">
+                  <Icon path={mdiBookOpen} size={1.5} color="#0693E3" />
+                </div>
+                <div className="analytics-tab__metric-value">
+                  {userStats?.total_reads || 0}
+                </div>
+                <div className="analytics-tab__metric-label">Articles Read</div>
+              </div>
+            )}
+
+            {readingTimeMinutes > 0 && (
+              <div className="analytics-tab__metric-card">
+                <div className="analytics-tab__metric-icon">
+                  <Icon path={mdiClockOutline} size={1.5} color="#0693E3" />
+                </div>
+                <div className="analytics-tab__metric-value">
+                  {readingTimeMinutes}m
+                </div>
+                <div className="analytics-tab__metric-label">Avg. Reading Time</div>
+              </div>
+            )}
+
+            {(documentStats?.total_word_count || 0) > 0 && (
+              <div className="analytics-tab__metric-card">
+                <div className="analytics-tab__metric-icon">
+                  <Icon path={mdiTextBox} size={1.5} color="#0693E3" />
+                </div>
+                <div className="analytics-tab__metric-value">
+                  {documentStats?.total_word_count?.toLocaleString() || 0}
+                </div>
+                <div className="analytics-tab__metric-label">Total Words Written</div>
+              </div>
+            )}
+          </div>
+
+          {/* Charts Row */}
+          <div className="analytics-tab__charts-grid">
+            {documentStats && Object.keys(documentStats.by_type || {}).length > 0 && (
+              <div className="analytics-tab__chart-card">
+                <h3 className="analytics-tab__chart-title">Documents by Type</h3>
+                <div className="analytics-tab__chart">
+                  <div className="analytics-tab__bar-chart">
+                    {Object.entries(documentStats.by_type || {}).map(([type, count]) => {
+                      const percentage = (count / (documentStats.total_documents || 1)) * 100;
+                      return (
+                        <div key={type} className="analytics-tab__bar-row">
+                          <div className="analytics-tab__bar-label">{type}</div>
+                          <div className="analytics-tab__bar-container">
+                            <div
+                              className="analytics-tab__bar-fill"
+                              style={{ width: `${percentage}%` }}
+                              data-type={type}
+                            />
+                          </div>
+                          <div className="analytics-tab__bar-value">{count}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {documentStats && Object.keys(documentStats.by_policy_area || {}).length > 0 && (
+              <div className="analytics-tab__chart-card">
+                <h3 className="analytics-tab__chart-title">Top Policy Areas</h3>
+                <div className="analytics-tab__chart">
+                  <div className="analytics-tab__policy-list">
+                    {Object.entries(documentStats.by_policy_area || {})
+                      .sort(([, a], [, b]) => b - a)
+                      .slice(0, 8)
+                      .map(([area, count], idx) => (
+                        <div key={area} className="analytics-tab__policy-row">
+                          <div className="analytics-tab__policy-rank">{idx + 1}</div>
+                          <div className="analytics-tab__policy-name">{area}</div>
+                          <div className="analytics-tab__policy-count">{count}</div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Feed Activity */}
+          <div className="analytics-tab__activity-grid" style={{ marginTop: '1rem' }}>
+            {(userStats?.active_subscriptions || 0) > 0 && (
+              <div className="analytics-tab__activity-card">
+                <div className="analytics-tab__activity-label">Active Subscriptions</div>
+                <div className="analytics-tab__activity-value">
+                  {userStats?.active_subscriptions || 0}
+                  <span className="analytics-tab__activity-total">
+                    / {userStats?.total_subscriptions || 0}
+                  </span>
+                </div>
+              </div>
+            )}
+            {(userStats?.total_saves || 0) > 0 && (
+              <div className="analytics-tab__activity-card">
+                <div className="analytics-tab__activity-label">Saved Articles</div>
+                <div className="analytics-tab__activity-value">
+                  {userStats?.total_saves || 0}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Favorite Sources */}
+          {userStats && userStats.favorite_sources.length > 0 && (
+            <div className="analytics-tab__favorites">
+              <h4>Your Favorite News Sources</h4>
+              <div className="analytics-tab__source-chips">
+                {userStats.favorite_sources.map((source, idx) => (
+                  <div key={idx} className="analytics-tab__source-chip">
+                    {source}
+                  </div>
                 ))}
               </div>
-              <a
-                href={getDeepDiveUrl(dd, 'en')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="analytics-tab__deep-dive-cta"
-                style={{ backgroundColor: dd.color }}
-              >
-                <Icon path={mdiOpenInNew} size={0.7} />
-                Read analysis
-              </a>
             </div>
-          ))}
-        </div>
-      </div>
+          )}
 
-      {/* Export Section */}
-      <div className="analytics-tab__export">
+          {/* Most Read Categories */}
+          {userStats && userStats.most_read_categories.length > 0 && (
+            <div className="analytics-tab__favorites">
+              <h4>Most Read Categories</h4>
+              <div className="analytics-tab__source-chips">
+                {userStats.most_read_categories.map((category, idx) => (
+                  <div key={idx} className="analytics-tab__category-chip">
+                    {category}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="analytics-tab__section">
+          <div className="analytics-tab__empty-state">
+            <h3>Your Activity</h3>
+            <p>Start tracking files in My EU Bubble, reading articles, and generating documents to see your personalised analytics here.</p>
+          </div>
+        </div>
+      )}
+
+      {/* ---- 5. EXPORT (only if user has data) ---- */}
+      <div className={`analytics-tab__export ${!hasActivity ? 'analytics-tab__export--disabled' : ''}`}>
         <h3>Export Your Data</h3>
         <p>Download your documents and reading history</p>
         <div className="analytics-tab__export-buttons">
-          <button className="analytics-tab__export-btn">
+          <button className="analytics-tab__export-btn" disabled={!hasActivity}>
             Export Documents (PDF)
           </button>
-          <button className="analytics-tab__export-btn">
+          <button className="analytics-tab__export-btn" disabled={!hasActivity}>
             Export Reading List (CSV)
           </button>
-          <button className="analytics-tab__export-btn">
+          <button className="analytics-tab__export-btn" disabled={!hasActivity}>
             Export Analytics Report
           </button>
         </div>
