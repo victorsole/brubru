@@ -252,7 +252,7 @@ DG REGIO published the results of the mid-term review of cohesion policy program
 - Adjustments to programme targets and milestones
 - Updated performance frameworks
 
-EVP Raffaele Fitto discussed the future cohesion policy framework during a visit to Austria (27 March 2026), signalling the Commission's early thinking on post-2027 cohesion policy design.
+EVP Raffaele Fitto discussed the future cohesion policy framework during a visit to Austria (27 March 2026), signalling the Commission's early thinking on post-2027 cohesion policy design. DG REGIO published the full mid-term review results on 1 April 2026, covering all programme adjustments and performance assessments. Fitto also met Belgian government leaders (31 March 2026) to discuss cohesion priorities.
 
 ## Cross-References
 

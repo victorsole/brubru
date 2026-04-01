@@ -272,6 +272,17 @@ Harmonises NCA powers across Member States:
 - **ECN+ Directive (EU) 2019/1**: NCA empowerment and harmonisation
 - **Damages Directive 2014/104/EU**: Private enforcement framework
 
+## EP Committee Activity (April 2026)
+
+### ECON: Competition Policy Annual Report 2025
+
+- **Document:** Amendments 1-313 (PE786.777v01-00)
+- **Rapporteur:** Stephanie Yon-Courtin (Renew, France)
+- **Status:** Amendment phase (April 2026)
+- **Scope:** Annual EP assessment of EU competition policy enforcement, covering merger control, State aid, antitrust, and digital markets competition
+
+The ECON committee is processing 313 amendments to the 2025 competition policy annual report, reflecting intense political interest in competition enforcement priorities. Key themes likely include DMA enforcement, State aid for green/digital transitions, and global competitiveness concerns.
+
 ## Cross-References
 
 - See also: `lobbying_methodology.md` for advocacy strategies in competition policy

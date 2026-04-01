@@ -123,6 +123,21 @@ On 18 March 2026, the EP committees IMCO and LIBE (joint procedure) adopted thei
 
 **Next steps:** EP plenary vote on the mandate expected **26 March 2026**. Once adopted, negotiations with Council begin.
 
+## AFCO: Institutional Aspects of AI in European Integration (April 2026)
+
+- **Document:** Draft Report (PE779.285v01-00)
+- **Rapporteur:** Emmanouil Kefalogiannis (EPP, Greece)
+- **Amendment deadline:** 28 April 2026
+- **Scope:** Constitutional and institutional implications of AI in the EU integration process, governance frameworks for AI use in EU institutions, democratic oversight of AI-driven decision-making
+
+This AFCO report examines how AI reshapes European governance and institutional functioning, complementing the AI Act's regulatory framework with constitutional considerations.
+
+## EPRS: AI Regulatory Sandboxes (1 April 2026)
+
+- **Publication:** "AI regulatory sandboxes: State of play and implementation challenges" (At a Glance)
+- **Key finding:** Member States obliged to establish at least one AI regulatory sandbox under the AI Act, but researchers identify design, fragmentation, and timing challenges
+- **URL:** https://epthinktank.eu/2026/04/01/ai-regulatory-sandboxes-state-of-play-and-implementation-challenges/
+
 ## Related Legislation
 
 | Legislation | CELEX | Relevance |

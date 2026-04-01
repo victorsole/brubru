@@ -57,6 +57,13 @@ EP BUDG co-rapporteurs Siegfried Muresan (EPP, Romania) and Carla Tavares (S&D, 
 
 Research ministers discussed the FP10 proposal at an informal meeting the day after its presentation on 16 July 2025. Two formal Council debates have taken place since. Slovenia has expressed "frustration" at the slow pace of negotiations. Detailed Council positions are still forming as of March 2026.
 
+### CULT Committee Opinion on Horizon Europe 2028-2034 (April 2026)
+
+- **Document:** Opinion (PE782.406v02-00)
+- **Rapporteur:** Laurence Farreng (Renew, France)
+- **Status:** Adopted
+- **Scope:** Culture and education committee perspective on FP10/Horizon Europe successor, focusing on creative industries, cultural heritage research, and synergies with Erasmus+
+
 ## European Competitiveness Fund (ECF)
 
 ### Legal References
@@ -136,6 +143,10 @@ A coalition of major university associations -- CESAER, EUA, EU-LIFE, LERU, YERU
 - Clear governance boundaries needed to prevent ECF industrial priorities from distorting FP10 research agendas
 - Adequate ring-fencing of FP10 budget within the ECF envelope
 - Bottom-up, investigator-driven research (ERC) must not be subordinated to top-down industrial strategy
+
+### EU-Australia Horizon Europe Association (1 April 2026)
+
+On 31 March 2026, the EU and Australia formally opened negotiations on Australia's association to Horizon Europe. This would make Australia an associated country, enabling Australian researchers to participate in Horizon Europe calls on equal terms. The association is expected to cover the remainder of the 2021-2027 programme and set the groundwork for FP10 participation.
 
 ### Open Questions (March 2026)
 

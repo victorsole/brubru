@@ -162,6 +162,13 @@ Nuclear energy provides approximately 23% of EU electricity (13 Member States op
 | Directive 2011/70/Euratom | 32011L0070 | Spent fuel and radioactive waste management |
 | Directive 2013/59/Euratom | 32013L0059 | Basic safety standards for radiation protection |
 
+### Nuclear Decommissioning Assistance Programme
+
+- **ITRE Amendments 28-84** (PE786.788v01-00, April 2026): Rapporteur Virginijus Sinkevicius (Greens, Lithuania)
+- Covers EU financial assistance for decommissioning nuclear power plants in Lithuania (Ignalina), Slovakia (Bohunice), and Bulgaria (Kozloduy)
+- Current programme: Regulation (EU) 2021/100 (CELEX: 32021R0100) -- EUR 466 million for 2021-2027
+- Decommissioning is a long-term process (decades); EU support reflects accession commitments made when these countries joined the EU
+
 ### Offshore Safety
 
 - **Offshore Oil and Gas Safety Directive**: Directive 2013/30/EU (CELEX 32013L0030), adopted June 2013. Safety requirements for offshore oil and gas operations, major hazard prevention, emergency response coordination.

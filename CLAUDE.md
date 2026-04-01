@@ -370,6 +370,10 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 
 **Full reference:** See `memory/predictions.md`. FOR=green, AGAINST=red, ABSTENTION=yellow, SPLIT=gold. Resolution leading indicators: OEIL_CROSSREF (1.0), COMMISSION_FOLLOWUP (0.9), TITLE_SIMILARITY (0.5-0.8).
 
+### Knowledge Loader Orphan Guide References (April 2026)
+
+**Every trigger in `GUIDE_KEYWORD_TRIGGERS` must point to an existing `.md` file in `knowledge_base/guides/`.** If a trigger references a guide ID with no corresponding file, `search_guides()` silently drops the match (the guide ID is not in `self.guides`). This means the trigger exists but does nothing. Found 3 orphans on 1 April 2026: `eu_public_health`, `eu_foreign_security_policy`, `eu_glossary_eurlex`. **After adding triggers, always verify** by running: `python3.12 -c "from knowledge_base.knowledge_loader import KnowledgeLoader; kl = KnowledgeLoader(); kl.load_all(); r = kl.search_guides('YOUR QUERY'); print(r)"`.
+
 ### Responsive Design Requirement (February 2026)
 
 **ALL UI changes MUST be responsive.** Breakpoints: Desktop >1024px (default), Tablet 768-1024px (`max-width: 1024px`), Mobile <768px (`max-width: 767px`). Mobile: single column, overlay sidebars, min 44px touch targets. Use `createPortal` for modals. **Never ship without testing all three breakpoints.**
