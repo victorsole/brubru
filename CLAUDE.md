@@ -372,7 +372,7 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 
 ### Knowledge Loader Orphan Guide References (April 2026)
 
-**Every trigger in `GUIDE_KEYWORD_TRIGGERS` must point to an existing `.md` file in `knowledge_base/guides/`.** If a trigger references a guide ID with no corresponding file, `search_guides()` silently drops the match (the guide ID is not in `self.guides`). This means the trigger exists but does nothing. Found 3 orphans on 1 April 2026: `eu_public_health`, `eu_foreign_security_policy`, `eu_glossary_eurlex`. **After adding triggers, always verify** by running: `python3.12 -c "from knowledge_base.knowledge_loader import KnowledgeLoader; kl = KnowledgeLoader(); kl.load_all(); r = kl.search_guides('YOUR QUERY'); print(r)"`.
+**Every trigger in `GUIDE_KEYWORD_TRIGGERS` must point to an existing `.md` file in `knowledge_base/guides/`.** If a trigger references a guide ID with no corresponding file, `search_guides()` silently drops the match (the guide ID is not in `self.guides`). This means the trigger exists but does nothing. Found 3 orphans on 1 April 2026, then **17 more on 3 April 2026** (298 dead mappings total, including `eu_justice_security`, `eu_agriculture_policy`, `eu_consumer_protection`, `eu_taxation_policy`, etc.). All fixed by rerouting to existing guides. **After any bulk trigger changes, run the orphan audit:** `python3.12 -c "from knowledge_base.knowledge_loader import KnowledgeLoader, GUIDE_KEYWORD_TRIGGERS; kl = KnowledgeLoader(); kl.load_all(); orphans = {gid for t, ids in GUIDE_KEYWORD_TRIGGERS.items() for gid in ids if gid not in kl.guides}; print(f'Orphans: {orphans}' if orphans else 'No orphans')"`.
 
 ### Responsive Design Requirement (February 2026)
 
