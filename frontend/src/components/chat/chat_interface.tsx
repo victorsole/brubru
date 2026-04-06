@@ -403,16 +403,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     setIsStreaming(true);
     setError(null);
 
-    // Create placeholder for streaming message
+    // Streaming message placeholder -- added to messages only when first text arrives
     const streamingMessageId = 'streaming_' + Date.now();
-    const streamingMessage: Message = {
-      id: streamingMessageId,
-      role: 'assistant',
-      content: '',
-      timestamp: new Date(),
-      citations: [],
-    };
-    setMessages((prev) => [...prev, streamingMessage]);
+    let messageAdded = false;
 
     try {
       abortControllerRef.current = new AbortController();
@@ -496,21 +489,29 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
               }
             }
 
-            // First real text chunk clears status
-            if (!accumulatedContent) {
-              setThinkingStatus(null);
-            }
-
             accumulatedContent += content;
 
-            // Update streaming message
-            setMessages((prev) =>
-              prev.map((msg) =>
-                msg.id === streamingMessageId
-                  ? { ...msg, content: accumulatedContent }
-                  : msg
-              )
-            );
+            // First real text chunk: add message frame and clear status
+            if (!messageAdded) {
+              messageAdded = true;
+              setThinkingStatus(null);
+              setMessages((prev) => [...prev, {
+                id: streamingMessageId,
+                role: 'assistant' as const,
+                content: accumulatedContent,
+                timestamp: new Date(),
+                citations: [],
+              }]);
+            } else {
+              // Update streaming message with accumulated content
+              setMessages((prev) =>
+                prev.map((msg) =>
+                  msg.id === streamingMessageId
+                    ? { ...msg, content: accumulatedContent }
+                    : msg
+                )
+              );
+            }
           }
         }
       }
@@ -540,8 +541,10 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
 
       console.error('Streaming failed, falling back to non-streaming:', err);
 
-      // Fallback: remove the empty streaming placeholder and retry via non-streaming
-      setMessages((prev) => prev.filter((msg) => msg.id !== streamingMessageId));
+      // Fallback: remove the streaming message (if it was added) and retry via non-streaming
+      if (messageAdded) {
+        setMessages((prev) => prev.filter((msg) => msg.id !== streamingMessageId));
+      }
       setIsStreaming(false);
       setThinkingStatus(null);
       abortControllerRef.current = null;
