@@ -538,8 +538,21 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
         return;
       }
 
-      console.error('Failed to stream message:', err);
-      setError('Failed to stream response. Please try again.');
+      console.error('Streaming failed, falling back to non-streaming:', err);
+
+      // Fallback: remove the empty streaming placeholder and retry via non-streaming
+      setMessages((prev) => prev.filter((msg) => msg.id !== streamingMessageId));
+      setIsStreaming(false);
+      setThinkingStatus(null);
+      abortControllerRef.current = null;
+
+      // Restore input so handleSendMessage can use it
+      setInputValue(currentInput);
+      // Small delay to let state settle, then call non-streaming path
+      setTimeout(() => {
+        handleSendMessage();
+      }, 100);
+      return;
     } finally {
       setIsStreaming(false);
       setThinkingStatus(null);
@@ -556,7 +569,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      handleSendMessageStreaming();
     }
   };
 
@@ -741,24 +754,14 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
               {t('chat.cancel')}
             </button>
           ) : (
-            <>
-              <button
-                className="chat-interface__send-button button button-primary"
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim()}
-                title="Send message (Enter)"
-              >
-                {t('chat.send')}
-              </button>
-              <button
-                className="chat-interface__stream-button button button-secondary"
-                onClick={handleSendMessageStreaming}
-                disabled={!inputValue.trim()}
-                title="Stream response"
-              >
-                {t('chat.stream')}
-              </button>
-            </>
+            <button
+              className="chat-interface__send-button button button-primary"
+              onClick={handleSendMessageStreaming}
+              disabled={!inputValue.trim()}
+              title="Send message (Enter)"
+            >
+              {t('chat.send')}
+            </button>
           )}
         </div>
       </div>

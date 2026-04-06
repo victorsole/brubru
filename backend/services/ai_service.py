@@ -460,12 +460,38 @@ class AIService:
                 })
 
         # Build context (the slow part: 2-5s)
+        # Use an asyncio.Queue to emit progress status during context building
         context_str = ""
         if use_context:
-            context_str, _ = await self.context_builder.build_context_with_citations(
-                user_message=user_message,
-                conversation_history=self._convert_to_dict(conversation_history)
-            )
+            status_queue: asyncio.Queue = asyncio.Queue()
+
+            async def _build_context_with_progress():
+                """Run context building and emit progress events to queue."""
+                # Emit progress before the heavy gather
+                await status_queue.put("Searching knowledge base...")
+                context, citations = await self.context_builder.build_context_with_citations(
+                    user_message=user_message,
+                    conversation_history=self._convert_to_dict(conversation_history)
+                )
+                await status_queue.put("Ranking sources...")
+                await status_queue.put(None)  # Signal completion
+                return context, citations
+
+            # Run context building as a task so we can drain status events
+            context_task = asyncio.create_task(_build_context_with_progress())
+
+            # Drain status events while context builds
+            while True:
+                try:
+                    status = await asyncio.wait_for(status_queue.get(), timeout=0.5)
+                    if status is None:
+                        break
+                    yield json.dumps({"type": "status", "message": status})
+                except asyncio.TimeoutError:
+                    # No status yet -- emit a heartbeat to keep the SSE connection alive
+                    continue
+
+            context_str, _ = await context_task
 
         # Signal context building done, AI composing
         yield json.dumps({"type": "status", "message": "Composing response..."})
