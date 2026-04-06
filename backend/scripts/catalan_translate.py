@@ -617,6 +617,8 @@ def translate_segments_sonnet(parsed: dict, output_dir: str = '', celex: str = '
     Fallback engine for high-quality review or complex texts.
     """
     import anthropic
+    from dotenv import load_dotenv
+    load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))
 
     client = anthropic.Anthropic()
 
@@ -627,6 +629,7 @@ BRUBRU CATALAN STANDARD:
 - "D'execució" for Implementing (never "d'implementació")
 - "Ha adoptat" for has adopted
 - "Tenint en compte" for Having regard to
+- "Atenent que:" for Whereas: (in recital preamble, NEVER "Mentre que:")
 - "Dictamen" for opinion (legal)
 - "Paràgraf" for paragraph
 - "Comitè dels Estats membres" for Member State Committee

@@ -945,9 +945,16 @@ class ContextBuilder:
                 except Exception as e:
                     logger.warning(f"[PLENARY-AM] Failed to fetch plenary amendments: {e}")
 
-        # Rapporteur-by-country query (detect country + rapporteur intent)
-        rapporteur_by_country = []
+        # Post-gather parallel operations: run independent fetches concurrently
+        # instead of sequentially. Reduces total latency from sum(times) to max(time).
+        # Inspired by Claude Code's coordinator pattern: parallel research workers.
+
         query_lower = user_message.lower()
+
+        # Prepare post-gather tasks (all independent of each other)
+        post_tasks = {}
+
+        # 1. Rapporteur-by-country query
         detected_country = None
         for demonym, country in COUNTRY_DEMONYMS.items():
             if demonym in query_lower:
@@ -955,54 +962,54 @@ class ContextBuilder:
                 break
         has_rapporteur_intent = any(phrase in query_lower for phrase in RAPPORTEUR_INTENT_PHRASES)
 
-        if detected_country and has_rapporteur_intent:
-            try:
-                rapporteur_by_country = await self._fetch_rapporteurs_by_country(detected_country)
-            except Exception as e:
-                logger.warning(f"[RAPPORTEUR] Country rapporteur fetch failed: {e}")
-
-        # CELLAR on-demand fallback: if no knowledge guides matched, query CELLAR
-        # for relevant legislation by EuroVoc topic keywords.
-        # This is a conditional second-pass to avoid wasting SPARQL queries when
-        # guides already provide context.
-        cellar_legislation = []
-        if not internal_knowledge and self.eurlex_client:
-            topic_keywords = self._extract_topic_keywords(user_message.lower())
-            if topic_keywords:
+        async def _fetch_rapporteur_by_country_safe():
+            if detected_country and has_rapporteur_intent:
                 try:
-                    cellar_legislation = await self._fetch_cellar_legislation_context(topic_keywords)
-                    if cellar_legislation:
-                        logger.info(f"[CELLAR] Fallback returned {len(cellar_legislation)} results "
-                                    f"for keywords: {topic_keywords}")
+                    return await self._fetch_rapporteurs_by_country(detected_country)
                 except Exception as e:
-                    logger.warning(f"[CELLAR] On-demand fallback failed: {e}")
+                    logger.warning(f"[RAPPORTEUR] Country rapporteur fetch failed: {e}")
+            return []
 
-        # EP plenary debate transcript (CRE): detect debate intent and fetch on demand
-        plenary_debate_transcript = None
+        post_tasks['rapporteur'] = _fetch_rapporteur_by_country_safe()
+
+        # 2. CELLAR on-demand fallback (only if no knowledge guides matched)
+        async def _fetch_cellar_safe():
+            if not internal_knowledge and self.eurlex_client:
+                topic_keywords = self._extract_topic_keywords(user_message.lower())
+                if topic_keywords:
+                    try:
+                        results = await self._fetch_cellar_legislation_context(topic_keywords)
+                        if results:
+                            logger.info(f"[CELLAR] Fallback returned {len(results)} results "
+                                        f"for keywords: {topic_keywords}")
+                        return results
+                    except Exception as e:
+                        logger.warning(f"[CELLAR] On-demand fallback failed: {e}")
+            return []
+
+        post_tasks['cellar'] = _fetch_cellar_safe()
+
+        # 3. EP plenary debate transcript (CRE)
         debate_date = self._detect_plenary_debate_intent(user_message)
-        if debate_date:
-            try:
-                plenary_debate_transcript = await self._fetch_plenary_debate(
-                    user_message, debate_date
-                )
-                if plenary_debate_transcript:
-                    logger.info(f"[CRE] Injected plenary debate transcript ({len(plenary_debate_transcript)} chars)")
-            except Exception as e:
-                logger.warning(f"[CRE] Failed to fetch plenary debate: {e}")
 
-        # EU institutional source search fallback.
-        # Primary trigger: no knowledge guides matched.
-        # Secondary trigger: user asks about a specific procedure (timeline, status,
-        # rapporteur, vote) but we found no procedure details -- even if a generic
-        # guide matched. This catches cases like "what is the timeline of the INI
-        # on trade and economic security?" where the trade guide matches but has
-        # no data about that specific procedure.
-        # Tertiary trigger: guides matched but ONLY via content-search fallback
-        # (no keyword trigger hits), meaning the matches are low-confidence and
-        # likely irrelevant. Also fire when the query contains current-event
-        # signals (decision, announced, ban, new rule) that suggest breaking news.
-        eu_institutional_results = []
-        if self.tavily_client and self.enable_web_search:
+        async def _fetch_debate_safe():
+            if debate_date:
+                try:
+                    transcript = await self._fetch_plenary_debate(user_message, debate_date)
+                    if transcript:
+                        logger.info(f"[CRE] Injected plenary debate transcript ({len(transcript)} chars)")
+                    return transcript
+                except Exception as e:
+                    logger.warning(f"[CRE] Failed to fetch plenary debate: {e}")
+            return None
+
+        post_tasks['debate'] = _fetch_debate_safe()
+
+        # 4. EU institutional source search fallback
+        async def _fetch_eu_search_safe():
+            if not (self.tavily_client and self.enable_web_search):
+                return []
+
             procedure_intent_phrases = [
                 'timeline', 'status', 'rapporteur', 'shadow', 'deadline',
                 'vote', 'adopted', 'tabled', 'reading', 'trilogue',
@@ -1011,12 +1018,8 @@ class ContextBuilder:
                 'procedure', 'legislative procedure',
             ]
             has_procedure_intent = any(p in query_lower for p in procedure_intent_phrases)
-            # Even with train files, if none were found via procedure ref
-            # (all came from loose keyword OR), the user's specific procedure
-            # question is unanswered. Check if any result was a direct ref match.
             no_procedure_data = not procedure_details
 
-            # Check if all matched guides are content-fallback only (no trigger hits)
             has_trigger_match = any(
                 item.get('trigger_matched', False)
                 for item in internal_knowledge
@@ -1024,8 +1027,6 @@ class ContextBuilder:
             )
             only_content_fallback = bool(internal_knowledge) and not has_trigger_match
 
-            # Current-event signals: queries about recent decisions, announcements,
-            # bans, new rules -- these are likely about breaking news not in guides
             current_event_phrases = [
                 'decision to', 'decided to', 'announced', 'just announced',
                 'new rule', 'new ban', 'ban on', 'banned', 'prevent',
@@ -1035,18 +1036,31 @@ class ContextBuilder:
             has_current_event_signal = any(p in query_lower for p in current_event_phrases)
 
             should_search = (
-                not internal_knowledge  # primary: no guides matched at all
-                or (has_procedure_intent and no_procedure_data)  # secondary: procedure question unanswered
-                or (only_content_fallback and has_current_event_signal)  # tertiary: low-confidence matches + current event
+                not internal_knowledge
+                or (has_procedure_intent and no_procedure_data)
+                or (only_content_fallback and has_current_event_signal)
             )
 
             if should_search:
                 try:
-                    eu_institutional_results = await self._fetch_eu_institutional_search(
-                        query=user_message
-                    )
+                    return await self._fetch_eu_institutional_search(query=user_message)
                 except Exception as e:
                     logger.warning(f"[EU-SEARCH] Institutional fallback failed: {e}")
+            return []
+
+        post_tasks['eu_search'] = _fetch_eu_search_safe()
+
+        # Execute all post-gather tasks in parallel
+        post_keys = list(post_tasks.keys())
+        post_results = await asyncio.gather(*post_tasks.values(), return_exceptions=True)
+        post_map = {}
+        for key, result in zip(post_keys, post_results):
+            post_map[key] = result if not isinstance(result, Exception) else ([] if key != 'debate' else None)
+
+        rapporteur_by_country = post_map['rapporteur']
+        cellar_legislation = post_map['cellar']
+        plenary_debate_transcript = post_map['debate']
+        eu_institutional_results = post_map['eu_search']
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -2559,14 +2573,18 @@ class ContextBuilder:
                     for guide in matching_guides[:remaining_slots]:
                         guide_content = self.knowledge_loader.get_guide(guide['id'])
                         if guide_content:
-                            knowledge_items.append({
+                            item = {
                                 'type': 'guide',
                                 'name': guide['id'],
                                 'title': guide['title'],
                                 'content': guide_content[:8000],
                                 'full_length': len(guide_content),
                                 'snippet': guide.get('snippet', '')
-                            })
+                            }
+                            staleness = self.knowledge_loader.get_guide_staleness(guide['id'])
+                            if staleness:
+                                item['staleness_caveat'] = staleness
+                            knowledge_items.append(item)
 
                 logger.info(f"[DRAFTING] Injected {len(knowledge_items)} items "
                             f"({sum(1 for i in knowledge_items if i['type'] == 'template')} templates, "
@@ -2574,13 +2592,28 @@ class ContextBuilder:
 
             else:
                 # Standard path: guides first, then templates
-                matching_guides = self.knowledge_loader.search_guides(query)
+                # Two-step pipeline inspired by Claude Code's memory recall:
+                # 1. Get candidates with quick_facts for ranking (low token cost)
+                # 2. Fetch full content only for top-ranked guides
+                max_guides = self.max_internal_knowledge_results
+                matching_guides = self.knowledge_loader.search_guides(query, output_mode='quick_facts')
 
                 if matching_guides:
-                    for guide in matching_guides[:self.max_internal_knowledge_results]:
+                    # If more candidates than slots, rank by query relevance
+                    if len(matching_guides) > max_guides:
+                        ranked = self._rank_guides_by_relevance(query, matching_guides)
+                        selected = ranked[:max_guides]
+                        logger.info(
+                            f"[GUIDE-RANK] {len(matching_guides)} candidates -> "
+                            f"top {len(selected)}: {[g['id'] for g in selected]}"
+                        )
+                    else:
+                        selected = matching_guides
+
+                    for guide in selected:
                         guide_content = self.knowledge_loader.get_guide(guide['id'])
                         if guide_content:
-                            knowledge_items.append({
+                            item = {
                                 'type': 'guide',
                                 'name': guide['id'],
                                 'title': guide['title'],
@@ -2588,7 +2621,12 @@ class ContextBuilder:
                                 'full_length': len(guide_content),
                                 'snippet': guide.get('snippet', ''),
                                 'trigger_matched': guide.get('trigger_matched', False)
-                            })
+                            }
+                            # Staleness caveat for guides older than 30 days
+                            staleness = self.knowledge_loader.get_guide_staleness(guide['id'])
+                            if staleness:
+                                item['staleness_caveat'] = staleness
+                            knowledge_items.append(item)
 
                     logger.debug(f"Found {len(matching_guides)} guide matches for query: {query}")
 
@@ -2620,6 +2658,65 @@ class ContextBuilder:
             logger.error(f"Failed to query internal knowledge: {str(e)}")
 
         return knowledge_items
+
+    def _rank_guides_by_relevance(
+        self,
+        query: str,
+        guides: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """
+        Rank candidate guides by relevance to the query using QUICK FACTS.
+
+        Scoring (no API call, pure keyword density):
+        - Query word hits in quick_facts (weighted 3x)
+        - Query word hits in title (weighted 2x)
+        - Trigger-matched guides get a bonus
+        - Longer quick_facts = more specific guide = small bonus
+
+        Inspired by Claude Code's memory relevance selector pattern.
+        """
+        query_lower = query.lower()
+        # Extract meaningful words (>3 chars, no stopwords)
+        stopwords = {
+            'what', 'when', 'where', 'which', 'that', 'this', 'these', 'those',
+            'have', 'does', 'will', 'would', 'could', 'should', 'about', 'with',
+            'from', 'they', 'their', 'there', 'been', 'being', 'some', 'more',
+            'also', 'than', 'then', 'very', 'just', 'like', 'tell', 'explain',
+        }
+        query_words = [w for w in query_lower.split() if len(w) > 3 and w not in stopwords]
+
+        scored = []
+        for guide in guides:
+            score = 0.0
+            qf = (guide.get('quick_facts') or '').lower()
+            title = (guide.get('title') or '').lower()
+
+            # Query word hits in quick_facts (3x weight)
+            for word in query_words:
+                if word in qf:
+                    score += 3.0
+                if word in title:
+                    score += 2.0
+
+            # Full query phrase match bonus
+            if query_lower in qf:
+                score += 5.0
+            if query_lower in title:
+                score += 4.0
+
+            # Trigger-matched guides get a bonus
+            if guide.get('trigger_matched'):
+                score += 2.0
+
+            # Specificity bonus: longer quick_facts = more detailed guide
+            if len(qf) > 200:
+                score += 0.5
+
+            scored.append((score, guide))
+
+        # Sort by score descending, stable sort preserves trigger-first order on ties
+        scored.sort(key=lambda x: x[0], reverse=True)
+        return [g for _, g in scored]
 
     # =========================================================================
     # CELLAR On-Demand Context (EuroVoc fallback)
@@ -5394,6 +5491,10 @@ class ContextBuilder:
             for item in context_data.internal_knowledge:
                 sections.append(f"- {item['title']}")
                 sections.append(f"  Type: {item['type']}")
+                # Staleness caveat (mirrors Claude Code's memory staleness signal)
+                staleness = item.get('staleness_caveat')
+                if staleness:
+                    sections.append(f"  {staleness}")
                 sections.append(f"  {item['content'][:4000]}")
                 sections.append("")
 

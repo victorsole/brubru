@@ -268,7 +268,13 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'research innovation budget': ['fp10_ecf_competitiveness'],
     '175 billion': ['fp10_ecf_competitiveness'],
     '451 billion': ['fp10_ecf_competitiveness'],
-    'draghi competitiveness': ['fp10_ecf_competitiveness'],
+    'draghi competitiveness': ['fp10_ecf_competitiveness', 'jrc_capitalism_sustainability_democracy'],
+    'draghi report': ['fp10_ecf_competitiveness', 'jrc_capitalism_sustainability_democracy'],
+    'letta report': ['jrc_capitalism_sustainability_democracy', '28th_regime_innovation_act'],
+    'eu competitiveness gap': ['fp10_ecf_competitiveness', 'jrc_capitalism_sustainability_democracy'],
+    'european model': ['jrc_capitalism_sustainability_democracy'],
+    'social market economy': ['jrc_capitalism_sustainability_democracy'],
+    'soziale marktwirtschaft': ['jrc_capitalism_sustainability_democracy'],
     'muresan': ['fp10_ecf_competitiveness', 'mff_2028_2034'],
     'carla tavares': ['fp10_ecf_competitiveness', 'mff_2028_2034'],
 
@@ -1263,8 +1269,8 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'class action': ['dsa_enforcement'],
     'representative action': ['dsa_enforcement'],
     'consumer adr': ['dsa_enforcement'],
-    'digital fairness': ['dsa_enforcement'],
-    'dark patterns': ['dsa_enforcement'],
+    'digital fairness': ['dsa_enforcement', 'digital_fairness_act'],
+    'dark patterns': ['dsa_enforcement', 'digital_fairness_act'],
     'green claims': ['dsa_enforcement'],
     'greenwashing': ['dsa_enforcement'],
     'proteccion del consumidor': ['dsa_enforcement'],
@@ -2387,6 +2393,118 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'tabaksaccijns': ['tobacco_excise_directive'],
     'impost tabac': ['tobacco_excise_directive'],
 
+    # CSAM Regulation / Child Sexual Abuse Online
+    'csam': ['csam_regulation_online'],
+    'csam regulation': ['csam_regulation_online'],
+    'child sexual abuse': ['csam_regulation_online'],
+    'child sexual abuse online': ['csam_regulation_online'],
+    'child sexual exploitation': ['csam_regulation_online'],
+    'chat control': ['csam_regulation_online'],
+    'chat controls': ['csam_regulation_online'],
+    '2022/0155': ['csam_regulation_online'],
+    'com(2022) 209': ['csam_regulation_online'],
+    'com(2022)209': ['csam_regulation_online'],
+    '2021/1232': ['csam_regulation_online'],
+    '32021r1232': ['csam_regulation_online'],
+    'eprivacy derogation': ['csam_regulation_online'],
+    'temporary derogation csam': ['csam_regulation_online'],
+    'voluntary csam detection': ['csam_regulation_online'],
+    'csam detection': ['csam_regulation_online'],
+    'child abuse material': ['csam_regulation_online'],
+    'grooming online': ['csam_regulation_online'],
+    'grooming detection': ['csam_regulation_online'],
+    'child grooming': ['csam_regulation_online'],
+    'eucsa': ['csam_regulation_online'],
+    'eu centre child sexual abuse': ['csam_regulation_online'],
+    'ncmec': ['csam_regulation_online'],
+    'cybertipline': ['csam_regulation_online'],
+    'photodna': ['csam_regulation_online'],
+    'detection order csam': ['csam_regulation_online'],
+    'zarzalejos csam': ['csam_regulation_online'],
+    'birgit sippel': ['csam_regulation_online'],
+    'child safety online': ['csam_regulation_online', 'dsa_enforcement'],
+    'child protection online': ['csam_regulation_online', 'dsa_enforcement'],
+    'protection of minors online': ['csam_regulation_online', 'dsa_enforcement'],
+    'dsa minors': ['dsa_enforcement', 'csam_regulation_online'],
+    'dsa article 28': ['dsa_enforcement', 'csam_regulation_online'],
+    'age verification': ['csam_regulation_online', 'dsa_enforcement'],
+    'online child safety': ['csam_regulation_online'],
+    'abus sexual infantil': ['csam_regulation_online'],
+    'abus sexuel enfants': ['csam_regulation_online'],
+    'abuso sexual menores': ['csam_regulation_online'],
+    'kindermisbruik': ['csam_regulation_online'],
+    'abuso sessuale minori': ['csam_regulation_online'],
+    'inhope': ['csam_regulation_online'],
+    'operation cumberland': ['csam_regulation_online'],
+    'ai generated csam': ['csam_regulation_online'],
+    'sextortion': ['csam_regulation_online'],
+    '2025/0429': ['csam_regulation_online'],
+    'com(2025)0797': ['csam_regulation_online'],
+    'special panel child safety': ['csam_regulation_online'],
+    'bik strategy': ['csam_regulation_online'],
+    'better internet for kids': ['csam_regulation_online'],
+
+    # Digital Fairness Act
+    'digital fairness act': ['digital_fairness_act'],
+    'digital fairness': ['digital_fairness_act'],
+    'dfa': ['digital_fairness_act'],
+    'addictive design': ['digital_fairness_act'],
+    'addictive design online': ['digital_fairness_act'],
+    'dark patterns regulation': ['digital_fairness_act'],
+    'dark patterns eu': ['digital_fairness_act'],
+    'influencer marketing regulation': ['digital_fairness_act'],
+    'influencer marketing eu': ['digital_fairness_act'],
+    'influencer regulation': ['digital_fairness_act'],
+    'kidfluencer': ['digital_fairness_act'],
+    'kidfluencers': ['digital_fairness_act'],
+    'loot boxes regulation': ['digital_fairness_act'],
+    'loot boxes': ['digital_fairness_act'],
+    'virtual currencies regulation': ['digital_fairness_act'],
+    'subscription traps': ['digital_fairness_act'],
+    'subscription cancellation': ['digital_fairness_act'],
+    'confirmshaming': ['digital_fairness_act'],
+    'roach motel': ['digital_fairness_act'],
+    'sneak into basket': ['digital_fairness_act'],
+    'forced continuity': ['digital_fairness_act'],
+    'consumer fitness check': ['digital_fairness_act'],
+    'fitness check consumer': ['digital_fairness_act'],
+    'michael mcgrath': ['digital_fairness_act'],
+    'influencer legal hub': ['digital_fairness_act'],
+    'equite numerique': ['digital_fairness_act'],
+    'equidad digital': ['digital_fairness_act'],
+    'digitale eerlijkheid': ['digital_fairness_act'],
+    'equita digitale': ['digital_fairness_act'],
+    'equitat digital': ['digital_fairness_act'],
+
+    # ePrivacy Directive and Regulation
+    'eprivacy': ['eprivacy_regulation'],
+    'eprivacy directive': ['eprivacy_regulation'],
+    'eprivacy regulation': ['eprivacy_regulation'],
+    'e-privacy': ['eprivacy_regulation'],
+    'directive 2002/58': ['eprivacy_regulation'],
+    '2002/58': ['eprivacy_regulation'],
+    '32002l0058': ['eprivacy_regulation'],
+    'cookie directive': ['eprivacy_regulation'],
+    'cookie consent eu': ['eprivacy_regulation'],
+    'cookie law': ['eprivacy_regulation'],
+    'confidentiality of communications': ['eprivacy_regulation'],
+    'confidentiality electronic communications': ['eprivacy_regulation'],
+    'traffic data directive': ['eprivacy_regulation'],
+    'metadata processing eu': ['eprivacy_regulation'],
+    'direct marketing eu': ['eprivacy_regulation'],
+    'unsolicited communications eu': ['eprivacy_regulation'],
+    'soft opt-in': ['eprivacy_regulation'],
+    'soft opt in': ['eprivacy_regulation'],
+    'com(2017) 10': ['eprivacy_regulation'],
+    'com(2017)10': ['eprivacy_regulation'],
+    '2017/0003': ['eprivacy_regulation'],
+    'privacy electronic communications': ['eprivacy_regulation'],
+    'vie privee communications': ['eprivacy_regulation'],
+    'privacidad comunicaciones': ['eprivacy_regulation'],
+    'privacy comunicazioni': ['eprivacy_regulation'],
+    'privacitat comunicacions': ['eprivacy_regulation'],
+    'privacy elektronische communicatie': ['eprivacy_regulation'],
+
     # Cross-references: DMA-GDPR interplay
     'dma gdpr': ['digital_markets_act', 'dsa_enforcement'],
     'dma gdpr interplay': ['digital_markets_act'],
@@ -2652,14 +2770,14 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'verpakking': ['ecodesign_digital_product_passport'],
 
     # European Council March 2026
-    'european council': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe'],
-    'european council march': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe'],
-    'european council summit': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe'],
-    'european council 19 march': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe'],
-    'european council 19-20 march': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe'],
-    'euco': ['iran_strait_hormuz_eu_response', 'mff_2028_2034'],
-    'eu summit': ['iran_strait_hormuz_eu_response', 'mff_2028_2034'],
-    'eu leaders summit': ['iran_strait_hormuz_eu_response', 'mff_2028_2034'],
+    'european council': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe', 'eu_competitiveness_council_debate'],
+    'european council march': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe', 'eu_competitiveness_council_debate'],
+    'european council summit': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe', 'eu_competitiveness_council_debate'],
+    'european council 19 march': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe', 'eu_competitiveness_council_debate'],
+    'european council 19-20 march': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'safe_rearm_europe', 'eu_competitiveness_council_debate'],
+    'euco': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'eu_competitiveness_council_debate'],
+    'eu summit': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'eu_competitiveness_council_debate'],
+    'eu leaders summit': ['iran_strait_hormuz_eu_response', 'mff_2028_2034', 'eu_competitiveness_council_debate'],
     'one europe one market': ['mff_2028_2034', '28th_regime_innovation_act'],
     'antonio costa': ['iran_strait_hormuz_eu_response'],
     'consejo europeo': ['iran_strait_hormuz_eu_response'],
@@ -3894,6 +4012,33 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'vino biologico': ['eu_funding_ipa_enlargement'],
     'organic wine': ['eu_funding_ipa_enlargement'],
 
+    # JRC Capitalism, Sustainability and Democracy report (training 3 Apr 2026)
+    'jrc144547': ['jrc_capitalism_sustainability_democracy'],
+    'capitalism sustainability and democracy': ['jrc_capitalism_sustainability_democracy'],
+    'capitalism sustainability democracy': ['jrc_capitalism_sustainability_democracy'],
+    'future-proofing the european model': ['jrc_capitalism_sustainability_democracy'],
+    'future proofing the european model': ['jrc_capitalism_sustainability_democracy'],
+    'schumpeterian triangle': ['jrc_capitalism_sustainability_democracy'],
+    'dynamic triangle': ['jrc_capitalism_sustainability_democracy'],
+    'fair and sustainable economy': ['jrc_capitalism_sustainability_democracy'],
+    'fase working paper': ['jrc_capitalism_sustainability_democracy'],
+    'luc soete': ['jrc_capitalism_sustainability_democracy'],
+    'sylvia schwaag serger': ['jrc_capitalism_sustainability_democracy'],
+    'mikel landabaso': ['jrc_capitalism_sustainability_democracy'],
+    'johan stierna': ['jrc_capitalism_sustainability_democracy'],
+    'integrated orchestration': ['jrc_capitalism_sustainability_democracy'],
+    'territorial myopia': ['jrc_capitalism_sustainability_democracy', 'cohesion_policy_audit'],
+    'geography of discontent': ['jrc_capitalism_sustainability_democracy', 'cohesion_policy_audit'],
+    'middle tech trap': ['jrc_capitalism_sustainability_democracy', 'eu_chips_act'],
+    'quantum policymaking': ['jrc_capitalism_sustainability_democracy'],
+    'creative resource efficiency': ['jrc_capitalism_sustainability_democracy'],
+    'triangle of hope': ['jrc_capitalism_sustainability_democracy'],
+    'triangle of sadness': ['jrc_capitalism_sustainability_democracy'],
+    'capitalisme durabilite democratie': ['jrc_capitalism_sustainability_democracy'],
+    'capitalismo sostenibilidad democracia': ['jrc_capitalism_sustainability_democracy'],
+    'capitalisme sostenibilitat democracia': ['jrc_capitalism_sustainability_democracy'],
+    'capitalismo sostenibilita democrazia': ['jrc_capitalism_sustainability_democracy'],
+
     # Multilingual triggers batch 2 (training 3 Apr 2026, rounds 1-10 session 2)
 
     # Parent-subsidiary directive / cross-border taxation (eu_budget_emu_law)
@@ -4177,6 +4322,69 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'paquet ferroviaire': ['eu_railway_regulation'],
     'pacchetto ferroviario': ['eu_railway_regulation'],
     'spoorwegpakket': ['eu_railway_regulation'],
+
+    # EU Competitiveness Council Debate -- Member State Positions
+    'competitiveness debate': ['eu_competitiveness_council_debate', 'fp10_ecf_competitiveness'],
+    'competitiveness council': ['eu_competitiveness_council_debate'],
+    'competitiveness compass': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'com(2025)30': ['eu_competitiveness_council_debate'],
+    'com(2025) 30': ['eu_competitiveness_council_debate'],
+    'member state positions': ['eu_competitiveness_council_debate'],
+    'member state positions competitiveness': ['eu_competitiveness_council_debate'],
+    'council positions competitiveness': ['eu_competitiveness_council_debate'],
+    'state aid reform': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'state aid flexibility': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'state aid rules': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'relax state aid': ['eu_competitiveness_council_debate'],
+    'made in eu': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'made in europe': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'european preference': ['eu_competitiveness_council_debate', 'industrial_accelerator_act', 'eu_defence_procurement'],
+    'european preference procurement': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'eu preference': ['eu_competitiveness_council_debate'],
+    'buy european': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'buy european act': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'climate rollback': ['eu_competitiveness_council_debate', 'european_climate_law'],
+    'climate vs competitiveness': ['eu_competitiveness_council_debate'],
+    'green deal rollback': ['eu_competitiveness_council_debate', 'european_climate_law'],
+    'ets competitiveness': ['eu_competitiveness_council_debate', 'european_climate_law'],
+    'ets2 delay': ['eu_competitiveness_council_debate', 'european_climate_law'],
+    'ets2 postponement': ['eu_competitiveness_council_debate', 'european_climate_law'],
+    'regulatory simplification': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'cutting red tape': ['eu_competitiveness_council_debate'],
+    'red tape eu': ['eu_competitiveness_council_debate'],
+    'simplification omnibus': ['eu_competitiveness_council_debate'],
+    'omnibus simplification': ['eu_competitiveness_council_debate'],
+    'competitiveness gap': ['eu_competitiveness_council_debate', 'fp10_ecf_competitiveness', 'jrc_capitalism_sustainability_democracy'],
+    'industrial policy eu': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'eu industrial policy': ['eu_competitiveness_council_debate', 'industrial_accelerator_act'],
+    'subsidies vs single market': ['eu_competitiveness_council_debate'],
+    'france state aid': ['eu_competitiveness_council_debate'],
+    'germany competitiveness': ['eu_competitiveness_council_debate'],
+    'netherlands state aid': ['eu_competitiveness_council_debate'],
+    'frugal states': ['eu_competitiveness_council_debate'],
+    'national champions': ['eu_competitiveness_council_debate'],
+    'sovereign fund': ['eu_competitiveness_council_debate'],
+    'eu sovereign fund': ['eu_competitiveness_council_debate'],
+    'level playing field single market': ['eu_competitiveness_council_debate'],
+    'who wants what competitiveness': ['eu_competitiveness_council_debate'],
+    'council debate competitiveness': ['eu_competitiveness_council_debate'],
+    'council debate industrial': ['eu_competitiveness_council_debate'],
+    # Multilingual -- competitiveness council debate
+    'debat competitivitat': ['eu_competitiveness_council_debate'],
+    'debat competitivite': ['eu_competitiveness_council_debate'],
+    'debate competitividad': ['eu_competitiveness_council_debate'],
+    'dibattito competitivita': ['eu_competitiveness_council_debate'],
+    'concurrentiedebat': ['eu_competitiveness_council_debate'],
+    'aide d\'etat': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'ayuda de estado': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'ajut d\'estat': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'aiuto di stato': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'staatssteun': ['eu_competitiveness_council_debate', 'competition_law_enforcement'],
+    'preference europeenne': ['eu_competitiveness_council_debate'],
+    'preferencia europea': ['eu_competitiveness_council_debate'],
+    'preferenza europea': ['eu_competitiveness_council_debate'],
+    'europese voorkeur': ['eu_competitiveness_council_debate'],
+    'preferencia europea compres': ['eu_competitiveness_council_debate'],
 }
 
 
@@ -4220,6 +4428,7 @@ class KnowledgeLoader:
         self.organigrammes: Dict[str, Any] = {}  # DG organizational charts
         self.analytics: Dict[str, Any] = {}      # Analytics snapshots (e.g., EU law)
         self.guides: Dict[str, str] = {}         # Reference guides (EU jargon, resources, etc.)
+        self.guide_freshness: Dict[str, datetime] = {}  # Guide last-modified dates for staleness tracking
         self.requirements: Dict[str, Any] = {}   # EU law requirements by cluster
 
         # Metadata
@@ -4361,7 +4570,7 @@ class KnowledgeLoader:
         return self.analytics.get(key)
 
     def _load_guides(self):
-        """Load reference guide Markdown files into memory"""
+        """Load reference guide Markdown files into memory with freshness tracking"""
         if not self.guides_dir.exists():
             logger.info(f"Guides directory not found: {self.guides_dir}")
             return
@@ -4372,6 +4581,11 @@ class KnowledgeLoader:
                     content = f.read()
                     key = md_file.stem  # e.g., "eu_jargon", "council_guide"
                     self.guides[key] = content
+
+                    # Track freshness: use file mtime as last-verified date
+                    mtime = datetime.fromtimestamp(md_file.stat().st_mtime)
+                    self.guide_freshness[key] = mtime
+
                     logger.debug(f"Loaded guide: {key}")
             except Exception as e:
                 logger.error(f"Failed to load guide {md_file}: {str(e)}")
@@ -4907,6 +5121,54 @@ class KnowledgeLoader:
         """
         return self.guides.get(guide_name)
 
+    def _extract_quick_facts(self, content: str) -> str:
+        """
+        Extract the QUICK FACTS block from a guide's content.
+
+        Returns the text between '## QUICK FACTS' and the next '##' heading,
+        or the first 500 chars if no QUICK FACTS block exists.
+        """
+        qf_match = re.search(
+            r'##\s*QUICK\s*FACTS\s*\n(.*?)(?=\n##\s|\Z)',
+            content,
+            re.DOTALL | re.IGNORECASE
+        )
+        if qf_match:
+            return qf_match.group(1).strip()
+        # Fallback: return first 500 chars after the title
+        title_end = content.find('\n', content.find('#'))
+        if title_end != -1:
+            return content[title_end:title_end + 500].strip()
+        return content[:500].strip()
+
+    def get_guide_staleness(self, guide_name: str, stale_after_days: int = 30) -> Optional[str]:
+        """
+        Check if a guide is stale and return a caveat string if so.
+
+        Mirrors Claude Code's memory staleness signal: when a memory is older
+        than a threshold, inject a warning so the AI knows to verify.
+
+        Args:
+            guide_name: Guide identifier
+            stale_after_days: Number of days after which a guide is considered stale
+
+        Returns:
+            Staleness caveat string, or None if guide is fresh
+        """
+        mtime = self.guide_freshness.get(guide_name)
+        if not mtime:
+            return None
+
+        age_days = (datetime.now() - mtime).days
+        if age_days > stale_after_days:
+            return (
+                f"[STALENESS NOTE: This guide was last updated {age_days} days ago "
+                f"({mtime.strftime('%d %B %Y')}). Positions, statuses, or dates "
+                f"may have evolved since then. Verify key facts before presenting "
+                f"as current.]"
+            )
+        return None
+
     def list_guides(self) -> List[Dict[str, str]]:
         """
         List all available guides.
@@ -4933,7 +5195,7 @@ class KnowledgeLoader:
 
         return guides_list
 
-    def search_guides(self, query: str) -> List[Dict[str, Any]]:
+    def search_guides(self, query: str, output_mode: str = 'full') -> List[Dict[str, Any]]:
         """
         Search guides by keyword triggers and content matching.
 
@@ -4945,6 +5207,10 @@ class KnowledgeLoader:
 
         Args:
             query: Search query (searches triggers, name, and content)
+            output_mode: Controls what data is returned per guide:
+                - 'full': guide ID, title, snippet, full content available via get_guide()
+                - 'quick_facts': guide ID, title, and QUICK FACTS block only (for ranking)
+                - 'titles_only': guide ID and title only (lowest token cost)
 
         Returns:
             List of matching guides with context snippets, ordered by relevance
@@ -4978,28 +5244,34 @@ class KnowledgeLoader:
             title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
             title = title_match.group(1) if title_match else guide_id.replace('_', ' ').title()
 
-            # Find context around the query match in content
-            content_lower = content.lower()
-            idx = content_lower.find(query_lower)
-            if idx != -1:
-                start = max(0, idx - 50)
-                end = min(len(content), idx + len(query_lower) + 100)
-                snippet = content[start:end].strip()
-                if start > 0:
-                    snippet = "..." + snippet
-                if end < len(content):
-                    snippet = snippet + "..."
-            else:
-                # Use the first paragraph after the title as snippet
-                para_match = re.search(r'^#[^\n]+\n+([^\n#]+)', content)
-                snippet = para_match.group(1).strip()[:150] + "..." if para_match else ""
-
-            matches.append({
+            match_data = {
                 'id': guide_id,
                 'title': title,
-                'snippet': snippet,
                 'trigger_matched': True
-            })
+            }
+
+            if output_mode != 'titles_only':
+                # Find context around the query match in content
+                content_lower = content.lower()
+                idx = content_lower.find(query_lower)
+                if idx != -1:
+                    start = max(0, idx - 50)
+                    end = min(len(content), idx + len(query_lower) + 100)
+                    snippet = content[start:end].strip()
+                    if start > 0:
+                        snippet = "..." + snippet
+                    if end < len(content):
+                        snippet = snippet + "..."
+                else:
+                    # Use the first paragraph after the title as snippet
+                    para_match = re.search(r'^#[^\n]+\n+([^\n#]+)', content)
+                    snippet = para_match.group(1).strip()[:150] + "..." if para_match else ""
+                match_data['snippet'] = snippet
+
+            if output_mode == 'quick_facts':
+                match_data['quick_facts'] = self._extract_quick_facts(content)
+
+            matches.append(match_data)
             seen_ids.add(guide_id)
 
         # Pass 2: Content search (fallback for guides not already matched by triggers)
@@ -5032,24 +5304,30 @@ class KnowledgeLoader:
                 title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
                 title = title_match.group(1) if title_match else name.replace('_', ' ').title()
 
-                idx = content_lower.find(query_lower)
-                if idx != -1:
-                    start = max(0, idx - 50)
-                    end = min(len(content), idx + len(query_lower) + 100)
-                    snippet = content[start:end].strip()
-                    if start > 0:
-                        snippet = "..." + snippet
-                    if end < len(content):
-                        snippet = snippet + "..."
-                else:
-                    snippet = ""
-
-                matches.append({
+                match_data = {
                     'id': name,
                     'title': title,
-                    'snippet': snippet,
                     'trigger_matched': False
-                })
+                }
+
+                if output_mode != 'titles_only':
+                    idx = content_lower.find(query_lower)
+                    if idx != -1:
+                        start = max(0, idx - 50)
+                        end = min(len(content), idx + len(query_lower) + 100)
+                        snippet = content[start:end].strip()
+                        if start > 0:
+                            snippet = "..." + snippet
+                        if end < len(content):
+                            snippet = snippet + "..."
+                    else:
+                        snippet = ""
+                    match_data['snippet'] = snippet
+
+                if output_mode == 'quick_facts':
+                    match_data['quick_facts'] = self._extract_quick_facts(content)
+
+                matches.append(match_data)
                 seen_ids.add(name)
 
         return matches
