@@ -42,6 +42,7 @@ export interface Message {
   searchTimeMs?: number;
   contextsUsed?: number;
   actions?: ChatAction[];
+  isStreaming?: boolean;
 }
 
 interface ChatInterfaceProps {
@@ -501,6 +502,7 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
                 content: accumulatedContent,
                 timestamp: new Date(),
                 citations: [],
+                isStreaming: true,
               }]);
             } else {
               // Update streaming message with accumulated content
@@ -515,6 +517,15 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
           }
         }
       }
+      // Mark streaming complete -- triggers full markdown render
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === streamingMessageId
+            ? { ...msg, isStreaming: false }
+            : msg
+        )
+      );
+
       // For pre-users, increment count, track event, and append progressive CTA after streaming
       if (!isAuthenticated) {
         const newCount = incrementPreUserQueryCount();
