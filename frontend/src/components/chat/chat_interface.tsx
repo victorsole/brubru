@@ -439,16 +439,21 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
       }
 
       let accumulatedContent = '';
+      let sseBuffer = '';  // Buffer for incomplete SSE lines across reads
 
       while (true) {
         const { done, value } = await reader.read();
 
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
+        // Append new data to buffer, then split on double-newline (SSE event boundary)
+        sseBuffer += decoder.decode(value, { stream: true });
+        const parts = sseBuffer.split('\n');
 
-        for (const line of lines) {
+        // Keep the last part in the buffer (it may be incomplete)
+        sseBuffer = parts.pop() || '';
+
+        for (const line of parts) {
           if (line.startsWith('data: ')) {
             const content = line.slice(6);
 
