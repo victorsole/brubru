@@ -978,6 +978,14 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'crisis vivienda': ['eu_housing_crisis'],
     'crisi abitativa': ['eu_housing_crisis'],
     'woningcrisis': ['eu_housing_crisis'],
+    'crisi habitatge': ['eu_housing_crisis'],
+    'habitatge': ['eu_housing_crisis'],
+    'habitatge assequible': ['eu_housing_crisis'],
+    'politica habitatge': ['eu_housing_crisis'],
+    'logement': ['eu_housing_crisis'],
+    'vivienda': ['eu_housing_crisis'],
+    'alloggio': ['eu_housing_crisis'],
+    'woning': ['eu_housing_crisis'],
 
     # ESPR and Digital Product Passport
     'digital product passport': ['ecodesign_digital_product_passport'],
@@ -2071,6 +2079,8 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'defensa europea': ['safe_rearm_europe', 'eu_defence_procurement'],
     'defense europeenne': ['safe_rearm_europe', 'eu_defence_procurement'],
     'difesa europea': ['safe_rearm_europe', 'eu_defence_procurement'],
+    'difesa europeo': ['safe_rearm_europe', 'eu_defence_procurement'],
+    'pacchetto difesa': ['safe_rearm_europe', 'eu_defence_procurement'],
     'europese defensie': ['safe_rearm_europe', 'eu_defence_procurement'],
     'eur 150 billion defence': ['safe_rearm_europe'],
     '150 billion loans': ['safe_rearm_europe'],
@@ -4006,9 +4016,14 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
 
     # Wine export / agrifood Albania (eu_funding_ipa_enlargement)
     'esportare vino': ['eu_funding_ipa_enlargement'],
+    'importare vino': ['eu_funding_ipa_enlargement', 'eu_trade_policy'],
+    'requisiti importare': ['eu_trade_policy', 'eu_funding_ipa_enlargement'],
+    'requisiti ue': ['eu_trade_policy'],
     'exportar vi': ['eu_funding_ipa_enlargement'],
     'exportar vino': ['eu_funding_ipa_enlargement'],
+    'importar vino': ['eu_trade_policy', 'eu_funding_ipa_enlargement'],
     'wine export': ['eu_funding_ipa_enlargement', 'eu_trade_policy'],
+    'wine import': ['eu_trade_policy'],
     'vino biologico': ['eu_funding_ipa_enlargement'],
     'organic wine': ['eu_funding_ipa_enlargement'],
 
