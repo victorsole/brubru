@@ -353,19 +353,9 @@ export const MessageList = ({ messages, chatId, onFollowUpClick, abVariant, dete
             {/* Message Content */}
             {(() => {
               if (message.role === 'assistant') {
-                // During streaming: simple text display (avoids broken markdown parsing)
-                // After streaming completes: full markdown rendering
-                if (message.isStreaming) {
-                  return (
-                    <div
-                      className="message-list__message-text message-list__message-text--streaming"
-                      style={{ whiteSpace: 'pre-wrap' }}
-                    >
-                      {message.content}
-                      <span className="chat-interface__cursor">|</span>
-                    </div>
-                  );
-                }
+                // Always render markdown (even during streaming).
+                // Backend escapes newlines as \\n in SSE, frontend decodes them,
+                // so the accumulated text has proper markdown structure.
                 const { cleanContent, followUps } = extractFollowUps(message.content);
                 const isLastAssistant = message === [...messages].reverse().find(m => m.role === 'assistant');
                 const showSmartSuggestions = abVariant === 'B' && preUserQueryCount === 1 && isLastAssistant;
