@@ -495,7 +495,11 @@ async def stream_message(request: ChatMessageRequest):
                         pass
 
                 full_response += chunk
-                yield f"data: {chunk}\n\n"
+                # SSE protocol: newlines in data must be sent as separate
+                # data: lines, otherwise the parser drops content after \n.
+                # Encode \n as \\n so the frontend receives them as literal text.
+                safe_chunk = chunk.replace('\n', '\\n')
+                yield f"data: {safe_chunk}\n\n"
 
             # Save messages to database after streaming completes
             _save_messages(

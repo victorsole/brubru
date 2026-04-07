@@ -495,7 +495,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
               }
             }
 
-            accumulatedContent += content;
+            // Decode escaped newlines from SSE transport
+            const decoded = content.replace(/\\n/g, '\n');
+            accumulatedContent += decoded;
 
             // First real text chunk: add message frame and clear status
             if (!messageAdded) {
