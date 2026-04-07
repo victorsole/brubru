@@ -4140,92 +4140,81 @@ class ContextBuilder:
         entities: ExtractedEntities
     ) -> List[Dict[str, Any]]:
         """
-        Fetch EU laws from local LEG_2025-11 database.
+        Fetch EU laws from local LEG_2025-11 database (28K+ laws).
 
-        This provides FASTER and MORE COMPREHENSIVE access to EU laws:
-        - 50k+ laws indexed locally
-        - Full-text search capabilities
-        - Instant access without API rate limits
-        - Links to related laws
+        Uses PostgreSQL TSVECTOR full-text search (GIN-indexed) for fast,
+        relevance-ranked results. Falls back to CELEX direct lookup when
+        the user references specific law identifiers.
 
         Args:
             query: User query
             entities: Extracted entities (CELEX, policy areas, etc.)
 
         Returns:
-            List of relevant EU laws with full text
+            List of relevant EU laws
         """
-        from services.law_database.law_indexer import get_law_indexer
+        from services.eu_law_search import EULawSearchService
+        from models.eu_law import EULaw
+        from core.database import SessionLocal
 
         laws = []
 
         try:
-            law_indexer = get_law_indexer()
+            db = SessionLocal()
 
-            # Priority 1: Direct CELEX lookup
-            if entities.celex_numbers:
-                for celex in entities.celex_numbers[:3]:  # Max 3 CELEX lookups
-                    law = await law_indexer.get_law_by_celex(celex)
-                    if law:
-                        # Get full text
-                        full_text = await law_indexer.get_law_full_text(law['uuid'])
+            try:
+                search_service = EULawSearchService(db)
 
+                # Priority 1: Direct CELEX lookup
+                if entities.celex_numbers:
+                    for celex in entities.celex_numbers[:3]:
+                        law = db.query(EULaw).filter(EULaw.celex == celex).first()
+                        if law:
+                            laws.append({
+                                'celex': law.celex,
+                                'title': law.title,
+                                'doc_type': law.doc_type_normalized or law.doc_type,
+                                'date': law.date.isoformat() if law.date else None,
+                                'oj_reference': law.oj_reference,
+                                'policy_area': law.policy_area,
+                                'legal_basis': law.legal_basis or [],
+                                'citations': law.citations or [],
+                                'source': 'local_database',
+                            })
+                            logger.debug(f"Found law in local database: {celex}")
+
+                # Priority 2: TSVECTOR full-text search (relevance-ranked)
+                if not laws:
+                    policy_area = entities.policy_areas[0] if entities.policy_areas else None
+
+                    results = search_service.search_tsvector(
+                        query=query,
+                        policy_area=policy_area,
+                        primary_only=True,
+                        doc_types=["Regulation", "Directive", "Decision"],
+                        limit=5,
+                    )
+
+                    for result in results:
                         laws.append({
-                            'celex': celex,
-                            'title': law['title'],
-                            'doc_type': law['doc_type'],
-                            'date': law['date'],
-                            'oj_reference': law.get('oj_reference'),
-                            'policy_area': law.get('policy_area'),
-                            'text_excerpt': full_text[:2000] if full_text else '',
-                            'full_text': full_text[:15000] if full_text else '',  # For AI processing
-                            'legal_basis': law.get('legal_basis', []),
-                            'citations': law.get('citations', []),
-                            'source': 'local_database',
-                            'uuid': law['uuid']
+                            'celex': result.get('celex'),
+                            'title': result.get('title'),
+                            'doc_type': result.get('doc_type'),
+                            'date': result.get('date'),
+                            'policy_area': result.get('policy_area'),
+                            'citations': result.get('citations') or [],
+                            'source': 'local_database_search',
                         })
 
-                        logger.debug(f"Found law in local database: {celex}")
+                    logger.debug(f"TSVECTOR search returned {len(results)} laws")
 
-            # Priority 2: Semantic search if no direct CELEX match
-            if not laws:
-                search_filters = {}
+                logger.info(f"Fetched {len(laws)} laws from local database")
 
-                # Filter by policy area if detected
-                if entities.policy_areas:
-                    search_filters['policy_area'] = entities.policy_areas[0]
-
-                # Search local database
-                search_results = await law_indexer.search_laws(
-                    query=query,
-                    filters=search_filters,
-                    limit=5  # Max 5 search results
-                )
-
-                for result in search_results:
-                    # Get full text
-                    full_text = await law_indexer.get_law_full_text(result['uuid'])
-
-                    laws.append({
-                        'celex': result.get('celex'),
-                        'title': result['title'],
-                        'doc_type': result['doc_type'],
-                        'date': result.get('date'),
-                        'oj_reference': result.get('oj_reference'),
-                        'policy_area': result.get('policy_area'),
-                        'text_excerpt': full_text[:2000] if full_text else '',
-                        'full_text': full_text[:15000] if full_text else '',
-                        'source': 'local_database_search',
-                        'uuid': result['uuid']
-                    })
-
-                logger.debug(f"Found {len(search_results)} laws via search")
-
-            logger.info(f"Fetched {len(laws)} laws from local database")
+            finally:
+                db.close()
 
         except Exception as e:
             logger.error(f"Failed to fetch from local EU laws database: {str(e)}")
-            # Don't fail context building if local database is unavailable
 
         return laws
 
@@ -5553,49 +5542,29 @@ class ContextBuilder:
                 sections.append(f"  Generated: {briefing['generated_at']}")
                 sections.append("")
 
-        # NEW: Local EU Laws Database (50k+ laws from LEG_2025-11)
+        # Local EU Laws Database (28K+ laws from LEG_2025-11, TSVECTOR-ranked)
         if context_data.local_eu_laws:
-            sections.append(f"\nLOCAL EU LAWS DATABASE ({len(context_data.local_eu_laws)} laws):")
-            sections.append("IMPORTANT: These laws are from the comprehensive local database of 50k+ EU laws.")
-            sections.append("You have access to FULL LEGAL TEXT, not just excerpts from APIs.")
-            sections.append("Use this for detailed legal analysis and precise answers.\n")
+            sections.append(f"\nEU LAWS DATABASE ({len(context_data.local_eu_laws)} relevant laws from 28,505 in database):")
+            sections.append("These are adopted EU laws matched by full-text relevance ranking.")
+            sections.append("Present their CELEX numbers and titles to the user. Mention related citations.\n")
 
             for law in context_data.local_eu_laws:
-                sections.append(f"- CELEX: {law.get('celex', 'N/A')}")
-                sections.append(f"  Title: {law['title'][:200]}..." if len(law['title']) > 200 else f"  Title: {law['title']}")
-                sections.append(f"  Type: {law['doc_type']}")
-                sections.append(f"  Date: {law.get('date', 'N/A')}")
-
-                if law.get('oj_reference'):
-                    sections.append(f"  Official Journal: {law['oj_reference']}")
+                celex = law.get('celex', 'N/A')
+                title = law.get('title', '')
+                sections.append(f"- CELEX: {celex}")
+                sections.append(f"  Title: {title[:200]}..." if len(title) > 200 else f"  Title: {title}")
+                sections.append(f"  Type: {law.get('doc_type', 'N/A')} | Date: {law.get('date', 'N/A')}")
 
                 if law.get('policy_area'):
                     sections.append(f"  Policy Area: {law['policy_area']}")
 
-                # Show legal relationships
-                if law.get('legal_basis'):
-                    basis_list = law['legal_basis'][:3]  # First 3
-                    sections.append(f"  Legal Basis: {', '.join(basis_list)}")
-                    if len(law.get('legal_basis', [])) > 3:
-                        sections.append(f"    ... and {len(law['legal_basis']) - 3} more")
-
                 if law.get('citations'):
-                    citations_list = law['citations'][:5]  # First 5
-                    sections.append(f"  Cites: {', '.join(citations_list)}")
-                    if len(law.get('citations', [])) > 5:
-                        sections.append(f"    ... and {len(law['citations']) - 5} more")
+                    citations_list = law['citations'][:5]
+                    sections.append(f"  Cites: {', '.join(str(c) for c in citations_list)}")
 
-                # Show text excerpt
-                excerpt = law.get('text_excerpt', '')
-                if excerpt:
-                    sections.append(f"  Excerpt: {excerpt[:1000]}...")
+                if celex and celex != 'N/A':
+                    sections.append(f"  EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}")
 
-                # Indicate full text is available
-                full_text_len = len(law.get('full_text', ''))
-                if full_text_len > 0:
-                    sections.append(f"  [FULL TEXT AVAILABLE: {full_text_len:,} characters]")
-
-                sections.append(f"  Source: {law.get('source', 'local_database')}")
                 sections.append("")
 
         # EU institutional source search (Tavily fallback, scoped to .europa.eu + policy media)
