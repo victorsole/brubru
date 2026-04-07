@@ -78,11 +78,12 @@ class EULawSearchService:
     """
     Search service for EU laws.
 
-    Uses PostgreSQL ILIKE for simple pattern matching.
-    Supports filtering by policy area, document type, and date range.
+    Uses PostgreSQL full-text search (TSVECTOR with GIN index) for fast,
+    ranked search across 28K+ documents. Falls back to ILIKE for
+    CELEX/short queries that TSVECTOR handles poorly.
     """
 
-    # Valid document types for filtering
+    # Valid document types for filtering (normalized)
     DOC_TYPES = [
         "Regulation",
         "Directive",
@@ -91,28 +92,7 @@ class EULawSearchService:
         "Opinion",
     ]
 
-    # Policy areas from the database
-    POLICY_AREAS = [
-        "Digital Policy and Digital Economy",
-        "Environment and Climate Action",
-        "Economic and Financial Affairs",
-        "Agriculture",
-        "Health and Food Safety",
-        "Transport",
-        "Migration and Home Affairs",
-        "Competition and State Aid",
-        "Employment and Social Affairs",
-        "Energy",
-        "Trade",
-    ]
-
     def __init__(self, db: Session):
-        """
-        Initialize search service.
-
-        Args:
-            db: SQLAlchemy database session
-        """
         self.db = db
 
     def search(
@@ -127,58 +107,76 @@ class EULawSearchService:
         offset: int = 0,
     ) -> SearchResponse:
         """
-        Search EU laws.
+        Search EU laws using full-text search (TSVECTOR) with ILIKE fallback.
 
-        Args:
-            query: Search query (searches title)
-            policy_area: Filter by policy area
-            doc_type: Filter by document type (Regulation, Directive, etc.)
-            year_from: Filter by year (from)
-            year_to: Filter by year (to)
-            is_primary_only: Only return primary legislation
-            limit: Maximum results to return
-            offset: Offset for pagination
-
-        Returns:
-            SearchResponse with results and metadata
+        TSVECTOR is used for multi-word natural language queries (near-instant via GIN index).
+        ILIKE is used for CELEX lookups and single short terms where TSVECTOR may miss.
         """
         filters_applied = {}
 
-        # Build query
+        # Build base query
         db_query = self.db.query(EULaw)
+        use_relevance_ordering = False
 
-        # Text search (title)
+        # Text search
         if query:
-            # Split query into words and search each
-            words = query.strip().split()
-            if len(words) == 1:
-                db_query = db_query.filter(EULaw.title.ilike(f"%{query}%"))
+            query_stripped = query.strip()
+            filters_applied["query"] = query_stripped
+
+            # CELEX direct lookup (starts with 3 + 4 digits)
+            if len(query_stripped) >= 5 and query_stripped[0] == '3' and query_stripped[1:5].isdigit():
+                db_query = db_query.filter(EULaw.celex == query_stripped)
             else:
-                # All words must match
-                conditions = [EULaw.title.ilike(f"%{word}%") for word in words]
-                db_query = db_query.filter(and_(*conditions))
-            filters_applied["query"] = query
+                # Try TSVECTOR full-text search for multi-word queries
+                ts_query = func.plainto_tsquery('english', query_stripped)
+                ts_filter = EULaw.search_vector.op('@@')(ts_query)
+
+                # Check if TSVECTOR would return results (for short/unusual terms it may not)
+                ts_count = self.db.query(func.count(EULaw.id)).filter(ts_filter).scalar()
+
+                if ts_count and ts_count > 0:
+                    db_query = db_query.filter(ts_filter)
+                    use_relevance_ordering = True
+                else:
+                    # Fallback to ILIKE for terms TSVECTOR misses
+                    words = query_stripped.split()
+                    if len(words) == 1:
+                        db_query = db_query.filter(EULaw.title.ilike(f"%{query_stripped}%"))
+                    else:
+                        conditions = [EULaw.title.ilike(f"%{word}%") for word in words]
+                        db_query = db_query.filter(and_(*conditions))
 
         # Policy area filter
         if policy_area:
             db_query = db_query.filter(EULaw.policy_area == policy_area)
             filters_applied["policy_area"] = policy_area
 
-        # Document type filter
+        # Document type filter (use normalized column if available, fall back to raw)
         if doc_type:
-            db_query = db_query.filter(EULaw.doc_type.ilike(f"%{doc_type}%"))
+            db_query = db_query.filter(
+                or_(
+                    EULaw.doc_type_normalized == doc_type,
+                    EULaw.doc_type.ilike(f"%{doc_type}%")
+                )
+            )
             filters_applied["doc_type"] = doc_type
 
-        # Year range filter
+        # Year range filter (use celex_year if available, fall back to date extract)
         if year_from:
             db_query = db_query.filter(
-                func.extract('year', EULaw.date) >= year_from
+                or_(
+                    EULaw.celex_year >= year_from,
+                    func.extract('year', EULaw.date) >= year_from
+                )
             )
             filters_applied["year_from"] = year_from
 
         if year_to:
             db_query = db_query.filter(
-                func.extract('year', EULaw.date) <= year_to
+                or_(
+                    EULaw.celex_year <= year_to,
+                    func.extract('year', EULaw.date) <= year_to
+                )
             )
             filters_applied["year_to"] = year_to
 
@@ -190,8 +188,16 @@ class EULawSearchService:
         # Get total count before limit/offset
         total_count = db_query.count()
 
-        # Order by date (newest first) and apply pagination
-        db_query = db_query.order_by(desc(EULaw.date))
+        # Order by relevance (TSVECTOR rank) or date
+        if use_relevance_ordering and query:
+            ts_query = func.plainto_tsquery('english', query.strip())
+            db_query = db_query.order_by(
+                func.ts_rank(EULaw.search_vector, ts_query).desc(),
+                desc(EULaw.date)
+            )
+        else:
+            db_query = db_query.order_by(desc(EULaw.date))
+
         results = db_query.offset(offset).limit(limit).all()
 
         # Convert to SearchResult objects
@@ -199,11 +205,11 @@ class EULawSearchService:
             SearchResult(
                 celex=law.celex or "",
                 title=law.title or "",
-                doc_type=law.doc_type or "",
+                doc_type=law.doc_type_normalized or law.doc_type or "",
                 date=law.date,
                 policy_area=law.policy_area or "",
                 oj_reference=law.oj_reference or "",
-                relevance_score=1.0,  # Simple relevance for now
+                relevance_score=1.0 if use_relevance_ordering else 0.0,
             )
             for law in results
         ]
@@ -214,6 +220,100 @@ class EULawSearchService:
             query=query,
             filters_applied=filters_applied,
         )
+
+    def search_tsvector(
+        self,
+        query: str,
+        policy_area: Optional[str] = None,
+        primary_only: bool = True,
+        doc_types: Optional[list[str]] = None,
+        limit: int = 5,
+    ) -> list[dict]:
+        """
+        Fast TSVECTOR-only search for internal use (chatbot context, document generator).
+
+        Returns lightweight dicts instead of SearchResult objects.
+        """
+        ts_query = func.plainto_tsquery('english', query.strip())
+
+        db_query = self.db.query(
+            EULaw.celex,
+            EULaw.title,
+            EULaw.doc_type_normalized,
+            EULaw.date,
+            EULaw.policy_area,
+            EULaw.citations,
+            func.ts_rank(EULaw.search_vector, ts_query).label('rank')
+        ).filter(
+            EULaw.search_vector.op('@@')(ts_query)
+        )
+
+        if policy_area:
+            db_query = db_query.filter(EULaw.policy_area == policy_area)
+
+        if primary_only:
+            db_query = db_query.filter(EULaw.is_primary_legislation == True)
+
+        if doc_types:
+            db_query = db_query.filter(EULaw.doc_type_normalized.in_(doc_types))
+
+        db_query = db_query.order_by(desc('rank')).limit(limit)
+
+        return [
+            {
+                'celex': row.celex,
+                'title': row.title,
+                'doc_type': row.doc_type_normalized,
+                'date': row.date.isoformat() if row.date else None,
+                'policy_area': row.policy_area,
+                'citations': row.citations,
+                'relevance': float(row.rank),
+            }
+            for row in db_query.all()
+        ]
+
+    def get_legal_framework(
+        self,
+        policy_area: str,
+        keywords: str = "",
+        limit: int = 5,
+    ) -> list[dict]:
+        """
+        Get the most relevant laws for a policy area/topic.
+
+        Used by Document Generator to inject a "Legal Framework" section
+        into position papers and MEP briefings.
+        """
+        if keywords:
+            results = self.search_tsvector(
+                query=keywords,
+                policy_area=policy_area,
+                primary_only=True,
+                doc_types=["Regulation", "Directive", "Decision"],
+                limit=limit,
+            )
+            if results:
+                return results
+
+        # Fallback: newest primary legislation in this policy area
+        laws = self.db.query(EULaw).filter(
+            and_(
+                EULaw.policy_area == policy_area,
+                EULaw.is_primary_legislation == True,
+                EULaw.doc_type_normalized.in_(["Regulation", "Directive", "Decision"]),
+            )
+        ).order_by(desc(EULaw.date)).limit(limit).all()
+
+        return [
+            {
+                'celex': law.celex,
+                'title': law.title,
+                'doc_type': law.doc_type_normalized or law.doc_type,
+                'date': law.date.isoformat() if law.date else None,
+                'policy_area': law.policy_area,
+            }
+            for law in laws
+        ]
 
     def get_by_celex(self, celex: str) -> Optional[SearchResult]:
         """
@@ -307,19 +407,20 @@ class EULawSearchService:
 
     def get_doc_type_stats(self) -> dict:
         """
-        Get statistics by document type.
+        Get statistics by normalized document type.
 
         Returns:
             Dict with doc type counts
         """
-        stats = {}
-        for doc_type in self.DOC_TYPES:
-            count = self.db.query(func.count(EULaw.id)).filter(
-                EULaw.doc_type.ilike(f"%{doc_type}%")
-            ).scalar()
-            stats[doc_type] = count
+        results = self.db.query(
+            EULaw.doc_type_normalized,
+            func.count(EULaw.id)
+        ).group_by(EULaw.doc_type_normalized).all()
 
-        return stats
+        return {
+            doc_type or "Unknown": count
+            for doc_type, count in results
+        }
 
     def get_year_stats(self, year_from: int = 2000) -> dict:
         """
