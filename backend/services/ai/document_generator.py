@@ -507,6 +507,30 @@ NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
             for i, ask in enumerate(request.key_asks)
         ])
 
+        # Enrich with legal framework from 28K+ law database
+        legal_framework_text = ""
+        try:
+            from core.database import SessionLocal
+            from services.eu_law_search import EULawSearchService
+
+            db = SessionLocal()
+            try:
+                search = EULawSearchService(db)
+                framework_laws = search.get_legal_framework(
+                    policy_area="",  # Don't filter by area, let TSVECTOR rank
+                    keywords=request.legislation_title,
+                    limit=5,
+                )
+                if framework_laws:
+                    legal_framework_text = "\n\nRELEVANT EU LEGAL FRAMEWORK (from Brubru's database of 28,505 laws):\n"
+                    for law in framework_laws:
+                        celex = law.get('celex', 'N/A')
+                        legal_framework_text += f"- {law.get('title', 'Unknown')} (CELEX: {celex}, {law.get('doc_type', '')}, {law.get('date', 'N/A')})\n"
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning(f"Could not fetch legal framework: {e}")
+
         # Build prompt
         prompt = self.POSITION_PAPER_PROMPT.format(
             organisation_name=request.organisation_name,
@@ -518,7 +542,7 @@ NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
             position=request.position.replace("_", " ").title(),
             key_asks_formatted=key_asks_formatted,
             sector_impact=request.sector_impact or "Not specified",
-            additional_context=request.additional_context or "None",
+            additional_context=(request.additional_context or "None") + legal_framework_text,
             tone=request.tone.upper(),
             style_guidelines=self.EU_STYLE_GUIDELINES
         )
@@ -559,6 +583,30 @@ NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
 
         key_points_formatted = "\n".join([f"- {point}" for point in request.key_points])
 
+        # Enrich with legal framework from 28K+ law database
+        legal_framework_text = ""
+        try:
+            from core.database import SessionLocal
+            from services.eu_law_search import EULawSearchService
+
+            db = SessionLocal()
+            try:
+                search = EULawSearchService(db)
+                framework_laws = search.get_legal_framework(
+                    policy_area="",  # Don't filter by area, let TSVECTOR rank
+                    keywords=request.legislation_title,
+                    limit=5,
+                )
+                if framework_laws:
+                    legal_framework_text = "\n\nRELEVANT EU LEGAL FRAMEWORK (from Brubru's database of 28,505 laws):\n"
+                    for law in framework_laws:
+                        celex = law.get('celex', 'N/A')
+                        legal_framework_text += f"- {law.get('title', 'Unknown')} (CELEX: {celex}, {law.get('doc_type', '')}, {law.get('date', 'N/A')})\n"
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning(f"Could not fetch legal framework: {e}")
+
         prompt = self.MEP_BRIEFING_PROMPT.format(
             mep_name=request.mep_name,
             political_group=request.political_group or "Not specified",
@@ -577,6 +625,10 @@ NOW GENERATE THE QUESTION BASED ON THE USER'S INPUT ABOVE.
             national_angle=request.national_angle or "Not specified",
             style_guidelines=self.EU_STYLE_GUIDELINES
         )
+
+        # Append legal framework to the prompt
+        if legal_framework_text:
+            prompt += legal_framework_text
 
         content = await self._generate(prompt)
         sections = self._parse_sections(content)

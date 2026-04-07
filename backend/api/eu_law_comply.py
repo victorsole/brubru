@@ -336,6 +336,104 @@ async def get_cluster_requirements(
 
 
 # ============================================================================
+# CLUSTER SUGGESTION ENDPOINT
+# ============================================================================
+
+@router.get("/suggest-clusters")
+async def suggest_clusters(
+    description: str,
+    limit: int = 5,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Suggest relevant compliance clusters based on a business description.
+
+    Uses TSVECTOR full-text search to find laws matching the description,
+    then returns clusters those laws belong to.
+    """
+    from services.eu_law_search import EULawSearchService
+
+    try:
+        if current_user.subscription_tier not in ['yellow', 'blue']:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="EU Law Comply is available for Yellow and Blue tier users only"
+            )
+
+        search_service = EULawSearchService(db)
+
+        # Find relevant laws via TSVECTOR search
+        matching_laws = search_service.search_tsvector(
+            query=description,
+            primary_only=True,
+            doc_types=["Regulation", "Directive"],
+            limit=20,
+        )
+
+        if not matching_laws:
+            return {"clusters": [], "message": "No matching laws found for this description"}
+
+        # Find which clusters these laws belong to
+        matching_celex = [law['celex'] for law in matching_laws if law.get('celex')]
+
+        if not matching_celex:
+            return {"clusters": [], "message": "No CELEX-identified laws matched"}
+
+        # Get law IDs for matched CELEX numbers
+        matched_law_ids = db.query(EULaw.id).filter(
+            EULaw.celex.in_(matching_celex)
+        ).all()
+        law_ids = [row[0] for row in matched_law_ids]
+
+        if not law_ids:
+            return {"clusters": [], "message": "No clustered laws matched"}
+
+        # Find clusters containing these laws
+        cluster_hits = db.query(
+            LawCluster.id,
+            LawCluster.name,
+            LawCluster.description,
+            LawCluster.policy_area,
+            func.count(ClusterLaw.law_id).label('match_count')
+        ).join(
+            ClusterLaw, ClusterLaw.cluster_id == LawCluster.id
+        ).filter(
+            ClusterLaw.law_id.in_(law_ids)
+        ).group_by(
+            LawCluster.id, LawCluster.name, LawCluster.description, LawCluster.policy_area
+        ).order_by(
+            func.count(ClusterLaw.law_id).desc()
+        ).limit(limit).all()
+
+        clusters = [
+            {
+                "id": hit.id,
+                "name": hit.name,
+                "description": hit.description,
+                "policy_area": hit.policy_area,
+                "relevance_score": hit.match_count,
+            }
+            for hit in cluster_hits
+        ]
+
+        return {
+            "clusters": clusters,
+            "laws_searched": len(matching_laws),
+            "laws_with_clusters": len(law_ids),
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error suggesting clusters: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to suggest clusters"
+        )
+
+
+# ============================================================================
 # LAW DATABASE ENDPOINTS
 # ============================================================================
 
