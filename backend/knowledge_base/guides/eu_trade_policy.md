@@ -61,6 +61,10 @@ On 6 March 2026, Commissioner Sefcovic and Canada's Minister for International T
 | International Procurement Instrument (IPI) | Regulation (EU) 2022/1031, CELEX 32022R1031 | Reciprocal procurement access |
 | CBAM | Regulation (EU) 2023/956, CELEX 32023R0956 | Carbon border adjustment |
 
+## Carbon Border Adjustment Mechanism (CBAM)
+
+**Regulation (EU) 2023/956** (CELEX: 32023R0956). CBAM imposes a carbon price on imports of carbon-intensive goods (cement, iron/steel, aluminium, fertilisers, electricity, hydrogen) to prevent carbon leakage. Transitional period: 1 October 2023 to 31 December 2025 (reporting only, no financial adjustment). Definitive regime: from 1 January 2026, importers must purchase CBAM certificates corresponding to the embedded emissions of imported goods. Certificate price mirrors the EU ETS allowance price (weekly average). First CBAM certificate price published 7 April 2026. Importers must surrender certificates annually by 31 May. Free allocation under EU ETS is phased out for CBAM sectors (2026-2034). Authorised declarants must register with national competent authorities. Implementing Regulation (EU) 2023/1773 (transitional rules) and Implementing Regulation (EU) 2025/2284 (definitive regime rules). DG TAXUD administers CBAM. EP lead: ENVI committee.
+
 ## EU Designs Regulation Codification (March 2026)
 
 **Regulation (EU) 2026/715** (CELEX: 32026R0715) -- Regulation of the European Parliament and of the Council of 11 March 2026 on European Union designs (codification). This codification consolidates the existing EU design protection framework into a single, streamlined legal text. It replaces Council Regulation (EC) No 6/2002 on Community designs, incorporating all subsequent amendments. The regulation covers registered and unregistered Community designs, administered by EUIPO (EU Intellectual Property Office) in Alicante, Spain. This is a technical codification (no policy changes), but it simplifies the legal reference for practitioners.

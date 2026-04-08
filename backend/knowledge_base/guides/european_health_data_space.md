@@ -17,6 +17,7 @@
 - Interoperability: European Electronic Health Record Exchange Format (EEHRxF)
 - National legislation required for opt-out mechanisms and secure processing environments by 2027
 - Third countries can apply to join HealthData@EU from March 2034
+- Implementing Regulation (EU) 2026/771 (7 April 2026): rules for establishment and operation of the EHDS Board (CELEX: 32026R0771)
 - Relationship with GDPR: EHDS is lex specialis for health data processing in the two defined pillars; GDPR Article 9 derogations clarified
 
 ## Overview
@@ -58,6 +59,7 @@ Secondary use covers access to health data by third parties for research, innova
 | 21 January 2025 | Council formally adopted the EHDS Regulation |
 | 5 March 2025 | Published in Official Journal |
 | 26 May 2025 | Entry into force |
+| 7 April 2026 | Commission Implementing Regulation (EU) 2026/771 published: rules for establishment and operation of the EHDS Board |
 | 2027 | Member States must have opt-out mechanisms and secure processing environments operational |
 | March 2029 | Secondary use provisions become applicable (26 months after entry into force) |
 | March 2034 | Third countries eligible to join HealthData@EU |
