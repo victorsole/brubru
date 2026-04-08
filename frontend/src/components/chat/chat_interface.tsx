@@ -217,10 +217,10 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     if (activeChatId === undefined) return; // prop not provided
 
     if (activeChatId === null) {
-      // New chat requested -- but preserve initialQuestion if present
+      // New chat requested -- but preserve initialQuestion or ?q= param if present
       setMessages([]);
       setChatId(null);
-      if (!initialQuestion) {
+      if (!initialQuestion && !urlQuery) {
         setInputValue('');
       }
       setError(null);
