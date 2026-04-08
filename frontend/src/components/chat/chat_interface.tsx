@@ -103,7 +103,7 @@ export interface DetectedEntities {
 export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId, onConversationUpdate }: ChatInterfaceProps = {}) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(initialQuestion || '');
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [thinkingStatus, setThinkingStatus] = useState<string | null>(null);
@@ -202,9 +202,11 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
   }, [isLoading]);
 
   // Handle initial question from EU Law Comply, daily brief ?q= param, or other sources
+  const initialQuestionConsumed = useRef(false);
   useEffect(() => {
-    if (initialQuestion) {
+    if (initialQuestion && !initialQuestionConsumed.current) {
       setInputValue(initialQuestion);
+      initialQuestionConsumed.current = true;
     }
   }, [initialQuestion]);
 
