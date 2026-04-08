@@ -84,7 +84,7 @@ def _special_date_greeting(local_dt: datetime) -> Optional[str]:
 
     # Sant Jordi (23 April) - Catalan book and rose day
     if month == 4 and day == 23:
-        return "Bon Sant Jordi"
+        return "Happy Sant Jordi"
 
     # Europe Day (9 May)
     if month == 5 and day == 9:
@@ -208,8 +208,8 @@ def generate_personalized_greeting(
         tail = "Celebrating the achievements of women leaders across Europe!"
     elif special == "Happy Easter":
         tail = "Wishing you a peaceful Easter. Ready to tackle EU policy when you are!"
-    elif special == "Bon Sant Jordi":
-        tail = "Books and roses! A perfect day for EU legislative reading, no?"
+    elif special == "Happy Sant Jordi":
+        tail = "Today is the day of books and roses! A perfect day for EU legislative reading, no?"
     elif special == "Happy Europe Day":
         tail = "Celebrating European unity, peace, and cooperation. How can I assist you today?"
     elif special == "Happy World Environment Day":

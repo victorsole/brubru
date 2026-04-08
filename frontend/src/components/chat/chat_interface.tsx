@@ -129,9 +129,17 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
 
   // Fetch personalized greeting on mount (available to all tiers)
   useEffect(() => {
-    // Pre-user: show generic welcome + track page_load
+    // Pre-user: show greeting (date-aware for special days) + track page_load
     if (!isAuthenticated) {
-      setPersonalizedGreeting('Welcome to Brubru! Ask me anything about EU policy.');
+      const now = new Date();
+      const m = now.getMonth() + 1;
+      const d = now.getDate();
+      let greeting = 'Welcome to Brubru! Ask me anything about EU policy.';
+      if (m === 4 && d === 23) greeting = 'Happy Sant Jordi! Today is the day of books and roses. Ask me anything about EU policy.';
+      else if (m === 5 && d === 9) greeting = 'Happy Europe Day! Ask me anything about EU policy.';
+      else if (m === 12 && d === 25) greeting = 'Merry Christmas! If you still feel like thinking about Brussels today, I am here.';
+      else if (m === 1 && d === 1) greeting = 'Happy New Year! Let\'s kick off the year with smart EU insights.';
+      setPersonalizedGreeting(greeting);
       trackPreUserEvent(getPreUserId(), 'page_load');
       return;
     }
