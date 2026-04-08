@@ -422,6 +422,7 @@ TRANSLATIONS = {
         "cta_button": "Try Brubru for free",
         "free_notice": "Brubru is free to use. No credit card required.",
         "unsubscribe": "If you no longer wish to receive emails from us, simply reply to this message.",
+        "suggested_q_label": "Try asking Brubru:",
     },
     "es": {
         "subject_cluster": "Brubru - Herramientas de IA para profesionales de {name}",
@@ -453,6 +454,7 @@ TRANSLATIONS = {
         "cta_button": "Pruebe Brubru gratis",
         "free_notice": "Brubru es gratuito. No se requiere tarjeta de credito.",
         "unsubscribe": "Si ya no desea recibir correos electronicos nuestros, simplemente responda a este mensaje.",
+        "suggested_q_label": "Pruebe a preguntar a Brubru:",
     },
     "fr": {
         "subject_cluster": "Brubru - Outils IA pour les professionnels de {name}",
@@ -484,6 +486,7 @@ TRANSLATIONS = {
         "cta_button": "Essayez Brubru gratuitement",
         "free_notice": "Brubru est gratuit. Aucune carte de credit requise.",
         "unsubscribe": "Si vous ne souhaitez plus recevoir d'e-mails de notre part, repondez simplement a ce message.",
+        "suggested_q_label": "Essayez de demander a Brubru :",
     },
     "it": {
         "subject_cluster": "Brubru - Strumenti IA per i professionisti di {name}",
@@ -515,6 +518,7 @@ TRANSLATIONS = {
         "cta_button": "Provate Brubru gratuitamente",
         "free_notice": "Brubru e gratuito. Nessuna carta di credito richiesta.",
         "unsubscribe": "Se non desiderate piu ricevere e-mail da noi, rispondete semplicemente a questo messaggio.",
+        "suggested_q_label": "Prova a chiedere a Brubru:",
     },
     "ca": {
         "subject_cluster": "Brubru: eines d'IA per a professionals de {name}",
@@ -546,6 +550,7 @@ TRANSLATIONS = {
         "cta_button": "Proveu Brubru gratis",
         "free_notice": "Brubru és gratuït. No cal targeta de crèdit.",
         "unsubscribe": "Si no voleu rebre més correus electrònics nostres, simplement responeu a aquest missatge.",
+        "suggested_q_label": "Proveu de preguntar a Brubru:",
     },
     "nl": {
         "subject_cluster": "Brubru - AI-tools voor {name} beleidsprofessionals",
@@ -577,6 +582,7 @@ TRANSLATIONS = {
         "cta_button": "Probeer Brubru gratis",
         "free_notice": "Brubru is gratis. Geen creditcard vereist.",
         "unsubscribe": "Als u geen e-mails meer van ons wilt ontvangen, beantwoord dan simpelweg dit bericht.",
+        "suggested_q_label": "Probeer Brubru een vraag te stellen:",
     },
 }
 
@@ -672,6 +678,8 @@ def _build_email_html(
     cta_text: str,
     free_notice: str,
     unsubscribe: str,
+    suggested_question: str = "",
+    suggested_question_label: str = "",
 ) -> str:
     """Build the HTML email from translated components."""
     colors = ["#0693e3", "#059669", "#9b51e0", "#d97706"]
@@ -729,10 +737,22 @@ def _build_email_html(
 
                             {files_section}
 
+                            <!-- Suggested Question -->
+                            {f'''<div style="margin:24px 0;padding:16px;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd;">
+                                <p style="color:#475569;font-size:13px;margin:0 0 8px;font-weight:600;">{suggested_question_label}</p>
+                                <p style="color:#0693e3;font-size:15px;font-style:italic;margin:0 0 10px;">
+                                    &ldquo;{suggested_question}&rdquo;
+                                </p>
+                                <a href="https://brubru.beresol.eu/main?q={__import__("urllib.parse", fromlist=["quote"]).quote(suggested_question)}"
+                                   style="display:inline-block;padding:6px 16px;font-size:13px;font-weight:600;color:#0693e3;border:1px solid #0693e3;border-radius:4px;text-decoration:none;">
+                                    Ask Brubru
+                                </a>
+                            </div>''' if suggested_question else ''}
+
                             <!-- CTA Button -->
                             <table cellpadding="0" cellspacing="0" style="margin:32px 0;">
                                 <tr><td align="center" style="background-color:#0693e3;border-radius:8px;">
-                                    <a href="https://brubru.beresol.eu"
+                                    <a href="https://brubru.beresol.eu/main{f"?q={__import__('urllib.parse', fromlist=['quote']).quote(suggested_question)}" if suggested_question else ""}"
                                        style="display:inline-block;padding:14px 36px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;">
                                         {cta_text}
                                     </a>
@@ -764,6 +784,59 @@ def _build_email_html(
         </table>
     </body>
     </html>"""
+
+
+# Suggested first questions per cluster (in the language of the campaign)
+CLUSTER_SUGGESTED_QUESTIONS = {
+    "digital": {
+        "en": "What are the AI Act compliance obligations for high-risk systems?",
+        "es": "Cuales son las obligaciones del Reglamento de IA para sistemas de alto riesgo?",
+    },
+    "climate": {
+        "en": "How does the CBAM affect EU importers starting in 2026?",
+        "es": "Como afecta el CBAM a los importadores europeos a partir de 2026?",
+    },
+    "finance": {
+        "en": "What are the PSD3 and Payment Services Regulation proposals?",
+        "es": "Que son las propuestas PSD3 y el Reglamento de Servicios de Pago?",
+    },
+    "trade": {
+        "en": "What is the status of the EU-Mercosur trade agreement?",
+        "es": "Cual es el estado del acuerdo comercial UE-Mercosur?",
+    },
+    "agriculture": {
+        "en": "How does the Common Agricultural Policy reform affect my sector?",
+        "es": "Como afecta la reforma de la PAC a mi sector?",
+    },
+    "health": {
+        "en": "What is the EU pharmaceutical legislation reform timeline?",
+        "es": "Cual es el calendario de la reforma de la legislacion farmaceutica de la UE?",
+    },
+    "energy": {
+        "en": "What are the EU rules on renewable energy and the Electrification Action Plan?",
+        "es": "Cuales son las normas de la UE sobre energia renovable y el Plan de Electrificacion?",
+    },
+    "transport": {
+        "en": "What are the EU rules on rail passenger rights and sustainable mobility?",
+        "es": "Cuales son las normas de la UE sobre derechos de pasajeros ferroviarios y movilidad sostenible?",
+    },
+    "defence": {
+        "en": "How does the SAFE instrument and ReArm Europe work?",
+        "es": "Como funciona el instrumento SAFE y ReArm Europe?",
+    },
+    "social": {
+        "en": "What is the EU approach to minimum wages and the Platform Workers Directive?",
+        "es": "Cual es el enfoque de la UE sobre salarios minimos y la Directiva de Trabajadores de Plataformas?",
+    },
+    "research": {
+        "en": "What is Horizon Europe and how can my organisation participate?",
+        "es": "Que es Horizonte Europa y como puede participar mi organizacion?",
+    },
+    "civil_society": {
+        "en": "How does the EU Transparency Register work?",
+        "es": "Como funciona el Registro de Transparencia de la UE?",
+    },
+}
 
 
 def build_cluster_email(cluster_key: str, lang: str = "en") -> dict:
@@ -804,6 +877,10 @@ def build_cluster_email(cluster_key: str, lang: str = "en") -> dict:
                                 {files_list}
                             </ul"""
 
+    # Get suggested question for this cluster and language
+    sq = CLUSTER_SUGGESTED_QUESTIONS.get(cluster_key, {}).get(lang, "")
+    sq_label = t.get("suggested_q_label", "")
+
     html_body = _build_email_html(
         subject=subject,
         header_subtitle=t["header_subtitle"],
@@ -815,6 +892,8 @@ def build_cluster_email(cluster_key: str, lang: str = "en") -> dict:
         cta_text=t["cta_button"],
         free_notice=t["free_notice"],
         unsubscribe=t["unsubscribe"],
+        suggested_question=sq,
+        suggested_question_label=sq_label,
     )
 
     return {"subject": subject, "html_body": html_body}
