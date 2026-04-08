@@ -103,7 +103,9 @@ export interface DetectedEntities {
 export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId, onConversationUpdate }: ChatInterfaceProps = {}) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState(initialQuestion || '');
+  // Read ?q= param directly from URL as well as initialQuestion prop
+  const urlQuery = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('q') : null;
+  const [inputValue, setInputValue] = useState(initialQuestion || urlQuery || '');
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [thinkingStatus, setThinkingStatus] = useState<string | null>(null);
