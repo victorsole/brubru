@@ -2,6 +2,8 @@
 
 ## QUICK FACTS
 - Topic: EU financial supervision -- ESAs, MiCA crypto-asset oversight, DORA digital resilience
+- Responsible Commissioner: Maria Luís Albuquerque (Financial Services, Portugal)
+- EP lead committee: ECON (Economic and Monetary Affairs)
 - ESAs: EBA (Paris, banking), EIOPA (Frankfurt, insurance/pensions), ESMA (Paris, securities/markets)
 - EBA founding regulation: Regulation (EU) 1093/2010
 - ESA Review: Regulation (EU) 2019/2175 -- enhanced governance, supervisory convergence, direct supervision powers

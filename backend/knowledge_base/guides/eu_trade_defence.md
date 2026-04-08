@@ -9,6 +9,7 @@
 - Modernisation: Regulation (EU) 2017/2321 (new anti-dumping methodology for non-market economies)
 - Enforcement regulation: Regulation (EU) 2015/1843 (TDI modernisation)
 - Lead DG: DG Trade and Economic Security (DG TRADE)
+- Responsible Commissioner: Maros Sefcovic (Trade and Economic Security, Slovakia)
 - EP committee: INTA (International Trade)
 - Investigations: TRON database (tron.trade.ec.europa.eu)
 - Active measures: ~150 anti-dumping + ~25 countervailing duty measures (approximate, 2025)

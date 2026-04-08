@@ -8,6 +8,8 @@
 - Adopted: Council adopted 21 January 2025, published OJ 5 March 2025
 - Entry into force: 26 May 2025 (26 March 2025 plus 60 days)
 - Responsible DGs: DG SANTE (Health and Food Safety) and DG CNECT (Communications Networks, Content and Technology)
+- Responsible Commissioners: Olivér Várhelyi (Health, Hungary) and Henna Virkkunen (Tech Sovereignty, Finland)
+- EP lead committee: ENVI (Environment, Public Health and Food Safety), with LIBE opinion
 - Two pillars: (1) primary use (patients access own health data via MyHealth@EU), (2) secondary use (research, innovation, policy via HealthData@EU)
 - MyHealth@EU: cross-border infrastructure for primary use, operated by Commission
 - HealthData@EU: decentralised infrastructure for secondary use, health data access bodies in each Member State

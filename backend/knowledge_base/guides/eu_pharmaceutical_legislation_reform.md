@@ -6,6 +6,7 @@
 - Replaces: Directive 2001/83/EC (medicinal products code) + Regulation (EC) 726/2004 (centralised procedure)
 - Status: provisional agreement reached 11 December 2025, awaiting formal adoption
 - Responsible DG: DG SANTE (Health and Food Safety)
+- Responsible Commissioner: Olivér Várhelyi (Health and Animal Welfare, Hungary)
 - EP lead committee: SANT (Public Health), formerly ENVI
 - Directive rapporteur: Dolors Montserrat (EPP, Spain)
 - Regulation rapporteur: Tiemo Wölken (S&D, Germany)

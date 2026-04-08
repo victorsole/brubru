@@ -10,6 +10,8 @@
 - Entry into force: 1 August 2024
 - Lead EP committees: IMCO + LIBE (joint procedure)
 - Co-rapporteurs: Brando Benifei (S&D) and Dragos Tudorache (Renew)
+- Responsible Commissioner: Henna Virkkunen (Tech Sovereignty, Security and Democracy, Finland)
+- Lead DG: DG CNECT (Communications Networks, Content and Technology)
 - Risk categories: Prohibited, High-risk, Limited risk, Minimal risk
 - Prohibited practices apply from: 2 February 2025
 - GPAI obligations apply from: 2 August 2025

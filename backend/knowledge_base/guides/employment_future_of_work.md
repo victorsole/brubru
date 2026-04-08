@@ -3,6 +3,8 @@
 ## QUICK FACTS
 - Topic: EU employment policy, platform work, AI and labour markets, youth employment, social rights
 - Responsible DG: DG EMPL (Employment, Social Affairs and Inclusion)
+- Responsible Commissioner: Roxana Minzatu (People, Skills and Preparedness, Romania)
+- EP lead committee: EMPL (Employment and Social Affairs)
 - Council configuration: EPSCO (Employment, Social Policy, Health and Consumer Affairs)
 - Platform Work Directive: (EU) 2024/2831 -- employment status, algorithmic management, transposition by 2 December 2026
 - ESF+ Regulation: (EU) 2021/1057 -- EUR 88 billion shared management + EUR 762 million EaSI strand (2021-2027)

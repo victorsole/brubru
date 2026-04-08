@@ -8,6 +8,8 @@
 - 2030 GHG target: -55% vs 1990 levels -- European Climate Law, Regulation (EU) 2021/1119
 - Long-term goal: Climate neutrality by 2050
 - Lead DG: DG ENER (Energy)
+- Responsible Commissioner: Teresa Ribera (Clean, Just and Competitive Transition, Spain)
+- EP lead committee: ITRE (Industry, Research and Energy)
 - Lead EP committee: ITRE
 - Council configuration: TTE (Transport, Telecommunications and Energy)
 - Key agency: ACER (EU Agency for Cooperation of Energy Regulators)
