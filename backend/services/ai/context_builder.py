@@ -529,6 +529,9 @@ class ContextData:
     # User uploaded documents (for personalised AI context)
     user_uploaded_documents: List[Dict[str, Any]]
 
+    # Org intelligence (aggregated user profile for personalisation)
+    org_intelligence: Optional[Dict[str, Any]] = None
+
     # MEP amendments (scraped EP committee amendments)
     mep_amendments_summary: List[Dict[str, Any]]
 
@@ -839,6 +842,12 @@ class ContextBuilder:
         else:
             tasks.append(empty_result())
 
+        # Org intelligence (aggregated user profile)
+        if user_id:
+            tasks.append(self._fetch_org_intelligence(user_id=user_id))
+        else:
+            tasks.append(empty_result())
+
         # MEP amendments (scraped EP committee amendments)
         if entities.procedure_references or entities.mep_names:
             tasks.append(self._fetch_mep_amendments(
@@ -915,11 +924,14 @@ class ContextBuilder:
         # Unpack User Uploaded Documents (index 17)
         user_uploaded_documents = results[17] if not isinstance(results[17], Exception) else []
 
-        # Unpack MEP Amendments summary (index 18)
-        mep_amendments_summary = results[18] if not isinstance(results[18], Exception) else []
+        # Unpack Org Intelligence (index 18)
+        org_intelligence = results[18] if not isinstance(results[18], Exception) else None
 
-        # Unpack EU Calendar Events (index 19)
-        eu_calendar_events = results[19] if not isinstance(results[19], Exception) else []
+        # Unpack MEP Amendments summary (index 19)
+        mep_amendments_summary = results[19] if not isinstance(results[19], Exception) else []
+
+        # Unpack EU Calendar Events (index 20)
+        eu_calendar_events = results[20] if not isinstance(results[20], Exception) else []
 
         # Fix 4: Extract procedure_refs from plenary events and fetch their amendments
         # This connects plenary scheduling to amendment data
@@ -1115,6 +1127,7 @@ class ContextBuilder:
             commission_documents=commission_documents,  # EC Commission Documents
             toolbox_results=toolbox_results,  # MCP Toolbox supplementary
             user_uploaded_documents=user_uploaded_documents,  # User uploaded documents
+            org_intelligence=org_intelligence,  # Aggregated user profile
             mep_amendments_summary=mep_amendments_summary,  # MEP amendments
             eu_calendar_events=eu_calendar_events,  # EU Calendar events
             cellar_legislation=cellar_legislation if cellar_legislation else None,  # CELLAR fallback
@@ -5029,6 +5042,39 @@ class ContextBuilder:
             logger.warning(f"Failed to fetch user uploaded documents: {e}")
             return []
 
+    async def _fetch_org_intelligence(self, user_id: str) -> Optional[Dict[str, Any]]:
+        """Fetch aggregated org intelligence profile for personalised context."""
+        try:
+            db = SessionLocal()
+            try:
+                from sqlalchemy import text
+                result = db.execute(
+                    text("SELECT policy_areas, tracked_files, amended_files, sector, country, "
+                         "query_count, amendment_count, top_topics FROM org_intelligence WHERE user_id = :uid"),
+                    {"uid": user_id}
+                ).fetchone()
+                if not result:
+                    return None
+                policy_areas, tracked_files, amended_files, sector, country, \
+                    query_count, amendment_count, top_topics = result
+                if not policy_areas and not tracked_files and query_count == 0:
+                    return None
+                return {
+                    'policy_areas': policy_areas or [],
+                    'tracked_files': tracked_files or [],
+                    'amended_files': amended_files or [],
+                    'sector': sector,
+                    'country': country,
+                    'query_count': query_count or 0,
+                    'amendment_count': amendment_count or 0,
+                    'top_topics': top_topics or {},
+                }
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning(f"Failed to fetch org intelligence: {e}")
+            return None
+
     def format_context_for_ai(
         self,
         context_data: ContextData,
@@ -5811,6 +5857,29 @@ class ContextBuilder:
                         sections.append(f"  Summary: {item['summary'][:400]}")
                 else:
                     sections.append(f"- {item.get('title', str(item))}")
+                sections.append("")
+
+        # Org intelligence (aggregated user profile for personalisation)
+        if context_data.org_intelligence:
+            oi = context_data.org_intelligence
+            parts = []
+            if oi.get('sector'):
+                country_str = f" ({oi['country']})" if oi.get('country') else ""
+                parts.append(f"Organisation: {oi['sector']}{country_str}")
+            if oi.get('policy_areas'):
+                parts.append(f"Policy focus: {', '.join(oi['policy_areas'][:5])}")
+            if oi.get('tracked_files'):
+                parts.append(f"Currently tracking: {', '.join(oi['tracked_files'][:5])}")
+            if oi.get('amended_files'):
+                parts.append(f"Has drafted amendments to: {', '.join(oi['amended_files'][:3])}")
+            if oi.get('top_topics'):
+                top = sorted(oi['top_topics'], key=oi['top_topics'].get, reverse=True)[:5]
+                parts.append(f"Frequent topics: {', '.join(top)}")
+            if parts:
+                sections.append("\nUSER PROFILE:")
+                sections.append("Tailor your response to this user's policy focus and institutional needs.\n")
+                for p in parts:
+                    sections.append(f"- {p}")
                 sections.append("")
 
         # User uploaded documents (personalised reference material)
