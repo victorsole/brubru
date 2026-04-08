@@ -244,10 +244,30 @@ def _build_brief_email_html(
 
 
 def _feature_line(is_welcome: bool) -> str:
-    # Update these numbers as the knowledge base grows
+    # Dynamic counts from the actual knowledge base and database
+    try:
+        from knowledge_base.knowledge_loader import KnowledgeLoader
+        kl = KnowledgeLoader()
+        kl.load_all()
+        guide_count = len(kl.guides)
+    except Exception:
+        guide_count = 120
+
+    try:
+        from core.database import SessionLocal
+        db = SessionLocal()
+        from sqlalchemy import text
+        result = db.execute(text("SELECT COUNT(*) FROM legislative_carriages"))
+        file_count = result.scalar() or 0
+        db.close()
+        # Round down to nearest hundred for cleaner display
+        file_label = f"{(file_count // 100) * 100}+" if file_count >= 100 else str(file_count)
+    except Exception:
+        file_label = "1,200+"
+
     features = [
-        "500+ legislative files",
-        "103 policy knowledge guides",
+        f"{file_label} legislative files",
+        f"{guide_count} policy knowledge guides",
         "6 EU institutional calendars",
     ]
     if is_welcome:
