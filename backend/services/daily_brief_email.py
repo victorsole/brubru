@@ -28,7 +28,7 @@ from services.email_service import EmailService
 logger = logging.getLogger(__name__)
 
 BRUBRU_URL = "https://brubru.beresol.eu"
-BRUBRU_CHAT_URL = f"{BRUBRU_URL}/chat"
+BRUBRU_CHAT_URL = f"{BRUBRU_URL}/main"
 BRUBRU_SIGNUP_URL = f"{BRUBRU_URL}/signup"
 BRUBRU_LOGO = f"{BRUBRU_URL}/assets/brubru_mainlogo.png"
 API_URL = "https://brubru-production.up.railway.app"
