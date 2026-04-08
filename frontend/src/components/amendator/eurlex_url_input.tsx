@@ -162,17 +162,17 @@ export const EURLexURLInput = ({ onDocumentFetched }: EURLexURLInputProps) => {
           <li>
             <button
               className="eurlex-url-input__example-link"
-              onClick={() => setUrl('https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689')}
+              onClick={() => setUrl('https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex:52026PC0321')}
             >
-              AI Act (Artificial Intelligence Act)
+              EU Inc. (28th Regime Corporate Framework)
             </button>
           </li>
           <li>
             <button
               className="eurlex-url-input__example-link"
-              onClick={() => setUrl('https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679')}
+              onClick={() => setUrl('https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=intcom:Ares%282025%293570423')}
             >
-              GDPR (General Data Protection Regulation)
+              Industrial Accelerator Act
             </button>
           </li>
         </ul>
