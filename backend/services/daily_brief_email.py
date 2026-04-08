@@ -63,21 +63,34 @@ HEADLINE_HOVER_COLORS = [
 
 def _build_headline_html(headline: str, url: str, source: str, category: str,
                          suggested_query: Optional[str] = None, index: int = 0) -> str:
-    """Build a single headline row with source link and Brubru query link."""
+    """Build a single headline row: headline + suggested question + Ask Brubru CTA."""
     source_label = source if source else _category_label(category)
     brubru_link = f"{BRUBRU_CHAT_URL}?q={urllib.parse.quote(suggested_query)}" if suggested_query else BRUBRU_CHAT_URL
     color = HEADLINE_HOVER_COLORS[index % len(HEADLINE_HOVER_COLORS)]
 
+    query_block = ""
+    if suggested_query:
+        query_block = f"""
+        <div style="margin-top: 6px;">
+          <a href="{brubru_link}" style="color: {color}; font-size: 14px; font-style: italic; text-decoration: none; line-height: 1.4;">
+            &ldquo;{suggested_query}&rdquo;
+          </a>
+        </div>
+        <div style="margin-top: 6px;">
+          <a href="{brubru_link}" style="display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 600; color: {color}; border: 1px solid {color}; border-radius: 4px; text-decoration: none;">
+            Ask Brubru
+          </a>
+        </div>"""
+
     return f"""
     <tr class="headline-row headline-{index}">
-      <td style="padding: 12px 0; border-bottom: 1px solid #f3f4f6; border-left: 3px solid transparent; transition: border-color 0.2s;">
+      <td style="padding: 14px 0; border-bottom: 1px solid #f3f4f6; border-left: 3px solid transparent; transition: border-color 0.2s;">
         <a href="{url}" class="headline-link-{index}" style="color: #111827; text-decoration: none; font-size: 15px; font-weight: 500; line-height: 1.4;">
           {headline}
         </a>
-        <div style="margin-top: 4px; font-size: 12px; color: #9ca3af;">
-          {source_label} &middot;
-          <a href="{url}" style="color: #6b7280; text-decoration: underline;">Source</a> &middot;
-          <a href="{brubru_link}" style="color: {color}; text-decoration: underline;">Ask Brubru about this</a>
+        {query_block}
+        <div style="margin-top: 4px; font-size: 11px; color: #9ca3af;">
+          <a href="{url}" style="color: #9ca3af; text-decoration: none;">{source_label}</a>
         </div>
       </td>
     </tr>"""

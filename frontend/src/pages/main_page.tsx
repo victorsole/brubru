@@ -1,7 +1,7 @@
 // frontend/src/pages/main_page.tsx
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { Sidebar } from '../components/shared/sidebar';
 import { ChatInterface } from '../components/chat/chat_interface';
 import { DocumentUpload } from '../components/chat/document_upload';
@@ -72,7 +72,9 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
   const { t } = useTranslation();
   const { isAuthenticated, user } = useAuth();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const state = location.state as { initialQuestion?: string; source?: string; findingId?: number } | null;
+  const queryParam = searchParams.get('q');
   const [uploadedDocumentIds, setUploadedDocumentIds] = useState<string[]>([]);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
@@ -189,7 +191,7 @@ export const MainPage = ({ isSidebarOpen, setIsSidebarOpen }: MainPageProps) => 
 
       <main className={`main-page__main ${isSidebarOpen ? 'main-page__main--sidebar-open' : ''}`}>
         <ChatInterface
-          initialQuestion={state?.initialQuestion}
+          initialQuestion={queryParam || state?.initialQuestion}
           documentIds={uploadedDocumentIds}
           activeChatId={activeChatId}
           onConversationUpdate={fetchConversations}
