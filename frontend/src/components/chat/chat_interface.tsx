@@ -201,9 +201,9 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     return () => clearInterval(interval);
   }, [isLoading]);
 
-  // Handle initial question from EU Law Comply or other sources
+  // Handle initial question from EU Law Comply, daily brief ?q= param, or other sources
   useEffect(() => {
-    if (initialQuestion && !inputValue) {
+    if (initialQuestion) {
       setInputValue(initialQuestion);
     }
   }, [initialQuestion]);
@@ -213,10 +213,12 @@ export const ChatInterface = ({ initialQuestion, documentIds = [], activeChatId,
     if (activeChatId === undefined) return; // prop not provided
 
     if (activeChatId === null) {
-      // New chat requested
+      // New chat requested -- but preserve initialQuestion if present
       setMessages([]);
       setChatId(null);
-      setInputValue('');
+      if (!initialQuestion) {
+        setInputValue('');
+      }
       setError(null);
       return;
     }
