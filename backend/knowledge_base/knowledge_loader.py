@@ -4479,6 +4479,15 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'open access': ['fp10_ecf_competitiveness'],
     'ciencia abierta': ['fp10_ecf_competitiveness'],
     'research data sharing': ['fp10_ecf_competitiveness'],
+    # EU-China relations
+    'eu china': ['eu_trade_policy'],
+    'eu china relations': ['eu_trade_policy'],
+    'china strategy': ['eu_trade_policy'],
+    'relaciones ue china': ['eu_trade_policy'],
+    'estrategia china': ['eu_trade_policy'],
+    'respecto a china': ['eu_trade_policy'],
+    'debate china': ['eu_trade_policy'],
+    'china y': ['eu_trade_policy'],
     # EP committee codes -> policy guides
     'itre committee': ['eu_energy_policy', 'fp10_ecf_competitiveness'],
     'itre': ['eu_energy_policy', 'fp10_ecf_competitiveness'],
