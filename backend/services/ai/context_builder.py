@@ -529,9 +529,6 @@ class ContextData:
     # User uploaded documents (for personalised AI context)
     user_uploaded_documents: List[Dict[str, Any]]
 
-    # Org intelligence (aggregated user profile for personalisation)
-    org_intelligence: Optional[Dict[str, Any]] = None
-
     # MEP amendments (scraped EP committee amendments)
     mep_amendments_summary: List[Dict[str, Any]]
 
@@ -542,6 +539,9 @@ class ContextData:
     query: str
     search_time_ms: float
     total_sources: int
+
+    # Org intelligence (aggregated user profile for personalisation)
+    org_intelligence: Optional[Dict[str, Any]] = None
 
     # Phase 8: Tender data (Tenderator integration) - optional, must come after required fields
     tender_context: Optional[TenderContextData] = None
