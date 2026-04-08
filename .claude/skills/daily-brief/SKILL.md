@@ -1,6 +1,6 @@
 ---
 name: daily-brief
-description: Compose and send the daily EU brief email. Drafts 10 headlines in Brubru style, sends a test to hello@beresol.eu for review, then sends to all subscribers ONLY after explicit user approval.
+description: Compose and send the daily EU brief email. Drafts 5 headlines in Brubru style (more only if justified on a given day), verifies Brubru can answer each topic, sends a test to hello@beresol.eu for review, then sends to all subscribers ONLY after explicit user approval.
 argument-hint: "optional: brubru news items to include"
 ---
 
@@ -10,13 +10,15 @@ argument-hint: "optional: brubru news items to include"
 
 The daily brief workflow:
 1. Pull today's headlines from the database (saved by `/news --save`)
-2. Rewrite headlines in Brubru style (concise, professional, no em-dashes)
-3. Build the HTML email with hover colour cycling and CTA button
-4. Send a TEST email to hello@beresol.eu
-5. Present the test to the user for review
-6. User reviews and requests changes (or approves)
-7. Apply changes if needed, re-send test
-8. ONLY when user says "OK" / "send" / "go" -> send to all subscribers
+2. Curate to **5 headlines** (default). More than 5 only if the day's news genuinely warrants it -- assess and propose to the user, never default to more.
+3. Rewrite headlines in Brubru style (concise, professional, no em-dashes)
+4. **Verify Brubru can answer each headline topic** by testing against the knowledge base. If a topic has no guide match or weak coverage, fix it (add content, triggers) BEFORE sending the brief. Never send a headline Brubru cannot answer well.
+5. Build the HTML email with hover colour cycling and CTA button
+6. Send a TEST email to hello@beresol.eu
+7. Present the test to the user for review
+8. User reviews and requests changes (or approves)
+9. Apply changes if needed, re-send test
+10. ONLY when user says "OK" / "send" / "go" -> send to all subscribers
 
 ## Step 1: Check Headlines
 
@@ -97,7 +99,7 @@ After sending, tell the user:
 ```
 TEST EMAIL SENT to hello@beresol.eu
   Subject: [TEST] Brubru Daily Brief: YYYY-MM-DD
-  Headlines: 10
+  Headlines: 5
   Brubru news: X items
 
   Please check your inbox and let me know:

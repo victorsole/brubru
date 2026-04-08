@@ -278,8 +278,9 @@ def _feature_line(is_welcome: bool) -> str:
     return f"{features[0]}, {features[1]}, and {features[2]}."
 
 
-def _fetch_headlines(db_session) -> tuple:
-    """Fetch today's (or yesterday's) headlines. Returns (headlines_list, date_string)."""
+def _fetch_headlines(db_session, limit: int = 5) -> tuple:
+    """Fetch today's (or yesterday's) headlines. Returns (headlines_list, date_string).
+    Default limit is 5 headlines; pass higher limit only when justified."""
     from models.daily_brief import DailyBrief
     from datetime import timedelta
 
@@ -288,7 +289,7 @@ def _fetch_headlines(db_session) -> tuple:
         db_session.query(DailyBrief)
         .filter(DailyBrief.brief_date == today)
         .order_by(DailyBrief.priority.asc())
-        .limit(10)
+        .limit(limit)
         .all()
     )
 
@@ -298,7 +299,7 @@ def _fetch_headlines(db_session) -> tuple:
             db_session.query(DailyBrief)
             .filter(DailyBrief.brief_date == yesterday)
             .order_by(DailyBrief.priority.asc())
-            .limit(10)
+            .limit(limit)
             .all()
         )
         brief_date = yesterday

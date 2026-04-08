@@ -69,7 +69,7 @@ def verify_headline_urls(db) -> bool:
         db.query(DailyBrief)
         .filter(DailyBrief.brief_date == today)
         .order_by(DailyBrief.priority.asc())
-        .limit(10)
+        .limit(5)
         .all()
     )
 
@@ -167,7 +167,7 @@ def preview(db, extra_recipients=None):
         db.query(DailyBrief)
         .filter(DailyBrief.brief_date == today)
         .order_by(DailyBrief.priority.asc())
-        .limit(10)
+        .limit(5)
         .all()
     )
 
