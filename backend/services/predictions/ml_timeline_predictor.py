@@ -442,10 +442,7 @@ class MLTimelinePredictor:
 
             # Get carriage
             carriage = self.db.query(LegislativeCarriage).filter(
-                or_(
-                    LegislativeCarriage.oeil_procedure_ref == procedure_ref,
-                    LegislativeCarriage.id == procedure_ref
-                )
+                LegislativeCarriage.oeil_procedure_ref == procedure_ref
             ).first()
 
             if not carriage:

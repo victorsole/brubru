@@ -270,10 +270,7 @@ class TimelinePredictor:
 
             # Get the target procedure
             target = self.db.query(LegislativeCarriage).filter(
-                or_(
-                    LegislativeCarriage.oeil_procedure_ref == procedure_ref,
-                    LegislativeCarriage.id == procedure_ref
-                )
+                LegislativeCarriage.oeil_procedure_ref == procedure_ref
             ).first()
 
             if not target:
@@ -346,10 +343,7 @@ class TimelinePredictor:
 
             # Get the procedure
             carriage = self.db.query(LegislativeCarriage).filter(
-                or_(
-                    LegislativeCarriage.oeil_procedure_ref == procedure_ref,
-                    LegislativeCarriage.id == procedure_ref
-                )
+                LegislativeCarriage.oeil_procedure_ref == procedure_ref
             ).first()
 
             if not carriage:
