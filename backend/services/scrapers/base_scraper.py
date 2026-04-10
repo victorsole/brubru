@@ -331,18 +331,14 @@ class BaseScraper(ABC):
         """
         Fetch a URL using Scrapling's Fetcher with real browser fingerprints.
 
-        Bypasses basic anti-bot protections (Cloudflare JS challenge, Akamai).
-        Synchronous (uses curl_cffi under the hood). For JS-heavy pages that
-        need a full browser, use StealthyFetcher or PlayWrightFetcher separately.
+        Bypasses basic anti-bot protections. Synchronous (curl_cffi).
+        For JS-rendered pages behind Cloudflare, use _fetch_stealthy() instead.
 
         Args:
             url: URL to fetch
 
         Returns:
             HTML content as string
-
-        Raises:
-            ScraperError: If Scrapling is not installed or fetch fails
         """
         if not SCRAPLING_AVAILABLE:
             raise ScraperError("Scrapling not installed. Run: pip install scrapling curl_cffi browserforge")
@@ -351,7 +347,8 @@ class BaseScraper(ABC):
             logger.info(f"{self.name}: Fingerprint fetch of {url}")
             fetcher = ScraplingFetcher(auto_match=True)
             response = fetcher.get(url)
-            content = response.text if hasattr(response, 'text') else str(response)
+            # Scrapling response: .body has raw bytes, .text may be empty
+            content = response.body.decode('utf-8', errors='replace') if hasattr(response, 'body') and response.body else ''
             self.stats['requests_made'] += 1
             self.stats['total_bytes'] += len(content)
             logger.info(f"{self.name}: Fingerprint fetch OK ({len(content)} bytes)")
@@ -360,6 +357,40 @@ class BaseScraper(ABC):
             self.stats['errors'] += 1
             logger.error(f"{self.name}: Fingerprint fetch failed for {url}: {e}")
             raise ScraperError(f"Fingerprint fetch failed: {str(e)}") from e
+
+    def _fetch_stealthy(self, url: str) -> str:
+        """
+        Fetch a URL using Scrapling's StealthyFetcher (patchright headless browser).
+
+        Bypasses Cloudflare, Akamai, DataDome. Renders JS. Synchronous.
+        Requires: pip install patchright msgspec
+
+        Tested: bypasses Council of the EU Cloudflare (153KB real content).
+
+        Args:
+            url: URL to fetch
+
+        Returns:
+            HTML content as string
+        """
+        try:
+            from scrapling import StealthyFetcher
+        except ImportError:
+            raise ScraperError("StealthyFetcher requires: pip install scrapling patchright msgspec")
+
+        try:
+            logger.info(f"{self.name}: Stealthy browser fetch of {url}")
+            fetcher = StealthyFetcher()
+            response = fetcher.fetch(url)
+            content = response.body.decode('utf-8', errors='replace') if hasattr(response, 'body') and response.body else ''
+            self.stats['requests_made'] += 1
+            self.stats['total_bytes'] += len(content)
+            logger.info(f"{self.name}: Stealthy fetch OK ({len(content)} bytes)")
+            return content
+        except Exception as e:
+            self.stats['errors'] += 1
+            logger.error(f"{self.name}: Stealthy fetch failed for {url}: {e}")
+            raise ScraperError(f"Stealthy fetch failed: {str(e)}") from e
 
     def _make_absolute_url(self, url: str) -> str:
         """Convert relative URL to absolute URL"""
