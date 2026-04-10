@@ -381,6 +381,27 @@ Sorted by lead score. These are your hottest leads — start outreach here.
 
 ---
 
+## EU Transparency Register intelligence (April 2026)
+
+Key Brussels contacts identified from the EU Transparency Register. These are the people in charge of EU relations for each company. Consider connecting with them directly on LinkedIn as they are the decision-makers for EU regulatory intelligence tools.
+
+| Company | Brussels contact | Position | FTE | Annual spend | EP passes |
+|---|---|---|---|---|---|
+| Banco Santander | Alicia (Head EU Gov Relations) | Brussels, Av. des Arts 6 | 2.2 | EUR 800K+ | 4 |
+| BBVA | Jaime Vazquez (Head European Affairs) | Brussels, Cantersteen 47 | 2.0 | EUR 800K | 3 |
+| CaixaBank | Leonor Echevarria (Head EU Public Affairs) | Brussels, Rue Marie Therese 11 | 3.3 | EUR 600K | 1 |
+| Repsol | Ana Alvarez Rodriguez (Head EU Public Affairs) | Brussels, Av. des Arts 44 | 1.9 | EUR 800K | - |
+| Iberdrola | Eva Chamizo Llatas (Dir European Affairs) | Brussels, Av. d'Auderghem 22-28 | 3.3 | EUR 400K | - |
+| Endesa | Teresa Luis Ruiz (Head Brussels Office) | Brussels, Av. des Nerviens 9 | 0.8 | EUR 25K | 2 |
+| Moeve | Emmanuel Desplechin (Head EU Affairs) | Brussels, Rue du Vieux Marche 63 | 2.6 | EUR 400K | 2 |
+| Cellnex | Letizia Susta (Head Brussels Office) | Barcelona/Brussels | 2.2 | EUR 500K+ | 2 |
+| Amadeus IT | Benjamin Ledwon (Head EU Representation) | Madrid | 2.0 | EUR 900K | 1 |
+| Indra | (10 FTE team in Brussels) | Brussels | 10.0 | EUR 700K+ | 7 |
+
+**Insight:** Indra has the largest EU affairs operation (10 FTE, 7 EP passes) of any Spanish company. Amadeus spends the most (EUR 900K) despite being headquartered in Madrid. Mercadona surprisingly has 4.5 FTE and 3 EP passes for a supermarket chain (food regulation complexity). These Brussels contacts are ADDITIONAL leads beyond the CRM list below.
+
+---
+
 ## Regulatory scan per sector (for LinkedIn DM personalisation)
 
 *Generated 10 April 2026 from Brubru eu_laws database (28,505 acts). Use these to show each contact you know their regulatory landscape.*

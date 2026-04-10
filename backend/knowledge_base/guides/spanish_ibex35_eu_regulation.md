@@ -7,7 +7,45 @@
 - Deep dive: https://brubru.beresol.eu/pharma-laws/ (pharma sector)
 - Source: Brubru eu_laws database scan, April 2026
 - AESIA (Spanish AI Supervisory Agency): 147 investigations opened in 18 months
-- Spanish companies in EU Transparency Register: Telefonica (6 lobbyists, 117+ Commission meetings), Repsol, Iberdrola, BBVA, Santander, Inditex all registered
+- 23+ Spanish companies confirmed in EU Transparency Register (see table below)
+- Highest lobbying spend: Repsol EUR 800K, Santander EUR 800K, BBVA EUR 800K, Indra EUR 700K
+- Most lobbyists: Indra (10 FTE, 7 EP passes), Mercadona (4.5 FTE, 3 EP passes), Iberdrola (3.3 FTE)
+
+## EU Transparency Register Profiles
+
+| Organisation | ID | FTE | Persons | Annual cost | Brussels office | EP passes | EU affairs contact |
+|---|---|---|---|---|---|---|---|
+| Banco Santander | 799142914971-03 | 2.2 | 7 | EUR 800K-900K | Av. des Arts 6, Brussels | 4 (Aznar, Iduh, Moreno, Sanchis) | Alicia (Head EU Gov Relations) |
+| BBVA | 090350412968-04 | 2.0 | 5 | EUR 800K | Cantersteen 47, Brussels | 3 (Vazquez, Hernandez, Galipienso) | Jaime Vazquez (Head European Affairs) |
+| CaixaBank | 055017716307-39 | 3.3 | 5 | EUR 600K | Rue Marie Therese 11, Brussels | 1 (Echevarria) | Leonor Echevarria (Head EU Public Affairs) |
+| Banco Sabadell | 624745614829-92 | 1.0 | - | EUR 50K | - | - | - |
+| Repsol | 69240395197-02 | 1.9 | 5 | EUR 800K | Av. des Arts 44, Brussels | - | Ana Alvarez Rodriguez (Head EU Public Affairs) |
+| Iberdrola | 41816938101-07 | 3.3 | 6 | EUR 400K | Av. d'Auderghem 22-28, Brussels | - | Eva Chamizo Llatas (Dir European Affairs) |
+| Endesa | 47504237466-74 | 0.8 | 2 | EUR 25K-50K | Av. des Nerviens 9, Brussels | 2 (Luis Ruiz, Haro Diaz) | Teresa Luis Ruiz (Head Brussels Office) |
+| Naturgy | 67833029261-54 | 1.5 | 3 | EUR 100K | - | - | - |
+| Moeve (ex-Cepsa) | 473235716272-48 | 2.6 | 4 | EUR 400K | Rue du Vieux Marche 63, Brussels | 2 (Bartolome, Desplechin) | Emmanuel Desplechin (Head EU Affairs) |
+| Cellnex | 412366615831-33 | 2.2 | 4 | EUR 500K-600K | Barcelona (no Brussels) | 2 (Susta, Spac) | Letizia Susta (Head Brussels Office) |
+| Indra | 208351410839-33 | 10.0 | 10 | EUR 700K-800K | Brussels | 7 (Frutos, Moya, Gonzalez, Shadman, Zuniga, Ybanez, Luengo) | - |
+| Amadeus IT | 193056815367-44 | 2.0 | 3 | EUR 900K | Madrid (no Brussels) | 1 (Ledwon) | Benjamin Ledwon (Head EU Representation) |
+| Mercadona | 893936110764-91 | 4.5 | 9 | EUR 400K | - | 3 (Herrero, Cascao, Anton) | - |
+| ACS Group | 880653799089-37 | 0.1 | 1 | EUR 50K-100K | - | 0 | Luis Cellier (Dir Relaciones Institucionales) |
+| Acciona | 451019811573-55 | 0.5 | - | EUR 300K | - | - | - |
+| Enagas | 905001612275-82 | 1.0 | - | EUR 200K | - | - | - |
+| Redeia | 44688805318-45 | 1.0 | - | EUR 50K | - | - | - |
+| Navantia | 114718251968-80 | 1.0 | - | EUR 300K | - | - | - |
+| AENA | 141532321289-19 | 0.1 | - | EUR 10K | - | - | - |
+| RENFE | 629049847630-60 | 2.8 | - | EUR 100K | - | - | - |
+| Mapfre | 970705336248-40 | 2.0 | - | EUR 300K | - | - | - |
+| Prosegur | 741095747174-97 | 0.2 | - | EUR 100K | - | - | - |
+| Gestamp | 369731496244-65 | 0.5 | - | EUR 10K | - | - | - |
+| Grifols | 400747536239-04 | 1.3 | - | EUR 25K | - | - | - |
+| Almirall | 2622034101532-88 | 0.1 | - | EUR 25K | - | - | - |
+| Viscofan | 634007348792-32 | 5.0 | - | EUR 200K | - | - | - |
+| Laboratorios Rovi | 399928552868-09 | 0.5 | - | EUR 10K | - | - | - |
+| MasOrange | 162478996362-95 | 1.8 | - | EUR 0 (newly registered) | - | - | - |
+| Atresmedia | 680073051473-25 | 1.0 | - | EUR 200K | - | - | - |
+
+**Not found in Register (as of April 2026):** Telefonica (likely registered under a subsidiary or different name), Inditex, Ferrovial, Sacyr, OHLA, SEAT/CUPRA, Grupo Antolin, Puig, El Corte Ingles, Bankinter, Ibercaja, Catalana Occidente, Linea Directa, Ferrer, Iberostar, Barcelo, NH Hotels, Melia, PRISA, Mediaset, Merlin Properties, Colonial.
 
 ## Banking Sector (Santander, BBVA, CaixaBank, Sabadell, Bankinter, Ibercaja)
 
