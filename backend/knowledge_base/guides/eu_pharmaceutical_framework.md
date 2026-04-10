@@ -18,6 +18,7 @@
 - EudraLex: 4 volumes of EU pharmaceutical rules and guidelines
 - Treaty basis: Article 114 TFEU (internal market) + Article 168 TFEU (public health)
 - REFORM: All three core acts (2001/83, 726/2004, 141/2000, 1901/2006) being replaced by the 2023 pharmaceutical package. See `eu_pharmaceutical_legislation_reform.md`.
+- AMR investment (7 April 2026): Commission invests EUR 30 million to strengthen global response to antimicrobial resistance, announced by DG SANTE
 
 ## Deep Dive
 

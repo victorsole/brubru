@@ -12,6 +12,9 @@
 - Annual assurance deadline: 15 February (MA declaration, AA audit opinion, accounts)
 - Commission review deadline: 31 May (acceptance of accounts)
 - Key legal references: Regulation (EU) 2021/1060, Delegated Regulation (EU) 2021/1702, ERDF/CF Regulation (EU) 2021/1058, ESF+ Regulation (EU) 2021/1057, JTF Regulation (EU) 2021/1056
+- Mid-term review (April 2026): DG REGIO published results of the mid-term review of cohesion policy
+- Cohesion Fund 2028-2034: Multiple EP committees drafting opinions (LIBE: Tanger Correa, SANT: Negrescu, ECON: Bajada, ITRE: Nagyova)
+- EVP Fitto (April 2026): Discussions with Belgian government/regions and Austria on future cohesion policy
 
 Guide for Joint Audit Directorate for Cohesion (DAC) auditors and shared management control officers covering the audit framework, error rate methodology, Arachne risk scoring, and assurance chain.
 

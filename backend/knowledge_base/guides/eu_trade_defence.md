@@ -13,6 +13,8 @@
 - EP committee: INTA (International Trade)
 - Investigations: TRON database (tron.trade.ec.europa.eu)
 - Active measures: ~150 anti-dumping + ~25 countervailing duty measures (approximate, 2025)
+- New (9 April 2026): Provisional anti-dumping on terephthalic acid from Korea/US (Reg. 2026/801, CELEX 32026R0801)
+- New (9 April 2026): Steel safeguard amendment (Reg. 2026/846, CELEX 32026R0846)
 - Top targets: China (~50% of measures), Russia, India, Turkey, Indonesia
 - Key sectors: steel, aluminium, chemicals, ceramics, solar panels, electric vehicles
 - WTO compliance: All EU TDI measures must comply with WTO Anti-Dumping Agreement, SCM Agreement, Safeguards Agreement
@@ -96,6 +98,12 @@ Safeguard measures protect EU industry against a **sudden surge of imports** cau
 ### Current Safeguard: Steel
 
 The EU's most significant active safeguard measure covers **steel imports** (26 product categories). Originally imposed in 2018 (Regulation (EU) 2019/159), extended multiple times. Tariff-rate quotas (TRQs) allow duty-free imports up to a certain volume, with 25% duty above the quota.
+
+**Steel safeguard amendment (9 April 2026):** Implementing Regulation (EU) 2026/846 (CELEX 32026R0846) amends Implementing Regulation (EU) 2019/159 imposing a definitive safeguard measure on imports of certain steel products.
+
+### Recent Anti-Dumping: Terephthalic Acid (April 2026)
+
+**Implementing Regulation (EU) 2026/801** (CELEX 32026R0801), published 9 April 2026: Provisional anti-dumping duties on imports of terephthalic acid originating in the Republic of Korea and the United States. Terephthalic acid (purified terephthalic acid, PTA) is a key input for PET plastic, polyester fibres, and packaging. This case is notable for targeting both a key US and Korean industry simultaneously.
 
 ## Key Sectors and Countries
 

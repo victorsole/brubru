@@ -7,6 +7,8 @@
 - IPA III beneficiaries: Albania, Bosnia and Herzegovina, Kosovo, Montenegro, North Macedonia, Serbia, Turkey (suspended), plus Moldova/Ukraine/Georgia (associated)
 - Reform and Growth Facility (RGF): EUR 6 billion for Western Balkans, 2024-2027 (entered into force 25 May 2024)
 - Western Balkans Investment Framework (WBIF): EUR 171 million support package (January 2026); EUR 463.7M committed in 2024
+- Serbia funding threat (10 April 2026): EU poised to slash up to EUR 1.5 billion in funding over democracy fears, judicial reforms stalling, Russia relations
+- Montenegro (10 April 2026): PM says Montenegro wants to join EU for security reasons amid geopolitical instability
 - IPARD III: pre-accession rural development instrument, covers agricultural holdings, processing, organic farming, LEADER, rural infrastructure
 - IPA III climate mainstreaming: 26.2% of budget; biodiversity: 3.7%
 - Cross-border cooperation: up to 3% of IPA III budget, max 85% EU co-financing
@@ -42,9 +44,9 @@ IPA III covers seven primary beneficiaries:
 | Albania | Candidate (negotiations opened June 2024) | Agriculture, tourism, energy, digital |
 | Bosnia and Herzegovina | Candidate (negotiations opened March 2024) | Energy, transport, rule of law |
 | Kosovo | Potential candidate (applied December 2022) | Rule of law, public administration |
-| Montenegro | Candidate (most advanced in negotiations) | Environment, energy, transport |
+| Montenegro | Candidate (most advanced in negotiations; PM cites EU security motive, April 2026) | Environment, energy, transport |
 | North Macedonia | Candidate (negotiations ongoing) | Agriculture, connectivity, digital |
-| Serbia | Candidate (negotiations ongoing) | Economy, rule of law, environment |
+| Serbia | Candidate (negotiations ongoing; EUR 1.5B funding freeze threatened, April 2026) | Economy, rule of law, environment |
 | Turkey | Candidate (negotiations suspended since 2018) | Limited IPA III access |
 
 Moldova, Ukraine, and Georgia are associated beneficiaries, primarily accessing IPA III through regional and cross-border programmes.

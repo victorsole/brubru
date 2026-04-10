@@ -332,7 +332,7 @@ Before marking a feature COMPLETE, verify end-to-end: (1) DB has data, (2) API r
 
 ### Multi-Provider AI System (March 2026)
 
-**Claude Sonnet 4 is the primary model** (switched from Haiku 4.5 on 23 March 2026). $10/day cap. Haiku was ignoring document retrieval instructions. Fallback: Mistral -> GPT-4 -> Gemini. Routing: `has_knowledge = internal_knowledge OR eu_institutional_results` (virtually all queries). File: `multi_provider_service.py`.
+**Claude Sonnet 4 is the primary model** (switched from Haiku 4.5 on 23 March 2026). $10/day cap. Haiku was ignoring document retrieval instructions. Fallback: Mistral -> GPT-4 -> Gemini. Routing: `has_knowledge = internal_knowledge OR eu_institutional_results` (virtually all queries). **Streaming is the default chat mode** (switched 7 April 2026): `/api/chat/stream` SSE endpoint with token-by-token text + status events ("Searching EU legislation...", "Composing response..."). Automatic fallback to non-streaming `/api/chat/message` if stream fails. **SSE newline escaping:** Backend escapes `\n` as `\\n` in text chunks (`chat.py`), frontend decodes back to `\n` (`chat_interface.tsx`). Markdown rendered continuously via `marked.parse()` during streaming (no mode switch). File: `multi_provider_service.py`, `ai_service.py` (`chat_stream`), `chat_interface.tsx`.
 
 ### EU Institutional Source Search Fallback (March 2026)
 
@@ -385,6 +385,14 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 ### SPA Pre-rendering for AI Crawlers (February 2026)
 
 **Full reference:** See `memory/deployment.md`. Production deploy: `npm run build:prerender`. 9 public routes pre-rendered with Puppeteer. `main.tsx` uses conditional hydration. Add new public routes to `ROUTES` array in `frontend/scripts/prerender.mjs`. AI crawler rules in `frontend/public/robots.txt`.
+
+### SiteGround FTP Deploy (April 2026)
+
+`lftp` can upload `frontend/dist/` directly to SiteGround: `lftp -c "set ftp:ssl-allow no; open -u ftp@beresol.eu,PASSWORD ftp.beresol.eu; mirror --reverse --verbose --only-newer --exclude .DS_Store --exclude .htaccess dist/ brubru.beresol.eu/public_html/; bye"`. Credentials in `.env` (`SITEGROUND_FTP_*`). Always exclude `.htaccess` (managed by SiteGround). Old JS bundles (`index-*.js`) accumulate on the server -- not harmful but could be cleaned up periodically.
+
+### Brubrufied Daily Brief System (April 2026)
+
+**5 headlines per day** (default, more only if justified). Each headline has three layers: (1) headline text linking to source, (2) **suggested question** in italics as the engagement hook, (3) **"Ask Brubru" button** linking to `/main?q=...` which pre-fills the chat input. The `suggested_query` column in `daily_briefs` drives both the question and the CTA link. **Every headline MUST have a suggested_query.** Before sending, verify Brubru can answer each suggested query well (test against knowledge base, fix gaps first). Feature line at the bottom is dynamic (reads real guide/file counts). Frontend `ChatInterface` reads `?q=` from `window.location.search` on mount. Chat route is `/main` (NOT `/chat`). Files: `services/daily_brief_email.py`, `scripts/send_daily_brief.py`, `components/chat/chat_interface.tsx`.
 
 ### Daily Brief Send Protocol (March 2026)
 

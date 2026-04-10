@@ -2,6 +2,7 @@
 name: daily-brief
 description: Compose and send the daily EU brief email. Drafts 5 headlines in Brubru style (more only if justified on a given day), verifies Brubru can answer each topic, sends a test to hello@beresol.eu for review, then sends to all subscribers ONLY after explicit user approval.
 argument-hint: "optional: brubru news items to include"
+allowed-tools: ["Read", "Edit", "Write", "Bash", "Glob", "Grep"]
 ---
 
 # Daily Brief Email
@@ -226,14 +227,33 @@ Every headline URL must point to the correct, working source. Before sending the
 ### Source Attribution (MANDATORY)
 The source label shown under each headline must reflect the **actual source** (Politico EU, Contexte EU, Official Journal, etc.), NOT the institutional category. The `source` field in the `daily_briefs` table has the real source name. The code already uses `source` over `_category_label(category)`. When reviewing the test email, verify that no headline says "European Commission" or "EU Institutions" when the article actually came from Politico, Contexte, or another media outlet.
 
+### Brubrufied Headline Format (MANDATORY)
+
+Each headline in the email has three layers:
+1. **Headline** (what happened) -- links to the original source
+2. **Suggested question** in italics -- the "so what" hook that makes the reader curious
+3. **"Ask Brubru" button** -- links to `brubru.beresol.eu/main?q=...` which pre-fills the chat input
+
+The `suggested_query` column in `daily_briefs` drives both the question text and the CTA link. **Every headline MUST have a suggested_query.** This is what turns the daily brief from a news digest into a Brubru engagement funnel.
+
+Good suggested queries:
+- Are personalised and actionable ("What does this mean for EU importers?")
+- Create curiosity ("How does this affect my sector?")
+- Cannot be fully answered by reading the headline alone
+
+Bad suggested queries:
+- Just restate the headline ("What are the EHDS implementing rules?")
+- Are too generic ("Tell me more about this")
+
 ### Chatbot Coverage Verification (MANDATORY)
+
 Before finalising headlines, verify that every headline's `suggested_query` will be answered well by Brubru's chatbot. For each headline:
 
 1. Run the suggested query through the knowledge loader to check guide matching
-2. If NO guide matches, either:
-   - Rewrite the suggested query to match existing triggers, or
-   - Flag it as a gap (the user may want to skip this headline or create a guide)
-3. Never send a daily brief that directs users to ask questions Brubru cannot answer
+2. If NO guide matches or coverage is weak:
+   - Fix it: add content to the relevant guide, add triggers, or create a new guide
+   - Only then proceed to send
+3. **Never send a daily brief that directs users to ask questions Brubru cannot answer well**
 
 ```python
 from knowledge_base.knowledge_loader import KnowledgeLoader
@@ -245,14 +265,25 @@ for query in suggested_queries:
         print(f'[WARN] No guide for: {query}')
 ```
 
+### Suggested Query SQL Pattern
+
+When curating headlines, always set the `suggested_query` column:
+
+```sql
+UPDATE daily_briefs SET suggested_query = 'Your question here?' WHERE id = 'UUID';
+```
+
 ## Important Notes
 
 - Use `python3.12` (not `python3`)
 - Headlines come from `/news --save` which populates the `daily_briefs` table
+- **Default: 5 headlines.** More only if the day's news genuinely warrants it -- assess and propose to the user
 - The script has duplicate-send protection (`daily_brief_sends` table) -- safe to retry
 - Permanent extras: Raquel (EP), Alexander (Comcast), David (EFPIA), brussels.md contacts
 - Unsubscribed addresses are automatically excluded
 - Gmail daily limit is ~2,000 recipients. Daily brief uses ~200 (individual sends)
 - Style rules: no em-dashes or "--", use colons and commas. Real hyperlinks. Brubru palette hover colours.
 - The email has hover colour cycling (blue, purple, green, amber, red) on headline rows and a gradient CTA button
+- "Ask Brubru" buttons link to `/main?q=...` (NOT `/chat` -- that route does not exist)
+- The feature line at the bottom ("Brubru tracks X legislative files, Y guides...") is dynamic -- no need to update manually
 - **NEVER skip the test email step. NEVER send to all without user approval.**

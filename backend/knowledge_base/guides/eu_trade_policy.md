@@ -9,6 +9,9 @@
 - EU has exclusive competence on trade policy (since Lisbon Treaty)
 - Active FTAs: 40+ trade agreements covering 70+ countries
 - Key current negotiations: EU-Australia (near conclusion, March 2026), EU-India, EU-Indonesia, EU-Mercosur (ratification), EU-Canada DTA
+- Anti-dumping (10 April 2026): Provisional duties on terephthalic acid from Korea and US (Reg. 2026/801, CELEX 32026R0801)
+- Steel safeguard (10 April 2026): Safeguard measure amendment on steel imports (Reg. 2026/846, CELEX 32026R0846)
+- Serbia (10 April 2026): EU poised to slash up to EUR 1.5 billion in funding over democracy and rule of law concerns
 
 ## Key Trade Agreements
 
@@ -68,6 +71,17 @@ On 6 March 2026, Commissioner Sefcovic and Canada's Minister for International T
 ## EU Designs Regulation Codification (March 2026)
 
 **Regulation (EU) 2026/715** (CELEX: 32026R0715) -- Regulation of the European Parliament and of the Council of 11 March 2026 on European Union designs (codification). This codification consolidates the existing EU design protection framework into a single, streamlined legal text. It replaces Council Regulation (EC) No 6/2002 on Community designs, incorporating all subsequent amendments. The regulation covers registered and unregistered Community designs, administered by EUIPO (EU Intellectual Property Office) in Alicante, Spain. This is a technical codification (no policy changes), but it simplifies the legal reference for practitioners.
+
+## EU-China Relations: Commission Orientation Debate (13 April 2026)
+
+The College of Commissioners will hold an orientation debate on EU-China relations on Monday 13 April 2026. Key context:
+- **Trade deficit**: The EU's trade deficit with China was EUR 291 billion in 2024 (Eurostat), the largest bilateral imbalance
+- **Anti-dumping**: Active investigations on Chinese EVs, solar panels, polyamide yarns, steel; provisional duties on EVs since October 2024
+- **Anti-Coercion Instrument**: Regulation (EU) 2023/2675 (CELEX 32023R2675) entered into force December 2023, giving the EU new tools against economic coercion
+- **De-risking strategy**: Commission Joint Communication on European Economic Security (June 2023) frames China as simultaneously partner, competitor, and systemic rival
+- **Outbound investment screening**: Commission proposal expected in 2026 to complement existing FDI screening (Regulation (EU) 2019/452)
+- **Critical raw materials**: China dominates processing of lithium, cobalt, rare earths; Critical Raw Materials Act (Regulation (EU) 2024/1252) aims to diversify
+- **Commissioner**: Maros Sefcovic (Trade and Economic Security, Slovakia) leads trade policy; Kaja Kallas (HR/VP, Estonia) on geopolitical dimension
 
 ## Recent Trade Defence Actions (March 2026)
 

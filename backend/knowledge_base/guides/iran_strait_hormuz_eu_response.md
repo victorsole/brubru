@@ -1,20 +1,25 @@
 # Iran War, Strait of Hormuz and EU Crisis Response
 
 ## QUICK FACTS
-Crisis: Iran war (started early March 2026), US-led military operations against Iran
-Strait of Hormuz: Carries approximately 20% of global oil shipments; transit disruption threatens EU energy security
-Oil price impact: Brent crude spiking, potential to exceed USD 100/barrel
-EU response: FAC (16 March 2026) discussing additional ships for EU maritime mission; Energy Council same day discussing oil reserves
-European Council: 19-20 March 2026 summit will address Iran/Middle East alongside Ukraine, competitiveness, MFF, defence
+LATEST (April 2026): US-Iran ceasefire reached; EU monitoring whether it holds. Trump reshaping Middle East dynamics.
+Trump-Rutte confrontation (9 April 2026): Trump blew up at NATO SG Mark Rutte over Iran/NATO burden-sharing; UK public sentiment toward Trump's US plunging amid Iran war.
+Montenegro (10 April 2026): PM says Montenegro wants to join EU for security reasons, citing geopolitical instability.
+Crisis background: Iran war (started early March 2026), US-led military operations against Iran
+Ceasefire: Agreed in early April 2026; fragile, EU watching closely. Key question: will it hold and what terms did Trump secure?
+Strait of Hormuz: Carries approximately 20% of global oil shipments; transit disruption threatened EU energy security during the war
+Oil price impact: Brent crude spiked during conflict, potential above USD 100/barrel; ceasefire easing pressure but markets remain cautious
+EU response during war: FAC (16 March 2026) deployed additional ships to EU maritime mission; Energy Council discussed oil reserves release
+European Council: 19-20 March 2026 summit addressed Iran/Middle East alongside Ukraine, competitiveness, MFF, defence
 Key actors: Kaja Kallas (EU foreign policy chief), Dan Jorgensen (Energy Commissioner), Teresa Ribera (EVP, energy/climate)
 Former HR/VP Borrell: Criticised EU for not standing up to Trump, called for suspending EU-US trade deal implementation
-Trump: Pressing NATO allies to secure Strait of Hormuz; warned of "very bad future" for non-compliant allies
-Iran strikes: Indiscriminate attacks on Gulf states; EU expressed "full solidarity with the people of the region"
-Ukraine dimension: Spiking oil prices refill Russian coffers; demand for US weapons in Iran war may deprive Kyiv of arms
+Trump: Pressed NATO allies to secure Strait of Hormuz; now brokering ceasefire, reshaping Middle East power dynamics
+Iran strikes (March 2026): Indiscriminate attacks on Gulf states; EU expressed "full solidarity with the people of the region"
+Ukraine dimension: Spiking oil prices refilled Russian coffers; demand for US weapons in Iran war may have deprived Kyiv of arms
 EU institutional response: Joint declaration by presidents of three EU institutions on 4th anniversary of Russian invasion
 Energy Council agenda: Oil reserves release, energy price containment, inflation management
 Commission winter preparation (23 March 2026): Commission calls on EU countries to start preparing for winter amid Middle East energy disruption
 EU-Australia trade deal (24 March 2026): Trade diversification deal signed amid geopolitical instability (see `eu_australia_trade_agreement.md`)
+Post-ceasefire outlook: EU assessing long-term energy security implications, reviewing defence posture, monitoring Trump's Middle East strategy
 
 ## EU Diplomatic Response
 
@@ -94,6 +99,27 @@ The EU-UK Parliamentary Partnership Assembly (16-17 March 2026) is meeting in Br
 | 17 March 2026 | Environment Council; GAC (EUCO preparation) |
 | 18 March 2026 | College of Commissioners (28th Regime, Innovation Act); Tripartite Social Summit |
 | 19-20 March 2026 | European Council summit + Euro Summit |
+| 23 March 2026 | Commission calls on EU countries to prepare for winter amid energy disruption |
+| 25 March 2026 | College of Commissioners: Qualitative Military Edge and AGILE (defence innovation) |
+| Early April 2026 | US-Iran ceasefire reached; EU monitors fragile truce |
+| 9 April 2026 | Ceasefire holding; Trump reshaping Middle East dynamics; EU reassessing posture |
+
+## Ceasefire and Post-Conflict Phase (April 2026)
+
+A US-Iran ceasefire was reached in early April 2026, following weeks of intense military operations. The ceasefire is fragile and the EU is closely monitoring whether it holds.
+
+### EU Post-Ceasefire Posture
+- Monitoring ceasefire compliance and potential resumption of hostilities
+- Reassessing energy security strategy: oil prices easing but structural vulnerabilities exposed
+- Reviewing EU maritime mission in the Strait of Hormuz region
+- Trump's ceasefire diplomacy raises questions about EU strategic autonomy: is the EU a spectator in its own neighbourhood's energy security?
+- Political divisions persist: some member states welcome US-brokered peace, others worry about EU marginalisation in Middle East diplomacy
+
+### Energy Security Implications
+- Oil markets cautiously stabilising but remain sensitive to any ceasefire breakdown
+- Gas storage replenishment for winter 2026-2027 remains a priority
+- The crisis exposed EU dependence on Strait of Hormuz transit routes, reinforcing the case for renewables and energy diversification
+- Commission reviewing whether emergency energy measures should remain in place
 
 ## Related Brubru Guides
 

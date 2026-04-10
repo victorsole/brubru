@@ -16,6 +16,9 @@
 - Clean Energy Package: 7 regulations/directives adopted 2018-2019 (core energy legislative framework)
 - REPowerEU (2022-2023): End Russian fossil fuel dependency by 2027
 - 2026 Energy Package: Adopted 10 March 2026 -- Clean Energy Investment Strategy, SMR Strategy, Citizens Energy Package
+- REMIT new implementing rules (9 April 2026): energy market integrity + standardised data (Reg. 2026/818)
+- 235 cross-border energy projects (PCI/PMI 5th list, 9 April 2026): interconnectivity boost
+- Gas Coordination Group (9 April 2026): EU summer preparedness confirmed
 - Renewables milestone (Eurostat, 19 March 2026): 47% of EU electricity came from renewables in 2025
 - Fusion energy (19 March 2026): EU to invest EUR 330 million to accelerate fusion energy and support nuclear technologies/skills
 - Middle East energy disruption (23 March 2026): Commission calls on Member States to prepare for winter amid Strait of Hormuz disruption (see `iran_strait_hormuz_eu_response.md`)
@@ -129,10 +132,16 @@ Key targets set by REPowerEU:
 - **Electricity Market Design Reform (Regulation)**: Regulation (EU) 2024/1747 (CELEX 32024R1747), adopted June 2024. Introduces two-way contracts for difference (CfDs), capacity mechanisms reform, and enhanced consumer protections against price volatility.
 - **Electricity Market Design Reform (Directive)**: Directive (EU) 2024/1711 (CELEX 32024L1711), adopted June 2024. Amends RED III and Directive 2019/944 on electricity market design, strengthens consumer rights, energy sharing provisions, and demand response.
 - **REMIT II** (wholesale energy market integrity): Regulation (EU) 2024/1106 (CELEX 32024R1106), adopted April 2024. Strengthens ACER's powers to investigate cross-border market manipulation, extends scope to derivatives and LNG.
+- **REMIT new implementing rules (9 April 2026)**: New energy market integrity and transparency rules entered into force, strengthening wholesale energy market oversight under REMIT II framework. Commission implementing regulation sets out detailed arrangements for common data structure, standardised metadata, and standardised authentication (Reg. 2026/818, CELEX 32026R0818).
 
 ### Energy Infrastructure
 
 - **Trans-European Energy Networks (TEN-E)**: Regulation (EU) 2022/869 (CELEX 32022R0869), adopted May 2022. Guidelines for cross-border energy infrastructure projects of common interest (PCIs) and projects of mutual interest (PMIs). Excludes new natural gas infrastructure, prioritises electricity, hydrogen, CO2 networks, and smart grids.
+- **5th PCI/PMI list (9 April 2026)**: Commission published list of 235 key cross-border energy projects to boost Europe's interconnectivity. These Projects of Common Interest (PCIs) and Projects of Mutual Interest (PMIs) benefit from streamlined permit-granting procedures and access to CEF-Energy funding.
+
+### Gas Preparedness (April 2026)
+
+- **Gas Coordination Group summer assessment (9 April 2026)**: Gas Coordination Group confirmed EU preparedness for the upcoming summer season. Gas storage levels and supply diversification assessed as adequate following the Iran ceasefire and stabilisation of Middle East energy routes.
 
 ### Transport Energy
 
@@ -282,6 +291,7 @@ The Iran conflict has direct implications for EU energy security. On 13 March 20
 - **Strategic reserves**: EU gas storage at ~45% capacity (March 2026); mandatory 90% filling target by 1 November 2026 under Regulation (EU) 2022/1032
 - **Market monitoring**: ACER and ENTSO-E/ENTSO-G activated enhanced monitoring protocols for price volatility and supply disruption scenarios
 - **IEA coordination**: Fatih Birol visited the College on 6 March 2026 for an orientation debate on energy prices; the Commission is assessing the situation in coordination with the IEA
+- **Oil market assessment (8 April 2026)**: Commission, EU countries and industry met to assess the oil market situation following the Iran ceasefire. Focus: price stabilisation, strategic reserve levels, winter 2026-2027 preparation. Ceasefire easing supply pressure but structural vulnerabilities remain.
 
 ## Related Brubru Features
 
