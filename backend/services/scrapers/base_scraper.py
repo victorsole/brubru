@@ -28,6 +28,17 @@ from tenacity import (
     retry_if_exception_type
 )
 
+# Scrapling: adaptive parsing + anti-bot fetching (April 2026)
+# Selector: adaptive HTML parser (CSS selectors, auto-relocating elements)
+# Fetcher: HTTP client with real browser fingerprints (bypasses Cloudflare/Akamai)
+# StealthyFetcher: headless browser (Playwright-based, for JS-rendered pages)
+try:
+    from scrapling import Selector as ScraplingSelector
+    from scrapling import Fetcher as ScraplingFetcher
+    SCRAPLING_AVAILABLE = True
+except ImportError:
+    SCRAPLING_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -297,6 +308,58 @@ class BaseScraper(ABC):
     def _parse_html(self, html: str) -> BeautifulSoup:
         """Parse HTML content with BeautifulSoup"""
         return BeautifulSoup(html, 'lxml')
+
+    def _parse_adaptive(self, html: str):
+        """
+        Parse HTML with Scrapling's adaptive parser.
+
+        Returns a Scrapling Selector object. API:
+            page = self._parse_adaptive(html)
+            items = page.css('div.es_document')       # returns list of Selectors
+            title = items[0].css('h3 .t-item')[0].text  # .text is a property
+            all_text = items[0].get_all_text()          # all text content
+
+        Falls back to BeautifulSoup if Scrapling is not installed.
+        """
+        if SCRAPLING_AVAILABLE:
+            return ScraplingSelector(html)
+        else:
+            logger.warning(f"{self.name}: Scrapling not available, falling back to BeautifulSoup")
+            return BeautifulSoup(html, 'lxml')
+
+    def _fetch_with_fingerprint(self, url: str) -> str:
+        """
+        Fetch a URL using Scrapling's Fetcher with real browser fingerprints.
+
+        Bypasses basic anti-bot protections (Cloudflare JS challenge, Akamai).
+        Synchronous (uses curl_cffi under the hood). For JS-heavy pages that
+        need a full browser, use StealthyFetcher or PlayWrightFetcher separately.
+
+        Args:
+            url: URL to fetch
+
+        Returns:
+            HTML content as string
+
+        Raises:
+            ScraperError: If Scrapling is not installed or fetch fails
+        """
+        if not SCRAPLING_AVAILABLE:
+            raise ScraperError("Scrapling not installed. Run: pip install scrapling curl_cffi browserforge")
+
+        try:
+            logger.info(f"{self.name}: Fingerprint fetch of {url}")
+            fetcher = ScraplingFetcher(auto_match=True)
+            response = fetcher.get(url)
+            content = response.text if hasattr(response, 'text') else str(response)
+            self.stats['requests_made'] += 1
+            self.stats['total_bytes'] += len(content)
+            logger.info(f"{self.name}: Fingerprint fetch OK ({len(content)} bytes)")
+            return content
+        except Exception as e:
+            self.stats['errors'] += 1
+            logger.error(f"{self.name}: Fingerprint fetch failed for {url}: {e}")
+            raise ScraperError(f"Fingerprint fetch failed: {str(e)}") from e
 
     def _make_absolute_url(self, url: str) -> str:
         """Convert relative URL to absolute URL"""
