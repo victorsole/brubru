@@ -63,10 +63,18 @@ The European Parliament adopted its first reading on 10 April 2024. After four t
 - EMA maintains a critical medicines shortages list
 - Links to the Critical Medicines Act (separate legislation)
 
+### Compounding and Hospital Exemption
+- **Magistral formulations:** Hospital pharmacies can now prepare compounded medicines up to 7 days in advance (current law requires individual prescription first). Applies only to pharmacies serving a hospital, based on estimated medical prescriptions
+- **Partial harmonisation:** New directive tightens and partially harmonises compounding rules across Member States
+- **Hospital ATMP exemption:** New data collection, reporting, and annual review obligations for ATMPs prepared under hospital exemption. EMA to assess whether adapted regulatory framework is needed for less complex ATMPs
+- **Industrial-scale boundary:** Clarified that production exceeding individual patient needs triggers full GMP and marketing authorisation
+- Full analysis: see `pharma_sector_regulatory_landscape.md`
+
 ### Regulatory Modernisation
 - Electronic submission in common format
 - Unlimited validity for marketing authorisations (no administrative renewal burden)
-- Regulatory sandboxes for innovative therapy development
+- Regulatory sandboxes for innovative therapy development (first time in EU pharma law)
+- AI Act Service Desk for compliance support
 - Streamlined EMA procedures
 
 ## Timeline

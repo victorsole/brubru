@@ -26,13 +26,32 @@ For the first time in EU pharmaceutical law, the 2026 reform introduces regulato
 
 **Dual sandbox issue:** Companies developing AI-enabled medicinal products face TWO separate sandbox frameworks: the pharma sandbox and the AI Act sandbox (Digital Omnibus). No formal cross-reference between them. Both may apply simultaneously.
 
-## Compounding
+## Compounding: Current Law vs New Directive
 
-Pharmacy compounding (preparing customised medicines for individual patients) is exempt from marketing authorisation under Article 3 of Directive 2001/83/EC. The 2026 reform clarifies:
-- Compounding remains under national competence (no EU harmonisation)
-- Industrial-scale production disguised as "compounding" triggers full GMP and marketing authorisation
-- Falsified Medicines Directive serialisation applies to compounded products entering the supply chain
-- Significant national variation persists (common law vs civil law jurisdictions)
+Pharmacy compounding is exempt from marketing authorisation under Article 3 of Directive 2001/83/EC. The 2026 reform (new Directive, provisional agreement December 2025) makes important changes:
+
+### Magistral Formulations (individual prescriptions)
+- **Current law (2001/83/EC, Art 3(1)):** A pharmacy can compound a medicine only AFTER receiving a prescription for a specific patient. No advance preparation permitted
+- **New Directive:** Magistral formula products "may be prepared in duly justified cases in advance by a pharmacy serving a hospital, on the basis of the estimated medical prescriptions within that hospital for the following seven days." This is a significant practical expansion: hospitals can now maintain 7-day rolling stock of compounded medicines instead of waiting for each individual prescription
+
+### Officinal Formulations (pharmacopoeia-based)
+- **Current law (2001/83/EC, Art 3(2)):** Pharmacies can prepare officinal formulae (listed in a national or EU pharmacopoeia) and dispense them directly to patients
+- **New Directive:** Retains this exemption with clarified conditions
+
+### Key changes in the reform:
+- **Partial harmonisation:** The new directive tightens and partially harmonises compounding rules across the EU (previously fully national)
+- **Hospital exemption for ATMPs:** New data collection, reporting, and annual review obligations. EMA must assess whether an adapted framework is needed for less complex ATMPs under hospital exemption
+- **Industrial-scale boundary:** Production disguised as "compounding" that exceeds individual patient needs triggers full GMP and marketing authorisation requirements
+- **Falsified Medicines Directive:** Serialisation requirements apply to compounded products entering the supply chain
+- **National variation persists:** Significant differences between Member States remain, especially between common law and civil law jurisdictions
+
+### What DIDN'T change:
+- Compounding remains fundamentally under national competence
+- The Article 3 exemption from marketing authorisation is preserved
+- The requirement for a medical prescription for magistral formulations is preserved
+- Officinal formulations remain based on national/EU pharmacopoeia
+
+Source: Osborne Clarke analysis (March 2026), Inside EU Life Sciences (April 2023 Commission proposal analysis), Directive compromise text published 6 March 2026
 
 ## Urban Waste Water Treatment (UWWTD Recast)
 
