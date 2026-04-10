@@ -517,6 +517,9 @@ class ContextData:
     # EP Committee Work in Progress items
     committee_work_items: List[Dict[str, Any]]
 
+    # EP Committee Meeting Minutes
+    committee_minutes: List[Dict[str, Any]]
+
     # EC Public Consultations (Have Your Say portal)
     public_consultations: List[Dict[str, Any]]
 
@@ -827,6 +830,9 @@ class ContextBuilder:
         # EP Committee Work in Progress items
         tasks.append(self._fetch_committee_work_items(query=user_message, entities=entities))
 
+        # EP Committee Meeting Minutes
+        tasks.append(self._fetch_committee_minutes(query=user_message, entities=entities))
+
         # Phase 9: Fetch EC Public Consultations (Have Your Say portal)
         tasks.append(self._fetch_public_consultations(query=user_message, entities=entities))
 
@@ -912,26 +918,29 @@ class ContextBuilder:
         # Unpack Committee Work items (index 13)
         committee_work_items = results[13] if not isinstance(results[13], Exception) else []
 
-        # Unpack Public Consultations (index 14)
-        public_consultations = results[14] if not isinstance(results[14], Exception) else []
+        # Unpack Committee Minutes (index 14)
+        committee_minutes = results[14] if not isinstance(results[14], Exception) else []
 
-        # Unpack Commission Documents (index 15)
-        commission_documents = results[15] if not isinstance(results[15], Exception) else []
+        # Unpack Public Consultations (index 15)
+        public_consultations = results[15] if not isinstance(results[15], Exception) else []
 
-        # Unpack MCP Toolbox results (index 16)
-        toolbox_results = results[16] if not isinstance(results[16], Exception) else []
+        # Unpack Commission Documents (index 16)
+        commission_documents = results[16] if not isinstance(results[16], Exception) else []
 
-        # Unpack User Uploaded Documents (index 17)
-        user_uploaded_documents = results[17] if not isinstance(results[17], Exception) else []
+        # Unpack MCP Toolbox results (index 17)
+        toolbox_results = results[17] if not isinstance(results[17], Exception) else []
 
-        # Unpack Org Intelligence (index 18)
-        org_intelligence = results[18] if not isinstance(results[18], Exception) else None
+        # Unpack User Uploaded Documents (index 18)
+        user_uploaded_documents = results[18] if not isinstance(results[18], Exception) else []
 
-        # Unpack MEP Amendments summary (index 19)
-        mep_amendments_summary = results[19] if not isinstance(results[19], Exception) else []
+        # Unpack Org Intelligence (index 19)
+        org_intelligence = results[19] if not isinstance(results[19], Exception) else None
 
-        # Unpack EU Calendar Events (index 20)
-        eu_calendar_events = results[20] if not isinstance(results[20], Exception) else []
+        # Unpack MEP Amendments summary (index 20)
+        mep_amendments_summary = results[20] if not isinstance(results[20], Exception) else []
+
+        # Unpack EU Calendar Events (index 21)
+        eu_calendar_events = results[21] if not isinstance(results[21], Exception) else []
 
         # Fix 4: Extract procedure_refs from plenary events and fetch their amendments
         # This connects plenary scheduling to amendment data
@@ -1123,6 +1132,7 @@ class ContextBuilder:
             web_search_results=web_search_results,  # Tavily web search
             beresol_content=beresol_content,  # Beresol open reports
             committee_work_items=committee_work_items,  # EP Committee Work
+            committee_minutes=committee_minutes,  # EP Committee Minutes
             public_consultations=public_consultations,  # EC Public Consultations
             commission_documents=commission_documents,  # EC Commission Documents
             toolbox_results=toolbox_results,  # MCP Toolbox supplementary
@@ -3593,6 +3603,89 @@ class ContextBuilder:
             logger.error(f"Failed to fetch committee work items: {str(e)}")
             return []
 
+    async def _fetch_committee_minutes(
+        self,
+        query: str,
+        entities: ExtractedEntities
+    ) -> List[Dict[str, Any]]:
+        """
+        Fetch relevant EP Committee meeting minutes.
+
+        Searches by committee code, procedure reference, or recent minutes.
+        """
+        from models.committee_minutes import CommitteeMinutes
+
+        try:
+            db = SessionLocal()
+            minutes = []
+            query_lower = query.lower()
+
+            # Check for committee mentions
+            committee_mentions = []
+            for code in EP_COMMITTEE_BY_CODE.keys():
+                if code.lower() in query_lower:
+                    committee_mentions.append(code)
+
+            all_committees = list(set(committee_mentions + (entities.committee_codes if entities.committee_codes else [])))
+
+            # Check for minutes/meeting intent keywords
+            minutes_intent = any(kw in query_lower for kw in [
+                'minutes', 'meeting', 'discussed', 'voted', 'vote in committee',
+                'committee vote', 'committee decision', 'acta', 'proces-verbal',
+                'actes', 'minutes of', 'what did', 'what was discussed',
+            ])
+
+            if all_committees:
+                results = (
+                    db.query(CommitteeMinutes)
+                    .filter(CommitteeMinutes.committee_code.in_(all_committees))
+                    .order_by(CommitteeMinutes.meeting_date.desc())
+                    .limit(5)
+                    .all()
+                )
+                for r in results:
+                    minutes.append({
+                        'title': r.title,
+                        'committee_code': r.committee_code,
+                        'meeting_date': r.meeting_date.strftime('%Y-%m-%d') if r.meeting_date else None,
+                        'publication_date': r.publication_date.strftime('%Y-%m-%d') if r.publication_date else None,
+                        'pdf_url': r.pdf_url,
+                        'full_text': r.full_text[:800] if r.full_text else None,
+                        'votes': r.votes or [],
+                        'agenda_items': r.agenda_items or [],
+                        'decisions': r.decisions or [],
+                        'source_type': 'committee_minutes',
+                    })
+
+            elif minutes_intent:
+                # Generic minutes query: return most recent across all committees
+                results = (
+                    db.query(CommitteeMinutes)
+                    .order_by(CommitteeMinutes.meeting_date.desc())
+                    .limit(5)
+                    .all()
+                )
+                for r in results:
+                    minutes.append({
+                        'title': r.title,
+                        'committee_code': r.committee_code,
+                        'meeting_date': r.meeting_date.strftime('%Y-%m-%d') if r.meeting_date else None,
+                        'publication_date': r.publication_date.strftime('%Y-%m-%d') if r.publication_date else None,
+                        'pdf_url': r.pdf_url,
+                        'full_text': r.full_text[:800] if r.full_text else None,
+                        'votes': r.votes or [],
+                        'agenda_items': r.agenda_items or [],
+                        'decisions': r.decisions or [],
+                        'source_type': 'committee_minutes',
+                    })
+
+            db.close()
+            return minutes
+
+        except Exception as e:
+            logger.error(f"Failed to fetch committee minutes: {str(e)}")
+            return []
+
     async def _fetch_public_consultations(
         self,
         query: str,
@@ -5718,6 +5811,27 @@ class ContextBuilder:
                     sections.append(f"  OEIL: {item['oeil_url']}")
                 if item.get('description'):
                     sections.append(f"  Description: {item['description'][:400]}...")
+                sections.append("")
+
+        # EP Committee Meeting Minutes
+        if context_data.committee_minutes:
+            sections.append(f"\nEP COMMITTEE MEETING MINUTES ({len(context_data.committee_minutes)} items):")
+            sections.append("Source: European Parliament published committee meeting minutes (official records)")
+            sections.append("Note: Minutes contain attendance, agenda items discussed, votes taken, and decisions adopted\n")
+
+            for item in context_data.committee_minutes:
+                sections.append(f"- {item['title']}")
+                sections.append(f"  Committee: {item['committee_code']}")
+                sections.append(f"  Meeting: {item['meeting_date']}")
+                if item.get('publication_date'):
+                    sections.append(f"  Published: {item['publication_date']}")
+                if item.get('pdf_url'):
+                    sections.append(f"  PDF: {item['pdf_url']}")
+                if item.get('votes'):
+                    for vote in item['votes'][:5]:
+                        sections.append(f"  Vote: {vote.get('subject', 'N/A')} - FOR:{vote.get('for', '?')} AGAINST:{vote.get('against', '?')} ABSTAIN:{vote.get('abstain', '?')}")
+                if item.get('full_text'):
+                    sections.append(f"  Content excerpt: {item['full_text'][:800]}")
                 sections.append("")
 
         # EC Public Consultations (Have Your Say portal)

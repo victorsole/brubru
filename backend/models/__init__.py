@@ -38,6 +38,7 @@ from .mep_amendment import AmendmentDocument, MEPAmendment
 from .alignment_score import AlignmentScore
 from .eprs_publication import EPRSPublication, EPRSPublicationTypeEnum
 from .catalan_translation import CatalanTranslation
+from .committee_minutes import CommitteeMinutes
 from .eu_calendar import (
     EUCalendarEvent,
     UserCalendarSubscription,
@@ -90,4 +91,5 @@ __all__ = [
     "EventStatusEnum",
     "ReminderPeriodEnum",
     "CatalanTranslation",
+    "CommitteeMinutes",
 ]

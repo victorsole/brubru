@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EU Pharmaceutical Laws Explained: The Complete Legal Framework | Brubru</title>
+  <meta name="description" content="Comprehensive guide to the EU pharmaceutical legal framework: Directive 2001/83/EC, Regulation 726/2004, EMA, clinical trials, pharmacovigilance, orphan medicines, the 2023 reform. By Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      --color-blue: #0693e3; --color-green: #059669; --color-purple: #9b51e0;
+      --color-amber: #d97706; --color-red: #dc2626; --color-text: #111827;
+      --color-secondary: #6b7280; --color-muted: #9ca3af; --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6; --color-bg: #ffffff; --radius: 12px; --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif; background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 1.05rem; }
+
+    .header { background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: white; border: none; cursor: pointer; background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); animation: rainbowShift 4s ease infinite; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; text-decoration: none; letter-spacing: 0.03em; }
+    .header__cta:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25); }
+    @keyframes rainbowShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .lang-bar { background: var(--color-bg-alt); border-bottom: 1px solid var(--color-border); padding: 0.5rem 2rem; display: flex; align-items: center; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+    .lang-btn { padding: 0.3rem 0.75rem; border-radius: 20px; border: 1px solid var(--color-border); background: var(--color-bg); cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--color-secondary); transition: all 0.2s; font-family: inherit; }
+    .lang-btn:hover, .lang-btn.active { background: var(--color-blue); color: white; border-color: var(--color-blue); }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag { display: inline-block; background: rgba(6,147,227,0.1); color: var(--color-blue); font-size: 0.8rem; font-weight: 600; padding: 0.35rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title { font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero__title span { color: var(--color-blue); background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; transition: background-position 0s; }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle { font-size: 1.15rem; color: var(--color-secondary); max-width: 750px; margin: 0 auto 1.5rem; }
+    .hero__meta { font-size: 0.85rem; color: var(--color-muted); display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+    .figure-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.25s; }
+    .figure-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(6,147,227,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    .toc { background: var(--color-bg-alt); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 3rem; }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .toc__link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); text-decoration: none; color: var(--color-text); font-size: 0.9rem; transition: all 0.15s; }
+    .toc__link:hover { background: rgba(6,147,227,0.08); color: var(--color-blue); }
+    .toc__num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--color-blue); color: white; border-radius: 50%; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0; }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+    .card:hover { border-color: var(--color-blue); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+    th { background: var(--color-bg-alt); font-weight: 700; text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid var(--color-border); }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    tr:hover td { background: rgba(6,147,227,0.03); }
+
+    .tag { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .tag-blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .tag-green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .tag-purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .tag-amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .tag-red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .pipeline { display: flex; gap: 0; margin: 2rem 0; overflow-x: auto; }
+    .pipeline__step { flex: 1; min-width: 140px; padding: 1rem; text-align: center; position: relative; border: 1px solid var(--color-border); border-radius: var(--radius-sm); margin-right: -1px; transition: all 0.3s; }
+    .pipeline__step:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 2; }
+    .pipeline__step-num { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .pipeline__step-label { font-size: 0.8rem; color: var(--color-secondary); margin-top: 0.25rem; }
+    .pipeline__step-detail { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.25rem; }
+    .pipeline__arrow { display: flex; align-items: center; color: var(--color-muted); font-size: 1.2rem; padding: 0 0.25rem; }
+
+    .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -1.55rem; top: 0.55rem; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--color-blue); background: var(--color-bg); z-index: 1; }
+    .timeline__item.done::before { background: var(--color-blue); }
+    .timeline__item.active::before { background: var(--color-amber); border-color: var(--color-amber); box-shadow: 0 0 0 4px rgba(217,119,6,0.2); }
+    .timeline__date { font-size: 0.8rem; font-weight: 700; color: var(--color-blue); }
+    .timeline__text { font-size: 0.95rem; }
+
+    /* Animated molecule */
+    .molecule-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; opacity: 0.03; }
+    .molecule-bg circle { animation: moleculePulse 4s ease-in-out infinite; }
+    @keyframes moleculePulse { 0%, 100% { r: 4; } 50% { r: 7; } }
+
+    /* Fade-in on scroll */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border); margin-top: 3rem; }
+    .footer__logo { height: 30px; margin-bottom: 1rem; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); }
+    .footer__text a { color: var(--color-blue); text-decoration: none; }
+
+    @media (max-width: 1024px) { .toc__grid { grid-template-columns: repeat(2, 1fr); } .figures { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 767px) { .hero__title { font-size: 2rem; } .toc__grid { grid-template-columns: 1fr; } .figures { grid-template-columns: 1fr; } .pipeline { flex-direction: column; } .pipeline__arrow { transform: rotate(90deg); justify-content: center; } .header { padding: 0.75rem 1rem; } .container { padding: 1rem; } .lang-bar { padding: 0.5rem 1rem; } }
+  </style>
+</head>
+<body>
+
+<!-- Decorative molecule background -->
+<svg class="molecule-bg" viewBox="0 0 1000 800">
+  <circle cx="150" cy="200" r="4" fill="#0693e3" style="animation-delay: 0s"/>
+  <circle cx="350" cy="150" r="4" fill="#059669" style="animation-delay: 0.5s"/>
+  <circle cx="550" cy="300" r="4" fill="#9b51e0" style="animation-delay: 1s"/>
+  <circle cx="750" cy="180" r="4" fill="#d97706" style="animation-delay: 1.5s"/>
+  <circle cx="250" cy="500" r="4" fill="#dc2626" style="animation-delay: 2s"/>
+  <circle cx="650" cy="550" r="4" fill="#0693e3" style="animation-delay: 0.7s"/>
+  <circle cx="850" cy="400" r="4" fill="#059669" style="animation-delay: 1.2s"/>
+  <circle cx="450" cy="650" r="4" fill="#9b51e0" style="animation-delay: 1.8s"/>
+  <line x1="150" y1="200" x2="350" y2="150" stroke="#0693e3" stroke-width="0.5" opacity="0.3"/>
+  <line x1="350" y1="150" x2="550" y2="300" stroke="#059669" stroke-width="0.5" opacity="0.3"/>
+  <line x1="550" y1="300" x2="750" y2="180" stroke="#9b51e0" stroke-width="0.5" opacity="0.3"/>
+  <line x1="250" y1="500" x2="450" y2="650" stroke="#dc2626" stroke-width="0.5" opacity="0.3"/>
+  <line x1="650" y1="550" x2="850" y2="400" stroke="#059669" stroke-width="0.5" opacity="0.3"/>
+</svg>
+
+<header class="header">
+  <img src="../assets/carousel/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title" data-i18n="header_title">Brubru Deep Dive Library</div>
+    <div class="header__subtitle" data-i18n="header_subtitle">EU Pharmaceutical Laws</div>
+  </div>
+  <a href="https://brubru.beresol.eu" class="header__cta" data-i18n="header_cta">Try Brubru Free</a>
+</header>
+
+<nav class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en')">English</button>
+  <button class="lang-btn" onclick="setLang('es')">Espa&ntilde;ol</button>
+  <button class="lang-btn" onclick="setLang('ca')">Catal&agrave;</button>
+  <button class="lang-btn" onclick="setLang('fr')">Fran&ccedil;ais</button>
+  <button class="lang-btn" onclick="setLang('it')">Italiano</button>
+  <button class="lang-btn" onclick="setLang('nl')">Nederlands</button>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero__tag"><a href="https://brubru.beresol.eu">Brubru Deep Dive</a></div>
+    <h1 class="hero__title" data-i18n="hero_title">EU Pharmaceutical Laws: <span>The Complete Framework</span></h1>
+    <p class="hero__subtitle" data-i18n="hero_subtitle">From marketing authorisation to pharmacovigilance, from orphan drugs to the 2023 reform: every law governing medicines in the European Union, explained.</p>
+    <div class="hero__meta">
+      <span><i class="mdi mdi-scale-balance"></i> <span data-i18n="meta_laws">30+ legal acts</span></span>
+      <span><i class="mdi mdi-hospital-building"></i> <span data-i18n="meta_ema">EMA, 7 committees</span></span>
+      <span><i class="mdi mdi-earth"></i> <span data-i18n="meta_market">27 Member States</span></span>
+      <span><i class="mdi mdi-update"></i> <span data-i18n="meta_date">March 2026</span></span>
+    </div>
+  </div>
+
+  <!-- KEY FIGURES -->
+  <div class="figures fade-in">
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number">2001</div>
+      <div class="figure-card__label" data-i18n="fig_code">Medicines Code adopted</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number">2</div>
+      <div class="figure-card__label" data-i18n="fig_paths">Authorisation pathways</div>
+    </div>
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number">7</div>
+      <div class="figure-card__label" data-i18n="fig_committees">EMA scientific committees</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number">2025</div>
+      <div class="figure-card__label" data-i18n="fig_reform">Reform deal reached</div>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc fade-in">
+    <div class="toc__title" data-i18n="toc_title">Contents</div>
+    <div class="toc__grid">
+      <a href="#core" class="toc__link"><span class="toc__num">1</span> <span data-i18n="toc_1">Core legislation</span></a>
+      <a href="#authorisation" class="toc__link"><span class="toc__num">2</span> <span data-i18n="toc_2">Authorisation pathways</span></a>
+      <a href="#pharma-vig" class="toc__link"><span class="toc__num">3</span> <span data-i18n="toc_3">Pharmacovigilance</span></a>
+      <a href="#clinical" class="toc__link"><span class="toc__num">4</span> <span data-i18n="toc_4">Clinical trials</span></a>
+      <a href="#special" class="toc__link"><span class="toc__num">5</span> <span data-i18n="toc_5">Special categories</span></a>
+      <a href="#safety" class="toc__link"><span class="toc__num">6</span> <span data-i18n="toc_6">Safety and quality</span></a>
+      <a href="#ema" class="toc__link"><span class="toc__num">7</span> <span data-i18n="toc_7">EMA and institutions</span></a>
+      <a href="#reform" class="toc__link"><span class="toc__num">8</span> <span data-i18n="toc_8">The 2023 reform</span></a>
+      <a href="#sandbox" class="toc__link"><span class="toc__num">9</span> Regulatory sandbox and compounding</a>
+      <a href="#environment" class="toc__link"><span class="toc__num">10</span> Environmental: UWWTF, PFAS, REACH</a>
+      <a href="#procurement" class="toc__link"><span class="toc__num">11</span> Public procurement and FTAs</a>
+      <a href="#trade" class="toc__link"><span class="toc__num">12</span> US-EU pharma trade</a>
+      <a href="#timeline" class="toc__link"><span class="toc__num">13</span> <span data-i18n="toc_9">Timeline</span></a>
+    </div>
+  </div>
+
+  <!-- SECTION 1: CORE LEGISLATION -->
+  <div class="section fade-in" id="core">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-book-open-page-variant"></i></div>
+      <h2 class="section__title" data-i18n="s1_title">1. Core Legislation</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s1_sub">The two pillars of EU medicines law</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document" style="color:var(--color-blue)"></i> <span data-i18n="s1_dir_title"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-blue)">Directive 2001/83/EC</a>: the Community Code</span></div>
+      <p data-i18n="s1_dir_text">The foundational law governing medicinal products for human use in the EU. It sets out the rules for marketing authorisation, manufacture, wholesale distribution, advertising, and pharmacovigilance through national and decentralised procedures. Adopted in 2001, it consolidated and replaced earlier directives dating back to 1965.</p>
+      <table>
+        <tr><th data-i18n="th_element">Element</th><th data-i18n="th_detail">Detail</th></tr>
+        <tr><td>CELEX</td><td>32001L0083</td></tr>
+        <tr><td data-i18n="td_scope">Scope</td><td data-i18n="s1_dir_scope">National, mutual recognition and decentralised authorisation procedures</td></tr>
+        <tr><td data-i18n="td_status">Status</td><td><span class="tag tag-amber" data-i18n="status_being_replaced">Being replaced by 2023 reform</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-file-document" style="color:var(--color-green)"></i> <span data-i18n="s1_reg_title"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-green)">Regulation (EC) 726/2004</a>: the Centralised Procedure</span></div>
+      <p data-i18n="s1_reg_text">Establishes the European Medicines Agency (EMA) and the centralised marketing authorisation procedure. A single application to EMA results in a single authorisation valid across all EU/EEA Member States. Mandatory for biotech products, orphan medicines, and treatments for cancer, HIV/AIDS, neurodegenerative diseases, diabetes, autoimmune and viral diseases.</p>
+      <table>
+        <tr><th data-i18n="th_element">Element</th><th data-i18n="th_detail">Detail</th></tr>
+        <tr><td>CELEX</td><td>32004R0726</td></tr>
+        <tr><td data-i18n="td_scope">Scope</td><td data-i18n="s1_reg_scope">Centralised authorisation via EMA, post-authorisation supervision</td></tr>
+        <tr><td data-i18n="td_status">Status</td><td><span class="tag tag-amber" data-i18n="status_being_replaced">Being replaced by 2023 reform</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 2: AUTHORISATION PATHWAYS -->
+  <div class="section fade-in" id="authorisation">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-check-decagram"></i></div>
+      <h2 class="section__title" data-i18n="s2_title">2. Authorisation Pathways</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s2_sub">How a medicine reaches the EU market</p>
+    <div class="pipeline">
+      <div class="pipeline__step" style="border-color:var(--color-blue)"><div class="pipeline__step-num" style="color:var(--color-blue)">CP</div><div class="pipeline__step-label" data-i18n="pipe_cp">Centralised</div><div class="pipeline__step-detail" data-i18n="pipe_cp_d">Via EMA, valid EU-wide</div></div>
+      <div class="pipeline__arrow"><i class="mdi mdi-chevron-right"></i></div>
+      <div class="pipeline__step" style="border-color:var(--color-green)"><div class="pipeline__step-num" style="color:var(--color-green)">DCP</div><div class="pipeline__step-label" data-i18n="pipe_dcp">Decentralised</div><div class="pipeline__step-detail" data-i18n="pipe_dcp_d">Multiple MS, one leads</div></div>
+      <div class="pipeline__arrow"><i class="mdi mdi-chevron-right"></i></div>
+      <div class="pipeline__step" style="border-color:var(--color-purple)"><div class="pipeline__step-num" style="color:var(--color-purple)">MRP</div><div class="pipeline__step-label" data-i18n="pipe_mrp">Mutual Recognition</div><div class="pipeline__step-detail" data-i18n="pipe_mrp_d">One MS approves, others recognise</div></div>
+      <div class="pipeline__arrow"><i class="mdi mdi-chevron-right"></i></div>
+      <div class="pipeline__step" style="border-color:var(--color-amber)"><div class="pipeline__step-num" style="color:var(--color-amber)">NP</div><div class="pipeline__step-label" data-i18n="pipe_np">National</div><div class="pipeline__step-detail" data-i18n="pipe_np_d">Single Member State</div></div>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-information" style="color:var(--color-blue)"></i> <span data-i18n="s2_mandatory">Centralised procedure is mandatory for:</span></div>
+      <p data-i18n="s2_mandatory_list">Biotechnology products, orphan medicines, HIV/AIDS, cancer, neurodegenerative diseases, diabetes, autoimmune diseases, viral diseases, and advanced therapy medicinal products (gene therapy, somatic cell therapy, tissue engineering). Assessment time: 210 active days.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 3: PHARMACOVIGILANCE -->
+  <div class="section fade-in" id="pharma-vig">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-shield-search"></i></div>
+      <h2 class="section__title" data-i18n="s3_title">3. Pharmacovigilance</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s3_sub">Monitoring medicine safety after authorisation</p>
+    <table>
+      <tr><th data-i18n="th_legislation">Legislation</th><th>CELEX</th><th data-i18n="th_purpose">Purpose</th></tr>
+      <tr><td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010R1235-20110101" target="_blank">Regulation (EU) 1235/2010</a></td><td>32010R1235</td><td data-i18n="s3_r1">Strengthens EMA pharmacovigilance (amends Reg 726/2004)</td></tr>
+      <tr><td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010L0084-20110120" target="_blank">Directive 2010/84/EU</a></td><td>32010L0084</td><td data-i18n="s3_r2">Strengthens national pharmacovigilance (amends Dir 2001/83)</td></tr>
+      <tr><td><a href="https://eur-lex.europa.eu/eli/reg/2012/1027/oj/eng" target="_blank">Regulation (EU) 1027/2012</a></td><td>32012R1027</td><td data-i18n="s3_r3">Further amendments to Reg 726/2004</td></tr>
+      <tr><td><a href="https://eur-lex.europa.eu/legal-content/en/TXT/?uri=CELEX%3A32012L0026" target="_blank">Directive 2012/26/EU</a></td><td>32012L0026</td><td data-i18n="s3_r4">Further amendments to Dir 2001/83</td></tr>
+      <tr><td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02012R0520-20260212" target="_blank">Implementing Reg (EU) 520/2012</a></td><td>32012R0520</td><td data-i18n="s3_r5">Operational pharmacovigilance procedures</td></tr>
+    </table>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-database" style="color:var(--color-purple)"></i> <span data-i18n="s3_eudra">EudraVigilance</span></div>
+      <p data-i18n="s3_eudra_text">The EU database of suspected adverse drug reactions, managed by EMA. Marketing authorisation holders must report all suspected serious reactions within 15 days. Key tools include Periodic Safety Update Reports (PSURs), Risk Management Plans (RMPs), and the black triangle symbol for medicines under additional monitoring.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: CLINICAL TRIALS -->
+  <div class="section fade-in" id="clinical">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-flask"></i></div>
+      <h2 class="section__title" data-i18n="s4_title">4. Clinical Trials</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s4_sub"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-amber)">Regulation (EU) 536/2014</a> (CELEX 32014R0536)</p>
+    <div class="card">
+      <p data-i18n="s4_text">Replaced the Clinical Trials <a href="https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32001L0020" target="_blank">Directive 2001/20/EC</a>. Introduces the Clinical Trials Information System (CTIS): a single EU portal for all trial applications. One application can cover multiple Member States, with coordinated assessment led by a Reporting Member State. Trial results must be published within 12 months of study completion. Simplified rules apply to low-intervention clinical trials.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: SPECIAL CATEGORIES -->
+  <div class="section fade-in" id="special">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-red)"><i class="mdi mdi-star-circle"></i></div>
+      <h2 class="section__title" data-i18n="s5_title">5. Special Categories</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s5_sub">Orphan, paediatric, advanced therapies, and herbal medicines</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-heart-pulse" style="color:var(--color-red)"></i> <span data-i18n="s5_orphan_title">Orphan Medicines (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">Reg 141/2000</a>)</span></div>
+      <p data-i18n="s5_orphan_text">For diseases affecting not more than 5 in 10,000 people in the EU. EMA's Committee for Orphan Medicinal Products (COMP) grants orphan designation. Incentives include 10 years of market exclusivity, protocol assistance, and fee reductions. Under the 2023 reform, breakthrough orphans will receive up to 11 years.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-baby-face-outline" style="color:var(--color-blue)"></i> <span data-i18n="s5_paed_title">Paediatric Medicines (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-blue)">Reg 1901/2006</a>)</span></div>
+      <p data-i18n="s5_paed_text">Requires Paediatric Investigation Plans (PIPs) for all new medicines, assessed by EMA's Paediatric Committee (PDCO). Completing an agreed PIP grants a 6-month SPC extension. Waivers available when a disease does not occur in children or the product would be unsafe.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-dna" style="color:var(--color-green)"></i> <span data-i18n="s5_atmp_title">Advanced Therapies (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Reg 1394/2007</a>)</span></div>
+      <p data-i18n="s5_atmp_text">Covers gene therapy, somatic cell therapy, and tissue-engineered products. Centralised authorisation is mandatory. EMA's Committee for Advanced Therapies (CAT) provides the scientific assessment. These cutting-edge therapies are transforming treatment for rare genetic conditions and cancers.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-leaf" style="color:var(--color-green)"></i> <span data-i18n="s5_herbal_title">Traditional Herbal Medicines (<a href="https://eur-lex.europa.eu/eli/dir/2004/24/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Dir 2004/24/EC</a>)</span></div>
+      <p data-i18n="s5_herbal_text">Simplified registration procedure for traditional herbal medicines with at least 30 years of documented use (including 15 years in the EU). EMA's Herbal Medicinal Products Committee (HMPC) prepares monographs establishing safety and efficacy profiles.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6: SAFETY AND QUALITY -->
+  <div class="section fade-in" id="safety">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-shield-check"></i></div>
+      <h2 class="section__title" data-i18n="s6_title">6. Safety and Quality</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s6_sub">Anti-counterfeiting, GMP, and EudraLex</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-barcode-scan" style="color:var(--color-red)"></i> <span data-i18n="s6_fmd_title">Falsified Medicines Directive (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">2011/62/EU</a>)</span></div>
+      <p data-i18n="s6_fmd_text">Mandatory safety features on packaging: a unique identifier (2D barcode) and an anti-tampering device, verified at dispensing through the European Medicines Verification System (EMVS). Strengthened supply chain controls cover importers, brokers, and API manufacturers. A common EU logo identifies legal online pharmacies.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-book-multiple" style="color:var(--color-blue)"></i> <span>EudraLex</span></div>
+      <table>
+        <tr><th data-i18n="th_volume">Volume</th><th data-i18n="th_content">Content</th></tr>
+        <tr><td>Volume 1</td><td data-i18n="s6_v1">EU pharmaceutical legislation (consolidated legal texts)</td></tr>
+        <tr><td>Volume 2</td><td data-i18n="s6_v2">Notice to Applicants (procedures, forms, CTD guidance)</td></tr>
+        <tr><td>Volume 3</td><td data-i18n="s6_v3">Scientific guidelines (quality, safety, efficacy)</td></tr>
+        <tr><td>Volume 4</td><td data-i18n="s6_v4">Good Manufacturing Practice (GMP) guidelines</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 7: EMA AND INSTITUTIONS -->
+  <div class="section fade-in" id="ema">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-hospital-building"></i></div>
+      <h2 class="section__title" data-i18n="s7_title">7. EMA and Institutional Landscape</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s7_sub">The European Medicines Agency and its 7 scientific committees</p>
+    <table>
+      <tr><th data-i18n="th_committee">Committee</th><th data-i18n="th_acronym">Acronym</th><th data-i18n="th_role">Role</th></tr>
+      <tr><td data-i18n="s7_chmp">Committee for Medicinal Products for Human Use</td><td>CHMP</td><td data-i18n="s7_chmp_r">Marketing authorisation opinions</td></tr>
+      <tr><td data-i18n="s7_prac">Pharmacovigilance Risk Assessment Committee</td><td>PRAC</td><td data-i18n="s7_prac_r">Safety monitoring</td></tr>
+      <tr><td data-i18n="s7_comp">Committee for Orphan Medicinal Products</td><td>COMP</td><td data-i18n="s7_comp_r">Orphan designation</td></tr>
+      <tr><td data-i18n="s7_pdco">Paediatric Committee</td><td>PDCO</td><td data-i18n="s7_pdco_r">Paediatric Investigation Plans</td></tr>
+      <tr><td data-i18n="s7_cat">Committee for Advanced Therapies</td><td>CAT</td><td data-i18n="s7_cat_r">ATMP assessment</td></tr>
+      <tr><td data-i18n="s7_cvmp">Committee for Veterinary Medicinal Products</td><td>CVMP</td><td data-i18n="s7_cvmp_r">Veterinary medicines</td></tr>
+      <tr><td data-i18n="s7_hmpc">Herbal Medicinal Products Committee</td><td>HMPC</td><td data-i18n="s7_hmpc_r">Herbal monographs</td></tr>
+    </table>
+    <div class="card" style="margin-top: 1.25rem">
+      <div class="card__title"><i class="mdi mdi-account-group" style="color:var(--color-green)"></i> <span data-i18n="s7_actors_title">Key institutional actors</span></div>
+      <table>
+        <tr><th data-i18n="th_actor">Actor</th><th data-i18n="th_role">Role</th></tr>
+        <tr><td>DG SANTE</td><td data-i18n="s7_sante">Lead Commission DG for pharmaceuticals</td></tr>
+        <tr><td data-i18n="s7_ema_name">EMA (Amsterdam)</td><td data-i18n="s7_ema_role">Centralised MA, pharmacovigilance, crisis management</td></tr>
+        <tr><td>HMA</td><td data-i18n="s7_hma">Network of 30 national medicines agencies + EMA</td></tr>
+        <tr><td data-i18n="s7_edqm_name">EDQM (Strasbourg)</td><td data-i18n="s7_edqm">European Pharmacopoeia, quality standards</td></tr>
+        <tr><td data-i18n="s7_sant">SANT Committee (EP)</td><td data-i18n="s7_sant_r">Lead EP committee for pharmaceutical legislation</td></tr>
+        <tr><td>EPSCO Council</td><td data-i18n="s7_epsco">Council configuration for health matters</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 8: THE 2023 REFORM -->
+  <div class="section fade-in" id="reform">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-auto-fix"></i></div>
+      <h2 class="section__title" data-i18n="s8_title">8. The 2023 Reform</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s8_sub">The biggest overhaul of EU pharmaceutical law since 2004</p>
+    <div class="card">
+      <p data-i18n="s8_intro">On 26 April 2023, the Commission proposed replacing both the Directive (2001/83/EC) and the Regulation (726/2004) with a modernised framework. After four trilogues, negotiators reached a provisional agreement on 11 December 2025. The reform addresses innovation incentives, supply chain resilience, antimicrobial resistance, and patient access.</p>
+    </div>
+    <table>
+      <tr><th data-i18n="th_topic">Topic</th><th data-i18n="th_current">Current</th><th data-i18n="th_reform">Reform</th></tr>
+      <tr><td data-i18n="s8_dp">Data protection</td><td data-i18n="s8_dp_c">8 years</td><td data-i18n="s8_dp_r">8 years (unchanged)</td></tr>
+      <tr><td data-i18n="s8_mp">Market protection</td><td data-i18n="s8_mp_c">2 years</td><td data-i18n="s8_mp_r">1 year base + extensions</td></tr>
+      <tr><td data-i18n="s8_max">Max total protection</td><td data-i18n="s8_max_c">10 years</td><td data-i18n="s8_max_r">11 years (with all bonuses)</td></tr>
+      <tr><td data-i18n="s8_orphan">Orphan exclusivity</td><td data-i18n="s8_orphan_c">10 years</td><td data-i18n="s8_orphan_r">Up to 11 years (breakthrough)</td></tr>
+      <tr><td data-i18n="s8_amr">AMR incentive</td><td data-i18n="s8_amr_c">None</td><td data-i18n="s8_amr_r">Transferable 12-month voucher</td></tr>
+      <tr><td data-i18n="s8_short">Shortages</td><td data-i18n="s8_short_c">No framework</td><td data-i18n="s8_short_r">Mandatory prevention plans + EMA monitoring</td></tr>
+    </table>
+    <div class="card" style="margin-top: 1.25rem">
+      <div class="card__title"><i class="mdi mdi-account-tie" style="color:var(--color-purple)"></i> <span data-i18n="s8_rap_title">Rapporteurs</span></div>
+      <table>
+        <tr><th data-i18n="th_file">File</th><th data-i18n="th_rapporteur">Rapporteur</th><th data-i18n="th_procedure">Procedure</th></tr>
+        <tr><td data-i18n="s8_dir">Directive</td><td data-i18n="s8_rap_dir"><a href="https://www.europarl.europa.eu/meps/en/197711/DOLORS_MONTSERRAT/home" target="_blank">Dolors Montserrat</a> (EPP, Spain)</td><td><a href="https://eur-lex.europa.eu/procedure/EN/2023_132" target="_blank">2023/0132(COD)</a></td></tr>
+        <tr><td data-i18n="s8_reg">Regulation</td><td data-i18n="s8_rap_reg"><a href="https://www.europarl.europa.eu/meps/en/185619/TIEMO_WOLKEN/home" target="_blank">Tiemo W&ouml;lken</a> (S&amp;D, Germany)</td><td><a href="https://eur-lex.europa.eu/procedure/EN/2023_131" target="_blank">2023/0131(COD)</a></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 9: REGULATORY SANDBOX AND COMPOUNDING -->
+  <div class="section fade-in" id="sandbox">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-flask-outline"></i></div>
+      <h2 class="section__title">9. Regulatory Sandbox and Compounding</h2>
+    </div>
+    <p class="section__subtitle">New tools for pharmaceutical innovation in the 2026 Pharma Package</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-check" style="color:var(--color-green)"></i> Regulatory Sandboxes</div>
+      <p>For the first time in EU pharmaceutical law, the 2026 reform introduces <strong>regulatory sandboxes</strong> as a formal legislative tool. The European Commission, at the suggestion of the EMA, may establish a sandbox where a medicinal product cannot be developed and authorised under standard regulatory requirements due to its inherent scientific or technical characteristics.</p>
+      <p style="margin-top:0.75rem"><strong>Areas envisaged:</strong> personalised medicines, advanced therapy medicinal products (ATMPs), products incorporating artificial intelligence (AI) or digital health tools, and innovative antimicrobials such as phage therapy.</p>
+      <p style="margin-top:0.75rem"><strong>How it works:</strong> A controlled, supervised environment where targeted adaptations to current regulatory requirements are permitted. Lessons learned are converted into permanent regulatory rules that reflect scientific progress.</p>
+      <p style="margin-top:0.75rem"><strong>Interplay with AI Act:</strong> Companies developing AI-enabled medicinal products must navigate <em>two</em> separate sandbox frameworks: the pharma sandbox under the new regulation, and the AI Act sandbox regime (as strengthened by the <a href="https://brubru.beresol.eu/main?q=What%20is%20the%20Digital%20Omnibus%20package%20and%20how%20does%20it%20affect%20AI%20Act%20sandboxes%3F" target="_blank">Digital Omnibus proposal</a>). These are distinct legal mechanisms with no formal cross-reference between them.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-mortar-pestle-plus" style="color:var(--color-amber)"></i> Compounding</div>
+      <p><strong>Pharmaceutical compounding</strong> refers to the preparation of customised medicines by pharmacies for individual patients. The 2026 Pharma Package clarifies the regulatory boundary between pharmacy compounding (which is exempt from marketing authorisation requirements under Article 3 of Directive 2001/83/EC) and industrial manufacturing.</p>
+      <p style="margin-top:0.75rem"><strong>Key clarifications in the reform:</strong></p>
+      <ul style="margin-top:0.5rem; padding-left:1.5rem">
+        <li>Compounding remains under national competence but must comply with Good Pharmacy Practice (GPP)</li>
+        <li>Industrial-scale "compounding" that is not for a specific named patient triggers full GMP and marketing authorisation requirements</li>
+        <li>The Falsified Medicines Directive (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank">Dir 2011/62/EU</a>) serialisation requirements apply to compounded products only when they enter the supply chain</li>
+        <li>The reform does not harmonise compounding rules across Member States, leaving significant national variation (especially between common law and civil law jurisdictions)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 10: ENVIRONMENTAL LEGISLATION -->
+  <div class="section fade-in" id="environment">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-leaf"></i></div>
+      <h2 class="section__title">10. Environmental Legislation Affecting Pharma</h2>
+    </div>
+    <p class="section__subtitle">Water treatment, PFAS, and chemicals regulation: the environmental framework that shapes pharmaceutical manufacturing</p>
+
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-water" style="color:var(--color-blue)"></i> Urban Waste Water Treatment (UWWTD recast)</div>
+      <p><strong><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202403019" target="_blank">Directive (EU) 2024/3019</a></strong> (CELEX: 32024L3019), adopted 27 November 2024. This recast of the 1991 Urban Waste Water Treatment Directive is the most significant upgrade to EU water treatment rules in 33 years.</p>
+      <p style="margin-top:0.75rem"><strong>Why it matters for pharma:</strong></p>
+      <ul style="margin-top:0.5rem; padding-left:1.5rem">
+        <li><strong>Extended Producer Responsibility (EPR):</strong> Pharmaceutical and cosmetic producers must finance quaternary treatment (advanced removal of micropollutants) at waste water treatment plants. This is a direct "polluter pays" mechanism: the industry that places micropollutants on the market pays for their removal</li>
+        <li><strong>Quaternary treatment:</strong> 80% removal of micropollutants (pharmaceuticals, PFAS) required for plants serving 150,000+ population equivalents by 2033, and 10,000+ p.e. by 2039</li>
+        <li><strong>EPR cost share:</strong> At least 80% of quaternary treatment costs borne by pharmaceutical and cosmetics producers, proportional to their micropollutant load</li>
+        <li><strong>Source: </strong><a href="https://www.europarl.europa.eu/RegData/etudes/BRIE/2023/740240/EPRS_BRI(2023)740240_EN.pdf" target="_blank">EPRS Briefing PE 740.240</a></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-water-alert" style="color:var(--color-red)"></i> PFAS (Forever Chemicals)</div>
+      <p>Per- and polyfluoroalkyl substances (PFAS) are synthetic chemicals used in pharmaceutical manufacturing (coatings, packaging, equipment). The EU is pursuing the world's most comprehensive PFAS regulatory approach.</p>
+      <table>
+        <tr><th>Measure</th><th>Status</th><th>Pharma impact</th></tr>
+        <tr><td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32020L2184" target="_blank">Drinking Water Directive 2020/2184</a></td><td>Monitoring since 12 January 2026</td><td>PFAS limits: total 0.5 &micro;g/L, sum of 20 specific PFAS 0.1 &micro;g/L</td></tr>
+        <tr><td><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0344(COD)" target="_blank">Water pollutants directive 2022/0344(COD)</a></td><td>Adopted 2nd reading 26 March 2026 (rapporteur: Javi L&oacute;pez, S&amp;D). Signed 30 March 2026</td><td>24 PFAS added to surface water monitoring list alongside pharmaceuticals</td></tr>
+        <tr><td>Universal PFAS restriction (ECHA)</td><td>Assessment expected end of 2026</td><td>Could restrict ~10,000 PFAS substances. Major impact on pharmaceutical manufacturing processes</td></tr>
+        <tr><td>PFAS bans already in force</td><td>PFOS, PFOA, PFHxS, PFHxA (textiles, food, cosmetics 2024). Firefighting foams phased out October 2025</td><td>Supply chain compliance required</td></tr>
+      </table>
+      <p style="margin-top:0.75rem"><strong>Cost of inaction:</strong> EUR 440 billion cumulative by 2050. EUR 1 trillion+ in water treatment costs without action. Sources: <a href="https://op.europa.eu/en/publication-detail/-/publication/2bcea765-fbf8-11f0-8da5-01aa75ed71a1/language-en" target="_blank">EC study (January 2026)</a>, <a href="https://environment.ec.europa.eu/news/new-study-confirms-huge-and-growing-costs-pfas-pollution-2026-01-29_en" target="_blank">DG ENV</a></p>
+    </div>
+
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-flask" style="color:var(--color-amber)"></i> REACH Chemicals Regulation</div>
+      <p><strong><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32006R1907" target="_blank">Regulation (EC) 1907/2006</a></strong> (REACH) is the EU's main chemicals legislation, enforced by <a href="https://echa.europa.eu" target="_blank">ECHA</a> in Helsinki. <a href="https://environment.ec.europa.eu/topics/chemicals/reach-regulation_en" target="_blank">DG ENV overview</a>.</p>
+      <p style="margin-top:0.75rem"><strong>Why it matters for pharma:</strong></p>
+      <ul style="margin-top:0.5rem; padding-left:1.5rem">
+        <li><strong>Active ingredients:</strong> Pharmaceutical active substances are exempt from REACH registration when used in medicinal products (Article 2(5)(a)), but not when used as intermediates or in non-medicinal applications</li>
+        <li><strong>Excipients and process chemicals:</strong> All non-active chemical substances used in pharmaceutical manufacturing (solvents, excipients, cleaning agents) must be REACH-registered if produced/imported above 1 tonne/year</li>
+        <li><strong>SVHC authorisation:</strong> If a substance used in pharma manufacturing is added to the Authorisation List (Annex XIV), manufacturers must obtain authorisation for continued use or find substitutes</li>
+        <li><strong>REACH targeted revision (<a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2023/0234(COD)" target="_blank">2023/0234(COD)</a>):</strong> Proposes "One Substance, One Assessment" (OSOA) to streamline hazard assessment across ECHA, EFSA, EMA, and EEA. This directly impacts how pharma substances are evaluated</li>
+        <li><strong>Critical Medicines Act connection:</strong> The proposed CMA may create exemptions or fast-track procedures for substances essential to critical medicine manufacturing</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 11: PUBLIC PROCUREMENT AND FTAs -->
+  <div class="section fade-in" id="procurement">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-gavel"></i></div>
+      <h2 class="section__title">11. Public Procurement and Free Trade Agreements</h2>
+    </div>
+    <p class="section__subtitle">How EU procurement rules and trade agreements shape pharmaceutical markets</p>
+
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-hospital-building" style="color:var(--color-purple)"></i> Public Procurement Directives</div>
+      <p>Hospital and public health system pharmaceutical purchases are governed by the EU public procurement framework:</p>
+      <table>
+        <tr><th>Directive</th><th>Scope</th><th>Pharma relevance</th></tr>
+        <tr><td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0024" target="_blank">Directive 2014/24/EU</a></td><td>General public procurement</td><td>Hospital medicine tenders, bulk purchasing agreements</td></tr>
+        <tr><td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0025" target="_blank">Directive 2014/25/EU</a></td><td>Utilities procurement</td><td>Relevant for health system infrastructure</td></tr>
+        <tr><td><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014L0023" target="_blank">Directive 2014/23/EU</a></td><td>Concession contracts</td><td>Public-private partnerships in healthcare services</td></tr>
+      </table>
+      <p style="margin-top:0.75rem"><strong>Key issues for pharma procurement:</strong> Joint procurement mechanisms (as used during COVID-19 for vaccines), Most Economically Advantageous Tender (MEAT) criteria allowing quality/innovation weighting over lowest price, and the International Procurement Instrument (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R1031" target="_blank">Regulation 2022/1031</a>) which can restrict third-country bidders in strategic sectors.</p>
+    </div>
+
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-earth" style="color:var(--color-blue)"></i> Free Trade Agreements (FTAs)</div>
+      <p>EU trade agreements directly affect pharmaceutical market access, IP protection, and regulatory cooperation:</p>
+      <table>
+        <tr><th>Agreement</th><th>Pharma provisions</th><th>Status</th></tr>
+        <tr><td>CETA (EU-Canada)</td><td>Patent linkage prohibition, GMP mutual recognition, generic entry protections</td><td>Provisionally applied since 2017</td></tr>
+        <tr><td>EU-Japan EPA</td><td>GMP inspection mutual recognition, regulatory cooperation on pharmaceuticals</td><td>In force since 2019</td></tr>
+        <tr><td>EU-Vietnam FTA</td><td>Data exclusivity (5 years), IP protections, technology transfer commitments</td><td>In force since 2020</td></tr>
+        <tr><td>EU-Mercosur</td><td>Patent term extensions, data protection provisions. Significant generic medicine implications for South America</td><td>Political agreement December 2024</td></tr>
+        <tr><td>EU-Australia</td><td>Pharmaceutical regulatory cooperation chapter</td><td>Signed 24 March 2026</td></tr>
+        <tr><td>EU-India (ongoing)</td><td>IP, data exclusivity, and generic medicine access are the most contentious chapters</td><td>Negotiations ongoing</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 12: US-EU PHARMA TRADE -->
+  <div class="section fade-in" id="trade">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-swap-horizontal"></i></div>
+      <h2 class="section__title">12. US-EU Pharmaceutical Trade Relationship</h2>
+    </div>
+    <p class="section__subtitle">The transatlantic pharma axis: mutual dependency, regulatory divergence, and tariff risks</p>
+
+    <div class="card">
+      <p>The EU and the US are the world's two largest pharmaceutical markets. Their relationship is characterised by deep interdependency: European companies develop and manufacture globally, while the US market provides the highest prices and fastest regulatory approvals (FDA).</p>
+      <p style="margin-top:0.75rem"><strong>Key dynamics (2026):</strong></p>
+      <ul style="margin-top:0.5rem; padding-left:1.5rem">
+        <li><strong>Tariff risk:</strong> US tariff policy under Trump II creates uncertainty for EU pharmaceutical exports. Pharma has historically been exempt from tariff disputes, but the current administration has signalled willingness to include it</li>
+        <li><strong>Regulatory divergence:</strong> The FDA and EMA are increasingly diverging on accelerated approval pathways, AI/digital health regulation, and biosimilar interchangeability rules. The EU's regulatory sandbox (new in the 2026 reform) has no US equivalent in the same form</li>
+        <li><strong>GMP mutual recognition:</strong> The EU-US <a href="https://www.ema.europa.eu/en/human-regulatory-overview/research-and-development/compliance/good-manufacturing-practice/mutual-recognition-agreements-mra" target="_blank">Mutual Recognition Agreement on GMP inspections</a> (fully operational since 2019) reduces duplicative inspections. This is the most successful transatlantic pharma cooperation mechanism</li>
+        <li><strong>China factor:</strong> Both the EU and US are seeking to reduce dependency on Chinese API (active pharmaceutical ingredient) manufacturing. The EU's proposed Critical Medicines Act and the US BIOSECURE Act both aim to reshore production</li>
+        <li><strong>Drug pricing:</strong> The US Inflation Reduction Act (IRA) introduced Medicare drug price negotiation for the first time, narrowing the EU-US price gap for selected medicines. This affects European companies' global pricing strategies</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 13: TIMELINE -->
+  <div class="section fade-in" id="timeline">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-timeline-clock"></i></div>
+      <h2 class="section__title" data-i18n="s9_title">13. Legislative Timeline</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s9_sub">Key milestones in EU pharmaceutical law</p>
+    <div class="timeline">
+      <div class="timeline__item done"><div class="timeline__date">1965</div><div class="timeline__text" data-i18n="tl_1965">First EU pharmaceutical directive (<a href="https://eur-lex.europa.eu/eli/dir/1965/65/oj/eng" target="_blank">Directive 65/65/EEC</a>): thalidomide response</div></div>
+      <div class="timeline__item done"><div class="timeline__date">1995</div><div class="timeline__text" data-i18n="tl_1995">EMA established (then EMEA, London)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2000</div><div class="timeline__text" data-i18n="tl_2000">Orphan medicines regulation (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank">Reg 141/2000</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2001</div><div class="timeline__text" data-i18n="tl_2001">Community Code adopted (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank">Directive 2001/83/EC</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2004</div><div class="timeline__text" data-i18n="tl_2004">Centralised procedure regulation (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank">Reg 726/2004</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2006</div><div class="timeline__text" data-i18n="tl_2006">Paediatric medicines regulation (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank">Reg 1901/2006</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2007</div><div class="timeline__text" data-i18n="tl_2007">Advanced therapies regulation (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank">Reg 1394/2007</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2010-12</div><div class="timeline__text" data-i18n="tl_2010">Pharmacovigilance package (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010R1235-20110101" target="_blank">Reg 1235/2010</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010L0084-20110120" target="_blank">Dir 2010/84/EU</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2011</div><div class="timeline__text" data-i18n="tl_2011">Falsified Medicines Directive (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank">Dir 2011/62/EU</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2014</div><div class="timeline__text" data-i18n="tl_2014">Clinical Trials Regulation (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank">Reg 536/2014</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2019</div><div class="timeline__text" data-i18n="tl_2019">EMA moves to Amsterdam (post-Brexit)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">2022</div><div class="timeline__text" data-i18n="tl_2022">EMA crisis role reinforced (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02022R0123-20250101" target="_blank">Reg 2022/123</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">April 2023</div><div class="timeline__text" data-i18n="tl_2023">Commission proposes pharmaceutical reform package</div></div>
+      <div class="timeline__item done"><div class="timeline__date">April 2024</div><div class="timeline__text" data-i18n="tl_2024">EP first reading adopted</div></div>
+      <div class="timeline__item done"><div class="timeline__date">November 2024</div><div class="timeline__text">Urban Waste Water Treatment Directive recast adopted (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202403019" target="_blank">Dir 2024/3019</a>): pharma EPR for micropollutant treatment</div></div>
+      <div class="timeline__item done"><div class="timeline__date">December 2025</div><div class="timeline__text" data-i18n="tl_2025">Pharma Package provisional agreement after 4 trilogues</div></div>
+      <div class="timeline__item done"><div class="timeline__date">January 2026</div><div class="timeline__text">PFAS monitoring enters into force under Drinking Water Directive 2020/2184</div></div>
+      <div class="timeline__item done"><div class="timeline__date">6 March 2026</div><div class="timeline__text">Council publishes final Pharma Package compromise texts (COREPER I endorsement)</div></div>
+      <div class="timeline__item done"><div class="timeline__date">18 March 2026</div><div class="timeline__text">EP SANT committee approves trilogue agreements on Pharma Package</div></div>
+      <div class="timeline__item done"><div class="timeline__date">26 March 2026</div><div class="timeline__text">EP adopts water pollutants directive at 2nd reading (<a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0344(COD)" target="_blank">2022/0344(COD)</a>): PFAS + pharmaceuticals in surface water</div></div>
+      <div class="timeline__item active"><div class="timeline__date">Autumn 2026</div><div class="timeline__text">Formal adoption by Council and EP plenary. Publication in OJ expected. Universal PFAS restriction decision (ECHA) expected end 2026</div></div>
+      <div class="timeline__item"><div class="timeline__date">2028</div><div class="timeline__text">New Regulation applicable (2 years after publication). Directive to be transposed by Member States</div></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <img src="../assets/carousel/brubru_mainlogo.png" alt="Brubru" class="footer__logo"><br>
+  <p class="footer__text" data-i18n="footer_text">EU Pharmaceutical Laws deep dive by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; Updated 10 April 2026 &middot; With feedback from David Devant Cerezo (EFPIA)</p>
+</footer>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// i18n translations
+const translations = {
+  es: {
+    // Hero
+    hero_title: 'Legislaci&oacute;n farmac&eacute;utica de la UE: <span>El marco completo</span>',
+    hero_subtitle: 'Desde la autorizaci&oacute;n de comercializaci&oacute;n hasta la farmacovigilancia, desde los medicamentos hu&eacute;rfanos hasta la reforma de 2023: todas las leyes que regulan los medicamentos en la Uni&oacute;n Europea, explicadas.',
+    meta_laws: '30+ actos jur&iacute;dicos', meta_ema: 'EMA, 7 comit&eacute;s', meta_market: '27 Estados miembros', meta_date: 'Marzo 2026',
+    fig_code: 'C&oacute;digo de medicamentos', fig_paths: 'V&iacute;as de autorizaci&oacute;n', fig_committees: 'Comit&eacute;s cient&iacute;ficos de la EMA', fig_reform: 'Acuerdo de reforma',
+    // TOC
+    toc_title: '&Iacute;ndice', toc_1: 'Legislaci&oacute;n b&aacute;sica', toc_2: 'V&iacute;as de autorizaci&oacute;n', toc_3: 'Farmacovigilancia', toc_4: 'Ensayos cl&iacute;nicos', toc_5: 'Categor&iacute;as especiales', toc_6: 'Seguridad y calidad', toc_7: 'EMA e instituciones', toc_8: 'La reforma de 2023', toc_9: 'Cronolog&iacute;a',
+    // Table headers
+    th_element: 'Elemento', th_detail: 'Detalle', th_legislation: 'Legislaci&oacute;n', th_purpose: 'Finalidad', th_volume: 'Volumen', th_content: 'Contenido', th_committee: 'Comit&eacute;', th_acronym: 'Sigla', th_role: 'Funci&oacute;n', th_actor: 'Actor', th_topic: 'Tema', th_current: 'Actual', th_reform: 'Reforma', th_file: 'Expediente', th_rapporteur: 'Ponente', th_procedure: 'Procedimiento',
+    // Status tags
+    status_being_replaced: 'Siendo sustituida por la reforma de 2023', td_scope: '&Aacute;mbito', td_status: 'Estado',
+    // Pipeline (authorisation)
+    pipe_cp: 'Centralizado', pipe_cp_d: 'V&iacute;a EMA, v&aacute;lido en toda la UE', pipe_dcp: 'Descentralizado', pipe_dcp_d: 'Varios EM, uno lidera', pipe_mrp: 'Reconocimiento mutuo', pipe_mrp_d: 'Un EM aprueba, los dem&aacute;s reconocen', pipe_np: 'Nacional', pipe_np_d: 'Un solo Estado miembro',
+    // Section 1
+    s1_title: '1. Legislaci&oacute;n b&aacute;sica', s1_sub: 'Los dos pilares del derecho farmac&eacute;utico de la UE',
+    s1_dir_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-blue)">Directiva 2001/83/CE</a>: el C&oacute;digo comunitario',
+    s1_dir_text: 'La ley fundacional que regula los medicamentos de uso humano en la UE. Establece las normas para la autorizaci&oacute;n de comercializaci&oacute;n, la fabricaci&oacute;n, la distribuci&oacute;n mayorista, la publicidad y la farmacovigilancia a trav&eacute;s de procedimientos nacionales y descentralizados. Adoptada en 2001, consolid&oacute; y sustituy&oacute; directivas anteriores que se remontaban a 1965.',
+    s1_dir_scope: 'Procedimientos de autorizaci&oacute;n nacionales, de reconocimiento mutuo y descentralizados',
+    s1_reg_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-green)">Reglamento (CE) 726/2004</a>: el Procedimiento centralizado',
+    s1_reg_text: 'Establece la Agencia Europea de Medicamentos (EMA) y el procedimiento centralizado de autorizaci&oacute;n de comercializaci&oacute;n. Una &uacute;nica solicitud ante la EMA resulta en una autorizaci&oacute;n v&aacute;lida en todos los Estados miembros de la UE/EEE. Obligatorio para productos biotecnol&oacute;gicos, medicamentos hu&eacute;rfanos y tratamientos para c&aacute;ncer, VIH/SIDA, enfermedades neurodegenerativas, diabetes, enfermedades autoinmunes y virales.',
+    s1_reg_scope: 'Autorizaci&oacute;n centralizada v&iacute;a EMA, supervisi&oacute;n posautorizaci&oacute;n',
+    // Section 2
+    s2_title: '2. V&iacute;as de autorizaci&oacute;n', s2_sub: 'C&oacute;mo un medicamento llega al mercado de la UE',
+    s2_mandatory: 'El procedimiento centralizado es obligatorio para:',
+    s2_mandatory_list: 'Productos biotecnol&oacute;gicos, medicamentos hu&eacute;rfanos, VIH/SIDA, c&aacute;ncer, enfermedades neurodegenerativas, diabetes, enfermedades autoinmunes, enfermedades virales y medicamentos de terapia avanzada (terapia g&eacute;nica, terapia celular som&aacute;tica, ingenier&iacute;a tisular). Tiempo de evaluaci&oacute;n: 210 d&iacute;as activos.',
+    // Section 3
+    s3_title: '3. Farmacovigilancia', s3_sub: 'Vigilancia de la seguridad de los medicamentos tras la autorizaci&oacute;n',
+    s3_eudra: 'EudraVigilance',
+    s3_eudra_text: 'La base de datos de la UE de sospechas de reacciones adversas a medicamentos, gestionada por la EMA. Los titulares de autorizaci&oacute;n de comercializaci&oacute;n deben notificar todas las sospechas de reacciones graves en un plazo de 15 d&iacute;as. Las herramientas clave incluyen los Informes Peri&oacute;dicos de Seguridad (PSUR), los Planes de Gesti&oacute;n de Riesgos (RMP) y el s&iacute;mbolo del tri&aacute;ngulo negro para medicamentos bajo vigilancia adicional.',
+    s3_r1: 'Refuerza la farmacovigilancia de la EMA (modifica el Reg 726/2004)',
+    s3_r2: 'Refuerza la farmacovigilancia nacional (modifica la Dir 2001/83)',
+    s3_r3: 'Modificaciones adicionales al Reg 726/2004',
+    s3_r4: 'Modificaciones adicionales a la Dir 2001/83',
+    s3_r5: 'Procedimientos operativos de farmacovigilancia',
+    // Section 4
+    s4_title: '4. Ensayos cl&iacute;nicos', s4_sub: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-amber)">Reglamento (UE) 536/2014</a> (CELEX 32014R0536)',
+    s4_text: 'Sustituy&oacute; la <a href="https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32001L0020" target="_blank">Directiva 2001/20/CE</a> sobre ensayos cl&iacute;nicos. Introduce el Sistema de Informaci&oacute;n sobre Ensayos Cl&iacute;nicos (CTIS): un portal &uacute;nico de la UE para todas las solicitudes de ensayos. Una solicitud puede cubrir varios Estados miembros, con una evaluaci&oacute;n coordinada dirigida por un Estado miembro ponente. Los resultados de los ensayos deben publicarse en un plazo de 12 meses tras la finalizaci&oacute;n del estudio. Se aplican normas simplificadas a los ensayos cl&iacute;nicos de baja intervenci&oacute;n.',
+    // Section 5
+    s5_title: '5. Categor&iacute;as especiales', s5_sub: 'Medicamentos hu&eacute;rfanos, pedi&aacute;tricos, terapias avanzadas y plantas medicinales',
+    s5_orphan_title: 'Medicamentos hu&eacute;rfanos (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">Reg 141/2000</a>)',
+    s5_orphan_text: 'Para enfermedades que afectan a no m&aacute;s de 5 de cada 10.000 personas en la UE. El Comit&eacute; de Medicamentos Hu&eacute;rfanos de la EMA (COMP) concede la designaci&oacute;n de hu&eacute;rfano. Los incentivos incluyen 10 a&ntilde;os de exclusividad de mercado, asistencia en el protocolo y reducciones de tasas. Con la reforma de 2023, los hu&eacute;rfanos innovadores recibir&aacute;n hasta 11 a&ntilde;os.',
+    s5_paed_title: 'Medicamentos pedi&aacute;tricos (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-blue)">Reg 1901/2006</a>)',
+    s5_paed_text: 'Exige Planes de Investigaci&oacute;n Pedi&aacute;trica (PIP) para todos los medicamentos nuevos, evaluados por el Comit&eacute; Pedi&aacute;trico de la EMA (PDCO). Completar un PIP acordado otorga una pr&oacute;rroga de 6 meses del CCP. Se pueden conceder exenciones cuando la enfermedad no se da en ni&ntilde;os o el producto no ser&iacute;a seguro.',
+    s5_atmp_title: 'Terapias avanzadas (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Reg 1394/2007</a>)',
+    s5_atmp_text: 'Abarca la terapia g&eacute;nica, la terapia celular som&aacute;tica y los productos de ingenier&iacute;a tisular. La autorizaci&oacute;n centralizada es obligatoria. El Comit&eacute; de Terapias Avanzadas de la EMA (CAT) proporciona la evaluaci&oacute;n cient&iacute;fica. Estas terapias de vanguardia est&aacute;n transformando el tratamiento de enfermedades gen&eacute;ticas raras y c&aacute;nceres.',
+    s5_herbal_title: 'Medicamentos tradicionales a base de plantas (<a href="https://eur-lex.europa.eu/eli/dir/2004/24/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Dir 2004/24/CE</a>)',
+    s5_herbal_text: 'Procedimiento simplificado de registro para medicamentos tradicionales a base de plantas con al menos 30 a&ntilde;os de uso documentado (incluidos 15 a&ntilde;os en la UE). El Comit&eacute; de Medicamentos a Base de Plantas de la EMA (HMPC) prepara monograf&iacute;as que establecen perfiles de seguridad y eficacia.',
+    // Section 6
+    s6_title: '6. Seguridad y calidad', s6_sub: 'Antifalsificaci&oacute;n, BPF y EudraLex',
+    s6_fmd_title: 'Directiva de medicamentos falsificados (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">2011/62/UE</a>)',
+    s6_fmd_text: 'Caracter&iacute;sticas de seguridad obligatorias en el envase: un identificador &uacute;nico (c&oacute;digo de barras 2D) y un dispositivo contra la manipulaci&oacute;n, verificados en la dispensaci&oacute;n a trav&eacute;s del Sistema Europeo de Verificaci&oacute;n de Medicamentos (EMVS). Controles reforzados de la cadena de suministro para importadores, intermediarios y fabricantes de principios activos. Un logotipo com&uacute;n de la UE identifica las farmacias en l&iacute;nea legales.',
+    s6_v1: 'Legislaci&oacute;n farmac&eacute;utica de la UE (textos jur&iacute;dicos consolidados)',
+    s6_v2: 'Aviso a los solicitantes (procedimientos, formularios, orientaci&oacute;n CTD)',
+    s6_v3: 'Directrices cient&iacute;ficas (calidad, seguridad, eficacia)',
+    s6_v4: 'Directrices de Buenas Pr&aacute;cticas de Fabricaci&oacute;n (BPF)',
+    // Section 7
+    s7_title: '7. EMA y panorama institucional', s7_sub: 'La Agencia Europea de Medicamentos y sus 7 comit&eacute;s cient&iacute;ficos',
+    s7_chmp: 'Comit&eacute; de Medicamentos de Uso Humano', s7_chmp_r: 'Dict&aacute;menes sobre autorizaci&oacute;n de comercializaci&oacute;n',
+    s7_prac: 'Comit&eacute; para la Evaluaci&oacute;n de Riesgos en Farmacovigilancia', s7_prac_r: 'Vigilancia de la seguridad',
+    s7_comp: 'Comit&eacute; de Medicamentos Hu&eacute;rfanos', s7_comp_r: 'Designaci&oacute;n de medicamento hu&eacute;rfano',
+    s7_pdco: 'Comit&eacute; Pedi&aacute;trico', s7_pdco_r: 'Planes de Investigaci&oacute;n Pedi&aacute;trica',
+    s7_cat: 'Comit&eacute; de Terapias Avanzadas', s7_cat_r: 'Evaluaci&oacute;n de ATMP',
+    s7_cvmp: 'Comit&eacute; de Medicamentos Veterinarios', s7_cvmp_r: 'Medicamentos veterinarios',
+    s7_hmpc: 'Comit&eacute; de Medicamentos a Base de Plantas', s7_hmpc_r: 'Monograf&iacute;as de plantas medicinales',
+    s7_actors_title: 'Actores institucionales clave',
+    s7_sante: 'DG l&iacute;der de la Comisi&oacute;n para el sector farmac&eacute;utico',
+    s7_ema_name: 'EMA (&Aacute;msterdam)', s7_ema_role: 'Autorizaci&oacute;n centralizada, farmacovigilancia, gesti&oacute;n de crisis',
+    s7_hma: 'Red de 30 agencias nacionales de medicamentos + EMA',
+    s7_edqm_name: 'EDQM (Estrasburgo)', s7_edqm: 'Farmacopea Europea, normas de calidad',
+    s7_sant: 'Comisi&oacute;n SANT (PE)', s7_sant_r: 'Comisi&oacute;n del PE l&iacute;der para la legislaci&oacute;n farmac&eacute;utica',
+    s7_epsco: 'Configuraci&oacute;n del Consejo para asuntos de salud',
+    // Section 8
+    s8_title: '8. La reforma de 2023', s8_sub: 'La mayor revisi&oacute;n del derecho farmac&eacute;utico de la UE desde 2004',
+    s8_intro: 'El 26 de abril de 2023, la Comisi&oacute;n propuso sustituir tanto la Directiva (2001/83/CE) como el Reglamento (726/2004) por un marco modernizado. Tras cuatro tri&aacute;logos, los negociadores alcanzaron un acuerdo provisional el 11 de diciembre de 2025. La reforma aborda los incentivos a la innovaci&oacute;n, la resiliencia de la cadena de suministro, la resistencia antimicrobiana y el acceso de los pacientes.',
+    s8_dp: 'Protecci&oacute;n de datos', s8_dp_c: '8 a&ntilde;os', s8_dp_r: '8 a&ntilde;os (sin cambios)',
+    s8_mp: 'Protecci&oacute;n de mercado', s8_mp_c: '2 a&ntilde;os', s8_mp_r: '1 a&ntilde;o base + extensiones',
+    s8_max: 'Protecci&oacute;n total m&aacute;xima', s8_max_c: '10 a&ntilde;os', s8_max_r: '11 a&ntilde;os (con todas las bonificaciones)',
+    s8_orphan: 'Exclusividad hu&eacute;rfano', s8_orphan_c: '10 a&ntilde;os', s8_orphan_r: 'Hasta 11 a&ntilde;os (innovador)',
+    s8_amr: 'Incentivo RAM', s8_amr_c: 'Ninguno', s8_amr_r: 'Bono transferible de 12 meses',
+    s8_short: 'Desabastecimientos', s8_short_c: 'Sin marco', s8_short_r: 'Planes de prevenci&oacute;n obligatorios + vigilancia EMA',
+    s8_rap_title: 'Ponentes',
+    s8_dir: 'Directiva', s8_reg: 'Reglamento',
+    s8_rap_dir: '<a href="https://www.europarl.europa.eu/meps/en/197711/DOLORS_MONTSERRAT/home" target="_blank">Dolors Montserrat</a> (PPE, Espa&ntilde;a)',
+    s8_rap_reg: '<a href="https://www.europarl.europa.eu/meps/en/185619/TIEMO_WOLKEN/home" target="_blank">Tiemo W&ouml;lken</a> (S&amp;D, Alemania)',
+    // Timeline
+    tl_1965: 'Primera directiva farmac&eacute;utica de la UE (<a href="https://eur-lex.europa.eu/eli/dir/1965/65/oj/eng" target="_blank">Directiva 65/65/CEE</a>): respuesta a la talidomida',
+    tl_1995: 'Creaci&oacute;n de la EMA (entonces EMEA, Londres)',
+    tl_2000: 'Reglamento de medicamentos hu&eacute;rfanos (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank">Reg 141/2000</a>)',
+    tl_2001: 'C&oacute;digo comunitario adoptado (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank">Directiva 2001/83/CE</a>)',
+    tl_2004: 'Reglamento del procedimiento centralizado (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank">Reg 726/2004</a>)',
+    tl_2006: 'Reglamento de medicamentos pedi&aacute;tricos (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank">Reg 1901/2006</a>)',
+    tl_2007: 'Reglamento de terapias avanzadas (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank">Reg 1394/2007</a>)',
+    tl_2010: 'Paquete de farmacovigilancia (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010R1235-20110101" target="_blank">Reg 1235/2010</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010L0084-20110120" target="_blank">Dir 2010/84/UE</a>)',
+    tl_2011: 'Directiva de medicamentos falsificados (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank">Dir 2011/62/UE</a>)',
+    tl_2014: 'Reglamento de ensayos cl&iacute;nicos (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank">Reg 536/2014</a>)',
+    tl_2019: 'La EMA se traslada a &Aacute;msterdam (post-Brexit)',
+    tl_2022: 'Papel de crisis de la EMA reforzado (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02022R0123-20250101" target="_blank">Reg 2022/123</a>)',
+    tl_2023: 'La Comisi&oacute;n propone el paquete de reforma farmac&eacute;utica',
+    tl_2024: 'Primera lectura del PE adoptada',
+    tl_2025: 'Acuerdo provisional tras 4 tri&aacute;logos',
+    tl_2026: 'Adopci&oacute;n formal por el Consejo y segunda lectura del PE (pendiente)',
+    s9_title: '9. Cronolog&iacute;a legislativa', s9_sub: 'Hitos clave en el derecho farmac&eacute;utico de la UE',
+    // Header
+    header_title: 'Biblioteca de an&aacute;lisis de Brubru', header_subtitle: 'Legislaci&oacute;n farmac&eacute;utica de la UE', header_cta: 'Prueba Brubru gratis',
+    // Footer
+    footer_text: 'An&aacute;lisis en profundidad de la legislaci&oacute;n farmac&eacute;utica de la UE por <a href="https://brubru.beresol.eu">Brubru</a>, el asistente de pol&iacute;tica de la UE de <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; Marzo 2026',
+  },
+  ca: {
+    // Hero
+    hero_title: 'Legislaci&oacute; farmac&egrave;utica de la UE: <span>El marc complet</span>',
+    hero_subtitle: "Des de l'autoritzaci&oacute; de comercialitzaci&oacute; fins a la farmacovigil&agrave;ncia, des dels medicaments orfes fins a la reforma de 2023: totes les lleis que regulen els medicaments a la Uni&oacute; Europea, explicades.",
+    meta_laws: '30+ actes jur&iacute;dics', meta_ema: 'EMA, 7 comit&egrave;s', meta_market: '27 estats membres', meta_date: 'Mar&ccedil; 2026',
+    fig_code: 'Codi de medicaments', fig_paths: "Vies d'autoritzaci&oacute;", fig_committees: "Comit&egrave;s cient&iacute;fics de l'EMA", fig_reform: 'Acord de reforma',
+    // TOC
+    toc_title: '&Iacute;ndex', toc_1: 'Legislaci&oacute; b&agrave;sica', toc_2: "Vies d'autoritzaci&oacute;", toc_3: 'Farmacovigil&agrave;ncia', toc_4: 'Assaigs cl&iacute;nics', toc_5: 'Categories especials', toc_6: 'Seguretat i qualitat', toc_7: 'EMA i institucions', toc_8: 'La reforma de 2023', toc_9: 'Cronologia',
+    // Table headers
+    th_element: 'Element', th_detail: 'Detall', th_legislation: 'Legislaci&oacute;', th_purpose: 'Finalitat', th_volume: 'Volum', th_content: 'Contingut', th_committee: 'Comit&egrave;', th_acronym: 'Sigla', th_role: 'Funci&oacute;', th_actor: 'Actor', th_topic: 'Tema', th_current: 'Actual', th_reform: 'Reforma', th_file: 'Expedient', th_rapporteur: 'Ponent', th_procedure: 'Procediment',
+    // Status tags
+    status_being_replaced: 'Sent substitu&iuml;da per la reforma de 2023', td_scope: '&Agrave;mbit', td_status: 'Estat',
+    // Pipeline (authorisation)
+    pipe_cp: 'Centralitzat', pipe_cp_d: 'Via EMA, v&agrave;lid a tota la UE', pipe_dcp: 'Descentralitzat', pipe_dcp_d: 'Diversos EM, un lidera', pipe_mrp: 'Reconeixement mutu', pipe_mrp_d: 'Un EM aprova, els altres reconeixen', pipe_np: 'Nacional', pipe_np_d: 'Un sol estat membre',
+    // Section 1
+    s1_title: '1. Legislaci&oacute; b&agrave;sica', s1_sub: 'Els dos pilars del dret farmac&egrave;utic de la UE',
+    s1_dir_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-blue)">Directiva 2001/83/CE</a>: el Codi comunitari',
+    s1_dir_text: "La llei fundacional que regula els medicaments d'&uacute;s hum&agrave; a la UE. Estableix les normes per a l'autoritzaci&oacute; de comercialitzaci&oacute;, la fabricaci&oacute;, la distribuci&oacute; a l'engr&ograve;s, la publicitat i la farmacovigil&agrave;ncia mitjan&ccedil;ant procediments nacionals i descentralitzats. Adoptada el 2001, va consolidar i substituir directives anteriors que es remuntaven a 1965.",
+    s1_dir_scope: "Procediments d'autoritzaci&oacute; nacionals, de reconeixement mutu i descentralitzats",
+    s1_reg_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-green)">Reglament (CE) 726/2004</a>: el Procediment centralitzat',
+    s1_reg_text: "Estableix l'Ag&egrave;ncia Europea de Medicaments (EMA) i el procediment centralitzat d'autoritzaci&oacute; de comercialitzaci&oacute;. Una &uacute;nica sol&middot;licitud davant l'EMA resulta en una autoritzaci&oacute; v&agrave;lida a tots els estats membres de la UE/EEE. Obligatori per a productes biotecnol&ograve;gics, medicaments orfes i tractaments per a c&agrave;ncer, VIH/sida, malalties neurodegeneratives, diabetis, malalties autoimmunes i virals.",
+    s1_reg_scope: "Autoritzaci&oacute; centralitzada via EMA, supervisi&oacute; postautoritzaci&oacute;",
+    // Section 2
+    s2_title: "2. Vies d'autoritzaci&oacute;", s2_sub: 'Com un medicament arriba al mercat de la UE',
+    s2_mandatory: 'El procediment centralitzat &eacute;s obligatori per a:',
+    s2_mandatory_list: "Productes biotecnol&ograve;gics, medicaments orfes, VIH/sida, c&agrave;ncer, malalties neurodegeneratives, diabetis, malalties autoimmunes, malalties virals i medicaments de ter&agrave;pia avan&ccedil;ada (ter&agrave;pia g&egrave;nica, ter&agrave;pia cel&middot;lular som&agrave;tica, enginyeria tissular). Temps d'avaluaci&oacute;: 210 dies actius.",
+    // Section 3
+    s3_title: '3. Farmacovigil&agrave;ncia', s3_sub: "Vigil&agrave;ncia de la seguretat dels medicaments despr&eacute;s de l'autoritzaci&oacute;",
+    s3_eudra: 'EudraVigilance',
+    s3_eudra_text: "La base de dades de la UE de sospites de reaccions adverses a medicaments, gestionada per l'EMA. Els titulars d'autoritzaci&oacute; de comercialitzaci&oacute; han de notificar totes les sospites de reaccions greus en un termini de 15 dies. Les eines clau inclouen els Informes Peri&ograve;dics de Seguretat (PSUR), els Plans de Gesti&oacute; de Riscos (RMP) i el s&iacute;mbol del triangle negre per a medicaments sota vigil&agrave;ncia addicional.",
+    s3_r1: "Refor&ccedil;a la farmacovigil&agrave;ncia de l'EMA (modifica el Reg 726/2004)",
+    s3_r2: 'Refor&ccedil;a la farmacovigil&agrave;ncia nacional (modifica la Dir 2001/83)',
+    s3_r3: 'Modificacions addicionals al Reg 726/2004',
+    s3_r4: 'Modificacions addicionals a la Dir 2001/83',
+    s3_r5: "Procediments operatius de farmacovigil&agrave;ncia",
+    // Section 4
+    s4_title: '4. Assaigs cl&iacute;nics', s4_sub: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-amber)">Reglament (UE) 536/2014</a> (CELEX 32014R0536)',
+    s4_text: "Va substituir la <a href=\"https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32001L0020\" target=\"_blank\">Directiva 2001/20/CE</a> sobre assaigs cl&iacute;nics. Introdueix el Sistema d'Informaci&oacute; sobre Assaigs Cl&iacute;nics (CTIS): un portal &uacute;nic de la UE per a totes les sol&middot;licituds d'assaigs. Una sol&middot;licitud pot cobrir diversos estats membres, amb una avaluaci&oacute; coordinada dirigida per un estat membre ponent. Els resultats dels assaigs s'han de publicar en un termini de 12 mesos despr&eacute;s de la finalitzaci&oacute; de l'estudi. S'apliquen normes simplificades als assaigs cl&iacute;nics de baixa intervenci&oacute;.",
+    // Section 5
+    s5_title: '5. Categories especials', s5_sub: 'Medicaments orfes, pedi&agrave;trics, ter&agrave;pies avan&ccedil;ades i plantes medicinals',
+    s5_orphan_title: 'Medicaments orfes (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">Reg 141/2000</a>)',
+    s5_orphan_text: "Per a malalties que afecten no m&eacute;s de 5 de cada 10.000 persones a la UE. El Comit&egrave; de Medicaments Orfes de l'EMA (COMP) concedeix la designaci&oacute; d'orfe. Els incentius inclouen 10 anys d'exclusivitat de mercat, assist&egrave;ncia en el protocol i reduccions de taxes. Amb la reforma de 2023, els orfes innovadors rebran fins a 11 anys.",
+    s5_paed_title: 'Medicaments pedi&agrave;trics (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-blue)">Reg 1901/2006</a>)',
+    s5_paed_text: "Exigeix Plans d'Investigaci&oacute; Pedi&agrave;trica (PIP) per a tots els medicaments nous, avaluats pel Comit&egrave; Pedi&agrave;tric de l'EMA (PDCO). Completar un PIP acordat atorga una pr&ograve;rroga de 6 mesos del CCP. Es poden concedir exempcions quan la malaltia no es d&oacute;na en nens o el producte no seria segur.",
+    s5_atmp_title: "Ter&agrave;pies avan&ccedil;ades (<a href=\"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726\" target=\"_blank\" style=\"color:inherit;border-bottom:1px dashed var(--color-green)\">Reg 1394/2007</a>)",
+    s5_atmp_text: "Comprendre la ter&agrave;pia g&egrave;nica, la ter&agrave;pia cel&middot;lular som&agrave;tica i els productes d'enginyeria tissular. L'autoritzaci&oacute; centralitzada &eacute;s obligat&ograve;ria. El Comit&egrave; de Ter&agrave;pies Avan&ccedil;ades de l'EMA (CAT) proporciona l'avaluaci&oacute; cient&iacute;fica. Aquestes ter&agrave;pies d'avantguarda estan transformant el tractament de malalties gen&egrave;tiques rares i c&agrave;ncers.",
+    s5_herbal_title: 'Medicaments tradicionals a base de plantes (<a href="https://eur-lex.europa.eu/eli/dir/2004/24/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Dir 2004/24/CE</a>)',
+    s5_herbal_text: "Procediment simplificat de registre per a medicaments tradicionals a base de plantes amb almenys 30 anys d'&uacute;s documentat (incloent-hi 15 anys a la UE). El Comit&egrave; de Medicaments a Base de Plantes de l'EMA (HMPC) prepara monografies que estableixen perfils de seguretat i efic&agrave;cia.",
+    // Section 6
+    s6_title: '6. Seguretat i qualitat', s6_sub: 'Antifalsificaci&oacute;, BPF i EudraLex',
+    s6_fmd_title: 'Directiva de medicaments falsificats (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">2011/62/UE</a>)',
+    s6_fmd_text: "Caracter&iacute;stiques de seguretat obligat&ograve;ries a l'envoltori: un identificador &uacute;nic (codi de barres 2D) i un dispositiu contra la manipulaci&oacute;, verificats en la dispensaci&oacute; a trav&eacute;s del Sistema Europeu de Verificaci&oacute; de Medicaments (EMVS). Controls refor&ccedil;ats de la cadena de subministrament per a importadors, intermediaris i fabricants de principis actius. Un logotip com&uacute; de la UE identifica les farm&agrave;cies en l&iacute;nia legals.",
+    s6_v1: 'Legislaci&oacute; farmac&egrave;utica de la UE (textos jur&iacute;dics consolidats)',
+    s6_v2: "Av&iacute;s als sol&middot;licitants (procediments, formularis, orientaci&oacute; CTD)",
+    s6_v3: "Directrius cient&iacute;fiques (qualitat, seguretat, efic&agrave;cia)",
+    s6_v4: 'Directrius de Bones Pr&agrave;ctiques de Fabricaci&oacute; (BPF)',
+    // Section 7
+    s7_title: '7. EMA i panorama institucional', s7_sub: "L'Ag&egrave;ncia Europea de Medicaments i els seus 7 comit&egrave;s cient&iacute;fics",
+    s7_chmp: "Comit&egrave; de Medicaments d'&Uacute;s Hum&agrave;", s7_chmp_r: "Dictaments sobre autoritzaci&oacute; de comercialitzaci&oacute;",
+    s7_prac: "Comit&egrave; per a l'Avaluaci&oacute; de Riscos en Farmacovigil&agrave;ncia", s7_prac_r: 'Vigil&agrave;ncia de la seguretat',
+    s7_comp: 'Comit&egrave; de Medicaments Orfes', s7_comp_r: "Designaci&oacute; de medicament orfe",
+    s7_pdco: 'Comit&egrave; Pedi&agrave;tric', s7_pdco_r: "Plans d'Investigaci&oacute; Pedi&agrave;trica",
+    s7_cat: "Comit&egrave; de Ter&agrave;pies Avan&ccedil;ades", s7_cat_r: "Avaluaci&oacute; d'ATMP",
+    s7_cvmp: 'Comit&egrave; de Medicaments Veterinaris', s7_cvmp_r: 'Medicaments veterinaris',
+    s7_hmpc: 'Comit&egrave; de Medicaments a Base de Plantes', s7_hmpc_r: 'Monografies de plantes medicinals',
+    s7_actors_title: 'Actors institucionals clau',
+    s7_sante: "DG l&iacute;der de la Comissi&oacute; per al sector farmac&egrave;utic",
+    s7_ema_name: "EMA (&Agrave;msterdam)", s7_ema_role: "Autoritzaci&oacute; centralitzada, farmacovigil&agrave;ncia, gesti&oacute; de crisis",
+    s7_hma: "Xarxa de 30 ag&egrave;ncies nacionals de medicaments + EMA",
+    s7_edqm_name: 'EDQM (Estrasburg)', s7_edqm: 'Farmacopea Europea, normes de qualitat',
+    s7_sant: 'Comissi&oacute; SANT (PE)', s7_sant_r: "Comissi&oacute; del PE l&iacute;der per a la legislaci&oacute; farmac&egrave;utica",
+    s7_epsco: 'Configuraci&oacute; del Consell per a afers de salut',
+    // Section 8
+    s8_title: '8. La reforma de 2023', s8_sub: 'La revisi&oacute; m&eacute;s gran del dret farmac&egrave;utic de la UE des de 2004',
+    s8_intro: "El 26 d'abril de 2023, la Comissi&oacute; va proposar substituir tant la Directiva (2001/83/CE) com el Reglament (726/2004) per un marc modernitzat. Despr&eacute;s de quatre tri&agrave;legs, els negociadors van assolir un acord provisional l'11 de desembre de 2025. La reforma aborda els incentius a la innovaci&oacute;, la resili&egrave;ncia de la cadena de subministrament, la resist&egrave;ncia antimicrobiana i l'acc&eacute;s dels pacients.",
+    s8_dp: 'Protecci&oacute; de dades', s8_dp_c: '8 anys', s8_dp_r: '8 anys (sense canvis)',
+    s8_mp: 'Protecci&oacute; de mercat', s8_mp_c: '2 anys', s8_mp_r: '1 any base + extensions',
+    s8_max: 'Protecci&oacute; total m&agrave;xima', s8_max_c: '10 anys', s8_max_r: '11 anys (amb totes les bonificacions)',
+    s8_orphan: 'Exclusivitat orfe', s8_orphan_c: '10 anys', s8_orphan_r: 'Fins a 11 anys (innovador)',
+    s8_amr: 'Incentiu RAM', s8_amr_c: 'Cap', s8_amr_r: 'Bo transferible de 12 mesos',
+    s8_short: 'Desabastiments', s8_short_c: 'Sense marc', s8_short_r: "Plans de prevenci&oacute; obligatoris + vigil&agrave;ncia EMA",
+    s8_rap_title: 'Ponents',
+    s8_dir: 'Directiva', s8_reg: 'Reglament',
+    s8_rap_dir: '<a href="https://www.europarl.europa.eu/meps/en/197711/DOLORS_MONTSERRAT/home" target="_blank">Dolors Montserrat</a> (PPE, Espanya)',
+    s8_rap_reg: '<a href="https://www.europarl.europa.eu/meps/en/185619/TIEMO_WOLKEN/home" target="_blank">Tiemo W&ouml;lken</a> (S&amp;D, Alemanya)',
+    // Timeline
+    tl_1965: 'Primera directiva farmac&egrave;utica de la UE (<a href="https://eur-lex.europa.eu/eli/dir/1965/65/oj/eng" target="_blank">Directiva 65/65/CEE</a>): resposta a la talidomida',
+    tl_1995: "Creaci&oacute; de l'EMA (llavors EMEA, Londres)",
+    tl_2000: 'Reglament de medicaments orfes (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank">Reg 141/2000</a>)',
+    tl_2001: 'Codi comunitari adoptat (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank">Directiva 2001/83/CE</a>)',
+    tl_2004: 'Reglament del procediment centralitzat (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank">Reg 726/2004</a>)',
+    tl_2006: 'Reglament de medicaments pedi&agrave;trics (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank">Reg 1901/2006</a>)',
+    tl_2007: 'Reglament de ter&agrave;pies avan&ccedil;ades (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank">Reg 1394/2007</a>)',
+    tl_2010: 'Paquet de farmacovigil&agrave;ncia (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010R1235-20110101" target="_blank">Reg 1235/2010</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010L0084-20110120" target="_blank">Dir 2010/84/UE</a>)',
+    tl_2011: 'Directiva de medicaments falsificats (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank">Dir 2011/62/UE</a>)',
+    tl_2014: 'Reglament d\'assaigs cl&iacute;nics (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank">Reg 536/2014</a>)',
+    tl_2019: "L'EMA es trasllada a &Agrave;msterdam (post-Brexit)",
+    tl_2022: "Paper de crisi de l'EMA refor&ccedil;at (<a href=\"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02022R0123-20250101\" target=\"_blank\">Reg 2022/123</a>)",
+    tl_2023: 'La Comissi&oacute; proposa el paquet de reforma farmac&egrave;utica',
+    tl_2024: 'Primera lectura del PE adoptada',
+    tl_2025: 'Acord provisional despr&eacute;s de 4 tri&agrave;legs',
+    tl_2026: "Adopci&oacute; formal pel Consell i segona lectura del PE (pendent)",
+    s9_title: '9. Cronologia legislativa', s9_sub: 'Fites clau en el dret farmac&egrave;utic de la UE',
+    // Header
+    header_title: "Biblioteca d'an&agrave;lisi de Brubru", header_subtitle: 'Legislaci&oacute; farmac&egrave;utica de la UE', header_cta: 'Prova Brubru gratis',
+    // Footer
+    footer_text: "An&agrave;lisi en profunditat de la legislaci&oacute; farmac&egrave;utica de la UE per <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistent de pol&iacute;tica de la UE de <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Mar&ccedil; 2026",
+  },
+  fr: {
+    // Hero
+    hero_title: 'L&eacute;gislation pharmaceutique de l\'UE : <span>Le cadre complet</span>',
+    hero_subtitle: "De l'autorisation de mise sur le march&eacute; &agrave; la pharmacovigilance, des m&eacute;dicaments orphelins &agrave; la r&eacute;forme de 2023 : toutes les lois r&eacute;gissant les m&eacute;dicaments dans l'Union europ&eacute;enne, expliqu&eacute;es.",
+    meta_laws: '30+ actes juridiques', meta_ema: 'EMA, 7 comit&eacute;s', meta_market: '27 &Eacute;tats membres', meta_date: 'Mars 2026',
+    fig_code: 'Code des m&eacute;dicaments', fig_paths: "Voies d'autorisation", fig_committees: "Comit&eacute;s scientifiques de l'EMA", fig_reform: 'Accord de r&eacute;forme',
+    // TOC
+    toc_title: 'Sommaire', toc_1: 'L&eacute;gislation de base', toc_2: "Voies d'autorisation", toc_3: 'Pharmacovigilance', toc_4: 'Essais cliniques', toc_5: 'Cat&eacute;gories sp&eacute;ciales', toc_6: 'S&eacute;curit&eacute; et qualit&eacute;', toc_7: 'EMA et institutions', toc_8: 'La r&eacute;forme de 2023', toc_9: 'Chronologie',
+    // Table headers
+    th_element: '&Eacute;l&eacute;ment', th_detail: 'D&eacute;tail', th_legislation: 'L&eacute;gislation', th_purpose: 'Objet', th_volume: 'Volume', th_content: 'Contenu', th_committee: 'Comit&eacute;', th_acronym: 'Sigle', th_role: 'R&ocirc;le', th_actor: 'Acteur', th_topic: 'Th&egrave;me', th_current: 'Actuel', th_reform: 'R&eacute;forme', th_file: 'Dossier', th_rapporteur: 'Rapporteur', th_procedure: 'Proc&eacute;dure',
+    // Status tags
+    status_being_replaced: 'En cours de remplacement par la r&eacute;forme de 2023', td_scope: 'Champ', td_status: 'Statut',
+    // Pipeline (authorisation)
+    pipe_cp: 'Centralis&eacute;e', pipe_cp_d: "Via l'EMA, valable dans toute l'UE", pipe_dcp: 'D&eacute;centralis&eacute;e', pipe_dcp_d: 'Plusieurs EM, un coordonne', pipe_mrp: 'Reconnaissance mutuelle', pipe_mrp_d: 'Un EM approuve, les autres reconnaissent', pipe_np: 'Nationale', pipe_np_d: 'Un seul &Eacute;tat membre',
+    // Section 1
+    s1_title: '1. L&eacute;gislation de base', s1_sub: "Les deux piliers du droit pharmaceutique de l'UE",
+    s1_dir_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-blue)">Directive 2001/83/CE</a> : le Code communautaire',
+    s1_dir_text: "La loi fondatrice r&eacute;gissant les m&eacute;dicaments &agrave; usage humain dans l'UE. Elle d&eacute;finit les r&egrave;gles relatives &agrave; l'autorisation de mise sur le march&eacute;, la fabrication, la distribution en gros, la publicit&eacute; et la pharmacovigilance via les proc&eacute;dures nationales et d&eacute;centralis&eacute;es. Adopt&eacute;e en 2001, elle a consolid&eacute; et remplac&eacute; les directives ant&eacute;rieures remontant &agrave; 1965.",
+    s1_dir_scope: "Proc&eacute;dures d'autorisation nationales, de reconnaissance mutuelle et d&eacute;centralis&eacute;es",
+    s1_reg_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-green)">R&egrave;glement (CE) 726/2004</a> : la Proc&eacute;dure centralis&eacute;e',
+    s1_reg_text: "Cr&eacute;e l'Agence europ&eacute;enne des m&eacute;dicaments (EMA) et la proc&eacute;dure centralis&eacute;e d'autorisation de mise sur le march&eacute;. Une demande unique aupr&egrave;s de l'EMA aboutit &agrave; une autorisation valable dans tous les &Eacute;tats membres de l'UE/EEE. Obligatoire pour les produits biotechnologiques, les m&eacute;dicaments orphelins et les traitements du cancer, du VIH/sida, des maladies neurod&eacute;g&eacute;n&eacute;ratives, du diab&egrave;te, des maladies auto-immunes et virales.",
+    s1_reg_scope: "Autorisation centralis&eacute;e via l'EMA, surveillance post-autorisation",
+    // Section 2
+    s2_title: "2. Voies d'autorisation", s2_sub: "Comment un m&eacute;dicament acc&egrave;de au march&eacute; de l'UE",
+    s2_mandatory: "La proc&eacute;dure centralis&eacute;e est obligatoire pour :",
+    s2_mandatory_list: "Produits biotechnologiques, m&eacute;dicaments orphelins, VIH/sida, cancer, maladies neurod&eacute;g&eacute;n&eacute;ratives, diab&egrave;te, maladies auto-immunes, maladies virales et m&eacute;dicaments de th&eacute;rapie innovante (th&eacute;rapie g&eacute;nique, th&eacute;rapie cellulaire somatique, ing&eacute;nierie tissulaire). Dur&eacute;e d'&eacute;valuation : 210 jours actifs.",
+    // Section 3
+    s3_title: '3. Pharmacovigilance', s3_sub: "Surveillance de la s&eacute;curit&eacute; des m&eacute;dicaments apr&egrave;s l'autorisation",
+    s3_eudra: 'EudraVigilance',
+    s3_eudra_text: "La base de donn&eacute;es de l'UE sur les effets ind&eacute;sirables suspect&eacute;s de m&eacute;dicaments, g&eacute;r&eacute;e par l'EMA. Les titulaires d'autorisation de mise sur le march&eacute; doivent signaler tous les effets ind&eacute;sirables graves suspect&eacute;s dans un d&eacute;lai de 15 jours. Les outils cl&eacute;s comprennent les Rapports P&eacute;riodiques Actualis&eacute;s de S&eacute;curit&eacute; (PSUR), les Plans de Gestion des Risques (PGR) et le symbole du triangle noir pour les m&eacute;dicaments sous surveillance renforc&eacute;e.",
+    s3_r1: "Renforce la pharmacovigilance de l'EMA (modifie le R&egrave;g 726/2004)",
+    s3_r2: 'Renforce la pharmacovigilance nationale (modifie la Dir 2001/83)',
+    s3_r3: 'Modifications suppl&eacute;mentaires au R&egrave;g 726/2004',
+    s3_r4: 'Modifications suppl&eacute;mentaires &agrave; la Dir 2001/83',
+    s3_r5: 'Proc&eacute;dures op&eacute;rationnelles de pharmacovigilance',
+    // Section 4
+    s4_title: '4. Essais cliniques', s4_sub: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-amber)">R&egrave;glement (UE) 536/2014</a> (CELEX 32014R0536)',
+    s4_text: "A remplac&eacute; la <a href=\"https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32001L0020\" target=\"_blank\">Directive 2001/20/CE</a> sur les essais cliniques. Introduit le Syst&egrave;me d'Information sur les Essais Cliniques (CTIS) : un portail unique de l'UE pour toutes les demandes d'essais. Une demande peut couvrir plusieurs &Eacute;tats membres, avec une &eacute;valuation coordonn&eacute;e dirig&eacute;e par un &Eacute;tat membre rapporteur. Les r&eacute;sultats des essais doivent &ecirc;tre publi&eacute;s dans un d&eacute;lai de 12 mois apr&egrave;s la fin de l'&eacute;tude. Des r&egrave;gles simplifi&eacute;es s'appliquent aux essais cliniques &agrave; faible intervention.",
+    // Section 5
+    s5_title: '5. Cat&eacute;gories sp&eacute;ciales', s5_sub: 'M&eacute;dicaments orphelins, p&eacute;diatriques, th&eacute;rapies avanc&eacute;es et plantes m&eacute;dicinales',
+    s5_orphan_title: 'M&eacute;dicaments orphelins (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">R&egrave;g 141/2000</a>)',
+    s5_orphan_text: "Pour les maladies touchant pas plus de 5 personnes sur 10 000 dans l'UE. Le Comit&eacute; des m&eacute;dicaments orphelins de l'EMA (COMP) accorde la d&eacute;signation orpheline. Les incitations comprennent 10 ans d'exclusivit&eacute; commerciale, une assistance au protocole et des r&eacute;ductions de taxes. Avec la r&eacute;forme de 2023, les orphelins innovants b&eacute;n&eacute;ficieront de jusqu'&agrave; 11 ans.",
+    s5_paed_title: 'M&eacute;dicaments p&eacute;diatriques (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-blue)">R&egrave;g 1901/2006</a>)',
+    s5_paed_text: "Exige des Plans d'Investigation P&eacute;diatrique (PIP) pour tous les nouveaux m&eacute;dicaments, &eacute;valu&eacute;s par le Comit&eacute; p&eacute;diatrique de l'EMA (PDCO). L'ach&egrave;vement d'un PIP convenu accorde une prolongation de 6 mois du CCP. Des d&eacute;rogations sont possibles lorsque la maladie n'existe pas chez les enfants ou que le produit serait dangereux.",
+    s5_atmp_title: 'Th&eacute;rapies avanc&eacute;es (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">R&egrave;g 1394/2007</a>)',
+    s5_atmp_text: "Couvre la th&eacute;rapie g&eacute;nique, la th&eacute;rapie cellulaire somatique et les produits d'ing&eacute;nierie tissulaire. L'autorisation centralis&eacute;e est obligatoire. Le Comit&eacute; des th&eacute;rapies innovantes de l'EMA (CAT) fournit l'&eacute;valuation scientifique. Ces th&eacute;rapies de pointe transforment le traitement des maladies g&eacute;n&eacute;tiques rares et des cancers.",
+    s5_herbal_title: 'M&eacute;dicaments traditionnels &agrave; base de plantes (<a href="https://eur-lex.europa.eu/eli/dir/2004/24/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Dir 2004/24/CE</a>)',
+    s5_herbal_text: "Proc&eacute;dure d'enregistrement simplifi&eacute;e pour les m&eacute;dicaments traditionnels &agrave; base de plantes justifiant d'au moins 30 ans d'utilisation document&eacute;e (dont 15 ans dans l'UE). Le Comit&eacute; des m&eacute;dicaments &agrave; base de plantes de l'EMA (HMPC) pr&eacute;pare des monographies &eacute;tablissant les profils de s&eacute;curit&eacute; et d'efficacit&eacute;.",
+    // Section 6
+    s6_title: '6. S&eacute;curit&eacute; et qualit&eacute;', s6_sub: 'Anti-contrefa&ccedil;on, BPF et EudraLex',
+    s6_fmd_title: 'Directive sur les m&eacute;dicaments falsifi&eacute;s (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">2011/62/UE</a>)',
+    s6_fmd_text: "Dispositifs de s&eacute;curit&eacute; obligatoires sur l'emballage : un identifiant unique (code-barres 2D) et un dispositif anti-effraction, v&eacute;rifi&eacute;s lors de la dispensation via le Syst&egrave;me Europ&eacute;en de V&eacute;rification des M&eacute;dicaments (EMVS). Contr&ocirc;les renforc&eacute;s de la cha&icirc;ne d'approvisionnement pour les importateurs, courtiers et fabricants de principes actifs. Un logo commun de l'UE identifie les pharmacies en ligne l&eacute;gales.",
+    s6_v1: "L&eacute;gislation pharmaceutique de l'UE (textes juridiques consolid&eacute;s)",
+    s6_v2: 'Avis aux demandeurs (proc&eacute;dures, formulaires, guide CTD)',
+    s6_v3: 'Lignes directrices scientifiques (qualit&eacute;, s&eacute;curit&eacute;, efficacit&eacute;)',
+    s6_v4: 'Lignes directrices de Bonnes Pratiques de Fabrication (BPF)',
+    // Section 7
+    s7_title: '7. EMA et paysage institutionnel', s7_sub: "L'Agence europ&eacute;enne des m&eacute;dicaments et ses 7 comit&eacute;s scientifiques",
+    s7_chmp: "Comit&eacute; des m&eacute;dicaments &agrave; usage humain", s7_chmp_r: "Avis sur l'autorisation de mise sur le march&eacute;",
+    s7_prac: "Comit&eacute; pour l'&eacute;valuation des risques en pharmacovigilance", s7_prac_r: 'Surveillance de la s&eacute;curit&eacute;',
+    s7_comp: 'Comit&eacute; des m&eacute;dicaments orphelins', s7_comp_r: 'D&eacute;signation orpheline',
+    s7_pdco: 'Comit&eacute; p&eacute;diatrique', s7_pdco_r: "Plans d'Investigation P&eacute;diatrique",
+    s7_cat: 'Comit&eacute; des th&eacute;rapies innovantes', s7_cat_r: "&Eacute;valuation des ATMP",
+    s7_cvmp: 'Comit&eacute; des m&eacute;dicaments v&eacute;t&eacute;rinaires', s7_cvmp_r: 'M&eacute;dicaments v&eacute;t&eacute;rinaires',
+    s7_hmpc: 'Comit&eacute; des m&eacute;dicaments &agrave; base de plantes', s7_hmpc_r: 'Monographies de plantes m&eacute;dicinales',
+    s7_actors_title: 'Acteurs institutionnels cl&eacute;s',
+    s7_sante: 'DG de la Commission chef de file pour le secteur pharmaceutique',
+    s7_ema_name: 'EMA (Amsterdam)', s7_ema_role: 'Autorisation centralis&eacute;e, pharmacovigilance, gestion de crise',
+    s7_hma: "R&eacute;seau de 30 agences nationales du m&eacute;dicament + EMA",
+    s7_edqm_name: 'EDQM (Strasbourg)', s7_edqm: 'Pharmacop&eacute;e europ&eacute;enne, normes de qualit&eacute;',
+    s7_sant: 'Commission SANT (PE)', s7_sant_r: 'Commission du PE chef de file pour la l&eacute;gislation pharmaceutique',
+    s7_epsco: 'Configuration du Conseil pour les affaires de sant&eacute;',
+    // Section 8
+    s8_title: '8. La r&eacute;forme de 2023', s8_sub: "La plus grande r&eacute;vision du droit pharmaceutique de l'UE depuis 2004",
+    s8_intro: "Le 26 avril 2023, la Commission a propos&eacute; de remplacer la Directive (2001/83/CE) et le R&egrave;glement (726/2004) par un cadre modernis&eacute;. Apr&egrave;s quatre trilogues, les n&eacute;gociateurs ont atteint un accord provisoire le 11 d&eacute;cembre 2025. La r&eacute;forme traite des incitations &agrave; l'innovation, de la r&eacute;silience de la cha&icirc;ne d'approvisionnement, de la r&eacute;sistance antimicrobienne et de l'acc&egrave;s des patients.",
+    s8_dp: 'Protection des donn&eacute;es', s8_dp_c: '8 ans', s8_dp_r: '8 ans (inchang&eacute;)',
+    s8_mp: 'Protection du march&eacute;', s8_mp_c: '2 ans', s8_mp_r: '1 an de base + extensions',
+    s8_max: 'Protection totale maximale', s8_max_c: '10 ans', s8_max_r: '11 ans (avec tous les bonus)',
+    s8_orphan: 'Exclusivit&eacute; orpheline', s8_orphan_c: '10 ans', s8_orphan_r: "Jusqu'&agrave; 11 ans (innovant)",
+    s8_amr: 'Incitation RAM', s8_amr_c: 'Aucune', s8_amr_r: 'Bon transf&eacute;rable de 12 mois',
+    s8_short: 'P&eacute;nuries', s8_short_c: 'Pas de cadre', s8_short_r: "Plans de pr&eacute;vention obligatoires + surveillance EMA",
+    s8_rap_title: 'Rapporteurs',
+    s8_dir: 'Directive', s8_reg: 'R&egrave;glement',
+    s8_rap_dir: '<a href="https://www.europarl.europa.eu/meps/en/197711/DOLORS_MONTSERRAT/home" target="_blank">Dolors Montserrat</a> (PPE, Espagne)',
+    s8_rap_reg: '<a href="https://www.europarl.europa.eu/meps/en/185619/TIEMO_WOLKEN/home" target="_blank">Tiemo W&ouml;lken</a> (S&amp;D, Allemagne)',
+    // Timeline
+    tl_1965: "Premi&egrave;re directive pharmaceutique de l'UE (<a href=\"https://eur-lex.europa.eu/eli/dir/1965/65/oj/eng\" target=\"_blank\">Directive 65/65/CEE</a>) : r&eacute;ponse &agrave; la thalidomide",
+    tl_1995: "Cr&eacute;ation de l'EMA (alors EMEA, Londres)",
+    tl_2000: 'R&egrave;glement sur les m&eacute;dicaments orphelins (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank">R&egrave;g 141/2000</a>)',
+    tl_2001: 'Code communautaire adopt&eacute; (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank">Directive 2001/83/CE</a>)',
+    tl_2004: 'R&egrave;glement sur la proc&eacute;dure centralis&eacute;e (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank">R&egrave;g 726/2004</a>)',
+    tl_2006: 'R&egrave;glement sur les m&eacute;dicaments p&eacute;diatriques (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank">R&egrave;g 1901/2006</a>)',
+    tl_2007: 'R&egrave;glement sur les th&eacute;rapies avanc&eacute;es (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank">R&egrave;g 1394/2007</a>)',
+    tl_2010: 'Paquet pharmacovigilance (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010R1235-20110101" target="_blank">R&egrave;g 1235/2010</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010L0084-20110120" target="_blank">Dir 2010/84/UE</a>)',
+    tl_2011: 'Directive sur les m&eacute;dicaments falsifi&eacute;s (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank">Dir 2011/62/UE</a>)',
+    tl_2014: 'R&egrave;glement sur les essais cliniques (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank">R&egrave;g 536/2014</a>)',
+    tl_2019: "L'EMA d&eacute;m&eacute;nage &agrave; Amsterdam (post-Brexit)",
+    tl_2022: "R&ocirc;le de crise de l'EMA renforc&eacute; (<a href=\"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02022R0123-20250101\" target=\"_blank\">R&egrave;g 2022/123</a>)",
+    tl_2023: 'La Commission propose le paquet de r&eacute;forme pharmaceutique',
+    tl_2024: 'Premi&egrave;re lecture du PE adopt&eacute;e',
+    tl_2025: 'Accord provisoire apr&egrave;s 4 trilogues',
+    tl_2026: 'Adoption formelle par le Conseil et deuxi&egrave;me lecture du PE (en attente)',
+    s9_title: '9. Chronologie l&eacute;gislative', s9_sub: "Jalons cl&eacute;s du droit pharmaceutique de l'UE",
+    // Header
+    header_title: "Biblioth&egrave;que d'analyses de Brubru", header_subtitle: "L&eacute;gislation pharmaceutique de l'UE", header_cta: 'Essayez Brubru gratuitement',
+    // Footer
+    footer_text: "Analyse approfondie de la l&eacute;gislation pharmaceutique de l'UE par <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistant politique de l'UE de <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Mars 2026",
+  },
+  it: {
+    // Hero
+    hero_title: 'Legislazione farmaceutica UE: <span>Il quadro completo</span>',
+    hero_subtitle: "Dall'autorizzazione all'immissione in commercio alla farmacovigilanza, dai medicinali orfani alla riforma del 2023: tutte le leggi che regolano i medicinali nell'Unione Europea, spiegate.",
+    meta_laws: '30+ atti giuridici', meta_ema: 'EMA, 7 comitati', meta_market: '27 Stati membri', meta_date: 'Marzo 2026',
+    fig_code: 'Codice dei medicinali', fig_paths: 'Percorsi di autorizzazione', fig_committees: "Comitati scientifici dell'EMA", fig_reform: 'Accordo di riforma',
+    // TOC
+    toc_title: 'Indice', toc_1: 'Legislazione di base', toc_2: 'Percorsi di autorizzazione', toc_3: 'Farmacovigilanza', toc_4: 'Sperimentazioni cliniche', toc_5: 'Categorie speciali', toc_6: 'Sicurezza e qualit&agrave;', toc_7: 'EMA e istituzioni', toc_8: 'La riforma del 2023', toc_9: 'Cronologia',
+    // Table headers
+    th_element: 'Elemento', th_detail: 'Dettaglio', th_legislation: 'Legislazione', th_purpose: 'Scopo', th_volume: 'Volume', th_content: 'Contenuto', th_committee: 'Comitato', th_acronym: 'Sigla', th_role: 'Ruolo', th_actor: 'Attore', th_topic: 'Tema', th_current: 'Attuale', th_reform: 'Riforma', th_file: 'Fascicolo', th_rapporteur: 'Relatore', th_procedure: 'Procedura',
+    // Status tags
+    status_being_replaced: 'In fase di sostituzione dalla riforma del 2023', td_scope: 'Ambito', td_status: 'Stato',
+    // Pipeline (authorisation)
+    pipe_cp: 'Centralizzata', pipe_cp_d: "Tramite EMA, valida in tutta l'UE", pipe_dcp: 'Decentrata', pipe_dcp_d: 'Pi&ugrave; SM, uno coordina', pipe_mrp: 'Mutuo riconoscimento', pipe_mrp_d: 'Uno SM approva, gli altri riconoscono', pipe_np: 'Nazionale', pipe_np_d: 'Un solo Stato membro',
+    // Section 1
+    s1_title: '1. Legislazione di base', s1_sub: "I due pilastri del diritto farmaceutico dell'UE",
+    s1_dir_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-blue)">Direttiva 2001/83/CE</a>: il Codice comunitario',
+    s1_dir_text: "La legge fondamentale che disciplina i medicinali per uso umano nell'UE. Stabilisce le norme per l'autorizzazione all'immissione in commercio, la fabbricazione, la distribuzione all'ingrosso, la pubblicit&agrave; e la farmacovigilanza attraverso le procedure nazionali e decentrate. Adottata nel 2001, ha consolidato e sostituito le direttive precedenti risalenti al 1965.",
+    s1_dir_scope: 'Procedure di autorizzazione nazionali, di mutuo riconoscimento e decentrate',
+    s1_reg_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-green)">Regolamento (CE) 726/2004</a>: la Procedura centralizzata',
+    s1_reg_text: "Istituisce l'Agenzia europea per i medicinali (EMA) e la procedura centralizzata di autorizzazione all'immissione in commercio. Una singola domanda all'EMA si traduce in un'autorizzazione valida in tutti gli Stati membri dell'UE/SEE. Obbligatorio per prodotti biotecnologici, medicinali orfani e trattamenti per cancro, HIV/AIDS, malattie neurodegenerative, diabete, malattie autoimmuni e virali.",
+    s1_reg_scope: "Autorizzazione centralizzata tramite EMA, sorveglianza post-autorizzazione",
+    // Section 2
+    s2_title: '2. Percorsi di autorizzazione', s2_sub: "Come un medicinale arriva sul mercato dell'UE",
+    s2_mandatory: "La procedura centralizzata &egrave; obbligatoria per:",
+    s2_mandatory_list: "Prodotti biotecnologici, medicinali orfani, HIV/AIDS, cancro, malattie neurodegenerative, diabete, malattie autoimmuni, malattie virali e medicinali per terapie avanzate (terapia genica, terapia cellulare somatica, ingegneria tissutale). Tempo di valutazione: 210 giorni attivi.",
+    // Section 3
+    s3_title: '3. Farmacovigilanza', s3_sub: "Monitoraggio della sicurezza dei medicinali dopo l'autorizzazione",
+    s3_eudra: 'EudraVigilance',
+    s3_eudra_text: "La banca dati dell'UE sulle sospette reazioni avverse ai medicinali, gestita dall'EMA. I titolari di autorizzazione all'immissione in commercio devono segnalare tutte le sospette reazioni gravi entro 15 giorni. Gli strumenti chiave comprendono i Rapporti Periodici di Aggiornamento sulla Sicurezza (PSUR), i Piani di Gestione del Rischio (RMP) e il simbolo del triangolo nero per i medicinali sottoposti a monitoraggio addizionale.",
+    s3_r1: "Rafforza la farmacovigilanza dell'EMA (modifica il Reg 726/2004)",
+    s3_r2: 'Rafforza la farmacovigilanza nazionale (modifica la Dir 2001/83)',
+    s3_r3: 'Ulteriori modifiche al Reg 726/2004',
+    s3_r4: 'Ulteriori modifiche alla Dir 2001/83',
+    s3_r5: 'Procedure operative di farmacovigilanza',
+    // Section 4
+    s4_title: '4. Sperimentazioni cliniche', s4_sub: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-amber)">Regolamento (UE) 536/2014</a> (CELEX 32014R0536)',
+    s4_text: "Ha sostituito la <a href=\"https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32001L0020\" target=\"_blank\">Direttiva 2001/20/CE</a> sulle sperimentazioni cliniche. Introduce il Sistema Informativo sulle Sperimentazioni Cliniche (CTIS): un portale unico dell'UE per tutte le domande di sperimentazione. Una domanda pu&ograve; coprire pi&ugrave; Stati membri, con una valutazione coordinata guidata da uno Stato membro relatore. I risultati delle sperimentazioni devono essere pubblicati entro 12 mesi dal completamento dello studio. Si applicano regole semplificate alle sperimentazioni cliniche a basso livello di intervento.",
+    // Section 5
+    s5_title: '5. Categorie speciali', s5_sub: 'Medicinali orfani, pediatrici, terapie avanzate e medicinali a base di erbe',
+    s5_orphan_title: 'Medicinali orfani (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">Reg 141/2000</a>)',
+    s5_orphan_text: "Per le malattie che colpiscono non pi&ugrave; di 5 persone su 10.000 nell'UE. Il Comitato per i medicinali orfani dell'EMA (COMP) concede la designazione di medicinale orfano. Gli incentivi comprendono 10 anni di esclusivit&agrave; di mercato, assistenza al protocollo e riduzioni delle tariffe. Con la riforma del 2023, gli orfani innovativi riceveranno fino a 11 anni.",
+    s5_paed_title: 'Medicinali pediatrici (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-blue)">Reg 1901/2006</a>)',
+    s5_paed_text: "Richiede Piani di Indagine Pediatrica (PIP) per tutti i nuovi medicinali, valutati dal Comitato pediatrico dell'EMA (PDCO). Il completamento di un PIP concordato concede una proroga di 6 mesi del CCP. Sono possibili deroghe quando la malattia non si manifesta nei bambini o il prodotto non sarebbe sicuro.",
+    s5_atmp_title: 'Terapie avanzate (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Reg 1394/2007</a>)',
+    s5_atmp_text: "Copre la terapia genica, la terapia cellulare somatica e i prodotti di ingegneria tissutale. L'autorizzazione centralizzata &egrave; obbligatoria. Il Comitato per le terapie avanzate dell'EMA (CAT) fornisce la valutazione scientifica. Queste terapie all'avanguardia stanno trasformando il trattamento delle malattie genetiche rare e dei tumori.",
+    s5_herbal_title: 'Medicinali tradizionali a base di erbe (<a href="https://eur-lex.europa.eu/eli/dir/2004/24/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Dir 2004/24/CE</a>)',
+    s5_herbal_text: "Procedura di registrazione semplificata per i medicinali tradizionali a base di erbe con almeno 30 anni di uso documentato (di cui 15 nell'UE). Il Comitato per i medicinali a base di erbe dell'EMA (HMPC) prepara monografie che stabiliscono profili di sicurezza ed efficacia.",
+    // Section 6
+    s6_title: '6. Sicurezza e qualit&agrave;', s6_sub: 'Anti-contraffazione, GMP e EudraLex',
+    s6_fmd_title: 'Direttiva sui medicinali falsificati (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">2011/62/UE</a>)',
+    s6_fmd_text: "Dispositivi di sicurezza obbligatori sulla confezione: un identificativo univoco (codice a barre 2D) e un dispositivo antimanomissione, verificati al momento della dispensazione tramite il Sistema Europeo di Verifica dei Medicinali (EMVS). Controlli rafforzati della catena di approvvigionamento per importatori, intermediari e produttori di principi attivi. Un logo comune dell'UE identifica le farmacie online legali.",
+    s6_v1: "Legislazione farmaceutica dell'UE (testi giuridici consolidati)",
+    s6_v2: 'Avviso ai richiedenti (procedure, moduli, guida CTD)',
+    s6_v3: 'Linee guida scientifiche (qualit&agrave;, sicurezza, efficacia)',
+    s6_v4: 'Linee guida sulle Norme di Buona Fabbricazione (GMP)',
+    // Section 7
+    s7_title: '7. EMA e panorama istituzionale', s7_sub: "L'Agenzia europea per i medicinali e i suoi 7 comitati scientifici",
+    s7_chmp: 'Comitato per i medicinali per uso umano', s7_chmp_r: "Pareri sull'autorizzazione all'immissione in commercio",
+    s7_prac: 'Comitato di valutazione dei rischi per la farmacovigilanza', s7_prac_r: 'Sorveglianza della sicurezza',
+    s7_comp: 'Comitato per i medicinali orfani', s7_comp_r: 'Designazione di medicinale orfano',
+    s7_pdco: 'Comitato pediatrico', s7_pdco_r: 'Piani di Indagine Pediatrica',
+    s7_cat: 'Comitato per le terapie avanzate', s7_cat_r: 'Valutazione degli ATMP',
+    s7_cvmp: 'Comitato per i medicinali veterinari', s7_cvmp_r: 'Medicinali veterinari',
+    s7_hmpc: 'Comitato per i medicinali a base di erbe', s7_hmpc_r: 'Monografie di piante medicinali',
+    s7_actors_title: 'Attori istituzionali chiave',
+    s7_sante: 'DG della Commissione capofila per il settore farmaceutico',
+    s7_ema_name: 'EMA (Amsterdam)', s7_ema_role: 'Autorizzazione centralizzata, farmacovigilanza, gestione delle crisi',
+    s7_hma: 'Rete di 30 agenzie nazionali del farmaco + EMA',
+    s7_edqm_name: 'EDQM (Strasburgo)', s7_edqm: 'Farmacopea europea, standard di qualit&agrave;',
+    s7_sant: 'Commissione SANT (PE)', s7_sant_r: 'Commissione del PE capofila per la legislazione farmaceutica',
+    s7_epsco: 'Configurazione del Consiglio per gli affari sanitari',
+    // Section 8
+    s8_title: '8. La riforma del 2023', s8_sub: "La pi&ugrave; grande revisione del diritto farmaceutico dell'UE dal 2004",
+    s8_intro: "Il 26 aprile 2023, la Commissione ha proposto di sostituire sia la Direttiva (2001/83/CE) sia il Regolamento (726/2004) con un quadro normativo modernizzato. Dopo quattro triloghi, i negoziatori hanno raggiunto un accordo provvisorio l'11 dicembre 2025. La riforma affronta gli incentivi all'innovazione, la resilienza della catena di approvvigionamento, la resistenza antimicrobica e l'accesso dei pazienti.",
+    s8_dp: 'Protezione dei dati', s8_dp_c: '8 anni', s8_dp_r: '8 anni (invariato)',
+    s8_mp: 'Protezione del mercato', s8_mp_c: '2 anni', s8_mp_r: '1 anno base + estensioni',
+    s8_max: 'Protezione totale massima', s8_max_c: '10 anni', s8_max_r: '11 anni (con tutti i bonus)',
+    s8_orphan: 'Esclusivit&agrave; orfano', s8_orphan_c: '10 anni', s8_orphan_r: 'Fino a 11 anni (innovativo)',
+    s8_amr: 'Incentivo RAM', s8_amr_c: 'Nessuno', s8_amr_r: 'Buono trasferibile di 12 mesi',
+    s8_short: 'Carenze', s8_short_c: 'Nessun quadro', s8_short_r: "Piani di prevenzione obbligatori + sorveglianza EMA",
+    s8_rap_title: 'Relatori',
+    s8_dir: 'Direttiva', s8_reg: 'Regolamento',
+    s8_rap_dir: '<a href="https://www.europarl.europa.eu/meps/en/197711/DOLORS_MONTSERRAT/home" target="_blank">Dolors Montserrat</a> (PPE, Spagna)',
+    s8_rap_reg: '<a href="https://www.europarl.europa.eu/meps/en/185619/TIEMO_WOLKEN/home" target="_blank">Tiemo W&ouml;lken</a> (S&amp;D, Germania)',
+    // Timeline
+    tl_1965: "Prima direttiva farmaceutica dell'UE (<a href=\"https://eur-lex.europa.eu/eli/dir/1965/65/oj/eng\" target=\"_blank\">Direttiva 65/65/CEE</a>): risposta al talidomide",
+    tl_1995: "Istituzione dell'EMA (allora EMEA, Londra)",
+    tl_2000: 'Regolamento sui medicinali orfani (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank">Reg 141/2000</a>)',
+    tl_2001: 'Codice comunitario adottato (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank">Direttiva 2001/83/CE</a>)',
+    tl_2004: 'Regolamento sulla procedura centralizzata (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank">Reg 726/2004</a>)',
+    tl_2006: 'Regolamento sui medicinali pediatrici (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank">Reg 1901/2006</a>)',
+    tl_2007: 'Regolamento sulle terapie avanzate (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank">Reg 1394/2007</a>)',
+    tl_2010: 'Pacchetto farmacovigilanza (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010R1235-20110101" target="_blank">Reg 1235/2010</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010L0084-20110120" target="_blank">Dir 2010/84/UE</a>)',
+    tl_2011: 'Direttiva sui medicinali falsificati (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank">Dir 2011/62/UE</a>)',
+    tl_2014: 'Regolamento sulle sperimentazioni cliniche (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank">Reg 536/2014</a>)',
+    tl_2019: "L'EMA si trasferisce ad Amsterdam (post-Brexit)",
+    tl_2022: "Ruolo di crisi dell'EMA rafforzato (<a href=\"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02022R0123-20250101\" target=\"_blank\">Reg 2022/123</a>)",
+    tl_2023: 'La Commissione propone il pacchetto di riforma farmaceutica',
+    tl_2024: 'Prima lettura del PE adottata',
+    tl_2025: 'Accordo provvisorio dopo 4 triloghi',
+    tl_2026: 'Adozione formale da parte del Consiglio e seconda lettura del PE (in sospeso)',
+    s9_title: '9. Cronologia legislativa', s9_sub: "Tappe chiave del diritto farmaceutico dell'UE",
+    // Header
+    header_title: 'Biblioteca di analisi di Brubru', header_subtitle: "Legislazione farmaceutica dell'UE", header_cta: 'Prova Brubru gratis',
+    // Footer
+    footer_text: "Analisi approfondita della legislazione farmaceutica dell'UE di <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistente per le politiche UE di <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Marzo 2026",
+  },
+  nl: {
+    // Hero
+    hero_title: 'EU-farmaceutische wetgeving: <span>Het volledige kader</span>',
+    hero_subtitle: 'Van handelsvergunning tot geneesmiddelenbewaking, van weesgeneesmiddelen tot de hervorming van 2023: alle wetten die geneesmiddelen in de Europese Unie reguleren, uitgelegd.',
+    meta_laws: '30+ rechtshandelingen', meta_ema: 'EMA, 7 comit&eacute;s', meta_market: '27 lidstaten', meta_date: 'Maart 2026',
+    fig_code: 'Geneesmiddelencode', fig_paths: 'Vergunningstrajecten', fig_committees: 'Wetenschappelijke comit&eacute;s van het EMA', fig_reform: 'Hervormingsakkoord',
+    // TOC
+    toc_title: 'Inhoud', toc_1: 'Basiswetgeving', toc_2: 'Vergunningstrajecten', toc_3: 'Geneesmiddelenbewaking', toc_4: 'Klinische proeven', toc_5: 'Bijzondere categorie&euml;n', toc_6: 'Veiligheid en kwaliteit', toc_7: 'EMA en instellingen', toc_8: 'De hervorming van 2023', toc_9: 'Tijdlijn',
+    // Table headers
+    th_element: 'Element', th_detail: 'Detail', th_legislation: 'Wetgeving', th_purpose: 'Doel', th_volume: 'Volume', th_content: 'Inhoud', th_committee: 'Comit&eacute;', th_acronym: 'Afkorting', th_role: 'Rol', th_actor: 'Actor', th_topic: 'Onderwerp', th_current: 'Huidig', th_reform: 'Hervorming', th_file: 'Dossier', th_rapporteur: 'Rapporteur', th_procedure: 'Procedure',
+    // Status tags
+    status_being_replaced: 'Wordt vervangen door de hervorming van 2023', td_scope: 'Toepassingsgebied', td_status: 'Status',
+    // Pipeline (authorisation)
+    pipe_cp: 'Gecentraliseerd', pipe_cp_d: 'Via EMA, EU-breed geldig', pipe_dcp: 'Gedecentraliseerd', pipe_dcp_d: 'Meerdere LS, &eacute;&eacute;n co&ouml;rdineert', pipe_mrp: 'Wederzijdse erkenning', pipe_mrp_d: 'E&eacute;n LS keurt goed, anderen erkennen', pipe_np: 'Nationaal', pipe_np_d: 'E&eacute;n enkele lidstaat',
+    // Section 1
+    s1_title: '1. Basiswetgeving', s1_sub: 'De twee pijlers van het EU-geneesmiddelenrecht',
+    s1_dir_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-blue)">Richtlijn 2001/83/EG</a>: het communautaire wetboek',
+    s1_dir_text: 'De fundamentele wet die geneesmiddelen voor menselijk gebruik in de EU regelt. Zij stelt de regels vast voor de handelsvergunning, de vervaardiging, de groothandel, de reclame en de geneesmiddelenbewaking via nationale en gedecentraliseerde procedures. Aangenomen in 2001, consolideerde en verving zij eerdere richtlijnen die teruggingen tot 1965.',
+    s1_dir_scope: 'Nationale, wederzijdse erkennings- en gedecentraliseerde vergunningsprocedures',
+    s1_reg_title: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--color-green)">Verordening (EG) 726/2004</a>: de gecentraliseerde procedure',
+    s1_reg_text: 'Stelt het Europees Geneesmiddelenbureau (EMA) in en de gecentraliseerde handelsvergunningsprocedure. E&eacute;n aanvraag bij het EMA leidt tot &eacute;&eacute;n vergunning die in alle EU/EER-lidstaten geldig is. Verplicht voor biotechnologische producten, weesgeneesmiddelen en behandelingen voor kanker, hiv/aids, neurodegeneratieve ziekten, diabetes, auto-immuunziekten en virale ziekten.',
+    s1_reg_scope: 'Gecentraliseerde vergunning via EMA, toezicht na vergunning',
+    // Section 2
+    s2_title: '2. Vergunningstrajecten', s2_sub: 'Hoe een geneesmiddel de EU-markt bereikt',
+    s2_mandatory: 'De gecentraliseerde procedure is verplicht voor:',
+    s2_mandatory_list: 'Biotechnologische producten, weesgeneesmiddelen, hiv/aids, kanker, neurodegeneratieve ziekten, diabetes, auto-immuunziekten, virale ziekten en geneesmiddelen voor geavanceerde therapie (gentherapie, somatische celtherapie, weefselmanipulatie). Beoordelingstijd: 210 actieve dagen.',
+    // Section 3
+    s3_title: '3. Geneesmiddelenbewaking', s3_sub: 'Veiligheidsmonitoring van geneesmiddelen na vergunning',
+    s3_eudra: 'EudraVigilance',
+    s3_eudra_text: 'De EU-databank van vermoede bijwerkingen van geneesmiddelen, beheerd door het EMA. Houders van een handelsvergunning moeten alle vermoede ernstige bijwerkingen binnen 15 dagen melden. Belangrijke instrumenten zijn Periodieke Veiligheidsupdaterapporten (PSUR), Risicobeheerplannen (RMP) en het zwarte-driehoeksymbool voor geneesmiddelen onder aanvullende monitoring.',
+    s3_r1: 'Versterkt de geneesmiddelenbewaking van het EMA (wijzigt Vo 726/2004)',
+    s3_r2: 'Versterkt de nationale geneesmiddelenbewaking (wijzigt Rl 2001/83)',
+    s3_r3: 'Verdere wijzigingen van Vo 726/2004',
+    s3_r4: 'Verdere wijzigingen van Rl 2001/83',
+    s3_r5: 'Operationele procedures voor geneesmiddelenbewaking',
+    // Section 4
+    s4_title: '4. Klinische proeven', s4_sub: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-amber)">Verordening (EU) 536/2014</a> (CELEX 32014R0536)',
+    s4_text: 'Verving de <a href="https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX%3A32001L0020" target="_blank">Richtlijn 2001/20/EG</a> inzake klinische proeven. Introduceert het Informatiesysteem Klinische Proeven (CTIS): &eacute;&eacute;n EU-portaal voor alle proefaanvragen. E&eacute;n aanvraag kan meerdere lidstaten bestrijken, met een geco&ouml;rdineerde beoordeling onder leiding van een rapporterende lidstaat. Proefresultaten moeten binnen 12 maanden na afronding van het onderzoek worden gepubliceerd. Vereenvoudigde regels gelden voor klinische proeven met een laag interventieniveau.',
+    // Section 5
+    s5_title: '5. Bijzondere categorie&euml;n', s5_sub: 'Weesgeneesmiddelen, kindergeneesmiddelen, geavanceerde therapie&euml;n en kruidengeneesmiddelen',
+    s5_orphan_title: 'Weesgeneesmiddelen (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">Vo 141/2000</a>)',
+    s5_orphan_text: 'Voor ziekten die niet meer dan 5 op de 10.000 mensen in de EU treffen. Het Comit&eacute; voor weesgeneesmiddelen van het EMA (COMP) verleent de weesaanwijzing. Stimulansen omvatten 10 jaar marktexclusiviteit, protocolbijstand en tariefverlagingen. Onder de hervorming van 2023 ontvangen baanbrekende weesgeneesmiddelen tot 11 jaar.',
+    s5_paed_title: 'Kindergeneesmiddelen (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-blue)">Vo 1901/2006</a>)',
+    s5_paed_text: 'Vereist Pediatrische Onderzoeksplannen (PIP) voor alle nieuwe geneesmiddelen, beoordeeld door het Pediatrisch Comit&eacute; van het EMA (PDCO). Voltooiing van een overeengekomen PIP verleent een verlenging van 6 maanden van het ABC. Ontheffingen zijn mogelijk wanneer de ziekte niet bij kinderen voorkomt of het product onveilig zou zijn.',
+    s5_atmp_title: 'Geavanceerde therapie&euml;n (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Vo 1394/2007</a>)',
+    s5_atmp_text: 'Omvat gentherapie, somatische celtherapie en weefselmanipulatieproducten. Gecentraliseerde vergunning is verplicht. Het Comit&eacute; voor geavanceerde therapie&euml;n van het EMA (CAT) levert de wetenschappelijke beoordeling. Deze geavanceerde therapie&euml;n transformeren de behandeling van zeldzame genetische aandoeningen en kanker.',
+    s5_herbal_title: 'Traditionele kruidengeneesmiddelen (<a href="https://eur-lex.europa.eu/eli/dir/2004/24/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-green)">Rl 2004/24/EG</a>)',
+    s5_herbal_text: 'Vereenvoudigde registratieprocedure voor traditionele kruidengeneesmiddelen met ten minste 30 jaar gedocumenteerd gebruik (waarvan 15 jaar in de EU). Het Comit&eacute; voor kruidengeneesmiddelen van het EMA (HMPC) stelt monografie&euml;n op die veiligheids- en werkzaamheidsprofielen vaststellen.',
+    // Section 6
+    s6_title: '6. Veiligheid en kwaliteit', s6_sub: 'Antivervalsing, GMP en EudraLex',
+    s6_fmd_title: 'Richtlijn vervalste geneesmiddelen (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank" style="color:inherit;border-bottom:1px dashed var(--color-red)">2011/62/EU</a>)',
+    s6_fmd_text: 'Verplichte veiligheidskenmerken op de verpakking: een uniek identificatiekenmerk (2D-streepjescode) en een verzegeling, geverifieerd bij aflevering via het Europees Geneesmiddelenverificatiesysteem (EMVS). Versterkte controles in de toeleveringsketen voor importeurs, tussenhandelaren en fabrikanten van werkzame stoffen. Een gemeenschappelijk EU-logo identificeert legale onlineapotheken.',
+    s6_v1: 'EU-farmaceutische wetgeving (geconsolideerde juridische teksten)',
+    s6_v2: 'Mededeling aan aanvragers (procedures, formulieren, CTD-leidraad)',
+    s6_v3: 'Wetenschappelijke richtsnoeren (kwaliteit, veiligheid, werkzaamheid)',
+    s6_v4: 'Richtsnoeren voor Goede Fabricagepraktijken (GMP)',
+    // Section 7
+    s7_title: '7. EMA en institutioneel landschap', s7_sub: 'Het Europees Geneesmiddelenbureau en zijn 7 wetenschappelijke comit&eacute;s',
+    s7_chmp: 'Comit&eacute; voor geneesmiddelen voor menselijk gebruik', s7_chmp_r: 'Adviezen over handelsvergunningen',
+    s7_prac: 'Comit&eacute; voor risicobeoordeling op het gebied van geneesmiddelenbewaking', s7_prac_r: 'Veiligheidsmonitoring',
+    s7_comp: 'Comit&eacute; voor weesgeneesmiddelen', s7_comp_r: 'Weesaanwijzing',
+    s7_pdco: 'Pediatrisch Comit&eacute;', s7_pdco_r: 'Pediatrische Onderzoeksplannen',
+    s7_cat: 'Comit&eacute; voor geavanceerde therapie&euml;n', s7_cat_r: 'Beoordeling van ATMP',
+    s7_cvmp: 'Comit&eacute; voor diergeneesmiddelen', s7_cvmp_r: 'Diergeneesmiddelen',
+    s7_hmpc: 'Comit&eacute; voor kruidengeneesmiddelen', s7_hmpc_r: "Monografie&euml;n van geneeskrachtige planten",
+    s7_actors_title: 'Belangrijke institutionele actoren',
+    s7_sante: 'Leidende DG van de Commissie voor de farmaceutische sector',
+    s7_ema_name: 'EMA (Amsterdam)', s7_ema_role: 'Gecentraliseerde vergunning, geneesmiddelenbewaking, crisisbeheer',
+    s7_hma: 'Netwerk van 30 nationale geneesmiddelenautoriteiten + EMA',
+    s7_edqm_name: 'EDQM (Straatsburg)', s7_edqm: 'Europese farmacopee, kwaliteitsnormen',
+    s7_sant: 'Commissie SANT (EP)', s7_sant_r: 'Leidende EP-commissie voor farmaceutische wetgeving',
+    s7_epsco: 'Raadsconfiguratie voor gezondheidszaken',
+    // Section 8
+    s8_title: '8. De hervorming van 2023', s8_sub: 'De grootste herziening van het EU-geneesmiddelenrecht sinds 2004',
+    s8_intro: 'Op 26 april 2023 stelde de Commissie voor om zowel de Richtlijn (2001/83/EG) als de Verordening (726/2004) te vervangen door een gemoderniseerd kader. Na vier trilogen bereikten de onderhandelaars op 11 december 2025 een voorlopig akkoord. De hervorming richt zich op innovatie-stimulansen, veerkracht van de toeleveringsketen, antimicrobi&euml;le resistentie en pati&euml;ntentoegang.',
+    s8_dp: 'Gegevensbescherming', s8_dp_c: '8 jaar', s8_dp_r: '8 jaar (ongewijzigd)',
+    s8_mp: 'Marktbescherming', s8_mp_c: '2 jaar', s8_mp_r: '1 jaar basis + verlengingen',
+    s8_max: 'Maximale totale bescherming', s8_max_c: '10 jaar', s8_max_r: '11 jaar (met alle bonussen)',
+    s8_orphan: 'Weesexclusiviteit', s8_orphan_c: '10 jaar', s8_orphan_r: 'Tot 11 jaar (baanbrekend)',
+    s8_amr: 'AMR-stimulans', s8_amr_c: 'Geen', s8_amr_r: 'Overdraagbare voucher van 12 maanden',
+    s8_short: 'Tekorten', s8_short_c: 'Geen kader', s8_short_r: 'Verplichte preventieplannen + EMA-monitoring',
+    s8_rap_title: 'Rapporteurs',
+    s8_dir: 'Richtlijn', s8_reg: 'Verordening',
+    s8_rap_dir: '<a href="https://www.europarl.europa.eu/meps/en/197711/DOLORS_MONTSERRAT/home" target="_blank">Dolors Montserrat</a> (EVP, Spanje)',
+    s8_rap_reg: '<a href="https://www.europarl.europa.eu/meps/en/185619/TIEMO_WOLKEN/home" target="_blank">Tiemo W&ouml;lken</a> (S&amp;D, Duitsland)',
+    // Timeline
+    tl_1965: 'Eerste EU-farmaceutische richtlijn (<a href="https://eur-lex.europa.eu/eli/dir/1965/65/oj/eng" target="_blank">Richtlijn 65/65/EEG</a>): reactie op thalidomide',
+    tl_1995: 'EMA opgericht (toen EMEA, Londen)',
+    tl_2000: 'Verordening weesgeneesmiddelen (<a href="https://eur-lex.europa.eu/eli/reg/2000/141/oj/eng" target="_blank">Vo 141/2000</a>)',
+    tl_2001: 'Communautair wetboek aangenomen (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02001L0083-20250101" target="_blank">Richtlijn 2001/83/EG</a>)',
+    tl_2004: 'Verordening gecentraliseerde procedure (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02004R0726-20220128" target="_blank">Vo 726/2004</a>)',
+    tl_2006: 'Verordening kindergeneesmiddelen (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02006R1901-20190128" target="_blank">Vo 1901/2006</a>)',
+    tl_2007: 'Verordening geavanceerde therapie&euml;n (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02007R1394-20190726" target="_blank">Vo 1394/2007</a>)',
+    tl_2010: 'Geneesmiddelenbewakingspakket (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010R1235-20110101" target="_blank">Vo 1235/2010</a>, <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02010L0084-20110120" target="_blank">Rl 2010/84/EU</a>)',
+    tl_2011: 'Richtlijn vervalste geneesmiddelen (<a href="https://eur-lex.europa.eu/eli/dir/2011/62/oj/eng" target="_blank">Rl 2011/62/EU</a>)',
+    tl_2014: 'Verordening klinische proeven (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02014R0536-20221205" target="_blank">Vo 536/2014</a>)',
+    tl_2019: 'EMA verhuist naar Amsterdam (post-Brexit)',
+    tl_2022: 'Crisisrol EMA versterkt (<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02022R0123-20250101" target="_blank">Vo 2022/123</a>)',
+    tl_2023: 'Commissie stelt het farmaceutische hervormingspakket voor',
+    tl_2024: 'Eerste lezing EP aangenomen',
+    tl_2025: 'Voorlopig akkoord na 4 trilogen',
+    tl_2026: 'Formele goedkeuring door de Raad en tweede lezing EP (lopend)',
+    s9_title: '9. Wetgevingstijdlijn', s9_sub: 'Belangrijke mijlpalen in het EU-geneesmiddelenrecht',
+    // Header
+    header_title: 'Brubru Analysbibliotheek', header_subtitle: 'EU-farmaceutische wetgeving', header_cta: 'Probeer Brubru gratis',
+    // Footer
+    footer_text: "Diepgaande analyse van de EU-farmaceutische wetgeving door <a href='https://brubru.beresol.eu'>Brubru</a>, de AI-beleidsassistent van <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Maart 2026",
+  }
+};
+
+function setLang(lang) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  if (lang === 'en') {
+    // Reset to original content
+    location.reload();
+    return;
+  }
+  const t = translations[lang];
+  if (!t) return;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.innerHTML = t[key];
+  });
+}
+</script>
+</body>
+</html>
