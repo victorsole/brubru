@@ -4714,6 +4714,18 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'mapfre': ['spanish_ibex35_eu_regulation'],
     'el corte ingles': ['spanish_ibex35_eu_regulation'],
     'puig': ['spanish_ibex35_eu_regulation'],
+
+    # Council Analysis and Research Team (ART) publications
+    'council research': ['council_art_research'],
+    'council research papers': ['council_art_research'],
+    'art papers': ['council_art_research'],
+    'council analysis': ['council_art_research'],
+    'forward look': ['council_art_research'],
+    'forward look 2026': ['council_art_research'],
+    'council forward look': ['council_art_research'],
+    'council secretariat research': ['council_art_research'],
+    'council strategic analysis': ['council_art_research'],
+    'prospects for 2026': ['council_art_research'],
 }
 
 

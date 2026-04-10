@@ -37,7 +37,11 @@ class ThinkTankRSSClient:
     # The general feed contains all publication types; category feeds may be empty.
     # Items are categorised via <category> tags (e.g. "At a glance", "Briefings").
     RSS_FEEDS = {
-        # Primary feed (contains all publication types, 10 items per page)
+        # Official EP Think Tank portal RSS (covers ALL types: EPRS, ECTI, CASP)
+        # This is the primary source -- the WordPress blog RSS misses many publications
+        "thinktank_portal": "https://www.europarl.europa.eu/thinktank/en/research/advanced-search/rss",
+
+        # WordPress blog feed (secondary, 10 items per page)
         "all_publications": "https://epthinktank.eu/feed/",
 
         # Category feeds (WordPress category archives -- may be empty, use general feed + filter)
@@ -152,19 +156,26 @@ class ThinkTankRSSClient:
 
         logger.info(f"Fetching latest Think Tank publications ({publication_type or 'all'}, last {days} days)")
 
-        # Fetch paginated general feed to get enough items
-        # Each page has ~10 items, so fetch enough pages for the requested time window
-        max_pages = min(days // 3 + 1, 10)  # Rough: ~3 days per page of 10 items
+        # Fetch from official EP Think Tank portal RSS first (covers EPRS, ECTI, CASP)
+        # This is the most comprehensive source
         feeds = []
 
-        # Page 1
+        try:
+            portal_feed = await self.rss_client.fetch_feed(self.RSS_FEEDS["thinktank_portal"], since=since)
+            feeds.append(portal_feed)
+            logger.info(f"Fetched {len(portal_feed.entries)} items from thinktank portal RSS")
+        except Exception as e:
+            logger.warning(f"Failed to fetch thinktank portal RSS: {str(e)}")
+
+        # Also fetch paginated WordPress blog feed for additional items
+        max_pages = min(days // 3 + 1, 10)
+
         try:
             feed = await self.rss_client.fetch_feed(self.RSS_FEEDS["all_publications"], since=since)
             feeds.append(feed)
         except Exception as e:
             logger.error(f"Failed to fetch general feed: {str(e)}")
 
-        # Additional pages if needed
         for page_num in range(2, max_pages + 1):
             page_key = f"page_{page_num}"
             if page_key not in self.RSS_FEEDS:
@@ -172,7 +183,7 @@ class ThinkTankRSSClient:
             try:
                 feed = await self.rss_client.fetch_feed(self.RSS_FEEDS[page_key], since=since)
                 if not feed.entries:
-                    break  # No more items
+                    break
                 feeds.append(feed)
             except Exception as e:
                 logger.debug(f"Page {page_num} fetch failed (expected at end): {str(e)}")
