@@ -16,6 +16,12 @@
 - AI Act Service Desk: central information hub for AI Act compliance, tailor-made answers
 - European Data Union Strategy: expected H2 2025
 - European Strategy for AI in Science: launching 10 April 2025
+- Apply AI Strategy: COM(2025) 723, adopted 8 October 2025. Blueprint for AI adoption in 13 strategic sectors. Public sector identified as key domain.
+- JRC report (2026): "Advancing AI adoption in EU public administrations: Future directions and opportunities under the Apply AI Strategy" (JRC143539, EUR 40440, doi:10.2760/3112501)
+- JRC AI adoption framework: 3 pillars: (1) ANCHOR AI in EU regulatory framework (AI Act, data governance), (2) ADAPT public administration capacity (skills, infrastructure, governance), (3) APPLY AI in high-impact domains (public value creation)
+- JRC 6 policy recommendations for Member States: (1) Recognise public sector as strategic AI domain in national AI strategies, (2) Ensure AI literacy in public administrations (Article 4 AI Act), (3) Engage with EU funding/guidance instruments (EDIHs, GenAI4EU, PSTW, GovTech catalogues), (4) Develop public-value-driven AI scaling pathways, (5) Use public procurement to strengthen EU GovTech ecosystem and digital sovereignty, (6) Establish public AI registries for transparency and trust (Helsinki, Amsterdam models)
+- JRC AI application domains for public sector: legislative drafting (Finland/Sitra pilot), policy assessment/alignment (GenAI4Lex-B), trend analysis, emergency forecasting (LifeSaver/Estonia), extreme weather (Destination Earth)
+- GPT@JRC: Commission's internal LLM platform hosted at JRC data centre (used for this report)
 - Key documents: https://digital-strategy.ec.europa.eu/en/library/ai-continent-action-plan
 - Factsheet: https://ec.europa.eu/newsroom/dae/redirection/document/114523
 - Full action plan: https://ec.europa.eu/newsroom/dae/redirection/document/114522

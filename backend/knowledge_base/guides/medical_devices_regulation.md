@@ -17,6 +17,8 @@
 - Transition: certificates under MDD/AIMDD valid until 31 December 2028 (extended by Regulation (EU) 2024/1860)
 - In Vitro Diagnostics: separate regulation, IVDR (EU) 2017/746 (CELEX 32017R0746)
 - Simplification: Regulation (EU) 2024/1860 extended transition deadlines, reduced burden on legacy devices
+- NEW simplification proposal (2025): COM(2025/0404(COD)) amending Regulations 2017/745 (MDR), 2017/746 (IVDR), 2022/123 (EMA support for expert panels), and 2024/1689 (AI Act Annex I)
+- SANT committee presentation: 14 April 2026, Commissioner Varhelyi presents simplification proposal, Rapporteur Oliver Schenk (EPP, Germany)
 - Related: European Biotech Act COM(2025)1022 (amends clinical trial aspects)
 
 ## Overview

@@ -16,6 +16,7 @@
 - Structure: 109 articles in 12 chapters + 1 Annex
 - Key innovation: EUR 0 minimum capital, 48-hour registration, max EUR 100 cost, fully digital, EU-ESO with harmonised deferred taxation
 - Estimated impact: 308,000 EU Inc. companies over 10 years, EUR 328-440 million savings
+- EPRS study (April 2026): "Feasibility of an optional 28th EU tax regime to support competitiveness" -- proposes framework parallel to those of 27 MS. Commissioned by FISC committee.
 - Press release: IP/26/614 | Q&A: QANDA/26/615
 - Official page: https://commission.europa.eu/eu-inc-new-harmonised-corporate-legal-regime_en
 

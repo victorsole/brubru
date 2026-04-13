@@ -17,6 +17,8 @@
 - Shadow rapporteur: Tomas Tobe (EPP, Sweden), appointed 19 March 2026
 - Related simplification measure: 2026/0012(COD)
 - Current status: Preparatory phase in Parliament (March 2026)
+- EPRS At a Glance (8 April 2026): "Ransomware resilience: Strategic targets and growing trends" -- ransomware remained a major cybersecurity threat in the EU in 2025. Ref: EPRS_ATA(2026)785699
+- UN Cybercrime Convention: LIBE consent vote 15 April 2026 (see un_cybercrime_convention guide)
 
 ## Key Documents
 - [Regulation (EU) 2019/881: Cybersecurity Act (original)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0881)

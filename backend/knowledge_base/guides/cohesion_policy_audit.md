@@ -15,6 +15,8 @@
 - Mid-term review (April 2026): DG REGIO published results of the mid-term review of cohesion policy
 - Cohesion Fund 2028-2034: Multiple EP committees drafting opinions (LIBE: Tanger Correa, SANT: Negrescu, ECON: Bajada, ITRE: Nagyova)
 - EVP Fitto (April 2026): Discussions with Belgian government/regions and Austria on future cohesion policy
+- REGI committee (14-15 April 2026): Exchange of views on future of cross-border cooperation within post-2027 MFF with Joris Bengevoord (President, AEBR; Chair, Brabant Delta Water Board). Study presentation: "Flexibility and Simplification in Cohesion Policy under the 2028-2034 MFF" by Policy Department for Regional Development, Agriculture and Fisheries
+- NRP Fund and ERDF/Interreg/Cohesion Fund: legislative proposals under scrutiny in REGI committee
 
 Guide for Joint Audit Directorate for Cohesion (DAC) auditors and shared management control officers covering the audit framework, error rate methodology, Arachne risk scoring, and assurance chain.
 

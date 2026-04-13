@@ -19,6 +19,8 @@ Legal basis: Article 192(1) TFEU (environment)
 Responsible Commissioner: Wopke Hoekstra (Climate Action)
 Responsible DG: DG CLIMA
 ESABCC recommendation: 90-95% net reduction by 2040
+ETS emissions trend (10 April 2026): DG CLIMA confirms EU ETS sustains downward trend in covered emissions. Supports trajectory toward 2030 and 2040 targets.
+Energy Union Task Force (10 April 2026): Calls for enhanced EU-wide coordination to safeguard energy security
 
 ## Original Climate Law (2021)
 

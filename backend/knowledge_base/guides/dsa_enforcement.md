@@ -18,6 +18,8 @@
 - Designated VLOSEs: 3 (as of March 2026)
 - TikTok case: Commission Decision of 5 December 2025, Case DSA.100109, summary published OJ 13 March 2026 (52026DSA100109)
 - Penalties: up to 6% global annual turnover, periodic penalty payments up to 5% average daily worldwide turnover
+- DG CNECT (10 April 2026): First results published under revised Code of Conduct on Countering Illegal Hate Speech Online
+- HaDEA (10 April 2026): New calls for proposals under Digital Europe Programme published
 - Related: DMA (32022R1925), AI Act (32024R1689), AVMSD (32018L1808), Terrorist Content Regulation (32021R0784), CSAM Regulation proposal (COM(2022)209)
 - Related guides: digital_markets_act, copyright_generative_ai, csam_regulation_online
 

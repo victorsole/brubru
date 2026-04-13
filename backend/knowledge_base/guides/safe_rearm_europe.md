@@ -13,7 +13,9 @@
 - Commission proposal: COM(2025) 120, 19 March 2025
 - Commissioner: Andrius Kubilius (Defence and Space)
 - DG: DG DEFIS
-- NATO context: New 5% GDP defence spending target by 2035 (up from 2%)
+- SAFE adopted: May 2025. 10 Member States have so far requested a SAFE loan (as of October 2025).
+- National escape clause: Council activated flexibility in EU fiscal rules at request of 15 Member States so far to increase defence spending.
+- NATO context: New 5% GDP defence spending target (The Hague 2025), minimum 3.5% for core defence needs + up to 1.5% for critical infrastructure, civil preparedness, resilience
 - Geopolitical driver: US strategic reorientation under Trump presidency, Russia-Ukraine war
 - European Council 19-20 March 2026: EU leaders discussed defence spending, competitiveness, and Ukraine. Von der Leyen/Costa joint statement. Politico: "EU leaders find themselves incapable of action despite wars so close to home." Metsola: "We must be an economic force to speak language of power."
 - Related: EDIS (COM(2024) 150), EDIP (Regulation (EU) 2025/2643, CELEX 32025R2643)

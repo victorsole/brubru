@@ -15,6 +15,10 @@
 - Responsible DG: DG JUST (Justice and Consumers)
 - Responsible Commissioner: Michael McGrath (Democracy, Justice, Rule of Law)
 - Key CJEU cases: C-507/18 (NH v Associazione Avvocatura LGBTI), C-356/21 (J.K. v TP S.A.)
+- Rule of Law Conditionality Regulation: Regulation (EU, Euratom) 2020/2092 (CELEX 32020R2092). Allows suspension of EU budget payments to Member States breaching rule of law. Applied to Hungary (frozen EUR 6.3 billion cohesion + EUR 4.6 billion RRF until conditions met).
+- Article 7 TEU procedure: Initiated against Hungary (September 2018, EP triggered) and Poland (December 2017, Commission triggered). Hungary: no progress in Council. Poland: closed after government change (2024).
+- Commission annual Rule of Law Report: COM(2025) annual cycle. LIBE committee adoption of 2025 Rule of Law report: 15 April 2026 (Rapporteur Konstantinos Arvanitis, GUE/NGL, Greece, procedure 2025/2239(INI)).
+- Hungary election (12 April 2026): Viktor Orban (Fidesz) defeated after 16 years. Peter Magyar (Tisza Party) won. Implications for EU decision-making: potential unblocking of Council unanimity votes (foreign policy, Article 7), reorientation toward rule of law compliance, unfreezing of EU funds conditioned on judicial independence reforms.
 
 ## Recent Developments (March 2026)
 

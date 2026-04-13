@@ -11,6 +11,8 @@
 - Cancer mission: Horizon Europe Mission on Cancer (EUR 378.2 million, 2021-2027)
 - EU Cancer Inequalities Registry: Launched 2022, tracks disparities across Member States
 - SANT Draft Report (April 2026): PE786.738v01-00, Rapporteur Vlad Vasile-Voiculescu (Renew, Romania)
+- SANT consideration of draft report: 14 April 2026 (Tuesday, SPAAK 1A2)
+- EPRS/ECTI study (April 2026): "Patient-centred health research and innovation in the EU: A preliminary exploratory study" -- case studies from Germany, Netherlands, Belgium on patient-centredness in R&I. Variable implementation across Member States. Ref: ECTI_STU(2026)786414
 
 Guide covering Europe's Beating Cancer Plan, EU cancer policy framework, screening programmes, pharmaceutical measures, and EP implementation review.
 

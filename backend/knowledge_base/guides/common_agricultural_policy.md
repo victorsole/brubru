@@ -17,6 +17,7 @@
 - Responsible DG: DG AGRI (Agriculture and Rural Development)
 - Responsible Commissioner: Christophe Hansen (Agriculture and Food)
 - EP lead committee: AGRI
+- EPRS/CASP study (April 2026): "Generational change in agriculture: Comparative analysis of businesses run by young farmers in selected EU countries" (Finland, Spain, Luxembourg, Poland). Examines EU and national measures supporting generational renewal under CAP 2023-2027. Ref: CASP_STU(2026)776007, At a Glance: CASP_ATA(2026)783504
 
 ## Overview
 

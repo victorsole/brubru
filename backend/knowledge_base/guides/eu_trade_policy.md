@@ -12,6 +12,8 @@
 - Anti-dumping (10 April 2026): Provisional duties on terephthalic acid from Korea and US (Reg. 2026/801, CELEX 32026R0801)
 - Steel safeguard (10 April 2026): Safeguard measure amendment on steel imports (Reg. 2026/846, CELEX 32026R0846)
 - Serbia (10 April 2026): EU poised to slash up to EUR 1.5 billion in funding over democracy and rule of law concerns
+- EPRS At a Glance (9 April 2026): "EU-US trade and investment relations" -- 2025 marked by frequent tariff changes on variety of goods; total trade value continued to grow; EU-US trade slightly higher than 2024. Ref: EPRS_ATA(2026)785679
+- Eurostat (10 April 2026): Trade in goods with China in 2025 (annual data release). EU trade in services supply worth EUR 5,933 billion in 2023
 
 ## Key Trade Agreements
 

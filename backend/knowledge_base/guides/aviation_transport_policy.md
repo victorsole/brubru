@@ -29,6 +29,7 @@
 - Free allowances phased out: 100% auctioning from 2026
 - ETS review for aviation upcoming: update to include maritime-aviation interactions
 - Procedure announced: Update of EU ETS for maritime, aviation and stationary installations
+- EPRS Briefing (8 April 2026): "CountEmissionsEU: Measuring emissions from transport services" -- greening of freight transport proposals (July 2023). Ref: EPRS_BRI(2023)757562
 
 ### CORSIA (Carbon Offsetting and Reduction Scheme for International Aviation)
 - ICAO-led global scheme for international aviation emissions
@@ -42,6 +43,8 @@
 - Key issues: compensation thresholds, extraordinary circumstances definition, connecting flights, tarmac delays
 - Industry position: A4E, ERA, IATA urge "realistic stance"; current EU261 costs airlines and passengers EUR 8.1 billion annually
 - Interplay with Regulation (EC) 2027/97 on air carrier liability
+- CONCILIATION stage (April 2026): COREPER I (15 April) preparing for conciliation on air passenger rights revision
+- Transport Council (21 April 2026): Informal videoconference of Transport Ministers; air passenger rights conciliation preparation; Middle East crisis transport sector impact
 
 ### Single European Sky 2+ (SES2+)
 - Procedure: 2013/0186(COD)

@@ -12,10 +12,19 @@
 - Key challenge: Only 18% of EU defence procurement is collaborative (target: 35% by 2030)
 - DTIB: Defence Technological and Industrial Base -- consolidation is a strategic priority
 - EDIS: European Defence Industrial Strategy (COM(2024) 150), adopted March 2024
-- Total EU defence spending: EUR 326 billion in 2025 (1.9% of GDP on average)
+- EU-27 combined defence budgets: EUR 218B (2021), EUR 343B (2024, 1.9% GDP), projected EUR 392B (2025, 2.1% GDP)
+- NATO The Hague 2025: new 5% GDP defence investment commitment (minimum 3.5% core defence). Reaching guideline requires extra EUR 254 billion, raising total to ~EUR 635 billion (EDA)
+- US comparison: EUR 845B (2024, 3.1% GDP) -- nearly 2.5x the combined EU total
+- Russia: officially EUR 107B but estimated EUR 234B in PPP terms (5.5% GDP, 2024). China: EUR 250B (officially)
+- MFF 2028-2034: Commission proposed **EUR 131 billion for defence and space** (Heading 2: Competitiveness Fund)
 - Fragmentation: 27 national defence markets, 178 weapon system types (vs. 30 in the US)
 - European Defence Agency (EDA): Capability planning and joint procurement coordination
-- Predecessor instruments: EDIRPA (Regulation (EU) 2023/2418), ASAP (Regulation (EU) 2023/1525)
+- Predecessor instruments: EDIRPA (Regulation (EU) 2023/2418, EUR 310M, 5 projects selected incl. Mistral), ASAP (Regulation (EU) 2023/1525, EUR 500M, ammunition production)
+- EDF mid-term: EUR 1.5B increase earmarked for EDIP. By March 2025, 5 annual EDF work programmes adopted, EUR 5.4B committed (EUR 6B incl. precursors EDIDP and PADR)
+- European Peace Facility (EPF): EUR 17B+ (outside EU budget, 2021-2027). EUR 6.1B mobilised for Ukraine (2022-2024). Total EU support for Ukrainian army: EUR 63.2B
+- Military mobility: EUR 1.7B (Connecting Europe Facility 2021-2027). 95 projects selected across 3 calls (2021, 2022, 2023)
+- EIB defence: revised lending policy, Security and Defence Office created. 3.5% of 2025 financing (~EUR 3.5B) for security/defence. Defence Equity Facility: EUR 175M (2024-2027) to mobilise ~EUR 500M in private funds for dual-use tech
+- EPRS At a Glance (October 2025): "EU defence funding" (PE 777.937, author Sebastian Clapp). Comprehensive overview of all EU defence funding instruments.
 - EUNAVFOR MED IRINI: EU military operation in the Mediterranean (established March 2020), enforces UN arms embargo on Libya, trains Libyan Coast Guard, disrupts human smuggling. New Force Commander appointed March 2026 (Decision (CFSP) 2026/768, CELEX 32026D0768).
 - AGILE Programme: COM(2026) 135, procedure 2026/0078(COD), EUR 115M (2027), Article 173 TFEU
 - AGILE: targets 20-30 projects, up to 100% funding, 4-month time-to-grant, 1-3 year deployment

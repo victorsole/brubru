@@ -20,6 +20,7 @@ Energy Council agenda: Oil reserves release, energy price containment, inflation
 Commission winter preparation (23 March 2026): Commission calls on EU countries to start preparing for winter amid Middle East energy disruption
 EU-Australia trade deal (24 March 2026): Trade diversification deal signed amid geopolitical instability (see `eu_australia_trade_agreement.md`)
 Post-ceasefire outlook: EU assessing long-term energy security implications, reviewing defence posture, monitoring Trump's Middle East strategy
+EP AFET + Iran delegation debate (16 April 2026): Discussion with advocates for a free Iran. Speakers: Shirin Ebadi (Sakharov and Nobel Peace Prize laureate, online), Mustafa Hijri (Democratic Party of Iranian Kurdistan), Saeed Bashirtash (7 Aban Front), Abdullah Mohtadi (Komala Party, online), Sanaz Behzadi (journalist, Open Society)
 
 ## EU Diplomatic Response
 

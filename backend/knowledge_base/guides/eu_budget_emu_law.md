@@ -13,6 +13,7 @@
 - InvestEU: EUR 26.2 billion EU guarantee, expected to mobilise EUR 372 billion -- Regulation (EU) 2021/523
 - Stability and Growth Pact: Reformed 2024 -- net expenditure benchmark, country-specific debt sustainability analysis -- Regulation (EU) 2024/1263
 - Discharge procedure: Article 319 TFEU (ECA report -> Council recommendation -> EP CONT -> EP plenary)
+- EPRS Briefing (9 April 2026): "Poland's National Recovery and Resilience Plan: Latest state of play" -- Polish NRRP is 3rd largest under RRF, EUR 54.7 billion (EUR 25.3B grants + EUR 29.4B loans, reduced from EUR 34.5B). Revised 4 times (latest amendment approved). REPowerEU chapter added December 2023. Ref: EPRS_BRI(2022)733665
 
 Guide covering the EU's budgetary framework, own resources system, financial governance, anti-fraud mechanisms, and key EMU instruments for Legal Service lawyers, DG ECFIN economists, and budget specialists.
 
