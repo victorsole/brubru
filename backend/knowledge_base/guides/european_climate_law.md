@@ -21,6 +21,7 @@ Responsible DG: DG CLIMA
 ESABCC recommendation: 90-95% net reduction by 2040
 ETS emissions trend (10 April 2026): DG CLIMA confirms EU ETS sustains downward trend in covered emissions. Supports trajectory toward 2030 and 2040 targets.
 Energy Union Task Force (10 April 2026): Calls for enhanced EU-wide coordination to safeguard energy security
+EPRS Briefing (13 April 2026): "The First Conference on Transitioning Away from Fossil Fuels - 24-29 April 2026, Santa Marta, Colombia" -- follow-up to COP28 UAE Consensus, EU delegation preparatory position, fossil fuel phase-down roadmaps, finance for developing countries. Ref: EPRS_UNK_5ff48ae0d309
 
 ## Original Climate Law (2021)
 

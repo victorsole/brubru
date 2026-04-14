@@ -9,6 +9,7 @@
 - Western Balkans Investment Framework (WBIF): EUR 171 million support package (January 2026); EUR 463.7M committed in 2024
 - Serbia funding threat (10 April 2026): EU poised to slash up to EUR 1.5 billion in funding over democracy fears, judicial reforms stalling, Russia relations
 - Montenegro (10 April 2026): PM says Montenegro wants to join EU for security reasons amid geopolitical instability
+- Political momentum (Monday 14 April 2026, Politico): EU enlargement is losing political support across capitals as governments increasingly fear populist backlash from the cost (MFF rebalancing, agricultural transfers) and migration concerns of admitting Ukraine, Moldova, Western Balkans. Several governments (notably France, Netherlands, Austria) signalled reluctance on accession timelines. Risk: enlargement promise to candidates becomes hollow. Counterbalance: Hungary regime change (Magyar government, election 12 April 2026) lifts veto blockade on Ukraine cluster opening. Source: https://www.politico.eu/article/fear-populists-pushing-governments-oppose-expanding-eu/
 - EPRS Briefing (13 April 2026): "Ukraine's veterans policy" -- reintegration of war veterans into civilian life, veterans policy strategy for 2030, challenges (education, healthcare, psychological assistance, housing, occupied territories). Ref: EPRS_BRI(2026)785703
 - IPARD III: pre-accession rural development instrument, covers agricultural holdings, processing, organic farming, LEADER, rural infrastructure
 - IPA III climate mainstreaming: 26.2% of budget; biodiversity: 3.7%

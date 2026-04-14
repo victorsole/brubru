@@ -7,6 +7,9 @@
 - Article 102: Prohibits abuse of dominant position (predatory pricing, tying, refusal to supply)
 - Procedural framework: Regulation (EC) 1/2003
 - Lead DG: DG Competition (DG COMP)
+- Director-General of DG COMP (from Monday 13 April 2026): **Anthony Whelan** (Irish), appointed by Commission. Seasoned Irish official steeped in tech policy. Previously: adviser to President von der Leyen on digital and competition issues; before that, head of DG COMP State Aid department. Replaces Olivier Guersent (departed summer 2025). Public commitment: "competition enforcement needs to be even-handed, fact-based, constrained by whatever is the legal framework of rules that you're enforcing"; will not be influenced by "noise" around Big Tech cases (Google, Meta, Apple, X). Proximity to von der Leyen signals possible alignment with President's push to leverage competition policy for EU scale-up and competitiveness. Source: FT 13 April 2026 (Barbara Moens).
+- Responsible Commissioner: Teresa Ribera (EVP for Clean, Just and Competitive Transition -- also Competition; Spanish socialist, PSOE/S&D). Reportedly had preferred a woman DG COMP but "warmly welcomed" Whelan, citing his "deep experience in European policymaking and a strong understanding of how our rules serve citizens, innovation and fair markets".
+- Merger guidelines revision (ongoing April 2026): Commission revising EU merger guidelines; political tension between von der Leyen (scale/competitiveness-favouring) and Ribera (single-market-integration-favouring, opposes using competitiveness as pretext for concentration).
 - Max fine: 10% of worldwide annual turnover
 - Leniency: Full immunity for first applicant; 20-50% reduction for subsequent cooperators
 - Settlement discount: 10% fine reduction
@@ -14,6 +17,7 @@
 - Private enforcement: Damages Directive 2014/104/EU
 - Judicial review: General Court (full review + unlimited jurisdiction on fines), Court of Justice (points of law)
 - Largest cartel fine: EUR 2.93 billion (truck cartel, 2016)
+- DG COMP (13 April 2026): Commission carried out unannounced antitrust inspections at premises of companies active in the chocolate confectionery sector in several Member States. Concerns: possible violation of Article 101 TFEU (cartel prohibition) on market allocation or price coordination. Source: https://ec.europa.eu/commission/presscorner
 
 Guide to EU antitrust enforcement by DG Competition, covering Articles 101 and 102 TFEU, procedural rules under Regulation 1/2003, and the ECN+ Directive cooperation framework.
 

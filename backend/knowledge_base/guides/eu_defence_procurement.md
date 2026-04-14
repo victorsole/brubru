@@ -29,6 +29,7 @@
 - AGILE Programme: COM(2026) 135, procedure 2026/0078(COD), EUR 115M (2027), Article 173 TFEU
 - AGILE: targets 20-30 projects, up to 100% funding, 4-month time-to-grant, 1-3 year deployment
 - Related guides: safe_rearm_europe, eu_common_military_list, mff_2028_2034
+- EP AFCO Draft Report (14 April 2026): "Institutional aspects of the Common European Defence Union" (2025/2212(INI)) -- INI procedure examining treaty basis, qualified majority voting extension, Permanent Structured Cooperation (PESCO) reform, Defence Commissioner role evolution. Source: https://www.europarl.europa.eu/committees/en/afco
 
 ## Overview
 

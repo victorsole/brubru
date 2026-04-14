@@ -221,3 +221,108 @@ async def get_progress_summary(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to generate progress summary: {str(e)}"
         )
+
+
+@router.get("/{celex}/recital-article-map")
+def get_recital_article_map(
+    celex: str,
+    force_recompute: bool = Query(False, description="Recompute instead of reading cached map"),
+    db: Session = Depends(get_db),
+):
+    """
+    Return the recital-to-article map for a given CELEX.
+
+    Response shape:
+        {
+          "celex": "32016R0679",
+          "map": {
+            "Article 3": [
+              {"recital_number": "27", "score": 0.41, "snippet": "..."},
+              ...
+            ],
+            ...
+          }
+        }
+
+    The map is computed on first access (from the local Formex archive) and
+    cached in `eu_laws.extra_metadata.recital_article_map`. Pass
+    `force_recompute=true` to rebuild.
+
+    Uses TF-IDF cosine similarity between article text and recital text.
+    See `services/parsers/recital_article_linker.py`.
+    """
+    from services.parsers.recital_article_store import get_or_compute_map
+
+    mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
+    if mapping is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"CELEX {celex} not in eu_laws or Formex XML unavailable",
+        )
+    return {"celex": celex, "map": mapping}
+
+
+@router.get("/{celex}/defined-terms")
+def get_defined_terms(
+    celex: str,
+    force_recompute: bool = Query(False),
+    db: Session = Depends(get_db),
+):
+    """
+    Return the Article 3/4-style definitions dict for a CELEX.
+
+    Response shape:
+        {
+          "celex": "32022R2065",
+          "terms": {
+            "information society service": {
+              "term": "information society service",
+              "definition": "...",
+              "article": "Article 3",
+              "point": "a"
+            },
+            ...
+          }
+        }
+
+    Supports hover-definition UI in Amendator, Catalan pages, EUR-Lex viewer.
+    """
+    from services.parsers.definition_store import get_or_compute_map as _get_defs
+
+    mapping = _get_defs(db, celex, force_recompute=force_recompute)
+    if mapping is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"CELEX {celex} not in eu_laws or Formex XML unavailable",
+        )
+    return {"celex": celex, "terms": mapping}
+
+
+class ResolveRefsRequest(BaseModel):
+    text: str
+    annotate_html: bool = False
+
+
+@router.post("/resolve-references")
+def resolve_cross_references(payload: ResolveRefsRequest):
+    """
+    Resolve inline EU legal citations in the submitted text.
+
+    Body:
+        {"text": "See Article 7 of Regulation (EU) 2024/1234 and Directive 2011/93/EU.",
+         "annotate_html": false}
+
+    Response (annotate_html=false):
+        {"refs": [{"raw": "...", "celex": "...", "url": "...", "article": "7", ...}, ...]}
+
+    Response (annotate_html=true):
+        {"html": "<...>See <a href=... data-celex=...>Article 7 of Regulation (EU) 2024/1234</a>..."}
+    """
+    from services.parsers.cross_reference_resolver import (
+        resolve_references_json,
+        annotate_html,
+    )
+
+    if payload.annotate_html:
+        return {"html": annotate_html(payload.text)}
+    return {"refs": resolve_references_json(payload.text)}

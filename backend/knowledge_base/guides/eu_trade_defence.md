@@ -15,6 +15,7 @@
 - Active measures: ~150 anti-dumping + ~25 countervailing duty measures (approximate, 2025)
 - New (9 April 2026): Provisional anti-dumping on terephthalic acid from Korea/US (Reg. 2026/801, CELEX 32026R0801)
 - New (9 April 2026): Steel safeguard amendment (Reg. 2026/846, CELEX 32026R0846)
+- New (Monday 14 April 2026): Political agreement reached between Council, Parliament and Commission on the new EU steel measure to protect EU steel market from global overcapacity. Replaces existing safeguard expiring 30 June 2026. Tighter tariff-rate quota (TRQ) regime, lower import ceilings, higher out-of-quota duties (proposed up to 50% vs current 25%), country-specific quotas for top suppliers, expanded coverage of downstream products. Lead Commissioner: Maros Sefcovic. EP rapporteur: INTA committee. Sources: https://policy.trade.ec.europa.eu/news/commission-welcomes-political-agreement-new-eu-steel-measure-2026-04-14_en and https://www.europarl.europa.eu/news/en/press-room/20260413IPR40607/new-measures-to-protect-eu-steel-market-from-global-overcapacity
 - Top targets: China (~50% of measures), Russia, India, Turkey, Indonesia
 - Key sectors: steel, aluminium, chemicals, ceramics, solar panels, electric vehicles
 - WTO compliance: All EU TDI measures must comply with WTO Anti-Dumping Agreement, SCM Agreement, Safeguards Agreement

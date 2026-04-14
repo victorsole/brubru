@@ -145,6 +145,230 @@
       "type": "Directive",
       "year": 2024,
       "full_name": "Tax Dispute Resolution Directive"
+    },
+    "MiFID II": {
+      "celex": "32014L0065",
+      "full_title": "Directive 2014/65/EU on markets in financial instruments",
+      "type": "Directive",
+      "year": 2014,
+      "full_name": "Markets in Financial Instruments Directive II"
+    },
+    "MiFIR": {
+      "celex": "32014R0600",
+      "full_title": "Regulation (EU) No 600/2014 on markets in financial instruments",
+      "type": "Regulation",
+      "year": 2014,
+      "full_name": "Markets in Financial Instruments Regulation"
+    },
+    "Solvency II": {
+      "celex": "32009L0138",
+      "full_title": "Directive 2009/138/EC on the taking-up and pursuit of the business of Insurance and Reinsurance",
+      "type": "Directive",
+      "year": 2009,
+      "full_name": "Solvency II Directive"
+    },
+    "CRR": {
+      "celex": "32013R0575",
+      "full_title": "Regulation (EU) No 575/2013 on prudential requirements for credit institutions and investment firms (Capital Requirements Regulation)",
+      "type": "Regulation",
+      "year": 2013,
+      "full_name": "Capital Requirements Regulation"
+    },
+    "CRR3": {
+      "celex": "32024R1623",
+      "full_title": "Regulation (EU) 2024/1623 amending Regulation (EU) No 575/2013 as regards requirements for credit risk, credit valuation adjustment risk, operational risk, market risk and the output floor",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Capital Requirements Regulation III"
+    },
+    "CRD": {
+      "celex": "32013L0036",
+      "full_title": "Directive 2013/36/EU on access to the activity of credit institutions and the prudential supervision of credit institutions and investment firms (Capital Requirements Directive IV)",
+      "type": "Directive",
+      "year": 2013,
+      "full_name": "Capital Requirements Directive IV"
+    },
+    "CRD6": {
+      "celex": "32024L1619",
+      "full_title": "Directive (EU) 2024/1619 amending Directive 2013/36/EU as regards supervisory powers, sanctions, third-country branches, and environmental, social and governance risks",
+      "type": "Directive",
+      "year": 2024,
+      "full_name": "Capital Requirements Directive VI"
+    },
+    "BRRD": {
+      "celex": "32014L0059",
+      "full_title": "Directive 2014/59/EU establishing a framework for the recovery and resolution of credit institutions and investment firms",
+      "type": "Directive",
+      "year": 2014,
+      "full_name": "Bank Recovery and Resolution Directive"
+    },
+    "SRMR": {
+      "celex": "32014R0806",
+      "full_title": "Regulation (EU) No 806/2014 establishing uniform rules and a uniform procedure for the resolution of credit institutions and certain investment firms in the framework of a Single Resolution Mechanism",
+      "type": "Regulation",
+      "year": 2014,
+      "full_name": "Single Resolution Mechanism Regulation"
+    },
+    "NPL Directive": {
+      "celex": "32021L2167",
+      "full_title": "Directive (EU) 2021/2167 on credit servicers and credit purchasers",
+      "type": "Directive",
+      "year": 2021,
+      "full_name": "Non-Performing Loans Directive"
+    },
+    "AMLR": {
+      "celex": "32024R1624",
+      "full_title": "Regulation (EU) 2024/1624 on the prevention of the use of the financial system for the purposes of money laundering or terrorist financing",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Anti-Money Laundering Regulation"
+    },
+    "AMLD6": {
+      "celex": "32024L1640",
+      "full_title": "Directive (EU) 2024/1640 on the mechanisms to be put in place by Member States for the prevention of the use of the financial system for the purposes of money laundering or terrorist financing",
+      "type": "Directive",
+      "year": 2024,
+      "full_name": "Sixth Anti-Money Laundering Directive"
+    },
+    "AMLAR": {
+      "celex": "32024R1620",
+      "full_title": "Regulation (EU) 2024/1620 establishing the Authority for Anti-Money Laundering and Countering the Financing of Terrorism",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Anti-Money Laundering Authority Regulation"
+    },
+    "EUDI Wallet Regulation": {
+      "celex": "32024R1183",
+      "full_title": "Regulation (EU) 2024/1183 establishing the European Digital Identity Framework",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "European Digital Identity Wallet Regulation"
+    },
+    "eIDAS 2": {
+      "celex": "32024R1183",
+      "full_title": "Regulation (EU) 2024/1183 establishing the European Digital Identity Framework",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "eIDAS 2 Regulation"
+    },
+    "NIS2 Directive": {
+      "celex": "32022L2555",
+      "full_title": "Directive (EU) 2022/2555 on measures for a high common level of cybersecurity across the Union",
+      "type": "Directive",
+      "year": 2022,
+      "full_name": "NIS 2 Directive"
+    },
+    "CBAM Regulation": {
+      "celex": "32023R0956",
+      "full_title": "Regulation (EU) 2023/956 establishing a carbon border adjustment mechanism",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "Carbon Border Adjustment Mechanism Regulation"
+    },
+    "Batteries Regulation": {
+      "celex": "32023R1542",
+      "full_title": "Regulation (EU) 2023/1542 concerning batteries and waste batteries",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "Batteries Regulation"
+    },
+    "Chips Act": {
+      "celex": "32023R1781",
+      "full_title": "Regulation (EU) 2023/1781 establishing a framework of measures for strengthening Europe's semiconductor ecosystem",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "European Chips Act"
+    },
+    "Deforestation Regulation": {
+      "celex": "32023R1115",
+      "full_title": "Regulation (EU) 2023/1115 on the making available on the Union market and the export from the Union of certain commodities and products associated with deforestation and forest degradation",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "EU Deforestation Regulation"
+    },
+    "EUDR": {
+      "celex": "32023R1115",
+      "full_title": "Regulation (EU) 2023/1115 on deforestation-free products",
+      "type": "Regulation",
+      "year": 2023,
+      "full_name": "EU Deforestation Regulation"
+    },
+    "Critical Raw Materials Act": {
+      "celex": "32024R1252",
+      "full_title": "Regulation (EU) 2024/1252 establishing a framework for ensuring a secure and sustainable supply of critical raw materials",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Critical Raw Materials Act"
+    },
+    "CRMA": {
+      "celex": "32024R1252",
+      "full_title": "Regulation (EU) 2024/1252 on critical raw materials",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Critical Raw Materials Act"
+    },
+    "NZIA": {
+      "celex": "32024R1735",
+      "full_title": "Regulation (EU) 2024/1735 establishing a framework of measures for strengthening Europe's net-zero technology manufacturing ecosystem",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Net-Zero Industry Act"
+    },
+    "Net-Zero Industry Act": {
+      "celex": "32024R1735",
+      "full_title": "Regulation (EU) 2024/1735 on net-zero technology manufacturing",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Net-Zero Industry Act"
+    },
+    "RRF Regulation": {
+      "celex": "32021R0241",
+      "full_title": "Regulation (EU) 2021/241 establishing the Recovery and Resilience Facility",
+      "type": "Regulation",
+      "year": 2021,
+      "full_name": "Recovery and Resilience Facility Regulation"
+    },
+    "Cyber Resilience Act": {
+      "celex": "32024R2847",
+      "full_title": "Regulation (EU) 2024/2847 on horizontal cybersecurity requirements for products with digital elements",
+      "type": "Regulation",
+      "year": 2024,
+      "full_name": "Cyber Resilience Act"
+    },
+    "PNR Directive": {
+      "celex": "32016L0681",
+      "full_title": "Directive (EU) 2016/681 on the use of passenger name record (PNR) data",
+      "type": "Directive",
+      "year": 2016,
+      "full_name": "Passenger Name Record Directive"
+    },
+    "CSAM Regulation": {
+      "celex": "52022PC0209",
+      "full_title": "Proposal for a Regulation laying down rules to prevent and combat child sexual abuse (COM(2022) 209)",
+      "type": "Proposal",
+      "year": 2022,
+      "full_name": "Child Sexual Abuse Material Regulation (proposal)"
+    },
+    "CSAM Derogation": {
+      "celex": "32021R1232",
+      "full_title": "Regulation (EU) 2021/1232 on a temporary derogation from certain provisions of Directive 2002/58/EC for the purpose of combating online child sexual abuse",
+      "type": "Regulation",
+      "year": 2021,
+      "full_name": "CSAM Temporary Derogation"
+    },
+    "Industrial Accelerator Act": {
+      "celex": "52026PC0100",
+      "full_title": "Proposal for a Regulation: Industrial Accelerator Act (COM(2026) 100)",
+      "type": "Proposal",
+      "year": 2026,
+      "full_name": "Industrial Accelerator Act"
+    },
+    "EU Inc": {
+      "celex": "52026PC0321",
+      "full_title": "Proposal for a Regulation: 28th Regime Corporate Legal Framework (COM(2026) 321)",
+      "type": "Proposal",
+      "year": 2026,
+      "full_name": "EU Inc (28th Regime Corporate Legal Framework)"
     }
   }
 }

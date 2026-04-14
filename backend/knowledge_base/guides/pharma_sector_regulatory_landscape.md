@@ -15,6 +15,8 @@
 - International cooperation: GMP MRAs with US, Canada, Japan, Australia, NZ, Switzerland; ICH founding member; WHO Listed Authority
 - Critical Medicines Act: proposed, aims to secure EU supply of essential medicines (reduce China/India API dependency)
 - Tariff risk: US tariff policy under Trump II may extend to pharmaceuticals (historically exempt)
+- EPRS Study (10 April 2026): "Patient-centred health research and innovation in the EU - A preliminary exploratory study" -- scoping study for SANT committee, patient participation in clinical trials and HTA decisions, EHDS interaction, rare diseases. Ref: EPRS_UNK_9897131bb03c
+- Eurostat (13 April 2026): EU pharma products trade surplus reached EUR 221 billion in 2024, driven by Ireland, Belgium, Germany manufacturing hubs; confirms strategic importance of pharma sector.
 
 ## Regulatory Sandbox (2026 Pharma Package)
 

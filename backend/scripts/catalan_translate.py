@@ -836,6 +836,17 @@ def generate_html(translated: dict, celex: str) -> str:
         clean = re.sub(r'^\s*\(\d+\)\s*', '', recital)
         recitals_html += f'<p class="recital">({i}) {clean}</p>\n'
 
+    # Cross-reference annotator (Option C): wraps inline citations like
+    # "Reglament (UE) 2024/1234" in clickable <a> to EUR-Lex. Safe if the
+    # module is absent or fails at runtime -- fall back to raw text.
+    try:
+        import sys as _sys
+        from pathlib import Path as _Path
+        _sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))
+        from services.parsers.cross_reference_resolver import annotate_html as _annotate
+    except Exception:  # pragma: no cover
+        _annotate = lambda x: x  # noqa: E731
+
     # Build articles HTML
     articles_html = ''
     for art in translated['articles']:
@@ -844,7 +855,7 @@ def generate_html(translated: dict, celex: str) -> str:
         if art_title:
             articles_html += f'  <h3 class="article-title">{art_title}</h3>\n'
         for para in art['paragraphs']:
-            articles_html += f'  <p class="article-text">{para}</p>\n'
+            articles_html += f'  <p class="article-text">{_annotate(para)}</p>\n'
         articles_html += '</div>\n'
 
     eurlex_url = f'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}'
@@ -895,6 +906,8 @@ def generate_html(translated: dict, celex: str) -> str:
     .article {{ margin-bottom: 1.5rem; padding: 1rem 0; border-top: 1px solid var(--color-border); }}
     .article-title {{ font-size: 1.1rem; font-weight: 700; color: var(--color-blue); margin-bottom: 0.5rem; }}
     .article-text {{ margin-bottom: 0.5rem; text-align: justify; }}
+    .eur-lex-ref {{ color: var(--color-blue); text-decoration: none; border-bottom: 1px dashed var(--color-blue); }}
+    .eur-lex-ref:hover {{ background: rgba(6, 147, 227, 0.08); border-bottom-style: solid; }}
 
     .final-block {{ margin-top: 2rem; padding-top: 1rem; border-top: 2px solid var(--color-border); font-style: italic; color: var(--color-secondary); }}
 

@@ -14,6 +14,7 @@
 - Monitoring programme: Commission Implementing Regulation (EU) 2020/585 (multiannual control programme)
 - EU Pesticides Database: food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en
 - Scale: 100,000+ food samples analysed annually across 600+ pesticides
+- DG SANTE (13 April 2026): Open consultation on genetically modified oilseed rape MS11 for authorisation as food and feed under Regulation (EC) 1829/2003 (CELEX: 32003R1829). Consultation runs via EFSA assessment; Member States scrutiny in SCOPAFF. Source: https://food.ec.europa.eu/plants/genetically-modified-organisms/public-consultations_en
 
 ## Overview
 

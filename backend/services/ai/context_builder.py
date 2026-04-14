@@ -4240,6 +4240,121 @@ class ContextBuilder:
             logger.error(f"Failed to fetch EU Calendar events: {str(e)}")
             return []
 
+    def _resolve_alias_celex_pairs(
+        self, query: str, existing: List[Dict[str, Any]]
+    ) -> List[tuple[str, Any]]:
+        """
+        If the query mentions a law by acronym/nickname (GDPR, DSA, AI Act,
+        Chips Act, ...) return the resolved (celex, alias) pairs that are not
+        already covered by `existing` laws.
+        """
+        try:
+            from services.parsers.law_alias_resolver import find_aliases_with_celex
+        except Exception:
+            return []
+        covered = {(l.get('celex') or '').upper() for l in existing}
+        out = []
+        for alias, celex in find_aliases_with_celex(query).items():
+            if celex and celex.upper() not in covered:
+                out.append((celex, alias))
+                covered.add(celex.upper())
+        return out
+
+    def _fetch_recital_article_links(
+        self,
+        db,
+        laws: List[Dict[str, Any]],
+        query: str,
+    ) -> Dict[str, List[Dict[str, Any]]]:
+        """
+        For each law in `laws`, if the query mentions one or more articles,
+        return TF-IDF-linked recitals for those articles.
+
+        Returns a dict keyed by CELEX with entries:
+            {
+              celex: [
+                {"article": "Article 12", "recitals": [{number, score, snippet}, ...]},
+                ...
+              ]
+            }
+
+        The recital-article map is computed on demand from the local Formex
+        archive and cached in eu_laws.extra_metadata (see
+        services/parsers/recital_article_store.py).
+        """
+        if not laws:
+            return {}
+
+        import re as _re
+
+        # Pull article numbers from the query: supports "Article 12", "Art. 7(3)",
+        # "articles 3 and 4", "article 3" (case-insensitive). Capture the integer.
+        article_numbers = set()
+        for m in _re.finditer(r"\b(?:article|art\.?)\s*(\d{1,3})", query, _re.IGNORECASE):
+            article_numbers.add(m.group(1))
+        if not article_numbers:
+            return {}
+
+        from services.parsers.recital_article_store import get_or_compute_map
+
+        out: Dict[str, List[Dict[str, Any]]] = {}
+        for law_dict in laws:
+            celex = law_dict.get('celex')
+            if not celex:
+                continue
+            mapping = get_or_compute_map(db, celex)
+            if not mapping:
+                continue
+            rows = []
+            for num in article_numbers:
+                for key in (f"Article {num}", f"Article {num.zfill(2)}", f"Article {num.zfill(3)}", num):
+                    if key in mapping and mapping[key]:
+                        rows.append({"article": f"Article {num}", "recitals": mapping[key][:3]})
+                        break
+            if rows:
+                out[celex] = rows
+        return out
+
+    def _fetch_defined_terms_matches(
+        self,
+        db,
+        laws: List[Dict[str, Any]],
+        query: str,
+    ) -> Dict[str, List[Dict[str, Any]]]:
+        """
+        For each law in `laws`, return any defined terms (from Article 3/4 of
+        that law) whose term appears in the query. Up to 5 per law.
+
+        Uses the on-demand Formex-parsed store (see
+        services/parsers/definition_store.py).
+        """
+        if not laws:
+            return {}
+        from services.parsers.definition_store import get_or_compute_map as _get_defs
+
+        q_lower = query.lower()
+        out: Dict[str, List[Dict[str, Any]]] = {}
+        for law_dict in laws:
+            celex = law_dict.get('celex')
+            if not celex:
+                continue
+            terms = _get_defs(db, celex)
+            if not terms:
+                continue
+            hits: List[Dict[str, Any]] = []
+            for term_key, entry in terms.items():
+                # term_key is already lowercase per extract_definitions_map
+                # Require word-boundary-ish hit: at least 4 characters and present as substring
+                if len(term_key) < 4:
+                    continue
+                if term_key in q_lower:
+                    hits.append(entry)
+                    if len(hits) >= 5:
+                        break
+            if hits:
+                out[celex] = hits
+        return out
+
     async def _fetch_eu_laws_from_database(
         self,
         query: str,
@@ -4288,6 +4403,60 @@ class ContextBuilder:
                                 'source': 'local_database',
                             })
                             logger.debug(f"Found law in local database: {celex}")
+
+                # Priority 1b: resolve aliases/nicknames in the free-text query
+                # (GDPR, DSA, AI Act, Chips Act, CBAM, ...) to their CELEX and
+                # load the same way. This makes recital-article and defined-term
+                # enrichment below work even when the user never types a CELEX.
+                try:
+                    alias_pairs = self._resolve_alias_celex_pairs(query, laws)
+                    for alias_celex, alias_name in alias_pairs[:3]:
+                        law = db.query(EULaw).filter(EULaw.celex == alias_celex).first()
+                        if law:
+                            laws.append({
+                                'celex': law.celex,
+                                'title': law.title,
+                                'doc_type': law.doc_type_normalized or law.doc_type,
+                                'date': law.date.isoformat() if law.date else None,
+                                'oj_reference': law.oj_reference,
+                                'policy_area': law.policy_area,
+                                'legal_basis': law.legal_basis or [],
+                                'citations': law.citations or [],
+                                'source': f'local_database (via alias "{alias_name}")',
+                                'resolved_alias': alias_name,
+                            })
+                            logger.debug(f"Found law in local database via alias {alias_name} -> {alias_celex}")
+                except Exception as e:  # pragma: no cover
+                    logger.debug(f"alias resolution skipped: {e}")
+
+                # Recital-article enrichment: if the query mentions "Article N",
+                # fetch the TF-IDF-linked recitals for that article from
+                # extra_metadata.recital_article_map (computed on demand).
+                try:
+                    recital_article_ctx = self._fetch_recital_article_links(
+                        db=db, laws=laws, query=query
+                    )
+                    if recital_article_ctx:
+                        for law_dict in laws:
+                            key = law_dict['celex']
+                            if key in recital_article_ctx:
+                                law_dict['recital_article_links'] = recital_article_ctx[key]
+                except Exception as e:  # pragma: no cover
+                    logger.debug(f"recital_article enrichment skipped: {e}")
+
+                # Defined-terms enrichment: surface any Article 3/4 definitions
+                # whose term appears in the query.
+                try:
+                    defined_terms_ctx = self._fetch_defined_terms_matches(
+                        db=db, laws=laws, query=query
+                    )
+                    if defined_terms_ctx:
+                        for law_dict in laws:
+                            key = law_dict['celex']
+                            if key in defined_terms_ctx:
+                                law_dict['defined_terms'] = defined_terms_ctx[key]
+                except Exception as e:  # pragma: no cover
+                    logger.debug(f"defined_terms enrichment skipped: {e}")
 
                 # Priority 2: TSVECTOR full-text search (relevance-ranked)
                 if not laws:
@@ -5703,6 +5872,27 @@ class ContextBuilder:
 
                 if celex and celex != 'N/A':
                     sections.append(f"  EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}")
+
+                # Recital-article linking (TF-IDF; only appears when user mentions a specific article)
+                ral = law.get('recital_article_links')
+                if ral:
+                    sections.append("  Recital-to-article links (TF-IDF cosine; cite in 'Justification' when drafting amendments):")
+                    for entry in ral:
+                        recital_cites = ", ".join(
+                            f"recital {r['recital_number']} (score {r['score']:.2f}): {r['snippet']}"
+                            for r in entry.get('recitals', [])[:3]
+                        )
+                        sections.append(f"    {entry['article']} -> {recital_cites}")
+
+                # Defined terms (Article 3/4 definitions whose term appears in the query)
+                dts = law.get('defined_terms')
+                if dts:
+                    sections.append("  Statutory definitions (from this law -- use them verbatim when answering):")
+                    for entry in dts:
+                        pt = f"({entry['point']})" if entry.get('point') else ""
+                        sections.append(
+                            f"    {entry['article']}{pt} '{entry['term']}' means: {entry['definition'][:300]}"
+                        )
 
                 sections.append("")
 

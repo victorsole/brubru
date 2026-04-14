@@ -19,6 +19,8 @@
 - EPRS study (April 2026): "Feasibility of an optional 28th EU tax regime to support competitiveness" -- proposes framework parallel to those of 27 MS. Commissioned by FISC committee.
 - Press release: IP/26/614 | Q&A: QANDA/26/615
 - Official page: https://commission.europa.eu/eu-inc-new-harmonised-corporate-legal-regime_en
+- EPRS At a Glance (10 April 2026): "Feasibility of a 28th Tax Regime and Its Potential to Support EU Competitiveness" -- summary findings of EP-commissioned study on optional 28th tax regime for cross-border companies, potential EU-wide single tax return and harmonised corporate tax base. Ref: EPRS_UNK_995ea2ae2405
+- EPRS Study (10 April 2026): "Feasibility of a 28th Tax Regime and Its Potential to Support EU Competitiveness" -- full study for ECON/FISC committees, scenarios for optional opt-in regime, interaction with BEFIT, member state fiscal sovereignty safeguards. Ref: EPRS_UNK_dec9f136d16b
 
 ## Key Provisions
 

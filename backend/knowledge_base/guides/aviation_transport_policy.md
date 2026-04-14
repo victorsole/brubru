@@ -11,6 +11,7 @@
 - CORSIA: Carbon Offsetting and Reduction Scheme for International Aviation (ICAO-led)
 - Industry bodies: A4E (Airlines for Europe), ERA (European Regions Airline Association), IATA, ACI Europe (airports)
 - Related guides: eu_energy_policy, eu_taxonomy_sustainable_finance, eu_trade_policy
+- EPRS Briefing (8 April 2026): "CountEmissionsEU: Measuring emissions from transport services" -- analysis of CountEmissionsEU proposal (COM(2023)441), harmonised methodology for GHG emissions measurement across passenger and freight transport services, link to ISO 14083, implementation challenges for SMEs. Ref: EPRS_UNK_c5031a47b85c
 
 ## Active and Upcoming Legislative Files
 

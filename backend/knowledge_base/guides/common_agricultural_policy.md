@@ -18,6 +18,9 @@
 - Responsible Commissioner: Christophe Hansen (Agriculture and Food)
 - EP lead committee: AGRI
 - EPRS/CASP study (April 2026): "Generational change in agriculture: Comparative analysis of businesses run by young farmers in selected EU countries" (Finland, Spain, Luxembourg, Poland). Examines EU and national measures supporting generational renewal under CAP 2023-2027. Ref: CASP_STU(2026)776007, At a Glance: CASP_ATA(2026)783504
+- EPRS At a Glance (9 April 2026): "Generational change in agriculture: Comparative analysis of businesses run by young farmers" -- findings: young farmer share declining in EU 15, stable in Central/Eastern; CAP young farmer payment effectiveness limited by land access, succession tax. Ref: EPRS_UNK_a5370145dc03
+- EPRS Study (9 April 2026): "Research for the AGRI Committee - Generational change in agriculture: Comparative analysis" -- full study for AGRI committee, recommendations on CAP post-2027 targeted support, Member State best practices (France, Ireland, Netherlands). Ref: EPRS_UNK_4009f4d0c405
+- DG AGRI (13 April 2026): EU agri-food trade posted EUR 3.2 billion surplus in January 2026, exports up 6% year-on-year (dairy, wine, beverages); imports of tropical products and feedingstuffs remained high.
 
 ## Overview
 

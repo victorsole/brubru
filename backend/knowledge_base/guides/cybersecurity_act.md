@@ -19,6 +19,8 @@
 - Current status: Preparatory phase in Parliament (March 2026)
 - EPRS At a Glance (8 April 2026): "Ransomware resilience: Strategic targets and growing trends" -- ransomware remained a major cybersecurity threat in the EU in 2025. Ref: EPRS_ATA(2026)785699
 - UN Cybercrime Convention: LIBE consent vote 15 April 2026 (see un_cybercrime_convention guide)
+- EPRS Briefing (13 April 2026): "Understanding the dark web" -- overview of Tor/I2P networks, criminal markets, law enforcement operations (Operation SpecTor, Operation Cronos), EU policy gaps. Ref: EPRS_UNK_a0c8fc5a2567
+- EPRS At a Glance (8 April 2026): "Ransomware resilience: Strategic targets and growing trends" -- ransomware incidents up 17% in 2025, healthcare/education/public administration most targeted, NIS2 implementation status critical. Ref: EPRS_UNK_c9da880b8158
 
 ## Key Documents
 - [Regulation (EU) 2019/881: Cybersecurity Act (original)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0881)

@@ -17,6 +17,8 @@
 - EVP Fitto (April 2026): Discussions with Belgian government/regions and Austria on future cohesion policy
 - REGI committee (14-15 April 2026): Exchange of views on future of cross-border cooperation within post-2027 MFF with Joris Bengevoord (President, AEBR; Chair, Brabant Delta Water Board). Study presentation: "Flexibility and Simplification in Cohesion Policy under the 2028-2034 MFF" by Policy Department for Regional Development, Agriculture and Fisheries
 - NRP Fund and ERDF/Interreg/Cohesion Fund: legislative proposals under scrutiny in REGI committee
+- Mid-Term Review (14 April 2026): Commission published results of the Mid-Term Review of Cohesion Policy 2021-2027. Key findings: absorption slower than previous MFF, STEP flexibility uptake modest, climate mainstreaming 32% (below 37% target in some programmes), need for further simplification. Source: https://ec.europa.eu/regional_policy/newsroom/
+- Public Sector Loan Facility (14 April 2026): Results of the first PSLF call for proposals under the Just Transition Mechanism: 50+ projects selected across coal-regions in transition, total EUR 1.5B grant-loan blend with EIB. Supports decarbonisation infrastructure in Silesia, Czechia, Western Romania, Asturias, Jiu Valley. Source: https://ec.europa.eu/regional_policy
 
 Guide for Joint Audit Directorate for Cohesion (DAC) auditors and shared management control officers covering the audit framework, error rate methodology, Arachne risk scoring, and assurance chain.
 

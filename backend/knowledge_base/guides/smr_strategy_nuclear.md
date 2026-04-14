@@ -16,6 +16,8 @@ QUICK FACTS:
 - Status: Communication (non-legislative strategy)
 - Fusion energy investment (19 March 2026): EU to invest EUR 330 million to accelerate fusion energy and support nuclear technologies and skills (Euratom research programme)
 - Related guides: Clean Energy Investment Strategy (clean_energy_investment_strategy.md), Citizens Energy Package (citizens_energy_package.md), EU Energy Policy (eu_energy_policy.md)
+- DG ENER consultations (13 April 2026): Commission opened consultations evaluating current rules under the Radioactive Waste Directive (Directive 2011/70/Euratom, CELEX: 32011L0070) and the Radioactive Shipments Directive (Directive 2006/117/Euratom, CELEX: 32006L0117). Feedback 8 weeks; evaluation may precede revision aligned with SMR deployment and nuclear waste management post-2030.
+- DG ENER (13 April 2026): Commission consults Member States on proposal for a Temporary Crisis Framework for State aid, relevant to nuclear/SMR strategic projects.
 
 ## Overview
 

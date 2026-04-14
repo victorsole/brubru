@@ -24,6 +24,16 @@
 - EUCSA: Proposed EU Centre on Child Sexual Abuse (new decentralised agency)
 - EU strategy: 2020 EU strategy on the rights of the child; BIK+ (Better Internet for Kids) strategy
 - DSA Art. 28 guidelines on minors: Published 14 July 2025
+- Commission plain-language explainer (April 2026, Publications Office): "The Digital Services Act explained: What online platforms should do to keep kids and teens safe online" (19 pages, catalogue ID 33740183-a581-11f0-a7c5-01aa75ed71a1). Explains July 2025 DSA minors guidelines for general audiences. See dedicated section at the bottom.
+- DSA Guidelines three principles: (1) Children's rights come first (protection, non-discrimination, inclusion, privacy, information/education, freedom of expression, participation); (2) Safety by design; (3) Understanding the needs of young users (cyberbullying, harmful content, excessive use).
+- DSA Guidelines covered platforms: social media (TikTok, Instagram, Snapchat, Yubo, BeReal); video-sharing/streaming (YouTube, Twitch); games with user content (Roblox, Minecraft); view/post/share platforms (Discord, Reddit). Private messaging services are NOT covered.
+- EU age-verification app blueprint (launched July 2025): user-friendly, proves 18+ without revealing personal data, integrates with EU Digital Identity Wallet (from 2026).
+- Age assurance tiers: self-declaration (not reliable); age estimation via face/typing/interests (intrusive, imperfect); age verification via official IDs or EU Digital Identity Wallet (most accurate).
+- Risk tiers from DSA Guidelines: low-risk (other safety measures enough), medium-risk social media (age estimation or verification), high-risk (gambling, dating, 18+ adult content, loot boxes) = age verification required.
+- Minimum age to use TikTok, Snapchat, Instagram, BeReal, Steam: 13 years old.
+- Anti-addiction design requirements: no infinite scrolling by default, no pull-to-refresh, no autoplay, no constant notifications, no virtual daily rewards/streaks for minors.
+- DSA oversight: each Member State has a Digital Services Coordinator (DSC); DSCs appoint Trusted Flaggers to report illegal content. See `dsa_enforcement.md`.
+- What happens next under DSA minors regime (per April 2026 Commission explainer): (1) monitoring compliance, opening proceedings against non-compliant platforms; (2) rolling out EU age-verification app; (3) developing EU action plan against cyberbullying; (4) analysing social media use and mental health impact on minors.
 - Commission Special Panel on Child Safety Online: First meeting 5 March 2026
 - EDPS Opinion: 7/2026 -- extension must address shortcomings and prevent indiscriminate scanning
 - EDPB-EDPS Joint Opinion: 2022 -- serious concerns about proportionality and interference with communication confidentiality
@@ -287,3 +297,163 @@ On 5 March 2026, the Commission held the first meeting of the Special Panel on C
 - Commission Guidelines on Protection of Minors (14 July 2025)
 - EDPS Opinion 7/2026 on extension
 - EDPB-EDPS Joint Opinion (2022)
+
+---
+
+## Commission Plain-Language Explainer (April 2026) -- Full Data Extract
+
+**Publication:** "The Digital Services Act explained: What online platforms should do to keep kids and teens safe online"
+**Publisher:** European Commission, Publications Office of the EU, Luxembourg
+**URL:** https://op.europa.eu/en/publication-detail/-/publication/33740183-a581-11f0-a7c5-01aa75ed71a1/language-en
+**Catalogue ID:** 33740183-a581-11f0-a7c5-01aa75ed71a1
+**Length:** 19 pages, plain-language / infographic format for general public (including parents, educators, youth)
+**Purpose:** Explain in accessible form the July 2025 DSA guidelines on the protection of minors
+
+### 1. Who has to follow the DSA minors guidelines?
+
+Any platform used by, or likely to be accessed by, children and teens. Adults-only websites cannot simply claim "kids are not allowed" and ignore reality. If underage users can access content, the platform has to follow the rules.
+
+Covered categories:
+- **Social media:** TikTok, Instagram, Snapchat, Yubo, BeReal
+- **Video-sharing and streaming:** YouTube, Twitch
+- **Games with user content creation:** Roblox, Minecraft
+- **Post-and-share platforms:** Discord, Reddit
+
+NOT covered: private messaging services or features.
+
+### 2. Three Key Principles
+
+1. **Children's rights come first** (protection, non-discrimination, inclusion, privacy, access to information and education, freedom of expression, participation). Design platforms to be private, safe and secure by default.
+2. **Safety by design.** Build privacy, safety and security in from the start. Features must be age-appropriate for different stages of child development.
+3. **Understanding the needs of users.** Systematically assess how services are used by children and what risks they face (cyberbullying, harmful content, excessive use). Find solutions to reduce those risks.
+
+### 3. Ten Recommendation Areas
+
+#### a. Risk Assessment
+Platforms must regularly check risks to kids and teens and find the balance between letting them share, explore, play, learn -- and keeping them safe.
+
+#### b. Age Assurance
+
+Three methods:
+
+| Method | Description | Accuracy | Privacy impact |
+|--------|------------|----------|----------------|
+| Self-declaration | User enters date of birth or confirms "I'm over 13/18" | Ineffective and unreliable (easy to cheat) | Low |
+| Age estimation | Tech estimates age from face scans, typing style, interests | Imperfect | Intrusive |
+| Age verification | Checks via official IDs, EU Digital Identity Wallet | Most accurate | Privacy-preserving (via EUDI Wallet) |
+
+Minimum age to use TikTok, Snapchat, Instagram, BeReal, Steam: 13 years old.
+
+**Platforms should:** explain age checks clearly, only ask when really needed, use the simplest method that works, ensure methods are accurate/fair/hard to bypass, offer more than one option, allow appeal if estimate is wrong.
+
+**What method for what risk level:**
+- Low-risk services: other safety measures may be enough
+- Medium-risk services (certain social media): age estimation OR age verification
+- High-risk services (gambling, dating, 18+ adult content): age verification mandatory
+
+**EU age-verification app blueprint:** launched July 2025. Designed to be user-friendly, prove users are 18+ without revealing other personal details. Linked to EU Digital Identity Wallet (launching 2026).
+
+#### c. Registration
+Share safety information, educational tips, verify age. Keep the process simple and accessible (including users with disabilities). Do not encourage underage sign-ups. Easy log-out and account deletion. Introduce privacy settings, default protections, reporting tools at sign-up.
+
+#### d. Account Settings (Privacy and Safety You Can Control)
+Default settings must be **private, safe, secure from the start**. Defaults must include:
+- Limiting contact (who can follow/message the child/teen)
+- Turning off risky features by default: geolocation, video autoplay, microphone and camera access, contact syncing, tracking
+- Preventing strangers from seeing or downloading content
+- Contact info sharing only with explicit permission
+- Notification management (turn off push notifications, alerts during sleep hours)
+- Reducing excessive use: disable likes/reactions counters, "is typing" indicators, read receipts
+- Protecting mental health: turn off filters that negatively affect body image or self-esteem
+
+Kids and teens can customise settings only with guidance (age-appropriate warnings, temporary changes, reconfirmation of important choices, no permanent weakening of defaults without oversight).
+
+#### e. Interfaces
+Designed to be easy and safe. Platforms **must avoid**:
+- Infinite scrolling
+- Pull-to-refresh
+- Constant notifications
+- Video autoplay
+- Virtual daily rewards, streaks, or points that require children to open the app/game every day
+
+Platforms **must include**:
+- Time-management tools (break reminders, session limits)
+- Easy-to-find safety, reporting and feedback tools
+- Accessibility features for users with additional needs/disabilities
+- Clear warnings when minors interact with AI features
+
+#### f. Recommender Systems and Search Features
+- Only show age-appropriate content
+- Limit data collected to make recommendations
+- Prioritise active user choices and feedback ("Show me less/more of this", "I don't want to see this", "I am not interested in this")
+- Avoid relying on passive feedback (how long users watch/browse)
+- Explain WHY something was recommended and allow users to change it
+- Let users reset the feed completely and permanently
+- Easy to report unwanted content; feedback must actually change what is shown
+- All recommender system settings must be child-friendly and accessible
+- Search features must block unsafe words and hashtags, and help children find age-appropriate interests
+
+#### g. Commercial Practices
+Children and teens often don't realise when something online is an ad, a hidden promotion, a paid influencer post. Platforms must:
+- Clearly and consistently label all advertising and sponsored content (including influencers' product placements)
+- Regularly review how ads are labelled; check with children and guardians that labels are effective
+- Avoid advertising to minors products/services that could harm privacy, safety, security
+- Transparent about costs of: in-app purchases, virtual currencies/tokens, other transactions
+- Avoid pressure tactics: countdown timers, "buy now" messages
+- **Block access to any feature resembling gambling, like loot boxes**
+- Ensure "free" products/services don't include hidden purchases
+- Make sure advertising is age-appropriate
+- Adapt advertising algorithms so children are not exposed to ads too much or too often
+
+**Definitions (plain language, from the explainer):**
+- **Product placement:** a brand or item is shown in a video or post as part of a paid promotion
+- **Loot box:** a digital item that gives random rewards, often used in games
+- **In-app purchase:** something you buy inside an app, like extra features, more lives, new skins, virtual coins
+
+#### h. Moderation
+- Clearly define harmful content and behaviours
+- Efficient removal of harmful/illegal content and accounts quickly
+- Moderators trained to spot grooming, dangerous challenges
+- Remove illegal/harmful content **without delay**
+- Use tools to **prevent users from generating or sharing harmful AI content**
+- Regularly review and improve moderation systems
+
+#### i. Reporting
+- Simple, clear ways for any user to report abuse, cyberbullying, harmful content (including persons with disabilities)
+- Allow users to block, mute, or restrict comments/interactions
+- Users must not be added to groups automatically (opt-in only after invitation)
+- Fast, helpful responses when users report a problem (feedback on what happened)
+
+#### j. Tools for Parents and Guardians
+- Based on communication and empowerment, NOT control
+- Never result in surveillance or taking away child's rights/independence
+- Respect children's and teens' privacy -- must notify child when parent/guardian activates such tools
+- Work across all devices and software versions
+- Compatible with existing parental tools (phones/apps)
+- Must complement, not replace, the platform's built-in safety features
+
+### 4. Who Enforces the DSA Rules?
+
+Each EU Member State has a **Digital Services Coordinator (DSC)** that works with the Commission. DSCs appoint **Trusted Flaggers** (organisations expert in identifying and flagging illegal/harmful content). When Trusted Flaggers raise concerns, platforms must act quickly.
+
+See `dsa_enforcement.md` for the full DSC map, fines and case status.
+
+### 5. What Happens Next?
+
+The Commission and Member States continue to make sure platforms follow the DSA and keep children/young people safe online. Current actions:
+- Checking platform compliance with the minors guidelines; starting legal proceedings against non-compliant platforms
+- Testing and rolling out the **EU age-verification app**
+- Developing an **EU action plan against cyberbullying**
+- Analysing how social media use impacts mental health in children and teens
+
+**Digital age of majority:** the age when you can start using online services on your own without parental approval. Usually 13 or 18, depending on the Member State and the type of service.
+
+### Brubru User Implications
+
+- **Platform operators (VLOPs and non-VLOPs):** The DSA minors guidelines apply to any platform minors can access; check all ten recommendation areas against current defaults. Loot-box-like features are now explicitly prohibited for minors.
+- **Product designers:** Infinite scroll, autoplay, streaks, daily rewards must be disabled by default for minors. Recommender systems must explain why + allow reset.
+- **Legal/compliance teams:** DSC in your MS is the first contact. Trusted Flagger escalations require quick action; document response times.
+- **Age-verification providers:** EU age-verification app + EU Digital Identity Wallet integration define the de facto standard.
+- **Advocacy groups (BIK, Safer Internet Centres, ECPAT, etc.):** Commission Action Plan against cyberbullying is the key upcoming file.
+- **Online advertisers targeting 13-18:** review all influencer/product placement disclosures; avoid pressure tactics; avoid "free" products with hidden purchases.
+- **Parent-control tool vendors:** must support notification to the child, privacy preservation, cross-device compatibility.
