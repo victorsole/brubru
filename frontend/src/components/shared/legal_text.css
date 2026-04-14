@@ -1,0 +1,49 @@
+/* frontend/src/components/shared/legal_text.css
+ *
+ * Styling for the three annotation classes emitted by the backend annotator:
+ *   .eur-lex-ref          -- cross-reference to another EU act, clickable
+ *   .eur-lex-ref--alias   -- acronym/nickname (GDPR, DSA, ...), clickable
+ *   .defined-term         -- statutory definition, native title tooltip
+ *
+ * These classes are used across Amendator, Analytics, Catalan landing pages
+ * and anywhere else <LegalText> is rendered.
+ */
+
+.legal-text {
+  line-height: 1.6;
+}
+
+/* Cross-references to EU legal acts */
+.legal-text .eur-lex-ref {
+  color: #0693e3;
+  text-decoration: none;
+  border-bottom: 1px dashed #0693e3;
+  padding-bottom: 1px;
+  transition: background-color 0.12s ease, border-bottom-style 0.12s ease;
+}
+
+.legal-text .eur-lex-ref:hover,
+.legal-text .eur-lex-ref:focus {
+  background-color: rgba(6, 147, 227, 0.08);
+  border-bottom-style: solid;
+  outline: none;
+}
+
+/* Acronym variant: same colour but a dotted underline to differentiate from
+ * formal citations which are dashed. Subtle, but readers notice. */
+.legal-text .eur-lex-ref--alias {
+  border-bottom-style: dotted;
+  font-weight: 600;
+}
+
+/* Defined terms: visible but not loud. Native title tooltip means no JS. */
+.legal-text .defined-term {
+  border-bottom: 1px dotted #059669;
+  cursor: help;
+  background-color: rgba(5, 150, 105, 0.03);
+  padding: 0 1px;
+}
+
+.legal-text .defined-term:hover {
+  background-color: rgba(5, 150, 105, 0.12);
+}

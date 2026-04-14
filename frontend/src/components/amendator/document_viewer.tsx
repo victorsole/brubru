@@ -1,5 +1,6 @@
 // frontend/src/components/amendator/document_viewer.tsx
 import './document_viewer.css';
+import { LegalText } from '../shared/legal_text';
 
 interface DocumentViewerProps {
   selectedText?: string;
@@ -102,7 +103,11 @@ export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerP
             {recitals.map((recital) => (
               <div key={recital.number} className="document-viewer__recital">
                 <span className="document-viewer__recital-number">({recital.number})</span>
-                <p className="document-viewer__recital-text">{recital.text}</p>
+                <LegalText
+                  text={recital.text}
+                  celex={loadedDocument.metadata.celex}
+                  className="document-viewer__recital-text"
+                />
               </div>
             ))}
           </div>
@@ -115,16 +120,23 @@ export const DocumentViewer = ({ selectedText, loadedDocument }: DocumentViewerP
               <h3 className="document-viewer__article-title">
                 Article {article.number}
               </h3>
-              <p className="document-viewer__paragraph">{article.full_text || article.text}</p>
+              <LegalText
+                text={article.full_text || article.text}
+                celex={loadedDocument.metadata.celex}
+                className="document-viewer__paragraph"
+              />
             </div>
           ))
         ) : (
           /* Display plain text if no structure detected */
           <div className="document-viewer__plain-text">
             {loadedDocument.text.split('\n\n').map((paragraph, idx) => (
-              <p key={idx} className="document-viewer__paragraph">
-                {paragraph}
-              </p>
+              <LegalText
+                key={idx}
+                text={paragraph}
+                celex={loadedDocument.metadata.celex}
+                className="document-viewer__paragraph"
+              />
             ))}
           </div>
         )}

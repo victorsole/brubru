@@ -1,0 +1,178 @@
+/* frontend/src/components/amendator/recitals_panel.css */
+
+.recitals-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.75rem 0;
+  gap: 0.75rem;
+}
+
+.recitals-panel__header {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+}
+
+.recitals-panel__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.recitals-panel__subtitle {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.recitals-panel__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.recital-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0.6rem 0.7rem;
+  transition: box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.recital-card:hover {
+  border-color: #059669;
+  box-shadow: 0 1px 4px rgba(5, 150, 105, 0.08);
+}
+
+.recital-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.recital-card__number {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #059669;
+  letter-spacing: 0.01em;
+}
+
+.recital-card__score {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 14px;
+  background: #e5e7eb;
+  border-radius: 7px;
+  overflow: hidden;
+  font-size: 0.65rem;
+}
+
+.recital-card__score-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+  border-radius: 7px;
+  transition: width 0.3s ease;
+}
+
+.recital-card__score-label {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  line-height: 14px;
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.62rem;
+}
+
+.recital-card__snippet {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.recital-card__actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.recital-card__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.recital-card__copy-btn:hover {
+  background-color: #059669;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.recitals-panel__footer {
+  padding: 0.5rem 0 0.75rem 0;
+  border-top: 1px solid var(--color-border, #e5e7eb);
+  margin-top: 0.25rem;
+}
+
+.recitals-panel__eurlex-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #0693e3;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.recitals-panel__eurlex-link:hover {
+  text-decoration: underline;
+}
+
+.recitals-panel__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.recitals-panel__empty svg {
+  color: #9ca3af;
+  margin-bottom: 0.6rem;
+}
+
+.recitals-panel__empty-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.35rem 0;
+}
+
+.recitals-panel__empty-hint {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #6b7280;
+  margin: 0;
+  max-width: 280px;
+}

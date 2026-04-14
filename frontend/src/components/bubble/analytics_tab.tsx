@@ -10,12 +10,15 @@ import Icon from '@mdi/react';
 import {
   mdiChartBar, mdiBookOpen, mdiClockOutline, mdiTextBox,
   mdiOpenInNew, mdiBookOpenPageVariantOutline, mdiChevronDown, mdiChevronUp,
+  mdiLinkVariant,
 } from '@mdi/js';
 import { useBubble } from '../../hooks/use_bubble';
 import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
+import { useCoverageStats } from '../../hooks/use_legal_intelligence';
 import './analytics_tab.css';
 
 export const AnalyticsTab = () => {
+  const { data: coverage } = useCoverageStats();
   const {
     userStats,
     documentStats,
@@ -207,6 +210,112 @@ export const AnalyticsTab = () => {
           </div>
         </div>
       </div>
+
+      {/* ---- LEGAL-TEXT INTELLIGENCE COVERAGE ---- */}
+      {coverage && (
+        <div className="analytics-tab__section">
+          <h3>
+            <Icon path={mdiLinkVariant} size={0.9} style={{ marginRight: 6, verticalAlign: 'middle' }} />
+            Legal-Text Intelligence Coverage
+          </h3>
+          <p style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: 0 }}>
+            How many EU laws Brubru has parsed for recital-to-article links
+            (TF-IDF cosine) and statutory definitions (Articles 3/4). The chatbot,
+            Amendator, and Catalan landing pages all consume this layer.
+          </p>
+
+          <div className="analytics-tab__static-grid">
+            <div className="analytics-tab__static-card">
+              <h4>Tracked laws</h4>
+              <div style={{ fontSize: '2rem', fontWeight: 700, color: '#0693e3', lineHeight: 1.1 }}>
+                {coverage.tracked.with_recital_map}
+                <span style={{ fontSize: '0.95rem', fontWeight: 400, color: '#6b7280' }}>
+                  {' '}/ {coverage.tracked.total}
+                </span>
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>
+                with recital-article maps cached
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#6b7280', marginTop: '0.35rem' }}>
+                {coverage.tracked.with_defined_terms} / {coverage.tracked.total} with statutory definitions extracted
+              </div>
+            </div>
+
+            <div className="analytics-tab__static-card">
+              <h4>All EU laws (28K corpus)</h4>
+              <div style={{ fontSize: '2rem', fontWeight: 700, color: '#059669', lineHeight: 1.1 }}>
+                {coverage.global.with_recital_map.toLocaleString()}
+                <span style={{ fontSize: '0.95rem', fontWeight: 400, color: '#6b7280' }}>
+                  {' '}/ {coverage.global.total_laws.toLocaleString()}
+                </span>
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>
+                with recital-article maps
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#6b7280', marginTop: '0.35rem' }}>
+                {coverage.global.with_defined_terms.toLocaleString()} with definitions
+              </div>
+            </div>
+
+            <div className="analytics-tab__static-card">
+              <h4>Aggregate links</h4>
+              <div style={{ fontSize: '2rem', fontWeight: 700, color: '#9b51e0', lineHeight: 1.1 }}>
+                {coverage.aggregates.total_recital_links.toLocaleString()}
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#6b7280' }}>
+                semantic recital-article links computed
+              </div>
+              <div style={{ fontSize: '0.78rem', color: '#6b7280', marginTop: '0.35rem' }}>
+                {coverage.aggregates.total_defined_terms.toLocaleString()} statutory terms indexed
+              </div>
+            </div>
+          </div>
+
+          {coverage.top_laws_by_links.length > 0 && (
+            <div style={{ marginTop: '1rem' }}>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+                Most-linked laws
+              </h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem' }}>
+                {coverage.top_laws_by_links.map((law) => (
+                  <li
+                    key={law.celex}
+                    style={{
+                      display: 'flex',
+                      gap: '0.5rem',
+                      alignItems: 'baseline',
+                      padding: '0.35rem 0',
+                      borderBottom: '1px solid #f3f4f6',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: 'monospace',
+                        fontSize: '0.78rem',
+                        color: '#0693e3',
+                        minWidth: 95,
+                      }}
+                    >
+                      {law.celex}
+                    </span>
+                    <span style={{ flex: 1, color: '#374151' }}>{law.title}</span>
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        color: '#9b51e0',
+                        minWidth: 60,
+                        textAlign: 'right',
+                      }}
+                    >
+                      {law.link_count} links
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* ---- 3. POLICY AREAS EXPLORER (collapsible) ---- */}
       {euSnapshot && (

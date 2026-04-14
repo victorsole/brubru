@@ -2,12 +2,13 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Icon from '@mdi/react';
-import { mdiContentSave, mdiFileEditOutline, mdiRobotOutline } from '@mdi/js';
+import { mdiContentSave, mdiFileEditOutline, mdiRobotOutline, mdiCompassOutline } from '@mdi/js';
 import { Sidebar } from '../components/shared/sidebar';
 import type { LegislativeElement, CellAmendment, PendingAIAmendment } from '../components/amendator/two_column_layout';
 import { TwoColumnLayout } from '../components/amendator/two_column_layout';
 import { AmendmentSidebar } from '../components/amendator/amendment_sidebar';
 import { AIAssistantPanel } from '../components/amendator/ai_assistant_sidebar';
+import { RecitalsPanel } from '../components/amendator/recitals_panel';
 import type { AISuggestion } from '../components/amendator/ai_assistant_sidebar';
 import type { LoadedDocument } from '../components/amendator/document_viewer';
 import { LegislativeContextBanner } from '../components/amendator/legislative_context_banner';
@@ -59,7 +60,7 @@ export interface Amendment {
   group?: string; // Committee or political group
 }
 
-type SidebarTab = 'amendments' | 'ai';
+type SidebarTab = 'amendments' | 'ai' | 'recitals';
 
 interface AmendatorPageProps {
   isSidebarOpen: boolean;
@@ -297,6 +298,14 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               <Icon path={mdiRobotOutline} size={0.8} />
               <span className="amendator-sidebar__tab-label">AI Assistant</span>
             </button>
+            <button
+              className={`amendator-sidebar__tab ${activeTab === 'recitals' ? 'amendator-sidebar__tab--active' : ''}`}
+              onClick={() => setActiveTab('recitals')}
+              title="Recitals linked to the selected article (TF-IDF cosine)"
+            >
+              <Icon path={mdiCompassOutline} size={0.8} />
+              <span className="amendator-sidebar__tab-label">Recitals</span>
+            </button>
           </div>
 
           {/* Tab Content - both panels stay mounted to preserve state */}
@@ -316,6 +325,12 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
                 loadedDocument={loadedDocument}
                 onSuggestionAccepted={handleAISuggestionAccepted}
                 onBatchSuggestionsAccepted={handleBatchSuggestionsAccepted}
+              />
+            </div>
+            <div style={{ display: activeTab === 'recitals' ? 'contents' : 'none' }}>
+              <RecitalsPanel
+                selectedElement={selectedElement}
+                celex={loadedDocument?.metadata?.celex}
               />
             </div>
           </div>

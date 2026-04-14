@@ -298,6 +298,185 @@ def get_defined_terms(
     return {"celex": celex, "terms": mapping}
 
 
+class AnnotateTextRequest(BaseModel):
+    """
+    Annotate a paragraph (or list of paragraphs) with cross-references, law
+    aliases and defined-term spans.
+
+    - If `celex` is provided, defined terms from that law are wrapped in
+      <span class="defined-term" title="...">.
+    - Cross-references ("Article 7 of Regulation (EU) 2024/1234") and aliases
+      (GDPR, DSA, AI Act) are always wrapped unless `include_aliases=false`.
+    """
+    text: Optional[str] = None
+    texts: Optional[List[str]] = None
+    celex: Optional[str] = None
+    include_aliases: bool = True
+
+
+@router.post("/annotate-text")
+def annotate_legal_text_api(
+    payload: AnnotateTextRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    One-shot annotation endpoint used by the Amendator document viewer and any
+    other frontend that renders EU legal text.
+
+    Request body shape (either form is accepted):
+        {"text": "...", "celex": "32022R2065"}
+        {"texts": ["paragraph 1", "paragraph 2"], "celex": "32022R2065"}
+
+    Returns:
+        {"html": "..."} or {"html": ["...", "..."]}
+
+    If the `celex` is known and its defined_terms map is cached, every
+    statutory term in the text is wrapped in a <span class="defined-term">.
+    Otherwise only cross-refs and aliases are wrapped.
+    """
+    from services.parsers.legal_text_annotator import (
+        annotate_legal_text,
+        annotate_many,
+    )
+
+    if payload.text is None and not payload.texts:
+        raise HTTPException(status_code=400, detail="Provide `text` or `texts`.")
+
+    defined_terms = None
+    if payload.celex:
+        from services.parsers.definition_store import get_or_compute_map as _get_defs
+
+        try:
+            defined_terms = _get_defs(db, payload.celex) or None
+        except Exception:
+            defined_terms = None
+
+    if payload.texts is not None:
+        annotated = annotate_many(
+            payload.texts,
+            defined_terms,
+            include_aliases=payload.include_aliases,
+        )
+        return {"html": annotated}
+
+    annotated = annotate_legal_text(
+        payload.text or "",
+        defined_terms,
+        include_aliases=payload.include_aliases,
+    )
+    return {"html": annotated}
+
+
+@router.get("/coverage-stats")
+def get_coverage_stats(db: Session = Depends(get_db)):
+    """
+    Aggregate coverage of the legal-text intelligence layer across the
+    `eu_laws` table and the `legislative_tracking` table.
+
+    Read-only. Used by the My EU Bubble Analytics tab.
+    """
+    from sqlalchemy import text as sqla_text
+
+    # Global coverage across eu_laws.extra_metadata
+    global_row = db.execute(
+        sqla_text(
+            """
+            SELECT
+              COUNT(*) FILTER (WHERE extra_metadata ? 'recital_article_map')::int AS with_recital_map,
+              COUNT(*) FILTER (WHERE extra_metadata ? 'defined_terms')::int AS with_defined_terms,
+              COUNT(*)::int AS total_laws
+            FROM eu_laws
+            """
+        )
+    ).first()
+
+    # Tracked-law coverage: join legislative_tracking <-> eu_laws on celex
+    tracked_row = db.execute(
+        sqla_text(
+            """
+            SELECT
+              COUNT(DISTINCT lt.celex_number)::int AS tracked_total,
+              COUNT(DISTINCT CASE WHEN el.extra_metadata ? 'recital_article_map'
+                                  THEN lt.celex_number END)::int AS tracked_with_recital_map,
+              COUNT(DISTINCT CASE WHEN el.extra_metadata ? 'defined_terms'
+                                  THEN lt.celex_number END)::int AS tracked_with_defined_terms
+            FROM legislative_tracking lt
+            LEFT JOIN eu_laws el ON el.celex = lt.celex_number
+            WHERE lt.celex_number IS NOT NULL
+            """
+        )
+    ).first()
+
+    # Aggregate numbers: total recital-article links + total defined terms
+    aggregate_row = db.execute(
+        sqla_text(
+            """
+            SELECT
+              COALESCE(SUM((
+                SELECT COUNT(*)::int
+                FROM jsonb_each(extra_metadata->'recital_article_map') je
+                WHERE jsonb_typeof(je.value) = 'array'
+              )), 0)::bigint AS total_article_buckets,
+              COALESCE(SUM(jsonb_array_length(COALESCE(
+                jsonb_path_query_array(extra_metadata, '$.recital_article_map.*[*]'),
+                '[]'::jsonb
+              ))), 0)::bigint AS total_recital_links,
+              COALESCE(SUM((
+                SELECT COUNT(*)::int
+                FROM jsonb_object_keys(extra_metadata->'defined_terms')
+              )), 0)::bigint AS total_defined_terms
+            FROM eu_laws
+            WHERE extra_metadata ? 'recital_article_map' OR extra_metadata ? 'defined_terms'
+            """
+        )
+    ).first()
+
+    # Top 5 laws by recital-article link count -- the headline stat
+    top_laws = db.execute(
+        sqla_text(
+            """
+            SELECT
+              celex,
+              title,
+              jsonb_array_length(COALESCE(
+                jsonb_path_query_array(extra_metadata, '$.recital_article_map.*[*]'),
+                '[]'::jsonb
+              ))::int AS link_count
+            FROM eu_laws
+            WHERE extra_metadata ? 'recital_article_map'
+            ORDER BY link_count DESC
+            LIMIT 5
+            """
+        )
+    ).fetchall()
+
+    return {
+        "global": {
+            "total_laws": (global_row.total_laws if global_row else 0),
+            "with_recital_map": (global_row.with_recital_map if global_row else 0),
+            "with_defined_terms": (global_row.with_defined_terms if global_row else 0),
+        },
+        "tracked": {
+            "total": (tracked_row.tracked_total if tracked_row else 0),
+            "with_recital_map": (tracked_row.tracked_with_recital_map if tracked_row else 0),
+            "with_defined_terms": (tracked_row.tracked_with_defined_terms if tracked_row else 0),
+        },
+        "aggregates": {
+            "total_article_buckets": int(aggregate_row.total_article_buckets) if aggregate_row else 0,
+            "total_recital_links": int(aggregate_row.total_recital_links) if aggregate_row else 0,
+            "total_defined_terms": int(aggregate_row.total_defined_terms) if aggregate_row else 0,
+        },
+        "top_laws_by_links": [
+            {
+                "celex": row.celex,
+                "title": (row.title[:160] if row.title else row.celex),
+                "link_count": int(row.link_count),
+            }
+            for row in top_laws
+        ],
+    }
+
+
 class ResolveRefsRequest(BaseModel):
     text: str
     annotate_html: bool = False
