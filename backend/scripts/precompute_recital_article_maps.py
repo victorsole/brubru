@@ -34,9 +34,10 @@ def iter_tracked(db) -> Iterable[str]:
     rows = db.execute(
         sqla_text(
             """
-            SELECT DISTINCT celex_number
-              FROM legislative_tracking
-             WHERE celex_number IS NOT NULL
+            SELECT DISTINCT unnest(lc.celex_numbers) AS celex
+              FROM legislative_carriages lc
+              JOIN user_carriage_tracks uct ON uct.carriage_id = lc.id
+             WHERE lc.celex_numbers IS NOT NULL
             """
         )
     ).fetchall()

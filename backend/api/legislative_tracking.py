@@ -390,19 +390,25 @@ def get_coverage_stats(db: Session = Depends(get_db)):
         )
     ).first()
 
-    # Tracked-law coverage: join legislative_tracking <-> eu_laws on celex
+    # Tracked-law coverage: legislative_carriages.celex_numbers is a TEXT[] of
+    # CELEX numbers attached to a procedure; we count distinct CELEX numbers
+    # that any user tracks, and how many of them have the intelligence layer
+    # cached on eu_laws.extra_metadata.
     tracked_row = db.execute(
         sqla_text(
             """
+            WITH tracked_celex AS (
+                SELECT DISTINCT unnest(lc.celex_numbers) AS celex
+                FROM legislative_carriages lc
+                JOIN user_carriage_tracks uct ON uct.carriage_id = lc.id
+                WHERE lc.celex_numbers IS NOT NULL
+            )
             SELECT
-              COUNT(DISTINCT lt.celex_number)::int AS tracked_total,
-              COUNT(DISTINCT CASE WHEN el.extra_metadata ? 'recital_article_map'
-                                  THEN lt.celex_number END)::int AS tracked_with_recital_map,
-              COUNT(DISTINCT CASE WHEN el.extra_metadata ? 'defined_terms'
-                                  THEN lt.celex_number END)::int AS tracked_with_defined_terms
-            FROM legislative_tracking lt
-            LEFT JOIN eu_laws el ON el.celex = lt.celex_number
-            WHERE lt.celex_number IS NOT NULL
+              COUNT(*)::int AS tracked_total,
+              COUNT(*) FILTER (WHERE el.extra_metadata ? 'recital_article_map')::int AS tracked_with_recital_map,
+              COUNT(*) FILTER (WHERE el.extra_metadata ? 'defined_terms')::int AS tracked_with_defined_terms
+            FROM tracked_celex tc
+            LEFT JOIN eu_laws el ON el.celex = tc.celex
             """
         )
     ).first()

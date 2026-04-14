@@ -224,6 +224,41 @@ Seed script: `backend/scripts/seed_test_users.py`
 
 *When Claude makes a mistake, add a rule below so it never happens again.*
 
+### Legal-Text Intelligence Layer (April 2026)
+
+Anything that displays, parses, or queries EU legal texts must route through `services/parsers/`:
+- **Recital-article links**: `recital_article_linker.py` (TF-IDF) + `recital_article_store.py` (cached in `eu_laws.extra_metadata.recital_article_map`, versioned)
+- **Defined terms**: `definition_extractor.py` + `definition_store.py` (cached in `eu_laws.extra_metadata.defined_terms`)
+- **Cross-references**: `cross_reference_resolver.py` parses "Article N of Regulation (EU) YEAR/NUM" → CELEX
+- **Law aliases**: `law_alias_resolver.py` resolves user-typed names ("GDPR", "DSA", "AI Act", 700+ entries) to CELEX. Manual list at `knowledge_base/institutions/legislation_acronyms_manual.json` overrides auto-extracted at `legislation_acronyms.json`.
+- **Combined annotator**: `legal_text_annotator.py` layers cross-refs + aliases + defined terms in one HTML pass, anchor-aware (never wraps inside an existing `<a>`)
+
+Frontend consumes via `frontend/src/hooks/use_legal_intelligence.ts` (4 hooks with module-scoped Map cache). The shared `<LegalText>` component (`frontend/src/components/shared/legal_text.tsx`) is the canonical way to render EU legal text — it auto-applies all three annotation layers via `POST /api/legislation/annotate-text`. Defined terms render as native `<span title="...">` tooltips, no popover library needed.
+
+API endpoints under `/api/legislation/*`: `recital-article-map`, `defined-terms`, `resolve-references`, `annotate-text`, `coverage-stats`.
+
+**Tracked-law table:** "tracked" means a user has bookmarked a `legislative_carriages` row via `user_carriage_tracks`. Each carriage has `celex_numbers TEXT[]`. There is NO `legislative_tracking` table — that name was a hallucination corrected on 14 April 2026 in the coverage-stats endpoint.
+
+### Reading .env in Shell — Never Source It (April 2026)
+
+`.env` values often contain shell-unsafe characters (parens, ampersands, special punctuation in tokens). `set -a; source .env` will fail with parse errors. **Always read values directly:**
+```bash
+FTP_HOST=$(grep '^SITEGROUND_FTP_HOST=' /Users/victorsole/Documents/GitHub/brubru/.env | cut -d'=' -f2-)
+```
+This caused two FTP failures on 14 April 2026 before switching to the grep|cut pattern.
+
+### Frontend Clean Reinstall on Module Mismatch (April 2026)
+
+If `npm run build` or `npm run build:prerender` fails with errors like "module does not provide an export named X" (e.g. tinyglobby/fdir, axios validator path), the cause is a corrupted `node_modules`. Fix:
+```bash
+cd frontend && rm -rf node_modules package-lock.json && npm install --legacy-peer-deps
+```
+The `--legacy-peer-deps` flag is required because `react-joyride` has a peer-dependency conflict in this project. Lost 5 minutes on 14 April 2026 trying targeted fixes before the clean reinstall worked.
+
+### React 18+ TypeScript: React.ReactNode, Not JSX.Element (April 2026)
+
+`tsc -b` errors with "Cannot find namespace 'JSX'" on component prop types declared as `JSX.Element`. The fix is to use `React.ReactNode` instead. Add `import type * as React from 'react'` if not already imported. JSX namespace exists at runtime but is no longer in the global TS scope by default in modern React/TS configurations.
+
 ### Brubru Supports 6 Languages, Not 23 (March 2026)
 
 Brubru supports **6 languages**: English, French, Dutch, Spanish, Catalan, and Italian. These are the languages Victor speaks and can support users in directly. **Never claim 23 EU languages** in any material, code comment, tour step, application, or business plan. The EU has 24 official languages, but Brubru's interface and support covers 6. i18next locales: `en, fr, nl, es, ca, it`.
@@ -390,6 +425,11 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 
 `lftp` can upload `frontend/dist/` directly to SiteGround: `lftp -c "set ftp:ssl-allow no; open -u ftp@beresol.eu,PASSWORD ftp.beresol.eu; mirror --reverse --verbose --only-newer --exclude .DS_Store --exclude .htaccess dist/ brubru.beresol.eu/public_html/; bye"`. Credentials in `.env` (`SITEGROUND_FTP_*`). Always exclude `.htaccess` (managed by SiteGround). Old JS bundles (`index-*.js`) accumulate on the server -- not harmful but could be cleaned up periodically.
 
+**CRITICAL: Files NOT in frontend/dist/ that must be uploaded separately after every FTP deploy:**
+- Catalan landing page: `lftp put -O brubru.beresol.eu/public_html/legislacio-ue-catala/ data/legislacio-ue-catala/index.html`
+- This file lives in `data/` not `frontend/`, so the dist mirror misses it. Without it, `/legislacio-ue-catala/` returns 403.
+- **Post-deploy verification:** Check `brubru.beresol.eu/guides/index.html` and `brubru.beresol.eu/legislacio-ue-catala/` return HTTP 200.
+
 ### Brubrufied Daily Brief System (April 2026)
 
 **5 headlines per day** (default, more only if justified). Each headline has three layers: (1) headline text linking to source, (2) **suggested question** in italics as the engagement hook, (3) **"Ask Brubru" button** linking to `/main?q=...` which pre-fills the chat input. The `suggested_query` column in `daily_briefs` drives both the question and the CTA link. **Every headline MUST have a suggested_query.** Before sending, verify Brubru can answer each suggested query well (test against knowledge base, fix gaps first). Feature line at the bottom is dynamic (reads real guide/file counts). Frontend `ChatInterface` reads `?q=` from `window.location.search` on mount. Chat route is `/main` (NOT `/chat`). Files: `services/daily_brief_email.py`, `scripts/send_daily_brief.py`, `components/chat/chat_interface.tsx`.
@@ -435,3 +475,30 @@ EUR-Lex WAF (`eur-lex.europa.eu`) blocks all automated requests (returns HTTP 20
 **Key files:** `backend/scripts/catalan_translate.py` (parser + translation + HTML generator). Spec: `docs/catalan-implementation.md`. Skill: `/catalan`. Memory: `memory/catalan_translation.md`.
 
 **Brubru Catalan standard:** D'execució (not d'implementació), Ha adoptat (not ha aconseguit), Tenint en compte, Dictamen, Paràgraf, Comitè dels Estats membres. Always regenerate `frontend/public/guides/index.html` after guide changes.
+
+### Scrapling Integration (April 2026)
+
+BaseScraper now has 3 fetch tiers + 2 parse tiers via Scrapling:
+- `_fetch(url)`: aiohttp (default, async)
+- `_fetch_with_fingerprint(url)`: Scrapling Fetcher (curl_cffi, browser fingerprints). Response body in `.body` NOT `.text`
+- `_fetch_stealthy(url)`: Scrapling StealthyFetcher (patchright headless Chromium). Bypasses Cloudflare. Council 153KB confirmed
+- `_parse_html(html)`: BeautifulSoup (default)
+- `_parse_adaptive(html)`: Scrapling Selector (auto-relocating elements when pages restructure)
+
+Dependencies: `scrapling`, `curl_cffi`, `browserforge`, `msgspec`, `patchright`. File: `services/scrapers/base_scraper.py`.
+
+### EP Committee Minutes (April 2026)
+
+New data source for committee meeting records (attendance, votes, decisions). 75 records, 24 committees (Sep 2025 - Mar 2026). Context builder index 14. Key files: `models/committee_minutes.py`, `services/scrapers/committee_minutes_scraper.py`, `services/scrapers/committee_minutes_sync_service.py`, `scripts/sync_committee_minutes.py`. CLI: `python3.12 scripts/sync_committee_minutes.py --max-pages 5`. Integrated in /news Step 1.
+
+### EPRS Portal RSS (April 2026)
+
+The official EP Think Tank portal RSS (`europarl.europa.eu/thinktank/.../rss`) is now the PRIMARY source for EPRS publications. It covers EPRS_, ECTI_, and CASP_ prefixed documents that the WordPress blog RSS (`epthinktank.eu/feed/`) misses. File: `services/api_clients/think_tank_rss_client.py`. The `thinktank_portal` feed is fetched first in `get_latest_publications()`.
+
+### Catalan Text Must Have Accents (April 2026)
+
+**All Catalan text output** (emails, guides, translations, LinkedIn messages) MUST include proper Catalan accents and diacritics: à, è, é, í, ò, ó, ú, ç, l·l (ela geminada), ï, ü. Never output unaccented Catalan. Key words: sóc (not soc), perquè (not perque), política (not politica), Brussel·les (not Brusselles), regulació (not regulacio), autònoms (not autonoms), Víctor Solé (not Victor Sole).
+
+### Systematic EPRS Integration in /news (April 2026)
+
+During /news, **every new EPRS publication** synced to the database must be mapped to a relevant knowledge guide with a one-line reference in QUICK FACTS. Format: `- EPRS [Type] ([Date]): "[Short title]" -- [key finding]. Ref: [EPRS reference]`. This is codified in /news Step 3a. Also applies to JRC, Eurostat, and DG-specific data publications found during the news scrape.
