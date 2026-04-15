@@ -22,6 +22,14 @@
 - Council formal approval: March 2024 (narrowed scope from original proposal)
 - Trilogue agreement: December 2023
 - Related: CSRD (32022L2464), EU Taxonomy (32020R0852), Conflict Minerals (32017R0821), Deforestation Regulation (32023R1115), Forced Labour Regulation (2022/0269(COD))
+- **Omnibus I scope reduction (2026)**: Commission's Omnibus I "simplification" package narrowed the CSDDD scope sharply. Updated SOMO datahub figures (April 2026):
+  - **974 EU corporate groups** now in scope (-71% vs original CSDDD)
+  - **473 non-EU parent groups** in scope through their EU subsidiaries
+  - By Member State (EU): **Germany 280**, with sharp drops across all large member states
+  - By third country: **US 182**, **UK 69**, **Switzerland 47**, **China 13**
+  - **Review clause: July 2031** -- scope will be revisited at that point
+- Source: Andreas Rasche (Copenhagen Business School), SOMO datahub, 15 April 2026. Commentary: "due diligence cannot remain a 'big players only' exercise".
+- Policy implication: at 974 EU groups and 280 in Germany, the overall impact of CSDDD on supply chains and human rights outcomes is materially diluted compared with the original 2024 scope. The July 2031 review is the next natural window to broaden scope.
 
 ## Overview
 
