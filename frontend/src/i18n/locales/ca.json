@@ -13,7 +13,8 @@
     "logOut": "Tancar Sessió",
     "onlyForUsers": "{{feature}} només està disponible per a usuaris registrats",
     "signUpFree": "Registra't gratis",
-    "logIn": "Iniciar sessió"
+    "logIn": "Iniciar sessió",
+    "api": "API"
   },
   "main": {
     "chatHistory": "Historial de Xat",
@@ -253,25 +254,88 @@
       "note": "Requereix verificacio d'acreditacio EP"
     },
     "module": {
-      "chat": { "name": "AI Chat", "price": "29", "description": "Assistent de xat IA per a politiques de la UE", "planId": "chat" },
-      "bubble": { "name": "My EU Bubble", "price": "29", "description": "Feeds RSS, seguiment legislatiu, prediccions", "planId": "bubble" },
-      "amendator": { "name": "Amendator", "price": "19", "description": "Eina de redaccio d'esmenes legislatives", "planId": "amendator" },
-      "comply": { "name": "EU Law Comply", "price": "29", "description": "Analisi de compliment", "planId": "comply" },
-      "tenderator": { "name": "Tenderator", "price": "49", "description": "Analisi i cerca de licitacions UE", "planId": "tenderator" }
+      "chat": {
+        "name": "AI Chat",
+        "price": "29",
+        "description": "Assistent de xat IA per a politiques de la UE",
+        "planId": "chat"
+      },
+      "bubble": {
+        "name": "My EU Bubble",
+        "price": "29",
+        "description": "Feeds RSS, seguiment legislatiu, prediccions",
+        "planId": "bubble"
+      },
+      "amendator": {
+        "name": "Amendator",
+        "price": "19",
+        "description": "Eina de redaccio d'esmenes legislatives",
+        "planId": "amendator"
+      },
+      "comply": {
+        "name": "EU Law Comply",
+        "price": "29",
+        "description": "Analisi de compliment",
+        "planId": "comply"
+      },
+      "tenderator": {
+        "name": "Tenderator",
+        "price": "49",
+        "description": "Analisi i cerca de licitacions UE",
+        "planId": "tenderator"
+      }
     },
     "features": {
       "title": "Comparacio de Funcions",
       "subtitle": "Mira el que inclou cada pla",
-      "columns": { "feature": "Funcio", "free": "Prova Gratuita", "starter": "Starter", "advocate": "Advocate", "professional": "Professional" },
+      "columns": {
+        "feature": "Funcio",
+        "free": "Prova Gratuita",
+        "starter": "Starter",
+        "advocate": "Advocate",
+        "professional": "Professional"
+      },
       "rows": {
-        "chat": "Xat de Politica IA", "chatFree": "5 missatges/dia", "chatStarter": "Il·limitat", "chatAdvocate": "Il·limitat", "chatProfessional": "Il·limitat + prioritat",
-        "amendments": "Esmenes", "amendmentsFree": "5/mes", "amendmentsStarter": "--", "amendmentsAdvocate": "Il·limitades", "amendmentsProfessional": "Il·limitades",
-        "rss": "RSS i Seguiment Legislatiu", "rssFree": "Limitat", "rssStarter": "Acces complet", "rssAdvocate": "Acces complet", "rssProfessional": "Acces complet",
-        "predictions": "Prediccions Legislatives", "predictionsFree": "--", "predictionsStarter": "Vots EP", "predictionsAdvocate": "Vots EP", "predictionsProfessional": "EP + Consell",
-        "comply": "EU Law Comply", "complyFree": "--", "complyStarter": "--", "complyAdvocate": "--", "complyProfessional": "Acces complet",
-        "tenderator": "Tenderator", "tenderatorFree": "--", "tenderatorStarter": "--", "tenderatorAdvocate": "--", "tenderatorProfessional": "Acces complet",
-        "exports": "Formats d'Exportacio", "exportsFree": "XML, HTML", "exportsStarter": "XML, HTML", "exportsAdvocate": "Tots els formats", "exportsProfessional": "Tots els formats",
-        "support": "Suport", "supportFree": "Comunitat", "supportStarter": "Email (48h)", "supportAdvocate": "Email (48h)", "supportProfessional": "Dedicat (24h)"
+        "chat": "Xat de Politica IA",
+        "chatFree": "5 missatges/dia",
+        "chatStarter": "Il·limitat",
+        "chatAdvocate": "Il·limitat",
+        "chatProfessional": "Il·limitat + prioritat",
+        "amendments": "Esmenes",
+        "amendmentsFree": "5/mes",
+        "amendmentsStarter": "--",
+        "amendmentsAdvocate": "Il·limitades",
+        "amendmentsProfessional": "Il·limitades",
+        "rss": "RSS i Seguiment Legislatiu",
+        "rssFree": "Limitat",
+        "rssStarter": "Acces complet",
+        "rssAdvocate": "Acces complet",
+        "rssProfessional": "Acces complet",
+        "predictions": "Prediccions Legislatives",
+        "predictionsFree": "--",
+        "predictionsStarter": "Vots EP",
+        "predictionsAdvocate": "Vots EP",
+        "predictionsProfessional": "EP + Consell",
+        "comply": "EU Law Comply",
+        "complyFree": "--",
+        "complyStarter": "--",
+        "complyAdvocate": "--",
+        "complyProfessional": "Acces complet",
+        "tenderator": "Tenderator",
+        "tenderatorFree": "--",
+        "tenderatorStarter": "--",
+        "tenderatorAdvocate": "--",
+        "tenderatorProfessional": "Acces complet",
+        "exports": "Formats d'Exportacio",
+        "exportsFree": "XML, HTML",
+        "exportsStarter": "XML, HTML",
+        "exportsAdvocate": "Tots els formats",
+        "exportsProfessional": "Tots els formats",
+        "support": "Suport",
+        "supportFree": "Comunitat",
+        "supportStarter": "Email (48h)",
+        "supportAdvocate": "Email (48h)",
+        "supportProfessional": "Dedicat (24h)"
       }
     },
     "faq": {
@@ -399,9 +463,9 @@
       "starter": {
         "badge": "STARTER",
         "name": "Starter",
-        "price": "\u20ac39",
+        "price": "€39",
         "period": "/mes",
-        "savings": "o \u20ac396/any (estalvia \u20ac72)",
+        "savings": "o €396/any (estalvia €72)",
         "f1": "AI Policy Chat (il·limitat)",
         "f2": "My EU Bubble dashboard",
         "f3": "Agregacio de feeds RSS",
@@ -409,11 +473,11 @@
         "button": "Comenar Prova Gratuita"
       },
       "advocate": {
-        "badge": "ADVOCATE \u2014 MES POPULAR",
+        "badge": "ADVOCATE — MES POPULAR",
         "name": "Advocate",
-        "price": "\u20ac59",
+        "price": "€59",
         "period": "/mes",
-        "savings": "o \u20ac499/any (estalvia \u20ac209)",
+        "savings": "o €499/any (estalvia €209)",
         "f1": "Tot en Starter",
         "f2": "Amendator (il·limitat)",
         "f3": "Suggeriments d'esmenes amb IA",
@@ -421,11 +485,11 @@
         "button": "Comenar Prova Gratuita"
       },
       "professional": {
-        "badge": "PROFESSIONAL \u2014 MILLOR VALOR",
+        "badge": "PROFESSIONAL — MILLOR VALOR",
         "name": "Professional",
-        "price": "\u20ac99",
+        "price": "€99",
         "period": "/mes",
-        "savings": "o \u20ac799/any (estalvia \u20ac389)",
+        "savings": "o €799/any (estalvia €389)",
         "f1": "Tot en Advocate",
         "f2": "EU Law Comply",
         "f3": "Tenderator",
@@ -473,6 +537,71 @@
       "terms": "Termes",
       "cookies": "Cookies",
       "contact": "Contacte"
+    }
+  },
+  "api": {
+    "eyebrow": "Per a desenvolupadors, RegTech i agents d'IA",
+    "titlePre": "La UE,",
+    "titleAccent": "estructurada",
+    "lede": "Brubru és un proveïdor vertical de dades de la UE. La nostra API REST et dóna accés en temps real a més de 28.500 lleis adoptades, més de 1.200 procediments legislatius, aportacions ciutadanes en directe, agendes de comissaris i la capa d'intel·ligència de textos legals que alimenta el propi xatbot i Amendator de Brubru. Brubru és el primer usuari de la seva pròpia API.",
+    "cta": {
+      "reference": "Referència de l'API",
+      "trial": "Prova Professional gratuïta",
+      "contact": "Parlar amb vendes",
+      "openRef": "Obrir la referència",
+      "ping": "/api/v1/ping (públic)"
+    },
+    "sections": {
+      "whatYouGet": "Què obtens",
+      "authentication": "Autenticació",
+      "envelope": "Envoltori de resposta",
+      "pricing": "Preus",
+      "errors": "Límits i errors",
+      "startBuilding": "Comença a integrar"
+    },
+    "endpoints": {
+      "laws": "Més de 28.500 lleis de la UE. Filtres per CELEX, tipus de document, àmbit polític, data de publicació, cerca de text.",
+      "procedures": "Més de 1.200 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
+      "consultations": "Aportacions d'actors interessats en directe del portal Have Your Say. Paginat amb agregats per país i tipus.",
+      "commissioners": "Agendes en directe dels 27 membres del Col·legi. Resolució de nom insensible a accents.",
+      "recitalMap": "Mapeig TF-IDF de considerants a articles per a qualsevol llei. Top-3 considerants per article.",
+      "definedTerms": "Diccionari de definicions (articles 3/4). Llest per anotar textos legals amb tooltips.",
+      "resolveRefs": "Text pla d'entrada, cites CELEX estructurades de sortida. Anotació HTML opcional.",
+      "resolveAliases": "Resol noms humans (RGPD, DSA, Llei d'IA, CBAM, ...) a CELEX. Més de 680 àlies."
+    },
+    "auth": {
+      "description": "Cada endpoint /api/v1/* requereix una clau d'API. Envia-la com a Authorization: Bearer <clau> (recomanat) o X-API-Key: <clau>. Les claus les emet l'equip Brubru per a subscriptors Professional. Límit: 60 peticions per minut per clau.",
+      "note": "X-API-Key també s'accepta per a scripts amb curl. Bearer és l'estàndard a Postman, OpenAPI i SDKs."
+    },
+    "envelope": {
+      "description": "Tots els endpoints paginats retornen la mateixa estructura. Els integradors poden codificar una vegada contra l'envoltori i canviar de dataset canviant la ruta."
+    },
+    "pricing": {
+      "plan": "Pla",
+      "monthly": "Mensual",
+      "api": "API",
+      "rateLimit": "Límit",
+      "chatbot": "Xatbot",
+      "starter": "Starter",
+      "advocate": "Advocate",
+      "professional": "Professional",
+      "included": "Inclòs",
+      "yes": "Sí",
+      "annual": "{{price}} anual",
+      "rate": "{{n}} req/min per clau",
+      "note": "L'ús només d'API no consumeix crèdits de xatbot/IA. Cada plaça Professional pot emetre una clau. Per exportacions massives, claus múltiples o SLA a mida,"
+    },
+    "errors": {
+      "code": "Codi",
+      "meaning": "Significat",
+      "ok": "Èxit. Consulta X-RateLimit-Remaining per saber quantes trucades et queden a la finestra.",
+      "unauthorized": "Clau d'API absent o invàlida.",
+      "forbidden": "Clau vàlida però el titular no té pla Professional.",
+      "notFound": "Recurs no trobat.",
+      "invalidQuery": "Paràmetre de consulta invàlid.",
+      "rateLimited": "Límit superat. Respecta la capçalera Retry-After.",
+      "upstream": "Portal UE temporalment no disponible (p. ex. Have Your Say, calendari de la Comissió).",
+      "envelopeNote": "Les respostes d'error utilitzen un envoltori canònic: { error, reason_code, request_id }. Tota resposta inclou també una capçalera X-Request-Id per a traçabilitat."
     }
   }
 }

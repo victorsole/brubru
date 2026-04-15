@@ -423,7 +423,9 @@ AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to
 
 ### SiteGround FTP Deploy (April 2026)
 
-`lftp` can upload `frontend/dist/` directly to SiteGround: `lftp -c "set ftp:ssl-allow no; open -u ftp@beresol.eu,PASSWORD ftp.beresol.eu; mirror --reverse --verbose --only-newer --exclude .DS_Store --exclude .htaccess dist/ brubru.beresol.eu/public_html/; bye"`. Credentials in `.env` (`SITEGROUND_FTP_*`). Always exclude `.htaccess` (managed by SiteGround). Old JS bundles (`index-*.js`) accumulate on the server -- not harmful but could be cleaned up periodically.
+`lftp` can upload `frontend/dist/` directly to SiteGround: `lftp -c "set ftp:ssl-allow no; open -u ftp@beresol.eu,PASSWORD ftp.beresol.eu; mirror --reverse --verbose --only-newer --exclude .DS_Store dist/ brubru.beresol.eu/public_html/; bye"`. Credentials in `.env` (`SITEGROUND_FTP_*`). Old JS bundles (`index-*.js`) accumulate on the server -- not harmful but could be cleaned up periodically.
+
+**`.htaccess` MUST be uploaded** (reversed policy, 15 April 2026). The local `frontend/dist/.htaccess` contains the SPA fallback (`RewriteCond !-f !-d -> index.html`) without which any client-side route (`/main`, `/my-eu-bubble`, `/amendator`, ...) 404s on refresh. If SiteGround injects panel-managed rules you want to keep, download production `.htaccess` first, merge, then upload the merged file.
 
 **CRITICAL: Files NOT in frontend/dist/ that must be uploaded separately after every FTP deploy:**
 - Catalan landing page: `lftp put -O brubru.beresol.eu/public_html/legislacio-ue-catala/ data/legislacio-ue-catala/index.html`

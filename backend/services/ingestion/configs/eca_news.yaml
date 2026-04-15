@@ -1,0 +1,8 @@
+slug: eca_news
+institution_slug: eca
+category: press_release
+url: https://www.eca.europa.eu/rss/news.xml
+language: en
+default_policy_areas:
+  - audit
+  - accountability

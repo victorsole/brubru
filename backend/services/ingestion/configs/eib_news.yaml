@@ -1,0 +1,8 @@
+slug: eib_news
+institution_slug: eib
+category: press_release
+url: https://www.eib.org/en/feeds/all-news-en.xml
+language: en
+default_policy_areas:
+  - finance
+  - investment

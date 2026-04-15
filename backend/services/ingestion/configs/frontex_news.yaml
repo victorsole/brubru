@@ -1,0 +1,8 @@
+slug: frontex_news
+institution_slug: frontex
+category: press_release
+url: https://www.frontex.europa.eu/feed/news-release
+language: en
+default_policy_areas:
+  - migration
+  - borders

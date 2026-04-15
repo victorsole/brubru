@@ -28,17 +28,22 @@ class PaginatedResponse(BaseModel, Generic[T]):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     total: int = Field(..., description="Total matching items across all pages")
+    returned: int = Field(..., description="Items in this page (len(data))")
     pages: int = Field(..., description="Total number of pages")
     page: int = Field(..., description="Current page (1-indexed)")
     limit: int = Field(..., description="Items per page used for this response")
     has_more: bool
     next_page: Optional[int] = None
     remaining_pages: int = 0
+    coverage_complete: bool = Field(True, description="True for DB-backed results; False if upstream/live fetch may be partial")
 
     published_from: Optional[date] = None
     published_to: Optional[date] = None
+    # GovClipping-compatible alias. Same value as published_to; partners who built against GovClipping see what they expect.
+    published_end: Optional[date] = None
     updated_from: Optional[datetime] = None
     updated_to: Optional[datetime] = None
+    updated_end: Optional[datetime] = None
     detail_level: DetailLevel = "Full"
 
     data: list[T]
@@ -56,6 +61,7 @@ def build_envelope(
     updated_from: Optional[datetime] = None,
     updated_to: Optional[datetime] = None,
     detail_level: DetailLevel = "Full",
+    coverage_complete: bool = True,
 ) -> PaginatedResponse[T]:
     """Populate all pagination fields consistently."""
     pages = max(1, ceil(total / limit)) if total > 0 else 0
@@ -64,16 +70,20 @@ def build_envelope(
     remaining = max(0, pages - page)
     return PaginatedResponse[T](
         total=total,
+        returned=len(items),
         pages=pages,
         page=page,
         limit=limit,
         has_more=has_more,
         next_page=next_page,
         remaining_pages=remaining,
+        coverage_complete=coverage_complete,
         published_from=published_from,
         published_to=published_to,
+        published_end=published_to,
         updated_from=updated_from,
         updated_to=updated_to,
+        updated_end=updated_to,
         detail_level=detail_level,
         data=items,
     )

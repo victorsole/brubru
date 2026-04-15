@@ -1,0 +1,8 @@
+slug: eea_news
+institution_slug: eea
+category: press_release
+url: https://www.eea.europa.eu/en/newsroom/news/RSS
+language: en
+default_policy_areas:
+  - environment
+  - climate

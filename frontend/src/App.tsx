@@ -25,6 +25,7 @@ import { AdminPanelPage } from './pages/admin_panel_page';
 import { EUComplyPage } from './pages/eu_comply_page';
 import { TenderatorPage } from './pages/tenderator_page';
 import { AboutPage } from './pages/about_page';
+import { ApiPage } from './pages/api_page';
 import { ContactPage } from './pages/contact_page';
 import { PrivacyPage } from './pages/privacy_page';
 import { TermsPage } from './pages/terms_page';
@@ -117,6 +118,15 @@ export const App = () => {
               <Header />
               <AnimatedPage>
                 <CookiesPage />
+              </AnimatedPage>
+              <Footer isSidebarOpen={isSidebarOpen} />
+            </>
+          )} />
+          <Route path="/api" element={(
+            <>
+              <Header />
+              <AnimatedPage>
+                <ApiPage />
               </AnimatedPage>
               <Footer isSidebarOpen={isSidebarOpen} />
             </>

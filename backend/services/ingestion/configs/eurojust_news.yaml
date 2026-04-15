@@ -1,0 +1,7 @@
+slug: eurojust_news
+institution_slug: eurojust
+category: press_release
+url: https://www.eurojust.europa.eu/news/rss.xml
+language: en
+default_policy_areas:
+  - justice

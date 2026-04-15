@@ -8,7 +8,8 @@ import {
   mdiGlassMugVariant,
   mdiFileEditOutline,
   mdiScaleBalance,
-  mdiPiggyBankOutline
+  mdiPiggyBankOutline,
+  mdiApi
 } from '@mdi/js';
 import { useAuth } from '../../hooks/use_auth';
 import { SUPPORTED_LANGUAGES, LANGUAGE_NAMES } from '../../i18n/config';
@@ -108,6 +109,7 @@ export const Header = () => {
             { path: '/amendator', icon: mdiFileEditOutline, labelKey: 'header.amendator', color: 'green' },
             { path: '/eulawcomply', icon: mdiScaleBalance, labelKey: 'header.euLawComply', color: 'silver' },
             { path: '/tenderator', icon: mdiPiggyBankOutline, labelKey: 'header.tenderator', color: 'gold', requiresBlue: true },
+            { path: '/api', icon: mdiApi, labelKey: 'header.api', color: 'blue', external: true },
           ].map((item) => {
             // Pre-users see everything (Blue-tier preview); logged-in users check tier
             if (item.requiresBlue && user && !hasBlueAccess) return null;
@@ -124,6 +126,21 @@ export const Header = () => {
                   <Icon path={item.icon} size={1} />
                   <span className="header__nav-icon-label">{t(item.labelKey)}</span>
                 </span>
+              );
+            }
+
+            // External (static) links use a plain anchor for full navigation
+            if ((item as any).external) {
+              return (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  className={`header__nav-icon-btn header__nav-icon-btn--${item.color}`}
+                  aria-label={t(item.labelKey)}
+                >
+                  <Icon path={item.icon} size={1} />
+                  <span className="header__nav-icon-label">{t(item.labelKey)}</span>
+                </a>
               );
             }
 

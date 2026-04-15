@@ -1,0 +1,8 @@
+slug: eurofound_news
+institution_slug: eurofound
+category: press_release
+url: https://www.eurofound.europa.eu/en/rss/news.xml
+language: en
+default_policy_areas:
+  - employment
+  - social_affairs

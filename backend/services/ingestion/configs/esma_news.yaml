@@ -1,0 +1,8 @@
+slug: esma_news
+institution_slug: esma
+category: press_release
+url: https://www.esma.europa.eu/rss-feed/news
+language: en
+default_policy_areas:
+  - finance
+  - markets

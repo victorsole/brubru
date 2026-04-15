@@ -1,0 +1,8 @@
+slug: eiopa_news
+institution_slug: eiopa
+category: press_release
+url: https://www.eiopa.europa.eu/rss/news_en.xml
+language: en
+default_policy_areas:
+  - finance
+  - insurance

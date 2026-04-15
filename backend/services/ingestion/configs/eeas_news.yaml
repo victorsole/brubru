@@ -1,0 +1,8 @@
+slug: eeas_news
+institution_slug: eeas
+category: press_release
+url: https://www.eeas.europa.eu/rss.xml
+language: en
+default_policy_areas:
+  - external_action
+  - foreign_affairs

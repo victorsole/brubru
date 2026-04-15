@@ -63,11 +63,14 @@ async def list_procedures(
     status: Optional[str] = Query(None, description="Carriage status"),
     updated_from: Optional[datetime] = Query(None),
     updated_to: Optional[datetime] = Query(None),
+    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to (GovClipping-compatible)"),
     limit: int = Query(20, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ProcedureItem]:
+    if updated_end and not updated_to:
+        updated_to = updated_end
     query = db.query(LegislativeCarriage)
     filters = []
     if reference:

@@ -1,0 +1,8 @@
+slug: europol_news
+institution_slug: europol
+category: press_release
+url: https://www.europol.europa.eu/newsroom/rss.xml
+language: en
+default_policy_areas:
+  - justice
+  - security

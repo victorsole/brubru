@@ -1,0 +1,8 @@
+slug: cedefop_news
+institution_slug: cedefop
+category: press_release
+url: https://www.cedefop.europa.eu/en/news-and-press/news/feed
+language: en
+default_policy_areas:
+  - vocational_training
+  - skills

@@ -6,6 +6,7 @@ SQLAlchemy models for Brubru application.
 
 from .user import User
 from .api_key import ApiKey
+from .institutional_publication import InstitutionalPublication
 from .rss_feed import RSSFeed
 from .rss_entry import RSSEntry
 from .user_feed_subscription import UserFeedSubscription
@@ -14,7 +15,8 @@ from .user_saved_entry import UserSavedEntry
 from .user_document import UserDocument
 from .notification import Notification
 from .chat_example_prompt import ChatExamplePrompt
-from .legislative_train import LegislativeTrain, LegislativeCarriage
+from .legislative_train import LegislativeTrain, LegislativeCarriage, UserCarriageTrack
+from .file_position import FilePositionSnapshot
 from .amendment import Amendment
 from .tender import Tender, TenderProfile, TenderMatch, TenderFetchJob
 from .committee_work import (
@@ -93,4 +95,6 @@ __all__ = [
     "ReminderPeriodEnum",
     "CatalanTranslation",
     "CommitteeMinutes",
+    "UserCarriageTrack",
+    "FilePositionSnapshot",
 ]

@@ -1,0 +1,8 @@
+slug: enisa_news
+institution_slug: enisa
+category: press_release
+url: https://www.enisa.europa.eu/news/enisa-news/@@rss.xml
+language: en
+default_policy_areas:
+  - cybersecurity
+  - digital

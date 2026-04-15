@@ -17,15 +17,19 @@ from . import docs as _docs
 from . import laws as _laws
 from . import legal_text as _legal_text
 from . import meta as _meta
+from . import meta_enums as _meta_enums
 from . import procedures as _procedures
+from . import publications as _publications
 
 router = APIRouter(prefix="/api/v1")
 router.include_router(_meta.router)
+router.include_router(_meta_enums.router)
 router.include_router(_consultations.router)
 router.include_router(_laws.router)
 router.include_router(_procedures.router)
 router.include_router(_commissioners.router)
 router.include_router(_legal_text.router)
+router.include_router(_publications.router)
 router.include_router(_docs.router)
 
 # Pretty docs also served at /api/docs (convenience alias).

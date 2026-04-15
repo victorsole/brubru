@@ -1,0 +1,8 @@
+slug: ema_news
+institution_slug: ema
+category: press_release
+url: https://www.ema.europa.eu/en/rss.xml
+language: en
+default_policy_areas:
+  - health
+  - pharmaceuticals

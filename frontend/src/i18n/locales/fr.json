@@ -13,7 +13,8 @@
     "logOut": "Déconnexion",
     "onlyForUsers": "{{feature}} est uniquement disponible pour les utilisateurs inscrits",
     "signUpFree": "Inscription gratuite",
-    "logIn": "Se connecter"
+    "logIn": "Se connecter",
+    "api": "API"
   },
   "main": {
     "chatHistory": "Historique des Discussions",
@@ -177,65 +178,191 @@
       "subtitle": "Intelligence politique UE modulaire -- choisissez ce dont vous avez besoin",
       "description": "Commencez avec des modules individuels ou economisez avec des packs. Tous les plans incluent 14 jours d'essai gratuit."
     },
-    "toggle": { "monthly": "Mensuel", "annual": "Annuel", "saveTag": "Economisez jusqu'a 20%" },
-    "bundles": { "title": "Packs", "subtitle": "Economisez en combinant des modules" },
-    "modules": { "title": "Modules Individuels", "subtitle": "Choisissez uniquement ce dont vous avez besoin" },
+    "toggle": {
+      "monthly": "Mensuel",
+      "annual": "Annuel",
+      "saveTag": "Economisez jusqu'a 20%"
+    },
+    "bundles": {
+      "title": "Packs",
+      "subtitle": "Economisez en combinant des modules"
+    },
+    "modules": {
+      "title": "Modules Individuels",
+      "subtitle": "Choisissez uniquement ce dont vous avez besoin"
+    },
     "starter": {
-      "name": "Starter", "badge": "STARTER", "priceMonthly": "39", "priceAnnual": "33", "annualTotal": "396",
-      "includes": "Chat + My EU Bubble", "description": "Chat IA essentiel et suivi des politiques pour demarrer",
-      "f1": "AI Policy Chat (illimite)", "f2": "My EU Bubble dashboard", "f3": "Agregation de flux RSS", "f4": "Suivi Legislative Train", "f5": "Exports basiques (XML, HTML)",
+      "name": "Starter",
+      "badge": "STARTER",
+      "priceMonthly": "39",
+      "priceAnnual": "33",
+      "annualTotal": "396",
+      "includes": "Chat + My EU Bubble",
+      "description": "Chat IA essentiel et suivi des politiques pour demarrer",
+      "f1": "AI Policy Chat (illimite)",
+      "f2": "My EU Bubble dashboard",
+      "f3": "Agregation de flux RSS",
+      "f4": "Suivi Legislative Train",
+      "f5": "Exports basiques (XML, HTML)",
       "button": "Obtenir Starter"
     },
     "advocate": {
-      "name": "Advocate", "badge": "ADVOCATE -- LE PLUS POPULAIRE", "priceMonthly": "59", "priceAnnual": "42", "annualTotal": "499",
-      "includes": "Chat + Bubble + Amendator", "description": "Kit complet de plaidoyer avec redaction d'amendements et analyse IA",
-      "f1": "Tout dans Starter", "f2": "Amendator (amendements illimites)", "f3": "Suggestions d'amendements par IA", "f4": "Exports PDF/Word (sans filigrane)", "f5": "Temps de reponse prioritaires",
+      "name": "Advocate",
+      "badge": "ADVOCATE -- LE PLUS POPULAIRE",
+      "priceMonthly": "59",
+      "priceAnnual": "42",
+      "annualTotal": "499",
+      "includes": "Chat + Bubble + Amendator",
+      "description": "Kit complet de plaidoyer avec redaction d'amendements et analyse IA",
+      "f1": "Tout dans Starter",
+      "f2": "Amendator (amendements illimites)",
+      "f3": "Suggestions d'amendements par IA",
+      "f4": "Exports PDF/Word (sans filigrane)",
+      "f5": "Temps de reponse prioritaires",
       "button": "Obtenir Advocate"
     },
     "professional": {
-      "name": "Professional", "badge": "PROFESSIONAL -- MEILLEURE VALEUR", "priceMonthly": "99", "priceAnnual": "67", "annualTotal": "799",
-      "includes": "Les 5 modules", "description": "Acces complet a la plateforme avec verification de conformite et analyse d'appels d'offres",
-      "f1": "Tout dans Advocate", "f2": "EU Law Comply", "f3": "Tenderator", "f4": "Predictions de votes du Conseil", "f5": "Support dedie (24h)", "f6": "Acces API",
+      "name": "Professional",
+      "badge": "PROFESSIONAL -- MEILLEURE VALEUR",
+      "priceMonthly": "99",
+      "priceAnnual": "67",
+      "annualTotal": "799",
+      "includes": "Les 5 modules",
+      "description": "Acces complet a la plateforme avec verification de conformite et analyse d'appels d'offres",
+      "f1": "Tout dans Advocate",
+      "f2": "EU Law Comply",
+      "f3": "Tenderator",
+      "f4": "Predictions de votes du Conseil",
+      "f5": "Support dedie (24h)",
+      "f6": "Acces API",
       "button": "Obtenir Professional"
     },
     "ep": {
-      "name": "EP Plan", "badge": "EP PLAN -- POUR APAs ET MEPs", "priceMonthly": "49", "priceAnnual": "45", "annualTotal": "539",
-      "includes": "Chat + Bubble + Amendator", "description": "Concu pour les assistants parlementaires accredites et les eurodeputes.",
-      "f1": "Chat IA avec contexte PE", "f2": "My EU Bubble + suivi des commissions", "f3": "Amendator avec format PE", "f4": "Generateur de questions ecrites PE", "f5": "Support PE prioritaire",
-      "button": "Obtenir EP Plan", "note": "Necessite une verification d'accreditation PE"
+      "name": "EP Plan",
+      "badge": "EP PLAN -- POUR APAs ET MEPs",
+      "priceMonthly": "49",
+      "priceAnnual": "45",
+      "annualTotal": "539",
+      "includes": "Chat + Bubble + Amendator",
+      "description": "Concu pour les assistants parlementaires accredites et les eurodeputes.",
+      "f1": "Chat IA avec contexte PE",
+      "f2": "My EU Bubble + suivi des commissions",
+      "f3": "Amendator avec format PE",
+      "f4": "Generateur de questions ecrites PE",
+      "f5": "Support PE prioritaire",
+      "button": "Obtenir EP Plan",
+      "note": "Necessite une verification d'accreditation PE"
     },
     "module": {
-      "chat": { "name": "AI Chat", "price": "29", "description": "Assistant de chat IA pour les politiques UE", "planId": "chat" },
-      "bubble": { "name": "My EU Bubble", "price": "29", "description": "Flux RSS, suivi legislatif, predictions", "planId": "bubble" },
-      "amendator": { "name": "Amendator", "price": "19", "description": "Outil de redaction d'amendements legislatifs", "planId": "amendator" },
-      "comply": { "name": "EU Law Comply", "price": "29", "description": "Analyse de conformite", "planId": "comply" },
-      "tenderator": { "name": "Tenderator", "price": "49", "description": "Analyse et recherche d'appels d'offres UE", "planId": "tenderator" }
+      "chat": {
+        "name": "AI Chat",
+        "price": "29",
+        "description": "Assistant de chat IA pour les politiques UE",
+        "planId": "chat"
+      },
+      "bubble": {
+        "name": "My EU Bubble",
+        "price": "29",
+        "description": "Flux RSS, suivi legislatif, predictions",
+        "planId": "bubble"
+      },
+      "amendator": {
+        "name": "Amendator",
+        "price": "19",
+        "description": "Outil de redaction d'amendements legislatifs",
+        "planId": "amendator"
+      },
+      "comply": {
+        "name": "EU Law Comply",
+        "price": "29",
+        "description": "Analyse de conformite",
+        "planId": "comply"
+      },
+      "tenderator": {
+        "name": "Tenderator",
+        "price": "49",
+        "description": "Analyse et recherche d'appels d'offres UE",
+        "planId": "tenderator"
+      }
     },
     "features": {
-      "title": "Comparaison des Fonctionnalites", "subtitle": "Decouvrez ce qui est inclus dans chaque plan",
-      "columns": { "feature": "Fonctionnalite", "free": "Essai Gratuit", "starter": "Starter", "advocate": "Advocate", "professional": "Professional" },
+      "title": "Comparaison des Fonctionnalites",
+      "subtitle": "Decouvrez ce qui est inclus dans chaque plan",
+      "columns": {
+        "feature": "Fonctionnalite",
+        "free": "Essai Gratuit",
+        "starter": "Starter",
+        "advocate": "Advocate",
+        "professional": "Professional"
+      },
       "rows": {
-        "chat": "Chat Politique IA", "chatFree": "5 messages/jour", "chatStarter": "Illimite", "chatAdvocate": "Illimite", "chatProfessional": "Illimite + priorite",
-        "amendments": "Amendements", "amendmentsFree": "5/mois", "amendmentsStarter": "--", "amendmentsAdvocate": "Illimites", "amendmentsProfessional": "Illimites",
-        "rss": "RSS et Suivi Legislatif", "rssFree": "Limite", "rssStarter": "Acces complet", "rssAdvocate": "Acces complet", "rssProfessional": "Acces complet",
-        "predictions": "Predictions Legislatives", "predictionsFree": "--", "predictionsStarter": "Votes PE", "predictionsAdvocate": "Votes PE", "predictionsProfessional": "PE + Conseil",
-        "comply": "EU Law Comply", "complyFree": "--", "complyStarter": "--", "complyAdvocate": "--", "complyProfessional": "Acces complet",
-        "tenderator": "Tenderator", "tenderatorFree": "--", "tenderatorStarter": "--", "tenderatorAdvocate": "--", "tenderatorProfessional": "Acces complet",
-        "exports": "Formats d'Export", "exportsFree": "XML, HTML", "exportsStarter": "XML, HTML", "exportsAdvocate": "Tous les formats", "exportsProfessional": "Tous les formats",
-        "support": "Support", "supportFree": "Communaute", "supportStarter": "Email (48h)", "supportAdvocate": "Email (48h)", "supportProfessional": "Dedie (24h)"
+        "chat": "Chat Politique IA",
+        "chatFree": "5 messages/jour",
+        "chatStarter": "Illimite",
+        "chatAdvocate": "Illimite",
+        "chatProfessional": "Illimite + priorite",
+        "amendments": "Amendements",
+        "amendmentsFree": "5/mois",
+        "amendmentsStarter": "--",
+        "amendmentsAdvocate": "Illimites",
+        "amendmentsProfessional": "Illimites",
+        "rss": "RSS et Suivi Legislatif",
+        "rssFree": "Limite",
+        "rssStarter": "Acces complet",
+        "rssAdvocate": "Acces complet",
+        "rssProfessional": "Acces complet",
+        "predictions": "Predictions Legislatives",
+        "predictionsFree": "--",
+        "predictionsStarter": "Votes PE",
+        "predictionsAdvocate": "Votes PE",
+        "predictionsProfessional": "PE + Conseil",
+        "comply": "EU Law Comply",
+        "complyFree": "--",
+        "complyStarter": "--",
+        "complyAdvocate": "--",
+        "complyProfessional": "Acces complet",
+        "tenderator": "Tenderator",
+        "tenderatorFree": "--",
+        "tenderatorStarter": "--",
+        "tenderatorAdvocate": "--",
+        "tenderatorProfessional": "Acces complet",
+        "exports": "Formats d'Export",
+        "exportsFree": "XML, HTML",
+        "exportsStarter": "XML, HTML",
+        "exportsAdvocate": "Tous les formats",
+        "exportsProfessional": "Tous les formats",
+        "support": "Support",
+        "supportFree": "Communaute",
+        "supportStarter": "Email (48h)",
+        "supportAdvocate": "Email (48h)",
+        "supportProfessional": "Dedie (24h)"
       }
     },
     "faq": {
       "title": "Questions Frequentes",
-      "q1": "Quels moyens de paiement acceptez-vous?", "a1": "Nous acceptons toutes les principales cartes de credit, debit et virements bancaires via Stripe.",
-      "q2": "Puis-je changer mon plan plus tard?", "a2": "Oui, vous pouvez changer entre modules et packs a tout moment. Les ameliorations s'appliquent immediatement; les retrogradations a la fin du cycle de facturation.",
-      "q3": "Quelle est votre politique de remboursement?", "a3": "Nous offrons une garantie de remboursement de 14 jours pour tous les plans. Les plans mensuels peuvent etre annules a tout moment.",
-      "q4": "Offrez-vous un essai gratuit?", "a4": "Oui, tous les plans incluent un essai gratuit de 14 jours. Aucune carte de credit requise pour commencer.",
-      "q5": "Puis-je combiner des modules individuels?", "a5": "Vous pouvez souscrire a des modules individuels separement, mais les packs offrent des economies significatives.",
-      "q6": "Qu'est-ce que le EP Plan?", "a6": "Le EP Plan est concu pour les assistants parlementaires accredites et les eurodeputes. Il inclut Chat, Bubble et Amendator avec un contexte IA specifique au PE."
+      "q1": "Quels moyens de paiement acceptez-vous?",
+      "a1": "Nous acceptons toutes les principales cartes de credit, debit et virements bancaires via Stripe.",
+      "q2": "Puis-je changer mon plan plus tard?",
+      "a2": "Oui, vous pouvez changer entre modules et packs a tout moment. Les ameliorations s'appliquent immediatement; les retrogradations a la fin du cycle de facturation.",
+      "q3": "Quelle est votre politique de remboursement?",
+      "a3": "Nous offrons une garantie de remboursement de 14 jours pour tous les plans. Les plans mensuels peuvent etre annules a tout moment.",
+      "q4": "Offrez-vous un essai gratuit?",
+      "a4": "Oui, tous les plans incluent un essai gratuit de 14 jours. Aucune carte de credit requise pour commencer.",
+      "q5": "Puis-je combiner des modules individuels?",
+      "a5": "Vous pouvez souscrire a des modules individuels separement, mais les packs offrent des economies significatives.",
+      "q6": "Qu'est-ce que le EP Plan?",
+      "a6": "Le EP Plan est concu pour les assistants parlementaires accredites et les eurodeputes. Il inclut Chat, Bubble et Amendator avec un contexte IA specifique au PE."
     },
-    "trust": { "title": "Fait confiance par les professionnels des politiques a travers l'Europe", "subtitle": "Rejoignez les organisations qui utilisent deja Brubru" },
-    "cta": { "title": "Pret a commencer?", "subtitle": "Commencez votre essai gratuit de 14 jours aujourd'hui -- sans carte de credit", "button": "Commencer l'Essai Gratuit", "contact": "Ou contactez-nous pour des besoins entreprise" },
+    "trust": {
+      "title": "Fait confiance par les professionnels des politiques a travers l'Europe",
+      "subtitle": "Rejoignez les organisations qui utilisent deja Brubru"
+    },
+    "cta": {
+      "title": "Pret a commencer?",
+      "subtitle": "Commencez votre essai gratuit de 14 jours aujourd'hui -- sans carte de credit",
+      "button": "Commencer l'Essai Gratuit",
+      "contact": "Ou contactez-nous pour des besoins entreprise"
+    },
     "contactEmail": "hello@beresol.eu"
   },
   "euLawComply": {
@@ -333,9 +460,43 @@
       "eyebrow": "Tarifs",
       "title": "<strong>Choisissez votre Plan</strong>",
       "subtitle": "14 jours d'essai gratuit sur tous les plans",
-      "starter": { "badge": "STARTER", "name": "Starter", "price": "\u20ac39", "period": "/mois", "savings": "ou \u20ac396/an (economisez \u20ac72)", "f1": "AI Policy Chat (illimite)", "f2": "My EU Bubble dashboard", "f3": "Agregation de flux RSS", "f4": "Suivi Legislative Train", "button": "Commencer l'Essai Gratuit" },
-      "advocate": { "badge": "ADVOCATE \u2014 LE PLUS POPULAIRE", "name": "Advocate", "price": "\u20ac59", "period": "/mois", "savings": "ou \u20ac499/an (economisez \u20ac209)", "f1": "Tout dans Starter", "f2": "Amendator (illimite)", "f3": "Suggestions d'amendements par IA", "f4": "Exports PDF/Word", "button": "Commencer l'Essai Gratuit" },
-      "professional": { "badge": "PROFESSIONAL \u2014 MEILLEURE VALEUR", "name": "Professional", "price": "\u20ac99", "period": "/mois", "savings": "ou \u20ac799/an (economisez \u20ac389)", "f1": "Tout dans Advocate", "f2": "EU Law Comply", "f3": "Tenderator", "f4": "Predictions de votes du Conseil", "f5": "Support dedie (24h)", "button": "Commencer l'Essai Gratuit" },
+      "starter": {
+        "badge": "STARTER",
+        "name": "Starter",
+        "price": "€39",
+        "period": "/mois",
+        "savings": "ou €396/an (economisez €72)",
+        "f1": "AI Policy Chat (illimite)",
+        "f2": "My EU Bubble dashboard",
+        "f3": "Agregation de flux RSS",
+        "f4": "Suivi Legislative Train",
+        "button": "Commencer l'Essai Gratuit"
+      },
+      "advocate": {
+        "badge": "ADVOCATE — LE PLUS POPULAIRE",
+        "name": "Advocate",
+        "price": "€59",
+        "period": "/mois",
+        "savings": "ou €499/an (economisez €209)",
+        "f1": "Tout dans Starter",
+        "f2": "Amendator (illimite)",
+        "f3": "Suggestions d'amendements par IA",
+        "f4": "Exports PDF/Word",
+        "button": "Commencer l'Essai Gratuit"
+      },
+      "professional": {
+        "badge": "PROFESSIONAL — MEILLEURE VALEUR",
+        "name": "Professional",
+        "price": "€99",
+        "period": "/mois",
+        "savings": "ou €799/an (economisez €389)",
+        "f1": "Tout dans Advocate",
+        "f2": "EU Law Comply",
+        "f3": "Tenderator",
+        "f4": "Predictions de votes du Conseil",
+        "f5": "Support dedie (24h)",
+        "button": "Commencer l'Essai Gratuit"
+      },
       "allPlans": "Voir tous les plans et modules"
     },
     "clients": {
@@ -376,6 +537,71 @@
       "terms": "Conditions",
       "cookies": "Cookies",
       "contact": "Contact"
+    }
+  },
+  "api": {
+    "eyebrow": "Pour développeurs, RegTech et agents IA",
+    "titlePre": "L'UE,",
+    "titleAccent": "structurée",
+    "lede": "Brubru est un fournisseur vertical de données UE. Notre API REST vous donne un accès temps réel à plus de 28 500 textes de loi adoptés, plus de 1 200 procédures législatives, les contributions vivantes des consultations publiques, les agendas des commissaires et la couche d'intelligence juridique qui alimente le chatbot et Amendator de Brubru. Brubru est le premier utilisateur de sa propre API.",
+    "cta": {
+      "reference": "Référence de l'API",
+      "trial": "Essai Professional gratuit",
+      "contact": "Parler aux ventes",
+      "openRef": "Ouvrir la référence",
+      "ping": "/api/v1/ping (public)"
+    },
+    "sections": {
+      "whatYouGet": "Ce que vous obtenez",
+      "authentication": "Authentification",
+      "envelope": "Enveloppe de réponse",
+      "pricing": "Tarifs",
+      "errors": "Limites et erreurs",
+      "startBuilding": "Commencer à intégrer"
+    },
+    "endpoints": {
+      "laws": "Plus de 28 500 textes de loi UE. Filtres par CELEX, type de document, domaine politique, date de publication, recherche plein-texte.",
+      "procedures": "Plus de 1 200 dossiers législatifs, de la proposition à l'adoption. Filtres par référence OEIL, commission compétente, rapporteur, dernière mise à jour.",
+      "consultations": "Contributions d'acteurs en direct depuis le portail Have Your Say. Paginé avec agrégats par pays et type.",
+      "commissioners": "Agendas en direct des 27 membres du Collège. Résolution du nom insensible aux accents.",
+      "recitalMap": "Correspondance TF-IDF considérants/articles pour n'importe quelle loi. Top-3 considérants par article.",
+      "definedTerms": "Dictionnaire des définitions (articles 3/4). Prêt pour tooltip sur les textes juridiques.",
+      "resolveRefs": "Texte brut en entrée, citations CELEX structurées en sortie. Annotation HTML facultative.",
+      "resolveAliases": "Résolution de noms humains (RGPD, DSA, IA Act, CBAM, ...) en CELEX. Plus de 680 alias."
+    },
+    "auth": {
+      "description": "Chaque endpoint /api/v1/* exige une clé API. Envoyez-la en Authorization: Bearer <clé> (recommandé) ou X-API-Key: <clé>. Les clés sont émises par l'équipe Brubru pour les abonnés Professional. Limite : 60 requêtes par minute par clé.",
+      "note": "X-API-Key est aussi accepté pour les scripts curl. Bearer est la valeur par défaut pour Postman, OpenAPI et les SDK."
+    },
+    "envelope": {
+      "description": "Tous les endpoints paginés renvoient la même structure. Les intégrateurs codent une seule fois contre l'enveloppe et changent de dataset en changeant le chemin."
+    },
+    "pricing": {
+      "plan": "Plan",
+      "monthly": "Mensuel",
+      "api": "API",
+      "rateLimit": "Limite",
+      "chatbot": "Chatbot",
+      "starter": "Starter",
+      "advocate": "Advocate",
+      "professional": "Professional",
+      "included": "Inclus",
+      "yes": "Oui",
+      "annual": "{{price}} annuel",
+      "rate": "{{n}} req/min par clé",
+      "note": "L'usage API seul ne consomme pas de crédits chatbot/IA. Chaque siège Professional peut émettre une clé. Pour exports en masse, clés multiples ou SLA sur mesure,"
+    },
+    "errors": {
+      "code": "Code",
+      "meaning": "Signification",
+      "ok": "Succès. Consultez X-RateLimit-Remaining pour vos appels restants dans la fenêtre.",
+      "unauthorized": "Clé API manquante ou invalide.",
+      "forbidden": "Clé valide mais le titulaire n'est pas au niveau Professional.",
+      "notFound": "Ressource introuvable.",
+      "invalidQuery": "Paramètre de requête invalide.",
+      "rateLimited": "Limite dépassée. Respectez l'en-tête Retry-After.",
+      "upstream": "Portail UE temporairement indisponible (ex. Have Your Say, calendrier de la Commission).",
+      "envelopeNote": "Les réponses d'erreur utilisent une enveloppe canonique : { error, reason_code, request_id }. Chaque réponse porte aussi un en-tête X-Request-Id pour la traçabilité."
     }
   }
 }

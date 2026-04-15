@@ -78,18 +78,30 @@ def yellow_user_with_key():
         db.close()
 
 
+def _err(json_body):
+    """Extract canonical error fields from either wrapped or unwrapped response body."""
+    detail = json_body.get("detail", json_body)
+    if isinstance(detail, dict):
+        return detail.get("error", ""), detail.get("reason_code", "")
+    return str(detail), ""
+
+
 def test_missing_header_returns_401(test_app):
     client = TestClient(test_app)
     r = client.get("/protected")
     assert r.status_code == 401
-    assert "Missing X-API-Key" in r.json()["detail"]
+    msg, code = _err(r.json())
+    assert "Missing API key" in msg
+    assert code == "auth_missing_key"
 
 
 def test_wrong_prefix_returns_401(test_app):
     client = TestClient(test_app)
     r = client.get("/protected", headers={"X-API-Key": "sk_live_notours"})
     assert r.status_code == 401
-    assert "Invalid API key format" in r.json()["detail"]
+    msg, code = _err(r.json())
+    assert "Invalid API key format" in msg
+    assert code == "auth_invalid_format"
 
 
 def test_unknown_key_returns_401(test_app):
@@ -99,7 +111,9 @@ def test_unknown_key_returns_401(test_app):
         headers={"X-API-Key": "brubru_live_" + "0" * 48},
     )
     assert r.status_code == 401
-    assert "Invalid or revoked" in r.json()["detail"]
+    msg, code = _err(r.json())
+    assert "not found" in msg.lower() or "revoked" in msg.lower()
+    assert code == "auth_key_not_found"
 
 
 def test_valid_key_returns_200(test_app, blue_user_with_key):
@@ -133,4 +147,6 @@ def test_non_blue_tier_returns_403(test_app, yellow_user_with_key):
     client = TestClient(test_app)
     r = client.get("/protected", headers={"X-API-Key": plaintext})
     assert r.status_code == 403
-    assert "Professional" in r.json()["detail"]
+    msg, code = _err(r.json())
+    assert "Professional" in msg
+    assert code == "tier_insufficient"

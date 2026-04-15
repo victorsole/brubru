@@ -1,0 +1,7 @@
+slug: efsa_news
+institution_slug: efsa
+category: press_release
+url: https://www.efsa.europa.eu/en/rss/news.xml
+language: en
+default_policy_areas:
+  - food_safety

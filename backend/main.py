@@ -33,7 +33,7 @@ from api import (
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
-    whatsapp,
+    whatsapp, positions,
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -205,12 +205,15 @@ app.include_router(preuser_analytics.router, tags=["Pre-User Analytics"])
 app.include_router(daily_brief.router, tags=["Daily Brief"])
 app.include_router(catalan_translations.router, tags=["Catalan Translations"])
 app.include_router(whatsapp.router, tags=["WhatsApp"])
+app.include_router(positions.router, tags=["Position Analysis"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
 
 # Data Provider API v1 (public paid surface, /api/v1/*)
 from api.v1 import router as v1_router, docs_alias_router as v1_docs_alias
+from api.v1._errors import register_v1_error_handlers
 app.include_router(v1_router)
 app.include_router(v1_docs_alias)
+register_v1_error_handlers(app)
 
 
 @app.middleware("http")

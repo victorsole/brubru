@@ -1,0 +1,8 @@
+slug: edps_news
+institution_slug: edps
+category: press_release
+url: https://www.edps.europa.eu/press-publications/press-news/news/rss_en
+language: en
+default_policy_areas:
+  - data_protection
+  - privacy

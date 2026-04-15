@@ -13,7 +13,8 @@
     "logOut": "Log Out",
     "onlyForUsers": "{{feature}} is only available for signed-up users",
     "signUpFree": "Sign up free",
-    "logIn": "Log in"
+    "logIn": "Log in",
+    "api": "API"
   },
   "main": {
     "chatHistory": "Chat History",
@@ -418,7 +419,7 @@
       "eyebrow": "Platform",
       "title": "10 Tools.<br />One Platform.",
       "subtitle": "Everything EU professionals need",
-      "description": "Brubru replaces expensive consultants and fragmented tools with a single AI-powered platform that covers the full EU advocacy workflow \u2014 from research to amendment drafting to compliance checking."
+      "description": "Brubru replaces expensive consultants and fragmented tools with a single AI-powered platform that covers the full EU advocacy workflow — from research to amendment drafting to compliance checking."
     },
     "features": {
       "aiChat": "AI Policy Chat",
@@ -445,9 +446,9 @@
     "story": {
       "eyebrow": "How Brubru Works",
       "title": "From research question to policy action in minutes, not weeks",
-      "intro": "Brubru\u2019s AI understands EU institutional processes, legislative procedures, and policy context. Here\u2019s how professionals use it every day.",
+      "intro": "Brubru’s AI understands EU institutional processes, legislative procedures, and policy context. Here’s how professionals use it every day.",
       "step1Title": "Ask a policy question",
-      "step1Content": "Type any EU policy question in natural language. Brubru\u2019s AI draws on a knowledge base of 50,000+ EU laws, EP committee reports, Commission proposals, EPRS briefings, and 11 Beresol open reports covering topics from AI Act implementation to CBAM compliance.",
+      "step1Content": "Type any EU policy question in natural language. Brubru’s AI draws on a knowledge base of 50,000+ EU laws, EP committee reports, Commission proposals, EPRS briefings, and 11 Beresol open reports covering topics from AI Act implementation to CBAM compliance.",
       "step2Title": "Track what matters",
       "step2Content": "Set up RSS feeds from the European Parliament, Council, Commission, EUR-Lex, and more. Track specific legislative files through the Legislative Train, monitor EP committee work, and get alerts on public consultations with upcoming deadlines.",
       "step3Title": "Draft amendments",
@@ -462,9 +463,9 @@
       "starter": {
         "badge": "STARTER",
         "name": "Starter",
-        "price": "\u20ac39",
+        "price": "€39",
         "period": "/month",
-        "savings": "or \u20ac396/year (save \u20ac72)",
+        "savings": "or €396/year (save €72)",
         "f1": "AI Policy Chat (unlimited)",
         "f2": "My EU Bubble dashboard",
         "f3": "RSS feed aggregation",
@@ -472,11 +473,11 @@
         "button": "Start Free Trial"
       },
       "advocate": {
-        "badge": "ADVOCATE \u2014 MOST POPULAR",
+        "badge": "ADVOCATE — MOST POPULAR",
         "name": "Advocate",
-        "price": "\u20ac59",
+        "price": "€59",
         "period": "/month",
-        "savings": "or \u20ac499/year (save \u20ac209)",
+        "savings": "or €499/year (save €209)",
         "f1": "Everything in Starter",
         "f2": "Amendator (unlimited)",
         "f3": "AI amendment suggestions",
@@ -484,11 +485,11 @@
         "button": "Start Free Trial"
       },
       "professional": {
-        "badge": "PROFESSIONAL \u2014 BEST VALUE",
+        "badge": "PROFESSIONAL — BEST VALUE",
         "name": "Professional",
-        "price": "\u20ac99",
+        "price": "€99",
         "period": "/month",
-        "savings": "or \u20ac799/year (save \u20ac389)",
+        "savings": "or €799/year (save €389)",
         "f1": "Everything in Advocate",
         "f2": "EU Law Comply",
         "f3": "Tenderator",
@@ -512,7 +513,7 @@
       "eyebrow": "About Brubru",
       "title": "Built in <strong>Brussels</strong>, for the <strong>EU bubble</strong>",
       "text1": "Brubru is developed by <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>, a Brussels-based public affairs technology company. We combine deep understanding of EU institutional processes with cutting-edge AI to create tools that actually work for policy professionals.",
-      "text2": "Our mission is to democratise access to EU policy intelligence. Whether you\u2019re a lobbyist tracking legislative files, an NGO drafting amendments, or a trade association monitoring consultations \u2014 Brubru gives you the same analytical power as the largest firms in town.",
+      "text2": "Our mission is to democratise access to EU policy intelligence. Whether you’re a lobbyist tracking legislative files, an NGO drafting amendments, or a trade association monitoring consultations — Brubru gives you the same analytical power as the largest firms in town.",
       "gdprTitle": "GDPR Compliant",
       "gdprDesc": "EU-hosted infrastructure. Your data stays in Europe.",
       "multilingualTitle": "Multilingual",
@@ -530,12 +531,77 @@
       "button": "Create Free Account"
     },
     "footer": {
-      "copyright": "\u00a9 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru is a product of <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
+      "copyright": "© 2026 <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a> BV. Brubru is a product of <a href=\"https://beresol.eu\" target=\"_blank\" rel=\"noopener noreferrer\">Beresol</a>.",
       "aboutUs": "About Us",
       "privacy": "Privacy",
       "terms": "Terms",
       "cookies": "Cookies",
       "contact": "Contact"
+    }
+  },
+  "api": {
+    "eyebrow": "For developers, RegTech, and AI agents",
+    "titlePre": "The EU,",
+    "titleAccent": "structured",
+    "lede": "Brubru is a vertical EU data provider. Our REST API gives you real-time access to 28,500+ adopted laws, 1,200+ legislative procedures, live consultation feedback, commissioner agendas, and the legal-text intelligence layer that powers Brubru's own chatbot and Amendator. Brubru itself is the first user of its own API.",
+    "cta": {
+      "reference": "API reference",
+      "trial": "Start a Professional trial",
+      "contact": "Contact sales",
+      "openRef": "Open the reference",
+      "ping": "/api/v1/ping (public)"
+    },
+    "sections": {
+      "whatYouGet": "What you get",
+      "authentication": "Authentication",
+      "envelope": "Response envelope",
+      "pricing": "Pricing",
+      "errors": "Rate limits and errors",
+      "startBuilding": "Start building"
+    },
+    "endpoints": {
+      "laws": "28,500+ adopted EU laws. Filters by CELEX, doc type, policy area, publication date, full-text search.",
+      "procedures": "1,200+ legislative files from proposal to adoption. Filters by OEIL reference, lead committee, rapporteur, last-update.",
+      "consultations": "Live stakeholder contributions from the EC Have Your Say portal. Paginated with country and user-type aggregates.",
+      "commissioners": "Live calendar items for all 27 college members. Name resolution is accent-insensitive.",
+      "recitalMap": "TF-IDF cosine mapping of recitals to articles for any law. Top-3 recitals per article.",
+      "definedTerms": "Article 3/4-style definitions dictionary. Hover-ready for annotating legal text.",
+      "resolveRefs": "Plain text in, structured CELEX citations out. Optional HTML annotation.",
+      "resolveAliases": "Resolve human names (GDPR, DSA, AI Act, CBAM, ...) to CELEX. 680+ aliases."
+    },
+    "auth": {
+      "description": "Every /api/v1/* endpoint requires an API key. Pass it as Authorization: Bearer <key> (recommended) or X-API-Key: <key>. Keys are minted by Brubru's admin team for Professional subscribers. Rate limit is 60 requests per minute per key.",
+      "note": "X-API-Key is also accepted for curl-friendly scripts. Bearer is the default for Postman, OpenAPI tooling, and SDKs."
+    },
+    "envelope": {
+      "description": "Every paginated endpoint returns the same shape. Partners can code once against the envelope and swap datasets by changing the path."
+    },
+    "pricing": {
+      "plan": "Plan",
+      "monthly": "Monthly",
+      "api": "API",
+      "rateLimit": "Rate limit",
+      "chatbot": "Chatbot",
+      "starter": "Starter",
+      "advocate": "Advocate",
+      "professional": "Professional",
+      "included": "Included",
+      "yes": "Yes",
+      "annual": "{{price}} annual",
+      "rate": "{{n}} req / min per key",
+      "note": "API-only usage does not consume chatbot/AI credits. Each Professional seat can mint one API key. For bulk exports, multiple keys, or custom SLAs,"
+    },
+    "errors": {
+      "code": "Code",
+      "meaning": "Meaning",
+      "ok": "Success. See X-RateLimit-Remaining for your remaining calls in the window.",
+      "unauthorized": "Missing or invalid API key.",
+      "forbidden": "Key valid but the owner is not on the Professional tier.",
+      "notFound": "Resource not found.",
+      "invalidQuery": "Invalid query parameter.",
+      "rateLimited": "Rate limit exceeded. Respect the Retry-After header.",
+      "upstream": "Upstream EU portal temporarily unavailable (e.g. Have Your Say, Commission calendar).",
+      "envelopeNote": "Error responses use a canonical envelope: { error, reason_code, request_id }. Every response also carries an X-Request-Id header for support traceability."
     }
   }
 }

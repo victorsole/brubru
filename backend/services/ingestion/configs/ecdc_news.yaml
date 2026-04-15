@@ -1,0 +1,7 @@
+slug: ecdc_news
+institution_slug: ecdc
+category: press_release
+url: https://www.ecdc.europa.eu/en/news-events/rss
+language: en
+default_policy_areas:
+  - health

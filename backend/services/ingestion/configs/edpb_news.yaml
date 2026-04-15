@@ -1,0 +1,8 @@
+slug: edpb_news
+institution_slug: edpb
+category: press_release
+url: https://www.edpb.europa.eu/news/news_en?type%5B0%5D=press_release&_format=rss
+language: en
+default_policy_areas:
+  - data_protection
+  - privacy

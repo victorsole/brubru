@@ -1,0 +1,7 @@
+slug: fra_news
+institution_slug: fra
+category: press_release
+url: https://fra.europa.eu/en/rss.xml
+language: en
+default_policy_areas:
+  - fundamental_rights

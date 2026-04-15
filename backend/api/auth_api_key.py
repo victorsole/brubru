@@ -53,22 +53,44 @@ async def get_api_user(
     request: Request,
     background_tasks: BackgroundTasks,
     x_api_key: Optional[str] = Header(default=None, alias="X-API-Key"),
+    authorization: Optional[str] = Header(default=None, alias="Authorization"),
     db: Session = Depends(get_db),
 ) -> User:
-    """Authenticate an /api/v1/* caller by API key."""
+    """Authenticate an /api/v1/* caller by API key.
 
-    if not x_api_key:
+    Accepts either `X-API-Key: brubru_live_...` or `Authorization: Bearer brubru_live_...`.
+    Bearer is the OpenAPI/Postman default; X-API-Key kept for curl-friendliness.
+    """
+
+    # Extract key from whichever header is present. Bearer wins if both set.
+    extracted: Optional[str] = None
+    if authorization:
+        parts = authorization.strip().split(None, 1)
+        if len(parts) == 2 and parts[0].lower() == "bearer":
+            extracted = parts[1].strip()
+    if not extracted and x_api_key:
+        extracted = x_api_key.strip()
+
+    if not extracted:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Missing X-API-Key header",
-            headers={"WWW-Authenticate": "ApiKey"},
+            detail={
+                "error": "Unauthorized: Missing API key",
+                "reason_code": "auth_missing_key",
+            },
+            headers={"WWW-Authenticate": 'Bearer realm="Brubru API"'},
         )
 
-    if not x_api_key.startswith(KEY_PREFIX):
+    if not extracted.startswith(KEY_PREFIX):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid API key format",
+            detail={
+                "error": "Unauthorized: Invalid API key format",
+                "reason_code": "auth_invalid_format",
+            },
         )
+
+    x_api_key = extracted
 
     key_hash = ApiKey.hash_plaintext(x_api_key)
     api_key = (
@@ -79,20 +101,29 @@ async def get_api_user(
     if api_key is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or revoked API key",
+            detail={
+                "error": "Unauthorized: API key not found or revoked",
+                "reason_code": "auth_key_not_found",
+            },
         )
 
     user = db.query(User).filter(User.id == api_key.user_id).first()
     if user is None or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="API key owner is inactive",
+            detail={
+                "error": "Unauthorized: API key owner is inactive",
+                "reason_code": "org_inactive",
+            },
         )
 
     if user.subscription_tier != REQUIRED_TIER:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="API access requires the Professional subscription",
+            detail={
+                "error": "Forbidden: API access requires the Professional subscription",
+                "reason_code": "tier_insufficient",
+            },
         )
 
     # Attach for downstream dependencies (e.g. per-key rate limiter)

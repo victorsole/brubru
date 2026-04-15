@@ -58,13 +58,18 @@ async def list_laws(
     celex: Optional[str] = Query(None, description="Exact CELEX filter"),
     doc_type: Optional[str] = Query(None, description="Document type (Regulation, Directive, Decision, ...)"),
     policy_area: Optional[str] = Query(None, description="Policy area slug"),
-    published_from: Optional[date] = Query(None),
-    published_to: Optional[date] = Query(None),
+    published_from: Optional[date] = Query(None, description="Publication date from (YYYY-MM-DD)"),
+    published_to: Optional[date] = Query(None, description="Publication date to (YYYY-MM-DD)"),
+    published_end: Optional[date] = Query(None, description="Alias of published_to (GovClipping-compatible)"),
     limit: int = Query(20, ge=1, le=100),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[LawItem]:
+    # Alias: published_end -> published_to
+    if published_end and not published_to:
+        published_to = published_end
+
     query = db.query(EULaw)
 
     filters = []

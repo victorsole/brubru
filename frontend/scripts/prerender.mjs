@@ -33,6 +33,7 @@ const ROUTES = [
   { path: '/terms', title: 'Terms of Service - Brubru', description: 'Brubru terms of service and conditions of use.' },
   { path: '/cookies', title: 'Cookie Policy - Brubru', description: 'Brubru cookie policy and tracking information.' },
   { path: '/subprocessors', title: 'Subprocessors - Brubru', description: 'List of third-party subprocessors used by Brubru.' },
+  { path: '/api', title: 'Brubru API - The EU, structured.', description: 'Brubru Data Provider API. REST + MCP access to 28,500+ EU laws, 1,200+ legislative procedures, live consultation feedback, commissioner agendas, and legal-text intelligence. Professional subscription.' },
 ];
 
 async function prerender() {
