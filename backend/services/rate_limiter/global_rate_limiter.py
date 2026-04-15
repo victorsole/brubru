@@ -46,13 +46,51 @@ class GlobalRateLimiter:
         "data_europa": RateLimitConfig(calls=60, period=60),
     }
 
+    # Per-API-key limit for the Data Provider API (/api/v1/*). Soft sliding
+    # window. Shared across all endpoints a single key hits.
+    API_KEY_LIMIT = RateLimitConfig(calls=60, period=60)
+
     def __init__(self):
         """Initialize global rate limiter"""
         # In-memory tracking: {service: {timestamp_list}}
         self._call_timestamps: Dict[str, list] = {}
         self._locks: Dict[str, asyncio.Lock] = {}
+        # Per-API-key sliding windows (separate map so key IDs don't collide with service names)
+        self._api_key_timestamps: Dict[str, list] = {}
+        self._api_key_locks: Dict[str, asyncio.Lock] = {}
 
         logger.info("Initialized Global Rate Limiter")
+
+    async def check_api_key_limit(self, api_key_id: str) -> tuple[bool, int]:
+        """
+        Sliding-window soft rate limit for a single API key.
+
+        Returns:
+            (allowed, retry_after_seconds). retry_after is 0 when allowed.
+        """
+        if api_key_id not in self._api_key_locks:
+            self._api_key_locks[api_key_id] = asyncio.Lock()
+
+        async with self._api_key_locks[api_key_id]:
+            cfg = self.API_KEY_LIMIT
+            now = datetime.now()
+            cutoff = now - timedelta(seconds=cfg.period)
+            stamps = [t for t in self._api_key_timestamps.get(api_key_id, []) if t > cutoff]
+            if len(stamps) >= cfg.calls:
+                retry_after = int(cfg.period - (now - stamps[0]).total_seconds()) + 1
+                self._api_key_timestamps[api_key_id] = stamps
+                return False, max(1, retry_after)
+            stamps.append(now)
+            self._api_key_timestamps[api_key_id] = stamps
+            return True, 0
+
+    def get_remaining_api_key_calls(self, api_key_id: str) -> int:
+        """Calls remaining in the current 60s window for an API key."""
+        cfg = self.API_KEY_LIMIT
+        now = datetime.now()
+        cutoff = now - timedelta(seconds=cfg.period)
+        stamps = [t for t in self._api_key_timestamps.get(api_key_id, []) if t > cutoff]
+        return max(0, cfg.calls - len(stamps))
 
     async def check_limit(self, service: str) -> bool:
         """

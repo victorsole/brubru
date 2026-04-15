@@ -3153,6 +3153,10 @@
               <li><span class="mdi mdi-file-cabinet"></span> EC Register of Commission Documents (COM, SWD, SEC, OJ via RegDoc API)</li>
               <li><span class="mdi mdi-comment-question-outline"></span> EC Public Consultations from "Have Your Say" portal</li>
               <li><span class="mdi mdi-file-document-multiple-outline"></span> <a href="https://beresol.eu" target="_blank" style="color: inherit; font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--color-primary);"><strong>Beresol</strong></a> open reports on AI Act, DORA, MiCA, SFDR, CBAM, Mercosur, and 9 more topics</li>
+              <li><span class="mdi mdi-link-variant"></span> <strong>Recital-to-article linker</strong>: per-law TF-IDF cosine map between every article and the recitals that explain its intent. When a user asks about Article 12 of a regulation, the chatbot surfaces the 3 most relevant recitals with scores.</li>
+              <li><span class="mdi mdi-book-alphabet"></span> <strong>Statutory definition extractor</strong>: every Article 3/4 "term means..." entry is indexed. If the user mentions a defined term (e.g. "online platform"), the chatbot cites the exact statutory definition verbatim.</li>
+              <li><span class="mdi mdi-tag-multiple-outline"></span> <strong>Law alias resolver</strong>: 680+ acronym/nickname to CELEX mappings (GDPR, DSA, DMA, AI Act, CBAM, Chips Act, Solvency II, CRR, Critical Raw Materials Act, EU Inc, ...). Users type how they speak; Brubru resolves to the underlying legal act and retrieves its structure.</li>
+              <li><span class="mdi mdi-file-find-outline"></span> <strong>Cross-reference resolver</strong>: inline citations like "Article 7 of Regulation (EU) 2024/1234" or "Directive 2011/93/EU" are parsed into structured references with clickable EUR-Lex URLs.</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">AI provider chain</div>
             <ul class="product-detail__list">
@@ -3309,6 +3313,9 @@
               <li><span class="mdi mdi-check-circle-outline"></span> Handles both OJ (Official Journal) and COM (Commission) document formats</li>
               <li><span class="mdi mdi-check-circle-outline"></span> Supports recitals, articles, annexes, and transitional provisions</li>
               <li><span class="mdi mdi-check-circle-outline"></span> Link amendments to Legislative Train carriages for tracking</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Recital-aware Justification</strong>: for every article being amended, Brubru surfaces the top-3 TF-IDF-linked recitals so drafters can cite the original legal intent without hunting through 80+ recitals by hand</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Definition hover</strong>: every statutory defined term in the act is tooltip-enabled. No more guessing what "online platform" means in context</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Clickable cross-references</strong>: citations like "Article 7 of Regulation (EU) 2024/1234" resolve to EUR-Lex automatically</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Why it matters</div>
             <ul class="product-detail__list">

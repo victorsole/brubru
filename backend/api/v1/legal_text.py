@@ -1,0 +1,131 @@
+"""
+/api/v1/legal-text — Legal-Text Intelligence endpoints on the Data Provider API.
+
+Wraps the recital-article linker, definition extractor, cross-reference resolver,
+and law alias resolver that power Brubru's internal chatbot and Amendator.
+
+Customers get the same primitives Brubru uses internally.
+"""
+
+import logging
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from core.database import get_db
+from models.user import User
+
+from ._deps import api_user_with_rate_limit
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/legal-text", tags=["v1-legal-text"])
+
+
+class RecitalArticleMapResponse(BaseModel):
+    celex: str
+    map: dict = Field(..., description="Article -> [{recital_number, score, snippet}, ...] (top-3)")
+
+
+class DefinedTermsResponse(BaseModel):
+    celex: str
+    terms: dict = Field(..., description="Term -> {term, definition, article, point}")
+
+
+class ResolveRefsRequest(BaseModel):
+    text: str
+    annotate_html: bool = False
+
+
+class ResolveAliasesRequest(BaseModel):
+    text: str = Field(..., description="Plain text. Detects GDPR/DSA/AI Act/etc. by name.")
+
+
+@router.get(
+    "/{celex}/recital-article-map",
+    response_model=RecitalArticleMapResponse,
+    summary="Recital-to-article mapping (TF-IDF cosine, top-3 per article)",
+)
+def recital_article_map(
+    celex: str,
+    force_recompute: bool = Query(False),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> RecitalArticleMapResponse:
+    from services.parsers.recital_article_store import get_or_compute_map
+
+    mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
+    if mapping is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "not_found", "detail": f"CELEX {celex} not available", "resource": "law", "id": celex},
+        )
+    return RecitalArticleMapResponse(celex=celex, map=mapping)
+
+
+@router.get(
+    "/{celex}/defined-terms",
+    response_model=DefinedTermsResponse,
+    summary="Article 3/4-style definitions extracted from a law",
+)
+def defined_terms(
+    celex: str,
+    force_recompute: bool = Query(False),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> DefinedTermsResponse:
+    from services.parsers.definition_store import get_or_compute_map as _get_defs
+
+    mapping = _get_defs(db, celex, force_recompute=force_recompute)
+    if mapping is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"error": "not_found", "detail": f"CELEX {celex} not available", "resource": "law", "id": celex},
+        )
+    return DefinedTermsResponse(celex=celex, terms=mapping)
+
+
+@router.post(
+    "/resolve-references",
+    summary="Resolve inline EU legal citations in plain text",
+)
+def resolve_references(
+    payload: ResolveRefsRequest,
+    user: User = Depends(api_user_with_rate_limit),
+):
+    from services.parsers.cross_reference_resolver import (
+        resolve_references_json,
+        annotate_html,
+    )
+
+    if payload.annotate_html:
+        return {"html": annotate_html(payload.text)}
+    return {"refs": resolve_references_json(payload.text)}
+
+
+@router.post(
+    "/resolve-aliases",
+    summary="Resolve human names (GDPR, DSA, AI Act, ...) to CELEX identifiers",
+)
+def resolve_aliases(
+    payload: ResolveAliasesRequest,
+    user: User = Depends(api_user_with_rate_limit),
+):
+    from services.parsers.law_alias_resolver import find_alias_matches
+
+    matches = find_alias_matches(payload.text)
+    return {
+        "aliases": [
+            {
+                "raw": m.raw,
+                "alias": m.alias,
+                "celex": m.celex,
+                "full_title": m.full_title,
+                "start": m.start,
+                "end": m.end,
+            }
+            for m in matches
+        ]
+    }

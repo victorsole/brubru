@@ -5,6 +5,7 @@ SQLAlchemy models for Brubru application.
 """
 
 from .user import User
+from .api_key import ApiKey
 from .rss_feed import RSSFeed
 from .rss_entry import RSSEntry
 from .user_feed_subscription import UserFeedSubscription
