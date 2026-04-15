@@ -18,6 +18,8 @@
 - Judicial review: General Court (full review + unlimited jurisdiction on fines), Court of Justice (points of law)
 - Largest cartel fine: EUR 2.93 billion (truck cartel, 2016)
 - DG COMP (13 April 2026): Commission carried out unannounced antitrust inspections at premises of companies active in the chocolate confectionery sector in several Member States. Concerns: possible violation of Article 101 TFEU (cartel prohibition) on market allocation or price coordination. Source: https://ec.europa.eu/commission/presscorner
+- Merger case M.12286 HONDA / ASTEMO (14 April 2026): prior notification of concentration, candidate for simplified procedure (OJ:C_202602183)
+- Merger case M.12295 VALEA / ROCKAWAY MEDIA / ROCKAWAY ARTS (14 April 2026): non-opposition to notified concentration (OJ:C_202602283)
 
 Guide to EU antitrust enforcement by DG Competition, covering Articles 101 and 102 TFEU, procedural rules under Regulation 1/2003, and the ECN+ Directive cooperation framework.
 

@@ -18,6 +18,7 @@ QUICK FACTS:
 - EP committee: SANTE-ITRE joint (Commissioner Varhelyi exchange of views 19 March 2026)
 - EP own-initiative report: 2025/2087(INI) on public health aspects of biotechnology and life sciences
 - Key bodies created: European Health Biotechnology Steering Group, EU Health Biotechnology Support Network, Foresight Panel for Emerging Health Innovation
+- EPRS Briefing (14 April 2026): "European biotech act" -- overview of COM(2025) 1022 objectives, competitiveness gap, 7-pillar structure, SANTE-ITRE joint committee path. Ref: EPRS_BRI(2026)785708
 
 ## Why This Regulation
 

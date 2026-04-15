@@ -565,6 +565,12 @@ class ContextData:
     # EP plenary debate transcript (CRE)
     plenary_debate_transcript: Optional[str] = None
 
+    # On-demand: stakeholder feedback to a public consultation
+    consultation_feedback_block: Optional[str] = None
+
+    # On-demand: a Commissioner's published agenda
+    commissioner_agenda_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1026,6 +1032,41 @@ class ContextBuilder:
 
         post_tasks['debate'] = _fetch_debate_safe()
 
+        # 3b. On-demand: Have Your Say stakeholder feedback
+        consultation_feedback_intent = self._detect_consultation_feedback_intent(user_message)
+
+        async def _fetch_feedback_safe():
+            if not consultation_feedback_intent:
+                return None
+            try:
+                block = await self._fetch_consultation_feedback(user_message, public_consultations)
+                if block:
+                    logger.info("[HYS-feedback] Injected stakeholder feedback block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[HYS-feedback] Failed: %s", e)
+                return None
+
+        post_tasks['consultation_feedback'] = _fetch_feedback_safe()
+
+        # 3c. On-demand: Commissioner agenda
+        commissioner_intent = self._detect_commissioner_agenda_intent(user_message)
+
+        async def _fetch_commissioner_agenda_safe():
+            if not commissioner_intent:
+                return None
+            name, df, dt = commissioner_intent
+            try:
+                block = await self._fetch_commissioner_agenda(name, df, dt)
+                if block:
+                    logger.info("[commissioner-agenda] Injected agenda block for %s (%d chars)", name, len(block))
+                return block
+            except Exception as e:
+                logger.warning("[commissioner-agenda] Failed for %s: %s", name, e)
+                return None
+
+        post_tasks['commissioner_agenda'] = _fetch_commissioner_agenda_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1082,6 +1123,8 @@ class ContextBuilder:
         cellar_legislation = post_map['cellar']
         plenary_debate_transcript = post_map['debate']
         eu_institutional_results = post_map['eu_search']
+        consultation_feedback_block = post_map.get('consultation_feedback')
+        commissioner_agenda_block = post_map.get('commissioner_agenda')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1147,6 +1190,8 @@ class ContextBuilder:
             rapporteur_by_country=rapporteur_by_country if rapporteur_by_country else None,
             rapporteur_country=detected_country if rapporteur_by_country else None,
             plenary_debate_transcript=plenary_debate_transcript,
+            consultation_feedback_block=consultation_feedback_block,
+            commissioner_agenda_block=commissioner_agenda_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -3789,18 +3834,22 @@ class ContextBuilder:
                 results = fallback_query.all()
 
             # Format results
-            now = datetime.now()
+            today = date.today()
             for item in results:
                 days_remaining = None
                 is_closing_soon = False
                 if item.end_date:
-                    days_remaining = (item.end_date - now).days
-                    is_closing_soon = days_remaining <= 7 and days_remaining >= 0
+                    end = item.end_date.date() if hasattr(item.end_date, "date") and not isinstance(item.end_date, date) else item.end_date
+                    days_remaining = (end - today).days
+                    is_closing_soon = 0 <= days_remaining <= 7
 
                 consultations.append({
                     'source_type': 'public_consultation',
-                    'consultation_id': item.consultation_id,
+                    'consultation_id': item.initiative_id,
+                    'publication_id': getattr(item, 'publication_id', None),
+                    'initiative_id': getattr(item, 'initiative_id', None),
                     'title': item.title,
+                    'short_title': getattr(item, 'short_title', None),
                     'description': item.description[:400] if item.description else None,
                     'dg_responsible': item.dg_responsible,
                     'dg_name': get_dg_full_name(item.dg_responsible) if item.dg_responsible else None,
@@ -3813,6 +3862,7 @@ class ContextBuilder:
                     'is_closing_soon': is_closing_soon,
                     'feedback_count': item.feedback_count,
                     'portal_url': item.portal_url,
+                    'feedback_url': getattr(item, 'feedback_url', None),
                     'relevance_score': item.relevance_score
                 })
 
@@ -5028,6 +5078,352 @@ class ContextBuilder:
             result += "\n\n" + client.format_debate_for_context(largest)
         return result
 
+    # ------------------------------------------------------------------
+    # On-demand: stakeholder feedback on EC public consultations
+    # ------------------------------------------------------------------
+
+    CONSULTATION_FEEDBACK_INTENT_PHRASES = (
+        "feedback on", "feedback to", "feedback from", "feedback on the consultation",
+        "stakeholder feedback", "stakeholder responses", "stakeholder contributions",
+        "what did stakeholders say", "what stakeholders said",
+        "contributions to", "contributions on the consultation",
+        "comments on the consultation", "comments to the consultation",
+        "responses to the consultation", "responses on the consultation",
+        "have your say feedback", "have your say contributions",
+        # FR
+        "contributions a la consultation", "contributions à la consultation",
+        "reponses a la consultation", "réponses à la consultation",
+        "qui a repondu a", "qui a répondu à",
+        # ES
+        "respuestas a la consulta", "comentarios sobre la consulta",
+        "qué dijeron sobre la consulta", "que dijeron sobre la consulta",
+        # CA
+        "que van dir sobre la consulta", "què van dir sobre la consulta",
+        "respostes a la consulta",
+        # NL
+        "feedback op de raadpleging", "reacties op de consultatie",
+        # IT
+        "feedback sulla consultazione", "risposte alla consultazione",
+    )
+
+    def _detect_consultation_feedback_intent(self, query: str) -> bool:
+        if not query:
+            return False
+        q = query.lower()
+        return any(p in q for p in self.CONSULTATION_FEEDBACK_INTENT_PHRASES)
+
+    async def _fetch_consultation_feedback(
+        self,
+        query: str,
+        consultations: List[Dict[str, Any]],
+        limit: int = 8,
+    ) -> Optional[str]:
+        """If the user is asking about feedback to a consultation, find the best
+        matching consultation (across ALL statuses) and fetch the top stakeholder
+        contributions live from Have Your Say.
+        """
+        from services.api_clients.have_your_say_feedback_client import (
+            get_have_your_say_feedback_client,
+        )
+        client = get_have_your_say_feedback_client()
+
+        def _pid_of(c: Dict[str, Any]) -> Optional[int]:
+            for candidate in (c.get("publication_id"), c.get("initiative_id")):
+                if candidate:
+                    try:
+                        return int(str(candidate).strip())
+                    except (TypeError, ValueError):
+                        pass
+            if c.get("portal_url"):
+                m = re.search(r"/initiatives/(\d+)\b", c["portal_url"])
+                if m:
+                    return int(m.group(1))
+            return None
+
+        # Build candidate pool: (consultation_dict, pid, score)
+        candidates: List[Tuple[Dict[str, Any], int, int]] = []
+
+        stop = {"the", "and", "for", "with", "what", "did", "say", "about",
+                "consultation", "feedback", "stakeholders", "contributions",
+                "show", "give", "tell", "have", "your", "from", "this", "that",
+                "kept", "purposes", "their"}
+        tokens = [t.lower() for t in re.findall(r"[A-Za-z\u00C0-\u017F]{4,}", query)]
+        tokens = [t for t in tokens if t not in stop][:8]
+
+        def _score(consultation: Dict[str, Any]) -> int:
+            text = " ".join([
+                consultation.get("title") or "",
+                consultation.get("short_title") or "",
+            ]).lower()
+            return sum(1 for t in tokens if t in text)
+
+        # 1) Score consultations from the main pipeline
+        for c in consultations or []:
+            p = _pid_of(c)
+            if p is None:
+                continue
+            candidates.append((c, p, _score(c)))
+
+        # 2) Augment with keyword search across ALL statuses (open/closed/upcoming)
+        if tokens:
+            try:
+                from core.database import SessionLocal
+                from models.public_consultation import PublicConsultation
+                from sqlalchemy import or_, func
+                db = SessionLocal()
+                try:
+                    q = db.query(PublicConsultation)
+                    conds = []
+                    for t in tokens:
+                        like = f"%{t}%"
+                        conds.append(func.lower(PublicConsultation.title).like(like))
+                        conds.append(func.lower(func.coalesce(PublicConsultation.short_title, "")).like(like))
+                    q = q.filter(or_(*conds))
+                    q = q.order_by(PublicConsultation.feedback_count.desc().nulls_last())
+                    rows = q.limit(8).all()
+                finally:
+                    db.close()
+                for it in rows:
+                    d = {
+                        "title": it.title,
+                        "short_title": it.short_title,
+                        "publication_id": it.publication_id,
+                        "initiative_id": it.initiative_id,
+                        "portal_url": it.portal_url,
+                        "feedback_url": it.feedback_url,
+                        "feedback_count": it.feedback_count or 0,
+                    }
+                    p = _pid_of(d)
+                    if p is None:
+                        continue
+                    if any(p == existing_pid for _, existing_pid, _ in candidates):
+                        continue
+                    candidates.append((d, p, _score(d)))
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("[HYS-feedback] keyword fallback failed: %s", exc)
+
+        if not candidates:
+            return None
+
+        # Sort by score desc, then by feedback_count desc (DB hint), then preserve order
+        candidates.sort(key=lambda triple: (-triple[2], -(triple[0].get("feedback_count") or 0)))
+
+        # Try each candidate in order until we get non-empty live feedback
+        chosen: Optional[Dict[str, Any]] = None
+        pid: Optional[int] = None
+        items: List[Any] = []
+        summary: Dict[str, Any] = {}
+        for c, p, score in candidates[:5]:
+            try:
+                items = await client.fetch_feedback(p, limit=limit)
+            except Exception:
+                items = []
+            if items:
+                chosen, pid = c, p
+                try:
+                    summary = await client.get_summary_counts(p)
+                except Exception:
+                    summary = {"total": len(items), "by_user_type": {}, "by_country": {}}
+                break
+
+        if not items or chosen is None or pid is None:
+            return None
+
+        title = chosen.get("title") or chosen.get("short_title") or "the consultation"
+        public_url = chosen.get("portal_url") or chosen.get("feedback_url") or ""
+
+        lines: List[str] = []
+        lines.append(f"\nSTAKEHOLDER FEEDBACK ON HAVE YOUR SAY (live, top {len(items)} of approx {summary.get('total', 0)} sampled):")
+        lines.append(f"Consultation: {title}")
+        if public_url:
+            lines.append(f"Source: {public_url}")
+        if summary.get("by_user_type"):
+            top_types = sorted(summary["by_user_type"].items(), key=lambda kv: -kv[1])[:5]
+            lines.append("By stakeholder type: " + ", ".join(f"{k}={v}" for k, v in top_types))
+        if summary.get("by_country"):
+            top_countries = sorted(summary["by_country"].items(), key=lambda kv: -kv[1])[:6]
+            lines.append("By country: " + ", ".join(f"{k}={v}" for k, v in top_countries))
+        lines.append("")
+        for it in items:
+            who = it.organisation or it.author_name or "anonymous"
+            tr = f" (TR {it.transparency_register_number})" if it.transparency_register_number else ""
+            lines.append(f"- [{it.user_type or 'UNKNOWN'} | {it.country or '??'}] {who}{tr}")
+            if it.short_text:
+                lines.append(f"  \"{it.short_text}\"")
+            if it.attachments:
+                lines.append(f"  Attachments: {len(it.attachments)}")
+            lines.append(f"  Submitted: {it.date}")
+            lines.append("")
+        return "\n".join(lines)
+
+    # ------------------------------------------------------------------
+    # On-demand: Commissioner agenda
+    # ------------------------------------------------------------------
+
+    COMMISSIONER_AGENDA_INTENT_PHRASES = (
+        "agenda", "schedule", "calendar", "meeting", "meetings",
+        "agenda of", "agenda for", "agenda de", "agenda di",
+        "what is", "what was", "what will", "what did",
+        "doing today", "doing tomorrow", "doing yesterday",
+        "did today", "did yesterday", "will do",
+        "meeting", "meetings", "schedule", "calendar",
+        # FR
+        "rendez-vous de", "agenda de la commissaire", "agenda du commissaire",
+        # ES
+        "agenda del comisario", "agenda de la comisaria",
+        # CA
+        "agenda del comissari", "agenda de la comissaria", "que fa", "què fa",
+        # IT
+        "agenda del commissario",
+        # NL
+        "agenda van",
+    )
+
+    def _detect_commissioner_agenda_intent(
+        self, query: str
+    ) -> Optional[Tuple[str, Optional[date], Optional[date]]]:
+        """Return (commissioner_name, date_from, date_to) or None.
+
+        Detection works in two passes:
+          1) Try to resolve a commissioner name in the query.
+          2) Require either an agenda-style intent phrase OR a date/relative-date
+             token. If only a commissioner name appears with no agenda or date hint,
+             do not trigger (avoids false positives on biographical questions).
+        """
+        if not query:
+            return None
+        q = query.lower()
+
+        from services.api_clients.commissioner_agenda_client import (
+            get_commissioner_agenda_client,
+        )
+        client = get_commissioner_agenda_client()
+        words = re.findall(r"[\w\u00C0-\u017F\-']+", query)
+        profile = None
+        for n in (3, 2, 1):
+            for i in range(len(words) - n + 1):
+                cand = " ".join(words[i : i + n])
+                if len(cand) < 3:
+                    continue
+                p = client.resolve(cand)
+                if p:
+                    profile = p
+                    break
+            if profile:
+                break
+        if profile is None:
+            return None
+
+        # date / relative-date detection
+        relative_date_tokens = (
+            "today", "yesterday", "tomorrow", "this week", "next week", "last week",
+            "demain", "ahir", "demà", "hoy", "ayer", "mañana", "manana",
+            "oggi", "ieri", "domani", "avui", "aujourd'hui",
+        )
+        has_intent_phrase = any(p in q for p in self.COMMISSIONER_AGENDA_INTENT_PHRASES)
+        has_relative_date = any(w in q for w in relative_date_tokens)
+        has_iso_date = bool(re.search(r"\b\d{4}-\d{2}-\d{2}\b", q))
+        has_named_date = bool(re.search(
+            r"\b\d{1,2}\s+(january|february|march|april|may|june|july|august|september|october|november|december)\b",
+            q,
+        ))
+        if not (has_intent_phrase or has_relative_date or has_iso_date or has_named_date):
+            return None
+
+        # date detection
+        today = date.today()
+        date_from: Optional[date] = None
+        date_to: Optional[date] = None
+        if "today" in q or "hoy" in q or "avui" in q or "oggi" in q or "aujourd'hui" in q:
+            date_from = date_to = today
+        elif "yesterday" in q or "ayer" in q or "ahir" in q or "ieri" in q or "hier" in q:
+            date_from = date_to = today - timedelta(days=1)
+        elif "tomorrow" in q or "mañana" in q or "manana" in q or "demà" in q or "demain" in q or "domani" in q:
+            date_from = date_to = today + timedelta(days=1)
+        elif "this week" in q:
+            start = today - timedelta(days=today.weekday())
+            date_from = start
+            date_to = start + timedelta(days=6)
+        elif "next week" in q:
+            start = today - timedelta(days=today.weekday()) + timedelta(days=7)
+            date_from = start
+            date_to = start + timedelta(days=6)
+        elif "last week" in q:
+            start = today - timedelta(days=today.weekday()) - timedelta(days=7)
+            date_from = start
+            date_to = start + timedelta(days=6)
+        else:
+            # try ISO date or "Day Month [Year]"
+            m = re.search(r"(\d{4})-(\d{2})-(\d{2})", q)
+            if m:
+                try:
+                    date_from = date_to = date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+                except ValueError:
+                    pass
+            else:
+                month_names = {
+                    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+                    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
+                }
+                m = re.search(
+                    r"(\d{1,2})\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s*(\d{4})?",
+                    q,
+                )
+                if m:
+                    try:
+                        y = int(m.group(3)) if m.group(3) else today.year
+                        d = date(y, month_names[m.group(2)], int(m.group(1)))
+                        date_from = date_to = d
+                    except (ValueError, KeyError):
+                        pass
+
+        # default: a 2-week window centred on today
+        if date_from is None and date_to is None:
+            date_from = today - timedelta(days=7)
+            date_to = today + timedelta(days=7)
+
+        return profile.name, date_from, date_to
+
+    async def _fetch_commissioner_agenda(
+        self,
+        commissioner_name: str,
+        date_from: Optional[date],
+        date_to: Optional[date],
+    ) -> Optional[str]:
+        from services.api_clients.commissioner_agenda_client import (
+            get_commissioner_agenda_client,
+        )
+        client = get_commissioner_agenda_client()
+        try:
+            profile, items = await client.fetch_agenda(commissioner_name, date_from=date_from, date_to=date_to)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[commissioner-agenda] fetch failed name=%s: %s", commissioner_name, exc)
+            return None
+        if not profile:
+            return None
+        if not items:
+            window = ""
+            if date_from and date_to:
+                window = f" between {date_from.isoformat()} and {date_to.isoformat()}"
+            return (
+                f"\nCOMMISSIONER AGENDA (live):\nNo public agenda items for {profile.name}"
+                f"{window}. Source: https://commission.europa.eu/about/organisation/college-commissioners/"
+                "calendar-items-president-and-commissioners_en"
+            )
+        lines: List[str] = []
+        window = ""
+        if date_from and date_to:
+            window = f" ({date_from.isoformat()} to {date_to.isoformat()})"
+        lines.append(f"\nCOMMISSIONER AGENDA (live){window}:")
+        lines.append(f"{profile.name} -- {profile.portfolio} ({profile.country})")
+        lines.append(f"Source: https://commission.europa.eu/about/organisation/college-commissioners/calendar-items-president-and-commissioners_en")
+        lines.append("")
+        for it in items[:25]:
+            loc = f" -- {it.location}" if it.location else ""
+            url = f"\n  Detail: {it.detail_url}" if it.detail_url else ""
+            lines.append(f"- {it.date.isoformat()}: {it.title}{loc}{url}")
+        return "\n".join(lines)
+
     async def _fetch_eu_institutional_search(
         self,
         query: str,
@@ -5402,6 +5798,15 @@ class ContextBuilder:
 
         # Header
         sections.append(f"USER QUERY: {context_data.query}\n")
+
+        # On-demand blocks (high-priority, user explicitly asked for these via intent
+        # detection in build_context_for_query). Append early so they survive truncation.
+        if getattr(context_data, 'consultation_feedback_block', None):
+            sections.append(context_data.consultation_feedback_block)
+            sections.append("")
+        if getattr(context_data, 'commissioner_agenda_block', None):
+            sections.append(context_data.commissioner_agenda_block)
+            sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)
         try:
@@ -5917,6 +6322,8 @@ class ContextBuilder:
         if context_data.plenary_debate_transcript:
             sections.append(f"\n{context_data.plenary_debate_transcript}")
             sections.append("")
+
+        # (On-demand blocks moved earlier to survive truncation)
 
         # Real-time web search results (Tavily)
         if context_data.web_search_results:

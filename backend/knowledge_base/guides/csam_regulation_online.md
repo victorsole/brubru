@@ -19,7 +19,8 @@
 - EP plenary votes on extension: 11 March 2026 (partial), 26 March 2026 (final)
 - EP plenary vote 11 March: 458 for, 103 against, 63 abstentions (adopted with amendments)
 - EP plenary vote 26 March: Commission proposal REJECTED (228 for, 311 against, 92 abstentions)
-- Current status of derogation: EXPIRED 3 April 2026; EP adopted position extending to 3 August 2027 with conditions; awaiting Council 1st reading
+- Current status of derogation: EXPIRED 3 April 2026; EP adopted position extending to 3 August 2027 with conditions (T10-0095/2026, 26 March 2026); awaiting Council 1st reading
+- Extension procedure full document trail: COM(2025)0797 (19/12/2025) > LIBE draft report PE784.310 (Sippel, 5/2/2026) > Amendments PE784.377 (10/2/2026) > Committee report A10-0040/2026 (3/3/2026) > EP partial vote T10-0070/2026 (11/3/2026) > EP 1st reading T10-0095/2026 (26/3/2026)
 - Criminal law framework: Directive 2011/93/EU (CELEX 32011L0093)
 - EUCSA: Proposed EU Centre on Child Sexual Abuse (new decentralised agency)
 - EU strategy: 2020 EU strategy on the rights of the child; BIK+ (Better Internet for Kids) strategy

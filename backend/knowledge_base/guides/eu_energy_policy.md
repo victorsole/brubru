@@ -17,6 +17,8 @@
 - REPowerEU (2022-2023): End Russian fossil fuel dependency by 2027
 - 2026 Energy Package: Adopted 10 March 2026 -- Clean Energy Investment Strategy, SMR Strategy, Citizens Energy Package
 - REMIT new implementing rules (9 April 2026): energy market integrity + standardised data (Reg. 2026/818)
+- Electricity supplier switching (14 April 2026): New implementing rules adopted by Commission -- switching process reduced to 24 hours by end of 2026 (consumer-facing benefit, speeds market competition). Source: DG ENER press release 14 April 2026
+- EPRS Briefing (14 April 2026): "Update of the EU emissions trading system for stationary installations, aviation, and maritime transport" -- ETS Directive obliges Commission to report by July 2026, potentially leading to revisions; interplay with CBAM. Ref: EPRS_BRI(2026)785707
 - 235 cross-border energy projects (PCI/PMI 5th list, 9 April 2026): interconnectivity boost
 - Gas Coordination Group (9 April 2026): EU summer preparedness confirmed
 - Renewables milestone (Eurostat, 19 March 2026): 47% of EU electricity came from renewables in 2025

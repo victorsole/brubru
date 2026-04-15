@@ -18,6 +18,22 @@
 - New government formation: coalition talks expected to take 4-8 weeks; new PM (Magyar) likely sworn in mid-to-late May 2026
 - Source: Politico EU "Inside Magyar's grand bargain" (14 April 2026), Brussels Playbook podcast
 - Source: Politico EU "Péter Magyar maps out grand bargain to reset Hungary's ties with Brussels" (14 April 2026)
+- Source: Politico EU "Why Orban's man in Brussels is here to stay -- for now" (15 April 2026): Hungary's Commissioner remains in post despite Orban's electoral defeat
+
+## Hungary's Commissioner in Brussels: Oliver Varhelyi
+
+Hungary's seat in the College of Commissioners (2024-2029 term) is held by **Oliver Varhelyi** (Fidesz nominee), who took the **Health and Animal Welfare** portfolio in the von der Leyen II Commission. Varhelyi is a career diplomat (former Permanent Representative of Hungary to the EU 2015-2019) and served as Commissioner for Neighbourhood and Enlargement in the von der Leyen I Commission (2019-2024).
+
+**Why Varhelyi stays even after Orban's defeat:**
+- Commissioners serve a fixed 5-year term and cannot be unilaterally recalled by their nominating Member State. The Treaty (Article 246 TFEU) provides only narrow grounds for replacement: voluntary resignation, compulsory retirement (Article 247 TFEU, by Court of Justice ruling on serious misconduct or no longer fulfilling conditions of office), or death.
+- A change of national government does not trigger replacement -- the Commissioner owes loyalty to the Union, not to the government that nominated them (Article 17(3) TEU).
+- Magyar's incoming government can publicly distance itself from Varhelyi but cannot force his resignation. The most it can do is signal that it will nominate a different Hungarian Commissioner for the next term (2029-2034).
+- President von der Leyen could reshuffle portfolios, but removing a Commissioner mid-term requires either resignation or Court action.
+
+**Political consequences:**
+- Varhelyi continues to lead DG SANTE files including the European Biotech Act (COM(2025) 1022), the EU Health Data Space, and ongoing pharmaceutical legislation (EFPIA-related dossiers).
+- Magyar's government may channel its EU influence through the Council and through informal political pressure rather than through "its" Commissioner.
+- The College's collective responsibility doctrine means Varhelyi remains formally bound by Commission positions including those Magyar's government may oppose (e.g., conditionality, rule of law procedures against Hungary).
 
 ## What Changed: From Orban's Veto Politics to Magyar's Reset
 

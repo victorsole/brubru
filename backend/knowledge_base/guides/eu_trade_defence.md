@@ -1,6 +1,7 @@
 # EU Trade Defence Instruments
 
 ## QUICK FACTS
+- PETI draft report 2025/2955(RSP) (15 April 2026): "Protection of EU companies, jobs and products against unfair competition from third countries" -- based on petitions 0072/2025 and 0956/2025. Signals growing citizen/industry pressure for stronger trade defence instruments.
 - Legal basis: Article 207 TFEU (Common Commercial Policy)
 - 3 instruments: anti-dumping, countervailing duties (anti-subsidy), safeguard measures
 - Anti-dumping regulation: Regulation (EU) 2016/1036, CELEX: 32016R1036

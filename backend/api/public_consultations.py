@@ -974,3 +974,194 @@ async def refine_proposal(
 
 
 
+
+
+# ============================================================================
+# Stakeholder Feedback (live from Have Your Say)
+# ============================================================================
+
+class FeedbackItemResponse(PydanticBaseModel):
+    """One stakeholder feedback contribution."""
+    feedback_id: int
+    publication_id: int
+    date: str
+    user_type: str
+    organisation: str
+    author_name: str
+    country: str
+    language: str
+    company_size: Optional[str] = None
+    transparency_register_number: Optional[str] = None
+    text: str
+    attachments: List[dict] = []
+    public_url: str
+
+
+class FeedbackResponse(PydanticBaseModel):
+    """Live feedback fetch for a consultation."""
+    consultation_id: Optional[UUID] = None
+    initiative_id: str
+    publication_id: int
+    title: str
+    portal_url: Optional[str] = None
+    feedback_url: Optional[str] = None
+    sample_size: int
+    summary_total: int
+    by_user_type: dict
+    by_country: dict
+    items: List[FeedbackItemResponse]
+
+
+def _resolve_publication_id(consultation: PublicConsultation) -> Optional[int]:
+    """Best-effort extraction of the integer publication ID from a consultation."""
+    import re as _re
+    for candidate in (
+        getattr(consultation, "publication_id", None),
+        getattr(consultation, "initiative_id", None),
+    ):
+        if candidate:
+            try:
+                return int(str(candidate).strip())
+            except (TypeError, ValueError):
+                pass
+    portal = getattr(consultation, "portal_url", None) or ""
+    m = _re.search(r"/initiatives/(\d+)\b", portal)
+    if m:
+        return int(m.group(1))
+    return None
+
+
+async def _build_feedback_response(
+    consultation: Optional[PublicConsultation],
+    publication_id: int,
+    initiative_id_fallback: str,
+    title_fallback: str,
+    limit: int,
+    country: Optional[str],
+    user_type: Optional[str],
+) -> FeedbackResponse:
+    from services.api_clients.have_your_say_feedback_client import (
+        get_have_your_say_feedback_client,
+    )
+    client = get_have_your_say_feedback_client()
+    items = await client.fetch_feedback(
+        publication_id, limit=limit, country=country, user_type=user_type
+    )
+    summary = await client.get_summary_counts(publication_id)
+    return FeedbackResponse(
+        consultation_id=consultation.id if consultation else None,
+        initiative_id=str(consultation.initiative_id) if consultation else initiative_id_fallback,
+        publication_id=publication_id,
+        title=consultation.title if consultation else title_fallback,
+        portal_url=consultation.portal_url if consultation else None,
+        feedback_url=consultation.feedback_url if consultation else None,
+        sample_size=len(items),
+        summary_total=int(summary.get("total", 0)),
+        by_user_type=summary.get("by_user_type", {}),
+        by_country=summary.get("by_country", {}),
+        items=[
+            FeedbackItemResponse(
+                feedback_id=it.feedback_id,
+                publication_id=it.publication_id,
+                date=it.date,
+                user_type=it.user_type,
+                organisation=it.organisation,
+                author_name=it.author_name,
+                country=it.country,
+                language=it.language,
+                company_size=it.company_size,
+                transparency_register_number=it.transparency_register_number,
+                text=it.short_text,
+                attachments=it.attachments,
+                public_url=it.public_url,
+            )
+            for it in items
+        ],
+    )
+
+
+@router.get(
+    "/{consultation_id}/feedback",
+    response_model=FeedbackResponse,
+    summary="Stakeholder feedback (live from Have Your Say)",
+    description=(
+        "Fetch live stakeholder feedback contributions submitted to this consultation "
+        "via the EC Have Your Say portal. The integer publication ID is resolved from the "
+        "stored consultation record. Yellow tier or above."
+    ),
+)
+async def get_consultation_feedback(
+    consultation_id: UUID,
+    limit: int = Query(20, ge=1, le=100, description="Max feedback items to return"),
+    country: Optional[str] = Query(None, min_length=3, max_length=3, description="ISO-3 country filter (e.g., BEL, FRA)"),
+    user_type: Optional[str] = Query(None, description="Stakeholder type filter (BUSINESS_ASSOCIATION, COMPANY, NGO, CITIZEN, ...)"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> FeedbackResponse:
+    check_yellow_tier(current_user)
+
+    consultation = db.query(PublicConsultation).filter(
+        PublicConsultation.id == consultation_id
+    ).first()
+    if not consultation:
+        raise HTTPException(status_code=404, detail="Consultation not found")
+
+    pid = _resolve_publication_id(consultation)
+    if pid is None:
+        raise HTTPException(
+            status_code=422,
+            detail="Consultation has no resolvable publication ID for live feedback fetch",
+        )
+
+    try:
+        return await _build_feedback_response(
+            consultation=consultation,
+            publication_id=pid,
+            initiative_id_fallback=str(consultation.initiative_id),
+            title_fallback=consultation.title or "",
+            limit=limit,
+            country=country,
+            user_type=user_type,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.error(f"Failed to fetch feedback for consultation {consultation_id}: {exc}")
+        raise HTTPException(status_code=502, detail=f"Have Your Say fetch failed: {exc}")
+
+
+@router.get(
+    "/by-initiative/{initiative_id}/feedback",
+    response_model=FeedbackResponse,
+    summary="Stakeholder feedback by initiative ID (live)",
+    description=(
+        "Fetch live stakeholder feedback by the public Have Your Say initiative ID "
+        "(integer in URLs like /initiatives/14094-...). Convenience endpoint for external "
+        "consumers (Data Provider vertical). Yellow tier or above."
+    ),
+)
+async def get_consultation_feedback_by_initiative(
+    initiative_id: int,
+    limit: int = Query(20, ge=1, le=100),
+    country: Optional[str] = Query(None, min_length=3, max_length=3),
+    user_type: Optional[str] = Query(None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> FeedbackResponse:
+    check_yellow_tier(current_user)
+
+    consultation = db.query(PublicConsultation).filter(
+        PublicConsultation.initiative_id == str(initiative_id)
+    ).first()
+
+    try:
+        return await _build_feedback_response(
+            consultation=consultation,
+            publication_id=initiative_id,
+            initiative_id_fallback=str(initiative_id),
+            title_fallback="",
+            limit=limit,
+            country=country,
+            user_type=user_type,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.error(f"Failed to fetch feedback for initiative {initiative_id}: {exc}")
+        raise HTTPException(status_code=502, detail=f"Have Your Say fetch failed: {exc}")
