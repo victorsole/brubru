@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Icon from '@mdi/react';
-import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation, mdiCalendarMonth } from '@mdi/js';
+import { mdiViewDashboard, mdiFileDocument, mdiFileEdit, mdiChartLine, mdiTrain, mdiStarOutline, mdiCalendarCollapseHorizontal, mdiCrystalBall, mdiCreation, mdiCalendarMonth, mdiScaleBalance } from '@mdi/js';
 import { useAuth } from '../hooks/use_auth';
 import { DashboardTab } from '../components/bubble/dashboard_tab';
 import { DocumentsTab } from '../components/bubble/documents_tab';
@@ -16,14 +16,15 @@ import { ConsultationsCTA } from '../components/bubble/consultations_cta';
 import { PredictionsTab } from '../components/bubble/predictions_tab';
 import { EUCalendarTab } from '../components/bubble/eu_calendar_tab';
 import { EUCalendarCTA } from '../components/bubble/eu_calendar_cta';
+import { PositionAnalysisTab } from '../components/bubble/position_analysis_tab';
 import { NewsSidebar } from '../components/bubble/news_sidebar';
 import { FeedbackInvitation } from '../components/shared/feedback_invitation';
 import './my_eu_bubble_page.css';
 
-type TabType = 'dashboard' | 'my_files' | 'eu_calendar' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
+type TabType = 'dashboard' | 'my_files' | 'position_analysis' | 'eu_calendar' | 'predictions' | 'consultations' | 'documents' | 'amendments' | 'analytics' | 'legislative';
 
 const VALID_TABS: TabType[] = [
-  'dashboard', 'my_files', 'eu_calendar', 'predictions', 'consultations',
+  'dashboard', 'my_files', 'position_analysis', 'eu_calendar', 'predictions', 'consultations',
   'documents', 'amendments', 'analytics', 'legislative',
 ];
 
@@ -51,6 +52,7 @@ export const MyEUBubblePage = () => {
   const tabs = [
     { id: 'dashboard' as TabType, label: t('bubble.dashboard'), icon: mdiViewDashboard },
     { id: 'my_files' as TabType, label: 'My Files', icon: mdiStarOutline },
+    { id: 'position_analysis' as TabType, label: t('bubble.tabs.positionAnalysis', 'Position Analysis'), icon: mdiScaleBalance },
     { id: 'eu_calendar' as TabType, label: t('bubble.tabs.euCalendar', 'My EU Calendar'), icon: mdiCalendarMonth },
     { id: 'predictions' as TabType, label: t('bubble.tabs.predictions', 'Predictions'), icon: mdiCrystalBall, isPredictions: true },
     { id: 'consultations' as TabType, label: t('bubble.tabs.consultations', 'EC Consultations'), icon: mdiCalendarCollapseHorizontal },
@@ -66,6 +68,8 @@ export const MyEUBubblePage = () => {
         return <DashboardTab />;
       case 'my_files':
         return <MyTrackedFilesTab />;
+      case 'position_analysis':
+        return <PositionAnalysisTab />;
       case 'eu_calendar':
         // Show CTA for White tier users, full calendar for Yellow+ tiers
         if (!user || user.subscription_tier === 'white') {

@@ -571,6 +571,9 @@ class ContextData:
     # On-demand: a Commissioner's published agenda
     commissioner_agenda_block: Optional[str] = None
 
+    # On-demand: Position Analysis (Commission / Parliament / Council stances on a file)
+    position_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1067,6 +1070,23 @@ class ContextBuilder:
 
         post_tasks['commissioner_agenda'] = _fetch_commissioner_agenda_safe()
 
+        # 3d. On-demand: Position Analysis
+        position_intent = self._detect_position_intent(user_message)
+
+        async def _fetch_position_safe():
+            if not position_intent:
+                return None
+            try:
+                block = await self._fetch_position_block(user_message, position_intent)
+                if block:
+                    logger.info("[position] Injected position block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[position] Failed: %s", e)
+                return None
+
+        post_tasks['position'] = _fetch_position_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1125,6 +1145,7 @@ class ContextBuilder:
         eu_institutional_results = post_map['eu_search']
         consultation_feedback_block = post_map.get('consultation_feedback')
         commissioner_agenda_block = post_map.get('commissioner_agenda')
+        position_block = post_map.get('position')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1192,6 +1213,7 @@ class ContextBuilder:
             plenary_debate_transcript=plenary_debate_transcript,
             consultation_feedback_block=consultation_feedback_block,
             commissioner_agenda_block=commissioner_agenda_block,
+            position_block=position_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -5424,6 +5446,135 @@ class ContextBuilder:
             lines.append(f"- {it.date.isoformat()}: {it.title}{loc}{url}")
         return "\n".join(lines)
 
+    # ------------------------------------------------------------------
+    # On-demand: Position Analysis (Commission / Parliament / Council)
+    # ------------------------------------------------------------------
+
+    POSITION_INTENT_PHRASES = (
+        "position of", "stance of", "where does", "what is the position",
+        "position on", "stance on", "for or against", "supports or opposes",
+        "support or oppose", "who is for", "who is against",
+        # FR
+        "position de", "position du", "position sur",
+        # ES
+        "postura de", "postura sobre", "quién apoya", "quien apoya",
+        # CA
+        "postura de", "postura sobre", "qui dóna suport", "qui dona suport",
+        # IT
+        "posizione di", "posizione sul",
+        # NL
+        "standpunt van",
+    )
+
+    def _detect_position_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        """Detect a position-analysis intent. Requires either:
+          (a) a position phrase, or
+          (b) a procedure reference that the user is asking about in substantive terms.
+        Returns {"procedure_ref"?, "free_text"} or None.
+        """
+        if not query:
+            return None
+        q = query.lower()
+        has_phrase = any(p in q for p in self.POSITION_INTENT_PHRASES)
+        # Procedure reference detection
+        m = re.search(r"(\d{4}/\d{4}\s*\([A-Z]{2,4}\))", query)
+        procedure_ref = m.group(1).replace(" ", "") if m else None
+        if not (has_phrase or procedure_ref):
+            return None
+        return {"procedure_ref": procedure_ref, "free_text": query}
+
+    async def _fetch_position_block(
+        self, query: str, intent: Dict[str, Any]
+    ) -> Optional[str]:
+        """Fetch + format a FilePosition block. Uses cached snapshot if fresh."""
+        from core.database import SessionLocal
+        from models.file_position import FilePositionSnapshot
+        from models.legislative_train import LegislativeCarriage
+        from services.positions import get_position_aggregator
+
+        db = SessionLocal()
+        try:
+            carriage = None
+            if intent.get("procedure_ref"):
+                carriage = (
+                    db.query(LegislativeCarriage)
+                    .filter(LegislativeCarriage.oeil_procedure_ref == intent["procedure_ref"])
+                    .first()
+                )
+            if carriage is None:
+                # Keyword search on title against recent carriages
+                stop = {"position", "stance", "of", "the", "on", "for", "about",
+                        "what", "is", "who", "supports", "opposes", "group", "council"}
+                tokens = [t.lower() for t in re.findall(r"[A-Za-z\u00C0-\u017F]{4,}", query)]
+                tokens = [t for t in tokens if t not in stop][:6]
+                if not tokens:
+                    return None
+                from sqlalchemy import or_, func as sqlfunc
+                q2 = db.query(LegislativeCarriage).filter(LegislativeCarriage.oeil_procedure_ref.isnot(None))
+                conds = [sqlfunc.lower(LegislativeCarriage.title).like(f"%{t}%") for t in tokens]
+                q2 = q2.filter(or_(*conds)).order_by(LegislativeCarriage.is_recently_updated.desc().nullslast())
+                carriage = q2.first()
+            if carriage is None:
+                return None
+
+            agg = get_position_aggregator(db=db)
+            snap = agg.get_cached(carriage.id)
+            if snap is None or not agg.is_fresh(snap):
+                try:
+                    await agg.aggregate_and_cache(carriage)
+                    snap = agg.get_cached(carriage.id)
+                except Exception as exc:  # noqa: BLE001
+                    logger.warning("[position] aggregation failed: %s", exc)
+                    return None
+            if snap is None:
+                return None
+            return self._format_position_block(carriage, snap)
+        finally:
+            db.close()
+
+    def _format_position_block(self, carriage, snap) -> str:
+        parl = snap.parliament_position or {}
+        coun = snap.council_position or {}
+        comm = snap.commission_position or {}
+        groups = parl.get("groups", []) or []
+        ms = coun.get("member_states", []) or []
+        summary = coun.get("summary") or {}
+        lines = []
+        lines.append(f"\nPOSITION ANALYSIS (cached, {snap.confidence} confidence, {snap.data_completeness} completeness):")
+        lines.append(f"File: {carriage.title or '(untitled)'} [{snap.procedure_ref}]")
+        if comm.get("com_references"):
+            lines.append(f"Commission: {', '.join(comm['com_references'])}")
+            if comm.get("proposal_date"):
+                lines.append(f"Proposal date: {comm['proposal_date']}")
+        if parl.get("rapporteur"):
+            rg = f" ({parl.get('rapporteur_group')})" if parl.get("rapporteur_group") else ""
+            lines.append(f"Rapporteur: {parl['rapporteur']}{rg} -- {parl.get('lead_committee') or ''}")
+        if parl.get("amendment_activity"):
+            act = parl["amendment_activity"]
+            lines.append(f"Amendments tabled: {act.get('total', 0)}")
+            bg = act.get("by_group", {})
+            if bg:
+                top = sorted(bg.items(), key=lambda kv: -kv[1])[:6]
+                lines.append("  By group: " + ", ".join(f"{k}={v}" for k, v in top))
+        if groups:
+            lines.append("Parliament stance (per group):")
+            for g in groups:
+                lines.append(f"  - {g['group_code']}: {g['stance']} (cohesion {g['cohesion']}, {g['confidence']} confidence, {g['amendment_count']} amendments) -- {g.get('rationale','')}")
+        if ms:
+            lines.append("Council stance (per Member State):")
+            supp = summary.get("supporting", [])
+            opp = summary.get("opposing", [])
+            und = [x['country_code'] for x in ms if x.get('stance') not in ('support','oppose')]
+            lines.append(f"  Supporting ({len(supp)}): {', '.join(supp) or '(none)'}")
+            lines.append(f"  Opposing ({len(opp)}): {', '.join(opp) or '(none)'}")
+            lines.append(f"  Undecided ({len(und)}): {', '.join(und[:15])}{' ...' if len(und)>15 else ''}")
+        if coun.get("general_approach_adopted"):
+            lines.append("Council general approach: ADOPTED")
+        if parl.get("plenary_adopted", {}).get("adopted"):
+            lines.append(f"EP plenary text adopted: {parl['plenary_adopted'].get('date','?')}")
+        lines.append("Source: file_position_snapshots (generated_at " + (snap.generated_at.isoformat() if snap.generated_at else '?') + ")")
+        return "\n".join(lines)
+
     async def _fetch_eu_institutional_search(
         self,
         query: str,
@@ -5806,6 +5957,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'commissioner_agenda_block', None):
             sections.append(context_data.commissioner_agenda_block)
+            sections.append("")
+        if getattr(context_data, 'position_block', None):
+            sections.append(context_data.position_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)

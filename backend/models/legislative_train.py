@@ -10,7 +10,7 @@ ENHANCED (January 2025):
 """
 
 from sqlalchemy import Column, String, Integer, Boolean, DateTime, JSON, Text, ForeignKey, Enum as SQLEnum
-from sqlalchemy.dialects.postgresql import ARRAY, UUID
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
@@ -273,6 +273,10 @@ class UserCarriageTrack(Base):
     # Tracking metadata
     tracked_since = Column(DateTime, default=datetime.now, nullable=False)
     last_notified_at = Column(DateTime)
+
+    # Position Analysis: user's stance on this tracked file
+    # Shape: {stance, notes, evidence_urls[], priority_articles[], last_updated}
+    user_position = Column(JSONB, nullable=True)
 
     # Relationships
     user = relationship("User")
