@@ -28,7 +28,7 @@ from services.schedulers.amendment_sync_scheduler import (
 from api import (
     chat, documents, auth, subscriptions, my_eu_bubble, rss_feeds,
     user_documents, legislative_tracking, notifications, export, personalization,
-    feedback, admin_panel, committees, amendments, legislative_train,
+    feedback, admin_panel, admin_api_keys, committees, amendments, legislative_train,
     eu_law_comply, admin_eu_comply, stripe_payment, tenderator, admin_tenders,
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
@@ -179,6 +179,7 @@ app.include_router(export.router, tags=["Data Export"])
 app.include_router(personalization.router, prefix="/api", tags=["Personalization"])
 app.include_router(feedback.router, tags=["Feedback"])
 app.include_router(admin_panel.router, tags=["Admin Panel"])
+app.include_router(admin_api_keys.router, tags=["Admin API Keys"])
 app.include_router(admin_eu_comply.router, prefix="/api/admin/eu-comply", tags=["Admin EU Comply"])
 app.include_router(committees.router, tags=["Committees"])
 app.include_router(committee_work.router, tags=["Committee Work"])
@@ -205,6 +206,24 @@ app.include_router(daily_brief.router, tags=["Daily Brief"])
 app.include_router(catalan_translations.router, tags=["Catalan Translations"])
 app.include_router(whatsapp.router, tags=["WhatsApp"])
 # app.include_router(ai.router, prefix="/api/ai", tags=["AI Services"])
+
+# Data Provider API v1 (public paid surface, /api/v1/*)
+from api.v1 import router as v1_router, docs_alias_router as v1_docs_alias
+app.include_router(v1_router)
+app.include_router(v1_docs_alias)
+
+
+@app.middleware("http")
+async def _v1_rate_limit_headers(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/api/v1/"):
+        limit = getattr(request.state, "rate_limit_limit", None)
+        remaining = getattr(request.state, "rate_limit_remaining", None)
+        if limit is not None:
+            response.headers["X-RateLimit-Limit"] = str(limit)
+        if remaining is not None:
+            response.headers["X-RateLimit-Remaining"] = str(remaining)
+    return response
 
 
 if __name__ == "__main__":
