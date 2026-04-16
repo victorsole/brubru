@@ -553,11 +553,29 @@
     },
     "sections": {
       "whatYouGet": "What you get",
+      "quickstart": "Quickstart",
       "authentication": "Authentication",
       "envelope": "Response envelope",
+      "examples": "Code examples",
       "pricing": "Pricing",
       "errors": "Rate limits and errors",
       "startBuilding": "Start building"
+    },
+    "sidebar": {
+      "onThisPage": "On this page"
+    },
+    "quickstart": {
+      "intro": "Get your first API response in under two minutes.",
+      "step1Title": "Get a Professional subscription",
+      "step1": "Sign up at brubru.beresol.eu/subscription. Your API key will appear in your account settings within minutes.",
+      "step2Title": "Make your first request",
+      "step3Title": "Parse the response",
+      "step3": "Every endpoint returns the same paginated envelope. Extract the data array to iterate over results. Check has_more and next_page to paginate."
+    },
+    "examples": {
+      "intro": "Copy-paste examples for the most common integrations.",
+      "mcpTitle": "MCP (any AI assistant)",
+      "mcpDescription": "Brubru exposes a Model Context Protocol (MCP) server. Connect it to Claude, ChatGPT, Gemini, Mistral, or any MCP-compatible AI agent to give your assistant live EU legislative intelligence."
     },
     "endpoints": {
       "laws": "28,500+ adopted EU laws. Filters by CELEX, doc type, policy area, publication date, full-text search.",

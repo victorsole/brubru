@@ -12,6 +12,7 @@
 - Commissioner: Magnus Brunner (Internal Affairs and Migration)
 - Human rights concerns: civil society and tech companies raised concerns about surveillance provisions, lack of safeguards
 - EU signed: pending Council decision, subject to EP consent
+- EPRS Briefing (15 April 2026): "Understanding the dark web" -- dark web as tool for good (sanctuary for privacy, whistleblowers) and criminality (illicit content, services). Context for cybercrime convention implementation. Ref: EPRS_BLOG_understanding-the-dark-web
 
 ## Overview
 

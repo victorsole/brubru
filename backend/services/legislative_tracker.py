@@ -96,9 +96,10 @@ class LegislativeTracker:
                 for doc in user_docs
             ]
 
-            # Find related RSS entries
+            # Find related RSS entries via entry_metadata JSONB
+            # Note: RSSEntry uses entry_metadata (not metadata, which is reserved by SQLAlchemy)
             stmt = select(RSSEntry).where(
-                RSSEntry.metadata.op('@>')({'celex_numbers': [celex_number]})
+                RSSEntry.entry_metadata.op('@>')('{"celex_numbers": ["' + celex_number + '"]}')
             )
             rss_entries = self.db.execute(stmt).scalars().all()
 

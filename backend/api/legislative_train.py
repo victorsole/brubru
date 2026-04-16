@@ -440,6 +440,44 @@ async def track_carriage_by_procedure(
         raise HTTPException(status_code=500, detail="Failed to track file")
 
 
+@router.post(
+    "/track-by-celex",
+    summary="Track legislative file by CELEX number",
+    description="Find a legislative carriage whose celex_numbers array contains this CELEX, then track it."
+)
+async def track_carriage_by_celex(
+    celex: str = Query(..., description="CELEX number (e.g. 52026PC0321)"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    try:
+        carriage = db.query(LegislativeCarriage).filter(
+            LegislativeCarriage.celex_numbers.any(celex)
+        ).first()
+
+        if not carriage:
+            raise HTTPException(status_code=404, detail=f"No legislative file found for CELEX: {celex}")
+
+        existing = db.query(UserCarriageTrack).filter(
+            UserCarriageTrack.user_id == current_user.id,
+            UserCarriageTrack.carriage_id == carriage.id,
+        ).first()
+
+        if existing:
+            return {"message": "Already tracking this file", "carriage_id": str(carriage.id), "celex": celex}
+
+        track = UserCarriageTrack(user_id=current_user.id, carriage_id=carriage.id)
+        db.add(track)
+        db.commit()
+        return {"message": "Now tracking legislative file", "carriage_id": str(carriage.id), "celex": celex}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to track by CELEX {celex}: {e}")
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to track: {e}")
+
+
 @router.delete(
     "/track/{carriage_id}",
     summary="Untrack legislative file",

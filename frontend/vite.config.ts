@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     port: 5173,  // Changed back to Vite default to test OAuth
     proxy: {
-      '/api': {
+      '/api/': {
         target: 'http://localhost:8000',
         changeOrigin: true,
       },

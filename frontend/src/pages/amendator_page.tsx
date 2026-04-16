@@ -296,7 +296,7 @@ export const AmendatorPage = ({ isSidebarOpen, setIsSidebarOpen }: AmendatorPage
               onClick={() => setActiveTab('ai')}
             >
               <Icon path={mdiRobotOutline} size={0.8} />
-              <span className="amendator-sidebar__tab-label">AI Assistant</span>
+              <span className="amendator-sidebar__tab-label">AI</span>
             </button>
             <button
               className={`amendator-sidebar__tab ${activeTab === 'recitals' ? 'amendator-sidebar__tab--active' : ''}`}

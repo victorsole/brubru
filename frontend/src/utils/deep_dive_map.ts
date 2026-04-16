@@ -78,6 +78,16 @@ export const DEEP_DIVES: DeepDive[] = [
     color: '#9b51e0',
     icon: 'mdi-access-point-network',
   },
+  {
+    title: 'Combating Child Sexual Abuse Online (CSAM Regulation)',
+    shortTitle: 'CSAM Regulation',
+    comReference: 'COM(2022) 209',
+    procedureRef: '2022/0155(COD)',
+    basePath: '/csam-regulation',
+    languages: ['en'],
+    color: '#dc2626',
+    icon: 'mdi-shield-alert-outline',
+  },
 ];
 
 /**

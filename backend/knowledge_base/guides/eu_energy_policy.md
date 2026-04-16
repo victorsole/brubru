@@ -19,6 +19,7 @@
 - REMIT new implementing rules (9 April 2026): energy market integrity + standardised data (Reg. 2026/818)
 - Electricity supplier switching (14 April 2026): New implementing rules adopted by Commission -- switching process reduced to 24 hours by end of 2026 (consumer-facing benefit, speeds market competition). Source: DG ENER press release 14 April 2026
 - EPRS Briefing (14 April 2026): "Update of the EU emissions trading system for stationary installations, aviation, and maritime transport" -- ETS Directive obliges Commission to report by July 2026, potentially leading to revisions; interplay with CBAM. Ref: EPRS_BRI(2026)785707
+- EPRS Briefing (15 April 2026): "Revision of the EU energy security framework -- Implementation takeaways" -- Security of Gas Supply Regulation (SoGS), Electricity Risk Preparedness Regulation, emergency measures; industry favours diversification to protect competitiveness, NGOs advocate full renewables transition, regulators stress need for balanced approach. Ref: EPRS_BRI(2026)774724
 - 235 cross-border energy projects (PCI/PMI 5th list, 9 April 2026): interconnectivity boost
 - Gas Coordination Group (9 April 2026): EU summer preparedness confirmed
 - Renewables milestone (Eurostat, 19 March 2026): 47% of EU electricity came from renewables in 2025
@@ -108,6 +109,9 @@ Key targets set by REPowerEU:
 - 42.5% binding renewable target in RED III (Directive 2023/2413, CELEX 32023L2413)
 - Phase out Russian fossil fuel imports by 2027
 - 10 million tonnes of domestic renewable hydrogen by 2030
+- RFNBO Delegated Act: Commission Delegated Regulation (EU) 2023/1184 (CELEX 32023R1184) -- methodology for production of renewable liquid and gaseous fuels of non-biological origin (RFNBOs, i.e. renewable hydrogen and e-fuels). Sets additionality, temporal correlation, and geographic correlation criteria. Five Member States (DE, ES, NL, PL, AT) wrote to the Commission requesting targeted review, arguing current criteria risk "slowing down the hydrogen ramp-up by imposing a very significant burden on projects"
+- AccelerateEU Communication (LEAKED, Contexte, 16 April 2026): Draft Commission communication announcing measures to support Member States facing the energy crisis. Mostly non-legislative measures, but includes at least one surprise: Commission plans to propose a **targeted review of RFNBO production criteria** (the RFNBOs delegated act) in **June 2026**. Source: Damien Genicot / Contexte (journalist: Ciaran Sunderland). This would be a significant relaxation of green hydrogen rules in response to industry lobbying.
+- Hydrogen Europe: leading industry lobby pushing for more pragmatic RFNBO rules
 
 ### Renewable Energy Directive (RED III/IV)
 

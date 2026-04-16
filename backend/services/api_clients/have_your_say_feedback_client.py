@@ -86,6 +86,35 @@ class HaveYourSayFeedbackClient:
     def _cache_put(self, key: str, payload: Any) -> None:
         self._cache[key] = (time.time(), payload)
 
+    async def resolve_publication_ids(self, initiative_id: int) -> List[int]:
+        """Resolve initiative_id -> list of publicationIds via the HYS detail API.
+
+        The feedback API requires publicationId, which is different from
+        initiative_id.  This method calls the initiative detail endpoint and
+        extracts the publication IDs from the response.
+        """
+        cache_key = f"resolve:{initiative_id}"
+        hit = self._cache_get(cache_key)
+        if hit is not None:
+            return hit
+
+        detail_url = f"https://ec.europa.eu/info/law/better-regulation/api/groupInitiativesByType/{initiative_id}"
+        try:
+            async with httpx.AsyncClient(
+                timeout=15.0,
+                headers={"User-Agent": USER_AGENT, "Accept": "application/json"},
+            ) as client:
+                r = await client.get(detail_url)
+                r.raise_for_status()
+                data = r.json()
+            pubs = data.get("publications") or []
+            pub_ids = [int(p["id"]) for p in pubs if p.get("id")]
+            self._cache_put(cache_key, pub_ids)
+            return pub_ids
+        except Exception as exc:
+            logger.warning("[HYS-feedback] resolve pub_ids for initiative %s failed: %s", initiative_id, exc)
+            return []
+
     async def _get_json(self, params: Dict[str, Any]) -> Dict[str, Any]:
         async with httpx.AsyncClient(timeout=15.0, headers={"User-Agent": USER_AGENT, "Accept": "application/json"}) as client:
             r = await client.get(FEEDBACK_API, params=params)

@@ -19,6 +19,8 @@
 - Review: scheduled for 2026 Digital Fitness Check
 - Related: DSA (32022R2065), AI Act (32024R1689), Data Act (32023R2854), P2B Regulation (32019R1150)
 - EPRS: EPRS_ATA(2025)772826 "Digital Markets Act enforcement -- state of play" by Polona Car (April 2025)
+- Meta/WhatsApp AI assistant case (15 April 2026): Commission sent Meta fresh charge sheet on possible interim measures to reverse exclusion of third-party AI assistants from WhatsApp. Commission rejects Meta's proposed "pay-to-play" remedy; preparing rare interim measures to force reinstatement of access under same conditions. Aims to prevent "irreparable harm" to competition before Meta can leverage user base to establish AI assistant dominance. DMA Article 7 (interoperability of messaging services) is the legal hook.
+- DMA interim measures power: Article 24 DMA -- Commission can impose interim measures on gatekeepers when there is urgency and risk of serious and irreparable harm to competition
 
 ## Overview
 

@@ -5149,21 +5149,29 @@ class ContextBuilder:
         )
         client = get_have_your_say_feedback_client()
 
-        def _pid_of(c: Dict[str, Any]) -> Optional[int]:
-            for candidate in (c.get("publication_id"), c.get("initiative_id")):
-                if candidate:
+        def _extract_ids(c: Dict[str, Any]) -> Tuple[Optional[int], Optional[int]]:
+            """Return (publication_id, initiative_id) from a consultation dict."""
+            pub_id = None
+            init_id = None
+            for key, target in [("publication_id", "pub"), ("initiative_id", "init")]:
+                val = c.get(key)
+                if val:
                     try:
-                        return int(str(candidate).strip())
+                        parsed = int(str(val).strip())
+                        if target == "pub":
+                            pub_id = parsed
+                        else:
+                            init_id = parsed
                     except (TypeError, ValueError):
                         pass
-            if c.get("portal_url"):
+            if not init_id and c.get("portal_url"):
                 m = re.search(r"/initiatives/(\d+)\b", c["portal_url"])
                 if m:
-                    return int(m.group(1))
-            return None
+                    init_id = int(m.group(1))
+            return pub_id, init_id
 
-        # Build candidate pool: (consultation_dict, pid, score)
-        candidates: List[Tuple[Dict[str, Any], int, int]] = []
+        # Build candidate pool: (consultation_dict, pub_id, init_id, score)
+        candidates: List[Tuple[Dict[str, Any], Optional[int], Optional[int], int]] = []
 
         stop = {"the", "and", "for", "with", "what", "did", "say", "about",
                 "consultation", "feedback", "stakeholders", "contributions",
@@ -5181,10 +5189,10 @@ class ContextBuilder:
 
         # 1) Score consultations from the main pipeline
         for c in consultations or []:
-            p = _pid_of(c)
-            if p is None:
+            pub_id, init_id = _extract_ids(c)
+            if pub_id is None and init_id is None:
                 continue
-            candidates.append((c, p, _score(c)))
+            candidates.append((c, pub_id, init_id, _score(c)))
 
         # 2) Augment with keyword search across ALL statuses (open/closed/upcoming)
         if tokens:
@@ -5215,12 +5223,13 @@ class ContextBuilder:
                         "feedback_url": it.feedback_url,
                         "feedback_count": it.feedback_count or 0,
                     }
-                    p = _pid_of(d)
-                    if p is None:
+                    pub_id, init_id = _extract_ids(d)
+                    if pub_id is None and init_id is None:
                         continue
-                    if any(p == existing_pid for _, existing_pid, _ in candidates):
+                    # Deduplicate by initiative_id (the stable identifier)
+                    if any(init_id and init_id == ei for _, _, ei, _ in candidates):
                         continue
-                    candidates.append((d, p, _score(d)))
+                    candidates.append((d, pub_id, init_id, _score(d)))
             except Exception as exc:  # noqa: BLE001
                 logger.warning("[HYS-feedback] keyword fallback failed: %s", exc)
 
@@ -5228,24 +5237,42 @@ class ContextBuilder:
             return None
 
         # Sort by score desc, then by feedback_count desc (DB hint), then preserve order
-        candidates.sort(key=lambda triple: (-triple[2], -(triple[0].get("feedback_count") or 0)))
+        candidates.sort(key=lambda quad: (-quad[3], -(quad[0].get("feedback_count") or 0)))
 
-        # Try each candidate in order until we get non-empty live feedback
+        # Try each candidate in order until we get non-empty live feedback.
+        # When publication_id is missing, resolve it from initiative_id via
+        # the HYS detail API (initiative_id != publicationId in the EC system).
         chosen: Optional[Dict[str, Any]] = None
         pid: Optional[int] = None
         items: List[Any] = []
         summary: Dict[str, Any] = {}
-        for c, p, score in candidates[:5]:
-            try:
-                items = await client.fetch_feedback(p, limit=limit)
-            except Exception:
-                items = []
-            if items:
-                chosen, pid = c, p
+        for c, c_pub_id, c_init_id, score in candidates[:5]:
+            # Build list of publicationIds to try for this candidate
+            try_pids: List[int] = []
+            if c_pub_id:
+                try_pids.append(c_pub_id)
+            if c_init_id and c_init_id not in try_pids:
+                # Resolve initiative_id -> publication_ids via HYS detail API
+                resolved = await client.resolve_publication_ids(c_init_id)
+                if resolved:
+                    try_pids.extend(p for p in resolved if p not in try_pids)
+                else:
+                    # Fallback: try initiative_id directly (works for some)
+                    try_pids.append(c_init_id)
+
+            for try_pid in try_pids:
                 try:
-                    summary = await client.get_summary_counts(p)
+                    items = await client.fetch_feedback(try_pid, limit=limit)
                 except Exception:
-                    summary = {"total": len(items), "by_user_type": {}, "by_country": {}}
+                    items = []
+                if items:
+                    chosen, pid = c, try_pid
+                    try:
+                        summary = await client.get_summary_counts(try_pid)
+                    except Exception:
+                        summary = {"total": len(items), "by_user_type": {}, "by_country": {}}
+                    break
+            if items:
                 break
 
         if not items or chosen is None or pid is None:

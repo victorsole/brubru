@@ -504,3 +504,26 @@ The official EP Think Tank portal RSS (`europarl.europa.eu/thinktank/.../rss`) i
 ### Systematic EPRS Integration in /news (April 2026)
 
 During /news, **every new EPRS publication** synced to the database must be mapped to a relevant knowledge guide with a one-line reference in QUICK FACTS. Format: `- EPRS [Type] ([Date]): "[Short title]" -- [key finding]. Ref: [EPRS reference]`. This is codified in /news Step 3a. Also applies to JRC, Eurostat, and DG-specific data publications found during the news scrape.
+
+### On-Demand Chatbot Features -- 4-Step Template (April 2026)
+
+Every new on-demand chatbot capability follows the same template (CRE plenary debates, HYS stakeholder feedback, commissioner agendas, Position Analysis are the 4 examples so far):
+
+1. **Client** in `services/api_clients/` or similar -- live fetch, with in-memory TTL cache (typically 1-24h depending on volatility).
+2. **Intent detector** in `context_builder.py`: `_detect_X_intent(query) -> Optional[...]`. Multilingual phrases (EN/FR/ES/CA/IT/NL at minimum). Must not fire on generic queries; require a specific entity (procedure ref, commissioner name, consultation ID) OR a strong phrase.
+3. **Fetcher** in `context_builder.py`: `_fetch_X_block(...)`. Returns a formatted text block starting with a `SECTION HEADER` in CAPS. Register in `post_tasks` dict. Add corresponding field to `ContextData` dataclass.
+4. **System prompt rule** in `ai_service.py` `_build_system_prompt()`: `CRITICAL -- SECTION HEADER:` block explaining how to present the data, what to attribute, what NOT to invent.
+
+**Critical gotcha:** append the block **near the top** of `format_context_for_ai()` (right after `USER QUERY`). The 32k-char truncation at the end of the formatter will silently strip blocks placed later, even though the field on `ContextData` is populated.
+
+### DB Model and Migration Parity (April 2026)
+
+When adding a column via SQL migration, **always** update the corresponding SQLAlchemy model in `backend/models/` in the same commit. Otherwise attribute access at runtime (`row.new_column`) raises `AttributeError: 'Model' object has no attribute 'new_column'` even though the column exists in Postgres -- SQLAlchemy only reflects columns it has been told about.
+
+Lesson on 15 April 2026: added `user_carriage_tracks.user_position` in migration 035, forgot the `UserCarriageTrack.user_position = Column(JSONB, nullable=True)` line in `models/legislative_train.py`. Live GET /api/positions/{id} returned HTTP 500 until fixed.
+
+### Context Formatter Truncates at 32k (April 2026)
+
+`format_context_for_ai()` caps `full_context` at `max_length` (default 32000) and appends `[Context truncated due to length]`. Any section appended late in the formatter is silently stripped when the sum of earlier sections already fills the budget. On-demand blocks (STAKEHOLDER FEEDBACK, COMMISSIONER AGENDA, POSITION ANALYSIS) are therefore appended **near the top** of the sections list.
+
+Do not assume a section field being set on `ContextData` means the AI sees it. If an on-demand feature silently doesn't work, grep the formatter for its block header and check its position relative to the mass of knowledge-guide / legislative-train / EPRS sections that come before it.

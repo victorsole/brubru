@@ -151,28 +151,30 @@ function GroupsCard({ parliament }: { parliament: PositionResponse['parliament_p
           <div className="pos-badge pos-badge--green">Plenary adopted {parliament.plenary_adopted.date}</div>
         )}
       </div>
-      <table className="pos-group-table">
-        <thead>
-          <tr>
-            <th>Group</th>
-            <th>Stance</th>
-            <th>Cohesion</th>
-            <th>Amendments</th>
-            <th>Confidence</th>
-          </tr>
-        </thead>
-        <tbody>
-          {parliament.groups.map((g) => (
-            <tr key={g.group_code}>
-              <td><strong>{g.group_code}</strong></td>
-              <td><StanceBadge stance={g.stance} /></td>
-              <td>{(g.cohesion * 100).toFixed(0)}%</td>
-              <td>{g.amendment_count}</td>
-              <td>{g.confidence}</td>
+      <div className="pos-group-table-wrapper">
+        <table className="pos-group-table">
+          <thead>
+            <tr>
+              <th>Group</th>
+              <th>Stance</th>
+              <th>Cohesion</th>
+              <th>Amendments</th>
+              <th>Confidence</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {parliament.groups.map((g) => (
+              <tr key={g.group_code}>
+                <td className="pos-group-table__group-name">{g.group_code}</td>
+                <td><StanceBadge stance={g.stance} /></td>
+                <td className="pos-group-table__cohesion">{(g.cohesion * 100).toFixed(0)}%</td>
+                <td className="pos-group-table__count">{g.amendment_count}</td>
+                <td className="pos-group-table__confidence">{g.confidence}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {parliament.amendment_activity?.total > 0 && (
         <div className="pos-card__footer">Total amendments tabled: {parliament.amendment_activity.total}</div>
       )}
@@ -207,11 +209,14 @@ function CouncilCard({ council }: { council: PositionResponse['council_position'
             <div className="pos-ms-bloc__title">{bloc.title} ({bloc.list.length})</div>
             <div className="pos-ms-bloc__chips">
               {bloc.list.length === 0 && <span className="pos-ms-bloc__empty">—</span>}
-              {bloc.list.map((m) => (
-                <span key={m.country_code} className="pos-ms-chip" title={`${m.country_name} (${m.confidence} confidence)`}>
-                  {m.country_code}
-                </span>
-              ))}
+              {bloc.list.map((m) => {
+                const confCls = m.confidence === 'high' ? 'pos-ms-chip--high' : m.confidence === 'low' ? 'pos-ms-chip--low' : 'pos-ms-chip--medium';
+                return (
+                  <span key={m.country_code} className={`pos-ms-chip ${confCls}`} title={`${m.country_name} (${m.confidence} confidence)`}>
+                    {m.country_code}
+                  </span>
+                );
+              })}
             </div>
           </div>
         ))}

@@ -28,7 +28,20 @@
 - Commission plain-language explainer (April 2026, Publications Office): "The Digital Services Act explained: What online platforms should do to keep kids and teens safe online" (19 pages, catalogue ID 33740183-a581-11f0-a7c5-01aa75ed71a1). Explains July 2025 DSA minors guidelines for general audiences. See dedicated section at the bottom.
 - DSA Guidelines three principles: (1) Children's rights come first (protection, non-discrimination, inclusion, privacy, information/education, freedom of expression, participation); (2) Safety by design; (3) Understanding the needs of young users (cyberbullying, harmful content, excessive use).
 - DSA Guidelines covered platforms: social media (TikTok, Instagram, Snapchat, Yubo, BeReal); video-sharing/streaming (YouTube, Twitch); games with user content (Roblox, Minecraft); view/post/share platforms (Discord, Reddit). Private messaging services are NOT covered.
-- EU age-verification app blueprint (launched July 2025): user-friendly, proves 18+ without revealing personal data, integrates with EU Digital Identity Wallet (from 2026).
+- EU age-verification app LAUNCHED (15 April 2026, STATEMENT/26/817): Von der Leyen + Virkkunen formally announced the EU digital age verification app. Key details from von der Leyen statement:
+  - "Technically ready and soon available for citizens to use"
+  - Setup: download app, set up with passport or ID card, then prove age when accessing online services
+  - Privacy: "completely anonymous: users cannot be tracked" -- proves age without revealing any other personal info
+  - Works on any device (phone, tablet, computer)
+  - Fully open source -- code is publicly auditable, partner countries can use it
+  - Based on the same model as the EU COVID certificate app (developed in 3 months, used by 78 countries across 4 continents)
+  - Front-runner MS integrating into national wallets: France, Denmark, Greece, Italy, Spain, Cyprus, Ireland
+  - Von der Leyen: "There are no more excuses. Europe offers a free and easy to use solution that can shield our children from harmful and illegal content."
+  - Von der Leyen: "Children's rights in the European Union come before commercial interest."
+  - Commission Special Panel on Child Safety Online: second meeting 16 April 2026, recommendations by summer
+  - Press contacts: Paula Pinho (Chief Spokesperson), Arianna Podesta, Olof Gill
+  - CNN global coverage. YouTube: "No more excuses: New age verification app to keep kids safe online"
+- Original blueprint: July 2025. App provides digital ID card-like proof of age.
 - Age assurance tiers: self-declaration (not reliable); age estimation via face/typing/interests (intrusive, imperfect); age verification via official IDs or EU Digital Identity Wallet (most accurate).
 - Risk tiers from DSA Guidelines: low-risk (other safety measures enough), medium-risk social media (age estimation or verification), high-risk (gambling, dating, 18+ adult content, loot boxes) = age verification required.
 - Minimum age to use TikTok, Snapchat, Instagram, BeReal, Steam: 13 years old.

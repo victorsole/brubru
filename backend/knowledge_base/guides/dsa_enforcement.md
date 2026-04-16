@@ -21,6 +21,8 @@
 - DG CNECT (10 April 2026): First results published under revised Code of Conduct on Countering Illegal Hate Speech Online
 - HaDEA (10 April 2026): New calls for proposals under Digital Europe Programme published
 - Related: DMA (32022R1925), AI Act (32024R1689), AVMSD (32018L1808), Terrorist Content Regulation (32021R0784), CSAM Regulation proposal (COM(2022)209)
+- EU digital age verification app launched (15 April 2026): Von der Leyen + Virkkunen. Centralised age check without sharing personal data. Integrates with EU Digital Identity Wallet. Not mandatory under DSA but platform burden removed. See also csam_regulation_online guide for full details.
+- European Board for Digital Services press statement (15 April 2026): Board update on DSA governance and coordination
 - Related guides: digital_markets_act, copyright_generative_ai, csam_regulation_online
 
 ## Overview

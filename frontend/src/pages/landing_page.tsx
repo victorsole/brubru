@@ -351,6 +351,123 @@ export const LandingPage = () => {
           <CarouselSection />
         </div>
 
+        {/* ========== 8b. MCP INTEGRATION ========== */}
+        <section className="section mcp-section fade-up" style={{
+          background: 'linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%)',
+          padding: '80px 24px',
+          textAlign: 'center',
+        }}>
+          <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <p style={{ color: '#0693e3', fontWeight: 600, fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>
+              For developers and RegTech partners
+            </p>
+            <h2 style={{ fontSize: '2rem', fontWeight: 700, color: '#111827', marginBottom: '16px' }}>
+              The EU, structured. REST API and MCP server.
+            </h2>
+            <p style={{ color: '#6b7280', fontSize: '1.1rem', lineHeight: 1.7, marginBottom: '32px' }}>
+              Brubru is a vertical EU data provider. The same 28,505 laws, 1,296 procedures,
+              live consultation feedback, commissioner agendas, and legal-text intelligence
+              that power the Brubru app are exposed as a paid <strong>REST API</strong> and as an{' '}
+              <strong>MCP server</strong>. Brubru itself is the first user of its own API.
+              Built for RegTech, law firms, public-affairs teams, and AI agents.
+            </p>
+
+            <div style={{
+              display: 'flex',
+              gap: '12px',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              marginBottom: '32px',
+            }}>
+              <a href="/api" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                background: '#0693e3', color: '#fff', padding: '12px 22px',
+                borderRadius: '4px', textDecoration: 'none', fontWeight: 700,
+              }}>
+                <span className="mdi mdi-api" /> Explore the API
+              </a>
+              <a href="/api/docs" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                background: '#fff', color: '#0693e3', padding: '12px 22px',
+                borderRadius: '4px', textDecoration: 'none', fontWeight: 700,
+                border: '2px solid #0693e3',
+              }}>
+                <span className="mdi mdi-book-open-variant" /> API reference
+              </a>
+            </div>
+
+            <p style={{ color: '#374151', fontWeight: 700, marginBottom: '12px', textAlign: 'left' }}>
+              REST API endpoints (Professional subscription, 60 req/min):
+            </p>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              gap: '16px',
+              textAlign: 'left',
+              marginBottom: '32px',
+            }}>
+              {[
+                { icon: 'mdi-scale-balance', name: 'GET /api/v1/laws', desc: '28,505 adopted EU laws, full-text + filters' },
+                { icon: 'mdi-train', name: 'GET /api/v1/procedures', desc: '1,200+ legislative files in flight' },
+                { icon: 'mdi-account-tie', name: 'GET /api/v1/commissioners/{name}/agenda', desc: 'Live calendar for all 27 college members' },
+                { icon: 'mdi-message-text', name: 'GET /api/v1/consultations/.../feedback', desc: 'Live Have Your Say stakeholder input' },
+                { icon: 'mdi-book-search', name: 'GET /api/v1/legal-text/{celex}/recital-article-map', desc: 'TF-IDF recital-article linker' },
+                { icon: 'mdi-text-search', name: 'POST /api/v1/legal-text/resolve-aliases', desc: '680+ GDPR/DSA/AI Act/CBAM aliases to CELEX' },
+              ].map((tool) => (
+                <div key={tool.name} style={{
+                  background: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  padding: '16px',
+                }}>
+                  <span className={`mdi ${tool.icon}`} style={{ color: '#0693e3', fontSize: '1.3rem', marginRight: '8px' }} />
+                  <strong style={{ fontFamily: 'monospace', fontSize: '0.78rem' }}>{tool.name}</strong>
+                  <p style={{ color: '#6b7280', fontSize: '0.9rem', marginTop: '4px', marginBottom: 0 }}>{tool.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <p style={{ color: '#374151', fontWeight: 700, marginBottom: '12px', textAlign: 'left' }}>
+              MCP server tools (compatible with Claude, GPT, Cursor, Windsurf):
+            </p>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '16px',
+              textAlign: 'left',
+              marginBottom: '32px',
+            }}>
+              {[
+                { icon: 'mdi-chat-question', name: 'ask_brubru', desc: 'Ask any EU policy question' },
+                { icon: 'mdi-scale-balance', name: 'search_eu_legislation', desc: 'Search 28,505 EU laws' },
+                { icon: 'mdi-book-open-variant', name: 'search_knowledge_guides', desc: '128 curated policy guides' },
+                { icon: 'mdi-file-document-check', name: 'get_procedure_status', desc: 'Legislative procedure tracker' },
+                { icon: 'mdi-calendar-clock', name: 'get_calendar_events', desc: 'EU institutional calendar' },
+                { icon: 'mdi-library', name: 'search_eprs', desc: 'EP Research publications' },
+              ].map((tool) => (
+                <div key={tool.name} style={{
+                  background: 'white',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '8px',
+                  padding: '16px',
+                }}>
+                  <span className={`mdi ${tool.icon}`} style={{ color: '#9b51e0', fontSize: '1.3rem', marginRight: '8px' }} />
+                  <strong style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>{tool.name}</strong>
+                  <p style={{ color: '#6b7280', fontSize: '0.9rem', marginTop: '4px', marginBottom: 0 }}>{tool.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <p style={{ color: '#9ca3af', fontSize: '0.85rem' }}>
+              Same canonical pagination envelope across every endpoint. OpenAPI 3.1 spec at{' '}
+              <a href="/api/v1/openapi.json" style={{ color: '#0693e3' }}>/api/v1/openapi.json</a>{' '}
+              &mdash; importable into Postman in one click.
+              <br />
+              Interested in integrating? Contact <a href="mailto:hello@beresol.eu" style={{ color: '#0693e3' }}>hello@beresol.eu</a>
+            </p>
+          </div>
+        </section>
+
         {/* ========== 9. ABOUT ========== */}
         <section className="about-section" id="about">
           <div className="about">
