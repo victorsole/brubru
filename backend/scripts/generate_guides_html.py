@@ -424,6 +424,56 @@ def generate_html(guides: list[dict]) -> str:
 </html>'''
 
 
+def update_data_architecture_counts(guide_count: int, trigger_count: int) -> bool:
+    """Sync hardcoded guide/trigger counts in data-architecture/index.html.
+
+    Rewrites four hotspots:
+      1. figure-card data-count attribute for "expert knowledge guides"
+      2. section__intro line "519 europa.eu sources, N knowledge guides"
+      3. subsection__title "N expert knowledge guides"
+      4. subsection__title "N,NNN keyword triggers in 6 languages"
+    """
+    data_arch = Path(__file__).parent.parent.parent / 'frontend' / 'public' / 'data-architecture' / 'index.html'
+    if not data_arch.exists():
+        print(f'[WARN] data-architecture page not found: {data_arch}')
+        return False
+
+    html = data_arch.read_text(encoding='utf-8')
+    original = html
+
+    # 1. figure-card data-count + label
+    html = re.sub(
+        r'(<div class="figure-card__number" data-count=")\d+(">0</div>\s*<div class="figure-card__label">expert knowledge guides)',
+        rf'\g<1>{guide_count}\g<2>',
+        html,
+    )
+    # 2. "519 europa.eu sources, N knowledge guides"
+    html = re.sub(
+        r'(519 europa\.eu sources,\s*)\d+(\s+knowledge guides)',
+        rf'\g<1>{guide_count}\g<2>',
+        html,
+    )
+    # 3. subsection title for guides count
+    html = re.sub(
+        r'(<h3 class="subsection__title">)\d+(\s+expert knowledge guides</h3>)',
+        rf'\g<1>{guide_count}\g<2>',
+        html,
+    )
+    # 4. subsection title for triggers count (with comma, e.g. 5,379)
+    html = re.sub(
+        r'(<h3 class="subsection__title">)[\d,]+(\s+keyword triggers in 6 languages</h3>)',
+        rf'\g<1>{trigger_count:,}\g<2>',
+        html,
+    )
+
+    if html != original:
+        data_arch.write_text(html, encoding='utf-8')
+        print(f'[OK] Updated {data_arch} (guides={guide_count}, triggers={trigger_count:,})')
+        return True
+    print(f'[INFO] data-architecture counts already match guides={guide_count}, triggers={trigger_count:,}')
+    return False
+
+
 def main():
     loader = KnowledgeLoader()
     loader.load_all()
@@ -439,9 +489,13 @@ def main():
     output_path = output_dir / 'index.html'
     output_path.write_text(html, encoding='utf-8')
 
+    total_triggers = sum(g["triggers"] for g in guides)
     print(f'[OK] Generated {output_path}')
-    print(f'     {len(guides)} guides, {sum(g["triggers"] for g in guides)} triggers')
+    print(f'     {len(guides)} guides, {total_triggers} triggers')
     print(f'     {len(set(g["category"] for g in guides))} categories')
+
+    # Keep data-architecture page in sync with current counts.
+    update_data_architecture_counts(len(guides), total_triggers)
 
 
 if __name__ == '__main__':

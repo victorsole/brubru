@@ -155,9 +155,22 @@ DAILY BRIEF SENT
   Breakdown: A users + B pre-users + C extras
 ```
 
-## Step 6: Check Unsubscribes and Bounces
+## Step 6: Check Unsubscribes and Bounces (MANDATORY)
 
-Immediately after sending, check for new unsubscribes and bounces:
+**Always** run this after every send. Gmail DSN messages arrive 1-3 minutes after the batch, so wait **at least 2 minutes** before the bounce sweep. The runtime exposes `ScheduleWakeup` for this — schedule a 120-second wake-up and resume `/daily-brief` at this step when it fires. Never skip this check: chronic bouncers erode sender reputation and trigger Gmail throttling.
+
+Two passes are required:
+
+**Pass 1 — Gmail DSN scan (catches extras-file recipients the DB does not know about):**
+Use the Gmail MCP tool `search_threads` with the query below. Include TRASH because Gmail frequently files bounces in Trash or Spam automatically.
+
+```
+(subject:"Delivery Status" OR subject:"undeliverable" OR subject:"failure notice" OR subject:"Mail Delivery" OR from:mailer-daemon OR from:postmaster) newer_than:1d
+```
+
+Also include `includeTrash: true`. For each DSN, extract the failed recipient email and the reason (e.g. `Address not found`, `550 permanent failure`, `Recipient Unknown`).
+
+**Pass 2 — DB unsubscribe/bounce events:**
 
 ```sql
 -- New unsubscribes
@@ -184,6 +197,17 @@ UNSUBSCRIBE CHECK:
 ```
 
 If a paying subscriber (yellow/blue tier) has unsubscribed, flag it to the user as a retention concern.
+
+**Auto-unsubscribe chronic bouncers.** Any address that returns a permanent DSN (`Address not found`, `550`, `Recipient Unknown`, `mailbox full` repeated for 3+ consecutive days) should be added to the unsubscribe list so future sends skip it. Insert a `daily_brief_unsubscribe` row in `pre_user_events` with the email in `event_metadata` — the new `_load_unsubscribed_extras()` filter in `scripts/send_daily_brief.py` will pick it up automatically. Example:
+
+```sql
+INSERT INTO pre_user_events (id, pre_user_id, event_type, ab_variant, event_metadata, created_at)
+VALUES (gen_random_uuid(), gen_random_uuid()::text, 'daily_brief_unsubscribe', 'A',
+        jsonb_build_object('email', 'bouncing.address@example.com', 'note', 'Chronic bouncer auto-unsubscribed YYYY-MM-DD: [reason]'),
+        NOW());
+```
+
+For addresses already in the `users` table, set `preferences.daily_brief_unsubscribed = true` instead.
 
 ## Step 7: Log Results
 
