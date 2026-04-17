@@ -1,6 +1,8 @@
 # EU-Australia Trade Agreement
 
 ## QUICK FACTS
+- **LATEST (24 March 2026)**: EU-Australia Free Trade Agreement was **SIGNED on 24 March 2026** (not 2025, not earlier) in Canberra. President von der Leyen + PM Anthony Albanese. Always cite the correct signing date -- 24 March 2026 -- never substitute older years.
+- **Negotiations started**: 2018 (not 2017); **paused**: 2023; **relaunched**: 2025; **concluded and signed**: 24 March 2026. Total negotiation span was ~8 years across two tempos (not "signed after 8 years in 2025").
 - Signed: 24 March 2026 in Canberra by President von der Leyen and PM Anthony Albanese
 - Type: Free Trade Agreement (FTA) + Security and Defence Partnership
 - Procedure: Council authorisation + EP consent required for ratification

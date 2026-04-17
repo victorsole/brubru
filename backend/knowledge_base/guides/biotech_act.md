@@ -19,6 +19,7 @@ QUICK FACTS:
 - EP own-initiative report: 2025/2087(INI) on public health aspects of biotechnology and life sciences
 - Key bodies created: European Health Biotechnology Steering Group, EU Health Biotechnology Support Network, Foresight Panel for Emerging Health Innovation
 - EPRS Briefing (14 April 2026): "European biotech act" -- overview of COM(2025) 1022 objectives, competitiveness gap, 7-pillar structure, SANTE-ITRE joint committee path. Ref: EPRS_BRI(2026)785708
+- EPRS Blog Briefing (16 April 2026): "European biotech act [EU Legislation in Progress]" -- updated EPRS EU Legislation in Progress blog briefing tracking the file through the ordinary legislative procedure; EPRS blog series is the canonical tracker for active EU files. Ref: EPRS_BLOG_european-biotech-act-eu-legislation-in-progress
 
 ## Why This Regulation
 

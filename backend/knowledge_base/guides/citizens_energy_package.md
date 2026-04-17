@@ -14,6 +14,8 @@ QUICK FACTS:
 - CELEX 32026H0537: Recommendation on private investment in energy efficiency
 - Status: Communication (non-legislative) with recommendations and implementation guidance
 - Related guides: Clean Energy Investment Strategy (clean_energy_investment_strategy.md), SMR Strategy (smr_strategy_nuclear.md), EU Energy Policy (eu_energy_policy.md)
+- State aid electricity price relief (16 April 2026, DG COMP): Commission approved Bulgarian, German, and Slovenian State aid schemes providing temporary electricity price relief for energy-intensive companies. Complements Citizens Energy Package consumer-side measures; industry-side relief under TCTF.
+- Commission emergency plan on energy price surge (16 April 2026, Contexte): Response to US-Iran war fallout; June 2026 renewable hydrogen review, electricity tax and grid tariff reform proposals. Aligned with Citizens Energy Package aim of lowering household bills.
 
 ## Overview
 

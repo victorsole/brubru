@@ -20,6 +20,13 @@
 - DG COMP (13 April 2026): Commission carried out unannounced antitrust inspections at premises of companies active in the chocolate confectionery sector in several Member States. Concerns: possible violation of Article 101 TFEU (cartel prohibition) on market allocation or price coordination. Source: https://ec.europa.eu/commission/presscorner
 - Merger case M.12286 HONDA / ASTEMO (14 April 2026): prior notification of concentration, candidate for simplified procedure (OJ:C_202602183)
 - Merger case M.12295 VALEA / ROCKAWAY MEDIA / ROCKAWAY ARTS (14 April 2026): non-opposition to notified concentration (OJ:C_202602283)
+- YEL (1 April 2026): "State aid control as a coordinating instrument for EU industrial policy in the internal market" by Lena Hornkohl, Dionysios Pelekis. DOI: 10.1093/yel/yeag004
+- YEL (25 February 2026): "'Naked' and 'by object' restrictions of competition and Article 102 TFEU" by Ioannis Lianos. DOI: 10.1093/yel/yeaf011
+- TTBER revision (16 April 2026, IP/26/809): Commission adopted revised Technology Transfer Block Exemption Regulation (TTBER) + Technology Transfer Guidelines. Replaces Regulation (EU) 316/2014 (expiring 30 April 2026). See dedicated `tech_transfer_block_exemption` guide.
+- Google DMA enforcement (16 April 2026, IP/26/825): Commission proposes measures to Google on sharing search engine data with third parties under DMA Article 6(11). Specific obligations on treatment of query, click, and view data from Google's general search service toward third-party search engines. See `digital_markets_act` guide.
+- Cernavoda 1 nuclear State aid investigation (16 April 2026, IP/26/814): Commission opened in-depth investigation into Romanian State aid to support refurbishment of Cernavoda 1 nuclear reactor. Legal basis assessed under Article 107(3)(c) TFEU and Euratom Treaty; proportionality concerns + impact on EU electricity market. Parallel to Hinkley Point C state aid precedent (C(2014) 7142).
+- BG/DE/SI state aid electricity price relief (16 April 2026): Commission approved Bulgarian, German and Slovenian State aid schemes providing temporary electricity price relief for energy-intensive companies. Legal basis: Article 107(3)(c) TFEU + Temporary Crisis and Transition Framework (TCTF), extended.
+- EPRS Briefing (16 April 2026): "State aid in the EU: State of play" -- EPRS overview of EU state aid framework: General Block Exemption Regulation (GBER), temporary crisis frameworks (TCF, TCTF), State Aid Modernisation, sectoral guidelines (CEEAG, RFEC). Ref: EPRS_UNK_1f041d750f1f
 
 Guide to EU antitrust enforcement by DG Competition, covering Articles 101 and 102 TFEU, procedural rules under Regulation 1/2003, and the ECN+ Directive cooperation framework.
 

@@ -121,6 +121,32 @@ def _build_brubru_news_html(news_items: List[str]) -> str:
       </div>"""
 
 
+def _build_week_ahead_html(week_items: List[str], closing: Optional[str] = None) -> str:
+    """Build the 'Week ahead' section (Friday preview of the following week + closing line)."""
+    if not week_items and not closing:
+        return ""
+    items_html = "".join(
+        f'<li style="margin-bottom: 4px;">{item}</li>' for item in (week_items or [])
+    )
+    closing_html = (
+        f'<p style="font-size: 13px; color: #374151; line-height: 1.5; margin: 10px 0 0 0; font-style: italic;">{closing}</p>'
+        if closing else ""
+    )
+    list_html = (
+        f'<ul style="font-size: 13px; color: #374151; line-height: 1.5; margin: 0; padding-left: 18px;">{items_html}</ul>'
+        if items_html else ""
+    )
+    return f"""
+      <!-- Week Ahead -->
+      <div style="margin-top: 20px; padding: 16px; background: #fef7ed; border-radius: 8px; border: 1px solid #fed7aa;">
+        <p style="font-size: 13px; font-weight: 600; color: #d97706; margin: 0 0 8px 0;">
+          The week ahead
+        </p>
+        {list_html}
+        {closing_html}
+      </div>"""
+
+
 def _build_brief_email_html(
     headlines: List[dict],
     brief_date: str,
@@ -128,6 +154,8 @@ def _build_brief_email_html(
     is_welcome: bool = False,
     is_registered_user: bool = False,
     brubru_news: Optional[List[str]] = None,
+    week_ahead: Optional[List[str]] = None,
+    week_ahead_closing: Optional[str] = None,
 ) -> str:
     """Build the full HTML email for the daily brief."""
 
@@ -225,6 +253,8 @@ def _build_brief_email_html(
       </table>
 
       {_build_brubru_news_html(brubru_news or [])}
+
+      {_build_week_ahead_html(week_ahead or [], week_ahead_closing)}
 
       <!-- CTA -->
       <div style="text-align: center; margin-top: 24px;">
@@ -414,7 +444,9 @@ BCC_BATCH_SIZE = 90
 
 
 def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
-                           extra_recipients: Optional[List[str]] = None) -> dict:
+                           extra_recipients: Optional[List[str]] = None,
+                           week_ahead: Optional[List[str]] = None,
+                           week_ahead_closing: Optional[str] = None) -> dict:
     """Send today's brief to all subscribers via BCC batching.
 
     Uses BCC batches of 90 recipients per SMTP connection to avoid Gmail
@@ -456,6 +488,8 @@ def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
         is_welcome=False,
         is_registered_user=False,
         brubru_news=brubru_news,
+        week_ahead=week_ahead,
+        week_ahead_closing=week_ahead_closing,
     )
 
     subject = f"Brubru Daily Brief: {brief_date}"

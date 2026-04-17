@@ -29,7 +29,9 @@ The mid-term review (2024-2025) identified persistent gaps in employment (disabi
 
 ## PETI Draft Report 2025/2057(INI) -- April 2026
 
-The Committee on Petitions has posted (15 April 2026) a draft INI report on the post-2024 update of the disability rights strategy. PETI receives a large share of all EU petitions on disability access and treatment, giving the committee a unique evidence base.
+The Committee on Petitions has posted (15-17 April 2026) a draft INI report on the post-2024 update of the disability rights strategy. PETI receives a large share of all EU petitions on disability access and treatment, giving the committee a unique evidence base.
+
+**Update 17 April 2026**: PETI draft report for `EU strategy for the rights of persons with disabilities post-2024` [2025/2057(INI)] confirmed as under active preparation by rapporteur Pal Szekeres (PfE, Hungary). Draft expected to feed into the College 6 May 2026 Social Package.
 
 ## Social Package 6 May 2026
 

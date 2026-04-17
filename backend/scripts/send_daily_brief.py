@@ -23,6 +23,29 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core.database import SessionLocal
 
 
+def _load_unsubscribed_extras() -> set:
+    """Return set of emails explicitly unsubscribed via pre_user_events 'daily_brief_unsubscribe'.
+
+    Honors unsubscribe requests for addresses fed via --extra / --extra-file
+    that are not in the users table (and therefore not covered by
+    User.preferences.daily_brief_unsubscribed).
+    """
+    try:
+        from sqlalchemy import text as _text
+        db = SessionLocal()
+        rows = db.execute(_text(
+            "SELECT LOWER(event_metadata->>'email') AS email "
+            "FROM pre_user_events "
+            "WHERE event_type IN ('daily_brief_unsubscribe', 'unsubscribe') "
+            "AND event_metadata->>'email' IS NOT NULL"
+        )).fetchall()
+        db.close()
+        return {r.email for r in rows if r.email}
+    except Exception as e:
+        print(f"  [WARN] Could not load unsubscribe list: {e}")
+        return set()
+
+
 def _load_extra_recipients(file_path: str) -> list:
     """Extract email addresses from a file (txt with one per line, or .md with emails inline)."""
     if not os.path.exists(file_path):
@@ -33,6 +56,7 @@ def _load_extra_recipients(file_path: str) -> list:
         content = f.read()
 
     emails = set(re.findall(r'[\w.+-]+@[\w.-]+\.\w+', content))
+    unsubscribed = _load_unsubscribed_extras()
 
     # Filter out format patterns and generic/institutional addresses
     skip_locals = {'first', 'last', 'flast', 'firstname', 'firstinitial', 'lastinitial'}
@@ -48,6 +72,8 @@ def _load_extra_recipients(file_path: str) -> list:
     real = []
     for e in sorted(emails):
         if e in skip_exact:
+            continue
+        if e.lower() in unsubscribed:
             continue
         local = e.split('@')[0].lower()
         if any(p in local for p in skip_locals):
@@ -188,7 +214,8 @@ def preview(db, extra_recipients=None):
     print(f"  Run with --send to deliver\n")
 
 
-def send(db, brubru_news=None, extra_recipients=None, skip_url_check=False):
+def send(db, brubru_news=None, extra_recipients=None, skip_url_check=False,
+         week_ahead=None, week_ahead_closing=None):
     """Send the daily brief to all subscribers. Verifies URLs first."""
     from services.daily_brief_email import send_daily_brief_batch
 
@@ -201,7 +228,8 @@ def send(db, brubru_news=None, extra_recipients=None, skip_url_check=False):
             print("  To skip this check (NOT recommended): --send --skip-url-check")
             return
 
-    result = send_daily_brief_batch(db, brubru_news=brubru_news, extra_recipients=extra_recipients)
+    result = send_daily_brief_batch(db, brubru_news=brubru_news, extra_recipients=extra_recipients,
+                                     week_ahead=week_ahead, week_ahead_closing=week_ahead_closing)
     print(f"\n  Daily Brief Send Results:")
     print(f"  Sent: {result.get('sent', 0)}")
     print(f"  Failed: {result.get('failed', 0)}")
@@ -227,6 +255,10 @@ def main():
     parser.add_argument("--list", action="store_true", help="List all subscriber emails")
     parser.add_argument("--news", nargs="+", metavar="ITEM",
                         help="Brubru product news items to include in the email")
+    parser.add_argument("--week-ahead", nargs="+", metavar="ITEM",
+                        help="Friday 'Week ahead' bullet items (HTML allowed)")
+    parser.add_argument("--week-ahead-closing", metavar="TEXT",
+                        help="Friday closing line (e.g. weekend wishes)")
     parser.add_argument("--extra-file", metavar="PATH",
                         help="File with additional recipient emails (txt or md)")
     parser.add_argument("--extra", nargs="+", metavar="EMAIL",
@@ -257,7 +289,8 @@ def main():
             send_test(db, brubru_news=args.news)
         elif args.send:
             send(db, brubru_news=args.news, extra_recipients=extra,
-                 skip_url_check=args.skip_url_check)
+                 skip_url_check=args.skip_url_check,
+                 week_ahead=args.week_ahead, week_ahead_closing=args.week_ahead_closing)
         else:
             preview(db, extra_recipients=extra)
     finally:

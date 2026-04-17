@@ -42,6 +42,7 @@ from .alignment_score import AlignmentScore
 from .eprs_publication import EPRSPublication, EPRSPublicationTypeEnum
 from .catalan_translation import CatalanTranslation
 from .committee_minutes import CommitteeMinutes
+from .committee_meeting_transcript import CommitteeMeetingTranscript, TranscriptStatusEnum
 from .eu_calendar import (
     EUCalendarEvent,
     UserCalendarSubscription,

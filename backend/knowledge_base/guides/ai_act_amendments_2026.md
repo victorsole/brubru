@@ -13,6 +13,7 @@
 - AI regulatory sandboxes: deadline extended to 2 December 2027
 - Commissioner: Henna Virkkunen (EVP, Tech Sovereignty, Security and Democracy)
 - AI Office: reinforced supervisory powers for AI systems based on general-purpose AI models
+- JRC report (16 April 2026): "Fractured reality: how algorithms fuel polarisation and affect democracy" -- JRC Publications Office study on algorithmic amplification, filter bubbles, echo chambers, platform design and democratic impact. Relevant to AI Act Article 10 (risk management), DSA Article 34 (systemic risk assessment), DSA Article 40 (researcher data access). See also `dsa_enforcement` and `digital_markets_act` guides.
 
 ## Overview
 

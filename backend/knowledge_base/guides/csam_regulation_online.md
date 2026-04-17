@@ -28,6 +28,9 @@
 - Commission plain-language explainer (April 2026, Publications Office): "The Digital Services Act explained: What online platforms should do to keep kids and teens safe online" (19 pages, catalogue ID 33740183-a581-11f0-a7c5-01aa75ed71a1). Explains July 2025 DSA minors guidelines for general audiences. See dedicated section at the bottom.
 - DSA Guidelines three principles: (1) Children's rights come first (protection, non-discrimination, inclusion, privacy, information/education, freedom of expression, participation); (2) Safety by design; (3) Understanding the needs of young users (cyberbullying, harmful content, excessive use).
 - DSA Guidelines covered platforms: social media (TikTok, Instagram, Snapchat, Yubo, BeReal); video-sharing/streaming (YouTube, Twitch); games with user content (Roblox, Minecraft); view/post/share platforms (Discord, Reddit). Private messaging services are NOT covered.
+- Special Panel on Child Online Safety -- 2nd meeting (16 April 2026): Second meeting of the Special Panel advising von der Leyen on child online safety (DG CNECT announcement). Panel discussed EU age-verification app rollout, DSA Article 28 implementation, and AI-generated CSAM risks. Follows the inaugural meeting earlier in 2026.
+- LIBE draft report (17 April 2026): Amending Regulation (EU) 2021/1232 as regards extension of its period of application [2025/0429(COD)] -- LIBE draft tracking Sippel rapporteurship + EP 1st reading position; key file for extending voluntary-detection derogation beyond 3 August 2027.
+- LIBE draft report (17 April 2026): Ban on conversion practices -- European Citizens' Initiative [2026/2539(RSP)] -- adjacent minors / LGBTIQ+ protection file.
 - EU age-verification app LAUNCHED (15 April 2026, STATEMENT/26/817): Von der Leyen + Virkkunen formally announced the EU digital age verification app. Key details from von der Leyen statement:
   - "Technically ready and soon available for citizens to use"
   - Setup: download app, set up with passport or ID card, then prove age when accessing online services
@@ -55,6 +58,7 @@
 - AI-generated CSAM reports: 4,700 (2023) to 67,000 (2024) -- 1,325% increase
 - IWF: 70% of known CSAM in 2024 traced to European country
 - Related guides: dsa_enforcement, digital_omnibus_package
+- YEL (11 October 2025): "Governing the 'Governors' of online speech: a review of the DSA's first steps in regulating social media platforms" by Anastasia Iliopoulou-Penot. DOI: 10.1093/yel/yeaf006
 - Related legislation: Regulation (EU) 2021/784 (terrorist content online), DSA Art. 28 (minors), GDPR Art. 8 (children's consent), AVMSD Art. 28a (VSP minors)
 
 ## Overview

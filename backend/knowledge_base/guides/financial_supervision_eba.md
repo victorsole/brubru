@@ -15,6 +15,8 @@
 - Regulatory tools: RTS (binding), ITS (binding), Guidelines (comply-or-explain), Q&As, Opinions
 - Joint Committee: Cross-sectoral coordination -- consumer protection, AML, financial conglomerates
 - CASP own funds: EUR 50,000 to EUR 150,000 depending on services
+- YEL (15 March 2026): "The 'supervisory effects' of the ECB soft law as a dialogue tool in the field of banking supervision" by Dalvinder Singh, Oana Stefan. DOI: 10.1093/yel/yeag001
+- YEL (5 November 2025): "Peer review in networked financial supervision: the evolution of ESMA's collegial panopticon" by Alexis Galan, Yane Svetiev. DOI: 10.1093/yel/yeaf008
 
 Guide for European Supervisory Authority staff covering prudential supervision, MiCA crypto-asset oversight, DORA digital operational resilience, and supervisory convergence tools.
 

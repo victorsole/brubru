@@ -51,33 +51,171 @@ TRANSLATIONS_DIR = os.path.join(
 )
 
 # Category auto-classification based on keywords in title
+# Rules checked top-to-bottom; first match wins. More specific rules first.
+# Supports both English (from Formex XML titles) and Catalan (from translated titles).
 CATEGORY_RULES = [
-    # (keywords_in_title, category_ca, category_en)
-    (['antidumping', 'countervailing', 'anti-dumping', 'safeguard measure'], 'Comerc i politica exterior', 'Trade and External Policy'),
-    (['customs', 'tariff', 'import', 'export', 'trade'], 'Comerc i politica exterior', 'Trade and External Policy'),
-    (['fisheries', 'fishing', 'aquaculture', 'fish'], 'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
-    (['agriculture', 'CAP', 'agri', 'farm', 'crop', 'wine', 'olive', 'sugar', 'milk', 'beef', 'poultry', 'cereal'], 'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
-    (['animal', 'veterinary', 'plant health', 'phytosanitary', 'food safety', 'feed'], 'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
-    (['environment', 'emission', 'climate', 'carbon', 'waste', 'water', 'pollution', 'biodiversity', 'natura 2000', 'habitat'], 'Sostenibilitat i medi ambient', 'Sustainability and Environmental Policies'),
-    (['energy', 'renewable', 'electricity', 'gas', 'nuclear', 'petroleum', 'fuel'], 'Sostenibilitat i medi ambient', 'Sustainability and Environmental Policies'),
-    (['digital', 'data', 'cyber', 'electronic', 'telecom', 'AI', 'artificial intelligence', 'platform', 'online'], 'Transformacio digital', 'Digital Transformation'),
-    (['bank', 'credit', 'financial', 'insurance', 'securities', 'investment', 'capital', 'payment', 'money laundering', 'prudential'], 'Politiques economiques i de mercat', 'Core Economic and Market Policies'),
-    (['competition', 'state aid', 'merger', 'antitrust', 'subsid'], 'Politiques economiques i de mercat', 'Core Economic and Market Policies'),
-    (['transport', 'aviation', 'railway', 'maritime', 'road', 'shipping', 'port'], 'Politiques economiques i de mercat', 'Core Economic and Market Policies'),
-    (['health', 'medicinal', 'pharmaceutical', 'medical device', 'patient'], 'Politiques socials', 'Social Policies'),
-    (['worker', 'employment', 'labour', 'social', 'pension', 'equality', 'discrimination'], 'Politiques socials', 'Social Policies'),
-    (['migration', 'asylum', 'border', 'visa', 'Schengen', 'police', 'criminal', 'judicial', 'Europol', 'Eurojust'], 'Justicia i afers d interior', 'Justice and Home Affairs'),
-    (['foreign', 'CFSP', 'sanctions', 'restrictive measures', 'third countr'], 'Comerc i politica exterior', 'Trade and External Policy'),
+    # --- Agriculture, food safety, fisheries ---
+    (['pesticide', 'fitosanitari', 'substància activa', 'substancia activa', 'biocid', 'producte biocida',
+      'plant protection', 'protecció vegetal', 'proteccio vegetal', 'herbicid', 'fungicid', 'insecticid'],
+     'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
+    (['additiu', 'additive', 'pinso', 'feed additive', 'novel food', 'nou aliment', 'flavouring',
+      'aroma', 'food supplement', 'complement alimentari', 'food contact', 'contaminant'],
+     'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
+    (['fisheries', 'fishing', 'aquaculture', 'fish', 'pesca', 'pesquer', 'aqüicultura', 'atún', 'tuna',
+      'catch', 'captura', 'quota de pesca'],
+     'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
+    (['agriculture', 'CAP', 'agri', 'farm', 'crop', 'wine', 'olive', 'sugar', 'milk', 'beef', 'poultry',
+      'cereal', 'fruit', 'vegetable', 'seed', 'organic', 'ecològic', 'PAC', 'vi ', 'sucre', 'llet',
+      'cereals', 'fruita', 'hortalissa', 'carn', 'ovelles', 'bovins', 'porcí'],
+     'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
+    (['animal', 'veterinary', 'plant health', 'phytosanitary', 'food safety', 'feed', 'zoo',
+      'salut animal', 'veterinari', 'sanitat animal', 'zoonos', 'epizoòtia'],
+     'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
+    (['denominació', 'denominacio', 'indicació geogràfica', 'indicacio geografica', 'geographical indication',
+      'protected designation', 'denominació d\'origen', 'IGP', 'DOP', 'TSG'],
+     'Agricultura i recursos naturals', 'Agriculture and Natural Resources'),
+
+    # --- Trade, customs, sanctions ---
+    (['antidumping', 'countervailing', 'anti-dumping', 'antidúmping', 'safeguard measure',
+      'drets provisionals', 'drets definitius', 'dret compensatori', 'mesura de salvaguarda'],
+     'Comerç i política exterior', 'Trade and External Policy'),
+    (['customs', 'tariff', 'aranzel', 'duana', 'duaner', 'contingent', 'nomenclatura combinada',
+      'combined nomenclature', 'codi NC', 'CN code', 'classificació tarifària'],
+     'Comerç i política exterior', 'Trade and External Policy'),
+    (['sancion', 'restrictiv', 'mesures restrictives', 'restrictive measures', 'congelació d\'actius',
+      'freeze', 'embargo', 'prohibició de viatge'],
+     'Comerç i política exterior', 'Trade and External Policy'),
+    (['acord d\'associació', 'acord de comerç', 'acord de lliure', 'trade agreement', 'association agreement',
+      'free trade', 'partnership agreement', 'acord de cooperació', 'cooperation agreement',
+      'acord de pesca', 'fisheries partnership', 'EPA', 'DCFTA'],
+     'Comerç i política exterior', 'Trade and External Policy'),
+    (['foreign', 'CFSP', 'PESC', 'third countr', 'tercer país', 'tercer pais', 'relacions exteriors',
+      'external relations', 'neighbourhood', 'veïnatge', 'ACP', 'overseas', 'ultramar'],
+     'Comerç i política exterior', 'Trade and External Policy'),
+    (['import', 'export', 'trade', 'comerç', 'comercial'],
+     'Comerç i política exterior', 'Trade and External Policy'),
+
+    # --- Environment, energy, sustainability ---
+    (['environment', 'emission', 'climate', 'carbon', 'waste', 'water', 'pollution', 'biodiversity',
+      'natura 2000', 'habitat', 'medi ambient', 'residus', 'contaminació', 'biodiversitat',
+      'carboni', 'clima', 'emissió', 'emissio', 'reciclatge', 'circular economy', 'economia circular',
+      'chemical', 'químic', 'REACH', 'substàncies', 'CLP', 'classificació de substàncies'],
+     'Sostenibilitat i medi ambient', 'Sustainability and Environmental Policies'),
+    (['energy', 'renewable', 'electricity', 'gas', 'nuclear', 'petroleum', 'fuel', 'energia',
+      'renovable', 'electricitat', 'petroli', 'combustible', 'hidrogen', 'hydrogen', 'eòlic',
+      'solar', 'fotovoltaic'],
+     'Sostenibilitat i medi ambient', 'Sustainability and Environmental Policies'),
+
+    # --- Digital ---
+    (['digital', 'data', 'cyber', 'electronic', 'telecom', 'AI ', 'artificial intelligence', 'platform',
+      'online', 'internet', 'dades', 'ciberseguretat', 'electrònic', 'telecomunicaci', 'plataforma',
+      'intel·ligència artificial', 'semiconductor', 'xip', 'chip', 'roaming', 'e-commerce'],
+     'Transformació digital', 'Digital Transformation'),
+
+    # --- Economic, financial, market ---
+    (['bank', 'credit', 'financial', 'insurance', 'securities', 'investment', 'capital', 'payment',
+      'money laundering', 'prudential', 'banc', 'crèdit', 'financer', 'assegurança', 'valors',
+      'inversió', 'blanqueig', 'prudencial', 'solvència', 'liquiditat'],
+     'Polítiques econòmiques i de mercat', 'Core Economic and Market Policies'),
+    (['competition', 'state aid', 'merger', 'antitrust', 'subsid', 'concentraci', 'competència',
+      'ajut estatal', 'ajuda estatal', 'fusió', 'antimonopoli', 'subvenció', 'subvencio'],
+     'Polítiques econòmiques i de mercat', 'Core Economic and Market Policies'),
+    (['transport', 'aviation', 'railway', 'maritime', 'road', 'shipping', 'port', 'aviació',
+      'ferroviari', 'marítim', 'carretera', 'portuari', 'aeroport', 'vehicle', 'automòbil'],
+     'Polítiques econòmiques i de mercat', 'Core Economic and Market Policies'),
+    (['consumer', 'consumidor', 'product safety', 'seguretat dels productes', 'market surveillance',
+      'vigilància del mercat', 'CE marking', 'marcatge CE', 'standardisation', 'normalització'],
+     'Polítiques econòmiques i de mercat', 'Core Economic and Market Policies'),
+    (['intellectual property', 'propietat intel·lectual', 'patent', 'trademark', 'marca',
+      'copyright', 'drets d\'autor', 'design right'],
+     'Polítiques econòmiques i de mercat', 'Core Economic and Market Policies'),
+    (['VAT', 'IVA', 'tax', 'impost', 'fiscal', 'excise', 'accisa', 'duty', 'taxation'],
+     'Polítiques econòmiques i de mercat', 'Core Economic and Market Policies'),
+
+    # --- Social, health, employment ---
+    (['health', 'medicinal', 'pharmaceutical', 'medical device', 'patient', 'salut', 'medicament',
+      'farmacèutic', 'dispositiu mèdic', 'pacient', 'drug', 'tobacco', 'tabac', 'alcohol',
+      'cosmètic', 'cosmetic', 'sang', 'blood', 'teixit', 'tissue', 'organ'],
+     'Polítiques socials', 'Social Policies'),
+    (['worker', 'employment', 'labour', 'social', 'pension', 'equality', 'discrimination',
+      'treballador', 'ocupació', 'laboral', 'pensió', 'igualtat', 'discriminació', 'disability',
+      'discapacitat', 'accessibility', 'accessibilitat', 'education', 'educació', 'training',
+      'formació', 'Erasmus', 'youth', 'joventut'],
+     'Polítiques socials', 'Social Policies'),
+
+    # --- Justice, home affairs ---
+    (['migration', 'asylum', 'border', 'visa', 'Schengen', 'police', 'criminal', 'judicial',
+      'Europol', 'Eurojust', 'migració', 'asil', 'frontera', 'policia', 'penal', 'judicial',
+      'extradició', 'cooperation in criminal', 'cooperació penal', 'data protection',
+      'protecció de dades', 'privacitat', 'privacy', 'GDPR', 'RGPD'],
+     "Justícia i afers d'interior", 'Justice and Home Affairs'),
+
+    # --- Institutional/procedural (NEW) ---
+    (['tribunal', 'court of justice', 'general court', 'procediment', 'reglament de procediment',
+      'rules of procedure', 'staff regulations', 'estatut dels funcionaris', 'interinstitucional',
+      'interinstitutional', 'pressupost', 'budget', 'comitologia', 'comitology', 'OLAF',
+      'defensor del poble', 'ombudsman', 'eurostat', 'statistics', 'estadística',
+      'comitè de les regions', 'committee of the regions', 'comitè econòmic i social',
+      'economic and social committee', 'cens', 'census', 'nomenament', 'appointment'],
+     'Afers institucionals de la UE', 'EU Institutional Affairs'),
 ]
+
+# Parent-law CELEX -> category mapping (for amendments that reference a known law)
+PARENT_LAW_CATEGORIES = {
+    '396/2005': 'Agricultura i recursos naturals',    # Pesticides MRLs
+    '1107/2009': 'Agricultura i recursos naturals',   # Plant protection products
+    '528/2012': 'Agricultura i recursos naturals',    # Biocidal products
+    '540/2011': 'Agricultura i recursos naturals',    # Approved active substances
+    '1333/2008': 'Agricultura i recursos naturals',   # Food additives
+    '2015/2283': 'Agricultura i recursos naturals',   # Novel foods
+    '2017/2470': 'Agricultura i recursos naturals',   # Novel foods list
+    '1829/2003': 'Agricultura i recursos naturals',   # GM food/feed
+    '1831/2003': 'Agricultura i recursos naturals',   # Feed additives
+    '1223/2009': 'Polítiques socials',                # Cosmetics
+    '2021/2115': 'Agricultura i recursos naturals',   # CAP Strategic Plans
+    '2021/2116': 'Agricultura i recursos naturals',   # CAP financing
+    '1308/2013': 'Agricultura i recursos naturals',   # CMO regulation
+    '952/2013': 'Comerç i política exterior',         # Union Customs Code
+    '2658/87': 'Comerç i política exterior',          # Combined Nomenclature
+    '575/2013': 'Polítiques econòmiques i de mercat', # CRR
+    '648/2012': 'Polítiques econòmiques i de mercat', # EMIR
+    '600/2014': 'Polítiques econòmiques i de mercat', # MiFIR
+    '2016/679': "Justícia i afers d'interior",        # GDPR
+    '2022/2065': 'Transformació digital',             # DSA
+    '2024/1689': 'Transformació digital',             # AI Act
+}
 
 
 def classify_act(title: str) -> tuple:
-    """Auto-classify an act by title keywords. Returns (category_ca, category_en)."""
+    """Auto-classify an act by title keywords. Returns (category_ca, category_en).
+
+    Strategy:
+    1. Try parent-law detection (amendments referencing a known regulation)
+    2. Try keyword matching against expanded rules
+    3. Fall back to 'Altres actes' only if nothing matches
+    """
     title_lower = title.lower()
+
+    # Step 1: Parent-law detection for amendments
+    # Look for patterns like "modifica el Reglament (UE) núm. 575/2013" or "Regulation (EU) No 396/2005"
+    parent_refs = re.findall(r'(?:núm\.|No|n\.)\s*(\d+/\d{4})', title)
+    if not parent_refs:
+        parent_refs = re.findall(r'\((?:UE|EU|CE|EC)\)\s*(?:núm\.\s*)?(\d+/\d{4})', title)
+    if not parent_refs:
+        parent_refs = re.findall(r'(\d{3,4}/\d{4})', title)
+
+    for ref in parent_refs:
+        if ref in PARENT_LAW_CATEGORIES:
+            cat_ca = PARENT_LAW_CATEGORIES[ref]
+            cat_en = next((en for kws, ca, en in CATEGORY_RULES if ca == cat_ca), 'Other')
+            return cat_ca, cat_en
+
+    # Step 2: Keyword matching
     for keywords, cat_ca, cat_en in CATEGORY_RULES:
         if any(kw.lower() in title_lower for kw in keywords):
             return cat_ca, cat_en
-    return 'Altres', 'Other'
+
+    return 'Altres actes', 'Other acts'
 
 
 def detect_doc_type(title: str) -> str:

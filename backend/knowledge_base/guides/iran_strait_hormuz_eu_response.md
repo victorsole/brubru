@@ -21,6 +21,9 @@ Commission winter preparation (23 March 2026): Commission calls on EU countries 
 EU-Australia trade deal (24 March 2026): Trade diversification deal signed amid geopolitical instability (see `eu_australia_trade_agreement.md`)
 Post-ceasefire outlook: EU assessing long-term energy security implications, reviewing defence posture, monitoring Trump's Middle East strategy
 EP AFET + Iran delegation debate (16 April 2026): Discussion with advocates for a free Iran. Speakers: Shirin Ebadi (Sakharov and Nobel Peace Prize laureate, online), Mustafa Hijri (Democratic Party of Iranian Kurdistan), Saeed Bashirtash (7 Aban Front), Abdullah Mohtadi (Komala Party, online), Sanaz Behzadi (journalist, Open Society)
+Commission fisheries emergency funding (16 April 2026, IP/26/824): Commission activates EU emergency funding (EMFAF mobilisation) to shield fisheries and aquaculture from Middle East crisis. Targeted support for fuel costs, logistics, and affected fleets in Mediterranean / Atlantic fisheries. DG MARE + DG BUDG press release.
+Commission emergency plan -- energy price surge (reported 16 April 2026 by Contexte): Commission preparing emergency package in response to US-Iran war fallout. Key elements: (a) coordination and demand-cut measures, (b) June 2026 renewable hydrogen review (REDIII DA review), (c) fresh proposals to slash electricity taxes, (d) grid tariff reform, (e) possible gas demand reduction measures. DG ENER + DG CLIMA lead.
+Informal Transport Council (21 April 2026): Informal videoconference of Ministers of Transport. Agenda: air passenger rights conciliation, Middle East crisis transport sector impact.
 
 ## EU Diplomatic Response
 
