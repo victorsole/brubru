@@ -46,7 +46,7 @@ class OutcomePrediction(BaseModel):
 
 
 @router.get(
-    "/{procedure_ref}/timeline",
+    "/{procedure_ref:path}/timeline",
     response_model=TimelinePrediction,
     summary="Predicted days remaining to adoption/closure",
     description=(
@@ -101,7 +101,7 @@ async def get_timeline(
 
 
 @router.get(
-    "/{procedure_ref}/outcome",
+    "/{procedure_ref:path}/outcome",
     response_model=OutcomePrediction,
     summary="Predicted outcome probabilities (adopted / rejected / withdrawn / pending)",
 )
