@@ -64,8 +64,8 @@ EPRS_PUBLICATION_TYPES = [
 ]
 
 CALENDAR_INSTITUTIONS = [
-    "european_parliament", "council", "european_commission",
-    "european_central_bank", "european_court_of_justice", "agency",
+    "EP", "COUNCIL", "EUROPEAN_COUNCIL", "COMMISSION", "ECJ", "ECB",
+    "ESMA", "EMA", "EBA", "EIOPA", "COR", "EESC",
 ]
 
 

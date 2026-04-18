@@ -28,7 +28,7 @@ router = APIRouter(prefix="/consultations", tags=["v1-consultations"])
 
 class FeedbackItem(BaseModel):
     feedback_id: Optional[str] = None
-    date: Optional[datetime] = None
+    date: Optional[str] = None  # upstream format varies; pass through as string
     user_type: Optional[str] = None
     organisation: Optional[str] = None
     author_name: Optional[str] = None
@@ -117,8 +117,8 @@ async def get_feedback_by_initiative(
 
     data = [
         FeedbackItem(
-            feedback_id=it.feedback_id,
-            date=it.date,
+            feedback_id=str(it.feedback_id) if it.feedback_id is not None else None,
+            date=str(it.date) if it.date is not None else None,
             user_type=it.user_type,
             organisation=it.organisation,
             author_name=it.author_name,

@@ -11,7 +11,7 @@ from sqlalchemy import and_, func
 from sqlalchemy.orm import Session
 
 from core.database import get_db
-from models.eu_calendar import EUCalendarEvent
+from models.eu_calendar import EUCalendarEvent, EventTypeEnum, InstitutionEnum
 from models.user import User
 
 from ._deps import api_user_with_rate_limit
@@ -52,8 +52,8 @@ class CalendarEventItem(BaseModel):
 )
 async def list_calendar_events(
     request: Request,
-    institution: Optional[str] = Query(None, description="european_parliament | council | european_commission | agency"),
-    event_type: Optional[str] = Query(None, description="plenary | committee | council_meeting | college_meeting | agency_meeting | ..."),
+    institution: Optional[str] = Query(None, description="EP | COUNCIL | EUROPEAN_COUNCIL | COMMISSION | ECJ | ECB | ESMA | EMA | EBA | EIOPA | COR | EESC"),
+    event_type: Optional[str] = Query(None, description="PLENARY | COMMITTEE_MEETING | COUNCIL_MEETING | COLLEGE_MEETING | ..."),
     committee: Optional[str] = Query(None, description="EP committee code"),
     commission_dg: Optional[str] = Query(None, description="e.g. AGRI, CNECT, ENV"),
     date_from: Optional[date] = Query(None),
@@ -66,9 +66,15 @@ async def list_calendar_events(
     query = db.query(EUCalendarEvent)
     filters = []
     if institution:
-        filters.append(func.lower(func.cast(EUCalendarEvent.institution, func.TEXT.type)) == institution.lower())  # type: ignore
+        try:
+            filters.append(EUCalendarEvent.institution == InstitutionEnum(institution.upper()))
+        except ValueError:
+            filters.append(EUCalendarEvent.institution == institution.upper())
     if event_type:
-        filters.append(func.lower(func.cast(EUCalendarEvent.event_type, func.TEXT.type)) == event_type.lower())  # type: ignore
+        try:
+            filters.append(EUCalendarEvent.event_type == EventTypeEnum(event_type.upper()))
+        except ValueError:
+            filters.append(EUCalendarEvent.event_type == event_type.upper())
     if committee:
         filters.append(func.upper(EUCalendarEvent.ep_committee_code) == committee.upper())
     if commission_dg:

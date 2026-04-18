@@ -143,11 +143,12 @@ class LawTextResponse(BaseModel):
 @router.get(
     "/{celex}/text",
     response_model=LawTextResponse,
-    summary="Full text of a specific EU law (from local Formex XML cache)",
+    summary="Full text of a specific EU law",
     description=(
         "Returns the full text of an adopted EU law by CELEX identifier. "
-        "Default format is 'plain' (whitespace-normalised text); pass ?format=xml for raw Formex XML. "
-        "Content length can be hundreds of KB for regulations; clients should handle large payloads."
+        "Tries local Formex XML cache first; falls back to EUR-Lex Cellar API "
+        "(publications.europa.eu/resource/celex/{celex}). "
+        "Default format is 'plain' (whitespace-normalised); pass ?format=xml for raw markup."
     ),
 )
 async def get_law_text(
@@ -167,22 +168,31 @@ async def get_law_text(
         )
 
     xml_path = row.xml_path or ""
-    if not xml_path:
+    raw = ""
+    # Prefer local LEG corpus if deployed
+    if xml_path:
+        repo_root = Path(__file__).resolve().parents[3]
+        full_path = repo_root / xml_path
+        if full_path.exists():
+            raw = full_path.read_text(encoding="utf-8", errors="ignore")
+
+    # Fallback to EUR-Lex Cellar API (works on prod where LEG XML isn't shipped)
+    if not raw:
+        import httpx
+        cellar_url = f"https://publications.europa.eu/resource/celex/{row.celex}"
+        try:
+            async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as hc:
+                resp = await hc.get(cellar_url, headers={"Accept": "application/xhtml+xml, text/html", "Accept-Language": "eng"})
+                if resp.status_code == 200 and resp.text:
+                    raw = resp.text
+        except Exception as exc:  # noqa: BLE001
+            logger.warning(f"Cellar fetch failed for {row.celex}: {exc}")
+
+    if not raw:
         raise HTTPException(
             status_code=404,
-            detail={"error": f"No text cached for CELEX {celex}", "reason_code": "text_unavailable", "resource": "law", "id": celex},
+            detail={"error": f"Text unavailable for CELEX {celex}", "reason_code": "text_unavailable", "resource": "law", "id": celex},
         )
-
-    # xml_path is relative to the project root
-    repo_root = Path(__file__).resolve().parents[3]
-    full_path = repo_root / xml_path
-    if not full_path.exists():
-        raise HTTPException(
-            status_code=404,
-            detail={"error": f"Text file missing on disk for {celex}", "reason_code": "text_unavailable", "resource": "law", "id": celex},
-        )
-
-    raw = full_path.read_text(encoding="utf-8", errors="ignore")
     if format == "plain":
         text = re.sub(r"<[^>]+>", " ", raw)
         text = re.sub(r"\s+", " ", text).strip()
