@@ -70,7 +70,8 @@ async def list_eprs(
     query = db.query(EPRSPublication)
     filters = []
     if publication_type:
-        filters.append(EPRSPublication.publication_type == publication_type.upper())
+        # DB stores lowercase enum values ('briefing', 'study', 'at_a_glance', ...)
+        filters.append(EPRSPublication.publication_type == publication_type.lower())
     if committee:
         filters.append(EPRSPublication.committees.any(committee.upper()))
     if procedure_ref:

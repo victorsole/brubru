@@ -58,9 +58,9 @@ HTTP_METHODS_BY_DATASET = {
 }
 
 EPRS_PUBLICATION_TYPES = [
-    "BRIEFING", "STUDY", "IN_DEPTH_ANALYSIS", "AT_A_GLANCE",
-    "EU_LEGISLATION_IN_PROGRESS", "INITIAL_APPRAISAL", "EX_POST_EVALUATION",
-    "HISTORICAL_ARCHIVES", "OTHER",
+    "briefing", "study", "in_depth_analysis", "at_a_glance",
+    "eu_legislation_in_progress", "initial_appraisal", "ex_post_evaluation",
+    "historical_archives", "other",
 ]
 
 CALENDAR_INSTITUTIONS = [
