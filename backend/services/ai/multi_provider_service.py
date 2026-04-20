@@ -242,7 +242,7 @@ class AnthropicProvider(AIProvider):
 class OpenAIProvider(AIProvider):
     """OpenAI GPT-4 provider (fallback 2)"""
 
-    MODEL = "gpt-4-turbo-preview"
+    MODEL = "gpt-4o"  # 20 Apr 2026: was 'gpt-4-turbo-preview' which returns 404 model_not_found
 
     def __init__(self, api_key: Optional[str] = None, org_id: Optional[str] = None):
         self.api_key = api_key or settings.OPENAI_API_KEY
@@ -312,7 +312,7 @@ class OpenAIProvider(AIProvider):
 class GeminiProvider(AIProvider):
     """Google Gemini provider (fallback 3)"""
 
-    MODEL = "gemini-1.5-pro"
+    MODEL = "gemini-2.0-flash"  # 20 Apr 2026: was 'gemini-1.5-pro' which is no longer supported for generateContent on v1beta
 
     def __init__(self, api_key: Optional[str] = None):
         self.api_key = api_key or settings.GOOGLE_GEMINI_API_KEY
