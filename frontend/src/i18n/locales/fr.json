@@ -363,7 +363,22 @@
       "button": "Commencer l'Essai Gratuit",
       "contact": "Ou contactez-nous pour des besoins entreprise"
     },
-    "contactEmail": "hello@beresol.eu"
+    "contactEmail": "hello@beresol.eu",
+    "enterprise": {
+      "name": "Entreprise",
+      "badge": "Pour les équipes et partenaires",
+      "priceLabel": "Tarif personnalisé",
+      "priceHint": "Adapté à la taille de votre équipe et à votre usage",
+      "description": "Pour les entreprises avec une exposition réglementaire européenne significative et une équipe bruxelloise restreinte. Accès multi-utilisateurs, clés API avec limites supérieures, analyses réglementaires sur mesure avec votre marque, onboarding dédié et support prioritaire.",
+      "f1": "Multi-utilisateurs (à partir de 5 sièges) avec SSO",
+      "f2": "Clés API avec limites supérieures + crédits d'usage",
+      "f3": "Analyses réglementaires sur mesure et rapports en marque blanche",
+      "f4": "Support prioritaire chat et email, avec SLA",
+      "f5": "Onboarding dédié et revue trimestrielle",
+      "f6": "Transcriptions de commissions à la demande et analyses approfondies",
+      "note": "Les plans Entreprise sont personnalisés. Parlez-nous de votre périmètre et nous vous ferons un devis sous 48 heures.",
+      "button": "Contacter les ventes"
+    }
   },
   "euLawComply": {
     "history": "Historique des Analyses",
@@ -440,8 +455,8 @@
       "committeesDesc": "Surveillez les travaux en cours dans les 26 commissions du PE",
       "consultations": "Consultations Publiques",
       "consultationsDesc": "Découvrez et participez aux consultations \"Have Your Say\" de la CE",
-      "languages": "23 Langues de l'UE",
-      "languagesDesc": "Localisation complète de l'interface dans toutes les langues officielles de l'UE"
+      "languages": "6 langues",
+      "languagesDesc": "Localisation complète de l'interface en anglais, français, néerlandais, espagnol, catalan et italien"
     },
     "story": {
       "eyebrow": "Comment fonctionne Brubru",

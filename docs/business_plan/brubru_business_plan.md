@@ -485,6 +485,16 @@ Three forces create a once-in-a-generation window:
 |------|-------|--------|
 | EP Plan | EUR 49/mo (EUR 42/mo annual) | MEPs, parliamentary assistants, EP staff -- tailored feature set for in-house parliamentary work |
 
+**Enterprise** (added 20 April 2026):
+
+| Plan | Price | Target |
+|------|-------|--------|
+| Enterprise | Custom quote -- tailored per team size and usage (contact sales) | Companies with meaningful EU regulatory exposure and a thin Brussels team. Includes multi-seat (from 5 seats) with SSO, API keys with higher rate limits and usage-based credits, custom regulatory scans and branded reports, priority SLA-backed support, dedicated onboarding and quarterly review, on-demand committee transcripts and deep-dive deliverables. |
+
+Target customers for Enterprise: the 8 platforms scanned in April 2026 (Discord, Roblox, Grindr, Yubo, Automattic, Coinbase, Epic Games, Nextdoor) -- declared Brussels lobbying spend ranges from EUR 0 (Grindr, Nextdoor) to EUR 300-400k/year (Coinbase), with most having a 0.1-1.1 FTE Brussels team. They cannot afford a full Brussels office but need continuous institutional intelligence well beyond the self-serve Professional tier.
+
+**Why a custom-priced Enterprise tier rather than a published premium price.** Enterprise buyers compare on scope and SLA, not seat count. Publishing a single "EUR 249/mo Enterprise" number would anchor the conversation on the number itself and invite direct comparison to the EUR 99 Professional seat. Hiding the price behind a "Contact sales" button (standard practice for Harvey, vLex, CoCounsel enterprise tiers) lets us quote based on team size, integration depth, and credit pool per customer. It also signals that Enterprise is a genuinely different product, not "Professional with a higher number".
+
 **Free Trial:** 14-day full access to all features, no credit card required.
 
 **Upgrade triggers:**

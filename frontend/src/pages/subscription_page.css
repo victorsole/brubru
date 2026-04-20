@@ -303,6 +303,22 @@
   border-bottom: 1px solid #bfdbfe;
 }
 
+/* Enterprise Banner variant */
+.subscription__ep-banner--enterprise {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  border-top-color: #ddd6fe;
+  border-bottom-color: #ddd6fe;
+}
+
+.subscription__ep-banner--enterprise .subscription__ep-banner-badge {
+  background: #6d28d9;
+}
+
+.subscription__pricing-amount--custom {
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
 .subscription__ep-banner-content {
   max-width: 1200px;
   margin: 0 auto;

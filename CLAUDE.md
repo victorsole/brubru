@@ -77,7 +77,9 @@ python3.12 -m backend.scripts.seed_test_users
 
 ## File Naming Convention
 
-**All files use `snake_case`** - no exceptions.
+**All files use `snake_case`** — with one documented exception.
+
+**Exception:** `frontend/src/App.tsx` and `frontend/src/App.css` retain Vite's default PascalCase because they are the framework-conventional root component and stylesheet referenced directly by Vite's build pipeline. Do not rename without auditing every Vite/Vitest config and package-lock reference.
 
 - `chat_interface.tsx` (correct)
 - `ChatInterface.tsx` (incorrect)
@@ -220,237 +222,31 @@ Seed script: `backend/scripts/seed_test_users.py`
 
 ---
 
-## Learned Rules (Add corrections here)
-
-*When Claude makes a mistake, add a rule below so it never happens again.*
-
-### Legal-Text Intelligence Layer (April 2026)
-
-Anything that displays, parses, or queries EU legal texts must route through `services/parsers/`:
-- **Recital-article links**: `recital_article_linker.py` (TF-IDF) + `recital_article_store.py` (cached in `eu_laws.extra_metadata.recital_article_map`, versioned)
-- **Defined terms**: `definition_extractor.py` + `definition_store.py` (cached in `eu_laws.extra_metadata.defined_terms`)
-- **Cross-references**: `cross_reference_resolver.py` parses "Article N of Regulation (EU) YEAR/NUM" → CELEX
-- **Law aliases**: `law_alias_resolver.py` resolves user-typed names ("GDPR", "DSA", "AI Act", 700+ entries) to CELEX. Manual list at `knowledge_base/institutions/legislation_acronyms_manual.json` overrides auto-extracted at `legislation_acronyms.json`.
-- **Combined annotator**: `legal_text_annotator.py` layers cross-refs + aliases + defined terms in one HTML pass, anchor-aware (never wraps inside an existing `<a>`)
-
-Frontend consumes via `frontend/src/hooks/use_legal_intelligence.ts` (4 hooks with module-scoped Map cache). The shared `<LegalText>` component (`frontend/src/components/shared/legal_text.tsx`) is the canonical way to render EU legal text — it auto-applies all three annotation layers via `POST /api/legislation/annotate-text`. Defined terms render as native `<span title="...">` tooltips, no popover library needed.
-
-API endpoints under `/api/legislation/*`: `recital-article-map`, `defined-terms`, `resolve-references`, `annotate-text`, `coverage-stats`.
-
-**Tracked-law table:** "tracked" means a user has bookmarked a `legislative_carriages` row via `user_carriage_tracks`. Each carriage has `celex_numbers TEXT[]`. There is NO `legislative_tracking` table — that name was a hallucination corrected on 14 April 2026 in the coverage-stats endpoint.
-
-### Reading .env in Shell — Never Source It (April 2026)
-
-`.env` values often contain shell-unsafe characters (parens, ampersands, special punctuation in tokens). `set -a; source .env` will fail with parse errors. **Always read values directly:**
-```bash
-FTP_HOST=$(grep '^SITEGROUND_FTP_HOST=' /Users/victorsole/Documents/GitHub/brubru/.env | cut -d'=' -f2-)
-```
-This caused two FTP failures on 14 April 2026 before switching to the grep|cut pattern.
-
-### Frontend Clean Reinstall on Module Mismatch (April 2026)
-
-If `npm run build` or `npm run build:prerender` fails with errors like "module does not provide an export named X" (e.g. tinyglobby/fdir, axios validator path), the cause is a corrupted `node_modules`. Fix:
-```bash
-cd frontend && rm -rf node_modules package-lock.json && npm install --legacy-peer-deps
-```
-The `--legacy-peer-deps` flag is required because `react-joyride` has a peer-dependency conflict in this project. Lost 5 minutes on 14 April 2026 trying targeted fixes before the clean reinstall worked.
-
-### React 18+ TypeScript: React.ReactNode, Not JSX.Element (April 2026)
-
-`tsc -b` errors with "Cannot find namespace 'JSX'" on component prop types declared as `JSX.Element`. The fix is to use `React.ReactNode` instead. Add `import type * as React from 'react'` if not already imported. JSX namespace exists at runtime but is no longer in the global TS scope by default in modern React/TS configurations.
-
-### Brubru Supports 6 Languages, Not 23 (March 2026)
-
-Brubru supports **6 languages**: English, French, Dutch, Spanish, Catalan, and Italian. These are the languages Victor speaks and can support users in directly. **Never claim 23 EU languages** in any material, code comment, tour step, application, or business plan. The EU has 24 official languages, but Brubru's interface and support covers 6. i18next locales: `en, fr, nl, es, ca, it`.
-
-### Founder Name: Victor Solé (March 2026)
-
-The founder's surname is **Solé** (with an accent on the e). Never write "Sole" without the accent. In HTML, use `Sol&eacute;`. This applies to all contexts: emails, documents, business plans, investment memos, and code comments.
-
-### Gmail Daily Send Volume Planning (March 2026)
-
-~2,000 recipients/day limit. Priority order: daily brief first, campaigns second, news alerts last (BCC batches of 90). **Never schedule all three on the same day.** Pick two. Gmail resets at midnight Pacific.
-
-### Daily Brief URL Verification (March 2026)
-
-**Never guess EP document reference numbers** (TA, A, B, P, RC). Always look up from the Texts Adopted TOC page. Append `_EN.html` suffix. Wrong number = 404 sent to all subscribers.
-
-### Legislative Train Scraper - Data Source Unification (January 2025)
-
-Use `get_all_files_unified()` for comprehensive scraping with OEIL refs (~500+ files). `get_all_files_fast()` for fast mode without OEIL refs. Old methods (`get_all_carriages()`, `get_package_files()`) preserved for backward compatibility. File: `backend/services/scrapers/legislative_train_scraper.py`.
-
-### Modal Z-Index Stacking Context (January 2025)
-
-**Always use `createPortal` for modals in My EU Bubble pages.** The `.my-eu-bubble-page > *` rule creates a stacking context that traps modal z-index values. Portal to `document.body` to escape it.
-
-### EPRS Service Architecture (January 2025)
-
-Always use `EPRSService` (not individual components) for EPRS operations: `from services.eprs import get_eprs_service`. Coordinates ThinkTankScraper, EPRSArchiveClient, EPRSIndexer, EPRSMatcher. File: `services/eprs/eprs_service.py`.
-
-### OEIL XML Feed Integration (January 2026)
-
-**Full reference:** See `memory/integrations.md` -> OEIL XML Feed section. Key files: `services/api_clients/oeil_client.py`, `services/scrapers/oeil_sync_service.py`. CLI: `python scripts/sync_oeil_feeds.py --days 7`. API: `POST /api/legislative-train/sync/oeil` (Blue tier).
-
-**OEIL XML feed limit:** The procedures feed has a **30-day server-side limit** (`maxDays=30`). For older procedures, use `OEILClient.lookup_procedure(ref)` or `OEILSyncService.sync_single_procedure(ref)` which scrape individual OEIL pages. API: `POST /api/legislative-train/sync/oeil/lookup?reference=2025/0726(COD)` (Blue tier).
-
-### Knowledge Guide Truncation (March 2026)
-
-Two truncation points: **storage** at 8,000 chars (`guide_content[:8000]` in search results), **AI prompt injection** at 4,000 chars (`item['content'][:4000]` in `format_context_for_ai`). The prompt injection was the real bottleneck: it was 1,000 chars until 23 March 2026, causing document references (T9-xxx, A9-xxx) at char 1424+ to be invisible to the AI. Put key detail in **QUICK FACTS** block at top of guides. File: `context_builder.py`.
-
-### Data-Driven Chat Follow-Ups (February 2026)
-
-Legislative file matches trigger OEIL enrichment (Documentation Gateway + procedure page) for data-driven follow-up questions. Cached on `LegislativeCarriage.oeil_procedure_data` (7-day TTL, max 3 files/request). Key files: `context_builder.py` (`_enrich_train_files_with_actions()`), `ai_service.py` (Phase D3), `oeil_client.py`.
-
-### EUR-Lex RSS Feed Integration (January 2026)
-
-**Full reference:** See `memory/integrations.md` -> EUR-Lex RSS section. Key files: `services/api_clients/eurlex_client.py`, `services/scrapers/eurlex_sync_service.py`. CLI: `python scripts/sync_eurlex_feeds.py --days 7`. API: `POST /api/legislative-train/sync/eurlex` (Blue tier).
-
-### EC Register of Commission Documents (February 2026)
-
-**Full reference:** See `memory/integrations.md` -> Commission Documents section. Dual strategy: EUR-Lex RSS for discovery, RegDoc API for enrichment. Paginated search still returns 503. Individual document lookup works (requires browser-like headers). Key files: `services/api_clients/commission_doc_register_client.py`, `api/commission_documents.py`.
-
-### Beresol Knowledge Bundle (January 2026)
-
-**Full reference:** See `memory/integrations.md` -> Beresol section. 11 reports + 7 monitors in `knowledge_base/brubru-knowledge-bundle/`. **Attribution required**: Always cite "Beresol Open Report/Monitor" + `https://beresol.eu/public-affairs`. Key file: `knowledge_base/beresol_knowledge_loader.py`.
-
-### EP Committee Work In Progress (January 2026)
-
-**Full reference:** See `memory/integrations.md` -> Committee Work section. 26 EP committees tracked. CLI: `python scripts/sync_committee_work.py`. API: `GET /api/committee-work/items`, `POST /api/committee-work/sync` (Blue tier). Key files: `services/scrapers/committee_work_scraper.py`, `models/committee_work.py`.
-
-### EC Public Consultations (January 2026)
-
-**Full reference:** See `memory/integrations.md` -> Consultations section. "Have Your Say" portal integration. Subscribers: full access. Professional only: AI proposals. No subscription: CTA. CLI: `python scripts/sync_consultations.py --status open`. API: `GET /api/consultations`, `POST /api/consultations/sync` (Admin). Key files: `services/scrapers/public_consultation_scraper.py`, `api/public_consultations.py`.
-
-### EPRS Database Integration (February 2026)
-
-**Full reference:** See `memory/integrations.md` -> EPRS Database Integration section. EPRS publications synced from RSS to PostgreSQL. **Chatbot-only** -- no UI tab. CLI: `python scripts/sync_eprs_publications.py --days 14` (metadata), `--enrich` (PDF extraction). API: `GET /api/eprs/publications`, `POST /api/eprs/sync` (Blue tier). Context builder does two-pass search: PostgreSQL first (CELEX/procedure/text), ChromaDB semantic second. Key files: `models/eprs_publication.py`, `services/scrapers/eprs_sync_service.py`, `api/eprs.py`.
-
-### SQLAlchemy `metadata` Reserved Attribute (January 2025)
-
-Use `doc_metadata` instead of `metadata` for document metadata fields in SQLAlchemy models. `metadata` conflicts with the built-in declarative_base attribute.
-
-### Frontend Services Must Include Auth Headers (March 2026)
-
-**Every frontend API service** must include `authHeaders()` on authenticated endpoints. No global axios interceptor exists. Pattern: `const token = useAuth.getState().token; return token ? { Authorization: \`Bearer ${token}\` } : {};` applied to every axios call. Lesson: missing auth headers caused calendar to show zero events for a month (fixed 16 March 2026).
-
-### Development Server Ports (January 2025)
-
-Frontend: port 5173 (kill existing first: `lsof -ti:5173 | xargs kill -9 2>/dev/null`). Backend: port 8000. Never let Vite auto-pick another port.
-
-### Markdown Rendering in React (January 2025)
-
-Use `marked` library: `<div dangerouslySetInnerHTML={{ __html: marked.parse(content) as string }} className="markdown-content" />`. CSS class `.markdown-content` styles headings/lists. Used in `document_generator_wizard.tsx`.
-
-### EUR-Lex Parser: COM Documents vs OJ Documents (January 2025)
-
-`EurlexParser` handles two formats: **OJ** (CELEX starts with `3`, adopted legislation, CSS: `.oj-doc-ti`, `.oj-ti-art`) and **COM** (CELEX starts with `5`, proposals, CSS: `.Titreobjet`, `.ManualConsidrant`). Auto-detects via `_detect_com_document()`. File: `backend/services/parsers/eurlex_parser.py`.
-
-### Legislative Train OEIL Data Quality (January 2025)
-
-**Known issue:** Some carriages have incorrect/duplicate OEIL procedure refs. Causes wrong OEIL links and file matching. Needs database cleanup: remove duplicates, re-scrape refs, validate mappings. File: `backend/services/scrapers/legislative_train_scraper.py`.
-
-### No Emojis - Use MDI Icons (January 2025)
-
-**Never use emojis in the codebase.** Frontend: use MDI icon classes (`mdi-check`, `mdi-close`, `mdi-alert`, `mdi-file-document`, `mdi-magnify`). Backend logging: use text prefixes `[OK]`, `[INFO]`, `[WARN]`, `[ERROR]`, `[START]`/`[STOP]`. The € symbol and accented characters (é, ñ) are NOT emojis.
-
-### Standalone HTML Files Must Follow Brubru Aesthetics (February 2026)
-
-**Every standalone HTML file** MUST use: Adobe Caslon Pro font (`@font-face` from `New-Yorker-Font/`), Brubru palette (`#0693e3` blue, `#059669` green, `#9b51e0` purple, `#d97706` amber, `#dc2626` red), white background, `brubru_mainlogo.png` logo, relative paths. No double dashes (`--`), rainbow gradient CTAs, lowercase after colons. Neutrals: `#111827` text, `#6b7280` secondary, `#e5e7eb` border, `#f3f4f6` bg-alt.
-
-### Header Icon Navigation (January 2025)
-
-Header uses animated MDI icon buttons (icon-only, expand on hover). Nav colours: Main=Blue(`#0693e3`), Bubble=Purple(`#9b51e0`), Amendator=Green(`#059669`), Comply=Silver(`#9ca3af`), Tenderator=Gold(`#d97706`). CSS class: `.header__nav-icon-btn--{color}`. Files: `frontend/src/components/shared/header.tsx`, `header.css`.
-
-### Feature Completion Checklist (January 2026)
-
-Before marking a feature COMPLETE, verify end-to-end: (1) DB has data, (2) API returns data, (3) frontend builds, (4) hook is used in a component, (5) manual browser test, (6) chatbot context works if applicable. **Never mark "PARTIAL" and move on.**
-
-### Multi-Provider AI System (March 2026)
-
-**Claude Sonnet 4 is the primary model** (switched from Haiku 4.5 on 23 March 2026). $10/day cap. Haiku was ignoring document retrieval instructions. Fallback: Mistral -> GPT-4 -> Gemini. Routing: `has_knowledge = internal_knowledge OR eu_institutional_results` (virtually all queries). **Streaming is the default chat mode** (switched 7 April 2026): `/api/chat/stream` SSE endpoint with token-by-token text + status events ("Searching EU legislation...", "Composing response..."). Automatic fallback to non-streaming `/api/chat/message` if stream fails. **SSE newline escaping:** Backend escapes `\n` as `\\n` in text chunks (`chat.py`), frontend decodes back to `\n` (`chat_interface.tsx`). Markdown rendered continuously via `marked.parse()` during streaming (no mode switch). File: `multi_provider_service.py`, `ai_service.py` (`chat_stream`), `chat_interface.tsx`.
-
-### EU Institutional Source Search Fallback (March 2026)
-
-When no knowledge guide matches, Tavily searches 25 trusted EU domains. **Also fires when user has procedure-intent keywords** (timeline, status, rapporteur, vote, INI, COD) even if a generic guide matched, as long as no procedure details were found. Additionally, OEIL topic search via Tavily fires when keyword OR results are noise (no confident title match). Key files: `context_builder.py` (`_fetch_eu_institutional_search()`, `_fetch_legislative_train_files()` OEIL topic search block).
-
-### EP Plenary Debate Transcripts (CRE) (March 2026)
-
-On-demand CRE XML fetch from Doceo (no DB storage). 22 intent triggers in 6 languages. Max 4,000 chars per debate. 3-5 day publication delay. Key files: `cre_client.py`, `context_builder.py` (`_detect_plenary_debate_intent()`), `ai_service.py` (debate summary structure). Spec: `docs/maria/ep_cre_transcripts.md`.
-
-### Featured Chatbot Questions Source (March 2026)
-
-From `chat_example_prompts` table (scope=`'main_chat'`, is_active=`true`), NOT `daily_briefs.suggested_query`. API: `GET /api/chat/examples?scope=main_chat&limit=4`. Fallback: i18n keys `chat.example1-4`.
-
-### EPRS Enrichment: Skip During Morning Routine (March 2026)
-
-`python3.12 scripts/sync_eprs_publications.py --enrich` downloads PDFs and runs CPU-only embedding (BAAI/bge-m3). This takes **15+ minutes** for even a handful of publications. **Do not run `--enrich` during the `/morning` routine.** Run metadata-only sync (`--days 7` without `--enrich`) instead. Schedule `--enrich` overnight or skip entirely.
-
-### Daily Brief BCC Batching (March 2026)
-
-`send_daily_brief_batch()` in `services/daily_brief_email.py` now uses **BCC batching** (90 recipients per SMTP connection) instead of individual sends. This avoids the Gmail rate limit (~80-100 individual sends per session). Greeting is generic ("Good morning") with no personalisation. The `daily_brief_sends` table still tracks per-recipient duplicate prevention.
-
-### Document Retrieval Rule (March 2026)
-
-The AI MUST present all document references (T9-xxx, A9-xxx, PE-xxx, COM-xxx) from knowledge guides immediately with clickable URLs. NEVER say "I don't have the texts" when the guide lists them. NEVER tell users to "search EUR-Lex yourself." NEVER ask "which version do you need?" This is Brubru's core value: fetching buried EU documents and delivering them efficiently. System prompt rule in `ai_service.py`. Also: Document Gateway references with doceo URLs are now injected via `key_documents` in `available_actions` from `context_builder.py`.
-
-### Audit Queries: Check User Identity (March 2026)
-
-Always join `chat_messages -> chats (user_id) -> users (email)` when auditing queries. Victor's test queries (victor@hellobo.eu) should be noted but not treated as real user issues. Focus on external users. The EU-ESOP queries on 19 March were all Victor's tests, not real users.
-
-### RSS AI Enrichment - On-Demand Only (January 2026)
-
-AI enrichment is **on-demand only** (`enable_ai_enrichment=False` by default) to avoid $5/day cost. Trigger via `POST /api/rss/entries/{entry_id}/enrich`. Files: `services/rss/rss_processor.py`, `api/rss_feeds.py`.
-
-### Predictions: EP Group Colours + Resolution Indicators (February 2026)
-
-**Full reference:** See `memory/predictions.md`. FOR=green, AGAINST=red, ABSTENTION=yellow, SPLIT=gold. Resolution leading indicators: OEIL_CROSSREF (1.0), COMMISSION_FOLLOWUP (0.9), TITLE_SIMILARITY (0.5-0.8).
-
-### Knowledge Loader Orphan Guide References (April 2026)
-
-**Every trigger in `GUIDE_KEYWORD_TRIGGERS` must point to an existing `.md` file in `knowledge_base/guides/`.** If a trigger references a guide ID with no corresponding file, `search_guides()` silently drops the match (the guide ID is not in `self.guides`). This means the trigger exists but does nothing. Found 3 orphans on 1 April 2026, then **17 more on 3 April 2026** (298 dead mappings total, including `eu_justice_security`, `eu_agriculture_policy`, `eu_consumer_protection`, `eu_taxation_policy`, etc.). All fixed by rerouting to existing guides. **After any bulk trigger changes, run the orphan audit:** `python3.12 -c "from knowledge_base.knowledge_loader import KnowledgeLoader, GUIDE_KEYWORD_TRIGGERS; kl = KnowledgeLoader(); kl.load_all(); orphans = {gid for t, ids in GUIDE_KEYWORD_TRIGGERS.items() for gid in ids if gid not in kl.guides}; print(f'Orphans: {orphans}' if orphans else 'No orphans')"`.
-
-### Responsive Design Requirement (February 2026)
-
-**ALL UI changes MUST be responsive.** Breakpoints: Desktop >1024px (default), Tablet 768-1024px (`max-width: 1024px`), Mobile <768px (`max-width: 767px`). Mobile: single column, overlay sidebars, min 44px touch targets. Use `createPortal` for modals. **Never ship without testing all three breakpoints.**
-
-### Email Campaign System (February 2026)
-
-**Full reference:** See `memory/email_campaigns.md`. Gmail SMTP (Google Workspace), no third-party dependencies. Gmail limit: ~2,000 recipients/day, 90 per BCC batch. 8 tailored institution templates + 12 multilingual lobby cluster templates. Key files: `services/email_service.py`, `scripts/send_lobby_campaign.py`, `scripts/collect_institution_emails.py`. Data: `data/emails/`. Docs: `docs/email_system_prompt.md`.
-
-### SPA Pre-rendering for AI Crawlers (February 2026)
-
-**Full reference:** See `memory/deployment.md`. Production deploy: `npm run build:prerender`. 9 public routes pre-rendered with Puppeteer. `main.tsx` uses conditional hydration. Add new public routes to `ROUTES` array in `frontend/scripts/prerender.mjs`. AI crawler rules in `frontend/public/robots.txt`.
-
-### SiteGround FTP Deploy (April 2026)
-
-`lftp` can upload `frontend/dist/` directly to SiteGround: `lftp -c "set ftp:ssl-allow no; open -u ftp@beresol.eu,PASSWORD ftp.beresol.eu; mirror --reverse --verbose --only-newer --exclude .DS_Store dist/ brubru.beresol.eu/public_html/; bye"`. Credentials in `.env` (`SITEGROUND_FTP_*`). Old JS bundles (`index-*.js`) accumulate on the server -- not harmful but could be cleaned up periodically.
-
-**`.htaccess` MUST be uploaded** (reversed policy, 15 April 2026). The local `frontend/dist/.htaccess` contains the SPA fallback (`RewriteCond !-f !-d -> index.html`) without which any client-side route (`/main`, `/my-eu-bubble`, `/amendator`, ...) 404s on refresh. If SiteGround injects panel-managed rules you want to keep, download production `.htaccess` first, merge, then upload the merged file.
-
-**CRITICAL: Files NOT in frontend/dist/ that must be uploaded separately after every FTP deploy:**
-- Catalan landing page: `lftp put -O brubru.beresol.eu/public_html/legislacio-ue-catala/ data/legislacio-ue-catala/index.html`
-- This file lives in `data/` not `frontend/`, so the dist mirror misses it. Without it, `/legislacio-ue-catala/` returns 403.
-- **Post-deploy verification:** Check `brubru.beresol.eu/guides/index.html` and `brubru.beresol.eu/legislacio-ue-catala/` return HTTP 200.
-
-### Brubrufied Daily Brief System (April 2026)
-
-**5 headlines per day** (default, more only if justified). Each headline has three layers: (1) headline text linking to source, (2) **suggested question** in italics as the engagement hook, (3) **"Ask Brubru" button** linking to `/main?q=...` which pre-fills the chat input. The `suggested_query` column in `daily_briefs` drives both the question and the CTA link. **Every headline MUST have a suggested_query.** Before sending, verify Brubru can answer each suggested query well (test against knowledge base, fix gaps first). Feature line at the bottom is dynamic (reads real guide/file counts). Frontend `ChatInterface` reads `?q=` from `window.location.search` on mount. Chat route is `/main` (NOT `/chat`). Files: `services/daily_brief_email.py`, `scripts/send_daily_brief.py`, `components/chat/chat_interface.tsx`.
-
-### Daily Brief Send Protocol (March 2026)
-
-**CRITICAL.** On 25 March 2026, daily brief was sent to 70 subscribers with fabricated URLs (404 errors). Two compounding failures: (1) used `--send --extra` which sends to ALL subscribers not just test address, (2) constructed URLs from patterns instead of verifying they exist. **Mandatory protocol:** (1) `--verify-urls` to check all headline URLs return HTTP 200, (2) `--test` to send ONLY to hello@beresol.eu, (3) wait for Victor's OK, (4) only then `--send`. Code guardrails added: `--send` now blocks if any URL fails verification. File: `scripts/send_daily_brief.py`.
-
-### Catalan Legal Translation Glossary (March 2026)
-
-Softcatala NMT does not distinguish legal context. Key corrections applied via `GLOSSARY_CORRECTIONS` in `scripts/catalan_translate.py`: "Mentre que:" -> "Atenent que:" (EU recitals "Whereas"), "d'implementacio" -> "d'execucio" (Implementing), "ha aconseguit" -> "ha adoptat" (has adopted). "Having regard to" -> "Tenint en compte" is already correct. Confirmed by Catalan legal expert (25 March 2026). After any glossary update, patch existing translated HTML files too.
-
-### macOS Tahoe iCloud File Eviction (March 2026)
-
-If `~/Documents` is synced to iCloud with "Optimise Mac Storage" enabled, macOS Tahoe (26.x) can evict git pack files and working tree files to iCloud, marking them `compressed,dataless`. Any process trying to read them gets `Need authenticator` (errno 81). `com.apple.provenance` xattr is a red herring -- the real cause is `dataless`. **Fix:** Disable iCloud optimisation for the GitHub folder, or move it outside iCloud-synced directories. To recover a broken repo: `rm -rf .git && git init && git remote add origin <url> && git fetch origin && git reset origin/main`, then `rm -f` and `git checkout origin/main --` for any locked working tree files.
-
-### EUR-Lex Cellar API for Document Fetch (March 2026)
-
-EUR-Lex WAF (`eur-lex.europa.eu`) blocks all automated requests (returns HTTP 202 / 0 bytes or WAF cookie challenge). **Bypass:** Use `publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml, text/html` and `Accept-Language: eng` for document content (follows redirects through Cellar UUID). Returns OJ-format XHTML. Also works with `Accept: application/rdf+xml` for metadata. **OJ discovery:** RSS feed at `eur-lex.europa.eu/EN/display-feed/OJ/L/rss.xml` works from non-sandboxed environments but may be WAF-blocked from Claude Code. Fallback: SPARQL at `publications.europa.eu/webapi/rdf/sparql` (may have indexing delay for same-day OJ). CLI: `python3.12 scripts/catalan_translate.py --cellar 32026R0722`.
+## Learned Rules
+
+**Full reference:** `memory/learned_rules.md` — full history of rules accumulated from past corrections. Read when working on a topic you have not touched recently.
+
+**Always-on critical rules** (most common pitfalls — full detail in `memory/learned_rules.md`):
+
+- **Brubru = 6 languages** (EN, FR, NL, ES, CA, IT). Never claim 23.
+- **Founder name: Victor Solé** (with accent; HTML: `Sol&eacute;`).
+- **No emojis in codebase.** Use MDI icons (frontend) or `[OK]`/`[INFO]`/`[ERROR]` prefixes (backend).
+- **Document retrieval:** AI MUST present T9-/A9-/PE-/COM- references with clickable URLs from knowledge guides. Never say "search EUR-Lex yourself."
+- **Daily brief send protocol:** `--verify-urls` → `--test` to hello@beresol.eu → wait for explicit OK → `--send`. Never `--send --extra` without test-first.
+- **Responsive design:** all UI changes must work at desktop (>1024px), tablet (768-1024px), mobile (<768px).
+- **5 headlines/day** in daily brief (default). Every headline has a `suggested_query` → pre-verified the chatbot can answer.
+- **Canonical products:** Chat, Amendator, My EU Bubble, EU Law Comply, Tenderator, API. My EU Bubble sub-tabs in order: Dashboard, My Files, Position Analysis, My EU Calendar, Predictions, EC Public Consultations, Documents, Amendments, Legislative Tracker, Analytics. Never invent non-canonical tabs.
+- **Catalan output must be accented:** sóc, perquè, política, Brussel·les, regulació, Víctor Solé.
+- **Context formatter truncates at 32k** — on-demand blocks go near the TOP of `format_context_for_ai()`.
+- **DB model / migration parity:** a new column in a migration must also appear on the SQLAlchemy model in the same commit.
+- **Week-ahead (Friday brief):** verify every item against primary EU source (doceo, college-agenda, consilium) before sending. Never trust `eu_calendar_events` DB blindly.
+- **Legal-text layer:** display/parse/query EU legal text through `services/parsers/` (recital-article linker, definition extractor, cross-reference resolver, law alias resolver, combined annotator). Frontend via `<LegalText>` + `use_legal_intelligence.ts`.
+- **On-demand chatbot features** follow the 4-step template (client → intent detector → fetcher → system prompt rule). Block appended near top of context formatter.
+- **.env in shell:** never `source .env`. Use `grep '^VAR=' .env | cut -d= -f2-`.
+- **Frontend module mismatch:** `rm -rf node_modules package-lock.json && npm install --legacy-peer-deps`.
+- **Knowledge guides:** QUICK FACTS block at top. Prompt injection cap 4,000 chars in `format_context_for_ai`. After bulk trigger changes, run orphan audit.
+- **EUR-Lex WAF bypass:** use `publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml`. Never scrape `eur-lex.europa.eu` directly.
+- **SiteGround FTP:** env var is `SITEGROUND_FTP_PASS` (not `_PASSWORD`). `.htaccess` MUST be uploaded. Catalan landing page at `data/legislacio-ue-catala/index.html` uploaded separately.
 
 ---
 
@@ -477,53 +273,3 @@ EUR-Lex WAF (`eur-lex.europa.eu`) blocks all automated requests (returns HTTP 20
 **Key files:** `backend/scripts/catalan_translate.py` (parser + translation + HTML generator). Spec: `docs/catalan-implementation.md`. Skill: `/catalan`. Memory: `memory/catalan_translation.md`.
 
 **Brubru Catalan standard:** D'execució (not d'implementació), Ha adoptat (not ha aconseguit), Tenint en compte, Dictamen, Paràgraf, Comitè dels Estats membres. Always regenerate `frontend/public/guides/index.html` after guide changes.
-
-### Scrapling Integration (April 2026)
-
-BaseScraper now has 3 fetch tiers + 2 parse tiers via Scrapling:
-- `_fetch(url)`: aiohttp (default, async)
-- `_fetch_with_fingerprint(url)`: Scrapling Fetcher (curl_cffi, browser fingerprints). Response body in `.body` NOT `.text`
-- `_fetch_stealthy(url)`: Scrapling StealthyFetcher (patchright headless Chromium). Bypasses Cloudflare. Council 153KB confirmed
-- `_parse_html(html)`: BeautifulSoup (default)
-- `_parse_adaptive(html)`: Scrapling Selector (auto-relocating elements when pages restructure)
-
-Dependencies: `scrapling`, `curl_cffi`, `browserforge`, `msgspec`, `patchright`. File: `services/scrapers/base_scraper.py`.
-
-### EP Committee Minutes (April 2026)
-
-New data source for committee meeting records (attendance, votes, decisions). 75 records, 24 committees (Sep 2025 - Mar 2026). Context builder index 14. Key files: `models/committee_minutes.py`, `services/scrapers/committee_minutes_scraper.py`, `services/scrapers/committee_minutes_sync_service.py`, `scripts/sync_committee_minutes.py`. CLI: `python3.12 scripts/sync_committee_minutes.py --max-pages 5`. Integrated in /news Step 1.
-
-### EPRS Portal RSS (April 2026)
-
-The official EP Think Tank portal RSS (`europarl.europa.eu/thinktank/.../rss`) is now the PRIMARY source for EPRS publications. It covers EPRS_, ECTI_, and CASP_ prefixed documents that the WordPress blog RSS (`epthinktank.eu/feed/`) misses. File: `services/api_clients/think_tank_rss_client.py`. The `thinktank_portal` feed is fetched first in `get_latest_publications()`.
-
-### Catalan Text Must Have Accents (April 2026)
-
-**All Catalan text output** (emails, guides, translations, LinkedIn messages) MUST include proper Catalan accents and diacritics: à, è, é, í, ò, ó, ú, ç, l·l (ela geminada), ï, ü. Never output unaccented Catalan. Key words: sóc (not soc), perquè (not perque), política (not politica), Brussel·les (not Brusselles), regulació (not regulacio), autònoms (not autonoms), Víctor Solé (not Victor Sole).
-
-### Systematic EPRS Integration in /news (April 2026)
-
-During /news, **every new EPRS publication** synced to the database must be mapped to a relevant knowledge guide with a one-line reference in QUICK FACTS. Format: `- EPRS [Type] ([Date]): "[Short title]" -- [key finding]. Ref: [EPRS reference]`. This is codified in /news Step 3a. Also applies to JRC, Eurostat, and DG-specific data publications found during the news scrape.
-
-### On-Demand Chatbot Features -- 4-Step Template (April 2026)
-
-Every new on-demand chatbot capability follows the same template (CRE plenary debates, HYS stakeholder feedback, commissioner agendas, Position Analysis are the 4 examples so far):
-
-1. **Client** in `services/api_clients/` or similar -- live fetch, with in-memory TTL cache (typically 1-24h depending on volatility).
-2. **Intent detector** in `context_builder.py`: `_detect_X_intent(query) -> Optional[...]`. Multilingual phrases (EN/FR/ES/CA/IT/NL at minimum). Must not fire on generic queries; require a specific entity (procedure ref, commissioner name, consultation ID) OR a strong phrase.
-3. **Fetcher** in `context_builder.py`: `_fetch_X_block(...)`. Returns a formatted text block starting with a `SECTION HEADER` in CAPS. Register in `post_tasks` dict. Add corresponding field to `ContextData` dataclass.
-4. **System prompt rule** in `ai_service.py` `_build_system_prompt()`: `CRITICAL -- SECTION HEADER:` block explaining how to present the data, what to attribute, what NOT to invent.
-
-**Critical gotcha:** append the block **near the top** of `format_context_for_ai()` (right after `USER QUERY`). The 32k-char truncation at the end of the formatter will silently strip blocks placed later, even though the field on `ContextData` is populated.
-
-### DB Model and Migration Parity (April 2026)
-
-When adding a column via SQL migration, **always** update the corresponding SQLAlchemy model in `backend/models/` in the same commit. Otherwise attribute access at runtime (`row.new_column`) raises `AttributeError: 'Model' object has no attribute 'new_column'` even though the column exists in Postgres -- SQLAlchemy only reflects columns it has been told about.
-
-Lesson on 15 April 2026: added `user_carriage_tracks.user_position` in migration 035, forgot the `UserCarriageTrack.user_position = Column(JSONB, nullable=True)` line in `models/legislative_train.py`. Live GET /api/positions/{id} returned HTTP 500 until fixed.
-
-### Context Formatter Truncates at 32k (April 2026)
-
-`format_context_for_ai()` caps `full_context` at `max_length` (default 32000) and appends `[Context truncated due to length]`. Any section appended late in the formatter is silently stripped when the sum of earlier sections already fills the budget. On-demand blocks (STAKEHOLDER FEEDBACK, COMMISSIONER AGENDA, POSITION ANALYSIS) are therefore appended **near the top** of the sections list.
-
-Do not assume a section field being set on `ContextData` means the AI sees it. If an on-demand feature silently doesn't work, grep the formatter for its block header and check its position relative to the mass of knowledge-guide / legislative-train / EPRS sections that come before it.

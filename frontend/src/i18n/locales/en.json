@@ -363,7 +363,22 @@
       "button": "Start Free Trial",
       "contact": "Or contact us for enterprise needs"
     },
-    "contactEmail": "hello@beresol.eu"
+    "contactEmail": "hello@beresol.eu",
+    "enterprise": {
+      "name": "Enterprise",
+      "badge": "For teams + partners",
+      "priceLabel": "Custom pricing",
+      "priceHint": "Tailored to your team size and usage",
+      "description": "For companies with meaningful EU regulatory exposure and a thin Brussels team. Multi-seat access, API keys with higher rate limits, custom regulatory scans and branded deliverables, dedicated onboarding and priority support.",
+      "f1": "Multi-seat (from 5 seats) with SSO",
+      "f2": "API keys with higher rate limits + usage-based credits",
+      "f3": "Custom regulatory scans and branded reports",
+      "f4": "Priority chat and email support, SLA-backed",
+      "f5": "Dedicated onboarding and quarterly review",
+      "f6": "On-demand committee transcripts and deep-dive deliverables",
+      "note": "Enterprise plans are tailored per team. Tell us about your scope and we will quote within 48 hours.",
+      "button": "Contact sales"
+    }
   },
   "euLawComply": {
     "history": "Analysis History",
@@ -440,8 +455,8 @@
       "committeesDesc": "Track work in progress across all 26 EP committees",
       "consultations": "Public Consultations",
       "consultationsDesc": "Discover and participate in EC \"Have Your Say\" consultations",
-      "languages": "23 EU Languages",
-      "languagesDesc": "Full interface localisation across all official EU languages"
+      "languages": "6 Languages",
+      "languagesDesc": "Full interface localisation in English, French, Dutch, Spanish, Catalan and Italian"
     },
     "story": {
       "eyebrow": "How Brubru Works",

@@ -363,7 +363,22 @@
       "button": "Start Gratis Proef",
       "contact": "Of neem contact op voor zakelijke behoeften"
     },
-    "contactEmail": "hello@beresol.eu"
+    "contactEmail": "hello@beresol.eu",
+    "enterprise": {
+      "name": "Enterprise",
+      "badge": "Voor teams en partners",
+      "priceLabel": "Aangepaste prijs",
+      "priceHint": "Afgestemd op jouw teamgrootte en gebruik",
+      "description": "Voor bedrijven met serieuze EU-regelgevingsimpact en een klein Brussels team. Multi-gebruikers toegang, API-sleutels met hogere limieten, aangepaste regelgevingsanalyses met eigen merk, speciale onboarding en prioritaire ondersteuning.",
+      "f1": "Multi-gebruiker (vanaf 5 plekken) met SSO",
+      "f2": "API-sleutels met hogere limieten + gebruikstegoeden",
+      "f3": "Aangepaste regelgevingsanalyses en rapporten met jouw merk",
+      "f4": "Prioritaire chat- en e-mailondersteuning, met SLA",
+      "f5": "Speciale onboarding en kwartaaloverleg",
+      "f6": "On-demand commissie-transcripties en diepgaande analyses",
+      "note": "Enterprise-plannen zijn op maat. Vertel ons je scope en we bezorgen je een offerte binnen 48 uur.",
+      "button": "Contact met verkoop"
+    }
   },
   "euLawComply": {
     "history": "Analyse Geschiedenis",
@@ -440,8 +455,8 @@
       "committeesDesc": "Volg lopende werkzaamheden in alle 26 EP-commissies",
       "consultations": "Openbare Raadplegingen",
       "consultationsDesc": "Ontdek en neem deel aan EC \"Have Your Say\" raadplegingen",
-      "languages": "23 EU-talen",
-      "languagesDesc": "Volledige interfacelokalisatie in alle officiele EU-talen"
+      "languages": "6 talen",
+      "languagesDesc": "Volledige interfacelokalisatie in Engels, Frans, Nederlands, Spaans, Catalaans en Italiaans"
     },
     "story": {
       "eyebrow": "Hoe Brubru werkt",

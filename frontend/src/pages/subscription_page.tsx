@@ -191,6 +191,39 @@ export const SubscriptionPage = () => {
         </div>
       </section>
 
+      {/* Enterprise Banner */}
+      <section className="subscription__ep-banner subscription__ep-banner--enterprise">
+        <div className="subscription__ep-banner-content">
+          <div className="subscription__ep-banner-info">
+            <div className="subscription__ep-banner-badge">{t('subscription.enterprise.badge')}</div>
+            <h3 className="subscription__ep-banner-title">{t('subscription.enterprise.name')}</h3>
+            <p className="subscription__ep-banner-description">{t('subscription.enterprise.description')}</p>
+            <div className="subscription__ep-banner-features">
+              {['f1', 'f2', 'f3', 'f4', 'f5', 'f6'].map((fKey) => (
+                <span key={fKey} className="subscription__ep-feature">
+                  <span className="mdi mdi-check"></span> {t(`subscription.enterprise.${fKey}`)}
+                </span>
+              ))}
+            </div>
+            <p className="subscription__ep-banner-note">{t('subscription.enterprise.note')}</p>
+          </div>
+          <div className="subscription__ep-banner-pricing">
+            <div className="subscription__pricing-price">
+              <span className="subscription__pricing-amount subscription__pricing-amount--custom">
+                {t('subscription.enterprise.priceLabel')}
+              </span>
+            </div>
+            <p className="subscription__pricing-savings">{t('subscription.enterprise.priceHint')}</p>
+            <a
+              href="mailto:hello@beresol.eu?subject=Brubru%20Enterprise%20-%20Contact%20Sales&body=Hi%20Victor%2C%0A%0AI%27d%20like%20to%20discuss%20a%20Brubru%20Enterprise%20plan%20for%20my%20team.%0A%0AOrganisation%3A%20%0ATeam%20size%3A%20%0AKey%20EU%20files%20we%20follow%3A%20%0A%0AThanks"
+              className="subscription__pricing-button button button-primary"
+            >
+              {t('subscription.enterprise.button')}
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Individual Modules Section */}
       <section className="subscription__modules">
         <h2 className="subscription__section-title">{t('subscription.modules.title')}</h2>
