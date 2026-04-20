@@ -3,6 +3,7 @@
 ## QUICK FACTS
 Water Framework Directive (WFD): Directive 2000/60/EC, CELEX 32000L0060
 WFD adopted: 23 October 2000
+**WFD amendment (March 2026): Directive (EU) 2026/805** of the European Parliament and of the Council of 30 March 2026 amending Directive 2000/60/EC establishing a framework for Community action in the field of water policy. Published OJ L, 20.4.2026. CELEX 32026L0805. Entry into force 20 days after OJ publication.
 WFD objective: Good ecological and chemical status for all EU water bodies
 Current performance: Only 37% of surface waters at good ecological status
 Drinking Water Directive (recast): Directive (EU) 2020/2184, CELEX 32020L2184, procedure 2017/0332(COD)

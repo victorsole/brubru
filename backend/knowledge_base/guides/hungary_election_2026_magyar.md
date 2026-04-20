@@ -19,6 +19,9 @@
 - Source: Politico EU "Inside Magyar's grand bargain" (14 April 2026), Brussels Playbook podcast
 - Source: Politico EU "Péter Magyar maps out grand bargain to reset Hungary's ties with Brussels" (14 April 2026)
 - Source: Politico EU "Why Orban's man in Brussels is here to stay -- for now" (15 April 2026): Hungary's Commissioner remains in post despite Orban's electoral defeat
+- Commission statement (19 April 2026, STATEMENT/26/844): Technical meetings with the **incoming Hungarian Government** confirmed by the Commission. First formal engagement between Commission services (SG, DG BUDG, DG ECFIN, DG REGIO) and Magyar transition team on the frozen EUR 19B RRF/Cohesion file. Signals Commission readiness to unlock funds once rule-of-law milestones are credibly met.
+- Politico EU (19 April 2026): "Orbán signals readiness to approve EUR 90B EU loan to Ukraine once Druzhba oil is flowing" -- caretaker Orbán government's final pressure play before handover; Druzhba pipeline / Russian oil dependency linked to Ukraine-aid veto.
+- Politico EU (19 April 2026): "Orbán's exit leaves Israel exposed in Europe" -- Orbán's defeat removes most reliable pro-Israel veto player in Council; implications for EU-Israel Association Agreement review.
 
 ## Hungary's Commissioner in Brussels: Oliver Varhelyi
 

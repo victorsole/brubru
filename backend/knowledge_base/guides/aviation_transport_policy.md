@@ -12,6 +12,8 @@
 - Industry bodies: A4E (Airlines for Europe), ERA (European Regions Airline Association), IATA, ACI Europe (airports)
 - Related guides: eu_energy_policy, eu_taxonomy_sustainable_finance, eu_trade_policy
 - EPRS Briefing (8 April 2026): "CountEmissionsEU: Measuring emissions from transport services" -- analysis of CountEmissionsEU proposal (COM(2023)441), harmonised methodology for GHG emissions measurement across passenger and freight transport services, link to ISO 14083, implementation challenges for SMEs. Ref: EPRS_UNK_c5031a47b85c
+- **Airspace block performance plan investigations (27 March 2026)**: Two Commission Decisions published in OJ L, 20.4.2026 -- Decision (EU) **2026/865** initiating detailed examination of revised draft functional airspace block performance plan (one Member State) and Decision (EU) **2026/867** initiating detailed examination of revised draft performance plan for the FAB concerned. CELEX 32026D0865 + 32026D0867. Legal basis: Regulation (EC) 549/2004 + Commission Implementing Regulation 2019/317 (Single European Sky performance scheme). Signals Commission scrutiny of national/FAB compliance with EU-wide traffic + capacity targets.
+- **Transport Council informal videoconference (21 April 2026)**: Ministers to discuss (a) air passenger rights conciliation (EU261 review file), (b) transport-sector impact of Middle East crisis (fuel costs, detours around Strait of Hormuz).
 
 ## Active and Upcoming Legislative Files
 

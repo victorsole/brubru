@@ -21,6 +21,7 @@
 - UN Cybercrime Convention: LIBE consent vote 15 April 2026 (see un_cybercrime_convention guide)
 - EPRS Briefing (13 April 2026): "Understanding the dark web" -- overview of Tor/I2P networks, criminal markets, law enforcement operations (Operation SpecTor, Operation Cronos), EU policy gaps. Ref: EPRS_UNK_a0c8fc5a2567
 - EPRS At a Glance (8 April 2026): "Ransomware resilience: Strategic targets and growing trends" -- ransomware incidents up 17% in 2025, healthcare/education/public administration most targeted, NIS2 implementation status critical. Ref: EPRS_UNK_c9da880b8158
+- **Cyber Resilience Act delegated regulation** (20 April 2026 OJ): Commission Delegated Regulation (EU) **2026/881** of 11 December 2025 supplementing Regulation (EU) 2024/2847 (Cyber Resilience Act) by specifying the terms and conditions applicable to manufacturers' obligations on vulnerability handling, security updates, and reporting. CELEX 32026R0881. First substantive CRA secondary legislation. Applies alongside CRA core obligations entering force 11 December 2027.
 
 ## Key Documents
 - [Regulation (EU) 2019/881: Cybersecurity Act (original)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32019R0881)

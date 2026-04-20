@@ -20,6 +20,7 @@
 - Post-2026: MFF 2028-2034 successor under discussion
 - EPRS Briefing (13 April 2026): "Latvia's National Recovery and Resilience Plan: Latest state of play" Ref: EPRS_UNK_4a2fdee08c24
 - EPRS Briefing (9 April 2026): "Poland's National Recovery and Resilience Plan: Latest state of play" Ref: EPRS_UNK_b99524223f53
+- **Ukraine Facility methodology update (20 April 2026 OJ)**: Commission Communication **XC02328** -- "Communication from the Commission amending the methodology for handling the partial fulfilment of steps in the Ukraine Plan under the Ukraine Facility Regulation and replacing Communication C(2025) 17...". Published OJ C, 20.4.2026. CELEX 52026XC02328. Adjusts rules on how Commission releases Ukraine Plan instalments when only part of the agreed steps (milestones/targets) are verified as complete. Reflects Ukraine Facility implementation lessons + ongoing war dynamics affecting milestone verification. Not an RRF instrument but parallels RRF methodology.
 
 ## 27 NRRPs: Status Overview (April 2026)
 

@@ -1,19 +1,24 @@
 """
-EP Multimedia Centre Client
+EP Committees Webstreaming Client
 
-Discovers and fetches committee meeting recordings from the European
-Parliament's Multimedia Centre (multimedia.europarl.europa.eu).
+Canonical source: https://www.europarl.europa.eu/committees/en/meetings/webstreaming
+(the committees hub page), with detail pages hosted on
+multimedia.europarl.europa.eu.
 
-The Multimedia Centre streams all committee meetings live and keeps
-recorded archives. This client scrapes the listing pages and individual
-meeting pages to extract video URLs for audio download and transcription.
+Discovery happens from the committees hub (live-stream schedule + "Video
+recordings" archive). Transcription is on-demand only.
 
-URL patterns:
-  Listings:  https://multimedia.europarl.europa.eu/en/webstreaming
-  Committee: https://multimedia.europarl.europa.eu/en/webstreaming?committee={CODE}
-  Meeting:   https://multimedia.europarl.europa.eu/en/webstreaming/{EVENT_ID}
+Selectors (verified 19 April 2026):
+  Card:       div.es_document-header
+  Link:       h3.es_document-title a[href*="multimedia.europarl"]
+  Date/time:  span.es_agenda-date  (e.g. "20-04-2026 14:30 - 17:30")
+  Committee:  a.es_badge-committee (text == committee code, may repeat for joint meetings)
+
+Detail URL pattern:
+  https://multimedia.europarl.europa.eu/en/{slug}-committee-meeting_YYYYMMDD-HHMM-COMMITTEE-{CODE(S)}_vd
 
 Created: April 2026
+Updated: April 2026 — switched to committees hub scraping (was multimedia centre)
 """
 
 import logging
@@ -28,8 +33,9 @@ from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
 
+COMMITTEES_BASE = "https://www.europarl.europa.eu"
+COMMITTEES_WEBSTREAMING_URL = f"{COMMITTEES_BASE}/committees/en/meetings/webstreaming"
 MULTIMEDIA_BASE = "https://multimedia.europarl.europa.eu"
-WEBSTREAMING_URL = f"{MULTIMEDIA_BASE}/en/webstreaming"
 USER_AGENT = "Mozilla/5.0 (compatible; Brubru/1.0; +https://brubru.beresol.eu)"
 CACHE_TTL = 3600  # 1 hour
 
@@ -99,118 +105,121 @@ class EPMultimediaClient:
         committee_code: Optional[str] = None,
         date_from: Optional[date] = None,
         date_to: Optional[date] = None,
-        max_pages: int = 2,
+        max_pages: int = 1,
     ) -> List[CommitteeMeeting]:
-        """Discover committee meetings from the webstreaming listing page.
+        """Discover committee meetings from the EP committees hub webstreaming page.
 
-        Returns recorded (not live) meetings, newest first.
+        Scrapes both live-stream schedule (upcoming) and the "Video recordings"
+        archive (past meetings). Returns meetings newest-first.
         """
         cache_key = f"discover:{committee_code or 'all'}:{date_from}:{date_to}"
         cached = self._cache_get(cache_key)
         if cached is not None:
             return cached
 
-        meetings: List[CommitteeMeeting] = []
+        html = await self._fetch_html(COMMITTEES_WEBSTREAMING_URL)
+        if not html:
+            logger.warning("[EP-committees-ws] Failed to fetch hub page")
+            return []
 
-        for page in range(max_pages):
-            url = f"{WEBSTREAMING_URL}?tab=recorded"
-            if committee_code:
-                url += f"&committee={committee_code.upper()}"
-            if page > 0:
-                url += f"&page={page}"
+        meetings = self._parse_committees_hub_page(html)
 
-            html = await self._fetch_html(url)
-            if not html:
-                break
+        if committee_code:
+            code_upper = committee_code.upper()
+            meetings = [m for m in meetings if code_upper in m.committee_code.upper().split("-")]
 
-            page_meetings = self._parse_listing_page(html)
-            if not page_meetings:
-                break
-
-            meetings.extend(page_meetings)
-            logger.info("[EP-multimedia] Page %d: %d meetings", page, len(page_meetings))
-
-        # Filter by date range
         if date_from:
             meetings = [m for m in meetings if m.meeting_date >= date_from]
         if date_to:
             meetings = [m for m in meetings if m.meeting_date <= date_to]
 
         self._cache_put(cache_key, meetings)
-        logger.info("[EP-multimedia] Discovered %d meetings for %s", len(meetings), committee_code or "all")
+        logger.info(
+            "[EP-committees-ws] Discovered %d meetings (filter committee=%s, range=%s..%s)",
+            len(meetings), committee_code or "all", date_from, date_to,
+        )
         return meetings
 
-    def _parse_listing_page(self, html: str) -> List[CommitteeMeeting]:
-        """Parse the webstreaming listing page into CommitteeMeeting objects."""
+    def _parse_committees_hub_page(self, html: str) -> List[CommitteeMeeting]:
+        """Parse the committees hub webstreaming page into CommitteeMeeting objects.
+
+        Target DOM (verified April 2026):
+            div.es_document-header
+              h3.es_document-title > a[href*="multimedia.europarl"]
+              span.es_agenda-date  "DD-MM-YYYY HH:MM - HH:MM"
+              a.es_badge-committee (1+ per card, e.g. joint IMCO-JURI-PETI)
+        """
         soup = BeautifulSoup(html, "lxml")
         meetings: List[CommitteeMeeting] = []
 
-        # The listing page shows meeting cards with committee code, date, times
-        # Structure varies; we look for common patterns in the EP multimedia HTML
-        for card in soup.select("[class*='event'], [class*='meeting'], [class*='card']"):
-            meeting = self._parse_meeting_card(card)
+        for card in soup.select("div.es_document-header"):
+            meeting = self._parse_hub_card(card)
             if meeting:
                 meetings.append(meeting)
 
-        # Fallback: parse from text content if structured selectors fail
-        if not meetings:
-            meetings = self._parse_listing_fallback(soup)
-
         return meetings
 
-    def _parse_meeting_card(self, card) -> Optional[CommitteeMeeting]:
-        """Extract meeting data from a single card element."""
+    def _parse_hub_card(self, card) -> Optional[CommitteeMeeting]:
+        """Extract a CommitteeMeeting from a committees-hub card."""
         try:
-            # Extract committee code from badge or text
-            committee_code = None
-            for el in card.select("[class*='badge'], [class*='committee'], strong, span"):
-                text = el.get_text(strip=True).upper()
-                if len(text) <= 6 and text.isalpha():
-                    committee_code = text
-                    break
-
-            if not committee_code:
+            link = card.select_one('h3.es_document-title a[href*="multimedia.europarl"]')
+            if not link:
+                return None
+            multimedia_url = link.get("href", "").strip()
+            if not multimedia_url:
                 return None
 
-            # Extract date
-            meeting_date = None
-            date_text = card.get_text()
-            date_match = re.search(r"(\d{2})-(\d{2})-(\d{4})", date_text)
-            if date_match:
-                d, m, y = date_match.groups()
-                meeting_date = date(int(y), int(m), int(d))
+            # event_id from URL: "libe-committee-meeting_20260420-1500-COMMITTEE-LIBE_vd"
+            event_id = multimedia_url.rstrip("/").split("/")[-1]
 
-            if not meeting_date:
+            # Date/time: "20-04-2026 14:30 - 17:30"
+            date_el = card.select_one("span.es_agenda-date")
+            if not date_el:
+                return None
+            dt_text = date_el.get_text(" ", strip=True)
+            dt_match = re.match(
+                r"(\d{2})-(\d{2})-(\d{4})\s+(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})",
+                dt_text,
+            )
+            if not dt_match:
+                return None
+            d_, m_, y_, start_time, end_time = dt_match.groups()
+            meeting_date = date(int(y_), int(m_), int(d_))
+
+            # Committee badges (one per code, multiple for joint meetings)
+            badges = card.select("a.es_badge-committee")
+            codes = [b.get_text(strip=True).upper() for b in badges if b.get_text(strip=True)]
+            if not codes:
+                # Fallback: extract from URL
+                url_code_match = re.search(r"COMMITTEE-([A-Z-]+)_vd", multimedia_url)
+                if url_code_match:
+                    codes = url_code_match.group(1).split("-")
+            if not codes:
                 return None
 
-            # Extract times
-            time_match = re.search(r"(\d{2}:\d{2})\s*[-/]\s*(\d{2}:\d{2})", date_text)
-            start_time = time_match.group(1) if time_match else None
-            end_time = time_match.group(2) if time_match else None
+            # committee_code column is VARCHAR(10) — use primary code only.
+            # Joint meetings preserve all codes in the title (e.g. "IMCO-JURI-PETI ...").
+            full_code_str = "-".join(codes)
+            committee_code = codes[0]  # primary for filtering
 
-            # Extract link (event ID)
-            link = card.find("a", href=True)
-            event_id = ""
-            multimedia_url = ""
-            if link:
-                href = link["href"]
-                multimedia_url = href if href.startswith("http") else f"{MULTIMEDIA_BASE}{href}"
-                # Event ID is typically the last path segment
-                event_id = href.rstrip("/").split("/")[-1]
-
-            # Title
-            title_el = card.find(["h3", "h4", "h5", "a"])
-            title = title_el.get_text(strip=True) if title_el else f"Committee Meeting {committee_code}"
+            title = (
+                f"{full_code_str} Committee Meeting - {meeting_date.strftime('%d %B %Y')}"
+                if len(codes) > 1
+                else f"{committee_code} Committee Meeting - {meeting_date.strftime('%d %B %Y')}"
+            )
 
             # Duration
             duration = None
-            if start_time and end_time:
-                try:
-                    s = datetime.strptime(start_time, "%H:%M")
-                    e = datetime.strptime(end_time, "%H:%M")
-                    duration = int((e - s).total_seconds() / 60)
-                except ValueError:
-                    pass
+            try:
+                s = datetime.strptime(start_time, "%H:%M")
+                e = datetime.strptime(end_time, "%H:%M")
+                duration = int((e - s).total_seconds() / 60)
+            except ValueError:
+                pass
+
+            # Live if today and not yet ended
+            today = date.today()
+            is_live = meeting_date == today
 
             return CommitteeMeeting(
                 event_id=event_id,
@@ -221,38 +230,11 @@ class EPMultimediaClient:
                 end_time=end_time,
                 multimedia_url=multimedia_url,
                 duration_minutes=duration,
+                is_live=is_live,
             )
         except Exception as exc:
-            logger.debug("[EP-multimedia] Failed to parse card: %s", exc)
+            logger.debug("[EP-committees-ws] Failed to parse card: %s", exc)
             return None
-
-    def _parse_listing_fallback(self, soup: BeautifulSoup) -> List[CommitteeMeeting]:
-        """Fallback parser using text patterns when structured selectors fail."""
-        meetings: List[CommitteeMeeting] = []
-        text = soup.get_text()
-
-        # Pattern: "16-04-2026 09:00 - 12:30ENVI" or "16-04-2026 09:00 - 11:30FISC"
-        pattern = re.compile(
-            r"(\d{2})-(\d{2})-(\d{4})\s+(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})([A-Z]{3,6})"
-        )
-        for match in pattern.finditer(text):
-            d, m, y, start, end, code = match.groups()
-            try:
-                meeting_date = date(int(y), int(m), int(d))
-            except ValueError:
-                continue
-
-            meetings.append(CommitteeMeeting(
-                event_id=f"{code.lower()}-{y}{m}{d}",
-                committee_code=code,
-                title=f"Committee Meeting {code}",
-                meeting_date=meeting_date,
-                start_time=start,
-                end_time=end,
-                multimedia_url=f"{WEBSTREAMING_URL}?committee={code}",
-            ))
-
-        return meetings
 
     async def get_meeting_details(self, multimedia_url: str) -> Optional[Dict[str, Any]]:
         """Fetch a meeting detail page and extract video URL and agenda."""

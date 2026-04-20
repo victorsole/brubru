@@ -6,7 +6,12 @@
 - SRM: Regulation (EU) No 806/2014, CELEX 32014R0806, procedure 2023/0111(COD)
 - BRRD: Directive 2014/59/EU, CELEX 32014L0059, procedure 2023/0112(COD)
 - DGSD: Directive 2014/49/EU, CELEX 32014L0049, procedure 2023/0113(COD)
-- Stage: ADOPTED -- EP plenary 2nd reading (26 March 2026). Awaiting OJ publication.
+- Stage: **PUBLISHED in OJ (30 March 2026)** -- see CELEX numbers below
+- SRM amendment: **Regulation (EU) 2026/808**, signed 30 March 2026 (amending 806/2014)
+- BRRD amendment: **Directive (EU) 2026/806**, signed 30 March 2026 (amending 2014/59)
+- DGSD amendment: **Directive (EU) 2026/804**, signed 30 March 2026 (amending 2014/49 -- deposit protection scope, use of deposit guarantee funds)
+- Entry into force: 20 days after OJ publication
+- OJ reference: OJ L, 20.4.2026 (surfaced in EUR-Lex feed 20 April 2026)
 - ECON rapporteur (SRM): Irene Tinagli (S&D, Italy)
 - ECON rapporteur (BRRD): Ludek Niedermayer (EPP, Czechia)
 - ECON rapporteur (DGSD): Kira Marie Peter-Hansen (Greens/EFA, Denmark)

@@ -574,6 +574,9 @@ class ContextData:
     # On-demand: Position Analysis (Commission / Parliament / Council stances on a file)
     position_block: Optional[str] = None
 
+    # On-demand: EP committee meeting transcript (AI-transcribed from EP Multimedia)
+    committee_transcript_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1087,6 +1090,26 @@ class ContextBuilder:
 
         post_tasks['position'] = _fetch_position_safe()
 
+        # 3e. On-demand: EP committee meeting transcript
+        committee_transcript_intent = self._detect_committee_transcript_intent(user_message)
+
+        async def _fetch_committee_transcript_safe():
+            if not committee_transcript_intent:
+                return None
+            try:
+                block = await self._fetch_committee_transcript_block(committee_transcript_intent)
+                if block:
+                    logger.info(
+                        "[committee-transcript] Injected transcript for %s (%d chars)",
+                        committee_transcript_intent.get("committee_code"), len(block),
+                    )
+                return block
+            except Exception as e:
+                logger.warning("[committee-transcript] Failed: %s", e)
+                return None
+
+        post_tasks['committee_transcript'] = _fetch_committee_transcript_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1146,6 +1169,7 @@ class ContextBuilder:
         consultation_feedback_block = post_map.get('consultation_feedback')
         commissioner_agenda_block = post_map.get('commissioner_agenda')
         position_block = post_map.get('position')
+        committee_transcript_block = post_map.get('committee_transcript')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1214,6 +1238,7 @@ class ContextBuilder:
             consultation_feedback_block=consultation_feedback_block,
             commissioner_agenda_block=commissioner_agenda_block,
             position_block=position_block,
+            committee_transcript_block=committee_transcript_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -4236,9 +4261,11 @@ class ContextBuilder:
             institution_map = {
                 'parliament': InstitutionEnum.EP.value,
                 'plenary': InstitutionEnum.EP.value,
+                'plenaries': InstitutionEnum.EP.value,
                 'mep': InstitutionEnum.EP.value,
                 'committee': InstitutionEnum.EP.value,
                 'council': InstitutionEnum.COUNCIL.value,
+                'councils': InstitutionEnum.COUNCIL.value,
                 'european council': InstitutionEnum.EUROPEAN_COUNCIL.value,
                 'summit': InstitutionEnum.EUROPEAN_COUNCIL.value,
                 'commission': InstitutionEnum.COMMISSION.value,
@@ -4247,21 +4274,73 @@ class ContextBuilder:
                 'ecb': InstitutionEnum.ECB.value,
                 'central bank': InstitutionEnum.ECB.value,
             }
-            detected_institution = None
+            # Collect ALL institution matches. If the query mentions multiple
+            # institutions (e.g. "meetings, plenaries, councils"), drop the filter
+            # entirely so results span every relevant institution — otherwise a
+            # greedy first-match would narrow the answer to only one source.
+            matched_institutions = set()
             for keyword, inst_value in institution_map.items():
                 if keyword in query_lower:
-                    detected_institution = inst_value
-                    break
+                    matched_institutions.add(inst_value)
 
-            if detected_institution:
-                filters.append(EUCalendarEvent.institution == detected_institution)
+            if len(matched_institutions) == 1:
+                filters.append(EUCalendarEvent.institution == next(iter(matched_institutions)))
+            # else: 0 or 2+ matches -> no institution filter (broad retrieval)
+            multi_institution_query = len(matched_institutions) != 1
 
-            # Committee code filter
-            if entities.committee_codes:
+            # Policy-area filter: detect common policy topics in the query and
+            # match against event.policy_areas ARRAY. Increases precision for
+            # queries like "energy events next week", "climate meetings".
+            policy_keyword_map = {
+                'energy': ['energy', 'climate'],
+                'climate': ['climate', 'energy'],
+                'environment': ['environment', 'climate'],
+                'digital': ['digital'],
+                'ai ': ['digital'],
+                'artificial intelligence': ['digital'],
+                'defence': ['defence', 'foreign_affairs'],
+                'defense': ['defence', 'foreign_affairs'],
+                'trade': ['trade', 'foreign_affairs'],
+                'foreign': ['foreign_affairs'],
+                'health': ['health'],
+                'agriculture': ['agriculture'],
+                'farming': ['agriculture'],
+                'fisheries': ['fisheries'],
+                'transport': ['transport'],
+                'employment': ['employment'],
+                'budget': ['budget', 'economy'],
+                'economy': ['economy', 'budget'],
+                'migration': ['migration', 'justice'],
+                'justice': ['justice'],
+                'security': ['security', 'defence'],
+                'cohesion': ['cohesion', 'regional'],
+                'regional': ['regional', 'cohesion'],
+                'research': ['research'],
+            }
+            matched_areas: List[str] = []
+            for keyword, areas in policy_keyword_map.items():
+                if keyword in query_lower:
+                    matched_areas.extend(areas)
+            matched_areas = list(dict.fromkeys(matched_areas))  # dedupe, preserve order
+            if matched_areas:
+                area_conditions = [
+                    EUCalendarEvent.policy_areas.any(area) for area in matched_areas
+                ]
+                filters.append(or_(*area_conditions))
+
+            # Committee code filter. Skip when the query explicitly spans
+            # multiple institutions (Council, Commission events don't carry an
+            # ep_committee_code, so a hard filter would wrongly exclude them).
+            # Also keep Council/Commission events even when a committee code
+            # was inferred from a policy topic (e.g. "energy" -> ITRE).
+            if entities.committee_codes and not multi_institution_query:
                 committee_conditions = [
                     EUCalendarEvent.ep_committee_code == code
                     for code in entities.committee_codes
                 ]
+                # Always allow non-EP events through so institutional coverage
+                # stays broad when the user asks "what's happening".
+                committee_conditions.append(EUCalendarEvent.institution != InstitutionEnum.EP.value)
                 filters.append(or_(*committee_conditions))
 
             # Procedure reference filter
@@ -4281,7 +4360,7 @@ class ContextBuilder:
             else:
                 base_query = base_query.order_by(EUCalendarEvent.start_date.asc())
 
-            results = base_query.limit(5).all()
+            results = base_query.limit(8).all()
 
             # Format results
             events = []
@@ -4943,6 +5022,32 @@ class ContextBuilder:
         except Exception:
             return "Unknown"
 
+    # ── EP Committee Meeting Transcripts (AI-transcribed via Whisper) ────
+
+    COMMITTEE_TRANSCRIPT_INTENT_PHRASES = [
+        # English
+        "committee meeting", "committee debate", "committee discussion",
+        "committee hearing", "said in committee", "committee exchange",
+        "committee transcript", "libe committee", "envi committee",
+        "econ committee", "agri committee", "imco committee", "juri committee",
+        "itre committee", "tran committee", "regi committee", "budg committee",
+        "cont committee", "pech committee", "afet committee", "inta committee",
+        "empl committee", "cult committee", "femm committee", "fisc committee",
+        "sede subcommittee", "droi subcommittee", "peti committee",
+        # French
+        "réunion de commission", "commission libe", "commission envi",
+        "commission econ", "en commission parlementaire",
+        # Spanish
+        "reunión de comisión", "comisión parlamentaria", "comisión libe",
+        "comisión del parlamento",
+        # Italian
+        "riunione di commissione", "commissione parlamentare",
+        # Dutch
+        "parlementaire commissie", "vergadering commissie",
+        # Catalan
+        "reunió de comissió", "comissió parlamentària",
+    ]
+
     # ── EP Plenary Debate Transcripts (CRE) ──────────────────────────────
 
     DEBATE_INTENT_PHRASES = [
@@ -5099,6 +5204,214 @@ class ContextBuilder:
             largest = max(session.debates, key=lambda d: d.speaker_count)
             result += "\n\n" + client.format_debate_for_context(largest)
         return result
+
+    # ------------------------------------------------------------------
+    # On-demand: EP committee meeting transcripts (AI-transcribed)
+    # ------------------------------------------------------------------
+
+    # Known EP committee codes for direct match in queries
+    EP_COMMITTEE_CODES = {
+        "AFCO", "AFET", "AGRI", "BUDG", "CONT", "CULT", "DEVE", "DROI", "ECON",
+        "EMPL", "ENVI", "FEMM", "FISC", "IMCO", "INTA", "ITRE", "JURI", "LIBE",
+        "PECH", "PETI", "REGI", "SEDE", "TRAN", "PANA", "SANT",
+    }
+
+    def _detect_committee_transcript_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        """Detect queries about EP committee meeting transcripts.
+
+        Returns dict with committee_code (required), plus optional procedure_ref
+        and date_hint; or None if no committee-transcript intent detected.
+        """
+        if not query:
+            return None
+
+        import re as _re
+        import unicodedata as _ud
+
+        def _strip_accents(s: str) -> str:
+            return "".join(
+                c for c in _ud.normalize("NFKD", s) if not _ud.combining(c)
+            )
+
+        q = query.lower()
+        q_norm = _strip_accents(q)
+        phrases_norm = [_strip_accents(p) for p in self.COMMITTEE_TRANSCRIPT_INTENT_PHRASES]
+        phrase_match = any(p in q_norm for p in phrases_norm)
+
+        code_match = None
+        for code in self.EP_COMMITTEE_CODES:
+            if _re.search(rf"\b{code.lower()}\b", q):
+                code_match = code
+                break
+
+        # Verbatim/speech words suggest transcript retrieval even without an explicit "committee" phrase
+        verbatim_words = ("said", "discussed", "heard", "debated", "exchange of views",
+                          "asked", "told", "replied", "stated", "argued", "spoke")
+        has_verbatim = any(w in q for w in verbatim_words)
+
+        if not code_match:
+            return None
+        if not (phrase_match or has_verbatim):
+            return None
+
+        proc_match = _re.search(r"\d{4}/\d{4}\s*\([A-Z]{2,4}\)", query)
+        procedure_ref = proc_match.group(0) if proc_match else None
+
+        date_hint = self._detect_plenary_debate_intent(query)  # reuse parser
+
+        return {
+            "committee_code": code_match,
+            "procedure_ref": procedure_ref,
+            "date_hint": date_hint,
+        }
+
+    async def _fetch_committee_transcript_block(
+        self,
+        intent: Dict[str, Any],
+    ) -> Optional[str]:
+        """Fetch a committee-meeting transcript for the chatbot context.
+
+        Strategy:
+          1. Look for a COMPLETED row matching the committee (+ optional filters)
+          2. If none, look for a PENDING row with a video_url and transcribe on
+             demand (first user to ask pays the Whisper wait; cached thereafter)
+          3. If still nothing, return None
+        """
+        if not intent or not intent.get("committee_code"):
+            return None
+
+        try:
+            from core.database import SessionLocal
+            from models.committee_meeting_transcript import (
+                CommitteeMeetingTranscript, TranscriptStatusEnum,
+            )
+            from services.committee_transcription_service import (
+                get_committee_transcription_service,
+            )
+        except Exception as exc:
+            logger.warning("[committee-transcript] Import failed: %s", exc)
+            return None
+
+        code = intent["committee_code"]
+        proc_ref = intent.get("procedure_ref")
+        date_hint = intent.get("date_hint")
+
+        session = SessionLocal()
+        try:
+            # ── Step 1: Look for a matching COMPLETED transcript ────────
+            def _apply_filters(query):
+                # Match committee code (may be joint: "IMCO-JURI-PETI")
+                query = query.filter(
+                    CommitteeMeetingTranscript.committee_code.ilike(f"%{code}%")
+                )
+                if proc_ref:
+                    query = query.filter(
+                        CommitteeMeetingTranscript.related_procedure_refs.any(proc_ref)
+                    )
+                if date_hint:
+                    from datetime import datetime as _dt, timedelta
+                    window_start = _dt.combine(date_hint - timedelta(days=7), _dt.min.time())
+                    window_end = _dt.combine(date_hint + timedelta(days=7), _dt.max.time())
+                    query = query.filter(
+                        CommitteeMeetingTranscript.meeting_date >= window_start,
+                        CommitteeMeetingTranscript.meeting_date <= window_end,
+                    )
+                return query
+
+            completed_q = _apply_filters(session.query(CommitteeMeetingTranscript).filter(
+                CommitteeMeetingTranscript.status == TranscriptStatusEnum.COMPLETED,
+            ))
+            transcript = completed_q.order_by(
+                CommitteeMeetingTranscript.meeting_date.desc()
+            ).first()
+
+            if not transcript:
+                # Relax: any completed for committee (ignore proc_ref / date_hint)
+                transcript = session.query(CommitteeMeetingTranscript).filter(
+                    CommitteeMeetingTranscript.committee_code.ilike(f"%{code}%"),
+                    CommitteeMeetingTranscript.status == TranscriptStatusEnum.COMPLETED,
+                ).order_by(
+                    CommitteeMeetingTranscript.meeting_date.desc()
+                ).first()
+
+            # ── Step 2: On-demand transcription ─────────────────────────
+            if not transcript:
+                pending = _apply_filters(session.query(CommitteeMeetingTranscript).filter(
+                    CommitteeMeetingTranscript.status.in_([
+                        TranscriptStatusEnum.PENDING,
+                        TranscriptStatusEnum.FAILED,
+                    ]),
+                    CommitteeMeetingTranscript.video_url.isnot(None),
+                )).order_by(
+                    CommitteeMeetingTranscript.meeting_date.desc()
+                ).first()
+
+                if not pending:
+                    logger.info(
+                        "[committee-transcript] No COMPLETED or PENDING transcript for code=%s ref=%s",
+                        code, proc_ref,
+                    )
+                    return None
+
+                logger.info(
+                    "[committee-transcript] On-demand transcription: %s %s (cost ~$0.006/min)",
+                    pending.committee_code, pending.meeting_date,
+                )
+                pending.status = TranscriptStatusEnum.TRANSCRIBING
+                session.commit()
+
+                svc = get_committee_transcription_service()
+                meeting_date = pending.meeting_date
+                if hasattr(meeting_date, "date"):
+                    md_arg = meeting_date.date()
+                else:
+                    md_arg = meeting_date
+                result = await svc.transcribe_meeting(
+                    video_url=pending.video_url,
+                    committee_code=pending.committee_code,
+                    meeting_date=md_arg,
+                    title=pending.title,
+                    agenda_items=pending.agenda_items or [],
+                )
+
+                for k, v in result.items():
+                    if hasattr(pending, k):
+                        setattr(pending, k, v)
+                if result.get("status") == "completed":
+                    from datetime import datetime as _dt
+                    pending.transcribed_at = _dt.utcnow()
+
+                session.commit()
+                session.refresh(pending)
+
+                if pending.status != TranscriptStatusEnum.COMPLETED:
+                    logger.warning(
+                        "[committee-transcript] On-demand transcription failed for %s: %s",
+                        pending.event_id, pending.error_message,
+                    )
+                    return None
+                transcript = pending
+
+            # ── Step 3: Format for context injection ────────────────────
+            svc = get_committee_transcription_service()
+            meeting_date = transcript.meeting_date
+            if hasattr(meeting_date, "date"):
+                meeting_date = meeting_date.date()
+            block = svc.format_transcript_for_context(
+                transcript_text=transcript.transcript_text or "",
+                committee_code=transcript.committee_code,
+                meeting_date=meeting_date,
+                title=transcript.title,
+                agenda_items=transcript.agenda_items or [],
+                procedure_ref=proc_ref,
+                max_chars=4000,
+            )
+
+            header = "COMMITTEE TRANSCRIPT (live — AI-transcribed from EP Multimedia):"
+            return f"{header}\n{block}"
+
+        finally:
+            session.close()
 
     # ------------------------------------------------------------------
     # On-demand: stakeholder feedback on EC public consultations
@@ -5987,6 +6300,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'position_block', None):
             sections.append(context_data.position_block)
+            sections.append("")
+        if getattr(context_data, 'committee_transcript_block', None):
+            sections.append(context_data.committee_transcript_block)
             sections.append("")
 
         # EU LAW SNAPSHOT (from internal analytics)
