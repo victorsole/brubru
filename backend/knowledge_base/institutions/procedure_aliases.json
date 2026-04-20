@@ -1,0 +1,604 @@
+{
+  "metadata": {
+    "title": "Curated EU Legislative Procedure Aliases",
+    "description": "Maps natural-language procedure names and nicknames to formal procedure references (COD/NLE/CNS/RSP) and lead committees. Used by the committee-transcript chatbot path so users can ask 'What did LIBE say about the ePrivacy Directive extension?' without typing '2025/0429(COD)'. Aliases drawn from MEP usage, Politico EU, EurActiv, EDRi, BEUC, Bruegel and civil society shorthand.",
+    "last_updated": "2026-04-20",
+    "source": "OEIL + EP committee assignments + Brussels-bubble media; manually curated for high-profile procedures"
+  },
+  "procedures": {
+    "2025/0429(COD)": {
+      "title": "Extension of the temporary derogation from Directive 2002/58/EC (ePrivacy) to combat online child sexual abuse",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "ePrivacy Directive extension",
+        "ePrivacy extension",
+        "ePrivacy derogation extension",
+        "CSAM temporary derogation extension",
+        "CSAM derogation extension",
+        "extension of the CSAM derogation",
+        "temporary derogation extension",
+        "extension of the ePrivacy derogation",
+        "online child sexual abuse derogation extension"
+      ]
+    },
+    "2022/0155(COD)": {
+      "title": "Regulation laying down rules to prevent and combat child sexual abuse (CSAM Regulation)",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "CSAM Regulation",
+        "CSAM regulation",
+        "child sexual abuse regulation",
+        "CSA Regulation",
+        "chat control",
+        "CSAM proposal",
+        "CSAM file"
+      ]
+    },
+    "2021/0106(COD)": {
+      "title": "Artificial Intelligence Act",
+      "lead_committee": "IMCO-LIBE",
+      "aliases": [
+        "AI Act",
+        "Artificial Intelligence Act",
+        "AIA",
+        "EU AI Act"
+      ]
+    },
+    "2020/0361(COD)": {
+      "title": "Digital Services Act",
+      "lead_committee": "IMCO",
+      "aliases": [
+        "Digital Services Act",
+        "DSA",
+        "DSA file"
+      ]
+    },
+    "2020/0374(COD)": {
+      "title": "Digital Markets Act",
+      "lead_committee": "IMCO",
+      "aliases": [
+        "Digital Markets Act",
+        "DMA",
+        "DMA file"
+      ]
+    },
+    "2020/0310(COD)": {
+      "title": "Directive on adequate minimum wages in the European Union",
+      "lead_committee": "EMPL",
+      "aliases": [
+        "Minimum Wages Directive",
+        "adequate minimum wages directive"
+      ]
+    },
+    "2021/0201(COD)": {
+      "title": "Nature Restoration Regulation",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "Nature Restoration Law",
+        "Nature Restoration Regulation",
+        "NRL"
+      ]
+    },
+    "2022/0051(COD)": {
+      "title": "Corporate Sustainability Due Diligence Directive",
+      "lead_committee": "JURI",
+      "aliases": [
+        "CSDDD",
+        "CS3D",
+        "Due Diligence Directive",
+        "supply chain due diligence directive"
+      ]
+    },
+    "2022/0047(COD)": {
+      "title": "Data Act",
+      "lead_committee": "ITRE",
+      "aliases": [
+        "Data Act",
+        "EU Data Act"
+      ]
+    },
+    "2022/0272(COD)": {
+      "title": "Cyber Resilience Act",
+      "lead_committee": "ITRE",
+      "aliases": [
+        "Cyber Resilience Act",
+        "CRA"
+      ]
+    },
+    "2022/0140(COD)": {
+      "title": "European Health Data Space Regulation",
+      "lead_committee": "ENVI-LIBE",
+      "aliases": [
+        "EHDS",
+        "European Health Data Space",
+        "Health Data Space Regulation"
+      ]
+    },
+    "2023/0081(COD)": {
+      "title": "Net-Zero Industry Act",
+      "lead_committee": "ITRE",
+      "aliases": [
+        "Net-Zero Industry Act",
+        "NZIA"
+      ]
+    },
+    "2023/0079(COD)": {
+      "title": "Critical Raw Materials Act",
+      "lead_committee": "ITRE",
+      "aliases": [
+        "Critical Raw Materials Act",
+        "CRMA"
+      ]
+    },
+    "2023/0135(COD)": {
+      "title": "Anti-corruption Directive",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "Anti-corruption Directive",
+        "EU anti-corruption directive"
+      ]
+    },
+    "2024/0197(COD)": {
+      "title": "Return Regulation (common system for the return of third-country nationals)",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "Return Regulation",
+        "returns regulation",
+        "common return system"
+      ]
+    },
+    "2021/0214(COD)": {
+      "title": "Regulation establishing a Carbon Border Adjustment Mechanism",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "CBAM",
+        "Carbon Border Adjustment Mechanism",
+        "carbon border tax",
+        "EU carbon border tax",
+        "CBAM Regulation",
+        "carbon tariff",
+        "border carbon adjustment"
+      ]
+    },
+    "2021/0211(COD)": {
+      "title": "Revision of the EU Emissions Trading System Directive including ETS2 for buildings and road transport",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "ETS2",
+        "EU ETS 2",
+        "ETS revision",
+        "ETS buildings and road transport",
+        "Fit for 55 ETS",
+        "emissions trading revision",
+        "ETS expansion"
+      ]
+    },
+    "2021/0200(COD)": {
+      "title": "Revision of the Effort Sharing Regulation for 2021-2030",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "Effort Sharing Regulation",
+        "ESR revision",
+        "Effort Sharing",
+        "ESR",
+        "binding national emission targets",
+        "Fit for 55 Effort Sharing"
+      ]
+    },
+    "2021/0423(COD)": {
+      "title": "Regulation on the reduction of methane emissions in the energy sector",
+      "lead_committee": "ITRE-ENVI",
+      "aliases": [
+        "Methane Regulation",
+        "EU methane regulation",
+        "methane rules",
+        "energy methane regulation",
+        "Fit for 55 methane",
+        "methane emissions regulation"
+      ]
+    },
+    "2022/0099(COD)": {
+      "title": "Regulation on fluorinated greenhouse gases (F-gas Regulation)",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "F-gas Regulation",
+        "F-gas revision",
+        "fluorinated greenhouse gases regulation",
+        "HFC regulation",
+        "F-gases"
+      ]
+    },
+    "2022/0396(COD)": {
+      "title": "Regulation on packaging and packaging waste (Packaging and Packaging Waste Regulation)",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "PPWR",
+        "Packaging and Packaging Waste Regulation",
+        "Packaging Regulation",
+        "EU packaging rules",
+        "packaging waste regulation",
+        "single-use packaging ban"
+      ]
+    },
+    "2023/0232(COD)": {
+      "title": "Directive on Soil Monitoring and Resilience (Soil Monitoring Law)",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "Soil Monitoring Law",
+        "Soil Monitoring Directive",
+        "Soil Health Law",
+        "EU soil law",
+        "soil resilience directive",
+        "healthy soils directive"
+      ]
+    },
+    "2021/0197(COD)": {
+      "title": "Revision of CO2 emission performance standards for new passenger cars and light commercial vehicles",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "CO2 standards for cars and vans",
+        "2035 combustion engine ban",
+        "car CO2 standards",
+        "ICE ban",
+        "zero-emission cars 2035",
+        "cars and vans CO2"
+      ]
+    },
+    "2020/0036(COD)": {
+      "title": "European Climate Law",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "European Climate Law",
+        "EU Climate Law",
+        "Climate Law",
+        "climate neutrality law",
+        "2050 climate neutrality"
+      ]
+    },
+    "2022/0066(COD)": {
+      "title": "Directive on combating violence against women and domestic violence",
+      "lead_committee": "FEMM-LIBE",
+      "aliases": [
+        "Violence Against Women Directive",
+        "VAW Directive",
+        "anti-VAW directive",
+        "domestic violence directive",
+        "gender-based violence directive"
+      ]
+    },
+    "2022/0117(COD)": {
+      "title": "Directive on protecting persons who engage in public participation from manifestly unfounded or abusive court proceedings (Anti-SLAPP Directive)",
+      "lead_committee": "JURI",
+      "aliases": [
+        "Anti-SLAPP Directive",
+        "SLAPP Directive",
+        "anti-SLAPP",
+        "Daphne's Law",
+        "strategic lawsuits directive",
+        "journalist protection directive"
+      ]
+    },
+    "2022/0277(COD)": {
+      "title": "European Media Freedom Act",
+      "lead_committee": "CULT",
+      "aliases": [
+        "European Media Freedom Act",
+        "EMFA",
+        "Media Freedom Act",
+        "media pluralism regulation",
+        "journalism regulation"
+      ]
+    },
+    "2021/0239(COD)": {
+      "title": "Regulation on the prevention of the use of the financial system for money laundering or terrorist financing (AML Single Rulebook)",
+      "lead_committee": "ECON-LIBE",
+      "aliases": [
+        "AML Single Rulebook",
+        "AML Regulation",
+        "anti-money laundering regulation",
+        "AMLR",
+        "single AML rulebook",
+        "EU AML package"
+      ]
+    },
+    "2021/0240(COD)": {
+      "title": "Regulation establishing the Authority for Anti-Money Laundering and Countering the Financing of Terrorism (AMLA)",
+      "lead_committee": "ECON-LIBE",
+      "aliases": [
+        "AMLA",
+        "AMLA Regulation",
+        "EU AML Authority",
+        "Anti-Money Laundering Authority",
+        "new AML watchdog",
+        "Frankfurt AML agency"
+      ]
+    },
+    "2023/0205(COD)": {
+      "title": "Regulation on a framework for Financial Data Access (FIDA)",
+      "lead_committee": "ECON",
+      "aliases": [
+        "FIDA",
+        "FiDA",
+        "Financial Data Access Regulation",
+        "open finance framework",
+        "open finance regulation",
+        "EU open finance"
+      ]
+    },
+    "2023/0210(COD)": {
+      "title": "Regulation on payment services in the internal market (Payment Services Regulation, PSR)",
+      "lead_committee": "ECON",
+      "aliases": [
+        "PSR",
+        "Payment Services Regulation",
+        "PSD3 PSR",
+        "PSD3 package",
+        "payments regulation",
+        "revised payment services rules"
+      ]
+    },
+    "2023/0167(COD)": {
+      "title": "Directive as regards Union retail investor protection rules (Retail Investment Strategy)",
+      "lead_committee": "ECON",
+      "aliases": [
+        "Retail Investment Strategy",
+        "RIS",
+        "retail investor protection directive",
+        "retail investment package",
+        "RIS Directive",
+        "retail investor package"
+      ]
+    },
+    "2022/0406(COD)": {
+      "title": "Regulation amending the Prospectus Regulation and the Market Abuse Regulation (Listing Act)",
+      "lead_committee": "ECON",
+      "aliases": [
+        "Listing Act",
+        "EU Listing Act",
+        "prospectus regulation revision",
+        "listing package",
+        "listing rules reform",
+        "SME listing act"
+      ]
+    },
+    "2023/0156(COD)": {
+      "title": "Regulation establishing the Union Customs Code and the EU Customs Authority (Customs Reform)",
+      "lead_committee": "IMCO",
+      "aliases": [
+        "Union Customs Code reform",
+        "UCC reform",
+        "EU Customs Reform",
+        "Customs Authority Regulation",
+        "customs modernisation",
+        "customs package"
+      ]
+    },
+    "2023/0323(COD)": {
+      "title": "Regulation on combating late payment in commercial transactions",
+      "lead_committee": "IMCO",
+      "aliases": [
+        "Late Payments Regulation",
+        "late payment regulation",
+        "B2B late payments",
+        "commercial payments regulation",
+        "SME late payment rules"
+      ]
+    },
+    "2023/0109(COD)": {
+      "title": "Regulation laying down measures to strengthen solidarity and capacities in the Union to detect, prepare for and respond to cyber threats (Cyber Solidarity Act)",
+      "lead_committee": "ITRE",
+      "aliases": [
+        "Cyber Solidarity Act",
+        "cyber solidarity regulation",
+        "EU cyber reserve",
+        "cybersecurity shield",
+        "cyber threats regulation"
+      ]
+    },
+    "2023/0108(COD)": {
+      "title": "Targeted amendment to the Cybersecurity Act on managed security services",
+      "lead_committee": "ITRE",
+      "aliases": [
+        "Cybersecurity Act amendment",
+        "Cybersecurity Act revision",
+        "managed security services amendment",
+        "targeted cybersecurity act amendment"
+      ]
+    },
+    "2024/0061(COD)": {
+      "title": "Regulation establishing the European Defence Industry Programme (EDIP)",
+      "lead_committee": "ITRE-SEDE",
+      "aliases": [
+        "EDIP",
+        "European Defence Industry Programme",
+        "Defence Industry Programme",
+        "EU defence programme",
+        "defence industrial strategy",
+        "EDIS EDIP"
+      ]
+    },
+    "2022/0269(COD)": {
+      "title": "Regulation on prohibiting products made with forced labour on the Union market",
+      "lead_committee": "IMCO-INTA",
+      "aliases": [
+        "Forced Labour Regulation",
+        "Forced Labour Ban",
+        "EU forced labour ban",
+        "forced labour products regulation",
+        "Uyghur ban"
+      ]
+    },
+    "2021/0366(COD)": {
+      "title": "Regulation on the making available on the Union market of certain commodities and products associated with deforestation and forest degradation (EUDR)",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "EUDR",
+        "Deforestation Regulation",
+        "EU Deforestation Regulation",
+        "deforestation-free products regulation",
+        "anti-deforestation law",
+        "timber regulation successor"
+      ]
+    },
+    "2023/0131(COD)": {
+      "title": "Regulation establishing Union procedures for the authorisation and supervision of medicinal products (Pharma Package Regulation)",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "Pharmaceutical Regulation",
+        "Pharma Package regulation",
+        "general pharmaceutical regulation",
+        "EMA regulation revision",
+        "medicines regulation",
+        "pharma reform regulation"
+      ]
+    },
+    "2023/0132(COD)": {
+      "title": "Directive on the Union code relating to medicinal products for human use (Pharma Package Directive)",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "Pharmaceutical Directive",
+        "Pharma Package directive",
+        "general pharmaceutical directive",
+        "medicines directive revision",
+        "pharma reform directive",
+        "EU pharma legislation revision"
+      ]
+    },
+    "2022/0216(COD)": {
+      "title": "Regulation on standards of quality and safety for substances of human origin intended for human application (SoHO Regulation)",
+      "lead_committee": "ENVI",
+      "aliases": [
+        "SoHO Regulation",
+        "Substances of Human Origin Regulation",
+        "blood tissues cells regulation",
+        "BTC regulation"
+      ]
+    },
+    "2020/0279(COD)": {
+      "title": "Regulation on asylum and migration management (AMMR)",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "AMMR",
+        "Asylum and Migration Management Regulation",
+        "Dublin successor",
+        "Dublin IV",
+        "new Dublin",
+        "solidarity mechanism regulation"
+      ]
+    },
+    "2016/0224(COD)": {
+      "title": "Regulation establishing a common procedure for international protection in the Union (Asylum Procedure Regulation)",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "Asylum Procedure Regulation",
+        "common asylum procedure",
+        "border procedure regulation",
+        "asylum procedures regulation"
+      ]
+    },
+    "2016/0132(COD)": {
+      "title": "Regulation on the establishment of Eurodac for the comparison of biometric data (Eurodac Regulation recast)",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "Eurodac Regulation",
+        "Eurodac recast",
+        "Eurodac",
+        "migrant fingerprint database",
+        "Eurodac reform"
+      ]
+    },
+    "2020/0278(COD)": {
+      "title": "Regulation introducing a screening of third-country nationals at the external borders (Screening Regulation)",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "Screening Regulation",
+        "border screening regulation",
+        "pre-entry screening",
+        "third-country national screening",
+        "migration screening",
+        "Pact screening file"
+      ]
+    },
+    "2024/0318(COD)": {
+      "title": "Regulation on temporary derogations for the progressive start of operations of the Entry/Exit System",
+      "lead_committee": "LIBE",
+      "aliases": [
+        "EES progressive start",
+        "Entry Exit System start regulation",
+        "EES phased rollout",
+        "EES derogation",
+        "EES launch regulation"
+      ]
+    },
+    "2023/0085(COD)": {
+      "title": "Directive on substantiation and communication of explicit environmental claims (Green Claims Directive)",
+      "lead_committee": "ENVI-IMCO",
+      "aliases": [
+        "Green Claims Directive",
+        "GCD",
+        "greenwashing directive",
+        "green claims",
+        "environmental claims directive",
+        "anti-greenwashing rules"
+      ]
+    },
+    "2021/0420(COD)": {
+      "title": "Regulation on Union guidelines for the development of the trans-European transport network (TEN-T)",
+      "lead_committee": "TRAN",
+      "aliases": [
+        "TEN-T Regulation",
+        "TEN-T revision",
+        "trans-European transport network",
+        "TEN-T guidelines",
+        "TEN-T reform"
+      ]
+    },
+    "2025/0044(COD)": {
+      "title": "Omnibus I simplification package amending CSRD and CSDDD",
+      "lead_committee": "JURI",
+      "aliases": [
+        "Omnibus I",
+        "Sustainability Omnibus",
+        "CSRD CSDDD omnibus",
+        "first omnibus",
+        "simplification omnibus",
+        "omnibus sustainability package",
+        "stop the clock"
+      ]
+    },
+    "2025/0360(COD)": {
+      "title": "Digital Omnibus Regulation amending GDPR, ePrivacy Directive, NIS2 and Data Act",
+      "lead_committee": "LIBE-ITRE",
+      "aliases": [
+        "Digital Omnibus",
+        "Digital Omnibus Regulation",
+        "GDPR simplification",
+        "digital simplification omnibus"
+      ]
+    },
+    "2025/0241(COD)": {
+      "title": "Regulation establishing the Common Agricultural Policy for 2028-2034",
+      "lead_committee": "AGRI",
+      "aliases": [
+        "CAP 2028-2034",
+        "CAP post-2027",
+        "new CAP",
+        "CAP reform",
+        "next CAP",
+        "CAP regulation 2028"
+      ]
+    },
+    "2025/0555(COD)": {
+      "title": "Regulation establishing the European Competitiveness Fund",
+      "lead_committee": "ITRE",
+      "aliases": [
+        "European Competitiveness Fund",
+        "ECF",
+        "Competitiveness Fund",
+        "EU Competitiveness Fund",
+        "Competitiveness Compass fund",
+        "competitiveness fund regulation"
+      ]
+    }
+  }
+}

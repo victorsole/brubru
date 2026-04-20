@@ -5319,8 +5319,18 @@ class ContextBuilder:
     def _detect_committee_transcript_intent(self, query: str) -> Optional[Dict[str, Any]]:
         """Detect queries about EP committee meeting transcripts.
 
-        Returns dict with committee_code (required), plus optional procedure_ref
-        and date_hint; or None if no committee-transcript intent detected.
+        Real users don't type "2025/0429(COD)". They say "ePrivacy Directive
+        extension" or "the CSAM file". Accept three entry paths:
+
+          1. Explicit committee code (LIBE, ENVI, ...) + transcript phrase or
+             verbatim word ("said", "discussed").
+          2. Procedure alias match (resolved via procedure_alias_resolver) +
+             transcript phrase or verbatim word — committee code inferred from
+             the alias, so the user doesn't need to know it.
+          3. Formal procedure_ref like "2025/0429(COD)" anywhere in the query.
+
+        Returns a dict with at least one of {committee_code, procedure_ref}
+        populated, plus optional topic_keywords and date_hint; or None.
         """
         if not query:
             return None
@@ -5345,23 +5355,67 @@ class ContextBuilder:
                 break
 
         # Verbatim/speech words suggest transcript retrieval even without an explicit "committee" phrase
-        verbatim_words = ("said", "discussed", "heard", "debated", "exchange of views",
-                          "asked", "told", "replied", "stated", "argued", "spoke")
+        verbatim_words = (
+            "said", "say", "says", "saying",
+            "discussed", "discuss", "discussing", "discussion",
+            "heard", "hear", "hearing",
+            "debated", "debate", "debating",
+            "exchange of views", "exchange",
+            "asked", "ask", "asking",
+            "told", "tell", "tells", "telling",
+            "replied", "reply", "replies",
+            "stated", "state", "stating",
+            "argued", "argue", "arguing",
+            "spoke", "speak", "speaking",
+            "mentioned", "mention", "mentions",
+            "addressed", "address", "addresses",
+            "talked", "talk", "talks", "talking",
+            "raised", "raise", "raises",
+        )
         has_verbatim = any(w in q for w in verbatim_words)
+        has_transcript_signal = phrase_match or has_verbatim
 
-        if not code_match:
-            return None
-        if not (phrase_match or has_verbatim):
-            return None
+        # Resolve a procedure alias (e.g. "ePrivacy Directive extension" -> "2025/0429(COD)")
+        proc_from_alias: Optional[Dict[str, Any]] = None
+        try:
+            from services.parsers.procedure_alias_resolver import (
+                resolve_procedure, extract_topic_keywords,
+            )
+            proc_from_alias = resolve_procedure(query)
+            topic_keywords = extract_topic_keywords(query)
+        except Exception as exc:
+            logger.debug("[committee-transcript] alias resolver unavailable: %s", exc)
+            topic_keywords = []
 
+        # Extract formal procedure_ref directly from query (belt-and-braces)
         proc_match = _re.search(r"\d{4}/\d{4}\s*\([A-Z]{2,4}\)", query)
         procedure_ref = proc_match.group(0) if proc_match else None
+        if not procedure_ref and proc_from_alias:
+            procedure_ref = proc_from_alias.get("procedure_ref")
+
+        # If alias gave us a lead committee and the user didn't name one, use it
+        if not code_match and proc_from_alias:
+            lead = (proc_from_alias.get("lead_committee") or "").split("-")[0].strip()
+            if lead in self.EP_COMMITTEE_CODES:
+                code_match = lead
+
+        # Decision: we need either (committee code + transcript signal) OR
+        # (procedure alias/ref + transcript signal) to fire this path.
+        has_procedure_signal = bool(procedure_ref) or bool(proc_from_alias)
+
+        if not has_transcript_signal:
+            return None
+        if not code_match and not has_procedure_signal:
+            return None
 
         date_hint = self._detect_plenary_debate_intent(query)  # reuse parser
 
         return {
-            "committee_code": code_match,
-            "procedure_ref": procedure_ref,
+            "committee_code": code_match,         # may be None if procedure-only query
+            "procedure_ref": procedure_ref,       # formal COD/NLE/CNS ref if any
+            "procedure_title": (proc_from_alias or {}).get("title"),
+            "matched_alias": (proc_from_alias or {}).get("matched_alias"),
+            "topic_keywords": topic_keywords,
             "date_hint": date_hint,
         }
 
@@ -5371,13 +5425,21 @@ class ContextBuilder:
     ) -> Optional[str]:
         """Fetch a committee-meeting transcript for the chatbot context.
 
-        Strategy:
-          1. Look for a COMPLETED row matching the committee (+ optional filters)
-          2. If none, look for a PENDING row with a video_url and transcribe on
-             demand (first user to ask pays the Whisper wait; cached thereafter)
-          3. If still nothing, return None
+        Retrieval cascade (each step narrows less than the previous one):
+          A. COMPLETED + committee_code + procedure_ref + date window
+          B. COMPLETED + committee_code + procedure_ref
+          C. COMPLETED + committee_code + keyword ILIKE on title / agenda / text
+          D. COMPLETED + keyword ILIKE on title / agenda / text (no committee filter)
+          E. COMPLETED + committee_code (most recent)
+          F. PENDING with video_url — transcribe on demand
+
+        Committee code may be None (procedure-only queries). Procedure_ref may
+        also be None (pure keyword queries).
         """
-        if not intent or not intent.get("committee_code"):
+        if not intent:
+            return None
+        if not intent.get("committee_code") and not intent.get("procedure_ref") \
+                and not intent.get("topic_keywords"):
             return None
 
         try:
@@ -5388,63 +5450,117 @@ class ContextBuilder:
             from services.committee_transcription_service import (
                 get_committee_transcription_service,
             )
+            from sqlalchemy import or_, cast, String as SAString
         except Exception as exc:
             logger.warning("[committee-transcript] Import failed: %s", exc)
             return None
 
-        code = intent["committee_code"]
+        code = intent.get("committee_code")
         proc_ref = intent.get("procedure_ref")
         date_hint = intent.get("date_hint")
+        topic_keywords = intent.get("topic_keywords") or []
+
+        # Only use higher-signal keywords (drop aliases that are already baked
+        # into proc_ref) to avoid polluting ILIKE searches with common words.
+        signal_keywords = [k for k in topic_keywords if len(k) >= 5][:5]
 
         session = SessionLocal()
         try:
-            # ── Step 1: Look for a matching COMPLETED transcript ────────
-            def _apply_filters(query):
-                # Match committee code (may be joint: "IMCO-JURI-PETI")
-                query = query.filter(
-                    CommitteeMeetingTranscript.committee_code.ilike(f"%{code}%")
-                )
-                if proc_ref:
-                    query = query.filter(
-                        CommitteeMeetingTranscript.related_procedure_refs.any(proc_ref)
-                    )
-                if date_hint:
-                    from datetime import datetime as _dt, timedelta
-                    window_start = _dt.combine(date_hint - timedelta(days=7), _dt.min.time())
-                    window_end = _dt.combine(date_hint + timedelta(days=7), _dt.max.time())
-                    query = query.filter(
-                        CommitteeMeetingTranscript.meeting_date >= window_start,
-                        CommitteeMeetingTranscript.meeting_date <= window_end,
+            Completed = CommitteeMeetingTranscript.status == TranscriptStatusEnum.COMPLETED
+
+            def _committee_filter(query):
+                if code:
+                    return query.filter(
+                        CommitteeMeetingTranscript.committee_code.ilike(f"%{code}%")
                     )
                 return query
 
-            completed_q = _apply_filters(session.query(CommitteeMeetingTranscript).filter(
-                CommitteeMeetingTranscript.status == TranscriptStatusEnum.COMPLETED,
-            ))
-            transcript = completed_q.order_by(
-                CommitteeMeetingTranscript.meeting_date.desc()
-            ).first()
+            def _date_filter(query):
+                if not date_hint:
+                    return query
+                from datetime import datetime as _dt, timedelta
+                window_start = _dt.combine(date_hint - timedelta(days=7), _dt.min.time())
+                window_end = _dt.combine(date_hint + timedelta(days=7), _dt.max.time())
+                return query.filter(
+                    CommitteeMeetingTranscript.meeting_date >= window_start,
+                    CommitteeMeetingTranscript.meeting_date <= window_end,
+                )
 
-            if not transcript:
-                # Relax: any completed for committee (ignore proc_ref / date_hint)
-                transcript = session.query(CommitteeMeetingTranscript).filter(
-                    CommitteeMeetingTranscript.committee_code.ilike(f"%{code}%"),
-                    CommitteeMeetingTranscript.status == TranscriptStatusEnum.COMPLETED,
-                ).order_by(
-                    CommitteeMeetingTranscript.meeting_date.desc()
-                ).first()
+            def _keyword_filter(query, keywords):
+                if not keywords:
+                    return query
+                clauses = []
+                for kw in keywords:
+                    like = f"%{kw}%"
+                    clauses.append(CommitteeMeetingTranscript.title.ilike(like))
+                    clauses.append(CommitteeMeetingTranscript.transcript_text.ilike(like))
+                    clauses.append(
+                        cast(CommitteeMeetingTranscript.agenda_items, SAString).ilike(like)
+                    )
+                return query.filter(or_(*clauses))
+
+            base = session.query(CommitteeMeetingTranscript).filter(Completed)
+
+            # A. code + proc_ref + date
+            transcript = None
+            if code and proc_ref:
+                q = _committee_filter(base)
+                q = q.filter(CommitteeMeetingTranscript.related_procedure_refs.any(proc_ref))
+                q = _date_filter(q)
+                transcript = q.order_by(CommitteeMeetingTranscript.meeting_date.desc()).first()
+
+                # B. code + proc_ref (drop date)
+                if not transcript:
+                    q = _committee_filter(base).filter(
+                        CommitteeMeetingTranscript.related_procedure_refs.any(proc_ref)
+                    )
+                    transcript = q.order_by(CommitteeMeetingTranscript.meeting_date.desc()).first()
+
+            # Procedure-only query (no committee): try proc_ref across all committees
+            if not transcript and proc_ref and not code:
+                q = base.filter(
+                    CommitteeMeetingTranscript.related_procedure_refs.any(proc_ref)
+                )
+                transcript = q.order_by(CommitteeMeetingTranscript.meeting_date.desc()).first()
+
+            # C. code + keyword
+            if not transcript and code and signal_keywords:
+                q = _keyword_filter(_committee_filter(base), signal_keywords)
+                transcript = q.order_by(CommitteeMeetingTranscript.meeting_date.desc()).first()
+
+            # D. keyword only (no committee filter)
+            if not transcript and signal_keywords:
+                q = _keyword_filter(base, signal_keywords)
+                transcript = q.order_by(CommitteeMeetingTranscript.meeting_date.desc()).first()
+
+            # E. code only, most recent
+            if not transcript and code:
+                q = _committee_filter(base)
+                transcript = q.order_by(CommitteeMeetingTranscript.meeting_date.desc()).first()
 
             # ── Step 2: On-demand transcription ─────────────────────────
             if not transcript:
-                pending = _apply_filters(session.query(CommitteeMeetingTranscript).filter(
+                pending_base = session.query(CommitteeMeetingTranscript).filter(
                     CommitteeMeetingTranscript.status.in_([
                         TranscriptStatusEnum.PENDING,
                         TranscriptStatusEnum.FAILED,
                     ]),
                     CommitteeMeetingTranscript.video_url.isnot(None),
-                )).order_by(
+                )
+                pq = _committee_filter(pending_base)
+                if proc_ref:
+                    pq = pq.filter(
+                        CommitteeMeetingTranscript.related_procedure_refs.any(proc_ref)
+                    )
+                pending = pq.order_by(
                     CommitteeMeetingTranscript.meeting_date.desc()
                 ).first()
+                if not pending and signal_keywords:
+                    pending = _keyword_filter(
+                        _committee_filter(pending_base), signal_keywords
+                    ).order_by(
+                        CommitteeMeetingTranscript.meeting_date.desc()
+                    ).first()
 
                 if not pending:
                     logger.info(
