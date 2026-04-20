@@ -183,6 +183,23 @@ def detect_language(text: str) -> str:
         elif es_hits > ca_hits:
             scores["ES"] += 0.05
 
+    # IT vs ES disambiguation: many shared words (la, una, del, con).
+    # Look for tokens that exist in one language but not the other.
+    if scores.get("IT", 0) > 0 and scores.get("ES", 0) > 0:
+        italian_unique = ["il", "lo", "gli", "dei", "degli", "delle", "della",
+                          "nella", "nel", "sulla", "sono", "sono", "anche",
+                          "questa", "questo", "quelli", "tutti", "tutto", "pero",
+                          "perche", "molto", "cosi", "ogni", "sempre"]
+        spanish_unique_vs_it = ["el", "los", "las", "por", "esta", "para",
+                                "tambien", "porque", "mucho", "asi", "cada",
+                                "siempre", "todos", "todas"]
+        it_hits = sum(1 for w in words if w in italian_unique)
+        es_hits = sum(1 for w in words if w in spanish_unique_vs_it)
+        if it_hits > es_hits:
+            scores["IT"] += 0.05
+        elif es_hits > it_hits:
+            scores["ES"] += 0.05
+
     best = max(scores, key=scores.get)
     return best if scores[best] > 0.02 else "EN"
 
@@ -220,8 +237,11 @@ def check_includes_doc_refs_from_guide(response: str, ga: dict) -> CriterionResu
 
     found = []
     for ref in guide_refs:
-        # Normalise whitespace for matching
-        normalised = re.sub(r"\s+", r"\\s*", re.escape(ref))
+        # Build a whitespace-tolerant regex. Python 3.12's re.escape escapes
+        # spaces with a literal backslash, so we can't just re.sub whitespace
+        # after escaping -- we have to split first.
+        parts = re.split(r"\s+", ref)
+        normalised = r"\s*".join(re.escape(p) for p in parts)
         if re.search(normalised, response, re.IGNORECASE):
             found.append(ref)
 
@@ -236,8 +256,20 @@ def check_includes_doc_refs_from_guide(response: str, ga: dict) -> CriterionResu
     )
 
 
-def check_british_english(response: str, _ga: dict) -> CriterionResult:
-    """Response should use British English spellings."""
+def check_british_english(response: str, ga: dict) -> CriterionResult:
+    """
+    Response should use British English spellings.
+
+    Gate: only apply this check to English-language queries. Words like
+    "favor" are legitimate Spanish / Portuguese vocabulary and must not be
+    flagged as American English when the response is in ES/CA/IT/FR/NL.
+    """
+    if ga.get("language", "EN") != "EN":
+        return CriterionResult(
+            "british_english", True,
+            f"Skipped (response language: {ga.get('language')})",
+        )
+
     american_found = []
     words = re.findall(r"\b\w+\b", response.lower())
     for american, british in AMERICAN_SPELLINGS.items():
