@@ -56,11 +56,22 @@ def recital_article_map(
 ) -> RecitalArticleMapResponse:
     from services.parsers.recital_article_store import get_or_compute_map
 
-    mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
+    try:
+        mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
+    except Exception as exc:  # noqa: BLE001
+        logger.exception(f"recital-article-map computation failed for {celex}: {exc}")
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "error": f"Unable to compute recital-article map for CELEX {celex}",
+                "reason_code": "computation_unavailable",
+                "source": "brubru-recital-linker",
+            },
+        )
     if mapping is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail={"error": "not_found", "detail": f"CELEX {celex} not available", "resource": "law", "id": celex},
+            detail={"error": f"CELEX {celex} not available", "reason_code": "not_found", "resource": "law", "id": celex},
         )
     return RecitalArticleMapResponse(celex=celex, map=mapping)
 
@@ -89,7 +100,14 @@ def defined_terms(
 
 @router.post(
     "/resolve-references",
-    summary="Resolve inline EU legal citations in plain text",
+    summary="Resolve inline EU legal citations in plain text (READ-ONLY)",
+    description=(
+        "**This endpoint is idempotent and does NOT modify any server-side data.** "
+        "It is POST because the request body carries free text that may exceed URL length limits. "
+        "Given plain text containing EU legal citations (e.g. 'Article 7 of Regulation (EU) 2024/1234'), "
+        "returns a structured list of matched CELEX identifiers with EUR-Lex URLs. "
+        "Pass annotate_html=true to receive an HTML-annotated version instead."
+    ),
 )
 def resolve_references(
     payload: ResolveRefsRequest,
@@ -107,7 +125,13 @@ def resolve_references(
 
 @router.post(
     "/resolve-aliases",
-    summary="Resolve human names (GDPR, DSA, AI Act, ...) to CELEX identifiers",
+    summary="Resolve human names (GDPR, DSA, AI Act, ...) to CELEX (READ-ONLY)",
+    description=(
+        "**This endpoint is idempotent and does NOT modify any server-side data.** "
+        "POST because the body carries free text. Scans the input for 680+ known human names "
+        "of EU laws (GDPR, DSA, AI Act, CBAM, Solvency II, CRR, ...) and returns a list of "
+        "matches with their CELEX identifiers and canonical titles."
+    ),
 )
 def resolve_aliases(
     payload: ResolveAliasesRequest,

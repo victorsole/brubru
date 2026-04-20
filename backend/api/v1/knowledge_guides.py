@@ -66,7 +66,7 @@ async def list_knowledge_guides(
     request: Request,
     q: Optional[str] = Query(None, description="Keyword query (e.g. 'GDPR', 'AI Act', 'CBAM')"),
     detail_level: str = Query("Summary", description="Summary returns preview; Full returns full markdown"),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[KnowledgeGuideItem]:

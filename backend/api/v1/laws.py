@@ -58,17 +58,35 @@ async def list_laws(
     celex: Optional[str] = Query(None, description="Exact CELEX filter"),
     doc_type: Optional[str] = Query(None, description="Document type (Regulation, Directive, Decision, ...)"),
     policy_area: Optional[str] = Query(None, description="Policy area slug"),
-    published_from: Optional[date] = Query(None, description="Publication date from (YYYY-MM-DD)"),
-    published_to: Optional[date] = Query(None, description="Publication date to (YYYY-MM-DD)"),
-    published_end: Optional[date] = Query(None, description="Alias of published_to (GovClipping-compatible)"),
-    limit: int = Query(20, ge=1, le=100),
+    published_from: Optional[date] = Query(None, description="Lower bound — laws with adoption date >= value (YYYY-MM-DD)"),
+    published_to: Optional[date] = Query(None, description="Upper bound — laws with adoption date <= value (YYYY-MM-DD). Preferred name."),
+    published_end: Optional[date] = Query(None, description="Alias of published_to for GovClipping compatibility. If both are sent with different values, returns 422."),
+    limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[LawItem]:
-    # Alias: published_end -> published_to
+    # published_end is an alias of published_to (GovClipping-compatible).
+    # If both are passed with different values, reject with 422.
+    if published_end and published_to and published_end != published_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Conflicting upper-bound parameters: published_to={published_to} and published_end={published_end}. They are aliases of the same bound; pass only one, or pass matching values.",
+                "reason_code": "conflicting_params",
+            },
+        )
     if published_end and not published_to:
         published_to = published_end
+
+    if published_from and published_to and published_from > published_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Invalid date range: published_from={published_from} is after published_to={published_to}.",
+                "reason_code": "invalid_date_range",
+            },
+        )
 
     query = db.query(EULaw)
 

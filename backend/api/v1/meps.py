@@ -1,13 +1,13 @@
 """
-/api/v1/meps — Members of the European Parliament (live from EP Open Data API).
+/api/v1/meps — Members of the European Parliament (live from EP Open Data REST API v2).
 
-No MEPs table in Brubru's DB today; this endpoint proxies the EP REST API v2
-with a 6-hour in-memory cache so partners don't need their own EP integration.
+Proxies https://data.europarl.europa.eu/api/v2/meps with 6h in-memory cache.
 """
 
 import time
 from typing import Any, Dict, List, Optional
 
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
@@ -17,6 +17,8 @@ from ._envelope import PaginatedResponse, build_envelope
 
 router = APIRouter(prefix="/meps", tags=["v1-meps"])
 
+EP_API_BASE = "https://data.europarl.europa.eu/api/v2"
+EP_PROFILE_URL = "https://www.europarl.europa.eu/meps/en/{id}"
 _CACHE: Dict[str, tuple] = {}  # key -> (timestamp, data)
 _TTL = 6 * 60 * 60  # 6h
 
@@ -42,34 +44,72 @@ def _put(key: str, value):
 
 
 async def _fetch_list(country=None, group=None, name=None, limit=100, offset=0) -> List[Dict[str, Any]]:
-    from services.api_clients.european_parliament_client import EuropeanParliamentClient
-
     key = f"list:{country}:{group}:{name}:{limit}:{offset}"
     cached = _cached(key)
     if cached is not None:
         return cached
 
-    client = EuropeanParliamentClient()
+    params: Dict[str, Any] = {"limit": min(limit, 500), "offset": offset, "format": "application/ld+json"}
+    if country:
+        params["country-of-representation"] = country.upper()
+    if group:
+        params["political-group"] = group
+
+    headers = {"User-Agent": "Brubru/1.0", "Accept": "application/ld+json"}
     try:
-        rows = await client.get_mep_list(country=country, group=group, name=name, limit=limit, offset=offset)
-    finally:
-        try:
-            await client.close()
-        except Exception:
-            pass
+        async with httpx.AsyncClient(timeout=15.0) as hc:
+            r = await hc.get(f"{EP_API_BASE}/meps", params=params, headers=headers)
+            r.raise_for_status()
+            data = r.json()
+    except Exception:
+        return []
+
+    rows = data.get("data") if isinstance(data, dict) else []
+    if not isinstance(rows, list):
+        rows = []
     _put(key, rows)
     return rows
 
 
+async def _fetch_profile(mep_id: str) -> Optional[Dict[str, Any]]:
+    key = f"profile:{mep_id}"
+    cached = _cached(key)
+    if cached is not None:
+        return cached
+    headers = {"User-Agent": "Brubru/1.0", "Accept": "application/ld+json"}
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as hc:
+            r = await hc.get(f"{EP_API_BASE}/meps/{mep_id}", params={"format": "application/ld+json"}, headers=headers)
+            if r.status_code == 404:
+                return None
+            r.raise_for_status()
+            data = r.json()
+    except Exception:
+        return None
+    rows = data.get("data") if isinstance(data, dict) else []
+    if not rows:
+        return None
+    _put(key, rows[0])
+    return rows[0]
+
+
+def _identifier(raw: Dict[str, Any]) -> str:
+    return str(raw.get("identifier") or raw.get("id", "").split("/")[-1] or "")
+
+
 def _normalise(raw: Dict[str, Any]) -> MEPItem:
-    # EP REST API v2 returns a nested dict; fields vary over time.
+    ident = _identifier(raw)
+    profile_url = EP_PROFILE_URL.format(id=ident) if ident else None
+    # The /meps list endpoint returns identifier + label + givenName + familyName (no country/group).
+    # /meps/{id} returns the full profile including hasMembership array — we surface membership count but not resolve orgs here (too slow for list view).
+    full_name = raw.get("label") or f"{raw.get('givenName', '')} {raw.get('familyName', '')}".strip() or raw.get("fullName")
     return MEPItem(
-        id=str(raw.get("id") or raw.get("identifier") or raw.get("mep_id") or ""),
-        full_name=raw.get("fullName") or raw.get("full_name") or raw.get("name"),
-        country=raw.get("country") or raw.get("countryOfRepresentation") or raw.get("country_code"),
-        group=raw.get("politicalGroup") or raw.get("political_group") or raw.get("group"),
-        role=raw.get("role"),
-        profile_url=raw.get("profileUrl") or raw.get("profile_url") or raw.get("europarl_url"),
+        id=ident or None,
+        full_name=full_name or None,
+        country=raw.get("country_of_representation") or raw.get("countryOfRepresentation") or None,
+        group=raw.get("political_group") or raw.get("politicalGroup") or None,
+        role=raw.get("role") or None,
+        profile_url=profile_url,
     )
 
 
@@ -87,7 +127,7 @@ async def list_meps(
     country: Optional[str] = Query(None, min_length=2, max_length=2),
     group: Optional[str] = Query(None),
     name: Optional[str] = Query(None),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
 ) -> PaginatedResponse[MEPItem]:
@@ -106,7 +146,11 @@ async def list_meps(
         )
 
     data = [_normalise(r) for r in (raw or [])]
-    total = len(data) + offset  # EP API doesn't return total; best-effort
+    # EP Open Data doesn't return a total count; we expose what we fetched and flag
+    # coverage_complete=False so clients know pagination is unbounded from our side.
+    total = offset + len(data)
+    if len(data) == limit:
+        total += 1  # hint there might be more
     return build_envelope(data, total=total, page=page, limit=limit, coverage_complete=False)
 
 
@@ -119,27 +163,10 @@ async def get_mep(
     mep_id: str,
     user: User = Depends(api_user_with_rate_limit),
 ) -> MEPItem:
-    key = f"profile:{mep_id}"
-    cached = _cached(key)
-    if cached is not None:
-        return _normalise(cached)
-
-    from services.api_clients.european_parliament_client import EuropeanParliamentClient
-    client = EuropeanParliamentClient()
-    try:
-        profile = await client.get_mep_profile(mep_id)
-    except Exception:
-        profile = None
-    finally:
-        try:
-            await client.close()
-        except Exception:
-            pass
-
+    profile = await _fetch_profile(mep_id)
     if not profile:
         raise HTTPException(
             status_code=404,
-            detail={"error": "MEP not found", "reason_code": "not_found", "resource": "mep", "id": mep_id},
+            detail={"error": f"MEP {mep_id} not found on EP Open Data", "reason_code": "not_found", "resource": "mep", "id": mep_id},
         )
-    _put(key, profile)
     return _normalise(profile)

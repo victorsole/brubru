@@ -255,10 +255,26 @@ class CommissionerAgendaClient:
                     label = meta_li.find(class_="ecl-content-block__secondary-meta-label")
                     if label:
                         location = re.sub(r"\s+", " ", label.get_text(" ", strip=True)).strip()
-            link = node.find("a", href=True)
-            href = link["href"] if link else ""
-            if href and href.startswith("/"):
-                href = "https://commission.europa.eu" + href
+            # Prefer the title's own link; fall back to any href in the article;
+            # reject anchors and javascript: links.
+            def _clean(h: str) -> str:
+                if not h or h.startswith(("#", "javascript:", "mailto:")):
+                    return ""
+                if h.startswith("/"):
+                    return "https://commission.europa.eu" + h
+                return h
+
+            href = ""
+            if title_el:
+                a_in_title = title_el.find("a", href=True) or title_el.find_parent("a", href=True)
+                if a_in_title:
+                    href = _clean(a_in_title.get("href", ""))
+            if not href:
+                for a in node.find_all("a", href=True):
+                    candidate = _clean(a.get("href", ""))
+                    if candidate:
+                        href = candidate
+                        break
             out.append(AgendaItem(date=d, title=title, location=location, detail_url=href))
         return out
 

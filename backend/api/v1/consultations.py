@@ -7,6 +7,7 @@ PaginatedResponse envelope.
 """
 
 import logging
+import re
 from datetime import datetime
 from typing import Optional
 
@@ -24,6 +25,28 @@ from ._envelope import PaginatedResponse, build_envelope
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/consultations", tags=["v1-consultations"])
+
+
+def _normalise_date(raw) -> Optional[str]:
+    """Normalise upstream HYS date to ISO-8601 'YYYY-MM-DDTHH:MM:SSZ'.
+
+    Upstream ranges from 'YYYY/MM/DD HH:MM:SS' to 'YYYY-MM-DD' to datetime objects.
+    """
+    if raw is None:
+        return None
+    if isinstance(raw, datetime):
+        return raw.strftime("%Y-%m-%dT%H:%M:%SZ")
+    s = str(raw).strip()
+    if not s:
+        return None
+    s = s.replace("/", "-")
+    m = re.match(r"(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}:\d{2})", s)
+    if m:
+        return f"{m.group(1)}T{m.group(2)}Z"
+    m = re.match(r"(\d{4}-\d{2}-\d{2})$", s)
+    if m:
+        return f"{m.group(1)}T00:00:00Z"
+    return s
 
 
 class FeedbackItem(BaseModel):
@@ -74,7 +97,7 @@ class FeedbackEnvelope(PaginatedResponse[FeedbackItem]):
 async def get_feedback_by_initiative(
     request: Request,
     initiative_id: int,
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     country: Optional[str] = Query(None, min_length=3, max_length=3),
     user_type: Optional[str] = Query(None),
@@ -118,7 +141,7 @@ async def get_feedback_by_initiative(
     data = [
         FeedbackItem(
             feedback_id=str(it.feedback_id) if it.feedback_id is not None else None,
-            date=str(it.date) if it.date is not None else None,
+            date=_normalise_date(it.date),
             user_type=it.user_type,
             organisation=it.organisation,
             author_name=it.author_name,

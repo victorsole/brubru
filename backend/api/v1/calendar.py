@@ -58,7 +58,7 @@ async def list_calendar_events(
     commission_dg: Optional[str] = Query(None, description="e.g. AGRI, CNECT, ENV"),
     date_from: Optional[date] = Query(None),
     date_to: Optional[date] = Query(None),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),

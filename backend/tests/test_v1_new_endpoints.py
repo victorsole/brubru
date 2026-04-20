@@ -106,21 +106,22 @@ def test_calendar_events(auth_headers):
 
 def test_meps_list_returns_envelope_or_upstream_error(auth_headers):
     with patch(
-        "services.api_clients.european_parliament_client.EuropeanParliamentClient.get_mep_list",
+        "api.v1.meps._fetch_list",
         new=AsyncMock(return_value=[
-            {"id": "197668", "fullName": "Manfred Weber", "country": "DE", "politicalGroup": "EPP"},
+            {"identifier": "197668", "label": "Manfred WEBER", "givenName": "Manfred", "familyName": "Weber"},
         ]),
     ):
         r = TestClient(app).get("/api/v1/meps?limit=1", headers=auth_headers)
     assert r.status_code == 200
     body = r.json()
     assert body["returned"] == 1
-    assert body["data"][0]["full_name"] == "Manfred Weber"
+    assert body["data"][0]["full_name"] == "Manfred WEBER"
+    assert body["data"][0]["profile_url"] == "https://www.europarl.europa.eu/meps/en/197668"
 
 
 def test_mep_profile_not_found(auth_headers):
     with patch(
-        "services.api_clients.european_parliament_client.EuropeanParliamentClient.get_mep_profile",
+        "api.v1.meps._fetch_profile",
         new=AsyncMock(return_value=None),
     ):
         r = TestClient(app).get("/api/v1/meps/999999999", headers=auth_headers)
