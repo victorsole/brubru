@@ -1167,6 +1167,30 @@ class ContextBuilder:
         plenary_debate_transcript = post_map['debate']
         eu_institutional_results = post_map['eu_search']
         consultation_feedback_block = post_map.get('consultation_feedback')
+
+        # --- Tier-3 backstop (v1 API coverage reinforcer) -------------------
+        # Principle: every chat query must be covered. If Tier 1 (DB smart
+        # filters) and Tier 2 (on-demand fetchers) left key surfaces empty,
+        # re-query with the simpler broad-filter logic that powers the public
+        # v1 API endpoints. Ensures a chat query never fails because a smart
+        # filter was too aggressive. See memory/feedback_three_tier_coverage.md.
+        try:
+            fallback_events = await self._fetch_api_fallback_calendar(
+                query=user_message,
+                entities=entities,
+                existing_events=eu_calendar_events,
+            )
+            if fallback_events:
+                existing_ids = {e.get('title') for e in eu_calendar_events or []}
+                merged = list(eu_calendar_events or [])
+                for ev in fallback_events:
+                    if ev.get('title') not in existing_ids:
+                        merged.append(ev)
+                eu_calendar_events = merged
+                logger.info("[tier3] Calendar backstop added %d events (total now %d)", len(fallback_events), len(eu_calendar_events))
+        except Exception as e:
+            logger.warning("[tier3] Calendar backstop failed: %s", e)
+
         commissioner_agenda_block = post_map.get('commissioner_agenda')
         position_block = post_map.get('position')
         committee_transcript_block = post_map.get('committee_transcript')
@@ -4191,6 +4215,82 @@ class ContextBuilder:
 
         except Exception as e:
             logger.error(f"Failed to fetch commission documents: {str(e)}")
+            return []
+
+    async def _fetch_api_fallback_calendar(
+        self,
+        query: str,
+        entities: "ExtractedEntities",
+        existing_events: Optional[List[Dict[str, Any]]],
+    ) -> List[Dict[str, Any]]:
+        """Tier-3 v1 API backstop for calendar events.
+
+        Fires when Tier 1 (smart context_builder filters) returned few/no events
+        but the query clearly asks about events/meetings/dates. Uses the broad
+        filter logic that backs `/api/v1/calendar/events`: date range + exclude
+        recess only -- no NLP, no policy-area, no committee constraints that
+        might over-filter.
+
+        Only triggers when a minimum "calendar intent" signal is present, so
+        we don't flood unrelated queries with calendar data.
+        """
+        # Don't run if we already have decent coverage from Tier 1
+        if existing_events and len(existing_events) >= 3:
+            return []
+
+        q_lower = (query or "").lower()
+        # Broad calendar-intent check (distinct from the narrower keyword sets
+        # used by _fetch_eu_calendar_events itself)
+        calendar_signal_words = (
+            "event", "events", "meeting", "meetings", "agenda", "schedule",
+            "calendar", "this week", "next week", "happening", "what's on",
+            "upcoming", "planned", "plenary", "plenaries", "council", "councils",
+            "college", "committee", "summit",
+        )
+        has_calendar_intent = any(w in q_lower for w in calendar_signal_words)
+        if not has_calendar_intent:
+            return []
+
+        from models.eu_calendar import EUCalendarEvent, EventTypeEnum
+        from sqlalchemy import and_
+        from datetime import date
+
+        try:
+            db = SessionLocal()
+            today = date.today()
+            # Broad window that mirrors /api/v1/calendar/events default surface
+            date_start = today - timedelta(days=3)
+            date_end = today + timedelta(days=21)
+
+            # Explicit date detection already handled upstream; keep filters minimal
+            q = db.query(EUCalendarEvent).filter(and_(
+                EUCalendarEvent.start_date >= date_start,
+                EUCalendarEvent.start_date <= date_end,
+                EUCalendarEvent.event_type != EventTypeEnum.RECESS.value,
+            )).order_by(EUCalendarEvent.start_date.asc()).limit(8)
+
+            rows = q.all()
+            events: List[Dict[str, Any]] = []
+            for event in rows:
+                events.append({
+                    'source_type': 'eu_calendar_api_fallback',
+                    'institution': event.institution if isinstance(event.institution, str) else event.institution.value,
+                    'title': event.title,
+                    'description': event.description,
+                    'start_date': event.start_date.isoformat() if event.start_date else None,
+                    'end_date': event.end_date.isoformat() if event.end_date else None,
+                    'event_type': event.event_type if isinstance(event.event_type, str) else event.event_type.value,
+                    'source_url': event.source_url,
+                    'agenda_url': event.agenda_url,
+                    'procedure_refs': event.procedure_refs or [],
+                    'ep_committee_code': event.ep_committee_code,
+                    'council_configuration': event.council_configuration,
+                    'policy_areas': list(event.policy_areas or []),
+                })
+            db.close()
+            return events
+        except Exception as exc:
+            logger.warning("[tier3] Calendar fallback DB query failed: %s", exc)
             return []
 
     async def _fetch_eu_calendar_events(

@@ -624,6 +624,18 @@ Citation Tracker --> Response with sources
 - `conversation_memory` -- Multi-turn context management
 - `conversation_quality` -- Response quality scoring
 
+### 8.3.1 Three-Tier Coverage Architecture (20 April 2026)
+
+Every Brubru Chat query flows through three retrieval tiers before the AI composes an answer. The v1 API is not only an external partner surface -- it is the internal reinforcer that guarantees coverage.
+
+**Tier 1 -- DB + smart filters.** `context_builder.py` queries PostgreSQL directly: 28,505 EU laws, 419 institutional calendar events, 157 knowledge guides, 1,296 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes. Fast, curated, no external dependency.
+
+**Tier 2 -- on-demand live fetchers.** Six specialised clients fire when intent detectors match: Doceo (plenary debates via CRE XML), EP Multimedia (committee meeting transcripts via on-demand Whisper transcription), Have Your Say API (stakeholder feedback on Commission consultations), commission.europa.eu scrape (commissioner agendas), EUR-Lex Cellar (CELEX document fetch), Tavily (25 trusted `.europa.eu` + policy-media domains).
+
+**Tier 3 -- v1 API backstop.** When Tiers 1 and 2 leave a surface thin, the same service functions that power `/api/v1/calendar/events` and sibling endpoints re-query with broader filters. The simpler filter logic often catches what Tier 1's smart filters miss. Real example: the 17 April 2026 query audit found an "energy events next week?" deflection where Tier-1 filters dropped valid events; the Tier-3 backstop added eight more. **Promise: no query fails for lack of trying.**
+
+Phase B-minimal shipped 20 April 2026 (calendar backstop). Assessment checkpoint 4 May 2026 -- if the backstop materially improves answer quality, expand to guides, laws, EPRS, procedures, committees, and MEPs.
+
 ### 8.4 Database Schema
 
 30+ models across the full advocacy workflow:

@@ -2870,7 +2870,7 @@
       </a>
       <div class="header__badge">
         <span class="mdi mdi-calendar"></span>
-        March 2026
+        April 2026
       </div>
     </div>
   </header>
@@ -2889,6 +2889,9 @@
     </button>
     <button class="nav-tab" onclick="showSection('product', this)">
       <span class="mdi mdi-cube-outline"></span> Product
+    </button>
+    <button class="nav-tab" onclick="showSection('clients', this)">
+      <span class="mdi mdi-account-group-outline"></span> Client profiles
     </button>
     <button class="nav-tab" onclick="showSection('market', this)">
       <span class="mdi mdi-earth"></span> Market
@@ -3003,8 +3006,8 @@
               <tr><td>My EU Bubble</td><td>Manual monitoring</td><td><span class="badge badge--green">80%</span></td></tr>
               <tr><td>Document Generator</td><td>Manual drafting</td><td><span class="badge badge--green">90%</span></td></tr>
               <tr><td>EU Law Comply</td><td>Compliance consultants</td><td><span class="badge badge--green">85%</span></td></tr>
-              <tr><td>Brubru Chat</td><td>Senior consultant Q&A</td><td><span class="badge badge--green">70%</span></td></tr>
-              <tr><td>Tenderator / GrantBru</td><td>Manual funding search</td><td><span class="badge badge--green">75%</span></td></tr>
+              <tr><td>Chat</td><td>Senior consultant Q&A</td><td><span class="badge badge--green">70%</span></td></tr>
+              <tr><td>Tenderator</td><td>Manual funding search</td><td><span class="badge badge--green">75%</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -3079,8 +3082,8 @@
       <!-- Product selector cards -->
       <div class="product-cards reveal">
         <div class="product-card product-card--active" onclick="showProduct('chat', this)">
-          <img src="brubru_icon_colours.png" alt="Brubru Chat" class="product-card__logo">
-          <div class="product-card__name">Brubru Chat</div>
+          <img src="brubru_icon_colours.png" alt="Chat" class="product-card__logo">
+          <div class="product-card__name">Chat</div>
           <div class="product-card__tier-label" style="color: var(--color-accent-green);">All tiers</div>
         </div>
         <div class="product-card" onclick="showProduct('bubble', this)">
@@ -3099,13 +3102,18 @@
           <div class="product-card__tier-label" style="color: var(--color-accent-gold);">Starter+</div>
 </div>
         <div class="product-card" onclick="showProduct('tenderator', this)">
-          <img src="brubru_tenderator.png" alt="Tenderator / GrantBru" class="product-card__logo">
-          <div class="product-card__name">Tenderator / GrantBru</div>
+          <img src="brubru_tenderator.png" alt="Tenderator" class="product-card__logo">
+          <div class="product-card__name">Tenderator</div>
+          <div class="product-card__tier-label" style="color: var(--color-primary);">Professional</div>
+        </div>
+        <div class="product-card" onclick="showProduct('api', this)">
+          <img src="brubru_mainlogo.png" alt="Brubru API" class="product-card__logo">
+          <div class="product-card__name">Brubru API</div>
           <div class="product-card__tier-label" style="color: var(--color-primary);">Professional</div>
         </div>
       </div>
 
-      <!-- ===== DETAIL: Brubru Chat ===== -->
+      <!-- ===== DETAIL: Chat ===== -->
       <div id="detail-chat" class="product-detail product-detail--active">
         <div class="product-detail__bg" style="background-image: url('brubru_icon_colours.png');"></div>
         <div class="product-detail__header">
@@ -3113,7 +3121,7 @@
             <span class="mdi mdi-chat-processing-outline"></span>
           </div>
           <div>
-            <div class="product-detail__title">Brubru Chat</div>
+            <div class="product-detail__title">Chat</div>
             <div class="product-detail__tagline">Context-aware AI policy advisor with deep EU institutional knowledge</div>
           </div>
         </div>
@@ -3191,22 +3199,24 @@
             <div class="product-detail__stat-label">EP committees tracked</div>
           </div>
           <div class="product-detail__stat">
-            <div class="product-detail__stat-value">9</div>
-            <div class="product-detail__stat-label">Dashboard tabs</div>
+            <div class="product-detail__stat-value">10</div>
+            <div class="product-detail__stat-label">Dashboard sub-tabs</div>
           </div>
         </div>
         <div class="product-detail__body">
           <div>
-            <div class="product-detail__section-title">Dashboard tabs</div>
+            <div class="product-detail__section-title">Dashboard sub-tabs (canonical order)</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-rss"></span> <strong>News Feed</strong>: 33+ RSS feeds from EP, Commission, Council, EPRS, OEIL, and general EU news</li>
-              <li><span class="mdi mdi-train"></span> <strong>Legislative Train</strong>: 490+ priority files from the Commission's work programme with status tracking</li>
-              <li><span class="mdi mdi-file-document-outline"></span> <strong>My Files</strong>: tracked legislation, saved entries, bookmarked collections</li>
-              <li><span class="mdi mdi-calendar-month"></span> <strong>My EU Calendar</strong>: aggregated institutional calendar from 6 data sources with 274+ events. EP plenary sessions, committee weeks, 26 EP committee draft agendas, Council/European Council meetings, Commission College weekly meetings enriched with published OJ agenda metadata, ECB Governing Council. Month/week/day views with institution, committee, and policy area filters. "My EU Today" daily digest with AI summary (Professional tier)</li>
-              <li><span class="mdi mdi-briefcase-outline"></span> <strong>Committee Work</strong>: work-in-progress procedures across 26 EP committees (COD, APP, CNS, NLE, INI)</li>
-              <li><span class="mdi mdi-file-cabinet"></span> <strong>Commission Documents</strong>: COM proposals, SWD staff working documents, SEC, OJ from EC Register with live RegDoc API enrichment</li>
-              <li><span class="mdi mdi-comment-question-outline"></span> <strong>EC Consultations</strong>: open, closed, and outcome-published consultations from "Have Your Say" portal</li>
-              <li><span class="mdi mdi-chart-bar"></span> <strong>Analytics</strong>: reading patterns, topic interests, engagement metrics</li>
+              <li><span class="mdi mdi-view-dashboard-outline"></span> <strong>Dashboard</strong>: personalised home screen. Tracked files status, upcoming EU events, predictions ready to read, the week's most important signals at a glance.</li>
+              <li><span class="mdi mdi-file-document-outline"></span> <strong>My Files</strong>: tracked legislation and bookmarked collections. Status changes, amendments, committee activity and deadlines aggregated per file.</li>
+              <li><span class="mdi mdi-compass-outline"></span> <strong>Position Analysis</strong>: stakeholder and institutional positions on every tracked file -- rapporteur stance, shadow positions, Council member state leanings, industry vs NGO alignment.</li>
+              <li><span class="mdi mdi-calendar-month"></span> <strong>My EU Calendar</strong>: aggregated institutional calendar from 6 data sources with 274+ events. EP plenary, committee weeks, Council configurations, Commission College, ECB Governing Council. Google Calendar sync.</li>
+              <li><span class="mdi mdi-chart-bell-curve"></span> <strong>Predictions</strong>: AI outcome and timeline forecasts per file. EP group voting patterns, Council QMV with blocking minority detection.</li>
+              <li><span class="mdi mdi-comment-question-outline"></span> <strong>EC Public Consultations</strong>: open, closed, and outcome-published consultations from the Have Your Say portal. AI-drafted response suggestions on Professional.</li>
+              <li><span class="mdi mdi-file-document-edit-outline"></span> <strong>Documents</strong>: AI-drafted position papers, MEP briefings, talking points, consultation responses -- sourced with CELEX references, ready to edit.</li>
+              <li><span class="mdi mdi-file-edit-outline"></span> <strong>Amendments</strong>: saved amendment drafts from Amendator plus a library of real EP committee amendments per procedure, with word-level diff and alignment scoring.</li>
+              <li><span class="mdi mdi-train"></span> <strong>Legislative Tracker</strong>: 490+ priority files from the Commission's work programme and the Legislative Train, enriched with OEIL status, EPRS briefings, and committee work.</li>
+              <li><span class="mdi mdi-chart-bar"></span> <strong>Analytics</strong>: reading patterns, topic interests, engagement metrics across tracked files. Where attention is paying off.</li>
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Core capabilities</div>
             <ul class="product-detail__list">
@@ -3433,7 +3443,7 @@
             <span class="mdi mdi-piggy-bank-outline"></span>
           </div>
           <div>
-            <div class="product-detail__title">Tenderator / GrantBru</div>
+            <div class="product-detail__title">Tenderator</div>
             <div class="product-detail__tagline">AI-powered EU funding and procurement intelligence (Professional tier exclusive)</div>
           </div>
         </div>
@@ -3493,10 +3503,89 @@
             </ul>
             <div class="product-detail__section-title" style="margin-top: 1rem;">Why Professional tier exclusive</div>
             <ul class="product-detail__list">
-              <li><span class="mdi mdi-information-outline"></span> Tenderator / GrantBru is the primary upgrade trigger from Advocate to Professional</li>
+              <li><span class="mdi mdi-information-outline"></span> Tenderator is the primary upgrade trigger from Advocate to Professional</li>
               <li><span class="mdi mdi-information-outline"></span> Higher compute cost per user (ML inference + SPARQL queries)</li>
               <li><span class="mdi mdi-information-outline"></span> Enterprise-grade feature justifying EUR 99/month Professional positioning</li>
             </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Brubru API ===== -->
+      <div id="detail-api" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_mainlogo.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(6,147,227,0.1); color: var(--color-primary);">
+            <span class="mdi mdi-api"></span>
+          </div>
+          <div>
+            <div class="product-detail__title">Brubru API</div>
+            <div class="product-detail__tagline">Vertical EU data as a service: the same sources, intelligence layer and MCP that power Brubru, exposed as a REST API for partners and internal systems</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">519</div>
+            <div class="product-detail__stat-label">europa.eu sources inventoried</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">28,505</div>
+            <div class="product-detail__stat-label">EU laws indexed (CELEX + TSVECTOR)</div>
+          </div>
+          <div class="product-detail__stat">
+            <div class="product-detail__stat-value">v1</div>
+            <div class="product-detail__stat-label">Stable, versioned endpoints</div>
+          </div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Why a Brubru API</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-lightbulb-outline"></span> Brubru's real moat is not the chat surface. It is the <strong>vertical ingestion + intelligence layer</strong> on top of europa.eu: 519 sources, law aliases, recital linker, cross-reference resolver, definition extractor, predictions engine.</li>
+              <li><span class="mdi mdi-share-variant-outline"></span> Partners (RegTech tools, consultancies, media outlets, public sector platforms, national registers) need the data, not necessarily our UI.</li>
+              <li><span class="mdi mdi-rocket-launch-outline"></span> Selling the data surface lets others build on Brubru while we keep improving the core. Brubru app is the first user of its own API.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Canonical response envelope</div>
+            <p style="font-size: 0.9rem; color: var(--color-gray-600); margin-bottom: 0.5rem;">Every v1 endpoint returns the same envelope: <code>{ success, data, meta, aggregates, links }</code>. Dataset-specific aggregates (e.g. <code>by_country</code>, <code>by_user_type</code>) sit alongside <code>data</code> so partners get analytics and detail in one call.</p>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Core endpoints</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-database-search-outline"></span> <code>GET /api/v1/legislation</code>: full-text and CELEX search across 28,505 EU laws.</li>
+              <li><span class="mdi mdi-file-tree-outline"></span> <code>GET /api/v1/procedures</code>: OEIL procedure status, rapporteurs, committees, timeline.</li>
+              <li><span class="mdi mdi-book-open-variant"></span> <code>GET /api/v1/publications</code>: EPRS, JRC, Eurostat, DG publications with filters.</li>
+              <li><span class="mdi mdi-comment-question-outline"></span> <code>GET /api/v1/consultations/by-initiative/{id}/feedback</code>: live stakeholder feedback from Have Your Say with country and user-type aggregates.</li>
+              <li><span class="mdi mdi-calendar-month"></span> <code>GET /api/v1/calendar</code>: aggregated institutional calendar (EP committees, College, Council, ECB).</li>
+              <li><span class="mdi mdi-link-variant"></span> <code>POST /api/v1/legislation/annotate-text</code>: apply cross-refs, definitions, law aliases to any EU legal text.</li>
+              <li><span class="mdi mdi-chart-bell-curve"></span> <code>GET /api/v1/predictions/{procedure}</code>: timeline and outcome forecasts on any procedure.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">MCP server access</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-robot-happy-outline"></span> Brubru's public <strong>Model Context Protocol (MCP)</strong> server exposes the same data to Claude, ChatGPT, Mistral, and any MCP-capable assistant.</li>
+              <li><span class="mdi mdi-toolbox-outline"></span> Tools: <code>search_eu_legislation</code>, <code>search_knowledge_guides</code>, <code>get_procedure_status</code>, <code>search_eprs</code>, <code>get_calendar_events</code>, <code>ask_brubru</code>.</li>
+              <li><span class="mdi mdi-account-tie-outline"></span> Lets consultancies, in-house teams, and public bodies plug Brubru into their own AI workflows without rebuilding the ingestion stack.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Tiered ingestion</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-layers-triple-outline"></span> <strong>Tier 1</strong>: official APIs (OEIL, RegDoc, CELEX, SPARQL).</li>
+              <li><span class="mdi mdi-layers-triple-outline"></span> <strong>Tier 2</strong>: RSS feeds (EPRS, DGs, Council, EP).</li>
+              <li><span class="mdi mdi-layers-triple-outline"></span> <strong>Tier 3</strong>: generic HTML scrapers with Scrapling fingerprints.</li>
+              <li><span class="mdi mdi-layers-triple-outline"></span> <strong>Tier 4</strong>: Tavily live search fallback for long-tail queries.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">First customers</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>GovClipping</strong> (Spain, RegTech) -- first external paid customer at EUR 99/month.</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Brubru itself</strong> -- the app is built on top of its own API.</li>
+              <li><span class="mdi mdi-target-account"></span> Pipeline: consultancies, in-house PA teams, national registers, EU-specialised media.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Pricing</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-circle-outline" style="color: var(--color-gray-500);"></span> <strong>Free:</strong> read-only access to selected endpoints with generous rate limits, for evaluation and open-source projects.</li>
+              <li><span class="mdi mdi-circle" style="color: var(--color-primary);"></span> <strong>Professional:</strong> EUR 99/month, full v1 API + MCP, fair-use rate limits.</li>
+              <li><span class="mdi mdi-circle" style="color: var(--color-accent-gold);"></span> <strong>Enterprise:</strong> custom volumes, SLAs, dedicated ingestion tiers, white-label. Contact sales.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Where to try it</div>
+            <p style="font-size: 0.9rem; color: var(--color-gray-600);">Live docs at <a href="https://brubru.beresol.eu/api" target="_blank" style="color: var(--color-primary); font-weight: 600;">brubru.beresol.eu/api</a>. Public MCP server details and sample Claude Desktop config in the same page.</p>
           </div>
         </div>
       </div>
@@ -3556,7 +3645,7 @@
                 <div class="fb-channel fb-channel--chat">
                   <div class="fb-channel__header">
                     <span class="mdi mdi-chat-processing-outline"></span>
-                    <strong>Brubru Chat</strong>
+                    <strong>Chat</strong>
                   </div>
                   <div class="fb-channel__body">
                     Three-button inline feedback on every AI response:<br>
@@ -3703,6 +3792,141 @@
 
         </div>
       </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 2b: CLIENT PROFILES (ICP)
+         ======================================== -->
+    <section id="clients" class="section">
+      <div class="section-header reveal">
+        <div class="section-header__title">Ideal customer profiles</div>
+        <div class="section-header__subtitle">Six personas across the EU public affairs value chain, mapped to every Brubru product and pricing tier.</div>
+      </div>
+
+      <div class="grid-2 reveal">
+        <div class="card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;"><span class="mdi mdi-briefcase-outline" style="color: var(--color-primary);"></span> Public affairs consultant</h3>
+          <div style="font-size: 0.85rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.75rem;">Consultancy</div>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem;"><strong>Segment:</strong> senior associates and directors in Brussels consultancies (Kreab, Rud Pedersen, Hume Brophy, Cambre, FGS, Interel, Fleishman, APCO, Burson, etc.) managing portfolios of 5 to 15 client briefs simultaneously.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Primary pain:</strong> 30 min per file to locate CELEX, rapporteur, committee, Council working party. Multiply by the client portfolio.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Target plan:</strong> Professional (EUR 99/mo) per consultant. Team licensing with discounts.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Addressable count:</strong> ~8,000 practising consultants in Brussels bubble (Transparency Register + national lobby registers).</p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;"><span class="mdi mdi-office-building-outline" style="color: var(--color-accent-purple);"></span> Corporate in-house PA</h3>
+          <div style="font-size: 0.85rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.75rem;">Multinational / mid-cap / scale-up</div>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem;"><strong>Segment:</strong> EU affairs managers inside multinationals and mid-caps (pharma, tech, automotive, finance, retail, energy). Teams of 1 to 3 people covering the full regulatory footprint.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Primary pain:</strong> too many files, too few hands. Risk of missing a delegated act, a trilogue, a compliance deadline. No time to draft position papers from scratch.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Target plan:</strong> Professional (EUR 99/mo) + EU Law Comply add-on. Potential enterprise expansion.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Addressable count:</strong> ~5,000 companies with EU affairs functions (FT500, EuroStoxx, EU Transparency Register category II).</p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;"><span class="mdi mdi-handshake-outline" style="color: var(--color-accent-green);"></span> Trade association policy lead</h3>
+          <div style="font-size: 0.85rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.75rem;">Trade federation</div>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem;"><strong>Segment:</strong> policy directors and officers at European trade associations (DIGITALEUROPE, EFPIA, CEFIC, ACEA, EBF, FoodDrinkEurope, SME United, ETUC, EuroCommerce, etc.).</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Primary pain:</strong> members expect clear guidance on ~30 dossiers; staff spend more time compiling monitoring than doing advocacy.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Target plan:</strong> Professional + document generator for member-facing reports. Bulk licensing for sector federations.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Addressable count:</strong> ~1,200 EU-level trade associations (EU Transparency Register + FENCA + direct listings).</p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;"><span class="mdi mdi-flag-variant-outline" style="color: var(--color-accent-gold);"></span> EU official</h3>
+          <div style="font-size: 0.85rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.75rem;">EU institutions (seller + co-legislator side)</div>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem;"><strong>Segment:</strong> Commission staff across DGs (GROW, CNECT, SANTE, ENV, COMP, FISMA, TRADE, JUST, HOME, CLIMA, etc.), services, cabinets; Council of the EU (General Secretariat, working party chairs, national attachés in Permanent Representations); EP secretariat and committee secretariats; EU agencies (EFSA, EMA, ENISA, ACER, EEA, FRA, EUROPOL, etc.); EESC; Committee of the Regions; ECB; EIB; Court of Auditors.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Primary pain:</strong> internal systems slow and siloed by institution; tracking stakeholder positions and the trilogue triangle (HYS feedback, lobby meetings, EP amendments, Council working party signals) across files is manual; political outcomes are guesswork.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Target plan:</strong> institutional procurement (DIGIT framework contract, Council procurement, agency contracts) + individual subscriptions. "Soft" tool adoption similar to DeepL / Linguee.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Addressable count:</strong> ~32,000 Commission staff + ~3,500 Council GS + ~7,000 EP staff + ~12,000 agency staff + ~3,000 EESC/CoR/ECB/EIB policy staff = ~57,500 total. Realistic ICP: ~15,000 in policy-facing roles across all institutions.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;"><span class="mdi mdi-account-tie-outline" style="color: var(--color-accent-red);"></span> EP parliamentary assistant / political group staff</h3>
+          <div style="font-size: 0.85rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.75rem;">Institution (buyer side)</div>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem;"><strong>Segment:</strong> accredited parliamentary assistants (APAs), local assistants, and advisers in the seven political groups (EPP, S&amp;D, Renew, Greens/EFA, PfE, ECR, The Left). EP Secretariat and committee secretariats.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Primary pain:</strong> 10 committees, dozens of files, hundreds of amendments per plenary. Producing a vote list by Monday morning for a Tuesday mini-plenary is a recurring nightmare.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Target plan:</strong> EP plan (EUR 49/mo) for APAs. Group-level Professional bulk licensing for political group secretariats.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Addressable count:</strong> ~1,800 APAs + ~1,400 group staff + ~500 committee secretariat staff = ~3,700 addressable seats. Secondary: 720 MEPs themselves.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;"><span class="mdi mdi-earth" style="color: var(--color-accent-green);"></span> NGO and civil society advocate</h3>
+          <div style="font-size: 0.85rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 0.75rem;">Public-interest advocacy</div>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem;"><strong>Segment:</strong> policy and campaign staff at European NGOs and civil-society networks (Transparency International EU, BEUC, EPHA, EDRi, BirdLife Europe, WWF EPO, Climate Action Network Europe, European Youth Forum, Eurochild, Caritas Europa, Amnesty International EU, Oxfam EU, Social Platform, ENAR, etc.) plus public-interest arms of foundations and think tanks.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Primary pain:</strong> small teams outnumbered by industry lobbyists; limited budgets; need to move as fast as commercial advocates without the same research resources; consultation responses and amendment drafting eat into campaigning time.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Target plan:</strong> Advocate (EUR 59/mo) for single analysts; Professional for larger networks. Non-profit discount programme. Potential Commission DG JUST / DG EMPL co-funded enterprise seats via CERV and ESF+ operating grants.</p>
+          <p style="color: var(--color-text-secondary); font-size: 0.95rem; margin-top: 0.5rem;"><strong>Addressable count:</strong> ~2,000 EU-level NGOs and civil-society networks (EU Transparency Register category III) + ~400 foundations and think tanks with a Brussels presence = ~2,400 addressable organisations.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem;" class="reveal">Use-case matrix: persona x product</h3>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" class="reveal">Every one of Brubru's five products has a concrete, role-specific use case for every persona.</p>
+
+      <table class="data-table reveal" style="margin-top: 1rem;">
+        <thead>
+          <tr>
+            <th>Profile</th>
+            <th>Chat</th>
+            <th>Amendator</th>
+            <th>My EU Bubble</th>
+            <th>EU Law Comply</th>
+            <th>Tenderator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>PA consultant</strong></td>
+            <td>Brief a client in 10 min (CELEX, rapporteur, trilogue status, stakeholder positions).</td>
+            <td>Draft amendments for clients who need to influence a specific article or recital.</td>
+            <td>Track all client files, predictions + alerts on status change.</td>
+            <td>Offer compliance audits as a new service line for corporate clients.</td>
+            <td>Flag EU procurement for client subsidiaries and partner firms.</td>
+          </tr>
+          <tr>
+            <td><strong>Corporate in-house</strong></td>
+            <td>Generate monthly regulatory briefing for C-suite in one command.</td>
+            <td>Draft the company's amendment proposals before sending to the rapporteur or TA.</td>
+            <td>Monitor regulatory footprint; Position Analysis shows Council leanings on your files.</td>
+            <td>Run gap analysis on internal AI, DORA, CSRD, CBAM policies.</td>
+            <td>Spot EU grant and procurement opportunities (Horizon, Digital Europe, IPCEI).</td>
+          </tr>
+          <tr>
+            <td><strong>Trade association</strong></td>
+            <td>Answer member questions on call with sourced detail in seconds.</td>
+            <td>Produce the association's amendment package for distribution to friendly MEPs.</td>
+            <td>Members' weekly monitoring digest with predictions and EP group voting signals.</td>
+            <td>Sector impact assessments on upcoming legislation.</td>
+            <td>Surface EU call-for-proposals that members can jointly bid on.</td>
+          </tr>
+          <tr>
+            <td><strong>EU official</strong></td>
+            <td>Check stakeholder positioning: HYS feedback, EP amendments, Council WP signals, Permanent Representations.</td>
+            <td>Study amendment patterns on your proposal to anticipate trilogue bargaining zones.</td>
+            <td>Track sister files across DGs, Council configurations, EP committees, agencies, ECB.</td>
+            <td>Benchmark a draft against the existing acquis before inter-service consultation or Council working party.</td>
+            <td>Track firms bidding for Commission, Council and agency framework contracts in your policy area.</td>
+          </tr>
+          <tr>
+            <td><strong>EP assistant / group staff</strong></td>
+            <td>Produce weekly vote lists in minutes with group voting recommendations.</td>
+            <td>Draft the MEP's amendments faster in valid Akoma Ntoso XML.</td>
+            <td>Predictions show likely trilogue outcomes and Council majorities; shadow rapporteur positions.</td>
+            <td>Evaluate constituent compliance questions against current EU law quickly.</td>
+            <td>EU funding opportunities for constituency projects (cities, regions, SMEs).</td>
+          </tr>
+          <tr>
+            <td><strong>NGO / civil society</strong></td>
+            <td>Answer coalition partner questions on call. Produce rapid-response analysis when a proposal drops, in 6 languages.</td>
+            <td>Draft amendments to counter industry positions, ready to hand to friendly MEPs. Track where commercial lobbyists have already moved on the text.</td>
+            <td>Monitor the Council where public scrutiny is weakest. EP vote predictions to prioritise advocacy resources.</td>
+            <td>Check member compliance with EU obligations (transparency register, financial disclosure, anti-discrimination rules).</td>
+            <td>Surface EU operating grants (CERV, LIFE, Erasmus+, Justice programme, ESF+).</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem;" class="reveal">Client pitch deck</h3>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" class="reveal">The condensed, client-facing version of this business plan is at <a href="brubru_client_pitch.html" style="color: var(--color-primary); font-weight: 600;">brubru_client_pitch.html</a>. Use it in prospect meetings, consultancy pitches, and institutional demos. Multilingual (EN, FR, NL, ES, CA, IT).</p>
     </section>
 
     <!-- ========================================
@@ -4386,7 +4610,7 @@
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> My EU Bubble (limited)</li>
             <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> EU Law Comply</li>
             <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Predictions</li>
-            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator / GrantBru</li>
+            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator</li>
           </ul>
         </div>
 
@@ -4400,12 +4624,12 @@
           </div>
           <div class="pricing-card__margin">EUR 396/year | Margin: EUR 31/user (79%)</div>
           <ul class="pricing-card__features">
-            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Brubru Chat + My EU Bubble</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Chat + My EU Bubble</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Unlimited amendments</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> All export formats</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Predictions (10/month)</li>
             <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> EU Law Comply</li>
-            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator / GrantBru</li>
+            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator</li>
           </ul>
         </div>
 
@@ -4424,7 +4648,7 @@
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Document Generator</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Advanced multi-provider AI</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Predictions (10/month)</li>
-            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator / GrantBru</li>
+            <li class="pricing-card__feature pricing-card__feature--disabled"><span class="mdi mdi-close"></span> Tenderator</li>
           </ul>
         </div>
 
@@ -4440,7 +4664,7 @@
           <ul class="pricing-card__features">
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Everything in Advocate</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Unlimited predictions + Council QMV</li>
-            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Tenderator / GrantBru (full)</li>
+            <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Tenderator (full)</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> EU Law Comply (full)</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Team seats, SLA</li>
             <li class="pricing-card__feature"><span class="mdi mdi-check"></span> Priority support</li>
@@ -4743,6 +4967,30 @@
           <div class="source-chip"><span class="mdi mdi-help-circle-outline"></span> AssistEU</div>
           <div class="source-chip"><span class="mdi mdi-format-text"></span> EU Style Guide</div>
           <div class="source-chip"><span class="mdi mdi-open-in-new"></span> Data Europa</div>
+        </div>
+      </div>
+
+      <!-- ===== THREE-TIER COVERAGE ARCHITECTURE (20 April 2026) ===== -->
+      <div class="card reveal" style="overflow: visible; margin-top: 1.5rem;">
+        <div class="card__title"><span class="mdi mdi-layers-triple-outline"></span> Three-tier coverage architecture</div>
+        <p style="font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 0.5rem;">Every Brubru Chat query passes through three retrieval tiers before the AI composes an answer. The v1 API is not only an external partner surface: it is the internal reinforcer that guarantees coverage. <em>Promise: no query fails for lack of trying.</em></p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.25rem;">
+          <div style="border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent-blue); border-radius: var(--radius-lg); padding: 1rem;">
+            <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-blue); margin-bottom: 0.35rem;">Tier 1 &middot; DB + smart filters</div>
+            <div style="font-weight: 600; margin-bottom: 0.5rem;">Fast, curated, no external dependency</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Direct PostgreSQL queries across 28,505 EU laws, 419 institutional calendar events, 157 knowledge guides, 1,296 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes.</div>
+          </div>
+          <div style="border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent-purple); border-radius: var(--radius-lg); padding: 1rem;">
+            <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-purple); margin-bottom: 0.35rem;">Tier 2 &middot; On-demand live fetchers</div>
+            <div style="font-weight: 600; margin-bottom: 0.5rem;">Six specialised clients fire on intent</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">Doceo (plenary debates via CRE XML), EP Multimedia (committee transcripts via on-demand Whisper), Have Your Say API (stakeholder feedback), commission.europa.eu scrape (commissioner agendas), EUR-Lex Cellar (CELEX fetch), Tavily (25 trusted <code>.europa.eu</code> + policy-media domains).</div>
+          </div>
+          <div style="border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent-green); border-radius: var(--radius-lg); padding: 1rem;">
+            <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-accent-green); margin-bottom: 0.35rem;">Tier 3 &middot; v1 API backstop</div>
+            <div style="font-weight: 600; margin-bottom: 0.5rem;">Reinforcer when Tiers 1 and 2 are thin</div>
+            <div style="font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5;">When coverage is thin, the same service functions powering <code>/api/v1/calendar/events</code> and siblings re-query with broader filters. The simpler filter logic often catches what Tier 1's smart filters miss. Phase B-minimal shipped 20 April 2026 (calendar backstop); assessment checkpoint 4 May 2026.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -5610,7 +5858,7 @@
   <footer class="footer">
     <strong>Brubru Business Plan</strong> | <a href="https://beresol.eu" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.2);"><strong>Beresol BV</strong></a>
     <br>
-    <small>March 2026 | Brussels, Belgium | hello@beresol.eu</small>
+    <small>April 2026 | Brussels, Belgium | hello@beresol.eu</small>
   </footer>
 
   <script>

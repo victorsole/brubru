@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data architecture: what Brubru knows | Brubru</title>
+  <meta name="description" content="A human-readable guide to Brubru's data architecture: what EU institutional sources we scrape, what we store, how we process it, and how it powers the AI assistant.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+      overflow-x: hidden;
+    }
+
+    /* --- Animations --- */
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes fadeSlideRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes countPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes borderGlow {
+      0%, 100% { border-color: var(--color-border); box-shadow: none; }
+      50% { border-color: var(--color-blue); box-shadow: 0 0 20px rgba(6,147,227,0.15); }
+    }
+    @keyframes typewriter {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    @keyframes flowPulse {
+      0% { opacity: 0.4; transform: scaleX(0.3); }
+      50% { opacity: 1; transform: scaleX(1); }
+      100% { opacity: 0.4; transform: scaleX(0.3); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes rotateIcon {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes staggerFade {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.85);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Stagger children */
+    .stagger-children.visible > * {
+      animation: staggerFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .stagger-children.visible > *:nth-child(1) { animation-delay: 0s; }
+    .stagger-children.visible > *:nth-child(2) { animation-delay: 0.08s; }
+    .stagger-children.visible > *:nth-child(3) { animation-delay: 0.16s; }
+    .stagger-children.visible > *:nth-child(4) { animation-delay: 0.24s; }
+    .stagger-children.visible > *:nth-child(5) { animation-delay: 0.32s; }
+    .stagger-children.visible > *:nth-child(6) { animation-delay: 0.40s; }
+    .stagger-children.visible > *:nth-child(7) { animation-delay: 0.48s; }
+    .stagger-children.visible > *:nth-child(8) { animation-delay: 0.56s; }
+    .stagger-children.visible > *:nth-child(9) { animation-delay: 0.64s; }
+    .stagger-children.visible > *:nth-child(10) { animation-delay: 0.72s; }
+    .stagger-children.visible > *:nth-child(11) { animation-delay: 0.80s; }
+    .stagger-children.visible > *:nth-child(12) { animation-delay: 0.88s; }
+    .stagger-children.visible > *:nth-child(13) { animation-delay: 0.96s; }
+
+    /* --- Header --- */
+    .header {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: fadeSlideUp 0.6s ease both;
+    }
+    .header__logo { height: 40px; transition: transform 0.3s ease; }
+    .header__logo:hover { transform: rotate(-5deg) scale(1.1); }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    /* --- Hero --- */
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      animation: scaleIn 0.5s ease 0.2s both;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      animation: fadeSlideUp 0.7s ease 0.3s both;
+    }
+    .hero__title span {
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowShift 6s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+      animation: fadeSlideUp 0.7s ease 0.5s both;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      animation: fadeSlideUp 0.7s ease 0.7s both;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* --- Figures --- */
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    .figure-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+    .figure-card.visible {
+      animation: borderGlow 3s ease infinite;
+    }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+      transition: transform 0.3s ease;
+    }
+    .figure-card:hover .figure-card__number {
+      animation: countPulse 0.6s ease;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    /* --- TOC --- */
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toc__link:hover {
+      background: rgba(6,147,227,0.08);
+      color: var(--color-blue);
+      transform: translateX(6px);
+    }
+    .toc__link .mdi { color: var(--color-blue); font-size: 1.1rem; transition: transform 0.3s ease; }
+    .toc__link:hover .mdi { transform: rotate(15deg) scale(1.2); }
+
+    /* --- Sections --- */
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--color-border);
+    }
+    .section__icon {
+      width: 44px; height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: white;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .section__header:hover .section__icon {
+      transform: rotate(10deg) scale(1.1);
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__intro { color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    /* --- Tables --- */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+    .data-table th {
+      background: var(--color-bg-alt);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-secondary);
+      border-bottom: 2px solid var(--color-border);
+    }
+    .data-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: top;
+    }
+    .data-table tr {
+      transition: all 0.25s ease;
+    }
+    .data-table tr:hover {
+      background: var(--color-bg-alt);
+      transform: scale(1.005);
+    }
+    .data-table .count { font-weight: 700; color: var(--color-blue); }
+    .data-table .source-tag {
+      display: inline-block;
+      background: rgba(6,147,227,0.1);
+      color: var(--color-blue);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      margin: 0.1rem;
+      transition: transform 0.2s ease;
+    }
+    .data-table .source-tag:hover { transform: scale(1.1); }
+    .source-tag--green { background: rgba(5,150,105,0.1) !important; color: var(--color-green) !important; }
+    .source-tag--purple { background: rgba(155,81,224,0.1) !important; color: var(--color-purple) !important; }
+    .source-tag--amber { background: rgba(217,119,6,0.1) !important; color: var(--color-amber) !important; }
+
+    /* --- Flow diagram --- */
+    .flow-diagram {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    .flow-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .flow-box {
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 2px solid;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .flow-box:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .flow-box--blue { border-color: var(--color-blue); color: var(--color-blue); background: rgba(6,147,227,0.05); }
+    .flow-box--green { border-color: var(--color-green); color: var(--color-green); background: rgba(5,150,105,0.05); }
+    .flow-box--purple { border-color: var(--color-purple); color: var(--color-purple); background: rgba(155,81,224,0.05); }
+    .flow-box--amber { border-color: var(--color-amber); color: var(--color-amber); background: rgba(217,119,6,0.05); }
+    .flow-arrow {
+      font-size: 1.4rem;
+      color: var(--color-muted);
+      animation: flowPulse 2s ease infinite;
+    }
+    .flow-arrow:nth-child(2) { animation-delay: 0.3s; }
+    .flow-arrow:nth-child(4) { animation-delay: 0.6s; }
+    .flow-arrow:nth-child(6) { animation-delay: 0.9s; }
+
+    /* --- Subsections --- */
+    .subsection { margin: 2rem 0; }
+    .subsection__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .subsection__text { color: var(--color-secondary); margin-bottom: 1rem; }
+
+    /* --- Info cards --- */
+    .info-card {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+      transition: all 0.3s ease;
+    }
+    .info-card:hover {
+      border-color: var(--color-blue);
+      box-shadow: 0 4px 20px rgba(6,147,227,0.1);
+      transform: translateX(4px);
+    }
+    .info-card__title { font-weight: 700; margin-bottom: 0.25rem; }
+    .info-card__text { color: var(--color-secondary); font-size: 0.95rem; }
+
+    /* --- Live examples --- */
+    .example-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .example-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid;
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    .example-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    }
+    .example-card--blue { border-left-color: var(--color-blue); }
+    .example-card--green { border-left-color: var(--color-green); }
+    .example-card--purple { border-left-color: var(--color-purple); }
+    .example-card--amber { border-left-color: var(--color-amber); }
+    .example-card--red { border-left-color: var(--color-red); }
+    .example-card__tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+    .example-card--blue .example-card__tag { color: var(--color-blue); }
+    .example-card--green .example-card__tag { color: var(--color-green); }
+    .example-card--purple .example-card__tag { color: var(--color-purple); }
+    .example-card--amber .example-card__tag { color: var(--color-amber); }
+    .example-card--red .example-card__tag { color: var(--color-red); }
+    .example-card__title { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; text-decoration: none; color: inherit; }
+    a.example-card { text-decoration: none; color: inherit; cursor: pointer; }
+    a.example-card:hover { border-left-width: 6px; }
+    .example-card__meta { font-size: 0.85rem; color: var(--color-secondary); }
+    .example-card__celex {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 0.8rem;
+      background: var(--color-bg-alt);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      margin-top: 0.35rem;
+      color: var(--color-text);
+    }
+
+    /* --- Typing effect for query demo --- */
+    .query-demo {
+      background: #1a1a2e;
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      margin: 1.5rem 0;
+      font-family: monospace;
+      overflow: hidden;
+    }
+    .query-demo__prompt {
+      color: var(--color-green);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .query-demo__text {
+      color: #e0e0e0;
+      font-size: 0.95rem;
+      border-right: 2px solid var(--color-blue);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+    }
+    .query-demo__text.typing {
+      animation: typewriter 3s steps(60) 0.5s forwards, blink 0.8s step-end infinite;
+    }
+    .query-demo__response {
+      color: var(--color-muted);
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .query-demo__response.show { opacity: 1; }
+
+    /* --- Floating particles background --- */
+    .particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      opacity: 0.12;
+      animation: float 6s ease-in-out infinite;
+    }
+    .particle:nth-child(1) { background: var(--color-blue); top: 10%; left: 5%; animation-delay: 0s; animation-duration: 7s; }
+    .particle:nth-child(2) { background: var(--color-green); top: 20%; left: 85%; animation-delay: 1s; animation-duration: 5s; }
+    .particle:nth-child(3) { background: var(--color-purple); top: 45%; left: 15%; animation-delay: 2s; animation-duration: 8s; }
+    .particle:nth-child(4) { background: var(--color-amber); top: 60%; left: 90%; animation-delay: 0.5s; animation-duration: 6s; }
+    .particle:nth-child(5) { background: var(--color-red); top: 80%; left: 40%; animation-delay: 1.5s; animation-duration: 9s; }
+    .particle:nth-child(6) { background: var(--color-blue); top: 35%; left: 60%; animation-delay: 3s; animation-duration: 7s; width: 4px; height: 4px; }
+    .particle:nth-child(7) { background: var(--color-green); top: 70%; left: 25%; animation-delay: 2.5s; animation-duration: 6s; width: 8px; height: 8px; }
+    .particle:nth-child(8) { background: var(--color-purple); top: 15%; left: 50%; animation-delay: 4s; animation-duration: 8s; width: 5px; height: 5px; }
+
+    /* --- Footer --- */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--color-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--color-border);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; transition: color 0.2s; }
+    .footer a:hover { text-decoration: underline; color: var(--color-purple); }
+
+    /* --- Responsive --- */
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: 1fr; }
+      .example-grid { grid-template-columns: 1fr; }
+      .container { padding: 1rem; }
+      .flow-row { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating particles -->
+<div class="particles">
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+</div>
+
+<header class="header">
+  <a href="https://brubru.beresol.eu"><img src="../assets/carousel/brubru_mainlogo.png" alt="Brubru" class="header__logo"></a>
+  <div class="header__text">
+    <div class="header__title">Data architecture</div>
+    <div class="header__subtitle">What Brubru knows, where it comes from, and how it works</div>
+  </div>
+  <a href="https://brubru.beresol.eu/main" class="header__cta">Try Brubru</a>
+</header>
+
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero__tag">Technical overview</div>
+    <h1 class="hero__title">What <span>Brubru</span> knows</h1>
+    <p class="hero__subtitle">Brubru is an AI-powered EU policy assistant. This page explains, in plain language, what data we collect from EU institutions, how we store and process it, and how it powers the chatbot and tools.</p>
+    <div class="hero__meta">
+      <span><i class="mdi mdi-update"></i> Last updated: April 2026</span>
+      <span><i class="mdi mdi-database-outline"></i> PostgreSQL + Supabase</span>
+      <span><i class="mdi mdi-brain"></i> Claude Sonnet 4 (primary AI)</span>
+    </div>
+  </div>
+
+  <!-- Key figures -->
+  <div class="figures stagger-children reveal">
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number" data-count="28505">0</div>
+      <div class="figure-card__label">EU laws indexed</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number" data-count="44">0</div>
+      <div class="figure-card__label">news sources scraped daily</div>
+    </div>
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number" data-count="157">0</div>
+      <div class="figure-card__label">expert knowledge guides</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number" data-count="72">0</div>
+      <div class="figure-card__label">database tables</div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc reveal">
+    <div class="toc__title">Contents</div>
+    <div class="toc__grid stagger-children reveal">
+      <a href="#sources" class="toc__link"><i class="mdi mdi-web"></i> Data sources</a>
+      <a href="#legislation" class="toc__link"><i class="mdi mdi-scale-balance"></i> EU legislation database</a>
+      <a href="#legislative-tracking" class="toc__link"><i class="mdi mdi-train"></i> Legislative tracking</a>
+      <a href="#knowledge" class="toc__link"><i class="mdi mdi-brain"></i> Knowledge base</a>
+      <a href="#news" class="toc__link"><i class="mdi mdi-newspaper"></i> News and RSS</a>
+      <a href="#chat" class="toc__link"><i class="mdi mdi-chat-processing"></i> Chat and AI</a>
+      <a href="#calendar" class="toc__link"><i class="mdi mdi-calendar"></i> EU calendar</a>
+      <a href="#users" class="toc__link"><i class="mdi mdi-account-group"></i> Users and subscriptions</a>
+      <a href="#flow" class="toc__link"><i class="mdi mdi-swap-horizontal"></i> Data flow</a>
+    </div>
+  </nav>
+
+  <!-- Section 1: Data sources -->
+  <div class="section" id="sources">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-web"></i></div>
+      <h2 class="section__title">Data sources</h2>
+    </div>
+    <p class="section__intro reveal">Brubru collects data from official EU institutional sources. No data is scraped from private or paywalled sources. Every piece of data traces back to an official publication.</p>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>Source</th><th>What we collect</th><th>How often</th><th>Method</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>EUR-Lex</strong><br><span class="source-tag">European Commission</span></td><td>Official Journal (L-series legislation, C-series information), CELEX numbers, full legal text metadata</td><td>Daily</td><td>RSS feeds + Cellar API</td></tr>
+        <tr><td><strong>OEIL</strong><br><span class="source-tag source-tag--purple">European Parliament</span></td><td>Legislative procedures, committee assignments, rapporteurs, key events, voting results, timeline</td><td>Daily</td><td>XML feed + page scraping</td></tr>
+        <tr><td><strong>Legislative Train</strong><br><span class="source-tag">European Commission</span></td><td>Commission priorities, legislative packages, file status (announced, ongoing, adopted, withdrawn)</td><td>Weekly</td><td>Web scraper</td></tr>
+        <tr><td><strong>EP committees</strong><br><span class="source-tag source-tag--purple">European Parliament</span></td><td>Draft reports, opinions, amendments, agendas, minutes from 26 EP committees</td><td>Daily</td><td>Web scraper + EP API</td></tr>
+        <tr><td><strong>EPRS Think Tank</strong><br><span class="source-tag source-tag--purple">European Parliament</span></td><td>Briefings, at-a-glance notes, in-depth analyses, study summaries</td><td>Weekly</td><td>RSS feed</td></tr>
+        <tr><td><strong>EC Press Corner</strong><br><span class="source-tag">European Commission</span></td><td>Press releases, speeches, Q&amp;As, factsheets from all Directorates-General</td><td>Daily</td><td>Web scraper</td></tr>
+        <tr><td><strong>DG-specific portals</strong><br><span class="source-tag">European Commission</span></td><td>Policy announcements, consultations, calls for experts from 20+ DGs (TRADE, ENER, SANTE, DEFIS, ENV, etc.)</td><td>Daily</td><td>Web scraper (per-DG)</td></tr>
+        <tr><td><strong>Public consultations</strong><br><span class="source-tag">European Commission</span></td><td>"Have Your Say" portal: open consultations, feedback periods, roadmaps, inception impact assessments</td><td>Weekly</td><td>Have Your Say API</td></tr>
+        <tr><td><strong>Commission Document Register</strong><br><span class="source-tag">European Commission</span></td><td>COM documents, SWD staff working documents, SEC documents, agendas, minutes (PV)</td><td>Weekly</td><td>RegDoc API</td></tr>
+        <tr><td><strong>EU news media</strong><br><span class="source-tag source-tag--amber">Media</span></td><td>Headlines and links from Politico EU, Euractiv, EUobserver, European Correspondent, Contexte</td><td>Daily</td><td>Web scraper (headlines only, no full text)</td></tr>
+        <tr><td><strong>EU Transparency Register</strong><br><span class="source-tag source-tag--green">Interinstitutional</span></td><td>Organisation names, policy interests, contact information for advocacy organisations</td><td>On demand</td><td>TR API</td></tr>
+        <tr><td><strong>EP plenary (CRE)</strong><br><span class="source-tag source-tag--purple">European Parliament</span></td><td>Full plenary debate transcripts (verbatim records) in XML format</td><td>On demand</td><td>Doceo XML fetch</td></tr>
+        <tr><td><strong>Formex V4 XML corpus</strong><br><span class="source-tag">European Commission</span></td><td>28,513 complete legal texts in structured XML (the entire EU acquis as of November 2025)</td><td>Bulk import (Nov 2025)</td><td>EU Publications Office export</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 2: EU legislation database -->
+  <div class="section" id="legislation">
+    <div class="section__header reveal-right">
+      <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-scale-balance"></i></div>
+      <h2 class="section__title">EU legislation database</h2>
+    </div>
+    <p class="section__intro reveal">The core of Brubru's knowledge: 28,505 EU laws with full-text search, CELEX identification, and metadata.</p>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">eu_laws table (28,505 records)</div>
+      <div class="info-card__text">Every adopted EU legal act with CELEX number, title, document type (regulation, directive, decision), date, Official Journal reference, policy area classification, and full-text search index (TSVECTOR). Sourced from the Formex V4 XML acquis corpus (EU Publications Office, November 2025 snapshot).</div>
+    </div>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">Examples from the database</h3>
+    </div>
+    <div class="example-grid stagger-children reveal">
+      <a href="https://brubru.beresol.eu/eu-inc/" class="example-card example-card--blue" target="_blank">
+        <div class="example-card__tag">Proposal (2026) | deep dive available</div>
+        <div class="example-card__title">28th regime corporate legal framework: EU Inc.</div>
+        <div class="example-card__meta">2026/0074(COD) | COM(2026) 321 | Tabled March 2026</div>
+        <div class="example-card__celex">52026PC0321</div>
+      </a>
+      <a href="https://brubru.beresol.eu/industrial-accelerator-act/" class="example-card example-card--green" target="_blank">
+        <div class="example-card__tag">Proposal (2026) | deep dive available</div>
+        <div class="example-card__title">Industrial Accelerator Act</div>
+        <div class="example-card__meta">2026/0068(COD) | COM(2026) 100 | Permitting, decarbonisation, lead markets</div>
+        <div class="example-card__celex">52026PC0100</div>
+      </a>
+      <div class="example-card example-card--purple">
+        <div class="example-card__tag">Proposal (2026) | announced</div>
+        <div class="example-card__title">European Innovation Act</div>
+        <div class="example-card__meta">Part of the Competitiveness Compass package | Expected Q2 2026</div>
+        <div class="example-card__celex">Announced, not yet tabled</div>
+      </div>
+      <div class="example-card example-card--amber">
+        <div class="example-card__tag">Regulation | in force</div>
+        <div class="example-card__title">AI Act</div>
+        <div class="example-card__meta">Adopted 13 June 2024 | Regulation (EU) 2024/1689</div>
+        <div class="example-card__celex">32024R1689</div>
+      </div>
+      <div class="example-card example-card--blue">
+        <div class="example-card__tag">Regulation | in force</div>
+        <div class="example-card__title">General Data Protection Regulation (GDPR)</div>
+        <div class="example-card__meta">In force since 25 May 2018 | OJ L 119</div>
+        <div class="example-card__celex">32016R0679</div>
+      </div>
+      <div class="example-card example-card--red">
+        <div class="example-card__tag">Regulation | definitive phase</div>
+        <div class="example-card__title">Carbon Border Adjustment Mechanism (CBAM)</div>
+        <div class="example-card__meta">Certificates required from 1 January 2026 | First price published 7 April 2026</div>
+        <div class="example-card__celex">32023R0956</div>
+      </div>
+    </div>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>What we store</th><th>Example</th><th>Why it matters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CELEX number</td><td><span class="count">32016R0679</span></td><td>Unique identifier for every EU legal act. Enables precise cross-referencing.</td></tr>
+        <tr><td>Title</td><td>General Data Protection Regulation</td><td>Human-readable name. Full-text searchable.</td></tr>
+        <tr><td>Document type</td><td>Regulation, Directive, Decision</td><td>Determines legal effect: regulations are directly applicable, directives need transposition.</td></tr>
+        <tr><td>Policy area</td><td>Digital, Environment, Trade</td><td>Classified into 19 policy domains for filtering and relevance scoring.</td></tr>
+        <tr><td>Date and OJ reference</td><td>OJ L 119, 4 May 2016</td><td>Official publication date and journal reference for citation.</td></tr>
+        <tr><td>Full text (TSVECTOR)</td><td>Indexed for search</td><td>Enables searches like "which EU law covers algorithmic transparency?" across all 28,505 acts.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 2b: Legal-text intelligence (recital linker, definitions, cross-references, aliases) -->
+  <div class="section" id="legal-text-intelligence">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-link-variant"></i></div>
+      <h2 class="section__title">Legal-text intelligence inside every law</h2>
+    </div>
+    <p class="section__intro reveal">Every EU law that Brubru tracks is not just a file: it is a structured object. Four parsers turn raw Formex XML and EUR-Lex XHTML into a queryable surface of articles, recitals, definitions, and cross-references. The chatbot, the file-tracking view, the Amendator and the Catalan landing pages all consume the same intelligence layer.</p>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">1. Recital-to-article linker (TF-IDF)</div>
+      <div class="info-card__text">For every law, we compute the cosine similarity between each article's text and each recital's text. The top-3 recitals per article are stored as <code>eu_laws.extra_metadata.recital_article_map</code>. When a user asks "what is the intent of Article 12 of the Data Act?", the chatbot surfaces recitals 14, 17 and 23 (with scores) automatically. When drafting an amendment, the Amendator offers those same recitals as ready-made justifications. Verified on 32025R2024: 31 of 32 articles linked, 76 recital references cached in milliseconds.</div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">2. Definition extractor (Article 3/4 hover tooltips)</div>
+      <div class="info-card__text">Every statutory definition (<em>"online platform" means ...</em>, <em>"high-risk AI system" means ...</em>) is extracted from the Definitions article and stored as <code>eu_laws.extra_metadata.defined_terms</code>. The chatbot cites them verbatim. The Catalan landing pages render them as hover tooltips. The DSA alone contributes 23 defined terms ("information society service", "recipient of the service", "consumer", "trader", "intermediary service", "illegal content", "online platform", "Very Large Online Platform", ...).</div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">3. Cross-reference resolver (clickable citations)</div>
+      <div class="info-card__text">In-text citations like <em>"Article 7 of Regulation (EU) 2024/1234"</em>, <em>"Directive 2011/93/EU"</em> or <em>"Regulation (EU, Euratom) 2024/2509"</em> are parsed into structured references. Each becomes a clickable EUR-Lex link with <code>data-celex</code>, <code>data-article</code>, <code>data-paragraph</code>, <code>data-point</code> attributes. The Catalan landing pages use this to turn every raw citation into a navigable link, a feature EUR-Lex itself does not ship.</div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">4. Law alias resolver (users speak human, not CELEX)</div>
+      <div class="info-card__text">Users do not type <code>32016R0679</code>. They type "GDPR", "DSA", "AI Act", "CBAM", "Chips Act", "Solvency II", "CRR", "Critical Raw Materials Act", "EU Inc". Brubru resolves 680+ acronyms and nicknames to their CELEX number in a single lookup, then feeds the resolution into the recital linker, the definition extractor and the cross-reference resolver. Case-sensitive word boundaries keep false positives out (e.g. "dsa" inside "usage" is not a DSA hit). Two sources: 669 auto-extracted from the Formex corpus + an authoritative Brubru-curated list of major acronyms.</div>
+    </div>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>User types</th><th>Brubru resolves to</th><th>What the chatbot then retrieves</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>"GDPR Article 5"</td><td>32016R0679 | Article 5</td><td>Statutory definition of "personal data", linked recitals, EUR-Lex link</td></tr>
+        <tr><td>"online platform under the DSA"</td><td>32022R2065 | Article 3(i)</td><td>Exact definition, Article 3 cross-references, related recitals</td></tr>
+        <tr><td>"the AI Act for high-risk systems"</td><td>32024R1689 | Annex III</td><td>Definitions of "AI system" and "high-risk AI system", linked recitals</td></tr>
+        <tr><td>"CBAM"</td><td>32023R0956</td><td>Article 2 scope, Annex I CN codes, definitive-phase recitals</td></tr>
+        <tr><td>"Critical Raw Materials Act"</td><td>32024R1252</td><td>Strategic raw materials list, definitions, linked articles</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">APIs exposed to every Brubru feature</h3>
+    </div>
+    <div class="example-grid stagger-children reveal">
+      <div class="example-card example-card--blue">
+        <div class="example-card__tag">REST</div>
+        <div class="example-card__title">GET /api/legislation/{celex}/recital-article-map</div>
+        <div class="example-card__meta">Top-3 recitals per article (TF-IDF cosine)</div>
+        <div class="example-card__celex">stored in extra_metadata</div>
+      </div>
+      <div class="example-card example-card--green">
+        <div class="example-card__tag">REST</div>
+        <div class="example-card__title">GET /api/legislation/{celex}/defined-terms</div>
+        <div class="example-card__meta">Article 3/4 definitions as a term -&gt; definition dict</div>
+        <div class="example-card__celex">stored in extra_metadata</div>
+      </div>
+      <div class="example-card example-card--purple">
+        <div class="example-card__tag">REST</div>
+        <div class="example-card__title">POST /api/legislation/resolve-references</div>
+        <div class="example-card__meta">Free text in, resolved CELEX citations + HTML annotation out</div>
+        <div class="example-card__celex">online, stateless</div>
+      </div>
+      <div class="example-card example-card--amber">
+        <div class="example-card__tag">Python module</div>
+        <div class="example-card__title">services.parsers.law_alias_resolver</div>
+        <div class="example-card__meta">680+ acronym/nickname to CELEX mappings</div>
+        <div class="example-card__celex">cached in-process</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Data Provider API -->
+  <div class="section" id="data-provider-api">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-api"></i></div>
+      <h2 class="section__title">Brubru API &mdash; the data provider vertical</h2>
+    </div>
+    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 157 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription.</p>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Authentication (/api/v1/*)</div>
+      <div class="info-card__content">
+        <p>API calls are authenticated with a key passed in the <code>X-API-Key</code> header. Keys are minted by the admin panel, issued only to Professional subscribers, and SHA-256 hashed at rest. Plaintext is shown once at creation.</p>
+        <ul>
+          <li>Key format: <code>brubru_live_</code> followed by 48 hex characters (192 bits of entropy).</li>
+          <li>Storage: <code>api_keys</code> table with <code>key_hash</code>, <code>key_prefix</code>, <code>scopes</code>, <code>last_used_at</code>, <code>revoked_at</code>.</li>
+          <li>Gating: only users with <code>subscription_tier = "blue"</code> can authenticate &mdash; the tier that backs the Professional plan.</li>
+          <li>Rate limit: 60 requests per minute per key (sliding window). Exceeded requests return <code>429</code> with a <code>Retry-After</code> header.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Admin endpoints (live)</div>
+      <div class="info-card__content">
+        <p>Brubru administrators mint, list, and revoke keys on behalf of Professional subscribers.</p>
+        <ul>
+          <li><code>POST /api/admin/users/{user_id}/api-keys</code> &mdash; mint a key. Plaintext returned once, never again.</li>
+          <li><code>GET /api/admin/users/{user_id}/api-keys</code> &mdash; list a user's keys (active and revoked). Plaintext is never returned.</li>
+          <li><code>DELETE /api/admin/api-keys/{key_id}</code> &mdash; revoke a key by setting <code>revoked_at</code>. Revocation is an audit event, not a deletion.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Canonical response envelope</div>
+      <div class="info-card__content">
+        <p>Every paginated v1 endpoint returns the same shape so partner integrations are predictable across datasets.</p>
+        <ul>
+          <li>Pagination: <code>total</code>, <code>pages</code>, <code>page</code>, <code>limit</code>, <code>has_more</code>, <code>next_page</code>, <code>remaining_pages</code>.</li>
+          <li>Filter echo: <code>published_from</code>, <code>published_to</code>, <code>updated_from</code>, <code>updated_to</code>, <code>detail_level</code>.</li>
+          <li>Attribution: <code>meta.powered_by = "Brubru"</code> and <code>meta.source = "brubru.beresol.eu"</code> &mdash; machine-readable so partners can display credit programmatically.</li>
+          <li>Dataset-specific aggregates (e.g. <code>by_country</code>, <code>by_user_type</code>) sit in an <code>aggregates</code> object alongside <code>data</code> so partners get analytics and detail in one call.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">v1 endpoints live (10 routes)</div>
+      <div class="info-card__content">
+        <p><strong>Meta:</strong></p>
+        <ul>
+          <li><code>GET /api/v1/ping</code> &mdash; unauthenticated health check.</li>
+          <li><code>GET /api/v1/whoami</code> &mdash; returns the key holder's tier plus current rate-limit window.</li>
+        </ul>
+        <p><strong>Datasets:</strong></p>
+        <ul>
+          <li><code>GET /api/v1/laws</code> &mdash; 28,500+ adopted EU laws. Filters: <code>celex</code>, <code>doc_type</code>, <code>policy_area</code>, <code>q</code> (TSVECTOR full-text), <code>published_from</code>, <code>published_to</code>.</li>
+          <li><code>GET /api/v1/procedures</code> &mdash; 1,200+ legislative files. Filters: <code>reference</code>, <code>committee</code>, <code>rapporteur_mep_id</code>, <code>status</code>, <code>updated_from</code>, <code>updated_to</code>.</li>
+          <li><code>GET /api/v1/commissioners/{name}/agenda</code> &mdash; live calendar items for all 27 college members. Accent-insensitive name resolution.</li>
+          <li><code>GET /api/v1/consultations/by-initiative/{id}/feedback</code> &mdash; live stakeholder feedback from Have Your Say with country and user-type aggregates.</li>
+        </ul>
+        <p><strong>Legal-Text Intelligence:</strong></p>
+        <ul>
+          <li><code>GET /api/v1/legal-text/{celex}/recital-article-map</code> &mdash; TF-IDF cosine mapping, top-3 recitals per article.</li>
+          <li><code>GET /api/v1/legal-text/{celex}/defined-terms</code> &mdash; Article 3/4-style definitions dictionary.</li>
+          <li><code>POST /api/v1/legal-text/resolve-references</code> &mdash; plain text in, structured CELEX citations or annotated HTML out.</li>
+          <li><code>POST /api/v1/legal-text/resolve-aliases</code> &mdash; resolve human names (GDPR, DSA, AI Act, CBAM, ...) to CELEX. 680+ aliases.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Three-tier coverage architecture (20 April 2026)</div>
+      <div class="info-card__content">
+        <p>Every Brubru Chat query flows through three retrieval tiers before the AI composes an answer. The v1 API is not only an external partner surface &mdash; it is the internal reinforcer that guarantees coverage.</p>
+        <ul>
+          <li><strong>Tier 1 &mdash; DB + smart filters.</strong> <code>context_builder.py</code> queries PostgreSQL directly: 28,505 EU laws, 419 calendar events, 157 knowledge guides, 1,296 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes. Fast, curated, no external dependency.</li>
+          <li><strong>Tier 2 &mdash; on-demand live fetchers.</strong> Six specialised clients fire when intent detectors match: Doceo (plenary debates via CRE XML), EP Multimedia (committee meeting transcripts via on-demand Whisper transcription), Have Your Say API (stakeholder feedback), commission.europa.eu scrape (commissioner agendas), EUR-Lex Cellar (CELEX document fetch), Tavily (25 trusted <code>.europa.eu</code> + policy-media domains).</li>
+          <li><strong>Tier 3 &mdash; v1 API backstop.</strong> When Tiers 1 and 2 leave a surface thin, the same service functions that power <code>/api/v1/calendar/events</code> and sibling endpoints re-query with broader filters. The simpler filter logic often catches what the chat's smart filters miss. Real example: on 17 April 2026 the "energy events next week?" query deflected because Tier 1 over-filtered; the Tier-3 backstop added 8 more relevant events. <strong>Promise: no query fails for lack of trying.</strong></li>
+        </ul>
+        <p><em>Phase B-minimal shipped 20 April 2026 (calendar backstop). Assessment checkpoint 4 May 2026 &mdash; if materially improves answer quality, expand to guides, laws, EPRS, procedures, committees, MEPs.</em></p>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Brubru as the first user of its own API (dogfooding)</div>
+      <div class="info-card__content">
+        <p>The chatbot, My EU Bubble, Amendator, and Document Generator inside the Brubru app all consume the same <code>/api/v1/*</code> surface that paying customers do. This dogfooding rule means the API never lags behind the product &mdash; if a Brubru feature works, the API works. External partners get the same data quality Brubru itself relies on.</p>
+        <p><strong>Phase 1 shipped (18 April 2026):</strong> 7 new endpoints covering the highest-value chatbot context sources &mdash; <code>/knowledge-guides</code> (147 guides), <code>/laws/{celex}/text</code> (full EU law text via Formex or EUR-Lex Cellar fallback), <code>/eprs</code> (145 EPRS publications), <code>/committees/{code}/work-items</code> + <code>/minutes</code>, <code>/calendar/events</code> (419 institutional events), <code>/meps</code> (live from EP Open Data), <code>/predictions/{ref}/timeline</code> + <code>/outcome</code> (XGBoost + baseline). Total v1 paths: 24, covering ~54% of the chatbot's internal context sources.</p>
+        <p><strong>Regression test: <code>/training api</code>.</strong> 50 representative user queries (EN/ES/CA/FR) from 7 query patterns are replayed against the live v1 API weekly. First run: <strong>48/50 pass (96%)</strong>. Every v1 change is verified against this baseline before ship. Dataset: <code>data/training/api_queries_50.json</code>.</p>
+        <p><strong>Phase 2 (June 2026):</strong> cursor pagination, field projection (<code>?fields=</code>), sorting, ETag caching, <code>X-RateLimit-Reset</code> header across every endpoint. <strong>Phase 3 (September 2026):</strong> webhooks, bulk CSV/Parquet exports, multilingual responses (24 EU languages), semantic search via embeddings.</p>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Documentation surface</div>
+      <div class="info-card__content">
+        <ul>
+          <li><a href="/api"><code>/api</code></a> &mdash; public landing page (pricing, response envelope, code samples). Linked from header nav.</li>
+          <li><a href="/api/docs"><code>/api/docs</code></a> &mdash; Scalar reference page (CDN-loaded, zero new deps), reads <code>/api/v1/openapi.json</code>.</li>
+          <li><code>/api/v1/openapi.json</code> &mdash; OpenAPI 3.1 spec auto-generated by FastAPI from Pydantic models, filtered to <code>/api/v1/*</code> only so internal Brubru routes never leak to partners. Postman imports it in one click.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Build progress</div>
+      <div class="info-card__content">
+        <ul>
+          <li><strong>Day 1</strong> (15 April 2026) &mdash; API key model, migration 033, admin endpoints, six-path auth dependency. 10 tests.</li>
+          <li><strong>Day 2</strong> (15 April 2026) &mdash; <code>/api/v1/*</code> sub-router, canonical paginated envelope, per-key sliding-window rate limiter (60 req/min), <code>X-RateLimit-*</code> headers, ping/whoami/feedback endpoints. 25 tests.</li>
+          <li><strong>Day 3</strong> (15 April 2026) &mdash; <code>/api/v1/laws</code> and <code>/api/v1/procedures</code> shipped with full filter sets. 30 tests.</li>
+          <li><strong>Day 4</strong> (15 April 2026) &mdash; <code>/api/v1/commissioners/{name}/agenda</code> shipped, four legal-text intelligence endpoints ported to v1. 34 tests.</li>
+          <li><strong>Day 5</strong> (15 April 2026) &mdash; Scalar docs at <code>/api/docs</code>, filtered OpenAPI at <code>/api/v1/openapi.json</code>, public landing page at <code>/api</code>, header nav entry next to Tenderator (i18n in 6 languages). <strong>36 tests passing in total.</strong></li>
+          <li><strong>Landing-page integration</strong> &mdash; the "For developers and RegTech partners" section now leads with the REST API (six flagship endpoints) plus the existing MCP server (six tools), with CTAs to <code>/api</code> and <code>/api/docs</code>.</li>
+          <li><strong>Day 6</strong> (15 April 2026) &mdash; partner-compatibility pass inspired by GovClipping's Postman docs. Six items shipped:
+            <ul>
+              <li><strong>Structured error envelope</strong> on every <code>/api/v1/*</code> response: <code>{ "error", "reason_code", "request_id" }</code>. Reason codes are stable machine-readable strings (<code>auth_missing_key</code>, <code>auth_invalid_format</code>, <code>auth_key_not_found</code>, <code>tier_insufficient</code>, <code>rate_limited</code>, <code>not_found</code>, <code>invalid_query</code>, <code>upstream_error</code>).</li>
+              <li><strong><code>X-Request-Id</code> response header</strong> on every call (echoes the client's inbound value if supplied, otherwise generates a UUID4). Matches the <code>request_id</code> in error bodies for support traceability.</li>
+              <li><strong>Envelope additions</strong>: <code>returned</code> (items in this page) and <code>coverage_complete</code> (True for DB-backed, False for live-scraped results).</li>
+              <li><strong>Filter aliases</strong>: <code>published_end</code> and <code>updated_end</code> accepted alongside <code>published_to</code> / <code>updated_to</code>. The envelope echoes both. Matches GovClipping's convention so partners reuse existing SDK patterns.</li>
+              <li><strong>Dual authentication</strong>: <code>Authorization: Bearer &lt;key&gt;</code> (OpenAPI/Postman default) and <code>X-API-Key: &lt;key&gt;</code> (curl-friendly) both accepted. Bearer wins if both present.</li>
+              <li><strong><code>GET /api/v1/meta/enums</code></strong>: a single lookup endpoint returning every valid filter value &mdash; doc_types, policy_areas (live from DB), EP committees, procedure statuses, stakeholder user types, detail levels. Partners call once, cache forever. 49 tests passing in total.</li>
+            </ul>
+          </li>
+          <li><strong>Internationalisation</strong> &mdash; the <code>/api</code> landing page is now translated to all six Brubru languages (English, Spanish, Catalan, French, Italian, Dutch) via the <code>api</code> i18n namespace in each locale file. Fully responsive (desktop / tablet / mobile breakpoints).</li>
+        </ul>
+        <p><em>Caveat: rate limiter is in-memory (per backend instance). For one paying partner this is fine; pin Railway to one replica until Redis is added.</em></p>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Option A: generic ingestion pipeline (15 April 2026)</div>
+      <div class="info-card__content">
+        <p>Shipping the next-scale source coverage without building 500 bespoke scrapers. The pattern: <strong>one generic RSS ingester + YAML config per feed</strong>. Adding a new EU institutional source is now a config file, not code.</p>
+        <ul>
+          <li><strong>Model + migration 035:</strong> <code>institutional_publications</code> table with unified shape (source_slug, institution_slug, category, title, summary, url, policy_areas, tags, published_date, full-text index). Row-Level Security enabled.</li>
+          <li><strong>Ingester:</strong> <code>backend/services/ingestion/rss_ingestor.py</code> reads YAML configs from <code>configs/*.yaml</code>, fetches via <code>BaseRSSClient</code>, upserts with dedupe on <code>(source_slug, external_id)</code>.</li>
+          <li><strong>Catalog (discovery-driven):</strong> <code>backend/scripts/discover_feeds.py</code> crawls all 519 base domains from <code>data/europa_eu/europa.eu_all_sources.md</code>, probes each for <code>&lt;link rel="alternate" type="application/rss+xml"&gt;</code> in the HTML head plus 13 common paths. Validated URLs land in <code>data/europa_eu/discovered_feeds.csv</code>. <code>configs_from_discovered.py</code> then turns each CSV row into a YAML ingestion config automatically. <strong>First full 519-domain discovery: 64 validated feeds found, 54 auto-generated YAML configs.</strong></li>
+          <li><strong>Live ingestion:</strong> <strong>52 of 78 configured feeds working</strong> after the discovery sweep &mdash; <strong>587 real publications across 44 sources and 35 institutions</strong> in the DB right now. Top contributors: JRC (91), European Commission (60), EMA (58), ECB (25), EEA (20), Frontex (20), EESC (20), CEPOL (20), FRA (12), EIGE (12). The remaining 26 configured URLs return 404/403 (retired feeds or WAF-blocked) and will be retired or re-curated in the next discovery pass.</li>
+          <li><strong>CLI:</strong> <code>python3.12 scripts/ingest_publications.py [slug1 slug2 ...]</code>. Run for all configs or a subset.</li>
+          <li><strong>New API:</strong> <code>GET /api/v1/publications</code> with filters (q, institution_slug, source_slug, category, policy_area, published_from/to). Plus <code>GET /api/v1/publications/sources</code> listing available feeds with counts. Same canonical envelope as every v1 endpoint.</li>
+          <li><strong>Tests:</strong> 58/58 passing (9 new tests for publications + ingester added).</li>
+        </ul>
+        <p><em>Ongoing curation: each week new YAML configs land. When an upstream feed URL breaks, the ingester logs the error and continues with the others &mdash; no cascading failure. This scales without rebuilding code.</em></p>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Source coverage today vs aspiration</div>
+      <div class="info-card__content">
+        <p>The v1 API exposes <strong>6 underlying europa.eu data streams</strong> via 12 endpoints:</p>
+        <ul>
+          <li><code>/laws</code> &rarr; <code>eu_laws</code> table (EUR-Lex Cellar ingest)</li>
+          <li><code>/procedures</code> &rarr; <code>legislative_carriages</code> + OEIL XML feed</li>
+          <li><code>/commissioners/{name}/agenda</code> &rarr; live scrape of <code>commission.europa.eu</code></li>
+          <li><code>/consultations/by-initiative/{id}/feedback</code> &rarr; live Have Your Say <code>allFeedback</code> API</li>
+          <li><code>/legal-text/*</code> &rarr; derived from <code>eu_laws</code> (recital-article linker, definitions, cross-refs, aliases)</li>
+          <li><code>/publications</code> &rarr; <code>institutional_publications</code> populated by the generic RSS ingester (587 items from 44 sources / 35 institutions live after first discovery sweep)</li>
+        </ul>
+        <p>After Option A ship: Brubru's internal scraper fleet plus the generic RSS pipeline now covers <strong>~55 of the 519 europa.eu domains</strong> from <code>data/europa_eu/europa.eu_all_sources.md</code>. Discovery + config generation is fully automated now, so the catalog grows by running <code>discover_feeds.py</code> + <code>ingest_publications.py</code> on a weekly schedule &mdash; no more guessing URLs. Expansion to the full 519 is a tiered ingestion programme (<code>memory/project_data_provider.md</code>): Tier 1 structured APIs (15 sources), Tier 2 RSS/Atom feeds (50-80 sources), Tier 3 generic HTML (~400 sources), Tier 4 Tavily long-tail. Partner-driven priority: ship 10-30 well-picked reliably-fresh sources first, expand on paying demand.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Legislative tracking -->
+  <div class="section" id="legislative-tracking">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-train"></i></div>
+      <h2 class="section__title">Legislative tracking (the "train")</h2>
+    </div>
+    <p class="section__intro reveal">Brubru tracks all 1,274 legislative files under the ordinary legislative procedure, from Commission proposal to final adoption. Every proposal is monitored automatically.</p>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">legislative_carriages table (1,274 files)</div>
+      <div class="info-card__text">Each "carriage" represents one legislative proposal on its journey through the EU institutions. We track its status, committee assignments, rapporteur, timeline of key events, and links to OEIL and EUR-Lex documents. The full pipeline is monitored: from the moment the Commission announces a proposal through committee work, trilogue, adoption, and even withdrawal.</div>
+    </div>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">Breakdown by status</h3>
+    </div>
+    <div class="figures stagger-children reveal" style="grid-template-columns: repeat(5, 1fr); margin: 1rem 0 2rem;">
+      <div class="figure-card fc-blue" style="padding: 1rem;">
+        <div class="figure-card__number" style="font-size: 1.8rem;" data-count="486">0</div>
+        <div class="figure-card__label">tabled</div>
+      </div>
+      <div class="figure-card fc-purple" style="padding: 1rem;">
+        <div class="figure-card__number" style="font-size: 1.8rem;" data-count="477">0</div>
+        <div class="figure-card__label">announced</div>
+      </div>
+      <div class="figure-card fc-green" style="padding: 1rem;">
+        <div class="figure-card__number" style="font-size: 1.8rem;" data-count="137">0</div>
+        <div class="figure-card__label">adopted</div>
+      </div>
+      <div class="figure-card fc-amber" style="padding: 1rem;">
+        <div class="figure-card__number" style="font-size: 1.8rem;" data-count="107">0</div>
+        <div class="figure-card__label">completed</div>
+      </div>
+      <div class="figure-card" style="padding: 1rem;">
+        <div class="figure-card__number" style="font-size: 1.8rem; color: var(--color-green);" data-count="67">0</div>
+        <div class="figure-card__label">close to adoption</div>
+      </div>
+    </div>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">A few examples from the 1,274 tracked files</h3>
+    </div>
+    <div class="example-grid stagger-children reveal">
+      <div class="example-card example-card--blue">
+        <div class="example-card__tag">Tabled</div>
+        <div class="example-card__title">Pharmaceutical legislation reform</div>
+        <div class="example-card__meta">2023/0132(COD) | SANT committee | Rapporteur: Montserrat (EPP, ES)</div>
+        <div class="example-card__celex">Provisional agreement Dec 2025</div>
+      </div>
+      <div class="example-card example-card--green">
+        <div class="example-card__tag">Adopted</div>
+        <div class="example-card__title">European Health Data Space (EHDS)</div>
+        <div class="example-card__meta">2022/0140(COD) | Regulation (EU) 2025/327</div>
+        <div class="example-card__celex">32025R0327</div>
+      </div>
+      <div class="example-card example-card--purple">
+        <div class="example-card__tag">Tabled</div>
+        <div class="example-card__title">Digital Networks Act</div>
+        <div class="example-card__meta">2025/0049(COD) | ITRE committee</div>
+        <div class="example-card__celex">COM(2025) 54</div>
+      </div>
+      <div class="example-card example-card--amber">
+        <div class="example-card__tag">Adopted</div>
+        <div class="example-card__title">SAFE instrument (defence)</div>
+        <div class="example-card__meta">2025/0072(COD) | Regulation (EU) 2025/1106</div>
+        <div class="example-card__celex">32025R1106</div>
+      </div>
+    </div>
+
+    <p class="section__intro reveal" style="font-size: 0.95rem; font-style: italic; margin-top: 0.5rem;">These are just 4 out of 1,274 files. Brubru tracks every proposal under the ordinary legislative procedure across all Commission priorities and EP committees.</p>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>What we track</th><th>Source</th><th>Records</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Legislative files</strong>: proposals, status, committees, rapporteurs</td><td><span class="source-tag">Legislative Train</span> <span class="source-tag source-tag--purple">OEIL</span></td><td class="count">1,274</td></tr>
+        <tr><td><strong>Legislative packages</strong>: grouped proposals under Commission priorities</td><td><span class="source-tag">Legislative Train</span></td><td class="count">166</td></tr>
+        <tr><td><strong>Committee work items</strong>: draft reports, opinions, amendments in progress</td><td><span class="source-tag source-tag--purple">EP committees</span></td><td class="count">359</td></tr>
+        <tr><td><strong>Texts adopted</strong>: final EP plenary votes, adopted positions</td><td><span class="source-tag source-tag--purple">EP plenary</span></td><td class="count">66</td></tr>
+        <tr><td><strong>Commission documents</strong>: COMs, SWDs, implementing/delegated acts</td><td><span class="source-tag">RegDoc API</span></td><td class="count">445</td></tr>
+        <tr><td><strong>Public consultations</strong>: open, closed, feedback received</td><td><span class="source-tag">Have Your Say</span></td><td class="count">123</td></tr>
+        <tr><td><strong>EPRS publications</strong>: briefings, studies, impact assessments</td><td><span class="source-tag source-tag--purple">EPRS</span></td><td class="count">112</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 4: Knowledge base -->
+  <div class="section" id="knowledge">
+    <div class="section__header reveal-right">
+      <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-brain"></i></div>
+      <h2 class="section__title">Knowledge base</h2>
+    </div>
+    <p class="section__intro reveal">Hand-curated expert knowledge that the AI uses to answer questions accurately. This is what makes Brubru different from a generic chatbot.</p>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">157 expert knowledge guides</h3>
+      <p class="subsection__text">Each guide covers one EU policy domain (e.g., AI Act, CBAM, Common Fisheries Policy) with: quick reference facts, CELEX numbers for relevant legislation, institutional contacts (Commissioner, DG, EP committee, rapporteur), procedure status, and key dates. Guides are written and maintained by EU policy specialists, not auto-generated.</p>
+    </div>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">5,463 keyword triggers in 6 languages</h3>
+      <p class="subsection__text">A multilingual index (English, French, Dutch, Spanish, Catalan, Italian) that routes user queries to the right knowledge guide. For example, "CBAM," "mecanismo de ajuste en frontera," and "koolstofgrensheffing" all route to the same trade policy guide.</p>
+    </div>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">Additional knowledge sources</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Source</th><th>Content</th><th>Size</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Beresol knowledge bundle</td><td>11 open reports + 7 monitors on EU policy topics</td><td>18 files</td></tr>
+          <tr><td>EU institutional organigrammes</td><td>Commission DGs, EP committees, Council configurations</td><td>35 files</td></tr>
+          <tr><td>Document templates</td><td>Position papers, MEP briefings, parliamentary questions, amendments</td><td>17 templates</td></tr>
+          <tr><td>Legislation acronyms</td><td>Maps abbreviations (GDPR, AI Act, DSA) to CELEX numbers and EUR-Lex URLs</td><td>150+ entries</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section 5: News and RSS -->
+  <div class="section" id="news">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-newspaper"></i></div>
+      <h2 class="section__title">News and RSS</h2>
+    </div>
+    <p class="section__intro reveal">Brubru scrapes 44 EU news portals daily and maintains an RSS feed aggregator for users to follow EU sources.</p>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>What we store</th><th>Records</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Daily brief headlines</strong>: curated EU news for email distribution</td><td class="count">262</td><td>Daily email digest sent to subscribers</td></tr>
+        <tr><td><strong>RSS feeds</strong>: EU institutional feeds (EC, EP, Council, agencies)</td><td class="count">57</td><td>My EU Bubble feed reader</td></tr>
+        <tr><td><strong>RSS entries</strong>: individual articles from subscribed feeds</td><td class="count">656</td><td>Personalised news feed</td></tr>
+        <tr><td><strong>Transparency Register orgs</strong>: EU lobby organisations, policy interests</td><td class="count">1,033</td><td>Targeted news alerts by policy area</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 6: Chat and AI -->
+  <div class="section" id="chat">
+    <div class="section__header reveal-right">
+      <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-chat-processing"></i></div>
+      <h2 class="section__title">Chat and AI processing</h2>
+    </div>
+    <p class="section__intro reveal">When a user asks Brubru a question, multiple data layers are assembled into context for the AI model.</p>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">How a query is answered</h3>
+    </div>
+
+    <!-- Query demo -->
+    <div class="query-demo reveal-scale" id="queryDemo">
+      <div class="query-demo__prompt">user@brubru ~$</div>
+      <div class="query-demo__text" id="queryText">What are the latest developments in EU pharmaceutical legislation?</div>
+      <div class="query-demo__response" id="queryResponse">
+        <span style="color: var(--color-green);">context_builder:</span> matched guide eu_pharmaceutical_legislation_reform<br>
+        <span style="color: var(--color-purple);">oeil_enrichment:</span> procedure 2023/0132(COD), provisional agreement Dec 2025<br>
+        <span style="color: var(--color-amber);">ai_service:</span> assembling response with 3 data layers...<br>
+        <span style="color: var(--color-blue);">response:</span> The most significant development is the comprehensive reform package...
+      </div>
+    </div>
+
+    <div class="flow-diagram reveal-scale">
+      <div class="flow-row">
+        <div class="flow-box flow-box--blue">User query</div>
+        <span class="flow-arrow"><i class="mdi mdi-arrow-right"></i></span>
+        <div class="flow-box flow-box--green">Knowledge guide match</div>
+        <span class="flow-arrow"><i class="mdi mdi-arrow-right"></i></span>
+        <div class="flow-box flow-box--purple">Legislative file lookup</div>
+        <span class="flow-arrow"><i class="mdi mdi-arrow-right"></i></span>
+        <div class="flow-box flow-box--amber">AI response</div>
+      </div>
+      <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--color-secondary);">
+        If no knowledge guide matches, Brubru searches 25 trusted EU domains via Tavily for real-time institutional content.
+      </p>
+    </div>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>Data layer</th><th>What it provides</th><th>When it fires</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Knowledge guides</strong></td><td>Expert-curated policy context, CELEX numbers, institutional contacts</td><td>Every query (keyword trigger match)</td></tr>
+        <tr><td><strong>Legislative Train files</strong></td><td>Procedure status, committee, rapporteur, OEIL data, key events</td><td>When query mentions a specific legislative file</td></tr>
+        <tr><td><strong>EU institutional search</strong></td><td>Real-time content from 25 EU domains (ec.europa.eu, europarl.europa.eu, etc.)</td><td>When no guide matches, or when procedure details are needed</td></tr>
+        <tr><td><strong>EPRS publications</strong></td><td>Parliament research briefings and analysis</td><td>When relevant EPRS content exists for the topic</td></tr>
+        <tr><td><strong>EP plenary debates (CRE)</strong></td><td>Verbatim transcripts from plenary sessions</td><td>When query asks about debates, speeches, or plenary discussions</td></tr>
+        <tr><td><strong>Organisation intelligence</strong></td><td>User's organisation profile, policy interests, Transparency Register data</td><td>For registered users with organisation profiles</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">AI model: Claude Sonnet 4 (Anthropic)</div>
+      <div class="info-card__text">Primary AI model since March 2026. Fallback chain: Mistral, GPT-4, Gemini. All responses are grounded in the context layers above. The AI does not browse the internet during a conversation: it uses pre-assembled context from Brubru's own databases and scrapers.</div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Chat storage</div>
+      <div class="info-card__text">282 conversations, 850 messages stored. Each conversation is linked to either a registered user or a pre-user session. Chat history enables follow-up questions within the same conversation. Messages are not used for AI training.</div>
+    </div>
+  </div>
+
+  <!-- Section 7: EU calendar -->
+  <div class="section" id="calendar">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-calendar"></i></div>
+      <h2 class="section__title">EU calendar</h2>
+    </div>
+    <p class="section__intro reveal">Aggregated institutional calendar from 6 EU sources, with 401 events tracked.</p>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>Source</th><th>Events</th><th>What it covers</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="source-tag source-tag--purple">European Parliament</span></td><td>Plenary sessions, committee meetings, hearings</td><td>Strasbourg and Brussels sessions, committee agendas</td></tr>
+        <tr><td><span class="source-tag source-tag--green">Council of the EU</span></td><td>Council configurations, COREPER, working groups</td><td>Ministerial meetings, rotating presidency events</td></tr>
+        <tr><td><span class="source-tag">European Commission</span></td><td>College meetings, public consultations deadlines</td><td>Weekly College agenda, stakeholder events</td></tr>
+        <tr><td><span class="source-tag source-tag--amber">European Council</span></td><td>Summits, Euro Summits</td><td>Heads of state meetings (quarterly)</td></tr>
+        <tr><td><span class="source-tag">Court of Justice (CJEU)</span></td><td>Hearings, judgments, opinions</td><td>Key rulings affecting EU law interpretation</td></tr>
+        <tr><td><span class="source-tag source-tag--purple">Committee of the Regions</span></td><td>Plenary sessions, commission meetings</td><td>Regional and local government input on EU legislation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section 8: Users and subscriptions -->
+  <div class="section" id="users">
+    <div class="section__header reveal-right">
+      <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-account-group"></i></div>
+      <h2 class="section__title">Users and subscriptions</h2>
+    </div>
+    <p class="section__intro reveal">User data is minimal and purpose-specific. We store what is necessary for authentication, personalisation, and billing.</p>
+
+    <table class="data-table reveal">
+      <thead>
+        <tr><th>What we store</th><th>Purpose</th><th>Who can access</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Email, name, profile photo</td><td>Authentication (Google/LinkedIn OAuth) and account display</td><td>User only + admin</td></tr>
+        <tr><td>Subscription plan and billing status</td><td>Feature gating (Starter, Advocate, Professional tiers)</td><td>User only + Stripe</td></tr>
+        <tr><td>Tracked legislative files</td><td>Users can follow specific proposals and get updates</td><td>User only</td></tr>
+        <tr><td>Calendar subscriptions</td><td>Personalised reminders for EU institutional events</td><td>User only</td></tr>
+        <tr><td>Organisation intelligence profile</td><td>Personalised AI responses based on policy interests and activity</td><td>User only</td></tr>
+        <tr><td>Chat history</td><td>Conversation continuity, follow-up questions</td><td>User only</td></tr>
+      </tbody>
+    </table>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Data privacy</div>
+      <div class="info-card__text">User data is stored in Supabase (PostgreSQL) hosted in the EU. Chat messages are not used for AI model training. Organisation intelligence profiles are derived from public Transparency Register data. Users can request data export or deletion at any time.</div>
+    </div>
+  </div>
+
+  <!-- Section 9: Data flow -->
+  <div class="section" id="flow">
+    <div class="section__header reveal-left">
+      <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-swap-horizontal"></i></div>
+      <h2 class="section__title">Data flow: from source to answer</h2>
+    </div>
+    <p class="section__intro reveal">Here is how data moves through Brubru, from collection to the moment a user gets an answer.</p>
+
+    <div class="subsection reveal">
+      <h3 class="subsection__title">1. Collection (daily)</h3>
+      <p class="subsection__text">Automated scrapers fetch new content from 44 EU news portals, EUR-Lex RSS feeds, OEIL procedure updates, EP committee documents, EPRS publications, and Commission press releases. Data is normalised and stored in PostgreSQL.</p>
+    </div>
+    <div class="subsection reveal">
+      <h3 class="subsection__title">2. Knowledge enrichment (continuous)</h3>
+      <p class="subsection__text">New legislation and institutional developments are reviewed daily. Expert knowledge guides are updated with new CELEX numbers, status changes, and institutional contacts. Keyword triggers are maintained in 6 languages.</p>
+    </div>
+    <div class="subsection reveal">
+      <h3 class="subsection__title">3. Context assembly (per query)</h3>
+      <p class="subsection__text">When a user asks a question, the context builder assembles a tailored context package: matching knowledge guides, relevant legislative files, EPRS briefings, and (if needed) real-time EU institutional search results. This context is injected into the AI prompt.</p>
+    </div>
+    <div class="subsection reveal">
+      <h3 class="subsection__title">4. AI response (per query)</h3>
+      <p class="subsection__text">The AI model (Claude Sonnet 4) generates a response grounded in the assembled context. Responses include document references with EUR-Lex links, procedure numbers, and institutional contacts. A post-processing step strips orphan citations and validates links.</p>
+    </div>
+    <div class="subsection reveal">
+      <h3 class="subsection__title">5. Distribution (daily)</h3>
+      <p class="subsection__text">Curated headlines are compiled into daily brief emails sent to subscribers. Targeted news alerts are sent to organisations whose policy interests match the day's developments. All emails link back to Brubru's chatbot with pre-filled questions.</p>
+    </div>
+
+    <div class="flow-diagram reveal-scale">
+      <div class="flow-row">
+        <div class="flow-box flow-box--blue">EU sources (44 portals)</div>
+        <span class="flow-arrow"><i class="mdi mdi-arrow-right"></i></span>
+        <div class="flow-box flow-box--green">PostgreSQL (72 tables)</div>
+        <span class="flow-arrow"><i class="mdi mdi-arrow-right"></i></span>
+        <div class="flow-box flow-box--purple">Context builder</div>
+        <span class="flow-arrow"><i class="mdi mdi-arrow-right"></i></span>
+        <div class="flow-box flow-box--amber">AI response</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <p>Built by <a href="https://beresol.eu">Beresol</a> with <a href="https://brubru.beresol.eu">Brubru</a></p>
+  <p style="margin-top: 0.5rem;">Victor Sol&eacute; Ferioli | <a href="mailto:hello@beresol.eu">hello@beresol.eu</a></p>
+</footer>
+
+<script>
+  // Intersection Observer for scroll-triggered animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger-children').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Animated counter for figure cards
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.count);
+    const duration = 2000;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const current = Math.round(eased * target);
+      el.textContent = current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.dataset.counted) {
+        entry.target.dataset.counted = 'true';
+        animateCounter(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+  // Typing effect for query demo
+  const demoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.dataset.played) {
+        entry.target.dataset.played = 'true';
+        const text = document.getElementById('queryText');
+        const response = document.getElementById('queryResponse');
+        text.classList.add('typing');
+        setTimeout(() => {
+          text.style.borderRight = 'none';
+          response.classList.add('show');
+        }, 3500);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  demoObserver.observe(document.getElementById('queryDemo'));
+</script>
+
+</body>
+</html>
