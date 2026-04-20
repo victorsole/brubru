@@ -1,6 +1,6 @@
 # Clean Energy Investment Strategy
 
-QUICK FACTS:
+## QUICK FACTS
 - Reference: COM(2026) 116 final
 - Adopted: 10 March 2026 (College of Commissioners)
 - Commissioner: Teresa Ribera (EVP, Clean, Just and Competitive Transition) + Stephane Sejourne (EVP, Industrial Strategy)

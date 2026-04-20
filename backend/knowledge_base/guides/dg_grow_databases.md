@@ -1,6 +1,6 @@
 # DG GROW Databases for Single Market Compliance
 
-QUICK FACTS:
+## QUICK FACTS
 - Full name: DG Internal Market, Industry, Entrepreneurship and SMEs (DG GROW)
 - Portal: https://single-market-economy.ec.europa.eu/tools-databases_en
 - Scope: Product safety, conformity assessment, technical regulations, trade barriers, industrial ecosystems

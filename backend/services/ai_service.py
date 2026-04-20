@@ -39,6 +39,71 @@ from models.chat_analytics import ChatAnalytics
 logger = logging.getLogger(__name__)
 
 
+# ---------------------------------------------------------------------------
+# Quality signal regexes (Playbook D: structured logging)
+# Kept at module level so the same patterns are used in ai_service runtime
+# and in scripts/eval_quality.py for consistency.
+# ---------------------------------------------------------------------------
+_LEGAL_ANCHOR_RE = re.compile(
+    r"\b[0-9]{5}[A-Z][0-9]{4}\b"                # CELEX (e.g. 32024R1689)
+    r"|COM\s*\(\d{4}\)\s*\d+"                   # COM(2023)533
+    r"|\d{4}/\d{4}\((?:COD|NLE|APP|CNS|INI|INL|RSP|RPS|BUD)\)",  # procedure ref
+    re.IGNORECASE,
+)
+
+_DEFLECTION_RE = re.compile(
+    r"search\s+EUR-Lex|check\s+EUR-Lex|visit\s+EUR-Lex"
+    r"|consult\s+EUR-Lex\s+yourself"
+    r"|you\s+(?:can|should|may)\s+(?:search|check|visit|consult)\s+EUR-Lex",
+    re.IGNORECASE,
+)
+
+_DONT_HAVE_RE = re.compile(
+    r"I\s+don'?t\s+have\s+access\s+to"
+    r"|I\s+don'?t\s+have\s+the\s+(?:specific\s+)?text"
+    r"|I\s+cannot\s+access"
+    r"|I\s+am\s+unable\s+to\s+access",
+    re.IGNORECASE,
+)
+
+# Lightweight language markers for query/response language detection.
+# Matches eval_quality.py so runtime and offline scoring agree.
+_LANG_MARKERS = {
+    "EN": {"the", "and", "of", "is", "for", "in", "to", "with", "this", "that"},
+    "FR": {"le", "la", "les", "des", "une", "est", "dans", "pour", "avec", "cette"},
+    "ES": {"el", "la", "los", "las", "una", "del", "por", "con", "esta", "para"},
+    "CA": {"el", "la", "els", "les", "una", "del", "per", "amb", "aquesta", "dels"},
+    "IT": {"il", "la", "le", "dei", "una", "del", "per", "con", "questa", "nella"},
+    "NL": {"de", "het", "een", "van", "voor", "met", "die", "dat", "deze", "wordt"},
+}
+
+
+def _detect_query_language(text: str) -> str:
+    """
+    Cheap bag-of-words language detector. Returns two-letter upper-case code.
+    Defaults to EN when signal is too weak.
+    """
+    if not text:
+        return "EN"
+    words = re.findall(r"\b\w+\b", text.lower())
+    if not words:
+        return "EN"
+    scores = {lang: sum(1 for w in words if w in markers) / len(words)
+              for lang, markers in _LANG_MARKERS.items()}
+    # CA/ES disambiguation
+    if scores.get("CA", 0) > 0 and scores.get("ES", 0) > 0:
+        ca_only = {"amb", "aquesta", "dels", "pel", "als", "pero"}
+        es_only = {"con", "esta", "por", "pero"}
+        ca = sum(1 for w in words if w in ca_only)
+        es = sum(1 for w in words if w in es_only)
+        if ca > es:
+            scores["CA"] += 0.05
+        elif es > ca:
+            scores["ES"] += 0.05
+    best = max(scores, key=scores.get)
+    return best if scores[best] > 0.02 else "EN"
+
+
 @dataclass
 class ChatMessage:
     """Chat message structure"""
@@ -376,6 +441,32 @@ class AIService:
             )
         )
 
+        # Quality logging (Playbook D): structured signals for every response.
+        # Grep-friendly prefix lets us aggregate into BQS metrics later.
+        try:
+            guides_matched = len(context_data.internal_knowledge) if context_data and context_data.internal_knowledge else 0
+            quality_signals = {
+                "ts": datetime.now().isoformat(),
+                "provider": provider_used,
+                "model": actual_model,
+                "response_time_ms": round(total_time_ms, 1),
+                "tokens": tokens_used,
+                "guides_matched": guides_matched,
+                "source_tiers": source_tiers,
+                "citations": len(citations),
+                "query_lang": _detect_query_language(user_message),
+                "response_lang": _detect_query_language(assistant_message),
+                "has_legal_anchor": bool(_LEGAL_ANCHOR_RE.search(assistant_message)),
+                "deflection": bool(_DEFLECTION_RE.search(assistant_message)),
+                "dont_have": bool(_DONT_HAVE_RE.search(assistant_message)),
+                "confidence": "high" if guides_matched > 0 else "low",
+                "query_len": len(user_message),
+                "response_len": len(assistant_message),
+            }
+            logger.info(f"[QUALITY] {json.dumps(quality_signals, ensure_ascii=False)}")
+        except Exception as e:
+            logger.warning(f"Quality logging failed (non-critical): {e}")
+
         # Compute action buttons from entities and intent
         action_dicts = []
         if use_context and context_data is not None:
@@ -712,6 +803,25 @@ When you mention a COM document, CELEX number, regulation, directive, or procedu
 - Procedure references: [2022/0095(COD)](https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference=2022/0095(COD))
 URL patterns: EUR-Lex CELEX = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}. COM = https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM:{year}:{number}:FIN. OEIL = https://oeil.secure.europarl.europa.eu/oeil/popups/ficheprocedure.do?reference={ref}.
 NEVER cite a regulation or directive as plain text when you know the CELEX number. Bare references without links are useless to professionals.
+
+CRITICAL -- LEGAL ANCHORING (required for every substantive response about EU law):
+When a query concerns a specific EU law, regulation, directive, proposal, or legislative file -- whether the user asks for information, analysis, drafting, comparison, or impact assessment -- you MUST include the legal anchor in your response.
+
+A legal anchor is at least one of:
+- CELEX number (e.g. 32024R1689, 32023R1115, 32014L0065)
+- COM reference (e.g. COM(2023)258, COM(2025)1022)
+- Procedure reference (e.g. 2023/0156(COD), 2022/0140(COD))
+
+Place the anchor naturally in the opening paragraph, or in a "Legal basis" / "Reference" section. Do NOT hide it in a footnote or leave it to the end. This applies to:
+- Position papers, briefing notes, talking points, lobbying strategies (drafting tasks)
+- Amendments, textual proposals (drafting tasks)
+- Country-specific analyses, sectoral impact assessments, compliance gap checks (analysis tasks)
+- "How does X affect Y?", "What does X mean for Z?" (analysis tasks)
+- "What is X?", "Explain X", "Status of X" (information tasks)
+
+The EU CONTEXT section (knowledge guides and law snapshots) contains the verified anchor for every law Brubru knows. If the guide's QUICK FACTS block lists "CELEX: 32024R1689", that is the anchor -- use it. A drafted position paper without a CELEX anchor is worthless to a professional.
+
+If the law has no CELEX yet (e.g. Commission proposal still in procedure), use the COM reference or procedure reference instead. If none of these are in the context, state clearly: "The procedure reference is not in my current sources."
 
 CRITICAL -- RAPPORTEUR ACCURACY:
 When identifying a rapporteur, shadow rapporteur, or any person's role:

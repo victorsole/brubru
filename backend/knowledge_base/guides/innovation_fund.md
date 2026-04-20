@@ -1,6 +1,6 @@
 # EU Innovation Fund
 
-QUICK FACTS:
+## QUICK FACTS
 - What: one of the world's largest funding programmes for deploying net-zero and innovative technologies
 - Funding source: EU Emissions Trading System (ETS) allowance auction revenues
 - Total budget: approximately EUR 40 billion (2020-2030), based on sale of 530 million ETS allowances at EUR 75/tonne

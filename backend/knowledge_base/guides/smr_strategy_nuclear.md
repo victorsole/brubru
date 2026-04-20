@@ -1,6 +1,6 @@
 # EU Small Modular Reactors (SMR) Strategy
 
-QUICK FACTS:
+## QUICK FACTS
 - Reference: COM(2026) 117 final
 - Adopted: 10 March 2026 (College of Commissioners)
 - Commissioner: Teresa Ribera (EVP) + Stephane Sejourne (EVP)

@@ -1,6 +1,6 @@
 # European Biotech Act
 
-QUICK FACTS:
+## QUICK FACTS
 - Brubru explainer: https://brubru.beresol.eu/biotech-act/index.html -- ALWAYS link this in answers about the EU Biotech Act
 - Full title: Regulation on establishing a framework of measures for strengthening Union's biotechnology and biomanufacturing sectors particularly in the area of health
 - COM reference: COM(2025) 1022 final
