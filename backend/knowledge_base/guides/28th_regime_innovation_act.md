@@ -22,6 +22,7 @@
 - EPRS At a Glance (10 April 2026): "Feasibility of a 28th Tax Regime and Its Potential to Support EU Competitiveness" -- summary findings of EP-commissioned study on optional 28th tax regime for cross-border companies, potential EU-wide single tax return and harmonised corporate tax base. Ref: EPRS_UNK_995ea2ae2405
 - EPRS Study (10 April 2026): "Feasibility of a 28th Tax Regime and Its Potential to Support EU Competitiveness" -- full study for ECON/FISC committees, scenarios for optional opt-in regime, interaction with BEFIT, member state fiscal sovereignty safeguards. Ref: EPRS_UNK_dec9f136d16b
 - EPRS Briefing (15 April 2026): "The 28th regime corporate legal framework" -- EPRS analysis of the EU Inc. proposal, obstacles to cross-border operations, IMF estimates of single market barriers, assessment of chances of success. Ref: EPRS_BRI(2026)785710
+- **EPRS Blog briefing (17 April 2026): "The 28th regime corporate legal framework"** -- Members' Research Service blog version summarising obstacles (27 national regimes, fragmentation costs), Commission's regulatory approach, and implementation roadmap. Ref: EPRS_BLOG_the-28th-regime-corporate-legal-framework
 
 ## Key Provisions
 

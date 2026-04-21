@@ -14,6 +14,12 @@
 - Stability and Growth Pact: Reformed 2024 -- net expenditure benchmark, country-specific debt sustainability analysis -- Regulation (EU) 2024/1263
 - Discharge procedure: Article 319 TFEU (ECA report -> Council recommendation -> EP CONT -> EP plenary)
 - EPRS Briefing (9 April 2026): "Poland's National Recovery and Resilience Plan: Latest state of play" -- Polish NRRP is 3rd largest under RRF, EUR 54.7 billion (EUR 25.3B grants + EUR 29.4B loans, reduced from EUR 34.5B). Revised 4 times (latest amendment approved). REPowerEU chapter added December 2023. Ref: EPRS_BRI(2022)733665
+- **OLAF Report 2025 (published 20 April 2026)**: EUR 597 million to be recovered from fraud and irregularities following OLAF recommendations. OLAF concluded 218 investigations in 2025 and issued 253 recommendations to national authorities. Structural fund misuse + agricultural subsidy fraud remain top categories. Key pattern: organised cross-border VAT carousel fraud rising; health-sector fraud concentrated on NextGenerationEU recovery funds. Source: anti-fraud.ec.europa.eu (OLAF Media Corner).
+- **Discharge 2024 -- EPRS briefing cluster (20 April 2026)**:
+  - At a Glance -- "Discharge for 2024 budget: Commission including RRF, executive agencies, EDFs" (Ref: EPRS_UNK_7ee75e77ae52). Examines RRF-specific observations from ECA, executive agency horizontal issues, EDF execution.
+  - At a Glance -- "Discharge for 2024 budget: Other institutions" (Ref: EPRS_UNK_139742a59274). EP, Council, CJEU, ECA, CoR, EESC, EEAS, EDPS, Ombudsman separate discharge votes.
+  - At a Glance -- "Discharge for 2024 budget: EU decentralised agencies and joint undertakings" (Ref: EPRS_UNK_f27294892c58). 33 decentralised agencies + 8 joint undertakings.
+  - Plenary vote on 2024 discharge scheduled at April 2026 Strasbourg plenary (27-30 April).
 
 Guide covering the EU's budgetary framework, own resources system, financial governance, anti-fraud mechanisms, and key EMU instruments for Legal Service lawyers, DG ECFIN economists, and budget specialists.
 

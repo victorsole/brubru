@@ -1,7 +1,9 @@
 # Iran War, Strait of Hormuz and EU Crisis Response
 
 ## QUICK FACTS
+**LATEST (21 April 2026)**: Transport Council informal videoconference today discussing transport-sector impact of Middle East crisis (fuel costs, Strait of Hormuz detours). Foreign Affairs Council + General Affairs Council also meeting 21 April. Informal Heads of State/Government meeting in Cyprus 23-24 April -- expected to discuss Iran/Middle East stability + southern neighbourhood.
 LATEST (April 2026): US-Iran ceasefire reached; EU monitoring whether it holds. Trump reshaping Middle East dynamics.
+**Contexte EU energy debate (reported 20 April 2026)**: "The vicious cycle of the EU's energy price dilemma" -- analysis of Commission internal tensions: short-term subsidies to cushion Iran-war energy price impact risk increasing fossil fuel demand, undermining electrification. Two Commission documents expected later this month take opposing tacks. Flags politicised debate on Commission emergency plan (see below).
 Trump-Rutte confrontation (9 April 2026): Trump blew up at NATO SG Mark Rutte over Iran/NATO burden-sharing; UK public sentiment toward Trump's US plunging amid Iran war.
 Montenegro (10 April 2026): PM says Montenegro wants to join EU for security reasons, citing geopolitical instability.
 Crisis background: Iran war (started early March 2026), US-led military operations against Iran

@@ -11,6 +11,12 @@
   - **Main file: [2025/2263(INI)]** -- "The Institutional Framework of the European Union and its interaction with national authorities in the application of Union law, with particular reference to Article 19 TEU". AFCO draft report published 20 April 2026. Cross-references the rule-of-law toolbox, infringement procedure, Article 7 TEU, and Conditionality Regulation.
   - **Companion file: [2026/2012(INI)]** -- AFCO own-initiative procedure, opened 2026 (scope tracked in OEIL); likely targeted aspect of institutional framework
   - **Companion file: [2026/2013(INI)]** -- AFCO own-initiative procedure, opened 2026; likely targeted aspect of institutional framework
+- **Three additional AFCO draft reports (20 April 2026)**:
+  - **[2025/2212(INI)]** "Institutional aspects of the Common European Defence Union" -- examines treaty basis, QMV extension, PESCO reform, Defence Commissioner role evolution. Directly tied to US 2026 NDS pivot and strategic autonomy push. See `us_2026_national_defence_strategy` and `eu_defence_procurement`.
+  - **[2025/2243(ACI)]** "Framework Agreement on relations between the European Parliament and the European Commission" -- Inter-institutional Agreement revision; covers Parliament's scrutiny powers, Commissioner hearings, State of the Union, delegated/implementing acts control.
+  - **[2025/2262(REG)]** "Amendments to Parliament's Rules of Procedure concerning appointments to Union agencies and bodies (Rule 135)" -- revises EP procedures for agency head appointments (e.g. EPPO Chief Prosecutor 2025/0803(NLE), ongoing).
+  - **[2025/2195(INL)]** European Electoral Act amendment -- proxy voting during pregnancy and after giving birth -- Article 225 TFEU legislative initiative. Committee vote scheduled Strasbourg 27 April.
+  - **[2025/2159(ACI)]** Interinstitutional Agreement on budgetary discipline, budgetary cooperation and sound financial management -- essential post-MFF governance.
 - Policy context: follows Commission rule-of-law reports, Conditionality Regulation (EU, Euratom) 2020/2092 implementation, Court of Justice rulings on judicial independence (Portuguese Judges, Commission v Poland, Miasto Łowicz)
 - Connected ongoing files: Hungary 2026 election aftermath (Magyar grand bargain, RRF frozen-funds review), Spain amnesty law referrals, Romania/Slovakia judicial reform concerns
 - Timing: AFCO draft reports typically move to committee adoption within 4-6 months; plenary vote late 2026 or early 2027

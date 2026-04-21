@@ -19,6 +19,10 @@
 - Treaty basis: Article 114 TFEU (internal market) + Article 168 TFEU (public health)
 - REFORM: All three core acts (2001/83, 726/2004, 141/2000, 1901/2006) being replaced by the 2023 pharmaceutical package. See `eu_pharmaceutical_legislation_reform.md`.
 - AMR investment (7 April 2026): Commission invests EUR 30 million to strengthen global response to antimicrobial resistance, announced by DG SANTE
+- **European Immunization Week Joint Statement (20 April 2026, STATEMENT/26/846)**: Joint statement by European Commission, WHO Regional Office for Europe, and UNICEF Regional Office for Europe and Central Asia celebrating two decades of progress through vaccination. Context: European Immunization Week 2026; Commission calls out measles resurgence in 2024-2025 + renewed HPV uptake push. Source: ec.europa.eu/commission/presscorner/detail/en/statement_26_846.
+- **EU-funded vaccination projects factsheet (20 April 2026, DG SANTE)**: Published factsheet highlighting EU-funded projects under EU4Health + Horizon Europe on immunisation: vaccination confidence (VACCELERATE, CREATE-HYDRO), vaccine surveillance (DRIVE, I-MOVE COVID), childhood programmes. Source: health.ec.europa.eu.
+- **MDCG 2021-24 rev.1 -- Medical device classification guidance (20 April 2026, DG SANTE)**: Update to Medical Device Coordination Group guidance on classification of medical devices under MDR (Regulation (EU) 2017/745). Revised classification rules, borderline cases, software-as-medical-device (SaMD) treatment. Source: health.ec.europa.eu/medical-devices-sector/new-regulations-and-regulations-amendments_en.
+- **EUHPP Live Webinar (21 April 2026)**: "Bridging the Gap -- Real-World Strategies for Patient-Public Partnerships" presentations + recording available (DG SANTE, 20 April 2026). Next webinar: "Health workforce at the core of the transformation of health systems" (8 May 2026).
 
 ## Deep Dive
 

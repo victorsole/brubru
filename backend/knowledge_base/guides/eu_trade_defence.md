@@ -1,7 +1,9 @@
 # EU Trade Defence Instruments
 
 ## QUICK FACTS
-- PETI draft report 2025/2955(RSP) (15 April 2026): "Protection of EU companies, jobs and products against unfair competition from third countries" -- based on petitions 0072/2025 and 0956/2025. Signals growing citizen/industry pressure for stronger trade defence instruments.
+- PETI draft report 2025/2955(RSP) (15 April 2026): "Protection of EU companies, jobs and products against unfair competition from third countries" -- based on petitions 0072/2025 and 0956/2025. Signals growing citizen/industry pressure for stronger trade defence instruments. **Updated 20 April 2026**: PETI draft report published with formal document reference on EP committee archive page; expected committee vote Q2 2026.
+- **INTA amendments on Mexico FTA (20 April 2026)**: PE787.663v01-00 -- amendments tabled on Mexico trade agreement file. Rapporteur: Borja Giménez Larraz (EPP, Spain). Part of EU external trade strategy to diversify away from Russia/China dependency.
+- **EPRS At a Glance (20 April 2026): "A new generalised scheme of preferences (GSP)"** -- analysis of new GSP Regulation post-2027. Includes trade defence dimension: forced-labour conditionality, CBAM interaction, safeguard investigation thresholds. See dedicated `eu_gsp_new_generation` guide. Ref: EPRS_UNK_f54ab66b6d1a.
 - Legal basis: Article 207 TFEU (Common Commercial Policy)
 - 3 instruments: anti-dumping, countervailing duties (anti-subsidy), safeguard measures
 - Anti-dumping regulation: Regulation (EU) 2016/1036, CELEX: 32016R1036

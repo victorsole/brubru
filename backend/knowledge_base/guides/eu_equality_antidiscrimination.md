@@ -20,6 +20,8 @@
 - Commission annual Rule of Law Report: COM(2025) annual cycle. LIBE committee adoption of 2025 Rule of Law report: 15 April 2026 (Rapporteur Konstantinos Arvanitis, GUE/NGL, Greece, procedure 2025/2239(INI)).
 - Hungary election (12 April 2026): Viktor Orban (Fidesz) defeated after 16 years. Peter Magyar (Tisza Party) won. Implications for EU decision-making: potential unblocking of Council unanimity votes (foreign policy, Article 7), reorientation toward rule of law compliance, unfreezing of EU funds conditioned on judicial independence reforms.
 - EP AFCO Draft Report (14 April 2026): Amendment of the European Electoral Act allowing MEPs to vote in plenary by proxy voting during pregnancy and after giving birth (2025/2195(INL)). Legislative initiative procedure under Article 225 TFEU. Addresses representation of pregnant/post-natal MEPs. Source: https://www.europarl.europa.eu/committees/en/afco
+- **EPRS At a Glance (20 April 2026): "The need for a consent-based definition of rape"** -- EPRS analysis on consent-based vs coercion-based models, Istanbul Convention Article 36 compliance, conviction-rate impact (Sweden +75% reporting; Spain +27% convictions), and EP FEMM push to add rape to Article 83(1) TFEU list of EU crimes. Ref: EPRS_UNK_994fa8ca4d44. See dedicated `consent_based_rape_definition` guide.
+- **EPRS At a Glance (20 April 2026): "Maternity and paternity leave in the EU"** -- EPRS review of Work-Life Balance Directive (EU) 2019/1158 implementation, MS divergence (Bulgaria 58 weeks maternity; Spain 16 weeks equalised paternity), father uptake gap (EU avg 25%). Ref: EPRS_UNK_613d0da18fbd. See dedicated `maternity_paternity_leave` guide.
 
 ## Recent Developments (March 2026)
 

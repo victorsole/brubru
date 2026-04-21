@@ -10,6 +10,7 @@
 - ENVI rapporteur: **Mohammed Chahim** (S&D, Netherlands)
 - ENVI draft report: PE786.835 (10 April 2026, A10-0000/2026 placeholder)
 - ENVI draft report contains 34 amendments (Recitals 1-50, Article 1 paragraph 1 points 1-20)
+- **ITRE draft opinion (20 April 2026): PE786.734v01-00, rapporteur Massimiliano Salini (EPP, Italy). Deadline for amendments: 7 May 2026.** Draft opinion supports downstream scope extension + anti-circumvention, with ITRE committee angle emphasising preservation of industrial competitiveness and protection of energy-intensive sectors. 111 amendments already filed on CJ19-PR-784222 (joint ENVI-ITRE committee track).
 - EESC opinion: 19 March 2026
 - Date of definitive CBAM application: 1 January 2026 (financial obligations begin)
 - Date of downstream extension entry into force: 1 January 2028 (proposed)
