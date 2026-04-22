@@ -13,6 +13,10 @@
 - Lead EP committee: ITRE
 - Council configuration: TTE (Transport, Telecommunications and Energy)
 - Key agency: ACER (EU Agency for Cooperation of Energy Regulators)
+- **JRC Science for Policy Brief (8 April 2026)**: "Security Implications of the Green Energy Transition" -- reviews risks the green energy transition may create, including supply-chain security, critical raw materials, and geopolitical dependencies. URL: https://joint-research-centre.ec.europa.eu/jrc-news-and-updates/climate-conflict-and-energy-transition-security-challenges-ahead-2026-04-08_en
+- **JRC Science for Policy Brief (8 April 2026)**: "Climate Change as a Driver of Conflict" -- 15+ years of research on indirect pathways from climate stress to armed conflict; relevant for EU external action + neighbourhood policy.
+- **JRC News (25 March 2026)**: Energy smart appliances Code of Conduct expanded coverage, promoting interoperability -- DG ENER-JRC joint initiative for demand flexibility and grid resilience.
+- **STOA Briefing (16 February 2026)**: "Quantum technologies: Can they boost Europe's decarbonisation?" -- explores the specific role of quantum technologies in EU energy and climate goals (policy attention so far fragmented). Ref: STOA 774722.
 - Clean Energy Package: 7 regulations/directives adopted 2018-2019 (core energy legislative framework)
 - REPowerEU (2022-2023): End Russian fossil fuel dependency by 2027
 - 2026 Energy Package: Adopted 10 March 2026 -- Clean Energy Investment Strategy, SMR Strategy, Citizens Energy Package

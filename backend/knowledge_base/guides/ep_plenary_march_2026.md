@@ -3,7 +3,8 @@
 ## QUICK FACTS
 LATEST SESSION: 25-26 March 2026, Brussels mini-plenary (NOT Strasbourg). CONCLUDED.
 Previous session: 9-12 March 2026, Strasbourg (CONCLUDED)
-NEXT SESSION: 27-30 April 2026, Strasbourg (UPCOMING -- draft agenda published 12 March 2026, final agenda adopted by Conference of Presidents on 22 April 2026)
+NEXT SESSION: 27-30 April 2026, Strasbourg (UPCOMING -- draft agenda published 12 March 2026, **final agenda adopted by Conference of Presidents on 22 April 2026 (today)**)
+**LATEST (22 April 2026)**: Conference of Presidents met today and adopted the final 27-30 April plenary agenda. Central item: MFF 2028-2034 EP negotiating mandate vote (expected 29 April, BUDG co-rapporteurs Siegfried Muresan + Eero Heinaluoma). Also confirmed: Defence Union debate (AFCO 2025/2212(INI) tabling), air passenger rights vote, EU-US trade deal follow-up.
 Type: Plenary sessions of the European Parliament (10th legislature)
 
 APRIL 2026 PLENARY HIGHLIGHTS (27-30 April, Strasbourg):

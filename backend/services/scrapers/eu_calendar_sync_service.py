@@ -271,6 +271,67 @@ class EUCalendarSyncService:
         service = CollegeOJSyncService(db=self._db)
         return await service.sync_college_agendas(days_back=days_back, year=year)
 
+    async def sync_euagenda(
+        self,
+        max_events: int = 200,
+        include_details: bool = True,
+    ) -> Dict[str, Any]:
+        """Sync third-party events from euagenda.eu (think tanks, conferences,
+        webinars, training). Institution=THIRD_PARTY, source='euagenda'.
+        """
+        start_time = time.time()
+        result = {"source": "euagenda", "added": 0, "updated": 0, "skipped": 0, "errors": 0}
+        try:
+            from services.scrapers.euagenda_scraper import EuAgendaScraper
+
+            scraper = EuAgendaScraper()
+            events = await scraper.scrape_upcoming(
+                max_events=max_events, include_details=include_details
+            )
+
+            db = self._get_db()
+            try:
+                for ev in events:
+                    # Filter out events without a parseable start_date (we only
+                    # want actionable calendar entries)
+                    if not ev.start_date:
+                        result["skipped"] += 1
+                        continue
+                    event_data = {
+                        "institution": "THIRD_PARTY",
+                        "event_type": ev.event_type,
+                        "title": ev.title,
+                        "description": ev.description or ev.subtitle,
+                        "start_date": ev.start_date,
+                        "end_date": ev.end_date,
+                        "start_time": ev.start_time,
+                        "end_time": ev.end_time,
+                        "all_day": ev.all_day,
+                        "status": "scheduled",
+                        "source_url": ev.source_url,
+                        "source": "euagenda",
+                        "external_id": ev.external_id,
+                        "organiser": ev.organiser,
+                        "venue": ev.venue,
+                        "policy_areas": ev.policy_areas or [],
+                    }
+                    try:
+                        self._upsert_event(db, event_data, result)
+                    except Exception as e:
+                        logger.warning(f"[WARN] Failed to upsert euagenda event: {e}")
+                        result["errors"] += 1
+                db.commit()
+            finally:
+                if self._should_close_db():
+                    db.close()
+        except Exception as e:
+            logger.exception("[euagenda] sync failed: %s", e)
+            result["errors"] += 1
+
+        elapsed = time.time() - start_time
+        result["elapsed_seconds"] = round(elapsed, 1)
+        return result
+
     async def sync_council_meetings(self, months_ahead: int = 6) -> Dict[str, Any]:
         """Sync Council meetings (async scraper)."""
         start_time = time.time()
@@ -359,6 +420,13 @@ class EUCalendarSyncService:
             if policy_areas and existing.policy_areas != policy_areas:
                 existing.policy_areas = policy_areas
                 changed = True
+            # Third-party event fields
+            if event_data.get("organiser") and existing.organiser != event_data.get("organiser"):
+                existing.organiser = event_data.get("organiser")
+                changed = True
+            if event_data.get("venue") and existing.venue != event_data.get("venue"):
+                existing.venue = event_data.get("venue")
+                changed = True
 
             if changed:
                 existing.last_updated = datetime.now()
@@ -390,6 +458,8 @@ class EUCalendarSyncService:
             related_documents=event_data.get("related_documents", {}),
             source=source,
             external_id=external_id,
+            organiser=event_data.get("organiser"),
+            venue=event_data.get("venue"),
         )
         db.add(event)
         result["added"] += 1

@@ -4246,6 +4246,9 @@ class ContextBuilder:
             "calendar", "this week", "next week", "happening", "what's on",
             "upcoming", "planned", "plenary", "plenaries", "council", "councils",
             "college", "committee", "summit",
+            # Third-party (euagenda) event-type keywords — added 22 April 2026
+            "conference", "webinar", "roundtable", "workshop", "training",
+            "think tank", "seminar",
         )
         has_calendar_intent = any(w in q_lower for w in calendar_signal_words)
         if not has_calendar_intent:
@@ -5468,6 +5471,19 @@ class ContextBuilder:
         try:
             Completed = CommitteeMeetingTranscript.status == TranscriptStatusEnum.COMPLETED
 
+            # Seed/test transcripts must never surface in production chatbot
+            # context — they contain synthetic facts (fabricated vote numbers,
+            # T-document IDs, rapporteur statements) inserted to verify the
+            # retrieval pipeline, not real Whisper output from real meetings.
+            # Filter by event_id / title markers.
+            from sqlalchemy import not_
+            _NotSeed = not_(or_(
+                CommitteeMeetingTranscript.event_id.ilike('%seed%'),
+                CommitteeMeetingTranscript.event_id.ilike('%test%'),
+                CommitteeMeetingTranscript.title.ilike('%seed test transcript%'),
+                CommitteeMeetingTranscript.title.ilike('%synthetic%'),
+            ))
+
             def _committee_filter(query):
                 if code:
                     return query.filter(
@@ -5499,7 +5515,7 @@ class ContextBuilder:
                     )
                 return query.filter(or_(*clauses))
 
-            base = session.query(CommitteeMeetingTranscript).filter(Completed)
+            base = session.query(CommitteeMeetingTranscript).filter(Completed).filter(_NotSeed)
 
             # A. code + proc_ref + date
             transcript = None

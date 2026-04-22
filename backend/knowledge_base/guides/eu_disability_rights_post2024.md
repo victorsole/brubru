@@ -7,6 +7,7 @@
 - Treaty basis: Article 19 TFEU (non-discrimination), Article 21 Charter of Fundamental Rights, Article 26 Charter (integration of persons with disabilities)
 - Responsible Commissioner: Hadja Lahbib (Equality, Preparedness and Crisis Management). EVP Minzatu (Social Rights) for cross-cutting social package 6 May 2026.
 - PETI own-initiative report: 2025/2057(INI) "EU strategy for the rights of persons with disabilities post-2024" -- PETI committee opinion PE773.084 by Pal Szekeres (PfE, Hungary), adopted 17 July 2025; lead committee EMPL
+- **PETI draft report refresh (22 April 2026)**: updated PETI draft report on 2025/2057(INI) surfaced in EP committees portal during Week 17 Group Week. Incorporates latest mid-term review findings and aligns with the Commission Social Package scheduled for College 6 May 2026. Source: https://www.europarl.europa.eu/committees/en/peti
 - Upcoming policy product: "Enhancing disability rights strategy to 2030" -- part of Social Package scheduled for College of Commissioners 6 May 2026
 - EU Disability Card: Directive (EU) 2024/2841 -- mutual recognition of disability status for short stays in other Member States (adopted October 2024)
 - EU Parking Card: Directive (EU) 2024/2842 -- mutual recognition of parking rights for persons with disabilities

@@ -13,6 +13,7 @@ Floods Directive: Directive 2007/60/EC, CELEX 32007L0060
 Urban Wastewater Treatment Directive: Directive 91/271/EEC, CELEX 31991L0271 (revision adopted 2024)
 Water Resilience Strategy: COM(2025)280, launched 8 December 2025
 March 2026: Commission launched call for evidence on targeted revision of EU water legislation
+Council ART Paper (April 2026): "Bridging Water Extremes: Can floods alleviate droughts?" -- EU strategic framing of water management, flood/drought interlinkages, ambition vs practical limits as water moves up the strategic agenda. URL: https://www.consilium.europa.eu/en/documents-publications/council-research-papers/
 Responsible DG: DG ENV (Environment)
 Responsible Commissioner: Jessika Roswall (Environment)
 EP lead committee: ENVI

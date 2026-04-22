@@ -38,6 +38,10 @@ class InstitutionEnum(str, enum.Enum):
     EIOPA = "EIOPA"
     COR = "COR"
     EESC = "EESC"
+    # Non-EU-institutional events (think tanks, conference organisers,
+    # associations, universities, public bodies). Added 22 April 2026 for
+    # euagenda.eu integration. See `euagenda_brussels_events.md` guide.
+    THIRD_PARTY = "THIRD_PARTY"
 
 
 class EventTypeEnum(str, enum.Enum):
@@ -60,6 +64,12 @@ class EventTypeEnum(str, enum.Enum):
     COMITOLOGY_MEETING = "comitology_meeting"
     EXPERT_GROUP_MEETING = "expert_group_meeting"
     GRANT_DEADLINE = "grant_deadline"
+    # Third-party (euagenda.eu) event types, added 22 April 2026
+    CONFERENCE = "conference"
+    WEBINAR = "webinar"
+    ROUNDTABLE = "roundtable"
+    TRAINING = "training"
+    WORKSHOP = "workshop"
 
 
 class EventStatusEnum(str, enum.Enum):
@@ -125,6 +135,10 @@ class EUCalendarEvent(Base):
     ep_activity_type = Column(String, nullable=True)
     ep_committee_code = Column(String, nullable=True)
     commission_dg = Column(String, nullable=True)
+
+    # Third-party (euagenda.eu) events: organising body + venue
+    organiser = Column(Text, nullable=True)
+    venue = Column(Text, nullable=True)
 
     # Classification
     policy_areas = Column(ARRAY(String), default=[])

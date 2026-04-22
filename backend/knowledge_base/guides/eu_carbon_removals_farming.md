@@ -15,6 +15,7 @@
 - Council configuration: Environment
 - Legal basis: Article 192(1) TFEU (environment)
 - Lead DG: DG CLIMA (Climate Action)
+- **JRC Science for Policy Report (2026)**: "Unlocking the Carbon Farming potential via a new generation of Monitoring, Reporting, Verification (MRV) systems" -- JRC analysis of next-generation MRV for carbon farming, feeding into CRCF implementing acts 2025-2027. Ref: JRC145825. URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC145825
 - Commissioner: Wopke Hoekstra (Climate, Net Zero, Clean Growth)
 - EPRS Briefing (16 April 2026): "Certifying EU permanent carbon removals: State of play in implementing the EU's Carbon Removal and Carbon Farming Regulation" -- state of play on implementing acts, methodology development, certification schemes, registry rollout. Ref: EPRS_UNK_923b0e8adb0a
 - Target: Contribute to EU 2050 climate neutrality goal (European Climate Law, Reg (EU) 2021/1119) and 2040 -90% target

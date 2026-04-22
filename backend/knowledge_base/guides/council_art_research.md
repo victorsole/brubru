@@ -8,9 +8,9 @@
 - Audience: Council delegations, EU policymakers, strategic planners
 - Note: This is the Council's in-house research centre, distinct from EPRS (Parliament) and JRC (Commission)
 - Latest publications (April 2026):
-  - "Forward Look 2026: Playing by new rules?" -- geopolitics, EU adaptation to changing global rules
-  - "Bridging Water Extremes: Can floods alleviate droughts?" -- water policy, climate adaptation
-  - "Prospects for 2026: what others are saying" -- compilation of 35 external outlook reports (society, tech, economy, environment, geopolitics)
+  - **"Forward Look 2026: Playing by new rules?"** -- annual flagship analysis. Explores how the 'rules of the game' are changing: global power dynamics, economic fragilities, destabilising societal pressures, conflict and hybrid threats, competitiveness and climate change. Assesses how the EU may need to adapt to -- and contribute to shaping -- a new playbook. Published early 2026.
+  - **"Prospects for 2026: what others are saying"** -- companion volume to Forward Look 2026. Synthesises 35 external outlook reports across society, technology, economy, environment, and (geo-)politics. Highlights **the ten conflicts expected to shape 2026**.
+  - **"Bridging Water Extremes: Can floods alleviate droughts?"** -- water policy ART paper. Examines flood and drought management together as a defining EU challenge. Ambition vs practical limits. Complements the Water Resilience Strategy (COM(2025)280) and WFD amendment (Dir 2026/805). Cross-reference `eu_water_legislation.md`.
 
 ## About the ART
 

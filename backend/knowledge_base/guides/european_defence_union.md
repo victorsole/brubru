@@ -11,7 +11,8 @@
 - Commissioner for Defence: Andrius Kubilius (Defence and Space portfolio, created November 2024)
 - HR/VP: Kaja Kallas
 - EP committee: SEDE (Subcommittee on Security and Defence), AFET lead
-- AFCO own-initiative report: 2025/2212(INI) "Institutional aspects of the Common European Defence Union" -- rapporteur Salvatore De Meo (EPP, Italy), appointed 13 January 2026; draft report not yet tabled in OEIL
+- AFCO own-initiative report: 2025/2212(INI) "Institutional aspects of the Common European Defence Union" -- rapporteur Salvatore De Meo (EPP, Italy), appointed 13 January 2026
+- **AFCO draft report TABLED (22 April 2026)**: procedure 2025/2212(INI) draft report now published in EP committees portal (https://www.europarl.europa.eu/committees/en/afco). Addresses Article 42 TEU activation path, supranationalisation of defence procurement (DG DEFIS mandate scope), passerelle options under Article 31(3) TEU, and parliamentary scrutiny of SAFE + EDIP. Tabling deadline for amendments: TBC (set by AFCO coordinators). AFCO committee vote expected before summer recess. Plenary vote target: autumn 2026.
 - Previous EP resolutions: many on European Defence Union, including 2023 Bilcik report on common security and defence policy
 - Treaty change vs. Treaty-base creativity: AFCO report expected to map what can be done under current Treaties (permanent structured cooperation, enhanced cooperation, supranationalisation of procurement) vs. what would require Treaty revision (common army, Article 42 activation)
 - Informal Leaders' meeting Cyprus 23-24 April 2026: defence likely on the agenda alongside competitiveness and enlargement

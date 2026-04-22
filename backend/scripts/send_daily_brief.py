@@ -107,11 +107,21 @@ def verify_headline_urls(db) -> bool:
     all_ok = True
     for item in items:
         try:
-            req = urllib.request.Request(item.url, method='HEAD', headers={
-                'User-Agent': 'Mozilla/5.0 (Brubru URL checker)'
+            # Use GET (not HEAD) so servers that don't implement HEAD
+            # (consilium subdomain returns 405; some EP pages too) still
+            # return 200. We do not download the full body.
+            req = urllib.request.Request(item.url, method='GET', headers={
+                'User-Agent': (
+                    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+                    'AppleWebKit/537.36 (KHTML, like Gecko) '
+                    'Chrome/124.0.0.0 Safari/537.36'
+                ),
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-GB,en;q=0.9',
             })
-            with urllib.request.urlopen(req, timeout=10) as resp:
+            with urllib.request.urlopen(req, timeout=15) as resp:
                 status = resp.status
+                resp.read(1024)  # consume minimal bytes, close connection
         except Exception as e:
             status = getattr(e, 'code', 0) or 0
 

@@ -10,6 +10,7 @@
 - Legal basis: Article 86 TFEU (European Public Prosecutor's Office) + Article 20 TEU (enhanced cooperation) + Articles 325 TFEU (protection of EU financial interests)
 - Current European Chief Prosecutor: Laura Codruta Kovesi (Romania) -- 7-year term, ends 2026
 - LIBE draft report (17 April 2026): Appointment of the European Chief Prosecutor [2025/0803(NLE)] -- LIBE committee report on next EPPO Chief Prosecutor succession process
+- **LIBE draft report visible in EP portal (22 April 2026)**: procedure 2025/0803(NLE) active during Week 17 Group Week. Kovesi's 7-year term ends October 2026; Council + EP joint selection committee has shortlisted candidates (confidential). NLE consent procedure -- EP approves or rejects, no amendments. Expected plenary vote: June or July 2026 plenary (TBC)
 - Participating Member States: 22 (as of 2026) -- all except Denmark, Ireland, Hungary, Poland, Sweden
 - Non-participating: Denmark (opt-out), Ireland (opt-out), Hungary (refusal), Poland (joined 24 May 2025), Sweden (joined 1 Jan 2023)
 - Independent body: neither EU institution nor agency in traditional sense; legally independent from Member States and other EU institutions (Article 6 Reg 2017/1939)
