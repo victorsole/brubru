@@ -186,6 +186,73 @@ PARENT_LAW_CATEGORIES = {
 }
 
 
+# Granular subcategory detection (Catalan keywords from translated titles)
+# First match wins. Order by specificity.
+SUBCATEGORY_RULES = [
+    # Agriculture & food
+    (['pesticide', 'fitosanitari', 'substància activa', 'substancia activa', 'biocid', 'herbicid',
+      'fungicid', 'plaguicid'], 'Pesticides i biocides'),
+    (['vi ', 'vinya', 'vitícola', 'viticola', 'vinícola', 'vinicola', 'enològic'], 'Vi i viticultura'),
+    (['pesca', 'pesquer', 'aqüicultura', 'atún', 'tuna', 'captura', 'quota de pesca', 'sardina',
+      'bacallà', 'fishing', 'fisheries'], 'Pesca i aqüicultura'),
+    (['additiu', 'pinso', 'feed additive', 'food additive', 'novel food', 'nou aliment', 'aroma'],
+     'Additius alimentaris i pinsos'),
+    (['denominació', 'denominacio', 'indicació geogràfica', 'indicacio geografica', ' dop', ' igp',
+      ' tsg'], 'Indicacions geogràfiques'),
+    (['orgànic', 'organic', 'ecològic', 'ecologic'], 'Agricultura ecològica'),
+    (['salut animal', 'sanitat animal', 'veterinari', 'zoonos', 'epizoòtia', 'bovins', 'porcí',
+      'oví', 'avícola', 'ramat'], 'Salut animal i veterinària'),
+    (['planta ', 'vegetal', 'fitosanitat', 'llavor', 'seed'], 'Sanitat vegetal i llavors'),
+    (['sucre', 'llet', 'cereals', 'fruita', 'hortalissa', 'carn ', 'oli d', 'oliva', 'mantega',
+      'formatge', 'mel '], 'Productes agrícoles'),
+    # Trade
+    (['antidumping', 'antidúmping', 'countervailing', 'drets provisionals', 'drets definitius',
+      'dret compensatori', 'mesura de salvaguarda'], 'Antidúmping i defensa comercial'),
+    (['sancion', 'restrictiv', 'mesures restrictives', 'congelació', 'embargo',
+      'prohibició de viatge'], 'Sancions i mesures restrictives'),
+    (['duana', 'duaner', 'aranzel', 'tarif', 'nomenclatura combinada', 'contingent tarifari',
+      'codi NC'], 'Duanes i aranzels'),
+    # Finance
+    (['banc', 'entitat de crèdit', 'entitat de credit', 'prudencial', 'solvència', 'solvencia',
+      'liquiditat'], 'Sector bancari'),
+    (['assegurança', 'asseguranca', 'reassegurança', 'reasseguranca'], 'Assegurances'),
+    (['valors', 'inversió', 'investiment', 'mercat financer', 'criptoactiu', 'borsa'],
+     'Mercats financers'),
+    (['blanqueig', 'finançament del terrorisme', 'financament del terrorisme'], 'Antiblanqueig'),
+    # Transport
+    (['ferroviari', 'tren', 'ferrocarril', 'railway', 'rail '], 'Trens i ferrocarril'),
+    (['aviació', 'aviacio', 'aeroport', 'aeronau', 'vol ', 'pilot', 'aeri'], 'Aviació'),
+    (['vehicle', 'automòbil', 'automobil', 'cotxe', 'motor ', 'homologació de tipus'],
+     'Cotxes i vehicles'),
+    (['marítim', 'maritim', 'vaixell', 'navegació', 'navegacio', 'port ', 'portuari'],
+     'Transport marítim'),
+    # Energy / environment
+    (['bateria', 'battery', 'pila '], 'Bateries'),
+    (['químic', 'quimic', 'REACH', 'CLP', 'substàncies', 'substancies'], 'Substàncies químiques'),
+    (['residus', 'reciclatge', 'waste', 'abocador', 'embalatge'], 'Residus i reciclatge'),
+    (['emissió', 'emissio', "gasos d'efecte", 'CO2', 'carboni', 'canvi climàtic',
+      'canvi climatic'], 'Emissions i clima'),
+    # Digital
+    (['ciberseguretat', 'cyber', 'seguretat de xarxes'], 'Ciberseguretat'),
+    (['protecció de dades', 'proteccio de dades', 'privacitat', 'RGPD'], 'Protecció de dades'),
+    (['intel·ligència artificial', 'intel.ligencia artificial'], 'Intel·ligència artificial'),
+    # Social
+    (['medicament', 'farmacèutic', 'farmaceutic', 'pharmaceutical'], 'Medicaments i farmàcia'),
+    (['cosmètic', 'cosmetic'], 'Cosmètics'),
+    (['esport', 'sport', 'dopatge', 'doping'], 'Esport'),
+    (['tabac', 'tobacco', 'cigarret'], 'Tabac'),
+]
+
+
+def detect_subcategory(title: str) -> str:
+    """Return the first matching subcategory, or None."""
+    title_lower = title.lower()
+    for keywords, sc in SUBCATEGORY_RULES:
+        if any(kw.lower() in title_lower for kw in keywords):
+            return sc
+    return None
+
+
 def classify_act(title: str) -> tuple:
     """Auto-classify an act by title keywords. Returns (category_ca, category_en).
 
@@ -311,13 +378,24 @@ def auto_fix(celex: str) -> int:
     return fixes
 
 
-def import_to_db(celex: str, title_ca: str, articles: int, recitals: int, size: int, engine: str):
+def import_to_db(celex: str, title_ca: str, articles: int, recitals: int, size: int, engine: str,
+                 file_type: str = 'main', oj_ref: str = '', parent_celex: str = '', annex_label: str = ''):
     """Import translation metadata to database."""
     from core.database import SessionLocal
     from models.catalan_translation import CatalanTranslation
 
     cat_ca, cat_en = classify_act(title_ca)
     doc_type = detect_doc_type(title_ca)
+
+    # Detect annex label from title
+    if not annex_label and file_type == 'annex':
+        label_match = re.search(r'(ANNEX\s+[IVXLCDM]+(?:\s+[A-Z])?)', title_ca, re.IGNORECASE)
+        if not label_match:
+            label_match = re.search(r'(ANNEX\s+\d+)', title_ca, re.IGNORECASE)
+        annex_label = label_match.group(1) if label_match else 'ANNEX'
+
+    # Detect subcategory
+    subcategory = detect_subcategory(title_ca)
 
     db = SessionLocal()
     try:
@@ -329,11 +407,26 @@ def import_to_db(celex: str, title_ca: str, articles: int, recitals: int, size: 
             existing.html_size_bytes = size
             existing.category = cat_ca
             existing.category_en = cat_en
+            if subcategory:
+                existing.subcategory = subcategory
+            if oj_ref:
+                existing.oj_reference = oj_ref
+            if file_type:
+                existing.file_type = file_type
+            if parent_celex:
+                existing.parent_celex = parent_celex
+            if annex_label:
+                existing.annex_label = annex_label
         else:
             db.add(CatalanTranslation(
                 celex=celex, title_en=title_ca, title_ca=title_ca,
                 short_name=celex, doc_type=doc_type,
                 category=cat_ca, category_en=cat_en,
+                subcategory=subcategory,
+                oj_reference=oj_ref or None,
+                file_type=file_type,
+                parent_celex=parent_celex or None,
+                annex_label=annex_label or None,
                 articles_count=articles, recitals_count=recitals,
                 html_size_bytes=size, engine=engine, source_format='formex',
                 siteground_url=f'https://brubru.beresol.eu/legislacio-ue-catala/{celex}/',
@@ -427,18 +520,22 @@ def main():
     parser.add_argument('--count', type=int, default=10, help='Number of acts to translate (default: 10)')
     parser.add_argument('--min-size', type=int, default=0, help='Minimum file size in KB')
     parser.add_argument('--max-size', type=int, default=999999, help='Maximum file size in KB')
+    parser.add_argument('--file-type', type=str, default='main', choices=['main', 'annex', 'all'],
+                        help='File type to translate: main (default), annex, or all')
     parser.add_argument('--start-from', type=str, default='', help='Start from this CELEX')
     parser.add_argument('--dry-run', action='store_true', help='Show queue without translating')
     parser.add_argument('--no-deploy', action='store_true', help='Skip FTP deploy')
     args = parser.parse_args()
 
-    if not os.path.exists(QUEUE_FILE):
-        print(f'[ERROR] Queue file not found: {QUEUE_FILE}')
-        print('Run the queue builder first (see catalan-implementation.md)')
+    # Try full queue first, fall back to old queue
+    FULL_QUEUE = os.path.join(TRANSLATIONS_DIR, 'translation_queue_full.txt')
+    queue_file = FULL_QUEUE if os.path.exists(FULL_QUEUE) else QUEUE_FILE
+    if not os.path.exists(queue_file):
+        print(f'[ERROR] Queue file not found: {queue_file}')
         sys.exit(1)
 
     # Load queue
-    with open(QUEUE_FILE, 'r') as f:
+    with open(queue_file, 'r') as f:
         lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
 
     # Get already translated
@@ -454,7 +551,14 @@ def main():
         parts = line.split('|')
         if len(parts) < 3:
             continue
-        xml_path, celex, size_kb = parts[0], parts[1], int(parts[2])
+        # New format: path|celex|size_kb|file_type|oj_ref|parent_celex
+        # Old format: path|celex|size_kb
+        xml_path = parts[0]
+        celex = parts[1]
+        size_kb = int(parts[2])
+        file_type = parts[3] if len(parts) > 3 else 'main'
+        oj_ref = parts[4] if len(parts) > 4 else ''
+        parent_celex = parts[5] if len(parts) > 5 else ''
 
         if args.start_from and celex == args.start_from:
             started = True
@@ -465,16 +569,20 @@ def main():
             continue
         if size_kb < args.min_size or size_kb > args.max_size:
             continue
+        # Filter by file type
+        if args.file_type != 'all' and file_type != args.file_type:
+            continue
 
-        queue.append((xml_path, celex, size_kb))
+        queue.append((xml_path, celex, size_kb, file_type, oj_ref, parent_celex))
 
     print(f'[INFO] Queue: {len(queue)} acts (filtered from {len(lines)} total, {len(already)} already done)')
-    print(f'[INFO] Translating up to {args.count} acts, size {args.min_size}-{args.max_size}KB')
+    print(f'[INFO] Translating up to {args.count} acts, type={args.file_type}, size {args.min_size}-{args.max_size}KB')
     print()
 
     if args.dry_run:
-        for i, (path, celex, size_kb) in enumerate(queue[:args.count]):
-            print(f'  [{i+1:>3}] {celex:16s} | {size_kb:>5}KB | {os.path.basename(path)}')
+        for i, (path, celex, size_kb, ft, oj, parent) in enumerate(queue[:args.count]):
+            parent_str = f' -> {parent}' if parent else ''
+            print(f'  [{i+1:>3}] {celex:20s} | {size_kb:>5}KB | {ft:5s} | {os.path.basename(path)}{parent_str}')
         print(f'\n[DRY RUN] Would translate {min(args.count, len(queue))} acts')
         return
 
@@ -494,9 +602,10 @@ def main():
     deploy_failed = []
     start_time = time.time()
 
-    for i, (xml_path, celex, size_kb) in enumerate(queue[:args.count]):
+    for i, (xml_path, celex, size_kb, file_type, oj_ref, parent_celex) in enumerate(queue[:args.count]):
         print(f'\n{"="*60}')
-        print(f'[{i+1}/{min(args.count, len(queue))}] {celex} ({size_kb}KB)')
+        ft_label = f' [{file_type}]' if file_type == 'annex' else ''
+        print(f'[{i+1}/{min(args.count, len(queue))}] {celex} ({size_kb}KB){ft_label}')
         print(f'{"="*60}')
 
         # Translate (no deploy)
@@ -548,14 +657,15 @@ def main():
             content = fh.read()
 
         title_match = re.search(r'<title>(.*?)</title>', content)
-        title_ca = title_match.group(1) if title_match else celex
+        title_ca = title_match.group(1).replace(' | Brubru', '').strip() if title_match else celex
         articles = len(re.findall(r'class="article-title"', content)) - 1
         recitals = len(re.findall(r'class="recital"', content))
         html_size = os.path.getsize(html_path)
 
         # Import to DB
         try:
-            import_to_db(celex, title_ca, max(articles, 0), recitals, html_size, 'softcatala')
+            import_to_db(celex, title_ca, max(articles, 0), recitals, html_size, 'softcatala',
+                         file_type=file_type, oj_ref=oj_ref, parent_celex=parent_celex)
             print(f'  [DB] Imported {celex}')
         except Exception as e:
             print(f'  [DB ERROR] {e}')

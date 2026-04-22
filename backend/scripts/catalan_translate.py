@@ -221,6 +221,93 @@ def parse_formex(xml_path: str) -> dict:
     return result
 
 
+def _parse_treaty_html(soup, html_path: str, celex: str = '') -> dict:
+    """
+    Parse EUR-Lex treaty HTML format (TEU, TFEU, Charter, Euratom).
+    Structure:
+      - p.doc-ti: document title (can be multiple paragraphs)
+      - p.ti-section-1, p.ti-section-2: structural headings (Title I, Chapter 1, etc.)
+      - p.ti-art: article title (e.g., "Article 1")
+      - p.sti-art: article subtitle (e.g., "Human dignity")
+      - p.normal: article body paragraphs
+    Consolidated treaties have no preamble recitals.
+    """
+    result = {
+        'source_file': html_path,
+        'metadata': {'celex': celex, 'language': 'EN'},
+        'title': '',
+        'preamble_init': '',
+        'visas': [],
+        'recitals_init': '',
+        'recitals': [],
+        'preamble_final': '',
+        'chapters': [],
+        'articles': [],
+        'final': '',
+    }
+
+    # Title: all p.doc-ti elements (first block only -- consolidated texts repeat)
+    title_els = soup.select('p.doc-ti')
+    if title_els:
+        # Deduplicate consecutive identical titles
+        seen = set()
+        parts = []
+        for el in title_els:
+            t = el.get_text(strip=True)
+            if t and t not in seen:
+                seen.add(t)
+                parts.append(t)
+        result['title'] = ' '.join(parts)
+
+    # Articles: p.ti-art + p.sti-art + following p.normal (until next ti-art or section)
+    art_titles = soup.select('p.ti-art')
+    for ti in art_titles:
+        art_text = ti.get_text(strip=True)
+        art_num_match = re.search(r'Article\s+(\d+[a-z]?)', art_text)
+        art_num = art_num_match.group(1) if art_num_match else art_text
+
+        # Subtitle
+        sti = ti.find_next_sibling('p', class_='sti-art')
+        subtitle = sti.get_text(strip=True) if sti else ''
+        full_title = f'{art_text} - {subtitle}' if subtitle else art_text
+
+        # Collect paragraphs until next ti-art or section header
+        paragraphs = []
+        el = ti.find_next_sibling()
+        while el:
+            classes = el.get('class') or []
+            # Stop at next article or section
+            if 'ti-art' in classes:
+                break
+            if any(c.startswith('ti-section') for c in classes) or any(c.startswith('ti-grseq') for c in classes):
+                break
+            if 'doc-end' in classes:
+                break
+            # Skip the subtitle paragraph itself
+            if 'sti-art' in classes:
+                el = el.find_next_sibling()
+                continue
+            # Collect normal body text
+            if 'normal' in classes or 'no-doc-c' in classes:
+                text = el.get_text(strip=True)
+                # Clean EUR-Lex artefacts like "◄" "▼"
+                text = re.sub(r'[►◄▼]\s*[A-Z]?\d*\s*', '', text)
+                if text:
+                    paragraphs.append(text)
+            el = el.find_next_sibling()
+
+        art_data = {
+            'identifier': f'ART_{art_num}',
+            'title': full_title,
+            'paragraphs': paragraphs,
+        }
+
+        if art_data['title'] or art_data['paragraphs']:
+            result['articles'].append(art_data)
+
+    return result
+
+
 def _parse_consolidated_html(soup, html_path: str, celex: str = '') -> dict:
     """
     Parse consolidated EUR-Lex HTML format (e.g. from 'Consolidated TEXT' pages).
@@ -338,6 +425,12 @@ def parse_oj_html(html_path: str, celex: str = '') -> dict:
     is_consolidated = bool(soup.select('p.title-article-norm'))
     if is_consolidated:
         return _parse_consolidated_html(soup, html_path, celex)
+
+    # Detect EUR-Lex treaty HTML format (TEU, TFEU, Charter, Euratom)
+    # Uses p.ti-art (article title) + p.sti-art (subtitle) + p.normal (body)
+    is_treaty = bool(soup.select('p.ti-art')) and bool(soup.select('p.doc-ti'))
+    if is_treaty:
+        return _parse_treaty_html(soup, html_path, celex)
 
     # Title: <p class="oj-doc-ti"> elements
     title_els = soup.select('p.oj-doc-ti')

@@ -411,8 +411,20 @@ def _get_all_recipient_emails(db_session) -> tuple:
     )
     preuser_emails = {r[0] for r in preuser_rows if r[0]}
 
+    # 2b. Pre-user unsubscribes (chronic bouncers + explicit opt-outs)
+    unsub_rows = (
+        db_session.query(
+            func.distinct(PreUserEvent.event_metadata["email"].astext)
+        )
+        .filter(PreUserEvent.event_type.in_(["daily_brief_unsubscribe", "unsubscribe"]))
+        .all()
+    )
+    unsubscribed_preusers = {r[0].lower() for r in unsub_rows if r[0]}
+
     # Remove pre-user emails that are already registered (avoid duplicates)
-    preuser_only = preuser_emails - registered_emails
+    # Also remove any pre-user email that has an unsubscribe event (case-insensitive)
+    preuser_only = {e for e in (preuser_emails - registered_emails)
+                    if e.lower() not in unsubscribed_preusers}
 
     return registered_emails, preuser_only
 

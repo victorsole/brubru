@@ -34,6 +34,12 @@ class CatalanTranslation(Base):
 
     # Identifiers
     celex = Column(String(30), unique=True, nullable=False, index=True)
+    oj_reference = Column(String(30), index=True)     # OJ ref from filename: "L_2022329" groups main + annexes
+
+    # Parent-child linking (annexes belong to a parent act)
+    parent_celex = Column(String(30), index=True)     # CELEX of parent act (NULL for main texts)
+    file_type = Column(String(20), default='main')    # "main" or "annex"
+    annex_label = Column(String(100))                  # e.g. "ANNEX I", "ANNEX II Part A"
 
     # Metadata
     title_en = Column(Text, nullable=False)          # Original English title
@@ -44,6 +50,7 @@ class CatalanTranslation(Base):
     # Classification (landing page categories)
     category = Column(String(100), index=True)        # e.g. "Transformacio digital"
     category_en = Column(String(100))                 # English category name
+    subcategory = Column(String(100), index=True)     # Granular tag: "Pesticides i biocides", "Vi i viticultura", etc.
 
     # Translation stats
     articles_count = Column(Integer, default=0)
@@ -71,12 +78,17 @@ class CatalanTranslation(Base):
         return {
             'id': self.id,
             'celex': self.celex,
+            'oj_reference': self.oj_reference,
+            'parent_celex': self.parent_celex,
+            'file_type': self.file_type,
+            'annex_label': self.annex_label,
             'title_en': self.title_en,
             'title_ca': self.title_ca,
             'short_name': self.short_name,
             'doc_type': self.doc_type,
             'category': self.category,
             'category_en': self.category_en,
+            'subcategory': self.subcategory,
             'articles_count': self.articles_count,
             'recitals_count': self.recitals_count,
             'html_size_bytes': self.html_size_bytes,
@@ -95,6 +107,7 @@ class CatalanTranslation(Base):
             'short_name': self.short_name,
             'doc_type': self.doc_type,
             'category': self.category,
+            'subcategory': self.subcategory,
             'articles_count': self.articles_count,
             'recitals_count': self.recitals_count,
             'url': f'/legislacio-ue-catala/{self.celex}/',

@@ -36,12 +36,13 @@ router = APIRouter(prefix="/api/catalan-translations", tags=["Catalan Translatio
 async def list_translations(
     search: Optional[str] = Query(None, description="Search in titles and CELEX"),
     category: Optional[str] = Query(None, description="Filter by category"),
+    subcategory: Optional[str] = Query(None, description="Filter by subcategory"),
     doc_type: Optional[str] = Query(None, description="Filter by document type"),
     limit: int = Query(50, ge=1, le=200, description="Results per page"),
     offset: int = Query(0, ge=0, description="Pagination offset"),
     db: Session = Depends(get_db),
 ):
-    """List translations with optional search and category filter."""
+    """List translations with optional search, category, and subcategory filter."""
     query = db.query(CatalanTranslation)
 
     if search:
@@ -57,6 +58,9 @@ async def list_translations(
 
     if category:
         query = query.filter(CatalanTranslation.category == category)
+
+    if subcategory:
+        query = query.filter(CatalanTranslation.subcategory == subcategory)
 
     if doc_type:
         query = query.filter(CatalanTranslation.doc_type == doc_type)
@@ -103,6 +107,40 @@ async def get_categories(db: Session = Depends(get_db)):
                 'count': row.count,
                 'total_articles': row.total_articles or 0,
             }
+            for row in rows
+        ]
+    }
+
+
+@router.get(
+    "/subcategories",
+    summary="Subcategory summary",
+    description="Returns each subcategory with its translation count, optionally filtered by category"
+)
+async def get_subcategories(
+    category: Optional[str] = Query(None, description="Filter subcategories by parent category"),
+    db: Session = Depends(get_db),
+):
+    """Get subcategories with counts."""
+    query = db.query(
+        CatalanTranslation.subcategory,
+        CatalanTranslation.category,
+        func.count(CatalanTranslation.id).label('count'),
+    ).filter(CatalanTranslation.subcategory.isnot(None))
+
+    if category:
+        query = query.filter(CatalanTranslation.category == category)
+
+    rows = (
+        query
+        .group_by(CatalanTranslation.subcategory, CatalanTranslation.category)
+        .order_by(func.count(CatalanTranslation.id).desc())
+        .all()
+    )
+
+    return {
+        'subcategories': [
+            {'subcategory': row.subcategory, 'category': row.category, 'count': row.count}
             for row in rows
         ]
     }
