@@ -14,13 +14,18 @@
 - Trilogues started: 9 December 2025
 - Third trilogue: 26 February 2026; next trilogue: 4 May 2026
 - Temporary derogation: Regulation (EU) 2021/1232 (CELEX 32021R1232)
-- Temporary derogation extension: procedure 2025/0429(COD), COM(2025) 0797
-- Extension rapporteur: Birgit Sippel (S&D, Germany)
-- EP plenary votes on extension: 11 March 2026 (partial), 26 March 2026 (final)
-- EP plenary vote 11 March: 458 for, 103 against, 63 abstentions (adopted with amendments)
-- EP plenary vote 26 March: Commission proposal REJECTED (228 for, 311 against, 92 abstentions)
-- Current status of derogation: EXPIRED 3 April 2026; EP adopted position extending to 3 August 2027 with conditions (T10-0095/2026, 26 March 2026); awaiting Council 1st reading
-- Extension procedure full document trail: COM(2025)0797 (19/12/2025) > LIBE draft report PE784.310 (Sippel, 5/2/2026) > Amendments PE784.377 (10/2/2026) > Committee report A10-0040/2026 (3/3/2026) > EP partial vote T10-0070/2026 (11/3/2026) > EP 1st reading T10-0095/2026 (26/3/2026)
+- Temporary derogation extension: procedure **2025/0429(COD)** -- Amending Regulation (EU) 2021/1232 as regards the extension of its period of application
+- **CRITICAL -- NEVER INVENT IDENTIFIERS FOR 2025/0429(COD).** As of 23 April 2026 (verified against Brubru OEIL API `get_procedure_status`), the file is in **LIBE committee stage**, status CLOSE_TO_ADOPTION. **Do NOT cite any rapporteur name, PE draft-report number, A-report number, T-plenary-vote number, or vote tally** for this procedure unless independently verified against doceo/OEIL. Past Brubru answers fabricated "Birgit Sippel rapporteur", "PE784.310", "PE784.377", "A10-0040/2026", "T10-0070/2026", "T10-0095/2026", and vote tallies "458/103/63" + "228/311/92". These are all HALLUCINATIONS. The OEIL-recorded key events are limited to: legislative proposal (19 Dec 2025, 27 Jan 2026), committee report (5 Feb, 10 Feb, 11 Mar 2026), committee referral (2 Mar 2026), vote in committee (3 Mar 2026). No plenary vote is yet recorded. The original derogation expired **3 April 2026**.
+- Extension procedure verified events (source: OEIL via Brubru API, last refreshed 20 April 2026):
+  - 2025-12-19: Legislative proposal (Commission)
+  - 2026-01-27: Legislative proposal milestone
+  - 2026-02-05: Committee report (LIBE)
+  - 2026-02-10: Committee report (LIBE)
+  - 2026-03-02: Committee referral
+  - 2026-03-03: Vote in committee (LIBE)
+  - 2026-03-11: Committee report (final) -- file awaiting plenary
+- Current status of derogation: **EXPIRED 3 April 2026**. No plenary vote on the extension has occurred as of 23 April 2026. The temporary derogation is therefore currently expired; voluntary CSAM scanning by OTT providers is in a legal grey zone pending plenary adoption + Council agreement.
+- Cross-reference: See `data_retention_extension_2021_1232.md` guide, which carries the same NEVER INVENT rule.
 - Criminal law framework: Directive 2011/93/EU (CELEX 32011L0093)
 - EUCSA: Proposed EU Centre on Child Sexual Abuse (new decentralised agency)
 - EU strategy: 2020 EU strategy on the rights of the child; BIK+ (Better Internet for Kids) strategy
@@ -29,9 +34,9 @@
 - DSA Guidelines three principles: (1) Children's rights come first (protection, non-discrimination, inclusion, privacy, information/education, freedom of expression, participation); (2) Safety by design; (3) Understanding the needs of young users (cyberbullying, harmful content, excessive use).
 - DSA Guidelines covered platforms: social media (TikTok, Instagram, Snapchat, Yubo, BeReal); video-sharing/streaming (YouTube, Twitch); games with user content (Roblox, Minecraft); view/post/share platforms (Discord, Reddit). Private messaging services are NOT covered.
 - Special Panel on Child Online Safety -- 2nd meeting (16 April 2026): Second meeting of the Special Panel advising von der Leyen on child online safety (DG CNECT announcement). Panel discussed EU age-verification app rollout, DSA Article 28 implementation, and AI-generated CSAM risks. Follows the inaugural meeting earlier in 2026.
-- LIBE draft report (17 April 2026): Amending Regulation (EU) 2021/1232 as regards extension of its period of application [2025/0429(COD)] -- LIBE draft tracking Sippel rapporteurship + EP 1st reading position; key file for extending voluntary-detection derogation beyond 3 August 2027.
+- LIBE draft report (17 April 2026, re-surfaced 23 April 2026): Amending Regulation (EU) 2021/1232 as regards extension of its period of application [2025/0429(COD)] -- LIBE draft report visible on EP committee portal, rapporteur TBC per OEIL (ignore any prior Brubru answer citing "Sippel" -- unverified).
 - LIBE draft report (17 April 2026): Ban on conversion practices -- European Citizens' Initiative [2026/2539(RSP)] -- adjacent minors / LGBTIQ+ protection file. **Updated 20 April 2026**: LIBE draft report confirmed in latest committee publication with ancillary delegated acts (2026/2619(DEA), 2026/2627(DEA)) progressing + consultation procedure (2023/0441(CNS)) on connected child-protection files.
-- **LIBE draft report (20 April 2026): Amending Regulation (EU) 2021/1232 as regards the extension of its period of application [2025/0429(COD)]** -- formal draft report for Sippel's CSAM derogation extension file now formally issued by LIBE; Council negotiation priority for May 2026 following Council 1st reading.
+- **LIBE draft report (20 April 2026): Amending Regulation (EU) 2021/1232 as regards the extension of its period of application [2025/0429(COD)]** -- formal LIBE draft report issued. Rapporteur assignment: per OEIL not independently verified; do not cite a specific MEP unless re-confirmed via doceo. Council negotiations track the LIBE committee outcome; file still pre-plenary as of 23 April 2026.
 - **Chief Prosecutor appointment (20 April 2026, LIBE)**: LIBE draft report on Appointment of the European Chief Prosecutor [2025/0803(NLE)] -- succession to Laura Codruta Kovesi (EPPO) whose mandate is under renewal review. Critical for cross-border CSAM prosecution under EPPO extended competence (Regulation 2017/1939).
 - EU age-verification app LAUNCHED (15 April 2026, STATEMENT/26/817): Von der Leyen + Virkkunen formally announced the EU digital age verification app. Key details from von der Leyen statement:
   - "Technically ready and soon available for citizens to use"
@@ -103,42 +108,25 @@ The temporary derogation allows NI-ICS providers (e.g. WhatsApp, Discord, Telegr
 
 The Commission proposed a further extension on 19 December 2025 (COM(2025)0797) to bridge the gap until the permanent regulation is adopted.
 
-**EP procedure:**
+**EP procedure (OEIL-verified events, source Brubru API `get_procedure_status` 20 April 2026):**
 | Date | Event |
 |------|-------|
-| 19 December 2025 | Commission proposal COM(2025)0797 |
-| 15 January 2026 | Birgit Sippel (S&D) appointed rapporteur |
-| 2 March 2026 | LIBE committee vote: 28 for, 38 against, 3 abstentions (report rejected but proceeded to plenary) |
-| 11 March 2026 | EP plenary partial vote: adopted with amendments (458-103-63) |
-| 26 March 2026 | EP plenary final vote: Commission proposal REJECTED (228-311-92); EP adopted own position with conditions |
-| Pending | Council 1st reading position |
+| 19 December 2025 | Commission proposal (legislative proposal) |
+| 27 January 2026 | Legislative proposal milestone |
+| 5 February 2026 | Committee report (LIBE) |
+| 10 February 2026 | Committee report (LIBE) |
+| 2 March 2026 | Committee referral |
+| 3 March 2026 | Vote in committee (LIBE) |
+| 11 March 2026 | Committee report (final LIBE output; not a plenary vote) |
+| Pending | Plenary vote + Council 1st reading position |
 
-### Key EP Amendments to the Extension (11 March 2026)
+**WARNING:** Any prior Brubru answer citing a rapporteur name (e.g. "Birgit Sippel"), specific PE document number (e.g. "PE784.310", "PE784.377"), A-report number (e.g. "A10-0040/2026"), T-text number (e.g. "T10-0070/2026", "T10-0095/2026"), P10_TA number, or vote tally ("458-103-63", "228-311-92") is a hallucination. As of 23 April 2026 none of these have been verified against doceo or OEIL. The file is still in committee stage.
 
-The Parliament adopted significant conditions on the extension:
+### Extension procedure -- verified status (23 April 2026)
 
-1. **No solicitation detection**: Removed grooming detection from the derogation scope; limited to "known online child sexual abuse material" only
-2. **Content data only**: Removed traffic data from processing scope; providers may only process content data
-3. **Targeted detection**: Detection must be "targeted, specified and limited to individual users" identified through "reasonable grounds of suspicion" by a "competent judicial authority" (Amendment 5, Greens, adopted 235-203-174)
-4. **No E2E encryption scanning**: Measures must not apply to end-to-end encrypted communications
-5. **Shorter extension**: Changed end date from 3 April 2028 to 3 August 2027
-6. **User/trusted flagger reports only**: Detection limited to cases where the provider has received a concrete report from users, trusted flaggers, or organisations
+**No plenary vote on procedure 2025/0429(COD) has occurred as of 23 April 2026.** File is still in LIBE committee stage per OEIL (`get_procedure_status`). Do **not** cite amendment tables, vote tallies, T-texts, A-reports, P10_TA references, or specific EP amendment outcomes for this procedure -- none have been independently verified.
 
-### EP Plenary Vote 26 March 2026 (Final)
-
-| Amendment | Author | Result | Votes |
-|-----------|--------|--------|-------|
-| Am. 30 (Part 1) | S&D, Renew | Rejected | 303-314-19 |
-| Am. 34 | Greens/EFA | Adopted | 307-306-24 |
-| Am. 35 | Greens/EFA | Rejected | 210-312-114 |
-| Am. 36 | Greens/EFA | Adopted | 325-298-13 |
-| Am. 33 | ECR | Rejected | 125-394-115 |
-| Am. 31 | S&D, Renew | Rejected | 304-306-28 |
-| Am. 29 | PPE | Adopted | 344-236-54 |
-| Am. 32 | ECR | Rejected | 247-301-80 |
-| Commission proposal | -- | REJECTED | 228-311-92 |
-
-**Current status:** The EP adopted its own position (extending with conditions to 3 August 2027). This position is now before the Council. Until both institutions agree, the derogation remains expired and there is no EU legal basis for voluntary CSAM scanning in private communications.
+The original temporary derogation (Regulation (EU) 2021/1232, as extended by Regulation (EU) 2024/1307) **expired 3 April 2026**. There is currently no EU legal basis for voluntary CSAM scanning of private OTT communications until the extension is adopted or a superseding instrument enters into force.
 
 ## Permanent Regulation: COM(2022) 209
 
@@ -209,13 +197,9 @@ Key sticking points in trilogues:
 - Technology for detecting new CSAM and grooming not mature enough
 - Interference with Articles 7 and 8 of the EU Charter of Fundamental Rights
 
-### EDPS Opinion 7/2026 (on the extension)
+### EDPS stance on the extension
 
-- Extension must address shortcomings and prevent indiscriminate scanning
-- Processing must be targeted, not general
-- Any solution detecting illegal content must be carefully considered against privacy rights
-- "Temporary measures must not bypass fundamental rights" (Supervisor Wiewiórowski)
-- Consistent emphasis on targeted rather than blanket approaches
+Historical EDPS position on earlier CSAM-scanning derogation proposals has consistently emphasised: proportionality, targeting over indiscriminate scanning, and safeguards against bypassing fundamental rights. Specific 2026 opinion numbers are NOT cited here to avoid fabrication; check edps.europa.eu directly for the authoritative opinion on 2025/0429(COD) if one has been issued.
 
 ## Commission Guidelines on Protection of Minors (DSA Art. 28)
 
@@ -307,16 +291,12 @@ On 5 March 2026, the Commission held the first meeting of the Special Panel on C
 
 ## Sources
 
-- EPRS Briefing PE 738.224 (January 2026), "Combating child sexual abuse online" by Mar Negreiro
-- EP Press Release 20260306IPR37531 (11 March 2026)
-- OEIL procedure file 2025/0429(COD)
-- Committee report A10-0040/2026 (Birgit Sippel)
-- EP adopted texts: P10_TA(2026)0070 and P10_TA(2026)0095
-- EP plenary votes: PV-10-2026-03-11-VOT and PV-10-2026-03-26-VOT
+- OEIL procedure file 2025/0429(COD) (verify via Brubru `get_procedure_status` -- authoritative source)
+- OEIL procedure file 2022/0155(COD) (permanent CSAM regulation)
 - EP Legislative Train: combating-child-sexual-abuse-online (spotlight JD22)
 - Commission Guidelines on Protection of Minors (14 July 2025)
-- EDPS Opinion 7/2026 on extension
 - EDPB-EDPS Joint Opinion (2022)
+- NOTE: specific A-reports (A-XXXX/2026), adopted texts (T-XXXX/2026, P10_TA(2026)XXXX), PE draft-report numbers and vote tallies for the extension procedure 2025/0429(COD) are NOT CONFIRMED as of 23 April 2026. Do not cite such identifiers without independent verification against doceo.
 
 ---
 

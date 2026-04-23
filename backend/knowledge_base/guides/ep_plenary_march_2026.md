@@ -127,7 +127,7 @@ DEBATES 26 MARCH (09:00-10:50): EU-US trade deal joint debate, Global Gateway (A
 
 ### Votes (12:30-13:30)
 - EP-Commission Framework Agreement (A10-0031/2026)
-- Extension of Regulation 2021/1232 (A10-0040/2026, LIBE, Birgit Sippel)
+- Extension of Regulation 2021/1232 (procedure 2025/0429(COD), LIBE — committee stage; no plenary vote yet recorded per OEIL 23 April 2026)
 - Council of Europe AI Convention (A10-0007/2026, IMCO/LIBE)
 - EU-Ecuador Europol agreement (A10-0028/2026)
 - 2027 budget guidelines (BUDG)

@@ -14,6 +14,8 @@
 - Serbia (10 April 2026): EU poised to slash up to EUR 1.5 billion in funding over democracy and rule of law concerns
 - EPRS At a Glance (9 April 2026): "EU-US trade and investment relations" -- 2025 marked by frequent tariff changes on variety of goods; total trade value continued to grow; EU-US trade slightly higher than 2024. Ref: EPRS_ATA(2026)785679
 - Eurostat (10 April 2026): Trade in goods with China in 2025 (annual data release). EU trade in services supply worth EUR 5,933 billion in 2023
+- **EPRS Briefing (22 April 2026): "China's economic challenge to the world"** -- EP Think Tank briefing on China's industrial policy, overcapacity, dual-use export controls, strategic dependencies. Feeds into EU de-risking strategy, CBAM extension debate, and Economic Security Framework. Central to EU trade-defence prioritisation 2026-2030.
+- **EU-Mexico Partnership amendments (21 April 2026)**: AFET + INTA joint amendments (PE787.714v01-00) + INTA amendments on Interim Trade Agreement (PE787.663v02-00). Rapporteurs: Borja Giménez Larraz (EPP, Spain) + Javi López (S&D, Spain). Signals momentum on EU-Mexico Global Agreement modernisation. See `eu_trade_defence.md`.
 
 ## Key Trade Agreements
 

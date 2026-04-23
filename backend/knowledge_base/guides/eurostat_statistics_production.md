@@ -12,6 +12,8 @@
 - Peer reviews: Every 5 years per NSI (self-assessment + independent expert visit)
 - Validation stages: Pre-validation, plausibility checks, anomaly detection, bilateral queries, revision analysis, publication clearance
 - Embargo: Publications embargoed until official release time (typically 11:00 CET)
+- **Eurostat data release (22 April 2026): "Drought hits 156,703 km² of EU land in 2024"** -- Eurostat + Copernicus soil moisture data release. Affected area equivalent to almost 4% of EU land mass. Southern + Mediterranean Member States (Spain, Italy, Portugal, Greece) + South-Eastern (Romania, Bulgaria) worst affected. Feeds directly into CAP 2023-2027 climate adaptation debate + post-2027 natural-disasters MFF funding (BUDG_ATA(2026)785762). Link: ec.europa.eu/eurostat product ddn-20260422-1.
+- **Eurostat data release (22 April 2026): "Government finance statistics: updated information"** -- quarterly GFS update feeding EDP / SGP compliance assessment.
 
 Guide for Eurostat statisticians and data analysts covering the European Statistical System, data collection methodologies, quality frameworks, and international trade in services statistics.
 

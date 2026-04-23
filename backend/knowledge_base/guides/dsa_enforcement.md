@@ -27,6 +27,7 @@
 - EU digital age verification app launched (15 April 2026): Von der Leyen + Virkkunen. Centralised age check without sharing personal data. Integrates with EU Digital Identity Wallet. Not mandatory under DSA but platform burden removed. See also csam_regulation_online guide for full details.
 - European Board for Digital Services press statement (15 April 2026): Board update on DSA governance and coordination
 - Related guides: digital_markets_act, copyright_generative_ai, csam_regulation_online
+- **EPRS Briefing (22 April 2026): "The Impact of Google AI Summaries and Google AI Overviews on Publishers' Revenue and Media Freedom"** -- **IUST_BRI(2026)787211** (issued by EP Directorate for IMPact Assessment and European Added Value, at the request of the JURI committee). Examines how Google's Search Generative Experience (SGE) and AI Overviews features affect traffic to publishers' websites, advertising revenue, and media pluralism. Intersects with DSA (VLOP obligations, systemic risk to media pluralism), Copyright Directive (EU) 2019/790 + Article 15 press-publishers' right, DMA (self-preferencing gatekeeper obligations). Expected to inform JURI/CULT amendments on generative-AI + news aggregation. URL: https://www.europarl.europa.eu/thinktank/en/document/IUST_BRI(2026)787211
 
 ## Overview
 

@@ -20,6 +20,7 @@
 - Only 2% of European 5G users connected via full 5G (vs 24% US, 77% China)
 - Digital Decade targets (2030): all households with 1 Gbps fixed, all populated areas with 5G-equivalent wireless
 - Context: Competitiveness Compass, Single Market Strategy, Draghi Report
+- **Virtual Worlds Observatory launch (22 April 2026, DG CNECT)**: Commission launched **final reports + Interactive Data Explorer** for the Virtual Worlds Observatory -- data on XR/metaverse adoption, investment flows, EU player ecosystem, regulatory implications. Complements the EU Virtual Worlds Strategy (COM(2023) 442). URL: `digital-strategy.ec.europa.eu/en/news/commission-launches-virtual-worlds-observatory-final-reports-and-interactive-data-explorer`. Feeds DMA/DSA gatekeeper scoping for immersive platforms.
 
 ## Overview
 

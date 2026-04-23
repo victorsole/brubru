@@ -12,6 +12,10 @@ Competitiveness Council configuration: rotating presidency, meets ~4 times/year
 Council conclusions reference: EUCO 7/26 (March 2026 conclusions)
 Responsible Commissioners: Stephane Sejourne (EVP Prosperity and Industrial Strategy), Maros Sefcovic (EVP Trade and Economic Security)
 Key Council working parties: Competitiveness and Growth, Industry, Internal Market
+- **EPRS Briefing (22 April 2026): "CO2 emission standards for cars and vans"** -- EPRS_BRI(2026)774751. Impact-assessment analysis of the proposed revision of Regulation (EU) 2019/631: central trade-off identified as "the more flexibility manufacturers are granted, the lower their co-benefits for air quality and climate." Feeds into Industrial Accelerator Act + Temporary Decarbonisation Fund debate. See `temporary_decarbonisation_fund.md`.
+- **ITRE Draft Opinion on Temporary Decarbonisation Fund (21 April 2026)**: **PE786.735v02** -- Rapporteur Massimiliano Salini (EPP, Italy); amendment deadline 8 May 2026. Competitiveness instrument bridging TCTF (state aid) and Competitiveness Fund (MFF 2028-2034). See dedicated `temporary_decarbonisation_fund.md` guide.
+- **EPRS Briefing (22 April 2026): "China's economic challenge to the world"** -- EP Think Tank analysis of China's industrial policy, overcapacity, dual-use export controls, strategic dependencies; feeds into EU de-risking and Economic Security strategy. Relevant for competitiveness + trade de-risking debate.
+- **Contexte EU (22 April 2026)**: "European competitiveness: The race to cut red tape and its limits" -- replay of Contexte Live discussion on competitiveness as EU industrial strategy's central pillar; Commission "red tape" omnibus packages (Omnibus I-IV) critically assessed by industry + civil society.
 
 ## Overview
 

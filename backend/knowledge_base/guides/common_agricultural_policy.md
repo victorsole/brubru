@@ -21,6 +21,8 @@
 - EPRS At a Glance (9 April 2026): "Generational change in agriculture: Comparative analysis of businesses run by young farmers" -- findings: young farmer share declining in EU 15, stable in Central/Eastern; CAP young farmer payment effectiveness limited by land access, succession tax. Ref: EPRS_UNK_a5370145dc03
 - EPRS Study (9 April 2026): "Research for the AGRI Committee - Generational change in agriculture: Comparative analysis" -- full study for AGRI committee, recommendations on CAP post-2027 targeted support, Member State best practices (France, Ireland, Netherlands). Ref: EPRS_UNK_4009f4d0c405
 - DG AGRI (13 April 2026): EU agri-food trade posted EUR 3.2 billion surplus in January 2026, exports up 6% year-on-year (dairy, wine, beverages); imports of tropical products and feedingstuffs remained high.
+- **Eurostat (22 April 2026): "Drought hits 156,703 km² of EU land in 2024"** -- ~4% of EU land. Southern + Mediterranean MS worst affected (ES, IT, PT, EL) plus RO + BG. Reinforces CAP climate-adaptation debate + post-2027 natural-disasters MFF adequacy (BUDG_ATA(2026)785762). Relevant to SO4 (climate change mitigation/adaptation), SO5 (natural resources), SO6 (biodiversity). Feeds into MTR cohesion reallocations toward water resilience.
+- **ENVI Motion for Resolution (21 April 2026)**: **PE785.406** -- Motion for a Resolution on the draft Commission implementing decision authorising the placing on the market of products containing GM soybean **MON 94637**. Sponsors: Sirpa Pietikäinen (EPP), Martin Häusling (Greens), Biljana Borzan (S&D), Anja Hazekamp (The Left). Standard ENVI objection to GMO authorisation via scrutiny procedure under Regulation (EU) 182/2011.
 
 ## Overview
 

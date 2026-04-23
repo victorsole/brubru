@@ -2,7 +2,9 @@
 
 ## QUICK FACTS
 - Topic: Mid-term review (MTR) of Cohesion Policy 2021-2027 -- reallocation of cohesion funds in response to new priorities
-- **LATEST (21 April 2026)**: DG REGIO news item "Results of the Mid-Term Review of cohesion policy" published. Sets out aggregate MS reallocation choices, sectoral shifts, and baseline for 2028-2034 cohesion planning.
+- **LATEST (22 April 2026)**: DG REGIO formally republished **"Results of the Mid-Term Review of cohesion policy"** news item on whats-new/newsroom. Confirms aggregate MS reallocation patterns: Eastern/Baltic defence-heavy, Southern water+housing, Western skills+grids, Nordic civil protection+Arctic. Establishes baseline for 2028-2034 cohesion negotiations under MFF successor.
+- **LATEST (14 April 2026)**: DG REGIO published "Advancing the Just Transition in Europe: Results of the first PSLF call for proposals" -- Public Sector Loan Facility under Just Transition Mechanism Pillar 3 awards first call projects. Pairs with MTR reallocation results as twin cohesion/JTF signals.
+- **LATEST (21 April 2026)**: DG REGIO news item "Results of the Mid-Term Review of cohesion policy" first published. Sets out aggregate MS reallocation choices, sectoral shifts, and baseline for 2028-2034 cohesion planning.
 - Legal basis: Common Provisions Regulation (CPR), Regulation (EU) 2021/1060 (CELEX 32021R1060), Articles 18 and 86
 - Responsible DG: DG REGIO (Regional and Urban Policy)
 - Responsible Commissioner: Raffaele Fitto (EVP, Cohesion and Reforms, Italy) -- also Cohesion portfolio

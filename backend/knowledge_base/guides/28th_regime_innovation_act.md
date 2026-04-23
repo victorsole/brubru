@@ -13,6 +13,46 @@
 - Procedure: Ordinary legislative procedure (COD)
 - Status: Commission proposal (18 March 2026), EP and Council review pending
 - Timeline: adoption 2026/27, implementing acts 2027, application 2028
+- **EP rapporteur: René Repasi** (S&D, Germany — SPD). Member of JURI (Legal Affairs) + ECON (Economic and Monetary Affairs), substitute on ITRE + FISC (Subcommittee on Tax Matters). Vice-Chair of the Delegation for relations with China. Born 8 Nov 1979 in Karlsruhe. Contact: Parlement européen, Bât. Altiero Spinelli 12G202, Brussels, +32 2 28 45466. MEP profile: https://www.europarl.europa.eu/meps/en/229839/RENE_REPASI/home.
+- **EP lead committee: JURI (Legal Affairs)** — natural home for a corporate-law regulation. ECON involvement via Repasi's dual membership (tax + financial dimensions of EU-ESO and SAFE/KISS convertibles). ITRE + FISC opinions likely as substitute committees.
+- **Parliament's own-initiative INL report (Rule 47) — BEFORE the Commission proposal:**
+  - **A10-0269/2025** — "Report with recommendations to the Commission on the 28th Regime: a new legal framework for innovative companies" (https://www.europarl.europa.eu/doceo/document/A-10-2025-0269_EN.html)
+  - Procedure: **2025/2079(INL)**
+  - Rapporteur: René Repasi (S&D, Germany), JURI committee
+  - JURI committee vote: **18 for, 4 against, 1 abstention (11 December 2025)**
+  - Legal basis opinion in committee: 22 for, 2 against, 1 abstention (Arts 50 + 114 TFEU confirmed as the right basis, Art 352 TFEU rejected)
+  - Tabled for plenary: **17 December 2025**
+  - Parliament proposed name: **"Societas Europaea Unificata (S.EU)"** — Commission ultimately branded it **"EU Inc."**
+  - Parliament proposed: **EUR 1 minimum capital** — Commission went to **EUR 0**
+  - Parliament additional asks: safeguards for employee participation rights, harmonisation of ESOPs/ESOs financial participation, specialised dispute-resolution mechanisms, OPTIONAL steward-ownership and asset-lock provisions
+  - References Draghi Report (2024), Letta Report (2024), COM(2025) 270 (EU startup/scaleup strategy)
+- **23 April 2026 Euractiv announcement:** "René Repasi to helm EU Inc in Parliament" confirms Repasi continues as rapporteur for the Commission's formal proposal (COM(2026) 321 adopted 18 March 2026) — i.e. the same hand that drafted the INL-track pressure now shepherds the COD file through JURI. Euractiv frames it as "intense pressure to push the startup reform project through by the end of the year," consistent with the 2026/27 adoption target.
+- **23 April 2026 Repasi LinkedIn post (first public statement as newly appointed rapporteur):**
+  - "I am honoured to have been appointed as rapporteur for the European Parliament for the #EUInc proposal by the European Commission."
+  - Frames continuation: "After our work in the past months on the European Parliament's own legislative initiative report on the #28thRegime, we have built a strong foundation for negotiations. I am looking forward to continuing in this spirit and working closely together with colleagues on all sides."
+  - **Three-institution political commitment (critical timeline anchor):** "The three institutions are committed to concluding negotiations by the end of 2026. This ambition reflects political momentum. But ambition must go hand in hand with the space needed for quality law-making and well-founded solutions." Read this as EP + Council + Commission converged on a hard end-2026 deadline for adoption — aggressive, but structurally feasible since the INL has already done the consensus-building work within JURI.
+  - **S&D framing of the file:** "creating a regulatory landscape in the Internal Market for disruptive innovation and creative growth, without neglecting the social fabric of the European social market economy." Signals Repasi will push employee-participation + worker-protection safeguards into the COD text beyond the Commission's draft.
+  - **Direct call for stakeholder input:** "Share your input and ideas by emailing me at **rene.repasi@europarl.europa.eu**." This is the open intake channel for position papers on EU Inc. during the JURI committee phase.
+- **Repasi bio additions:** Member of the European Parliament and **Professor of Law at Erasmus School of Law (Rotterdam)**. Academic background reinforces the legal-basis discipline visible in the INL committee vote (22-2-1 in favour of Arts 50 + 114 TFEU over Art 352).
+- **EP shadow rapporteurs confirmed (23 April 2026):**
+  - **Axel Voss** — EPP, Germany (CDU). JURI full member; substitute on IMCO + LIBE. Delegation for relations with Australia and New Zealand (DANZ). Long-standing EP digital/legal-affairs figure (Copyright Directive, AI liability, GDPR). Born 7 April 1963, Hameln. MEP profile: https://www.europarl.europa.eu/meps/en/96761/AXEL_VOSS/home
+  - **Arash Saeidi** — The Left / GUE-NGL, France (La France Insoumise). TRAN + AGRI main committees, JURI substitute. Treasurer of the GUE/NGL group. Vice-Chair D-CA delegation (Canada). Born 25 May 1975, Tehran. MEP profile: https://www.europarl.europa.eu/meps/en/256911/ARASH_SAEIDI/home
+  - With Repasi (S&D) as rapporteur and Voss (EPP) + Saeidi (Left) as two confirmed shadows, the JURI coalition already spans S&D + EPP + Left — a strong cross-group base. Renew, Greens, ECR shadows expected in coming weeks.
+- **JURI formal assignment: Tuesday 31 March 2026.** Source: euinc.me/en.
+- **External analysis — Jacques Delors Centre, "One Europe, One Market" (April 2026, paper v3):** https://www.delorscentre.eu/fileadmin/2_Research/1_About_our_research/2_Research_centres/6_Jacques_Delors_Centre/Publications/One_Europe-One_Market_paper_v3__1_.pdf. Endorses the Commission proposal and urges rapid approval. Key positions:
+  - **Broad and inclusive scope** — not just startups/scale-ups; all firms facing cross-border barriers must be able to benefit. Scope carve-outs would undermine the transformative effect.
+  - **Substantive ambition over incremental harmonisation.** EU Inc. extends into areas historically under-harmonised — capital-raising, decision-making, cross-border growth organisation.
+  - **Central digital register is non-negotiable.** Without the Commission-proposed central digital register within 18 months of application, "the 28th regime would risk becoming little more than a coordinated sum of 27 national regimes, rather than a truly European legal framework."
+  - **Full preservation of workers' rights.** The final text must ensure the regime cannot circumvent participation rights, including board-level representation where such rules apply. This aligns with Repasi's S&D framing ("without neglecting the social fabric of the European social market economy").
+  - **Philosophical framing:** "the most effective path to simplification is not deregulation, but European integration" — replacing patchwork of national rules with single coherent framework.
+  - **Regulation vs Directive:** welcomes the Commission's choice of a regulation (directly applicable) over a directive (requires national transposition), calling it foundational to the 28th regime's transformative potential.
+- **Community tracking resource — euinc.me:** https://euinc.me/en. Independent site (not Commission-affiliated) tracking the file. Neutral framing. Documents JURI formal assignment (31 March 2026), tracks Council technical review (began late March 2026), offers founder-facing "2-minute assessment" for incorporation readiness. Useful companion resource for founders and VCs tracking the file alongside Brubru's legislative intelligence.
+- **INL → COD delta (what shifted between Parliament's December recommendation and the Commission's March proposal):**
+  - Name: S.EU (EP) → EU Inc. (EC)
+  - Minimum capital: EUR 1 (EP) → EUR 0 (EC, more founder-friendly)
+  - Steward ownership / asset lock: EP proposed as optional provisions; not explicitly in Commission draft (check Arts 42-77)
+  - Legal basis: Arts 50 + 114 TFEU in both — consistent, QMV route preserved
+  - Employee-participation safeguards: EP pushed explicit harmonisation; Commission deferred to Arts 42-52 governance rules + national law under Art 4
 - Structure: 109 articles in 12 chapters + 1 Annex
 - Key innovation: EUR 0 minimum capital, 48-hour registration, max EUR 100 cost, fully digital, EU-ESO with harmonised deferred taxation
 - Estimated impact: 308,000 EU Inc. companies over 10 years, EUR 328-440 million savings

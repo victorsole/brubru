@@ -15,6 +15,11 @@ EU Special Representatives (EUSRs) are senior diplomats appointed by the Council
 
 EUSRs are a key instrument of the Common Foreign and Security Policy (CFSP). Their mandates are established and renewed through Council Decisions under Article 33 TEU. Each EUSR has a specific mandate defining their objectives, scope, and reporting obligations.
 
+## LATEST (April 2026)
+
+- **22 April 2026, DG FPI**: "Putting EU Foreign Policy into action to foster peace, security, and social cohesion in the Great Lakes region" -- Foreign Policy Instruments press release on EU programming in the Great Lakes region (DRC, Burundi, Rwanda, Uganda, Tanzania). Parallels the mandate of EUSR Great Lakes Region **Johan Borgstam** (since 1 September 2024). Confirms EU's continued combined diplomatic + programming engagement despite Sudan/Iran crisis distractions.
+- **22 April 2026, Commission Decision C(2026) 9012**: Post term-of-office activity authorisation for **Janez Lenarčič** as Head of the **OSCE Election Observation Mission for the Armenian parliamentary election scheduled for 7 June 2026**. Lenarčič -- formerly Commissioner for Crisis Management (2019-2024) -- rejoins EU-OSCE electoral observation bridge. Relevant for EU neighbourhood + democracy support; complements South Caucasus and Georgia EUSR Magdalena Grono's mandate.
+
 ## Current EUSRs (as of September 2025)
 
 | Region/Country | EUSR | Since |

@@ -17,6 +17,8 @@
 - Tariff risk: US tariff policy under Trump II may extend to pharmaceuticals (historically exempt)
 - EPRS Study (10 April 2026): "Patient-centred health research and innovation in the EU - A preliminary exploratory study" -- scoping study for SANT committee, patient participation in clinical trials and HTA decisions, EHDS interaction, rare diseases. Ref: EPRS_UNK_9897131bb03c
 - Eurostat (13 April 2026): EU pharma products trade surplus reached EUR 221 billion in 2024, driven by Ireland, Belgium, Germany manufacturing hubs; confirms strategic importance of pharma sector.
+- **First combined COVID-19 + influenza vaccine authorised (22 April 2026, DG SANTE)**: Commission authorised the **first combined COVID-19 and seasonal influenza vaccine** for people aged 50 and over. Signals consolidation of respiratory-virus vaccination into single-shot regimens; reduces adherence gap in autumn/winter campaigns; EMA positive opinion preceded Commission authorisation. Relevant for pharma manufacturers (mRNA + recombinant platforms), national procurement, and Europe's Beating Cancer Plan vaccination targets.
+- **DG SANTE (22 April 2026)** cluster: (a) "From infancy to old age: vaccines work across generations" awareness campaign; (b) Update -- Documents on European Medical Device Nomenclature (EMDN); (c) Update -- Manual on borderline and classification under MDR/IVDR (v5); (d) Registration -- EUHPP Live Webinar on EU IPC guidance (7 May 2026, 10:00-12:00 CEST).
 
 ## Regulatory Sandbox (2026 Pharma Package)
 

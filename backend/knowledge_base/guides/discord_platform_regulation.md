@@ -14,7 +14,7 @@
 
 ## CORE REGULATORY STACK (≈ 32 adopted acts)
 - **Digital Services Act** (Reg 2022/2065, CELEX 32022R2065) — Art 28 minor protection is highest-stakes. Not VLOP. Irish DSC = Coimisiún na Meán.
-- **CSAM Temporary Derogation** (Reg 2021/1232, CELEX 32021R1232) — **EXPIRED 3 April 2026**. EP rejected Commission extension 228-311-92 on 26 March 2026.
+- **CSAM Temporary Derogation** (Reg 2021/1232, CELEX 32021R1232) — **EXPIRED 3 April 2026**. Extension procedure 2025/0429(COD) is in LIBE committee stage per OEIL as of 23 April 2026; no plenary vote recorded. Do not cite specific T-numbers or vote tallies for this extension.
 - **CSAM Regulation** (COM(2022) 209) — pending, Belgian presidency H1 2026. The single largest regulatory uncertainty for Discord.
 - **GDPR** (Reg 2016/679, CELEX 32016R0679) — Art 6, 8 (minors), 32, 33-34 (breach notification after Sep 2025 age-check vendor breach).
 - **ePrivacy Directive** (Dir 2002/58, CELEX 32002L0058) — Art 5 confidentiality anchors CSAM debate; replacement ePrivacy Regulation withdrawn 11 Feb 2025.

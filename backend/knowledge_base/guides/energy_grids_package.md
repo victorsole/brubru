@@ -14,7 +14,10 @@
 - TEN-E Regulation: Regulation (EU) 2022/869 on trans-European energy infrastructure (CELEX 32022R0869)
 - Electricity Market Design reform: Regulation (EU) 2024/1747 (CELEX 32024R1747)
 - Related procedures: TEN-E revision, Electricity Market Design reform, Clean Industrial Deal (COM(2025)85)
-- Related guides: industrial_accelerator_act, mff_2028_2034
+- Related guides: industrial_accelerator_act, mff_2028_2034, accelerateeu_fossil_energy_crisis
+- **EPRS Briefing (22 April 2026): "European energy grids package"** -- EPRS_BRI(2026)774752. Impact-assessment analysis: TEN-E Regulation revision + proposed directive accelerating permit-granting procedures. Notes the grids package amends + replaces TEN-E Regulation (revised only June 2022). IA features Commission/Member-State/agency studies + six commissioned studies including infrastructure gaps report (TYNDP). URL: https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2026)774752
+- **SWD(2026) 118 -- Power Purchase Agreements Call for Evidence synopsis (22 April 2026, DG ENER)**: Commission Synopsis Report of Call for Evidence accompanying Commission Recommendation on removing barriers to Power Purchase Agreements and other energy purchase agreements. Feeds directly into AccelerateEU electrification track -- PPA uptake as alternative to capacity-market and state aid for corporate renewable procurement.
+- **AccelerateEU link (22 April 2026)**: Commission AccelerateEU Communication (Ribera + Jorgensen) positions the European Grids Package as the central investment track of the crisis-response architecture. See `accelerateeu_fossil_energy_crisis` guide.
 
 ## Overview
 

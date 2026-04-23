@@ -20,6 +20,8 @@
   - At a Glance -- "Discharge for 2024 budget: Other institutions" (Ref: EPRS_UNK_139742a59274). EP, Council, CJEU, ECA, CoR, EESC, EEAS, EDPS, Ombudsman separate discharge votes.
   - At a Glance -- "Discharge for 2024 budget: EU decentralised agencies and joint undertakings" (Ref: EPRS_UNK_f27294892c58). 33 decentralised agencies + 8 joint undertakings.
   - Plenary vote on 2024 discharge scheduled at April 2026 Strasbourg plenary (27-30 April).
+- **SWD(2026) 124 (22 April 2026, Eurostat)**: **"2026 Addendum to the 2024 Update of the 2016 Eurostat Study on the long-term budgetary implications of pension costs"** (following SWD(2025) 249 final). Updates projections of long-term budgetary sustainability for Member State pension systems, feeding European Semester country-specific recommendations, SGP debt sustainability analysis, and MFF 2028-2034 long-term fiscal framework. Relevant for DG ECFIN + ESM + intergenerational fairness debate (see `intergenerational_fairness_strategy` / Gender Equality Strategy).
+- **COM(2026) 179 (22 April 2026, DG BUDG)**: Commission reply to ECA Special Report on **RRF traceability and transparency**. See `eu_recovery_resilience_facility.md` for full discussion; feeds BUDG 2024 discharge vote at 27-30 April Strasbourg plenary.
 
 Guide covering the EU's budgetary framework, own resources system, financial governance, anti-fraud mechanisms, and key EMU instruments for Legal Service lawyers, DG ECFIN economists, and budget specialists.
 
