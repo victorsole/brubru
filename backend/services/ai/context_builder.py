@@ -577,6 +577,10 @@ class ContextData:
     # On-demand: EP committee meeting transcript (AI-transcribed from EP Multimedia)
     committee_transcript_block: Optional[str] = None
 
+    # On-demand: TODAY block (current date + EP week type + 3-day calendar window + recent Commission docs)
+    # Triggered by "today"/"hoy"/"avui"/"aujourd'hui"/"oggi"/"vandaag"/"heute"/"this week"/"esta semana"...
+    today_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1110,6 +1114,23 @@ class ContextBuilder:
 
         post_tasks['committee_transcript'] = _fetch_committee_transcript_safe()
 
+        # 3f. On-demand: TODAY block (date-anchored calendar + active files)
+        today_intent = self._detect_today_intent(user_message)
+
+        async def _fetch_today_safe():
+            if not today_intent:
+                return None
+            try:
+                block = await self._fetch_today_block(user_message)
+                if block:
+                    logger.info("[today-block] Injected today block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[today-block] Failed: %s", e)
+                return None
+
+        post_tasks['today_block'] = _fetch_today_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1194,6 +1215,7 @@ class ContextBuilder:
         commissioner_agenda_block = post_map.get('commissioner_agenda')
         position_block = post_map.get('position')
         committee_transcript_block = post_map.get('committee_transcript')
+        today_block = post_map.get('today_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1263,6 +1285,7 @@ class ContextBuilder:
             commissioner_agenda_block=commissioner_agenda_block,
             position_block=position_block,
             committee_transcript_block=committee_transcript_block,
+            today_block=today_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -5309,6 +5332,261 @@ class ContextBuilder:
         return result
 
     # ------------------------------------------------------------------
+    # On-demand: TODAY block (date-anchored calendar + active files)
+    # ------------------------------------------------------------------
+
+    # Phrases across EN/ES/CA/FR/IT/NL/DE that indicate the user wants
+    # CURRENT / TODAY / THIS-WEEK legislative activity rather than general
+    # background. Detection is permissive (substring match, accent-tolerant).
+    TODAY_INTENT_PHRASES = (
+        # English
+        "today", "right now", "happening now", "this week", "these days",
+        "currently being", "in progress today", "being discussed today",
+        "being processed today", "what is going on", "what's going on",
+        "being debated today", "what laws are being",
+        # Spanish
+        "hoy", "hoy en dia", "hoy en día", "en este momento", "esta semana",
+        "estos dias", "estos días", "actualmente se", "se estan tramitando",
+        "se están tramitando", "que leyes se", "qué leyes se",
+        "durante el dia de hoy", "durante el día de hoy",
+        # Catalan
+        "avui", "aquesta setmana", "aquests dies", "actualment es",
+        "durant el dia d'avui", "durant el dia davui",
+        # French
+        "aujourd'hui", "cette semaine", "ces jours",
+        "en cours aujourd'hui", "quelles lois",
+        # Italian
+        "oggi", "questa settimana",
+        # Dutch
+        "vandaag", "deze week",
+        # German
+        "heute", "diese woche",
+    )
+
+    def _detect_today_intent(self, query: str) -> bool:
+        """Return True if the query asks about current / today / this-week events.
+
+        Matches are substring-based and normalised to lowercase with common
+        accent folding for Spanish/Catalan/French. Accent-bearing user input
+        (hoy día, qué leyes, aujourd'hui) hits the folded and the raw form.
+        """
+        if not query:
+            return False
+        q = query.lower()
+        q_nfd = (
+            q.replace("á", "a").replace("é", "e").replace("í", "i")
+             .replace("ó", "o").replace("ú", "u").replace("ñ", "n")
+             .replace("ü", "u").replace("à", "a").replace("è", "e")
+             .replace("ò", "o").replace("ç", "c")
+        )
+        for phrase in self.TODAY_INTENT_PHRASES:
+            if phrase in q or phrase in q_nfd:
+                return True
+        return False
+
+    def _lookup_ep_week_type(self, d: "date") -> str:
+        """Return the EP calendar week type for the given date.
+
+        Values: "Plenary Strasbourg", "Mini-plenary Brussels",
+        "Committee week", "Group week", "Constituency week", or "Unknown".
+
+        Source of truth: memory/ep_calendar_2026.md (Victor maintains this).
+        We encode the 2026 calendar inline so the chat retrieval path does not
+        need to read a file from the /memory directory at request time.
+        """
+        try:
+            from datetime import date as _date  # local import to avoid cycle
+
+            # 2026 Strasbourg plenary weeks (Mon-Thu) -- "P-STRASBOURG"
+            plenary_strasbourg = [
+                (_date(2026, 1, 19), _date(2026, 1, 22)),
+                (_date(2026, 2, 2),  _date(2026, 2, 5)),
+                (_date(2026, 3, 9),  _date(2026, 3, 12)),
+                (_date(2026, 3, 23), _date(2026, 3, 26)),
+                (_date(2026, 3, 30), _date(2026, 4, 2)),
+                (_date(2026, 4, 27), _date(2026, 4, 30)),
+                (_date(2026, 5, 18), _date(2026, 5, 21)),
+                (_date(2026, 6, 15), _date(2026, 6, 18)),
+                (_date(2026, 7, 6),  _date(2026, 7, 9)),
+                (_date(2026, 9, 7),  _date(2026, 9, 10)),
+                (_date(2026, 10, 5), _date(2026, 10, 8)),
+                (_date(2026, 11, 9), _date(2026, 11, 12)),
+                (_date(2026, 12, 14), _date(2026, 12, 17)),
+            ]
+            mini_plenary_brussels = [
+                (_date(2026, 2, 18), _date(2026, 2, 18)),
+                (_date(2026, 3, 25), _date(2026, 3, 26)),
+                (_date(2026, 5, 11), _date(2026, 5, 11)),
+                (_date(2026, 6, 3),  _date(2026, 6, 3)),
+                (_date(2026, 10, 21), _date(2026, 10, 22)),
+            ]
+            group_weeks = [
+                (_date(2026, 2, 23), _date(2026, 2, 27)),
+                (_date(2026, 4, 20), _date(2026, 4, 24)),
+                (_date(2026, 6, 8),  _date(2026, 6, 12)),
+                (_date(2026, 9, 14), _date(2026, 9, 18)),
+                (_date(2026, 11, 30), _date(2026, 12, 4)),
+            ]
+            constituency_weeks = [
+                (_date(2026, 4, 6),  _date(2026, 4, 12)),   # Easter
+                (_date(2026, 5, 25), _date(2026, 5, 29)),
+                (_date(2026, 8, 3),  _date(2026, 8, 28)),   # summer recess
+                (_date(2026, 10, 26), _date(2026, 10, 30)),
+                (_date(2026, 11, 23), _date(2026, 11, 27)),
+            ]
+            # Committee weeks by default otherwise
+            for start, end in plenary_strasbourg:
+                if start <= d <= end:
+                    return "Plenary Strasbourg"
+            for start, end in mini_plenary_brussels:
+                if start <= d <= end:
+                    return "Mini-plenary Brussels"
+            for start, end in group_weeks:
+                if start <= d <= end:
+                    return "Group week"
+            for start, end in constituency_weeks:
+                if start <= d <= end:
+                    return "Constituency week"
+            # Default: committee week (most non-plenary weeks)
+            return "Committee week"
+        except Exception:
+            return "Unknown"
+
+    async def _fetch_today_block(self, query: str) -> Optional[str]:
+        """Build a TODAY-anchored context block.
+
+        Fallbacks (always returns something non-None when intent is detected):
+          1. If DB calendar query fails     -> still return date + week type
+          2. If no calendar events today    -> say "no verified events recorded"
+          3. If Commission docs unavailable -> skip section silently
+          4. If OEIL recent events fail     -> skip section silently
+
+        The block is injected NEAR THE TOP of format_context_for_ai() so it
+        survives the 32k truncation cap.
+        """
+        try:
+            from datetime import datetime, date, timedelta
+            try:
+                from zoneinfo import ZoneInfo
+                today = datetime.now(ZoneInfo("Europe/Brussels")).date()
+            except Exception:
+                today = datetime.utcnow().date()
+        except Exception as e:
+            logger.warning("[today-block] could not resolve date: %s", e)
+            return None
+
+        week_type = self._lookup_ep_week_type(today)
+
+        lines: List[str] = []
+        lines.append("=== TODAY BLOCK (current date anchor) ===")
+        lines.append(f"Today is {today.strftime('%A, %d %B %Y')} ({today.isoformat()}).")
+        lines.append(f"EP calendar week type: {week_type}.")
+        lines.append("")
+
+        # Section A: calendar events in the 3-day window today-1 .. today+1
+        events = []
+        try:
+            from models.eu_calendar import EUCalendarEvent
+            window_start = today - timedelta(days=1)
+            window_end = today + timedelta(days=1)
+            db = SessionLocal()
+            try:
+                events = (
+                    db.query(EUCalendarEvent)
+                    .filter(EUCalendarEvent.start_date >= window_start)
+                    .filter(EUCalendarEvent.start_date <= window_end)
+                    .filter(EUCalendarEvent.institution.in_(
+                        ["EP", "COMMISSION", "COUNCIL", "EUROPEAN_COUNCIL"]
+                    ))
+                    .order_by(EUCalendarEvent.start_date, EUCalendarEvent.start_time)
+                    .limit(40)
+                    .all()
+                )
+            finally:
+                db.close()
+            if events:
+                lines.append("Institutional events (today - 1 / today / today + 1, verified DB):")
+                for e in events:
+                    time_str = str(e.start_time)[:5] if e.start_time else "--:--"
+                    inst = e.institution or "EU"
+                    committee = f" ({e.ep_committee_code})" if e.ep_committee_code else ""
+                    title = (e.title or "")[:160]
+                    lines.append(f"- {e.start_date.isoformat()} {time_str} [{inst}{committee}] {title}")
+            else:
+                lines.append("(no institutional events recorded in eu_calendar_events for today +/- 1 day)")
+        except Exception as e:
+            logger.warning("[today-block] calendar fetch failed: %s", e)
+            lines.append("(calendar lookup unavailable; proceed with general knowledge)")
+
+        lines.append("")
+
+        # Section B: Commission documents in the last 48h
+        try:
+            from models.commission_document import CommissionDocument
+            cutoff = today - timedelta(days=2)
+            db = SessionLocal()
+            try:
+                docs = (
+                    db.query(CommissionDocument)
+                    .filter(CommissionDocument.document_date >= cutoff)
+                    .order_by(CommissionDocument.document_date.desc())
+                    .limit(12)
+                    .all()
+                )
+            finally:
+                db.close()
+            if docs:
+                lines.append("Commission documents in the last 48h (verified DB):")
+                for d in docs:
+                    dtype = getattr(d, "document_type", "DOC") or "DOC"
+                    ref = getattr(d, "reference", "") or ""
+                    title = (getattr(d, "title", "") or "")[:140]
+                    date_str = d.document_date.isoformat() if getattr(d, "document_date", None) else "?"
+                    lines.append(f"- {date_str} {dtype} {ref}: {title}")
+                lines.append("")
+        except Exception as e:
+            logger.debug("[today-block] commission_documents lookup skipped: %s", e)
+            # non-fatal
+
+        # Section C: active OEIL procedures with a key event in the last 7 days
+        try:
+            from sqlalchemy import text as _sql_text
+            db = SessionLocal()
+            try:
+                rows = db.execute(_sql_text(
+                    """
+                    SELECT oeil_procedure_ref, current_status, title, last_updated
+                    FROM legislative_carriages
+                    WHERE last_updated >= :cutoff
+                      AND current_status NOT IN ('ADOPTED', 'WITHDRAWN', 'REJECTED')
+                    ORDER BY last_updated DESC
+                    LIMIT 15
+                    """
+                ), {"cutoff": today - timedelta(days=7)}).fetchall()
+            finally:
+                db.close()
+            if rows:
+                lines.append("Active OEIL procedures with a key event in the last 7 days:")
+                for r in rows:
+                    ref, status, title, _ = r
+                    lines.append(f"- {ref} ({status}): {(title or '')[:140]}")
+                lines.append("")
+        except Exception as e:
+            logger.debug("[today-block] legislative_carriages lookup skipped: %s", e)
+            # non-fatal
+
+        # CRITICAL instruction for the model
+        lines.append("CRITICAL -- when the user asks about 'today' / 'hoy' / 'avui' / 'aujourd\\'hui' / 'this week' / 'esta semana':")
+        lines.append("- Anchor every claim in the TODAY BLOCK above (today's date, week type, verified events).")
+        lines.append("- Do NOT describe previous weeks or confabulate committee meetings from past dates as if they were current.")
+        lines.append("- If no verified event is listed for today, say so explicitly and point to the current EP week type.")
+        lines.append("- Never invent a Council/ECOFIN/Eurogroup or committee meeting on a date not present in the TODAY BLOCK.")
+        lines.append("- Respond in the SAME LANGUAGE as the user's question.")
+        lines.append("=== END TODAY BLOCK ===")
+
+        return "\n".join(lines)
+
+    # ------------------------------------------------------------------
     # On-demand: EP committee meeting transcripts (AI-transcribed)
     # ------------------------------------------------------------------
 
@@ -6496,6 +6774,12 @@ class ContextBuilder:
         ```
         """
         sections = []
+
+        # TODAY BLOCK (on-demand, date-anchored) — injected FIRST so it survives
+        # the 32k truncation cap and forces the model to ground relative dates
+        # ("today", "hoy", "this week", "esta semana") in a verified context.
+        if getattr(context_data, 'today_block', None):
+            sections.append(context_data.today_block)
 
         # Drafting mode signal (action intent detected)
         if context_data.drafting_intent and context_data.drafting_intent.is_drafting_query:
