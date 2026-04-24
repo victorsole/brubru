@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSAM Regulation Explained: Combating Child Sexual Abuse Online | Brubru</title>
+  <meta name="description" content="Comprehensive guide to the EU CSAM Regulation proposal (COM(2022) 209): mandatory detection orders, the EU Centre on Child Sexual Abuse, the ePrivacy derogation crisis, and the Chat Control debate. Article-by-article analysis.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-green: #059669;
+      --color-purple: #9b51e0;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-text: #111827;
+      --color-secondary: #6b7280;
+      --color-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6;
+      --color-bg: #ffffff;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .header {
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: white;
+      border: none;
+      cursor: pointer;
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue));
+      animation: rainbowShift 4s ease infinite;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+    }
+    .header__cta:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 8px 30px rgba(6, 147, 227, 0.35), 0 4px 15px rgba(155, 81, 224, 0.25);
+    }
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag {
+      display: inline-block;
+      background: rgba(220,38,38,0.1);
+      color: var(--color-red);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero__title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero__title span {
+      color: var(--color-red);
+      background-size: 300% 100%;
+      background-image: linear-gradient(90deg, var(--color-red), var(--color-amber), var(--color-purple), var(--color-red));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0s;
+    }
+    .hero__title:hover span {
+      animation: rainbowShift 4s ease infinite;
+    }
+    .hero__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-secondary);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero__meta {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+    .figure-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.25s;
+    }
+    .figure-card:hover { border-color: var(--color-red); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(220,38,38,0.1); }
+    .figure-card__number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-red .figure-card__number { color: var(--color-red); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+
+    .toc {
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 3rem;
+    }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .toc__link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--color-text);
+      font-size: 0.9rem;
+      transition: all 0.15s;
+    }
+    .toc__link:hover { background: rgba(220,38,38,0.08); color: var(--color-red); }
+    .toc__link .mdi { color: var(--color-red); font-size: 1.1rem; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .section__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--color-red); }
+    .card__title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card__title .mdi { font-size: 1.1rem; }
+    .card p { color: var(--color-secondary); margin-bottom: 0.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .info-box {
+      background: linear-gradient(135deg, rgba(220,38,38,0.06) 0%, rgba(217,119,6,0.06) 100%);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .info-box p { color: var(--color-secondary); }
+
+    .alert-box {
+      background: linear-gradient(135deg, rgba(220,38,38,0.08) 0%, rgba(220,38,38,0.03) 100%);
+      border: 2px solid var(--color-red);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .alert-box h3 { font-size: 1.15rem; margin-bottom: 0.75rem; color: var(--color-red); }
+    .alert-box p { color: var(--color-secondary); }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-border); }
+    th {
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-secondary);
+      background: var(--color-bg-alt);
+    }
+    td { font-size: 0.95rem; }
+    tr:hover td { background: rgba(220,38,38,0.03); }
+    .highlight-cell { color: var(--color-red); font-weight: 600; }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .article-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+    .article-card:hover { border-color: var(--color-red); transform: translateY(-1px); }
+    .article-card__num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-red);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .article-card__title { font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .article-card__desc { font-size: 0.88rem; color: var(--color-secondary); line-height: 1.5; }
+
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--color-border);
+    }
+    .timeline__item {
+      position: relative;
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -2rem;
+      top: 0.5rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid var(--color-red);
+      background: white;
+    }
+    .timeline__item--active::before { background: var(--color-red); }
+    .timeline__date { font-size: 0.85rem; font-weight: 700; color: var(--color-red); }
+    .timeline__text { font-size: 0.95rem; color: var(--color-secondary); }
+
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pill--red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .pill--amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .pill--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .pill--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .pill--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+
+    .footer {
+      background: var(--color-bg-alt);
+      border-top: 1px solid var(--color-border);
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--color-secondary);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-red); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .figures { grid-template-columns: repeat(2, 1fr); }
+      .toc__grid { grid-template-columns: repeat(2, 1fr); }
+      .article-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .hero__title { font-size: 1.8rem; }
+      .figures { grid-template-columns: 1fr 1fr; }
+      .toc__grid { grid-template-columns: 1fr; }
+      .header { padding: 0.75rem 1rem; }
+      .header__cta { display: none; }
+      .container { padding: 1.25rem; }
+      .hero__meta { flex-direction: column; gap: 0.5rem; }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-red);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 50;
+    }
+    .back-to-top.visible { opacity: 1; }
+    .back-to-top:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header" id="top">
+  <img src="../assets/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title">CSAM Regulation Explainer</div>
+    <div class="header__subtitle">Combating Child Sexual Abuse Online</div>
+  </div>
+  <select onchange="window.location.href=this.value" aria-label="Language" style="padding:0.4rem 0.75rem;border-radius:8px;border:1px solid var(--color-border);font-family:inherit;font-size:0.85rem;color:var(--color-text);background:var(--color-bg);cursor:pointer;">
+    <option value="index.html" selected>English</option>
+    <option value="fr.html">Fran&ccedil;ais</option>
+    <option value="es.html">Espa&ntilde;ol</option>
+    <option value="it.html">Italiano</option>
+    <option value="nl.html">Nederlands</option>
+    <option value="ca.html">Catal&agrave;</option>
+  </select>
+  <a href="https://brubru.beresol.eu" class="header__cta">Try Brubru Free</a>
+</header>
+
+<div class="container">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero__tag"><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0155(COD)" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;">COM(2022) 209</a> | Proposed 11 May 2022</div>
+  <h1 class="hero__title">Combating Child Sexual<br><span>Abuse Online</span></h1>
+  <p class="hero__subtitle">
+    The EU's proposed regulation on preventing and combating child sexual abuse.
+    Mandatory detection orders, an EU Centre on Child Sexual Abuse, and the most contested digital rights debate in Europe.
+    Here is everything you need to know.
+  </p>
+  <div class="hero__meta">
+    <span><i class="mdi mdi-file-document-outline"></i> Regulation proposal (COD)</span>
+    <span><i class="mdi mdi-scale-balance"></i> In trilogue negotiations</span>
+    <span><i class="mdi mdi-alert-circle-outline"></i> Temporary derogation: expired 3 April 2026</span>
+  </div>
+</section>
+
+<!-- Key figures -->
+<div class="figures">
+  <div class="figure-card fc-red">
+    <div class="figure-card__number">20.5M</div>
+    <div class="figure-card__label">NCMEC CyberTipline reports (2024)</div>
+  </div>
+  <div class="figure-card fc-amber">
+    <div class="figure-card__number">1,325%</div>
+    <div class="figure-card__label">Rise in AI-generated CSAM (2023 to 2024)</div>
+  </div>
+  <div class="figure-card fc-purple">
+    <div class="figure-card__number">70%</div>
+    <div class="figure-card__label">Known CSAM traced to Europe (IWF 2024)</div>
+  </div>
+  <div class="figure-card fc-blue">
+    <div class="figure-card__number">68%</div>
+    <div class="figure-card__label">EU CyberTipline reports from chats/messaging</div>
+  </div>
+</div>
+
+<!-- Alert box: derogation expired -->
+<div class="alert-box">
+  <h3><i class="mdi mdi-alert-circle"></i> Temporary Derogation Expired</h3>
+  <p>Regulation (EU) 2021/1232, the legal basis for voluntary CSAM scanning in private messages by providers like WhatsApp, Discord, and Telegram, <strong>expired on 3 April 2026</strong>. The European Parliament adopted a position extending the derogation to 3 August 2027 with significant conditions, but the Council has not yet agreed. Until both institutions reach agreement, there is <strong>no EU legal basis</strong> for voluntary CSAM detection in private communications.</p>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc__title"><i class="mdi mdi-format-list-numbered"></i> Contents</div>
+  <div class="toc__grid">
+    <a href="#problem" class="toc__link"><i class="mdi mdi-chart-line"></i> The problem: scale and trends</a>
+    <a href="#framework" class="toc__link"><i class="mdi mdi-layers-outline"></i> EU regulatory framework</a>
+    <a href="#derogation" class="toc__link"><i class="mdi mdi-clock-alert-outline"></i> Temporary derogation crisis</a>
+    <a href="#proposal" class="toc__link"><i class="mdi mdi-file-document-outline"></i> Commission proposal</a>
+    <a href="#detection" class="toc__link"><i class="mdi mdi-magnify-scan"></i> Detection orders and technologies</a>
+    <a href="#eucsa" class="toc__link"><i class="mdi mdi-shield-check-outline"></i> EU Centre (EUCSA)</a>
+    <a href="#positions" class="toc__link"><i class="mdi mdi-account-group-outline"></i> Parliament vs. Council</a>
+    <a href="#epencryption" class="toc__link"><i class="mdi mdi-lock-outline"></i> The encryption debate</a>
+    <a href="#stakeholders" class="toc__link"><i class="mdi mdi-comment-text-outline"></i> Stakeholder positions</a>
+    <a href="#minors" class="toc__link"><i class="mdi mdi-account-child-outline"></i> DSA guidelines on minors</a>
+    <a href="#timeline" class="toc__link"><i class="mdi mdi-timeline-clock-outline"></i> Legislative timeline</a>
+    <a href="#sources" class="toc__link"><i class="mdi mdi-link-variant"></i> Official sources</a>
+  </div>
+</nav>
+
+<!-- Section: The Problem -->
+<section class="section" id="problem">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-chart-line"></i></div>
+    <h2 class="section__title">The Problem: Scale and Trends</h2>
+  </div>
+  <p class="section__subtitle">Online child sexual abuse is growing in scale and severity, increasingly targeting younger children</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">NCMEC Data</div>
+      <div class="article-card__title">20.5 million reports in 2024</div>
+      <div class="article-card__desc">The US National Center for Missing &amp; Exploited Children's CyberTipline received over 20.5 million reports of suspected online CSAM in 2024. The majority related to circulation of known material.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">AI-Generated CSAM</div>
+      <div class="article-card__title">1,325% increase in one year</div>
+      <div class="article-card__desc">Reports of AI-generated CSAM surged from 4,700 in 2023 to 67,000 in 2024. Operation Cumberland (2025, 19 countries) was the first major case involving AI-generated material.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">European Hosting</div>
+      <div class="article-card__title">70% of known CSAM traced to Europe</div>
+      <div class="article-card__desc">According to the Internet Watch Foundation, 70% of all known CSAM in 2024 was traced to a European country. Almost all content (99%) was on publicly available areas of the internet.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Messaging Services</div>
+      <div class="article-card__title">68% of EU reports from chats</div>
+      <div class="article-card__desc">In 2022, 68% of CyberTipline reports were sourced from chats, messaging, or email services within the EU. An additional 22% came from social media or online gaming platforms.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Younger Victims</div>
+      <div class="article-card__title">65% increase among ages 7 to 10</div>
+      <div class="article-card__desc">Self-generated content is rising among younger age groups. INHOPE data shows most victims who produced self-generated content were between 3 and 13 years old. A 65% increase in CSAM among children aged 7 to 10 was recorded between 2022 and 2023.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Sextortion</div>
+      <div class="article-card__title">Financial sextortion rising globally</div>
+      <div class="article-card__desc">The FBI issued a global warning in early 2023 about the rise in financial sextortion: fake accounts approach minors on digital platforms, coerce explicit content, then demand payment under threat of publication.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: EU Framework -->
+<section class="section" id="framework">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-layers-outline"></i></div>
+    <h2 class="section__title">EU Regulatory Framework</h2>
+  </div>
+  <p class="section__subtitle">Three layers: criminal law, voluntary detection (temporary), and the proposed permanent regulation</p>
+
+  <div class="info-box">
+    <h3>Three-layer architecture</h3>
+    <p><strong>Layer 1: Criminal law</strong> (Directive 2011/93/EU) establishes minimum rules on CSAM offences and penalties across Member States, including grooming. <strong>Layer 2: Voluntary detection</strong> (Regulation 2021/1232, now expired) temporarily derogated from ePrivacy to allow NI-ICS providers to scan for CSAM. <strong>Layer 3: Permanent regulation</strong> (COM(2022) 209) proposes mandatory detection, reporting, and removal obligations. Currently in trilogue.</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Instrument</th>
+        <th>Status</th>
+        <th>Key mechanism</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Criminal law</td>
+        <td>Directive 2011/93/EU</td>
+        <td><span class="pill pill--green">In force</span></td>
+        <td>Minimum offence definitions, penalties, removal/blocking orders</td>
+      </tr>
+      <tr>
+        <td>Voluntary detection</td>
+        <td>Regulation 2021/1232 (as extended by 2024/1307)</td>
+        <td><span class="pill pill--red">Expired 3 April 2026</span></td>
+        <td>ePrivacy derogation for NI-ICS voluntary CSAM scanning</td>
+      </tr>
+      <tr>
+        <td>Permanent regulation</td>
+        <td>COM(2022) 209</td>
+        <td><span class="pill pill--amber">In trilogue</span></td>
+        <td>Mandatory detection orders, EUCSA, removal within 24 hours</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section: Derogation Crisis -->
+<section class="section" id="derogation">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-red);"><i class="mdi mdi-clock-alert-outline"></i></div>
+    <h2 class="section__title">The Temporary Derogation Crisis</h2>
+  </div>
+  <p class="section__subtitle">The legal basis for voluntary CSAM scanning expired on 3 April 2026</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-file-document-outline" style="color: var(--color-red);"></i> Extension procedure: 2025/0429(COD)</div>
+    <p>The Commission proposed extending the derogation on 19 December 2025. The LIBE committee has taken up the file; per OEIL the committee-stage events run from 19 December 2025 through a committee report on 11 March 2026. As of 23 April 2026 the file is still pre-plenary; no rapporteur name or vote tally has been independently verified against doceo.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-information-outline" style="color: var(--color-red);"></i> Extension procedure 2025/0429(COD) -- current status</div>
+    <p>As of 23 April 2026 the file is in LIBE committee stage per OEIL (status CLOSE_TO_ADOPTION). OEIL-verified events: legislative proposal 19 December 2025 + 27 January 2026; committee report 5 February + 10 February + 11 March 2026; committee referral 2 March 2026; vote in committee 3 March 2026. No plenary vote recorded.</p>
+    <p>The temporary derogation expired 3 April 2026. Until the EP plenary votes and the Council adopts a position, voluntary CSAM scanning of OTT communications lacks an EU legal basis.</p>
+  </div>
+
+  <div class="info-box">
+    <h3>Known anchor points (not fabricated)</h3>
+    <p>Commission proposal: 19 December 2025.<br>
+       LIBE committee work: February-March 2026 (see OEIL for key events).<br>
+       Previous extension: Regulation (EU) 2024/1307 (to 3 April 2026).<br>
+       Current status (23 April 2026): derogation EXPIRED, extension pre-plenary.</p>
+  </div>
+</section>
+
+<!-- Section: Commission Proposal -->
+<section class="section" id="proposal">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-file-document-outline"></i></div>
+    <h2 class="section__title">The Commission Proposal: COM(2022) 209</h2>
+  </div>
+  <p class="section__subtitle">Mandatory detection, reporting, and removal obligations for hosting services and interpersonal communications providers</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Risk Assessment</div>
+      <div class="article-card__title">Mandatory CSAM risk assessments</div>
+      <div class="article-card__desc">All providers must assess the risk of misuse of their services for CSAM dissemination (similar to DSA systemic risk assessments). Providers must evaluate risks associated with each service and implement mitigation measures.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Risk Mitigation</div>
+      <div class="article-card__title">Age verification and safety-by-design</div>
+      <div class="article-card__desc">Providers must implement mitigation measures including age verification, safety-by-design for children, and content moderation for CSAM. App stores must verify ages to prevent children downloading high-risk apps.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Detection Orders</div>
+      <div class="article-card__title">Judicial/administrative detection mandates</div>
+      <div class="article-card__desc">National coordinating authorities can request courts to issue detection orders requiring providers to deploy automated detection technologies. Maximum 2 years for CSAM, 1 year for grooming. Least privacy-intrusive technology required.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Reporting</div>
+      <div class="article-card__title">Report to EUCSA and law enforcement</div>
+      <div class="article-card__desc">Providers must report detected CSAM to the EU Centre on Child Sexual Abuse (EUCSA). EUCSA forwards reports to competent law enforcement authorities and to Europol.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Removal Orders</div>
+      <div class="article-card__title">24-hour removal window</div>
+      <div class="article-card__desc">Competent authorities can order removal of identified CSAM within 24 hours. For content that cannot be removed at source, blocking orders can be issued to prevent EU access.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">User Rights</div>
+      <div class="article-card__title">Judicial redress and complaint mechanisms</div>
+      <div class="article-card__desc">Both providers and users have the right to challenge measures. Users have a right to compensation for damages. Providers must inform users when content is removed and provide reasons upon request.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section: Detection Technologies -->
+<section class="section" id="detection">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-magnify-scan"></i></div>
+    <h2 class="section__title">Detection Technologies</h2>
+  </div>
+  <p class="section__subtitle">Hash-based matching for known CSAM, AI classifiers for new material, and NLP for grooming</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Technology</th>
+        <th>Accuracy</th>
+        <th>Human oversight</th>
+        <th>Privacy impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight-cell">Known CSAM</td>
+        <td>Hash-based (PhotoDNA): digital fingerprint compared to database of known hashes</td>
+        <td>Very high (minimal false positives)</td>
+        <td>Not needed (illegality already verified)</td>
+        <td>Low (does not access content, only hash comparison)</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">New/unknown CSAM</td>
+        <td>AI-based image classification</td>
+        <td>Higher false positive rate</td>
+        <td>Required for verification</td>
+        <td>High (requires accessing image content)</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Grooming</td>
+        <td>Text-based NLP pattern detection (Microsoft: 88% accuracy)</td>
+        <td>Significant false positives</td>
+        <td>Required (cannot distinguish consensual conversation from grooming)</td>
+        <td>Very high (requires accessing message text)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <h3>The technology maturity question</h3>
+    <p>The EPRS complementary impact assessment concluded that the overall effectiveness of detection for new CSAM and grooming is expected to be limited because the technology is not mature enough, and that it would interfere with Articles 7 and 8 of the EU Charter of Fundamental Rights (private life and data protection). This finding underpins Parliament's decision to restrict the extension to known CSAM only.</p>
+  </div>
+</section>
+
+<!-- Section: EUCSA -->
+<section class="section" id="eucsa">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-shield-check-outline"></i></div>
+    <h2 class="section__title">EU Centre on Child Sexual Abuse (EUCSA)</h2>
+  </div>
+  <p class="section__subtitle">A proposed new decentralised EU agency to coordinate the fight against online CSAM</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-database" style="color: var(--color-blue);"></i> Core functions</div>
+    <p>The EUCSA would: (1) create, maintain, and operate databases of CSAM indicators (hashes, URLs) for providers; (2) receive reports from providers on detected CSAM; (3) forward reports to competent law enforcement and to Europol; (4) verify that providers have removed content; (5) support national coordinating authorities in their tasks.</p>
+  </div>
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-heart-outline" style="color: var(--color-blue);"></i> Parliament additions</div>
+    <p>The EP's LIBE report (November 2023) added a <strong>Victims' Rights and Survivors' Consultative Forum</strong> at the EUCSA, plus an <strong>online European Child Protection Platform</strong> to raise awareness of hotline/helpline services and launch prevention campaigns.</p>
+  </div>
+</section>
+
+<!-- Section: Parliament vs Council -->
+<section class="section" id="positions">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-account-group-outline"></i></div>
+    <h2 class="section__title">Parliament vs. Council Positions</h2>
+  </div>
+  <p class="section__subtitle">The permanent regulation: key differences between the co-legislators</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Issue</th>
+        <th>Commission proposal</th>
+        <th>Parliament (LIBE)</th>
+        <th>Council (Danish Presidency)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="highlight-cell">Scope</td>
+        <td>Hosting services + interpersonal communications</td>
+        <td>Extended to search engines and AI systems</td>
+        <td>Closer to Commission</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">E2E encryption</td>
+        <td>Not explicitly addressed</td>
+        <td>Encrypted communications excluded from content scanning; metadata analysis only</td>
+        <td>More open to Commission approach</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Grooming detection</td>
+        <td>Mandatory via detection orders</td>
+        <td>Restricted (technology not mature enough)</td>
+        <td>Closer to Commission</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Online games</td>
+        <td>Not specifically addressed</td>
+        <td>Included in scope</td>
+        <td>Not specified</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Voluntary detection</td>
+        <td>Would terminate with new regime</td>
+        <td>Preserved alongside mandatory regime</td>
+        <td>Not specified</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Victims' forum</td>
+        <td>Not included</td>
+        <td>Victims' Rights and Survivors' Consultative Forum at EUCSA</td>
+        <td>Not specified</td>
+      </tr>
+      <tr>
+        <td class="highlight-cell">Prevention</td>
+        <td>Limited provisions</td>
+        <td>Reinforced: safety-by-design, age assurance, enhanced parental controls</td>
+        <td>Not specified</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section: Encryption debate -->
+<section class="section" id="epencryption">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-purple);"><i class="mdi mdi-lock-outline"></i></div>
+    <h2 class="section__title">The Encryption Debate</h2>
+  </div>
+  <p class="section__subtitle">"Chat Control" versus fundamental rights: the most polarising aspect of the proposal</p>
+
+  <div class="info-box">
+    <h3>The core tension</h3>
+    <p>The Commission proposal would require providers to deploy automated detection technologies in interpersonal communications, including those protected by end-to-end encryption. Critics call this "Chat Control," arguing it amounts to mass surveillance of private messages and would undermine E2E encryption. Supporters argue that without detection in encrypted channels, child abuse will increasingly migrate to encrypted services where it cannot be reported.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-lock-outline" style="color: var(--color-purple);"></i> Parliament's position: no E2E scanning</div>
+    <p>The LIBE committee (rapporteur Zarzalejos) excluded encrypted communications from content scanning. Detection in E2E encrypted services is limited to <strong>metadata analysis</strong> only, without accessing the content of the communication. This was reaffirmed in the March 2026 extension votes.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-outline" style="color: var(--color-amber);"></i> EDPS/EDPB position</div>
+    <p>The EDPB-EDPS Joint Opinion (2022) expressed "serious concerns about the disproportionality of the envisaged interference" with communication confidentiality. EDPS historical positions on CSAM-scanning derogations consistently emphasise proportionality and targeting over blanket scanning; consult <a href="https://www.edps.europa.eu/" target="_blank" rel="noopener">edps.europa.eu</a> for any specific 2026 opinion on 2025/0429(COD).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-comment-alert-outline" style="color: var(--color-red);"></i> The 58% drop</div>
+    <p>When the ePrivacy Directive derogation first took effect in late 2020, enabling voluntary CSAM detection by NI-ICS providers, there was initially an 18-week gap before providers could resume scanning. During this gap, EU reports to NCMEC dropped by <strong>58%</strong>, illustrating the real-world impact of legal uncertainty on child safety reporting.</p>
+  </div>
+</section>
+
+<!-- Section: Stakeholders -->
+<section class="section" id="stakeholders">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-amber);"><i class="mdi mdi-comment-text-outline"></i></div>
+    <h2 class="section__title">Stakeholder Positions</h2>
+  </div>
+  <p class="section__subtitle">A deeply polarised debate between child protection advocates and digital rights organisations</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Stakeholder</th>
+        <th>Position</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="highlight-cell">NCMEC</td><td>Supports mandatory detection; voluntary approach insufficient; too many companies decline to participate</td></tr>
+      <tr><td class="highlight-cell">UNICEF</td><td>Welcomes proposal as in line with UN Convention on the Rights of the Child (Art. 3(1))</td></tr>
+      <tr><td class="highlight-cell">IWF</td><td>Supports mandatory framework; 70% of CSAM hosted in Europe needs urgent action</td></tr>
+      <tr><td class="highlight-cell">ECPAT</td><td>Supports harmonised implementation; 68% of EU citizens support CSAM detection tools (ECPAT survey)</td></tr>
+      <tr><td class="highlight-cell">Microsoft</td><td>No "silver bullet" solution; regulation should reduce barriers to voluntary efforts, not impede them</td></tr>
+      <tr><td class="highlight-cell">Google</td><td>Supports voluntary system with clear legal basis; notice and takedown in accordance with DSA</td></tr>
+      <tr><td class="highlight-cell">EDRi + 117 organisations</td><td>Automated scanning and chat controls could be illegal; demand tailored, targeted alternatives</td></tr>
+      <tr><td class="highlight-cell">German Lawyers' Assoc.</td><td>Proposal potentially harmful to fundamental rights including privacy</td></tr>
+      <tr><td class="highlight-cell">EESC</td><td>Supports principle but sceptical about scanning encrypted communications; considers measures disproportionate</td></tr>
+      <tr><td class="highlight-cell">Global Encryption Coalition</td><td>Governments should preserve E2E; encourage metadata analysis as alternative</td></tr>
+      <tr><td class="highlight-cell">Digital Europe</td><td>Welcomes safeguards but orders must respect general monitoring ban from DSA</td></tr>
+      <tr><td class="highlight-cell">ISFE (videogames) + Cloudflare</td><td>Detection of "new" CSAM technically unfeasible; human review risks increasing CSAM access</td></tr>
+      <tr><td class="highlight-cell">Zoom/ITI</td><td>Should only apply to consumer interpersonal communications, not professional services</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section: DSA Guidelines on Minors -->
+<section class="section" id="minors">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-account-child-outline"></i></div>
+    <h2 class="section__title">DSA Guidelines on Protection of Minors</h2>
+  </div>
+  <p class="section__subtitle">Commission guidelines published 14 July 2025 under DSA Article 28(1)</p>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-account-outline" style="color: var(--color-green);"></i> Key requirements for platforms</div>
+    <p>Set minor accounts to private by default. Enable blocking, muting, and explicit consent for group additions. Prohibit screenshot/download features for minor-created content. Modify recommender systems to reduce harmful content exposure. Disable addictive features (streaks, autoplay, push notifications) by default for minors. Restrict manipulative practices (virtual currencies, loot boxes). Implement age assurance methods for adult content access. Improve reporting mechanisms with prompt feedback.</p>
+    <p>Following these guidelines is voluntary and does not guarantee DSA compliance, but the Commission will reference them during enforcement assessments.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-account-multiple-outline" style="color: var(--color-green);"></i> Special Panel on Child Safety Online</div>
+    <p>On 5 March 2026, the Commission held the first meeting of the Special Panel on Child Safety Online, hosted by President von der Leyen. The Panel provides expert recommendations on child protection online, potential harmonised age restrictions for social media access, and EU age verification solutions.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-book-open-page-variant-outline" style="color: var(--color-green);"></i> Commission plain-language explainer (April 2026)</div>
+    <p>In April 2026, the Publications Office of the EU published <a href="https://op.europa.eu/en/publication-detail/-/publication/33740183-a581-11f0-a7c5-01aa75ed71a1/language-en" target="_blank" rel="noopener">"The Digital Services Act explained: What online platforms should do to keep kids and teens safe online"</a> (19 pages, catalogue ID 33740183-a581-11f0-a7c5-01aa75ed71a1). The booklet translates the July 2025 DSA guidelines into plain language for parents, educators, youth and platform teams. It sets out 10 recommendation areas, 3 risk tiers for age assurance, and defines the "digital age of majority" (usually 13 or 18, depending on Member State).</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-shield-key-outline" style="color: var(--color-green);"></i> Three risk tiers for age assurance</div>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
+      <thead>
+        <tr style="border-bottom: 2px solid var(--color-border);">
+          <th style="text-align: left; padding: 0.5rem;">Risk level</th>
+          <th style="text-align: left; padding: 0.5rem;">Example services</th>
+          <th style="text-align: left; padding: 0.5rem;">Recommended method</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--color-border);">
+          <td style="padding: 0.5rem;"><strong>Low-risk</strong></td>
+          <td style="padding: 0.5rem;">General-purpose platforms with minimal harm risk</td>
+          <td style="padding: 0.5rem;">Other safety measures may be enough</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--color-border);">
+          <td style="padding: 0.5rem;"><strong>Medium-risk</strong></td>
+          <td style="padding: 0.5rem;">Certain social media platforms</td>
+          <td style="padding: 0.5rem;">Age estimation or age verification</td>
+        </tr>
+        <tr>
+          <td style="padding: 0.5rem;"><strong>High-risk</strong></td>
+          <td style="padding: 0.5rem;">Gambling, dating, adult content (18+), loot boxes</td>
+          <td style="padding: 0.5rem;">Age verification required</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 1rem;">Self-declaration ("I am over 13/18") is explicitly judged ineffective and unreliable. Age verification via the <strong>EU Digital Identity Wallet</strong> and the Commission's age-verification app blueprint (launched July 2025) are the privacy-preserving standard.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-alert-octagon-outline" style="color: var(--color-red);"></i> Addictive design features platforms must disable by default for minors</div>
+    <ul>
+      <li>Infinite scrolling</li>
+      <li>Pull-to-refresh</li>
+      <li>Constant push notifications</li>
+      <li>Video autoplay</li>
+      <li>Virtual daily rewards, streaks, points that require opening the app every day</li>
+      <li>Loot boxes and gambling-like features</li>
+      <li>Countdown timers and "buy now" pressure messages</li>
+      <li>Filters that negatively affect body image or self-esteem</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-compass-outline" style="color: var(--color-blue);"></i> Covered platforms under the DSA minors guidelines</div>
+    <p><strong>Covered:</strong> social media (TikTok, Instagram, Snapchat, Yubo, BeReal); video-sharing and streaming (YouTube, Twitch); games with user-generated content (Roblox, Minecraft); post-and-share platforms (Discord, Reddit).</p>
+    <p><strong>NOT covered:</strong> private messaging services or features. Minimum age on TikTok, Snapchat, Instagram, BeReal and Steam: 13 years old.</p>
+  </div>
+
+  <div class="card">
+    <div class="card__title"><i class="mdi mdi-road-variant" style="color: var(--color-amber);"></i> What the Commission and Member States are doing next</div>
+    <ul>
+      <li>Checking whether platforms follow the DSA minors guidelines; opening legal proceedings against non-compliant platforms</li>
+      <li>Testing and rolling out the <strong>EU age-verification app</strong></li>
+      <li>Developing an <strong>EU action plan against cyberbullying</strong></li>
+      <li>Analysing how social media use impacts mental health in children and teens</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="section" id="timeline">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-timeline-clock-outline"></i></div>
+    <h2 class="section__title">Legislative Timeline</h2>
+  </div>
+  <p class="section__subtitle">From criminal law directive to trilogue negotiations</p>
+
+  <div class="timeline">
+    <div class="timeline__item">
+      <div class="timeline__date">13 December 2011</div>
+      <div class="timeline__text">Directive 2011/93/EU adopted (criminal law framework for CSAM)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">14 July 2021</div>
+      <div class="timeline__text">Regulation 2021/1232 adopted (temporary ePrivacy derogation for voluntary CSAM detection)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 May 2022</div>
+      <div class="timeline__text">Commission publishes permanent regulation proposal COM(2022) 209</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 April 2023</div>
+      <div class="timeline__text">LIBE rapporteur Zarzalejos publishes draft report</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">16 November 2023</div>
+      <div class="timeline__text">LIBE committee adopts report (51 for, 2 against, 1 abstention)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">22 November 2023</div>
+      <div class="timeline__text">EP plenary confirms entry into interinstitutional negotiations</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">29 April 2024</div>
+      <div class="timeline__text">Regulation 2024/1307 extends temporary derogation to 3 April 2026</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 November 2025</div>
+      <div class="timeline__text">Council achieves common position under Danish Presidency</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">9 December 2025</div>
+      <div class="timeline__text">Trilogue negotiations begin (1st trilogue)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">19 December 2025</div>
+      <div class="timeline__text">Commission proposes extension of derogation (COM(2025) 0797)</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">26 February 2026</div>
+      <div class="timeline__text">3rd trilogue on permanent regulation</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">11 March 2026</div>
+      <div class="timeline__text">LIBE committee report (final committee-stage document per OEIL). Not a plenary vote.</div>
+    </div>
+    <div class="timeline__item">
+      <div class="timeline__date">3 April 2026</div>
+      <div class="timeline__text"><strong>Temporary derogation expires</strong>: no EU legal basis for voluntary CSAM scanning</div>
+    </div>
+    <div class="timeline__item timeline__item--active">
+      <div class="timeline__date">4 May 2026</div>
+      <div class="timeline__text">4th trilogue on permanent regulation (scheduled)</div>
+    </div>
+  </div>
+</section>
+
+<!-- Sources -->
+<section class="section" id="sources">
+  <div class="section__header">
+    <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-link-variant"></i></div>
+    <h2 class="section__title">Official Sources</h2>
+  </div>
+  <p class="section__subtitle">All primary documents and institutional references</p>
+
+  <div class="article-grid">
+    <div class="article-card">
+      <div class="article-card__num">Commission Proposal</div>
+      <div class="article-card__title">COM(2022) 209</div>
+      <div class="article-card__desc"><a href="https://eur-lex.europa.eu/resource.html?uri=cellar:13e33abf-d209-11ec-a95f-01aa75ed71a1.0001.02/DOC_1&format=PDF" target="_blank" rel="noopener">Proposal PDF (Part 1)</a> | <a href="https://eur-lex.europa.eu/resource.html?uri=cellar:13e33abf-d209-11ec-a95f-01aa75ed71a1.0001.02/DOC_2&format=PDF" target="_blank" rel="noopener">Part 2 (Annexes)</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">OEIL Procedure Files</div>
+      <div class="article-card__title">Permanent + Extension</div>
+      <div class="article-card__desc"><a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2022/0155(COD)" target="_blank" rel="noopener">2022/0155(COD) (permanent)</a> | <a href="https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0429(COD)" target="_blank" rel="noopener">2025/0429(COD) (extension)</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">EP Plenary Status</div>
+      <div class="article-card__title">Pre-plenary (as of 23 April 2026)</div>
+      <div class="article-card__desc">No plenary adopted text (T/P10_TA) has yet been recorded for procedure 2025/0429(COD) per OEIL. Verify via <a href="https://www.europarl.europa.eu/doceo/" target="_blank" rel="noopener">doceo</a> before citing any T-number.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">LIBE Committee Work</div>
+      <div class="article-card__title">Committee-stage documents</div>
+      <div class="article-card__desc"><a href="https://www.europarl.europa.eu/committees/en/libe/home/highlights" target="_blank" rel="noopener">LIBE committee page</a> -- check the committee document search for the current LIBE draft report; do not cite specific PE or A numbers without verification.</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Legislative Train</div>
+      <div class="article-card__title">EP tracking page</div>
+      <div class="article-card__desc"><a href="https://www.europarl.europa.eu/legislative-train/spotlight-JD22/file-combating-child-sexual-abuse-online" target="_blank" rel="noopener">Latest status and next steps</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">EDPS</div>
+      <div class="article-card__title">Opinion 7/2026</div>
+      <div class="article-card__desc"><a href="https://www.edps.europa.eu/press-publications/press-news/press-releases/2026/extension-interim-rules-combat-child-sexual-abuse-online-must-address-shortcomings-and-prevent-indiscriminate-scanning_en" target="_blank" rel="noopener">EDPS position on extension</a></div>
+    </div>
+    <div class="article-card">
+      <div class="article-card__num">Commission Guidelines</div>
+      <div class="article-card__title">Protection of Minors (DSA Art. 28)</div>
+      <div class="article-card__desc"><a href="https://digital-strategy.ec.europa.eu/en/library/commission-publishes-guidelines-protection-minors" target="_blank" rel="noopener">Published 14 July 2025</a></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>
+    <a href="https://brubru.beresol.eu">Brubru</a> by <a href="https://beresol.eu">Beresol</a> |
+    <a href="https://beresol.eu/public-affairs">Beresol Open Reports</a> |
+    <a href="https://beresol.eu/startup-monitor">Beresol Startup Monitor</a>
+  </p>
+  <p style="margin-top: 0.5rem;">Analysis based on official EU institutional sources. Updated April 2026.</p>
+</footer>
+
+<!-- Back to top -->
+<a href="#" class="back-to-top" id="backToTop" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
+  <i class="mdi mdi-chevron-up"></i>
+</a>
+<script>
+  window.addEventListener('scroll', function() {
+    document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+  });
+</script>
+
+</body>
+</html>

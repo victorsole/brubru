@@ -259,42 +259,79 @@ def _parse_treaty_html(soup, html_path: str, celex: str = '') -> dict:
                 parts.append(t)
         result['title'] = ' '.join(parts)
 
-    # Articles: p.ti-art + p.sti-art + following p.normal (until next ti-art or section)
+    # Articles: p.ti-art + p.sti-art + body paragraphs (walk document in order
+    # until next ti-art or doc-end). Body paragraphs are often NESTED inside
+    # unclassed <div> wrappers (one per numbered paragraph), so a shallow
+    # find_next_sibling walk misses them -- use find_all_next instead.
     art_titles = soup.select('p.ti-art')
-    for ti in art_titles:
+    for i, ti in enumerate(art_titles):
         art_text = ti.get_text(strip=True)
         art_num_match = re.search(r'Article\s+(\d+[a-z]?)', art_text)
         art_num = art_num_match.group(1) if art_num_match else art_text
 
-        # Subtitle
-        sti = ti.find_next_sibling('p', class_='sti-art')
-        subtitle = sti.get_text(strip=True) if sti else ''
+        # Subtitle: first sti-art after ti (in document order, may be nested)
+        subtitle = ''
+        for nxt in ti.find_all_next():
+            if nxt.name == 'p':
+                cls = nxt.get('class') or []
+                if 'sti-art' in cls:
+                    subtitle = nxt.get_text(strip=True)
+                    break
+                if 'ti-art' in cls or 'normal' in cls:
+                    break
         full_title = f'{art_text} - {subtitle}' if subtitle else art_text
 
-        # Collect paragraphs until next ti-art or section header
+        # Body: walk all elements in document order until the next ti-art.
+        # Collect p.normal text, deduplicating (nested structures can yield
+        # the same paragraph via both its wrapping div and the p itself, but
+        # here we only match on p.normal so that is not an issue).
+        next_ti = art_titles[i + 1] if i + 1 < len(art_titles) else None
         paragraphs = []
-        el = ti.find_next_sibling()
-        while el:
-            classes = el.get('class') or []
-            # Stop at next article or section
-            if 'ti-art' in classes:
+        for elem in ti.find_all_next():
+            if elem is next_ti:
                 break
-            if any(c.startswith('ti-section') for c in classes) or any(c.startswith('ti-grseq') for c in classes):
-                break
-            if 'doc-end' in classes:
-                break
-            # Skip the subtitle paragraph itself
-            if 'sti-art' in classes:
-                el = el.find_next_sibling()
+            if elem.name != 'p':
                 continue
-            # Collect normal body text
-            if 'normal' in classes or 'no-doc-c' in classes:
-                text = el.get_text(strip=True)
-                # Clean EUR-Lex artefacts like "◄" "▼"
+            cls = elem.get('class') or []
+            if 'ti-art' in cls:
+                break
+            if 'doc-end' in cls:
+                break
+            if 'sti-art' in cls:
+                continue  # already captured as subtitle
+            if 'normal' in cls or 'no-doc-c' in cls:
+                text = elem.get_text(' ', strip=True)
+                # Clean EUR-Lex artefacts: amendment markers, consolidation arrows
                 text = re.sub(r'[►◄▼]\s*[A-Z]?\d*\s*', '', text)
+                # Normalise non-breaking spaces
+                text = text.replace('\xa0', ' ')
+                text = re.sub(r'\s+', ' ', text).strip()
                 if text:
                     paragraphs.append(text)
-            el = el.find_next_sibling()
+
+        # Merge standalone point labels like "(a)", "(b)", "(i)", "1.", "(1)"
+        # with the following content paragraph. EUR-Lex renders subparagraphs
+        # as two separate <p class="normal"> (one label, one body) -- left as
+        # two paragraphs this yields "a)" on one line and the content on
+        # the next, which looks broken.
+        label_re = re.compile(r'^\s*\(?[a-z0-9]{1,4}\)\s*$|^\s*[a-z0-9]{1,4}\.\s*$', re.IGNORECASE)
+        # Accept roman numerals too: (i), (ii), (iii), (iv), (v), ...
+        roman_re = re.compile(r'^\s*\(?[ivxlcdm]{1,5}\)\s*$', re.IGNORECASE)
+        merged = []
+        idx = 0
+        while idx < len(paragraphs):
+            current = paragraphs[idx]
+            is_label = bool(label_re.match(current) or roman_re.match(current))
+            if is_label and idx + 1 < len(paragraphs):
+                next_para = paragraphs[idx + 1]
+                # Only merge if the next paragraph is NOT itself a bare label
+                if not (label_re.match(next_para) or roman_re.match(next_para)):
+                    merged.append(f'{current.strip()} {next_para.strip()}')
+                    idx += 2
+                    continue
+            merged.append(current)
+            idx += 1
+        paragraphs = merged
 
         art_data = {
             'identifier': f'ART_{art_num}',

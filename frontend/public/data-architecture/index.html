@@ -641,15 +641,15 @@
   <!-- Key figures -->
   <div class="figures stagger-children reveal">
     <div class="figure-card fc-blue">
-      <div class="figure-card__number" data-count="28505">0</div>
-      <div class="figure-card__label">EU laws indexed</div>
+      <div class="figure-card__number" data-count="28513">0</div>
+      <div class="figure-card__label">OJ publications (8,710 distinct laws, 61,219 XML files)</div>
     </div>
     <div class="figure-card fc-green">
       <div class="figure-card__number" data-count="44">0</div>
       <div class="figure-card__label">news sources scraped daily</div>
     </div>
     <div class="figure-card fc-purple">
-      <div class="figure-card__number" data-count="157">0</div>
+      <div class="figure-card__number" data-count="177">0</div>
       <div class="figure-card__label">expert knowledge guides</div>
     </div>
     <div class="figure-card fc-amber">
@@ -699,7 +699,7 @@
         <tr><td><strong>EU news media</strong><br><span class="source-tag source-tag--amber">Media</span></td><td>Headlines and links from Politico EU, Euractiv, EUobserver, European Correspondent, Contexte</td><td>Daily</td><td>Web scraper (headlines only, no full text)</td></tr>
         <tr><td><strong>EU Transparency Register</strong><br><span class="source-tag source-tag--green">Interinstitutional</span></td><td>Organisation names, policy interests, contact information for advocacy organisations</td><td>On demand</td><td>TR API</td></tr>
         <tr><td><strong>EP plenary (CRE)</strong><br><span class="source-tag source-tag--purple">European Parliament</span></td><td>Full plenary debate transcripts (verbatim records) in XML format</td><td>On demand</td><td>Doceo XML fetch</td></tr>
-        <tr><td><strong>Formex V4 XML corpus</strong><br><span class="source-tag">European Commission</span></td><td>28,513 complete legal texts in structured XML (the entire EU acquis as of November 2025)</td><td>Bulk import (Nov 2025)</td><td>EU Publications Office export</td></tr>
+        <tr><td><strong>Formex V4 XML corpus</strong><br><span class="source-tag">European Commission</span></td><td><strong>8,710 distinct laws</strong> across <strong>28,513 OJ publications</strong>, represented by <strong>61,219 translatable XML files</strong> (main texts + annexes) &mdash; the entire EU acquis as of November 2025</td><td>Bulk import (Nov 2025)</td><td>EU Publications Office export</td></tr>
       </tbody>
     </table>
   </div>
@@ -710,11 +710,11 @@
       <div class="section__icon" style="background: var(--color-green);"><i class="mdi mdi-scale-balance"></i></div>
       <h2 class="section__title">EU legislation database</h2>
     </div>
-    <p class="section__intro reveal">The core of Brubru's knowledge: 28,505 EU laws with full-text search, CELEX identification, and metadata.</p>
+    <p class="section__intro reveal">The core of Brubru's knowledge: <strong>8,710 distinct laws</strong> across <strong>28,513 OJ publications</strong>, represented by <strong>61,219 translatable XML files</strong> (main texts + annexes), with full-text search, CELEX identification, and metadata.</p>
 
     <div class="info-card reveal">
-      <div class="info-card__title">eu_laws table (28,505 records)</div>
-      <div class="info-card__text">Every adopted EU legal act with CELEX number, title, document type (regulation, directive, decision), date, Official Journal reference, policy area classification, and full-text search index (TSVECTOR). Sourced from the Formex V4 XML acquis corpus (EU Publications Office, November 2025 snapshot).</div>
+      <div class="info-card__title">eu_laws table &mdash; 8,710 distinct laws / 28,513 OJ entries / 61,219 XML files</div>
+      <div class="info-card__text">Every adopted EU legal act with CELEX number, title, document type (regulation, directive, decision), date, Official Journal reference, policy area classification, and full-text search index (TSVECTOR). Sourced from the Formex V4 XML acquis corpus (EU Publications Office, November 2025 snapshot). A single law's text is often split across multiple pages/files (e.g. REACH spans 7 files, AI Act spans 14 files), which is why the XML file count (61,219) exceeds the distinct-law count (8,710).</div>
     </div>
 
     <div class="subsection reveal">
@@ -769,7 +769,7 @@
         <tr><td>Document type</td><td>Regulation, Directive, Decision</td><td>Determines legal effect: regulations are directly applicable, directives need transposition.</td></tr>
         <tr><td>Policy area</td><td>Digital, Environment, Trade</td><td>Classified into 19 policy domains for filtering and relevance scoring.</td></tr>
         <tr><td>Date and OJ reference</td><td>OJ L 119, 4 May 2016</td><td>Official publication date and journal reference for citation.</td></tr>
-        <tr><td>Full text (TSVECTOR)</td><td>Indexed for search</td><td>Enables searches like "which EU law covers algorithmic transparency?" across all 28,505 acts.</td></tr>
+        <tr><td>Full text (TSVECTOR)</td><td>Indexed for search</td><td>Enables searches like "which EU law covers algorithmic transparency?" across all 8,710 distinct acts (61,219 underlying XML files).</td></tr>
       </tbody>
     </table>
   </div>
@@ -852,7 +852,7 @@
       <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-api"></i></div>
       <h2 class="section__title">Brubru API &mdash; the data provider vertical</h2>
     </div>
-    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 157 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) or the Enterprise plan (custom-quoted for teams needing higher rate limits, multi-seat SSO, custom regulatory scans, and SLA-backed support).</p>
+    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 177 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) or the Enterprise plan (custom-quoted for teams needing higher rate limits, multi-seat SSO, custom regulatory scans, and SLA-backed support).</p>
 
     <div class="info-card reveal">
       <div class="info-card__title">Authentication (/api/v1/*)</div>
@@ -902,7 +902,7 @@
         </ul>
         <p><strong>Datasets:</strong></p>
         <ul>
-          <li><code>GET /api/v1/laws</code> &mdash; 28,500+ adopted EU laws. Filters: <code>celex</code>, <code>doc_type</code>, <code>policy_area</code>, <code>q</code> (TSVECTOR full-text), <code>published_from</code>, <code>published_to</code>.</li>
+          <li><code>GET /api/v1/laws</code> &mdash; 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files). Filters: <code>celex</code>, <code>doc_type</code>, <code>policy_area</code>, <code>q</code> (TSVECTOR full-text), <code>published_from</code>, <code>published_to</code>.</li>
           <li><code>GET /api/v1/procedures</code> &mdash; 1,200+ legislative files. Filters: <code>reference</code>, <code>committee</code>, <code>rapporteur_mep_id</code>, <code>status</code>, <code>updated_from</code>, <code>updated_to</code>.</li>
           <li><code>GET /api/v1/commissioners/{name}/agenda</code> &mdash; live calendar items for all 27 college members. Accent-insensitive name resolution.</li>
           <li><code>GET /api/v1/consultations/by-initiative/{id}/feedback</code> &mdash; live stakeholder feedback from Have Your Say with country and user-type aggregates.</li>
@@ -922,7 +922,7 @@
       <div class="info-card__content">
         <p>Every Brubru Chat query flows through three retrieval tiers before the AI composes an answer. The v1 API is not only an external partner surface &mdash; it is the internal reinforcer that guarantees coverage.</p>
         <ul>
-          <li><strong>Tier 1 &mdash; DB + smart filters.</strong> <code>context_builder.py</code> queries PostgreSQL directly: 28,505 EU laws, 419 calendar events, 157 knowledge guides, 1,296 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes. Fast, curated, no external dependency.</li>
+          <li><strong>Tier 1 &mdash; DB + smart filters.</strong> <code>context_builder.py</code> queries PostgreSQL directly: 8,710 distinct EU laws (28,513 OJ entries, 61,219 XML files), 419 calendar events, 168 knowledge guides, 1,296 legislative carriages, 145 EPRS publications, 24 committee work registers, 75 committee minutes. Fast, curated, no external dependency.</li>
           <li><strong>Tier 2 &mdash; on-demand live fetchers.</strong> Six specialised clients fire when intent detectors match: Doceo (plenary debates via CRE XML), EP Multimedia (committee meeting transcripts via on-demand Whisper transcription), Have Your Say API (stakeholder feedback), commission.europa.eu scrape (commissioner agendas), EUR-Lex Cellar (CELEX document fetch), Tavily (25 trusted <code>.europa.eu</code> + policy-media domains).</li>
           <li><strong>Tier 3 &mdash; v1 API backstop.</strong> When Tiers 1 and 2 leave a surface thin, the same service functions that power <code>/api/v1/calendar/events</code> and sibling endpoints re-query with broader filters. The simpler filter logic often catches what the chat's smart filters miss. Real example: on 17 April 2026 the "energy events next week?" query deflected because Tier 1 over-filtered; the Tier-3 backstop added 8 more relevant events. <strong>Promise: no query fails for lack of trying.</strong></li>
         </ul>
@@ -941,12 +941,30 @@
     </div>
 
     <div class="info-card reveal">
+      <div class="info-card__title">Brubru's AI Act compliance posture (20 April 2026)</div>
+      <div class="info-card__content">
+        <p>Brubru Chat is itself an AI system under EU Regulation 2024/1689 (the AI Act). We treat our own compliance as a product feature, not a legal afterthought. The canonical academic reference on agentic-system compliance is Nannini et al. April 2026, <em>AI Agents Under EU Law: A Compliance Architecture for AI Providers</em>, <a href="https://arxiv.org/html/2604.04604v1" target="_blank" rel="noopener">arXiv 2604.04604v1</a>. The paper identifies four agent-specific compliance challenges (cybersecurity, oversight, transparency, behavioural drift) and nine parallel EU instruments that apply concurrently. What follows maps each against Brubru's architecture.</p>
+        <ul>
+          <li><strong>Risk classification.</strong> Brubru Chat is <strong>not</strong> a high-risk AI system under Annex III: it does not perform CV screening, credit scoring, access to essential services, critical infrastructure control, or biometric identification. It falls under Article 50 transparency (general-purpose interaction with EU policy text) and Chapter V GPAI obligations as a deployer of foundation models.</li>
+          <li><strong>Transparency (Article 50).</strong> The paper identifies Article 50's "affected parties" requirement as a non-trivial engineering challenge. This entire <code>/data-architecture</code> page is our inventory: 519 europa.eu sources, the 3-tier retrieval cascade, every on-demand fetcher (plenary debates, committee transcripts, stakeholder feedback, commissioner agendas, Cellar, Tavily), every downstream user in scope (registered users, API partners, daily-brief recipients). Users interacting with Brubru Chat see the AI disclaimer; the daily brief is opt-in; partner API calls are logged per-key.</li>
+          <li><strong>Behavioural drift.</strong> The paper's taxonomy: anticipated adaptive behaviour (tool selection, in-context learning, RAG) is <strong>not substantial modification</strong> if documented and risk-assessed. Brubru's tool-calling pattern (intent detection -> DB smart filters -> on-demand fetchers -> v1 API backstop) is exactly this category. Every fetcher is documented in code and in this page. We do not perform continuous post-deployment weight updates; the Mistral / Claude / OpenAI / Gemini foundation models are externally versioned.</li>
+          <li><strong>Cybersecurity, Article 15(4).</strong> API-level least-privilege rather than system-prompt controls. Our v1 API ships with: scope-limited API keys (tied to subscription_tier, not to the user's full Brubru session), per-key sliding-window rate limits (60 req/min default), SHA-256 hashing of keys at rest, plaintext shown once at creation, structured error envelope with <code>reason_code</code> for diagnostics, and tier gating enforced per endpoint. No prompt-injection vector reaches the keys.</li>
+          <li><strong>Human oversight, Article 14.</strong> The <code>/audit-queries</code> skill pulls every user query from the DB and diagnoses each against a quality checklist, with root-cause tracing into <code>context_builder.py</code>. Since 20 April 2026 this routine explicitly includes a dogfooding comparison to the v1 API (Tier-3 backstop). See <code>memory/feedback_chat_quality_paramount.md</code> and <code>memory/feedback_three_tier_coverage.md</code>.</li>
+          <li><strong>Data governance, Article 10.</strong> Training data for foundation models is governed by their providers (Mistral, Anthropic, OpenAI, Google). Brubru's own knowledge base (159 guides, 5,498 triggers) is human-authored and version-controlled in git; every update is traceable. User chat logs are retained in line with GDPR + our subprocessor agreement (see <a href="/subprocessors" target="_blank" rel="noopener">/subprocessors</a>).</li>
+          <li><strong>The 9-instrument compliance surface.</strong> Brubru itself also monitors all nine: AI Act, GDPR, CRA, DSA, Data Act, ePrivacy, NIS2, sector-specific (MDR, MiFID II, PSD2), revised Product Liability Directive. We ship daily updates to our knowledge base so customers with meaningful regulatory exposure (Enterprise-tier profile: Discord, Coinbase, Roblox, Epic Games, etc.) track the whole stack through a single surface rather than through nine parallel subscriptions.</li>
+        </ul>
+        <p><em>Status: self-assessment based on the canonical academic source. Harmonised standards under M/613 (CEN/CENELEC JTC 21) remain working drafts at April 2026; when adopted, we will re-map our posture against published standards. Full source reference: Nannini, Leon Smith, Maggini, Panai, Feliciano, Tiulkanov, Maran, Gealy, Bisconti, April 2026.</em></p>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
       <div class="info-card__title">Documentation surface</div>
       <div class="info-card__content">
         <ul>
-          <li><a href="/api"><code>/api</code></a> &mdash; public landing page (pricing, response envelope, code samples). Linked from header nav.</li>
-          <li><a href="/api/docs"><code>/api/docs</code></a> &mdash; Scalar reference page (CDN-loaded, zero new deps), reads <code>/api/v1/openapi.json</code>.</li>
-          <li><code>/api/v1/openapi.json</code> &mdash; OpenAPI 3.1 spec auto-generated by FastAPI from Pydantic models, filtered to <code>/api/v1/*</code> only so internal Brubru routes never leak to partners. Postman imports it in one click.</li>
+          <li><a href="/api"><code>/api</code></a> &mdash; public landing page (endpoints summary, response envelope, code samples, CTAs to docs and subscription). Header nav entry. <strong>No pricing shown here any more</strong> (pricing lives on <code>/subscription</code>).</li>
+          <li><a href="/api/docs/"><code>/api/docs/</code></a> &mdash; <strong>full docs microsite shipped 20 April 2026</strong>: 10 written pages (~130 KB), sticky sidebar nav, responsive. Introduction, Authentication, Envelope, Errors, Rate limits, Endpoints (all 24), Institutions matrix, Glossary (47 EU policy terms in plain English), Use cases (6 personas + 4 competitor patterns), Changelog. Soft-paywall banner links non-Professional visitors to <code>/subscription</code> but doesn't block reading.</li>
+          <li><code>/api/v1/openapi.json</code> &mdash; OpenAPI 3.1 spec auto-generated by FastAPI, filtered to v1 only. Postman imports in one click.</li>
+          <li>Scalar live try-it reference remains at <a href="https://brubru-production.up.railway.app/api/docs">brubru-production.up.railway.app/api/docs</a> (backend-served, execution requires API key).</li>
         </ul>
       </div>
     </div>
@@ -961,6 +979,18 @@
           <li><strong>Day 4</strong> (15 April 2026) &mdash; <code>/api/v1/commissioners/{name}/agenda</code> shipped, four legal-text intelligence endpoints ported to v1. 34 tests.</li>
           <li><strong>Day 5</strong> (15 April 2026) &mdash; Scalar docs at <code>/api/docs</code>, filtered OpenAPI at <code>/api/v1/openapi.json</code>, public landing page at <code>/api</code>, header nav entry next to Tenderator (i18n in 6 languages). <strong>36 tests passing in total.</strong></li>
           <li><strong>Landing-page integration</strong> &mdash; the "For developers and RegTech partners" section now leads with the REST API (six flagship endpoints) plus the existing MCP server (six tools), with CTAs to <code>/api</code> and <code>/api/docs</code>.</li>
+          <li><strong>Jordi feedback pass</strong> (20 April 2026) &mdash; 11 correctness bugs fixed after the 18 April integration review:
+            <ul>
+              <li><code>/laws</code>: <code>422 conflicting_params</code> when <code>published_to</code> and <code>published_end</code> carry different values; <code>422 invalid_date_range</code> on inverted ranges.</li>
+              <li><code>/meps</code>: rewired to direct <code>httpx</code> against EP Open Data REST v2. <code>full_name</code> and <code>profile_url</code> always populated; <code>total</code> now <code>offset + items + 1-hint</code> with <code>coverage_complete: false</code>.</li>
+              <li><code>/consultations</code>: ISO-8601 dates (<code>YYYY-MM-DDTHH:MM:SSZ</code>); <code>feedback_id</code> always string.</li>
+              <li><code>/legal-text/{celex}/recital-article-map</code>: graceful <code>503 computation_unavailable</code> instead of uncaught <code>500</code>.</li>
+              <li><code>/legal-text/resolve-references</code> + <code>/resolve-aliases</code>: documented as <strong>READ-ONLY idempotent</strong>.</li>
+              <li><code>/commissioners/{name}/agenda</code>: <code>detail_url</code> parser prefers title anchors; rejects <code>#</code>, <code>javascript:</code>, <code>mailto:</code>.</li>
+              <li>Default <code>limit</code> 20 &rarr; 50 across all 9 paginated endpoints.</li>
+              <li>8 regression tests in <code>test_v1_jordi_feedback.py</code>; 68 total green.</li>
+            </ul>
+          </li>
           <li><strong>Day 6</strong> (15 April 2026) &mdash; partner-compatibility pass inspired by GovClipping's Postman docs. Six items shipped:
             <ul>
               <li><strong>Structured error envelope</strong> on every <code>/api/v1/*</code> response: <code>{ "error", "reason_code", "request_id" }</code>. Reason codes are stable machine-readable strings (<code>auth_missing_key</code>, <code>auth_invalid_format</code>, <code>auth_key_not_found</code>, <code>tier_insufficient</code>, <code>rate_limited</code>, <code>not_found</code>, <code>invalid_query</code>, <code>upstream_error</code>).</li>
@@ -1107,12 +1137,12 @@
     <p class="section__intro reveal">Hand-curated expert knowledge that the AI uses to answer questions accurately. This is what makes Brubru different from a generic chatbot.</p>
 
     <div class="subsection reveal">
-      <h3 class="subsection__title">157 expert knowledge guides</h3>
+      <h3 class="subsection__title">177 expert knowledge guides</h3>
       <p class="subsection__text">Each guide covers one EU policy domain (e.g., AI Act, CBAM, Common Fisheries Policy) with: quick reference facts, CELEX numbers for relevant legislation, institutional contacts (Commissioner, DG, EP committee, rapporteur), procedure status, and key dates. Guides are written and maintained by EU policy specialists, not auto-generated.</p>
     </div>
 
     <div class="subsection reveal">
-      <h3 class="subsection__title">5,463 keyword triggers in 6 languages</h3>
+      <h3 class="subsection__title">5,936 keyword triggers in 6 languages</h3>
       <p class="subsection__text">A multilingual index (English, French, Dutch, Spanish, Catalan, Italian) that routes user queries to the right knowledge guide. For example, "CBAM," "mecanismo de ajuste en frontera," and "koolstofgrensheffing" all route to the same trade policy guide.</p>
     </div>
 

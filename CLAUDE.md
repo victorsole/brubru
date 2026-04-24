@@ -171,6 +171,10 @@ PostgreSQL via Supabase. Key tables:
 - `eu_calendar_events` - EU institutional calendar events
 - `user_calendar_subscriptions` - Calendar reminders/subscriptions
 
+## Canonical Numbers of the EU Legal Corpus
+
+LEG_2025-11 (Nov 2025 Publications Office bulk export): **8,710 distinct laws / 28,513 OJ publications / 61,219 translatable XML files**. One law can span multiple files (REACH=7, AI Act=14). Always cite the triple. `28,505` is deprecated.
+
 ## Testing
 
 ```bash
@@ -247,6 +251,10 @@ Seed script: `backend/scripts/seed_test_users.py`
 - **Knowledge guides:** QUICK FACTS block at top. Prompt injection cap 4,000 chars in `format_context_for_ai`. After bulk trigger changes, run orphan audit.
 - **EUR-Lex WAF bypass:** use `publications.europa.eu/resource/celex/{celex}` with `Accept: application/xhtml+xml`. Never scrape `eur-lex.europa.eu` directly.
 - **SiteGround FTP:** env var is `SITEGROUND_FTP_PASS` (not `_PASSWORD`). `.htaccess` MUST be uploaded. Catalan landing page at `data/legislacio-ue-catala/index.html` uploaded separately.
+- **Daily brief unsubscribe filter:** `services/daily_brief_email.py::_get_all_recipient_emails()` must subtract `daily_brief_unsubscribe` events from BOTH `users` and `pre_user_events` pools. Fixing only the `--extra-file` branch leaks chronic bouncers.
+- **/session-summary must overwrite memory/day_before.md every session** as its first persistent action. This file is the ONLY context-recovery input for the next morning's `/day-before`. Skipped on 18/20/21 April 2026 — cost the 22 April session a reconstruction from git log. Fix shipped: `.claude/skills/session-summary/SKILL.md` Step 6a is now mandatory-first; `.claude/skills/day-before/SKILL.md` runs a staleness check on the `# Previous Session:` heading.
+- **Seed / test fixtures in production-shared tables must be filterable at query time.** Incident (22 April 2026): a `committee_meeting_transcripts` row with `event_id=libe-seed-20260417`, status=COMPLETED, 340 words of synthetic dialogue (fake plenary vote 228/311/92, fake T10-0095/2026, fake rapporteur quotes) was feeding the chatbot, which faithfully cited the fabricated facts in every CSAM / ePrivacy query. Fix pattern: exclude seed rows via `event_id ILIKE '%seed%'`/`%test%'` + `title ILIKE '%seed test transcript%'`/`%synthetic%'` at every retrieval stage. See `context_builder.py::_fetch_committee_transcript_block`. Memory: `memory/feedback_seed_fixtures_contaminate_prod.md`. Better long-term pattern: add an `is_test` boolean column at table-creation time for any fixture-prone table.
+- **send_daily_brief.py URL verify uses GET + real browser User-Agent.** Never HEAD (consilium returns 405, some EP pages too), never the string "Brubru URL checker" (Cloudflare 403s it). The verify function in `backend/scripts/send_daily_brief.py` sends a Chrome UA + `Accept` + `Accept-Language` headers, reads 1 KB, closes — fast and reliable. Incident 22 April 2026.
 
 ---
 

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EU Digital Networks Act Explained: Rewiring Europe's Telecoms | Brubru</title>
+  <meta name="description" content="Comprehensive guide to the EU Digital Networks Act (DNA): spectrum reform, copper switch-off, satellite authorisation, network resilience, single passport, net neutrality. COM(2026) 16. By Brubru.">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Adobe Caslon Pro'; src: url('../New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+    :root {
+      --color-blue: #0693e3; --color-green: #059669; --color-purple: #9b51e0;
+      --color-amber: #d97706; --color-red: #dc2626; --color-text: #111827;
+      --color-secondary: #6b7280; --color-muted: #9ca3af; --color-border: #e5e7eb;
+      --color-bg-alt: #f3f4f6; --color-bg: #ffffff; --radius: 12px; --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Adobe Caslon Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, serif; background: var(--color-bg); color: var(--color-text); line-height: 1.7; font-size: 1.05rem; }
+
+    .header { background: var(--color-bg); border-bottom: 1px solid var(--color-border); padding: 1rem 2rem; display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 100; }
+    .header__logo { height: 40px; }
+    .header__text { flex: 1; }
+    .header__title { font-size: 1rem; font-weight: 700; color: var(--color-text); }
+    .header__subtitle { font-size: 0.8rem; color: var(--color-secondary); }
+    .header__cta { display: inline-block; padding: 0.5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; color: white; border: none; cursor: pointer; background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-blue), var(--color-green), var(--color-purple), var(--color-amber), var(--color-blue)); animation: rainbowShift 4s ease infinite; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; text-decoration: none; letter-spacing: 0.03em; }
+    .header__cta:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 8px 30px rgba(6,147,227,0.35), 0 4px 15px rgba(155,81,224,0.25); }
+    @keyframes rainbowShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+    .lang-bar { background: var(--color-bg-alt); border-bottom: 1px solid var(--color-border); padding: 0.5rem 2rem; display: flex; align-items: center; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+    .lang-btn { padding: 0.3rem 0.75rem; border-radius: 20px; border: 1px solid var(--color-border); background: var(--color-bg); cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--color-secondary); transition: all 0.2s; font-family: inherit; }
+    .lang-btn:hover, .lang-btn.active { background: var(--color-purple); color: white; border-color: var(--color-purple); }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+    .hero { text-align: center; padding: 3rem 1rem 2rem; }
+    .hero__tag { display: inline-block; background: rgba(155,81,224,0.1); color: var(--color-purple); font-size: 0.8rem; font-weight: 600; padding: 0.35rem 1rem; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .hero__tag a { color: inherit; text-decoration: none; }
+    .hero__title { font-size: 2.8rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero__title span { color: var(--color-purple); background-size: 300% 100%; background-image: linear-gradient(90deg, var(--color-purple), var(--color-blue), var(--color-green), var(--color-amber), var(--color-purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; transition: background-position 0s; }
+    .hero__title:hover span { animation: rainbowShift 4s ease infinite; }
+    .hero__subtitle { font-size: 1.15rem; color: var(--color-secondary); max-width: 750px; margin: 0 auto 1.5rem; }
+    .hero__meta { font-size: 0.85rem; color: var(--color-muted); display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .hero__meta span { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    .figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+    .figure-card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.5rem; text-align: center; transition: all 0.25s; }
+    .figure-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(155,81,224,0.1); }
+    .figure-card__number { font-size: 2.2rem; font-weight: 700; line-height: 1; margin-bottom: 0.25rem; }
+    .figure-card__label { font-size: 0.85rem; color: var(--color-secondary); }
+    .fc-purple .figure-card__number { color: var(--color-purple); }
+    .fc-blue .figure-card__number { color: var(--color-blue); }
+    .fc-green .figure-card__number { color: var(--color-green); }
+    .fc-amber .figure-card__number { color: var(--color-amber); }
+
+    .toc { background: var(--color-bg-alt); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 3rem; }
+    .toc__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .toc__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .toc__link { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); text-decoration: none; color: var(--color-text); font-size: 0.9rem; transition: all 0.15s; }
+    .toc__link:hover { background: rgba(155,81,224,0.08); color: var(--color-purple); }
+    .toc__num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--color-purple); color: white; border-radius: 50%; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+
+    .section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+    .section__header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .section__icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0; }
+    .section__title { font-size: 1.6rem; font-weight: 700; }
+    .section__subtitle { font-size: 1rem; color: var(--color-secondary); margin-bottom: 1.5rem; }
+
+    .card { background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.25rem; transition: all 0.2s; }
+    .card:hover { border-color: var(--color-purple); }
+    .card__title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card__title .mdi { font-size: 1.1rem; }
+
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.95rem; }
+    th { background: var(--color-bg-alt); font-weight: 700; text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid var(--color-border); }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+    tr:hover td { background: rgba(155,81,224,0.03); }
+
+    .tag { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+    .tag-blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .tag-green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .tag-purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .tag-amber { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .tag-red { background: rgba(220,38,38,0.1); color: var(--color-red); }
+
+    .pipeline { display: flex; gap: 0; margin: 2rem 0; overflow-x: auto; }
+    .pipeline__step { flex: 1; min-width: 140px; padding: 1rem; text-align: center; position: relative; border: 1px solid var(--color-border); border-radius: var(--radius-sm); margin-right: -1px; transition: all 0.3s; }
+    .pipeline__step:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 2; }
+    .pipeline__step-num { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .pipeline__step-label { font-size: 0.8rem; color: var(--color-secondary); margin-top: 0.25rem; }
+    .pipeline__step-detail { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.25rem; }
+    .pipeline__arrow { display: flex; align-items: center; color: var(--color-muted); font-size: 1.2rem; padding: 0 0.25rem; }
+
+    .timeline { position: relative; padding-left: 2rem; margin: 1.5rem 0; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--color-border); }
+    .timeline__item { position: relative; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+    .timeline__item::before { content: ''; position: absolute; left: -1.55rem; top: 0.55rem; width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--color-purple); background: var(--color-bg); z-index: 1; }
+    .timeline__item.done::before { background: var(--color-purple); }
+    .timeline__item.active::before { background: var(--color-amber); border-color: var(--color-amber); box-shadow: 0 0 0 4px rgba(217,119,6,0.2); }
+    .timeline__date { font-size: 0.8rem; font-weight: 700; color: var(--color-purple); }
+    .timeline__text { font-size: 0.95rem; }
+
+    /* Animated network background */
+    .network-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; opacity: 0.03; }
+    .network-bg circle { animation: nodePulse 4s ease-in-out infinite; }
+    @keyframes nodePulse { 0%, 100% { r: 4; } 50% { r: 7; } }
+
+    /* Fade-in on scroll */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    .footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--color-border); margin-top: 3rem; }
+    .footer__logo { height: 30px; margin-bottom: 1rem; }
+    .footer__text { font-size: 0.85rem; color: var(--color-secondary); }
+    .footer__text a { color: var(--color-purple); text-decoration: none; }
+
+    a.doc-link { color: inherit; text-decoration: none; border-bottom: 1px dashed var(--color-purple); }
+    a.doc-link:hover { color: var(--color-purple); }
+
+    @media (max-width: 1024px) { .toc__grid { grid-template-columns: repeat(2, 1fr); } .figures { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 767px) { .hero__title { font-size: 2rem; } .toc__grid { grid-template-columns: 1fr; } .figures { grid-template-columns: 1fr; } .pipeline { flex-direction: column; } .pipeline__arrow { transform: rotate(90deg); justify-content: center; } .header { padding: 0.75rem 1rem; } .container { padding: 1rem; } .lang-bar { padding: 0.5rem 1rem; } }
+  </style>
+</head>
+<body>
+
+<!-- Decorative network background -->
+<svg class="network-bg" viewBox="0 0 1000 800">
+  <circle cx="120" cy="180" r="4" fill="#9b51e0" style="animation-delay: 0s"/>
+  <circle cx="300" cy="120" r="4" fill="#0693e3" style="animation-delay: 0.5s"/>
+  <circle cx="500" cy="250" r="4" fill="#059669" style="animation-delay: 1s"/>
+  <circle cx="700" cy="150" r="4" fill="#d97706" style="animation-delay: 1.5s"/>
+  <circle cx="900" cy="300" r="4" fill="#9b51e0" style="animation-delay: 2s"/>
+  <circle cx="200" cy="450" r="4" fill="#dc2626" style="animation-delay: 0.7s"/>
+  <circle cx="400" cy="500" r="4" fill="#0693e3" style="animation-delay: 1.2s"/>
+  <circle cx="600" cy="600" r="4" fill="#9b51e0" style="animation-delay: 1.8s"/>
+  <circle cx="800" cy="500" r="4" fill="#059669" style="animation-delay: 0.3s"/>
+  <circle cx="150" cy="650" r="4" fill="#d97706" style="animation-delay: 1.1s"/>
+  <circle cx="750" cy="700" r="4" fill="#0693e3" style="animation-delay: 0.9s"/>
+  <circle cx="450" cy="350" r="5" fill="#9b51e0" style="animation-delay: 0.4s"/>
+  <!-- Network connection lines -->
+  <line x1="120" y1="180" x2="300" y2="120" stroke="#9b51e0" stroke-width="0.5" opacity="0.3"/>
+  <line x1="300" y1="120" x2="500" y2="250" stroke="#0693e3" stroke-width="0.5" opacity="0.3"/>
+  <line x1="500" y1="250" x2="700" y2="150" stroke="#059669" stroke-width="0.5" opacity="0.3"/>
+  <line x1="700" y1="150" x2="900" y2="300" stroke="#d97706" stroke-width="0.5" opacity="0.3"/>
+  <line x1="200" y1="450" x2="400" y2="500" stroke="#dc2626" stroke-width="0.5" opacity="0.3"/>
+  <line x1="400" y1="500" x2="600" y2="600" stroke="#0693e3" stroke-width="0.5" opacity="0.3"/>
+  <line x1="600" y1="600" x2="800" y2="500" stroke="#9b51e0" stroke-width="0.5" opacity="0.3"/>
+  <line x1="120" y1="180" x2="200" y2="450" stroke="#9b51e0" stroke-width="0.5" opacity="0.2"/>
+  <line x1="500" y1="250" x2="450" y2="350" stroke="#059669" stroke-width="0.5" opacity="0.2"/>
+  <line x1="450" y1="350" x2="400" y2="500" stroke="#9b51e0" stroke-width="0.5" opacity="0.2"/>
+  <line x1="800" y1="500" x2="750" y2="700" stroke="#059669" stroke-width="0.5" opacity="0.2"/>
+  <line x1="150" y1="650" x2="400" y2="500" stroke="#d97706" stroke-width="0.5" opacity="0.2"/>
+</svg>
+
+<header class="header">
+  <img src="../assets/carousel/brubru_mainlogo.png" alt="Brubru" class="header__logo">
+  <div class="header__text">
+    <div class="header__title" data-i18n="header_title">Brubru Deep Dive Library</div>
+    <div class="header__subtitle" data-i18n="header_subtitle">EU Digital Networks Act</div>
+  </div>
+  <a href="https://brubru.beresol.eu" class="header__cta" data-i18n="header_cta">Try Brubru Free</a>
+</header>
+
+<nav class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en')">English</button>
+  <button class="lang-btn" onclick="setLang('es')">Espa&ntilde;ol</button>
+  <button class="lang-btn" onclick="setLang('ca')">Catal&agrave;</button>
+  <button class="lang-btn" onclick="setLang('fr')">Fran&ccedil;ais</button>
+  <button class="lang-btn" onclick="setLang('it')">Italiano</button>
+  <button class="lang-btn" onclick="setLang('nl')">Nederlands</button>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero fade-in">
+    <div class="hero__tag"><a href="https://brubru.beresol.eu">Brubru Deep Dive</a></div>
+    <h1 class="hero__title" data-i18n="hero_title">Digital Networks Act: <span>Rewiring Europe's Telecoms</span></h1>
+    <p class="hero__subtitle" data-i18n="hero_subtitle">The most ambitious overhaul of EU telecoms regulation in two decades. From spectrum reform to copper switch-off, from satellite authorisation to a single market passport: one regulation to replace 27 national frameworks.</p>
+    <div class="hero__meta">
+      <span><i class="mdi mdi-file-document-outline"></i> <span data-i18n="meta_ref"><a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a></span></span>
+      <span><i class="mdi mdi-scale-balance"></i> <span data-i18n="meta_proc">2026/0013(COD)</span></span>
+      <span><i class="mdi mdi-calendar"></i> <span data-i18n="meta_date">21 January 2026</span></span>
+      <span><i class="mdi mdi-train"></i> <span data-i18n="meta_train"><a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-digital-networks-act-(dna)" target="_blank" class="doc-link">Legislative Train</a></span></span>
+    </div>
+  </div>
+
+  <!-- KEY FIGURES -->
+  <div class="figures fade-in">
+    <div class="figure-card fc-purple">
+      <div class="figure-card__number">8</div>
+      <div class="figure-card__label" data-i18n="fig_parts">Parts in the regulation</div>
+    </div>
+    <div class="figure-card fc-blue">
+      <div class="figure-card__number" data-i18n="fig_invest_num">&euro;148B</div>
+      <div class="figure-card__label" data-i18n="fig_invest">Fibre investment needed</div>
+    </div>
+    <div class="figure-card fc-amber">
+      <div class="figure-card__number">2035</div>
+      <div class="figure-card__label" data-i18n="fig_copper">Copper switch-off deadline</div>
+    </div>
+    <div class="figure-card fc-green">
+      <div class="figure-card__number" data-i18n="fig_passport_num">27&rarr;1</div>
+      <div class="figure-card__label" data-i18n="fig_passport">National regulators to single passport</div>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc fade-in">
+    <div class="toc__title" data-i18n="toc_title">Contents</div>
+    <div class="toc__grid">
+      <a href="#why" class="toc__link"><span class="toc__num">1</span> <span data-i18n="toc_1">Why the DNA?</span></a>
+      <a href="#copper" class="toc__link"><span class="toc__num">2</span> <span data-i18n="toc_2">Copper switch-off</span></a>
+      <a href="#spectrum" class="toc__link"><span class="toc__num">3</span> <span data-i18n="toc_3">Spectrum revolution</span></a>
+      <a href="#satellite" class="toc__link"><span class="toc__num">4</span> <span data-i18n="toc_4">Satellite authorisation</span></a>
+      <a href="#resilience" class="toc__link"><span class="toc__num">5</span> <span data-i18n="toc_5">Network resilience</span></a>
+      <a href="#passport" class="toc__link"><span class="toc__num">6</span> <span data-i18n="toc_6">Single passport</span></a>
+      <a href="#market" class="toc__link"><span class="toc__num">7</span> <span data-i18n="toc_7">Market regulation</span></a>
+      <a href="#neutrality" class="toc__link"><span class="toc__num">8</span> <span data-i18n="toc_8">Net neutrality and Big Tech</span></a>
+      <a href="#consumer" class="toc__link"><span class="toc__num">9</span> <span data-i18n="toc_9">Consumer protection</span></a>
+      <a href="#governance" class="toc__link"><span class="toc__num">10</span> <span data-i18n="toc_10">Governance</span></a>
+    </div>
+  </div>
+
+  <!-- SECTION 1: WHY THE DNA? -->
+  <div class="section fade-in" id="why">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-help-circle-outline"></i></div>
+      <h2 class="section__title" data-i18n="s1_title">1. Why the DNA?</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s1_sub">Europe's connectivity gap and the case for a single telecoms market</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-alert-circle" style="color:var(--color-purple)"></i> <span data-i18n="s1_frag_title">EECC fragmentation</span></div>
+      <p data-i18n="s1_frag_text">The <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32018L1972" target="_blank" class="doc-link">European Electronic Communications Code (Directive 2018/1972)</a> was transposed into 27 different national frameworks, with full transposition completed only in August 2024. This fragmentation prevents scale, discourages cross-border investment, and keeps European telecoms operators far smaller than their American and Asian counterparts. The Draghi Report on EU competitiveness identified telecoms consolidation as a strategic priority.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-chart-bar" style="color:var(--color-red)"></i> <span data-i18n="s1_gap_title">The EU connectivity gap</span></div>
+      <table>
+        <tr><th data-i18n="th_metric">Metric</th><th>EU</th><th data-i18n="th_us">United States</th><th data-i18n="th_china">China</th></tr>
+        <tr><td data-i18n="s1_ftth">FTTH coverage</td><td>77.2%</td><td>51%</td><td data-i18n="s1_ftth_cn">N/A</td></tr>
+        <tr><td data-i18n="s1_5gsa">5G standalone coverage</td><td>63%</td><td>81%</td><td data-i18n="s1_5gsa_cn">N/A</td></tr>
+        <tr><td data-i18n="s1_5gtakeup">Full 5G take-up</td><td>2%</td><td>24%</td><td>77%</td></tr>
+      </table>
+      <p data-i18n="s1_gap_text">Despite strong fibre deployment, EU 5G adoption remains critically low. The Digital Decade targets for 2030 require gigabit connectivity for all households and 5G coverage in all populated areas, goals that the current fragmented framework cannot deliver.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: COPPER SWITCH-OFF -->
+  <div class="section fade-in" id="copper">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-ethernet-cable-off"></i></div>
+      <h2 class="section__title" data-i18n="s2_title">2. Copper Switch-Off</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s2_sub">Mandatory migration from copper to fibre by 2035</p>
+    <div class="card">
+      <p data-i18n="s2_text">The DNA establishes a binding framework for decommissioning legacy copper networks. Operators must notify the national regulatory authority (NRA) and affected access seekers at least 36 months before switch-off. Alternative fibre or wireless infrastructure must be available at the point of decommissioning. Spain and Norway have already begun copper phase-out programmes. Full copper switch-off must be completed by 2039 at the latest, with the primary deadline set at 2035 for most networks.</p>
+    </div>
+    <div class="pipeline">
+      <div class="pipeline__step" style="border-color:var(--color-purple)"><div class="pipeline__step-num" style="color:var(--color-purple)">36m</div><div class="pipeline__step-label" data-i18n="pipe_notify">Notification</div><div class="pipeline__step-detail" data-i18n="pipe_notify_d">Operator notifies NRA + access seekers</div></div>
+      <div class="pipeline__arrow"><i class="mdi mdi-chevron-right"></i></div>
+      <div class="pipeline__step" style="border-color:var(--color-blue)"><div class="pipeline__step-num" style="color:var(--color-blue)">18m</div><div class="pipeline__step-label" data-i18n="pipe_migrate">Migration</div><div class="pipeline__step-detail" data-i18n="pipe_migrate_d">Alternative infrastructure available</div></div>
+      <div class="pipeline__arrow"><i class="mdi mdi-chevron-right"></i></div>
+      <div class="pipeline__step" style="border-color:var(--color-amber)"><div class="pipeline__step-num" style="color:var(--color-amber)">2035</div><div class="pipeline__step-label" data-i18n="pipe_deadline">Primary deadline</div><div class="pipeline__step-detail" data-i18n="pipe_deadline_d">Most networks decommissioned</div></div>
+      <div class="pipeline__arrow"><i class="mdi mdi-chevron-right"></i></div>
+      <div class="pipeline__step" style="border-color:var(--color-red)"><div class="pipeline__step-num" style="color:var(--color-red)">2039</div><div class="pipeline__step-label" data-i18n="pipe_final">Final deadline</div><div class="pipeline__step-detail" data-i18n="pipe_final_d">All copper fully decommissioned</div></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: SPECTRUM REVOLUTION -->
+  <div class="section fade-in" id="spectrum">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-signal-variant"></i></div>
+      <h2 class="section__title" data-i18n="s3_title">3. Spectrum Revolution</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s3_sub">From short national licences to unlimited EU-wide authorisations</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-infinity" style="color:var(--color-blue)"></i> <span data-i18n="s3_dur_title">Unlimited duration licences</span></div>
+      <p data-i18n="s3_dur_text">The DNA replaces short-term national spectrum licences with authorisations of unlimited duration, subject to a minimum term of 40 years. This gives operators the investment certainty needed for large-scale network rollout. The Commission gains a veto power over national spectrum decisions that could fragment the single market.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-share-variant" style="color:var(--color-green)"></i> <span data-i18n="s3_use_title">"Use it or share it" principle</span></div>
+      <p data-i18n="s3_use_text">Spectrum holders who fail to deploy within a reasonable timeframe must make unused spectrum available to other operators. The Commission will adopt binding spectrum roadmaps setting out harmonised timelines for the assignment and use of key frequency bands across all Member States.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SATELLITE -->
+  <div class="section fade-in" id="satellite">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-satellite-variant"></i></div>
+      <h2 class="section__title" data-i18n="s4_title">4. Satellite Authorisation</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s4_sub">Centralised EU licensing for satellite communications</p>
+    <div class="card">
+      <p data-i18n="s4_text">The DNA creates a centralised EU authorisation regime for satellite operators. Instead of obtaining separate licences in each Member State, a satellite operator will apply to the Commission, which manages all stages of the authorisation process. Non-compliance may result in fines of up to 5% of global turnover. The Radio Spectrum Policy Board (RSPB) and the Office for Digital Networks (ODN) will support the Commission in this process.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: NETWORK RESILIENCE -->
+  <div class="section fade-in" id="resilience">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-red)"><i class="mdi mdi-shield-lock"></i></div>
+      <h2 class="section__title" data-i18n="s5_title">5. Network Resilience and Cybersecurity</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s5_sub">High-risk supplier phase-out and Union preparedness</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-alert-octagon" style="color:var(--color-red)"></i> <span data-i18n="s5_hrs_title">High-risk supplier (HRS) phase-out</span></div>
+      <p data-i18n="s5_hrs_text">Part II of the DNA formalises the phase-out of high-risk suppliers from European networks. This primarily targets Huawei and ZTE equipment, with an estimated replacement cost of EUR 3.4 to 4.3 billion per year. Mobile network operators will have a 3-year timeline to remove HRS equipment from their core and radio access networks. The rules align with the Cybersecurity Act 2 (CSA2) framework.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-shield-check" style="color:var(--color-green)"></i> <span data-i18n="s5_prep_title">Union Preparedness Plan</span></div>
+      <p data-i18n="s5_prep_text">BEREC will develop a Union Preparedness Plan for electronic communications networks, coordinating resilience measures across Member States. This includes cyber incident response protocols, supply chain diversification requirements, and emergency communication fallback systems.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6: SINGLE PASSPORT -->
+  <div class="section fade-in" id="passport">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-passport"></i></div>
+      <h2 class="section__title" data-i18n="s6_title">6. Single Passport</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s6_sub">One authorisation to operate across all 27 Member States</p>
+    <div class="card">
+      <p data-i18n="s6_text">The DNA replaces 27 separate national authorisation regimes with a single EU-wide general authorisation, or "single passport". Operators will register once with the Office for Digital Networks (ODN), which maintains a central database of all authorised providers. The approach follows a maximum list principle: the conditions attached to the general authorisation are exhaustively defined at EU level, preventing Member States from adding additional national requirements.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 7: MARKET REGULATION -->
+  <div class="section fade-in" id="market">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-chart-timeline-variant"></i></div>
+      <h2 class="section__title" data-i18n="s7_title">7. Market Regulation</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s7_sub">SMP regulation, EU-harmonised access, and FTTH unbundling</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-domain" style="color:var(--color-blue)"></i> <span data-i18n="s7_smp_title">Significant Market Power (SMP) regime</span></div>
+      <p data-i18n="s7_smp_text">The DNA maintains a sequential approach to SMP regulation: national regulatory authorities first assess whether an operator holds significant market power, then impose proportionate remedies. The Commission's veto power is expanded to cover not only proposed market definitions but also proposed remedies. A new EU-harmonised access product will standardise wholesale access conditions across Member States.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-fiber-manual-record" style="color:var(--color-green)"></i> <span data-i18n="s7_ftth_title">FTTH unbundling and symmetric regulation</span></div>
+      <p data-i18n="s7_ftth_text">The regulation introduces provisions for fibre unbundling, allowing alternative operators to access the last mile of fibre-to-the-home (FTTH) networks. Symmetric regulation may be imposed on all operators regardless of market power where justified by specific bottleneck situations, such as access to in-building wiring or ducts.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 8: NET NEUTRALITY AND BIG TECH -->
+  <div class="section fade-in" id="neutrality">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-web"></i></div>
+      <h2 class="section__title" data-i18n="s8_title">8. Net Neutrality and Big Tech</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s8_sub">Open internet preserved, network slicing enabled, voluntary conciliation for traffic generators</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-check-circle" style="color:var(--color-green)"></i> <span data-i18n="s8_nn_title">Net neutrality retained</span></div>
+      <p data-i18n="s8_nn_text">The DNA preserves the core principles of the <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32015R2120" target="_blank" class="doc-link">Open Internet Regulation (2015/2120)</a>. All internet traffic continues to be treated equally, with no paid prioritisation for consumer internet access services. Network slicing is explicitly permitted for B2B specialised services, allowing operators to offer guaranteed quality-of-service levels for enterprise applications.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-handshake" style="color:var(--color-amber)"></i> <span data-i18n="s8_fair_title">Traffic generators: voluntary conciliation</span></div>
+      <p data-i18n="s8_fair_text">The DNA does NOT introduce a mandatory "fair share" contribution from large traffic generators (such as streaming platforms). Instead, it creates a voluntary conciliation mechanism through which telecoms operators and content providers can negotiate commercial agreements on traffic management and infrastructure investment. This represents a compromise following intense lobbying from both sides.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 9: CONSUMER PROTECTION -->
+  <div class="section fade-in" id="consumer">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-green)"><i class="mdi mdi-account-check"></i></div>
+      <h2 class="section__title" data-i18n="s9_title">9. Consumer Protection</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s9_sub">Maximum harmonisation, anti-fraud measures, and modernised emergency access</p>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-gavel" style="color:var(--color-purple)"></i> <span data-i18n="s9_harm_title">Maximum harmonisation</span></div>
+      <p data-i18n="s9_harm_text">Unlike the EECC directive, which allowed Member States to maintain higher consumer protection standards, the DNA adopts a maximum harmonisation approach. This means consumer rights and obligations are defined at EU level and Member States cannot deviate from them. Anti-fraud measures are centralised via the ODN, including a shared database of known fraudulent numbers and calling patterns.</p>
+    </div>
+    <div class="card">
+      <div class="card__title"><i class="mdi mdi-phone-alert" style="color:var(--color-red)"></i> <span data-i18n="s9_emerg_title">Emergency access modernised</span></div>
+      <p data-i18n="s9_emerg_text">Emergency services access is extended to internet-based communications services such as WhatsApp, ensuring that emergency calls can be made through number-independent interpersonal communications services. The universal service obligation (USO) is streamlined and adapted to the fibre era, removing outdated references to public payphones and printed directories.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 10: GOVERNANCE -->
+  <div class="section fade-in" id="governance">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-office-building"></i></div>
+      <h2 class="section__title" data-i18n="s10_title">10. Governance</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="s10_sub">New institutions: RSPB, ODN, and a broadened BEREC mandate</p>
+    <div class="card">
+      <table>
+        <tr><th data-i18n="th_body">Body</th><th data-i18n="th_replaces">Replaces</th><th data-i18n="th_function">Function</th></tr>
+        <tr><td>RSPB</td><td data-i18n="s10_rspb_rep">RSPG (Radio Spectrum Policy Group)</td><td data-i18n="s10_rspb_fn">Advisory body on spectrum policy, elevated to formal Board status with binding recommendations</td></tr>
+        <tr><td>ODN</td><td data-i18n="s10_odn_rep">BEREC Office</td><td data-i18n="s10_odn_fn">Central database for single passport, satellite authorisation support, anti-fraud coordination, market data collection</td></tr>
+        <tr><td>BEREC</td><td data-i18n="s10_berec_rep">BEREC (expanded)</td><td data-i18n="s10_berec_fn">Broadened mandate including cybersecurity coordination, Union Preparedness Plan, and enhanced SMP market analysis role</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- EP PRIOR POSITION -->
+  <div class="section fade-in" id="ep-position">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-blue)"><i class="mdi mdi-bank"></i></div>
+      <h2 class="section__title" data-i18n="ep_title">EP Prior Position</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="ep_sub">Resolution <a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a> on technological sovereignty (22 January 2026)</p>
+    <div class="card">
+      <p data-i18n="ep_text">The European Parliament adopted a resolution on digital infrastructure and technological sovereignty setting out its priorities ahead of the DNA proposal. Key paragraphs called for a progressive copper switch-off with adequate transition support, increased 5G and 6G investment incentives, harmonised spectrum assignment across the EU, common EU licences for satellite communications, and a binding high-risk vendor toolbox making the voluntary 5G toolbox legally enforceable. The resolution also urged the Commission to avoid a mandatory "fair share" mechanism for traffic generators.</p>
+    </div>
+  </div>
+
+  <!-- STAKEHOLDER REACTIONS -->
+  <div class="section fade-in" id="stakeholders">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-amber)"><i class="mdi mdi-account-group"></i></div>
+      <h2 class="section__title" data-i18n="sh_title">Stakeholder Reactions</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="sh_sub">Industry and expert positions on the DNA proposal</p>
+    <table>
+      <tr><th data-i18n="th_stakeholder">Stakeholder</th><th data-i18n="th_position">Position</th></tr>
+      <tr><td>FTTH Council Europe</td><td data-i18n="sh_ftth">Broadly supportive; welcomes copper switch-off framework and fibre investment incentives; cautions against weakening unbundling obligations</td></tr>
+      <tr><td>Connect Europe (ETNO)</td><td data-i18n="sh_etno">Supports single passport and spectrum reform; disappointed by absence of mandatory fair share from traffic generators; welcomes HRS phase-out timeline</td></tr>
+      <tr><td>GSMA</td><td data-i18n="sh_gsma">Welcomes unlimited spectrum duration and reduced regulatory burden; concerned about Commission veto on national spectrum decisions; supports satellite licensing simplification</td></tr>
+      <tr><td>MVNO Europe</td><td data-i18n="sh_mvno">Strongly supports symmetric regulation and FTTH unbundling; warns that maximum harmonisation could eliminate favourable national consumer protections; calls for robust wholesale access safeguards</td></tr>
+      <tr><td>Deutsche Telekom</td><td data-i18n="sh_dt">Welcomes investment certainty from long spectrum licences; concerned about HRS replacement costs and tight timeline; supports single passport to reduce administrative burden</td></tr>
+      <tr><td>Orange / iliad</td><td data-i18n="sh_orange">Supports copper switch-off acceleration; critical of voluntary conciliation mechanism as insufficient; calls for stronger fair share provisions; welcomes fibre unbundling clarity</td></tr>
+      <tr><td>CERRE</td><td data-i18n="sh_cerre">Independent think tank; notes tension between harmonisation and national market specificities; recommends phased implementation to avoid regulatory shocks; positive on spectrum reform direction</td></tr>
+      <tr><td>Oxera</td><td data-i18n="sh_oxera">Economic consultancy; analysis finds EUR 3.4 to 4.3 billion annual cost for HRS removal; questions whether 3-year timeline is realistic for full network replacement</td></tr>
+    </table>
+  </div>
+
+  <!-- LEGISLATIVE TIMELINE -->
+  <div class="section fade-in" id="timeline">
+    <div class="section__header">
+      <div class="section__icon" style="background:var(--color-purple)"><i class="mdi mdi-timeline-clock"></i></div>
+      <h2 class="section__title" data-i18n="tl_title">Legislative Timeline</h2>
+    </div>
+    <p class="section__subtitle" data-i18n="tl_sub">Key milestones in the Digital Networks Act</p>
+    <div class="timeline">
+      <div class="timeline__item done"><div class="timeline__date" data-i18n="tl_d1_date">February 2024</div><div class="timeline__text" data-i18n="tl_d1">Commission white paper: "How to master Europe's digital infrastructure needs"</div></div>
+      <div class="timeline__item done"><div class="timeline__date" data-i18n="tl_d2_date">July 2025</div><div class="timeline__text" data-i18n="tl_d2">Call for evidence on Digital Networks Act closed</div></div>
+      <div class="timeline__item done"><div class="timeline__date" data-i18n="tl_d3_date">22 January 2026</div><div class="timeline__text" data-i18n="tl_d3">EP Resolution on technological sovereignty (<a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a>)</div></div>
+      <div class="timeline__item done"><div class="timeline__date" data-i18n="tl_d4_date">21 January 2026</div><div class="timeline__text" data-i18n="tl_d4">Commission proposal: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a> (DNA) + <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2026/0035/COM_COM(2026)0035_EN.pdf" target="_blank" class="doc-link">COM(2026) 35</a> (EECC review) + <a href="https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=SWD:2026:0014:FIN:EN:PDF" target="_blank" class="doc-link">SWD(2026) 14</a> (impact assessment)</div></div>
+      <div class="timeline__item done"><div class="timeline__date" data-i18n="tl_d5_date">March 2026</div><div class="timeline__text" data-i18n="tl_d5">EPRS briefing <a href="https://www.europarl.europa.eu/RegData/etudes/BRIE/2026/785672/EPRS_BRI(2026)785672_EN.pdf" target="_blank" class="doc-link">PE 785.672</a></div></div>
+      <div class="timeline__item active"><div class="timeline__date" data-i18n="tl_d6_date">Current</div><div class="timeline__text" data-i18n="tl_d6">EP committee examination (ITRE)</div></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <img src="../assets/carousel/brubru_mainlogo.png" alt="Brubru" class="footer__logo"><br>
+  <p class="footer__text" data-i18n="footer_text">Digital Networks Act deep dive by <a href="https://brubru.beresol.eu">Brubru</a>, the AI-powered EU policy assistant by <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; March 2026</p>
+</footer>
+
+<script>
+// Fade-in on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// i18n translations
+const translations = {
+  es: {
+    header_title: 'Biblioteca de an&aacute;lisis de Brubru', header_subtitle: 'Ley de Redes Digitales de la UE', header_cta: 'Prueba Brubru gratis',
+    hero_title: 'Ley de Redes Digitales: <span>Recableando las telecomunicaciones europeas</span>',
+    hero_subtitle: 'La reforma m&aacute;s ambiciosa de la regulaci&oacute;n de telecomunicaciones de la UE en dos d&eacute;cadas. Desde la reforma del espectro hasta el apagado del cobre, desde la autorizaci&oacute;n de sat&eacute;lites hasta un pasaporte &uacute;nico de mercado: un reglamento para sustituir 27 marcos nacionales.',
+    meta_ref: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a>',
+    meta_proc: '2026/0013(COD)', meta_date: '21 de enero de 2026',
+    meta_train: '<a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-digital-networks-act-(dna)" target="_blank" class="doc-link">Tren Legislativo</a>',
+    fig_parts: 'Partes del reglamento', fig_invest: 'Inversi&oacute;n en fibra necesaria', fig_invest_num: '148.000M&euro;', fig_copper: 'Plazo de apagado del cobre', fig_passport: 'De reguladores nacionales a pasaporte &uacute;nico', fig_passport_num: '27&rarr;1',
+    toc_title: '&Iacute;ndice', toc_1: '&iquest;Por qu&eacute; la DNA?', toc_2: 'Apagado del cobre', toc_3: 'Revoluci&oacute;n del espectro', toc_4: 'Autorizaci&oacute;n de sat&eacute;lites', toc_5: 'Resiliencia de red', toc_6: 'Pasaporte &uacute;nico', toc_7: 'Regulaci&oacute;n del mercado', toc_8: 'Neutralidad de red y Big Tech', toc_9: 'Protecci&oacute;n del consumidor', toc_10: 'Gobernanza',
+    s1_title: '1. &iquest;Por qu&eacute; la DNA?', s1_sub: 'La brecha de conectividad europea y la necesidad de un mercado &uacute;nico de telecomunicaciones',
+    s1_frag_title: 'Fragmentaci&oacute;n del CECE', s1_frag_text: 'El <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32018L1972" target="_blank" class="doc-link">C&oacute;digo Europeo de las Comunicaciones Electr&oacute;nicas (Directiva 2018/1972)</a> se transpuso en 27 marcos nacionales diferentes, completando su transposici&oacute;n total solo en agosto de 2024. Esta fragmentaci&oacute;n impide la escala, desincentiva la inversi&oacute;n transfronteriza y mantiene a los operadores europeos de telecomunicaciones mucho m&aacute;s peque&ntilde;os que sus hom&oacute;logos estadounidenses y asi&aacute;ticos. El Informe Draghi sobre la competitividad de la UE identific&oacute; la consolidaci&oacute;n de las telecomunicaciones como una prioridad estrat&eacute;gica.',
+    s1_gap_title: 'La brecha de conectividad de la UE',
+    th_metric: 'Indicador', th_us: 'Estados Unidos', th_china: 'China',
+    s1_ftth: 'Cobertura FTTH', s1_ftth_cn: 'N/D', s1_5gsa: 'Cobertura 5G independiente', s1_5gsa_cn: 'N/D', s1_5gtakeup: 'Adopci&oacute;n plena de 5G',
+    s1_gap_text: 'A pesar de un fuerte despliegue de fibra, la adopci&oacute;n de 5G en la UE sigue siendo cr&iacute;ticamente baja. Los objetivos de la D&eacute;cada Digital para 2030 exigen conectividad gigabit para todos los hogares y cobertura 5G en todas las zonas pobladas, metas que el marco fragmentado actual no puede alcanzar.',
+    s2_title: '2. Apagado del cobre', s2_sub: 'Migraci&oacute;n obligatoria del cobre a la fibra para 2035',
+    s2_text: 'La DNA establece un marco vinculante para el desmantelamiento de las redes de cobre heredadas. Los operadores deben notificar a la autoridad nacional de regulaci&oacute;n (ANR) y a los solicitantes de acceso afectados al menos 36 meses antes del apagado. Debe haber infraestructura alternativa de fibra o inal&aacute;mbrica disponible en el momento del desmantelamiento. Espa&ntilde;a y Noruega ya han iniciado programas de eliminaci&oacute;n del cobre. El apagado total del cobre debe completarse a m&aacute;s tardar en 2039, con el plazo principal fijado en 2035 para la mayor&iacute;a de las redes.',
+    pipe_notify: 'Notificaci&oacute;n', pipe_notify_d: 'El operador notifica a la ANR + solicitantes de acceso', pipe_migrate: 'Migraci&oacute;n', pipe_migrate_d: 'Infraestructura alternativa disponible', pipe_deadline: 'Plazo principal', pipe_deadline_d: 'Mayor&iacute;a de redes desmanteladas', pipe_final: 'Plazo final', pipe_final_d: 'Todo el cobre desmantelado',
+    s3_title: '3. Revoluci&oacute;n del espectro', s3_sub: 'De licencias nacionales cortas a autorizaciones ilimitadas a escala de la UE',
+    s3_dur_title: 'Licencias de duraci&oacute;n ilimitada', s3_dur_text: 'La DNA sustituye las licencias nacionales de espectro de corta duraci&oacute;n por autorizaciones de duraci&oacute;n ilimitada, sujetas a un plazo m&iacute;nimo de 40 a&ntilde;os. Esto da a los operadores la certeza de inversi&oacute;n necesaria para el despliegue de redes a gran escala. La Comisi&oacute;n obtiene un poder de veto sobre las decisiones nacionales de espectro que pudieran fragmentar el mercado &uacute;nico.',
+    s3_use_title: 'Principio de "usa o comparte"', s3_use_text: 'Los titulares de espectro que no desplieguen en un plazo razonable deben poner el espectro no utilizado a disposici&oacute;n de otros operadores. La Comisi&oacute;n adoptar&aacute; hojas de ruta vinculantes de espectro que establezcan calendarios armonizados para la asignaci&oacute;n y uso de bandas de frecuencia clave en todos los Estados miembros.',
+    s4_title: '4. Autorizaci&oacute;n de sat&eacute;lites', s4_sub: 'Licencias centralizadas de la UE para comunicaciones por sat&eacute;lite',
+    s4_text: 'La DNA crea un r&eacute;gimen centralizado de autorizaci&oacute;n de la UE para operadores de sat&eacute;lite. En lugar de obtener licencias separadas en cada Estado miembro, un operador de sat&eacute;lite solicitar&aacute; ante la Comisi&oacute;n, que gestiona todas las fases del proceso de autorizaci&oacute;n. El incumplimiento puede resultar en multas de hasta el 5% de la facturaci&oacute;n global. El Consejo de Pol&iacute;tica del Espectro Radioel&eacute;ctrico (RSPB) y la Oficina de Redes Digitales (ODN) apoyar&aacute;n a la Comisi&oacute;n en este proceso.',
+    s5_title: '5. Resiliencia de red y ciberseguridad', s5_sub: 'Eliminaci&oacute;n de proveedores de alto riesgo y preparaci&oacute;n de la Uni&oacute;n',
+    s5_hrs_title: 'Eliminaci&oacute;n de proveedores de alto riesgo (HRS)', s5_hrs_text: 'La Parte II de la DNA formaliza la eliminaci&oacute;n de proveedores de alto riesgo de las redes europeas. Esto se dirige principalmente a equipos de Huawei y ZTE, con un coste de reemplazo estimado de 3.400 a 4.300 millones de euros al a&ntilde;o. Los operadores de redes m&oacute;viles tendr&aacute;n un plazo de 3 a&ntilde;os para retirar los equipos HRS de sus redes troncales y de acceso radio. Las normas se alinean con el marco de la Ley de Ciberseguridad 2 (CSA2).',
+    s5_prep_title: 'Plan de preparaci&oacute;n de la Uni&oacute;n', s5_prep_text: 'BEREC desarrollar&aacute; un Plan de Preparaci&oacute;n de la Uni&oacute;n para las redes de comunicaciones electr&oacute;nicas, coordinando medidas de resiliencia entre los Estados miembros. Esto incluye protocolos de respuesta a incidentes cibern&eacute;ticos, requisitos de diversificaci&oacute;n de la cadena de suministro y sistemas de comunicaci&oacute;n de emergencia alternativos.',
+    s6_title: '6. Pasaporte &uacute;nico', s6_sub: 'Una autorizaci&oacute;n para operar en los 27 Estados miembros',
+    s6_text: 'La DNA sustituye 27 reg&iacute;menes separados de autorizaci&oacute;n nacional por una autorizaci&oacute;n general &uacute;nica a escala de la UE, o "pasaporte &uacute;nico". Los operadores se registrar&aacute;n una sola vez ante la Oficina de Redes Digitales (ODN), que mantiene una base de datos central de todos los proveedores autorizados. El enfoque sigue un principio de lista m&aacute;xima: las condiciones vinculadas a la autorizaci&oacute;n general se definen exhaustivamente a nivel de la UE, impidiendo que los Estados miembros a&ntilde;adan requisitos nacionales adicionales.',
+    s7_title: '7. Regulaci&oacute;n del mercado', s7_sub: 'Regulaci&oacute;n PSM, acceso armonizado de la UE y desagregaci&oacute;n de FTTH',
+    s7_smp_title: 'R&eacute;gimen de Poder Significativo de Mercado (PSM)', s7_smp_text: 'La DNA mantiene un enfoque secuencial para la regulaci&oacute;n PSM: las autoridades nacionales de regulaci&oacute;n primero eval&uacute;an si un operador tiene poder significativo de mercado y luego imponen remedios proporcionados. El poder de veto de la Comisi&oacute;n se ampl&iacute;a para cubrir no solo las definiciones de mercado propuestas sino tambi&eacute;n los remedios propuestos. Un nuevo producto de acceso armonizado de la UE estandarizar&aacute; las condiciones de acceso mayorista en todos los Estados miembros.',
+    s7_ftth_title: 'Desagregaci&oacute;n de FTTH y regulaci&oacute;n sim&eacute;trica', s7_ftth_text: 'El reglamento introduce disposiciones para la desagregaci&oacute;n de fibra, permitiendo a operadores alternativos acceder al &uacute;ltimo tramo de las redes de fibra hasta el hogar (FTTH). La regulaci&oacute;n sim&eacute;trica puede imponerse a todos los operadores independientemente de su poder de mercado cuando lo justifiquen situaciones espec&iacute;ficas de cuello de botella, como el acceso al cableado interior de edificios o conductos.',
+    s8_title: '8. Neutralidad de red y Big Tech', s8_sub: 'Internet abierto preservado, segmentaci&oacute;n de red habilitada, conciliaci&oacute;n voluntaria para generadores de tr&aacute;fico',
+    s8_nn_title: 'Neutralidad de red mantenida', s8_nn_text: 'La DNA preserva los principios fundamentales del <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32015R2120" target="_blank" class="doc-link">Reglamento de Internet Abierto (2015/2120)</a>. Todo el tr&aacute;fico de internet contin&uacute;a trat&aacute;ndose por igual, sin priorizaci&oacute;n de pago para servicios de acceso a internet de consumidores. La segmentaci&oacute;n de red se permite expl&iacute;citamente para servicios especializados B2B, permitiendo a los operadores ofrecer niveles garantizados de calidad de servicio para aplicaciones empresariales.',
+    s8_fair_title: 'Generadores de tr&aacute;fico: conciliaci&oacute;n voluntaria', s8_fair_text: 'La DNA NO introduce una contribuci&oacute;n obligatoria de "cuota justa" de los grandes generadores de tr&aacute;fico (como las plataformas de streaming). En su lugar, crea un mecanismo de conciliaci&oacute;n voluntaria a trav&eacute;s del cual los operadores de telecomunicaciones y los proveedores de contenido pueden negociar acuerdos comerciales sobre gesti&oacute;n de tr&aacute;fico e inversi&oacute;n en infraestructura. Esto representa un compromiso tras un intenso cabildeo de ambas partes.',
+    s9_title: '9. Protecci&oacute;n del consumidor', s9_sub: 'Armonizaci&oacute;n m&aacute;xima, medidas antifraude y acceso de emergencia modernizado',
+    s9_harm_title: 'Armonizaci&oacute;n m&aacute;xima', s9_harm_text: 'A diferencia de la directiva CECE, que permit&iacute;a a los Estados miembros mantener est&aacute;ndares de protecci&oacute;n del consumidor m&aacute;s elevados, la DNA adopta un enfoque de armonizaci&oacute;n m&aacute;xima. Esto significa que los derechos y obligaciones de los consumidores se definen a nivel de la UE y los Estados miembros no pueden desviarse de ellos. Las medidas antifraude se centralizan a trav&eacute;s de la ODN, incluyendo una base de datos compartida de n&uacute;meros y patrones de llamada fraudulentos conocidos.',
+    s9_emerg_title: 'Acceso de emergencia modernizado', s9_emerg_text: 'El acceso a servicios de emergencia se extiende a los servicios de comunicaci&oacute;n basados en internet, como WhatsApp, garantizando que las llamadas de emergencia puedan realizarse a trav&eacute;s de servicios de comunicaci&oacute;n interpersonal independientes del n&uacute;mero. La obligaci&oacute;n de servicio universal (OSU) se simplifica y adapta a la era de la fibra, eliminando referencias obsoletas a tel&eacute;fonos p&uacute;blicos y directorios impresos.',
+    s10_title: '10. Gobernanza', s10_sub: 'Nuevas instituciones: RSPB, ODN y un mandato ampliado de BEREC',
+    th_body: 'Organismo', th_replaces: 'Sustituye a', th_function: 'Funci&oacute;n',
+    s10_rspb_rep: 'RSPG (Grupo de Pol&iacute;tica del Espectro Radioel&eacute;ctrico)', s10_rspb_fn: '&Oacute;rgano consultivo sobre pol&iacute;tica de espectro, elevado a estatus formal de Consejo con recomendaciones vinculantes',
+    s10_odn_rep: 'Oficina de BEREC', s10_odn_fn: 'Base de datos central para el pasaporte &uacute;nico, apoyo a la autorizaci&oacute;n de sat&eacute;lites, coordinaci&oacute;n antifraude, recogida de datos de mercado',
+    s10_berec_rep: 'BEREC (ampliado)', s10_berec_fn: 'Mandato ampliado que incluye coordinaci&oacute;n de ciberseguridad, Plan de Preparaci&oacute;n de la Uni&oacute;n y papel reforzado de an&aacute;lisis de mercado PSM',
+    ep_title: 'Posici&oacute;n previa del PE', ep_sub: 'Resoluci&oacute;n <a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a> sobre soberan&iacute;a tecnol&oacute;gica (22 de enero de 2026)',
+    ep_text: 'El Parlamento Europeo adopt&oacute; una resoluci&oacute;n sobre infraestructura digital y soberan&iacute;a tecnol&oacute;gica estableciendo sus prioridades antes de la propuesta DNA. Los p&aacute;rrafos clave pidieron un apagado progresivo del cobre con apoyo de transici&oacute;n adecuado, mayores incentivos de inversi&oacute;n en 5G y 6G, asignaci&oacute;n armonizada de espectro en la UE, licencias comunes de la UE para comunicaciones por sat&eacute;lite, y una caja de herramientas vinculante para proveedores de alto riesgo que haga legalmente exigible la caja de herramientas 5G voluntaria. La resoluci&oacute;n tambi&eacute;n inst&oacute; a la Comisi&oacute;n a evitar un mecanismo obligatorio de "cuota justa" para los generadores de tr&aacute;fico.',
+    sh_title: 'Reacciones de las partes interesadas', sh_sub: 'Posiciones de la industria y los expertos sobre la propuesta DNA',
+    th_stakeholder: 'Parte interesada', th_position: 'Posici&oacute;n',
+    sh_ftth: 'Ampliamente favorable; acoge el marco de apagado del cobre y los incentivos a la inversi&oacute;n en fibra; advierte contra el debilitamiento de las obligaciones de desagregaci&oacute;n',
+    sh_etno: 'Apoya el pasaporte &uacute;nico y la reforma del espectro; decepcionado por la ausencia de una cuota justa obligatoria de los generadores de tr&aacute;fico; acoge el calendario de eliminaci&oacute;n de HRS',
+    sh_gsma: 'Acoge la duraci&oacute;n ilimitada del espectro y la reducci&oacute;n de la carga regulatoria; preocupada por el veto de la Comisi&oacute;n a las decisiones nacionales de espectro; apoya la simplificaci&oacute;n de licencias de sat&eacute;lite',
+    sh_mvno: 'Apoya firmemente la regulaci&oacute;n sim&eacute;trica y la desagregaci&oacute;n de FTTH; advierte que la armonizaci&oacute;n m&aacute;xima podr&iacute;a eliminar protecciones nacionales favorables al consumidor; pide salvaguardias robustas de acceso mayorista',
+    sh_dt: 'Acoge la certeza de inversi&oacute;n de las licencias de espectro largas; preocupada por los costes de reemplazo de HRS y el ajustado calendario; apoya el pasaporte &uacute;nico para reducir la carga administrativa',
+    sh_orange: 'Apoya la aceleraci&oacute;n del apagado del cobre; cr&iacute;tica con el mecanismo de conciliaci&oacute;n voluntaria como insuficiente; pide provisiones m&aacute;s fuertes de cuota justa; acoge la claridad sobre desagregaci&oacute;n de fibra',
+    sh_cerre: 'Think tank independiente; se&ntilde;ala la tensi&oacute;n entre la armonizaci&oacute;n y las especificidades de los mercados nacionales; recomienda una implementaci&oacute;n gradual para evitar choques regulatorios; positivo sobre la direcci&oacute;n de la reforma del espectro',
+    sh_oxera: 'Consultor&iacute;a econ&oacute;mica; el an&aacute;lisis estima un coste de 3.400 a 4.300 millones de euros anuales para la eliminaci&oacute;n de HRS; cuestiona si el plazo de 3 a&ntilde;os es realista para la sustituci&oacute;n completa de la red',
+    tl_title: 'Cronolog&iacute;a legislativa', tl_sub: 'Hitos clave de la Ley de Redes Digitales',
+    tl_d1_date: 'Febrero 2024', tl_d1: 'Libro blanco de la Comisi&oacute;n: "C&oacute;mo dominar las necesidades de infraestructura digital de Europa"',
+    tl_d2_date: 'Julio 2025', tl_d2: 'Convocatoria de pruebas sobre la Ley de Redes Digitales cerrada',
+    tl_d3_date: '22 de enero de 2026', tl_d3: 'Resoluci&oacute;n del PE sobre soberan&iacute;a tecnol&oacute;gica (<a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a>)',
+    tl_d4_date: '21 de enero de 2026', tl_d4: 'Propuesta de la Comisi&oacute;n: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a> (DNA) + <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2026/0035/COM_COM(2026)0035_EN.pdf" target="_blank" class="doc-link">COM(2026) 35</a> (revisi&oacute;n CECE) + <a href="https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=SWD:2026:0014:FIN:EN:PDF" target="_blank" class="doc-link">SWD(2026) 14</a> (evaluaci&oacute;n de impacto)',
+    tl_d5_date: 'Marzo 2026', tl_d5: 'Nota del EPRS <a href="https://www.europarl.europa.eu/RegData/etudes/BRIE/2026/785672/EPRS_BRI(2026)785672_EN.pdf" target="_blank" class="doc-link">PE 785.672</a>',
+    tl_d6_date: 'Actual', tl_d6: 'Examen en comisi&oacute;n del PE (ITRE)',
+    footer_text: 'An&aacute;lisis en profundidad de la Ley de Redes Digitales por <a href="https://brubru.beresol.eu">Brubru</a>, el asistente de pol&iacute;tica de la UE de <a href="https://beresol.eu">Beresol</a>.<br>Victor Sol&eacute; &middot; Marzo 2026',
+  },
+  ca: {
+    header_title: "Biblioteca d'an&agrave;lisi de Brubru", header_subtitle: 'Llei de Xarxes Digitals de la UE', header_cta: 'Prova Brubru gratis',
+    hero_title: 'Llei de Xarxes Digitals: <span>Recablejant les telecomunicacions europees</span>',
+    hero_subtitle: "La reforma m&eacute;s ambiciosa de la regulaci&oacute; de telecomunicacions de la UE en dues d&egrave;cades. Des de la reforma de l'espectre fins a l'apagada del coure, des de l'autoritzaci&oacute; de sat&egrave;l&middot;lits fins a un passaport &uacute;nic de mercat: un reglament per substituir 27 marcs nacionals.",
+    meta_ref: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a>',
+    meta_proc: '2026/0013(COD)', meta_date: '21 de gener de 2026',
+    meta_train: '<a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-digital-networks-act-(dna)" target="_blank" class="doc-link">Tren Legislatiu</a>',
+    fig_parts: 'Parts del reglament', fig_invest: "Inversi&oacute; en fibra necess&agrave;ria", fig_invest_num: '148.000M&euro;', fig_copper: "Termini d'apagada del coure", fig_passport: 'De reguladors nacionals a passaport &uacute;nic', fig_passport_num: '27&rarr;1',
+    toc_title: '&Iacute;ndex', toc_1: 'Per qu&egrave; la DNA?', toc_2: 'Apagada del coure', toc_3: "Revoluci&oacute; de l'espectre", toc_4: 'Autoritzaci&oacute; de sat&egrave;l&middot;lits', toc_5: 'Resili&egrave;ncia de xarxa', toc_6: 'Passaport &uacute;nic', toc_7: 'Regulaci&oacute; del mercat', toc_8: 'Neutralitat de xarxa i Big Tech', toc_9: 'Protecci&oacute; del consumidor', toc_10: 'Governan&ccedil;a',
+    s1_title: '1. Per qu&egrave; la DNA?', s1_sub: "La bretxa de connectivitat europea i la necessitat d'un mercat &uacute;nic de telecomunicacions",
+    s1_frag_title: 'Fragmentaci&oacute; del CECE', s1_frag_text: 'El <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32018L1972" target="_blank" class="doc-link">Codi Europeu de les Comunicacions Electr&ograve;niques (Directiva 2018/1972)</a> es va transposar en 27 marcs nacionals diferents, completant la transposici&oacute; total nom&eacute;s a l\'agost de 2024. Aquesta fragmentaci&oacute; impedeix l\'escala, desincentiva la inversi&oacute; transfronterera i mant&eacute; els operadors europeus de telecomunicacions molt m&eacute;s petits que els seus hom&ograve;legs nord-americans i asi&agrave;tics. L\'Informe Draghi sobre la competitivitat de la UE va identificar la consolidaci&oacute; de les telecomunicacions com una prioritat estrat&egrave;gica.',
+    s1_gap_title: 'La bretxa de connectivitat de la UE',
+    th_metric: 'Indicador', th_us: 'Estats Units', th_china: 'Xina',
+    s1_ftth: 'Cobertura FTTH', s1_ftth_cn: 'N/D', s1_5gsa: 'Cobertura 5G independent', s1_5gsa_cn: 'N/D', s1_5gtakeup: 'Adopci&oacute; plena de 5G',
+    s1_gap_text: "Malgrat un fort desplegament de fibra, l'adopci&oacute; de 5G a la UE continua sent cr&iacute;ticament baixa. Els objectius de la D&egrave;cada Digital per a 2030 exigeixen connectivitat gigabit per a totes les llars i cobertura 5G a totes les zones poblades, fites que el marc fragmentat actual no pot assolir.",
+    s2_title: '2. Apagada del coure', s2_sub: 'Migraci&oacute; obligat&ograve;ria del coure a la fibra per a 2035',
+    s2_text: "La DNA estableix un marc vinculant per al desmantellament de les xarxes de coure heretades. Els operadors han de notificar l'autoritat nacional de regulaci&oacute; (ANR) i els sol&middot;licitants d'acc&eacute;s afectats almenys 36 mesos abans de l'apagada. Hi ha d'haver infraestructura alternativa de fibra o sense fils disponible en el moment del desmantellament. Espanya i Noruega ja han iniciat programes d'eliminaci&oacute; del coure. L'apagada total del coure s'ha de completar com a molt tard el 2039, amb el termini principal fixat el 2035 per a la majoria de les xarxes.",
+    pipe_notify: 'Notificaci&oacute;', pipe_notify_d: "L'operador notifica l'ANR + sol&middot;licitants d'acc&eacute;s", pipe_migrate: 'Migraci&oacute;', pipe_migrate_d: 'Infraestructura alternativa disponible', pipe_deadline: 'Termini principal', pipe_deadline_d: 'Majoria de xarxes desmantellades', pipe_final: 'Termini final', pipe_final_d: 'Tot el coure desmantellat',
+    s3_title: "3. Revoluci&oacute; de l'espectre", s3_sub: "De llic&egrave;ncies nacionals curtes a autoritzacions il&middot;limitades a escala de la UE",
+    s3_dur_title: 'Llic&egrave;ncies de duraci&oacute; il&middot;limitada', s3_dur_text: "La DNA substitueix les llic&egrave;ncies nacionals d'espectre de curta durada per autoritzacions de durada il&middot;limitada, subjectes a un termini m&iacute;nim de 40 anys. Aix&ograve; dona als operadors la certesa d'inversi&oacute; necess&agrave;ria per al desplegament de xarxes a gran escala. La Comissi&oacute; obt&eacute; un poder de veto sobre les decisions nacionals d'espectre que poguessin fragmentar el mercat &uacute;nic.",
+    s3_use_title: 'Principi de "fes-lo servir o comparteix-lo"', s3_use_text: "Els titulars d'espectre que no despleguin en un termini raonable han de posar l'espectre no utilitzat a disposici&oacute; d'altres operadors. La Comissi&oacute; adoptar&agrave; fulls de ruta vinculants d'espectre que estableixin calendaris harmonitzats per a l'assignaci&oacute; i &uacute;s de bandes de freq&uuml;&egrave;ncia clau a tots els estats membres.",
+    s4_title: 'Autoritzaci&oacute; de sat&egrave;l&middot;lits', s4_sub: "Llic&egrave;ncies centralitzades de la UE per a comunicacions per sat&egrave;l&middot;lit",
+    s4_text: "La DNA crea un r&egrave;gim centralitzat d'autoritzaci&oacute; de la UE per a operadors de sat&egrave;l&middot;lit. En lloc d'obtenir llic&egrave;ncies separades a cada estat membre, un operador de sat&egrave;l&middot;lit sol&middot;licitar&agrave; davant la Comissi&oacute;, que gestiona totes les fases del proc&eacute;s d'autoritzaci&oacute;. L'incompliment pot resultar en multes de fins al 5% de la facturaci&oacute; global. El Consell de Pol&iacute;tica de l'Espectre Radioel&egrave;ctric (RSPB) i l'Oficina de Xarxes Digitals (ODN) donaran suport a la Comissi&oacute; en aquest proc&eacute;s.",
+    s5_title: '5. Resili&egrave;ncia de xarxa i ciberseguretat', s5_sub: "Eliminaci&oacute; de prove&iuml;dors d'alt risc i preparaci&oacute; de la Uni&oacute;",
+    s5_hrs_title: "Eliminaci&oacute; de prove&iuml;dors d'alt risc (HRS)", s5_hrs_text: "La Part II de la DNA formalitza l'eliminaci&oacute; de prove&iuml;dors d'alt risc de les xarxes europees. Aix&ograve; es dirigeix principalment a equips de Huawei i ZTE, amb un cost de reempla&ccedil;ament estimat de 3.400 a 4.300 milions d'euros l'any. Els operadors de xarxes m&ograve;bils tindran un termini de 3 anys per retirar els equips HRS de les seves xarxes troncals i d'acc&eacute;s r&agrave;dio. Les normes s'alineen amb el marc de la Llei de Ciberseguretat 2 (CSA2).",
+    s5_prep_title: 'Pla de preparaci&oacute; de la Uni&oacute;', s5_prep_text: "BEREC desenvolupar&agrave; un Pla de Preparaci&oacute; de la Uni&oacute; per a les xarxes de comunicacions electr&ograve;niques, coordinant mesures de resili&egrave;ncia entre els estats membres. Aix&ograve; inclou protocols de resposta a incidents cibern&egrave;tics, requisits de diversificaci&oacute; de la cadena de subministrament i sistemes de comunicaci&oacute; d'emerg&egrave;ncia alternatius.",
+    s6_title: '6. Passaport &uacute;nic', s6_sub: 'Una autoritzaci&oacute; per operar als 27 estats membres',
+    s6_text: "La DNA substitueix 27 r&egrave;gims separats d'autoritzaci&oacute; nacional per una autoritzaci&oacute; general &uacute;nica a escala de la UE, o \"passaport &uacute;nic\". Els operadors es registraran un sol cop davant l'Oficina de Xarxes Digitals (ODN), que mant&eacute; una base de dades central de tots els prove&iuml;dors autoritzats. L'enfocament segueix un principi de llista m&agrave;xima: les condicions vinculades a l'autoritzaci&oacute; general es defineixen exhaustivament a nivell de la UE, impedint que els estats membres afegeixin requisits nacionals addicionals.",
+    s7_title: '7. Regulaci&oacute; del mercat', s7_sub: "Regulaci&oacute; PSM, acc&eacute;s harmonitzat de la UE i desagregaci&oacute; de FTTH",
+    s7_smp_title: 'R&egrave;gim de Poder Significatiu de Mercat (PSM)', s7_smp_text: "La DNA mant&eacute; un enfocament seq&uuml;encial per a la regulaci&oacute; PSM: les autoritats nacionals de regulaci&oacute; primer avaluen si un operador t&eacute; poder significatiu de mercat i despr&eacute;s imposen remeis proporcionats. El poder de veto de la Comissi&oacute; s'amplia per cobrir no nom&eacute;s les definicions de mercat proposades sin&oacute; tamb&eacute; els remeis proposats. Un nou producte d'acc&eacute;s harmonitzat de la UE estandarditzar&agrave; les condicions d'acc&eacute;s majorista a tots els estats membres.",
+    s7_ftth_title: 'Desagregaci&oacute; de FTTH i regulaci&oacute; sim&egrave;trica', s7_ftth_text: "El reglament introdueix disposicions per a la desagregaci&oacute; de fibra, permetent a operadors alternatius accedir a l'&uacute;ltim tram de les xarxes de fibra fins a la llar (FTTH). La regulaci&oacute; sim&egrave;trica es pot imposar a tots els operadors independentment del seu poder de mercat quan ho justifiquin situacions espec&iacute;fiques de coll d'ampolla, com l'acc&eacute;s al cablejat interior d'edificis o conductes.",
+    s8_title: '8. Neutralitat de xarxa i Big Tech', s8_sub: "Internet obert preservat, segmentaci&oacute; de xarxa habilitada, conciliaci&oacute; volunt&agrave;ria per a generadors de tr&agrave;nsit",
+    s8_nn_title: 'Neutralitat de xarxa mantinguda', s8_nn_text: 'La DNA preserva els principis fonamentals del <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32015R2120" target="_blank" class="doc-link">Reglament d\'Internet Obert (2015/2120)</a>. Tot el tr&agrave;nsit d\'internet continua tractant-se per igual, sense prioritzaci&oacute; de pagament per a serveis d\'acc&eacute;s a internet de consumidors. La segmentaci&oacute; de xarxa es permet expl&iacute;citament per a serveis especialitzats B2B, permetent als operadors oferir nivells garantits de qualitat de servei per a aplicacions empresarials.',
+    s8_fair_title: 'Generadors de tr&agrave;nsit: conciliaci&oacute; volunt&agrave;ria', s8_fair_text: "La DNA NO introdueix una contribuci&oacute; obligat&ograve;ria de \"quota justa\" dels grans generadors de tr&agrave;nsit (com les plataformes de streaming). En el seu lloc, crea un mecanisme de conciliaci&oacute; volunt&agrave;ria a trav&eacute;s del qual els operadors de telecomunicacions i els prove&iuml;dors de contingut poden negociar acords comercials sobre gesti&oacute; de tr&agrave;nsit i inversi&oacute; en infraestructura. Aix&ograve; representa un comprom&iacute;s despr&eacute;s d'un intens lobby d'ambdues parts.",
+    s9_title: '9. Protecci&oacute; del consumidor', s9_sub: "Harmonitzaci&oacute; m&agrave;xima, mesures antifrau i acc&eacute;s d'emerg&egrave;ncia modernitzat",
+    s9_harm_title: 'Harmonitzaci&oacute; m&agrave;xima', s9_harm_text: "A difer&egrave;ncia de la directiva CECE, que permetia als estats membres mantenir est&agrave;ndards de protecci&oacute; del consumidor m&eacute;s elevats, la DNA adopta un enfocament d'harmonitzaci&oacute; m&agrave;xima. Aix&ograve; significa que els drets i obligacions dels consumidors es defineixen a nivell de la UE i els estats membres no poden desviar-se'n. Les mesures antifrau es centralitzen a trav&eacute;s de l'ODN, incloent-hi una base de dades compartida de n&uacute;meros i patrons de trucada fraudulents coneguts.",
+    s9_emerg_title: "Acc&eacute;s d'emerg&egrave;ncia modernitzat", s9_emerg_text: "L'acc&eacute;s a serveis d'emerg&egrave;ncia s'est&eacute;n als serveis de comunicaci&oacute; basats en internet, com WhatsApp, garantint que les trucades d'emerg&egrave;ncia es puguin realitzar a trav&eacute;s de serveis de comunicaci&oacute; interpersonal independents del n&uacute;mero. L'obligaci&oacute; de servei universal (OSU) es simplifica i s'adapta a l'era de la fibra, eliminant refer&egrave;ncies obsoletes a tel&egrave;fons p&uacute;blics i directoris impresos.",
+    s10_title: '10. Governan&ccedil;a', s10_sub: 'Noves institucions: RSPB, ODN i un mandat ampliat de BEREC',
+    th_body: 'Organisme', th_replaces: 'Substitueix', th_function: 'Funci&oacute;',
+    s10_rspb_rep: "RSPG (Grup de Pol&iacute;tica de l'Espectre Radioel&egrave;ctric)", s10_rspb_fn: "Organisme consultiu sobre pol&iacute;tica d'espectre, elevat a estatus formal de Consell amb recomanacions vinculants",
+    s10_odn_rep: 'Oficina de BEREC', s10_odn_fn: "Base de dades central per al passaport &uacute;nic, suport a l'autoritzaci&oacute; de sat&egrave;l&middot;lits, coordinaci&oacute; antifrau, recollida de dades de mercat",
+    s10_berec_rep: 'BEREC (ampliat)', s10_berec_fn: "Mandat ampliat que inclou coordinaci&oacute; de ciberseguretat, Pla de Preparaci&oacute; de la Uni&oacute; i paper refor&ccedil;at d'an&agrave;lisi de mercat PSM",
+    ep_title: 'Posici&oacute; pr&egrave;via del PE', ep_sub: 'Resoluci&oacute; <a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a> sobre sobirania tecnol&ograve;gica (22 de gener de 2026)',
+    ep_text: "El Parlament Europeu va adoptar una resoluci&oacute; sobre infraestructura digital i sobirania tecnol&ograve;gica establint les seves prioritats abans de la proposta DNA. Els par&agrave;grafs clau van demanar una apagada progressiva del coure amb suport de transici&oacute; adequat, majors incentius d'inversi&oacute; en 5G i 6G, assignaci&oacute; harmonitzada d'espectre a la UE, llic&egrave;ncies comunes de la UE per a comunicacions per sat&egrave;l&middot;lit, i una caixa d'eines vinculant per a prove&iuml;dors d'alt risc que faci legalment exigible la caixa d'eines 5G volunt&agrave;ria. La resoluci&oacute; tamb&eacute; va instar la Comissi&oacute; a evitar un mecanisme obligatori de \"quota justa\" per als generadors de tr&agrave;nsit.",
+    sh_title: 'Reaccions de les parts interessades', sh_sub: "Posicions de la ind&uacute;stria i els experts sobre la proposta DNA",
+    th_stakeholder: 'Part interessada', th_position: 'Posici&oacute;',
+    sh_ftth: "Àmpliament favorable; acull el marc d'apagada del coure i els incentius a la inversi&oacute; en fibra; adverteix contra el debilitament de les obligacions de desagregaci&oacute;",
+    sh_etno: "Dona suport al passaport &uacute;nic i la reforma de l'espectre; decebut per l'abs&egrave;ncia d'una quota justa obligat&ograve;ria dels generadors de tr&agrave;nsit; acull el calendari d'eliminaci&oacute; d'HRS",
+    sh_gsma: "Acull la durada il&middot;limitada de l'espectre i la reducci&oacute; de la c&agrave;rrega regulat&ograve;ria; preocupada pel veto de la Comissi&oacute; a les decisions nacionals d'espectre; dona suport a la simplificaci&oacute; de llic&egrave;ncies de sat&egrave;l&middot;lit",
+    sh_mvno: "Dona suport fermament a la regulaci&oacute; sim&egrave;trica i la desagregaci&oacute; de FTTH; adverteix que l'harmonitzaci&oacute; m&agrave;xima podria eliminar proteccions nacionals favorables al consumidor; demana salvaguardes robustes d'acc&eacute;s majorista",
+    sh_dt: "Acull la certesa d'inversi&oacute; de les llic&egrave;ncies d'espectre llargues; preocupada pels costos de reempla&ccedil;ament d'HRS i l'ajustat calendari; dona suport al passaport &uacute;nic per reduir la c&agrave;rrega administrativa",
+    sh_orange: "Dona suport a l'acceleraci&oacute; de l'apagada del coure; cr&iacute;tica amb el mecanisme de conciliaci&oacute; volunt&agrave;ria com a insuficient; demana provisions m&eacute;s fortes de quota justa; acull la claredat sobre desagregaci&oacute; de fibra",
+    sh_cerre: "Think tank independent; assenyala la tensi&oacute; entre l'harmonitzaci&oacute; i les especificitats dels mercats nacionals; recomana una implementaci&oacute; gradual per evitar xocs regulatoris; positiu sobre la direcci&oacute; de la reforma de l'espectre",
+    sh_oxera: "Consultoria econ&ograve;mica; l'an&agrave;lisi estima un cost de 3.400 a 4.300 milions d'euros anuals per a l'eliminaci&oacute; d'HRS; qüestiona si el termini de 3 anys &eacute;s realista per a la substituci&oacute; completa de la xarxa",
+    tl_title: 'Cronologia legislativa', tl_sub: 'Fites clau de la Llei de Xarxes Digitals',
+    tl_d1_date: 'Febrer 2024', tl_d1: "Llibre blanc de la Comissi&oacute;: \"Com dominar les necessitats d'infraestructura digital d'Europa\"",
+    tl_d2_date: 'Juliol 2025', tl_d2: 'Convocat&ograve;ria de proves sobre la Llei de Xarxes Digitals tancada',
+    tl_d3_date: '22 de gener de 2026', tl_d3: 'Resoluci&oacute; del PE sobre sobirania tecnol&ograve;gica (<a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a>)',
+    tl_d4_date: '21 de gener de 2026', tl_d4: 'Proposta de la Comissi&oacute;: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a> (DNA) + <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2026/0035/COM_COM(2026)0035_EN.pdf" target="_blank" class="doc-link">COM(2026) 35</a> (revisi&oacute; CECE) + <a href="https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=SWD:2026:0014:FIN:EN:PDF" target="_blank" class="doc-link">SWD(2026) 14</a> (avaluaci&oacute; d\'impacte)',
+    tl_d5_date: 'Mar&ccedil; 2026', tl_d5: 'Nota de l\'EPRS <a href="https://www.europarl.europa.eu/RegData/etudes/BRIE/2026/785672/EPRS_BRI(2026)785672_EN.pdf" target="_blank" class="doc-link">PE 785.672</a>',
+    tl_d6_date: 'Actual', tl_d6: 'Examen en comissi&oacute; del PE (ITRE)',
+    footer_text: "An&agrave;lisi en profunditat de la Llei de Xarxes Digitals per <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistent de pol&iacute;tica de la UE de <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Mar&ccedil; 2026",
+  },
+  fr: {
+    header_title: "Biblioth&egrave;que d'analyses de Brubru", header_subtitle: "Loi sur les r&eacute;seaux num&eacute;riques de l'UE", header_cta: 'Essayez Brubru gratuitement',
+    hero_title: 'Loi sur les r&eacute;seaux num&eacute;riques : <span>Recabler les t&eacute;l&eacute;coms europ&eacute;ennes</span>',
+    hero_subtitle: "La r&eacute;forme la plus ambitieuse de la r&eacute;glementation des t&eacute;l&eacute;communications de l'UE en deux d&eacute;cennies. De la r&eacute;forme du spectre &agrave; l'extinction du cuivre, de l'autorisation des satellites &agrave; un passeport unique de march&eacute; : un r&egrave;glement pour remplacer 27 cadres nationaux.",
+    meta_ref: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a>',
+    meta_proc: '2026/0013(COD)', meta_date: '21 janvier 2026',
+    meta_train: '<a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-digital-networks-act-(dna)" target="_blank" class="doc-link">Train l&eacute;gislatif</a>',
+    fig_parts: 'Parties du r&egrave;glement', fig_invest: 'Investissement fibre n&eacute;cessaire', fig_invest_num: '148 Mds&euro;', fig_copper: "Date limite d'extinction du cuivre", fig_passport: 'De r&eacute;gulateurs nationaux &agrave; un passeport unique', fig_passport_num: '27&rarr;1',
+    toc_title: 'Sommaire', toc_1: 'Pourquoi le DNA ?', toc_2: 'Extinction du cuivre', toc_3: 'R&eacute;volution du spectre', toc_4: 'Autorisation satellite', toc_5: 'R&eacute;silience des r&eacute;seaux', toc_6: 'Passeport unique', toc_7: 'R&eacute;gulation du march&eacute;', toc_8: 'Neutralit&eacute; du net et Big Tech', toc_9: 'Protection des consommateurs', toc_10: 'Gouvernance',
+    s1_title: '1. Pourquoi le DNA ?', s1_sub: "Le d&eacute;ficit de connectivit&eacute; europ&eacute;en et la n&eacute;cessit&eacute; d'un march&eacute; unique des t&eacute;l&eacute;coms",
+    s1_frag_title: 'Fragmentation du CCEE', s1_frag_text: 'Le <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32018L1972" target="_blank" class="doc-link">Code europ&eacute;en des communications &eacute;lectroniques (Directive 2018/1972)</a> a &eacute;t&eacute; transpos&eacute; en 27 cadres nationaux diff&eacute;rents, la transposition compl&egrave;te n\'ayant &eacute;t&eacute; achev&eacute;e qu\'en ao&ucirc;t 2024. Cette fragmentation emp&ecirc;che les &eacute;conomies d\'&eacute;chelle, d&eacute;courage l\'investissement transfrontalier et maintient les op&eacute;rateurs europ&eacute;ens de t&eacute;l&eacute;communications bien plus petits que leurs homologues am&eacute;ricains et asiatiques. Le rapport Draghi sur la comp&eacute;titivit&eacute; de l\'UE a identifi&eacute; la consolidation des t&eacute;l&eacute;communications comme une priorit&eacute; strat&eacute;gique.',
+    s1_gap_title: "Le d&eacute;ficit de connectivit&eacute; de l'UE",
+    th_metric: 'Indicateur', th_us: '&Eacute;tats-Unis', th_china: 'Chine',
+    s1_ftth: 'Couverture FTTH', s1_ftth_cn: 'N/D', s1_5gsa: 'Couverture 5G autonome', s1_5gsa_cn: 'N/D', s1_5gtakeup: 'Adoption compl&egrave;te de la 5G',
+    s1_gap_text: "Malgr&eacute; un d&eacute;ploiement solide de la fibre, l'adoption de la 5G dans l'UE reste dangereusement faible. Les objectifs de la D&eacute;cennie num&eacute;rique pour 2030 exigent une connectivit&eacute; gigabit pour tous les m&eacute;nages et une couverture 5G dans toutes les zones peupl&eacute;es, des objectifs que le cadre fragment&eacute; actuel ne peut atteindre.",
+    s2_title: '2. Extinction du cuivre', s2_sub: 'Migration obligatoire du cuivre vers la fibre d\'ici 2035',
+    s2_text: "Le DNA &eacute;tablit un cadre contraignant pour le d&eacute;mant&egrave;lement des r&eacute;seaux cuivre h&eacute;rit&eacute;s. Les op&eacute;rateurs doivent notifier l'autorit&eacute; nationale de r&eacute;gulation (ANR) et les demandeurs d'acc&egrave;s concern&eacute;s au moins 36 mois avant l'extinction. Une infrastructure alternative en fibre ou sans fil doit &ecirc;tre disponible au moment du d&eacute;mant&egrave;lement. L'Espagne et la Norv&egrave;ge ont d&eacute;j&agrave; lanc&eacute; des programmes d'&eacute;limination du cuivre. L'extinction totale du cuivre doit &ecirc;tre achev&eacute;e au plus tard en 2039, avec le d&eacute;lai principal fix&eacute; &agrave; 2035 pour la plupart des r&eacute;seaux.",
+    pipe_notify: 'Notification', pipe_notify_d: "L'op&eacute;rateur notifie l'ANR + demandeurs d'acc&egrave;s", pipe_migrate: 'Migration', pipe_migrate_d: 'Infrastructure alternative disponible', pipe_deadline: 'Date limite principale', pipe_deadline_d: 'Majorit&eacute; des r&eacute;seaux d&eacute;mantel&eacute;s', pipe_final: 'Date limite finale', pipe_final_d: 'Tout le cuivre d&eacute;mantel&eacute;',
+    s3_title: '3. R&eacute;volution du spectre', s3_sub: "De licences nationales courtes &agrave; des autorisations illimit&eacute;es &agrave; l'&eacute;chelle de l'UE",
+    s3_dur_title: 'Licences de dur&eacute;e illimit&eacute;e', s3_dur_text: "Le DNA remplace les licences nationales de spectre de courte dur&eacute;e par des autorisations de dur&eacute;e illimit&eacute;e, sous r&eacute;serve d'une dur&eacute;e minimale de 40 ans. Cela donne aux op&eacute;rateurs la certitude d'investissement n&eacute;cessaire au d&eacute;ploiement de r&eacute;seaux &agrave; grande &eacute;chelle. La Commission obtient un droit de veto sur les d&eacute;cisions nationales en mati&egrave;re de spectre susceptibles de fragmenter le march&eacute; unique.",
+    s3_use_title: 'Principe de "l\'utiliser ou le partager"', s3_use_text: "Les d&eacute;tenteurs de spectre qui ne d&eacute;ploient pas dans un d&eacute;lai raisonnable doivent mettre le spectre inutilis&eacute; &agrave; la disposition d'autres op&eacute;rateurs. La Commission adoptera des feuilles de route contraignantes en mati&egrave;re de spectre fixant des calendriers harmonis&eacute;s pour l'attribution et l'utilisation des bandes de fr&eacute;quences cl&eacute;s dans tous les &Eacute;tats membres.",
+    s4_title: '4. Autorisation satellite', s4_sub: "Licences centralis&eacute;es de l'UE pour les communications par satellite",
+    s4_text: "Le DNA cr&eacute;e un r&eacute;gime centralis&eacute; d'autorisation de l'UE pour les op&eacute;rateurs de satellites. Au lieu d'obtenir des licences s&eacute;par&eacute;es dans chaque &Eacute;tat membre, un op&eacute;rateur de satellite d&eacute;posera sa demande aupr&egrave;s de la Commission, qui g&egrave;re toutes les &eacute;tapes du processus d'autorisation. Le non-respect peut entra&icirc;ner des amendes allant jusqu'&agrave; 5 % du chiffre d'affaires mondial. Le Comit&eacute; de la politique du spectre radio&eacute;lectrique (RSPB) et l'Office des r&eacute;seaux num&eacute;riques (ODN) assisteront la Commission dans ce processus.",
+    s5_title: '5. R&eacute;silience des r&eacute;seaux et cybers&eacute;curit&eacute;', s5_sub: "&Eacute;limination des fournisseurs &agrave; haut risque et pr&eacute;paration de l'Union",
+    s5_hrs_title: '&Eacute;limination des fournisseurs &agrave; haut risque (HRS)', s5_hrs_text: "La Partie II du DNA formalise l'&eacute;limination des fournisseurs &agrave; haut risque des r&eacute;seaux europ&eacute;ens. Cela vise principalement les &eacute;quipements Huawei et ZTE, avec un co&ucirc;t de remplacement estim&eacute; entre 3,4 et 4,3 milliards d'euros par an. Les op&eacute;rateurs de r&eacute;seaux mobiles disposeront d'un d&eacute;lai de 3 ans pour retirer les &eacute;quipements HRS de leurs r&eacute;seaux c&oelig;ur et d'acc&egrave;s radio. Les r&egrave;gles s'alignent sur le cadre de la Loi sur la cybers&eacute;curit&eacute; 2 (CSA2).",
+    s5_prep_title: "Plan de pr&eacute;paration de l'Union", s5_prep_text: "Le BEREC &eacute;laborera un Plan de pr&eacute;paration de l'Union pour les r&eacute;seaux de communications &eacute;lectroniques, coordonnant les mesures de r&eacute;silience entre les &Eacute;tats membres. Cela comprend des protocoles de r&eacute;ponse aux incidents cyber, des exigences de diversification de la cha&icirc;ne d'approvisionnement et des syst&egrave;mes de communication d'urgence alternatifs.",
+    s6_title: '6. Passeport unique', s6_sub: "Une autorisation pour op&eacute;rer dans les 27 &Eacute;tats membres",
+    s6_text: "Le DNA remplace 27 r&eacute;gimes d'autorisation nationaux distincts par une autorisation g&eacute;n&eacute;rale unique &agrave; l'&eacute;chelle de l'UE, ou \"passeport unique\". Les op&eacute;rateurs s'enregistreront une seule fois aupr&egrave;s de l'Office des r&eacute;seaux num&eacute;riques (ODN), qui tient une base de donn&eacute;es centrale de tous les fournisseurs autoris&eacute;s. L'approche suit un principe de liste maximale : les conditions attach&eacute;es &agrave; l'autorisation g&eacute;n&eacute;rale sont d&eacute;finies exhaustivement au niveau de l'UE, emp&ecirc;chant les &Eacute;tats membres d'ajouter des exigences nationales suppl&eacute;mentaires.",
+    s7_title: '7. R&eacute;gulation du march&eacute;', s7_sub: "R&eacute;gulation PSM, acc&egrave;s harmonis&eacute; UE et d&eacute;groupage FTTH",
+    s7_smp_title: 'R&eacute;gime de Puissance Significative de March&eacute; (PSM)', s7_smp_text: "Le DNA maintient une approche s&eacute;quentielle pour la r&eacute;gulation PSM : les autorit&eacute;s nationales de r&eacute;gulation &eacute;valuent d'abord si un op&eacute;rateur d&eacute;tient une puissance significative de march&eacute;, puis imposent des rem&egrave;des proportionn&eacute;s. Le droit de veto de la Commission est &eacute;largi pour couvrir non seulement les d&eacute;finitions de march&eacute; propos&eacute;es mais aussi les rem&egrave;des propos&eacute;s. Un nouveau produit d'acc&egrave;s harmonis&eacute; de l'UE standardisera les conditions d'acc&egrave;s de gros dans tous les &Eacute;tats membres.",
+    s7_ftth_title: 'D&eacute;groupage FTTH et r&eacute;gulation sym&eacute;trique', s7_ftth_text: "Le r&egrave;glement introduit des dispositions pour le d&eacute;groupage de la fibre, permettant aux op&eacute;rateurs alternatifs d'acc&eacute;der au dernier kilom&egrave;tre des r&eacute;seaux fibre jusqu'au domicile (FTTH). La r&eacute;gulation sym&eacute;trique peut &ecirc;tre impos&eacute;e &agrave; tous les op&eacute;rateurs ind&eacute;pendamment de leur puissance de march&eacute; lorsque des situations de goulot d'&eacute;tranglement sp&eacute;cifiques le justifient, comme l'acc&egrave;s au c&acirc;blage int&eacute;rieur des immeubles ou aux fourreaux.",
+    s8_title: '8. Neutralit&eacute; du net et Big Tech', s8_sub: "Internet ouvert pr&eacute;serv&eacute;, d&eacute;coupage r&eacute;seau activ&eacute;, conciliation volontaire pour les g&eacute;n&eacute;rateurs de trafic",
+    s8_nn_title: 'Neutralit&eacute; du net maintenue', s8_nn_text: 'Le DNA pr&eacute;serve les principes fondamentaux du <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32015R2120" target="_blank" class="doc-link">R&egrave;glement sur l\'Internet ouvert (2015/2120)</a>. Tout le trafic internet continue d\'&ecirc;tre trait&eacute; de mani&egrave;re &eacute;gale, sans priorisation payante pour les services d\'acc&egrave;s &agrave; internet grand public. Le d&eacute;coupage r&eacute;seau est explicitement autoris&eacute; pour les services sp&eacute;cialis&eacute;s B2B, permettant aux op&eacute;rateurs d\'offrir des niveaux garantis de qualit&eacute; de service pour les applications professionnelles.',
+    s8_fair_title: 'G&eacute;n&eacute;rateurs de trafic : conciliation volontaire', s8_fair_text: "Le DNA N'introduit PAS de contribution obligatoire de \"juste part\" des grands g&eacute;n&eacute;rateurs de trafic (comme les plateformes de streaming). Il cr&eacute;e plut&ocirc;t un m&eacute;canisme de conciliation volontaire permettant aux op&eacute;rateurs de t&eacute;l&eacute;communications et aux fournisseurs de contenus de n&eacute;gocier des accords commerciaux sur la gestion du trafic et l'investissement dans les infrastructures. Cela repr&eacute;sente un compromis apr&egrave;s un intense lobbying des deux c&ocirc;t&eacute;s.",
+    s9_title: '9. Protection des consommateurs', s9_sub: "Harmonisation maximale, mesures antifraude et acc&egrave;s d'urgence modernis&eacute;",
+    s9_harm_title: 'Harmonisation maximale', s9_harm_text: "Contrairement &agrave; la directive CCEE, qui permettait aux &Eacute;tats membres de maintenir des normes de protection des consommateurs plus &eacute;lev&eacute;es, le DNA adopte une approche d'harmonisation maximale. Les droits et obligations des consommateurs sont d&eacute;finis au niveau de l'UE et les &Eacute;tats membres ne peuvent pas y d&eacute;roger. Les mesures antifraude sont centralis&eacute;es via l'ODN, incluant une base de donn&eacute;es partag&eacute;e des num&eacute;ros et sch&eacute;mas d'appel frauduleux connus.",
+    s9_emerg_title: "Acc&egrave;s d'urgence modernis&eacute;", s9_emerg_text: "L'acc&egrave;s aux services d'urgence est &eacute;tendu aux services de communication bas&eacute;s sur internet tels que WhatsApp, garantissant que les appels d'urgence peuvent &ecirc;tre effectu&eacute;s via des services de communication interpersonnelle ind&eacute;pendants du num&eacute;ro. L'obligation de service universel (OSU) est simplifi&eacute;e et adapt&eacute;e &agrave; l'&egrave;re de la fibre, supprimant les r&eacute;f&eacute;rences obsol&egrave;tes aux cabines t&eacute;l&eacute;phoniques et annuaires imprim&eacute;s.",
+    s10_title: '10. Gouvernance', s10_sub: 'Nouvelles institutions : RSPB, ODN et un mandat &eacute;largi du BEREC',
+    th_body: 'Organisme', th_replaces: 'Remplace', th_function: 'Fonction',
+    s10_rspb_rep: 'RSPG (Groupe pour la politique du spectre radio&eacute;lectrique)', s10_rspb_fn: "Organe consultatif sur la politique du spectre, &eacute;lev&eacute; au statut formel de Comit&eacute; avec des recommandations contraignantes",
+    s10_odn_rep: 'Bureau du BEREC', s10_odn_fn: "Base de donn&eacute;es centrale pour le passeport unique, soutien &agrave; l'autorisation satellite, coordination antifraude, collecte de donn&eacute;es de march&eacute;",
+    s10_berec_rep: 'BEREC (&eacute;largi)', s10_berec_fn: "Mandat &eacute;largi incluant la coordination en cybers&eacute;curit&eacute;, le Plan de pr&eacute;paration de l'Union et un r&ocirc;le renforc&eacute; d'analyse de march&eacute; PSM",
+    ep_title: 'Position pr&eacute;alable du PE', ep_sub: 'R&eacute;solution <a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a> sur la souverainet&eacute; technologique (22 janvier 2026)',
+    ep_text: "Le Parlement europ&eacute;en a adopt&eacute; une r&eacute;solution sur l'infrastructure num&eacute;rique et la souverainet&eacute; technologique &eacute;tablissant ses priorit&eacute;s avant la proposition DNA. Les paragraphes cl&eacute;s ont demand&eacute; une extinction progressive du cuivre avec un soutien de transition ad&eacute;quat, des incitations accrues &agrave; l'investissement dans la 5G et la 6G, une attribution harmonis&eacute;e du spectre dans l'UE, des licences communes de l'UE pour les communications par satellite, et une bo&icirc;te &agrave; outils contraignante pour les fournisseurs &agrave; haut risque rendant la bo&icirc;te &agrave; outils 5G volontaire juridiquement contraignante. La r&eacute;solution a &eacute;galement exhort&eacute; la Commission &agrave; &eacute;viter un m&eacute;canisme obligatoire de \"juste part\" pour les g&eacute;n&eacute;rateurs de trafic.",
+    sh_title: 'R&eacute;actions des parties prenantes', sh_sub: "Positions de l'industrie et des experts sur la proposition DNA",
+    th_stakeholder: 'Partie prenante', th_position: 'Position',
+    sh_ftth: "Largement favorable ; salue le cadre d'extinction du cuivre et les incitations &agrave; l'investissement dans la fibre ; met en garde contre l'affaiblissement des obligations de d&eacute;groupage",
+    sh_etno: "Soutient le passeport unique et la r&eacute;forme du spectre ; d&eacute;&ccedil;u par l'absence de juste part obligatoire des g&eacute;n&eacute;rateurs de trafic ; salue le calendrier d'&eacute;limination des HRS",
+    sh_gsma: "Salue la dur&eacute;e illimit&eacute;e du spectre et la r&eacute;duction de la charge r&eacute;glementaire ; pr&eacute;occup&eacute;e par le veto de la Commission sur les d&eacute;cisions nationales de spectre ; soutient la simplification des licences satellite",
+    sh_mvno: "Soutient fermement la r&eacute;gulation sym&eacute;trique et le d&eacute;groupage FTTH ; avertit que l'harmonisation maximale pourrait &eacute;liminer des protections nationales favorables aux consommateurs ; demande des garanties robustes d'acc&egrave;s de gros",
+    sh_dt: "Salue la certitude d'investissement des licences de spectre longues ; pr&eacute;occup&eacute;e par les co&ucirc;ts de remplacement HRS et le calendrier serr&eacute; ; soutient le passeport unique pour r&eacute;duire la charge administrative",
+    sh_orange: "Soutient l'acc&eacute;l&eacute;ration de l'extinction du cuivre ; critique du m&eacute;canisme de conciliation volontaire jug&eacute; insuffisant ; demande des dispositions plus fortes de juste part ; salue la clart&eacute; sur le d&eacute;groupage fibre",
+    sh_cerre: "Think tank ind&eacute;pendant ; note la tension entre l'harmonisation et les sp&eacute;cificit&eacute;s des march&eacute;s nationaux ; recommande une mise en &oelig;uvre progressive pour &eacute;viter les chocs r&eacute;glementaires ; positif sur la direction de la r&eacute;forme du spectre",
+    sh_oxera: "Cabinet de conseil &eacute;conomique ; l'analyse estime un co&ucirc;t de 3,4 &agrave; 4,3 milliards d'euros par an pour l'&eacute;limination des HRS ; questionne si le d&eacute;lai de 3 ans est r&eacute;aliste pour le remplacement complet du r&eacute;seau",
+    tl_title: 'Chronologie l&eacute;gislative', tl_sub: 'Jalons cl&eacute;s de la Loi sur les r&eacute;seaux num&eacute;riques',
+    tl_d1_date: 'F&eacute;vrier 2024', tl_d1: "Livre blanc de la Commission : \"Comment ma&icirc;triser les besoins en infrastructures num&eacute;riques de l'Europe\"",
+    tl_d2_date: 'Juillet 2025', tl_d2: 'Appel &agrave; contributions sur la Loi sur les r&eacute;seaux num&eacute;riques clos',
+    tl_d3_date: '22 janvier 2026', tl_d3: 'R&eacute;solution du PE sur la souverainet&eacute; technologique (<a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a>)',
+    tl_d4_date: '21 janvier 2026', tl_d4: 'Proposition de la Commission : <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a> (DNA) + <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2026/0035/COM_COM(2026)0035_EN.pdf" target="_blank" class="doc-link">COM(2026) 35</a> (r&eacute;vision CCEE) + <a href="https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=SWD:2026:0014:FIN:EN:PDF" target="_blank" class="doc-link">SWD(2026) 14</a> (&eacute;valuation d\'impact)',
+    tl_d5_date: 'Mars 2026', tl_d5: 'Note du EPRS <a href="https://www.europarl.europa.eu/RegData/etudes/BRIE/2026/785672/EPRS_BRI(2026)785672_EN.pdf" target="_blank" class="doc-link">PE 785.672</a>',
+    tl_d6_date: 'Actuel', tl_d6: 'Examen en commission du PE (ITRE)',
+    footer_text: "Analyse approfondie de la Loi sur les r&eacute;seaux num&eacute;riques par <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistant politique de l'UE de <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Mars 2026",
+  },
+  it: {
+    header_title: 'Biblioteca di analisi di Brubru', header_subtitle: "Legge sulle reti digitali dell'UE", header_cta: 'Prova Brubru gratis',
+    hero_title: 'Legge sulle reti digitali: <span>Ricablare le telecomunicazioni europee</span>',
+    hero_subtitle: "La riforma pi&ugrave; ambiziosa della regolamentazione delle telecomunicazioni dell'UE in due decenni. Dalla riforma dello spettro allo spegnimento del rame, dall'autorizzazione satellitare a un passaporto unico di mercato: un regolamento per sostituire 27 quadri nazionali.",
+    meta_ref: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a>',
+    meta_proc: '2026/0013(COD)', meta_date: '21 gennaio 2026',
+    meta_train: '<a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-digital-networks-act-(dna)" target="_blank" class="doc-link">Treno legislativo</a>',
+    fig_parts: 'Parti del regolamento', fig_invest: 'Investimento in fibra necessario', fig_invest_num: '148 Mld&euro;', fig_copper: 'Scadenza spegnimento del rame', fig_passport: 'Da regolatori nazionali a passaporto unico', fig_passport_num: '27&rarr;1',
+    toc_title: 'Indice', toc_1: 'Perch&eacute; il DNA?', toc_2: 'Spegnimento del rame', toc_3: 'Rivoluzione dello spettro', toc_4: 'Autorizzazione satellitare', toc_5: 'Resilienza della rete', toc_6: 'Passaporto unico', toc_7: 'Regolazione del mercato', toc_8: 'Neutralit&agrave; della rete e Big Tech', toc_9: 'Protezione dei consumatori', toc_10: 'Governance',
+    s1_title: '1. Perch&eacute; il DNA?', s1_sub: "Il divario di connettivit&agrave; europeo e la necessit&agrave; di un mercato unico delle telecomunicazioni",
+    s1_frag_title: 'Frammentazione del CCEE', s1_frag_text: 'Il <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32018L1972" target="_blank" class="doc-link">Codice europeo delle comunicazioni elettroniche (Direttiva 2018/1972)</a> &egrave; stato recepito in 27 quadri nazionali diversi, con il recepimento completo completato solo nell\'agosto 2024. Questa frammentazione impedisce le economie di scala, scoraggia gli investimenti transfrontalieri e mantiene gli operatori europei di telecomunicazioni molto pi&ugrave; piccoli dei loro omologhi americani e asiatici. Il Rapporto Draghi sulla competitivit&agrave; dell\'UE ha identificato il consolidamento delle telecomunicazioni come priorit&agrave; strategica.',
+    s1_gap_title: "Il divario di connettivit&agrave; dell'UE",
+    th_metric: 'Indicatore', th_us: 'Stati Uniti', th_china: 'Cina',
+    s1_ftth: 'Copertura FTTH', s1_ftth_cn: 'N/D', s1_5gsa: 'Copertura 5G standalone', s1_5gsa_cn: 'N/D', s1_5gtakeup: 'Adozione piena del 5G',
+    s1_gap_text: "Nonostante un solido dispiegamento della fibra, l'adozione del 5G nell'UE rimane criticamente bassa. Gli obiettivi del Decennio digitale per il 2030 richiedono connettivit&agrave; gigabit per tutte le famiglie e copertura 5G in tutte le aree popolate, obiettivi che l'attuale quadro frammentato non pu&ograve; raggiungere.",
+    s2_title: '2. Spegnimento del rame', s2_sub: 'Migrazione obbligatoria dal rame alla fibra entro il 2035',
+    s2_text: "Il DNA stabilisce un quadro vincolante per la dismissione delle reti in rame ereditate. Gli operatori devono notificare l'autorit&agrave; nazionale di regolamentazione (ANR) e i richiedenti di accesso interessati almeno 36 mesi prima dello spegnimento. Deve essere disponibile un'infrastruttura alternativa in fibra o wireless al momento della dismissione. Spagna e Norvegia hanno gi&agrave; avviato programmi di eliminazione del rame. Lo spegnimento totale del rame deve essere completato entro il 2039 al pi&ugrave; tardi, con la scadenza principale fissata al 2035 per la maggior parte delle reti.",
+    pipe_notify: 'Notifica', pipe_notify_d: "L'operatore notifica l'ANR + richiedenti di accesso", pipe_migrate: 'Migrazione', pipe_migrate_d: 'Infrastruttura alternativa disponibile', pipe_deadline: 'Scadenza principale', pipe_deadline_d: 'Maggior parte delle reti dismesse', pipe_final: 'Scadenza finale', pipe_final_d: 'Tutto il rame dismesso',
+    s3_title: '3. Rivoluzione dello spettro', s3_sub: "Da licenze nazionali brevi ad autorizzazioni illimitate a livello UE",
+    s3_dur_title: 'Licenze di durata illimitata', s3_dur_text: "Il DNA sostituisce le licenze nazionali di spettro a breve termine con autorizzazioni di durata illimitata, soggette a un termine minimo di 40 anni. Ci&ograve; fornisce agli operatori la certezza di investimento necessaria per il dispiegamento di reti su larga scala. La Commissione acquisisce un potere di veto sulle decisioni nazionali in materia di spettro che potrebbero frammentare il mercato unico.",
+    s3_use_title: 'Principio di "usalo o condividilo"', s3_use_text: "I titolari di spettro che non effettuano il dispiegamento entro un termine ragionevole devono mettere lo spettro inutilizzato a disposizione di altri operatori. La Commissione adotter&agrave; tabelle di marcia vincolanti sullo spettro che stabiliscano calendari armonizzati per l'assegnazione e l'uso delle bande di frequenza chiave in tutti gli Stati membri.",
+    s4_title: '4. Autorizzazione satellitare', s4_sub: "Licenze centralizzate UE per le comunicazioni via satellite",
+    s4_text: "Il DNA crea un regime centralizzato di autorizzazione UE per gli operatori satellitari. Invece di ottenere licenze separate in ciascuno Stato membro, un operatore satellitare presenter&agrave; domanda alla Commissione, che gestisce tutte le fasi del processo di autorizzazione. L'inosservanza pu&ograve; comportare sanzioni fino al 5% del fatturato globale. Il Comitato per la politica dello spettro radioelettrico (RSPB) e l'Ufficio per le reti digitali (ODN) assisteranno la Commissione in questo processo.",
+    s5_title: '5. Resilienza della rete e cybersicurezza', s5_sub: "Eliminazione dei fornitori ad alto rischio e preparazione dell'Unione",
+    s5_hrs_title: 'Eliminazione dei fornitori ad alto rischio (HRS)', s5_hrs_text: "La Parte II del DNA formalizza l'eliminazione dei fornitori ad alto rischio dalle reti europee. Ci&ograve; riguarda principalmente le apparecchiature Huawei e ZTE, con un costo di sostituzione stimato tra 3,4 e 4,3 miliardi di euro all'anno. Gli operatori di reti mobili avranno un termine di 3 anni per rimuovere le apparecchiature HRS dalle loro reti core e di accesso radio. Le regole si allineano al quadro della Legge sulla cybersicurezza 2 (CSA2).",
+    s5_prep_title: "Piano di preparazione dell'Unione", s5_prep_text: "Il BEREC svilupper&agrave; un Piano di preparazione dell'Unione per le reti di comunicazioni elettroniche, coordinando le misure di resilienza tra gli Stati membri. Ci&ograve; include protocolli di risposta agli incidenti cyber, requisiti di diversificazione della catena di approvvigionamento e sistemi di comunicazione di emergenza alternativi.",
+    s6_title: '6. Passaporto unico', s6_sub: "Un'autorizzazione per operare in tutti i 27 Stati membri",
+    s6_text: "Il DNA sostituisce 27 regimi di autorizzazione nazionali separati con un'autorizzazione generale unica a livello UE, o \"passaporto unico\". Gli operatori si registreranno una sola volta presso l'Ufficio per le reti digitali (ODN), che mantiene una banca dati centrale di tutti i fornitori autorizzati. L'approccio segue un principio di lista massima: le condizioni connesse all'autorizzazione generale sono definite esaustivamente a livello UE, impedendo agli Stati membri di aggiungere requisiti nazionali supplementari.",
+    s7_title: '7. Regolazione del mercato', s7_sub: 'Regolazione PSM, accesso armonizzato UE e unbundling FTTH',
+    s7_smp_title: 'Regime di Significativo Potere di Mercato (PSM)', s7_smp_text: "Il DNA mantiene un approccio sequenziale per la regolazione PSM: le autorit&agrave; nazionali di regolamentazione prima valutano se un operatore detiene un significativo potere di mercato, poi impongono rimedi proporzionati. Il potere di veto della Commissione &egrave; ampliato per coprire non solo le definizioni di mercato proposte ma anche i rimedi proposti. Un nuovo prodotto di accesso armonizzato UE standardizzer&agrave; le condizioni di accesso all'ingrosso in tutti gli Stati membri.",
+    s7_ftth_title: 'Unbundling FTTH e regolazione simmetrica', s7_ftth_text: "Il regolamento introduce disposizioni per l'unbundling della fibra, consentendo agli operatori alternativi di accedere all'ultimo miglio delle reti in fibra fino all'abitazione (FTTH). La regolazione simmetrica pu&ograve; essere imposta a tutti gli operatori indipendentemente dal loro potere di mercato quando giustificata da situazioni specifiche di collo di bottiglia, come l'accesso al cablaggio interno degli edifici o ai cavidotti.",
+    s8_title: '8. Neutralit&agrave; della rete e Big Tech', s8_sub: 'Internet aperto preservato, network slicing abilitato, conciliazione volontaria per i generatori di traffico',
+    s8_nn_title: 'Neutralit&agrave; della rete mantenuta', s8_nn_text: 'Il DNA preserva i principi fondamentali del <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32015R2120" target="_blank" class="doc-link">Regolamento sull\'Internet aperto (2015/2120)</a>. Tutto il traffico internet continua ad essere trattato in modo uguale, senza prioritizzazione a pagamento per i servizi di accesso a internet per i consumatori. Il network slicing &egrave; esplicitamente consentito per i servizi specializzati B2B, permettendo agli operatori di offrire livelli garantiti di qualit&agrave; del servizio per le applicazioni aziendali.',
+    s8_fair_title: 'Generatori di traffico: conciliazione volontaria', s8_fair_text: "Il DNA NON introduce un contributo obbligatorio di \"equa quota\" dai grandi generatori di traffico (come le piattaforme di streaming). Crea invece un meccanismo di conciliazione volontaria attraverso il quale gli operatori di telecomunicazioni e i fornitori di contenuti possono negoziare accordi commerciali sulla gestione del traffico e gli investimenti in infrastrutture. Ci&ograve; rappresenta un compromesso dopo un intenso lobbying da entrambe le parti.",
+    s9_title: '9. Protezione dei consumatori', s9_sub: "Armonizzazione massima, misure antifrode e accesso di emergenza modernizzato",
+    s9_harm_title: 'Armonizzazione massima', s9_harm_text: "A differenza della direttiva CCEE, che consentiva agli Stati membri di mantenere standard di protezione dei consumatori pi&ugrave; elevati, il DNA adotta un approccio di armonizzazione massima. Ci&ograve; significa che i diritti e gli obblighi dei consumatori sono definiti a livello UE e gli Stati membri non possono derogarvi. Le misure antifrode sono centralizzate tramite l'ODN, includendo una banca dati condivisa dei numeri e dei modelli di chiamata fraudolenti noti.",
+    s9_emerg_title: "Accesso di emergenza modernizzato", s9_emerg_text: "L'accesso ai servizi di emergenza &egrave; esteso ai servizi di comunicazione basati su internet come WhatsApp, garantendo che le chiamate di emergenza possano essere effettuate tramite servizi di comunicazione interpersonale indipendenti dal numero. L'obbligo di servizio universale (OSU) &egrave; semplificato e adattato all'era della fibra, eliminando i riferimenti obsoleti alle cabine telefoniche pubbliche e agli elenchi stampati.",
+    s10_title: '10. Governance', s10_sub: 'Nuove istituzioni: RSPB, ODN e un mandato ampliato del BEREC',
+    th_body: 'Organismo', th_replaces: 'Sostituisce', th_function: 'Funzione',
+    s10_rspb_rep: 'RSPG (Gruppo per la politica dello spettro radioelettrico)', s10_rspb_fn: 'Organo consultivo sulla politica dello spettro, elevato a status formale di Comitato con raccomandazioni vincolanti',
+    s10_odn_rep: 'Ufficio del BEREC', s10_odn_fn: "Banca dati centrale per il passaporto unico, supporto all'autorizzazione satellitare, coordinamento antifrode, raccolta dati di mercato",
+    s10_berec_rep: 'BEREC (ampliato)', s10_berec_fn: "Mandato ampliato che include coordinamento della cybersicurezza, Piano di preparazione dell'Unione e ruolo rafforzato di analisi di mercato PSM",
+    ep_title: 'Posizione precedente del PE', ep_sub: 'Risoluzione <a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a> sulla sovranit&agrave; tecnologica (22 gennaio 2026)',
+    ep_text: "Il Parlamento europeo ha adottato una risoluzione sull'infrastruttura digitale e la sovranit&agrave; tecnologica stabilendo le sue priorit&agrave; prima della proposta DNA. I paragrafi chiave hanno chiesto uno spegnimento progressivo del rame con adeguato supporto alla transizione, maggiori incentivi agli investimenti nel 5G e 6G, assegnazione armonizzata dello spettro nell'UE, licenze comuni UE per le comunicazioni via satellite e una cassetta degli attrezzi vincolante per i fornitori ad alto rischio che renda giuridicamente vincolante la cassetta degli attrezzi 5G volontaria. La risoluzione ha inoltre esortato la Commissione a evitare un meccanismo obbligatorio di \"equa quota\" per i generatori di traffico.",
+    sh_title: 'Reazioni delle parti interessate', sh_sub: 'Posizioni dell\'industria e degli esperti sulla proposta DNA',
+    th_stakeholder: 'Parte interessata', th_position: 'Posizione',
+    sh_ftth: "Ampiamente favorevole; accoglie il quadro di spegnimento del rame e gli incentivi all'investimento in fibra; mette in guardia contro l'indebolimento degli obblighi di unbundling",
+    sh_etno: "Sostiene il passaporto unico e la riforma dello spettro; deluso dall'assenza di un'equa quota obbligatoria dai generatori di traffico; accoglie il calendario di eliminazione degli HRS",
+    sh_gsma: "Accoglie la durata illimitata dello spettro e la riduzione dell'onere regolamentare; preoccupata per il veto della Commissione sulle decisioni nazionali di spettro; sostiene la semplificazione delle licenze satellite",
+    sh_mvno: "Sostiene fermamente la regolazione simmetrica e l'unbundling FTTH; avverte che l'armonizzazione massima potrebbe eliminare protezioni nazionali favorevoli ai consumatori; chiede solide garanzie di accesso all'ingrosso",
+    sh_dt: "Accoglie la certezza di investimento delle licenze di spettro lunghe; preoccupata per i costi di sostituzione HRS e i tempi stretti; sostiene il passaporto unico per ridurre l'onere amministrativo",
+    sh_orange: "Sostiene l'accelerazione dello spegnimento del rame; critica il meccanismo di conciliazione volontaria giudicato insufficiente; chiede disposizioni pi&ugrave; forti sull'equa quota; accoglie la chiarezza sull'unbundling della fibra",
+    sh_cerre: "Think tank indipendente; nota la tensione tra armonizzazione e specificit&agrave; dei mercati nazionali; raccomanda un'attuazione graduale per evitare shock regolamentari; positivo sulla direzione della riforma dello spettro",
+    sh_oxera: "Societ&agrave; di consulenza economica; l'analisi stima un costo da 3,4 a 4,3 miliardi di euro all'anno per l'eliminazione degli HRS; mette in dubbio che il termine di 3 anni sia realistico per la sostituzione completa della rete",
+    tl_title: 'Cronologia legislativa', tl_sub: 'Tappe chiave della Legge sulle reti digitali',
+    tl_d1_date: 'Febbraio 2024', tl_d1: "Libro bianco della Commissione: \"Come padroneggiare le esigenze di infrastruttura digitale dell'Europa\"",
+    tl_d2_date: 'Luglio 2025', tl_d2: 'Invito a presentare contributi sulla Legge sulle reti digitali chiuso',
+    tl_d3_date: '22 gennaio 2026', tl_d3: 'Risoluzione del PE sulla sovranit&agrave; tecnologica (<a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a>)',
+    tl_d4_date: '21 gennaio 2026', tl_d4: 'Proposta della Commissione: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a> (DNA) + <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2026/0035/COM_COM(2026)0035_EN.pdf" target="_blank" class="doc-link">COM(2026) 35</a> (revisione CCEE) + <a href="https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=SWD:2026:0014:FIN:EN:PDF" target="_blank" class="doc-link">SWD(2026) 14</a> (valutazione d\'impatto)',
+    tl_d5_date: 'Marzo 2026', tl_d5: 'Nota dell\'EPRS <a href="https://www.europarl.europa.eu/RegData/etudes/BRIE/2026/785672/EPRS_BRI(2026)785672_EN.pdf" target="_blank" class="doc-link">PE 785.672</a>',
+    tl_d6_date: 'Attuale', tl_d6: 'Esame in commissione del PE (ITRE)',
+    footer_text: "Analisi approfondita della Legge sulle reti digitali di <a href='https://brubru.beresol.eu'>Brubru</a>, l'assistente per le politiche UE di <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Marzo 2026",
+  },
+  nl: {
+    header_title: 'Brubru Analysebibliotheek', header_subtitle: 'EU-wet op de digitale netwerken', header_cta: 'Probeer Brubru gratis',
+    hero_title: 'Wet op de digitale netwerken: <span>De Europese telecom herbekabelen</span>',
+    hero_subtitle: 'De meest ambitieuze hervorming van de EU-telecomregulering in twee decennia. Van spectrumhervorming tot koperuitschakeling, van satellietvergunningen tot een enkel marktpaspoort: &eacute;&eacute;n verordening ter vervanging van 27 nationale kaders.',
+    meta_ref: '<a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a>',
+    meta_proc: '2026/0013(COD)', meta_date: '21 januari 2026',
+    meta_train: '<a href="https://www.europarl.europa.eu/legislative-train/theme-a-new-plan-for-europe-s-sustainable-prosperity-and-competitiveness/file-digital-networks-act-(dna)" target="_blank" class="doc-link">Wetgevingstrein</a>',
+    fig_parts: 'Delen van de verordening', fig_invest: 'Glasvezelinvestering nodig', fig_invest_num: '&euro;148 mld', fig_copper: 'Deadline koperuitschakeling', fig_passport: 'Van nationale toezichthouders naar enkel paspoort', fig_passport_num: '27&rarr;1',
+    toc_title: 'Inhoud', toc_1: 'Waarom de DNA?', toc_2: 'Koperuitschakeling', toc_3: 'Spectrumrevolutie', toc_4: 'Satellietvergunning', toc_5: 'Netwerkweerbaarheid', toc_6: 'Enkel paspoort', toc_7: 'Marktregulering', toc_8: 'Netneutraliteit en Big Tech', toc_9: 'Consumentenbescherming', toc_10: 'Bestuur',
+    s1_title: '1. Waarom de DNA?', s1_sub: 'Het Europese connectiviteitsgat en de noodzaak van een interne telecommarkt',
+    s1_frag_title: 'EECC-fragmentatie', s1_frag_text: 'Het <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32018L1972" target="_blank" class="doc-link">Europees wetboek voor elektronische communicatie (Richtlijn 2018/1972)</a> werd omgezet in 27 verschillende nationale kaders, met volledige omzetting pas in augustus 2024. Deze fragmentatie verhindert schaalvoordelen, ontmoedigt grensoverschrijdende investeringen en houdt Europese telecomoperatoren veel kleiner dan hun Amerikaanse en Aziatische tegenhangers. Het Draghi-rapport over het EU-concurrentievermogen identificeerde telecomconsolidatie als strategische prioriteit.',
+    s1_gap_title: 'Het EU-connectiviteitsgat',
+    th_metric: 'Indicator', th_us: 'Verenigde Staten', th_china: 'China',
+    s1_ftth: 'FTTH-dekking', s1_ftth_cn: 'N/B', s1_5gsa: '5G standalone-dekking', s1_5gsa_cn: 'N/B', s1_5gtakeup: 'Volledige 5G-adoptie',
+    s1_gap_text: 'Ondanks een sterke glasvezeluitrol blijft de 5G-adoptie in de EU kritisch laag. De doelstellingen van het Digitaal Decennium voor 2030 vereisen gigabitconnectiviteit voor alle huishoudens en 5G-dekking in alle bewoonde gebieden, doelen die het huidige gefragmenteerde kader niet kan bereiken.',
+    s2_title: '2. Koperuitschakeling', s2_sub: 'Verplichte migratie van koper naar glasvezel tegen 2035',
+    s2_text: 'De DNA stelt een bindend kader vast voor de ontmanteling van verouderde kopernetwerken. Operatoren moeten de nationale regelgevende instantie (NRI) en getroffen toegangszoekers ten minste 36 maanden voor de uitschakeling op de hoogte brengen. Alternatieve glasvezel- of draadloze infrastructuur moet beschikbaar zijn op het moment van ontmanteling. Spanje en Noorwegen zijn al begonnen met programma\'s voor de uitfasering van koper. De volledige koperuitschakeling moet uiterlijk in 2039 zijn voltooid, met de primaire deadline vastgesteld op 2035 voor de meeste netwerken.',
+    pipe_notify: 'Kennisgeving', pipe_notify_d: 'Operator informeert NRI + toegangszoekers', pipe_migrate: 'Migratie', pipe_migrate_d: 'Alternatieve infrastructuur beschikbaar', pipe_deadline: 'Primaire deadline', pipe_deadline_d: 'Meeste netwerken ontmanteld', pipe_final: 'Finale deadline', pipe_final_d: 'Al het koper ontmanteld',
+    s3_title: '3. Spectrumrevolutie', s3_sub: 'Van korte nationale licenties naar onbeperkte EU-brede vergunningen',
+    s3_dur_title: 'Licenties van onbeperkte duur', s3_dur_text: 'De DNA vervangt kortstondige nationale spectrumlicenties door vergunningen van onbeperkte duur, met een minimumtermijn van 40 jaar. Dit geeft operatoren de investeringszekerheid die nodig is voor grootschalige netwerkuitrol. De Commissie krijgt een vetorecht over nationale spectrumbeslissingen die de interne markt zouden kunnen fragmenteren.',
+    s3_use_title: '"Gebruik het of deel het"-principe', s3_use_text: 'Spectrumhouders die niet binnen een redelijke termijn uitrollen, moeten ongebruikt spectrum beschikbaar stellen aan andere operatoren. De Commissie zal bindende spectrumroutekaarten vaststellen met geharmoniseerde tijdschema\'s voor de toewijzing en het gebruik van belangrijke frequentiebanden in alle lidstaten.',
+    s4_title: '4. Satellietvergunning', s4_sub: 'Gecentraliseerde EU-vergunningen voor satellietcommunicatie',
+    s4_text: 'De DNA cre&euml;ert een gecentraliseerd EU-vergunningenstelsel voor satellietoperatoren. In plaats van afzonderlijke vergunningen in elke lidstaat aan te vragen, dient een satellietoperator een aanvraag in bij de Commissie, die alle fasen van het vergunningsproces beheert. Niet-naleving kan leiden tot boetes tot 5% van de wereldwijde omzet. Het Radio Spectrum Policy Board (RSPB) en het Office for Digital Networks (ODN) ondersteunen de Commissie in dit proces.',
+    s5_title: '5. Netwerkweerbaarheid en cyberveiligheid', s5_sub: 'Uitfasering van leveranciers met een hoog risico en Unieparaatheid',
+    s5_hrs_title: 'Uitfasering van leveranciers met een hoog risico (HRS)', s5_hrs_text: 'Deel II van de DNA formaliseert de uitfasering van leveranciers met een hoog risico uit Europese netwerken. Dit richt zich voornamelijk op Huawei- en ZTE-apparatuur, met geschatte vervangingskosten van 3,4 tot 4,3 miljard euro per jaar. Mobiele-netwerkoperatoren hebben een termijn van 3 jaar om HRS-apparatuur uit hun kern- en radiotoegangsnetwerken te verwijderen. De regels sluiten aan bij het kader van de Cyberbeveiligingswet 2 (CSA2).',
+    s5_prep_title: 'Paraatheidsplan van de Unie', s5_prep_text: 'BEREC zal een Paraatheidsplan van de Unie voor elektronische-communicatienetwerken ontwikkelen, dat weerbaarheidsmaatregelen tussen lidstaten co&ouml;rdineert. Dit omvat protocollen voor cyberincidentrespons, vereisten voor diversificatie van de toeleveringsketen en noodcommunicatieterugvalsystemen.',
+    s6_title: '6. Enkel paspoort', s6_sub: 'E&eacute;n vergunning om in alle 27 lidstaten te opereren',
+    s6_text: 'De DNA vervangt 27 afzonderlijke nationale vergunningenstelsels door &eacute;&eacute;n enkele EU-brede algemene vergunning, of "enkel paspoort". Operatoren registreren zich eenmalig bij het Office for Digital Networks (ODN), dat een centrale databank van alle vergunninghoudende aanbieders onderhoudt. De aanpak volgt een maximumlijstprincipe: de voorwaarden verbonden aan de algemene vergunning worden uitputtend op EU-niveau gedefinieerd, waardoor lidstaten geen aanvullende nationale eisen kunnen stellen.',
+    s7_title: '7. Marktregulering', s7_sub: 'AMM-regulering, EU-geharmoniseerde toegang en FTTH-ontbundeling',
+    s7_smp_title: 'Regime van Aanmerkelijke Marktmacht (AMM)', s7_smp_text: 'De DNA handhaaft een sequenti&euml;le benadering van AMM-regulering: nationale regelgevende instanties beoordelen eerst of een operator aanmerkelijke marktmacht heeft en leggen vervolgens evenredige remedies op. Het vetorecht van de Commissie wordt uitgebreid tot niet alleen voorgestelde marktdefinities maar ook voorgestelde remedies. Een nieuw EU-geharmoniseerd toegangsproduct zal de wholesaletoegangsvoorwaarden in alle lidstaten standaardiseren.',
+    s7_ftth_title: 'FTTH-ontbundeling en symmetrische regulering', s7_ftth_text: 'De verordening introduceert bepalingen voor glasvezelontbundeling, waardoor alternatieve operatoren toegang krijgen tot het laatste stuk van fiber-to-the-home (FTTH)-netwerken. Symmetrische regulering kan aan alle operatoren worden opgelegd, ongeacht hun marktmacht, wanneer specifieke knelpuntsituaties dit rechtvaardigen, zoals toegang tot bedrading in gebouwen of buizen.',
+    s8_title: '8. Netneutraliteit en Big Tech', s8_sub: 'Open internet behouden, network slicing mogelijk, vrijwillige bemiddeling voor verkeersgeneratoren',
+    s8_nn_title: 'Netneutraliteit gehandhaafd', s8_nn_text: 'De DNA behoudt de kernprincipes van de <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32015R2120" target="_blank" class="doc-link">Verordening inzake open internet (2015/2120)</a>. Al het internetverkeer wordt nog steeds gelijk behandeld, zonder betaalde prioritering voor consumenteninternettoegansdiensten. Network slicing is expliciet toegestaan voor gespecialiseerde B2B-diensten, waardoor operatoren gegarandeerde kwaliteitsniveaus kunnen bieden voor zakelijke toepassingen.',
+    s8_fair_title: 'Verkeersgeneratoren: vrijwillige bemiddeling', s8_fair_text: 'De DNA voert GEEN verplichte "eerlijk aandeel"-bijdrage in van grote verkeersgeneratoren (zoals streamingplatforms). In plaats daarvan cre&euml;ert het een vrijwillig bemiddelingsmechanisme waardoor telecomoperatoren en contentaanbieders commerci&euml;le overeenkomsten kunnen onderhandelen over verkeersbeheer en infrastructuurinvesteringen. Dit vertegenwoordigt een compromis na intensief lobbyen van beide kanten.',
+    s9_title: '9. Consumentenbescherming', s9_sub: 'Maximale harmonisatie, antifraudemaatregelen en gemoderniseerde noodtoegang',
+    s9_harm_title: 'Maximale harmonisatie', s9_harm_text: 'In tegenstelling tot de EECC-richtlijn, die lidstaten toestond hogere consumentenbeschermingsnormen te handhaven, kiest de DNA voor een aanpak van maximale harmonisatie. Dit betekent dat consumentenrechten en -verplichtingen op EU-niveau worden gedefinieerd en lidstaten er niet van mogen afwijken. Antifraudemaatregelen worden gecentraliseerd via het ODN, inclusief een gedeelde databank van bekende frauduleuze nummers en belpatronen.',
+    s9_emerg_title: 'Gemoderniseerde noodtoegang', s9_emerg_text: 'Toegang tot nooddiensten wordt uitgebreid tot op internet gebaseerde communicatiediensten zoals WhatsApp, zodat noodoproepen kunnen worden gedaan via nummeronafhankelijke interpersoonlijke communicatiediensten. De universele dienstverplichting (USO) wordt gestroomlijnd en aangepast aan het glasvezeltijdperk, met verwijdering van verouderde verwijzingen naar openbare telefoontoestellen en gedrukte gidsen.',
+    s10_title: '10. Bestuur', s10_sub: 'Nieuwe organen: RSPB, ODN en een verbreed BEREC-mandaat',
+    th_body: 'Orgaan', th_replaces: 'Vervangt', th_function: 'Functie',
+    s10_rspb_rep: 'RSPG (Groep voor het radiospectrumbeleid)', s10_rspb_fn: 'Adviesorgaan inzake spectrumbeleid, verheven tot formele Raadstatus met bindende aanbevelingen',
+    s10_odn_rep: 'Bureau van BEREC', s10_odn_fn: 'Centrale databank voor het enkel paspoort, ondersteuning satellietvergunningen, antifraudeco&ouml;rdinatie, marktgegevensverzameling',
+    s10_berec_rep: 'BEREC (uitgebreid)', s10_berec_fn: 'Verbreed mandaat inclusief cyberveiligheidsco&ouml;rdinatie, Paraatheidsplan van de Unie en versterkte AMM-marktanalyserol',
+    ep_title: 'Eerdere positie EP', ep_sub: 'Resolutie <a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a> over technologische soevereiniteit (22 januari 2026)',
+    ep_text: 'Het Europees Parlement nam een resolutie aan over digitale infrastructuur en technologische soevereiniteit, waarin het zijn prioriteiten vaststelde v&oacute;&oacute;r het DNA-voorstel. Belangrijke paragrafen riepen op tot een geleidelijke koperuitschakeling met adequate transitieondersteuning, meer investeerngsimulansen voor 5G en 6G, geharmoniseerde spectrumtoewijzing in de EU, gemeenschappelijke EU-licenties voor satellietcommunicatie, en een bindende toolbox voor leveranciers met een hoog risico die de vrijwillige 5G-toolbox juridisch afdwingbaar maakt. De resolutie drong er ook bij de Commissie op aan een verplicht "eerlijk aandeel"-mechanisme voor verkeersgeneratoren te vermijden.',
+    sh_title: 'Reacties van belanghebbenden', sh_sub: 'Standpunten van industrie en experts over het DNA-voorstel',
+    th_stakeholder: 'Belanghebbende', th_position: 'Standpunt',
+    sh_ftth: 'Breed ondersteunend; verwelkomt het kader voor koperuitschakeling en stimulansen voor glasvezelinvestering; waarschuwt tegen verzwakking van ontbundelingsverplichtingen',
+    sh_etno: 'Steunt het enkel paspoort en de spectrumhervorming; teleurgesteld over het ontbreken van een verplicht eerlijk aandeel van verkeersgeneratoren; verwelkomt het tijdschema voor HRS-uitfasering',
+    sh_gsma: 'Verwelkomt de onbeperkte spectrumduur en verminderde regeldruk; bezorgd over het Commissieveto op nationale spectrumbeslissingen; steunt vereenvoudiging satellietvergunningen',
+    sh_mvno: 'Steunt symmetrische regulering en FTTH-ontbundeling krachtig; waarschuwt dat maximale harmonisatie gunstige nationale consumentenbeschermingen kan elimineren; vraagt om robuuste wholesaletoegangsgaranties',
+    sh_dt: 'Verwelkomt investeringszekerheid van lange spectrumlicenties; bezorgd over HRS-vervangingskosten en krappe tijdlijn; steunt enkel paspoort om administratieve lasten te verminderen',
+    sh_orange: 'Steunt versnelling van koperuitschakeling; kritisch over vrijwillig bemiddelingsmechanisme als ontoereikend; vraagt om sterkere eerlijk-aandeelbepalingen; verwelkomt duidelijkheid over glasvezelontbundeling',
+    sh_cerre: 'Onafhankelijke denktank; merkt spanning op tussen harmonisatie en nationale marktspecificiteiten; beveelt gefaseerde implementatie aan om regelgevingsschokken te voorkomen; positief over richting spectrumhervorming',
+    sh_oxera: 'Economisch adviesbureau; analyse schat kosten van 3,4 tot 4,3 miljard euro per jaar voor HRS-verwijdering; betwijfelt of de 3-jarige termijn realistisch is voor volledige netwerkvervanging',
+    tl_title: 'Wetgevingstijdlijn', tl_sub: 'Belangrijke mijlpalen van de Wet op de digitale netwerken',
+    tl_d1_date: 'Februari 2024', tl_d1: 'Witboek van de Commissie: "Hoe de digitale-infrastructuurbehoeften van Europa beheersen"',
+    tl_d2_date: 'Juli 2025', tl_d2: 'Raadpleging over de Wet op de digitale netwerken gesloten',
+    tl_d3_date: '22 januari 2026', tl_d3: 'EP-resolutie over technologische soevereiniteit (<a href="https://www.europarl.europa.eu/doceo/document/TA-10-2026-0022_EN.html" target="_blank" class="doc-link">P10_TA(2026)0022</a>)',
+    tl_d4_date: '21 januari 2026', tl_d4: 'Commissievoorstel: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=COM%3A2026%3A16%3AFIN" target="_blank" class="doc-link">COM(2026) 16</a> (DNA) + <a href="https://www.europarl.europa.eu/RegData/docs_autres_institutions/commission_europeenne/com/2026/0035/COM_COM(2026)0035_EN.pdf" target="_blank" class="doc-link">COM(2026) 35</a> (EECC-herziening) + <a href="https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=SWD:2026:0014:FIN:EN:PDF" target="_blank" class="doc-link">SWD(2026) 14</a> (effectbeoordeling)',
+    tl_d5_date: 'Maart 2026', tl_d5: 'EPRS-briefing <a href="https://www.europarl.europa.eu/RegData/etudes/BRIE/2026/785672/EPRS_BRI(2026)785672_EN.pdf" target="_blank" class="doc-link">PE 785.672</a>',
+    tl_d6_date: 'Huidig', tl_d6: 'EP-commissieonderzoek (ITRE)',
+    footer_text: "Diepgaande analyse van de Wet op de digitale netwerken door <a href='https://brubru.beresol.eu'>Brubru</a>, de AI-beleidsassistent van <a href='https://beresol.eu'>Beresol</a>.<br>Victor Sol&eacute; &middot; Maart 2026",
+  }
+};
+
+function setLang(lang) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  if (lang === 'en') {
+    location.reload();
+    return;
+  }
+  const t = translations[lang];
+  if (!t) return;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.innerHTML = t[key];
+  });
+}
+</script>
+</body>
+</html>

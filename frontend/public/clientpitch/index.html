@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brubru - Client Pitch | Beresol BV</title>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('fonts/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+
+    :root {
+      --color-blue: #0693e3;
+      --color-purple: #9b51e0;
+      --color-green: #059669;
+      --color-amber: #d97706;
+      --color-red: #dc2626;
+      --color-silver: #9ca3af;
+      --color-text: #111827;
+      --color-text-secondary: #6b7280;
+      --color-text-muted: #9ca3af;
+      --color-border: #e5e7eb;
+      --color-bg: #ffffff;
+      --color-bg-alt: #f9fafb;
+      --font-family: 'Adobe Caslon Pro', Georgia, 'Times New Roman', serif;
+      --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-family);
+      color: var(--color-text);
+      background: var(--color-bg-alt);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ============================================ HEADER */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+    }
+    .site-header__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .site-header__logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--color-text);
+    }
+    .site-header__logo img { height: 36px; }
+    .site-header__title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .site-header__subtitle {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+    }
+
+    /* ============================================ LANGUAGE SWITCH */
+    .lang-switch {
+      display: flex;
+      gap: 0.25rem;
+      background: var(--color-bg-alt);
+      border-radius: var(--radius-md);
+      padding: 0.25rem;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: none;
+      padding: 0.4rem 0.7rem;
+      font-family: var(--font-family);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+    .lang-switch button:hover { color: var(--color-blue); }
+    .lang-switch button.active {
+      background: var(--color-bg);
+      color: var(--color-blue);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ============================================ NAV TABS */
+    .nav-tabs {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-bg);
+    }
+    .nav-tab {
+      background: transparent;
+      border: none;
+      padding: 1rem 1.25rem;
+      font-family: var(--font-family);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-tab:hover { color: var(--color-blue); }
+    .nav-tab--active {
+      color: var(--color-blue);
+      border-bottom-color: var(--color-blue);
+    }
+    .nav-tab .mdi { font-size: 1.2rem; }
+
+    /* ============================================ MAIN */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .section { display: none; }
+    .section--active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header { margin-bottom: 2.5rem; }
+    .section-header__title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+    .section-header__subtitle {
+      font-size: 1.15rem;
+      color: var(--color-text-secondary);
+      max-width: 800px;
+    }
+
+    /* ============================================ CARDS & GRID */
+    .grid { display: grid; gap: 1.5rem; }
+    .grid--2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .grid--3 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+    .card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+    .card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .card__icon--blue   { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .card__icon--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .card__icon--green  { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .card__icon--amber  { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .card__icon--red    { background: rgba(220,38,38,0.1); color: var(--color-red); }
+    .card__icon--silver { background: rgba(156,163,175,0.2); color: var(--color-silver); }
+
+    .card__title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .card__meta {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .card__text {
+      font-size: 0.98rem;
+      color: var(--color-text-secondary);
+      line-height: 1.65;
+    }
+    .card__text ul { margin: 0.5rem 0 0 1.25rem; padding: 0; }
+    .card__text li { margin-bottom: 0.25rem; }
+    .card__text strong { color: var(--color-text); }
+
+    /* ============================================ MATRIX TABLE */
+    .matrix-wrapper {
+      overflow-x: auto;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      margin-top: 1.5rem;
+    }
+    .matrix {
+      width: 100%;
+      min-width: 920px;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    .matrix th, .matrix td {
+      padding: 1rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .matrix th {
+      background: var(--color-bg-alt);
+      font-weight: 700;
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+    .matrix td:first-child {
+      font-weight: 600;
+      background: var(--color-bg-alt);
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+    .matrix tr:last-child th,
+    .matrix tr:last-child td { border-bottom: none; }
+
+    /* ============================================ HERO */
+    .hero {
+      background: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+      color: white;
+      padding: 4rem 2rem;
+      border-radius: var(--radius-xl);
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    .hero__title {
+      font-size: 2.75rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .hero__text {
+      font-size: 1.2rem;
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      opacity: 0.95;
+    }
+    .hero__ctas {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.75rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-family);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .btn--white {
+      background: white;
+      color: var(--color-blue);
+    }
+    .btn--white:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn--ghost {
+      background: transparent;
+      color: white;
+      border-color: rgba(255,255,255,0.6);
+    }
+    .btn--ghost:hover { background: rgba(255,255,255,0.1); }
+    .btn--primary {
+      background: var(--color-blue);
+      color: white;
+    }
+    .btn--primary:hover { background: #0581c9; transform: translateY(-1px); }
+
+    /* ============================================ PAIN POINTS */
+    .pain-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-top: 1.5rem;
+    }
+    .pain-list li {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-red);
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-left-color 0.3s ease, border-left-width 0.3s ease;
+    }
+    .pain-list li::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, #dc2626, #9b51e0, #0693e3);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 2px;
+    }
+    .pain-list li:hover {
+      transform: translateY(-4px) translateX(2px);
+      box-shadow: 0 12px 24px -8px rgba(220,38,38,0.2), 0 6px 12px -4px rgba(155,81,224,0.12);
+      border-left-color: transparent;
+    }
+    .pain-list li:hover::after {
+      transform: scaleY(1);
+    }
+    .pain-list li strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .pain-list li:hover strong {
+      color: var(--color-blue);
+      transform: translateX(3px);
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .stat-row--four {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .stat-row--two {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) {
+      .stat-row--four { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .stat-row--four, .stat-row--two { grid-template-columns: 1fr; }
+    }
+
+    /* Two-block layout: pain vs solution */
+    .stats-block {
+      margin: 1.5rem 0 2rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--color-border);
+    }
+    .stats-block--pain {
+      background: linear-gradient(180deg, rgba(220,38,38,0.03) 0%, rgba(220,38,38,0) 100%);
+      border-color: rgba(220,38,38,0.15);
+    }
+    .stats-block--solution {
+      background: linear-gradient(180deg, rgba(5,150,105,0.03) 0%, rgba(5,150,105,0) 100%);
+      border-color: rgba(5,150,105,0.15);
+    }
+    .stats-block__header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .stats-block__badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.75rem;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .stats-block__badge--pain {
+      background: rgba(220,38,38,0.1);
+      color: var(--color-red);
+    }
+    .stats-block__badge--solution {
+      background: rgba(5,150,105,0.1);
+      color: var(--color-green);
+    }
+    .stats-block__title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    /* Pain and solution card accent variants */
+    .stat--pain .stat__number { color: var(--color-red); }
+    .stat--pain::before {
+      background: linear-gradient(135deg, #dc2626, #f97316, #d97706);
+    }
+    .stat--pain:hover {
+      box-shadow: 0 15px 30px -10px rgba(220,38,38,0.25), 0 8px 15px -5px rgba(249,115,22,0.15);
+    }
+    .stat--pain:hover .stat__number {
+      background: linear-gradient(135deg, #dc2626, #f97316, #d97706);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 12px rgba(220,38,38,0.3);
+    }
+    .stat--solution .stat__number { color: var(--color-green); }
+    .stat--solution::before {
+      background: linear-gradient(135deg, #059669, #0693e3, #9b51e0);
+    }
+    .stat--solution:hover {
+      box-shadow: 0 15px 30px -10px rgba(5,150,105,0.25), 0 8px 15px -5px rgba(6,147,227,0.15);
+    }
+    .stat--solution:hover .stat__number {
+      background: linear-gradient(135deg, #059669, #0693e3, #9b51e0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 12px rgba(5,150,105,0.3);
+    }
+    .stat {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+    .stat::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 2px;
+      background: linear-gradient(135deg, #0693e3, #9b51e0, #059669, #d97706);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .stat:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 15px 30px -10px rgba(6,147,227,0.25), 0 8px 15px -5px rgba(155,81,224,0.15);
+      border-color: transparent;
+    }
+    .stat:hover::before { opacity: 1; }
+    .stat__number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-blue);
+      line-height: 1;
+      display: inline-block;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.35s ease, text-shadow 0.35s ease;
+    }
+    .stat:hover .stat__number {
+      transform: scale(1.15);
+      background: linear-gradient(135deg, #0693e3, #9b51e0, #059669);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 12px rgba(6,147,227,0.3);
+    }
+    .stat__label {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================ PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .price-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 1.25rem;
+      text-align: center;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .price-card--featured {
+      border-color: var(--color-blue);
+      border-width: 2px;
+      box-shadow: var(--shadow-md);
+    }
+    .price-card--featured::before {
+      content: "Most popular";
+      position: absolute;
+      top: -0.7rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-blue);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.75rem;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .price-card__name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .price-card__price {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--color-blue);
+    }
+    .price-card__per {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 1rem;
+    }
+    .price-card__features {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    .price-card__features li {
+      padding: 0.4rem 0;
+      color: var(--color-text-secondary);
+      position: relative;
+      padding-left: 1.5rem;
+    }
+    .price-card__features li::before {
+      content: "\F012C";
+      font-family: "Material Design Icons";
+      position: absolute;
+      left: 0;
+      color: var(--color-green);
+      font-weight: 700;
+    }
+
+    /* ============================================ FOOTER */
+    .footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--color-border);
+      margin-top: 3rem;
+    }
+    .footer a { color: var(--color-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ============================================ INVESTOR-PLAN SHARED STYLES */
+    :root {
+      --color-primary: var(--color-blue);
+      --color-accent-blue: var(--color-blue);
+      --color-accent-purple: var(--color-purple);
+      --color-accent-green: var(--color-green);
+      --color-accent-gold: var(--color-amber);
+      --color-accent-red: var(--color-red);
+      --color-accent-silver: var(--color-silver);
+      --color-accent-orange: #f97316;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-900: #111827;
+      --color-text-secondary: #6b7280;
+      --color-text-muted: #9ca3af;
+      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+      --radius-sm: 0.25rem;
+      --radius-xl: 1rem;
+      --gradient-primary: linear-gradient(135deg, #0693e3 0%, #9b51e0 100%);
+    }
+
+    /* Metric cards */
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+    .metric-grid--3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .metric-card { background: white; border-radius: var(--radius-xl); padding: 1.5rem; box-shadow: var(--shadow-md); position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .metric-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+    .metric-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+    .metric-card--blue::before { background: var(--color-blue); }
+    .metric-card--green::before { background: var(--color-green); }
+    .metric-card--purple::before { background: var(--color-purple); }
+    .metric-card--gold::before { background: var(--color-amber); }
+    .metric-card__icon { width: 48px; height: 48px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .metric-card--blue .metric-card__icon { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .metric-card--green .metric-card__icon { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .metric-card--purple .metric-card__icon { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+    .metric-card--gold .metric-card__icon { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .metric-card__label { font-size: 0.8rem; color: var(--color-text-secondary); margin-bottom: 0.25rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    .metric-card__value { font-size: 2rem; font-weight: 700; line-height: 1.1; }
+    .metric-card__detail { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem; }
+
+    /* Grid-2 and Grid-3 from investor plan */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    /* Card title (investor plan style) */
+    .card__title { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .card__title .mdi { color: var(--color-blue); }
+
+    /* Data table */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th, .data-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--color-gray-100); }
+    .data-table th { font-size: 0.7rem; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; background: var(--color-gray-50); }
+    .data-table td { font-size: 0.85rem; }
+    .data-table tr:hover td { background: var(--color-gray-50); }
+
+    /* Badges */
+    .badge { display: inline-flex; align-items: center; padding: 0.2rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 600; }
+    .badge--green { background: rgba(5,150,105,0.1); color: var(--color-green); }
+    .badge--gold { background: rgba(217,119,6,0.1); color: var(--color-amber); }
+    .badge--blue { background: rgba(6,147,227,0.1); color: var(--color-blue); }
+    .badge--purple { background: rgba(155,81,224,0.1); color: var(--color-purple); }
+
+    /* Product cards */
+    .product-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width: 1100px) { .product-cards { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px) { .product-cards { grid-template-columns: repeat(2, 1fr); } }
+    .product-card { background: white; border-radius: var(--radius-xl); padding: 1.25rem; box-shadow: var(--shadow-md); border: 2px solid transparent; cursor: pointer; transition: all 0.25s; text-align: center; position: relative; }
+    .product-card:hover { transform: translateY(-5px) scale(1.03); box-shadow: var(--shadow-xl); }
+    .product-card:hover .product-card__logo { transform: scale(1.1); transition: transform 0.3s ease; }
+    .product-card--active { border-color: var(--color-blue); box-shadow: var(--shadow-lg), 0 0 0 3px rgba(6,147,227,0.12); }
+    .product-card--active::after { content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid var(--color-blue); }
+    .product-card__logo { width: 36px; height: 36px; border-radius: var(--radius-md); object-fit: cover; margin: 0 auto 0.5rem; display: block; }
+    .product-card__name { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .product-card__tier-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    /* Product detail panels */
+    .product-detail { display: none; background: white; border-radius: var(--radius-xl); padding: 2rem; box-shadow: var(--shadow-md); position: relative; overflow: hidden; margin-bottom: 1.5rem; }
+    .product-detail--active { display: block; }
+    .product-detail__bg { position: absolute; top: -10%; right: -10%; width: 300px; height: 300px; opacity: 0.04; background-size: contain; background-repeat: no-repeat; background-position: center; pointer-events: none; }
+    .product-detail__header, .product-detail__stat-grid, .product-detail__body { position: relative; z-index: 1; }
+    .product-detail__header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--color-gray-100); }
+    .product-detail__icon { width: 64px; height: 64px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+    .product-detail__title { font-size: 1.5rem; font-weight: 700; }
+    .product-detail__tagline { font-size: 0.95rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
+    .product-detail__body { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 768px) { .product-detail__body { grid-template-columns: 1fr; } }
+    .product-detail__section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-blue); margin-bottom: 0.5rem; }
+    .product-detail__list { list-style: none; padding: 0; margin: 0 0 0.5rem 0; }
+    .product-detail__list li { font-size: 0.85rem; color: var(--color-gray-700); padding: 0.25rem 0; padding-left: 1.5rem; position: relative; line-height: 1.55; }
+    .product-detail__list li .mdi { position: absolute; left: 0; top: 0.4rem; color: var(--color-blue); font-size: 1rem; }
+    .product-detail__stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    @media (max-width: 600px) { .product-detail__stat-grid { grid-template-columns: 1fr; } }
+    .product-detail__stat { background: var(--color-gray-50); border-radius: var(--radius-md); padding: 1rem; text-align: center; }
+    .product-detail__stat-value { font-size: 1.5rem; font-weight: 700; color: var(--color-blue); }
+    .product-detail__stat-label { font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 0.25rem; }
+    .product-detail__sub-feature { display: flex; gap: 0.75rem; margin-bottom: 1rem; padding: 0.75rem; background: var(--color-gray-50); border-radius: var(--radius-md); }
+    .product-detail__sub-feature-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+    .product-detail__sub-feature-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.25rem; }
+    .product-detail__sub-feature-desc { font-size: 0.8rem; color: var(--color-gray-700); line-height: 1.5; }
+    .feedback-loop-badge { padding: 0.6rem 1rem; background: linear-gradient(90deg, rgba(6,147,227,0.1), rgba(155,81,224,0.1)); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-blue); border: 1px dashed var(--color-blue); }
+
+    /* Competitive matrix */
+    .comp-matrix { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .comp-matrix th { padding: 0.6rem 0.5rem; text-align: center; background: var(--color-gray-50); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--color-text-muted); border-bottom: 2px solid var(--color-border); }
+    .comp-matrix th:first-child { text-align: left; }
+    .comp-matrix td { padding: 0.6rem 0.5rem; text-align: center; border-bottom: 1px solid var(--color-gray-100); }
+    .comp-matrix td:first-child { text-align: left; font-weight: 600; }
+    .comp-matrix tr:first-child td { background: rgba(6,147,227,0.04); font-weight: 600; }
+    .comp-matrix tr:first-child td:first-child { color: var(--color-blue); }
+    .comp-check { color: var(--color-green); }
+    .comp-cross { color: var(--color-text-muted); }
+    .comp-partial { color: var(--color-amber); }
+
+    /* Timeline */
+    .timeline-track { display: flex; align-items: flex-start; position: relative; padding-top: 1rem; margin: 1.5rem 0; }
+    .timeline-track::before { content: ''; position: absolute; top: 28px; left: 0; right: 0; height: 4px; background: var(--color-gray-200); border-radius: 2px; }
+    .timeline-milestone { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .timeline-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--color-gray-200); border: 4px solid white; box-shadow: 0 0 0 2px var(--color-gray-200); z-index: 1; margin-bottom: 0.75rem; }
+    .timeline-dot--active { background: var(--color-blue); box-shadow: 0 0 0 2px var(--color-blue), 0 0 0 6px rgba(6,147,227,0.2); }
+    .timeline-dot--complete { background: var(--color-green); box-shadow: 0 0 0 2px var(--color-green); }
+    .timeline-content { text-align: center; max-width: 140px; }
+    .timeline-label { font-size: 0.7rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.15rem; }
+    .timeline-value { font-size: 0.85rem; font-weight: 700; }
+    .timeline-target { font-size: 0.75rem; color: var(--color-green); margin-top: 0.15rem; }
+
+    /* Team card */
+    .team-card { background: white; border-radius: var(--radius-xl); padding: 1.75rem; box-shadow: var(--shadow-md); text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+    .team-card__avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem; color: white; overflow: hidden; }
+    .team-card__avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .team-card__name { font-size: 1.15rem; font-weight: 700; }
+    .team-card__role { font-size: 0.85rem; color: var(--color-blue); font-weight: 600; margin-bottom: 0.75rem; }
+    .team-card__bio { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.5; }
+
+    /* Hire rows */
+    .hire-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-gray-100); }
+    .hire-row:last-child { border-bottom: none; }
+    .hire-row__icon { width: 44px; height: 44px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+    .hire-row__info { flex: 1; }
+    .hire-row__title { font-size: 0.9rem; font-weight: 700; }
+    .hire-row__detail { font-size: 0.8rem; color: var(--color-text-secondary); }
+    .hire-row__timing { font-size: 0.75rem; font-weight: 600; color: var(--color-blue); }
+
+    /* Progress rows */
+    .progress-row { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 0; }
+    .progress-row__label { width: 140px; font-size: 0.8rem; font-weight: 600; flex-shrink: 0; }
+    .progress-row__bar { flex: 1; height: 8px; background: var(--color-gray-100); border-radius: 4px; overflow: hidden; }
+    .progress-row__fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+    .progress-row__fill--blue { background: var(--color-blue); }
+    .progress-row__fill--green { background: var(--color-green); }
+    .progress-row__fill--purple { background: var(--color-purple); }
+    .progress-row__value { width: 50px; font-size: 0.8rem; font-weight: 600; text-align: right; }
+
+    /* Card */
+    .card-investor { background: white; border-radius: var(--radius-xl); padding: 1.75rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem; }
+
+    /* ============================================ RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero__title { font-size: 2rem; }
+      .hero__text { font-size: 1rem; }
+      .section-header__title { font-size: 1.75rem; }
+      .nav-tab { padding: 0.75rem 0.9rem; font-size: 0.85rem; }
+      .nav-tab span:not(.mdi) { display: none; }
+      .matrix { min-width: 720px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="https://brubru.beresol.eu" class="site-header__logo">
+        <img src="brubru_mainlogo.png" alt="Brubru" />
+        <div>
+          <div class="site-header__title" data-i18n="header.title">Brubru for EU public affairs</div>
+          <div class="site-header__subtitle" data-i18n="header.subtitle">Client pitch by Beresol BV</div>
+        </div>
+      </a>
+      <div class="lang-switch" id="langSwitch">
+        <button onclick="setLang('en')" class="active" data-lang="en">EN</button>
+        <button onclick="setLang('fr')" data-lang="fr">FR</button>
+        <button onclick="setLang('nl')" data-lang="nl">NL</button>
+        <button onclick="setLang('es')" data-lang="es">ES</button>
+        <button onclick="setLang('ca')" data-lang="ca">CA</button>
+        <button onclick="setLang('it')" data-lang="it">IT</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== NAV TABS ========== -->
+  <nav class="nav-tabs" id="navTabs">
+    <button class="nav-tab nav-tab--active" onclick="showSection('problem', this)">
+      <span class="mdi mdi-alert-circle-outline"></span> <span data-i18n="nav.problem">The problem</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('clients', this)">
+      <span class="mdi mdi-account-group-outline"></span> <span data-i18n="nav.clients">Who we serve</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('products', this)">
+      <span class="mdi mdi-cube-outline"></span> <span data-i18n="nav.products">Product suite</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('competitive', this)">
+      <span class="mdi mdi-sword-cross"></span> <span data-i18n="nav.competitive">Competitive</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('pricing', this)">
+      <span class="mdi mdi-currency-eur"></span> <span data-i18n="nav.pricing">Pricing</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('team', this)">
+      <span class="mdi mdi-account-group-outline"></span> <span data-i18n="nav.team">Team</span>
+    </button>
+    <button class="nav-tab" onclick="showSection('start', this)">
+      <span class="mdi mdi-rocket-launch-outline"></span> <span data-i18n="nav.start">Get started</span>
+    </button>
+  </nav>
+
+  <main class="main">
+
+    <!-- ========================================
+         SECTION 1: THE PROBLEM
+         ======================================== -->
+    <section id="problem" class="section section--active">
+      <div class="hero">
+        <h1 class="hero__title" data-i18n="hero.title">All the EU, with AI.</h1>
+        <p class="hero__text" data-i18n="hero.text">Brubru is an AI-powered assistant built specifically for public affairs professionals working on EU policy. We track every new regulation, every committee vote, every Commission agenda, so you don't have to.</p>
+        <div class="hero__ctas">
+          <a href="https://brubru.beresol.eu" class="btn btn--white">
+            <span class="mdi mdi-play-circle-outline"></span> <span data-i18n="hero.cta_try">Try Brubru free</span>
+          </a>
+          <a href="mailto:hello@beresol.eu?subject=Brubru%20demo%20request" class="btn btn--ghost">
+            <span class="mdi mdi-calendar-check"></span> <span data-i18n="hero.cta_demo">Book a demo</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-header__title" data-i18n="problem.title">Brussels moves fast. Too fast.</h2>
+        <p class="section-header__subtitle" data-i18n="problem.subtitle">EU policy professionals spend up to half their week searching for information rather than acting on it. Here is what that looks like in practice.</p>
+      </div>
+
+      <div class="stats-block stats-block--pain">
+        <div class="stats-block__header">
+          <span class="stats-block__badge stats-block__badge--pain" data-i18n="problem.pain_badge">The pain</span>
+          <h3 class="stats-block__title" data-i18n="problem.pain_header">The EU you face</h3>
+        </div>
+        <div class="stat-row stat-row--four">
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="28513">28,513</div>
+            <div class="stat__label" data-i18n="problem.stat1">Official Journal publications (8,710 distinct laws)</div>
+          </div>
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="7582">7,582</div>
+            <div class="stat__label" data-i18n="problem.stat5">pages across the europa.eu digital ecosystem</div>
+          </div>
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="1274">1,274</div>
+            <div class="stat__label" data-i18n="problem.stat3">legislative files active in the Legislative Train and OEIL</div>
+          </div>
+          <div class="stat stat--animated stat--pain">
+            <div class="stat__number" data-target="519">519</div>
+            <div class="stat__label" data-i18n="problem.stat6">priority europa.eu subdomains to monitor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-block stats-block--solution">
+        <div class="stats-block__header">
+          <span class="stats-block__badge stats-block__badge--solution" data-i18n="problem.solution_badge">Brubru answers with</span>
+          <h3 class="stats-block__title" data-i18n="problem.solution_header">The machine that works through it for you</h3>
+        </div>
+        <div class="stat-row stat-row--two">
+          <div class="stat stat--animated stat--solution">
+            <div class="stat__number" data-target="147">147</div>
+            <div class="stat__label" data-i18n="problem.stat2">expert policy-domain knowledge guides, updated daily by our team</div>
+          </div>
+          <div class="stat stat--animated stat--solution">
+            <div class="stat__number" data-target="44">44</div>
+            <div class="stat__label" data-i18n="problem.stat4">EU institutional news portals scraped every morning</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.35rem; margin-top: 2.5rem; margin-bottom: 0.5rem;" data-i18n="problem.pain_title">The pain points we solve</h3>
+      <ul class="pain-list">
+        <li>
+          <strong data-i18n="problem.pain1_title">Hours lost in EUR-Lex and OEIL</strong>
+          <span data-i18n="problem.pain1_text">Finding the right CELEX, the right procedure reference, the right rapporteur takes 20 to 40 minutes per file. Brubru gives you the answer in seconds.</span>
+        </li>
+        <li>
+          <strong data-i18n="problem.pain2_title">Amendment drafting that burns a day</strong>
+          <span data-i18n="problem.pain2_text">Drafting a technically correct EP amendment in Akoma Ntoso XML is a specialist skill. Our Amendator produces valid amendments instantly.</span>
+        </li>
+        <li>
+          <strong data-i18n="problem.pain3_title">Missed committee votes and deadlines</strong>
+          <span data-i18n="problem.pain3_text">Committee agendas change, deadlines slip. My EU Calendar aggregates all institutional agendas in one place with real-time alerts.</span>
+        </li>
+        <li>
+          <strong data-i18n="problem.pain4_title">Compliance gaps nobody sees coming</strong>
+          <span data-i18n="problem.pain4_text">New obligations enter into force silently. EU Law Comply benchmarks your internal policies against applicable EU law and flags the gaps.</span>
+        </li>
+        <li>
+          <strong data-i18n="problem.pain5_title">Public procurement that feels like a black box</strong>
+          <span data-i18n="problem.pain5_text">TED publishes thousands of notices a week. The Tenderator filters, matches, and alerts you on the opportunities that actually fit your profile.</span>
+        </li>
+        <li>
+          <strong data-i18n="problem.pain6_title">Meetings you should have taken</strong>
+          <span data-i18n="problem.pain6_text">Who is the rapporteur? Which shadows should you brief? Brubru maps the political landscape of every file automatically.</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ========================================
+         SECTION 2: WHO WE SERVE (CLIENT PROFILES)
+         ======================================== -->
+    <section id="clients" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title" data-i18n="clients.title">Who uses Brubru</h2>
+        <p class="section-header__subtitle" data-i18n="clients.subtitle">Brubru is built for the six profiles of EU public affairs: the consultant, the corporate in-house, the trade association policy lead, the EU official, the parliamentary assistant, and the NGO or civil society advocate.</p>
+      </div>
+
+      <div class="grid grid--2">
+        <div class="card">
+          <div class="card__icon card__icon--blue"><span class="mdi mdi-briefcase-outline"></span></div>
+          <div class="card__meta" data-i18n="clients.c1_meta">Consultancy</div>
+          <div class="card__title" data-i18n="clients.c1_title">Public affairs consultant</div>
+          <div class="card__text">
+            <p data-i18n="clients.c1_who"><strong>Who:</strong> senior associates and directors in Brussels consultancies (Kreab, Rud Pedersen, Hume Brophy, Cambre, FGS, Interel, Fleishman, etc.) managing portfolios of five to fifteen client briefs at once.</p>
+            <p data-i18n="clients.c1_need" style="margin-top: 0.75rem;"><strong>The job:</strong> turn regulatory change into billable advice, fast. Client expects a memo the same afternoon the Commission publishes a proposal.</p>
+            <p data-i18n="clients.c1_pain" style="margin-top: 0.75rem;"><strong>Pain:</strong> thirty minutes per file just to find the CELEX, the rapporteur, the EP committee, the Council working party. Multiply by fifteen clients.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--purple"><span class="mdi mdi-office-building-outline"></span></div>
+          <div class="card__meta" data-i18n="clients.c2_meta">Corporate in-house</div>
+          <div class="card__title" data-i18n="clients.c2_title">In-house public affairs manager</div>
+          <div class="card__text">
+            <p data-i18n="clients.c2_who"><strong>Who:</strong> EU affairs managers inside multinationals, mid-caps, and scale-ups (pharma, tech, automotive, finance, retail). Often a team of one to three people covering the whole regulatory footprint of the company.</p>
+            <p data-i18n="clients.c2_need" style="margin-top: 0.75rem;"><strong>The job:</strong> protect the business from bad regulation and capture opportunities. Report quarterly to C-suite on regulatory exposure and advocacy wins.</p>
+            <p data-i18n="clients.c2_pain" style="margin-top: 0.75rem;"><strong>Pain:</strong> too many files, too few hands. Risk of missing a delegated act, a trilogue, or a compliance deadline. No time to draft position papers from scratch.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--green"><span class="mdi mdi-handshake-outline"></span></div>
+          <div class="card__meta" data-i18n="clients.c3_meta">Trade association</div>
+          <div class="card__title" data-i18n="clients.c3_title">Trade association policy lead</div>
+          <div class="card__text">
+            <p data-i18n="clients.c3_who"><strong>Who:</strong> policy officers and directors at European trade associations (DIGITALEUROPE, EFPIA, CEFIC, ACEA, EBF, FoodDrinkEurope, SME United, etc.) representing sectors or SME constituencies before EU institutions.</p>
+            <p data-i18n="clients.c3_need" style="margin-top: 0.75rem;"><strong>The job:</strong> consolidate members' positions, draft association responses to consultations, brief members on upcoming legislation, coordinate advocacy with allies.</p>
+            <p data-i18n="clients.c3_pain" style="margin-top: 0.75rem;"><strong>Pain:</strong> members want clear guidance on thirty dossiers, fast. Staff spend more time compiling monitoring reports than doing advocacy.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--amber"><span class="mdi mdi-flag-variant-outline"></span></div>
+          <div class="card__meta" data-i18n="clients.c4_meta">EU institutions</div>
+          <div class="card__title" data-i18n="clients.c4_title">EU official</div>
+          <div class="card__text">
+            <p data-i18n="clients.c4_who"><strong>Who:</strong> Commission staff (desk officers, heads of unit, policy officers across DGs and cabinets), Council of the EU (General Secretariat, working party chairs, national attachés in Permanent Representations), European Parliament secretariat and committee staff, EU agencies (EFSA, EMA, ENISA, ACER, EEA, FRA, EUROPOL, etc.), European Economic and Social Committee, Committee of the Regions, ECB, EIB, and the Court of Auditors.</p>
+            <p data-i18n="clients.c4_need" style="margin-top: 0.75rem;"><strong>The job:</strong> draft and negotiate legislation across institutions, run consultations, follow the Parliament's amendments on your own files, track what sister DGs and Council configurations are proposing, coordinate with national attachés in the Council.</p>
+            <p data-i18n="clients.c4_pain" style="margin-top: 0.75rem;"><strong>Pain:</strong> internal systems are slow and siloed by institution. Tracking stakeholder positions (Have Your Say feedback, lobby meetings, EP amendments, Council Working Party signals) across files is manual. Predicting political outcomes across the trilogue triangle is guesswork.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--red"><span class="mdi mdi-account-tie-outline"></span></div>
+          <div class="card__meta" data-i18n="clients.c5_meta">European Parliament</div>
+          <div class="card__title" data-i18n="clients.c5_title">MEP assistant and political group staff</div>
+          <div class="card__text">
+            <p data-i18n="clients.c5_who"><strong>Who:</strong> accredited parliamentary assistants (APAs), local assistants, and advisers in the seven political groups (EPP, S&amp;D, Renew, Greens, PfE, ECR, The Left) and the EP Secretariat.</p>
+            <p data-i18n="clients.c5_need" style="margin-top: 0.75rem;"><strong>The job:</strong> brief the MEP on every vote, draft amendments, manage constituency questions, track sister legislation in national parliaments, coordinate with shadows and rapporteurs in other groups.</p>
+            <p data-i18n="clients.c5_pain" style="margin-top: 0.75rem;"><strong>Pain:</strong> ten committees, dozens of files, hundreds of amendments per plenary. Producing a vote list by Monday morning for a Tuesday mini-plenary is a recurring nightmare.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__icon card__icon--green"><span class="mdi mdi-earth"></span></div>
+          <div class="card__meta" data-i18n="clients.c6_meta">NGO and civil society</div>
+          <div class="card__title" data-i18n="clients.c6_title">NGO and civil society advocate</div>
+          <div class="card__text">
+            <p data-i18n="clients.c6_who"><strong>Who:</strong> policy and campaign staff at European NGOs and civil society networks (Transparency International EU, BEUC, EPHA, EDRi, BirdLife Europe, WWF European Policy Office, Climate Action Network, European Youth Forum, Eurochild, Caritas Europa, Amnesty International EU, Oxfam EU, Social Platform, etc.) plus the public-interest arms of foundations and think tanks.</p>
+            <p data-i18n="clients.c6_need" style="margin-top: 0.75rem;"><strong>The job:</strong> defend the public interest in EU legislation: draft amendments for friendly MEPs, respond to Commission consultations, brief coalitions of NGOs, produce campaign-ready positions in multiple languages, monitor the Council where public scrutiny is weakest.</p>
+            <p data-i18n="clients.c6_pain" style="margin-top: 0.75rem;"><strong>Pain:</strong> small teams outnumbered by industry lobbyists. Limited budgets. Need to move as fast as commercial advocates without the same research resources. Consultation responses and amendment drafting eat into campaigning time.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 3: PRODUCT SUITE (full, mirrors investor plan)
+         ======================================== -->
+    <section id="products" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title" data-i18n="products.title">Product suite</h2>
+        <p class="section-header__subtitle" data-i18n="products.subtitle">Six integrated modules covering the full EU advocacy workflow. Click any module to explore.</p>
+      </div>
+
+      <!-- Product selector cards -->
+      <div class="product-cards">
+        <div class="product-card product-card--active" onclick="showProduct('chat', this)">
+          <img src="brubru_icon_colours.png" alt="Chat" class="product-card__logo">
+          <div class="product-card__name">Chat</div>
+          <div class="product-card__tier-label" style="color: var(--color-green);">All tiers</div>
+        </div>
+        <div class="product-card" onclick="showProduct('bubble', this)">
+          <img src="brubru_myeububble.png" alt="My EU Bubble" class="product-card__logo">
+          <div class="product-card__name">My EU Bubble</div>
+          <div class="product-card__tier-label" style="color: var(--color-green);">All tiers</div>
+        </div>
+        <div class="product-card" onclick="showProduct('amendator', this)">
+          <img src="brubru_amendator.png" alt="Amendator" class="product-card__logo">
+          <div class="product-card__name">Amendator</div>
+          <div class="product-card__tier-label" style="color: var(--color-amber);">Starter+</div>
+        </div>
+        <div class="product-card" onclick="showProduct('comply', this)">
+          <img src="brubru_eulawcomply.png" alt="EU Law Comply" class="product-card__logo">
+          <div class="product-card__name">EU Law Comply</div>
+          <div class="product-card__tier-label" style="color: var(--color-amber);">Starter+</div>
+        </div>
+        <div class="product-card" onclick="showProduct('tenderator', this)">
+          <img src="brubru_tenderator.png" alt="Tenderator" class="product-card__logo">
+          <div class="product-card__name">Tenderator</div>
+          <div class="product-card__tier-label" style="color: var(--color-blue);">Professional</div>
+        </div>
+        <div class="product-card" onclick="showProduct('api', this)">
+          <img src="brubru_mainlogo.png" alt="Brubru API" class="product-card__logo">
+          <div class="product-card__name">Brubru API</div>
+          <div class="product-card__tier-label" style="color: var(--color-blue);">Professional</div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Chat ===== -->
+      <div id="detail-chat" class="product-detail product-detail--active">
+        <div class="product-detail__bg" style="background-image: url('brubru_icon_colours.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(6,147,227,0.1); color: var(--color-blue);"><span class="mdi mdi-chat-processing-outline"></span></div>
+          <div>
+            <div class="product-detail__title">Chat</div>
+            <div class="product-detail__tagline">Context-aware AI policy advisor with deep EU institutional knowledge</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">4</div><div class="product-detail__stat-label">AI providers (fallback chain)</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">147</div><div class="product-detail__stat-label">Knowledge guides injected</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">15+</div><div class="product-detail__stat-label">Context sources per query</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Core capabilities</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> Natural language queries about EU legislation, procedures, and institutional dynamics</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Strategic advocacy guidance: who to talk to, which arguments work, how to position</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Document uploads (PDF, DOCX) for contextual analysis and summarisation</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Every answer cites CELEX numbers, procedure references, and source URLs</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> Multi-turn conversation memory with quality scoring</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Context sources injected per query</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-database-outline"></span> OEIL procedures (21,600+), Legislative Train (490+ files), EPRS Think Tank, EP committee work (26 committees), EC Transparency Register</li>
+              <li><span class="mdi mdi-link-variant"></span> Recital-to-article linker (TF-IDF per-law map)</li>
+              <li><span class="mdi mdi-book-alphabet"></span> Statutory definition extractor (every Article 3/4 "term means...")</li>
+              <li><span class="mdi mdi-tag-multiple-outline"></span> Law alias resolver (GDPR, DSA, DMA, AI Act, CBAM, ...) -> CELEX</li>
+              <li><span class="mdi mdi-file-find-outline"></span> Cross-reference resolver: inline "Article N of Regulation (EU) YYYY/NNN" -> EUR-Lex URL</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">AI provider chain</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle"></span> <strong>Mistral</strong> (primary)</li>
+              <li><span class="mdi mdi-numeric-2-circle"></span> <strong>Claude Sonnet</strong> (fallback): complex reasoning</li>
+              <li><span class="mdi mdi-numeric-3-circle"></span> <strong>GPT-4 Turbo</strong> (fallback): high availability</li>
+              <li><span class="mdi mdi-numeric-4-circle"></span> <strong>Gemini 1.5 Pro</strong> (fallback): last resort</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: My EU Bubble ===== -->
+      <div id="detail-bubble" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_myeububble.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(155,81,224,0.1); color: var(--color-purple);"><span class="mdi mdi-glass-mug-variant"></span></div>
+          <div>
+            <div class="product-detail__title">My EU Bubble</div>
+            <div class="product-detail__tagline">Personalised intelligence dashboard: monitor, track, predict, and generate from one place</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">33+</div><div class="product-detail__stat-label">RSS feeds from EU sources</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">26</div><div class="product-detail__stat-label">EP committees tracked</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">9</div><div class="product-detail__stat-label">Dashboard tabs</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Dashboard tabs</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-rss"></span> <strong>News Feed</strong>: 33+ RSS feeds (EP, Commission, Council, EPRS, OEIL, media)</li>
+              <li><span class="mdi mdi-train"></span> <strong>Legislative Train</strong>: 490+ priority files with status</li>
+              <li><span class="mdi mdi-file-document-outline"></span> <strong>My Files</strong>: tracked legislation and bookmarked collections</li>
+              <li><span class="mdi mdi-calendar-month"></span> <strong>My EU Calendar</strong>: aggregated EU institutional calendar with Google Calendar sync</li>
+              <li><span class="mdi mdi-chart-bell-curve"></span> <strong>Predictions</strong>: AI outcome + timeline forecasts</li>
+              <li><span class="mdi mdi-compass-outline"></span> <strong>Position Analysis</strong>: rapporteur + shadow + Council MS positions</li>
+              <li><span class="mdi mdi-comment-question-outline"></span> <strong>Stakeholder feedback</strong>: live from Have Your Say</li>
+              <li><span class="mdi mdi-account-multiple-outline"></span> <strong>Commissioner agendas</strong>: who is meeting whom</li>
+              <li><span class="mdi mdi-file-document-edit-outline"></span> <strong>Document generator</strong>: position papers, MEP briefings, talking points</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Integrated sub-modules</div>
+            <div class="product-detail__sub-feature">
+              <div class="product-detail__sub-feature-icon" style="background: rgba(6,147,227,0.1); color: var(--color-blue);"><span class="mdi mdi-file-document-edit-outline"></span></div>
+              <div>
+                <div class="product-detail__sub-feature-title">Document Generator</div>
+                <div class="product-detail__sub-feature-desc">AI-powered advocacy documents through a step-by-step wizard. Position papers, MEP briefings, talking points. Minutes instead of days.</div>
+              </div>
+            </div>
+            <div class="product-detail__sub-feature">
+              <div class="product-detail__sub-feature-icon" style="background: rgba(249,115,22,0.1); color: var(--color-accent-orange);"><span class="mdi mdi-chart-timeline-variant-shimmer"></span></div>
+              <div>
+                <div class="product-detail__sub-feature-title">Predictions engine</div>
+                <div class="product-detail__sub-feature-desc">AI legislative forecasting: timeline, outcome, EP plenary vote (720 MEPs), Council QMV with blocking minority detection.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Amendator ===== -->
+      <div id="detail-amendator" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_amendator.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(5,150,105,0.1); color: var(--color-green);"><span class="mdi mdi-file-edit-outline"></span></div>
+          <div>
+            <div class="product-detail__title">Amendator</div>
+            <div class="product-detail__tagline">XML-first legislative amendment editor modelled on the EP's AT4AM system</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">XML</div><div class="product-detail__stat-label">Akoma Ntoso compliant</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">4</div><div class="product-detail__stat-label">Export formats</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">3</div><div class="product-detail__stat-label">Workflow statuses</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">How it works</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle-outline"></span> Load any EU legislative text via EUR-Lex CELEX or URL</li>
+              <li><span class="mdi mdi-numeric-2-circle-outline"></span> Two-column layout: original vs proposed changes</li>
+              <li><span class="mdi mdi-numeric-3-circle-outline"></span> Click any article, paragraph, recital, or annex to propose an amendment</li>
+              <li><span class="mdi mdi-numeric-4-circle-outline"></span> AI drafting: describe in natural language, get legal text</li>
+              <li><span class="mdi mdi-numeric-5-circle-outline"></span> Track changes: bold for additions, strikethrough for deletions</li>
+              <li><span class="mdi mdi-numeric-6-circle-outline"></span> Export in XML, HTML, PDF, or Word</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">MEP amendments and AI comparative analysis</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-file-document-multiple-outline"></span> Browse real EP committee amendments by procedure, with political group breakdown</li>
+              <li><span class="mdi mdi-account-group"></span> <strong>Best Allies</strong>: top 15 MEPs ranked by alignment with your position</li>
+              <li><span class="mdi mdi-magnify-scan"></span> <strong>Coverage Gaps</strong>: articles MEPs amend that you have not touched, and vice versa</li>
+              <li><span class="mdi mdi-map-outline"></span> <strong>Political Landscape</strong>: supportive, mixed, opposed groups at a glance</li>
+              <li><span class="mdi mdi-link-variant"></span> Recital-aware justifications, definition hover, clickable cross-references</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: EU Law Comply ===== -->
+      <div id="detail-comply" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_eulawcomply.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(156,163,175,0.15); color: var(--color-silver);"><span class="mdi mdi-scale-balance"></span></div>
+          <div>
+            <div class="product-detail__title">EU Law Comply</div>
+            <div class="product-detail__tagline">Automated compliance gap analysis against EU regulations with severity-rated action plans</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">0-100%</div><div class="product-detail__stat-label">Compliance scoring</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">4</div><div class="product-detail__stat-label">Report export formats</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">2-phase</div><div class="product-detail__stat-label">Semantic + LLM analysis</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">How it works</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-numeric-1-circle-outline"></span> Upload your organisational policies (PDF, DOCX, TXT)</li>
+              <li><span class="mdi mdi-numeric-2-circle-outline"></span> Select EU law clusters (AI Act, GDPR, NIS2, CSRD, MiCA, DORA, ...)</li>
+              <li><span class="mdi mdi-numeric-3-circle-outline"></span> AI extracts regulatory requirements using HuggingFace models</li>
+              <li><span class="mdi mdi-numeric-4-circle-outline"></span> Two-phase gap analysis: semantic retrieval + LLM refinement</li>
+              <li><span class="mdi mdi-numeric-5-circle-outline"></span> Severity ratings: missing, partial, unclear, compliant</li>
+              <li><span class="mdi mdi-numeric-6-circle-outline"></span> Export report with Gantt-style action plan (PDF, Word, HTML, JSON)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">Market context</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-alert-circle-outline"></span> Traditional compliance assessments cost EUR 20,000-50,000 and take 2-4 weeks</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> Brubru produces a first-pass analysis in minutes at a fraction of the cost</li>
+              <li><span class="mdi mdi-alert-circle-outline"></span> Unprecedented wave of deadlines (AI Act, NIS2, DORA) 2025-2027</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Tenderator ===== -->
+      <div id="detail-tenderator" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_tenderator.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(217,119,6,0.1); color: var(--color-amber);"><span class="mdi mdi-piggy-bank-outline"></span></div>
+          <div>
+            <div class="product-detail__title">Tenderator</div>
+            <div class="product-detail__tagline">AI-powered EU funding and procurement intelligence (Professional tier exclusive)</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">800K+</div><div class="product-detail__stat-label">TED notices per year</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">6</div><div class="product-detail__stat-label">ML-powered services</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">SPARQL</div><div class="product-detail__stat-label">Market analytics engine</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Core features</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-account-cog-outline"></span> <strong>Organisation Profile</strong>: CPV codes, geography, capacity, experience</li>
+              <li><span class="mdi mdi-target"></span> <strong>AI-Matched Feed</strong>: relevance-scored tenders updated daily from TED</li>
+              <li><span class="mdi mdi-star-circle-outline"></span> <strong>SME Suitability Scoring</strong>: multi-criteria weighted fit analysis</li>
+              <li><span class="mdi mdi-format-list-checks"></span> <strong>Bid Checklist</strong>: requirements, eligibility, deadlines auto-extracted</li>
+              <li><span class="mdi mdi-calendar-month"></span> <strong>Tender Calendar</strong>: visual deadlines across all tracked tenders</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">GrantBru evolution (2027)</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-rocket-launch-outline"></span> <strong>All EU Funding</strong>: Horizon Europe, Digital Europe, CEF, LIFE, Erasmus+, EIC, EIB/EIF, Structural Funds, RRF</li>
+              <li><span class="mdi mdi-flag-outline"></span> <strong>National Schemes</strong>: MS co-financing, national subsidies, regional funds</li>
+              <li><span class="mdi mdi-target"></span> <strong>AI Grant Matching</strong>: profile against all EU and national programmes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DETAIL: Brubru API ===== -->
+      <div id="detail-api" class="product-detail">
+        <div class="product-detail__bg" style="background-image: url('brubru_mainlogo.png');"></div>
+        <div class="product-detail__header">
+          <div class="product-detail__icon" style="background: rgba(6,147,227,0.1); color: var(--color-blue);"><span class="mdi mdi-api"></span></div>
+          <div>
+            <div class="product-detail__title">Brubru API</div>
+            <div class="product-detail__tagline">Vertical EU data as a service: the same sources, intelligence layer and MCP that power Brubru, exposed as a REST API for partners and internal systems</div>
+          </div>
+        </div>
+        <div class="product-detail__stat-grid" style="margin-bottom: 1.5rem;">
+          <div class="product-detail__stat"><div class="product-detail__stat-value">519</div><div class="product-detail__stat-label">europa.eu sources inventoried</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">28,513</div><div class="product-detail__stat-label">OJ publications indexed (8,710 distinct laws, 61,219 XML files)</div></div>
+          <div class="product-detail__stat"><div class="product-detail__stat-value">v1</div><div class="product-detail__stat-label">Stable, versioned endpoints</div></div>
+        </div>
+        <div class="product-detail__body">
+          <div>
+            <div class="product-detail__section-title">Why a Brubru API</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-lightbulb-outline"></span> The real moat is the <strong>vertical ingestion + intelligence layer</strong>: 519 sources, recital linker, law aliases, cross-reference resolver, definition extractor, predictions engine.</li>
+              <li><span class="mdi mdi-share-variant-outline"></span> Partners (RegTech, consultancies, media, public sector, national registers) need the data, not our UI.</li>
+              <li><span class="mdi mdi-rocket-launch-outline"></span> Brubru app is the first user of its own API.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Core endpoints</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-database-search-outline"></span> <code>GET /api/v1/legislation</code>: full-text and CELEX search across 28,513 OJ entries (8,710 distinct laws).</li>
+              <li><span class="mdi mdi-file-tree-outline"></span> <code>GET /api/v1/procedures</code>: OEIL status, rapporteurs, committees, timeline.</li>
+              <li><span class="mdi mdi-book-open-variant"></span> <code>GET /api/v1/publications</code>: EPRS, JRC, Eurostat, DG publications with filters.</li>
+              <li><span class="mdi mdi-comment-question-outline"></span> <code>GET /api/v1/consultations/by-initiative/{id}/feedback</code>: live HYS feedback.</li>
+              <li><span class="mdi mdi-calendar-month"></span> <code>GET /api/v1/calendar</code>: aggregated institutional calendar.</li>
+              <li><span class="mdi mdi-link-variant"></span> <code>POST /api/v1/legislation/annotate-text</code>: cross-refs, definitions, aliases.</li>
+              <li><span class="mdi mdi-chart-bell-curve"></span> <code>GET /api/v1/predictions/{procedure}</code>: timeline + outcome forecasts.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="product-detail__section-title">MCP server access</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-robot-happy-outline"></span> Brubru's public <strong>Model Context Protocol</strong> server exposes the same data to Claude, ChatGPT, Mistral, and any MCP-capable assistant.</li>
+              <li><span class="mdi mdi-toolbox-outline"></span> Tools: <code>search_eu_legislation</code>, <code>search_knowledge_guides</code>, <code>get_procedure_status</code>, <code>search_eprs</code>, <code>get_calendar_events</code>, <code>ask_brubru</code>.</li>
+              <li><span class="mdi mdi-account-tie-outline"></span> Plug Brubru into your own AI workflows without rebuilding the ingestion stack.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">First customers</div>
+            <ul class="product-detail__list">
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>GovClipping</strong> (Spain, RegTech) -- first external paid customer at EUR 99/month.</li>
+              <li><span class="mdi mdi-check-circle-outline"></span> <strong>Brubru itself</strong> -- built on top of its own API.</li>
+              <li><span class="mdi mdi-target-account"></span> Pipeline: consultancies, in-house PA teams, national registers, EU-specialised media.</li>
+            </ul>
+            <div class="product-detail__section-title" style="margin-top: 1rem;">Try it</div>
+            <p style="font-size: 0.9rem; color: var(--color-gray-600);">Live docs at <a href="https://brubru.beresol.eu/api" target="_blank" style="color: var(--color-blue); font-weight: 600;">brubru.beresol.eu/api</a>. Free tier for evaluation and open-source projects.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 1.5rem; margin-top: 2rem; margin-bottom: 0.5rem;" data-i18n="products.matrix_title">Who uses what, and how</h3>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" data-i18n="products.matrix_subtitle">Concrete use cases for each profile, across all five products.</p>
+
+      <div class="matrix-wrapper">
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th data-i18n="products.matrix_col0">Profile</th>
+              <th data-i18n="products.matrix_col1">Chat</th>
+              <th data-i18n="products.matrix_col2">Amendator</th>
+              <th data-i18n="products.matrix_col3">My EU Bubble</th>
+              <th data-i18n="products.matrix_col4">EU Law Comply</th>
+              <th data-i18n="products.matrix_col5">Tenderator</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="products.matrix_r1">Consultant</td>
+              <td data-i18n="products.matrix_r1c1">Brief a client in ten minutes: ask Brubru for the file's procedure reference, rapporteur, trilogue status, and stakeholder positions.</td>
+              <td data-i18n="products.matrix_r1c2">Draft amendments for clients who need to influence a specific article or recital, ready to send to a friendly MEP's office.</td>
+              <td data-i18n="products.matrix_r1c3">Track all client files in one place, with predictions and alerts when status changes.</td>
+              <td data-i18n="products.matrix_r1c4">Offer compliance audits as a new service line for corporate clients.</td>
+              <td data-i18n="products.matrix_r1c5">Flag EU procurement opportunities for client subsidiaries and partner firms.</td>
+            </tr>
+            <tr>
+              <td data-i18n="products.matrix_r2">Corporate in-house</td>
+              <td data-i18n="products.matrix_r2c1">Generate the monthly regulatory briefing for C-suite in one command.</td>
+              <td data-i18n="products.matrix_r2c2">Draft the company's amendment proposals before sending them to the rapporteur or trade association.</td>
+              <td data-i18n="products.matrix_r2c3">Monitor the regulatory footprint of your business. Position Analysis shows how Council member states are leaning on your files.</td>
+              <td data-i18n="products.matrix_r2c4">Run a gap analysis on your internal AI, DORA, CSRD, or CBAM policy.</td>
+              <td data-i18n="products.matrix_r2c5">Spot EU grant and procurement opportunities (Horizon, Digital Europe, IPCEI calls).</td>
+            </tr>
+            <tr>
+              <td data-i18n="products.matrix_r3">Trade association</td>
+              <td data-i18n="products.matrix_r3c1">Answer member questions on call: "What does the Omnibus mean for SMEs?" with sourced detail in seconds.</td>
+              <td data-i18n="products.matrix_r3c2">Produce the association's amendment package for distribution to friendly MEPs.</td>
+              <td data-i18n="products.matrix_r3c3">Produce members' weekly monitoring digest automatically, with predictions and EP group voting signals.</td>
+              <td data-i18n="products.matrix_r3c4">Prepare association sector impact assessments on upcoming legislation.</td>
+              <td data-i18n="products.matrix_r3c5">Surface EU call-for-proposals that members can jointly bid on.</td>
+            </tr>
+            <tr>
+              <td data-i18n="products.matrix_r4">EU official</td>
+              <td data-i18n="products.matrix_r4c1">Check how stakeholders are positioning on your file: Have Your Say feedback, EP amendments, Council working party signals, national attaché positions.</td>
+              <td data-i18n="products.matrix_r4c2">Study amendment patterns on your proposal to anticipate trilogue bargaining zones.</td>
+              <td data-i18n="products.matrix_r4c3">Track sister files across DGs, Council configurations, EP committees, agencies and the ECB in one view.</td>
+              <td data-i18n="products.matrix_r4c4">Benchmark a sector policy draft against the existing acquis before inter-service consultation or Council working party discussion.</td>
+              <td data-i18n="products.matrix_r4c5">Track which firms are bidding for Commission, Council and agency framework contracts in your policy area.</td>
+            </tr>
+            <tr>
+              <td data-i18n="products.matrix_r5">EP assistant / group staff</td>
+              <td data-i18n="products.matrix_r5c1">Produce the weekly vote list in minutes, with plain-language summaries and group voting recommendations.</td>
+              <td data-i18n="products.matrix_r5c2">Draft the MEP's amendments faster, in valid XML ready for tabling. No more formatting headaches on deadline day.</td>
+              <td data-i18n="products.matrix_r5c3">Predictions tab shows likely trilogue outcomes and Council majorities. Position Analysis shows shadow rapporteur positions.</td>
+              <td data-i18n="products.matrix_r5c4">Evaluate constituent compliance questions against current EU law quickly.</td>
+              <td data-i18n="products.matrix_r5c5">Spot EU funding opportunities for constituency projects (cities, regions, SMEs in the MEP's area).</td>
+            </tr>
+            <tr>
+              <td data-i18n="products.matrix_r6">NGO / civil society</td>
+              <td data-i18n="products.matrix_r6c1">Answer coalition partner questions on call. Produce rapid-response analysis when a proposal drops. Draft campaign-ready explainers in six languages.</td>
+              <td data-i18n="products.matrix_r6c2">Draft amendments to counter industry positions, ready to hand to friendly MEPs. Track where commercial lobbyists have already moved on the text.</td>
+              <td data-i18n="products.matrix_r6c3">Monitor the Council where public scrutiny is weakest. Get predictions on EP votes to prioritise advocacy resources.</td>
+              <td data-i18n="products.matrix_r6c4">Check member compliance with EU obligations (transparency register, financial disclosure, anti-discrimination rules).</td>
+              <td data-i18n="products.matrix_r6c5">Surface EU operating grants, LIFE programme, Erasmus+, Citizens Equality Rights and Values, Justice programme calls.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem;" data-i18n="products.bubble_title">My EU Bubble, tab by tab</h3>
+      <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" data-i18n="products.bubble_subtitle">The Bubble is the heart of Brubru. Ten working surfaces around your file portfolio.</p>
+
+      <div class="grid grid--3">
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t1_title">Dashboard</div>
+          <div class="card__text" data-i18n="products.bubble_t1_text">Your personalised home screen: tracked files status, upcoming EU events, predictions ready to read, and the week's most important signals at a glance.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t2_title">My Files</div>
+          <div class="card__text" data-i18n="products.bubble_t2_text">Pin any EU legislative file to your personal radar. Get status changes, amendments, committee activity, and deadlines in one feed.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t3_title">Position Analysis</div>
+          <div class="card__text" data-i18n="products.bubble_t3_text">Stakeholder and institutional positions on every tracked file: rapporteur stance, shadow positions, Council member state leanings, industry vs NGO alignment.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t4_title">My EU Calendar</div>
+          <div class="card__text" data-i18n="products.bubble_t4_text">All EU institutional events in one calendar: EP committees, College, Council configurations, trilogues, agency meetings. Sync with Google Calendar.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t5_title">Predictions</div>
+          <div class="card__text" data-i18n="products.bubble_t5_text">AI-powered outcome predictions for your tracked files: likely adoption date, political risk, EP group voting patterns, Council QMV with blocking minority detection.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t6_title">EC Public Consultations</div>
+          <div class="card__text" data-i18n="products.bubble_t6_text">Open Commission consultations matched to your interests. Browse submitted feedback from the Have Your Say portal. AI-drafted response suggestions on Professional.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t7_title">Documents</div>
+          <div class="card__text" data-i18n="products.bubble_t7_text">Generate position papers, MEP briefings, talking points, and consultation responses. AI-drafted, fully sourced with CELEX references, ready to edit and send.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t8_title">Amendments</div>
+          <div class="card__text" data-i18n="products.bubble_t8_text">Your saved amendment drafts from Amendator. Browse real EP committee amendments by procedure and political group, with word-level diff and alignment scoring.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t9_title">Legislative Tracker</div>
+          <div class="card__text" data-i18n="products.bubble_t9_text">490+ priority files from the Commission's work programme and the Legislative Train, enriched with OEIL status, EPRS briefings, and committee work. The full pipeline of EU legislation.</div>
+        </div>
+        <div class="card">
+          <div class="card__title" data-i18n="products.bubble_t10_title">Analytics</div>
+          <div class="card__text" data-i18n="products.bubble_t10_text">Reading patterns, topic interests, engagement metrics across your tracked files. See which dossiers are moving and where your attention is paying off.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 3b: COMPETITIVE
+         ======================================== -->
+    <section id="competitive" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title" data-i18n="competitive.title">Competitive landscape</h2>
+        <p class="section-header__subtitle" data-i18n="competitive.subtitle">Emerging category: few AI-native EU policy platforms, none with Brubru's breadth.</p>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-table"></span> Competitive matrix</div>
+        <div style="overflow-x: auto; margin-top: 1rem;">
+          <table class="comp-matrix">
+            <thead>
+              <tr>
+                <th style="width: 130px;">Competitor</th>
+                <th>EU Focus</th>
+                <th>AI Chat</th>
+                <th>Amendments</th>
+                <th>MEP Analysis</th>
+                <th>Calendar</th>
+                <th>Compliance</th>
+                <th>Tenders</th>
+                <th>Predictions</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Brubru</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Deep</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> XML</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> AI</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> 6 src</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td>EUR 39-99</td>
+              </tr>
+              <tr>
+                <td>Dixit</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Brussels</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Analysis</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Mid-range</td>
+              </tr>
+              <tr>
+                <td>POLITICO Pro</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> 100+ reporters</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>EUR 7K-50K+</td>
+              </tr>
+              <tr>
+                <td>SAVOIRR</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>FiscalNote EUIT</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Brussels</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Generic</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span></td>
+                <td>EUR 10K-30K</td>
+              </tr>
+              <tr>
+                <td>Moonlit.ai</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> 16+ MS</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Luna</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Enterprise</td>
+              </tr>
+              <tr>
+                <td>LEOS</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Institutions</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> AKN XML</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Free (internal)</td>
+              </tr>
+              <tr>
+                <td>Cogrant</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Grants only</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>EU Matrix</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Deep analytics</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Beta</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Voting + influence</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Foresight</td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>Lobium</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> EU legislative</td>
+                <td><span class="mdi mdi-minus comp-partial"></span></td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Analyser</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> EU Radar</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>Spaak (Hamilton)</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> DK + EU</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> Hamilton</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>Prismos</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span> EU + BE</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>Not disclosed</td>
+              </tr>
+              <tr>
+                <td>ChatGPT / Claude</td>
+                <td><span class="mdi mdi-close comp-cross"></span> None</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>$20/mo</td>
+              </tr>
+              <tr>
+                <td>Traditional consultancy</td>
+                <td><span class="mdi mdi-check-bold comp-check"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Manual</td>
+                <td><span class="mdi mdi-minus comp-partial"></span> Manual</td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td><span class="mdi mdi-close comp-cross"></span></td>
+                <td>EUR 10K+/mo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-shield-check-outline"></span> Defensibility timeline</div>
+        <div class="timeline-track" style="margin-top: 0.5rem;">
+          <div class="timeline-milestone">
+            <div class="timeline-dot timeline-dot--active"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 1</div>
+              <div class="timeline-value">First mover</div>
+              <div class="timeline-target">Domain expertise + 35 scrapers</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 2</div>
+              <div class="timeline-value">Data network</div>
+              <div class="timeline-target">User interactions improve AI</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 3</div>
+              <div class="timeline-value">Switching costs</div>
+              <div class="timeline-target">Dossiers, contacts, amendments</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 4</div>
+              <div class="timeline-value">System of record</div>
+              <div class="timeline-target">Accumulated data = prohibitive switching</div>
+            </div>
+          </div>
+          <div class="timeline-milestone">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-label">Year 5</div>
+              <div class="timeline-value">Institutional</div>
+              <div class="timeline-target">EU body partnerships</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card__title"><span class="mdi mdi-shield-alert-outline"></span> Why general AI will not replace a vertical EU platform</div>
+        <p style="margin: 0.75rem 0 1rem 0; color: var(--color-text-secondary); font-size: 0.95rem;">The risk is not another SaaS competitor replicating 35 scrapers and 10 workflow verticals. It is Anthropic, OpenAI, or Google adding EU policy plugins via MCP, custom GPTs, or similar extension mechanisms.</p>
+        <div class="grid-3">
+          <div style="padding: 1.25rem; background: rgba(6,147,227,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-blue);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-blue); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Pipeline Depth</div>
+            <div style="font-size: 0.9rem; color: var(--color-text-secondary);">35 scrapers, structured legislative timelines, amendment classification, institutional behaviour analytics. General plugins cannot match this depth.</div>
+          </div>
+          <div style="padding: 1.25rem; background: rgba(5,150,105,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-green);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-green); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">Domain Engineering</div>
+            <div style="font-size: 0.9rem; color: var(--color-text-secondary);">Akoma Ntoso XML drafting, QMV calculation, compliance gap analysis, EP group vote prediction. Domain logic, not just data access.</div>
+          </div>
+          <div style="padding: 1.25rem; background: rgba(155,81,224,0.04); border-radius: var(--radius-lg); border-top: 3px solid var(--color-purple);">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--color-purple); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.5rem;">System of Record</div>
+            <div style="font-size: 0.9rem; color: var(--color-text-secondary);">User-accumulated dossiers, MEP contacts, amendment history, generated documents. Data that lives inside Brubru and nowhere else.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 4: PRICING
+         ======================================== -->
+    <section id="pricing" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title" data-i18n="pricing.title">Simple, modular pricing</h2>
+        <p class="section-header__subtitle" data-i18n="pricing.subtitle">Start with a 14-day free trial, no credit card required. Choose the plan that fits your role. Cancel any time.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-card__name" data-i18n="pricing.p1_name">Starter</div>
+          <div class="price-card__price">39€</div>
+          <div class="price-card__per" data-i18n="pricing.p1_per">per month</div>
+          <ul class="price-card__features">
+            <li data-i18n="pricing.p1_f1">Chat with full EU context</li>
+            <li data-i18n="pricing.p1_f2">My EU Bubble (basic tabs)</li>
+            <li data-i18n="pricing.p1_f3">My EU Calendar read-only</li>
+            <li data-i18n="pricing.p1_f4">Daily brief by email</li>
+            <li data-i18n="pricing.p1_f5">Six languages</li>
+          </ul>
+          <a href="https://brubru.beresol.eu/pricing" class="btn btn--primary" style="width: 100%; justify-content: center;" data-i18n="pricing.p1_cta">Start free trial</a>
+        </div>
+
+        <div class="price-card">
+          <div class="price-card__name" data-i18n="pricing.p2_name">Advocate</div>
+          <div class="price-card__price">59€</div>
+          <div class="price-card__per" data-i18n="pricing.p2_per">per month</div>
+          <ul class="price-card__features">
+            <li data-i18n="pricing.p2_f1">Everything in Starter</li>
+            <li data-i18n="pricing.p2_f2">Amendator</li>
+            <li data-i18n="pricing.p2_f3">Documents (position papers, MEP briefings, talking points)</li>
+            <li data-i18n="pricing.p2_f4">10 predictions per month</li>
+            <li data-i18n="pricing.p2_f5">Calendar sync</li>
+          </ul>
+          <a href="https://brubru.beresol.eu/pricing" class="btn btn--primary" style="width: 100%; justify-content: center;" data-i18n="pricing.p2_cta">Start free trial</a>
+        </div>
+
+        <div class="price-card price-card--featured">
+          <div class="price-card__name" data-i18n="pricing.p3_name">Professional</div>
+          <div class="price-card__price">99€</div>
+          <div class="price-card__per" data-i18n="pricing.p3_per">per month</div>
+          <ul class="price-card__features">
+            <li data-i18n="pricing.p3_f1">Everything in Advocate</li>
+            <li data-i18n="pricing.p3_f2">Unlimited predictions (+ Council)</li>
+            <li data-i18n="pricing.p3_f3">Position Analysis, Analytics, Legislative Tracker</li>
+            <li data-i18n="pricing.p3_f4">EU Law Comply</li>
+            <li data-i18n="pricing.p3_f5">Tenderator</li>
+            <li data-i18n="pricing.p3_f6">AI Assistant panel everywhere</li>
+            <li data-i18n="pricing.p3_f7">Priority support</li>
+          </ul>
+          <a href="https://brubru.beresol.eu/pricing" class="btn btn--primary" style="width: 100%; justify-content: center;" data-i18n="pricing.p3_cta">Start free trial</a>
+        </div>
+
+        <div class="price-card">
+          <div class="price-card__name" data-i18n="pricing.p4_name">EP plan</div>
+          <div class="price-card__price">49€</div>
+          <div class="price-card__per" data-i18n="pricing.p4_per">per month, EP staff</div>
+          <ul class="price-card__features">
+            <li data-i18n="pricing.p4_f1">Dedicated EP pricing</li>
+            <li data-i18n="pricing.p4_f2">All Advocate features</li>
+            <li data-i18n="pricing.p4_f3">EP-specific workflows (vote lists, group coordination)</li>
+            <li data-i18n="pricing.p4_f4">Group discounts available</li>
+          </ul>
+          <a href="mailto:hello@beresol.eu?subject=Brubru%20EP%20plan" class="btn btn--primary" style="width: 100%; justify-content: center;" data-i18n="pricing.p4_cta">Contact us</a>
+        </div>
+      </div>
+
+      <p style="text-align: center; margin-top: 2rem; color: var(--color-text-secondary); font-size: 0.9rem;" data-i18n="pricing.note">Annual billing available with two months free. Team and enterprise pricing on request.</p>
+    </section>
+
+    <!-- ========================================
+         SECTION 4b: TEAM
+         ======================================== -->
+    <section id="team" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title" data-i18n="team.title">The team behind Brubru</h2>
+        <p class="section-header__subtitle" data-i18n="team.subtitle">Solo founder with deep EU policy domain expertise and a clear hiring plan for the next twelve months.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="team-card">
+          <div class="team-card__avatar"><img src="victor.JPG" alt="Víctor Solé"></div>
+          <div class="team-card__name">Víctor Solé</div>
+          <div class="team-card__role">Founder &amp; CEO</div>
+          <div class="team-card__bio" data-i18n="team.victor_bio">8 years in EU policy: parliamentary assistant at the European Parliament, trade advisor, regulatory consultant across 6 EU languages (EN, ES, CA, FR, IT, NL). Built the entire Brubru platform because the product comes from doing the work, not from studying it. Based in Brussels.</div>
+        </div>
+        <div class="card-investor">
+          <div class="card__title"><span class="mdi mdi-account-plus-outline"></span> <span data-i18n="team.hires_title">Key hires next twelve months</span></div>
+          <div class="hire-row">
+            <div class="hire-row__icon" style="background: rgba(6,147,227,0.1); color: var(--color-blue);">
+              <span class="mdi mdi-handshake-outline"></span>
+            </div>
+            <div class="hire-row__info">
+              <div class="hire-row__title" data-i18n="team.hire1_title">Head of sales / BD</div>
+              <div class="hire-row__detail" data-i18n="team.hire1_detail">Convert Brussels network into paying customers</div>
+            </div>
+            <div class="hire-row__timing" data-i18n="team.hire1_timing">Month 3</div>
+          </div>
+          <div class="hire-row">
+            <div class="hire-row__icon" style="background: rgba(5,150,105,0.1); color: var(--color-green);">
+              <span class="mdi mdi-code-tags"></span>
+            </div>
+            <div class="hire-row__info">
+              <div class="hire-row__title" data-i18n="team.hire2_title">Junior developer</div>
+              <div class="hire-row__detail" data-i18n="team.hire2_detail">Scale features, reduce bus factor</div>
+            </div>
+            <div class="hire-row__timing" data-i18n="team.hire2_timing">Month 6</div>
+          </div>
+          <div class="hire-row">
+            <div class="hire-row__icon" style="background: rgba(155,81,224,0.1); color: var(--color-purple);">
+              <span class="mdi mdi-headset"></span>
+            </div>
+            <div class="hire-row__info">
+              <div class="hire-row__title" data-i18n="team.hire3_title">Customer success</div>
+              <div class="hire-row__detail" data-i18n="team.hire3_detail">Onboarding, retention, upsell</div>
+            </div>
+            <div class="hire-row__timing" data-i18n="team.hire3_timing">Month 9</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SECTION 5: GET STARTED
+         ======================================== -->
+    <section id="start" class="section">
+      <div class="section-header">
+        <h2 class="section-header__title" data-i18n="start.title">Ready to try?</h2>
+        <p class="section-header__subtitle" data-i18n="start.subtitle">Three ways to get started today.</p>
+      </div>
+
+      <div class="grid grid--3">
+        <div class="card">
+          <div class="card__icon card__icon--blue"><span class="mdi mdi-play-circle-outline"></span></div>
+          <div class="card__title" data-i18n="start.o1_title">Try the chatbot for free</div>
+          <div class="card__text" data-i18n="start.o1_text">Three free queries, no signup. Ask anything about EU policy and see what Brubru can do.</div>
+          <a href="https://brubru.beresol.eu" class="btn btn--primary" style="margin-top: 1rem;" data-i18n="start.o1_cta">Open Brubru →</a>
+        </div>
+        <div class="card">
+          <div class="card__icon card__icon--purple"><span class="mdi mdi-account-plus-outline"></span></div>
+          <div class="card__title" data-i18n="start.o2_title">Start a free trial</div>
+          <div class="card__text" data-i18n="start.o2_text">14 days free, no credit card. Full access to every product on your chosen plan.</div>
+          <a href="https://brubru.beresol.eu/signup" class="btn btn--primary" style="margin-top: 1rem;" data-i18n="start.o2_cta">Sign up →</a>
+        </div>
+        <div class="card">
+          <div class="card__icon card__icon--green"><span class="mdi mdi-calendar-check-outline"></span></div>
+          <div class="card__title" data-i18n="start.o3_title">Book a demo</div>
+          <div class="card__text" data-i18n="start.o3_text">Thirty minutes with Victor, our founder, walking through the product tailored to your role.</div>
+          <a href="mailto:hello@beresol.eu?subject=Brubru%20demo%20request" class="btn btn--primary" style="margin-top: 1rem;" data-i18n="start.o3_cta">Request demo →</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 3rem; padding: 2rem; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-lg); text-align: center;">
+        <h3 style="font-size: 1.35rem; margin-bottom: 0.75rem;" data-i18n="start.contact_title">Talk to us</h3>
+        <p style="color: var(--color-text-secondary); margin-bottom: 1rem;" data-i18n="start.contact_text">Beresol BV is a Brussels-based AI company. Brubru is built in the EU bubble, for the EU bubble.</p>
+        <p>
+          <a href="mailto:hello@beresol.eu" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">hello@beresol.eu</a>
+          &nbsp;·&nbsp;
+          <a href="https://linkedin.com/in/victor-sole" target="_blank" rel="noopener" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">Víctor Solé on LinkedIn</a>
+          &nbsp;·&nbsp;
+          <a href="https://brubru.beresol.eu" style="color: var(--color-blue); font-weight: 600; text-decoration: none;">brubru.beresol.eu</a>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>
+      &copy; 2026 <a href="https://beresol.eu">Beresol BV</a> ·
+      <a href="brubru_business_plan.html" data-i18n="footer.investors">Investors: business plan</a> ·
+      <a href="https://brubru.beresol.eu" data-i18n="footer.app">Open Brubru</a>
+    </p>
+  </footer>
+
+  <!-- ========== i18n DICTIONARY + LOGIC ========== -->
+  <script>
+    const TRANSLATIONS = {
+      en: {}, // English is the source; empty dict means "use the HTML text as-is"
+
+      fr: {
+        'header.title': 'Brubru pour les affaires publiques européennes',
+        'header.subtitle': 'Présentation client par Beresol BV',
+        'nav.problem': 'Le problème',
+        'nav.clients': 'Qui nous servons',
+        'nav.products': 'Suite de produits',
+        'nav.competitive': 'Concurrence',
+        'nav.pricing': 'Tarifs',
+        'nav.team': 'Équipe',
+        'nav.start': 'Commencer',
+        'hero.title': 'Toute l\u2019UE, avec l\u2019IA.',
+        'hero.text': 'Brubru est un assistant d\u2019IA pensé pour les professionnels des affaires publiques qui travaillent sur la politique européenne. Nous suivons chaque nouveau règlement, chaque vote en commission, chaque agenda de la Commission, pour que vous n\u2019ayez pas à le faire.',
+        'hero.cta_try': 'Essayer Brubru gratuitement',
+        'hero.cta_demo': 'Réserver une démo',
+        'problem.title': 'Bruxelles va vite. Trop vite.',
+        'problem.subtitle': 'Les professionnels des affaires UE passent jusqu\u2019à la moitié de leur semaine à chercher l\u2019information plutôt qu\u2019à agir. Voici ce que cela donne concrètement.',
+        'problem.stat1': 'publications au Journal officiel (8 710 actes distincts)',
+        'problem.stat2': 'guides experts de politiques européennes, mis à jour chaque jour',
+        'problem.stat3': 'dossiers législatifs en vie dans le Legislative Train et l\u2019OEIL',
+        'problem.stat4': 'portails institutionnels UE scrutés chaque matin',
+        'problem.stat5': 'pages de l\u2019écosystème numérique europa.eu indexées',
+        'problem.stat6': 'sous-domaines prioritaires europa.eu à surveiller',
+        'problem.pain_badge': 'La douleur',
+        'problem.pain_header': 'L\u2019UE que vous affrontez',
+        'problem.solution_badge': 'Brubru répond avec',
+        'problem.solution_header': 'La machine qui digère tout ça pour vous',
+        'problem.pain_title': 'Les points de douleur que nous résolvons',
+        'problem.pain1_title': 'Des heures perdues sur EUR-Lex et OEIL',
+        'problem.pain1_text': 'Trouver le bon CELEX, la bonne référence de procédure, le bon rapporteur prend 20 à 40 minutes par dossier. Brubru vous donne la réponse en quelques secondes.',
+        'problem.pain2_title': 'La rédaction d\u2019amendements qui brûle une journée',
+        'problem.pain2_text': 'Rédiger un amendement PE techniquement correct en XML Akoma Ntoso est un savoir-faire spécialisé. Notre Amendator produit des amendements valides instantanément.',
+        'problem.pain3_title': 'Votes en commission et échéances manqués',
+        'problem.pain3_text': 'Les agendas changent, les échéances dérivent. Mon Calendrier UE regroupe toutes les agendas institutionnels en un seul lieu avec alertes en temps réel.',
+        'problem.pain4_title': 'Des écarts de conformité invisibles',
+        'problem.pain4_text': 'De nouvelles obligations entrent en vigueur en silence. EU Law Comply compare vos politiques internes au droit applicable et identifie les écarts.',
+        'problem.pain5_title': 'Les marchés publics, une boîte noire',
+        'problem.pain5_text': 'TED publie des milliers d\u2019avis par semaine. Tenderator filtre, associe et vous alerte sur les opportunités qui correspondent vraiment à votre profil.',
+        'problem.pain6_title': 'Les rendez-vous que vous auriez dû prendre',
+        'problem.pain6_text': 'Qui est rapporteur ? Quels shadows briefer ? Brubru cartographie automatiquement le paysage politique de chaque dossier.',
+        'clients.title': 'Qui utilise Brubru',
+        'clients.subtitle': 'Brubru est conçu pour les six profils des affaires publiques UE : le consultant, le responsable interne, le chef de politique d\u2019association, le fonctionnaire européen, l\u2019assistant parlementaire, et l\u2019avocat de la société civile ou d\u2019ONG.',
+        'clients.c1_meta': 'Conseil',
+        'clients.c1_title': 'Consultant en affaires publiques',
+        'clients.c1_who': '<strong>Qui :</strong> associés seniors et directeurs de cabinets bruxellois (Kreab, Rud Pedersen, Hume Brophy, Cambre, FGS, Interel, Fleishman, etc.) qui gèrent 5 à 15 briefs clients simultanément.',
+        'clients.c1_need': '<strong>La mission :</strong> transformer le changement réglementaire en conseil facturable, rapidement. Le client attend une note le jour même de la publication d\u2019une proposition.',
+        'clients.c1_pain': '<strong>Douleur :</strong> 30 minutes par dossier pour trouver CELEX, rapporteur, commission PE, groupe de travail du Conseil. Multipliez par 15 clients.',
+        'clients.c2_meta': 'Interne entreprise',
+        'clients.c2_title': 'Responsable affaires publiques interne',
+        'clients.c2_who': '<strong>Qui :</strong> responsables affaires UE dans multinationales, ETI et scale-ups (pharma, tech, automobile, finance, distribution). Souvent une équipe d\u2019une à trois personnes pour couvrir toute l\u2019empreinte réglementaire.',
+        'clients.c2_need': '<strong>La mission :</strong> protéger l\u2019entreprise d\u2019une mauvaise réglementation et saisir les opportunités. Reporter trimestriellement au comex sur l\u2019exposition réglementaire et les gains d\u2019advocacy.',
+        'clients.c2_pain': '<strong>Douleur :</strong> trop de dossiers, pas assez de ressources. Risque de manquer un acte délégué, un trilogue, une échéance de conformité. Pas de temps pour rédiger des prises de position de zéro.',
+        'clients.c3_meta': 'Association professionnelle',
+        'clients.c3_title': 'Responsable politiques d\u2019une association',
+        'clients.c3_who': '<strong>Qui :</strong> directeurs et chargés de politique dans les fédérations européennes (DIGITALEUROPE, EFPIA, CEFIC, ACEA, EBF, FoodDrinkEurope, SME United, etc.) représentant des secteurs ou les PME.',
+        'clients.c3_need': '<strong>La mission :</strong> consolider les positions des membres, rédiger les réponses aux consultations, briefer les membres sur la législation à venir, coordonner l\u2019advocacy avec les alliés.',
+        'clients.c3_pain': '<strong>Douleur :</strong> les membres demandent des orientations claires sur 30 dossiers, vite. Le staff passe plus de temps à compiler des rapports qu\u2019à faire de l\u2019advocacy.',
+        'clients.c4_meta': 'Institutions européennes',
+        'clients.c4_title': 'Fonctionnaire européen',
+        'clients.c4_who': '<strong>Qui :</strong> personnel de la Commission (chefs d\u2019unité, chefs de pôle, chargés de politique dans les DG et cabinets), Conseil de l\u2019UE (Secrétariat général, présidents de groupe de travail, attachés nationaux aux Représentations permanentes), secrétariat du Parlement européen et personnel des commissions, agences (EFSA, EMA, ENISA, ACER, EEA, FRA, EUROPOL, etc.), CESE, CdR, BCE, BEI, Cour des comptes.',
+        'clients.c4_need': '<strong>La mission :</strong> rédiger et négocier la législation entre institutions, mener les consultations, suivre les amendements du Parlement sur vos dossiers, surveiller ce que proposent les DG sœurs et configurations du Conseil, coordonner avec les attachés nationaux.',
+        'clients.c4_pain': '<strong>Douleur :</strong> systèmes internes lents et cloisonnés. Le suivi manuel des positions (feedback Have Your Say, réunions de lobby, amendements PE, signaux des groupes de travail du Conseil). Anticiper l\u2019issue politique dans le triangle du trilogue relève de la divination.',
+        'clients.c5_meta': 'Parlement européen',
+        'clients.c5_title': 'Assistant de député et personnel des groupes politiques',
+        'clients.c5_who': '<strong>Qui :</strong> assistants parlementaires accrédités (APA), assistants locaux, conseillers dans les sept groupes politiques (PPE, S&D, Renew, Verts, PfE, ECR, La Gauche) et le Secrétariat du PE.',
+        'clients.c5_need': '<strong>La mission :</strong> briefer le député pour chaque vote, rédiger les amendements, gérer les questions de circonscription, suivre la législation sœur dans les parlements nationaux, coordonner avec les rapporteurs fictifs et rapporteurs d\u2019autres groupes.',
+        'clients.c5_pain': '<strong>Douleur :</strong> dix commissions, des dizaines de dossiers, des centaines d\u2019amendements par plénière. Produire une liste de vote le lundi matin pour une mini-plénière le mardi est un cauchemar récurrent.',
+        'clients.c6_meta': 'ONG et société civile',
+        'clients.c6_title': 'Avocat d\u2019ONG et de la société civile',
+        'clients.c6_who': '<strong>Qui :</strong> personnel politique et de campagne des ONG et réseaux européens de société civile (Transparency International UE, BEUC, EPHA, EDRi, BirdLife Europe, WWF European Policy Office, Climate Action Network, Forum européen de la jeunesse, Eurochild, Caritas Europa, Amnesty International UE, Oxfam UE, Social Platform, etc.) ainsi que les bras d\u2019intérêt public des fondations et think tanks.',
+        'clients.c6_need': '<strong>La mission :</strong> défendre l\u2019intérêt général dans la législation UE : rédiger des amendements pour des députés alliés, répondre aux consultations de la Commission, briefer les coalitions d\u2019ONG, produire des positions prêtes pour la campagne en plusieurs langues, surveiller le Conseil où la transparence est la plus faible.',
+        'clients.c6_pain': '<strong>Douleur :</strong> petites équipes dépassées par les lobbyistes industriels. Budgets limités. Doivent aller aussi vite que les advocates commerciaux sans les mêmes ressources de recherche. Les réponses aux consultations et la rédaction d\u2019amendements grignotent le temps de campagne.',
+        'products.title': 'Suite de produits',
+        'products.subtitle': 'Six modules intégrés couvrant tout le workflow d\u2019advocacy UE. Cliquez sur un module pour l\u2019explorer.',
+        'products.matrix_title': 'Qui utilise quoi, et comment',
+        'products.matrix_subtitle': 'Des cas d\u2019usage concrets pour chaque profil, sur les cinq produits.',
+        'products.matrix_col0': 'Profil',
+        'products.matrix_col1': 'Chat',
+        'products.matrix_col2': 'Amendator',
+        'products.matrix_col3': 'My EU Bubble',
+        'products.matrix_col4': 'EU Law Comply',
+        'products.matrix_col5': 'Tenderator',
+        'products.matrix_r1': 'Consultant',
+        'products.matrix_r2': 'Entreprise interne',
+        'products.matrix_r3': 'Association professionnelle',
+        'products.matrix_r4': 'Fonctionnaire européen',
+        'products.matrix_r5': 'Assistant PE / personnel de groupe',
+        'products.matrix_r6': 'ONG / société civile',
+        'products.bubble_title': 'My EU Bubble, onglet par onglet',
+        'products.bubble_subtitle': 'Le Bubble est le c\u0153ur de Brubru. Dix surfaces de travail autour de votre portefeuille de dossiers.',
+        'products.bubble_t1_title': 'Tableau de bord',
+        'products.bubble_t2_title': 'My Files',
+        'products.bubble_t3_title': 'Position Analysis',
+        'products.bubble_t4_title': 'My EU Calendar',
+        'products.bubble_t5_title': 'Predictions',
+        'products.bubble_t6_title': 'Consultations publiques CE',
+        'products.bubble_t7_title': 'Documents',
+        'products.bubble_t8_title': 'Amendements',
+        'products.bubble_t9_title': 'Legislative Tracker',
+        'products.bubble_t10_title': 'Analytics',
+        'competitive.title': 'Paysage concurrentiel',
+        'competitive.subtitle': 'Catégorie émergente : peu de plateformes IA pour la politique UE, aucune avec l\u2019étendue de Brubru.',
+        'pricing.title': 'Tarifs simples et modulaires',
+        'pricing.subtitle': 'Démarrez avec 14 jours d\u2019essai gratuit, sans carte bancaire. Choisissez le plan adapté à votre rôle. Annulez à tout moment.',
+        'pricing.p1_name': 'Starter', 'pricing.p1_per': 'par mois', 'pricing.p1_cta': 'Démarrer l\u2019essai gratuit',
+        'pricing.p2_name': 'Advocate', 'pricing.p2_per': 'par mois', 'pricing.p2_cta': 'Démarrer l\u2019essai gratuit',
+        'pricing.p3_name': 'Professional', 'pricing.p3_per': 'par mois', 'pricing.p3_cta': 'Démarrer l\u2019essai gratuit',
+        'pricing.p4_name': 'Forfait PE', 'pricing.p4_per': 'par mois, personnel PE', 'pricing.p4_cta': 'Nous contacter',
+        'pricing.note': 'Facturation annuelle disponible avec deux mois offerts. Tarifs équipe et entreprise sur demande.',
+        'team.title': 'L\u2019équipe derrière Brubru',
+        'team.subtitle': 'Fondateur solo avec une expertise approfondie du domaine politique UE et un plan de recrutement clair pour les douze prochains mois.',
+        'team.victor_bio': '8 ans en politique UE : assistant parlementaire au Parlement européen, conseiller commercial, consultant réglementaire en 6 langues UE (EN, ES, CA, FR, IT, NL). A construit toute la plateforme Brubru parce que le produit vient du terrain, pas des livres. Basé à Bruxelles.',
+        'team.hires_title': 'Recrutements des douze prochains mois',
+        'team.hire1_title': 'Responsable des ventes / BD',
+        'team.hire1_detail': 'Convertir le réseau bruxellois en clients payants',
+        'team.hire1_timing': 'Mois 3',
+        'team.hire2_title': 'Développeur junior',
+        'team.hire2_detail': 'Mettre à l\u2019échelle les fonctionnalités, réduire le bus factor',
+        'team.hire2_timing': 'Mois 6',
+        'team.hire3_title': 'Customer success',
+        'team.hire3_detail': 'Onboarding, rétention, upsell',
+        'team.hire3_timing': 'Mois 9',
+        'start.title': 'Prêt à essayer ?',
+        'start.subtitle': 'Trois façons de démarrer aujourd\u2019hui.',
+        'start.o1_title': 'Essayer le chatbot gratuitement',
+        'start.o1_text': 'Trois requêtes gratuites, sans inscription. Demandez-nous ce que vous voulez sur la politique UE.',
+        'start.o1_cta': 'Ouvrir Brubru \u2192',
+        'start.o2_title': 'Démarrer un essai gratuit',
+        'start.o2_text': '14 jours offerts, sans carte bancaire. Accès complet à tous les produits du plan choisi.',
+        'start.o2_cta': 'S\u2019inscrire \u2192',
+        'start.o3_title': 'Réserver une démo',
+        'start.o3_text': 'Trente minutes avec Víctor, notre fondateur, pour parcourir le produit adapté à votre rôle.',
+        'start.o3_cta': 'Demander une démo \u2192',
+        'start.contact_title': 'Parlons-nous',
+        'start.contact_text': 'Beresol BV est une entreprise d\u2019IA basée à Bruxelles. Brubru est construit dans la bulle UE, pour la bulle UE.',
+        'footer.investors': 'Investisseurs : business plan',
+        'footer.app': 'Ouvrir Brubru'
+      },
+
+      nl: {
+        'header.title': 'Brubru voor EU public affairs',
+        'header.subtitle': 'Klantpresentatie door Beresol BV',
+        'nav.problem': 'Het probleem',
+        'nav.clients': 'Wie wij bedienen',
+        'nav.products': 'Productsuite',
+        'nav.competitive': 'Concurrentie',
+        'nav.pricing': 'Prijzen',
+        'nav.team': 'Team',
+        'nav.start': 'Aan de slag',
+        'hero.title': 'De hele EU, met AI.',
+        'hero.text': 'Brubru is een AI-assistent gebouwd voor public-affairs-professionals die met EU-beleid werken. Wij volgen elke nieuwe regelgeving, elke commissiestemming, elke Commissie-agenda, zodat u dat niet hoeft te doen.',
+        'hero.cta_try': 'Probeer Brubru gratis',
+        'hero.cta_demo': 'Boek een demo',
+        'problem.title': 'Brussel gaat snel. Te snel.',
+        'problem.subtitle': 'EU-beleidsprofessionals besteden tot de helft van hun week aan zoeken in plaats van handelen. Zo ziet dat er in de praktijk uit.',
+        'problem.stat1': 'publicaties in het Publicatieblad (8.710 afzonderlijke wetten)',
+        'problem.stat2': 'expertgidsen per beleidsdomein, dagelijks bijgewerkt',
+        'problem.stat3': 'levende wetsdossiers in de Legislative Train en OEIL',
+        'problem.stat4': 'EU-institutionele nieuwsportalen elke ochtend doorzocht',
+        'problem.stat5': 'pagina\u2019s uit het europa.eu digitale ecosysteem geïndexeerd',
+        'problem.stat6': 'prioritaire europa.eu-subdomeinen om te volgen',
+        'problem.pain_badge': 'De pijn',
+        'problem.pain_header': 'De EU waar u tegenover staat',
+        'problem.solution_badge': 'Brubru antwoordt met',
+        'problem.solution_header': 'De machine die het voor u uitpluist',
+        'problem.pain_title': 'De pijnpunten die wij oplossen',
+        'problem.pain1_title': 'Uren verloren in EUR-Lex en OEIL',
+        'problem.pain1_text': 'De juiste CELEX, procedureverwijzing of rapporteur vinden kost 20 tot 40 minuten per dossier. Brubru geeft het antwoord in seconden.',
+        'problem.pain2_title': 'Amendementen schrijven die een hele dag vreten',
+        'problem.pain2_text': 'Een technisch correct EP-amendement in Akoma Ntoso-XML opstellen is een specialistenvak. Onze Amendator produceert onmiddellijk geldige amendementen.',
+        'problem.pain3_title': 'Gemiste commissiestemmingen en deadlines',
+        'problem.pain3_text': 'Agenda\u2019s verschuiven, deadlines glippen. My EU Calendar aggregeert alle institutionele agenda\u2019s met realtime-waarschuwingen.',
+        'problem.pain4_title': 'Compliance-gaten die niemand ziet aankomen',
+        'problem.pain4_text': 'Nieuwe verplichtingen treden in stilte in werking. EU Law Comply toetst uw interne beleid aan het EU-recht en markeert de leemtes.',
+        'problem.pain5_title': 'Aanbestedingen als een zwarte doos',
+        'problem.pain5_text': 'TED publiceert duizenden aankondigingen per week. Tenderator filtert, matcht en waarschuwt u over de kansen die écht bij u passen.',
+        'problem.pain6_title': 'De vergaderingen die u had moeten voeren',
+        'problem.pain6_text': 'Wie is de rapporteur? Welke schaduwrapporteurs moet u briefen? Brubru brengt het politieke landschap van elk dossier automatisch in kaart.',
+        'clients.title': 'Wie gebruikt Brubru',
+        'clients.subtitle': 'Brubru is gebouwd voor de zes profielen van EU public affairs: de consultant, de interne bedrijfsadviseur, de beleidsdirecteur van een brancheorganisatie, de EU-ambtenaar, de parlementaire medewerker en de ngo- of maatschappelijke pleitbezorger.',
+        'clients.c1_meta': 'Consultancy', 'clients.c1_title': 'Public-affairs-consultant',
+        'clients.c1_who': '<strong>Wie:</strong> senior associates en directeurs bij Brusselse consultancies (Kreab, Rud Pedersen, Hume Brophy, Cambre, FGS, Interel, Fleishman enz.) die 5 à 15 klantdossiers tegelijk beheren.',
+        'clients.c1_need': '<strong>De taak:</strong> regelgevende verandering snel omzetten in factureerbaar advies. De klant verwacht een memo op de dag dat de Commissie een voorstel publiceert.',
+        'clients.c1_pain': '<strong>Pijn:</strong> 30 minuten per dossier alleen al om CELEX, rapporteur, EP-commissie en Raadswerkgroep te vinden. Vermenigvuldig dat met 15 klanten.',
+        'clients.c2_meta': 'Interne bedrijfsadviseur', 'clients.c2_title': 'In-house public-affairs-manager',
+        'clients.c2_who': '<strong>Wie:</strong> EU-affairs-managers binnen multinationals, midcaps en scale-ups (pharma, tech, auto, financiën, retail). Vaak een team van 1 tot 3 personen voor de hele regelgevende voetafdruk.',
+        'clients.c2_need': '<strong>De taak:</strong> het bedrijf beschermen tegen slechte regelgeving en kansen grijpen. Elk kwartaal rapporteren aan de directie over regelgevende blootstelling en advocacy-winst.',
+        'clients.c2_pain': '<strong>Pijn:</strong> te veel dossiers, te weinig handen. Risico dat een gedelegeerde handeling, een triloog of een compliance-deadline wordt gemist. Geen tijd om positie-papers vanaf nul te schrijven.',
+        'clients.c3_meta': 'Brancheorganisatie', 'clients.c3_title': 'Beleidsdirecteur brancheorganisatie',
+        'clients.c3_who': '<strong>Wie:</strong> beleidsdirecteurs en -medewerkers bij Europese brancheorganisaties (DIGITALEUROPE, EFPIA, CEFIC, ACEA, EBF, FoodDrinkEurope, SME United, enz.).',
+        'clients.c3_need': '<strong>De taak:</strong> standpunten van leden consolideren, reageren op consultaties, leden briefen over aankomende wetgeving, advocacy coördineren met bondgenoten.',
+        'clients.c3_pain': '<strong>Pijn:</strong> leden verwachten heldere richtlijnen over 30 dossiers, snel. Staff verliest meer tijd aan monitoring dan aan echte advocacy.',
+        'clients.c4_meta': 'EU-instellingen', 'clients.c4_title': 'EU-ambtenaar',
+        'clients.c4_who': '<strong>Wie:</strong> Commissiepersoneel (desk officers, eenheidshoofden, beleidsambtenaren uit de DG\u2019s en kabinetten), Raad van de EU (SG, voorzitters van werkgroepen, nationale attachés bij de Permanente Vertegenwoordigingen), EP-secretariaat en commissiestaf, EU-agentschappen (EFSA, EMA, ENISA, ACER, EEA, FRA, EUROPOL enz.), EESC, Comité van de Regio\u2019s, ECB, EIB, Rekenkamer.',
+        'clients.c4_need': '<strong>De taak:</strong> wetgeving opstellen en onderhandelen tussen instellingen, consultaties leiden, de amendementen van het Parlement op uw dossiers volgen, in de gaten houden wat zusters-DG\u2019s en Raadsconfiguraties voorstellen, coördineren met nationale attachés in de Raad.',
+        'clients.c4_pain': '<strong>Pijn:</strong> interne systemen zijn traag en per instelling verkaveld. Handmatig bijhouden van belanghebbendenposities (Have Your Say-feedback, lobbymeetings, EP-amendementen, signalen uit de Raadswerkgroepen) is bewerkelijk. Het politieke resultaat in de trilogue-driehoek voorspellen is giswerk.',
+        'clients.c5_meta': 'Europees Parlement', 'clients.c5_title': 'EP-medewerker en groepsmedewerker',
+        'clients.c5_who': '<strong>Wie:</strong> geaccrediteerde parlementaire assistenten (APA\u2019s), lokale assistenten en adviseurs in de zeven fracties (EVP, S&D, Renew, Groenen, PfE, ECR, De Linkse) en het EP-secretariaat.',
+        'clients.c5_need': '<strong>De taak:</strong> het lid briefen voor elke stemming, amendementen opstellen, vragen uit de kiesomgeving beheren, zusterregelgeving in nationale parlementen volgen, afstemmen met schaduwrapporteurs en rapporteurs van andere groepen.',
+        'clients.c5_pain': '<strong>Pijn:</strong> tien commissies, tientallen dossiers, honderden amendementen per plenaire. Een stemlijst op maandagochtend produceren voor een mini-plenaire op dinsdag is een terugkerende nachtmerrie.',
+        'clients.c6_meta': 'Ngo en maatschappelijke organisatie', 'clients.c6_title': 'Ngo- en maatschappelijke pleitbezorger',
+        'clients.c6_who': '<strong>Wie:</strong> beleids- en campagnemedewerkers bij Europese ngo\u2019s en maatschappelijke netwerken (Transparency International EU, BEUC, EPHA, EDRi, BirdLife Europe, WWF European Policy Office, Climate Action Network, European Youth Forum, Eurochild, Caritas Europa, Amnesty International EU, Oxfam EU, Social Platform, enz.) plus de beleidsarmen van stichtingen en denktanks.',
+        'clients.c6_need': '<strong>De taak:</strong> het algemeen belang verdedigen in EU-wetgeving: amendementen opstellen voor bevriende EP-leden, reageren op Commissieconsultaties, coalities briefen, campagne-klare standpunten in zes talen produceren, de Raad monitoren waar de publieke controle het zwakst is.',
+        'clients.c6_pain': '<strong>Pijn:</strong> kleine teams tegenover industriële lobbyisten. Beperkte budgetten. Moeten net zo snel werken als commerciële advocates, zonder dezelfde onderzoeksmiddelen. Consultaties en amendementen vreten aan de campagnetijd.',
+        'products.title': 'Productsuite',
+        'products.subtitle': 'Zes geïntegreerde modules die de volledige EU-advocacy-workflow afdekken. Klik een module om te verkennen.',
+        'products.matrix_title': 'Wie gebruikt wat, en hoe',
+        'products.matrix_subtitle': 'Concrete use cases per profiel, over de vijf producten.',
+        'products.matrix_col0': 'Profiel', 'products.matrix_col1': 'Chat', 'products.matrix_col2': 'Amendator',
+        'products.matrix_col3': 'My EU Bubble', 'products.matrix_col4': 'EU Law Comply', 'products.matrix_col5': 'Tenderator',
+        'products.matrix_r1': 'Consultant', 'products.matrix_r2': 'Interne bedrijfsadviseur', 'products.matrix_r3': 'Brancheorganisatie',
+        'products.matrix_r4': 'EU-ambtenaar', 'products.matrix_r5': 'EP-medewerker / groep', 'products.matrix_r6': 'Ngo / maatschappij',
+        'products.bubble_title': 'My EU Bubble, tab voor tab',
+        'products.bubble_subtitle': 'The Bubble is het hart van Brubru. Tien werkvlakken rond uw dossierportefeuille.',
+        'products.bubble_t1_title': 'Dashboard', 'products.bubble_t2_title': 'My Files', 'products.bubble_t3_title': 'Position Analysis',
+        'products.bubble_t4_title': 'My EU Calendar', 'products.bubble_t5_title': 'Predictions', 'products.bubble_t6_title': 'EC Publieke consultaties',
+        'products.bubble_t7_title': 'Documents', 'products.bubble_t8_title': 'Amendementen', 'products.bubble_t9_title': 'Legislative Tracker',
+        'products.bubble_t10_title': 'Analytics',
+        'competitive.title': 'Concurrentielandschap',
+        'competitive.subtitle': 'Opkomende categorie: weinig AI-native EU-beleidsplatformen, geen met Brubru\u2019s breedte.',
+        'pricing.title': 'Eenvoudige, modulaire prijzen',
+        'pricing.subtitle': 'Begin met een proef van 14 dagen zonder creditcard. Kies het plan bij uw rol. Altijd opzegbaar.',
+        'pricing.p1_name': 'Starter', 'pricing.p1_per': 'per maand', 'pricing.p1_cta': 'Start gratis proef',
+        'pricing.p2_name': 'Advocate', 'pricing.p2_per': 'per maand', 'pricing.p2_cta': 'Start gratis proef',
+        'pricing.p3_name': 'Professional', 'pricing.p3_per': 'per maand', 'pricing.p3_cta': 'Start gratis proef',
+        'pricing.p4_name': 'EP-plan', 'pricing.p4_per': 'per maand, EP-personeel', 'pricing.p4_cta': 'Contacteer ons',
+        'pricing.note': 'Jaarfacturering beschikbaar met twee maanden gratis. Team- en enterprise-tarieven op aanvraag.',
+        'team.title': 'Het team achter Brubru',
+        'team.subtitle': 'Solofounder met diepe EU-beleidsexpertise en een helder aanwervingsplan voor de komende twaalf maanden.',
+        'team.victor_bio': '8 jaar in EU-beleid: parlementair assistent in het Europees Parlement, handelsadviseur, regelgevingsconsultant in 6 EU-talen (EN, ES, CA, FR, IT, NL). Bouwde het hele Brubru-platform omdat het product uit het vak komt, niet uit de theorie. Gevestigd in Brussel.',
+        'team.hires_title': 'Belangrijke aanwervingen komende twaalf maanden',
+        'team.hire1_title': 'Hoofd sales / BD', 'team.hire1_detail': 'Brussels netwerk omzetten in betalende klanten', 'team.hire1_timing': 'Maand 3',
+        'team.hire2_title': 'Junior-ontwikkelaar', 'team.hire2_detail': 'Features opschalen, bus factor verkleinen', 'team.hire2_timing': 'Maand 6',
+        'team.hire3_title': 'Customer success', 'team.hire3_detail': 'Onboarding, retentie, upsell', 'team.hire3_timing': 'Maand 9',
+        'start.title': 'Klaar om te proberen?', 'start.subtitle': 'Drie manieren om vandaag te beginnen.',
+        'start.o1_title': 'Probeer de chatbot gratis', 'start.o1_text': 'Drie gratis queries, geen registratie. Stel elke vraag over EU-beleid.', 'start.o1_cta': 'Open Brubru \u2192',
+        'start.o2_title': 'Start een gratis proef', 'start.o2_text': '14 dagen gratis, geen creditcard. Volledige toegang tot elk product in uw plan.', 'start.o2_cta': 'Aanmelden \u2192',
+        'start.o3_title': 'Boek een demo', 'start.o3_text': 'Dertig minuten met Víctor, onze oprichter, door het product op maat van uw rol.', 'start.o3_cta': 'Vraag een demo aan \u2192',
+        'start.contact_title': 'Spreek met ons', 'start.contact_text': 'Beresol BV is een AI-bedrijf gevestigd in Brussel. Brubru is gebouwd in de EU-bubble, voor de EU-bubble.',
+        'footer.investors': 'Investeerders: business plan', 'footer.app': 'Open Brubru'
+      },
+
+      es: {
+        'header.title': 'Brubru para asuntos públicos europeos',
+        'header.subtitle': 'Presentación a clientes por Beresol BV',
+        'nav.problem': 'El problema', 'nav.clients': 'A quién servimos', 'nav.products': 'Suite de productos',
+        'nav.competitive': 'Competencia', 'nav.pricing': 'Precios', 'nav.team': 'Equipo', 'nav.start': 'Empezar',
+        'hero.title': 'Toda la UE, con IA.',
+        'hero.text': 'Brubru es un asistente de IA construido específicamente para profesionales de asuntos públicos que trabajan en política europea. Rastreamos cada nueva regulación, cada voto en comisión, cada agenda de la Comisión, para que usted no tenga que hacerlo.',
+        'hero.cta_try': 'Prueba Brubru gratis', 'hero.cta_demo': 'Reservar una demo',
+        'problem.title': 'Bruselas va rápido. Demasiado rápido.',
+        'problem.subtitle': 'Los profesionales de política UE pasan hasta la mitad de su semana buscando información en lugar de actuar sobre ella. Así se ve en la práctica.',
+        'problem.stat1': 'publicaciones en el Diario Oficial (8.710 actos distintos)',
+        'problem.stat2': 'guías expertas de política por dominio, actualizadas a diario',
+        'problem.stat3': 'expedientes legislativos vivos en el Legislative Train y OEIL',
+        'problem.stat4': 'portales institucionales UE revisados cada mañana',
+        'problem.stat5': 'páginas del ecosistema digital europa.eu indexadas',
+        'problem.stat6': 'subdominios prioritarios de europa.eu para vigilar',
+        'problem.pain_badge': 'El dolor',
+        'problem.pain_header': 'La UE a la que te enfrentas',
+        'problem.solution_badge': 'Brubru responde con',
+        'problem.solution_header': 'La máquina que lo procesa por ti',
+        'problem.pain_title': 'Los puntos de dolor que resolvemos',
+        'problem.pain1_title': 'Horas perdidas en EUR-Lex y OEIL',
+        'problem.pain1_text': 'Encontrar el CELEX correcto, la referencia de procedimiento adecuada, el ponente idóneo lleva de 20 a 40 minutos por expediente. Brubru da la respuesta en segundos.',
+        'problem.pain2_title': 'Redactar enmiendas que queman un día entero',
+        'problem.pain2_text': 'Redactar una enmienda PE técnicamente correcta en XML Akoma Ntoso es una habilidad especializada. Nuestro Amendator produce enmiendas válidas al instante.',
+        'problem.pain3_title': 'Votos en comisión y plazos perdidos',
+        'problem.pain3_text': 'Las agendas cambian, los plazos se desplazan. Mi Calendario UE agrega todas las agendas institucionales con alertas en tiempo real.',
+        'problem.pain4_title': 'Brechas de cumplimiento que nadie ve llegar',
+        'problem.pain4_text': 'Las nuevas obligaciones entran en vigor en silencio. EU Law Comply compara sus políticas internas con el Derecho UE aplicable y señala las brechas.',
+        'problem.pain5_title': 'Contratación pública que parece una caja negra',
+        'problem.pain5_text': 'TED publica miles de anuncios por semana. Tenderator filtra, empareja y le alerta sobre las oportunidades que sí encajan con su perfil.',
+        'problem.pain6_title': 'Las reuniones que debería haber tenido',
+        'problem.pain6_text': '¿Quién es el ponente? ¿A qué ponentes alternativos hay que informar? Brubru mapea automáticamente el paisaje político de cada expediente.',
+        'clients.title': 'Quién usa Brubru',
+        'clients.subtitle': 'Brubru está construido para los seis perfiles de los asuntos públicos UE: el consultor, el responsable interno, el jefe de políticas de asociación, el funcionario UE, el asistente parlamentario y el defensor de ONG o sociedad civil.',
+        'clients.c1_meta': 'Consultoría', 'clients.c1_title': 'Consultor de asuntos públicos',
+        'clients.c1_who': '<strong>Quién:</strong> asociados sénior y directores de consultoras bruselenses (Kreab, Rud Pedersen, Hume Brophy, Cambre, FGS, Interel, Fleishman, etc.) gestionando carteras de 5 a 15 briefs simultáneos.',
+        'clients.c1_need': '<strong>El trabajo:</strong> convertir el cambio regulatorio en asesoría facturable, rápido. El cliente espera una nota la misma tarde en que la Comisión publica una propuesta.',
+        'clients.c1_pain': '<strong>Dolor:</strong> 30 minutos por expediente solo para localizar CELEX, ponente, comisión PE, grupo de trabajo del Consejo. Multiplíquelo por 15 clientes.',
+        'clients.c2_meta': 'Interno corporativo', 'clients.c2_title': 'Responsable interno de asuntos públicos',
+        'clients.c2_who': '<strong>Quién:</strong> responsables de asuntos UE en multinacionales, mid-caps y scale-ups (farma, tech, automoción, finanzas, retail). A menudo equipos de 1 a 3 personas cubriendo toda la huella regulatoria.',
+        'clients.c2_need': '<strong>El trabajo:</strong> proteger el negocio de la mala regulación y capturar oportunidades. Reportar trimestralmente al comité de dirección sobre exposición regulatoria y logros de advocacy.',
+        'clients.c2_pain': '<strong>Dolor:</strong> demasiados expedientes, pocas manos. Riesgo de perder un acto delegado, un trílogo, un plazo de cumplimiento. Sin tiempo para redactar documentos de posición desde cero.',
+        'clients.c3_meta': 'Asociación empresarial', 'clients.c3_title': 'Jefe de políticas de asociación',
+        'clients.c3_who': '<strong>Quién:</strong> directores y responsables de política en asociaciones europeas (DIGITALEUROPE, EFPIA, CEFIC, ACEA, EBF, FoodDrinkEurope, SME United, etc.).',
+        'clients.c3_need': '<strong>El trabajo:</strong> consolidar las posiciones de los miembros, redactar respuestas a consultas, informar a los miembros sobre la legislación venidera, coordinar la advocacy con aliados.',
+        'clients.c3_pain': '<strong>Dolor:</strong> los miembros esperan orientación clara sobre 30 expedientes, rápido. El personal dedica más tiempo a compilar informes que a hacer advocacy real.',
+        'clients.c4_meta': 'Instituciones UE', 'clients.c4_title': 'Funcionario UE',
+        'clients.c4_who': '<strong>Quién:</strong> personal de la Comisión (desk officers, jefes de unidad, responsables políticos en DGs y gabinetes), Consejo de la UE (Secretaría General, presidentes de grupo de trabajo, consejeros nacionales en las Representaciones Permanentes), Secretaría del PE y personal de comisión, agencias UE (EFSA, EMA, ENISA, ACER, EEA, FRA, EUROPOL, etc.), CESE, Comité de las Regiones, BCE, BEI, Tribunal de Cuentas.',
+        'clients.c4_need': '<strong>El trabajo:</strong> redactar y negociar legislación entre instituciones, realizar consultas, seguir las enmiendas del Parlamento a sus expedientes, vigilar lo que proponen las DG hermanas y las configuraciones del Consejo, coordinar con los consejeros nacionales.',
+        'clients.c4_pain': '<strong>Dolor:</strong> sistemas internos lentos y compartimentados por institución. Seguir manualmente las posiciones de interesados (feedback Have Your Say, reuniones de lobby, enmiendas PE, señales de grupos de trabajo del Consejo) en varios expedientes. Predecir el resultado político en el triángulo del trílogo es adivinar.',
+        'clients.c5_meta': 'Parlamento Europeo', 'clients.c5_title': 'Asistente de eurodiputado y personal de grupo',
+        'clients.c5_who': '<strong>Quién:</strong> asistentes parlamentarios acreditados (APAs), asistentes locales y asesores en los siete grupos políticos (PPE, S&D, Renew, Verdes, PfE, ECR, La Izquierda) y la Secretaría del PE.',
+        'clients.c5_need': '<strong>El trabajo:</strong> informar al eurodiputado para cada voto, redactar enmiendas, gestionar preguntas de la circunscripción, seguir legislación hermana en parlamentos nacionales, coordinar con ponentes alternativos y ponentes de otros grupos.',
+        'clients.c5_pain': '<strong>Dolor:</strong> diez comisiones, decenas de expedientes, cientos de enmiendas por plenaria. Producir una lista de voto el lunes por la mañana para una mini-plenaria el martes es una pesadilla recurrente.',
+        'clients.c6_meta': 'ONG y sociedad civil', 'clients.c6_title': 'Defensor de ONG y sociedad civil',
+        'clients.c6_who': '<strong>Quién:</strong> personal de política y campaña en ONG y redes europeas de sociedad civil (Transparency International UE, BEUC, EPHA, EDRi, BirdLife Europe, WWF European Policy Office, Climate Action Network, Foro Europeo de la Juventud, Eurochild, Caritas Europa, Amnesty International UE, Oxfam UE, Social Platform, etc.), más los brazos de interés público de fundaciones y think tanks.',
+        'clients.c6_need': '<strong>El trabajo:</strong> defender el interés general en la legislación UE: redactar enmiendas para eurodiputados afines, responder a consultas de la Comisión, informar a coaliciones de ONG, producir posiciones listas para campaña en múltiples idiomas, vigilar el Consejo donde el escrutinio público es más débil.',
+        'clients.c6_pain': '<strong>Dolor:</strong> equipos pequeños frente a lobistas de la industria. Presupuestos limitados. Deben moverse tan rápido como los defensores comerciales sin los mismos recursos de investigación. Las respuestas a consultas y la redacción de enmiendas consumen tiempo de campaña.',
+        'products.title': 'Suite de productos',
+        'products.subtitle': 'Seis módulos integrados que cubren todo el flujo de advocacy UE. Haz clic en cualquier módulo para explorarlo.',
+        'products.matrix_title': 'Quién usa qué, y cómo',
+        'products.matrix_subtitle': 'Casos de uso concretos para cada perfil, en los cinco productos.',
+        'products.matrix_col0': 'Perfil', 'products.matrix_col1': 'Chat', 'products.matrix_col2': 'Amendator',
+        'products.matrix_col3': 'My EU Bubble', 'products.matrix_col4': 'EU Law Comply', 'products.matrix_col5': 'Tenderator',
+        'products.matrix_r1': 'Consultor', 'products.matrix_r2': 'Interno corporativo', 'products.matrix_r3': 'Asociación empresarial',
+        'products.matrix_r4': 'Funcionario UE', 'products.matrix_r5': 'Asistente PE / grupo', 'products.matrix_r6': 'ONG / sociedad civil',
+        'products.bubble_title': 'My EU Bubble, pestaña a pestaña',
+        'products.bubble_subtitle': 'El Bubble es el corazón de Brubru. Diez superficies de trabajo alrededor de tu cartera de expedientes.',
+        'products.bubble_t1_title': 'Panel', 'products.bubble_t2_title': 'My Files', 'products.bubble_t3_title': 'Position Analysis',
+        'products.bubble_t4_title': 'My EU Calendar', 'products.bubble_t5_title': 'Predictions', 'products.bubble_t6_title': 'Consultas públicas CE',
+        'products.bubble_t7_title': 'Documents', 'products.bubble_t8_title': 'Enmiendas', 'products.bubble_t9_title': 'Legislative Tracker',
+        'products.bubble_t10_title': 'Analytics',
+        'competitive.title': 'Panorama competitivo',
+        'competitive.subtitle': 'Categoría emergente: pocas plataformas IA para política UE, ninguna con la amplitud de Brubru.',
+        'pricing.title': 'Precios sencillos y modulares',
+        'pricing.subtitle': 'Empieza con 14 días de prueba gratis, sin tarjeta de crédito. Elige el plan que encaje con tu rol. Cancela en cualquier momento.',
+        'pricing.p1_name': 'Starter', 'pricing.p1_per': 'al mes', 'pricing.p1_cta': 'Empezar prueba gratuita',
+        'pricing.p2_name': 'Advocate', 'pricing.p2_per': 'al mes', 'pricing.p2_cta': 'Empezar prueba gratuita',
+        'pricing.p3_name': 'Professional', 'pricing.p3_per': 'al mes', 'pricing.p3_cta': 'Empezar prueba gratuita',
+        'pricing.p4_name': 'Plan PE', 'pricing.p4_per': 'al mes, personal del PE', 'pricing.p4_cta': 'Contáctanos',
+        'pricing.note': 'Facturación anual disponible con dos meses gratis. Precios de equipo y empresa bajo solicitud.',
+        'team.title': 'El equipo detrás de Brubru',
+        'team.subtitle': 'Fundador en solitario con experiencia profunda en política UE y un plan claro de contrataciones para los próximos doce meses.',
+        'team.victor_bio': '8 años en política UE: asistente parlamentario en el Parlamento Europeo, asesor comercial, consultor regulatorio en 6 idiomas UE (EN, ES, CA, FR, IT, NL). Construyó toda la plataforma Brubru porque el producto viene de hacer el trabajo, no de estudiarlo. Con sede en Bruselas.',
+        'team.hires_title': 'Contrataciones clave próximos doce meses',
+        'team.hire1_title': 'Responsable de ventas / BD', 'team.hire1_detail': 'Convertir la red bruselense en clientes de pago', 'team.hire1_timing': 'Mes 3',
+        'team.hire2_title': 'Desarrollador júnior', 'team.hire2_detail': 'Escalar funcionalidades, reducir el bus factor', 'team.hire2_timing': 'Mes 6',
+        'team.hire3_title': 'Customer success', 'team.hire3_detail': 'Onboarding, retención, upsell', 'team.hire3_timing': 'Mes 9',
+        'start.title': '¿Listo para probar?', 'start.subtitle': 'Tres formas de empezar hoy.',
+        'start.o1_title': 'Prueba el chatbot gratis', 'start.o1_text': 'Tres consultas gratuitas, sin registro. Pregunta cualquier cosa sobre política UE.', 'start.o1_cta': 'Abrir Brubru \u2192',
+        'start.o2_title': 'Inicia una prueba gratuita', 'start.o2_text': '14 días gratis, sin tarjeta de crédito. Acceso completo a cada producto de tu plan.', 'start.o2_cta': 'Registrarse \u2192',
+        'start.o3_title': 'Reserva una demo', 'start.o3_text': 'Treinta minutos con Víctor, nuestro fundador, recorriendo el producto adaptado a tu rol.', 'start.o3_cta': 'Solicitar demo \u2192',
+        'start.contact_title': 'Habla con nosotros', 'start.contact_text': 'Beresol BV es una empresa de IA con sede en Bruselas. Brubru está construido en la burbuja UE, para la burbuja UE.',
+        'footer.investors': 'Inversores: business plan', 'footer.app': 'Abrir Brubru'
+      },
+
+      ca: {
+        'header.title': 'Brubru per a afers públics europeus',
+        'header.subtitle': 'Presentació a clients de Beresol BV',
+        'nav.problem': 'El problema', 'nav.clients': 'A qui servim', 'nav.products': 'Suite de productes',
+        'nav.competitive': 'Competència', 'nav.pricing': 'Preus', 'nav.team': 'Equip', 'nav.start': 'Començar',
+        'hero.title': 'Tota la UE, amb IA.',
+        'hero.text': 'Brubru és un assistent d\u2019IA construït específicament per a professionals d\u2019afers públics que treballen en política europea. Fem el seguiment de cada nova regulació, cada votació en comissió, cada agenda de la Comissió, perquè tu no ho hagis de fer.',
+        'hero.cta_try': 'Prova Brubru gratis', 'hero.cta_demo': 'Reservar una demo',
+        'problem.title': 'Brussel·les va ràpid. Massa ràpid.',
+        'problem.subtitle': 'Els professionals de política UE gasten fins a la meitat de la setmana cercant informació en lloc d\u2019actuar. Així es veu a la pràctica.',
+        'problem.stat1': 'publicacions al Diari Oficial (8.710 actes diferents)',
+        'problem.stat2': 'guies expertes de política per domini, actualitzades cada dia',
+        'problem.stat3': 'expedients legislatius vius al Legislative Train i a l\u2019OEIL',
+        'problem.stat4': 'portals institucionals UE revisats cada matí',
+        'problem.stat5': 'pàgines de l\u2019ecosistema digital europa.eu indexades',
+        'problem.stat6': 'subdominis prioritaris d\u2019europa.eu per vigilar',
+        'problem.pain_badge': 'El dolor',
+        'problem.pain_header': 'La UE a la qual t\u2019enfrontes',
+        'problem.solution_badge': 'Brubru respon amb',
+        'problem.solution_header': 'La màquina que ho processa per tu',
+        'problem.pain_title': 'Els punts de dolor que resolem',
+        'problem.pain1_title': 'Hores perdudes a EUR-Lex i OEIL',
+        'problem.pain1_text': 'Trobar el CELEX correcte, la referència de procediment adequada o el ponent adient triga de 20 a 40 minuts per expedient. Brubru et dona la resposta en segons.',
+        'problem.pain2_title': 'Redactar esmenes que et crema un dia sencer',
+        'problem.pain2_text': 'Redactar una esmena PE tècnicament correcta en XML Akoma Ntoso és una habilitat especialitzada. El nostre Amendator produeix esmenes vàlides a l\u2019instant.',
+        'problem.pain3_title': 'Votacions en comissió i terminis perduts',
+        'problem.pain3_text': 'Les agendes canvien, els terminis rellisquen. El meu Calendari UE agrega totes les agendes institucionals amb alertes en temps real.',
+        'problem.pain4_title': 'Forats de compliment que ningú no veu venir',
+        'problem.pain4_text': 'Les noves obligacions entren en vigor en silenci. EU Law Comply compara les teves polítiques internes amb el Dret UE aplicable i marca els forats.',
+        'problem.pain5_title': 'Contractació pública que sembla una caixa negra',
+        'problem.pain5_text': 'TED publica milers d\u2019anuncis per setmana. Tenderator filtra, empareja i t\u2019avisa sobre les oportunitats que realment encaixen amb el teu perfil.',
+        'problem.pain6_title': 'Les reunions que hauries d\u2019haver tingut',
+        'problem.pain6_text': 'Qui és el ponent? A quins ponents alternatius cal informar? Brubru cartografia automàticament el paisatge polític de cada expedient.',
+        'clients.title': 'Qui utilitza Brubru',
+        'clients.subtitle': 'Brubru està construït per als sis perfils dels afers públics UE: el consultor, el responsable intern, el cap de polítiques d\u2019associació, el funcionari UE, l\u2019assistent parlamentari i l\u2019advocat d\u2019ONG o societat civil.',
+        'clients.c1_meta': 'Consultoria', 'clients.c1_title': 'Consultor d\u2019afers públics',
+        'clients.c1_who': '<strong>Qui:</strong> associats sèniors i directors de consultores brussel·leses (Kreab, Rud Pedersen, Hume Brophy, Cambre, FGS, Interel, Fleishman, etc.) gestionant carteres de 5 a 15 encàrrecs simultanis.',
+        'clients.c1_need': '<strong>La feina:</strong> convertir el canvi regulatori en assessorament facturable, ràpid. El client espera una nota la mateixa tarda que la Comissió publica una proposta.',
+        'clients.c1_pain': '<strong>Dolor:</strong> 30 minuts per expedient només per localitzar CELEX, ponent, comissió PE, grup de treball del Consell. Multiplica-ho per 15 clients.',
+        'clients.c2_meta': 'Intern corporatiu', 'clients.c2_title': 'Responsable intern d\u2019afers públics',
+        'clients.c2_who': '<strong>Qui:</strong> responsables d\u2019afers UE dins de multinacionals, mid-caps i scale-ups (farma, tech, automoció, finances, retail). Sovint equips d\u2019una a tres persones cobrint tota la petjada regulatòria.',
+        'clients.c2_need': '<strong>La feina:</strong> protegir el negoci de la mala regulació i capturar oportunitats. Reportar trimestralment a la direcció sobre exposició regulatòria i victòries d\u2019advocacy.',
+        'clients.c2_pain': '<strong>Dolor:</strong> massa expedients, poques mans. Risc de perdre un acte delegat, un tríleg o un termini de compliment. Sense temps per redactar documents de posició des de zero.',
+        'clients.c3_meta': 'Associació empresarial', 'clients.c3_title': 'Cap de polítiques d\u2019associació',
+        'clients.c3_who': '<strong>Qui:</strong> directors i responsables de política en associacions europees (DIGITALEUROPE, EFPIA, CEFIC, ACEA, EBF, FoodDrinkEurope, SME United, etc.).',
+        'clients.c3_need': '<strong>La feina:</strong> consolidar les posicions dels membres, redactar respostes a consultes, informar els membres sobre la legislació que ve, coordinar l\u2019advocacy amb aliats.',
+        'clients.c3_pain': '<strong>Dolor:</strong> els membres esperen orientació clara sobre 30 expedients, ràpid. El personal passa més temps compilant informes que fent advocacy real.',
+        'clients.c4_meta': 'Institucions UE', 'clients.c4_title': 'Funcionari UE',
+        'clients.c4_who': '<strong>Qui:</strong> personal de la Comissió (desk officers, caps d\u2019unitat, responsables polítics a DGs i gabinets), Consell de la UE (Secretariat General, presidents de grup de treball, consellers nacionals a les Representacions Permanents), Secretariat del PE i personal de comissió, agències UE (EFSA, EMA, ENISA, ACER, EEA, FRA, EUROPOL, etc.), CESE, Comitè de les Regions, BCE, BEI, Tribunal de Comptes.',
+        'clients.c4_need': '<strong>La feina:</strong> redactar i negociar legislació entre institucions, dur a terme consultes, seguir les esmenes del Parlament als teus expedients, vigilar què proposen les DG germanes i les configuracions del Consell, coordinar amb els consellers nacionals.',
+        'clients.c4_pain': '<strong>Dolor:</strong> sistemes interns lents i compartimentats per institució. Seguir manualment les posicions dels interessats (feedback Have Your Say, reunions de lobby, esmenes PE, senyals de grups de treball del Consell). Predir el resultat polític al triangle del tríleg és endevinar.',
+        'clients.c5_meta': 'Parlament Europeu', 'clients.c5_title': 'Assistent d\u2019eurodiputat i personal de grup',
+        'clients.c5_who': '<strong>Qui:</strong> assistents parlamentaris acreditats (APA), assistents locals i assessors als set grups polítics (PPE, S&D, Renew, Verds, PfE, ECR, L\u2019Esquerra) i el Secretariat del PE.',
+        'clients.c5_need': '<strong>La feina:</strong> informar l\u2019eurodiputat per a cada votació, redactar esmenes, gestionar preguntes de la circumscripció, seguir legislació germana als parlaments nacionals, coordinar amb ponents alternatius i ponents d\u2019altres grups.',
+        'clients.c5_pain': '<strong>Dolor:</strong> deu comissions, desenes d\u2019expedients, centenars d\u2019esmenes per plenària. Produir una llista de vot dilluns al matí per a una mini-plenària dimarts és un malson recurrent.',
+        'clients.c6_meta': 'ONG i societat civil', 'clients.c6_title': 'Advocat d\u2019ONG i societat civil',
+        'clients.c6_who': '<strong>Qui:</strong> personal de política i campanya en ONG i xarxes europees de societat civil (Transparency International UE, BEUC, EPHA, EDRi, BirdLife Europe, WWF European Policy Office, Climate Action Network, Fòrum Europeu de la Joventut, Eurochild, Caritas Europa, Amnesty International UE, Oxfam UE, Social Platform, etc.), a més dels braços d\u2019interès públic de fundacions i think tanks.',
+        'clients.c6_need': '<strong>La feina:</strong> defensar l\u2019interès general en la legislació UE: redactar esmenes per a eurodiputats afins, respondre a consultes de la Comissió, informar coalicions d\u2019ONG, produir posicions llestes per a campanya en diverses llengües, vigilar el Consell on l\u2019escrutini públic és més feble.',
+        'clients.c6_pain': '<strong>Dolor:</strong> equips petits davant dels lobistes industrials. Pressupostos limitats. Han de moure\u2019s tan ràpid com els defensors comercials sense els mateixos recursos de recerca. Les respostes a consultes i la redacció d\u2019esmenes es mengen el temps de campanya.',
+        'products.title': 'Suite de productes',
+        'products.subtitle': 'Sis mòduls integrats que cobreixen tot el flux d\u2019advocacy UE. Fes clic en qualsevol mòdul per explorar-lo.',
+        'products.matrix_title': 'Qui utilitza què, i com',
+        'products.matrix_subtitle': 'Casos d\u2019ús concrets per a cada perfil, sobre els cinc productes.',
+        'products.matrix_col0': 'Perfil', 'products.matrix_col1': 'Chat', 'products.matrix_col2': 'Amendator',
+        'products.matrix_col3': 'My EU Bubble', 'products.matrix_col4': 'EU Law Comply', 'products.matrix_col5': 'Tenderator',
+        'products.matrix_r1': 'Consultor', 'products.matrix_r2': 'Intern corporatiu', 'products.matrix_r3': 'Associació empresarial',
+        'products.matrix_r4': 'Funcionari UE', 'products.matrix_r5': 'Assistent PE / grup', 'products.matrix_r6': 'ONG / societat civil',
+        'products.bubble_title': 'My EU Bubble, pestanya a pestanya',
+        'products.bubble_subtitle': 'El Bubble és el cor de Brubru. Deu superfícies de treball al voltant de la teva cartera d\u2019expedients.',
+        'products.bubble_t1_title': 'Tauler', 'products.bubble_t2_title': 'My Files', 'products.bubble_t3_title': 'Position Analysis',
+        'products.bubble_t4_title': 'My EU Calendar', 'products.bubble_t5_title': 'Predictions', 'products.bubble_t6_title': 'Consultes públiques CE',
+        'products.bubble_t7_title': 'Documents', 'products.bubble_t8_title': 'Esmenes', 'products.bubble_t9_title': 'Legislative Tracker',
+        'products.bubble_t10_title': 'Analytics',
+        'competitive.title': 'Panorama competitiu',
+        'competitive.subtitle': 'Categoria emergent: poques plataformes IA per a política UE, cap amb l\u2019amplitud de Brubru.',
+        'pricing.title': 'Preus senzills i modulars',
+        'pricing.subtitle': 'Comença amb 14 dies de prova gratuïta, sense targeta de crèdit. Tria el pla que encaixi amb el teu rol. Cancel·la quan vulguis.',
+        'pricing.p1_name': 'Starter', 'pricing.p1_per': 'al mes', 'pricing.p1_cta': 'Començar prova gratuïta',
+        'pricing.p2_name': 'Advocate', 'pricing.p2_per': 'al mes', 'pricing.p2_cta': 'Començar prova gratuïta',
+        'pricing.p3_name': 'Professional', 'pricing.p3_per': 'al mes', 'pricing.p3_cta': 'Començar prova gratuïta',
+        'pricing.p4_name': 'Pla PE', 'pricing.p4_per': 'al mes, personal del PE', 'pricing.p4_cta': 'Contacta\u2019ns',
+        'pricing.note': 'Facturació anual disponible amb dos mesos gratis. Preus d\u2019equip i empresa sota demanda.',
+        'team.title': 'L\u2019equip darrere de Brubru',
+        'team.subtitle': 'Fundador en solitari amb experiència profunda en política UE i un pla clar de contractacions per als propers dotze mesos.',
+        'team.victor_bio': '8 anys en política UE: assistent parlamentari al Parlament Europeu, assessor comercial, consultor regulatori en 6 llengües UE (EN, ES, CA, FR, IT, NL). Ha construït tota la plataforma Brubru perquè el producte ve de fer la feina, no d\u2019estudiar-la. Amb seu a Brussel\u00b7les.',
+        'team.hires_title': 'Contractacions clau propers dotze mesos',
+        'team.hire1_title': 'Responsable de vendes / BD', 'team.hire1_detail': 'Convertir la xarxa brussel\u00b7lesa en clients de pagament', 'team.hire1_timing': 'Mes 3',
+        'team.hire2_title': 'Desenvolupador júnior', 'team.hire2_detail': 'Escalar funcionalitats, reduir el bus factor', 'team.hire2_timing': 'Mes 6',
+        'team.hire3_title': 'Customer success', 'team.hire3_detail': 'Onboarding, retenció, upsell', 'team.hire3_timing': 'Mes 9',
+        'start.title': 'A punt per provar-ho?', 'start.subtitle': 'Tres maneres de començar avui.',
+        'start.o1_title': 'Prova el chatbot gratis', 'start.o1_text': 'Tres consultes gratuïtes, sense registre. Pregunta qualsevol cosa sobre política UE.', 'start.o1_cta': 'Obrir Brubru \u2192',
+        'start.o2_title': 'Inicia una prova gratuïta', 'start.o2_text': '14 dies gratis, sense targeta de crèdit. Accés complet a cada producte del teu pla.', 'start.o2_cta': 'Registrar-se \u2192',
+        'start.o3_title': 'Reserva una demo', 'start.o3_text': 'Trenta minuts amb Víctor, el nostre fundador, recorrent el producte adaptat al teu rol.', 'start.o3_cta': 'Demanar demo \u2192',
+        'start.contact_title': 'Parla amb nosaltres', 'start.contact_text': 'Beresol BV és una empresa d\u2019IA amb seu a Brussel\u00b7les. Brubru està construït a la bombolla UE, per a la bombolla UE.',
+        'footer.investors': 'Inversors: business plan', 'footer.app': 'Obrir Brubru'
+      },
+
+      it: {
+        'header.title': 'Brubru per gli affari pubblici europei',
+        'header.subtitle': 'Presentazione clienti di Beresol BV',
+        'nav.problem': 'Il problema', 'nav.clients': 'Chi serviamo', 'nav.products': 'Suite di prodotti',
+        'nav.competitive': 'Concorrenza', 'nav.pricing': 'Prezzi', 'nav.team': 'Team', 'nav.start': 'Iniziare',
+        'hero.title': 'Tutta l\u2019UE, con l\u2019IA.',
+        'hero.text': 'Brubru è un assistente di IA costruito appositamente per i professionisti degli affari pubblici che lavorano sulla politica europea. Tracciamo ogni nuovo regolamento, ogni voto in commissione, ogni agenda della Commissione, perché voi non dobbiate farlo.',
+        'hero.cta_try': 'Prova Brubru gratis', 'hero.cta_demo': 'Prenota una demo',
+        'problem.title': 'Bruxelles corre. Troppo in fretta.',
+        'problem.subtitle': 'I professionisti di politica UE passano fino alla metà della settimana a cercare informazioni invece di agire. Ecco come appare nella pratica.',
+        'problem.stat1': 'pubblicazioni in Gazzetta Ufficiale (8.710 atti distinti)',
+        'problem.stat2': 'guide esperte di politica per dominio, aggiornate ogni giorno',
+        'problem.stat3': 'fascicoli legislativi vivi nel Legislative Train e in OEIL',
+        'problem.stat4': 'portali istituzionali UE monitorati ogni mattina',
+        'problem.stat5': 'pagine dell\u2019ecosistema digitale europa.eu indicizzate',
+        'problem.stat6': 'sottodomini prioritari di europa.eu da monitorare',
+        'problem.pain_badge': 'Il dolore',
+        'problem.pain_header': 'L\u2019UE che dovete affrontare',
+        'problem.solution_badge': 'Brubru risponde con',
+        'problem.solution_header': 'La macchina che ci lavora al posto vostro',
+        'problem.pain_title': 'I punti di dolore che risolviamo',
+        'problem.pain1_title': 'Ore perse su EUR-Lex e OEIL',
+        'problem.pain1_text': 'Trovare il CELEX giusto, il riferimento di procedura corretto, il relatore adatto richiede 20-40 minuti per fascicolo. Brubru dà la risposta in secondi.',
+        'problem.pain2_title': 'Redigere emendamenti che bruciano una giornata',
+        'problem.pain2_text': 'Redigere un emendamento PE tecnicamente corretto in XML Akoma Ntoso è un\u2019abilità specialistica. Il nostro Amendator produce emendamenti validi all\u2019istante.',
+        'problem.pain3_title': 'Voti in commissione e scadenze persi',
+        'problem.pain3_text': 'Le agende cambiano, le scadenze slittano. Il mio Calendario UE aggrega tutte le agende istituzionali con avvisi in tempo reale.',
+        'problem.pain4_title': 'Lacune di conformità che nessuno vede',
+        'problem.pain4_text': 'I nuovi obblighi entrano in vigore in silenzio. EU Law Comply confronta le vostre politiche interne con il diritto UE applicabile e segnala le lacune.',
+        'problem.pain5_title': 'Appalti pubblici come una scatola nera',
+        'problem.pain5_text': 'TED pubblica migliaia di bandi alla settimana. Tenderator filtra, abbina e vi avvisa sulle opportunità che corrispondono davvero al vostro profilo.',
+        'problem.pain6_title': 'Gli incontri che avreste dovuto fare',
+        'problem.pain6_text': 'Chi è il relatore? Quali relatori ombra dovete briefare? Brubru mappa automaticamente il paesaggio politico di ogni fascicolo.',
+        'clients.title': 'Chi usa Brubru',
+        'clients.subtitle': 'Brubru è costruito per i sei profili degli affari pubblici UE: il consulente, il responsabile interno, il capo politiche di associazione, il funzionario UE, l\u2019assistente parlamentare e il sostenitore delle ONG o della società civile.',
+        'clients.c1_meta': 'Consulenza', 'clients.c1_title': 'Consulente di affari pubblici',
+        'clients.c1_who': '<strong>Chi:</strong> associate senior e direttori in società di consulenza bruxellesi (Kreab, Rud Pedersen, Hume Brophy, Cambre, FGS, Interel, Fleishman, ecc.) che gestiscono portafogli di 5-15 brief clienti in parallelo.',
+        'clients.c1_need': '<strong>Il compito:</strong> trasformare il cambiamento regolatorio in consulenza fatturabile, in fretta. Il cliente si aspetta un memo lo stesso pomeriggio in cui la Commissione pubblica una proposta.',
+        'clients.c1_pain': '<strong>Dolore:</strong> 30 minuti per fascicolo solo per trovare CELEX, relatore, commissione PE, gruppo di lavoro del Consiglio. Moltiplicate per 15 clienti.',
+        'clients.c2_meta': 'Interno aziendale', 'clients.c2_title': 'Responsabile affari pubblici interno',
+        'clients.c2_who': '<strong>Chi:</strong> responsabili affari UE dentro multinazionali, mid-cap e scale-up (farma, tech, auto, finanza, retail). Spesso team di 1-3 persone che coprono l\u2019intera impronta regolatoria.',
+        'clients.c2_need': '<strong>Il compito:</strong> proteggere l\u2019azienda da regolamentazione negativa e cogliere opportunità. Reportare trimestralmente al C-suite sull\u2019esposizione regolatoria e sui risultati di advocacy.',
+        'clients.c2_pain': '<strong>Dolore:</strong> troppi fascicoli, poche braccia. Rischio di perdere un atto delegato, un trilogo, una scadenza di conformità. Nessun tempo per redigere position paper da zero.',
+        'clients.c3_meta': 'Associazione di categoria', 'clients.c3_title': 'Capo politiche di associazione',
+        'clients.c3_who': '<strong>Chi:</strong> direttori e funzionari politici in associazioni europee (DIGITALEUROPE, EFPIA, CEFIC, ACEA, EBF, FoodDrinkEurope, SME United, ecc.).',
+        'clients.c3_need': '<strong>Il compito:</strong> consolidare le posizioni dei membri, redigere risposte alle consultazioni, briefare i membri sulla legislazione in arrivo, coordinare l\u2019advocacy con gli alleati.',
+        'clients.c3_pain': '<strong>Dolore:</strong> i membri si aspettano indicazioni chiare su 30 fascicoli, in fretta. Lo staff passa più tempo a compilare monitoraggi che a fare advocacy vera.',
+        'clients.c4_meta': 'Istituzioni UE', 'clients.c4_title': 'Funzionario UE',
+        'clients.c4_who': '<strong>Chi:</strong> personale della Commissione (desk officer, capi unità, funzionari politici nelle DG e nei gabinetti), Consiglio UE (Segretariato generale, presidenti di gruppo di lavoro, consiglieri nazionali nelle Rappresentanze permanenti), Segretariato del PE e staff di commissione, agenzie UE (EFSA, EMA, ENISA, ACER, EEA, FRA, EUROPOL, ecc.), CESE, Comitato delle Regioni, BCE, BEI, Corte dei conti.',
+        'clients.c4_need': '<strong>Il compito:</strong> redigere e negoziare la legislazione tra istituzioni, condurre consultazioni, seguire gli emendamenti del Parlamento sui vostri fascicoli, monitorare cosa propongono le DG sorelle e le configurazioni del Consiglio, coordinare con i consiglieri nazionali.',
+        'clients.c4_pain': '<strong>Dolore:</strong> sistemi interni lenti e silosizzati per istituzione. Tracciare manualmente le posizioni degli stakeholder (feedback Have Your Say, incontri di lobby, emendamenti PE, segnali dei gruppi di lavoro del Consiglio). Prevedere l\u2019esito politico nel triangolo del trilogo è indovinare.',
+        'clients.c5_meta': 'Parlamento europeo', 'clients.c5_title': 'Assistente di eurodeputato e staff di gruppo',
+        'clients.c5_who': '<strong>Chi:</strong> assistenti parlamentari accreditati (APA), assistenti locali e consiglieri nei sette gruppi politici (PPE, S&D, Renew, Verdi, PfE, ECR, La Sinistra) e il Segretariato del PE.',
+        'clients.c5_need': '<strong>Il compito:</strong> briefare l\u2019eurodeputato per ogni voto, redigere emendamenti, gestire domande di circoscrizione, seguire la legislazione sorella nei parlamenti nazionali, coordinare con relatori ombra e relatori di altri gruppi.',
+        'clients.c5_pain': '<strong>Dolore:</strong> dieci commissioni, decine di fascicoli, centinaia di emendamenti per plenaria. Produrre una lista di voto lunedì mattina per una mini-plenaria martedì è un incubo ricorrente.',
+        'clients.c6_meta': 'ONG e società civile', 'clients.c6_title': 'Sostenitore di ONG e società civile',
+        'clients.c6_who': '<strong>Chi:</strong> staff politico e di campagna in ONG e reti europee della società civile (Transparency International UE, BEUC, EPHA, EDRi, BirdLife Europe, WWF European Policy Office, Climate Action Network, Forum europeo della gioventù, Eurochild, Caritas Europa, Amnesty International UE, Oxfam UE, Social Platform, ecc.), più i bracci di interesse pubblico di fondazioni e think tank.',
+        'clients.c6_need': '<strong>Il compito:</strong> difendere l\u2019interesse generale nella legislazione UE: redigere emendamenti per eurodeputati alleati, rispondere alle consultazioni della Commissione, briefare coalizioni di ONG, produrre posizioni pronte per la campagna in più lingue, monitorare il Consiglio dove lo scrutinio pubblico è più debole.',
+        'clients.c6_pain': '<strong>Dolore:</strong> piccoli team di fronte a lobbisti industriali. Budget limitati. Devono muoversi veloci come gli advocate commerciali senza le stesse risorse di ricerca. Le risposte alle consultazioni e la redazione di emendamenti divorano il tempo di campagna.',
+        'products.title': 'Suite di prodotti',
+        'products.subtitle': 'Sei moduli integrati che coprono l\u2019intero workflow di advocacy UE. Clicca su un modulo per esplorarlo.',
+        'products.matrix_title': 'Chi usa cosa, e come',
+        'products.matrix_subtitle': 'Casi d\u2019uso concreti per ogni profilo, sui cinque prodotti.',
+        'products.matrix_col0': 'Profilo', 'products.matrix_col1': 'Chat', 'products.matrix_col2': 'Amendator',
+        'products.matrix_col3': 'My EU Bubble', 'products.matrix_col4': 'EU Law Comply', 'products.matrix_col5': 'Tenderator',
+        'products.matrix_r1': 'Consulente', 'products.matrix_r2': 'Interno aziendale', 'products.matrix_r3': 'Associazione di categoria',
+        'products.matrix_r4': 'Funzionario UE', 'products.matrix_r5': 'Assistente PE / gruppo', 'products.matrix_r6': 'ONG / società civile',
+        'products.bubble_title': 'My EU Bubble, tab per tab',
+        'products.bubble_subtitle': 'Il Bubble è il cuore di Brubru. Dieci superfici di lavoro attorno al vostro portafoglio di fascicoli.',
+        'products.bubble_t1_title': 'Dashboard', 'products.bubble_t2_title': 'My Files', 'products.bubble_t3_title': 'Position Analysis',
+        'products.bubble_t4_title': 'My EU Calendar', 'products.bubble_t5_title': 'Predictions', 'products.bubble_t6_title': 'Consultazioni pubbliche CE',
+        'products.bubble_t7_title': 'Documents', 'products.bubble_t8_title': 'Emendamenti', 'products.bubble_t9_title': 'Legislative Tracker',
+        'products.bubble_t10_title': 'Analytics',
+        'competitive.title': 'Panorama competitivo',
+        'competitive.subtitle': 'Categoria emergente: poche piattaforme IA per la politica UE, nessuna con l\u2019ampiezza di Brubru.',
+        'pricing.title': 'Prezzi semplici e modulari',
+        'pricing.subtitle': 'Inizia con 14 giorni di prova gratuita, senza carta di credito. Scegli il piano adatto al tuo ruolo. Annullabile in qualsiasi momento.',
+        'pricing.p1_name': 'Starter', 'pricing.p1_per': 'al mese', 'pricing.p1_cta': 'Inizia la prova gratuita',
+        'pricing.p2_name': 'Advocate', 'pricing.p2_per': 'al mese', 'pricing.p2_cta': 'Inizia la prova gratuita',
+        'pricing.p3_name': 'Professional', 'pricing.p3_per': 'al mese', 'pricing.p3_cta': 'Inizia la prova gratuita',
+        'pricing.p4_name': 'Piano PE', 'pricing.p4_per': 'al mese, staff PE', 'pricing.p4_cta': 'Contattaci',
+        'pricing.note': 'Fatturazione annuale disponibile con due mesi gratis. Prezzi team ed enterprise su richiesta.',
+        'team.title': 'Il team dietro Brubru',
+        'team.subtitle': 'Fondatore in solitario con una profonda competenza di politica UE e un piano di assunzioni chiaro per i prossimi dodici mesi.',
+        'team.victor_bio': '8 anni di politica UE: assistente parlamentare al Parlamento europeo, consulente commerciale, consulente regolatorio in 6 lingue UE (EN, ES, CA, FR, IT, NL). Ha costruito l\u2019intera piattaforma Brubru perché il prodotto nasce dal fare, non dallo studiare. Con sede a Bruxelles.',
+        'team.hires_title': 'Assunzioni chiave dei prossimi dodici mesi',
+        'team.hire1_title': 'Responsabile vendite / BD', 'team.hire1_detail': 'Convertire la rete bruxellese in clienti paganti', 'team.hire1_timing': 'Mese 3',
+        'team.hire2_title': 'Sviluppatore junior', 'team.hire2_detail': 'Scalare le funzionalità, ridurre il bus factor', 'team.hire2_timing': 'Mese 6',
+        'team.hire3_title': 'Customer success', 'team.hire3_detail': 'Onboarding, retention, upsell', 'team.hire3_timing': 'Mese 9',
+        'start.title': 'Pronto a provare?', 'start.subtitle': 'Tre modi per iniziare oggi.',
+        'start.o1_title': 'Prova il chatbot gratis', 'start.o1_text': 'Tre query gratuite, senza registrazione. Chiedi qualsiasi cosa sulla politica UE.', 'start.o1_cta': 'Apri Brubru \u2192',
+        'start.o2_title': 'Inizia una prova gratuita', 'start.o2_text': '14 giorni gratis, senza carta di credito. Accesso completo a ogni prodotto del tuo piano.', 'start.o2_cta': 'Registrati \u2192',
+        'start.o3_title': 'Prenota una demo', 'start.o3_text': 'Trenta minuti con Víctor, il nostro fondatore, per scoprire il prodotto adattato al tuo ruolo.', 'start.o3_cta': 'Richiedi demo \u2192',
+        'start.contact_title': 'Parliamo', 'start.contact_text': 'Beresol BV è un\u2019azienda di IA con sede a Bruxelles. Brubru è costruito nella bolla UE, per la bolla UE.',
+        'footer.investors': 'Investitori: business plan', 'footer.app': 'Apri Brubru'
+      }
+    };
+
+    function setLang(lang) {
+      document.documentElement.lang = lang;
+      const dict = TRANSLATIONS[lang] || {};
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key]) {
+          el.textContent = dict[key];
+        } else if (lang === 'en' && el.dataset.i18nDefault) {
+          el.textContent = el.dataset.i18nDefault;
+        }
+      });
+      document.querySelectorAll('#langSwitch button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      try { localStorage.setItem('brubru.pitch.lang', lang); } catch (e) {}
+    }
+
+    // Cache original (EN) text on first load so language toggles are lossless
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.dataset.i18nDefault = el.textContent;
+      });
+      const saved = (function () {
+        try { return localStorage.getItem('brubru.pitch.lang'); } catch (e) { return null; }
+      })();
+      if (saved && saved !== 'en') setLang(saved);
+    });
+
+    // ========== TAB NAVIGATION ==========
+    function showSection(id, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('section--active'));
+      document.getElementById(id).classList.add('section--active');
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('nav-tab--active'));
+      btn.classList.add('nav-tab--active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ========== PRODUCT SELECTOR ==========
+    function showProduct(productId, btn) {
+      document.querySelectorAll('.product-detail').forEach(d => d.classList.remove('product-detail--active'));
+      document.querySelectorAll('.product-card').forEach(c => c.classList.remove('product-card--active'));
+      const detail = document.getElementById('detail-' + productId);
+      if (detail) detail.classList.add('product-detail--active');
+      if (btn) btn.classList.add('product-card--active');
+    }
+
+    // ========== STAT COUNTER ANIMATION ==========
+    // Animate the numbers in .stat__number with data-target from 0 up to target when they enter the viewport.
+    (function () {
+      function formatNumber(n) {
+        return Math.floor(n).toLocaleString('en-US');
+      }
+      function animateNumber(el) {
+        if (el.dataset.animated === '1') return;
+        const target = parseInt(el.dataset.target, 10);
+        if (!Number.isFinite(target)) return;
+        el.dataset.animated = '1';
+        const duration = 1400;
+        const start = performance.now();
+        const finalText = el.textContent;
+        function step(now) {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = formatNumber(target * eased);
+          if (t < 1) {
+            requestAnimationFrame(step);
+          } else {
+            el.textContent = finalText;
+          }
+        }
+        requestAnimationFrame(step);
+      }
+      function initObserver() {
+        const stats = document.querySelectorAll('.stat__number[data-target]');
+        if (!('IntersectionObserver' in window)) {
+          stats.forEach(animateNumber);
+          return;
+        }
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animateNumber(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        stats.forEach((s) => io.observe(s));
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initObserver);
+      } else {
+        initObserver();
+      }
+      // Re-trigger when the Problem tab becomes active (so numbers animate on tab switch too)
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.nav-tab');
+        if (!btn) return;
+        setTimeout(() => {
+          document.querySelectorAll('#problem .stat__number[data-target]').forEach((el) => {
+            el.dataset.animated = '0';
+            animateNumber(el);
+          });
+        }, 50);
+      });
+    })();
+  </script>
+
+</body>
+</html>
