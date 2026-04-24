@@ -19,6 +19,7 @@ EUSRs are a key instrument of the Common Foreign and Security Policy (CFSP). The
 
 - **22 April 2026, DG FPI**: "Putting EU Foreign Policy into action to foster peace, security, and social cohesion in the Great Lakes region" -- Foreign Policy Instruments press release on EU programming in the Great Lakes region (DRC, Burundi, Rwanda, Uganda, Tanzania). Parallels the mandate of EUSR Great Lakes Region **Johan Borgstam** (since 1 September 2024). Confirms EU's continued combined diplomatic + programming engagement despite Sudan/Iran crisis distractions.
 - **22 April 2026, Commission Decision C(2026) 9012**: Post term-of-office activity authorisation for **Janez Lenarčič** as Head of the **OSCE Election Observation Mission for the Armenian parliamentary election scheduled for 7 June 2026**. Lenarčič -- formerly Commissioner for Crisis Management (2019-2024) -- rejoins EU-OSCE electoral observation bridge. Relevant for EU neighbourhood + democracy support; complements South Caucasus and Georgia EUSR Magdalena Grono's mandate.
+- **EP plenary debate: Armenia democratic resilience (28 April 2026)**: Item 8 on OJQ-10-2026-04-28_EN Strasbourg plenary, 15:00-22:00 debate block. Ahead of the 7 June 2026 Armenian parliamentary election and Lenarčič's OSCE EOM deployment, EP debates Armenia's democratic resilience amid continued Azerbaijan tensions, Russian influence pressure, and EU Partnership Agenda implementation. Expected HR/VP Kallas statement; potential resolution to follow in May or June plenary.
 
 ## Current EUSRs (as of September 2025)
 

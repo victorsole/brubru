@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 - Topic: International efforts to return Ukrainian children forcibly deported or transferred to Russia and occupied territories since February 2022
+- **LATEST (23 April 2026)**: Costa + von der Leyen issued a **joint statement with President Zelenskyy** after their Brussels meeting (statement_26_868 + statement_26_875). Key points: continued EU solidarity with Ukraine, reaffirmation of ERA loans + Ukraine Facility payments, recommitment to International Claims Commission for Ukraine (signed at The Hague 2 April 2025 -- EP consent vote scheduled 28 April Strasbourg, see `international_claims_commission_ukraine`). Factsheet "EU solidarity with Ukraine" updated same day (fs_22_3862). Children-return coalition remains standing agenda item for the Costa + VdL + Zelenskyy format.
 - **LATEST (21 April 2026)**: Commission announcement **EU, Ukraine and Canada to co-host high-level meeting on returning Ukrainian children** (IP/26/856). Venue, date and co-chairs TBC in follow-up press release.
 - Scale: Ukrainian government documented 19,546 children (as of early 2026) forcibly deported or transferred; Yale Humanitarian Research Lab (HRL) and Regional Centre for Human Rights estimate total may exceed 35,000
 - Children returned: approximately 1,200 as of April 2026 (Bring Kids Back UA Initiative data)
