@@ -12,6 +12,7 @@
 - Related 2026 simplification files: Omnibus I (sustainability reporting + due diligence + taxonomy, COM(2025) 81), Omnibus II (investment simplification), CBAM Omnibus (SME exemptions), AI Act Amendments 2026 (high-risk delay + SME exemptions)
 - Expected deliverables: revised Better Regulation Guidelines + Toolbox, new SME test, possible stock-flush of delegated/implementing acts, tighter Article 258 TFEU infringement pipeline KPIs
 - Brubru users: lobbyists, in-house counsel, trade associations preparing for next-generation consultation regimes; startups tracking SME test carve-outs; national regulatory-affairs units anticipating new transposition monitoring
+- STOA Study (31 March 2026): "Digital tools for regulatory simplification using AI" -- comprehensive analysis of AI-leveraged eTools supporting regulatory simplification and consistency across the EU legislative cycle, mapping digital solutions across all stages of the policy cycle at EU, Member State, and third-country levels. Directly feeds into the 28 April Better Regulation Communication.
 
 ## The "Better Regulation and Enforcement" Communication
 

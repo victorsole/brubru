@@ -21,6 +21,7 @@
 - Digital Decade targets (2030): all households with 1 Gbps fixed, all populated areas with 5G-equivalent wireless
 - Context: Competitiveness Compass, Single Market Strategy, Draghi Report
 - **Virtual Worlds Observatory launch (22 April 2026, DG CNECT)**: Commission launched **final reports + Interactive Data Explorer** for the Virtual Worlds Observatory -- data on XR/metaverse adoption, investment flows, EU player ecosystem, regulatory implications. Complements the EU Virtual Worlds Strategy (COM(2023) 442). URL: `digital-strategy.ec.europa.eu/en/news/commission-launches-virtual-worlds-observatory-final-reports-and-interactive-data-explorer`. Feeds DMA/DSA gatekeeper scoping for immersive platforms.
+- JRC Study trio (22 April 2026): "EU leads in virtual worlds research, but business opportunities lag behind" -- three JRC studies under the 2023 Strategy on Web 4.0 and virtual worlds. Key findings: (1) EU accounts for ~11% of global virtual-world players + 9% of related activities, third-largest share but trailing China + United States. (2) Industry dominated by small + micro-enterprises across education, healthcare, manufacturing, entertainment. (3) Skills gap: 3D modelling, XR/VR development, Unity programming, AI integration plus project management + AI literacy now required across most job profiles. URL: joint-research-centre.ec.europa.eu/jrc-news-and-updates/eu-leads-virtual-worlds-research-business-opportunities-lag-behind-2026-04-22_en
 
 ## Overview
 

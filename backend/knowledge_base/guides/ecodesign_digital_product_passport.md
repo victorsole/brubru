@@ -21,6 +21,7 @@
 - 5 key measures: (1) Ecodesign requirements via delegated acts, (2) Digital Product Passport, (3) Ban on destruction of unsold consumer products, (4) Green public procurement criteria, (5) EPREL database expansion
 - EP first reading vote: 473-110-69 (12 July 2023)
 - ESPR press release: COM(2022)142
+- JRC Paper (22 April 2026, Springer, JRC145962): "Advancing the circular economy assessment framework for the Ecodesign policy" (Gonzalez Torres, Magrini, Rodriguez Manotas, Senatore, Bernad Beltran, Gama Caldas). Reviews the EcoReport tool used to assess economic + environmental impacts of Ecodesign requirements; proposes a new assessment framework integrating resource-loop circularity indicators to fill gaps in the current approach while balancing added complexity vs policymaking delay. Directly informs the 2026-2027 delegated-act pipeline on iron/steel, aluminium, textiles, furniture, mattresses, tyres. doi: 10.1007/s12053-026-10423-8
 
 ## Overview
 
