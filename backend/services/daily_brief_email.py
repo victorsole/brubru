@@ -21,7 +21,7 @@ import urllib.parse
 from datetime import date
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from services.email_service import EmailService
 
@@ -62,11 +62,26 @@ HEADLINE_HOVER_COLORS = [
 
 
 def _build_headline_html(headline: str, url: str, source: str, category: str,
-                         suggested_query: Optional[str] = None, index: int = 0) -> str:
-    """Build a single headline row: headline + suggested question + Ask Brubru CTA."""
+                         suggested_query: Optional[str] = None, index: int = 0,
+                         brubru_feature_label: Optional[str] = None,
+                         brubru_feature_url: Optional[str] = None) -> str:
+    """Build a single headline row: headline + suggested question + Ask Brubru CTA + optional Brubru feature pill.
+
+    If brubru_feature_label + brubru_feature_url are provided, a second pill is rendered
+    alongside the "Ask Brubru" button pointing to the relevant canonical Brubru feature
+    (EC Public Consultations, My EU Calendar, Legislative Tracker, Documents, Position
+    Analysis, Amendments, Amendator, EU Law Comply, Tenderator, API, Dashboard).
+    """
     source_label = source if source else _category_label(category)
     brubru_link = f"{BRUBRU_CHAT_URL}?q={urllib.parse.quote(suggested_query)}" if suggested_query else BRUBRU_CHAT_URL
     color = HEADLINE_HOVER_COLORS[index % len(HEADLINE_HOVER_COLORS)]
+
+    feature_pill = ""
+    if brubru_feature_label and brubru_feature_url:
+        feature_pill = f"""
+          <a href="{brubru_feature_url}" style="display: inline-block; margin-left: 6px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: #ffffff; background: {color}; border: 1px solid {color}; border-radius: 4px; text-decoration: none;">
+            {brubru_feature_label}
+          </a>"""
 
     query_block = ""
     if suggested_query:
@@ -79,8 +94,11 @@ def _build_headline_html(headline: str, url: str, source: str, category: str,
         <div style="margin-top: 6px;">
           <a href="{brubru_link}" style="display: inline-block; padding: 4px 12px; font-size: 12px; font-weight: 600; color: {color}; border: 1px solid {color}; border-radius: 4px; text-decoration: none;">
             Ask Brubru
-          </a>
+          </a>{feature_pill}
         </div>"""
+    elif feature_pill:
+        query_block = f"""
+        <div style="margin-top: 6px;">{feature_pill}</div>"""
 
     return f"""
     <tr class="headline-row headline-{index}">
@@ -162,7 +180,9 @@ def _build_brief_email_html(
     headline_rows = "\n".join(
         _build_headline_html(
             h["headline"], h["url"], h["source"], h["category"],
-            h.get("suggested_query"), index=i
+            h.get("suggested_query"), index=i,
+            brubru_feature_label=h.get("brubru_feature_label"),
+            brubru_feature_url=h.get("brubru_feature_url"),
         )
         for i, h in enumerate(headlines)
     )
@@ -458,7 +478,8 @@ BCC_BATCH_SIZE = 90
 def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
                            extra_recipients: Optional[List[str]] = None,
                            week_ahead: Optional[List[str]] = None,
-                           week_ahead_closing: Optional[str] = None) -> dict:
+                           week_ahead_closing: Optional[str] = None,
+                           feature_map: Optional[Dict[int, Dict[str, str]]] = None) -> dict:
     """Send today's brief to all subscribers via BCC batching.
 
     Uses BCC batches of 90 recipients per SMTP connection to avoid Gmail
@@ -474,6 +495,15 @@ def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
 
     if not headlines:
         return {"sent": 0, "error": "No headlines for today"}
+
+    # Apply per-priority feature mappings if provided. Headlines are loaded in
+    # priority ASC order, so index 0 = priority 1. feature_map keys are 1-based.
+    if feature_map:
+        for i, h in enumerate(headlines, start=1):
+            fm = feature_map.get(i) or feature_map.get(h.get("priority"))
+            if fm:
+                h["brubru_feature_label"] = fm.get("label")
+                h["brubru_feature_url"] = fm.get("url")
 
     registered_emails, preuser_emails = _get_all_recipient_emails(db_session)
     all_existing = registered_emails | preuser_emails
