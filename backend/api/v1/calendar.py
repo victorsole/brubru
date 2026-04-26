@@ -5,7 +5,7 @@
 from datetime import date, datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func
 from sqlalchemy.orm import Session
@@ -58,11 +58,33 @@ async def list_calendar_events(
     commission_dg: Optional[str] = Query(None, description="e.g. AGRI, CNECT, ENV"),
     date_from: Optional[date] = Query(None),
     date_to: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync — events last_updated >= value. Returns rows ordered by last_updated desc when set."),
+    updated_to: Optional[datetime] = Query(None),
+    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[CalendarEventItem]:
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.",
+                "reason_code": "conflicting_params",
+            },
+        )
+    if updated_end and not updated_to:
+        updated_to = updated_end
+    if updated_from and updated_to and updated_from > updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Invalid date range: updated_from={updated_from} is after updated_to={updated_to}.",
+                "reason_code": "invalid_date_range",
+            },
+        )
+
     query = db.query(EUCalendarEvent)
     filters = []
     if institution:
@@ -83,11 +105,19 @@ async def list_calendar_events(
         filters.append(EUCalendarEvent.start_date >= date_from)
     if date_to:
         filters.append(EUCalendarEvent.start_date <= date_to)
+    if updated_from:
+        filters.append(EUCalendarEvent.last_updated >= updated_from)
+    if updated_to:
+        filters.append(EUCalendarEvent.last_updated <= updated_to)
     if filters:
         query = query.filter(and_(*filters))
 
     total = query.count()
-    rows = query.order_by(EUCalendarEvent.start_date.asc()).offset((page - 1) * limit).limit(limit).all()
+    if updated_from or updated_to:
+        order_col = EUCalendarEvent.last_updated.desc().nullslast()
+    else:
+        order_col = EUCalendarEvent.start_date.asc()
+    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
     data = [
         CalendarEventItem(
             id=str(r.id),
@@ -110,4 +140,50 @@ async def list_calendar_events(
         )
         for r in rows
     ]
-    return build_envelope(data, total=total, page=page, limit=limit, published_from=date_from, published_to=date_to)
+    return build_envelope(
+        data, total=total, page=page, limit=limit,
+        published_from=date_from, published_to=date_to,
+        updated_from=updated_from, updated_to=updated_to,
+    )
+
+
+@router.get(
+    "/events/{event_id}",
+    response_model=CalendarEventItem,
+    summary="Single calendar event detail by id (UUID)",
+)
+async def get_calendar_event_detail(
+    event_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> CalendarEventItem:
+    r = db.query(EUCalendarEvent).filter(EUCalendarEvent.id == event_id).first()
+    if not r:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": f"Calendar event id {event_id} not found",
+                "reason_code": "not_found",
+                "resource": "calendar_event",
+                "id": event_id,
+            },
+        )
+    return CalendarEventItem(
+        id=str(r.id),
+        institution=r.institution.value if hasattr(r.institution, "value") else str(r.institution or ""),
+        event_type=r.event_type.value if hasattr(r.event_type, "value") else str(r.event_type or ""),
+        title=r.title,
+        description=r.description,
+        start_date=r.start_date,
+        end_date=r.end_date,
+        all_day=bool(r.all_day),
+        council_configuration=r.council_configuration,
+        ep_activity_type=r.ep_activity_type,
+        ep_committee_code=r.ep_committee_code,
+        commission_dg=r.commission_dg,
+        policy_areas=list(r.policy_areas or []),
+        procedure_refs=list(r.procedure_refs or []),
+        status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
+        source_url=r.source_url,
+        agenda_url=r.agenda_url,
+    )

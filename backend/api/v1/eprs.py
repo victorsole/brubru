@@ -5,7 +5,7 @@
 from datetime import date, datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
@@ -58,14 +58,51 @@ async def list_eprs(
     celex: Optional[str] = Query(None),
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
-    published_end: Optional[date] = Query(None, description="Alias of published_to"),
+    published_end: Optional[date] = Query(None, description="Alias of published_to. 422 if both differ."),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync — rows last_updated >= value. Returns rows ordered by last_updated desc when set."),
+    updated_to: Optional[datetime] = Query(None),
+    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[EPRSItem]:
+    if published_end and published_to and published_end != published_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Conflicting upper-bound parameters: published_to={published_to} and published_end={published_end}.",
+                "reason_code": "conflicting_params",
+            },
+        )
     if published_end and not published_to:
         published_to = published_end
+    if published_from and published_to and published_from > published_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Invalid date range: published_from={published_from} is after published_to={published_to}.",
+                "reason_code": "invalid_date_range",
+            },
+        )
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.",
+                "reason_code": "conflicting_params",
+            },
+        )
+    if updated_end and not updated_to:
+        updated_to = updated_end
+    if updated_from and updated_to and updated_from > updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Invalid date range: updated_from={updated_from} is after updated_to={updated_to}.",
+                "reason_code": "invalid_date_range",
+            },
+        )
 
     query = db.query(EPRSPublication)
     filters = []
@@ -82,6 +119,10 @@ async def list_eprs(
         filters.append(EPRSPublication.publication_date >= published_from)
     if published_to:
         filters.append(EPRSPublication.publication_date <= published_to)
+    if updated_from:
+        filters.append(EPRSPublication.last_updated >= updated_from)
+    if updated_to:
+        filters.append(EPRSPublication.last_updated <= updated_to)
     if q:
         like = f"%{q}%"
         filters.append(or_(EPRSPublication.title.ilike(like), EPRSPublication.summary.ilike(like)))
@@ -89,8 +130,12 @@ async def list_eprs(
         query = query.filter(and_(*filters))
 
     total = query.count()
+    if updated_from or updated_to:
+        order_col = EPRSPublication.last_updated.desc().nullslast()
+    else:
+        order_col = EPRSPublication.publication_date.desc().nullslast()
     rows = (
-        query.order_by(EPRSPublication.publication_date.desc().nullslast())
+        query.order_by(order_col)
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -118,4 +163,53 @@ async def list_eprs(
         for r in rows
     ]
 
-    return build_envelope(data, total=total, page=page, limit=limit, published_from=published_from, published_to=published_to)
+    return build_envelope(
+        data, total=total, page=page, limit=limit,
+        published_from=published_from, published_to=published_to,
+        updated_from=updated_from, updated_to=updated_to,
+    )
+
+
+@router.get(
+    "/{publication_id}",
+    response_model=EPRSItem,
+    summary="EPRS publication detail by publication_id (e.g. EPRS_BRI(2026)762322)",
+)
+async def get_eprs_detail(
+    publication_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> EPRSItem:
+    r = (
+        db.query(EPRSPublication)
+        .filter(EPRSPublication.publication_id == publication_id)
+        .first()
+    )
+    if not r:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": f"EPRS publication_id {publication_id} not found",
+                "reason_code": "not_found",
+                "resource": "eprs_publication",
+                "id": publication_id,
+            },
+        )
+    return EPRSItem(
+        id=str(r.id),
+        publication_id=r.publication_id,
+        title=r.title,
+        publication_type=r.publication_type.value if hasattr(r.publication_type, "value") else (str(r.publication_type) if r.publication_type else None),
+        publication_date=r.publication_date,
+        authors=list(r.authors or []),
+        summary=r.summary,
+        policy_areas=list(r.policy_areas or []),
+        committees=list(r.committees or []),
+        related_celex_numbers=list(r.related_celex_numbers or []),
+        related_procedures=list(r.related_procedures or []),
+        html_url=r.html_url,
+        pdf_url=r.pdf_url,
+        word_count=r.word_count,
+        page_count=r.page_count,
+        has_full_text=bool(r.has_full_text),
+    )

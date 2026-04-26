@@ -61,6 +61,9 @@ async def list_laws(
     published_from: Optional[date] = Query(None, description="Lower bound — laws with adoption date >= value (YYYY-MM-DD)"),
     published_to: Optional[date] = Query(None, description="Upper bound — laws with adoption date <= value (YYYY-MM-DD). Preferred name."),
     published_end: Optional[date] = Query(None, description="Alias of published_to for GovClipping compatibility. If both are sent with different values, returns 422."),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync lower bound — rows with updated_at >= value. Returns rows ordered by updated_at desc when set."),
+    updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
+    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to (GovClipping-compatible). 422 if both differ."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -88,6 +91,25 @@ async def list_laws(
             },
         )
 
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.",
+                "reason_code": "conflicting_params",
+            },
+        )
+    if updated_end and not updated_to:
+        updated_to = updated_end
+    if updated_from and updated_to and updated_from > updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Invalid date range: updated_from={updated_from} is after updated_to={updated_to}.",
+                "reason_code": "invalid_date_range",
+            },
+        )
+
     query = db.query(EULaw)
 
     filters = []
@@ -101,6 +123,10 @@ async def list_laws(
         filters.append(EULaw.date >= published_from)
     if published_to:
         filters.append(EULaw.date <= published_to)
+    if updated_from:
+        filters.append(EULaw.updated_at >= updated_from)
+    if updated_to:
+        filters.append(EULaw.updated_at <= updated_to)
 
     if q:
         # Use search_vector if available, fall back to ILIKE on title
@@ -116,8 +142,14 @@ async def list_laws(
         query = query.filter(and_(*filters))
 
     total = query.count()
+    # When the partner is doing incremental sync, sort by updated_at desc so
+    # they see freshly-updated rows first. Otherwise fall back to adoption date.
+    if updated_from or updated_to:
+        order_col = EULaw.updated_at.desc().nullslast()
+    else:
+        order_col = EULaw.date.desc().nullslast()
     rows = (
-        query.order_by(EULaw.date.desc().nullslast())
+        query.order_by(order_col)
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -144,6 +176,68 @@ async def list_laws(
         limit=limit,
         published_from=published_from,
         published_to=published_to,
+        updated_from=updated_from,
+        updated_to=updated_to,
+    )
+
+
+@router.get(
+    "/{celex}",
+    response_model=LawItem,
+    summary="EU law metadata detail by CELEX",
+    description=(
+        "Returns the full metadata for one EU law identified by CELEX. "
+        "Companion to /laws/{celex}/text which returns the full body. "
+        "Use this when you only need bibliographic fields (title, doc_type, "
+        "policy_area, legal_basis, oj_reference, adoption date)."
+    ),
+)
+async def get_law_detail(
+    celex: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> LawItem:
+    # CELEX can collide across LEG corpus dumps (e.g. an annex or related
+    # joint-declaration re-uses the parent's CELEX). Prefer the row whose
+    # title starts with the doc_type word ("Regulation"/"Directive"/...) which
+    # is the canonical originator, then fall back to lowest id (earliest
+    # ingestion = canonical entry in 99% of cases).
+    upper_celex = celex.upper()
+    candidates = (
+        db.query(EULaw)
+        .filter(EULaw.celex == upper_celex)
+        .order_by(EULaw.id.asc())
+        .all()
+    )
+    r = None
+    if candidates:
+        # Prefer titles that start with the normalised doc_type
+        for cand in candidates:
+            dt = (cand.doc_type_normalized or cand.doc_type or "").strip()
+            if dt and (cand.title or "").lower().startswith(dt.lower()):
+                r = cand
+                break
+        if r is None:
+            r = candidates[0]
+    if not r:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": f"CELEX {celex} not found",
+                "reason_code": "not_found",
+                "resource": "law",
+                "id": celex,
+            },
+        )
+    return LawItem(
+        celex=r.celex,
+        title=r.title,
+        doc_type=r.doc_type_normalized or r.doc_type,
+        adopted_on=r.date,
+        oj_reference=r.oj_reference,
+        policy_area=r.policy_area,
+        legal_basis=list(r.legal_basis or []),
+        eurlex_url=_eurlex_url(r.celex),
     )
 
 

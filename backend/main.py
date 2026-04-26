@@ -226,6 +226,11 @@ async def _v1_rate_limit_headers(request, call_next):
             response.headers["X-RateLimit-Limit"] = str(limit)
         if remaining is not None:
             response.headers["X-RateLimit-Remaining"] = str(remaining)
+        # Attribution moves to response headers (W5 P2 — Thursday brief 1.20).
+        # Envelope `meta` block stays for 4 weeks during partner migration.
+        response.headers["X-Powered-By"] = "Brubru"
+        response.headers["X-Source"] = "brubru.beresol.eu"
+        response.headers["X-Brubru-Envelope-Meta-Deprecated"] = "2026-05-23"
     return response
 
 

@@ -13,7 +13,7 @@ import logging
 from datetime import date, datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
@@ -65,14 +65,52 @@ async def list_publications(
     policy_area: Optional[str] = Query(None, description="Single policy area tag"),
     published_from: Optional[date] = Query(None),
     published_to: Optional[date] = Query(None),
-    published_end: Optional[date] = Query(None, description="Alias of published_to"),
+    published_end: Optional[date] = Query(None, description="Alias of published_to. 422 if both differ."),
+    updated_from: Optional[datetime] = Query(None, description="Incremental sync — rows fetched_at >= value. Returns rows ordered by fetched_at desc when set."),
+    updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound — rows fetched_at <= value."),
+    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[PublicationItem]:
+    if published_end and published_to and published_end != published_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Conflicting upper-bound parameters: published_to={published_to} and published_end={published_end}.",
+                "reason_code": "conflicting_params",
+            },
+        )
     if published_end and not published_to:
         published_to = published_end
+    if published_from and published_to and published_from > published_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Invalid date range: published_from={published_from} is after published_to={published_to}.",
+                "reason_code": "invalid_date_range",
+            },
+        )
+
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.",
+                "reason_code": "conflicting_params",
+            },
+        )
+    if updated_end and not updated_to:
+        updated_to = updated_end
+    if updated_from and updated_to and updated_from > updated_to:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "error": f"Invalid date range: updated_from={updated_from} is after updated_to={updated_to}.",
+                "reason_code": "invalid_date_range",
+            },
+        )
 
     query = db.query(InstitutionalPublication)
     filters = []
@@ -91,6 +129,14 @@ async def list_publications(
         filters.append(
             InstitutionalPublication.published_date <= datetime.combine(published_to, datetime.max.time())
         )
+    # Incremental sync filter: use fetched_at (when row first appeared in our DB).
+    # InstitutionalPublication has no row-level updated_at; updated_date is the
+    # source-side publication update time. fetched_at is the partner-friendly
+    # signal for "what's new to me since X".
+    if updated_from:
+        filters.append(InstitutionalPublication.fetched_at >= updated_from)
+    if updated_to:
+        filters.append(InstitutionalPublication.fetched_at <= updated_to)
     if q:
         like = f"%{q}%"
         filters.append(
@@ -104,8 +150,12 @@ async def list_publications(
         query = query.filter(and_(*filters))
 
     total = query.count()
+    if updated_from or updated_to:
+        order_col = InstitutionalPublication.fetched_at.desc().nullslast()
+    else:
+        order_col = InstitutionalPublication.published_date.desc().nullslast()
     rows = (
-        query.order_by(InstitutionalPublication.published_date.desc().nullslast())
+        query.order_by(order_col)
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
@@ -135,6 +185,48 @@ async def list_publications(
         limit=limit,
         published_from=published_from,
         published_to=published_to,
+        updated_from=updated_from,
+        updated_to=updated_to,
+    )
+
+
+@router.get(
+    "/{publication_id}",
+    response_model=PublicationItem,
+    summary="Single publication detail by id (UUID)",
+)
+async def get_publication_detail(
+    publication_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> PublicationItem:
+    r = (
+        db.query(InstitutionalPublication)
+        .filter(InstitutionalPublication.id == publication_id)
+        .first()
+    )
+    if not r:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": f"Publication id {publication_id} not found",
+                "reason_code": "not_found",
+                "resource": "publication",
+                "id": publication_id,
+            },
+        )
+    return PublicationItem(
+        id=str(r.id),
+        source_slug=r.source_slug,
+        institution_slug=r.institution_slug,
+        category=r.category,
+        title=r.title,
+        summary=r.summary,
+        url=r.url,
+        language=r.language or "en",
+        published_date=r.published_date,
+        policy_areas=list(r.policy_areas or []),
+        tags=list(r.tags or []),
     )
 
 

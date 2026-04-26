@@ -1,0 +1,182 @@
+"""
+/api/v1/resolutions — EP non-legislative resolutions (INL, INI, RSP).
+
+Resolutions are EP outputs distinct from legislative texts: legislative-initiative
+(INL), own-initiative reports (INI), and current-issues resolutions (RSP). They
+are leading indicators of legislative pressure on the Commission.
+
+Backed by the ep_resolutions table.
+"""
+
+import logging
+from datetime import date, datetime
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from pydantic import BaseModel, Field
+from sqlalchemy import and_
+from sqlalchemy.orm import Session
+
+from core.database import get_db
+from models.ep_resolutions import EPResolution
+from models.user import User
+
+from ._deps import api_user_with_rate_limit
+from ._envelope import PaginatedResponse, build_envelope
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/resolutions", tags=["v1-resolutions"])
+
+
+class ResolutionItem(BaseModel):
+    id: str
+    procedure_ref: str
+    title: str
+    resolution_type: Optional[str] = None
+    adoption_date: Optional[date] = None
+    vote_date: Optional[datetime] = None
+    lead_committee: Optional[str] = None
+    rapporteur: Optional[str] = None
+    summary: Optional[str] = None
+    eurovoc_codes: list = Field(default_factory=list)
+    policy_areas: list = Field(default_factory=list)
+    vote_for: int = 0
+    vote_against: int = 0
+    vote_abstention: int = 0
+    vote_total: int = 0
+    oeil_url: Optional[str] = None
+    text_url: Optional[str] = None
+    has_commission_followup: bool = False
+    updated_at: Optional[datetime] = None
+
+
+def _row_to_item(r: EPResolution) -> ResolutionItem:
+    return ResolutionItem(
+        id=str(r.id),
+        procedure_ref=r.procedure_ref,
+        title=r.title,
+        resolution_type=r.resolution_type.value if hasattr(r.resolution_type, "value") else (str(r.resolution_type) if r.resolution_type else None),
+        adoption_date=r.adoption_date,
+        vote_date=r.vote_date,
+        lead_committee=r.lead_committee,
+        rapporteur=r.rapporteur,
+        summary=r.summary,
+        eurovoc_codes=list(r.eurovoc_codes or []),
+        policy_areas=list(r.policy_areas or []),
+        vote_for=int(r.vote_for or 0),
+        vote_against=int(r.vote_against or 0),
+        vote_abstention=int(r.vote_abstention or 0),
+        vote_total=int(r.vote_total or 0),
+        oeil_url=r.oeil_url,
+        text_url=r.text_url,
+        has_commission_followup=bool(r.has_commission_followup),
+        updated_at=r.updated_at,
+    )
+
+
+@router.get(
+    "",
+    response_model=PaginatedResponse[ResolutionItem],
+    summary="List EP resolutions (INL / INI / RSP)",
+    description=(
+        "Non-legislative EP outputs: legislative initiative (INL), own-initiative "
+        "reports (INI), and resolutions (RSP). Filter by type, lead committee, "
+        "rapporteur, adoption date, and incremental sync via updated_from."
+    ),
+)
+async def list_resolutions(
+    request: Request,
+    q: Optional[str] = Query(None, description="Substring on title + summary"),
+    resolution_type: Optional[str] = Query(None, description="INL | INI | RSP | OTHER"),
+    lead_committee: Optional[str] = Query(None),
+    rapporteur: Optional[str] = Query(None),
+    procedure_ref: Optional[str] = Query(None),
+    has_commission_followup: Optional[bool] = Query(None),
+    published_from: Optional[date] = Query(None, description="adoption_date >= value"),
+    published_to: Optional[date] = Query(None),
+    published_end: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[datetime] = Query(None),
+    updated_end: Optional[datetime] = Query(None),
+    limit: int = Query(50, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> PaginatedResponse[ResolutionItem]:
+    if published_end and published_to and published_end != published_to:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Conflicting upper-bound parameters: published_to={published_to} and published_end={published_end}.",
+            "reason_code": "conflicting_params",
+        })
+    if published_end and not published_to:
+        published_to = published_end
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.",
+            "reason_code": "conflicting_params",
+        })
+    if updated_end and not updated_to:
+        updated_to = updated_end
+
+    query = db.query(EPResolution)
+    filters = []
+    if resolution_type:
+        filters.append(EPResolution.resolution_type == resolution_type.upper())
+    if lead_committee:
+        filters.append(EPResolution.lead_committee == lead_committee.upper())
+    if rapporteur:
+        filters.append(EPResolution.rapporteur.ilike(f"%{rapporteur}%"))
+    if procedure_ref:
+        filters.append(EPResolution.procedure_ref == procedure_ref)
+    if has_commission_followup is not None:
+        filters.append(EPResolution.has_commission_followup == has_commission_followup)
+    if published_from:
+        filters.append(EPResolution.adoption_date >= published_from)
+    if published_to:
+        filters.append(EPResolution.adoption_date <= published_to)
+    if updated_from:
+        filters.append(EPResolution.updated_at >= updated_from)
+    if updated_to:
+        filters.append(EPResolution.updated_at <= updated_to)
+    if q:
+        like = f"%{q}%"
+        from sqlalchemy import or_
+        filters.append(or_(EPResolution.title.ilike(like), EPResolution.summary.ilike(like)))
+    if filters:
+        query = query.filter(and_(*filters))
+
+    total = query.count()
+    if updated_from or updated_to:
+        order_col = EPResolution.updated_at.desc().nullslast()
+    else:
+        order_col = EPResolution.adoption_date.desc().nullslast()
+    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
+
+    return build_envelope(
+        [_row_to_item(r) for r in rows],
+        total=total, page=page, limit=limit,
+        published_from=published_from, published_to=published_to,
+        updated_from=updated_from, updated_to=updated_to,
+    )
+
+
+@router.get(
+    "/{procedure_ref:path}",
+    response_model=ResolutionItem,
+    summary="Single resolution detail by procedure_ref",
+)
+async def get_resolution_detail(
+    procedure_ref: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> ResolutionItem:
+    r = db.query(EPResolution).filter(EPResolution.procedure_ref == procedure_ref).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"Resolution {procedure_ref} not found",
+            "reason_code": "not_found",
+            "resource": "resolution",
+            "id": procedure_ref,
+        })
+    return _row_to_item(r)

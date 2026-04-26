@@ -15,7 +15,9 @@ from . import calendar as _calendar
 from . import commissioners as _commissioners
 from . import committees as _committees
 from . import consultations as _consultations
+from . import council_documents as _council_documents
 from . import docs as _docs
+from . import ep_entities as _ep_entities
 from . import eprs as _eprs
 from . import knowledge_guides as _knowledge_guides
 from . import laws as _laws
@@ -23,9 +25,14 @@ from . import legal_text as _legal_text
 from . import meps as _meps
 from . import meta as _meta
 from . import meta_enums as _meta_enums
+from . import metadata as _metadata
 from . import predictions as _predictions
 from . import procedures as _procedures
 from . import publications as _publications
+from . import resolutions as _resolutions
+from . import texts_adopted as _texts_adopted
+from . import w4_endpoints as _w4
+from . import w5_endpoints as _w5
 
 router = APIRouter(prefix="/api/v1")
 router.include_router(_meta.router)
@@ -42,6 +49,26 @@ router.include_router(_committees.router)
 router.include_router(_calendar.router)
 router.include_router(_meps.router)
 router.include_router(_predictions.router)
+router.include_router(_resolutions.router)
+router.include_router(_texts_adopted.texts_adopted_router)
+router.include_router(_texts_adopted.texts_submitted_router)
+router.include_router(_council_documents.router)
+router.include_router(_metadata.router)
+router.include_router(_ep_entities.amendments_router)
+router.include_router(_ep_entities.votes_router)
+router.include_router(_ep_entities.ep_documents_router)
+router.include_router(_ep_entities.press_releases_router)
+router.include_router(_ep_entities.reports_router)
+router.include_router(_ep_entities.opinions_router)
+router.include_router(_w4.parl_q_router)
+router.include_router(_w4.meetings_router)
+router.include_router(_w4.rsb_router)
+router.include_router(_w4.delegated_router)
+router.include_router(_w4.implementing_router)
+router.include_router(_w4.tris_router)
+router.include_router(_w5.research_router)
+router.include_router(_w5.officials_router)
+router.include_router(_w5.tenders_router)
 router.include_router(_docs.router)
 
 # Pretty docs also served at /api/docs (convenience alias).

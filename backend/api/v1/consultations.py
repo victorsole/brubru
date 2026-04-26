@@ -8,11 +8,12 @@ PaginatedResponse envelope.
 
 import logging
 import re
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
+from sqlalchemy import and_, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -177,4 +178,177 @@ async def get_feedback_by_initiative(
             by_user_type=summary.get("by_user_type", {}),
             by_country=summary.get("by_country", {}),
         ),
+    )
+
+
+# ============================================================================
+# Consultations LIST endpoint (W1 P0 — Thursday brief 1.9)
+# ============================================================================
+
+
+class ConsultationItem(BaseModel):
+    id: str
+    initiative_id: str
+    title: str
+    short_title: Optional[str] = None
+    description: Optional[str] = None
+    consultation_type: Optional[str] = None
+    status: Optional[str] = None
+    dg_responsible: Optional[str] = None
+    policy_areas: list = Field(default_factory=list)
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
+    feedback_count: int = 0
+    portal_url: Optional[str] = None
+    feedback_url: Optional[str] = None
+    com_references: list = Field(default_factory=list)
+    celex_numbers: list = Field(default_factory=list)
+    last_updated: Optional[datetime] = None
+
+
+@router.get(
+    "",
+    response_model=PaginatedResponse[ConsultationItem],
+    summary="List EC Have Your Say consultations / initiatives",
+    description=(
+        "Searchable, paginated list of EC public consultations, calls for evidence, "
+        "and Have Your Say initiatives. For per-initiative stakeholder feedback, use "
+        "/by-initiative/{id}/feedback."
+    ),
+)
+async def list_consultations(
+    request: Request,
+    q: Optional[str] = Query(None, description="Substring match on title + description"),
+    status: Optional[str] = Query(None, description="open | upcoming | closed | outcome_published | withdrawn"),
+    consultation_type: Optional[str] = Query(None, description="public_consultation | call_for_evidence | feedback | roadmap | initiative"),
+    dg_responsible: Optional[str] = Query(None, description="DG code, e.g. CNECT, JUST"),
+    policy_area: Optional[str] = Query(None, description="Single policy area tag"),
+    published_from: Optional[date] = Query(None, description="start_date >= value"),
+    published_to: Optional[date] = Query(None),
+    published_end: Optional[date] = Query(None, description="Alias of published_to. 422 if both differ."),
+    updated_from: Optional[datetime] = Query(None, description="last_updated >= value. Returns rows ordered by last_updated desc when set."),
+    updated_to: Optional[datetime] = Query(None),
+    updated_end: Optional[datetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
+    limit: int = Query(50, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> PaginatedResponse[ConsultationItem]:
+    if published_end and published_to and published_end != published_to:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Conflicting upper-bound parameters: published_to={published_to} and published_end={published_end}.",
+            "reason_code": "conflicting_params",
+        })
+    if published_end and not published_to:
+        published_to = published_end
+    if published_from and published_to and published_from > published_to:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Invalid date range: published_from={published_from} is after published_to={published_to}.",
+            "reason_code": "invalid_date_range",
+        })
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.",
+            "reason_code": "conflicting_params",
+        })
+    if updated_end and not updated_to:
+        updated_to = updated_end
+
+    query = db.query(PublicConsultation)
+    filters = []
+    if status:
+        filters.append(PublicConsultation.status == status.lower())
+    if consultation_type:
+        filters.append(PublicConsultation.consultation_type == consultation_type.lower())
+    if dg_responsible:
+        filters.append(PublicConsultation.dg_responsible == dg_responsible.upper())
+    if policy_area:
+        filters.append(PublicConsultation.policy_areas.any(policy_area))
+    if published_from:
+        filters.append(PublicConsultation.start_date >= published_from)
+    if published_to:
+        filters.append(PublicConsultation.start_date <= published_to)
+    if updated_from:
+        filters.append(PublicConsultation.last_updated >= updated_from)
+    if updated_to:
+        filters.append(PublicConsultation.last_updated <= updated_to)
+    if q:
+        like = f"%{q}%"
+        filters.append(or_(PublicConsultation.title.ilike(like), PublicConsultation.description.ilike(like)))
+    if filters:
+        query = query.filter(and_(*filters))
+
+    total = query.count()
+    if updated_from or updated_to:
+        order_col = PublicConsultation.last_updated.desc().nullslast()
+    else:
+        order_col = PublicConsultation.start_date.desc().nullslast()
+    rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
+
+    data = [
+        ConsultationItem(
+            id=str(r.id),
+            initiative_id=r.initiative_id,
+            title=r.title,
+            short_title=r.short_title,
+            description=r.description,
+            consultation_type=r.consultation_type.value if hasattr(r.consultation_type, "value") else (str(r.consultation_type) if r.consultation_type else None),
+            status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
+            dg_responsible=r.dg_responsible,
+            policy_areas=list(r.policy_areas or []),
+            start_date=r.start_date,
+            end_date=r.end_date,
+            feedback_count=int(r.feedback_count or 0),
+            portal_url=r.portal_url,
+            feedback_url=r.feedback_url,
+            com_references=list(r.com_references or []),
+            celex_numbers=list(r.celex_numbers or []),
+            last_updated=r.last_updated,
+        )
+        for r in rows
+    ]
+
+    return build_envelope(
+        data, total=total, page=page, limit=limit,
+        published_from=published_from, published_to=published_to,
+        updated_from=updated_from, updated_to=updated_to,
+    )
+
+
+@router.get(
+    "/{initiative_id}",
+    response_model=ConsultationItem,
+    summary="Single consultation detail by initiative_id",
+)
+async def get_consultation_detail(
+    initiative_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> ConsultationItem:
+    r = db.query(PublicConsultation).filter(PublicConsultation.initiative_id == initiative_id).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"Consultation initiative_id={initiative_id} not found",
+            "reason_code": "not_found",
+            "resource": "consultation",
+            "id": initiative_id,
+        })
+    return ConsultationItem(
+        id=str(r.id),
+        initiative_id=r.initiative_id,
+        title=r.title,
+        short_title=r.short_title,
+        description=r.description,
+        consultation_type=r.consultation_type.value if hasattr(r.consultation_type, "value") else (str(r.consultation_type) if r.consultation_type else None),
+        status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
+        dg_responsible=r.dg_responsible,
+        policy_areas=list(r.policy_areas or []),
+        start_date=r.start_date,
+        end_date=r.end_date,
+        feedback_count=int(r.feedback_count or 0),
+        portal_url=r.portal_url,
+        feedback_url=r.feedback_url,
+        com_references=list(r.com_references or []),
+        celex_numbers=list(r.celex_numbers or []),
+        last_updated=r.last_updated,
     )

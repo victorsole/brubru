@@ -1,0 +1,194 @@
+"""
+/api/v1/council-documents — Council of the EU document register.
+
+W2 P1 deliverable from Marcadors B.2 (consilium.europa.eu/en/documents/).
+Council documents are a critical signal for trilogue + Council position tracking.
+
+Implementation note: this endpoint UNIONs three sources today:
+  1) institutional_publications rows whose institution_slug matches Council
+  2) eu_calendar_events with institution in (COUNCIL, EUROPEAN_COUNCIL)
+     (Council meetings are first-class "Council documents" via their agendas)
+
+A dedicated council_documents table with COREPER + working-party + Council
+configuration linkage is queued for week 4. Until then this surface returns
+the Council data we already have ingested.
+"""
+
+import logging
+from datetime import date, datetime
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from pydantic import BaseModel, Field
+from sqlalchemy import and_, or_
+from sqlalchemy.orm import Session
+
+from core.database import get_db
+from models.eu_calendar import EUCalendarEvent, InstitutionEnum
+from models.institutional_publication import InstitutionalPublication
+from models.user import User
+
+from ._deps import api_user_with_rate_limit
+from ._envelope import PaginatedResponse, build_envelope
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/council-documents", tags=["v1-council-documents"])
+
+
+COUNCIL_INSTITUTION_SLUGS = (
+    "council_of_the_eu",
+    "european_council",
+    "consilium",
+    "council",
+)
+
+
+class CouncilDocumentItem(BaseModel):
+    id: str
+    source: str  # "publication" | "calendar_event"
+    document_type: Optional[str] = None
+    council_configuration: Optional[str] = None  # only for calendar events
+    title: str
+    summary: Optional[str] = None
+    url: Optional[str] = None
+    language: str = "en"
+    published_date: Optional[datetime] = None
+    policy_areas: list = Field(default_factory=list)
+    tags: list = Field(default_factory=list)
+
+
+@router.get(
+    "",
+    response_model=PaginatedResponse[CouncilDocumentItem],
+    summary="Council of the EU document register",
+    description=(
+        "Council of the EU + European Council documents and meetings. "
+        "Today the surface unions institutional_publications (council-tagged) "
+        "with eu_calendar_events for COUNCIL / EUROPEAN_COUNCIL. A dedicated "
+        "Council document register scraper (working-party + COREPER docs + "
+        "Council conclusions full text) is queued for week 4."
+    ),
+)
+async def list_council_documents(
+    request: Request,
+    q: Optional[str] = Query(None),
+    document_type: Optional[str] = Query(None, description="press_release | conclusions | meeting_agenda | ..."),
+    policy_area: Optional[str] = Query(None),
+    published_from: Optional[date] = Query(None),
+    published_to: Optional[date] = Query(None),
+    published_end: Optional[date] = Query(None),
+    updated_from: Optional[datetime] = Query(None),
+    updated_to: Optional[datetime] = Query(None),
+    updated_end: Optional[datetime] = Query(None),
+    limit: int = Query(50, ge=1, le=100),
+    page: int = Query(1, ge=1),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> PaginatedResponse[CouncilDocumentItem]:
+    if published_end and published_to and published_end != published_to:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Conflicting upper-bound parameters: published_to={published_to} and published_end={published_end}.",
+            "reason_code": "conflicting_params",
+        })
+    if published_end and not published_to:
+        published_to = published_end
+    if updated_end and updated_to and updated_end != updated_to:
+        raise HTTPException(status_code=422, detail={
+            "error": f"Conflicting upper-bound parameters: updated_to={updated_to} and updated_end={updated_end}.",
+            "reason_code": "conflicting_params",
+        })
+    if updated_end and not updated_to:
+        updated_to = updated_end
+
+    # Branch 1: institutional_publications filtered to Council sources
+    pub_q = db.query(InstitutionalPublication).filter(
+        or_(*[
+            InstitutionalPublication.institution_slug.ilike(f"%{slug}%")
+            for slug in COUNCIL_INSTITUTION_SLUGS
+        ])
+    )
+    pub_filters = []
+    if document_type:
+        pub_filters.append(InstitutionalPublication.category == document_type)
+    if policy_area:
+        pub_filters.append(InstitutionalPublication.policy_areas.any(policy_area))
+    if published_from:
+        pub_filters.append(InstitutionalPublication.published_date >= published_from)
+    if published_to:
+        pub_filters.append(InstitutionalPublication.published_date <= datetime.combine(published_to, datetime.max.time()))
+    if updated_from:
+        pub_filters.append(InstitutionalPublication.fetched_at >= updated_from)
+    if updated_to:
+        pub_filters.append(InstitutionalPublication.fetched_at <= updated_to)
+    if q:
+        like = f"%{q}%"
+        pub_filters.append(or_(
+            InstitutionalPublication.title.ilike(like),
+            InstitutionalPublication.summary.ilike(like),
+        ))
+    if pub_filters:
+        pub_q = pub_q.filter(and_(*pub_filters))
+
+    # Branch 2: eu_calendar_events for Council meetings (= meeting_agenda docs)
+    cal_q = db.query(EUCalendarEvent).filter(
+        EUCalendarEvent.institution.in_([InstitutionEnum.COUNCIL, InstitutionEnum.EUROPEAN_COUNCIL])
+    )
+    if published_from:
+        cal_q = cal_q.filter(EUCalendarEvent.start_date >= published_from)
+    if published_to:
+        cal_q = cal_q.filter(EUCalendarEvent.start_date <= published_to)
+    if updated_from:
+        cal_q = cal_q.filter(EUCalendarEvent.last_updated >= updated_from)
+    if updated_to:
+        cal_q = cal_q.filter(EUCalendarEvent.last_updated <= updated_to)
+    if q:
+        cal_q = cal_q.filter(EUCalendarEvent.title.ilike(f"%{q}%"))
+    if document_type and document_type != "meeting_agenda":
+        # if filter is not meeting_agenda, exclude calendar events
+        cal_q = cal_q.filter(False)
+
+    pub_total = pub_q.count()
+    cal_total = cal_q.count()
+    total = pub_total + cal_total
+
+    pub_rows = pub_q.order_by(InstitutionalPublication.published_date.desc().nullslast()).limit(limit).all()
+    cal_rows = cal_q.order_by(EUCalendarEvent.start_date.desc()).limit(limit).all()
+
+    data: list = []
+    for r in pub_rows:
+        data.append(CouncilDocumentItem(
+            id=str(r.id),
+            source="publication",
+            document_type=r.category,
+            title=r.title,
+            summary=r.summary,
+            url=r.url,
+            language=r.language or "en",
+            published_date=r.published_date,
+            policy_areas=list(r.policy_areas or []),
+            tags=list(r.tags or []),
+        ))
+    for r in cal_rows:
+        data.append(CouncilDocumentItem(
+            id=str(r.id),
+            source="calendar_event",
+            document_type="meeting_agenda",
+            council_configuration=r.council_configuration,
+            title=r.title,
+            summary=r.description,
+            url=r.agenda_url or r.source_url,
+            published_date=datetime.combine(r.start_date, datetime.min.time()) if r.start_date else None,
+            policy_areas=list(r.policy_areas or []),
+        ))
+
+    # Sort union by published_date desc
+    data.sort(key=lambda x: x.published_date or datetime.min, reverse=True)
+    # Apply page slice
+    page_data = data[(page - 1) * limit : page * limit]
+
+    return build_envelope(
+        page_data, total=total, page=page, limit=limit,
+        published_from=published_from, published_to=published_to,
+        updated_from=updated_from, updated_to=updated_to,
+    )
