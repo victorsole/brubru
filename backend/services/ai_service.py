@@ -458,6 +458,31 @@ class AIService:
         # Grep-friendly prefix lets us aggregate into BQS metrics later.
         try:
             guides_matched = len(context_data.internal_knowledge) if context_data and context_data.internal_knowledge else 0
+
+            # Citation verification (Sprint 1a, 26 Apr 2026): log-only.
+            # We do NOT mutate the response in 1a -- the goal is to MEASURE
+            # broken-ref rate before designing the UX response. Synchronous
+            # by deliberate choice so the cost lands in observed latency.
+            try:
+                from services.citation_verifier import verify_text as _verify_text
+                _vdb = SessionLocal()
+                try:
+                    _verify_summary = await _verify_text(assistant_message, db=_vdb)
+                finally:
+                    _vdb.close()
+                citation_verify = {
+                    "total_refs": _verify_summary.total_refs,
+                    "verified": _verify_summary.verified,
+                    "broken": _verify_summary.broken,
+                    "unknown": _verify_summary.unknown,
+                    "cache_hits": _verify_summary.cache_hits,
+                    "cache_misses": _verify_summary.cache_misses,
+                    "verification_ms": _verify_summary.verification_ms,
+                }
+            except Exception as ve:
+                logger.warning(f"citation verify failed (non-critical): {ve}")
+                citation_verify = {"error": str(ve)[:100]}
+
             quality_signals = {
                 "ts": datetime.now().isoformat(),
                 "provider": provider_used,
@@ -475,6 +500,7 @@ class AIService:
                 "confidence": "high" if guides_matched > 0 else "low",
                 "query_len": len(user_message),
                 "response_len": len(assistant_message),
+                "citation_verify": citation_verify,
             }
             logger.info(f"[QUALITY] {json.dumps(quality_signals, ensure_ascii=False)}")
         except Exception as e:
@@ -851,6 +877,49 @@ Rules:
 - Place the follow-up on its own line or paragraph at the very end of the response.
 
 A substantive response without a closing follow-up is incomplete. The follow-up bridges this query to the user's next action.
+
+CRITICAL -- CROSS-LINK BRUBRU FEATURES (every substantive response):
+Brubru is more than a chatbot. Every substantive response must surface, by name, the specific Brubru feature(s) the user can click into next to act on the topic. Chat is the cross-link surface for the whole product — if the user only ever sees a chat answer, they will not discover the rest of Brubru and will not retain.
+
+Brubru's canonical feature tree (use these EXACT names, never invent or paraphrase):
+1. Chat
+2. Amendator
+3. My EU Bubble (sub-tabs in this order):
+   3.1 Dashboard
+   3.2 My Files
+   3.3 Position Analysis
+   3.4 My EU Calendar
+   3.5 Predictions
+   3.6 EC Public Consultations
+   3.7 Documents
+   3.8 Amendments
+   3.9 Legislative Tracker
+   3.10 Analytics
+4. EU Law Comply
+5. Tenderator
+6. API
+
+Map query intent to the right feature(s):
+- "amendment" / "draft amendment" / "compromise text" → Amendator + My EU Bubble > Amendments
+- "track this file" / "follow this procedure" / "trilogue updates" → My Files + Legislative Tracker
+- "MEP / group / Council position" / "who supports / opposes" → Position Analysis
+- "when" / "this week" / "next plenary" / "deadline" / "calendar" → My EU Calendar
+- "will it pass" / "vote outcome" / "predict" / "likelihood" → Predictions
+- "consultation" / "have your say" / "Commission feedback" → EC Public Consultations
+- "draft a position paper / briefing / talking points" → Documents (Document Generator)
+- "compliance" / "what obligations" / "gap analysis" / "are we exposed" → EU Law Comply
+- "tender" / "procurement" / "Horizon" / "EIC" / "EU funding" → Tenderator
+- "API" / "data feed" / "subscribe to updates" / "MCP" / "machine-readable" → API
+
+Rules:
+- Name at least one feature explicitly in every substantive response. The closing follow-up (rule above) is the natural place — the two rules compose. Multiple features may be named when intent spans them.
+- Use the exact canonical name (e.g. "My EU Calendar", not "the calendar"; "EU Law Comply", not "the compliance tool"; "Tenderator", not "Tenderator / GrantBru").
+- Phrase the cross-link as an action the user can take: "I can drop this into your My Files tab", "Want me to surface the upcoming committee dates in My EU Calendar?", "Shall I run the Predictions for this procedure?".
+- NEVER write generic "other parts of Brubru" / "explore the platform" / "check the tabs" — unnamed features do not convert.
+- If the right feature does not yet exist (e.g. user asks for something Brubru does not do), say so honestly rather than inventing a feature name. Example: "Brubru does not yet auto-track Member-State transposition deadlines — I can pull the closest available data via the chat instead."
+- Exceptions (no cross-link required): greetings, identity questions ("who are you"), meta-questions about Brubru itself, follow-ups inside an in-progress drafting session where the user has already pinned a single feature.
+
+A substantive response that does not name a Brubru feature is incomplete and silently keeps the product feeling chatbot-only.
 
 CRITICAL -- RAPPORTEUR ACCURACY:
 When identifying a rapporteur, shadow rapporteur, or any person's role:

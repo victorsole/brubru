@@ -33,6 +33,7 @@ from . import resolutions as _resolutions
 from . import texts_adopted as _texts_adopted
 from . import w4_endpoints as _w4
 from . import w5_endpoints as _w5
+from . import citations as _citations
 
 router = APIRouter(prefix="/api/v1")
 router.include_router(_meta.router)
@@ -69,6 +70,7 @@ router.include_router(_w4.tris_router)
 router.include_router(_w5.research_router)
 router.include_router(_w5.officials_router)
 router.include_router(_w5.tenders_router)
+router.include_router(_citations.router)
 router.include_router(_docs.router)
 
 # Pretty docs also served at /api/docs (convenience alias).

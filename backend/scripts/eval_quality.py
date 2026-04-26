@@ -27,6 +27,8 @@ Quality criteria checked per response:
     5. does_not_say_i_dont_have     - No "I don't have access to" cop-outs
     6. responds_in_query_language   - Response language matches query language
     7. actionable_followup          - Response offers a concrete next step
+    8. cross_link_correct           - Response names a specific Brubru feature appropriate
+                                      for the query intent (canonical-tree mandate)
 
 Aggregate metrics:
     - Pass rate: % of queries where all criteria pass
@@ -85,6 +87,8 @@ class QueryResult:
     model: str = ""
     response_text: str = ""
     error: str = ""
+    expected_features: list = field(default_factory=list)
+    features_named: list = field(default_factory=list)
 
 
 @dataclass
@@ -101,6 +105,7 @@ class EvalReport:
     per_criterion: dict = field(default_factory=dict)
     per_pattern: dict = field(default_factory=dict)
     per_language: dict = field(default_factory=dict)
+    per_feature: dict = field(default_factory=dict)
     results: list = field(default_factory=list)
 
 
@@ -356,6 +361,74 @@ def check_actionable_followup(response: str, _ga: dict) -> CriterionResult:
     return CriterionResult("actionable_followup", False, "No follow-up or next step offered")
 
 
+# ---------------------------------------------------------------------------
+# Canonical Brubru feature tree (17 Apr 2026 mandate)
+#   6 products: Chat, Amendator, My EU Bubble, EU Law Comply, Tenderator, API
+#   10 My EU Bubble sub-tabs: Dashboard, My Files, Position Analysis,
+#       My EU Calendar, Predictions, EC Public Consultations, Documents,
+#       Amendments, Legislative Tracker, Analytics
+# Patterns must match how the AI actually names features in responses.
+# ---------------------------------------------------------------------------
+FEATURE_PATTERNS = {
+    "Amendator":                r"\bAmendator\b",
+    "Amendments":               r"\bAmendments\s+tab\b|My\s+EU\s+Bubble\s*>\s*Amendments|\bAmendments\s+section\b",
+    "Position Analysis":        r"\bPosition\s+Analysis\b",
+    "Predictions":              r"\bPredictions\s+tab\b|\bPredictions\s+feature\b|Brubru\s+Predictions|My\s+EU\s+Bubble\s*>\s*Predictions",
+    "My EU Calendar":           r"\bMy\s+EU\s+Calendar\b|Brubru'?s?\s+EU\s+Calendar",
+    "EC Public Consultations":  r"\bEC\s+Public\s+Consultations\b|Public\s+Consultations\s+tab",
+    "Documents":                r"\bDocuments\s+tab\b|\bDocument\s+Generator\b|My\s+EU\s+Bubble\s*>\s*Documents",
+    "Legislative Tracker":      r"\bLegislative\s+Tracker\b",
+    "My Files":                 r"\bMy\s+Files\b",
+    "EU Law Comply":            r"\bEU\s+Law\s+Comply\b",
+    "Tenderator":               r"\bTenderator\b",
+    "API":                      r"\bBrubru\s+API\b|\bv1\s+API\b|\bAPI\s+(?:tab|page|access|endpoint)\b",
+    "Analytics":                r"\bAnalytics\s+tab\b",
+    "Dashboard":                r"\bDashboard\s+tab\b",
+}
+
+
+def detect_features_named(response: str) -> list:
+    """Return the list of canonical features explicitly named in the response."""
+    found = []
+    for feature, pattern in FEATURE_PATTERNS.items():
+        if re.search(pattern, response, re.IGNORECASE):
+            found.append(feature)
+    return found
+
+
+def check_cross_link_correct(response: str, ga: dict) -> CriterionResult:
+    """
+    Response must name at least one specific Brubru feature appropriate for
+    the query intent. Generic phrases like "another part of Brubru" or just
+    "Chat" do not count -- the rule is to point users to a deeper feature.
+    """
+    expected = ga.get("expected_features", [])
+    if not expected:
+        return CriterionResult(
+            "cross_link_correct", True, "no expected_features defined"
+        )
+
+    named = detect_features_named(response)
+    matched = [f for f in expected if f in named]
+    other = [f for f in named if f not in expected]
+
+    if matched:
+        detail = f"Matched: {', '.join(matched)}"
+        if other:
+            detail += f" (also named: {', '.join(other)})"
+        return CriterionResult("cross_link_correct", True, detail)
+
+    if named:
+        return CriterionResult(
+            "cross_link_correct", False,
+            f"Named {', '.join(named)} but expected one of {expected}"
+        )
+    return CriterionResult(
+        "cross_link_correct", False,
+        f"No canonical feature named (expected one of {expected})"
+    )
+
+
 CRITERION_CHECKERS = {
     "mentions_celex_or_com": check_mentions_celex_or_com,
     "includes_doc_refs_from_guide": check_includes_doc_refs_from_guide,
@@ -364,6 +437,7 @@ CRITERION_CHECKERS = {
     "does_not_say_i_dont_have": check_does_not_say_i_dont_have,
     "responds_in_query_language": check_responds_in_query_language,
     "actionable_followup": check_actionable_followup,
+    "cross_link_correct": check_cross_link_correct,
 }
 
 
@@ -435,6 +509,10 @@ def run_query(backend_url: str, ga: dict, verbose: bool = False) -> QueryResult:
     result.criteria_passed = sum(1 for cr in result.criteria_results if cr.passed)
     result.passed = result.criteria_passed == result.criteria_total
 
+    # Capture canonical-tree signals for per-feature aggregation
+    result.expected_features = ga.get("expected_features", [])
+    result.features_named = detect_features_named(response_text)
+
     return result
 
 
@@ -448,9 +526,14 @@ def compute_bqs(report: EvalReport) -> float:
     BQS = (0.30 x Eval Pass Rate)
         + (0.25 x Citation Accuracy proxy)
         + (0.15 x Language Consistency)
-        + (0.10 x Guide Coverage proxy)
+        + (0.10 x Cross-Link Correctness)        [new, 25 Apr 2026]
         + (0.10 x (1 - Deflection Rate))
-        + (0.10 x Response Time score)
+        + (0.05 x Guide Coverage proxy)          [reduced from 0.10]
+        + (0.05 x Response Time score)           [reduced from 0.10]
+
+    Total = 1.00. Recalibrated 25 April 2026 to incorporate the canonical-tree
+    cross-link mandate. Cross-link weight (0.10) taken evenly from guide_pass
+    and time_score, both of which were over-weighted relative to user impact.
 
     Note: Some metrics (guide coverage, knowledge freshness) require
     production data. For the eval script, we approximate with available signals.
@@ -458,7 +541,6 @@ def compute_bqs(report: EvalReport) -> float:
     if not report.results:
         return 0.0
 
-    total = len(report.results)
     successful = [r for r in report.results if not r.error]
     if not successful:
         return 0.0
@@ -479,6 +561,18 @@ def compute_bqs(report: EvalReport) -> float:
         1 for r in successful
         if any(cr.name == "responds_in_query_language" and cr.passed for cr in r.criteria_results)
     ) / n
+
+    # Cross-link correctness: % that name a correct canonical feature
+    cross_link_results = [
+        cr for r in successful for cr in r.criteria_results
+        if cr.name == "cross_link_correct"
+    ]
+    if cross_link_results:
+        cross_link_pass = sum(1 for cr in cross_link_results if cr.passed) / len(cross_link_results)
+    else:
+        # If the criterion was never run (e.g. legacy GAs without expected_features),
+        # treat as neutral 1.0 -- BQS shouldn't penalise absence of data.
+        cross_link_pass = 1.0
 
     # Guide coverage proxy: % that include doc refs from guide
     guide_pass = sum(
@@ -506,9 +600,10 @@ def compute_bqs(report: EvalReport) -> float:
         0.30 * eval_pass_rate
         + 0.25 * celex_pass
         + 0.15 * lang_pass
-        + 0.10 * guide_pass
+        + 0.10 * cross_link_pass
         + 0.10 * (1 - deflection_rate)
-        + 0.10 * time_score
+        + 0.05 * guide_pass
+        + 0.05 * time_score
     )
 
     return round(bqs, 4)
@@ -583,6 +678,33 @@ def build_report(results: list, backend_url: str) -> EvalReport:
         for name, counts in lang_counts.items()
     }
 
+    # Per-feature pass rates: a GA contributes to every feature in its
+    # expected_features list. "Pass" means the response named at least one
+    # of the expected features (cross_link_correct passed) AND the GA's
+    # full criteria suite passed.
+    feature_counts = {}
+    for r in successful:
+        for feat in r.expected_features:
+            entry = feature_counts.setdefault(
+                feat, {"passed": 0, "total": 0, "named": 0}
+            )
+            entry["total"] += 1
+            if feat in r.features_named:
+                entry["named"] += 1
+            if r.passed:
+                entry["passed"] += 1
+
+    report.per_feature = {
+        name: {
+            "passed": counts["passed"],
+            "named": counts["named"],
+            "total": counts["total"],
+            "pass_rate": round(counts["passed"] / counts["total"] * 100, 1),
+            "cross_link_rate": round(counts["named"] / counts["total"] * 100, 1),
+        }
+        for name, counts in feature_counts.items()
+    }
+
     report.bqs = compute_bqs(report)
 
     return report
@@ -649,6 +771,19 @@ def print_report(report: EvalReport, verbose: bool = False):
             print(f"       {name:<5} {data['passed']}/{data['total']} ({data['rate']}%)")
         print()
 
+    # Per-feature (canonical tree)
+    if report.per_feature:
+        print("  Per-Feature Cross-Link Rates (canonical tree):")
+        print("  " + "-" * 55)
+        for name, data in sorted(
+            report.per_feature.items(), key=lambda x: x[1]["cross_link_rate"]
+        ):
+            print(
+                f"       {name:<22} cross-link {data['named']}/{data['total']} ({data['cross_link_rate']}%)"
+                f"   full pass {data['passed']}/{data['total']} ({data['pass_rate']}%)"
+            )
+        print()
+
     # Individual results
     print("  Individual Results:")
     print("  " + "-" * 55)
@@ -694,6 +829,7 @@ def save_json_report(report: EvalReport, path: Optional[str] = None):
         "per_criterion": report.per_criterion,
         "per_pattern": report.per_pattern,
         "per_language": report.per_language,
+        "per_feature": report.per_feature,
         "results": [
             {
                 "id": r.id,
@@ -707,6 +843,8 @@ def save_json_report(report: EvalReport, path: Optional[str] = None):
                 "response_time_ms": r.response_time_ms,
                 "model": r.model,
                 "error": r.error,
+                "expected_features": r.expected_features,
+                "features_named": r.features_named,
                 "criteria_details": [
                     {"name": cr.name, "passed": cr.passed, "detail": cr.detail}
                     for cr in r.criteria_results

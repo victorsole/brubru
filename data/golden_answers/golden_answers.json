@@ -17,7 +17,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -40,7 +45,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -61,7 +71,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -82,7 +97,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "EU Law Comply",
+      "Position Analysis"
     ]
   },
   {
@@ -103,7 +123,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "EU Law Comply",
+      "Position Analysis"
     ]
   },
   {
@@ -124,7 +149,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -145,7 +175,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Documents",
+      "Position Analysis"
     ]
   },
   {
@@ -167,7 +202,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "EU Law Comply",
+      "Position Analysis"
     ]
   },
   {
@@ -188,7 +228,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "EU Law Comply",
+      "Legislative Tracker"
     ]
   },
   {
@@ -211,7 +256,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "Position Analysis"
     ]
   },
   {
@@ -232,7 +282,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "My EU Calendar"
     ]
   },
   {
@@ -255,7 +310,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "My EU Calendar"
     ]
   },
   {
@@ -278,7 +338,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "My EU Calendar"
     ]
   },
   {
@@ -299,7 +364,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "My EU Calendar"
     ]
   },
   {
@@ -320,7 +390,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "My EU Calendar"
     ]
   },
   {
@@ -341,7 +416,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -362,7 +442,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -383,7 +468,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -404,7 +494,11 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis"
     ]
   },
   {
@@ -427,7 +521,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Amendator",
+      "Amendments"
     ]
   },
   {
@@ -450,7 +549,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Amendator",
+      "Amendments"
     ]
   },
   {
@@ -473,7 +577,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Documents",
+      "Amendator"
     ]
   },
   {
@@ -496,7 +605,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Documents",
+      "Amendator"
     ]
   },
   {
@@ -518,7 +632,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "EU Law Comply",
+      "Position Analysis"
     ]
   },
   {
@@ -540,7 +659,11 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Tenderator"
     ]
   },
   {
@@ -561,7 +684,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "EU Law Comply",
+      "Position Analysis"
     ]
   },
   {
@@ -582,7 +710,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Position Analysis",
+      "Predictions"
     ]
   },
   {
@@ -603,7 +736,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "My EU Calendar"
     ]
   },
   {
@@ -624,7 +762,11 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Tenderator"
     ]
   },
   {
@@ -645,7 +787,12 @@
       "does_not_say_search_eurlex",
       "does_not_say_i_dont_have",
       "responds_in_query_language",
-      "actionable_followup"
+      "actionable_followup",
+      "cross_link_correct"
+    ],
+    "expected_features": [
+      "Legislative Tracker",
+      "Position Analysis"
     ]
   }
 ]
