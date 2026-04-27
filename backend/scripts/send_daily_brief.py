@@ -225,7 +225,7 @@ def preview(db, extra_recipients=None):
 
 
 def send(db, brubru_news=None, extra_recipients=None, skip_url_check=False,
-         week_ahead=None, week_ahead_closing=None):
+         week_ahead=None, week_ahead_closing=None, feature_map=None):
     """Send the daily brief to all subscribers. Verifies URLs first."""
     from services.daily_brief_email import send_daily_brief_batch
 
@@ -239,7 +239,8 @@ def send(db, brubru_news=None, extra_recipients=None, skip_url_check=False,
             return
 
     result = send_daily_brief_batch(db, brubru_news=brubru_news, extra_recipients=extra_recipients,
-                                     week_ahead=week_ahead, week_ahead_closing=week_ahead_closing)
+                                     week_ahead=week_ahead, week_ahead_closing=week_ahead_closing,
+                                     feature_map=feature_map)
     print(f"\n  Daily Brief Send Results:")
     print(f"  Sent: {result.get('sent', 0)}")
     print(f"  Failed: {result.get('failed', 0)}")
@@ -273,7 +274,25 @@ def main():
                         help="File with additional recipient emails (txt or md)")
     parser.add_argument("--extra", nargs="+", metavar="EMAIL",
                         help="Additional recipient email addresses")
+    parser.add_argument("--feature", nargs="+", metavar="INDEX:LABEL:URL",
+                        help="Per-headline Brubru feature CTA. Format INDEX:LABEL:URL. INDEX is 1-based headline position. Example: --feature \"1:Open My Files:https://brubru.beresol.eu/my-eu-bubble?tab=my_files\"")
     args = parser.parse_args()
+
+    # Parse --feature flags into feature_map dict
+    feature_map = None
+    if args.feature:
+        feature_map = {}
+        for spec in args.feature:
+            parts = spec.split(":", 2)
+            if len(parts) != 3:
+                print(f"[WARN] Skipping malformed --feature spec: {spec} (expected INDEX:LABEL:URL)")
+                continue
+            try:
+                idx = int(parts[0])
+            except ValueError:
+                print(f"[WARN] Skipping --feature with non-integer index: {spec}")
+                continue
+            feature_map[idx] = {"label": parts[1], "url": parts[2]}
 
     # Permanent extras: individually approved recipients who should always receive the brief
     PERMANENT_EXTRAS = [
@@ -300,7 +319,8 @@ def main():
         elif args.send:
             send(db, brubru_news=args.news, extra_recipients=extra,
                  skip_url_check=args.skip_url_check,
-                 week_ahead=args.week_ahead, week_ahead_closing=args.week_ahead_closing)
+                 week_ahead=args.week_ahead, week_ahead_closing=args.week_ahead_closing,
+                 feature_map=feature_map)
         else:
             preview(db, extra_recipients=extra)
     finally:
