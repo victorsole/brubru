@@ -1,6 +1,7 @@
 ---
 name: business-plan
 description: Reference skill for Brubru's business plan ecosystem. Lists all HTML and MD files, their purposes, URLs, and how to update them. Use when working on investor materials, strategy docs, or competitive analysis.
+allowed-tools: ["Read", "Edit", "Write", "Bash", "Glob", "Grep", "WebFetch"]
 ---
 
 # Brubru Business Plan Ecosystem

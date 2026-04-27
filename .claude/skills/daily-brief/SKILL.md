@@ -269,6 +269,27 @@ Bad suggested queries:
 - Just restate the headline ("What are the EHDS implementing rules?")
 - Are too generic ("Tell me more about this")
 
+### Per-Headline Brubru Feature CTA (MANDATORY)
+
+Brubru is no longer just a chatbot. Each headline in the brief MUST point the reader to the **specific Brubru feature** that lets them act on the topic — not just the chat. Brubru's canonical feature tree (`memory/project_brubru_feature_tree.md`): Chat, Amendator, My EU Bubble (Dashboard, My Files, Position Analysis, My EU Calendar, Predictions, EC Public Consultations, Documents, Amendments, Legislative Tracker, Analytics), EU Law Comply, Tenderator, API.
+
+Pick the feature that best matches the headline's intent:
+
+| Headline intent | Right feature CTA |
+|-----------------|-------------------|
+| "X has been adopted / proposed" | Chat (ask Brubru about it) + Legislative Tracker (track it) |
+| "Amendments tabled in committee X" | Amendator (draft amendments) + My EU Bubble > Amendments |
+| "Group Y / MEP Z position on file X" | Position Analysis + Predictions |
+| "Council / EUCO summit" | My EU Calendar + Predictions |
+| "Commission consultation opens" | EC Public Consultations (one-click reply) |
+| "New compliance obligation" | EU Law Comply (gap analysis) |
+| "TED tender / Horizon call" | Tenderator |
+| "New EU data source" | API (subscribe to feed) |
+
+Each headline's HTML block must include a small secondary CTA next to (or below) the "Ask Brubru" button that links to the relevant feature. The verifier in Step 4 (Chatbot Coverage Verification) must also check that the corresponding feature is actually live and useful for the topic — never link to a feature that returns an empty state for the headline's CELEX/OEIL ref.
+
+If headline-level feature CTAs are not yet wired in `daily_brief_email.py`, propose the change to the user, do NOT silently ship a brief without them. The CTA can be a one-line prefix ("Track this in your Legislative Tracker →") until the proper button styling is added.
+
 ### Chatbot Coverage Verification (MANDATORY)
 
 Before finalising headlines, verify that every headline's `suggested_query` will be answered well by Brubru's chatbot. For each headline:
