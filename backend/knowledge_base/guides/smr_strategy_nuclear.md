@@ -18,6 +18,7 @@
 - Related guides: Clean Energy Investment Strategy (clean_energy_investment_strategy.md), Citizens Energy Package (citizens_energy_package.md), EU Energy Policy (eu_energy_policy.md)
 - DG ENER consultations (13 April 2026): Commission opened consultations evaluating current rules under the Radioactive Waste Directive (Directive 2011/70/Euratom, CELEX: 32011L0070) and the Radioactive Shipments Directive (Directive 2006/117/Euratom, CELEX: 32006L0117). Feedback 8 weeks; evaluation may precede revision aligned with SMR deployment and nuclear waste management post-2030.
 - DG ENER (13 April 2026): Commission consults Member States on proposal for a Temporary Crisis Framework for State aid, relevant to nuclear/SMR strategic projects.
+- **Chornobyl 40 years anniversary cluster (24-26 April 2026)**: (a) "**Safeguarding Chornobyl: strengthening protection and resilience in Ukraine**" -- DG ENER programme on Chornobyl New Safe Confinement protection + nuclear safety upgrades; (b) **Joint statement by Commission and HR/VP** ahead of 40 years since Chornobyl disaster (25 April 2026); (c) "**Chernobyl 40 years later: Learning from the past**" -- DG ENER lessons-learned policy reflection; (d) **Commissioner Dombrovskis remarks at International Conference on Chornobyl Recovery and Nuclear Safety** (26 April 2026). Cluster reaffirms EU support for Ukrainian nuclear safety + tightening EURATOM safety standards + reactor longevity for SMR-era nuclear policy.
 
 ## Overview
 

@@ -3,6 +3,7 @@
 ## QUICK FACTS
 - Topic: EU debate on introducing a consent-based definition of rape into EU-wide law, including the ongoing Directive on combating violence against women and domestic violence (Directive (EU) 2024/1385) context and potential revisions
 - EPRS At a Glance (20 April 2026): "The need for a consent-based definition of rape" -- EPRS analysis of Member State practice divergence, human-rights framework (Istanbul Convention), and the political debate over Article 5 (rape) of the 2024 Directive. Ref: EPRS_UNK_994fa8ca4d44
+- **EP plenary press conference: Tuesday 28 April 2026, 17:00 CEST (Strasbourg)** -- press conference on consent-based definition of rape in EU law (EP press IP/20260424IPR41929). Drives renewed debate on whether Article 83(1) TFEU can carry consent-based definition harmonisation. Likely signals EP intent to push Commission for new initiative or amendment to Directive (EU) 2024/1385. Source: https://www.europarl.europa.eu/news/en/press-room/20260424IPR41929/consent-based-definition-of-rape-in-eu-law-press-conference-tuesday-28-april
 - Current EU instrument: **Directive (EU) 2024/1385** of 14 May 2024 on combating violence against women and domestic violence, CELEX 32024L1385, OJ L, 2024/1385, 24.5.2024
 - EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024L1385
 - Transposition deadline: 14 June 2027

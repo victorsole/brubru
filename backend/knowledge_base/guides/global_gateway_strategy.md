@@ -12,6 +12,8 @@
 - Council configuration: FAC (Development)
 - Context: EU's response to China's Belt and Road Initiative (BRI)
 - Key instrument: NDICI-Global Europe (EUR 79.5 billion, 2021-2027)
+- **LATEST (24 April 2026, DG INTPA)**: Commissioner Síkela on mission to **Addis Ababa, Ethiopia** -- announced new Global Gateway investments. Investments span (a) energy transition (renewables + grid), (b) digital connectivity (5G + cables), (c) transport corridors (Lobito Corridor extension), (d) human development (vocational + education + health). Reinforces EU's African anchor against China BRI + Russian Wagner-successor presence. Cross-link with `eu_special_representatives.md` for EUSR Horn of Africa coordination.
+- **LATEST (24 April 2026)**: **Global Green Bond Initiative Fund signed** (DG NEAR + DG INTPA + EIB + multiple partners). Mobilises up to **EUR 20 billion** for sustainable infrastructure investments globally. Anchor financing instrument for Global Gateway green-transition pillar.
 
 ## Overview
 

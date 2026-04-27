@@ -14,6 +14,8 @@
 - Negotiations launched: 2018, paused 2023, relaunched 2025
 - Context: First major new FTA concluded under von der Leyen II mandate
 - Related guide: `eu_trade_policy.md` (full EU trade policy framework)
+- **EPRS Briefing (24 April 2026)**: "Australia: Current landscape and engagement with the EU" -- post-signature analysis of Australia's political landscape, security alignment, AUKUS implications for EU defence cooperation, critical raw materials partnerships (Australia is a CRMA strategic partner), and Pacific Indo-Pacific architecture. Reaffirms Australia as "trusted, like-minded partner" in EU trade diversification away from China. Ref: EPRS_UNK_0fb956a29383
+- **EU-Australia Security and Defence Partnership operational layer (24 April 2026 EPRS)**: parallel partnership signed alongside FTA includes intelligence cooperation, joint exercises, capabilities cooperation under EDIP framework, and Indo-Pacific maritime security coordination.
 
 ## Overview
 

@@ -19,6 +19,8 @@
 - Eurostat (13 April 2026): EU pharma products trade surplus reached EUR 221 billion in 2024, driven by Ireland, Belgium, Germany manufacturing hubs; confirms strategic importance of pharma sector.
 - **First combined COVID-19 + influenza vaccine authorised (22 April 2026, DG SANTE)**: Commission authorised the **first combined COVID-19 and seasonal influenza vaccine** for people aged 50 and over. Signals consolidation of respiratory-virus vaccination into single-shot regimens; reduces adherence gap in autumn/winter campaigns; EMA positive opinion preceded Commission authorisation. Relevant for pharma manufacturers (mRNA + recombinant platforms), national procurement, and Europe's Beating Cancer Plan vaccination targets.
 - **DG SANTE (22 April 2026)** cluster: (a) "From infancy to old age: vaccines work across generations" awareness campaign; (b) Update -- Documents on European Medical Device Nomenclature (EMDN); (c) Update -- Manual on borderline and classification under MDR/IVDR (v5); (d) Registration -- EUHPP Live Webinar on EU IPC guidance (7 May 2026, 10:00-12:00 CEST).
+- **SCCS Scientific Advice on Cannabidiol (CBD) in cosmetic products (24 April 2026)**: Scientific Committee on Consumer Safety published opinion on CBD use in cosmetics. Reviews dermal absorption + systemic exposure + carcinogenicity + reproductive toxicity. Could trigger Cosmetics Regulation Annex II/III amendment. Source: DG SANTE.
+- **SCCS Scientific Advice on Silver in cosmetic products (24 April 2026)**: SCCS opinion on silver compounds (silver, colloidal silver, silver oxide, silver nitrate). Reviews antimicrobial use + nanoform safety + reproductive toxicity. Could amend Annex III restrictions. Source: DG SANTE.
 
 ## Regulatory Sandbox (2026 Pharma Package)
 

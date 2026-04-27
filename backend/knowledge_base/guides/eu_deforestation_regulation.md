@@ -20,6 +20,7 @@
 - OEIL: [2021/0366(COD)](https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2021/0366(COD))
 - Legislative Train: [Deforestation Regulation](https://www.europarl.europa.eu/legislative-train/theme-european-green-deal/file-new-rules-to-stop-eu-driven-deforestation)
 - EC page: [EU Deforestation Regulation](https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en)
+- **LATEST (24 April 2026, Politico EU)**: "LVMH-owned leather-maker linked to deforestation pushes to weaken EU green law" -- Politico reports luxury-fashion industry pressure (LVMH-owned tannery) on EUDR scope + benchmarking criteria, particularly leather + traceability requirements. Signals industry pushback during SME application window (30 June 2026). Cross-link with `eu_mercosur_trade_agreement.md` (Mercosur leather + Brazil deforestation safeguards under Reg. 2026/687).
 
 ## Overview
 

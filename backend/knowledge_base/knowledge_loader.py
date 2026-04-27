@@ -4117,6 +4117,152 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'australie overeenkomst': ['eu_australia_trade_agreement'],
     'acord australia': ['eu_australia_trade_agreement'],
 
+    # EU-Mercosur Interim Trade Agreement (provisional application from 1 May 2026)
+    'mercosur': ['eu_mercosur_trade_agreement', 'eu_trade_policy'],
+    'eu-mercosur': ['eu_mercosur_trade_agreement', 'eu_trade_policy'],
+    'eu mercosur': ['eu_mercosur_trade_agreement', 'eu_trade_policy'],
+    'mercosur interim trade agreement': ['eu_mercosur_trade_agreement'],
+    'mercosur ita': ['eu_mercosur_trade_agreement'],
+    'mercosur empa': ['eu_mercosur_trade_agreement'],
+    'mercosur partnership agreement': ['eu_mercosur_trade_agreement'],
+    'mercosur 1 may': ['eu_mercosur_trade_agreement'],
+    'mercosur provisional application': ['eu_mercosur_trade_agreement'],
+    '22026a00184': ['eu_mercosur_trade_agreement'],
+    'argentina brazil paraguay uruguay': ['eu_mercosur_trade_agreement'],
+    'mercosur safeguard': ['eu_mercosur_trade_agreement', 'eu_trade_defence'],
+    '32026r0687': ['eu_mercosur_trade_agreement', 'eu_trade_defence'],
+    'reglamento mercosur': ['eu_mercosur_trade_agreement'],
+    'accord mercosur': ['eu_mercosur_trade_agreement'],
+    'accordo mercosur': ['eu_mercosur_trade_agreement'],
+    'mercosur akkoord': ['eu_mercosur_trade_agreement'],
+    'acord mercosur': ['eu_mercosur_trade_agreement'],
+
+    # One Europe One Market Roadmap (Cyprus EUCO 23-24 April 2026, end-2027 target)
+    'one europe one market': ['single_market_one_europe_roadmap'],
+    'one europe, one market': ['single_market_one_europe_roadmap'],
+    'single market roadmap': ['single_market_one_europe_roadmap'],
+    'single market deepening': ['single_market_one_europe_roadmap'],
+    'cyprus euco roadmap': ['single_market_one_europe_roadmap'],
+    'metsola christodoulides von der leyen': ['single_market_one_europe_roadmap'],
+    'feuille de route marche unique': ['single_market_one_europe_roadmap'],
+    'mercato unico europeo roadmap': ['single_market_one_europe_roadmap'],
+    'eengemaakte markt routekaart': ['single_market_one_europe_roadmap'],
+    'mercat unic europeu': ['single_market_one_europe_roadmap'],
+    'una europa un mercado': ['single_market_one_europe_roadmap'],
+
+    # EU-US Critical Minerals MoU (24 April 2026)
+    'eu us critical minerals': ['eu_trade_policy'],
+    'critical minerals mou': ['eu_trade_policy'],
+    'sefcovic critical minerals': ['eu_trade_policy'],
+    'memorandum of understanding critical minerals': ['eu_trade_policy'],
+    'ip 26 862': ['eu_trade_policy'],
+
+    # Latin America EU Relations
+    'latin america eu': ['latin_america_eu_relations'],
+    'eu latin america': ['latin_america_eu_relations'],
+    'celac eu': ['latin_america_eu_relations'],
+    'eu celac': ['latin_america_eu_relations'],
+    'colombia 2026 elections': ['latin_america_eu_relations'],
+    'colombia presidential elections': ['latin_america_eu_relations'],
+    'colombia ahead of 2026': ['latin_america_eu_relations'],
+    'eu colombia': ['latin_america_eu_relations'],
+    'andean community': ['latin_america_eu_relations'],
+    'cariforum': ['latin_america_eu_relations'],
+    'eu chile': ['latin_america_eu_relations'],
+    'eu mexico global agreement': ['latin_america_eu_relations', 'eu_trade_policy'],
+    'eu cuba': ['latin_america_eu_relations'],
+    'eu venezuela': ['latin_america_eu_relations'],
+    'lithium triangle': ['latin_america_eu_relations'],
+    'amerique latine ue': ['latin_america_eu_relations'],
+    'america latina ue': ['latin_america_eu_relations'],
+    'amerika llatina ue': ['latin_america_eu_relations'],
+
+    # European Education Area 2021-2030
+    'european education area': ['european_education_area_2021_2030'],
+    'european education area 2030': ['european_education_area_2021_2030'],
+    'eea strategic framework': ['european_education_area_2021_2030'],
+    'erasmus plus': ['european_education_area_2021_2030'],
+    'erasmus+': ['european_education_area_2021_2030'],
+    'european universities initiative': ['european_education_area_2021_2030'],
+    'bologna process': ['european_education_area_2021_2030'],
+    'digcomp': ['european_education_area_2021_2030'],
+    'greencomp': ['european_education_area_2021_2030'],
+    'european education summit': ['european_education_area_2021_2030'],
+    'eu education benchmarks 2030': ['european_education_area_2021_2030'],
+    'espace europeen education': ['european_education_area_2021_2030'],
+    'espacio europeo educacion': ['european_education_area_2021_2030'],
+    'spazio europeo istruzione': ['european_education_area_2021_2030'],
+    'europese onderwijsruimte': ['european_education_area_2021_2030'],
+    'espai europeu educacio': ['european_education_area_2021_2030'],
+
+    # EU Aviation and Aeronautics Strategy (consultation from 24 April 2026)
+    'eu aviation strategy': ['aviation_transport_policy'],
+    'aviation and aeronautics strategy': ['aviation_transport_policy'],
+    'azea roadmap': ['aviation_transport_policy'],
+    'estrategia aviacion ue': ['aviation_transport_policy'],
+    'strategie aviation ue': ['aviation_transport_policy'],
+
+    # Article 19 TEU AFCO institutional framework
+    'article 19 teu': ['afco_institutional_framework_review'],
+    'article 19 ue': ['afco_institutional_framework_review'],
+    'institutional framework union law': ['afco_institutional_framework_review'],
+    '2025/2263(ini)': ['afco_institutional_framework_review'],
+    'pe770.052': ['afco_institutional_framework_review'],
+    'afco draft report 2025/2263': ['afco_institutional_framework_review'],
+    'national authorities application union law': ['afco_institutional_framework_review'],
+    'sven simon afco': ['afco_institutional_framework_review'],
+
+    # Proxy voting in plenary (2025/2195(INL), Wed 29 vote)
+    'proxy voting plenary': ['afco_institutional_framework_review'],
+    'proxy voting pregnancy': ['afco_institutional_framework_review'],
+    '2025/2195(inl)': ['afco_institutional_framework_review'],
+    'european electoral act amendment proxy': ['afco_institutional_framework_review'],
+    'vote par procuration plenary': ['afco_institutional_framework_review'],
+
+    # Chornobyl 40 years anniversary
+    'chornobyl 40 years': ['smr_strategy_nuclear'],
+    'chernobyl 40 years': ['smr_strategy_nuclear'],
+    'safeguarding chornobyl': ['smr_strategy_nuclear'],
+    'chornobyl recovery nuclear safety': ['smr_strategy_nuclear'],
+    'dombrovskis chornobyl': ['smr_strategy_nuclear'],
+
+    # Global Green Bond Initiative Fund (24 April 2026, EUR 20 billion)
+    'global green bond initiative': ['global_gateway_strategy'],
+    'global green bond fund': ['global_gateway_strategy'],
+    'eu 20 billion sustainable infrastructure': ['global_gateway_strategy'],
+
+    # SCCS opinions (CBD + silver in cosmetics, 24 April 2026)
+    'sccs cbd cosmetics': ['pharma_sector_regulatory_landscape'],
+    'cannabidiol cosmetics': ['pharma_sector_regulatory_landscape'],
+    'sccs silver cosmetics': ['pharma_sector_regulatory_landscape'],
+    'silver cosmetic products': ['pharma_sector_regulatory_landscape'],
+    'cosmetics regulation annex': ['pharma_sector_regulatory_landscape'],
+
+    # LVMH leather deforestation pushback
+    'lvmh leather deforestation': ['eu_deforestation_regulation'],
+    'luxury fashion eudr': ['eu_deforestation_regulation'],
+
+    # SEDE 8 April minutes / EU defence union 27 April update
+    'sede 8 april 2026': ['european_defence_union'],
+    'cj57_pv 2026 04 08': ['european_defence_union'],
+    'kubilius eastern border': ['european_defence_union'],
+
+    # Wed 29 plenary EU Middle East Crisis Response
+    'eu middle east crisis response': ['iran_strait_hormuz_eu_response'],
+    'wednesday 29 april middle east debate': ['iran_strait_hormuz_eu_response'],
+
+    # Tuesday 28 plenary consent-based rape press conference
+    'consent based rape press conference 28 april': ['consent_based_rape_definition'],
+    '20260424ipr41929': ['consent_based_rape_definition'],
+
+    # MFF Metsola statement
+    'metsola europe cannot face new era old budget': ['mff_2028_2034'],
+    '20260424ipr41902': ['mff_2028_2034'],
+
+    # ERDF management EPRS briefing
+    'erdf 2004 accession states': ['cohesion_policy_midterm_review'],
+    'management control structures erdf': ['cohesion_policy_midterm_review'],
+
     # EU-Andorra Association Agreement (procedures 2024/0101(NLE) + 2024/0102(NLE), still preparatory phase as of April 2026)
     'andorra': ['eu_andorra_association_agreement'],
     'principality of andorra': ['eu_andorra_association_agreement'],
