@@ -20,6 +20,8 @@
 - Central enforcement: AI Office (European Commission)
 - Corrigendum: 32024R1083R(04), published 10 March 2026
 - AI Continent Action Plan: adopted 9 April 2025. EUR 200B InvestAI, AI Factories, Gigafactories, Apply AI Strategy, AI Act Service Desk. See `ai_continent_action_plan.md`
+- **LATEST (27 April 2026, DG CNECT)**: **Third GPAI Signatory Taskforce meeting -- Safety and Security chapter**. The GPAI Code of Practice (drafted under AI Act Article 56 GPAI obligations applicable since 2 August 2025) holds working sessions with signatories on the Safety and Security chapter. Source: digital-strategy.ec.europa.eu/en/news/third-gpai-signatory-taskforce-meeting-safety-and-security-chapter. The Code of Practice is the mechanism through which GPAI providers can demonstrate compliance with Articles 53-56 obligations (transparency, copyright, systemic-risk evaluation, incident reporting) ahead of the AI Office finalising harmonised standards. Signatories include OpenAI, Anthropic, Google DeepMind, Mistral, Meta, Microsoft.
+- STOA At a Glance (1 April 2026): "What if AI data centres were put in space?" -- explores orbital data centres as response to electricity/cooling constraints; main barrier economic, not technical. Ref: STOA 774746.
 
 Guide for professionals working on AI regulation, compliance, and EU digital policy. Covers the AI Act framework, risk categories, enforcement timeline, institutional landscape, and the Digital Omnibus amendments.
 

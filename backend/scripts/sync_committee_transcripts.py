@@ -6,22 +6,23 @@ Transcription is opt-in via --transcribe (costs ~$0.006/min via Whisper).
 
 Modes:
 
-  1. `--seed-test-data`   -> insert one synthetic transcript row (no cost).
-                              For wiring / chatbot tests.
-
-  2. (default) `--discover [--committee LIBE] [--max 50] [--days 30]`
+  1. (default) `--discover [--committee LIBE] [--max 50] [--days 30]`
                           -> scrape the EP committees hub
                              (europarl.europa.eu/committees/en/meetings/webstreaming),
                              insert PENDING rows with video_url. Idempotent.
 
-  3. `... --transcribe`   -> ALSO run Whisper on any newly-discovered rows.
+  2. `... --transcribe`   -> ALSO run Whisper on any newly-discovered rows.
                              Intended for scheduled batch, not /news.
 
 Usage:
-    python3.12 -m scripts.sync_committee_transcripts --seed-test-data
     python3.12 -m scripts.sync_committee_transcripts                    # discover all (for /news)
     python3.12 -m scripts.sync_committee_transcripts --committee LIBE --max 5
     python3.12 -m scripts.sync_committee_transcripts --committee LIBE --max 1 --transcribe
+
+Note: The --seed-test-data flag was removed on 28 April 2026 after the
+fabricated-transcript incident (22 April + recurrence on 27 April). Seed/test
+fixtures must not live in production scripts. If a wiring test is needed,
+write a fixture into a tests/ directory with an `is_test=True` row marker.
 """
 
 import argparse
@@ -29,7 +30,6 @@ import asyncio
 import logging
 import os
 import sys
-import uuid
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -48,113 +48,15 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 
-SEED_TRANSCRIPT = {
-    "committee_code": "LIBE",
-    "title": "LIBE Committee Meeting - 17 April 2026 (seed test transcript)",
-    "event_id": "libe-seed-20260417",
-    "multimedia_url": "https://multimedia.europarl.europa.eu/en/webstreaming/libe-seed-20260417",
-    "video_url": None,
-    "transcript_text": (
-        "Thank you Madam Chair. The Committee on Civil Liberties, Justice and Home Affairs opens "
-        "the morning sitting of 17 April 2026. Our agenda today covers the extension of the "
-        "temporary derogation from Directive 2002/58/EC under Regulation (EU) 2021/1232, "
-        "procedure reference 2025/0429(COD). "
-        "I give the floor to rapporteur Birgit Sippel. "
-        "Thank you, Chair. Colleagues, as you know, the EP rejected the Commission's extension "
-        "proposal in plenary on 26 March 2026 by 228 in favour, 311 against, 92 abstentions. "
-        "The derogation expired on 3 April 2026. Our amended position -- adopted at plenary "
-        "on 26 March 2026 as T10-0095/2026 -- proposes extension to 3 August 2027 with "
-        "additional safeguards: mandatory judicial authorisation for any continued scanning, "
-        "an obligation on providers to publish annual transparency reports specifying the number "
-        "of false positives, and an explicit prohibition on client-side scanning. "
-        "I yield the floor. "
-        "The shadow rapporteurs have asked for the floor. Mr Agius Saliba on behalf of the S&D. "
-        "Thank you Chair. We support the rapporteur's approach but would like to strengthen the "
-        "language on age verification requirements in Article 3a. "
-        "On behalf of the PfE, Mr Tanger Correa. We remain opposed to any extension without "
-        "a full CJEU ruling on compatibility with Charter Articles 7 and 8. "
-        "On behalf of the EPP, Mr Zarzalejos, who is also the permanent rapporteur on the CSA "
-        "Regulation file, procedure 2022/0155(COD). We are reaching out to the Belgian "
-        "presidency to accelerate the permanent regulation. "
-        "On behalf of the Renew group, Ms Vautmans. Chair, the practical gap created by the "
-        "expiry of the derogation on 3 April 2026 is serious. Providers like Discord and "
-        "messaging platforms have no legal basis to scan for CSAM in number-independent "
-        "interpersonal communications services. We need the extension to pass Council quickly. "
-        "Exchange of views continues. The Committee will vote on the amendments at its "
-        "next meeting. Meeting adjourned at 11:32."
-    ),
-    "transcript_segments": [
-        {"start": 0.0, "end": 45.0, "text": "Opening remarks by the Chair."},
-        {"start": 45.0, "end": 180.0, "text": "Rapporteur Sippel presentation."},
-        {"start": 180.0, "end": 360.0, "text": "Shadow rapporteurs S&D and PfE."},
-        {"start": 360.0, "end": 540.0, "text": "EPP shadow - Zarzalejos."},
-        {"start": 540.0, "end": 720.0, "text": "Renew group - Vautmans on Discord/CSAM gap."},
-        {"start": 720.0, "end": 810.0, "text": "Exchange of views and adjournment."},
-    ],
-    "word_count": 340,
-    "duration_seconds": 810,
-    "language": "EN",
-    "agenda_items": [
-        {
-            "number": 1,
-            "title": "Extension of CSAM temporary derogation 2025/0429(COD)",
-            "procedure_refs": ["2025/0429(COD)"],
-            "start_time": 45.0,
-            "end_time": 720.0,
-        },
-    ],
-    "related_procedure_refs": ["2025/0429(COD)", "2022/0155(COD)"],
-    "speakers": [
-        {"label": "Chair", "name": None, "group": None, "segments_count": 2},
-        {"label": "Rapporteur", "name": "Birgit Sippel", "group": "S&D", "segments_count": 1},
-        {"label": "Shadow", "name": "Alex Agius Saliba", "group": "S&D", "segments_count": 1},
-        {"label": "Shadow", "name": "Antonio Tanger Correa", "group": "PfE", "segments_count": 1},
-        {"label": "Shadow", "name": "Javier Zarzalejos", "group": "EPP", "segments_count": 1},
-        {"label": "Shadow", "name": "Hilde Vautmans", "group": "Renew", "segments_count": 1},
-    ],
-    "speaker_count": 6,
-    "status": TranscriptStatusEnum.COMPLETED,
-    "transcription_cost": 0.0,
-    "transcription_model": "seed-test-data",
-    "transcribed_at": datetime.utcnow(),
-}
-
-
-def seed_test_data() -> int:
-    session = SessionLocal()
-    try:
-        existing = session.query(CommitteeMeetingTranscript).filter_by(
-            committee_code=SEED_TRANSCRIPT["committee_code"],
-            event_id=SEED_TRANSCRIPT["event_id"],
-        ).first()
-
-        if existing:
-            logger.info("[seed] Transcript already exists, updating status to completed")
-            existing.status = TranscriptStatusEnum.COMPLETED
-            existing.transcript_text = SEED_TRANSCRIPT["transcript_text"]
-            existing.last_updated = datetime.utcnow()
-            session.commit()
-            return 0
-
-        row = CommitteeMeetingTranscript(
-            id=uuid.uuid4(),
-            meeting_date=datetime(2026, 4, 17, 9, 30, 0),
-            **SEED_TRANSCRIPT,
-        )
-        session.add(row)
-        session.commit()
-        logger.info(
-            "[seed] Inserted seed transcript: %s %s (%d chars)",
-            row.committee_code, row.meeting_date,
-            len(row.transcript_text or ""),
-        )
-        return 0
-    except Exception as exc:
-        session.rollback()
-        logger.error("[seed] Failed: %s", exc)
-        return 1
-    finally:
-        session.close()
+# NOTE (28 April 2026): The SEED_TRANSCRIPT constant and seed_test_data() function
+# were removed in this file after the fabricated-transcript incident. They contained
+# a synthetic LIBE transcript with named-MEP rapporteur, fabricated PE/A/T identifiers,
+# and a fabricated vote tally. Even though the function was gated behind --seed-test-data,
+# the *file itself* was being grepped by the model when reasoning about LIBE / 2025/0429(COD),
+# and the warning text in ai_service.py named the same identifiers verbatim. The combination
+# of those two things re-anchored the model on the fake values. Test fixtures of this kind
+# must live under tests/, NOT in production scripts -- and any committee_meeting_transcripts
+# row used for testing must carry an explicit is_test=True marker filterable at query time.
 
 
 async def _enrich_video_url_if_missing(client, meeting) -> Optional[str]:
@@ -277,8 +179,6 @@ async def discover_meetings(
 
 def main():
     parser = argparse.ArgumentParser(description="EP committee transcript sync")
-    parser.add_argument("--seed-test-data", action="store_true",
-                        help="Insert a synthetic seed transcript (no Whisper cost).")
     parser.add_argument("--committee", type=str, default=None,
                         help="Restrict to a single committee code (default: all).")
     parser.add_argument("--max", type=int, default=50,
@@ -288,9 +188,6 @@ def main():
     parser.add_argument("--transcribe", action="store_true",
                         help="Also run Whisper transcription (costs ~$0.006/min).")
     args = parser.parse_args()
-
-    if args.seed_test_data:
-        sys.exit(seed_test_data())
 
     rc = asyncio.run(discover_meetings(
         committee=args.committee,

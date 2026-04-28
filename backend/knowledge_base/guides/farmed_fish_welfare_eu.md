@@ -11,6 +11,7 @@
 - EU Aquaculture guidelines: Commission Communication COM(2021) 236 "Strategic Guidelines for a more sustainable and competitive EU aquaculture for the period 2021 to 2030" -- includes welfare dimension but no binding rules
 - Missing framework: **no EU-wide legislation on farmed fish welfare during rearing**; fish do not have a dedicated welfare directive like calves (Directive 2008/119/EC), pigs (Directive 2008/120/EC), or laying hens (Directive 1999/74/EC)
 - Scale: EU aquaculture produced **1 million tonnes in 2024** (Eurostat, 23 April 2026 release) -- production concentrated in Spain (mussels + sea bream), France (oysters), Greece (sea bream + sea bass), Italy (trout + sea bass), Ireland (salmon), Denmark (rainbow trout)
+- **Cross-link**: see `welfare_dogs_cats_traceability.md` for the companion DG SANTE / EP file on companion-animal welfare (Item 57 plenary vote 28 April 2026, rapporteur Vrecionová). Together with the present farmed-fish file, these track Várhelyi's "Animal Welfare" portfolio thread launched December 2024.
 
 ## Why this matters
 

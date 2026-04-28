@@ -20,6 +20,11 @@
 - Policy context: follows Commission rule-of-law reports, Conditionality Regulation (EU, Euratom) 2020/2092 implementation, Court of Justice rulings on judicial independence (Portuguese Judges, Commission v Poland, Miasto Łowicz)
 - Connected ongoing files: Hungary 2026 election aftermath (Magyar grand bargain, RRF frozen-funds review), Spain amnesty law referrals, Romania/Slovakia judicial reform concerns
 - Timing: AFCO draft reports typically move to committee adoption within 4-6 months; plenary vote late 2026 or early 2027
+- **LATEST (28 April 2026)**: **Four AFCO draft reports tabled today**, all visible on AFCO committee portal (europarl.europa.eu/committees/en/afco):
+  1. **2025/2262(REG)** "Amendments to Parliament's Rules of Procedure concerning appointments to Union agencies and bodies (Rule 135)" -- plenary vote scheduled today's 12:00 voting block (Item 50 OJQ-10-2026-04-28_EN, Aurore Lalucq -> Sven Simon rapporteur tbc)
+  2. **2025/2263(INI)** "The Institutional Framework of the EU and its interaction with national authorities in the application of Union law, with particular reference to Article 19 TEU" -- this guide's main file, draft report tabled
+  3. **2026/2012(INI)** AFCO own-initiative procedure (subject confirmed in OEIL portal)
+  4. **2026/2013(INI)** AFCO own-initiative procedure (subject confirmed in OEIL portal)
 
 ## Overview
 

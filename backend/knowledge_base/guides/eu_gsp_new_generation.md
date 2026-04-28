@@ -15,6 +15,7 @@
 - EBA beneficiaries (47 LDCs as of 2024): Afghanistan, Bangladesh (until graduation in Nov 2026), Cambodia, Nepal, Myanmar (partial suspension 2020-), Yemen, etc.
 - GSP+ beneficiaries (2024): 8 countries -- Bolivia, Cabo Verde, Kyrgyz Republic, Mongolia, Pakistan, Philippines, Sri Lanka, Uzbekistan
 - Conditionality triggers: suspension possible for serious and systematic violations of the 27 core conventions (examples: Belarus suspended 2007, Sri Lanka suspended 2010-2017, Myanmar partial suspension 2020-)
+- **LATEST (28 April 2026)**: **Plenary vote Item 40** "Generalised Tariff Preferences Scheme" -- rapporteur **Bernd Lange (S&D, Germany, INTA chair)** at 12:00 voting block (OJQ-10-2026-04-28_EN). Vote sets EP position on the post-2027 GSP framework feeding Commission's expected 2026 proposal.
 
 ## Why a New Regulation
 

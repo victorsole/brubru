@@ -2,7 +2,8 @@
 
 ## QUICK FACTS
 - Topic: EU accession to the **Convention establishing the International Claims Commission for Ukraine**, opened for signature at The Hague, 2 April 2025, under the auspices of the Council of Europe
-- EU instrument: Council Decision authorising conclusion of the Convention (procedure 2025/0XXX(NLE)) -- NLE consent procedure, EP consent vote scheduled Tuesday 28 April 2026 Strasbourg plenary, 12:00 voting block (OJQ-10-2026-04-28_EN)
+- EU instrument: Council Decision authorising conclusion of the Convention (procedure 2025/0XXX(NLE)) -- NLE consent procedure, EP consent vote **Tuesday 28 April 2026 Strasbourg plenary, 12:00 voting block** (OJQ-10-2026-04-28_EN, Item 104 -- urgent procedure vote request)
+- **LATEST (28 April 2026)**: EP consent vote held today as Item 104 (urgent procedure under Rule 163). Plenary debate item 111 "Russia's attacks on Ukrainian civilians -- accountability" (15:00-22:00 block) paired the ICCU consent with the political accountability statement, giving Costa+VdL+Zelenskyy 23 April joint statement parliamentary follow-through. AFET amendments **PE786.697v03** (Michael Gahler rapporteur, 1-476 amendments tabled 22 April) on the 2025 Commission Report on Ukraine fed today's debate context.
 - Registry: The Hague, Netherlands
 - Parent framework: Register of Damage for Ukraine (RD4U, established 14 May 2023 at CoE Reykjavik Summit as an Enlarged Partial Agreement of the Council of Europe -- Brubru guide: check for RD4U cross-reference)
 - Purpose: adjudicate individual and state claims for **damage, loss, or injury caused by Russia's aggression against Ukraine from 24 February 2022 onwards**; evaluate claims registered via RD4U and deliver legally-binding compensation decisions

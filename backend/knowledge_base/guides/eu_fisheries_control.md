@@ -18,6 +18,8 @@
 - 11 active Sustainable Fisheries Partnership Agreements (SFPAs) with third countries
 - EPRS In-Depth Analysis: "Fishing outside the European Union: The external dimension of the CFP" (EPRS_IDA(2025)767212, author: Frederik Scholaert)
 - Regional Fisheries Management Organisations (RFMOs): new proposal COM(2025)195 (procedure 2025/0106(COD))
+- **LATEST (27 April 2026)**: **Commissioner Costas Kadis speech on the Role of Ocean Diplomacy in the Competitiveness of EU Fisheries and Aquaculture** (European Parliament). Source: ec.europa.eu/commission/presscorner/detail/en/. Kadis frames ocean diplomacy as a competitiveness lever -- linking SFPAs, IUU enforcement, RFMO leadership, and the upcoming UN Ocean Conference (Nice, June 2026). Reinforces the Competitiveness Compass external dimension for the blue economy.
+- **LATEST (28 April 2026)**: **Plenary vote Item 86** "Ocean Diplomacy and EU Fisheries Competitiveness" (rapporteur **Željana Zovko, EPP, HR**) at 12:00 voting block (OJQ-10-2026-04-28_EN). Resolution sets EP position on ocean diplomacy strategy ahead of UN Ocean Conference Nice June 2026.
 
 ## Common Fisheries Policy (CFP) Framework
 

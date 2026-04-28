@@ -35,13 +35,13 @@ EVENT_TYPE = "send_batch_es_eutr"
 
 # Today's headlines as bullet items in Spanish
 # Edit these per-day; the rest of the email is template
-ISSUES_THIS_WEEK_SHORT = "Mercosur, mercado único, materias primas críticas, deforestación"
+ISSUES_THIS_WEEK_SHORT = "MFF 2028-2034, DMA, AI Act, Mercosur, Better Regulation"
 ISSUES_BULLETS = [
-    "<strong>EU-Mercosur</strong>: aplicación provisional del Acuerdo Comercial Interino desde el viernes 1 de mayo (CELEX 22026A00184). Cambia la realidad arancelaria para importadores agrarios, automoción, textil y cuero.",
-    "<strong>Plenaria de Estrasburgo del 27 al 30 de abril</strong>: el martes 28 se vota el informe interino del MFF 2028-2034, el miércoles 29 hay debate sobre la respuesta de la UE a la crisis en Oriente Medio (energía y fertilizantes).",
-    "<strong>\"One Europe, One Market\" Roadmap</strong>: las tres instituciones europeas firmaron en la Cumbre de Chipre una hoja de ruta para profundizar el mercado único antes de finales de 2027, con revisiones trimestrales.",
-    "<strong>Asociación estratégica UE-EE.UU. sobre materias primas críticas</strong>: el comisario Šefčovič firmó el MoU sobre litio, cobalto, cobre y tierras raras (24 de abril).",
-    "<strong>Reglamento de deforestación (EUDR)</strong>: presión industrial de la moda de lujo (caso LVMH) ante la fecha límite del 30 de junio para PYMES.",
+    "<strong>MFF 2028-2034 — voto del Parlamento Europeo el miércoles 29 de abril en Estrasburgo</strong>. La comisión BUDG ya adoptó el mandato de negociación el 16 de abril; coponentes Siegfried Mureşan (PPE, RO) y Carla Tavares (S&amp;D). Posición del PE: 1,27 % de la RNB de la UE (frente al 1,26 % de la Comisión), servicio de la deuda de NextGenerationEU fuera de los topes, mecanismo de protección frente a la inflación, defensa y competitividad como nuevas prioridades.",
+    "<strong>Aplicación del DMA — la Comisión abre consulta pública sobre la interoperabilidad de Google Android con dispositivos de terceros</strong> (smartwatches, auriculares, dispositivos del hogar inteligente) bajo el artículo 6(7) DMA. Reglamento (UE) 2022/1925, CELEX 32022R1925. Tercera ofensiva de aplicación tras Meta WhatsApp y Google Search.",
+    "<strong>EU-Mercosur — aplicación provisional del Acuerdo Comercial Interino desde el viernes 1 de mayo</strong> (CELEX 22026A00184). Cambia la realidad arancelaria para importadores agrarios, automoción, textil y cuero.",
+    "<strong>Comunicación sobre Mejor Regulación y Aplicación adoptada hoy por el Colegio de Comisarios</strong>; declaración del EVP Valdis Dombrovskis (Economía y Productividad, Implementación y Simplificación) en el pleno del martes por la tarde. Por primera vez, simplificación + procedimientos de infracción del artículo 258 TFUE en una única estrategia.",
+    "<strong>Ley de IA — tercera reunión del grupo de trabajo de signatarios del Código de Buenas Prácticas para IA de Propósito General</strong> (capítulo Seguridad y Protección). Mecanismo a través del cual los proveedores de IA de propósito general (OpenAI, Anthropic, Google DeepMind, Mistral, Meta, Microsoft) pueden demostrar el cumplimiento de los artículos 53-56 del Reglamento (UE) 2024/1689 antes de las normas armonizadas.",
 ]
 
 

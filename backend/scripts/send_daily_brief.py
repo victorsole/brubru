@@ -139,7 +139,7 @@ def verify_headline_urls(db) -> bool:
     return all_ok
 
 
-def send_test(db, brubru_news=None):
+def send_test(db, brubru_news=None, feature_map=None):
     """Send the daily brief ONLY to hello@beresol.eu for testing."""
     from services.daily_brief_email import _fetch_headlines, _build_brief_email_html
     from services.email_service import EmailService
@@ -149,11 +149,21 @@ def send_test(db, brubru_news=None):
         print("  [WARN] No headlines found for today")
         return
 
+    # Apply per-priority feature mappings if provided. Mirrors the production
+    # send_daily_brief_batch() behaviour so the test email looks identical to
+    # the real send. feature_map keys are 1-based positional indices.
+    if feature_map:
+        for i, h in enumerate(headlines, start=1):
+            fm = feature_map.get(i) or feature_map.get(h.get("priority"))
+            if fm:
+                h["brubru_feature_label"] = fm.get("label")
+                h["brubru_feature_url"] = fm.get("url")
+
     test_email = "hello@beresol.eu"
     html = _build_brief_email_html(
         headlines, brief_date, test_email,
         is_welcome=False, is_registered_user=True,
-        brubru_news=brubru_news
+        brubru_news=brubru_news,
     )
 
     from datetime import date
@@ -274,11 +284,16 @@ def main():
                         help="File with additional recipient emails (txt or md)")
     parser.add_argument("--extra", nargs="+", metavar="EMAIL",
                         help="Additional recipient email addresses")
-    parser.add_argument("--feature", nargs="+", metavar="INDEX:LABEL:URL",
-                        help="Per-headline Brubru feature CTA. Format INDEX:LABEL:URL. INDEX is 1-based headline position. Example: --feature \"1:Open My Files:https://brubru.beresol.eu/my-eu-bubble?tab=my_files\"")
+    parser.add_argument("--feature", action="append", metavar="INDEX:LABEL:URL", default=None,
+                        help="Per-headline Brubru feature CTA. Format INDEX:LABEL:URL. INDEX is 1-based headline position. Repeat the flag once per headline. Example: --feature \"1:Open My Files:https://brubru.beresol.eu/my-eu-bubble?tab=my_files\" --feature \"2:Track this in Legislative Tracker:https://...\"")
     args = parser.parse_args()
 
-    # Parse --feature flags into feature_map dict
+    # Parse --feature flags into feature_map dict.
+    # action="append" gives a flat list of strings, one per --feature occurrence.
+    # (Earlier versions used nargs="+" which silently dropped earlier --feature
+    # flags when the user repeated the option — only the last list survived.
+    # action="append" makes "repeat the flag once per headline" the documented
+    # ergonomic and correct usage.)
     feature_map = None
     if args.feature:
         feature_map = {}
@@ -315,7 +330,7 @@ def main():
             verify_headline_urls(db)
         elif args.test:
             verify_headline_urls(db)
-            send_test(db, brubru_news=args.news)
+            send_test(db, brubru_news=args.news, feature_map=feature_map)
         elif args.send:
             send(db, brubru_news=args.news, extra_recipients=extra,
                  skip_url_check=args.skip_url_check,
