@@ -3,8 +3,9 @@
 ## QUICK FACTS
 - **Title:** AccelerateEU -- Commission Communication on protecting Europeans from the fossil energy crisis and accelerating the shift to clean, homegrown energy
 - **Adopted:** 22 April 2026 (Commission press conference)
-- **Responsible Commissioners:** Teresa Ribera (EVP, Clean, Just and Competitive Transition) -- lead; Dan Jorgensen (Energy)
+- **Responsible Commissioners:** Teresa Ribera (EVP, Clean, Just and Competitive Transition) -- lead; Dan Jørgensen (Energy)
 - **Lead DGs:** DG ENER (Energy), DG CLIMA (Climate)
+- **DG ENER head (29 April 2026 reshuffle)**: **Céline Gauer (French career bureaucrat)** appointed new Director-General; **Ditte Juul Jørgensen** (previous DG ENER head) moves to DG TRADE. Source: Euractiv 29 April 2026. Effective dates pending; organigrammes scheduled for refresh 1 June 2026.
 - **Package type:** Commission Communication (not legislative proposal) + implementing measures + consultation follow-ups
 - **Published resources:** Factsheet (ec.europa.eu/commission/presscorner/detail/en/fs_26_631), Q&A (qanda_26_630), press conference speeches
 - **Political context:** Direct Commission response to Iran war (March-April 2026), Strait of Hormuz disruption, oil/gas price spike, US-Iran ceasefire uncertainty. See `iran_strait_hormuz_eu_response` guide.
