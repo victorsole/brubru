@@ -274,10 +274,10 @@ def main():
     parser.add_argument("--skip-url-check", action="store_true",
                         help="Skip URL verification before --send (NOT recommended)")
     parser.add_argument("--list", action="store_true", help="List all subscriber emails")
-    parser.add_argument("--news", nargs="+", metavar="ITEM",
-                        help="Brubru product news items to include in the email")
-    parser.add_argument("--week-ahead", nargs="+", metavar="ITEM",
-                        help="Friday 'Week ahead' bullet items (HTML allowed)")
+    parser.add_argument("--news", action="append", metavar="ITEM", default=None,
+                        help="Brubru product news item. Repeat the flag once per item. Switched from nargs=+ to action=append on 29 April 2026 after the same overwrite bug that hit --feature on 27 April: when the flag was repeated, only the last list survived and earlier items were silently dropped.")
+    parser.add_argument("--week-ahead", action="append", metavar="ITEM", default=None,
+                        help="Friday 'Week ahead' bullet item (HTML allowed). Repeat the flag once per bullet (action=append; same fix as --news / --feature, switched 29 April 2026).")
     parser.add_argument("--week-ahead-closing", metavar="TEXT",
                         help="Friday closing line (e.g. weekend wishes)")
     parser.add_argument("--extra-file", metavar="PATH",

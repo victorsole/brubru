@@ -20,6 +20,7 @@
 - Facilitation Directive reform: COM(2023)755, companion package (see dedicated guide)
 - Controversy: Hungary and Poland voted against, civil society criticism of border procedure rights
 - Dublin Regulation: replaced by AMMR as the responsibility-allocation instrument
+- **LATEST (28 April 2026, DG HOME / Eurostat)**: **EU first-time asylum applications fell 27% in 2025**: 669,400 (vs 912,400 in 2024). **Top countries of origin shifted -- Venezuela now #1 with 89,500 (13%)** overtaking Syria (40,000 / 6%) which had led 2013-2024. Afghanistan #2 with 63,800 (10%). Top destination Member States (top 5 = 83% of EU total): **Spain 141,000 (21%), Italy 126,600 (19%), France 116,400 (17%), Germany 113,200 (17%), Greece 55,400 (8%)**. **Unaccompanied minors** also fell -38.9% to 21,125; top recipients Germany (4,900), Netherlands (3,600), Spain (3,200), Greece (3,000), Belgium (1,600); largest absolute decreases Germany (-8,400 / -63.1%), Bulgaria (-2,000 / -78.1%), Greece (-1,600 / -35.1%). The drop precedes the Pact implementation deadline of 12 June 2026, by which Member States must apply the new AMMR/APR/Screening framework. Source: home-affairs.ec.europa.eu/news/eu-member-states-saw-27-drop-first-time-asylum-applications-2025-2026-04-28_en.
 
 ## Overview
 

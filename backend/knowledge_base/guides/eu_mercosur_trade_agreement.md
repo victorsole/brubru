@@ -2,6 +2,7 @@
 
 ## QUICK FACTS
 
+- **STATUS (29 April 2026, T-2 days)**: **Provisional application begins Friday 1 May 2026** -- two days from now. Customs and origin procedures must be operational on day one; importers should have **Access2Markets** + **ROSA** workflows ready. The 6-month grace window for goods in transit/temporary storage on 1 May runs to **1 November 2026**. EP INTA + AGRI committees expected to monitor early agricultural-import flows under the bilateral safeguard regulation (Reg. EU 2026/687) starting May 2026.
 - **STATUS (24 April 2026)**: **Provisional application begins 1 May 2026** -- DG TAXUD published guidance and confirmed the activation of the **Interim Trade Agreement (ITA)** between the EU and Mercosur (Argentina, Brazil, Paraguay, Uruguay). Brubru users should distinguish carefully between (1) the political agreement reached December 2024, (2) the bilateral safeguard regulation Reg. (EU) 2026/687 (CELEX 32026R0687, published 19 March 2026), and (3) the **provisional application of the Interim Trade Agreement from 1 May 2026** -- which is what changes operational reality for traders. Full ratification of the EU-Mercosur Partnership Agreement (EMPA) by all Member State parliaments remains pending and may take several years.
 - **CELEX reference**: 22026A00184 (Council Decision authorising signature and provisional application of the Interim Trade Agreement, EUR-Lex link below)
 - **Trading bloc covered**: 27 EU Member States + Argentina, Brazil, Paraguay, Uruguay -- combined market of approximately 700 million people

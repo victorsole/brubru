@@ -93,6 +93,8 @@ https://ec.europa.eu/commission/presscorner,European Commission – Press Corner
 https://learning-corner.ec.europa.eu,European Commission – Learning Corner
 https://cohesiondata.ec.europa.eu,European Commission – Cohesion Open Data
 https://kohesio.ec.europa.eu,European Commission – Kohesio (EU Projects Discovery)
+https://ec.europa.eu/regional_policy/whats-new/newsroom,European Commission – DG REGIO Newsroom (legacy path, MTR + PSLF + EURegionsWeek announcements; registered 28 April 2026)
+https://home-affairs.ec.europa.eu/news,European Commission – DG HOME News index (Migration and Home Affairs; covers asylum statistics, Pact implementation, Schengen, EES, ETIAS; distinct from commission.europa.eu/migration_home; registered 29 April 2026)
 https://interoperable-europe.ec.europa.eu,European Commission – Interoperable Europe Portal (formerly Joinup)
 https://code.europa.eu,European Commission – EU Open Source Code Repository (GitLab)
 https://ec.europa.eu/eurostat,European Commission – Eurostat (Statistical Office)

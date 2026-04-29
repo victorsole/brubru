@@ -273,6 +273,28 @@ Bad suggested queries:
 
 Brubru is no longer just a chatbot. Each headline in the brief MUST point the reader to the **specific Brubru feature** that lets them act on the topic — not just the chat. Brubru's canonical feature tree (`memory/project_brubru_feature_tree.md`): Chat, Amendator, My EU Bubble (Dashboard, My Files, Position Analysis, My EU Calendar, Predictions, EC Public Consultations, Documents, Amendments, Legislative Tracker, Analytics), EU Law Comply, Tenderator, API.
 
+**CTA URL canonical paths (source: `memory/reference_brubru_feature_urls.md`; cross-check `frontend/src/App.tsx` if in doubt):**
+
+| Feature | URL |
+|---------|-----|
+| Chat (pre-filled query) | `https://brubru.beresol.eu/main?q=<URL-encoded query>` |
+| Amendator | `https://brubru.beresol.eu/amendator` |
+| My EU Bubble — Dashboard | `https://brubru.beresol.eu/my-eu-bubble` |
+| My EU Bubble — My Files | `https://brubru.beresol.eu/my-eu-bubble?tab=my_files` |
+| My EU Bubble — Position Analysis | `https://brubru.beresol.eu/my-eu-bubble?tab=position_analysis` |
+| My EU Bubble — My EU Calendar | `https://brubru.beresol.eu/my-eu-bubble?tab=eu_calendar` |
+| My EU Bubble — Predictions | `https://brubru.beresol.eu/my-eu-bubble?tab=predictions` |
+| My EU Bubble — EC Public Consultations | `https://brubru.beresol.eu/my-eu-bubble?tab=consultations` |
+| My EU Bubble — Documents | `https://brubru.beresol.eu/my-eu-bubble?tab=documents` |
+| My EU Bubble — Amendments | `https://brubru.beresol.eu/my-eu-bubble?tab=amendments` |
+| My EU Bubble — Legislative Tracker | `https://brubru.beresol.eu/my-eu-bubble?tab=legislative` (NOT `tracker`) |
+| My EU Bubble — Analytics | `https://brubru.beresol.eu/my-eu-bubble?tab=analytics` |
+| **EU Law Comply** | `https://brubru.beresol.eu/eulawcomply` **(no hyphens — `/eu-law-comply` 404s)** |
+| Tenderator | `https://brubru.beresol.eu/tenderator` |
+| API | `https://brubru.beresol.eu/api` |
+
+**Incident 28 April 2026:** daily brief shipped with `/eu-law-comply` (with hyphens) on 5th headline CTA. URL 404s; 128 recipients hit a dead link. Always cross-reference this table or `App.tsx` before drafting CTA URLs.
+
 Pick the feature that best matches the headline's intent:
 
 | Headline intent | Right feature CTA |

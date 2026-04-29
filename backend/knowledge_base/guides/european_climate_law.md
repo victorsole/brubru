@@ -22,6 +22,7 @@ ESABCC recommendation: 90-95% net reduction by 2040
 ETS emissions trend (10 April 2026): DG CLIMA confirms EU ETS sustains downward trend in covered emissions. Supports trajectory toward 2030 and 2040 targets.
 Energy Union Task Force (10 April 2026): Calls for enhanced EU-wide coordination to safeguard energy security
 EPRS Briefing (13 April 2026): "The First Conference on Transitioning Away from Fossil Fuels - 24-29 April 2026, Santa Marta, Colombia" -- follow-up to COP28 UAE Consensus, EU delegation preparatory position, fossil fuel phase-down roadmaps, finance for developing countries. Ref: EPRS_UNK_5ff48ae0d309
+**LATEST (28 April 2026, DG DEFIS / Copernicus)**: **"Europe's warming accelerates beyond global trend, new Copernicus data shows"** -- the European State of the Climate report (joint Copernicus Climate Change Service C3S + WMO) confirms Europe is warming faster than the global average. Reinforces the empirical case for the 2040 -90% target (Reg. 2026/667) and the urgency of ETS2 buildings/road-transport implementation in 2028. Source: ec.europa.eu/commission/presscorner/detail/en/.
 EPRS Briefing (16 April 2026): "Certifying EU permanent carbon removals: State of play in implementing the EU's Carbon Removal and Carbon Farming Regulation" -- first delegated regulation (3 Feb 2026) supplementing CRCF certification framework for permanent carbon removals, scrutiny period 2 months + 2 months extension, adoption 20 days after OJ publication. Ref: EPRS_BRI(2026)785709
 
 ## Original Climate Law (2021)

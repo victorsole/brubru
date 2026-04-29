@@ -16,6 +16,7 @@
 - Related guide: `eu_trade_policy.md` (full EU trade policy framework)
 - **EPRS Briefing (24 April 2026)**: "Australia: Current landscape and engagement with the EU" -- post-signature analysis of Australia's political landscape, security alignment, AUKUS implications for EU defence cooperation, critical raw materials partnerships (Australia is a CRMA strategic partner), and Pacific Indo-Pacific architecture. Reaffirms Australia as "trusted, like-minded partner" in EU trade diversification away from China. Ref: EPRS_UNK_0fb956a29383
 - **EU-Australia Security and Defence Partnership operational layer (24 April 2026 EPRS)**: parallel partnership signed alongside FTA includes intelligence cooperation, joint exercises, capabilities cooperation under EDIP framework, and Indo-Pacific maritime security coordination.
+- **LATEST (29 April 2026)**: New **EPRS Briefing `EPRS_BLOG_australia-current-landscape-and-engagement-with-the-eu`** -- "Australia: Current landscape and engagement with the EU" -- post-signature reference for users tracking Indo-Pacific architecture, AUKUS implications for EU defence cooperation, critical raw materials partnerships, and the Pacific dimension of the EU's diversification away from China. Companion to the 24 April briefing already cited above.
 
 ## Overview
 
