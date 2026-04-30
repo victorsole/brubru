@@ -204,3 +204,58 @@ Goal: Jordi can re-pull every endpoint and find the data he needs without each c
 5. **CC-2(a)** schema fixes — surface columns that already exist but aren't in the Full Pydantic schema (parl-q, tris, knowledge-guides body, laws-detail summary). ~2 hours.
 6. **CC-2(b)** backfill — multi-day, parallelisable: PDF text extraction for reports/opinions/resolutions/commission-register; HTML body scrape for parl-q/tris/tenders. Run in background while other items go through verification.
 7. **Per-folder verification loop** — after each PR lands, re-run `audit_jordi_feedback.py`; share Jordi the deltas; iterate until every column is green.
+
+---
+
+## Implementation log (30 April 2026, 14h25 → 17h00 UTC)
+
+End-to-end iteration sprint after the 15h Jordi meeting. Code, deploy, audit
+loop. Status against each cross-cutting fix:
+
+### Done
+
+| CC | Status | Commit | Verification |
+|---|---|---|---|
+| **CC-1** drop `meta` envelope | ✓ shipped | `735993b8` | re-audit: `meta` in **0/36** list endpoints (was 31). |
+| **CC-3** fix 4 broken routes | ✓ shipped | `735993b8` | `/meta/dgs`, `/meta/committees`, `/meta/policy-areas`, `/commissioners/{slug}`, `/citations/verify?q=` all 200. Audit 404s **0** (was 5). |
+| **CC-4** commissioner profile vs. agenda | ✓ shipped | `735993b8` | `/commissioners/{slug}` returns profile-only; `/commissioners/{slug}/agenda` returns standard envelope without profile fields. |
+| **CC-6** rate-limit tiers | ✓ shipped | `d2146d25` | migration 045 applied to prod DB. `whoami` returns `api_tier: "free"`. Header `X-RateLimit-Tier` live. `provision_enterprise_key.py` ready (dry-run by default). |
+| **CC-2(a)** body fields exposed | ✓ shipped | `3b5334d6` | `/laws[/{celex}]` ship `text_url`. `/knowledge-guides` Full uncapped + new `content` field. |
+| **CC-5** calendar per-event URLs | ✓ shipped | `5761d238` + `7f571b54` | committee_meeting → `/committees/en/{LIBE}/home/highlights`, plenary_session → `/plenary/en/agendas.html?day=YYYYMMDD`, european_council_summit → `/en/meetings/european-council/YYYY/MM/DD/`. **Generic `latest-documents` URL no longer leaks.** |
+| **law-tracker.europa.eu** integration | ✓ shipped | `5761d238` | `/procedures` + `/procedures/{ref}` ship `law_tracker_url`. OEIL `2025/0420(COD)` → `https://law-tracker.europa.eu/procedure/2025_420?lang=en`. COM-style refs correctly return null. |
+
+### Remaining
+
+| CC | Status | Why deferred |
+|---|---|---|
+| **CC-2(b)** backfill body content | pending | Multi-day. PDF text extraction for reports/opinions/resolutions/commission-register; HTML body scrape for parl-q/tris/tenders/council-documents. Runs in background — code already exposes the fields, just need rows populated. |
+| **/predictions/{ref}/timeline** 502 | pending | Upstream model-loading error on Railway, not a routing issue. Audit shows 1/43 still 502; rest of the API is unaffected. Investigate logs separately. |
+| Provision Jordi's Enterprise key | pending | Operational step. Run `python3.12 backend/scripts/provision_enterprise_key.py --email <jordi> --name "GovClipping production" --tier enterprise --commit` once Jordi's Brubru account is set up. |
+
+### Audit deltas
+
+Original audit (30 April 2026, 12:43 UTC):
+- HTTP 200: 37/43
+- 404s: 5
+- 502s: 1
+- meta envelope present: 31/36 list endpoints
+
+After full sprint (30 April 2026, 17h UTC):
+- HTTP 200: **42/43**  (only predictions still 502)
+- 404s: **0**
+- 502s: 1 (predictions, upstream model)
+- meta envelope present: **0/36** list endpoints
+
+### Ratification
+
+- Cross-cutting fixes verified against production with `audit_jordi_feedback.py`
+  before and after each PR.
+- Postman workspace stays in sync by re-pulling the live OpenAPI spec
+  (no schema-shape changes that break existing partner integrations — only
+  additive fields and the dropped `meta` block).
+- `/api/docs/` microsite + Postman collection do **not** advertise
+  `meta`-block fields anywhere — they were already migrated to response
+  headers in the previous sprint, so removing the block is purely a payload
+  cleanup, no doc churn.
+- Iteration was test-and-edit: re-audit after each PR, fix what regressed,
+  re-deploy.
