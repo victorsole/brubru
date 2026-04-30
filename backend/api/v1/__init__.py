@@ -12,6 +12,7 @@ All errors use the canonical error shapes in _errors.
 from fastapi import APIRouter
 
 from . import calendar as _calendar
+from . import commission_register as _commission_register
 from . import commissioners as _commissioners
 from . import committees as _committees
 from . import consultations as _consultations
@@ -33,6 +34,7 @@ from . import resolutions as _resolutions
 from . import texts_adopted as _texts_adopted
 from . import w4_endpoints as _w4
 from . import w5_endpoints as _w5
+from . import webstreams as _webstreams
 from . import citations as _citations
 
 router = APIRouter(prefix="/api/v1")
@@ -70,6 +72,8 @@ router.include_router(_w4.tris_router)
 router.include_router(_w5.research_router)
 router.include_router(_w5.officials_router)
 router.include_router(_w5.tenders_router)
+router.include_router(_commission_register.router)
+router.include_router(_webstreams.router)
 router.include_router(_citations.router)
 router.include_router(_docs.router)
 

@@ -64,7 +64,10 @@ class CommissionDocument(Base):
     dg_responsible = Column(String)  # DG code e.g. "CNECT"
     procedure_ref = Column(String)   # OEIL cross-ref e.g. "2021/0106(COD)"
     languages = Column(ARRAY(String), default=[])
-    portal_url = Column(String)      # EUR-Lex or RegDoc URL
+    portal_url = Column(String)      # EUR-Lex or RegDoc landing page URL
+    pdf_url = Column(Text, nullable=True)  # Direct PDF asset URL when available (migration 040)
+    document_register_category = Column(String(50), nullable=True)  # AGENDA_COM_MEETING / TENTAT_AGENDA_COM_MEETING / OPIN_IMPACT_ASSESS / ...
+    source_url = Column(Text, nullable=True)  # Commission Transparency Register search URL or other origin
     celex = Column(String)           # CELEX number for adopted acts
     common_name = Column(String)     # Colloquial name e.g. "Digital Omnibus Act"
 

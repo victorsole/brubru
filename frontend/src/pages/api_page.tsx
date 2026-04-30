@@ -8,6 +8,9 @@ export const ApiPage = () => {
   const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState('endpoints');
 
+  // Public landing surface — only GET endpoints are listed here.
+  // POST endpoints (legal-text/resolve-*) are documented in /api/docs/endpoints
+  // for partners; we intentionally do not surface them on this page.
   const endpoints = [
     { m: 'GET',  p: '/api/v1/laws',                                           k: 'laws' },
     { m: 'GET',  p: '/api/v1/procedures',                                     k: 'procedures' },
@@ -15,8 +18,6 @@ export const ApiPage = () => {
     { m: 'GET',  p: '/api/v1/commissioners/{name}/agenda',                    k: 'commissioners' },
     { m: 'GET',  p: '/api/v1/legal-text/{celex}/recital-article-map',         k: 'recitalMap' },
     { m: 'GET',  p: '/api/v1/legal-text/{celex}/defined-terms',               k: 'definedTerms' },
-    { m: 'POST', p: '/api/v1/legal-text/resolve-references',                  k: 'resolveRefs' },
-    { m: 'POST', p: '/api/v1/legal-text/resolve-aliases',                     k: 'resolveAliases' },
   ];
 
   const errorRows: Array<{ code: string; key: string }> = [
