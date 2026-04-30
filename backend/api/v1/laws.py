@@ -35,6 +35,7 @@ class LawItem(BaseModel):
     policy_area: Optional[str] = None
     legal_basis: list = Field(default_factory=list)
     eurlex_url: Optional[str] = None
+    text_url: Optional[str] = Field(None, description="Brubru endpoint for the full body (XML or plain text). Call this URL to retrieve the actual law content.")
 
 
 def _eurlex_url(celex: Optional[str]) -> Optional[str]:
@@ -165,6 +166,7 @@ async def list_laws(
             policy_area=r.policy_area,
             legal_basis=list(r.legal_basis or []),
             eurlex_url=_eurlex_url(r.celex),
+            text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
         )
         for r in rows
     ]
@@ -238,6 +240,7 @@ async def get_law_detail(
         policy_area=r.policy_area,
         legal_basis=list(r.legal_basis or []),
         eurlex_url=_eurlex_url(r.celex),
+        text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
     )
 
 

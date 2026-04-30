@@ -41,6 +41,10 @@ class KnowledgeGuideItem(BaseModel):
     summary: Optional[str] = None
     quick_facts: Optional[str] = None
     triggers: list = Field(default_factory=list)
+    # `content` carries the full markdown body when detail_level=Full, and is
+    # truncated to a 500-char preview at detail_level=Summary. Mirrored as
+    # `content_preview` for back-compat with anyone built against the old name.
+    content: Optional[str] = None
     content_preview: Optional[str] = None
     full_content_chars: int = 0
 
@@ -95,14 +99,17 @@ async def list_knowledge_guides(
         raw = kl.guides.get(gid, "")
         parsed = _parse_guide(gid, raw)
         content = parsed["content"]
-        preview = content[:500] if not include_full else content[:20000]
+        # Summary level: 500-char preview. Full level: the entire markdown body
+        # (no cap — Jordi #1 / #8: API users need raw content, not titles).
+        body = content if include_full else content[:500]
         data.append(KnowledgeGuideItem(
             id=gid,
             title=parsed["title"],
             summary=None,
             quick_facts=parsed["quick_facts"],
             triggers=sorted(set(triggers_by_guide.get(gid, [])))[:50],
-            content_preview=preview,
+            content=body,
+            content_preview=body,
             full_content_chars=len(content),
         ))
 
@@ -135,6 +142,7 @@ async def get_knowledge_guide(
         summary=None,
         quick_facts=parsed["quick_facts"],
         triggers=triggers,
+        content=parsed["content"],
         content_preview=parsed["content"],
         full_content_chars=len(parsed["content"]),
     )
