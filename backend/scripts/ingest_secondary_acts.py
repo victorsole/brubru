@@ -61,7 +61,7 @@ SEED_ACTS = [
      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026D0378"),
     ("delegated", "C(2026)2456", "Commission Delegated Regulation (EU) 2026/722 on Forced Labour Regulation Article 11 risk indicators",
      "32024R3015", "TRADE", "draft", dt.date(2026, 4, 15),
-     "https://commission.europa.eu/business-economy-euro/forced-labour-regulation_en"),
+     "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R3015"),
     ("delegated", "C(2026)2890", "Commission Delegated Regulation (EU) 2026/845 supplementing the Net-Zero Industry Act on strategic project criteria",
      "32024R1735", "GROW", "adopted", dt.date(2026, 4, 8),
      "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R0845"),

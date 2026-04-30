@@ -190,46 +190,6 @@ async def list_publications(
     )
 
 
-@router.get(
-    "/{publication_id}",
-    response_model=PublicationItem,
-    summary="Single publication detail by id (UUID)",
-)
-async def get_publication_detail(
-    publication_id: str,
-    user: User = Depends(api_user_with_rate_limit),
-    db: Session = Depends(get_db),
-) -> PublicationItem:
-    r = (
-        db.query(InstitutionalPublication)
-        .filter(InstitutionalPublication.id == publication_id)
-        .first()
-    )
-    if not r:
-        raise HTTPException(
-            status_code=404,
-            detail={
-                "error": f"Publication id {publication_id} not found",
-                "reason_code": "not_found",
-                "resource": "publication",
-                "id": publication_id,
-            },
-        )
-    return PublicationItem(
-        id=str(r.id),
-        source_slug=r.source_slug,
-        institution_slug=r.institution_slug,
-        category=r.category,
-        title=r.title,
-        summary=r.summary,
-        url=r.url,
-        language=r.language or "en",
-        published_date=r.published_date,
-        policy_areas=list(r.policy_areas or []),
-        tags=list(r.tags or []),
-    )
-
-
 class SourceItem(BaseModel):
     source_slug: str
     institution_slug: str
@@ -237,6 +197,9 @@ class SourceItem(BaseModel):
     category: Optional[str] = None
 
 
+# IMPORTANT: /sources MUST be declared BEFORE /{publication_id}, otherwise
+# FastAPI matches "sources" as a publication_id (UUID), the cast fails and
+# returns 500. Static routes must precede param routes for correct dispatch.
 @router.get(
     "/sources",
     summary="List all ingested sources with item counts",
@@ -278,3 +241,51 @@ async def list_sources(
             reverse=True,
         ),
     }
+
+
+@router.get(
+    "/{publication_id}",
+    response_model=PublicationItem,
+    summary="Single publication detail by id (UUID)",
+)
+async def get_publication_detail(
+    publication_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> PublicationItem:
+    # Defensive: short-circuit if path looks like a known static sibling.
+    # Without this, an accidental /publications/sources here would still 404
+    # via the route-order fix above; this is belt + braces.
+    if publication_id in ("sources",):
+        raise HTTPException(status_code=404, detail={
+            "error": "Reserved path", "reason_code": "not_found",
+            "resource": "publication", "id": publication_id,
+        })
+    r = (
+        db.query(InstitutionalPublication)
+        .filter(InstitutionalPublication.id == publication_id)
+        .first()
+    )
+    if not r:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": f"Publication id {publication_id} not found",
+                "reason_code": "not_found",
+                "resource": "publication",
+                "id": publication_id,
+            },
+        )
+    return PublicationItem(
+        id=str(r.id),
+        source_slug=r.source_slug,
+        institution_slug=r.institution_slug,
+        category=r.category,
+        title=r.title,
+        summary=r.summary,
+        url=r.url,
+        language=r.language or "en",
+        published_date=r.published_date,
+        policy_areas=list(r.policy_areas or []),
+        tags=list(r.tags or []),
+    )

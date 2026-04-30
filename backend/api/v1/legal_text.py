@@ -56,8 +56,13 @@ def recital_article_map(
 ) -> RecitalArticleMapResponse:
     from services.parsers.recital_article_store import get_or_compute_map
 
+    # Defensive: catch ALL exceptions, including ones in service layer that
+    # bubble up despite the inner try (e.g. import errors, missing DB columns
+    # on production). Convert to clean 503 instead of an unhandled 500.
     try:
         mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
+    except HTTPException:
+        raise
     except Exception as exc:  # noqa: BLE001
         logger.exception(f"recital-article-map computation failed for {celex}: {exc}")
         raise HTTPException(
@@ -66,12 +71,21 @@ def recital_article_map(
                 "error": f"Unable to compute recital-article map for CELEX {celex}",
                 "reason_code": "computation_unavailable",
                 "source": "brubru-recital-linker",
+                "exception": type(exc).__name__,
             },
         )
     if mapping is None:
+        # Either the law isn't in eu_laws or the LEG XML isn't available on
+        # this deployment (Railway doesn't ship the LEG corpus by design).
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail={"error": f"CELEX {celex} not available", "reason_code": "not_found", "resource": "law", "id": celex},
+            detail={
+                "error": f"CELEX {celex} not available — recital map requires Formex XML which is not deployed to production",
+                "reason_code": "not_found",
+                "resource": "law",
+                "id": celex,
+                "hint": "Use /api/v1/laws/{celex}/text to get the full text via the EUR-Lex Cellar fallback",
+            },
         )
     return RecitalArticleMapResponse(celex=celex, map=mapping)
 
