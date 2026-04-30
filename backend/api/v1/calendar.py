@@ -53,6 +53,92 @@ def _derive_webstream_url(institution: str, event_type: str, ep_committee_code: 
     return None
 
 
+# Generic / placeholder URLs we should NEVER ship as source_url. When a row
+# has one of these, we derive a more specific URL based on event_type +
+# institution + committee_code + start_date. Jordi feedback #7 (30 April 2026).
+_GENERIC_SOURCE_URLS = {
+    "https://www.europarl.europa.eu/committees/en/documents/latest-documents",
+    "https://www.europarl.europa.eu/committees/en/meetings/meeting-documents",
+    "https://www.europarl.europa.eu/news/en/agenda",
+    "https://www.consilium.europa.eu/en/meetings/",
+    "https://commission.europa.eu/news/college-meetings_en",
+}
+
+
+def _derive_specific_source_url(
+    institution: Optional[str],
+    event_type: Optional[str],
+    ep_committee_code: Optional[str],
+    council_configuration: Optional[str],
+    start_date,
+) -> Optional[str]:
+    """Build a per-event source URL when the row has no specific one.
+
+    Patterns:
+      EP plenary           -> /plenary/en/agendas.html?day=YYYYMMDD
+      EP committee_meeting -> /committees/en/{COMMITTEE_LOWER}/meetings/agendas
+      EP committee_week    -> /news/en/agenda
+      Council meeting      -> /en/meetings/{CONFIG_LOWER}/{YYYY}/{MM}/{DD}/
+      European Council     -> /en/meetings/european-council/{YYYY}/{MM}/{DD}/
+      Commission college   -> /news/all-news_en
+    Returns None when we can't reasonably derive one.
+    """
+    et = (event_type or "").lower()
+    inst = (institution or "").upper()
+    d = start_date
+
+    if inst == "EP":
+        if "plenary" in et:
+            if d:
+                return f"https://www.europarl.europa.eu/plenary/en/agendas.html?day={d.strftime('%Y%m%d')}"
+            return "https://www.europarl.europa.eu/plenary/en/agendas.html"
+        if et == "committee_meeting" and ep_committee_code:
+            # /meetings/agendas returns 404 on EP; the committee home/highlights
+            # page is the canonical entry that always 200s.
+            return f"https://www.europarl.europa.eu/committees/en/{ep_committee_code.lower()}/home/highlights"
+        if et == "committee_week":
+            return "https://www.europarl.europa.eu/news/en/agenda"
+
+    if inst in ("COUNCIL", "EUROPEAN_COUNCIL"):
+        slug = (council_configuration or "").lower().replace(" ", "-").replace("(", "").replace(")", "").replace("/", "-")
+        if inst == "EUROPEAN_COUNCIL" and d:
+            return f"https://www.consilium.europa.eu/en/meetings/european-council/{d.year}/{d.month:02d}/{d.day:02d}/"
+        if slug and d:
+            return f"https://www.consilium.europa.eu/en/meetings/{slug}/{d.year}/{d.month:02d}/{d.day:02d}/"
+        if d:
+            return f"https://www.consilium.europa.eu/en/meetings/calendar/?DateFrom={d.strftime('%Y/%m/%d')}&DateTo={d.strftime('%Y/%m/%d')}"
+
+    if inst == "COMMISSION":
+        return "https://commission.europa.eu/news_en"
+
+    return None
+
+
+def _resolve_source_url(
+    raw_source_url: Optional[str],
+    institution: Optional[str],
+    event_type: Optional[str],
+    ep_committee_code: Optional[str],
+    council_configuration: Optional[str],
+    start_date,
+) -> Optional[str]:
+    """Return a specific per-event URL, replacing generic placeholders.
+
+    1. Use the DB-stored source_url if it is specific (not a known placeholder).
+    2. Otherwise derive from event_type + institution + date.
+    3. Otherwise return None (better than misleading the caller).
+    """
+    if raw_source_url and raw_source_url not in _GENERIC_SOURCE_URLS:
+        return raw_source_url
+    return _derive_specific_source_url(
+        institution=institution,
+        event_type=event_type,
+        ep_committee_code=ep_committee_code,
+        council_configuration=council_configuration,
+        start_date=start_date,
+    ) or raw_source_url  # Fall back to whatever we had if derivation also fails
+
+
 @router.get(
     "/events",
     response_model=PaginatedResponse[CalendarEventItem],
@@ -154,7 +240,10 @@ async def list_calendar_events(
             policy_areas=list(r.policy_areas or []),
             procedure_refs=list(r.procedure_refs or []),
             status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
-            source_url=r.source_url,
+            source_url=_resolve_source_url(
+                r.source_url, inst_value, et_value, r.ep_committee_code,
+                r.council_configuration, r.start_date,
+            ),
             agenda_url=r.agenda_url,
             webstream_url=_derive_webstream_url(inst_value, et_value, r.ep_committee_code),
         ))
@@ -204,7 +293,10 @@ async def get_calendar_event_detail(
         policy_areas=list(r.policy_areas or []),
         procedure_refs=list(r.procedure_refs or []),
         status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
-        source_url=r.source_url,
+        source_url=_resolve_source_url(
+            r.source_url, inst_value, et_value, r.ep_committee_code,
+            r.council_configuration, r.start_date,
+        ),
         agenda_url=r.agenda_url,
         webstream_url=_derive_webstream_url(inst_value, et_value, r.ep_committee_code),
     )

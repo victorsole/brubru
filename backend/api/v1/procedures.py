@@ -41,8 +41,27 @@ class ProcedureItem(BaseModel):
     policy_areas: list = Field(default_factory=list)
     legal_text_url: Optional[str] = None
     url: Optional[str] = None
+    # Aggregated procedure tracker on law-tracker.europa.eu — combines OEIL,
+    # EUR-Lex and Commission events on a single page. Pattern:
+    # https://law-tracker.europa.eu/procedure/{YYYY}_{NNN}?lang=en
+    law_tracker_url: Optional[str] = None
     first_seen: Optional[datetime] = None
     last_updated: Optional[datetime] = None
+
+
+def _law_tracker_url(oeil_ref: Optional[str]) -> Optional[str]:
+    """Map an OEIL procedure reference (e.g. '2025/0420(COD)') to the
+    law-tracker.europa.eu URL ('2025_420'). Strips leading zeros from the
+    sequential number to match the tracker's slug format. Returns None when
+    we can't parse the ref."""
+    if not oeil_ref:
+        return None
+    import re
+    m = re.match(r"^\s*(\d{4})/0*(\d+)(?:\([A-Z]+\))?\s*$", oeil_ref)
+    if not m:
+        return None
+    year, seq = m.group(1), m.group(2)
+    return f"https://law-tracker.europa.eu/procedure/{year}_{seq}?lang=en"
 
 
 @router.get(
@@ -114,6 +133,7 @@ async def list_procedures(
             policy_areas=list(r.policy_areas or []),
             legal_text_url=r.legal_text_url,
             url=r.url,
+            law_tracker_url=_law_tracker_url(r.oeil_procedure_ref),
             first_seen=r.first_seen,
             last_updated=r.last_updated,
         )
@@ -177,6 +197,8 @@ class ProcedureDetail(BaseModel):
     # Links
     legal_text_url: Optional[str] = None
     url: Optional[str] = None
+    # https://law-tracker.europa.eu/procedure/{YYYY}_{N}?lang=en
+    law_tracker_url: Optional[str] = None
 
     # Temporal
     first_seen: Optional[datetime] = None
@@ -233,6 +255,7 @@ def _carriage_to_detail(r: LegislativeCarriage) -> ProcedureDetail:
         ai_policy_classifications=_coerce_list(r.ai_policy_classifications),
         legal_text_url=r.legal_text_url,
         url=r.url,
+        law_tracker_url=_law_tracker_url(r.oeil_procedure_ref),
         first_seen=r.first_seen,
         last_updated=r.last_updated,
         expected_completion=r.expected_completion,
