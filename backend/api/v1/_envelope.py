@@ -17,6 +17,10 @@ DetailLevel = Literal["Minimal", "Summary", "Full"]
 
 
 class Meta(BaseModel):
+    """Legacy meta block. NOT included in PaginatedResponse anymore (Jordi
+    feedback 30 April 2026 — the same provenance information is on
+    `X-Powered-By` / `X-Source` response headers). Kept for the citations
+    endpoint until that one is migrated."""
     source: str = "brubru.beresol.eu"
     powered_by: str = "Brubru"
     fetched_at: datetime = Field(default_factory=datetime.utcnow)
@@ -47,7 +51,6 @@ class PaginatedResponse(BaseModel, Generic[T]):
     detail_level: DetailLevel = "Full"
 
     data: list[T]
-    meta: Meta = Field(default_factory=Meta)
 
 
 def build_envelope(

@@ -12,7 +12,7 @@ internally by Chat post-processing for citation grounding.
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Request
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -21,9 +21,12 @@ from models.user import User
 from services.citation_verifier import verify_one
 
 from ._deps import api_user_with_rate_limit
-from ._envelope import Meta
 
+# Two prefixes share the same handlers: /verify-citation/{ref} (legacy, kept for
+# back-compat with anyone who built against the original path) and /citations
+# (matches what the public docs and Postman advertise).
 router = APIRouter(prefix="/verify-citation", tags=["v1-citations"])
+citations_router = APIRouter(prefix="/citations", tags=["v1-citations"])
 
 
 class VerifyCitationItem(BaseModel):
@@ -39,7 +42,6 @@ class VerifyCitationItem(BaseModel):
 
 class VerifyCitationResponse(BaseModel):
     data: VerifyCitationItem
-    meta: Meta = Field(default_factory=Meta)
 
 
 @router.get(
@@ -82,6 +84,37 @@ async def verify_citation(
             http_status=result.http_status,
             latency_ms=result.latency_ms,
             original_form=result.original_form or ref,
+            from_cache=result.from_cache,
+        )
+    )
+
+
+@citations_router.get(
+    "/verify",
+    response_model=VerifyCitationResponse,
+    summary="Verify a citation by query string (alias of /verify-citation/{ref})",
+    description=(
+        "Same as `/verify-citation/{ref}` but accepts the reference as a `?q=` "
+        "query parameter, which is friendlier for refs that include slashes "
+        "or parentheses (CELEX, COM, OEIL). Cached identically."
+    ),
+)
+async def verify_citation_q(
+    request: Request,
+    q: str = Query(..., min_length=1, max_length=128, description="The reference to verify (CELEX, COM, OEIL)"),
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> VerifyCitationResponse:
+    result = await verify_one(q, db=db)
+    return VerifyCitationResponse(
+        data=VerifyCitationItem(
+            ref=result.ref,
+            kind=result.kind,
+            status=result.status,
+            resolved_url=result.resolved_url,
+            http_status=result.http_status,
+            latency_ms=result.latency_ms,
+            original_form=result.original_form or q,
             from_cache=result.from_cache,
         )
     )

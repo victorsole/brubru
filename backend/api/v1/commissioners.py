@@ -31,28 +31,86 @@ class AgendaItemOut(BaseModel):
     detail_url: Optional[str] = None
 
 
-class CommissionerEnvelope(PaginatedResponse[AgendaItemOut]):
-    commissioner_name: str
-    commissioner_slug: str
-    commissioner_portfolio: str
-    commissioner_country: str
+class CommissionerProfileOut(BaseModel):
+    """Profile-only view of a College member. Returned by `/commissioners` (list)
+    and `/commissioners/{slug}` (detail). The agenda lives at a separate path."""
+    slug: str
+    name: str
+    portfolio: str
+    country: str
     bio_url: str
-    # Source URLs surfaced at response top (asks #2 + #5 from polish list).
     agenda_url: Optional[str] = None              # Filtered unified-calendar URL when leader_id resolved
-    agenda_pdf_url: Optional[str] = None          # Reserved — most don't publish PDF
+    agenda_pdf_url: Optional[str] = None          # Reserved — most don't publish a PDF
     unified_calendar_url: str = (
         "https://commission.europa.eu/about/organisation/college-commissioners/"
         "calendar-items-president-and-commissioners_en"
     )
+    type: str = "commissioner"
+
+
+def _build_profile_out(profile) -> CommissionerProfileOut:
+    leader_id = getattr(profile, "leader_id", None)
+    agenda_url = None
+    if leader_id:
+        agenda_url = (
+            "https://commission.europa.eu/about/organisation/college-commissioners/"
+            "calendar-items-president-and-commissioners_en"
+            "?f%5B0%5D=commissioner_dynamic_commissioner_dynamic%3A"
+            f"http%3A//publications.europa.eu/resource/authority/political-leader/{leader_id}"
+        )
+    return CommissionerProfileOut(
+        slug=profile.slug,
+        name=profile.name,
+        portfolio=profile.portfolio,
+        country=profile.country,
+        bio_url=profile.bio_url,
+        agenda_url=agenda_url,
+    )
+
+
+@router.get(
+    "/{slug}",
+    response_model=CommissionerProfileOut,
+    summary="Commissioner profile (no agenda — see /agenda for events)",
+    description=(
+        "Profile-only view of one Commission college member. Same shape as the "
+        "rows returned by GET /commissioners. To get the events / meetings for "
+        "this commissioner, call GET /commissioners/{slug}/agenda."
+    ),
+)
+async def get_profile(
+    request: Request,
+    slug: str,
+    user: User = Depends(api_user_with_rate_limit),
+) -> CommissionerProfileOut:
+    from services.api_clients.commissioner_agenda_client import (
+        get_commissioner_agenda_client,
+    )
+
+    client = get_commissioner_agenda_client()
+    profile = client.resolve(slug)
+    if profile is None:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "error": "not_found",
+                "detail": "Commissioner not found",
+                "resource": "commissioner",
+                "id": slug,
+            },
+        )
+    return _build_profile_out(profile)
 
 
 @router.get(
     "/{name}/agenda",
-    response_model=CommissionerEnvelope,
-    summary="Commissioner agenda (live, from commission.europa.eu)",
+    response_model=PaginatedResponse[AgendaItemOut],
+    summary="Commissioner agenda — events only (no profile fields)",
     description=(
         "Live calendar items for a Commission college member. Name resolution is "
-        "accent-insensitive and accepts full name, surname, or known nickname (27 members)."
+        "accent-insensitive and accepts full name, slug, or known nickname (27 members). "
+        "Returns ONLY the agenda data envelope — for the profile, call "
+        "GET /commissioners/{slug}."
     ),
 )
 async def get_agenda(
@@ -64,7 +122,7 @@ async def get_agenda(
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
-) -> CommissionerEnvelope:
+) -> PaginatedResponse[AgendaItemOut]:
     from services.api_clients.commissioner_agenda_client import (
         get_commissioner_agenda_client,
     )
@@ -109,29 +167,11 @@ async def get_agenda(
         for it in page_items
     ]
 
-    envelope = build_envelope(
+    return build_envelope(
         data,
         total=total,
         page=page,
         limit=limit,
         published_from=date_from,
         published_to=date_to,
-    )
-    leader_id = getattr(profile, "leader_id", None)
-    agenda_url = None
-    if leader_id:
-        agenda_url = (
-            "https://commission.europa.eu/about/organisation/college-commissioners/"
-            "calendar-items-president-and-commissioners_en"
-            "?f%5B0%5D=commissioner_dynamic_commissioner_dynamic%3A"
-            f"http%3A//publications.europa.eu/resource/authority/political-leader/{leader_id}"
-        )
-    return CommissionerEnvelope(
-        **envelope.model_dump(),
-        commissioner_name=profile.name,
-        commissioner_slug=profile.slug,
-        commissioner_portfolio=profile.portfolio,
-        commissioner_country=profile.country,
-        bio_url=profile.bio_url,
-        agenda_url=agenda_url,
     )

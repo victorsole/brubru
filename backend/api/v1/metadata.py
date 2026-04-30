@@ -25,6 +25,8 @@ from models.user import User
 from ._deps import api_user_with_rate_limit
 
 router = APIRouter(tags=["v1-metadata"])
+# Aliases under /meta/* — what the public docs and Postman advertise. Same handlers.
+meta_router = APIRouter(prefix="/meta", tags=["v1-metadata"])
 
 
 # ============================================================================
@@ -613,3 +615,25 @@ async def list_commissioners(user: User = Depends(api_user_with_rate_limit)) -> 
             "type": "commissioner",
         })
     return _shape(sorted(items, key=lambda x: x["name"]))
+
+
+# ============================================================================
+# /meta/* aliases — what the public docs and Postman advertise.
+# Same handlers, registered on meta_router so /api/v1/meta/dgs etc. resolve.
+# ============================================================================
+
+# Long-form aliases (one per legacy path)
+meta_router.add_api_route("/institutions",        list_institutions,        methods=["GET"], response_model=_GenericListResponse, summary="EU institutions, agencies, and bodies")
+meta_router.add_api_route("/committees",          list_committees,          methods=["GET"], response_model=_GenericListResponse, summary="EP committees with full names")
+meta_router.add_api_route("/directorates-general", list_dgs,                methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs")
+meta_router.add_api_route("/dgs",                 list_dgs,                 methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs (short alias)")
+meta_router.add_api_route("/political-groups",    list_political_groups,    methods=["GET"], response_model=_GenericListResponse, summary="EP political groups")
+meta_router.add_api_route("/countries",           list_countries,           methods=["GET"], response_model=_GenericListResponse, summary="EU + EEA countries with ISO codes")
+meta_router.add_api_route("/languages",           list_languages,           methods=["GET"], response_model=_GenericListResponse, summary="24 official EU languages with ISO-639 codes")
+meta_router.add_api_route("/procedure-types",     list_procedure_types,     methods=["GET"], response_model=_GenericListResponse, summary="Legislative procedure types (COD, NLE, INI, ...)")
+meta_router.add_api_route("/legal-bases",         list_legal_bases,         methods=["GET"], response_model=_GenericListResponse, summary="TFEU/TEU legal bases (selected)")
+meta_router.add_api_route("/procedure-statuses",  list_procedure_statuses,  methods=["GET"], response_model=_GenericListResponse, summary="Procedure status enumeration")
+meta_router.add_api_route("/event-types",         list_event_types,         methods=["GET"], response_model=_GenericListResponse, summary="Calendar event types")
+meta_router.add_api_route("/document-types",      list_document_types,      methods=["GET"], response_model=_GenericListResponse, summary="OJ document types (live from eu_laws)")
+meta_router.add_api_route("/policy-areas",        list_policy_areas,        methods=["GET"], response_model=_GenericListResponse, summary="Policy areas (live from eu_laws)")
+meta_router.add_api_route("/commissioners",       list_commissioners,       methods=["GET"], response_model=_GenericListResponse, summary="College of Commissioners (27 members) — static enum")
