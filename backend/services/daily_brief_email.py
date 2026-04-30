@@ -534,7 +534,15 @@ def send_daily_brief_batch(db_session, brubru_news: Optional[List[str]] = None,
         week_ahead_closing=week_ahead_closing,
     )
 
-    subject = f"Brubru Daily Brief: {brief_date}"
+    from datetime import date as _date
+    if isinstance(brief_date, str):
+        try:
+            _formatted = _date.fromisoformat(brief_date).strftime("%-d %B %Y")
+        except ValueError:
+            _formatted = brief_date
+    else:
+        _formatted = brief_date.strftime("%-d %B %Y") if hasattr(brief_date, "strftime") else str(brief_date)
+    subject = f"Brubru Daily EU Brief - {_formatted}"
     service = EmailService()
     sent = 0
     failed = 0

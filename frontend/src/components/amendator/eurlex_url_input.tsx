@@ -1,5 +1,5 @@
 // EUR-Lex URL Input Component
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './eurlex_url_input.css';
 
 const API_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api`;
@@ -52,11 +52,40 @@ export interface FetchedDocument {
   quality: string;
 }
 
+interface FeaturedExample {
+  celex: string | null;
+  eurlex_url: string;
+  title: string;
+  description: string | null;
+  source: string | null;
+  position: number;
+}
+
 export const EURLexURLInput = ({ onDocumentFetched }: EURLexURLInputProps) => {
   const [url, setUrl] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [examples, setExamples] = useState<FeaturedExample[]>([]);
+  const [examplesLoading, setExamplesLoading] = useState(true);
+  const [examplesError, setExamplesError] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/amendator/featured-examples?limit=10`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (!cancelled) setExamples(data.items || []);
+      } catch (e) {
+        if (!cancelled) setExamplesError(e instanceof Error ? e.message : 'Failed to load examples');
+      } finally {
+        if (!cancelled) setExamplesLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const handleFetch = async () => {
     if (!url.trim()) {
@@ -157,25 +186,36 @@ export const EURLexURLInput = ({ onDocumentFetched }: EURLexURLInputProps) => {
       )}
 
       <div className="eurlex-url-input__examples">
-        <p className="eurlex-url-input__examples-title">Example URLs:</p>
-        <ul className="eurlex-url-input__examples-list">
-          <li>
-            <button
-              className="eurlex-url-input__example-link"
-              onClick={() => setUrl('https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex:52026PC0321')}
-            >
-              EU Inc. (28th Regime Corporate Framework)
-            </button>
-          </li>
-          <li>
-            <button
-              className="eurlex-url-input__example-link"
-              onClick={() => setUrl('https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=intcom:Ares%282025%293570423')}
-            >
-              Industrial Accelerator Act
-            </button>
-          </li>
-        </ul>
+        <p className="eurlex-url-input__examples-title">Hot files this week:</p>
+        {examplesLoading && (
+          <p className="eurlex-url-input__examples-loading">Loading…</p>
+        )}
+        {examplesError && !examplesLoading && (
+          <p className="eurlex-url-input__examples-error">
+            <span className="mdi mdi-alert"></span> Could not load featured examples ({examplesError}).
+          </p>
+        )}
+        {!examplesLoading && !examplesError && examples.length === 0 && (
+          <p className="eurlex-url-input__examples-empty">No featured examples yet — paste any EUR-Lex URL above.</p>
+        )}
+        {!examplesLoading && examples.length > 0 && (
+          <ul className="eurlex-url-input__examples-list">
+            {examples.map((ex) => (
+              <li key={ex.eurlex_url}>
+                <button
+                  className="eurlex-url-input__example-link"
+                  onClick={() => setUrl(ex.eurlex_url)}
+                  title={ex.description || ex.eurlex_url}
+                >
+                  {ex.title}
+                </button>
+                {ex.description && (
+                  <span className="eurlex-url-input__example-desc">{ex.description}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );

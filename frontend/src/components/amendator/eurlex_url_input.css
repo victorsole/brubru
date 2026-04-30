@@ -113,7 +113,10 @@
 }
 
 .eurlex-url-input__examples-list li {
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .eurlex-url-input__example-link {
@@ -126,13 +129,43 @@
   padding: 0;
   text-align: left;
   transition: color var(--transition-fast);
+  font-weight: var(--font-weight-medium);
 }
 
 .eurlex-url-input__example-link:hover {
   color: var(--color-accent-purple);
 }
 
+.eurlex-url-input__example-desc {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  display: block;
+}
+
+.eurlex-url-input__examples-loading,
+.eurlex-url-input__examples-empty,
+.eurlex-url-input__examples-error {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+  padding: var(--space-2) 0;
+}
+
+.eurlex-url-input__examples-error {
+  color: var(--color-danger);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .eurlex-url-input__examples-list li {
+    margin-bottom: var(--space-2);
+  }
+}
+
 @media (max-width: 767px) {
   .eurlex-url-input__field {
     flex-direction: column;
@@ -140,6 +173,20 @@
 
   .eurlex-url-input__button {
     width: 100%;
+  }
+
+  .eurlex-url-input__example-desc {
+    font-size: 11px;
+  }
+
+  .eurlex-url-input__example-link {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .eurlex-url-input {
+    padding: var(--space-3);
   }
 }
 

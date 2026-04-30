@@ -1,6 +1,7 @@
 # International Claims Commission for Ukraine (ICCU)
 
 ## QUICK FACTS
+- **EPRS Briefing (29 April 2026)**: "Financing Ukraine's recovery and reconstruction through the 2028-2034 Multiannual Financial Framework" — examines financing options for Ukraine's post-war recovery and reconstruction through the MFF and other sources. Ref: BUDG_BRI(2026)785764. Material context for the ICCU compensation architecture (third pillar = Compensation Fund, still under negotiation; sourcing question for frozen Russian sovereign assets / Extraordinary Revenues mechanism).
 - Topic: EU accession to the **Convention establishing the International Claims Commission for Ukraine**, opened for signature at The Hague, 2 April 2025, under the auspices of the Council of Europe
 - EU instrument: Council Decision authorising conclusion of the Convention (procedure 2025/0XXX(NLE)) -- NLE consent procedure, EP consent vote **Tuesday 28 April 2026 Strasbourg plenary, 12:00 voting block** (OJQ-10-2026-04-28_EN, Item 104 -- urgent procedure vote request)
 - **LATEST (28 April 2026)**: EP consent vote held today as Item 104 (urgent procedure under Rule 163). Plenary debate item 111 "Russia's attacks on Ukrainian civilians -- accountability" (15:00-22:00 block) paired the ICCU consent with the political accountability statement, giving Costa+VdL+Zelenskyy 23 April joint statement parliamentary follow-through. AFET amendments **PE786.697v03** (Michael Gahler rapporteur, 1-476 amendments tabled 22 April) on the 2025 Commission Report on Ukraine fed today's debate context.

@@ -316,36 +316,42 @@ class EURLexClient(BaseAPIClient):
         language: str = "EN"
     ) -> Optional[str]:
         """
-        Get document HTML page from EUR-Lex portal
+        Get document HTML/XHTML page from the Publications Office Cellar API.
 
-        This method fetches the HTML version of a document, which includes
-        the full text formatted for web viewing.
+        Per CLAUDE.md learned rule (`feedback_cellar_needs_accept_language`):
+        Cellar `/resource/celex/...` requires BOTH `Accept: application/xhtml+xml`
+        AND `Accept-Language: en` (otherwise 400). EUR-Lex `/legal-content/...`
+        is WAF-blocked for body scraping; we never call it for HTML body.
 
         Args:
             celex: CELEX number
             language: Language code (uppercase: EN, FR, DE, etc.)
 
         Returns:
-            HTML content of the document page
+            XHTML content of the document, or None if unavailable.
         """
-        logger.info(f"Fetching HTML page for {celex} in {language}")
+        logger.info(f"Fetching XHTML for {celex} in {language} via Cellar API")
 
-        # EUR-Lex HTML URL pattern
-        url = f"https://eur-lex.europa.eu/legal-content/{language.upper()}/TXT/?uri=CELEX:{celex}"
+        cellar_url = f"https://publications.europa.eu/resource/celex/{celex}"
+        headers = {
+            "Accept": "application/xhtml+xml",
+            "Accept-Language": language.lower(),
+            "User-Agent": "Mozilla/5.0 (Brubru EU policy intelligence)",
+        }
 
         try:
-            response = await self.client.get(url)
-            response.raise_for_status()
-
-            if response.status_code == 200:
-                logger.info(f"Successfully fetched HTML for {celex} ({len(response.text)} bytes)")
+            response = await self.client.get(cellar_url, headers=headers)
+            if response.status_code == 200 and response.text and len(response.text) > 5000:
+                logger.info(f"Cellar fetch OK for {celex} ({len(response.text)} bytes)")
                 return response.text
 
-            logger.warning(f"No HTML page available for {celex}")
+            # Some documents (e.g. agreements) only have alternative formats;
+            # try the HTML notice URL as a last-resort fallback for metadata-only
+            logger.warning(f"Cellar returned {response.status_code} / {len(response.text)} bytes for {celex}")
             return None
 
         except Exception as e:
-            logger.error(f"Failed to fetch HTML for {celex}: {str(e)}")
+            logger.error(f"Failed to fetch XHTML for {celex} via Cellar: {str(e)}")
             return None
 
     async def get_document_full_text(

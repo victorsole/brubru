@@ -8,6 +8,7 @@
 - Key Regulation 2: Asylum Procedures Regulation (APR), Regulation (EU) 2024/1348 (CELEX 32024R1348)
 - Key Regulation 3: Screening Regulation, Regulation (EU) 2024/1356 (CELEX 32024R1356)
 - Key Regulation 4: Crisis and Force Majeure Regulation, Regulation (EU) 2024/1359 (CELEX 32024R1359)
+- **Eurostat data (29 April 2026)**: "**24 % of first-time asylum applicants in 2025 were minors**" — empirical evidence layer for unaccompanied-minor protection arm of the Pact; underscores transposition urgency for Reception Conditions + Screening Regulation. Source: ec.europa.eu/eurostat news (29 April 2026).
 - Key Regulation 5: Eurodac Regulation (recast), Regulation (EU) 2024/1358 (CELEX 32024R1358)
 - Responsible DG: DG HOME (Migration and Home Affairs)
 - Responsible Commissioner: Magnus Brunner (Internal Affairs and Migration)

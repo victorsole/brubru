@@ -33,7 +33,7 @@ from api import (
     user_preferences, admin_analytics, generate, committee_work, public_consultations,
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
-    whatsapp, positions, archive,
+    whatsapp, positions, archive, amendator_examples, public_analytics,
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -188,6 +188,8 @@ app.include_router(public_consultations.router, tags=["Public Consultations"])
 app.include_router(chat_examples_public_router)
 app.include_router(chat_examples_admin_router)
 app.include_router(amendments.router, tags=["Amendments"])
+app.include_router(amendator_examples.router)
+app.include_router(public_analytics.router)
 app.include_router(eu_law_comply.router, prefix="/api", tags=["EU Law Comply"])
 app.include_router(tenderator.router, tags=["Tenderator"])
 app.include_router(archive.router, tags=["Archive"])

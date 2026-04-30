@@ -35,7 +35,7 @@ export const ApiPage = () => {
     { id: 'authentication', label: t('api.sections.authentication') },
     { id: 'envelope',       label: t('api.sections.envelope') },
     { id: 'examples',       label: t('api.sections.examples') },
-    { id: 'pricing',        label: t('api.sections.pricing') },
+    { id: 'full-docs',      label: t('api.sections.fullDocs') },
     { id: 'errors',         label: t('api.sections.errors') },
     { id: 'start-building', label: t('api.sections.startBuilding') },
   ];
@@ -138,7 +138,7 @@ export const ApiPage = () => {
                 <div>
                   <strong>{t('api.quickstart.step2Title')}</strong>
                   <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?q=artificial+intelligence&limit=5"`}</code></pre>
+  "https://brubru.beresol.eu/api/v1/laws?q=METSAF+state+aid&limit=5"`}</code></pre>
                 </div>
               </div>
               <div className="api-page__step">
@@ -156,7 +156,7 @@ export const ApiPage = () => {
             <h2>{t('api.sections.authentication')}</h2>
             <p>{t('api.auth.description')}</p>
             <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?policy_area=Transport&limit=10"`}</code></pre>
+  "https://brubru.beresol.eu/api/v1/laws?policy_area=Digital&limit=10"`}</code></pre>
             <p className="api-page__note">{t('api.auth.note')}</p>
           </section>
 
@@ -198,8 +198,8 @@ export const ApiPage = () => {
 API_KEY = "brubru_live_..."
 BASE    = "https://brubru.beresol.eu/api/v1"
 
-# Search laws by keyword
-resp = requests.get(f"{BASE}/laws", params={"q": "artificial intelligence", "limit": 5},
+# Search laws by keyword (today's hot topic: METSAF + Meta DSA + Age Verification, 29 April 2026)
+resp = requests.get(f"{BASE}/laws", params={"q": "METSAF state aid", "limit": 5},
                     headers={"Authorization": f"Bearer {API_KEY}"})
 for law in resp.json()["data"]:
     print(f'{law["celex"]}  {law["title"][:80]}')`}</code></pre>
@@ -208,7 +208,7 @@ for law in resp.json()["data"]:
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
 const BASE    = "https://brubru.beresol.eu/api/v1";
 
-const res = await fetch(\`\${BASE}/laws?q=artificial+intelligence&limit=5\`, {
+const res = await fetch(\`\${BASE}/laws?q=METSAF+state+aid&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },
 });
 const { data } = await res.json();
@@ -228,42 +228,18 @@ data.forEach(law => console.log(law.celex, law.title));`}</code></pre>
 }`}</code></pre>
           </section>
 
-          {/* Pricing */}
-          <section className="policy-page__section" id="pricing">
-            <h2>{t('api.sections.pricing')}</h2>
-            <div className="api-page__table-wrap">
-              <table className="api-page__table">
-                <thead>
-                  <tr>
-                    <th>{t('api.pricing.plan')}</th>
-                    <th>{t('api.pricing.monthly')}</th>
-                    <th>{t('api.pricing.api')}</th>
-                    <th>{t('api.pricing.rateLimit')}</th>
-                    <th>{t('api.pricing.chatbot')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{t('api.pricing.starter')}</td>
-                    <td>&euro;39</td><td>&mdash;</td><td>&mdash;</td><td>{t('api.pricing.yes')}</td>
-                  </tr>
-                  <tr>
-                    <td>{t('api.pricing.advocate')}</td>
-                    <td>&euro;59</td><td>&mdash;</td><td>&mdash;</td><td>{t('api.pricing.yes')}</td>
-                  </tr>
-                  <tr>
-                    <td><strong>{t('api.pricing.professional')}</strong></td>
-                    <td><strong>&euro;99 ({t('api.pricing.annual', { price: '\u20AC67' })})</strong></td>
-                    <td><strong>{t('api.pricing.included')}</strong></td>
-                    <td><strong>{t('api.pricing.rate', { n: 60 })}</strong></td>
-                    <td>{t('api.pricing.included')}</td>
-                  </tr>
-                </tbody>
-              </table>
+          {/* Full documentation CTA (replaces pricing section) */}
+          <section className="policy-page__section" id="full-docs">
+            <h2>{t('api.sections.fullDocs')}</h2>
+            <p>{t('api.fullDocs.lede')}</p>
+            <div className="api-page__cta-row">
+              <a className="api-page__cta api-page__cta--primary" href="/api/docs/">
+                <span className="mdi mdi-book-open-variant" /> {t('api.cta.openFullDocs')}
+              </a>
+              <a className="api-page__cta api-page__cta--secondary" href="mailto:hello@beresol.eu?subject=Brubru%20API%20access">
+                <span className="mdi mdi-email" /> {t('api.cta.contact')}
+              </a>
             </div>
-            <p>
-              {t('api.pricing.note')} <a href="mailto:hello@beresol.eu">{t('api.cta.contact')}</a>.
-            </p>
           </section>
 
           {/* Errors */}

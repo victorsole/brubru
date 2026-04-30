@@ -1,6 +1,7 @@
 # EU Financial Supervision: ESAs, MiCA, and DORA
 
 ## QUICK FACTS
+- **EPRS Briefing (29 April 2026)**: "MISP: A review of selected technical issues" — background ahead of the **ECON public hearing on 5 May 2026** on the Market Integration and Settlement Package (incl. Settlement Finality Regulation). Ref: ECTI_BRI(2026)784036
 - Topic: EU financial supervision -- ESAs, MiCA crypto-asset oversight, DORA digital resilience
 - Responsible Commissioner: Maria Luís Albuquerque (Financial Services, Portugal)
 - EP lead committee: ECON (Economic and Monetary Affairs)

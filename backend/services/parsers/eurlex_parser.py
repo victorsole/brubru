@@ -290,8 +290,25 @@ class EurlexParser:
         return result
 
     def _detect_com_document(self) -> bool:
-        """Detect if this is a COM document (proposal) vs OJ (adopted legislation)."""
+        """Detect if this is a COM document (proposal) vs OJ (adopted legislation).
+
+        Cellar API XHTML for OJ-published regulations uses `eli-subdivision`
+        DIVs with `id^="rct_"` for recitals and `oj-*` classes — those are
+        unambiguous OJ markers. If we see them, this is OJ-adopted, even if
+        the body cites a COM proposal in the recitals (which most regulations
+        do — they reference the original COM proposal in the preamble).
+        """
         if not self.soup:
+            return False
+
+        # OJ-adopted markers — strong signal, takes precedence
+        oj_markers = [
+            self.soup.select_one('div.eli-subdivision[id^="rct_"]'),  # recitals
+            self.soup.select_one('div.oj-final'),
+            self.soup.select_one('p.oj-doc-ti'),
+            self.soup.select_one('p.oj-ti-art'),
+        ]
+        if any(oj_markers):
             return False
 
         # COM documents have specific CSS classes
@@ -302,13 +319,12 @@ class EurlexParser:
             self.soup.select_one('.Rfrenceinstitutionnelle'),  # COM reference
             self.soup.select_one('.Exposdesmotifstitre'),  # Explanatory memorandum
         ]
+        if any(com_indicators):
+            return True
 
-        # Check for COM reference pattern (e.g., "COM(2021) 206 final")
+        # Final fallback: COM reference pattern in absence of OJ markers
         text = self.soup.get_text()
-        has_com_ref = bool(re.search(r'COM\s*\(\d{4}\)\s*\d+', text))
-
-        # If we find COM-specific elements or COM reference, it's a proposal
-        return any(com_indicators) or has_com_ref
+        return bool(re.search(r'COM\s*\(\d{4}\)\s*\d+', text))
 
     def _get_text(self, element) -> str:
         """Get clean text content from element."""

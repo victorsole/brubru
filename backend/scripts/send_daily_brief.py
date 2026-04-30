@@ -167,8 +167,8 @@ def send_test(db, brubru_news=None, feature_map=None):
     )
 
     from datetime import date
-    formatted = date.fromisoformat(brief_date).strftime("%d %B %Y")
-    subject = f"[TEST] Brubru Daily EU Brief -- {formatted}"
+    formatted = date.fromisoformat(brief_date).strftime("%-d %B %Y")
+    subject = f"[TEST] Brubru Daily EU Brief - {formatted}"
 
     service = EmailService()
     success = service.send(to=test_email, subject=subject, html_body=html)

@@ -45,6 +45,8 @@ import type { CommissionDocType } from '../../hooks/use_commission_documents';
 import { getEultUrl, getRegDelUrl } from '../../utils/eu_links';
 import { CommissionDocumentCard } from './commission_document_card';
 import { LegislativeFileDetail } from './legislative_file_detail';
+import { HotThisWeekWidget } from './hot_this_week_widget';
+import { useAuth } from '../../hooks/use_auth';
 import './my_tracked_files_tab.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -58,6 +60,7 @@ interface SearchableFile {
 
 export const MyTrackedFilesTab = () => {
   const navigate = useNavigate();
+  const isAuthenticated = useAuth((s) => s.isAuthenticated);
   const {
     trackedFiles,
     recentChanges,
@@ -455,6 +458,24 @@ export const MyTrackedFilesTab = () => {
       {/* Legislative Files Tab Content */}
       {activeTab === 'legislative' && (
         <>
+          {/* Hot This Week Widget — surfaces files with recent activity */}
+          <HotThisWeekWidget
+            isAuthenticated={isAuthenticated}
+            onTrack={async (file) => {
+              try {
+                await trackFile(file.carriage_id, true);
+                await fetchTrackedFiles();
+              } catch (error: unknown) {
+                const ax = error as { response?: { status?: number; data?: { detail?: string } } };
+                if (ax.response?.status === 401) {
+                  alert('Please log in to track files.');
+                } else {
+                  alert(ax.response?.data?.detail || 'Failed to track file.');
+                }
+              }
+            }}
+          />
+
           {/* Recent Changes Section */}
           {recentChanges.length > 0 && (
             <div className="my-tracked-files-tab__changes">

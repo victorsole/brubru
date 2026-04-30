@@ -15,6 +15,7 @@ import {
 import { useBubble } from '../../hooks/use_bubble';
 import { DEEP_DIVES, getDeepDiveUrl, LANG_LABELS } from '../../utils/deep_dive_map';
 import { useCoverageStats } from '../../hooks/use_legal_intelligence';
+import { TopicSpikesPanel } from './topic_spikes_panel';
 import './analytics_tab.css';
 
 export const AnalyticsTab = () => {
@@ -110,6 +111,9 @@ export const AnalyticsTab = () => {
   return (
     <div className="analytics-tab">
       <h2>Analytics & Insights</h2>
+
+      {/* ---- 0. TOPIC SPIKES (live, last 7 days) ---- */}
+      <TopicSpikesPanel />
 
       {/* ---- 1. DEEP DIVE LIBRARY (hero section) ---- */}
       <div className="analytics-tab__section analytics-tab__section--hero">

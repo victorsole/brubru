@@ -1,6 +1,9 @@
 # EU Fisheries Policy and Control
 
 ## QUICK FACTS
+- **EPRS At a Glance (29 April 2026)**: "Research for PECH Committee — Navigating the new MFF approach for 2028-34 — Mapping threats & opportunities for fisheries and aquaculture" — clarifies how the new proposed MFF architecture may affect EU fisheries and aquaculture, comparing the proposal with the current EMFAF framework. Ref: CASP_ATA(2026)776021
+- **EPRS Study (29 April 2026)**: "Research for PECH Committee — Navigating the new MFF approach for 2028-2034 — Mapping threats and opportunities for the fisheries and aquaculture sector" — full companion study, aligns with the European Ocean Pact. Ref: CASP_STU(2026)776021 (companion)
+- **METSAF (29 April 2026, IP/26/894)**: Middle East crisis Temporary State aid Framework eligibility includes **fisheries and aquaculture** for fuel-cost compensation up to 70 % of extra cost (or EUR 50,000 flat-rate). In force until 31 December 2026. See `metsaf_state_aid_middle_east.md`.
 - Common Fisheries Policy (CFP): Regulation (EU) No 1380/2013 (CELEX: 32013R1380), in force since 1 January 2014
 - Fisheries Control Regulation (recast): Regulation (EU) 2023/2842 amending Regulation (EC) No 1224/2009 (CELEX: 32023R2842)
 - Responsible DG: DG MARE (Maritime Affairs and Fisheries)

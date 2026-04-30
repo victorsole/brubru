@@ -7083,6 +7083,123 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # NL
     'celex nummer formaat': ['celex_number_format'],
     'wat is een celex': ['celex_number_format'],
+
+    # ============================================================
+    # 30 April 2026 batch — METSAF + Meta DSA + Age Verification rollout + Better Regulation COM(2026)380 + WSR/DIWASS
+    # ============================================================
+
+    # METSAF (multilingual)
+    'metsaf': ['metsaf_state_aid_middle_east'],
+    'middle east crisis temporary state aid framework': ['metsaf_state_aid_middle_east'],
+    'middle east state aid framework': ['metsaf_state_aid_middle_east'],
+    'middle east temporary aid framework': ['metsaf_state_aid_middle_east'],
+    'state aid middle east crisis': ['metsaf_state_aid_middle_east', 'accelerateeu_fossil_energy_crisis'],
+    'temporary state aid framework iran war': ['metsaf_state_aid_middle_east'],
+    'state aid fuel cost compensation': ['metsaf_state_aid_middle_east'],
+    'state aid fertiliser cost compensation': ['metsaf_state_aid_middle_east'],
+    'cisaf temporary adjustment': ['metsaf_state_aid_middle_east'],
+    'eu state aid agriculture fisheries transport 2026': ['metsaf_state_aid_middle_east'],
+    'ribera state aid framework': ['metsaf_state_aid_middle_east'],
+    # ES
+    'marco temporal ayudas estado oriente medio': ['metsaf_state_aid_middle_east'],
+    'ayudas estado crisis oriente medio': ['metsaf_state_aid_middle_east'],
+    'compensacion combustible fertilizantes ue': ['metsaf_state_aid_middle_east'],
+    # FR
+    'cadre temporaire aides etat moyen orient': ['metsaf_state_aid_middle_east'],
+    'aides etat crise moyen orient': ['metsaf_state_aid_middle_east'],
+    'metsaf cadre aides etat': ['metsaf_state_aid_middle_east'],
+    # IT
+    'quadro temporaneo aiuti stato medio oriente': ['metsaf_state_aid_middle_east'],
+    'aiuti stato crisi medio oriente': ['metsaf_state_aid_middle_east'],
+    # CA
+    'marc temporal ajuts estat orient mitja': ['metsaf_state_aid_middle_east'],
+    # NL
+    'tijdelijk staatssteunkader midden oosten': ['metsaf_state_aid_middle_east'],
+
+    # Meta DSA preliminary finding (multilingual)
+    'meta dsa breach minors': ['dsa_enforcement', 'eu_age_verification_recommendation'],
+    'meta instagram facebook minors under 13': ['dsa_enforcement', 'eu_age_verification_recommendation'],
+    'commission preliminary finding meta': ['dsa_enforcement'],
+    'ip 26 920': ['dsa_enforcement'],
+    'meta digital services act under 13': ['dsa_enforcement', 'eu_age_verification_recommendation'],
+    'instagram facebook age verification dsa': ['dsa_enforcement', 'eu_age_verification_recommendation'],
+    # ES
+    'meta menores 13 dsa': ['dsa_enforcement'],
+    'instagram facebook menores europa': ['dsa_enforcement', 'eu_age_verification_recommendation'],
+    # FR
+    'meta mineurs 13 ans dsa': ['dsa_enforcement'],
+    'instagram facebook mineurs union europeenne': ['dsa_enforcement', 'eu_age_verification_recommendation'],
+    # IT
+    'meta minori 13 anni dsa': ['dsa_enforcement'],
+    # CA
+    'meta menors 13 dsa': ['dsa_enforcement'],
+    # NL
+    'meta minderjarigen dsa': ['dsa_enforcement'],
+
+    # Age Verification rollout (29 April 2026 push)
+    'eu age verification rollout': ['eu_age_verification_recommendation'],
+    'eu age verification scheme': ['eu_age_verification_recommendation'],
+    'commission urges age verification rollout': ['eu_age_verification_recommendation'],
+    'eu age verification coordination mechanism': ['eu_age_verification_recommendation'],
+    'eu age verification provider list': ['eu_age_verification_recommendation'],
+    'eudi wallet age verification integration': ['eu_age_verification_recommendation'],
+
+    # Better Regulation COM(2026)380 (multilingual)
+    'com 2026 380': ['better_regulation_enforcement_communication'],
+    'simpler clearer better enforced eu rulebook': ['better_regulation_enforcement_communication'],
+    'regulatory deep cleaning': ['better_regulation_enforcement_communication'],
+    'regulatory deep cleaning action plan': ['better_regulation_enforcement_communication'],
+    'simplicity by design': ['better_regulation_enforcement_communication'],
+    'european product act': ['better_regulation_enforcement_communication'],
+    'public procurement act': ['better_regulation_enforcement_communication'],
+    'banking competitiveness report': ['better_regulation_enforcement_communication'],
+    'state aid banking communication': ['better_regulation_enforcement_communication'],
+    # ES
+    'cleaning normativo profundo': ['better_regulation_enforcement_communication'],
+    'simplicidad por diseno ue': ['better_regulation_enforcement_communication'],
+    # FR
+    'nettoyage reglementaire approfondi': ['better_regulation_enforcement_communication'],
+    'simplicite par conception ue': ['better_regulation_enforcement_communication'],
+    # IT
+    'pulizia regolatoria profonda': ['better_regulation_enforcement_communication'],
+    'semplicita per progettazione ue': ['better_regulation_enforcement_communication'],
+    # CA
+    'neteja regulatoria profunda': ['better_regulation_enforcement_communication'],
+    # NL
+    'diep regulerend opschoning': ['better_regulation_enforcement_communication'],
+
+    # WSR / DIWASS (multilingual)
+    'diwass': ['eu_waste_shipment_regulation_diwass'],
+    'digital waste shipment system': ['eu_waste_shipment_regulation_diwass'],
+    'eu waste shipment regulation 2024': ['eu_waste_shipment_regulation_diwass'],
+    'wsr 2024 1157': ['eu_waste_shipment_regulation_diwass'],
+    'regulation 2024 1157 waste shipment': ['eu_waste_shipment_regulation_diwass'],
+    'waste shipment regulation 21 may 2026': ['eu_waste_shipment_regulation_diwass'],
+    'annex vii waste shipment': ['eu_waste_shipment_regulation_diwass'],
+    'plastic waste exports prohibition': ['eu_waste_shipment_regulation_diwass'],
+    'roswall waste shipment': ['eu_waste_shipment_regulation_diwass'],
+    'switzerland municipal waste exports': ['eu_waste_shipment_regulation_diwass'],
+    # ES
+    'reglamento traslados residuos ue': ['eu_waste_shipment_regulation_diwass'],
+    'sistema digital traslados residuos': ['eu_waste_shipment_regulation_diwass'],
+    # FR
+    'reglement transferts dechets ue': ['eu_waste_shipment_regulation_diwass'],
+    'systeme numerique transferts dechets': ['eu_waste_shipment_regulation_diwass'],
+    # IT
+    'regolamento spedizioni rifiuti ue': ['eu_waste_shipment_regulation_diwass'],
+    # CA
+    'reglament trasllats residus ue': ['eu_waste_shipment_regulation_diwass'],
+    # NL
+    'verordening overbrenging afvalstoffen': ['eu_waste_shipment_regulation_diwass'],
+
+    # PCI-PMI Transparency Platform
+    'pci pmi transparency platform': ['eu_energy_policy', 'accelerateeu_fossil_energy_crisis'],
+    'projects of common interest second list': ['eu_energy_policy'],
+
+    # MFF post-vote
+    'ep mff position adopted': ['mff_2028_2034'],
+    'ep mff plenary vote 29 april 2026': ['mff_2028_2034'],
+    'mff trilogue 2028 2034': ['mff_2028_2034'],
 }
 
 

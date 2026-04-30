@@ -612,6 +612,88 @@ async def get_tracked_carriages(
         raise HTTPException(status_code=500, detail="Failed to retrieve tracked files")
 
 
+@router.get(
+    "/hot-this-week",
+    summary="Hot files this week",
+    description="Top legislative files with recent activity (last 14 days). Used by My EU Bubble dashboard widget."
+)
+async def get_hot_this_week_carriages(
+    db: Session = Depends(get_db),
+    limit: int = 10
+):
+    """Return up to N carriages with recent activity, ranked by recency.
+
+    Public endpoint (no auth required) so the suggestion widget renders for
+    anonymous visitors. Filters:
+      - recent activity: is_recently_updated TRUE, or last_updated within 14d,
+        or days_in_current_status < 14
+      - title quality: ignore items whose title is just a CELEX/document
+        identifier (e.g. "CELEX:32016L2370R(01)") or empty. Users can't tell
+        what those are without clicking.
+      - over-fetch then re-rank, so quality filtering doesn't starve the list.
+    """
+    try:
+        from datetime import datetime, timedelta, timezone
+        import re
+        from sqlalchemy import or_
+
+        cutoff = datetime.now(timezone.utc) - timedelta(days=14)
+
+        # Over-fetch — we filter out low-quality titles client-side
+        carriages = (
+            db.query(LegislativeCarriage)
+              .filter(
+                  or_(
+                      LegislativeCarriage.is_recently_updated.is_(True),
+                      LegislativeCarriage.last_updated >= cutoff,
+                      LegislativeCarriage.days_in_current_status < 14,
+                  )
+              )
+              .order_by(LegislativeCarriage.last_updated.desc().nullslast())
+              .limit(limit * 5)
+              .all()
+        )
+
+        # CELEX-only titles look like: CELEX:32016L2370R(01), 32016L2370,
+        # CELEX:32026D02446 — uninformative, skip.
+        CELEX_PATTERN = re.compile(r"^(CELEX[:\s]*)?[0-9]{5}[A-Z][0-9]{4}([A-Z]\([0-9]+\))?$", re.IGNORECASE)
+
+        def is_meaningful(title: str | None) -> bool:
+            if not title:
+                return False
+            t = title.strip()
+            if len(t) < 25:
+                return False
+            if CELEX_PATTERN.match(t):
+                return False
+            return True
+
+        items = []
+        for c in carriages:
+            if not is_meaningful(c.title):
+                continue
+            items.append({
+                "id": str(c.id),
+                "carriage_id": str(c.id),
+                "file_id": c.file_id,
+                "title": c.title.strip(),
+                "current_status": c.current_status.value if c.current_status else "unknown",
+                "oeil_procedure_ref": c.oeil_procedure_ref,
+                "celex_numbers": c.celex_numbers or [],
+                "lead_committee": (c.committees or [None])[0],
+                "last_updated": c.last_updated.isoformat() if c.last_updated else None,
+                "days_in_current_status": c.days_in_current_status,
+                "is_recently_updated": bool(c.is_recently_updated),
+            })
+            if len(items) >= limit:
+                break
+
+        return {"items": items, "total": len(items)}
+    except Exception as e:
+        logger.error(f"Failed to get hot-this-week carriages: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve hot files")
+
+
 # ===== EUR-Lex Integration Endpoints =====
 
 @router.get(

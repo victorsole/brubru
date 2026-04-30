@@ -4,7 +4,7 @@
 - Topic: Communication from the Commission on Better Regulation and Enforcement -- next-generation simplification + enforcement strategy, landing 28 April 2026 in Strasbourg (College) with a simultaneous EP plenary statement
 - Adopted by: College of Commissioners, Strasbourg meeting Tuesday 28 April 2026
 - Lead: President von der Leyen + EVP Valdis Dombrovskis (Economy and Productivity, Implementation and Simplification)
-- Reference: Communication COM(2026) series -- final number confirmed on adoption day; Brubru to capture exact reference from presscorner and update this guide same day
+- **Reference (CONFIRMED 30 April 2026): COM(2026) 380 final** — "A Simpler, Clearer and Better Enforced EU Rulebook" + Annex 1 ("Regulatory Deep Cleaning Action Plan") + Annex 2. Document register: ec.europa.eu/transparency/documents-register/detail?ref=COM(2026)380. Direct file API: ec.europa.eu/transparency/documents-register/api/files/COM(2026)380?ersIds=090166e52cce2631,090166e52cce262e,090166e52cce1ebb
 - EP follow-up: Plenary debate Item 109 (Commission statement), Tuesday 28 April 2026, 15:00-22:00 debate slot, Strasbourg
 - Parent frameworks: Competitiveness Compass COM(2025) 30, Draghi report (September 2024), Letta report (April 2024), Single Market 30 Years review
 - Predecessor instruments: "Better Regulation Agenda" (2015, COM(2015) 215), Regulatory Fitness and Performance (REFIT) programme, "One In, One Out" principle (2021), Stoiber High-Level Group reports
@@ -15,6 +15,22 @@
 - STOA Study (31 March 2026): "Digital tools for regulatory simplification using AI" -- comprehensive analysis of AI-leveraged eTools supporting regulatory simplification and consistency across the EU legislative cycle, mapping digital solutions across all stages of the policy cycle at EU, Member State, and third-country levels. Directly feeds into the 28 April Better Regulation Communication. Ref: STOA 774725.
 - **LATEST (28 April 2026)**: **Communication adopted by College in Strasbourg today.** Plenary statement by Commissioner Dombrovskis follows in 15:00-22:00 debate block (Item 109 OJQ-10-2026-04-28_EN). Final reference number to be captured from EC presscorner once posted -- expected COM(2026) 200-series. Paired with Item 119 DMA Enforcement (Cavazzini + Schwab) and Item 88 EU law application monitoring 2023-2025 (Žalimas) as the "regulatory quality + enforcement" mini-cluster.
 - **LATEST (29 April 2026)**: Companion materials confirmed -- Q&A QANDA/26/902, Factsheet FS/26/903, two Dombrovskis speeches (statement at EP, plenary remarks). Q&A frames the Communication as **"simplicity by design + enforcement by design"**, with Single Market identified as the priority enforcement area while reaffirming commitment to the entire EU rulebook (fundamental freedoms, environmental protection, consumer rights). Sources: ec.europa.eu/commission/presscorner/detail/en/qanda_26_902 + fs_26_903 + speech_26_915 + speech_26_916. Contexte EU coverage flags NGO criticism (concerns the simplification could weaken scrutiny) and lawmaker pressure for deeper cuts.
+- **LATEST (30 April 2026) — Annex I "Regulatory Deep Cleaning Action Plan" content**: 12 priority policy areas to be examined as a matter of priority in 2026 and 2027, with possible legislative proposals, support measures, repeals, withdrawals or other actions:
+  1. **Free movement of goods and services** — flagship: **European Product Act** (forthcoming) to align EU product rules + reduce administrative burden + introduce digital product information; followed by sector-specific Omnibus aligning sectoral rules to the new common definitions; **Public Procurement Act** to simplify procedures + repeal redundant sectoral procurement provisions
+  2. **Financial services and banking** — flagship: **Banking Competitiveness Report** (forthcoming) reducing duplications between micro/macro-prudential and crisis-management frameworks; **State Aid Banking Communication** consolidating instruments into a single rulebook; venture and growth capital fund rules to be adapted
+  3. **Customs**
+  4. **Taxation**
+  5. **Health and food safety**
+  6. **Agriculture**
+  7. **Transport**
+  8. **Energy**
+  9. **Climate**
+  10. **Environment**
+  11. **Digital**
+  12. **Housing and permitting**
+- **30 April 2026** — Stakeholder engagement: Commission ran a Call for Evidence, **288 submissions from 27 countries** (100 business associations, 65 NGOs, 29 EU citizens, 22 companies, 22 public authorities, 16 'other', 12 trade unions, 11 academic/research, 5 environmental organisations, 4 consumer organisations, 2 non-EU citizens). Stakeholders consistently call for stronger transparency, accountability, and legal robustness in better regulation tools.
+- **30 April 2026** — "Simplicity by design" defined as a 5-point principle: those affected by a law should easily understand (a) what the goal is, (b) who must do what and when, (c) how new rights/obligations interact with existing ones, (d) how compliance is achieved, (e) what happens if obligations are not met. Commission commits to apply it to all forthcoming legal proposals; calls on EP, Council and Member States to adhere to the same discipline.
+- **30 April 2026** — Empowerments discipline: in upcoming legislative proposals, Commission will only propose **well-designed empowerments for delegated and implementing acts which are strictly necessary**, calling on EP and Council to apply the same discipline.
 
 ## The "Better Regulation and Enforcement" Communication
 

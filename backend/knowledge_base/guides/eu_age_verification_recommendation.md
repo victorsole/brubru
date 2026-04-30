@@ -40,6 +40,19 @@ The Recommendation positions the **EU Age Verification app + EUDI Wallet** as th
 
 Member States retain the competence to set the **age threshold** for specific types of content (typically 18 for pornography/gambling; 13/14/15/16 for social media — varies). The Recommendation harmonises the **technology** for age proving, not the **age** to be proved.
 
+## LATEST (29 April 2026) — Commission urges Member State rollout + companion DSA action
+
+On the day after adoption, the Commission published a follow-up urging Member States to **make the EU Age Verification app available to citizens by the end of 2026** (Source: digital-strategy.ec.europa.eu/en/news/commission-urges-member-states-rollout-eu-age-verification-app):
+
+- Member States can deploy as a **standalone app** or **integrate into European Digital Identity Wallets**
+- **Seven Member States already integrating**: France, Denmark, Greece, Italy, Spain, Cyprus, Ireland
+- Commission to set up an **EU age verification scheme** — criteria for proof-of-age service providers + a published list of providers meeting privacy and security standards
+- Commission to set up an **EU-wide coordination mechanism** for accreditation of national solutions, preventing fragmentation across 27 national schemes
+- App is **open-source**: developers can inspect the code; non-EU partner countries can use it
+- EVP Virkkunen statement: "Effective and privacy-preserving age verification is the next piece of the puzzle that we are getting closer to completing, as we work towards an online space where our children are safe and empowered."
+
+**Same-day DSA enforcement action (29 April 2026, IP/26/920)**: Commission preliminarily finds **Meta (Instagram + Facebook) in breach of DSA** for failing to prevent under-13s from accessing the platforms — citing the 2025 DSA Guidelines on protection of minors and the EU Age Verification app blueprint as the reference benchmark. Together, the Recommendation, the rollout urging, and the Meta preliminary finding form a coordinated 28-29 April Strasbourg trio designed to operationalise child-safety online enforcement. See `dsa_enforcement.md` for the Meta finding detail.
+
 ## Cross-link with other Brubru guides
 
 - `digital_markets_act.md` — gatekeepers + interoperability
