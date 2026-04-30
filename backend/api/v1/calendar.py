@@ -60,6 +60,8 @@ _GENERIC_SOURCE_URLS = {
     "https://www.europarl.europa.eu/committees/en/documents/latest-documents",
     "https://www.europarl.europa.eu/committees/en/meetings/meeting-documents",
     "https://www.europarl.europa.eu/news/en/agenda",
+    # Plenary day-less agenda root — override with ?day=YYYYMMDD when we have a date.
+    "https://www.europarl.europa.eu/plenary/en/agendas.html",
     "https://www.consilium.europa.eu/en/meetings/",
     "https://commission.europa.eu/news/college-meetings_en",
 }
