@@ -54,12 +54,10 @@ def recital_article_map(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> RecitalArticleMapResponse:
-    from services.parsers.recital_article_store import get_or_compute_map
-
-    # Defensive: catch ALL exceptions, including ones in service layer that
-    # bubble up despite the inner try (e.g. import errors, missing DB columns
-    # on production). Convert to clean 503 instead of an unhandled 500.
+    # Defensive: catch ALL exceptions, including the lazy import itself, so
+    # any failure surfaces as a clean 503 instead of an unhandled 500.
     try:
+        from services.parsers.recital_article_store import get_or_compute_map
         mapping = get_or_compute_map(db, celex, force_recompute=force_recompute)
     except HTTPException:
         raise
@@ -72,6 +70,7 @@ def recital_article_map(
                 "reason_code": "computation_unavailable",
                 "source": "brubru-recital-linker",
                 "exception": type(exc).__name__,
+                "exception_message": str(exc)[:200],
             },
         )
     if mapping is None:
