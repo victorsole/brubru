@@ -25,6 +25,7 @@ class PingResponse(BaseModel):
 class WhoAmIResponse(BaseModel):
     user_id: str
     tier: str
+    api_tier: str = "free"               # Per-key rate-limit tier: free | pro | enterprise
     rate_limit_limit: int
     rate_limit_remaining: int
 
@@ -46,6 +47,7 @@ async def whoami(
     return WhoAmIResponse(
         user_id=str(user.id),
         tier=user.subscription_tier or "",
+        api_tier=getattr(request.state, "rate_limit_tier", "free"),
         rate_limit_limit=getattr(request.state, "rate_limit_limit", 60),
         rate_limit_remaining=getattr(request.state, "rate_limit_remaining", 60),
     )

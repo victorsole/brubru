@@ -44,6 +44,9 @@ class ApiKey(Base):
     last_used_ip = Column(INET, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     revoked_at = Column(DateTime(timezone=True), nullable=True)
+    # Per-key rate-limit tier. Enforced in services/rate_limiter/global_rate_limiter.py.
+    # free=60/min, pro=300/min, enterprise=6000/min. Default free for any new key.
+    api_tier = Column(String(20), nullable=False, default="free")
 
     user = relationship("User", backref="api_keys")
 

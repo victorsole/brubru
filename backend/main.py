@@ -225,15 +225,16 @@ async def _v1_rate_limit_headers(request, call_next):
     if request.url.path.startswith("/api/v1/"):
         limit = getattr(request.state, "rate_limit_limit", None)
         remaining = getattr(request.state, "rate_limit_remaining", None)
+        tier = getattr(request.state, "rate_limit_tier", None)
         if limit is not None:
             response.headers["X-RateLimit-Limit"] = str(limit)
         if remaining is not None:
             response.headers["X-RateLimit-Remaining"] = str(remaining)
-        # Attribution moves to response headers (W5 P2 — Thursday brief 1.20).
-        # Envelope `meta` block stays for 4 weeks during partner migration.
+        if tier is not None:
+            response.headers["X-RateLimit-Tier"] = tier
+        # Attribution headers replace the now-removed envelope `meta` block.
         response.headers["X-Powered-By"] = "Brubru"
         response.headers["X-Source"] = "brubru.beresol.eu"
-        response.headers["X-Brubru-Envelope-Meta-Deprecated"] = "2026-05-23"
     return response
 
 

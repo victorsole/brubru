@@ -16,28 +16,33 @@ async def api_user_with_rate_limit(
     request: Request,
     user: User = Depends(get_api_user),
 ) -> User:
-    """Authenticated user + per-key rate limit enforcement."""
+    """Authenticated user + per-key, tier-aware rate-limit enforcement."""
     api_key = getattr(request.state, "api_key", None)
     if api_key is None:
         # Defensive: get_api_user should always attach it.
         raise HTTPException(status_code=500, detail="api_key missing from request state")
 
-    limiter = get_rate_limiter()
-    allowed, retry_after = await limiter.check_api_key_limit(str(api_key.id))
-    remaining = limiter.get_remaining_api_key_calls(str(api_key.id))
+    tier = getattr(api_key, "api_tier", None) or "free"
 
-    # Expose rate-limit info on the response via request.state; endpoints/middleware can surface headers.
+    limiter = get_rate_limiter()
+    allowed, retry_after = await limiter.check_api_key_limit(str(api_key.id), tier=tier)
+    remaining = limiter.get_remaining_api_key_calls(str(api_key.id), tier=tier)
+    cfg = limiter.get_limit_for_tier(tier)
+
+    # Expose rate-limit info on the response via request.state; middleware emits headers.
     request.state.rate_limit_remaining = remaining
-    request.state.rate_limit_limit = 60
+    request.state.rate_limit_limit = cfg.calls
+    request.state.rate_limit_tier = tier
 
     if not allowed:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Rate limit exceeded: 60 requests per minute",
+            detail=f"Rate limit exceeded: {cfg.calls} requests per minute (tier={tier})",
             headers={
                 "Retry-After": str(retry_after),
-                "X-RateLimit-Limit": "60",
+                "X-RateLimit-Limit": str(cfg.calls),
                 "X-RateLimit-Remaining": "0",
+                "X-RateLimit-Tier": tier,
             },
         )
     return user

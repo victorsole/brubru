@@ -50,6 +50,18 @@ class GlobalRateLimiter:
     # window. Shared across all endpoints a single key hits.
     API_KEY_LIMIT = RateLimitConfig(calls=60, period=60)
 
+    # Tier-based ceilings. The tier is read from ApiKey.api_tier (column added in
+    # migration 045). Unknown / missing tier falls back to "free" (60/min).
+    TIER_LIMITS = {
+        "free": RateLimitConfig(calls=60, period=60),
+        "pro": RateLimitConfig(calls=300, period=60),
+        "enterprise": RateLimitConfig(calls=6000, period=60),
+    }
+
+    @classmethod
+    def get_limit_for_tier(cls, tier: str | None) -> "RateLimitConfig":
+        return cls.TIER_LIMITS.get((tier or "free").lower(), cls.TIER_LIMITS["free"])
+
     def __init__(self):
         """Initialize global rate limiter"""
         # In-memory tracking: {service: {timestamp_list}}
@@ -61,9 +73,12 @@ class GlobalRateLimiter:
 
         logger.info("Initialized Global Rate Limiter")
 
-    async def check_api_key_limit(self, api_key_id: str) -> tuple[bool, int]:
+    async def check_api_key_limit(self, api_key_id: str, tier: str | None = None) -> tuple[bool, int]:
         """
         Sliding-window soft rate limit for a single API key.
+
+        The ceiling is the tier-specific limit (see TIER_LIMITS). Unknown / missing
+        tier falls back to "free" (60/min).
 
         Returns:
             (allowed, retry_after_seconds). retry_after is 0 when allowed.
@@ -72,7 +87,7 @@ class GlobalRateLimiter:
             self._api_key_locks[api_key_id] = asyncio.Lock()
 
         async with self._api_key_locks[api_key_id]:
-            cfg = self.API_KEY_LIMIT
+            cfg = self.get_limit_for_tier(tier)
             now = datetime.now()
             cutoff = now - timedelta(seconds=cfg.period)
             stamps = [t for t in self._api_key_timestamps.get(api_key_id, []) if t > cutoff]
@@ -84,9 +99,9 @@ class GlobalRateLimiter:
             self._api_key_timestamps[api_key_id] = stamps
             return True, 0
 
-    def get_remaining_api_key_calls(self, api_key_id: str) -> int:
-        """Calls remaining in the current 60s window for an API key."""
-        cfg = self.API_KEY_LIMIT
+    def get_remaining_api_key_calls(self, api_key_id: str, tier: str | None = None) -> int:
+        """Calls remaining in the current 60s window for an API key (tier-aware)."""
+        cfg = self.get_limit_for_tier(tier)
         now = datetime.now()
         cutoff = now - timedelta(seconds=cfg.period)
         stamps = [t for t in self._api_key_timestamps.get(api_key_id, []) if t > cutoff]
