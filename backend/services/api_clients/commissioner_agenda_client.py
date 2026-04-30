@@ -90,7 +90,19 @@ def _strip_accents(s: str) -> str:
 def _slug_from_url(url: str) -> str:
     # https://commission.europa.eu/about/.../college-commissioners/raffaele-fitto_en
     m = re.search(r"/college-commissioners/([a-z0-9\-]+)_[a-z]+/?$", url or "")
-    return m.group(1) if m else ""
+    if m:
+        return m.group(1)
+    # Special case: the President page lives at /about/organisation/president_en.
+    if url and "/about/organisation/president_en" in url:
+        return "president"
+    return ""
+
+
+def _slug_from_name(name: str) -> str:
+    """Fallback slug derivation from the human name (accent-insensitive)."""
+    s = _strip_accents((name or "").lower()).strip()
+    s = re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+    return s
 
 
 def load_commissioner_profiles() -> List[CommissionerProfile]:
@@ -107,9 +119,10 @@ def load_commissioner_profiles() -> List[CommissionerProfile]:
         url = (record.get("url") or "").strip()
         if not name or not url:
             return
+        slug = _slug_from_url(url) or _slug_from_name(name)
         out.append(CommissionerProfile(
             name=name,
-            slug=_slug_from_url(url),
+            slug=slug,
             country=record.get("country") or "",
             portfolio=record.get("portfolio") or record.get("position") or "",
             bio_url=url,

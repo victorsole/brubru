@@ -69,6 +69,38 @@ class AmendmentItem(BaseModel):
 
 
 @amendments_router.get(
+    "/{amendment_id}",
+    response_model=AmendmentItem,
+    summary="Single EP amendment by id (UUID)",
+)
+async def get_amendment_detail(
+    amendment_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> AmendmentItem:
+    r = db.query(MEPAmendment).filter(MEPAmendment.id == amendment_id).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"Amendment {amendment_id} not found",
+            "reason_code": "not_found",
+            "resource": "amendment",
+            "id": amendment_id,
+        })
+    return AmendmentItem(
+        id=str(r.id), procedure_reference=r.procedure_reference,
+        committee_code=r.committee_code, pe_reference=r.pe_reference,
+        amendment_number=r.amendment_number,
+        author_names=list(r.author_names or []),
+        political_group=r.political_group, on_behalf_of_group=bool(r.on_behalf_of_group),
+        element_type=r.element_type, element_number=r.element_number,
+        element_reference=r.element_reference, amendment_type=r.amendment_type,
+        original_text=r.original_text, proposed_text=r.proposed_text,
+        justification=r.justification, source_url=r.source_url,
+        document_date=r.document_date, scraped_at=r.scraped_at,
+    )
+
+
+@amendments_router.get(
     "",
     response_model=PaginatedResponse[AmendmentItem],
     summary="EP committee amendments (scraped from doceo)",
@@ -404,7 +436,8 @@ async def list_ep_documents(
     if updated_from:
         aq = aq.filter(AmendmentDocument.scraped_at >= updated_from)
 
-    a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).limit(limit * 2).all()
+    a_total = aq.count()
+    a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).limit(limit * 4).all()
     for r in a_rows:
         items.append(EPDocumentItem(
             id=str(r.id),
@@ -431,7 +464,8 @@ async def list_ep_documents(
         cq = cq.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
     if updated_from:
         cq = cq.filter(CommitteeWorkItem.last_updated >= updated_from)
-    c_rows = cq.order_by(CommitteeWorkItem.last_updated.desc().nullslast()).limit(limit * 2).all()
+    c_total = cq.count()
+    c_rows = cq.order_by(CommitteeWorkItem.last_updated.desc().nullslast()).limit(limit * 4).all()
     for r in c_rows:
         items.append(EPDocumentItem(
             id=str(r.id),
@@ -446,9 +480,10 @@ async def list_ep_documents(
             last_updated=r.last_updated,
         ))
 
-    # Sort union by document_date desc and apply page slice
+    # Sort union by document_date desc and apply page slice.
+    # `total` reflects the FULL DB count across both source tables (honest).
     items.sort(key=lambda x: x.document_date or date.min, reverse=True)
-    total = len(items)
+    total = a_total + c_total
     page_data = items[(page - 1) * limit : page * limit]
     return build_envelope(
         page_data, total=total, page=page, limit=limit,

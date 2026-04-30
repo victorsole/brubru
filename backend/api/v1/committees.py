@@ -21,6 +21,32 @@ from ._envelope import PaginatedResponse, build_envelope
 router = APIRouter(prefix="/committees", tags=["v1-committees"])
 
 
+def _committee_streaming_url(code: str) -> str:
+    return f"https://multimedia.europarl.europa.eu/en/webstreaming?committee={code.upper()}"
+
+
+def _committee_homepage_url(code: str) -> str:
+    return f"https://www.europarl.europa.eu/committees/en/{code.lower()}/home/highlights"
+
+
+def _committee_documents_url(code: str) -> str:
+    return f"https://www.europarl.europa.eu/committees/en/{code.lower()}/documents/latest-documents"
+
+
+class CommitteeWorkEnvelope(PaginatedResponse["CommitteeWorkOut"]):
+    committee_code: str
+    streaming_url: str
+    homepage: str
+    documents_url: str
+
+
+class CommitteeMinutesEnvelope(PaginatedResponse["CommitteeMinutesOut"]):
+    committee_code: str
+    streaming_url: str
+    homepage: str
+    documents_url: str
+
+
 class CommitteeWorkOut(BaseModel):
     id: str
     procedure_ref: Optional[str] = None
@@ -55,7 +81,7 @@ class CommitteeMinutesOut(BaseModel):
 
 @router.get(
     "/{code}/work-items",
-    response_model=PaginatedResponse[CommitteeWorkOut],
+    response_model=CommitteeWorkEnvelope,
     summary="Work items tracked by an EP committee",
 )
 async def list_committee_work(
@@ -68,7 +94,7 @@ async def list_committee_work(
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
-) -> PaginatedResponse[CommitteeWorkOut]:
+) -> CommitteeWorkEnvelope:
     query = db.query(CommitteeWorkItem).filter(func.upper(CommitteeWorkItem.committee_code) == code.upper())
     if q:
         query = query.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
@@ -98,12 +124,19 @@ async def list_committee_work(
         )
         for r in rows
     ]
-    return build_envelope(data, total=total, page=page, limit=limit)
+    envelope = build_envelope(data, total=total, page=page, limit=limit)
+    return CommitteeWorkEnvelope(
+        **envelope.model_dump(),
+        committee_code=code.upper(),
+        streaming_url=_committee_streaming_url(code),
+        homepage=_committee_homepage_url(code),
+        documents_url=_committee_documents_url(code),
+    )
 
 
 @router.get(
     "/{code}/minutes",
-    response_model=PaginatedResponse[CommitteeMinutesOut],
+    response_model=CommitteeMinutesEnvelope,
     summary="Minutes of a committee's meetings",
 )
 async def list_committee_minutes(
@@ -115,7 +148,7 @@ async def list_committee_minutes(
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
-) -> PaginatedResponse[CommitteeMinutesOut]:
+) -> CommitteeMinutesEnvelope:
     query = db.query(CommitteeMinutes).filter(func.upper(CommitteeMinutes.committee_code) == code.upper())
     if published_from:
         query = query.filter(CommitteeMinutes.meeting_date >= published_from)
@@ -140,4 +173,11 @@ async def list_committee_minutes(
         )
         for r in rows
     ]
-    return build_envelope(data, total=total, page=page, limit=limit, published_from=published_from, published_to=published_to)
+    envelope = build_envelope(data, total=total, page=page, limit=limit, published_from=published_from, published_to=published_to)
+    return CommitteeMinutesEnvelope(
+        **envelope.model_dump(),
+        committee_code=code.upper(),
+        streaming_url=_committee_streaming_url(code),
+        homepage=_committee_homepage_url(code),
+        documents_url=_committee_documents_url(code),
+    )

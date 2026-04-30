@@ -38,6 +38,19 @@ class CalendarEventItem(BaseModel):
     status: Optional[str] = None
     source_url: Optional[str] = None
     agenda_url: Optional[str] = None
+    # Computed: per-event webstream URL (committee_meeting events only).
+    webstream_url: Optional[str] = None
+
+
+def _derive_webstream_url(institution: str, event_type: str, ep_committee_code: Optional[str]) -> Optional[str]:
+    """Build the multimedia.europarl webstream URL for an EP committee meeting."""
+    if not ep_committee_code:
+        return None
+    et = (event_type or "").lower()
+    inst = (institution or "").upper()
+    if "committee" in et and inst == "EP":
+        return f"https://multimedia.europarl.europa.eu/en/webstreaming?committee={ep_committee_code.upper()}"
+    return None
 
 
 @router.get(
@@ -88,15 +101,18 @@ async def list_calendar_events(
     query = db.query(EUCalendarEvent)
     filters = []
     if institution:
+        # DB stores InstitutionEnum values in UPPERCASE (e.g. 'EP', 'COUNCIL').
         try:
             filters.append(EUCalendarEvent.institution == InstitutionEnum(institution.upper()))
         except ValueError:
             filters.append(EUCalendarEvent.institution == institution.upper())
     if event_type:
+        # DB stores EventTypeEnum values in lowercase (e.g. 'committee_meeting').
+        et_lower = event_type.lower()
         try:
-            filters.append(EUCalendarEvent.event_type == EventTypeEnum(event_type.upper()))
+            filters.append(EUCalendarEvent.event_type == EventTypeEnum(et_lower))
         except ValueError:
-            filters.append(EUCalendarEvent.event_type == event_type.upper())
+            filters.append(EUCalendarEvent.event_type == et_lower)
     if committee:
         filters.append(func.upper(EUCalendarEvent.ep_committee_code) == committee.upper())
     if commission_dg:
@@ -118,11 +134,14 @@ async def list_calendar_events(
     else:
         order_col = EUCalendarEvent.start_date.asc()
     rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
-    data = [
-        CalendarEventItem(
+    data = []
+    for r in rows:
+        inst_value = r.institution.value if hasattr(r.institution, "value") else (str(r.institution) if r.institution else "")
+        et_value = r.event_type.value if hasattr(r.event_type, "value") else (str(r.event_type) if r.event_type else "")
+        data.append(CalendarEventItem(
             id=str(r.id),
-            institution=str(r.institution) if r.institution else "",
-            event_type=str(r.event_type) if r.event_type else "",
+            institution=inst_value,
+            event_type=et_value,
             title=r.title,
             description=r.description,
             start_date=r.start_date,
@@ -134,12 +153,11 @@ async def list_calendar_events(
             commission_dg=r.commission_dg,
             policy_areas=list(r.policy_areas or []),
             procedure_refs=list(r.procedure_refs or []),
-            status=str(r.status) if r.status else None,
+            status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
             source_url=r.source_url,
             agenda_url=r.agenda_url,
-        )
-        for r in rows
-    ]
+            webstream_url=_derive_webstream_url(inst_value, et_value, r.ep_committee_code),
+        ))
     return build_envelope(
         data, total=total, page=page, limit=limit,
         published_from=date_from, published_to=date_to,
@@ -168,10 +186,12 @@ async def get_calendar_event_detail(
                 "id": event_id,
             },
         )
+    inst_value = r.institution.value if hasattr(r.institution, "value") else str(r.institution or "")
+    et_value = r.event_type.value if hasattr(r.event_type, "value") else str(r.event_type or "")
     return CalendarEventItem(
         id=str(r.id),
-        institution=r.institution.value if hasattr(r.institution, "value") else str(r.institution or ""),
-        event_type=r.event_type.value if hasattr(r.event_type, "value") else str(r.event_type or ""),
+        institution=inst_value,
+        event_type=et_value,
         title=r.title,
         description=r.description,
         start_date=r.start_date,
@@ -186,4 +206,5 @@ async def get_calendar_event_detail(
         status=r.status.value if hasattr(r.status, "value") else (str(r.status) if r.status else None),
         source_url=r.source_url,
         agenda_url=r.agenda_url,
+        webstream_url=_derive_webstream_url(inst_value, et_value, r.ep_committee_code),
     )

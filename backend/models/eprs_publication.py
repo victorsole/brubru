@@ -92,6 +92,12 @@ class EPRSPublication(Base):
     extraction_quality = Column(String)  # "high", "medium", "low"
     has_full_text = Column(Boolean, default=False)
 
+    # Source discriminator (migration 041) — eprs | stoa | jrc | art | eca
+    source = Column(String(10), nullable=False, default="eprs")
+    # Reference numbers used by some sources
+    doi = Column(Text, nullable=True)               # JRC + ECA papers carry a DOI
+    eur_number = Column(String(50), nullable=True)  # JRC technical reports use EUR XXXXX
+
     # Temporal tracking
     scraped_at = Column(DateTime, default=datetime.now)
     first_seen = Column(DateTime, default=datetime.now, nullable=False)

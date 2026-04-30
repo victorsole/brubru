@@ -83,17 +83,12 @@ async def list_research_publications(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ResearchPublicationItem]:
-    # If source filter is explicitly STOA/JRC/ART/ECA → return empty (data not
-    # ingested in dedicated tables yet; queued behind dedicated scrapers).
-    if source and source.lower() not in ("eprs", None):
-        # ingestion stub
-        return build_envelope([], total=0, page=page, limit=limit,
-                              published_from=published_from, published_to=published_to,
-                              updated_from=updated_from)
-
-    # EPRS-backed branch
+    # All four sources (eprs, stoa, jrc, art, eca) live in eprs_publications,
+    # discriminated by the `source` column (migration 041).
     query = db.query(EPRSPublication)
     filters = []
+    if source:
+        filters.append(EPRSPublication.source == source.lower())
     if publication_type:
         filters.append(EPRSPublication.publication_type == publication_type.lower())
     if committee:
@@ -121,7 +116,8 @@ async def list_research_publications(
     )
     data = [
         ResearchPublicationItem(
-            id=str(r.id), source="eprs", publication_id=r.publication_id, title=r.title,
+            id=str(r.id), source=getattr(r, "source", "eprs") or "eprs",
+            publication_id=r.publication_id, title=r.title,
             publication_type=r.publication_type.value if hasattr(r.publication_type, "value") else (str(r.publication_type) if r.publication_type else None),
             publication_date=r.publication_date,
             authors=list(r.authors or []), summary=r.summary,

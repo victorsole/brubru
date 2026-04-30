@@ -156,6 +156,48 @@ async def list_parliamentary_questions(
                           updated_from=updated_from)
 
 
+@parl_q_router.get(
+    "/{question_reference:path}",
+    response_model=ParliamentaryQuestionItem,
+    summary="Single parliamentary question by reference (e.g. E-001234/2026)",
+)
+async def get_parl_question_detail(
+    question_reference: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> ParliamentaryQuestionItem:
+    r = db.query(ParliamentaryQuestion).filter(ParliamentaryQuestion.question_reference == question_reference).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"Parliamentary question {question_reference} not found",
+            "reason_code": "not_found",
+            "resource": "parliamentary_question",
+            "id": question_reference,
+        })
+    return ParliamentaryQuestionItem(
+        id=str(r.id),
+        question_reference=r.question_reference,
+        question_type=r.question_type.value if hasattr(r.question_type, "value") else str(r.question_type),
+        parliamentary_term=int(r.parliamentary_term or 10),
+        subject=r.subject,
+        text_question=r.text_question,
+        text_answer=r.text_answer,
+        submitted_date=r.submitted_date,
+        answered_date=r.answered_date,
+        asking_mep_ids=list(r.asking_mep_ids or []),
+        asking_mep_names=list(r.asking_mep_names or []),
+        answering_institution=r.answering_institution,
+        answering_commissioner=r.answering_commissioner,
+        committees=list(r.committees or []),
+        procedure_ref=r.procedure_ref,
+        related_celex=list(r.related_celex or []),
+        policy_areas=list(r.policy_areas or []),
+        source_url=r.source_url,
+        answer_url=r.answer_url,
+        last_updated=r.last_updated,
+    )
+
+
 # ============================================================================
 # /meetings — Commission Transparency Initiative
 # ============================================================================
@@ -252,6 +294,38 @@ async def list_meetings(
                           updated_from=updated_from)
 
 
+@meetings_router.get(
+    "/{meeting_id}",
+    response_model=TransparencyMeetingItem,
+    summary="Single Transparency Initiative meeting by id (UUID)",
+)
+async def get_meeting_detail(
+    meeting_id: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> TransparencyMeetingItem:
+    r = db.query(TransparencyMeeting).filter(TransparencyMeeting.id == meeting_id).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"Meeting {meeting_id} not found",
+            "reason_code": "not_found",
+            "resource": "transparency_meeting",
+            "id": meeting_id,
+        })
+    return TransparencyMeetingItem(
+        id=str(r.id), host_uuid=r.host_uuid, host_name=r.host_name,
+        host_role=r.host_role, host_dg=r.host_dg, host_cabinet=r.host_cabinet,
+        meeting_date=r.meeting_date, location=r.location, subject=r.subject,
+        organisation_met=r.organisation_met,
+        transparency_register_id=r.transparency_register_id,
+        organisation_type=r.organisation_type,
+        representatives=r.representatives, source_url=r.source_url,
+        policy_areas=list(r.policy_areas or []),
+        related_celex=list(r.related_celex or []),
+        last_updated=r.last_updated,
+    )
+
+
 # ============================================================================
 # /rsb-opinions
 # ============================================================================
@@ -342,6 +416,36 @@ async def list_rsb_opinions(
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from)
+
+
+@rsb_router.get(
+    "/{opinion_reference}",
+    response_model=RSBOpinionItem,
+    summary="Single RSB opinion by reference",
+)
+async def get_rsb_detail(
+    opinion_reference: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> RSBOpinionItem:
+    r = db.query(RSBOpinion).filter(RSBOpinion.opinion_reference == opinion_reference).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"RSB opinion {opinion_reference} not found",
+            "reason_code": "not_found",
+            "resource": "rsb_opinion",
+            "id": opinion_reference,
+        })
+    return RSBOpinionItem(
+        id=str(r.id), opinion_reference=r.opinion_reference, title=r.title,
+        target_initiative=r.target_initiative, target_dg=r.target_dg,
+        procedure_ref=r.procedure_ref, opinion_type=r.opinion_type,
+        verdict=r.verdict.value if hasattr(r.verdict, "value") else str(r.verdict),
+        opinion_date=r.opinion_date, summary=r.summary,
+        pdf_url=r.pdf_url, source_url=r.source_url,
+        policy_areas=list(r.policy_areas or []),
+        last_updated=r.last_updated,
+    )
 
 
 # ============================================================================
@@ -443,6 +547,56 @@ async def list_delegated_acts(
 ) -> PaginatedResponse[SecondaryActItem]:
     return _list_secondary_acts(db, "delegated", parent_celex, proposing_dg, status, q,
                                 published_from, published_to, updated_from, limit, page)
+
+
+def _secondary_act_detail(db: Session, reference: str, expected_type: str) -> SecondaryActItem:
+    r = db.query(SecondaryAct).filter(SecondaryAct.reference == reference).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"Secondary act {reference} not found",
+            "reason_code": "not_found",
+            "resource": expected_type,
+            "id": reference,
+        })
+    return SecondaryActItem(
+        id=str(r.id),
+        act_type=r.act_type.value if hasattr(r.act_type, "value") else str(r.act_type),
+        reference=r.reference, title=r.title, description=r.description,
+        parent_celex=r.parent_celex, parent_procedure_ref=r.parent_procedure_ref,
+        status=r.status.value if hasattr(r.status, "value") else str(r.status),
+        proposing_dg=r.proposing_dg, publication_date=r.publication_date,
+        objection_deadline=r.objection_deadline,
+        ep_scrutiny=dict(r.ep_scrutiny or {}), council_scrutiny=dict(r.council_scrutiny or {}),
+        celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
+        policy_areas=list(r.policy_areas or []),
+        last_updated=r.last_updated,
+    )
+
+
+@delegated_router.get(
+    "/{reference:path}",
+    response_model=SecondaryActItem,
+    summary="Single delegated act by reference (e.g. C(2026)1234)",
+)
+async def get_delegated_detail(
+    reference: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> SecondaryActItem:
+    return _secondary_act_detail(db, reference, "delegated_act")
+
+
+@implementing_router.get(
+    "/{reference:path}",
+    response_model=SecondaryActItem,
+    summary="Single implementing act by reference (e.g. C(2026)0234)",
+)
+async def get_implementing_detail(
+    reference: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> SecondaryActItem:
+    return _secondary_act_detail(db, reference, "implementing_act")
 
 
 @implementing_router.get(
@@ -569,3 +723,38 @@ async def list_tris_notifications(
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from)
+
+
+@tris_router.get(
+    "/{notification_number:path}",
+    response_model=TRISNotificationItem,
+    summary="Single TRIS notification by number (e.g. 2026/0123/FR)",
+)
+async def get_tris_detail(
+    notification_number: str,
+    user: User = Depends(api_user_with_rate_limit),
+    db: Session = Depends(get_db),
+) -> TRISNotificationItem:
+    r = db.query(TRISNotification).filter(TRISNotification.notification_number == notification_number).first()
+    if not r:
+        raise HTTPException(status_code=404, detail={
+            "error": f"TRIS notification {notification_number} not found",
+            "reason_code": "not_found",
+            "resource": "tris_notification",
+            "id": notification_number,
+        })
+    return TRISNotificationItem(
+        id=str(r.id), notification_number=r.notification_number,
+        notifying_country=r.notifying_country, title=r.title,
+        short_summary=r.short_summary, full_text_summary=r.full_text_summary,
+        notification_date=r.notification_date, standstill_until=r.standstill_until,
+        sector=r.sector, products_or_services=r.products_or_services,
+        main_content=r.main_content,
+        commission_observations_url=r.commission_observations_url,
+        member_state_observations=list(r.member_state_observations or []),
+        detailed_opinions=list(r.detailed_opinions or []),
+        source_url=r.source_url, pdf_url=r.pdf_url,
+        policy_areas=list(r.policy_areas or []),
+        related_celex=list(r.related_celex or []),
+        last_updated=r.last_updated,
+    )

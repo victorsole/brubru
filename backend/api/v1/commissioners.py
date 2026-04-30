@@ -37,6 +37,13 @@ class CommissionerEnvelope(PaginatedResponse[AgendaItemOut]):
     commissioner_portfolio: str
     commissioner_country: str
     bio_url: str
+    # Source URLs surfaced at response top (asks #2 + #5 from polish list).
+    agenda_url: Optional[str] = None              # Filtered unified-calendar URL when leader_id resolved
+    agenda_pdf_url: Optional[str] = None          # Reserved — most don't publish PDF
+    unified_calendar_url: str = (
+        "https://commission.europa.eu/about/organisation/college-commissioners/"
+        "calendar-items-president-and-commissioners_en"
+    )
 
 
 @router.get(
@@ -110,6 +117,15 @@ async def get_agenda(
         published_from=date_from,
         published_to=date_to,
     )
+    leader_id = getattr(profile, "leader_id", None)
+    agenda_url = None
+    if leader_id:
+        agenda_url = (
+            "https://commission.europa.eu/about/organisation/college-commissioners/"
+            "calendar-items-president-and-commissioners_en"
+            "?f%5B0%5D=commissioner_dynamic_commissioner_dynamic%3A"
+            f"http%3A//publications.europa.eu/resource/authority/political-leader/{leader_id}"
+        )
     return CommissionerEnvelope(
         **envelope.model_dump(),
         commissioner_name=profile.name,
@@ -117,4 +133,5 @@ async def get_agenda(
         commissioner_portfolio=profile.portfolio,
         commissioner_country=profile.country,
         bio_url=profile.bio_url,
+        agenda_url=agenda_url,
     )
