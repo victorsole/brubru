@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Response envelope — Brubru EU Data API</title>
+<meta name="description" content="Brubru API response envelope: pagination, filter echo, detail_level. Attribution lives on response headers (X-Powered-By / X-Source).">
+<link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
+<link rel="stylesheet" href="/api/docs/_assets/docs.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+</head>
+<body>
+<div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+  <span>You're viewing the reference. To execute live calls you need a Brubru API key &mdash; </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span> &middot; or </span>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
+</div>
+<script>
+(function(){
+  // Hide for authenticated Professional users (detected via cookie set after login)
+  var m = document.cookie.match(/brubru_tier=([^;]+)/);
+  if (m && m[1] === 'blue') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+  // Hide for users who dismissed in this session
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+})();
+</script>
+
+<div class="shell">
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time. Pages mark the
+active link by adding class="active" to the matching <a>.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <h3>Start here</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope" class="active">Response envelope</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
+  </ul>
+
+  <h3>Legislation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#laws" data-nav="endpoints-laws">Laws</a></li>
+    <li><a href="/api/docs/endpoints.html#procedures" data-nav="endpoints-procedures">Procedures</a></li>
+    <li><a href="/api/docs/endpoints.html#legal-text" data-nav="endpoints-legal-text">Legal-text intelligence</a></li>
+    <li><a href="/api/docs/endpoints.html#delegated-acts" data-nav="endpoints-delegated">Delegated acts</a></li>
+    <li><a href="/api/docs/endpoints.html#implementing-acts" data-nav="endpoints-implementing">Implementing acts</a></li>
+    <li><a href="/api/docs/endpoints.html#tris-notifications" data-nav="endpoints-tris">TRIS notifications</a></li>
+    <li><a href="/api/docs/endpoints.html#commission-register" data-nav="endpoints-commission-register">Commission Register</a></li>
+    <li><a href="/api/docs/endpoints.html#council-documents" data-nav="endpoints-council-documents">Council Documents</a></li>
+  </ul>
+
+  <h3>Institutions &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#metadata" data-nav="endpoints-metadata">Metadata (13 enum endpoints)</a></li>
+    <li><a href="/api/docs/endpoints.html#commissioners" data-nav="endpoints-commissioners">Commissioners</a></li>
+    <li><a href="/api/docs/endpoints.html#officials" data-nav="endpoints-officials">Officials (14,873)</a></li>
+    <li><a href="/api/docs/endpoints.html#meps" data-nav="endpoints-meps">MEPs</a></li>
+    <li><a href="/api/docs/endpoints.html#meetings" data-nav="endpoints-meetings">Meetings (Transparency)</a></li>
+    <li><a href="/api/docs/endpoints.html#rsb-opinions" data-nav="endpoints-rsb-opinions">RSB Opinions</a></li>
+  </ul>
+
+  <h3>EP detail</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#committees" data-nav="endpoints-committees">Committees</a></li>
+    <li><a href="/api/docs/endpoints.html#ep-documents" data-nav="endpoints-ep-documents">EP documents (unified)</a></li>
+    <li><a href="/api/docs/endpoints.html#amendments" data-nav="endpoints-amendments">Amendments</a></li>
+    <li><a href="/api/docs/endpoints.html#votes" data-nav="endpoints-votes">Votes</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-adopted" data-nav="endpoints-texts-adopted">Texts adopted</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-submitted" data-nav="endpoints-texts-submitted">Texts submitted</a></li>
+    <li><a href="/api/docs/endpoints.html#resolutions" data-nav="endpoints-resolutions">Resolutions</a></li>
+    <li><a href="/api/docs/endpoints.html#reports" data-nav="endpoints-reports">Reports</a></li>
+    <li><a href="/api/docs/endpoints.html#opinions" data-nav="endpoints-opinions">Opinions</a></li>
+    <li><a href="/api/docs/endpoints.html#parliamentary-questions" data-nav="endpoints-parl-q">Parliamentary questions</a></li>
+    <li><a href="/api/docs/endpoints.html#webstreams" data-nav="endpoints-webstreams">Webstreams</a></li>
+  </ul>
+
+  <h3>Live data</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#publications" data-nav="endpoints-publications">Publications</a></li>
+    <li><a href="/api/docs/endpoints.html#press-releases" data-nav="endpoints-press-releases">Press releases</a></li>
+    <li><a href="/api/docs/endpoints.html#calendar" data-nav="endpoints-calendar">Calendar</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="endpoints-consultations">Consultations</a></li>
+    <li><a href="/api/docs/endpoints.html#research-publications" data-nav="endpoints-research">Research (EPRS+STOA+JRC+ART+ECA)</a></li>
+    <li><a href="/api/docs/endpoints.html#tenders" data-nav="endpoints-tenders">Tenders (TED)</a></li>
+    <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
+    <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
+    <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+  </ul>
+
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions">EU institutions covered</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossary</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Use cases by role</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Changelog</a></li>
+  </ul>
+
+  <h3>External</h3>
+  <ul>
+    <li><a href="https://brubru-production.up.railway.app/api/v1/openapi.json" target="_blank" rel="noopener">OpenAPI spec</a></li>
+    <li><a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/" target="_blank" rel="noopener">Postman workspace</a></li>
+    <li><a href="https://brubru-production.up.railway.app/api/docs" target="_blank" rel="noopener">Scalar try-it</a></li>
+  </ul>
+</aside>
+
+<main class="main">
+
+<div class="main__eyebrow">Response envelope</div>
+<h1>The canonical response shape</h1>
+<p class="main__lede">
+Every paginated endpoint returns the same JSON envelope. Code once against it and swap datasets by changing the path.
+</p>
+
+<h2>Shape</h2>
+<pre><code>{
+  "total": 139,
+  "returned": 20,
+  "pages": 7,
+  "page": 1,
+  "limit": 50,
+  "has_more": true,
+  "next_page": 2,
+  "remaining_pages": 6,
+  "coverage_complete": true,
+  "published_from": "2026-01-01",
+  "published_to": "2026-01-31",
+  "published_end": "2026-01-31",
+  "updated_from": null,
+  "updated_to": null,
+  "updated_end": null,
+  "detail_level": "Full",
+  "data": [ ... dataset-specific items ... ]
+}</code></pre>
+
+<p>Attribution lives on response headers, not in the body:</p>
+<pre><code>X-Powered-By: Brubru
+X-Source: brubru.beresol.eu
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 58
+X-RateLimit-Tier: free</code></pre>
+
+<h2>Pagination fields</h2>
+<table>
+<thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>total</code></td><td>int</td><td>Total matching items across all pages. For live-fetched endpoints where total isn't knowable (MEPs), this is a best-effort hint: <code>offset + items + 1</code> if the page is full.</td></tr>
+<tr><td><code>returned</code></td><td>int</td><td>Items in this page. Always equals <code>len(data)</code>.</td></tr>
+<tr><td><code>pages</code></td><td>int</td><td>Total number of pages given the current <code>limit</code>.</td></tr>
+<tr><td><code>page</code></td><td>int</td><td>Current page, 1-indexed.</td></tr>
+<tr><td><code>limit</code></td><td>int</td><td>Items per page. Default 50, max 100.</td></tr>
+<tr><td><code>has_more</code></td><td>bool</td><td>True if there's at least one more page.</td></tr>
+<tr><td><code>next_page</code></td><td>int | null</td><td>Next page number, or null if on last page.</td></tr>
+<tr><td><code>remaining_pages</code></td><td>int</td><td>Pages left after this one.</td></tr>
+<tr><td><code>coverage_complete</code></td><td>bool</td><td><code>true</code> for DB-backed endpoints (we've seen everything). <code>false</code> for live-scraped endpoints where upstream pagination is unbounded.</td></tr>
+</tbody>
+</table>
+
+<h2>Filter-echo fields</h2>
+<p>Date-range filters you sent come back in the envelope so you can verify the API interpreted them correctly:</p>
+
+<table>
+<thead><tr><th>Field</th><th>Comes from</th></tr></thead>
+<tbody>
+<tr><td><code>published_from</code></td><td>Your <code>?published_from=</code> query param</td></tr>
+<tr><td><code>published_to</code></td><td>Your <code>?published_to=</code> query param</td></tr>
+<tr><td><code>published_end</code></td><td>Alias of <code>published_to</code> (GovClipping-compatible). Identical value.</td></tr>
+<tr><td><code>updated_from</code></td><td>Your <code>?updated_from=</code> query param</td></tr>
+<tr><td><code>updated_to</code></td><td>Your <code>?updated_to=</code> query param</td></tr>
+<tr><td><code>updated_end</code></td><td>Alias of <code>updated_to</code>. Identical value.</td></tr>
+</tbody>
+</table>
+
+<div class="callout callout--warn">
+<p><strong>Date params: semantics.</strong> <code>published_to</code> and <code>published_end</code> are <em>aliases of the same upper bound</em>. They mean the same thing. If you send both with different values, the API returns <code>422 conflicting_params</code>. Prefer <code>published_to</code>; <code>published_end</code> exists for GovClipping partners.</p>
+</div>
+
+<h2><code>detail_level</code></h2>
+<p>Accepted values: <code>Minimal</code>, <code>Summary</code> (default), <code>Full</code>. Lowercase is also accepted (<code>full</code>, <code>summary</code>). The envelope echoes whatever the client sent.</p>
+
+<ul>
+<li><strong>Summary</strong> (default) — core fields only: id, title, date, url, key identifiers.</li>
+<li><strong>Full</strong> — all available fields. For <code>/laws</code>: adds text excerpts, legal basis, citations, defined-terms count. For <code>/procedures</code>: adds OEIL key events, shadow rapporteurs, AI summary.</li>
+<li><strong>Minimal</strong> — just id + title + source_url. Useful for typeahead / autocomplete.</li>
+</ul>
+
+<h2>Attribution &mdash; response headers, not envelope</h2>
+<p>Provenance information is on response headers, not in the JSON body. Removed from the envelope on 30 April 2026 after partner feedback &mdash; payloads are now leaner and the same data is one <code>HEAD</code> away.</p>
+
+<table>
+<thead><tr><th>Header</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>X-Powered-By: Brubru</code></td><td>Always present on <code>/api/v1/*</code> responses.</td></tr>
+<tr><td><code>X-Source: brubru.beresol.eu</code></td><td>Origin attribution.</td></tr>
+<tr><td><code>X-RateLimit-Limit</code></td><td>Per-minute ceiling for your tier (60 / 300 / 6000).</td></tr>
+<tr><td><code>X-RateLimit-Remaining</code></td><td>Calls left in the current 60-second sliding window.</td></tr>
+<tr><td><code>X-RateLimit-Tier</code></td><td>Your tier: <code>free</code>, <code>pro</code>, or <code>enterprise</code>.</td></tr>
+</tbody>
+</table>
+
+<p>If you display Brubru data in your UI, we ask that you honour the <code>X-Powered-By</code> attribution either visually (a "Powered by Brubru" badge) or structurally in the raw metadata of your storage.</p>
+
+<h2>Dataset-specific <code>aggregates</code></h2>
+<p>Some endpoints (e.g. <code>/consultations/.../feedback</code>) include a sibling <code>aggregates</code> object alongside <code>data</code>, giving counts by country and user_type in the same response so you don't need a separate summary call.</p>
+
+<h2>Sort order</h2>
+<p>All list endpoints are sorted <strong>most-recent-first</strong> by date (adoption, publication, event, or last-updated depending on dataset). Within ties, secondary sort is id descending. Custom sort via <code>?sort=</code> is on the June 2026 roadmap.</p>
+
+<h2>Non-envelope responses</h2>
+<p>A few endpoints return a flat object instead of the paginated envelope:</p>
+
+<ul>
+<li><code>/api/v1/ping</code> &mdash; status/time/version only.</li>
+<li><code>/api/v1/whoami</code> &mdash; user + rate-limit state only.</li>
+<li><code>/api/v1/meta/enums</code> &mdash; valid filter values.</li>
+<li><code>/api/v1/laws/{celex}/text</code> &mdash; full-text response.</li>
+<li><code>/api/v1/legal-text/{celex}/recital-article-map</code> and <code>/defined-terms</code> &mdash; derived objects.</li>
+<li><code>/api/v1/legal-text/resolve-references</code> and <code>/resolve-aliases</code> &mdash; plain object with <code>refs</code> or <code>aliases</code>.</li>
+<li><code>/api/v1/predictions/{ref}/timeline</code> and <code>/outcome</code> &mdash; prediction object.</li>
+</ul>
+
+<h2>Next</h2>
+<p>Read about <a href="/api/docs/errors.html">Errors</a> next.</p>
+
+<footer>
+&copy; 2026 Beresol BV — Brubru EU Data API v1.
+<a href="/api/">Back to marketing page</a> ·
+<a href="https://brubru-production.up.railway.app/api/v1/openapi.json">OpenAPI spec</a> ·
+<a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
+</footer>
+</main>
+</div>
+</body>
+</html>

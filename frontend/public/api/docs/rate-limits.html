@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rate limits — Brubru EU Data API</title>
+<meta name="description" content="Brubru API rate limits, retry strategy, headers, monthly quotas.">
+<link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
+<link rel="stylesheet" href="/api/docs/_assets/docs.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+</head>
+<body>
+<div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+  <span>You're viewing the reference. To execute live calls you need a Brubru API key &mdash; </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span> &middot; or </span>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
+</div>
+<script>
+(function(){
+  // Hide for authenticated Professional users (detected via cookie set after login)
+  var m = document.cookie.match(/brubru_tier=([^;]+)/);
+  if (m && m[1] === 'blue') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+  // Hide for users who dismissed in this session
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+})();
+</script>
+
+<div class="shell">
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time. Pages mark the
+active link by adding class="active" to the matching <a>.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <h3>Start here</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits" class="active">Rate limits</a></li>
+  </ul>
+
+  <h3>Legislation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#laws" data-nav="endpoints-laws">Laws</a></li>
+    <li><a href="/api/docs/endpoints.html#procedures" data-nav="endpoints-procedures">Procedures</a></li>
+    <li><a href="/api/docs/endpoints.html#legal-text" data-nav="endpoints-legal-text">Legal-text intelligence</a></li>
+    <li><a href="/api/docs/endpoints.html#delegated-acts" data-nav="endpoints-delegated">Delegated acts</a></li>
+    <li><a href="/api/docs/endpoints.html#implementing-acts" data-nav="endpoints-implementing">Implementing acts</a></li>
+    <li><a href="/api/docs/endpoints.html#tris-notifications" data-nav="endpoints-tris">TRIS notifications</a></li>
+    <li><a href="/api/docs/endpoints.html#commission-register" data-nav="endpoints-commission-register">Commission Register</a></li>
+    <li><a href="/api/docs/endpoints.html#council-documents" data-nav="endpoints-council-documents">Council Documents</a></li>
+  </ul>
+
+  <h3>Institutions &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#metadata" data-nav="endpoints-metadata">Metadata (13 enum endpoints)</a></li>
+    <li><a href="/api/docs/endpoints.html#commissioners" data-nav="endpoints-commissioners">Commissioners</a></li>
+    <li><a href="/api/docs/endpoints.html#officials" data-nav="endpoints-officials">Officials (14,873)</a></li>
+    <li><a href="/api/docs/endpoints.html#meps" data-nav="endpoints-meps">MEPs</a></li>
+    <li><a href="/api/docs/endpoints.html#meetings" data-nav="endpoints-meetings">Meetings (Transparency)</a></li>
+    <li><a href="/api/docs/endpoints.html#rsb-opinions" data-nav="endpoints-rsb-opinions">RSB Opinions</a></li>
+  </ul>
+
+  <h3>EP detail</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#committees" data-nav="endpoints-committees">Committees</a></li>
+    <li><a href="/api/docs/endpoints.html#ep-documents" data-nav="endpoints-ep-documents">EP documents (unified)</a></li>
+    <li><a href="/api/docs/endpoints.html#amendments" data-nav="endpoints-amendments">Amendments</a></li>
+    <li><a href="/api/docs/endpoints.html#votes" data-nav="endpoints-votes">Votes</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-adopted" data-nav="endpoints-texts-adopted">Texts adopted</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-submitted" data-nav="endpoints-texts-submitted">Texts submitted</a></li>
+    <li><a href="/api/docs/endpoints.html#resolutions" data-nav="endpoints-resolutions">Resolutions</a></li>
+    <li><a href="/api/docs/endpoints.html#reports" data-nav="endpoints-reports">Reports</a></li>
+    <li><a href="/api/docs/endpoints.html#opinions" data-nav="endpoints-opinions">Opinions</a></li>
+    <li><a href="/api/docs/endpoints.html#parliamentary-questions" data-nav="endpoints-parl-q">Parliamentary questions</a></li>
+    <li><a href="/api/docs/endpoints.html#webstreams" data-nav="endpoints-webstreams">Webstreams</a></li>
+  </ul>
+
+  <h3>Live data</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#publications" data-nav="endpoints-publications">Publications</a></li>
+    <li><a href="/api/docs/endpoints.html#press-releases" data-nav="endpoints-press-releases">Press releases</a></li>
+    <li><a href="/api/docs/endpoints.html#calendar" data-nav="endpoints-calendar">Calendar</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="endpoints-consultations">Consultations</a></li>
+    <li><a href="/api/docs/endpoints.html#research-publications" data-nav="endpoints-research">Research (EPRS+STOA+JRC+ART+ECA)</a></li>
+    <li><a href="/api/docs/endpoints.html#tenders" data-nav="endpoints-tenders">Tenders (TED)</a></li>
+    <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
+    <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
+    <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+  </ul>
+
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions">EU institutions covered</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossary</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Use cases by role</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Changelog</a></li>
+  </ul>
+
+  <h3>External</h3>
+  <ul>
+    <li><a href="https://brubru-production.up.railway.app/api/v1/openapi.json" target="_blank" rel="noopener">OpenAPI spec</a></li>
+    <li><a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/" target="_blank" rel="noopener">Postman workspace</a></li>
+    <li><a href="https://brubru-production.up.railway.app/api/docs" target="_blank" rel="noopener">Scalar try-it</a></li>
+  </ul>
+</aside>
+
+<main class="main">
+
+<div class="main__eyebrow">Rate limits</div>
+<h1>Rate limits</h1>
+<p class="main__lede">
+Three per-key tiers: <strong>free 60</strong>, <strong>pro 300</strong>, <strong>enterprise 6000 requests / minute</strong>. Sliding-window enforcement. Your tier is on the <code>X-RateLimit-Tier</code> header of every response and on <code>/whoami</code>.
+</p>
+
+<h2>Tier table</h2>
+<table>
+<thead><tr><th>Tier</th><th>Per-minute limit</th><th>Monthly quota</th><th>Who gets it</th></tr></thead>
+<tbody>
+<tr><td><code>free</code></td><td>60 req/min</td><td>Unlimited</td><td>Trial keys + Professional default</td></tr>
+<tr><td><code>pro</code></td><td>300 req/min</td><td>Unlimited</td><td>Production integrations on request &mdash; email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a></td></tr>
+<tr><td><code>enterprise</code></td><td>6,000 req/min</td><td>Unlimited</td><td>Partner integrations (e.g. GovClipping). Custom contract.</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<p>The limit uses a sliding window over the last 60 seconds, not fixed calendar minutes. Bursting is allowed as long as you stay under your tier's ceiling in any rolling 60-second window.</p>
+</div>
+
+<h2>Response headers</h2>
+<p>Every response carries:</p>
+<ul>
+<li><code>X-RateLimit-Limit</code> &mdash; your tier's per-minute ceiling (60 / 300 / 6000).</li>
+<li><code>X-RateLimit-Remaining</code> &mdash; calls left in the current 60-second window.</li>
+<li><code>X-RateLimit-Tier</code> &mdash; <code>free</code>, <code>pro</code>, or <code>enterprise</code>.</li>
+</ul>
+<p>On 429 responses, additionally:</p>
+<ul>
+<li><code>Retry-After</code> &mdash; seconds to wait before retrying.</li>
+</ul>
+
+<h2>Check your tier any time</h2>
+<pre><code>curl -H "Authorization: Bearer $BRUBRU_API_KEY" \
+  https://brubru-production.up.railway.app/api/v1/whoami
+
+# {
+#   "user_id": "...",
+#   "tier": "blue",
+#   "api_tier": "enterprise",
+#   "rate_limit_limit": 6000,
+#   "rate_limit_remaining": 5998
+# }</code></pre>
+
+<h2>When you hit the limit</h2>
+<p>You get a <code>429 rate_limited</code> response. The right behaviour is:</p>
+<ol>
+<li>Read <code>Retry-After</code>.</li>
+<li>Sleep that many seconds.</li>
+<li>Retry the same request.</li>
+</ol>
+
+<pre><code>import time, httpx
+
+def call_with_backoff(url, headers):
+    for attempt in range(5):
+        r = httpx.get(url, headers=headers)
+        if r.status_code != 429:
+            return r
+        wait = int(r.headers.get("Retry-After", 60))
+        time.sleep(wait)
+    r.raise_for_status()
+</code></pre>
+
+<h2>Good citizenship</h2>
+<ul>
+<li><strong>Cache aggressively.</strong> Our data refreshes daily for most endpoints. Don't poll faster than you need.</li>
+<li><strong>Batch filters.</strong> Ask for <code>limit=100</code> once instead of 10 calls with <code>limit=10</code>.</li>
+<li><strong>Use <code>If-None-Match</code> when we expose ETags</strong> (June 2026 roadmap).</li>
+<li><strong>Monitor Newman runs.</strong> In CI, set <code>newman run --delay-request 1000</code> to pace calls.</li>
+</ul>
+
+<h2>Need higher limits?</h2>
+<p>Email <a href="mailto:hello@beresol.eu">hello@beresol.eu</a> with your use case. <code>pro</code> upgrades are usually approved within 24h for production integrations. <code>enterprise</code> is a custom contract for partner integrations &mdash; bundling resale rights, SLA, and the 6,000 req/min ceiling.</p>
+
+<h2>Next</h2>
+<p>Head to <a href="/api/docs/endpoints.html">Endpoints</a> for the full reference of all 82 routes across 36 folders.</p>
+
+<footer>
+&copy; 2026 Beresol BV — Brubru EU Data API v1.
+<a href="/api/">Back to marketing page</a> ·
+<a href="https://brubru-production.up.railway.app/api/v1/openapi.json">OpenAPI spec</a> ·
+<a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
+</footer>
+</main>
+</div>
+</body>
+</html>

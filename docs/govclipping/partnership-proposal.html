@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beresol x GovClipping: Partnership Proposal (Internal)</title>
+  <style>
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../frontend/public/New-Yorker-Font/ACaslonPro-Regular.otf') format('opentype');
+      font-weight: 400; font-style: normal;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../frontend/public/New-Yorker-Font/ACaslonPro-Semibold.otf') format('opentype');
+      font-weight: 600; font-style: normal;
+    }
+    @font-face {
+      font-family: 'Adobe Caslon Pro';
+      src: url('../../frontend/public/New-Yorker-Font/ACaslonPro-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal;
+    }
+
+    :root {
+      --blue: #0693e3;
+      --green: #059669;
+      --purple: #9b51e0;
+      --amber: #d97706;
+      --red: #dc2626;
+      --text: #111827;
+      --secondary: #6b7280;
+      --border: #e5e7eb;
+      --bg-alt: #f3f4f6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Adobe Caslon Pro', Georgia, serif;
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 32px;
+      background: #fff;
+    }
+
+    .internal-badge {
+      display: inline-block;
+      background: var(--red);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--secondary);
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-top: 36px;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p, li { margin-bottom: 8px; }
+    ul { padding-left: 24px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: var(--bg-alt);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .highlight-row td {
+      background: #f0f9ff;
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 16px 0;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .card-blue { border-left: 4px solid var(--blue); }
+    .card-green { border-left: 4px solid var(--green); }
+    .card-purple { border-left: 4px solid var(--purple); }
+    .card-amber { border-left: 4px solid var(--amber); }
+
+    .card h3 { margin-top: 0; }
+
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 12px;
+      margin-right: 6px;
+    }
+
+    .tag-blue { background: #dbeafe; color: #1e40af; }
+    .tag-green { background: #d1fae5; color: #065f46; }
+    .tag-purple { background: #ede9fe; color: #5b21b6; }
+    .tag-amber { background: #fef3c7; color: #92400e; }
+
+    .recommended {
+      background: linear-gradient(135deg, #0693e3 0%, #059669 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+    .recommended h3 { color: white; margin-top: 0; }
+
+    .number-big {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--blue);
+      line-height: 1;
+    }
+
+    .number-label {
+      font-size: 0.85rem;
+      color: var(--secondary);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .stat-box {
+      background: var(--bg-alt);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--secondary);
+    }
+
+    @media print {
+      body { padding: 20px; font-size: 14px; }
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.1rem; margin-top: 24px; }
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<span class="internal-badge">Internal document: not for distribution</span>
+
+<h1>Beresol x GovClipping</h1>
+<p class="subtitle">Partnership proposal: EU legislative intelligence for the Spanish RegTech market</p>
+
+<div class="recommended" style="margin-top:16px;">
+  <h3 style="margin-top:0;">Status &mdash; 1 May 2026 (post 30-Apr meeting)</h3>
+  <p><strong>Agreement signed at 99 EUR/month</strong>, billed yearly (1,188 EUR), 1 year renewable. Catalan agreement at <code>docs/govclipping/acord-collaboracio-govclipping.md</code>. Public announcement assets in 3 languages at <code>docs/govclipping/anunci-public-acord.md</code>.</p>
+  <p><strong>Same-day iteration sprint</strong> after the meeting: 8 cross-cutting fixes audited, shipped and verified end-to-end against production. 200 OK rate moved from 37/43 to 42/43; <code>meta</code> envelope removed from 31/36 list endpoints; 4 broken routes restored; per-event calendar URLs live; rate-limit tier system in place (free 60 / pro 300 / <strong>enterprise 6000 req/min</strong>) ready for Jordi's key.</p>
+  <p>Full implementation log in <a href="jordi-meeting-2026-04-30-audit.md">jordi-meeting-2026-04-30-audit.md</a>.</p>
+</div>
+
+<h2>The opportunity</h2>
+
+<div class="grid-2">
+  <div class="card card-blue">
+    <h3>Brubru (Beresol BV, NL)</h3>
+    <p>AI-powered EU policy assistant. 28,505 adopted laws, 1,464 procedures in flight, 14,873 EU institutional officials, 56,051 amendments, 1,026 reports, 386 tenders, 210 research publications (EPRS+STOA+JRC+ART+ECA), 528 Commission Register documents, 206 curated guides.</p>
+    <p><span class="tag tag-blue">EU institutions</span> <span class="tag tag-blue">AI chat</span> <span class="tag tag-blue">6 languages</span></p>
+  </div>
+  <div class="card card-green">
+    <h3>GovClipping (Spain)</h3>
+    <p>Regulatory monitoring platform. 280+ institutional sources, 2.5M+ documents. National (BOE) + 19 regions + 43 provinces. MCP-compatible architecture.</p>
+    <p><span class="tag tag-green">Spain national</span> <span class="tag tag-green">19 regions</span> <span class="tag tag-green">MCP</span></p>
+  </div>
+</div>
+
+<p><strong>Gap:</strong> GovClipping covers Spanish law but not EU legislation. Brubru covers EU but not national transposition. Together = full regulatory chain from Brussels to Madrid to Barcelona.</p>
+
+<h2>Brubru by the numbers</h2>
+
+<div class="stats-row">
+  <div class="stat-box">
+    <div class="number-big">82</div>
+    <div class="number-label">v1 endpoints</div>
+  </div>
+  <div class="stat-box">
+    <div class="number-big">36</div>
+    <div class="number-label">Postman folders</div>
+  </div>
+  <div class="stat-box">
+    <div class="number-big">28,505</div>
+    <div class="number-label">EU laws in database</div>
+  </div>
+  <div class="stat-box">
+    <div class="number-big">14,873</div>
+    <div class="number-label">EU officials</div>
+  </div>
+</div>
+
+<table>
+  <tr><th>Data source</th><th>Records</th><th>Updated</th></tr>
+  <tr><td>EU acquis (full corpus, TSVECTOR search)</td><td>28,505</td><td>November 2025 corpus + daily OJ</td></tr>
+  <tr><td>Legislative procedures (OEIL enriched + law-tracker.europa.eu link)</td><td>1,464</td><td>Daily sync</td></tr>
+  <tr><td>EU institutional officials (Who Is Who, 75 organigrammes)</td><td>14,873</td><td>Weekly bulk re-ingest</td></tr>
+  <tr><td>MEP amendments (every legislative file)</td><td>56,051</td><td>Daily</td></tr>
+  <tr><td>EP committee reports</td><td>1,026</td><td>Daily (doceo)</td></tr>
+  <tr><td>Commission Register documents (COM, SWD, JOIN, C-series + EUR-Lex PDF URL)</td><td>528</td><td>Daily delta</td></tr>
+  <tr><td>Active TED tenders</td><td>386</td><td>Daily</td></tr>
+  <tr><td>Research publications (EPRS + STOA + JRC + ART + ECA, unified)</td><td>210</td><td>Daily, filterable by source</td></tr>
+  <tr><td>EU institutional calendar events (8 sources, per-event URLs)</td><td>697</td><td>Daily (EP, Council, Commission, EUCO, agencies, euagenda)</td></tr>
+  <tr><td>EP committee minutes</td><td>75</td><td>Weekly scrape</td></tr>
+  <tr><td>Knowledge guides (curated, with QUICK FACTS)</td><td>206</td><td>Daily (morning routine)</td></tr>
+  <tr><td>Keyword triggers (6 languages)</td><td>4,616</td><td>Continuous</td></tr>
+</table>
+
+<h2>30 April 2026 meeting &mdash; what shipped for Jordi same-day</h2>
+
+<p>Jordi sent 8 written feedback items during the 30 April meeting. Each one was audited against production, fixed, deployed and verified end-to-end the same afternoon. Implementation log: <a href="jordi-meeting-2026-04-30-audit.md">jordi-meeting-2026-04-30-audit.md</a>. Punch list: <a href="jordi-meeting-2026-04-30-feedback.md">jordi-meeting-2026-04-30-feedback.md</a>.</p>
+
+<table>
+  <thead><tr><th>#</th><th>Jordi's ask</th><th>What we shipped</th><th>Verification</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>1, 8</td>
+      <td>API user types keywords as titles &mdash; show the raw content of every item, not just titles. Detail level Full must be the entire row.</td>
+      <td>Schema-only pass: <code>/laws[/{celex}]</code> now ship <code>text_url</code> &rarr; <code>/laws/{celex}/text</code>. <code>/knowledge-guides</code> Full uncapped, new <code>content</code> field. Body backfill for parl-q / tris / tenders / commission-register / reports / opinions / resolutions queued (multi-day extract job).</td>
+      <td>Endpoints expose the fields; PDF/HTML body extraction running in background.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Drop the <code>meta: {source, powered_by, fetched_at}</code> envelope block from every endpoint.</td>
+      <td>Removed from the canonical <code>PaginatedResponse</code> envelope. Same provenance information is on the <code>X-Powered-By</code> / <code>X-Source</code> response headers.</td>
+      <td>Audit re-run: <code>meta</code> in <strong>0/36</strong> list endpoints (was 31).</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Separate commissioner profile from agenda. <code>/commissioners/fitto</code> = profile, <code>/commissioners/fitto/agenda</code> = events only.</td>
+      <td>New <code>GET /api/v1/commissioners/{slug}</code> endpoint returns profile only. <code>/agenda</code> response stripped to standard envelope &mdash; no profile fields injected.</td>
+      <td><code>curl /commissioners/fitto</code> &rarr; profile. <code>curl /commissioners/fitto/agenda</code> &rarr; envelope with <code>data</code>, no profile.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Rate limit must be much higher for partners &mdash; "infinite if need be".</td>
+      <td>Migration 045 added <code>api_keys.api_tier</code>. Three tiers: free 60/min, pro 300/min, <strong>enterprise 6000/min</strong>. <code>X-RateLimit-Tier</code> header on every response. <code>provision_enterprise_key.py</code> CLI ready to mint Jordi's partner key on Victor's OK.</td>
+      <td><code>whoami</code> now returns <code>api_tier</code> alongside <code>tier</code>; header live in production.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Audit every endpoint, iterate until satisfied.</td>
+      <td>Programmatic audit (<code>backend/scripts/audit_jordi_feedback.py</code>) hits 43 sample calls and flags every breach. Re-run after each PR.</td>
+      <td>200s 37 &rarr; <strong>42</strong>; 404s 5 &rarr; <strong>0</strong>; only outstanding 502 is <code>/predictions/{ref}/timeline</code> (upstream model loading on Railway).</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>Confirm we ingest every committee meeting agenda PDF from <code>europarl.europa.eu/committees/en/meetings/meeting-documents</code>.</td>
+      <td>Surface commitment in the schema (each event ships <code>source_url</code> &rarr; specific committee meetings page); count-vs-EP-page audit + PDF extraction queued in CC-2(b) background pass.</td>
+      <td>Schema is ready; coverage delta to be reported with the body-backfill batch.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Calendar event <code>source_url</code> must point to the specific event, not a generic listing page.</td>
+      <td>The generic <code>/committees/en/documents/latest-documents</code> placeholder no longer leaks. Each row gets a per-event URL derived from <code>event_type + institution + committee_code + start_date</code>.<br>Patterns now live: <code>plenary_session</code> &rarr; <code>/plenary/en/agendas.html?day=YYYYMMDD</code> · <code>committee_meeting</code> &rarr; <code>/committees/en/{LIBE}/home/highlights</code> · <code>european_council_summit</code> &rarr; <code>/en/meetings/european-council/YYYY/MM/DD/</code> · <code>commission_college_meeting</code> &rarr; specific OJ document URL on transparency register.</td>
+      <td>Sample committee_meeting (DROI), plenary_session (2025-01-13), european_council_summit, commission_college_meeting all return event-specific URLs.</td>
+    </tr>
+    <tr>
+      <td>+</td>
+      <td>(Mid-meeting) Add <code>law-tracker.europa.eu</code> as a data source.</td>
+      <td><code>/procedures</code> + <code>/procedures/{ref}</code> ship <code>law_tracker_url</code> alongside <code>legal_text_url</code> and <code>url</code>. Mapping: OEIL <code>2025/0420(COD)</code> &rarr; <code>https://law-tracker.europa.eu/procedure/2025_420?lang=en</code>. COM-style refs correctly return null (not OEIL procedures).</td>
+      <td>Verified live; 200 OK on the canonical example.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Open from this sprint:</strong> Jordi's enterprise API key (manual, awaiting Victor's OK), CC-2(b) body backfill (multi-day background job), <code>/predictions/{ref}/timeline</code> 502 (upstream model loading on Railway, not a routing issue).</p>
+
+<h2>Integration options</h2>
+
+<div class="recommended">
+  <h3>Recommended: MCP Plugin (lowest friction)</h3>
+  <p>Brubru as an MCP server that GovClipping's AI agents call directly. Since GovClipping already supports MCP, integration is plug-and-play. No custom API work, no frontend changes on GovClipping's side.</p>
+  <p>Tools exposed: <code>search_eu_legislation</code>, <code>query_knowledge_base</code>, <code>get_procedure_status</code>, <code>get_calendar_events</code>, <code>search_eprs</code></p>
+</div>
+
+<div class="grid-2">
+  <div class="card card-purple">
+    <h3>Option 2: REST API</h3>
+    <p>GovClipping calls Brubru endpoints from their backend. Standard HTTP, JSON responses. More control, more integration work.</p>
+    <p>Endpoints: <code>/api/chat</code>, <code>/api/legislative-train</code>, <code>/api/eu-calendar</code>, <code>/api/eprs</code></p>
+  </div>
+  <div class="card card-amber">
+    <h3>Option 3: Embedded widget</h3>
+    <p>Brubru chat widget (iframe or web component) embedded in GovClipping UI. Their users ask EU questions without leaving the platform.</p>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card card-blue">
+    <h3>Option 4: Mutual data exchange</h3>
+    <p>Two-way: Brubru provides EU legislative data, GovClipping provides Spanish transposition data. Both products become more complete.</p>
+  </div>
+  <div class="card card-green">
+    <h3>Growth path</h3>
+    <p>Start with MCP (week 1). Add API for custom features (month 1). Add widget for end-user access (month 2). Explore data exchange (quarter 2).</p>
+  </div>
+</div>
+
+<h2>Pricing models</h2>
+
+<table>
+  <tr><th>Model</th><th>Price</th><th>Best for</th></tr>
+  <tr><td>Per MCP call</td><td>EUR 0.05 to 0.10 / call</td><td>Low volume, pay-as-you-go, testing phase</td></tr>
+  <tr class="highlight-row"><td>Flat monthly licence</td><td>EUR 500 to 2,000 / month</td><td>Predictable cost, bundled into GovClipping pricing</td></tr>
+  <tr><td>Revenue share</td><td>20 to 30% of EU module revenue</td><td>Aligned incentives, scales with adoption</td></tr>
+  <tr><td>Per-seat</td><td>EUR 15 to 25 / user / month</td><td>If GovClipping resells as add-on per client</td></tr>
+</table>
+
+<p><strong>Recommendation:</strong> Start with flat monthly licence (EUR 500/mo) during pilot, transition to per-seat or revenue share as volume grows.</p>
+
+<h2>Economics</h2>
+
+<table>
+  <tr><th>Item</th><th>Beresol monthly cost</th></tr>
+  <tr><td>Founder time (130h x EUR 52)</td><td>EUR 6,760</td></tr>
+  <tr><td>AI (Claude Sonnet 4)</td><td>EUR 280</td></tr>
+  <tr><td>Infrastructure (Railway, Supabase, SiteGround, Gmail)</td><td>EUR 50</td></tr>
+  <tr><td><strong>Total</strong></td><td><strong>EUR 7,090 / month</strong></td></tr>
+</table>
+
+<table>
+  <tr><th>Scenario</th><th>Direct users</th><th>GovClipping licence</th><th>Monthly revenue</th><th>Result</th></tr>
+  <tr><td>Today</td><td>0 paying</td><td>EUR 0</td><td>EUR 0</td><td style="color: var(--red);">-EUR 7,090</td></tr>
+  <tr><td>GovClipping only</td><td>0</td><td>EUR 1,000</td><td>EUR 1,000</td><td style="color: var(--red);">-EUR 6,090</td></tr>
+  <tr><td>GovClipping + 50 direct</td><td>50 x EUR 59 avg</td><td>EUR 1,000</td><td>EUR 3,950</td><td style="color: var(--red);">-EUR 3,140</td></tr>
+  <tr class="highlight-row"><td>Breakeven</td><td>72 x EUR 59 avg</td><td>EUR 1,500</td><td>EUR 5,748</td><td style="color: var(--green);">~EUR 0</td></tr>
+  <tr><td>Target (6 months)</td><td>100 direct</td><td>EUR 2,000</td><td>EUR 7,900</td><td style="color: var(--green);">+EUR 810</td></tr>
+  <tr><td>Scale (12 months)</td><td>200 direct</td><td>EUR 3,000</td><td>EUR 14,800</td><td style="color: var(--green);">+EUR 7,710</td></tr>
+</table>
+
+<h2>Tax structure</h2>
+
+<table>
+  <tr><th>Party</th><th>Jurisdiction</th><th>VAT treatment</th></tr>
+  <tr><td>Beresol BV (seller)</td><td>Netherlands</td><td>Issues invoice without VAT (reverse charge)</td></tr>
+  <tr><td>GovClipping (buyer)</td><td>Spain</td><td>Self-assesses Spanish VAT (21%)</td></tr>
+  <tr><td>Invoice note</td><td colspan="2">"VAT reverse charge, Article 196 VAT Directive 2006/112/EC"</td></tr>
+  <tr><td>Beresol corporate tax</td><td>Netherlands</td><td>19% on first EUR 200K profit, 25.8% above</td></tr>
+</table>
+
+<h2>The frame that wins</h2>
+
+<p><strong>Brubru is GovClipping's EU-level complement, not a competitor.</strong></p>
+
+<ul>
+  <li>GovClipping covers the Spanish output side: BOE, BOA, BOP, BOPA, 20 ministries &times; 17 autonomous communities &times; parliamentary initiatives &times; public organisms (AEAT, AEPD, CNMC, CNMV, AIReF, INCIBE, IDAE, OEPM, SEPI, Red.es).</li>
+  <li>Brubru covers the EU input side: where Spanish regulation originates, where it's going, who's steering it, when it forces transposition, whether Madrid is aligned with Brussels.</li>
+  <li>~70% of Spanish legislation is downstream of EU. Jordi is today flying blind upstream.</li>
+</ul>
+
+<h2>Three demos (20 minutes total)</h2>
+
+<ol>
+  <li>
+    <strong>Demo 1 &mdash; "The EU origin of today's BOE"</strong> (6 min)
+    <ol>
+      <li>GovClipping: pick any recent BOE transposing an EU directive (digital, energy, chemicals, data protection).</li>
+      <li>Brubru: <code>POST /api/v1/legal-text/resolve-aliases</code> with the decree title or preamble &rarr; returns CELEX of the parent EU regulation.</li>
+      <li>Brubru: <code>GET /api/v1/laws/{celex}/text?format=plain</code> &rarr; full EU text (verified on GDPR: 351 KB via EUR-Lex Cellar).</li>
+      <li>Brubru: <code>GET /api/v1/procedures?q=&lt;topic&gt;</code> &rarr; OEIL procedure status.</li>
+    </ol>
+    <em>Your BOE monitoring + our EU context = end-to-end transposition tracking in one workflow.</em>
+  </li>
+
+  <li>
+    <strong>Demo 2 &mdash; "Is Madrid ahead or behind Brussels?"</strong> (6 min)
+    <ol>
+      <li>GovClipping: Spanish government announcement (Ejecutivo module).</li>
+      <li>Brubru: <code>GET /api/v1/knowledge-guides?q=&lt;topic&gt;</code> &rarr; curated guide on EU obligations/deadlines (147 guides).</li>
+      <li>Brubru: <code>GET /api/v1/calendar/events?institution=EP&amp;committee=LIBE&amp;limit=5</code> &rarr; upcoming EP discussions.</li>
+      <li>Brubru: <code>GET /api/v1/predictions/{ref}/timeline</code> &rarr; XGBoost forecast for when the EU rule finishes.</li>
+    </ol>
+    <em>See what Brussels is doing next, right beside what Madrid did today.</em>
+  </li>
+
+  <li>
+    <strong>Demo 3 &mdash; "Stakeholder intelligence across borders"</strong> (6 min)
+    <ol>
+      <li>GovClipping: "Participaci&oacute;n Ciudadana" shows Spanish consultations.</li>
+      <li>Brubru: <code>GET /api/v1/consultations/by-initiative/13174/feedback</code> &rarr; Have Your Say stakeholder data grouped by country, user_type, organisation, Transparency Register number.</li>
+    </ol>
+    <em>For any Spanish consultation, we show who's pushing back at EU level &mdash; and from which country and sector. GovClipping has no access to this layer.</em>
+  </li>
+</ol>
+
+<h2>Three questions for Jordi</h2>
+
+<ol>
+  <li>
+    <strong>API volume:</strong> "Your API is capped at 100 successful calls/month on free, and your usage shows 0/100 used. What's the real throughput your engineering team needs once EU data flows in? Is 60 req/min per API key the right ceiling, or should we unlock a higher tier on Professional?"
+    <br><em>&rarr; Discovers whether our soft rate limit will bite immediately. Opens the pricing conversation without pressing for commitment.</em>
+  </li>
+
+  <li>
+    <strong>Cross-referencing:</strong> "Your initiative records have <code>sections_json</code> with document registry numbers and <code>masterdata_section_str</code>. Would you want each of those auto-linked to the EU directive or regulation they transpose?"
+    <br><em>&rarr; Our <code>POST /api/v1/legal-text/resolve-references</code> + <code>/resolve-aliases</code> become the linking engine for his ~580k initiative records. This is where "Powered by Brubru" gets structurally embedded in his UX, not just a logo.</em>
+  </li>
+
+  <li>
+    <strong>Calendar integration depth:</strong> "Your calendar export today is Outlook/Gmail, institutional agenda only. Would you prefer EU institutional events in that same export stream (one feed), or rendered as a separate sidebar?"
+    <br><em>&rarr; Choose the integration depth. Single stream = deeper tech partnership, "Powered by Brubru" stamped on EU items via <code>meta.source</code>.</em>
+  </li>
+</ol>
+
+<h2>Postman workspace &mdash; Jordi's starting point</h2>
+
+<p><strong>URL:</strong> <a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/">postman.com/beresol-565660/workspace/brubru-eu-data-api/</a></p>
+
+<p><strong>State (verified 18 April 2026):</strong></p>
+<ul>
+  <li>Public workspace &mdash; he can fork without creating a paid account.</li>
+  <li><strong>24 requests across 15 folders</strong>, auto-synced from the live OpenAPI spec.</li>
+  <li>Collection auth: <code>X-API-Key: {{api_key}}</code>, or <code>Authorization: Bearer {{api_key}}</code>.</li>
+  <li>Environment "Brubru Production" pre-populates <code>baseUrl</code> = <code>https://brubru-production.up.railway.app</code>.</li>
+  <li>Every request has sensible default params (GDPR CELEX, Fitto commissioner, LIBE committee, HYS initiative 13174, ECB publications) &mdash; first Send returns real data.</li>
+  <li>Regression-tested weekly by <code>/training api</code>: 48/50 baseline (96%).</li>
+</ul>
+
+<p><strong>Jordi's first 5 clicks:</strong></p>
+<ol>
+  <li>Fork the collection into his workspace.</li>
+  <li>Fork the environment, paste his API key into <code>api_key</code> (current value, type = secret).</li>
+  <li>Select the environment in the top-right dropdown.</li>
+  <li>Hit <code>/api/v1/ping</code> &rarr; 200.</li>
+  <li>Hit <code>/api/v1/consultations/by-initiative/13174/feedback</code> &rarr; real stakeholder data.</li>
+</ol>
+
+<p><strong>His API key:</strong> we mint <code>POST /api/admin/users/{jordi_user_id}/api-keys</code> once his Professional subscription activates. Deliver over secure channel (Signal, not email).</p>
+
+<h2>Pricing &amp; attribution (from Jordi's 13 April email)</h2>
+
+<ul>
+  <li>Professional plan: 99 EUR/month monthly, 67 EUR/month annual.</li>
+  <li>API-only usage (no AI credit consumption on Brubru's side).</li>
+  <li>Attribution: "Powered by Brubru" mentions on GovClipping (a) landing page, (b) specific sections, (c) newsletter.</li>
+  <li>In exchange: discount on the monthly fee.</li>
+</ul>
+
+<p><strong>Our framing:</strong> 67 EUR/month billed monthly (= annual-equivalent discount) in exchange for attribution commitments documented in a one-page side letter. Keeps both sides aligned without contract overhead.</p>
+
+<p><strong>If GovClipping outgrows Professional limits:</strong> we added an Enterprise tier (custom-quoted, 20 April 2026) for partners that need higher API rate limits, multi-seat SSO for their own analyst team, or usage-based credits for heavier consumption. Natural upgrade path once volume exceeds the Professional fair-use ceiling. Pitch it only if he asks about rate limits or scale &mdash; don't pre-empt.</p>
+
+<h2>Warning signs to preempt</h2>
+
+<ul>
+  <li>If he says <em>"We only need Spanish"</em> &rarr; cite the 70% downstream stat, walk through Demo 1.</li>
+  <li>If he asks <em>"Can you give me raw EUR-Lex XML?"</em> &rarr; <code>/api/v1/laws/{celex}/text?format=xml</code> already does this via Cellar fallback.</li>
+  <li>If he asks <em>"What happens when EU changes spec format?"</em> &rarr; cite the tiered ingestion pipeline (519 source inventory, generic RSS ingester + Scrapling fallback) and the <code>/training api</code> regression discipline.</li>
+  <li>If he asks <em>"What if a user query has no data in your DB?"</em> &rarr; cite the three-tier coverage architecture (20 April 2026): Tier 1 DB + smart filters, Tier 2 six on-demand live fetchers (CRE, committee transcripts via Whisper, Have Your Say, commissioner agendas, EUR-Lex Cellar, Tavily), Tier 3 v1 API backstop that re-queries with broader filters when the first two tiers leave a gap. <strong>The same cascade applies when GovClipping's app makes a Brubru API call on behalf of its client.</strong></li>
+  <li><strong>Do not oversell predictions.</strong> The XGBoost model is baseline-plus; frame as <em>"directional forecast, not a crystal ball"</em>. Only pitch if he asks about procedure flow.</li>
+</ul>
+
+<h2>Resposta en catal&agrave; a l'email del 18 d'abril</h2>
+
+<p><em>Ready to paste into Jordi's inbox. Uses <code>hello@beresol.eu</code> as reply-from.</em></p>
+
+<div style="background: #f9fafb; border-left: 4px solid #0693e3; padding: 1.5rem; margin: 1rem 0;">
+<p>Hola Jordi,</p>
+
+<p>Molt&iacute;ssimes gr&agrave;cies pel rep&agrave;s tan detallat de l'API. &Eacute;s exactament el tipus de feedback que ens ajuda a fer-la apta per a integracions serioses, i he dedicat avui dilluns tot el dia a arreglar-ho.</p>
+
+<p><strong>Avui (dilluns 20 d'abril) &mdash; desplegat a producci&oacute;:</strong></p>
+
+<ol>
+  <li><strong>Laws</strong> &mdash; ara retorna <code>422</code> amb <code>reason_code: conflicting_params</code> quan s'envien <code>published_to</code> i <code>published_end</code> amb valors diferents, i <code>422</code> amb <code>reason_code: invalid_date_range</code> quan el rang &eacute;s invertit. He aclarit la descripci&oacute; OpenAPI de cada par&agrave;metre: <code>published_to</code> &eacute;s el nom preferit (l&iacute;mit superior, <code>date &le; valor</code>); <code>published_end</code> &eacute;s simplement un &agrave;lies del mateix bound, existent per compatibilitat amb la vostra API. Si passes tots dos amb el mateix valor, endavant; si els passes amb valors diferents, ara et diem exactament quin &eacute;s el problema.</li>
+
+  <li><strong>MEPs</strong> &mdash; tota la ruta reescrita. Ara crida directament l'EP Open Data REST v2 (no el SPARQL antic). <code>full_name</code> sempre ve poblat, <code>profile_url</code> sempre apunta a <code>europarl.europa.eu/meps/en/{id}</code>, i <code>/meps/{mep_id}</code> funciona correctament. El <code>total</code> ara &eacute;s <code>offset + items + 1-hint</code> per indicar que hi ha m&eacute;s p&agrave;gines (abans retornava el <code>limit</code> com si fos el total &mdash; tens ra&oacute;). <code>coverage_complete: false</code> per deixar clar que la paginaci&oacute; &eacute;s oberta.</li>
+
+  <li><strong>Consultations</strong> &mdash; totes les dates en format ISO-8601 (<code>YYYY-MM-DDTHH:MM:SSZ</code>). El <code>feedback_id</code> sempre string.</li>
+
+  <li><strong>Legal-text</strong> &mdash; <code>/legal-text/{celex}/recital-article-map</code> ara captura l'excepci&oacute; del TF-IDF i retorna <code>503</code> amb <code>reason_code: computation_unavailable</code> en comptes del <code>500</code> cru. Els dos endpoints POST (<code>resolve-references</code> i <code>resolve-aliases</code>) ara estan documentats com a <strong>READ-ONLY, idempotents, sense cap modificaci&oacute; de dades al servidor</strong>. S&oacute;n POST nom&eacute;s perqu&egrave; el body pot ser llarg; cap risc d'escriptura.</li>
+
+  <li><strong>Commissioners</strong> &mdash; el parser de <code>detail_url</code> ara prioritza el link del t&iacute;tol i rebutja <code>#</code>, <code>javascript:</code> i <code>mailto:</code>. Fet amb test de regressi&oacute; directe sobre el HTML de la Comissi&oacute;.</li>
+
+  <li><strong>Default limit</strong> 20 &rarr; 50 a tots els endpoints paginats (tens ra&oacute; sobre el col&middot;lapse amb 20; 100 continua sent el m&agrave;xim).</li>
+</ol>
+
+<p><strong>Dem&agrave; (dimarts 21):</strong></p>
+<ul>
+  <li>Treure el pricing de <code>/api/</code> &mdash; nom&eacute;s m&agrave;rqueting, no detalls de plans.</li>
+  <li>Soft-paywall a <code>/api/docs</code> &mdash; la refer&egrave;ncia es veu, el "Try it" viu requereix autenticaci&oacute; Professional.</li>
+  <li>Esquelet del microsite de docs a <code>/api/docs/</code> amb: Introducci&oacute;, Autenticaci&oacute;, Envelope + errors, Endpoints, Institucions UE cobertes, Glossari (CELEX, OEIL, rapporteur, trilogue, comit&eacute; respons&agrave;ble/opini&oacute;...), Use cases per perfil (consultor, trade association, corporate, ONG, funcionari UE, investigador), Changelog.</li>
+</ul>
+
+<p><strong>Roadmap fins al maig:</strong></p>
+<ul>
+  <li><strong>Setmana del 28 abril:</strong> guies d'&uacute;s per persona + glossari complet.</li>
+  <li><strong>Setmana del 5 maig:</strong> MCP expandit de 6 &rarr; 24 eines (Claude), GPT Actions (ChatGPT), Function Calling (Gemini) &mdash; tots alimentats pel mateix OpenAPI spec.</li>
+  <li><strong>Setmana del 12 maig:</strong> endpoint <code>/api/v1/activity</code> &mdash; el flux unificat cronol&ograve;gic UE que em vas demanar (lleis publicades, canvis d'estat de procediments, esmenes tabulades, consultes obertes/tancades, EPRS, events). Cronol&ograve;gic primer; ranking per import&agrave;ncia al v2.</li>
+</ul>
+
+<p><strong>Per dimecres:</strong> far&eacute; una passada completa a producci&oacute; amb la clau que et mint&iacute; abans de la trucada, i vindr&eacute; amb els 13 punts verificats en verd. Tamb&eacute; tindr&eacute; 24 requests al workspace Postman amb defaults sensats per a cada endpoint, perqu&egrave; puguis fer fork i provar-los directament.</p>
+
+<p>Una abra&ccedil;ada,<br>
+Victor</p>
+</div>
+
+<h2>Full docs microsite shipped (20 April 2026)</h2>
+
+<p><strong>Live at <a href="https://brubru.beresol.eu/api/docs/">brubru.beresol.eu/api/docs/</a></strong> &mdash; 10 written pages, ~130 KB, responsive with sticky sidebar nav. Built for Jordi's Wednesday meeting.</p>
+
+<table>
+<thead><tr><th>Page</th><th>What it contains</th></tr></thead>
+<tbody>
+<tr><td><code>/</code> Introduction</td><td>What Brubru API is, data sources + refresh-cadence table, quickstart with curl, limitations explicit</td></tr>
+<tr><td><code>/authentication</code></td><td>Bearer vs X-API-Key, key lifecycle, rotation, security, examples in Python/Node/TypeScript</td></tr>
+<tr><td><code>/envelope</code></td><td>All envelope fields, pagination, <code>detail_level</code>, <code>meta</code> attribution, date-filter semantics</td></tr>
+<tr><td><code>/errors</code></td><td>Full reason-code table, <code>X-Request-Id</code>, recovery patterns, worked examples</td></tr>
+<tr><td><code>/rate-limits</code></td><td>60/min sliding window, <code>Retry-After</code>, backoff pseudocode</td></tr>
+<tr><td><code>/endpoints</code></td><td><strong>All 24 endpoints</strong> with parameters tables, curl examples, sample responses</td></tr>
+<tr><td><code>/institutions</code></td><td>Matrix: every EU institution we ingest from + refresh cadences + what we don't cover</td></tr>
+<tr><td><code>/glossary</code></td><td>47 EU policy terms in plain English: CELEX, OEIL, rapporteur, trilogue, transposition deadline, committee role types, directive vs regulation, etc.</td></tr>
+<tr><td><code>/use-cases</code></td><td>6 role-specific call sequences + 4 competitor integration patterns (including GovClipping)</td></tr>
+<tr><td><code>/changelog</code></td><td>Dated history of every API change from 14 April + roadmap through September 2026</td></tr>
+</tbody>
+</table>
+
+<p>Discoverability from <code>/api/</code>:</p>
+<ol>
+  <li>Hero button "API reference" (top of page)</li>
+  <li>New "Full documentation" section (replaces pricing, above Errors) &rarr; "Open full docs"</li>
+  <li>"Start building" section at the bottom &rarr; "Open the reference"</li>
+</ol>
+
+<p><strong>Soft paywall:</strong> sticky banner on every docs page saying "To execute live calls you need a Brubru API key &mdash; Start a Professional trial". Auto-hides for authenticated Professional users (<code>brubru_tier=blue</code> cookie) and for anyone who dismisses it (<code>sessionStorage</code>). Non-blocking &mdash; the reference stays fully readable to discovery visitors.</p>
+
+<p><strong>Pricing removed from <code>/api/</code>:</strong> pricing table deleted, i18n keys dropped, replaced by the "Full documentation" CTA. Pricing now lives only on <code>/subscription</code>.</p>
+
+<h2>Post-call deliverables (expect asks)</h2>
+
+<ol>
+  <li>Side letter on attribution + pricing &mdash; skeleton drafted, need his logo-placement details.</li>
+  <li>Integration sample code &mdash; Python + Node.js snippets showing how to call <code>resolve-aliases</code> from his initiative ingestion pipeline.</li>
+  <li>Slack or shared channel for engineering questions during integration.</li>
+  <li>"Powered by Brubru" badge &mdash; SVG + HTML snippet matching the Brubru palette.</li>
+</ol>
+
+<h2>Appendix &mdash; what GovClipping actually tracks (from dashboard read)</h2>
+
+<p>Explicit document types in his filter dropdown: Agenda, BOA, BOE, BOP, BOPA, Consejo de Ministros, Ayudas, Participaci&oacute;n Ciudadana, Dict&aacute;menes del Consejo de Estado, Publicaciones, Acuerdos de Gobierno, Presidente, Notas de prensa, Diario de sesiones, Subvenciones.</p>
+
+<p><strong>Zero</strong> EU-level document types. No EUR-Lex, OEIL, EPRS, EP committees, Commission documents, Have Your Say, or EU calendar. That is the gap Brubru fills.</p>
+
+<p><strong>Premium features he has:</strong> AI entity detection (subsidiary/brand/competitor mentions), KPI dashboards, calendar export, 48h-before deadline alerts on subsidies/participation/normative processes, 5 active alerts max, 3 dashboards max, ability to add new official sources.</p>
+
+<p><strong>Questions still open from first meeting:</strong></p>
+<ul>
+  <li>How many paying clients does GovClipping have? What sectors?</li>
+  <li>Do clients ask EU-level questions GovClipping can't answer today?</li>
+  <li>What's GovClipping's tech stack? How do their MCP integrations work?</li>
+  <li>Would they want to resell Brubru as an add-on or embed it transparently?</li>
+  <li>Do they cover DOGC (Catalan) separately from BOE?</li>
+  <li>Timeline: pilot with 1-3 clients, or launch to all?</li>
+  <li>Who makes the technical integration decision: Jordi or a CTO?</li>
+</ul>
+
+<footer>
+  <p>Beresol BV (Netherlands) | Victor Sol&eacute; Ferioli | hello@beresol.eu | Prepared 13 April 2026, updated 18 April 2026</p>
+  <p>This document is internal to Beresol. Not for distribution.</p>
+</footer>
+
+</body>
+</html>

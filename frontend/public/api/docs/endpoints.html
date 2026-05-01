@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Endpoints — Brubru EU Data API</title>
+<meta name="description" content="Full reference of all 24 Brubru EU Data API endpoints with parameters, curl examples, and sample responses.">
+<link rel="icon" type="image/png" href="/assets/brubru_mainlogo.png">
+<link rel="stylesheet" href="/api/docs/_assets/docs.css">
+</head>
+<body>
+<div id="brubru-paywall-banner" style="position:sticky;top:0;z-index:50;background:linear-gradient(90deg,#0693e3 0%,#047dbe 100%);color:#fff;padding:12px 20px;text-align:center;font-family:'Adobe Caslon Pro',Georgia,serif;font-size:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+  <span>You're viewing the reference. To execute live calls you need a Brubru API key &mdash; </span>
+  <a href="/subscription" style="color:#fff;font-weight:700;text-decoration:underline;">Start a Professional trial</a>
+  <span> &middot; or </span>
+  <a href="mailto:hello@beresol.eu" style="color:#fff;font-weight:700;text-decoration:underline;">contact sales</a>
+  <button onclick="document.getElementById('brubru-paywall-banner').style.display='none';sessionStorage.setItem('brubru_paywall_dismissed','1');" style="float:right;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:0 8px;" aria-label="Dismiss">&times;</button>
+</div>
+<script>
+(function(){
+  // Hide for authenticated Professional users (detected via cookie set after login)
+  var m = document.cookie.match(/brubru_tier=([^;]+)/);
+  if (m && m[1] === 'blue') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+  // Hide for users who dismissed in this session
+  if (sessionStorage.getItem('brubru_paywall_dismissed') === '1') {
+    var b = document.getElementById('brubru-paywall-banner');
+    if (b) b.style.display = 'none';
+  }
+})();
+</script>
+
+<div class="shell">
+<!--
+Shared nav HTML fragment for Brubru API docs.
+Each page inlines this by find-and-replace at build time. Pages mark the
+active link by adding class="active" to the matching <a>.
+-->
+<aside class="sidebar">
+  <a href="/api/" class="sidebar__brand">
+    <img src="/assets/brubru_mainlogo.png" alt="">
+    <span class="sidebar__brand-text">Brubru API</span>
+  </a>
+
+  <h3>Start here</h3>
+  <ul>
+    <li><a href="/api/docs/" data-nav="home">Introduction</a></li>
+    <li><a href="/api/docs/authentication.html" data-nav="authentication">Authentication</a></li>
+    <li><a href="/api/docs/envelope.html" data-nav="envelope">Response envelope</a></li>
+    <li><a href="/api/docs/errors.html" data-nav="errors">Errors</a></li>
+    <li><a href="/api/docs/rate-limits.html" data-nav="rate-limits">Rate limits</a></li>
+  </ul>
+
+  <h3>Legislation</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#laws" data-nav="endpoints-laws">Laws</a></li>
+    <li><a href="/api/docs/endpoints.html#procedures" data-nav="endpoints-procedures">Procedures</a></li>
+    <li><a href="/api/docs/endpoints.html#legal-text" data-nav="endpoints-legal-text">Legal-text intelligence</a></li>
+    <li><a href="/api/docs/endpoints.html#delegated-acts" data-nav="endpoints-delegated">Delegated acts</a></li>
+    <li><a href="/api/docs/endpoints.html#implementing-acts" data-nav="endpoints-implementing">Implementing acts</a></li>
+    <li><a href="/api/docs/endpoints.html#tris-notifications" data-nav="endpoints-tris">TRIS notifications</a></li>
+    <li><a href="/api/docs/endpoints.html#commission-register" data-nav="endpoints-commission-register">Commission Register</a></li>
+    <li><a href="/api/docs/endpoints.html#council-documents" data-nav="endpoints-council-documents">Council Documents</a></li>
+  </ul>
+
+  <h3>Institutions &amp; people</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#metadata" data-nav="endpoints-metadata">Metadata (13 enum endpoints)</a></li>
+    <li><a href="/api/docs/endpoints.html#commissioners" data-nav="endpoints-commissioners">Commissioners</a></li>
+    <li><a href="/api/docs/endpoints.html#officials" data-nav="endpoints-officials">Officials (14,873)</a></li>
+    <li><a href="/api/docs/endpoints.html#meps" data-nav="endpoints-meps">MEPs</a></li>
+    <li><a href="/api/docs/endpoints.html#meetings" data-nav="endpoints-meetings">Meetings (Transparency)</a></li>
+    <li><a href="/api/docs/endpoints.html#rsb-opinions" data-nav="endpoints-rsb-opinions">RSB Opinions</a></li>
+  </ul>
+
+  <h3>EP detail</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#committees" data-nav="endpoints-committees">Committees</a></li>
+    <li><a href="/api/docs/endpoints.html#ep-documents" data-nav="endpoints-ep-documents">EP documents (unified)</a></li>
+    <li><a href="/api/docs/endpoints.html#amendments" data-nav="endpoints-amendments">Amendments</a></li>
+    <li><a href="/api/docs/endpoints.html#votes" data-nav="endpoints-votes">Votes</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-adopted" data-nav="endpoints-texts-adopted">Texts adopted</a></li>
+    <li><a href="/api/docs/endpoints.html#texts-submitted" data-nav="endpoints-texts-submitted">Texts submitted</a></li>
+    <li><a href="/api/docs/endpoints.html#resolutions" data-nav="endpoints-resolutions">Resolutions</a></li>
+    <li><a href="/api/docs/endpoints.html#reports" data-nav="endpoints-reports">Reports</a></li>
+    <li><a href="/api/docs/endpoints.html#opinions" data-nav="endpoints-opinions">Opinions</a></li>
+    <li><a href="/api/docs/endpoints.html#parliamentary-questions" data-nav="endpoints-parl-q">Parliamentary questions</a></li>
+    <li><a href="/api/docs/endpoints.html#webstreams" data-nav="endpoints-webstreams">Webstreams</a></li>
+  </ul>
+
+  <h3>Live data</h3>
+  <ul>
+    <li><a href="/api/docs/endpoints.html#publications" data-nav="endpoints-publications">Publications</a></li>
+    <li><a href="/api/docs/endpoints.html#press-releases" data-nav="endpoints-press-releases">Press releases</a></li>
+    <li><a href="/api/docs/endpoints.html#calendar" data-nav="endpoints-calendar">Calendar</a></li>
+    <li><a href="/api/docs/endpoints.html#consultations" data-nav="endpoints-consultations">Consultations</a></li>
+    <li><a href="/api/docs/endpoints.html#research-publications" data-nav="endpoints-research">Research (EPRS+STOA+JRC+ART+ECA)</a></li>
+    <li><a href="/api/docs/endpoints.html#tenders" data-nav="endpoints-tenders">Tenders (TED)</a></li>
+    <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
+    <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
+    <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+  </ul>
+
+  <h3>Reference</h3>
+  <ul>
+    <li><a href="/api/docs/institutions.html" data-nav="institutions">EU institutions covered</a></li>
+    <li><a href="/api/docs/glossary.html" data-nav="glossary">Glossary</a></li>
+    <li><a href="/api/docs/use-cases.html" data-nav="use-cases">Use cases by role</a></li>
+    <li><a href="/api/docs/changelog.html" data-nav="changelog">Changelog</a></li>
+  </ul>
+
+  <h3>External</h3>
+  <ul>
+    <li><a href="https://brubru-production.up.railway.app/api/v1/openapi.json" target="_blank" rel="noopener">OpenAPI spec</a></li>
+    <li><a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/" target="_blank" rel="noopener">Postman workspace</a></li>
+    <li><a href="https://brubru-production.up.railway.app/api/docs" target="_blank" rel="noopener">Scalar try-it</a></li>
+  </ul>
+</aside>
+
+<main class="main">
+
+<div class="main__eyebrow">Endpoints</div>
+<h1>Full endpoint reference</h1>
+<p class="main__lede">
+All <strong>82 v1 endpoints across 36 folders</strong> grouped by dataset. Each entry shows the HTTP method,
+path, parameters, a curl example, and a sample response. For live try-it,
+open the <a href="https://brubru-production.up.railway.app/api/docs" target="_blank">Scalar reference</a> or the <a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/" target="_blank">Postman workspace</a>.
+</p>
+
+<div class="callout">
+<p><strong>Base URL:</strong> <code>https://brubru-production.up.railway.app</code><br>
+<strong>Auth:</strong> <code>Authorization: Bearer brubru_live_...</code> (all endpoints except <code>/ping</code>)<br>
+<strong>Content type:</strong> <code>application/json</code></p>
+</div>
+
+<h2 id="meta">Meta endpoints</h2>
+<p id="metadata"></p>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/ping</span>
+  <span class="badge badge--public">Public</span>
+</div>
+<p class="endpoint__desc">Health check. Unauthenticated. Use this to verify your connectivity and the service is up before debugging auth.</p>
+<pre><code>curl https://brubru-production.up.railway.app/api/v1/ping</code></pre>
+<pre><code>{
+  "status": "ok",
+  "service": "brubru-data-provider",
+  "version": "v1",
+  "time": "2026-04-20T15:00:00Z"
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/whoami</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Identify the key holder + current rate-limit state. Useful for SDK bring-up.</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/whoami</code></pre>
+<pre><code>{
+  "user_id": "d5daeab9-1f70-43b4-a66a-2282a4ff85b0",
+  "tier": "blue",
+  "rate_limit_limit": 60,
+  "rate_limit_remaining": 59
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/meta/enums</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">All valid enum values for every filter param. Call once at startup, cache.</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/meta/enums</code></pre>
+<pre><code>{
+  "datasets": ["laws", "procedures", "commissioners", "consultations", ...],
+  "doc_types": ["Regulation", "Directive", "Decision", ...],
+  "policy_areas": ["Agriculture", "Digital", "Environment", ...],
+  "ep_committees": ["AFCO", "AFET", "AGRI", "BUDG", ...],
+  "eprs_publication_types": ["briefing", "study", "at_a_glance", ...],
+  "calendar_institutions": ["EP", "COUNCIL", "COMMISSION", ...],
+  "detail_levels": ["Minimal", "Summary", "Full"],
+  ...
+}</code></pre>
+</div>
+
+<h2 id="laws">Laws</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/laws</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Search adopted EU legislation. 28,500+ laws indexed with TSVECTOR full-text search.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>q</td><td>string</td><td>Full-text search over title + subject matter.</td></tr>
+<tr><td>celex</td><td>string</td><td>Exact CELEX match (e.g. <code>32016R0679</code>).</td></tr>
+<tr><td>doc_type</td><td>string</td><td>Regulation, Directive, Decision...</td></tr>
+<tr><td>policy_area</td><td>string</td><td>Digital, Environment, Finance...</td></tr>
+<tr><td>published_from</td><td>date YYYY-MM-DD</td><td>Lower bound — adoption date &ge; value.</td></tr>
+<tr><td>published_to</td><td>date YYYY-MM-DD</td><td>Upper bound — adoption date &le; value. Preferred.</td></tr>
+<tr><td>published_end</td><td>date YYYY-MM-DD</td><td>Alias of <code>published_to</code>. 422 if conflicting.</td></tr>
+<tr><td>limit</td><td>int 1-100</td><td>Default 50.</td></tr>
+<tr><td>page</td><td>int &ge; 1</td><td>Default 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/laws?q=artificial+intelligence&limit=3"</code></pre>
+
+<pre><code>{
+  "total": 87, "returned": 3, "page": 1, "limit": 3, "has_more": true,
+  "data": [
+    {
+      "celex": "32024R1689",
+      "title": "Regulation (EU) 2024/1689 ... on artificial intelligence",
+      "doc_type": "Regulation",
+      "adopted_on": "2024-06-13",
+      "oj_reference": "L, 2024/1689",
+      "policy_area": "Digital",
+      "legal_basis": ["Article 114 TFEU"],
+      "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689"
+    },
+    ...
+  ]
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/laws/{celex}/text</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Full text of a specific EU law. Tries local Formex XML cache first; falls back to EUR-Lex Cellar (<code>publications.europa.eu/resource/celex/{celex}</code>) if not cached.</p>
+
+<h4>Path parameters</h4>
+<table class="param-table">
+<tbody><tr><td>celex</td><td>string</td><td>CELEX identifier.</td></tr></tbody>
+</table>
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody><tr><td>format</td><td>plain | xml</td><td>Default <code>plain</code> — whitespace-normalised text. <code>xml</code> returns raw Formex.</td></tr></tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/laws/32016R0679/text?format=plain"</code></pre>
+
+<pre><code>{
+  "celex": "32016R0679",
+  "title": "Regulation (EU) 2016/679 ... General Data Protection Regulation",
+  "doc_type": "Regulation",
+  "adopted_on": "2016-04-27",
+  "format": "plain",
+  "content": "REGULATION (EU) 2016/679 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL ...",
+  "content_length": 351521,
+  "eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
+}</code></pre>
+
+<div class="callout">
+<p>Content can be hundreds of KB for regulations. Use <code>format=plain</code> for LLM input; <code>format=xml</code> if you need structure preserved.</p>
+</div>
+</div>
+
+<h2 id="procedures">Procedures</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/procedures</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">EU legislative procedures in flight. 1,464 files tracked from Commission proposal to adoption.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>q</td><td>string</td><td>Substring match on title.</td></tr>
+<tr><td>reference</td><td>string</td><td>OEIL reference e.g. <code>2025/0726(COD)</code>.</td></tr>
+<tr><td>committee</td><td>string</td><td>Lead committee code (LIBE, ENVI, ...).</td></tr>
+<tr><td>rapporteur_mep_id</td><td>string</td><td>Filter by rapporteur.</td></tr>
+<tr><td>status</td><td>string</td><td>Carriage status (announced, tabled, adopted, ...).</td></tr>
+<tr><td>updated_from / updated_to / updated_end</td><td>datetime</td><td>Last-updated bounds. <code>updated_end</code> is alias of <code>updated_to</code>.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/procedures?committee=LIBE&limit=3"</code></pre>
+
+<h4>Cross-references shipped with every row</h4>
+<ul>
+<li><code>url</code> &mdash; canonical OEIL page on <code>oeil.secure.europarl.europa.eu</code>.</li>
+<li><code>legal_text_url</code> &mdash; EUR-Lex link to the adopted text (when available).</li>
+<li><code>law_tracker_url</code> &mdash; the EU's aggregated procedure tracker on <code>law-tracker.europa.eu</code>. Mapping: OEIL <code>2025/0420(COD)</code> &rarr; <code>https://law-tracker.europa.eu/procedure/2025_420?lang=en</code>. Combines OEIL + EUR-Lex + Commission events on a single page. Returns <code>null</code> when the reference isn't an OEIL procedure (e.g. COM-numbered drafts).</li>
+</ul>
+</div>
+
+<h2 id="publications">Publications</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/publications</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Unified feed of press releases and reports from 44+ EU institutions. Populated by our RSS ingester.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>q</td><td>string</td><td>Full-text on title + summary.</td></tr>
+<tr><td>institution_slug</td><td>string</td><td>european_commission, ecb, ema, frontex, ...</td></tr>
+<tr><td>source_slug</td><td>string</td><td>Per-feed filter (ec_press, ecb_press, ema_news, ...).</td></tr>
+<tr><td>category</td><td>string</td><td>press_release, report, consultation, agenda, ...</td></tr>
+<tr><td>policy_area</td><td>string</td><td>Single policy area tag.</td></tr>
+<tr><td>published_from / to / end</td><td>date</td><td>Publication-date bounds.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/publications?institution_slug=ecb&limit=5"</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/publications/sources</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Catalog of ingested sources with per-source item count and latest publication date. Useful for monitoring ingestion health.</p>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/publications/sources</code></pre>
+</div>
+
+<h2 id="eprs">EPRS</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/eprs</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">European Parliamentary Research Service publications — briefings, studies, in-depth analyses.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>q</td><td>string</td><td>Substring on title + summary.</td></tr>
+<tr><td>publication_type</td><td>string</td><td>briefing | study | in_depth_analysis | at_a_glance | eu_legislation_in_progress (lowercase).</td></tr>
+<tr><td>committee</td><td>string</td><td>LIBE, ENVI, ECON, ...</td></tr>
+<tr><td>procedure_ref</td><td>string</td><td>OEIL reference.</td></tr>
+<tr><td>celex</td><td>string</td><td>CELEX linked to this publication.</td></tr>
+<tr><td>published_from / to / end</td><td>date</td><td>Publication bounds.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/eprs?publication_type=briefing&committee=LIBE"</code></pre>
+</div>
+
+<h2 id="meps">MEPs</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/meps</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Live from EP Open Data REST v2. 6-hour cache. <code>total</code> is a best-effort hint; <code>coverage_complete</code> is false.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>country</td><td>ISO-2 e.g. ES</td><td>Country of representation.</td></tr>
+<tr><td>group</td><td>string</td><td>Political group (EPP, S-D, RENEW, ...).</td></tr>
+<tr><td>name</td><td>string</td><td>Name substring.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/meps?country=ES&limit=5"</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/meps/{mep_id}</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">MEP profile by identifier. Returns <code>MEPItem</code> shape; <code>profile_url</code> is <code>https://www.europarl.europa.eu/meps/en/{id}</code>.</p>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/meps/197668</code></pre>
+</div>
+
+<h2 id="commissioners">Commissioners</h2>
+
+<div class="callout callout--ok">
+<p><strong>Profile vs. agenda are now separate endpoints.</strong> Updated 30 April 2026 after partner feedback &mdash; agendas are not metadata. Use <code>/commissioners/{slug}</code> for the profile, <code>/commissioners/{slug}/agenda</code> for the events.</p>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/commissioners</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">All 27 College members. Profile rows only &mdash; <code>slug</code>, <code>name</code>, <code>portfolio</code>, <code>country</code>, <code>bio_url</code>, <code>agenda_url</code>, <code>unified_calendar_url</code>.</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/commissioners</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/commissioners/{slug}</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Profile of a single Commissioner. Same shape as one row of <code>/commissioners</code>. No events &mdash; for the agenda call <code>/{slug}/agenda</code>.</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/commissioners/raffaele-fitto
+
+# {
+#   "slug": "raffaele-fitto",
+#   "name": "Raffaele Fitto",
+#   "portfolio": "Cohesion and Reforms",
+#   "country": "Italy",
+#   "bio_url": "https://commission.europa.eu/about/organisation/college-commissioners/raffaele-fitto_en",
+#   "agenda_url": null,
+#   "unified_calendar_url": "https://commission.europa.eu/about/organisation/college-commissioners/calendar-items-president-and-commissioners_en",
+#   "type": "commissioner"
+# }</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/commissioners/{name}/agenda</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Live calendar items for a Commission college member. Name resolution is accent-insensitive and accepts full name, slug, or nickname. Returns ONLY the agenda envelope &mdash; no profile fields injected.</p>
+
+<h4>Path parameters</h4>
+<table class="param-table">
+<tbody><tr><td>name</td><td>string</td><td>Slug, surname, or full name (Fitto, raffaele-fitto, Sefcovic, Virkkunen, McGrath, ...).</td></tr></tbody>
+</table>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>date_from / date_to</td><td>date</td><td>Event-date bounds.</td></tr>
+<tr><td>limit / page</td><td>int 1-200 / 1</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/commissioners/Fitto/agenda?limit=10"
+
+# {
+#   "total": 23, "returned": 10, "has_more": true,
+#   "data": [
+#     { "date": "2026-04-15", "title": "Meeting with Giovanni Liverani, ANIA",
+#       "location": "Brussels", "detail_url": "https://commission.europa.eu/..." },
+#     ...
+#   ]
+# }</code></pre>
+</div>
+
+<h2 id="committees">Committees</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/committees/{code}/work-items</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Legislative files tracked by an EP committee. Procedure reference, rapporteur, status, vote date, CELEX links.</p>
+
+<h4>Path parameters</h4>
+<table class="param-table">
+<tbody><tr><td>code</td><td>string</td><td>Committee code (LIBE, ENVI, AGRI, ...). See <a href="/api/docs/glossary.html">Glossary</a>.</td></tr></tbody>
+</table>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>q</td><td>string</td><td>Substring on title.</td></tr>
+<tr><td>status</td><td>string</td><td>Carriage status.</td></tr>
+<tr><td>stage</td><td>string</td><td>Stage name.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/committees/LIBE/work-items?limit=5"</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/committees/{code}/minutes</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Meeting minutes for a committee. Includes agenda items, votes, decisions.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>date_from / date_to</td><td>date</td><td>Meeting date bounds.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/committees/LIBE/minutes?limit=3"</code></pre>
+</div>
+
+<h2 id="consultations">Consultations</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/consultations/by-initiative/{initiative_id}/feedback</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Live stakeholder feedback on an EC Have Your Say initiative. Returns paginated items + summary aggregates (by_country, by_user_type).</p>
+
+<h4>Path parameters</h4>
+<table class="param-table">
+<tbody><tr><td>initiative_id</td><td>int</td><td>HYS initiative ID (e.g. 13174 for "Sustainable EU food system").</td></tr></tbody>
+</table>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>country</td><td>ISO-3 e.g. BEL</td><td>Filter by country of respondent.</td></tr>
+<tr><td>user_type</td><td>string</td><td>BUSINESS_ASSOCIATION, COMPANY, NGO, CITIZEN, ...</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/consultations/by-initiative/13174/feedback?user_type=BUSINESS_ASSOCIATION&limit=5"</code></pre>
+
+<pre><code>{
+  "total": 86, "returned": 5, "has_more": true,
+  "aggregates": {
+    "consultation_id": "uuid",
+    "initiative_id": "13174",
+    "publication_id": 13174,
+    "title": "Sustainable EU food system",
+    "portal_url": "https://ec.europa.eu/info/law/better-regulation/...",
+    "summary_total": 86,
+    "by_user_type": { "COMPANY": 38, "BUSINESS_ASSOCIATION": 28, "NGO": 12, ... },
+    "by_country": { "BEL": 15, "GBR": 12, ... }
+  },
+  "data": [
+    {
+      "feedback_id": "621474",
+      "date": "2020-10-09T22:02:54Z",
+      "user_type": "BUSINESS_ASSOCIATION",
+      "organisation": "Freshfields Bruckhaus Deringer",
+      "country": "GBR",
+      "transparency_register_number": "443913019286-78",
+      "text": "...",
+      "public_url": "https://ec.europa.eu/..."
+    },
+    ...
+  ]
+}</code></pre>
+</div>
+
+<h2 id="calendar">Calendar</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/calendar/events</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Unified EU institutional calendar. EP plenary, Council meetings, Commission college, decentralised agencies.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>institution</td><td>EP | COUNCIL | EUROPEAN_COUNCIL | COMMISSION | ECJ | ECB | ESMA | EMA | EBA | EIOPA | COR | EESC</td><td>Upper-case codes.</td></tr>
+<tr><td>event_type</td><td>string</td><td>PLENARY, COMMITTEE_MEETING, COUNCIL_MEETING, COLLEGE_MEETING, ...</td></tr>
+<tr><td>committee</td><td>string</td><td>EP committee code.</td></tr>
+<tr><td>commission_dg</td><td>string</td><td>AGRI, CNECT, ENV, ...</td></tr>
+<tr><td>date_from / date_to</td><td>date</td><td>Event-date bounds.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/calendar/events?institution=EP&limit=10"</code></pre>
+</div>
+
+<h2 id="knowledge-guides">Knowledge guides</h2>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/knowledge-guides</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">147 curated Brubru policy explainers. Keyword-indexed; each has a QUICK FACTS block and triggers.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody>
+<tr><td>q</td><td>string</td><td>Keyword query. Omit for full listing.</td></tr>
+<tr><td>detail_level</td><td>Summary | Full</td><td>Summary = first 500 chars; Full = 20k chars.</td></tr>
+<tr><td>limit / page</td><td>int</td><td>Default 50 / 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/knowledge-guides?q=AI+Act"</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/knowledge-guides/{guide_id}</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Full markdown content of a specific guide.</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/knowledge-guides/gdpr_data_protection</code></pre>
+</div>
+
+<h2 id="legal-text">Legal-text intelligence</h2>
+
+<div class="callout">
+<p>These endpoints expose Brubru's derived analyses of EU legal texts. The two POST endpoints are <strong>READ-ONLY idempotent</strong> — they're POST only because the request body may contain long user text.</p>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/legal-text/{celex}/recital-article-map</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Top-3 recitals motivating each article of a law. TF-IDF cosine similarity. Cached per CELEX.</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody><tr><td>force_recompute</td><td>bool</td><td>Bypass cache, rebuild the map. Default false.</td></tr></tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/legal-text/32016R0679/recital-article-map</code></pre>
+
+<pre><code>{
+  "celex": "32016R0679",
+  "map": {
+    "Article 3": [
+      {"recital_number": "27", "score": 0.41, "snippet": "..."},
+      {"recital_number": "14", "score": 0.35, "snippet": "..."},
+      {"recital_number": "23", "score": 0.30, "snippet": "..."}
+    ],
+    "Article 6": [...],
+    ...
+  }
+}</code></pre>
+
+<div class="callout callout--warn">
+<p>If computation fails (edge-case XML, empty TF-IDF vocabulary), you get <code>503 computation_unavailable</code>. Fall back to <code>/defined-terms</code> for a different parser's output.</p>
+</div>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/legal-text/{celex}/defined-terms</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Extracted Article 3/4-style definitions (<em>"X means..."</em>) as a term → definition dictionary.</p>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  https://brubru-production.up.railway.app/api/v1/legal-text/32022R2065/defined-terms</code></pre>
+
+<pre><code>{
+  "celex": "32022R2065",
+  "terms": {
+    "information society service": {
+      "term": "information society service",
+      "definition": "a service as defined in Article 1(1)(b) of Directive (EU) 2015/1535",
+      "article": "Article 3",
+      "point": "a"
+    },
+    ...
+  }
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--post">POST</span>
+  <span class="endpoint__path">/api/v1/legal-text/resolve-references</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc"><strong>READ-ONLY.</strong> Parse free text for inline EU legal citations; return structured CELEX identifiers with EUR-Lex URLs.</p>
+
+<h4>Request body</h4>
+<pre><code>{
+  "text": "See Article 7 of Regulation (EU) 2024/1234 and Directive 2011/93/EU.",
+  "annotate_html": false
+}</code></pre>
+
+<h4>Response (annotate_html=false)</h4>
+<pre><code>{
+  "refs": [
+    {"raw": "Regulation (EU) 2024/1234", "celex": "32024R1234", "url": "https://eur-lex.europa.eu/...", "article": "7"},
+    {"raw": "Directive 2011/93/EU", "celex": "32011L0093", "url": "https://eur-lex.europa.eu/..."}
+  ]
+}</code></pre>
+
+<h4>Response (annotate_html=true)</h4>
+<pre><code>{
+  "html": "See &lt;a href='...' data-celex='32024R1234'&gt;Article 7 of Regulation (EU) 2024/1234&lt;/a&gt; and ..."
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--post">POST</span>
+  <span class="endpoint__path">/api/v1/legal-text/resolve-aliases</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc"><strong>READ-ONLY.</strong> Scan free text for 680+ human nicknames of EU laws (GDPR, DSA, AI Act, CBAM, Solvency II, CRR, ...); return matches with CELEX identifiers.</p>
+
+<h4>Request body</h4>
+<pre><code>{
+  "text": "Under the GDPR and the Digital Services Act, platforms must..."
+}</code></pre>
+
+<h4>Response</h4>
+<pre><code>{
+  "aliases": [
+    {
+      "raw": "GDPR",
+      "alias": "GDPR",
+      "celex": "32016R0679",
+      "full_title": "Regulation (EU) 2016/679 ... General Data Protection Regulation",
+      "start": 10,
+      "end": 14
+    },
+    {
+      "raw": "Digital Services Act",
+      "alias": "DSA",
+      "celex": "32022R2065",
+      "full_title": "Regulation (EU) 2022/2065 ... Digital Services Act",
+      "start": 23,
+      "end": 43
+    }
+  ]
+}</code></pre>
+</div>
+
+<h2 id="predictions">Predictions</h2>
+
+<div class="callout">
+<p>Brubru uses XGBoost ML + baseline heuristics trained on historical OEIL data to forecast legislative outcomes. These are directional, not prophetic — combine with your own judgement.</p>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/predictions/{procedure_ref:path}/timeline</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Predicted days remaining until the procedure closes. Includes confidence score and 25/75 bounds.</p>
+
+<h4>Path parameters</h4>
+<table class="param-table">
+<tbody><tr><td>procedure_ref</td><td>string</td><td>OEIL reference. URL-encode slashes: <code>2025%2F0232(COD)</code>.</td></tr></tbody>
+</table>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody><tr><td>use_ml</td><td>bool</td><td>Default true. Falls back to baseline heuristic on ML error.</td></tr></tbody>
+</table>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/predictions/2025%2F0232(COD)/timeline?use_ml=true"</code></pre>
+
+<pre><code>{
+  "procedure_ref": "2025/0232(COD)",
+  "current_status": "TABLED",
+  "days_in_status": 45,
+  "predicted_days_remaining": 218,
+  "confidence": 0.62,
+  "lower_bound_25": 140,
+  "upper_bound_75": 310,
+  "model_version": "xgboost-2026-w15",
+  "prediction_method": "ml_xgboost"
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/predictions/{procedure_ref:path}/outcome</span>
+  <span class="badge badge--auth">Auth</span>
+</div>
+<p class="endpoint__desc">Probability distribution over outcomes (adopted, rejected, withdrawn, pending) for a procedure.</p>
+
+<pre><code>curl -H "Authorization: Bearer $KEY" \
+  "https://brubru-production.up.railway.app/api/v1/predictions/2025%2F0232(COD)/outcome"</code></pre>
+
+<pre><code>{
+  "procedure_ref": "2025/0232(COD)",
+  "current_status": "TABLED",
+  "outcomes": [
+    {"outcome": "adopted", "probability": 0.71},
+    {"outcome": "withdrawn", "probability": 0.18},
+    {"outcome": "rejected", "probability": 0.07},
+    {"outcome": "pending", "probability": 0.04}
+  ],
+  "most_likely_outcome": "adopted",
+  "confidence": 0.71,
+  "model_version": "xgboost-2026-w15"
+}</code></pre>
+</div>
+
+<h2 id="delegated-acts">Delegated acts</h2>
+<p>Article 290 TFEU acts adopted by the Commission under powers delegated by the co-legislators. Filter by basic-act CELEX, status, policy area, date range.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/delegated-acts</span><span class="badge badge--auth">Auth</span></div>
+<p class="endpoint__desc">List delegated acts. Each item carries CELEX (when published), basic-act CELEX, OJ reference, source URL.</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/delegated-acts?policy_area=Digital&amp;limit=10"</code></pre>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/delegated-acts/{reference:path}</span><span class="badge badge--auth">Auth</span></div>
+<p class="endpoint__desc">Detail by delegated-act reference (e.g. <code>C(2026) 1234</code>) — URL-encode slashes and parentheses.</p>
+</div>
+
+<h2 id="implementing-acts">Implementing acts</h2>
+<p>Article 291 TFEU acts ensuring uniform implementation. Same shape as delegated-acts.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/implementing-acts</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/implementing-acts?status=adopted&amp;limit=10"</code></pre>
+</div>
+<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/implementing-acts/{reference:path}</span><span class="badge badge--auth">Auth</span></div></div>
+
+<h2 id="tris-notifications">TRIS notifications</h2>
+<p>Member-State draft technical regulations notified under Directive 2015/1535. Filter by notifying country, status, date.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/tris-notifications</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/tris-notifications?country=DE&amp;limit=10"</code></pre>
+</div>
+<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/tris-notifications/{notification_number}</span><span class="badge badge--auth">Auth</span></div></div>
+
+<h2 id="commission-register">Commission Register</h2>
+<p>Commission preparatory and policy documents (COM, SWD, JOIN, C-series) from the Documents Register, enriched with EUR-Lex CELEX-derived PDF URLs (<code>https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{celex}</code>) where the document is on Cellar.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/commission-register-documents</span><span class="badge badge--auth">Auth</span></div>
+<p class="endpoint__desc">List all 528 documents. Filter by category (COM/SWD/JOIN/C), DG, year.</p>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/commission-register-documents?category=SWD&amp;year=2026&amp;limit=20"</code></pre>
+</div>
+
+<h2 id="council-documents">Council Documents</h2>
+<p>Council of the EU public-register documents (presidency notes, working-party reports, conclusions, ST-references).</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/council-documents</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/council-documents?q=migration&amp;limit=10"</code></pre>
+</div>
+
+<h2 id="officials">Officials</h2>
+<p>Every entry from the EU Who Is Who directories — 14,873 records sourced from 75 organigrammes covering Commission DGs, EP services, Council Secretariat, Ombudsman, and decentralised agencies. Filter by institution, DG/unit, role.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/officials</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/officials?institution=COMMISSION&amp;dg=DG_CNECT&amp;limit=50"</code></pre>
+</div>
+
+<h2 id="meetings">Meetings (Transparency)</h2>
+<p>Commission Transparency Register meetings: which Commissioner / Cabinet member / DG met which interest representative when.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/meetings</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/meetings?commissioner=virkkunen&amp;limit=20"</code></pre>
+</div>
+
+<h2 id="rsb-opinions">RSB Opinions</h2>
+<p>Regulatory Scrutiny Board opinions on Commission impact assessments and major evaluations.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/rsb-opinions</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/rsb-opinions?limit=10"</code></pre>
+</div>
+
+<h2 id="ep-documents">EP documents (unified)</h2>
+<p>Single endpoint that branches across reports, opinions, resolutions, texts adopted, texts submitted, and parliamentary questions. Use the <code>doc_type</code> filter to narrow.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/ep-documents</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/ep-documents?doc_type=report&amp;committee=LIBE&amp;limit=10"</code></pre>
+</div>
+
+<h2 id="amendments">Amendments</h2>
+<p>56,051 MEP amendments to legislative files. Filter by procedure, committee, MEP, or political group.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/amendments</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/amendments?procedure_ref=2024%2F0001(COD)&amp;limit=20"</code></pre>
+</div>
+
+<h2 id="votes">Votes</h2>
+<p>EP roll-call votes. Each vote ships totals + group breakdown + per-MEP positions.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/votes</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/votes?procedure_ref=2024%2F0001(COD)&amp;limit=10"</code></pre>
+</div>
+
+<h2 id="texts-adopted">Texts adopted</h2>
+<p>Final EP positions adopted in plenary (TA-references). Filter by date, procedure, committee.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/texts-adopted</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/texts-adopted?published_from=2026-01-01&amp;limit=10"</code></pre>
+</div>
+
+<h2 id="texts-submitted">Texts submitted</h2>
+<p>Motions for resolution, recommendations and other texts tabled but not yet adopted.</p>
+<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/texts-submitted</span><span class="badge badge--auth">Auth</span></div></div>
+
+<h2 id="resolutions">Resolutions</h2>
+<p>EP resolutions (own-initiative + responses to Commission communications).</p>
+<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/resolutions</span><span class="badge badge--auth">Auth</span></div></div>
+
+<h2 id="reports">Reports</h2>
+<p>1,026 EP committee reports (A-references). The rapporteur's draft compiled with adopted amendments.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/reports</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/reports?committee=ITRE&amp;limit=10"</code></pre>
+</div>
+
+<h2 id="opinions">Opinions</h2>
+<p>Opinions of associated committees (RR-references) — non-lead committee input on a file.</p>
+<div class="endpoint"><div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/opinions</span><span class="badge badge--auth">Auth</span></div></div>
+
+<h2 id="parliamentary-questions">Parliamentary questions</h2>
+<p>Written and oral questions tabled by MEPs to the Commission, Council, ECB, and EEAS.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/parliamentary-questions</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/parliamentary-questions?addressee=Commission&amp;limit=10"</code></pre>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/parliamentary-questions/{reference:path}</span><span class="badge badge--auth">Auth</span></div>
+<p class="endpoint__desc">Detail by question reference (e.g. <code>E-001234/2026</code>). Slashes are URL-encoded.</p>
+</div>
+
+<h2 id="webstreams">Webstreams</h2>
+<p>Live and on-demand video URLs from <code>multimedia.europarl.europa.eu</code>. Each event surfaces a stream URL plus committee + day metadata.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/webstreams</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/webstreams?committee=LIBE&amp;date=2026-04-30"</code></pre>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/webstreams/by-procedure/{procedure_ref:path}</span><span class="badge badge--auth">Auth</span></div>
+<p class="endpoint__desc">Find webstreams for a specific OEIL file (committee meetings or plenary debate covering that procedure).</p>
+</div>
+
+<h2 id="press-releases">Press releases</h2>
+<p>Same envelope as <code>/publications</code>, filtered to institutional press desks across the EC, EP, Council, EEAS, ECB, and agencies.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/press-releases</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/press-releases?institution=EC&amp;limit=20"</code></pre>
+</div>
+
+<h2 id="research-publications">Research publications (EPRS + STOA + JRC + ART + ECA)</h2>
+<p>Unified research feed across the EU's five major research producers — 210 publications and growing. Filter by <code>source</code> to narrow.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/research-publications</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/research-publications?source=JRC&amp;limit=10"</code></pre>
+<p class="endpoint__desc">Each item ships <code>source</code> (EPRS / STOA / JRC / ART / ECA), <code>doi</code> when available, and <code>eur_number</code> (EU publications office identifier) for citation.</p>
+</div>
+
+<h2 id="tenders">Tenders (TED)</h2>
+<p>EU tender notices from Tenders Electronic Daily — 386 active. Filter by CPV code, contracting authority, deadline.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/tenders</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/tenders?cpv=72000000&amp;limit=20"</code></pre>
+</div>
+
+<h2 id="citations">Verify citation</h2>
+<p>Pass any EU legal citation; get back the canonical CELEX, full title, and authoritative EUR-Lex URL. Use this before quoting a regulation in user-facing output to avoid fabrication.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/citations/verify</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/citations/verify?q=Regulation+(EU)+2016%2F679"</code></pre>
+</div>
+
+<h2>Next</h2>
+<p>Now you've seen everything. Head to <a href="/api/docs/use-cases.html">Use cases by role</a> to see how to chain these for your specific job, or <a href="https://www.postman.com/beresol-565660/workspace/brubru-eu-data-api/">fork the Postman workspace</a> to try each endpoint live with a few clicks.</p>
+
+<footer>
+&copy; 2026 Beresol BV — Brubru EU Data API v1.
+<a href="/api/">Back to marketing page</a> ·
+<a href="https://brubru-production.up.railway.app/api/v1/openapi.json">OpenAPI spec</a> ·
+<a href="mailto:hello@beresol.eu">hello@beresol.eu</a>
+</footer>
+</main>
+</div>
+</body>
+</html>
