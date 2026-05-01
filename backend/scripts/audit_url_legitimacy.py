@@ -145,6 +145,9 @@ PLAN = [
     ("knowledge-guides",              "/api/v1/knowledge-guides?limit=10",              set()),
     ("infringements",                 "/api/v1/infringements?limit=10",                 {"source_url", "pdf_url"}),
     ("funding-opportunities",         "/api/v1/funding-opportunities?limit=10",         {"source_url", "documents_url"}),
+    ("ft-calls-for-proposals",        "/api/v1/ft-calls-for-proposals?limit=10",        {"source_url", "documents_url"}),
+    ("ft-calls-for-tenders",          "/api/v1/ft-calls-for-tenders?limit=10",          {"source_url", "documents_url"}),
+    ("ft-funded-projects",            "/api/v1/ft-funded-projects?limit=10",            {"source_url"}),
 ]
 
 
