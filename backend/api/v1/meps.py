@@ -43,13 +43,21 @@ def _put(key: str, value):
     _CACHE[key] = (time.time(), value)
 
 
-async def _fetch_list(country=None, group=None, name=None, limit=100, offset=0) -> List[Dict[str, Any]]:
-    key = f"list:{country}:{group}:{name}:{limit}:{offset}"
+async def _fetch_list(country=None, group=None, name=None, term=10, limit=100, offset=0) -> List[Dict[str, Any]]:
+    key = f"list:{country}:{group}:{name}:{term}:{limit}:{offset}"
     cached = _cached(key)
     if cached is not None:
         return cached
 
-    params: Dict[str, Any] = {"limit": min(limit, 500), "offset": offset, "format": "application/ld+json"}
+    params: Dict[str, Any] = {
+        "limit": min(limit, 500),
+        "offset": offset,
+        "format": "application/ld+json",
+        # Default to the current parliamentary term. Without this filter the EP
+        # Open Data API returns ALL historical MEPs ordered by ID ascending,
+        # which means /meps?limit=10 starts with people elected in 1979.
+        "parliamentary-term": term,
+    }
     if country:
         params["country-of-representation"] = country.upper()
     if group:
@@ -127,6 +135,7 @@ async def list_meps(
     country: Optional[str] = Query(None, min_length=2, max_length=2),
     group: Optional[str] = Query(None),
     name: Optional[str] = Query(None),
+    term: int = Query(10, ge=1, le=10, description="Parliamentary term (default 10 — current). Pass term=9 for previous, etc."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -134,7 +143,7 @@ async def list_meps(
     # EP API uses offset-based pagination
     offset = (page - 1) * limit
     try:
-        raw = await _fetch_list(country=country, group=group, name=name, limit=limit, offset=offset)
+        raw = await _fetch_list(country=country, group=group, name=name, term=term, limit=limit, offset=offset)
     except Exception as exc:  # noqa: BLE001
         raise HTTPException(
             status_code=502,
