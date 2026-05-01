@@ -160,12 +160,20 @@ def audit_folder(folder, path, url_fields):
     if n == 0:
         return {"folder": folder, "verdict": "EMPTY", "http_status": 200, "rows": 0}
 
-    # Pick a primary URL field. First one in the candidate set that exists on item[0].
+    # Pick the primary URL field as the candidate with the MOST distinct values
+    # across rows. This avoids accidentally flagging legitimate shared-parent
+    # URLs (e.g. commissioners.unified_calendar_url is shared across all 27)
+    # when a per-row URL (e.g. bio_url) is also available.
     primary = None
+    best_distinct = 0
     for f in url_fields:
-        if f in items[0] and items[0][f]:
+        vals = [it.get(f) for it in items if it.get(f)]
+        if not vals:
+            continue
+        distinct = len(set(vals))
+        if distinct > best_distinct:
+            best_distinct = distinct
             primary = f
-            break
 
     rec = {
         "folder": folder,
