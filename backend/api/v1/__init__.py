@@ -36,6 +36,7 @@ from . import w4_endpoints as _w4
 from . import w5_endpoints as _w5
 from . import webstreams as _webstreams
 from . import citations as _citations
+from . import infringements_funding as _infringements_funding
 
 router = APIRouter(prefix="/api/v1")
 router.include_router(_meta.router)
@@ -77,6 +78,8 @@ router.include_router(_commission_register.router)
 router.include_router(_webstreams.router)
 router.include_router(_citations.router)
 router.include_router(_citations.citations_router)
+router.include_router(_infringements_funding.infringements_router)
+router.include_router(_infringements_funding.funding_router)
 router.include_router(_docs.router)
 
 # Pretty docs also served at /api/docs (convenience alias).
