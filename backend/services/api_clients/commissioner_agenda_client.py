@@ -141,7 +141,8 @@ def load_commissioner_profiles() -> List[CommissionerProfile]:
 
 
 def find_profile(query: str, profiles: Optional[List[CommissionerProfile]] = None) -> Optional[CommissionerProfile]:
-    """Resolve a free-text mention (e.g., 'Fitto', 'Raffaele Fitto', 'Sefcovic') to a profile."""
+    """Resolve a free-text mention (e.g., 'Fitto', 'Raffaele Fitto', 'Sefcovic',
+    'raffaele-fitto') to a profile. Accepts the canonical slug too."""
     if profiles is None:
         profiles = load_commissioner_profiles()
     if not query:
@@ -149,17 +150,27 @@ def find_profile(query: str, profiles: Optional[List[CommissionerProfile]] = Non
     q = _strip_accents(query.lower()).strip()
     if not q:
         return None
+    # exact slug match (canonical input from /commissioners list)
+    for p in profiles:
+        if (p.slug or "").lower() == q:
+            return p
     # exact name match (accent-insensitive)
     for p in profiles:
         if _strip_accents(p.name.lower()) == q:
             return p
+    # slug treated as name with hyphens-as-spaces (e.g. "raffaele-fitto" → "raffaele fitto")
+    q_dehyphen = q.replace("-", " ")
+    if q_dehyphen != q:
+        for p in profiles:
+            if _strip_accents(p.name.lower()) == q_dehyphen:
+                return p
     # surname-only match
     for p in profiles:
         parts = _strip_accents(p.name.lower()).split()
         if parts and parts[-1] == q:
             return p
     # token-set match (any token of q matches a surname)
-    tokens = q.split()
+    tokens = q.split() + q_dehyphen.split()
     for p in profiles:
         surname = _strip_accents(p.name.lower()).split()[-1] if p.name else ""
         if surname and surname in tokens:
@@ -167,7 +178,7 @@ def find_profile(query: str, profiles: Optional[List[CommissionerProfile]] = Non
     # substring fallback (only if 4+ chars, to avoid false positives)
     if len(q) >= 4:
         for p in profiles:
-            if q in _strip_accents(p.name.lower()):
+            if q in _strip_accents(p.name.lower()) or q_dehyphen in _strip_accents(p.name.lower()):
                 return p
     return None
 

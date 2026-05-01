@@ -111,8 +111,14 @@ async def list_procedures(
         query = query.filter(and_(*filters))
 
     total = query.count()
+    # Add id as secondary sort to keep pagination deterministic when many rows
+    # share last_updated (or it's NULL) — without it page=2 could return rows
+    # already on page=1.
     rows = (
-        query.order_by(LegislativeCarriage.last_updated.desc().nullslast())
+        query.order_by(
+            LegislativeCarriage.last_updated.desc().nullslast(),
+            LegislativeCarriage.id.asc(),
+        )
         .offset((page - 1) * limit)
         .limit(limit)
         .all()
