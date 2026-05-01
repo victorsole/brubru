@@ -1,6 +1,8 @@
 # EU Taxonomy and Sustainable Finance
 
 ## QUICK FACTS
+**EPRS Briefing (29 April 2026)**: "EU Taxonomy Implementation: Review of technical screening criteria — Joint ECON-ENVI Committee meeting of 5 May 2026" — background on the 17 March 2026 DA package (two delegated acts amending existing TSC, expected entry into force January 2027). Ref: ECTI_BRI(2026)788648. URL: https://www.europarl.europa.eu/thinktank/en/document/ECTI_BRI(2026)788648
+**Joint ECON-ENVI hearing**: 5 May 2026 — review of taxonomy technical screening criteria
 EU Taxonomy Regulation: Regulation (EU) 2020/852, CELEX 32020R0852
 Published: 22 June 2020, in force since 12 July 2020
 Purpose: Common classification system for environmentally sustainable economic activities

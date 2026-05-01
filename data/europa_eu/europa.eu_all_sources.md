@@ -69,6 +69,7 @@ https://hera.ec.europa.eu,European Commission – HERA (Health Emergency Prepare
 # ═══════════════════════════════════════════════
 https://have-your-say.ec.europa.eu,European Commission – Have Your Say (Public Consultations)
 https://single-market-scoreboard.ec.europa.eu,European Commission – Single Market Scoreboard
+https://technical-regulation-information-system.ec.europa.eu,European Commission – TRIS (Technical Regulation Information System, SMTD Directive 2015/1535 notifications) [added 1 May 2026 after DG GROW Terrible Ten guidance]
 https://digital-markets-act.ec.europa.eu,European Commission – Digital Markets Act Portal
 https://eu-solidarity-ukraine.ec.europa.eu,European Commission – EU Solidarity with Ukraine
 https://immigration-portal.ec.europa.eu,European Commission – EU Immigration Portal

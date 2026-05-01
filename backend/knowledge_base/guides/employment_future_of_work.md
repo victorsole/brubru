@@ -15,6 +15,8 @@
 - Posting of Workers Directive: 96/71/EC amended by 2018/957 -- equal pay at same place
 - European Pillar of Social Rights 2030 targets: 78% employment rate, 60% adult learning, -15 million at risk of poverty
 - Union of Skills: Flagship Commission initiative launched 2025, skills partnerships and digital skills acceleration
+- **DG EMPL (30 April 2026)**: Commission welcomes important step to modernise EU social security coordination rules — Council progress on the long-stalled revision of Regulations (EC) 883/2004 and 987/2009 (proposal COM(2016) 815). Brubru tracking: this is the cross-border-workers / posted-workers / unemployment-benefit-portability file under co-decision since 2016. Source: ec.europa.eu/social/news 30 April 2026.
+- **EGF case (30 April 2026)**: Commission proposes €2 million via European Globalisation Adjustment Fund (EGF) to help over 800 dismissed workers in Belgium. Demonstrates EGF activation pathway under Reg (EU) 2021/691. Source: ec.europa.eu/social/news 30 April 2026.
 
 Guide for DG EMPL policy officers and social affairs professionals covering platform work, AI and labour markets, youth employment, and the European Pillar of Social Rights.
 

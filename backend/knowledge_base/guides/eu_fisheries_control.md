@@ -1,6 +1,7 @@
 # EU Fisheries Policy and Control
 
 ## QUICK FACTS
+- **DG MARE evaluation (30 April 2026)**: "Commission evaluation shows slow progress in fishing sustainability and ongoing challenges for EU fishers" — operational evaluation paired with the PECH MFF research stream below. Flags persistent gaps in MSY achievement, landing-obligation enforcement, and small-scale-fleet (<12m) data quality. Source: oceans-and-fisheries.ec.europa.eu/news 30 April 2026.
 - **EPRS At a Glance (29 April 2026)**: "Research for PECH Committee — Navigating the new MFF approach for 2028-34 — Mapping threats & opportunities for fisheries and aquaculture" — clarifies how the new proposed MFF architecture may affect EU fisheries and aquaculture, comparing the proposal with the current EMFAF framework. Ref: CASP_ATA(2026)776021
 - **EPRS Study (29 April 2026)**: "Research for PECH Committee — Navigating the new MFF approach for 2028-2034 — Mapping threats and opportunities for the fisheries and aquaculture sector" — full companion study, aligns with the European Ocean Pact. Ref: CASP_STU(2026)776021 (companion)
 - **METSAF (29 April 2026, IP/26/894)**: Middle East crisis Temporary State aid Framework eligibility includes **fisheries and aquaculture** for fuel-cost compensation up to 70 % of extra cost (or EUR 50,000 flat-rate). In force until 31 December 2026. See `metsaf_state_aid_middle_east.md`.
