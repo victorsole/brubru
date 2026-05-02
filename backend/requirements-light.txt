@@ -78,3 +78,9 @@ python-dateutil==2.8.2
 pytz==2024.1
 numpy==1.26.3  # Required for embeddings and vector operations
 scikit-learn==1.4.0  # Required by services/parsers/recital_article_linker (TF-IDF + cosine)
+
+# RDF / DCAT-AP / LegalHTML / EuroSciVoc (EU Vocabularies arc — Phases 2, 8, 12)
+rdflib==7.6.0
+
+# YAML manifest parsing (Phase 0 manifest, sync scripts)
+PyYAML==6.0.1
