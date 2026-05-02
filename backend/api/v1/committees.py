@@ -62,6 +62,28 @@ class CommitteeWorkOut(BaseModel):
     vote_result: Optional[str] = None
     celex_numbers: list = Field(default_factory=list)
     relevance_score: Optional[int] = None
+    # Closes Jordi's "falta links" complaint — derive canonical URLs from
+    # procedure_ref so each row points back to its OEIL file and the
+    # law-tracker.europa.eu aggregator.
+    url: Optional[str] = None
+    law_tracker_url: Optional[str] = None
+
+
+def _oeil_url_for_ref(oeil_ref: Optional[str]) -> Optional[str]:
+    if not oeil_ref:
+        return None
+    return f"https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference={oeil_ref}"
+
+
+def _law_tracker_url_for_ref(oeil_ref: Optional[str]) -> Optional[str]:
+    """Map OEIL ref (YYYY/NNNN(COD)) to law-tracker.europa.eu/procedure/YYYY_N."""
+    if not oeil_ref:
+        return None
+    import re as _re
+    m = _re.match(r"^\s*(\d{4})/0*(\d+)(?:\([A-Z]+\))?\s*$", oeil_ref)
+    if not m:
+        return None
+    return f"https://law-tracker.europa.eu/procedure/{m.group(1)}_{m.group(2)}?lang=en"
 
 
 class CommitteeMinutesOut(BaseModel):
@@ -121,6 +143,8 @@ async def list_committee_work(
             vote_result=r.vote_result,
             celex_numbers=list(r.celex_numbers or []),
             relevance_score=r.relevance_score,
+            url=_oeil_url_for_ref(r.procedure_ref),
+            law_tracker_url=_law_tracker_url_for_ref(r.procedure_ref),
         )
         for r in rows
     ]
