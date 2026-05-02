@@ -49,18 +49,29 @@ if _RDFLIB_AVAILABLE:
 else:
     SPDX = ADMS = VCARD = None  # type: ignore[assignment]
 
-# Brubru's own publisher IRI.
+# Brubru's own publisher IRI (string constants — IRI conversion deferred
+# to call time so the module imports clean even when rdflib is missing).
 BRUBRU_BASE = "https://brubru.beresol.eu"
-PUBLISHER_IRI = URIRef(f"{BRUBRU_BASE}/.well-known/publisher")
-CATALOG_IRI = URIRef(f"{BRUBRU_BASE}/.well-known/dcat-ap-catalog")
-CONTACT_IRI = URIRef("mailto:hello@beresol.eu")
+PUBLISHER_IRI_STR = f"{BRUBRU_BASE}/.well-known/publisher"
+CATALOG_IRI_STR = f"{BRUBRU_BASE}/.well-known/dcat-ap-catalog"
+CONTACT_IRI_STR = "mailto:hello@beresol.eu"
+DCAT_AP_AP_STR = "http://data.europa.eu/r5r/"
 
-# DCAT-AP application profile pointer
-DCAT_AP_AP = URIRef("http://data.europa.eu/r5r/")
+# rdflib URIRef instances — only built when rdflib is available. Code
+# paths that reference them (serialize, _add_*, etc.) only run when
+# rdflib loaded.
+if _RDFLIB_AVAILABLE:
+    PUBLISHER_IRI = URIRef(PUBLISHER_IRI_STR)
+    CATALOG_IRI = URIRef(CATALOG_IRI_STR)
+    CONTACT_IRI = URIRef(CONTACT_IRI_STR)
+    DCAT_AP_AP = URIRef(DCAT_AP_AP_STR)
+else:
+    PUBLISHER_IRI = CATALOG_IRI = CONTACT_IRI = DCAT_AP_AP = None  # type: ignore[assignment]
 
 
 def catalog_uri() -> str:
-    return str(CATALOG_IRI)
+    """Return the catalogue IRI as a plain string (works without rdflib)."""
+    return CATALOG_IRI_STR
 
 
 def _bind_prefixes(g: Graph) -> None:
