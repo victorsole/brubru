@@ -104,57 +104,89 @@ async def _fetch_profile(mep_id: str) -> Optional[Dict[str, Any]]:
     return rows[0]
 
 
+def _extract_country(profile: Dict[str, Any]) -> Optional[str]:
+    """Pull ISO-3 country code from the citizenship URI on an EP profile."""
+    val = profile.get("citizenship") or profile.get("country_of_representation")
+    if not val:
+        return None
+    s = str(val)
+    # citizenship is "http://publications.europa.eu/resource/authority/country/POL"
+    if "/country/" in s:
+        return s.rsplit("/country/", 1)[-1].strip("/").upper()
+    return s.upper() if len(s) <= 3 else s
+
+
+def _extract_active_political_group(profile: Dict[str, Any]) -> Optional[str]:
+    """Find the active EU_POLITICAL_GROUP membership and return its org URI."""
+    import datetime as _dt
+    today = _dt.date.today().isoformat()
+    best = None
+    best_end = ""
+    for m in profile.get("hasMembership") or []:
+        cls = m.get("membershipClassification") or ""
+        if "EU_POLITICAL_GROUP" not in cls:
+            continue
+        end = (m.get("memberDuring") or {}).get("endDate") or "9999-12-31"
+        if end < today:
+            continue
+        org = m.get("organization")
+        if not org:
+            continue
+        if end > best_end:
+            best_end = end
+            best = str(org)
+    return best
+
+
+def _extract_role(profile: Dict[str, Any]) -> Optional[str]:
+    """Return the canonical role of the MEP (e.g. MEMBER) from ep-roles URI."""
+    for m in profile.get("hasMembership") or []:
+        cls = m.get("membershipClassification") or ""
+        # MEMBER_PARLIAMENT membership at the institution level (org/ep-10) is the canonical role.
+        if (m.get("organization") or "").startswith("org/ep-") and m.get("role"):
+            r = str(m["role"])
+            return r.rsplit("/", 1)[-1] if "/" in r else r
+    return None
+
+
 async def _enrich_country_group(items: List["MEPItem"]) -> List["MEPItem"]:
     """Hydrate `country`, `group`, `role` on a LIST of MEPItems.
 
     The EP Open Data /meps LIST endpoint returns identifier + name only. To
     populate the affiliation fields Jordi flagged as empty, we resolve each
-    item's full profile in parallel (capped concurrency to be a polite
-    citizen of the EP API). 6h cache means most calls become free after the
-    first warmup.
+    item's full profile in parallel (bounded concurrency) and parse:
+      - country: ISO-3 code from the `citizenship` URI
+      - group: org URI of the active EU_POLITICAL_GROUP membership
+      - role: trailing component of the MEMBER_PARLIAMENT role URI
+
+    6h cache means most calls become free after the first warmup.
     """
     import asyncio
 
     if not items:
         return items
 
-    sem = asyncio.Semaphore(8)  # bounded concurrency on EP Open Data
+    sem = asyncio.Semaphore(8)
 
     async def _hydrate(item: "MEPItem") -> "MEPItem":
-        if item.id and (not item.country or not item.group):
-            async with sem:
-                profile = await _fetch_profile(item.id)
-            if profile:
-                # EP Open Data has multiple shapes; check all known keys.
-                country = (
-                    profile.get("country_of_representation")
-                    or profile.get("countryOfRepresentation")
-                    or profile.get("represents_country")
-                )
-                group = (
-                    profile.get("political_group")
-                    or profile.get("politicalGroup")
-                    or profile.get("api_political_group")
-                )
-                # Role / membership fallback from `hasMembership` array.
-                role = (
-                    profile.get("role")
-                    or profile.get("api_role")
-                )
-                if not group or not role:
-                    for membership in profile.get("hasMembership") or profile.get("has_membership") or []:
-                        org = membership.get("organization") or membership.get("organisation") or {}
-                        ot = (org.get("type") or "").lower() if isinstance(org, dict) else ""
-                        if "political" in ot and not group:
-                            group = (org.get("label") if isinstance(org, dict) else None) or membership.get("api_role")
-                        if membership.get("role") and not role:
-                            role = membership.get("role")
-                if not item.country and country:
-                    item.country = str(country).upper() if len(str(country)) <= 3 else str(country)
-                if not item.group and group:
-                    item.group = str(group)
-                if not item.role and role:
-                    item.role = str(role)
+        if not item.id:
+            return item
+        async with sem:
+            profile = await _fetch_profile(item.id)
+        if not profile:
+            return item
+        if not item.country:
+            country = _extract_country(profile)
+            if country:
+                item.country = country
+        if not item.group:
+            group = _extract_active_political_group(profile)
+            if group:
+                item.group = group
+        if not item.role:
+            role = _extract_role(profile)
+            if role:
+                item.role = role
         return item
 
     return await asyncio.gather(*[_hydrate(it) for it in items])
