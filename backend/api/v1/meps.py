@@ -4,6 +4,7 @@
 Proxies https://data.europarl.europa.eu/api/v2/meps with 6h in-memory cache.
 """
 
+import logging
 import time
 from typing import Any, Dict, List, Optional
 
@@ -14,6 +15,8 @@ from pydantic import BaseModel, Field
 from models.user import User
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/meps", tags=["v1-meps"])
 
@@ -101,6 +104,62 @@ async def _fetch_profile(mep_id: str) -> Optional[Dict[str, Any]]:
     return rows[0]
 
 
+async def _enrich_country_group(items: List["MEPItem"]) -> List["MEPItem"]:
+    """Hydrate `country`, `group`, `role` on a LIST of MEPItems.
+
+    The EP Open Data /meps LIST endpoint returns identifier + name only. To
+    populate the affiliation fields Jordi flagged as empty, we resolve each
+    item's full profile in parallel (capped concurrency to be a polite
+    citizen of the EP API). 6h cache means most calls become free after the
+    first warmup.
+    """
+    import asyncio
+
+    if not items:
+        return items
+
+    sem = asyncio.Semaphore(8)  # bounded concurrency on EP Open Data
+
+    async def _hydrate(item: "MEPItem") -> "MEPItem":
+        if item.id and (not item.country or not item.group):
+            async with sem:
+                profile = await _fetch_profile(item.id)
+            if profile:
+                # EP Open Data has multiple shapes; check all known keys.
+                country = (
+                    profile.get("country_of_representation")
+                    or profile.get("countryOfRepresentation")
+                    or profile.get("represents_country")
+                )
+                group = (
+                    profile.get("political_group")
+                    or profile.get("politicalGroup")
+                    or profile.get("api_political_group")
+                )
+                # Role / membership fallback from `hasMembership` array.
+                role = (
+                    profile.get("role")
+                    or profile.get("api_role")
+                )
+                if not group or not role:
+                    for membership in profile.get("hasMembership") or profile.get("has_membership") or []:
+                        org = membership.get("organization") or membership.get("organisation") or {}
+                        ot = (org.get("type") or "").lower() if isinstance(org, dict) else ""
+                        if "political" in ot and not group:
+                            group = (org.get("label") if isinstance(org, dict) else None) or membership.get("api_role")
+                        if membership.get("role") and not role:
+                            role = membership.get("role")
+                if not item.country and country:
+                    item.country = str(country).upper() if len(str(country)) <= 3 else str(country)
+                if not item.group and group:
+                    item.group = str(group)
+                if not item.role and role:
+                    item.role = str(role)
+        return item
+
+    return await asyncio.gather(*[_hydrate(it) for it in items])
+
+
 def _identifier(raw: Dict[str, Any]) -> str:
     return str(raw.get("identifier") or raw.get("id", "").split("/")[-1] or "")
 
@@ -155,6 +214,12 @@ async def list_meps(
         )
 
     data = [_normalise(r) for r in (raw or [])]
+    # Per-MEP profile hydration so country/group/role surface on LIST too.
+    # Bounded concurrency (8) + 6h cache means a warmed cache makes this free.
+    try:
+        data = await _enrich_country_group(data)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[meps] hydration skipped: %s", exc)
     # EP Open Data doesn't return a total count; we expose what we fetched and flag
     # coverage_complete=False so clients know pagination is unbounded from our side.
     total = offset + len(data)
