@@ -70,6 +70,12 @@ scikit-learn==1.4.0  # ML utilities, preprocessing, metrics
 # XML Processing (Akoma Ntoso)
 lxml==5.1.0
 
+# RDF / DCAT-AP / LegalHTML / EuroSciVoc (EU Vocabularies arc — Phases 2, 8, 12)
+rdflib==7.6.0
+
+# YAML manifest parsing (Phase 0 manifest, sync scripts) — declare explicitly
+PyYAML==6.0.1
+
 # MCP Toolbox for Databases (Google GenAI Toolbox)
 toolbox-core>=0.5.0  # Python SDK for MCP Toolbox server
 
