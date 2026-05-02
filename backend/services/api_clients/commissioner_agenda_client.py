@@ -40,6 +40,13 @@ CALENDAR_BASE = (
     "https://commission.europa.eu/about/organisation/college-commissioners/"
     "calendar-items-president-and-commissioners_en"
 )
+# The Commission redesigned the calendar page in spring 2026 — the HTML now
+# loads items via JavaScript, breaking the previous server-side scrape. The
+# bare RSS feed at /node/33084/rss_en still returns the latest 30 items
+# globally, each tagged with the commissioner's political-leader URI in
+# <category domain="...">. We use the RSS feed as the canonical source and
+# filter per commissioner from the merged list.
+RSS_FEED_URL = "https://commission.europa.eu/node/33084/rss_en"
 LEADER_AUTHORITY_BASE = (
     "http://publications.europa.eu/resource/authority/political-leader/"
 )
@@ -53,6 +60,16 @@ COMMISSIONERS_JSON = (
     / "institutions"
     / "commissioners.json"
 )
+
+
+def _norm(s: str) -> str:
+    """Lowercase, strip diacritics, collapse whitespace and punctuation."""
+    if not s:
+        return ""
+    s = unicodedata.normalize("NFD", s)
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+    s = re.sub(r"[\s\W_]+", " ", s).strip().lower()
+    return s
 
 
 @dataclass
@@ -251,6 +268,123 @@ class CommissionerAgendaClient:
         return None
 
     @staticmethod
+    def _build_rss_url_index(rss_xml: str, commissioner_name: str) -> Dict[Tuple[date, str], str]:
+        """Index URLs from the bare RSS feed by (date, normalised-title-prefix).
+
+        Used to enrich HTML-parsed items with detail URLs that the Commission
+        no longer renders inline on the calendar page. The RSS feed's <title>
+        is "YYYY-MM-DD - <event title>"; we key the index on date plus a short
+        normalised slice of the title for fuzzy match.
+        """
+        from xml.etree import ElementTree as ET
+
+        if not rss_xml:
+            return {}
+        try:
+            root = ET.fromstring(rss_xml)
+        except ET.ParseError:
+            return {}
+
+        index: Dict[Tuple[date, str], str] = {}
+        for it in root.findall(".//item"):
+            title_el = it.find("title")
+            link_el = it.find("link")
+            if title_el is None or link_el is None:
+                continue
+            raw = (title_el.text or "").strip()
+            link = (link_el.text or "").strip()
+            if not raw or not link:
+                continue
+            m = re.match(r"^\s*(\d{4}-\d{2}-\d{2})\s*[-–]\s*(.+)$", raw)
+            if not m:
+                continue
+            try:
+                event_date = date.fromisoformat(m.group(1))
+            except ValueError:
+                continue
+            key = (event_date, _norm(m.group(2))[:60])
+            index[key] = link
+        return index
+
+    @staticmethod
+    def _lookup_rss_url(index: Dict[Tuple[date, str], str], item: "AgendaItem") -> str:
+        """Return the RSS detail URL for an HTML-parsed item, or empty string."""
+        key = (item.date, _norm(item.title)[:60])
+        if key in index:
+            return index[key]
+        # Fuzzy fallback: same date and title prefix overlap on first 30 chars.
+        norm_title = _norm(item.title)
+        for (d, t), url in index.items():
+            if d == item.date and t[:30] == norm_title[:30]:
+                return url
+        return ""
+
+    @staticmethod
+    def _parse_rss_items(rss_xml: str, leader_id: str) -> List[AgendaItem]:
+        """Parse the bare commission calendar RSS and filter to one commissioner.
+
+        The RSS feed is the only working source after the spring 2026 redesign
+        (the leader-filtered HTML page is now JS-rendered). Each <item> carries
+        the political-leader authority URI in a <category domain="..."> tag,
+        which lets us match the requested commissioner without a server-side
+        filter. Returns ALL items whose category matches the leader_id.
+        """
+        from xml.etree import ElementTree as ET
+
+        if not rss_xml or not leader_id:
+            return []
+        try:
+            root = ET.fromstring(rss_xml)
+        except ET.ParseError as exc:
+            logger.warning("[commissioner-agenda] RSS parse failed: %s", exc)
+            return []
+
+        target_uri = f"{LEADER_AUTHORITY_BASE}{leader_id}"
+        out: List[AgendaItem] = []
+        for it in root.findall(".//item"):
+            categories = it.findall("category")
+            # Match the political-leader category by domain prefix (the upstream
+            # sometimes appends '/0002', '/0004' suffixes — accept any prefix).
+            owner_match = False
+            for c in categories:
+                domain = c.attrib.get("domain", "")
+                if domain.startswith(LEADER_AUTHORITY_BASE):
+                    if domain == target_uri or domain.startswith(target_uri + "/"):
+                        owner_match = True
+                        break
+            if not owner_match:
+                continue
+
+            title_el = it.find("title")
+            link_el = it.find("link")
+            pub_el = it.find("pubDate")
+            raw_title = (title_el.text or "").strip() if title_el is not None else ""
+            link = (link_el.text or "").strip() if link_el is not None else ""
+            pub = (pub_el.text or "").strip() if pub_el is not None else ""
+
+            # Title is "YYYY-MM-DD - <title>". Extract both halves.
+            event_date: Optional[date] = None
+            display_title = raw_title
+            m = re.match(r"^\s*(\d{4}-\d{2}-\d{2})\s*[-–]\s*(.+)$", raw_title)
+            if m:
+                try:
+                    event_date = date.fromisoformat(m.group(1))
+                except ValueError:
+                    event_date = None
+                display_title = m.group(2).strip()
+            if event_date is None and pub:
+                # pubDate fallback: "Fri, 01 May 2026 12:58:14 +0200"
+                try:
+                    event_date = datetime.strptime(pub.split(" +")[0].split(" -")[0], "%a, %d %b %Y %H:%M:%S").date()
+                except Exception:  # noqa: BLE001
+                    event_date = None
+            if event_date is None:
+                continue
+
+            out.append(AgendaItem(date=event_date, title=display_title, location="", detail_url=link))
+        return out
+
+    @staticmethod
     def _parse_items(html: str) -> List[AgendaItem]:
         soup = BeautifulSoup(html, "html.parser")
         out: List[AgendaItem] = []
@@ -322,9 +456,28 @@ class CommissionerAgendaClient:
         if cached and time.time() - cached[0] < AGENDA_TTL:
             items = cached[1]
         else:
+            # The Commission's spring-2026 redesign STRIPPED per-event detail
+            # links from the calendar HTML listing — each card now shows only
+            # date + title + location, no <a href>. The bare RSS feed at
+            # /node/33084/rss_en still carries per-event URLs but only for the
+            # latest 30 items globally. Strategy: parse HTML for the per-
+            # commissioner roster, then enrich each item with the matching RSS
+            # detail URL when present (date + title substring match).
             url = self._build_calendar_url(leader_id)
             html = await self._get(url)
             items = self._parse_items(html or "")
+            rss = await self._get(RSS_FEED_URL)
+            url_index = self._build_rss_url_index(rss or "", profile.name)
+            if url_index:
+                items = [
+                    AgendaItem(
+                        date=it.date,
+                        title=it.title,
+                        location=it.location,
+                        detail_url=it.detail_url or self._lookup_rss_url(url_index, it),
+                    )
+                    for it in items
+                ]
             self._agenda_cache[cache_key] = (time.time(), items)
 
         if date_from or date_to:
