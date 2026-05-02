@@ -90,9 +90,16 @@ class FeedbackEnvelope(PaginatedResponse[FeedbackItem]):
     response_model=FeedbackEnvelope,
     summary="Stakeholder feedback on a Have Your Say initiative (live, paginated)",
     description=(
-        "Live stakeholder feedback submitted to the EC Have Your Say portal, by the "
-        "integer initiative ID. Returns both summary aggregates (totals per country, "
-        "per stakeholder type) and the paginated items. Upstream is cached for 6 hours."
+        "**What it does:** returns the live stakeholder feedback submitted to the EC "
+        "Have Your Say portal for one initiative, plus summary aggregates (totals per "
+        "country, per stakeholder type) in the same payload.\n\n"
+        "**How to obtain an `initiative_id`:** call `/api/v1/consultations` (LIST) and "
+        "grab the `initiative_id` field. This sub-route requires the **numeric** form "
+        "(initiatives that accept feedback always have one — slug-style call-for-evidence "
+        "IDs return 422).\n\n"
+        "**Try it:** `GET /api/v1/consultations/by-initiative/13693/feedback?limit=10` "
+        "(Cooking appliances energy labelling).\n\n"
+        "**Cache:** upstream HYS portal cached for 6 hours."
     ),
 )
 async def get_feedback_by_initiative(
@@ -319,6 +326,17 @@ async def list_consultations(
     "/{initiative_id}",
     response_model=ConsultationItem,
     summary="Single consultation detail by initiative_id",
+    description=(
+        "**What it does:** returns a single Have Your Say consultation / call for "
+        "evidence by its `initiative_id`.\n\n"
+        "**How to obtain an `initiative_id`:** call `/api/v1/consultations` (LIST) and "
+        "grab the `initiative_id` field. This route accepts BOTH numeric IDs "
+        "(e.g. `13693`) and slug IDs (e.g. `eu-aviation-aeronautics-strategy-2026`).\n\n"
+        "**Try it:**\n"
+        "- `GET /api/v1/consultations/13693` (Cooking appliances energy labelling)\n"
+        "- `GET /api/v1/consultations/13687` (Solid-fuel local space heaters)\n"
+        "- `GET /api/v1/consultations/eu-aviation-aeronautics-strategy-2026` (EU Aviation Strategy)"
+    ),
 )
 async def get_consultation_detail(
     initiative_id: str,

@@ -49,13 +49,18 @@ class VerifyCitationResponse(BaseModel):
     response_model=VerifyCitationResponse,
     summary="Verify a CELEX, COM or OEIL reference resolves to a real EU document",
     description=(
-        "Pass a CELEX number (e.g. `32024R1689`), COM reference "
-        "(e.g. `COM(2021) 206`), or OEIL procedure reference "
-        "(e.g. `2021/0106(COD)`). Returns whether it resolves against the "
-        "Cellar (publications.europa.eu) or OEIL endpoints, plus a resolved "
-        "canonical URL when it does. Cached for 30 days on success, 24 hours "
-        "on broken refs, 1 hour on transient network errors. Use this to "
-        "ground your own AI's citations or to validate a regulatory feed."
+        "**What it does:** given any EU legal reference, tells you whether it points "
+        "at a real document on EUR-Lex / OEIL, and returns the canonical URL.\n\n"
+        "**When to use it:** ground your own AI's citations, validate a regulatory "
+        "feed, or detect hallucinated CELEX numbers before showing them to your users.\n\n"
+        "**Accepted forms:**\n"
+        "- CELEX — `32024R1689` (AI Act)\n"
+        "- COM reference — `COM(2021) 206` (auto-converted to CELEX)\n"
+        "- OEIL procedure — `2021/0106(COD)`\n\n"
+        "**Try it:** `GET /api/v1/verify-citation/32016R0679` → returns `status=ok`, "
+        "`resolved_url=https://eur-lex.europa.eu/eli/reg/2016/679/oj`.\n\n"
+        "**Cache:** 30 days on success, 24h on broken refs, 1h on transient errors. "
+        "Most calls are sub-millisecond from cache."
     ),
 )
 async def verify_citation(

@@ -50,9 +50,18 @@ class OutcomePrediction(BaseModel):
     response_model=TimelinePrediction,
     summary="Predicted days remaining to adoption/closure",
     description=(
-        "Given an OEIL procedure reference (e.g. 2025/0726(COD)), returns the predicted "
-        "days until the procedure closes. Combines XGBoost ML + baseline heuristic. "
-        "Confidence is [0.0 - 1.0]."
+        "**What it does:** given an OEIL procedure reference, predicts how many days "
+        "remain until the procedure closes (adopted, rejected, or withdrawn). Combines "
+        "an XGBoost ML model with a baseline heuristic. Confidence is `[0.0, 1.0]`.\n\n"
+        "**How to obtain a `procedure_ref`:** call `/api/v1/procedures` (or `/api/v1/laws`) "
+        "and grab the `oeil_procedure_ref` field from any item. Format: `YYYY/NNNN(COD)`, "
+        "`(CNS)`, `(APP)`, etc.\n\n"
+        "**Try it:** `GET /api/v1/predictions/2025/0232(COD)/timeline` (Workers from "
+        "carcinogens directive — close to adoption).\n\n"
+        "**Service status (2 May 2026):** XGBoost model loading on Railway is currently "
+        "degraded — calls may return 502 with `reason_code=upstream_error`. As a "
+        "workaround, `GET /api/v1/procedures/{ref}` returns the same upstream OEIL data "
+        "(`current_status`, `oeil_key_events`, `expected_completion`) without the ML layer."
     ),
 )
 async def get_timeline(
@@ -104,6 +113,15 @@ async def get_timeline(
     "/{procedure_ref:path}/outcome",
     response_model=OutcomePrediction,
     summary="Predicted outcome probabilities (adopted / rejected / withdrawn / pending)",
+    description=(
+        "**What it does:** predicts the probability of each possible outcome for an "
+        "ongoing legislative procedure: adopted, rejected, withdrawn, pending.\n\n"
+        "**How to obtain a `procedure_ref`:** see `/timeline` above — same identifier.\n\n"
+        "**Try it:** `GET /api/v1/predictions/2025/0232(COD)/outcome`.\n\n"
+        "**Service status (2 May 2026):** as with `/timeline`, the ML layer is currently "
+        "degraded on Railway. Workaround: `GET /api/v1/procedures/{ref}` returns the live "
+        "OEIL state (status, key events) without the predicted probabilities."
+    ),
 )
 async def get_outcome(
     procedure_ref: str,

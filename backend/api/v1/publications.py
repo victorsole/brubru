@@ -203,7 +203,18 @@ class SourceItem(BaseModel):
 @router.get(
     "/sources",
     summary="List all ingested sources with item counts",
-    description="Partners discover which institutional feeds are available and how fresh each is.",
+    description=(
+        "**What it does:** returns every RSS / institutional source Brubru ingests, with "
+        "the per-source article count and the timestamp of the most recent ingested item.\n\n"
+        "**When to use it:** discover which institutional feeds your subscription covers "
+        "before filtering the unified `/api/v1/publications` endpoint by `source_slug`. "
+        "Also useful for monitoring — if `latest` is more than a few days old on a feed "
+        "that should be daily, the upstream source is likely down.\n\n"
+        "**Try it:** `GET /api/v1/publications/sources` → "
+        "`{total_sources: 26, sources: [{source_slug:'ec_press', count: 4823, "
+        "latest:'2026-05-02T...'}, ...]}`. Then filter: "
+        "`/api/v1/publications?source_slug=ec_press`."
+    ),
 )
 async def list_sources(
     user: User = Depends(api_user_with_rate_limit),

@@ -28,25 +28,59 @@ router = APIRouter(prefix="/procedures", tags=["v1-procedures"])
 
 
 class ProcedureItem(BaseModel):
+    """LIST-shaped procedure row.
+
+    Maintains LIST/DETAIL field parity with `ProcedureDetail` so partners (e.g.
+    GovClipping) can iterate over the LIST without round-tripping to DETAIL just
+    to read `description`, `oeil_key_events`, `ai_summary`, etc. The two models
+    expose identical field names; values may be set or null per row.
+    """
     id: str
     file_id: Optional[str] = None
     title: Optional[str] = None
+    description: Optional[str] = None
     oeil_procedure_ref: Optional[str] = None
+
     current_status: Optional[str] = None
     is_blocked: bool = False
+    days_in_current_status: Optional[int] = None
+    text_type: Optional[str] = None
+
     lead_committee: Optional[str] = None
+    opinion_committees: list = Field(default_factory=list)
     committees: list = Field(default_factory=list)
     rapporteur_mep_id: Optional[str] = None
+
     celex_numbers: list = Field(default_factory=list)
+    eprs_briefing_ids: list = Field(default_factory=list)
+    eprs_matched_briefings: list = Field(default_factory=list)
     policy_areas: list = Field(default_factory=list)
+    related_themes: list = Field(default_factory=list)
+    spotlight_tags: list = Field(default_factory=list)
+    ec_priority_ids: list = Field(default_factory=list)
+
+    timeline: list = Field(default_factory=list)
+    status_history: list = Field(default_factory=list)
+    oeil_timeline: list = Field(default_factory=list)
+    oeil_key_events: list = Field(default_factory=list)
+    eurlex_documents: list = Field(default_factory=list)
+
+    ai_summary: Optional[str] = None
+    ai_entities: list = Field(default_factory=list)
+    ai_policy_classifications: list = Field(default_factory=list)
+
     legal_text_url: Optional[str] = None
     url: Optional[str] = None
     # Aggregated procedure tracker on law-tracker.europa.eu — combines OEIL,
     # EUR-Lex and Commission events on a single page. Pattern:
     # https://law-tracker.europa.eu/procedure/{YYYY}_{NNN}?lang=en
     law_tracker_url: Optional[str] = None
+
     first_seen: Optional[datetime] = None
     last_updated: Optional[datetime] = None
+    expected_completion: Optional[datetime] = None
+    enriched_at: Optional[datetime] = None
+    enrichment_quality: Optional[str] = None
 
 
 def _law_tracker_url(oeil_ref: Optional[str]) -> Optional[str]:
@@ -129,19 +163,39 @@ async def list_procedures(
             id=str(r.id),
             file_id=r.file_id,
             title=r.title,
+            description=r.description,
             oeil_procedure_ref=r.oeil_procedure_ref,
-            current_status=str(r.current_status) if r.current_status is not None else None,
+            current_status=_enum_str(r.current_status),
             is_blocked=bool(r.is_blocked),
+            days_in_current_status=r.days_in_current_status,
+            text_type=_enum_str(r.text_type),
             lead_committee=r.lead_committee,
+            opinion_committees=list(r.opinion_committees or []),
             committees=list(r.committees or []),
             rapporteur_mep_id=r.rapporteur_mep_id,
             celex_numbers=list(r.celex_numbers or []),
+            eprs_briefing_ids=list(r.eprs_briefing_ids or []),
+            eprs_matched_briefings=_coerce_list(r.eprs_matched_briefings),
             policy_areas=list(r.policy_areas or []),
+            related_themes=list(r.related_themes or []),
+            spotlight_tags=list(r.spotlight_tags or []),
+            ec_priority_ids=list(r.ec_priority_ids or []),
+            timeline=_coerce_list(r.timeline),
+            status_history=_coerce_list(r.status_history),
+            oeil_timeline=_coerce_list(r.oeil_timeline),
+            oeil_key_events=_coerce_list(r.oeil_key_events),
+            eurlex_documents=_coerce_list(r.eurlex_documents),
+            ai_summary=r.ai_summary,
+            ai_entities=_coerce_list(r.ai_entities),
+            ai_policy_classifications=_coerce_list(r.ai_policy_classifications),
             legal_text_url=r.legal_text_url,
             url=r.url,
             law_tracker_url=_law_tracker_url(r.oeil_procedure_ref),
             first_seen=r.first_seen,
             last_updated=r.last_updated,
+            expected_completion=r.expected_completion,
+            enriched_at=r.enriched_at,
+            enrichment_quality=r.enrichment_quality,
         )
         for r in rows
     ]

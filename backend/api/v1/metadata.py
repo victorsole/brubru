@@ -622,18 +622,25 @@ async def list_commissioners(user: User = Depends(api_user_with_rate_limit)) -> 
 # Same handlers, registered on meta_router so /api/v1/meta/dgs etc. resolve.
 # ============================================================================
 
-# Long-form aliases (one per legacy path)
-meta_router.add_api_route("/institutions",        list_institutions,        methods=["GET"], response_model=_GenericListResponse, summary="EU institutions, agencies, and bodies")
-meta_router.add_api_route("/committees",          list_committees,          methods=["GET"], response_model=_GenericListResponse, summary="EP committees with full names")
-meta_router.add_api_route("/directorates-general", list_dgs,                methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs")
-meta_router.add_api_route("/dgs",                 list_dgs,                 methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs (short alias)")
-meta_router.add_api_route("/political-groups",    list_political_groups,    methods=["GET"], response_model=_GenericListResponse, summary="EP political groups")
-meta_router.add_api_route("/countries",           list_countries,           methods=["GET"], response_model=_GenericListResponse, summary="EU + EEA countries with ISO codes")
-meta_router.add_api_route("/languages",           list_languages,           methods=["GET"], response_model=_GenericListResponse, summary="24 official EU languages with ISO-639 codes")
-meta_router.add_api_route("/procedure-types",     list_procedure_types,     methods=["GET"], response_model=_GenericListResponse, summary="Legislative procedure types (COD, NLE, INI, ...)")
-meta_router.add_api_route("/legal-bases",         list_legal_bases,         methods=["GET"], response_model=_GenericListResponse, summary="TFEU/TEU legal bases (selected)")
-meta_router.add_api_route("/procedure-statuses",  list_procedure_statuses,  methods=["GET"], response_model=_GenericListResponse, summary="Procedure status enumeration")
-meta_router.add_api_route("/event-types",         list_event_types,         methods=["GET"], response_model=_GenericListResponse, summary="Calendar event types")
-meta_router.add_api_route("/document-types",      list_document_types,      methods=["GET"], response_model=_GenericListResponse, summary="OJ document types (live from eu_laws)")
-meta_router.add_api_route("/policy-areas",        list_policy_areas,        methods=["GET"], response_model=_GenericListResponse, summary="Policy areas (live from eu_laws)")
-meta_router.add_api_route("/commissioners",       list_commissioners,       methods=["GET"], response_model=_GenericListResponse, summary="College of Commissioners (27 members) — static enum")
+# Deprecated aliases under /meta/* — same handlers as /{path} above.
+# Kept for back-compat with anyone who built against the original advertised paths.
+# Marked deprecated=True so they appear with a strikethrough in the OpenAPI docs.
+_DEPRECATED_NOTE = (
+    "DEPRECATED ALIAS — same response as the top-level path "
+    "(`/api/v1/{path}`). Prefer the canonical form going forward; this alias "
+    "is kept only for back-compat with consumers built against the original docs."
+)
+meta_router.add_api_route("/institutions",        list_institutions,        methods=["GET"], response_model=_GenericListResponse, summary="EU institutions, agencies, and bodies (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/committees",          list_committees,          methods=["GET"], response_model=_GenericListResponse, summary="EP committees (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/directorates-general", list_dgs,                methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/dgs",                 list_dgs,                 methods=["GET"], response_model=_GenericListResponse, summary="Commission DGs short alias (deprecated)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/political-groups",    list_political_groups,    methods=["GET"], response_model=_GenericListResponse, summary="EP political groups (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/countries",           list_countries,           methods=["GET"], response_model=_GenericListResponse, summary="EU + EEA countries (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/languages",           list_languages,           methods=["GET"], response_model=_GenericListResponse, summary="24 official EU languages (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/procedure-types",     list_procedure_types,     methods=["GET"], response_model=_GenericListResponse, summary="Procedure types (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/legal-bases",         list_legal_bases,         methods=["GET"], response_model=_GenericListResponse, summary="TFEU/TEU legal bases (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/procedure-statuses",  list_procedure_statuses,  methods=["GET"], response_model=_GenericListResponse, summary="Procedure status enum (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/event-types",         list_event_types,         methods=["GET"], response_model=_GenericListResponse, summary="Calendar event types (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/document-types",      list_document_types,      methods=["GET"], response_model=_GenericListResponse, summary="OJ document types (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/policy-areas",        list_policy_areas,        methods=["GET"], response_model=_GenericListResponse, summary="Policy areas (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
+meta_router.add_api_route("/commissioners",       list_commissioners,       methods=["GET"], response_model=_GenericListResponse, summary="College of Commissioners (deprecated alias)", description=_DEPRECATED_NOTE, deprecated=True)
