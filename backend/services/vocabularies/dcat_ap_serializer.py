@@ -23,17 +23,31 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List, Optional
 
-from rdflib import BNode, Graph, Literal, Namespace, URIRef
-from rdflib.namespace import DCAT, DCTERMS, FOAF, RDF, SKOS, XSD
+# Lazy-import rdflib so missing-dep failures degrade gracefully —
+# the rest of Brubru (chat, v1 API) keeps booting if rdflib isn't
+# installed. The serialize() entry point will raise a clean
+# RuntimeError instead of crashing the FastAPI app at import time.
+try:
+    from rdflib import BNode, Graph, Literal, Namespace, URIRef
+    from rdflib.namespace import DCAT, DCTERMS, FOAF, RDF, SKOS, XSD
+    _RDFLIB_AVAILABLE = True
+except ImportError as _e:  # noqa: BLE001
+    _RDFLIB_AVAILABLE = False
+    _RDFLIB_IMPORT_ERROR = str(_e)
+    BNode = Graph = Literal = Namespace = URIRef = None  # type: ignore[assignment]
+    DCAT = DCTERMS = FOAF = RDF = SKOS = XSD = None  # type: ignore[assignment]
 
 logger = logging.getLogger(__name__)
 
 # ----------------------------------------------------------------------
-# Namespaces (DCAT-AP-aligned)
+# Namespaces (DCAT-AP-aligned) — only constructed when rdflib is present
 # ----------------------------------------------------------------------
-SPDX = Namespace("http://spdx.org/rdf/terms#")
-ADMS = Namespace("http://www.w3.org/ns/adms#")
-VCARD = Namespace("http://www.w3.org/2006/vcard/ns#")
+if _RDFLIB_AVAILABLE:
+    SPDX = Namespace("http://spdx.org/rdf/terms#")
+    ADMS = Namespace("http://www.w3.org/ns/adms#")
+    VCARD = Namespace("http://www.w3.org/2006/vcard/ns#")
+else:
+    SPDX = ADMS = VCARD = None  # type: ignore[assignment]
 
 # Brubru's own publisher IRI.
 BRUBRU_BASE = "https://brubru.beresol.eu"
@@ -174,7 +188,17 @@ def serialize(rows: List[Dict[str, Any]], *, format: str = "turtle") -> bytes:
     """
     Render `rows` (each a brubru_dataset_catalog row dict) in the requested
     format. Supported formats: turtle, xml (RDF/XML), json-ld.
+
+    Raises RuntimeError with a clean message if `rdflib` is not installed.
+    The rest of Brubru continues working — DCAT-AP is a single endpoint,
+    not a critical path.
     """
+    if not _RDFLIB_AVAILABLE:
+        raise RuntimeError(
+            f"DCAT-AP serialiser unavailable — rdflib not installed "
+            f"(import error: {_RDFLIB_IMPORT_ERROR}). Add rdflib to "
+            "backend/requirements.txt and redeploy."
+        )
     g = Graph()
     _bind_prefixes(g)
     _add_publisher(g)
