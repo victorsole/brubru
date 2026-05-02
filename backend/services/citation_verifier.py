@@ -77,6 +77,19 @@ COM_RE = re.compile(
 OEIL_TYPES = ("COD", "NLE", "APP", "CNS", "INI", "INL", "RSP", "RPS", "BUD")
 OEIL_RE = re.compile(rf"\b\d{{4}}/\d{{4}}\((?:{'|'.join(OEIL_TYPES)})\)")
 
+# Authority URI: http://publications.europa.eu/resource/authority/{NAL}/{code}
+# Verified via DB lookup against eu_authority_labels (no network).
+# Phase 1 / EU Vocabularies arc — enables hallucination detection on body codes.
+AUTHORITY_URI_RE = re.compile(
+    r"http://publications\.europa\.eu/resource/authority/[A-Za-z0-9_\-]+/[A-Za-z0-9_\-:.]+"
+)
+
+# Threshold below which we don't trust the labels table to be populated
+# enough for verdicts. While Cellar SPARQL is recovering and the cron
+# hasn't filled the table, return "unknown" for authority URIs rather
+# than false-positive every body name as broken.
+AUTHORITY_TABLE_MIN_ROWS = 100
+
 
 # ---------------------------------------------------------------------------
 # Data shapes
@@ -183,6 +196,14 @@ def extract_refs(text: str) -> list[RefMatch]:
         seen.add(ref)
         out.append(RefMatch(ref=ref, kind="oeil", original_form=m.group(0)))
 
+    # Authority URIs (verified via DB, not network)
+    for m in AUTHORITY_URI_RE.finditer(text):
+        ref = m.group(0)
+        if ref in seen:
+            continue
+        seen.add(ref)
+        out.append(RefMatch(ref=ref, kind="authority_uri", original_form=ref))
+
     return out
 
 
@@ -282,6 +303,64 @@ def _classify_status(http_status: Optional[int]) -> str:
     return "unknown"  # 4xx auth, 5xx, network, etc.
 
 
+def _verify_authority_uri_db(db: Optional[Session], match: RefMatch) -> VerifyResult:
+    """
+    Verify an authority URI against eu_authority_labels (DB, no network).
+
+    Behaviour:
+      - If db is None or the table has fewer than AUTHORITY_TABLE_MIN_ROWS,
+        return status='unknown' (fail-open during pre-sync window).
+      - If the URI exists in the table → 'ok' with resolved_url = URI.
+      - If the URI is shape-valid but not in the table → 'broken'.
+
+    Phase 1 / EU Vocabularies arc.
+    """
+    from sqlalchemy import text as _sql_text
+
+    start = time.monotonic()
+
+    if db is None:
+        return VerifyResult(
+            ref=match.ref, kind=match.kind, status="unknown",
+            resolved_url=None, http_status=None,
+            latency_ms=int((time.monotonic() - start) * 1000),
+            original_form=match.original_form,
+        )
+
+    try:
+        total = db.execute(_sql_text("SELECT COUNT(*) FROM eu_authority_labels")).scalar() or 0
+        if total < AUTHORITY_TABLE_MIN_ROWS:
+            return VerifyResult(
+                ref=match.ref, kind=match.kind, status="unknown",
+                resolved_url=None, http_status=None,
+                latency_ms=int((time.monotonic() - start) * 1000),
+                original_form=match.original_form,
+            )
+
+        exists = db.execute(
+            _sql_text("SELECT 1 FROM eu_authority_labels WHERE uri = :u LIMIT 1"),
+            {"u": match.ref},
+        ).scalar()
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"authority_uri verify DB error for {match.ref}: {e}")
+        return VerifyResult(
+            ref=match.ref, kind=match.kind, status="unknown",
+            resolved_url=None, http_status=None,
+            latency_ms=int((time.monotonic() - start) * 1000),
+            original_form=match.original_form,
+        )
+
+    return VerifyResult(
+        ref=match.ref,
+        kind=match.kind,
+        status="ok" if exists else "broken",
+        resolved_url=match.ref if exists else None,
+        http_status=200 if exists else 404,
+        latency_ms=int((time.monotonic() - start) * 1000),
+        original_form=match.original_form,
+    )
+
+
 async def _verify_one_ref(session: aiohttp.ClientSession, match: RefMatch) -> VerifyResult:
     """
     Hit the network for a single ref. No cache logic here.
@@ -366,7 +445,16 @@ async def verify_text(text: str, db: Optional[Session] = None) -> VerifyTextSumm
             cache_misses.append(m)
     summary.cache_misses = len(cache_misses)
 
-    # 2. Network pass for misses, parallelised
+    # 1b. Authority-URI verification (DB-only, no network).
+    # Pull these out of cache_misses so the network pass doesn't see them.
+    authority_misses = [m for m in cache_misses if m.kind == "authority_uri"]
+    cache_misses = [m for m in cache_misses if m.kind != "authority_uri"]
+    for m in authority_misses:
+        result = _verify_authority_uri_db(db, m)
+        summary.details.append(result)
+        _cache_write(db, result)
+
+    # 2. Network pass for non-authority misses, parallelised
     if cache_misses:
         timeout = aiohttp.ClientTimeout(total=TOTAL_BUDGET_S)
         # limit_per_host=4: publications.europa.eu and oeil.europarl.europa.eu
