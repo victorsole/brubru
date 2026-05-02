@@ -45,10 +45,50 @@ class ResolutionItem(BaseModel):
     vote_against: int = 0
     vote_abstention: int = 0
     vote_total: int = 0
+    # `key_events` synthesised from the row itself: a single canonical event
+    # (the plenary vote) plus, when present, an "adoption" entry. Each event
+    # is `{date, event_type, description}`. Surfaces what Jordi flagged as
+    # missing on the LIST without requiring a join to the full procedure.
+    key_events: list = Field(default_factory=list)
     oeil_url: Optional[str] = None
     text_url: Optional[str] = None
     has_commission_followup: bool = False
     updated_at: Optional[datetime] = None
+
+
+def _build_key_events(r: EPResolution) -> list:
+    """Synthesise a key-events list from the resolution row.
+
+    The resolutions table doesn't carry a structured timeline; the closest
+    signals are `vote_date` (plenary vote) and `adoption_date` (publication).
+    We emit those as canonical events so partners can render a basic timeline
+    without round-tripping to /procedures/{ref}.
+    """
+    events: list = []
+    if r.vote_date:
+        descr_parts = []
+        if r.vote_for or r.vote_against or r.vote_abstention or r.vote_total:
+            descr_parts.append(f"Vote: {int(r.vote_for or 0)} for, {int(r.vote_against or 0)} against, {int(r.vote_abstention or 0)} abstentions")
+            if r.vote_total:
+                descr_parts.append(f"total {int(r.vote_total)}")
+        events.append({
+            "date": r.vote_date.date().isoformat() if hasattr(r.vote_date, "date") else str(r.vote_date),
+            "event_type": "plenary_vote",
+            "description": " (".join(descr_parts) + ")" if len(descr_parts) > 1 else (descr_parts[0] if descr_parts else "Plenary vote"),
+        })
+    if r.adoption_date and (not r.vote_date or r.adoption_date != getattr(r.vote_date, "date", lambda: None)()):
+        events.append({
+            "date": r.adoption_date.isoformat() if hasattr(r.adoption_date, "isoformat") else str(r.adoption_date),
+            "event_type": "adopted",
+            "description": "Resolution adopted",
+        })
+    if r.has_commission_followup:
+        events.append({
+            "date": None,
+            "event_type": "commission_followup",
+            "description": "Commission has followed up on this resolution (see /api/v1/commission-register-documents)",
+        })
+    return events
 
 
 def _row_to_item(r: EPResolution) -> ResolutionItem:
@@ -68,6 +108,7 @@ def _row_to_item(r: EPResolution) -> ResolutionItem:
         vote_against=int(r.vote_against or 0),
         vote_abstention=int(r.vote_abstention or 0),
         vote_total=int(r.vote_total or 0),
+        key_events=_build_key_events(r),
         oeil_url=r.oeil_url,
         text_url=r.text_url,
         has_commission_followup=bool(r.has_commission_followup),
