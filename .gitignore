@@ -7,6 +7,11 @@ docs/
 # self-contained HTML sections, regenerated freely.
 docs/marketing/designs/
 data/
+# EU Vocabularies manifest must ship in the Railway image (cron sync reads it).
+# Narrow exception so the rest of backend/data/ stays ignored.
+!backend/data/
+!backend/data/eu_vocabularies/
+!backend/data/eu_vocabularies/manifest.yaml
 brubru.world/
 .env
 node_modules/

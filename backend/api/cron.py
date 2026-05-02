@@ -248,6 +248,62 @@ async def cron_sync_all(
     return {"status": "success", "results": results}
 
 
+@router.post("/sync/authority-labels")
+async def cron_sync_authority_labels(
+    authorization: str = Header(...),
+    nal: str = Query(default=None, description="Restrict to one NAL (e.g. corporate-body)"),
+    lang: str = Query(default=None, description="Restrict to one language (en|fr|es|ca|it|nl)"),
+    limit: int = Query(default=None, ge=1, le=100000, description="Cap concepts per NAL"),
+):
+    """
+    Nightly EU authority-label sync (Phase 1, EU Vocabularies arc).
+
+    Pulls skos:prefLabel + skos:altLabel for the 12 hot NALs in 6 languages
+    from the Cellar SPARQL endpoint and upserts into eu_authority_labels.
+
+    Idempotent. Fail-soft: if Cellar returns 5xx for some queries, those
+    NAL/lang pairs are skipped and the rest still write. Returns 200 with
+    a result summary regardless — this is an internal cron, not a user
+    surface, so the operator reads the body to see partial success.
+
+    Recommended Railway cron schedule: 0 3 * * *  (daily 03:00 UTC)
+    """
+    _verify_cron_secret(authorization)
+
+    try:
+        from scripts.sync_eu_authority_labels import run as run_sync
+
+        logger.info(
+            f"[CRON] Authority-label sync started (nal={nal or 'all'}, "
+            f"lang={lang or 'all'}, limit={limit or 'unlimited'})"
+        )
+
+        exit_code = await run_sync(
+            nal_filter=nal,
+            lang_filter=lang,
+            force=False,
+            dry_run=False,
+            limit=limit,
+        )
+
+        # exit_code 0 = full success; 1 = partial (some NAL/lang failed but others wrote)
+        status = "success" if exit_code == 0 else "partial"
+        logger.info(f"[CRON] Authority-label sync done: status={status}")
+
+        return {
+            "status": status,
+            "source": "eu_authority_labels",
+            "exit_code": exit_code,
+        }
+
+    except Exception as e:
+        logger.error(f"[CRON] Authority-label sync failed: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Authority-label sync failed: {str(e)}",
+        )
+
+
 @router.post("/daily-brief")
 async def cron_daily_brief(
     authorization: str = Header(...),

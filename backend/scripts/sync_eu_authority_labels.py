@@ -43,7 +43,29 @@ from services.vocabularies.authority_label_cache import AuthorityLabelCache  # n
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger("sync-auth-labels")
 
-MANIFEST_PATH = ROOT / "data" / "eu_vocabularies" / "manifest.yaml"
+def _resolve_manifest_path() -> Path:
+    """Find manifest.yaml in either local-dev or Railway-image layout.
+
+    Local dev: repo-root `data/eu_vocabularies/manifest.yaml` is canonical.
+    Railway image: `backend/data/eu_vocabularies/manifest.yaml` (inside the
+    Docker build context) is the only one that ships. Try the in-image
+    path first so production never falls back to a missing repo-root.
+    """
+    here = Path(__file__).resolve()
+    candidates = [
+        here.parents[1] / "data" / "eu_vocabularies" / "manifest.yaml",  # /app/data/...
+        here.parents[2] / "data" / "eu_vocabularies" / "manifest.yaml",  # repo root
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    raise FileNotFoundError(
+        "manifest.yaml not found in any of: "
+        + ", ".join(str(c) for c in candidates)
+    )
+
+
+MANIFEST_PATH = _resolve_manifest_path()
 SPARQL_ENDPOINT = "https://publications.europa.eu/webapi/rdf/sparql"
 
 BRUBRU_LANGS = ("en", "fr", "es", "ca", "it", "nl")
