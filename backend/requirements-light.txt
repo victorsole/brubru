@@ -82,5 +82,6 @@ scikit-learn==1.4.0  # Required by services/parsers/recital_article_linker (TF-I
 # RDF / DCAT-AP / LegalHTML / EuroSciVoc (EU Vocabularies arc — Phases 2, 8, 12)
 rdflib==7.6.0
 
-# YAML manifest parsing (Phase 0 manifest, sync scripts)
-PyYAML==6.0.1
+# YAML manifest parsing (Phase 0 manifest, sync scripts).
+# Range matches mistralai 1.9.11's transitive requirement (pyyaml<7.0.0,>=6.0.2).
+PyYAML>=6.0.2,<7.0.0
