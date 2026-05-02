@@ -267,6 +267,30 @@ class AIService:
 
             # Format context and build citations
             context_str = self.context_builder.format_context_for_ai(context_data)
+
+            # Phase 1 of docs/applications/euvoc.md — prepend a localised
+            # glossary block when the assembled context contains EU authority
+            # URIs. Fail-soft: any error returns no glossary, never breaks chat.
+            try:
+                from services.vocabularies.glossary_injector import (
+                    build_glossary_block as _build_glossary_block,
+                    detect_language as _detect_language,
+                )
+                _glossary_lang = _detect_language(user_message)
+                _glossary_db = SessionLocal()
+                try:
+                    _glossary = _build_glossary_block(context_str, _glossary_db, _glossary_lang)
+                finally:
+                    _glossary_db.close()
+                if _glossary:
+                    context_str = _glossary + "\n\n" + context_str
+                    logger.info(
+                        "[euvoc-glossary] Prepended glossary block (%d chars, lang=%s)",
+                        len(_glossary), _glossary_lang,
+                    )
+            except Exception as _e:  # noqa: BLE001
+                logger.warning("[euvoc-glossary] injection failed: %s", _e)
+
             citations = self._build_citations_from_context(context_data)
 
             search_time_ms = (datetime.now() - start_time).total_seconds() * 1000

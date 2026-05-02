@@ -581,6 +581,11 @@ class ContextData:
     # Triggered by "today"/"hoy"/"avui"/"aujourd'hui"/"oggi"/"vandaag"/"heute"/"this week"/"esta semana"...
     today_block: Optional[str] = None
 
+    # On-demand: Cellar SPARQL discovery block (live retrieval from publications.europa.eu/webapi/rdf/sparql)
+    # Triggered by "what was published since/this/last <period>", "list/find/show me recent <regs|directives|decisions>",
+    # "regulations on <topic>", "consolidated version of <CELEX>".
+    cellar_discovery_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1131,6 +1136,23 @@ class ContextBuilder:
 
         post_tasks['today_block'] = _fetch_today_safe()
 
+        # 3g. On-demand: Cellar SPARQL discovery block (live retrieval from publications.europa.eu)
+        cellar_discovery_intent = self._detect_cellar_discovery_intent(user_message)
+
+        async def _fetch_cellar_discovery_safe():
+            if not cellar_discovery_intent:
+                return None
+            try:
+                block = await self._fetch_cellar_discovery_block(user_message, cellar_discovery_intent)
+                if block:
+                    logger.info("[cellar-discovery] Injected discovery block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[cellar-discovery] Failed: %s", e)
+                return None
+
+        post_tasks['cellar_discovery_block'] = _fetch_cellar_discovery_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1216,6 +1238,7 @@ class ContextBuilder:
         position_block = post_map.get('position')
         committee_transcript_block = post_map.get('committee_transcript')
         today_block = post_map.get('today_block')
+        cellar_discovery_block = post_map.get('cellar_discovery_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1286,6 +1309,7 @@ class ContextBuilder:
             position_block=position_block,
             committee_transcript_block=committee_transcript_block,
             today_block=today_block,
+            cellar_discovery_block=cellar_discovery_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -5587,6 +5611,177 @@ class ContextBuilder:
         return "\n".join(lines)
 
     # ------------------------------------------------------------------
+    # On-demand: Cellar SPARQL discovery (live retrieval from
+    # publications.europa.eu/webapi/rdf/sparql)
+    # ------------------------------------------------------------------
+
+    # Two-token detector:
+    # - corpus token = the kind of thing the user is asking about
+    # - recency token = a signal that they want a list / fresh slice (not "tell me about X")
+    # Both must be present. Single-word matches are too broad (every query about a
+    # specific regulation would falsely fire).
+    _CELLAR_CORPUS_TOKENS = {
+        # English
+        "regulation", "regulations", "directive", "directives", "decision", "decisions",
+        "acts ", "legislation", "official journal", " oj ", "in force",
+        "proposal", "proposals", "case law", "court ruling", "judgment", "ruling",
+        # Spanish
+        "reglamento", "reglamentos", "directiva", "directivas", "decision",
+        "decisiones", "doue", "legislacion", "propuesta", "propuestas",
+        "jurisprudencia", "sentencia",
+        # Catalan
+        "reglament", "reglaments", "directiva", "directives", "decisio", "decisions",
+        "proposta", "propostes", "jurisprudencia",
+        # French
+        "reglement", "reglements", "directive", "directives", "decision", "decisions",
+        "joue", "legislation", "proposition", "propositions", "jurisprudence",
+        # Italian
+        "regolamento", "regolamenti", "direttiva", "direttive", "proposta", "proposte",
+        "giurisprudenza",
+        # Dutch
+        "verordening", "verordeningen", "richtlijn", "richtlijnen", "voorstel",
+        "rechtspraak",
+    }
+    _CELLAR_RECENCY_TOKENS = {
+        # English
+        "recent", "recently", "lately", "published", "since", " new ", "last week",
+        "last month", "this month", "this year", "list ", "find ", "show me",
+        "what was published", "what's been published", "what has been published",
+        "in force", "from 20", "until 20", "between 20",
+        # Spanish
+        "reciente", "recientes", "publicado", "publicados", "ultim", "este mes",
+        "este ano", "este año", "desde 20", "hasta 20",
+        # Catalan
+        "recent", "recents", "publicat", "publicats", "ultim", "aquest mes",
+        "aquest any", "des de 20", "fins a 20",
+        # French
+        "recent", "recents", "publie", "publies", "dernier", "ce mois", "cette annee",
+        "depuis 20",
+        # Italian
+        "recente", "recenti", "pubblicato", "pubblicati", "ultimo", "questo mese",
+        "dal 20", "dal 19",
+        # Dutch
+        "recent", "onlangs", "gepubliceerd", "deze maand", "dit jaar", "sinds 20",
+    }
+
+    def _detect_cellar_discovery_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        """Detect corpus-wide discovery queries.
+
+        Returns None when the query is about a specific document (let the
+        normal retrieval pipeline handle it) or unrelated. Returns a small
+        intent dict otherwise: {kind: 'discovery', sectors: [...]}.
+
+        Heuristic: must contain BOTH a corpus-token AND a recency-token.
+        Specific-CELEX queries ("32016R0679") are excluded.
+        """
+        if not query:
+            return None
+        q = query.lower().strip()
+        q_nfd = (
+            q.replace("á", "a").replace("é", "e").replace("í", "i")
+             .replace("ó", "o").replace("ú", "u").replace("ñ", "n")
+             .replace("è", "e").replace("à", "a").replace("ç", "c")
+        )
+        # Bail out on obvious specific-doc queries — let normal retrieval handle.
+        # CELEX numbers (sector + year + type-letter + serial) — rough match.
+        import re as _re
+        if _re.search(r"\b\d[A-Z\d]{0,1}\d{4}[A-Z]\d{4}\b", query):
+            return None
+
+        corpus_hit = next(
+            (t.strip() for t in self._CELLAR_CORPUS_TOKENS if t in q or t in q_nfd),
+            None,
+        )
+        recency_hit = next(
+            (t.strip() for t in self._CELLAR_RECENCY_TOKENS if t in q or t in q_nfd),
+            None,
+        )
+        if not (corpus_hit and recency_hit):
+            return None
+
+        sectors = ["3"]
+        if any(w in q_nfd for w in ["proposal", "propuesta", "proposta", "voorstel", "vorschlag"]):
+            sectors = ["5"]
+        if any(w in q_nfd for w in ["case law", "judgment", "ruling", "tribunal", "court", "sentencia"]):
+            sectors = ["6"]
+        return {
+            "kind": "discovery",
+            "sectors": sectors,
+            "corpus_hit": corpus_hit,
+            "recency_hit": recency_hit,
+        }
+
+    async def _fetch_cellar_discovery_block(
+        self,
+        query: str,
+        intent: Dict[str, Any],
+    ) -> Optional[str]:
+        """Live Cellar SPARQL fetch — surfaces 5-8 recent acts matching the
+        user's discovery question. Result is a compact context block injected
+        near the top of format_context_for_ai (above the 32k truncation cap).
+        """
+        from datetime import date as _date, timedelta as _td
+
+        # Lazy import to avoid hard dependency on httpx for unrelated tests
+        try:
+            from services.api_clients.cellar_sparql_client import CellarSPARQLClient
+        except Exception as e:
+            logger.warning("[cellar-discovery] client import failed: %s", e)
+            return None
+
+        # 30-day default window. Specific date phrases ("since 2024", "this year")
+        # are NOT yet parsed — keep behaviour simple and reliable.
+        today = _date.today()
+        start = today - _td(days=30)
+        sectors = intent.get("sectors") or ["3"]
+
+        try:
+            async with CellarSPARQLClient(timeout=30) as client:
+                rows = await client.discover_by_date_range(
+                    date_from=start,
+                    date_to=today,
+                    sectors=sectors,
+                    limit=8,
+                )
+        except Exception as e:
+            logger.warning("[cellar-discovery] SPARQL call failed: %s", e)
+            return None
+
+        if not rows:
+            return None
+
+        sector_label = {
+            "3": "EU legislation in force",
+            "5": "Commission proposals",
+            "6": "EU case law",
+        }.get(sectors[0], "EU acts")
+
+        lines = [
+            "=== CELLAR DISCOVERY (live SPARQL, last 30 days) ===",
+            f"Source: publications.europa.eu/webapi/rdf/sparql",
+            f"Filter: {sector_label} (CELEX sector {sectors[0]}), {start.isoformat()} -> {today.isoformat()}",
+            "",
+            "Recent matching acts (cite verbatim — these are LIVE, verified by Cellar):",
+        ]
+        for r in rows[:8]:
+            celex = r.get("celex") or "?"
+            d = r.get("date") or "?"
+            title = (r.get("title") or "").strip()
+            if len(title) > 180:
+                title = title[:177] + "..."
+            url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+            lines.append(f"- [{celex}] ({d}) {title}")
+            lines.append(f"    {url}")
+        lines.append("")
+        lines.append("INSTRUCTIONS:")
+        lines.append("- Cite each act by its CELEX number and link, never invent identifiers.")
+        lines.append("- If the user asked about a topic not represented above, say so plainly.")
+        lines.append("- Respond in the SAME LANGUAGE as the user's question.")
+        lines.append("=== END CELLAR DISCOVERY ===")
+
+        return "\n".join(lines)
+
+    # ------------------------------------------------------------------
     # On-demand: EP committee meeting transcripts (AI-transcribed)
     # ------------------------------------------------------------------
 
@@ -6780,6 +6975,12 @@ class ContextBuilder:
         # ("today", "hoy", "this week", "esta semana") in a verified context.
         if getattr(context_data, 'today_block', None):
             sections.append(context_data.today_block)
+
+        # CELLAR DISCOVERY BLOCK (on-demand, live SPARQL) — also injected near top
+        # so it survives the 32k truncation cap. Triggered by corpus-wide questions
+        # like "regulations on data protection", "directives published since X".
+        if getattr(context_data, 'cellar_discovery_block', None):
+            sections.append(context_data.cellar_discovery_block)
 
         # Drafting mode signal (action intent detected)
         if context_data.drafting_intent and context_data.drafting_intent.is_drafting_query:

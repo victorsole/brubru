@@ -180,6 +180,15 @@ async def list_laws(
         published_to=published_to,
         updated_from=updated_from,
         updated_to=updated_to,
+        # Phase 3 — OP Core Metadata enrichment.
+        op_core_title="EU legislation listing",
+        op_core_type="EU legislation",
+        op_core_identifier=str(request.url),
+        op_core_referenced_by=[
+            "https://brubru.beresol.eu/api/v1/discover/cellar/recent",
+            "https://brubru.beresol.eu/api/v1/discover/cellar/celex/{celex}/relationships",
+            "https://brubru.beresol.eu/api/v1/vocabularies/modification-types",
+        ],
     )
 
 

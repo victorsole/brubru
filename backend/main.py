@@ -34,6 +34,7 @@ from api import (
     predictions, texts_adopted, commission_documents, mep_amendments, eu_calendar,
     eprs, cron, preuser_analytics, dg_grow, daily_brief, catalan_translations,
     whatsapp, positions, archive, amendator_examples, public_analytics,
+    datasets_dcat,
 )
 from api.chat_examples import public_router as chat_examples_public_router, admin_router as chat_examples_admin_router
 # from api import ai
@@ -189,6 +190,7 @@ app.include_router(chat_examples_public_router)
 app.include_router(chat_examples_admin_router)
 app.include_router(amendments.router, tags=["Amendments"])
 app.include_router(amendator_examples.router)
+app.include_router(datasets_dcat.router, tags=["DCAT-AP Self-Catalogue"])
 app.include_router(public_analytics.router)
 app.include_router(eu_law_comply.router, prefix="/api", tags=["EU Law Comply"])
 app.include_router(tenderator.router, tags=["Tenderator"])
@@ -235,6 +237,8 @@ async def _v1_rate_limit_headers(request, call_next):
         # Attribution headers replace the now-removed envelope `meta` block.
         response.headers["X-Powered-By"] = "Brubru"
         response.headers["X-Source"] = "brubru.beresol.eu"
+        # Phase 3 of docs/applications/euvoc.md — declare OP Core conformance.
+        response.headers["X-OP-Core-Conformance"] = "v1.0"
     return response
 
 

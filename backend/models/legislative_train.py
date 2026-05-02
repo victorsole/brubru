@@ -222,6 +222,11 @@ class LegislativeCarriage(Base):
     enriched_at = Column(DateTime)
     enrichment_quality = Column(String)  # "high", "medium", "low"
 
+    # Phase 5 of docs/applications/euvoc.md — IMMC-equivalent inter-institutional
+    # handoff events projected from cdm:event_legal_*. See migration 049_immc_tags.sql
+    # and services/api_clients/immc_client.py for the JSONB shape.
+    immc_tags = Column(JSON, default=dict)
+
     # Relationships
     train = relationship("LegislativeTrain", back_populates="carriages")
     package = relationship("LegislativePackage", back_populates="carriages")

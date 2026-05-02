@@ -1,0 +1,1 @@
+"""Brubru document-generation services."""
