@@ -193,9 +193,9 @@ def main():
             hosts = hosts[: args.limit]
         all_hosts.extend(hosts)
 
+    inserted = total_meetings = 0
     conn = psycopg2.connect(db_url) if args.apply else None
     cur = conn.cursor() if conn else None
-    inserted = total_meetings = 0
 
     for host in all_hosts:
         meetings = fetch_all_meetings_for_host(host, max_pages=args.max_pages)
@@ -204,33 +204,56 @@ def main():
         if not args.apply or not meetings:
             continue
         for m in meetings:
-            try:
-                cur.execute(
-                    """
-                    INSERT INTO transparency_meetings
-                      (id, host_uuid, host_name, host_role, host_dg, host_cabinet,
-                       meeting_date, location, subject, organisation_met,
-                       transparency_register_id, organisation_type, representatives,
-                       source_url, policy_areas, related_celex,
-                       scraped_at, first_seen, last_updated)
-                    VALUES
-                      (%(id)s, %(host_uuid)s, %(host_name)s, %(host_role)s, %(host_dg)s,
-                       %(host_cabinet)s, %(meeting_date)s, %(location)s, %(subject)s,
-                       %(organisation_met)s, %(transparency_register_id)s, %(organisation_type)s,
-                       %(representatives)s, %(source_url)s, %(policy_areas)s, %(related_celex)s,
-                       NOW(), NOW(), NOW())
-                    ON CONFLICT DO NOTHING
-                    """,
-                    m,
-                )
-                inserted += 1
-            except Exception as exc:
-                print(f"    [ERR] {m['meeting_date']}: {exc}")
-                conn.rollback()
-        conn.commit()
+            attempt = 0
+            while attempt < 3:
+                try:
+                    cur.execute(
+                        """
+                        INSERT INTO transparency_meetings
+                          (id, host_uuid, host_name, host_role, host_dg, host_cabinet,
+                           meeting_date, location, subject, organisation_met,
+                           transparency_register_id, organisation_type, representatives,
+                           source_url, policy_areas, related_celex,
+                           scraped_at, first_seen, last_updated)
+                        VALUES
+                          (%(id)s, %(host_uuid)s, %(host_name)s, %(host_role)s, %(host_dg)s,
+                           %(host_cabinet)s, %(meeting_date)s, %(location)s, %(subject)s,
+                           %(organisation_met)s, %(transparency_register_id)s, %(organisation_type)s,
+                           %(representatives)s, %(source_url)s, %(policy_areas)s, %(related_celex)s,
+                           NOW(), NOW(), NOW())
+                        ON CONFLICT DO NOTHING
+                        """,
+                        m,
+                    )
+                    inserted += 1
+                    break
+                except (psycopg2.OperationalError, psycopg2.InterfaceError) as exc:
+                    print(f"    [RECONNECT] {exc}")
+                    try:
+                        conn.close()
+                    except Exception:
+                        pass
+                    conn = psycopg2.connect(db_url)
+                    cur = conn.cursor()
+                    attempt += 1
+                except Exception as exc:
+                    print(f"    [ERR] {m['meeting_date']}: {exc}")
+                    try:
+                        conn.rollback()
+                    except Exception:
+                        pass
+                    break
+        try:
+            conn.commit()
+        except Exception:
+            conn = psycopg2.connect(db_url)
+            cur = conn.cursor()
 
     if conn:
-        conn.close()
+        try:
+            conn.close()
+        except Exception:
+            pass
 
     print(f"[DONE] hosts={len(all_hosts)} meetings_parsed={total_meetings} inserted={inserted}{' (applied)' if args.apply else ' (dry-run)'}")
 
