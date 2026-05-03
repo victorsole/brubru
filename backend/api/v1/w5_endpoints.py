@@ -184,13 +184,28 @@ async def list_officials(
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[OfficialItem]:
     query = db.query(EUOfficial)
-    # Filter out scrape-noise rows: names that are filter-bar text, lowercase
-    # garbage, or starting with a dash (e.g. "— Committees Afet, Sede,").
-    # These are JSON-LD scraping artifacts where the parser captured a UI label
-    # instead of an actual person row.
+    # Filter out scrape-noise rows. The original Whoiswho JSON-LD scrape
+    # picked up several patterns of non-person text:
+    #   1. "— Committees Afet, Sede,"  (filter-bar UI label)
+    #   2. "(postal office Box: ...)"  (institution header rendered as name)
+    #   3. "(NATURE & Circular"        (truncated section heading)
+    #   4. "(Έλενα Κουντουρα)"          (alternate-script name shown in
+    #                                    parentheses next to the real Latin
+    #                                    name; produces duplicate rows for
+    #                                    the same person)
+    # Hide all of those by default. The underlying rows stay in DB so a
+    # future PDF-based re-ingest from the Publications Office Whoiswho
+    # PDFs (op.europa.eu/webpub/wiw/pdf/EUWhoiswho_*_EN.pdf) can replace
+    # them cleanly.
     filters = [
         ~EUOfficial.name.op("~")(r"^[—–\-]"),
         ~EUOfficial.name.op("~")(r"^[a-z]"),
+        # Names starting with "(" are the noise patterns 2/3/4 above.
+        ~EUOfficial.name.op("~")(r"^\("),
+        # Defensive: explicit "postal office" / "Postal address" matches
+        # in case the leading paren is stripped somewhere upstream.
+        ~EUOfficial.name.ilike("%postal office%"),
+        ~EUOfficial.name.ilike("%Postal address%"),
         func.length(EUOfficial.name) >= 4,
     ]
     if institution_slug:
