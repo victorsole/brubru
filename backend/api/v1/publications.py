@@ -42,6 +42,12 @@ class PublicationItem(BaseModel):
     published_date: Optional[datetime] = None
     policy_areas: list = Field(default_factory=list)
     tags: list = Field(default_factory=list)
+    has_body: bool = False
+    # Body extracted from the source URL (HTML stripped of nav/footer/scripts).
+    # Populated by backend/scripts/backfill_body_text.py on a rolling basis.
+    # On LIST responses the body is truncated at 5k chars; full body lives on
+    # GET /publications/{id}.
+    body: Optional[str] = None
 
 
 @router.get(
@@ -174,6 +180,8 @@ async def list_publications(
             published_date=r.published_date,
             policy_areas=list(r.policy_areas or []),
             tags=list(r.tags or []),
+            has_body=bool(r.html_content and len(r.html_content) > 500),
+            body=(r.html_content[:5000] + "…") if (r.html_content and len(r.html_content) > 5000) else r.html_content,
         )
         for r in rows
     ]
@@ -299,4 +307,7 @@ async def get_publication_detail(
         published_date=r.published_date,
         policy_areas=list(r.policy_areas or []),
         tags=list(r.tags or []),
+        has_body=bool(r.html_content and len(r.html_content) > 500),
+        # Full body on detail (no truncation).
+        body=r.html_content,
     )

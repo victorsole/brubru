@@ -49,9 +49,15 @@ class TextItem(BaseModel):
     full_text_url: Optional[str] = None
     pdf_url: Optional[str] = None
     last_updated: Optional[datetime] = None
+    has_full_text: bool = False
+    # Body text only populated on the DETAIL endpoint to keep list responses
+    # small. List rows expose `has_full_text` so partners can know whether the
+    # text is available before drilling in.
+    full_text: Optional[str] = None
 
 
-def _row_to_item(r: TextAdopted) -> TextItem:
+def _row_to_item(r: TextAdopted, include_body: bool = False) -> TextItem:
+    body = (r.full_text or "") if include_body else None
     return TextItem(
         id=str(r.id),
         ta_reference=r.ta_reference,
@@ -71,6 +77,8 @@ def _row_to_item(r: TextAdopted) -> TextItem:
         full_text_url=r.full_text_url,
         pdf_url=r.pdf_url,
         last_updated=r.last_updated,
+        has_full_text=bool(r.full_text and len(r.full_text) > 500),
+        full_text=body,
     )
 
 
@@ -193,7 +201,7 @@ async def get_text_adopted_detail(
             "resource": "text_adopted",
             "id": ta_reference,
         })
-    return _row_to_item(r)
+    return _row_to_item(r, include_body=True)
 
 
 @texts_submitted_router.get(
