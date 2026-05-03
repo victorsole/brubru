@@ -104,10 +104,13 @@ class EPAmendmentSyncService:
         logger.info(f"[START] Discovering amendment documents for {procedure_ref}")
         gateway_docs = await self.oeil_client.get_documentation_gateway(procedure_ref)
 
-        # Filter to only amendment-relevant types (AM and PR)
+        # Filter to amendment + report + opinion document types. The /opinions
+        # endpoint queries amendment_documents for ('AD','PA'); without 'AD'
+        # here, AD-type opinions never make it into the table and the endpoint
+        # returns empty.
         amendment_docs = [
             d for d in gateway_docs
-            if d['doc_type_code'] in ('AM', 'PR', 'PA')
+            if d['doc_type_code'] in ('AM', 'PR', 'PA', 'AD', 'RD')
         ]
 
         logger.info(f"Found {len(amendment_docs)} amendment documents out of {len(gateway_docs)} total")
