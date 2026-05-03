@@ -133,11 +133,16 @@ async def get_outcome(
         pred = await predictor.predict_outcome(procedure_ref)
         if not pred:
             raise HTTPException(status_code=404, detail={"error": "Procedure not found", "reason_code": "not_found", "resource": "procedure", "id": procedure_ref})
+        # The OutcomePredictor return type uses `probabilities` / `predicted_outcome`,
+        # not `outcomes` / `most_likely_outcome`. Tolerate either spelling so an
+        # ML upgrade that renames fields back doesn't break the v1 surface.
+        outcomes_src = getattr(pred, "outcomes", None) or getattr(pred, "probabilities", None) or []
+        most_likely = getattr(pred, "most_likely_outcome", None) or getattr(pred, "predicted_outcome", None)
         return OutcomePrediction(
             procedure_ref=pred.procedure_ref,
             current_status=pred.current_status,
-            outcomes=[OutcomeProbability(outcome=o.outcome, probability=o.probability) for o in (pred.outcomes or [])],
-            most_likely_outcome=pred.most_likely_outcome,
+            outcomes=[OutcomeProbability(outcome=o.outcome, probability=o.probability) for o in outcomes_src],
+            most_likely_outcome=most_likely,
             confidence=pred.confidence,
             model_version=getattr(pred, "model_version", "baseline"),
         )
