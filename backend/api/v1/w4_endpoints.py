@@ -472,6 +472,10 @@ class SecondaryActItem(BaseModel):
     pdf_url: Optional[str] = None
     policy_areas: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    has_body: bool = False
+    # Body text backfilled from Cellar (migration 051). 5k-char truncation on
+    # list responses; full body on detail.
+    body: Optional[str] = None
 
 
 def _list_secondary_acts(
@@ -518,6 +522,8 @@ def _list_secondary_acts(
             celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
             policy_areas=list(r.policy_areas or []),
             last_updated=r.last_updated,
+            has_body=bool(r.text_body and len(r.text_body) > 500),
+            body=(r.text_body[:5000] + "…") if (r.text_body and len(r.text_body) > 5000) else r.text_body,
         )
         for r in rows
     ]
@@ -570,6 +576,8 @@ def _secondary_act_detail(db: Session, reference: str, expected_type: str) -> Se
         celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
+        has_body=bool(r.text_body and len(r.text_body) > 500),
+        body=r.text_body,
     )
 
 

@@ -74,7 +74,40 @@ KINDS = {
         "min_filled": 300,
         "id_label": "inf_reference",
     },
+    # Phase 3: tables with a CELEX column. Source URL is built from CELEX via
+    # the Cellar API (publications.europa.eu/resource/celex/{celex}) which
+    # requires Accept: application/xhtml+xml + Accept-Language: en. Bypasses
+    # EUR-Lex's WAF. See `cellar_url_for_celex` below.
+    "register-docs": {
+        "table": "commission_documents",
+        "id_col": "id",
+        "url_cols": ["celex"],          # CELEX column → Cellar URL
+        "body_col": "text_body",
+        "min_filled": 500,
+        "id_label": "reference",
+        "use_cellar": True,
+    },
+    "acts": {
+        "table": "secondary_acts",
+        "id_col": "id",
+        "url_cols": ["celex"],
+        "body_col": "text_body",
+        "min_filled": 500,
+        "id_label": "reference",
+        "use_cellar": True,
+    },
 }
+
+
+def cellar_url_for_celex(celex: str) -> str:
+    """Build a Cellar resource URL for a CELEX number.
+
+    EUR-Lex public WAF blocks server-side scrapes of /legal-content/EN/TXT/...
+    The Publications Office's Cellar resource URL with explicit content
+    negotiation (Accept: application/xhtml+xml, Accept-Language: en) is the
+    canonical machine-readable path.
+    """
+    return f"http://publications.europa.eu/resource/celex/{celex.strip().upper()}"
 
 
 def get_env(key: str) -> str:
@@ -86,16 +119,29 @@ def get_env(key: str) -> str:
     return ""
 
 
-def http_fetch(url: str, timeout: float = 25.0) -> Tuple[Optional[bytes], str]:
-    """Fetch a URL. Returns (bytes, content_kind) where kind is 'html', 'pdf', or '' on failure."""
+def http_fetch(url: str, timeout: float = 25.0, cellar: bool = False, _accept: Optional[str] = None) -> Tuple[Optional[bytes], str]:
+    """Fetch a URL. Returns (bytes, content_kind) where kind is 'html', 'pdf', or '' on failure.
+
+    When cellar=True, uses the explicit content-negotiation headers required
+    by the Publications Office Cellar API (Accept: application/xhtml+xml +
+    Accept-Language: en) to receive a server-side rendered XHTML body for a
+    CELEX resource. Without these the Cellar endpoint returns 400.
+
+    Many CELEX resources don't have an XHTML manifestation but DO have a PDF
+    one (typical for JOIN, RES, DEC, and some SWDs). On HTTP 404 with cellar
+    mode, we automatically retry with Accept: application/pdf.
+    """
     is_pdf_ext = url.lower().endswith(".pdf")
     if url.lower().endswith((".docx", ".doc", ".xlsx")):
         return None, ""
-    req = urllib_request.Request(url, headers={
-        "User-Agent": USER_AGENT,
-        "Accept": "text/html,application/xhtml+xml,application/pdf",
-        "Accept-Language": "en",
-    })
+    headers = {"User-Agent": USER_AGENT}
+    if cellar:
+        headers["Accept"] = _accept or "application/xhtml+xml"
+        headers["Accept-Language"] = "en"
+    else:
+        headers["Accept"] = "text/html,application/xhtml+xml,application/pdf"
+        headers["Accept-Language"] = "en"
+    req = urllib_request.Request(url, headers=headers)
     try:
         with urllib_request.urlopen(req, timeout=timeout) as r:
             ctype = (r.headers.get("Content-Type") or "").lower()
@@ -106,6 +152,23 @@ def http_fetch(url: str, timeout: float = 25.0) -> Tuple[Optional[bytes], str]:
                 return blob, "html"
             return None, ""
     except urllib_error.HTTPError as e:
+        # Cellar returns HTTP 300 (Multiple Choices) when a CELEX has multiple
+        # language manifestations and we haven't pinned one. The response
+        # body lists each manifestation as <a href> — grab the first DOC link
+        # and re-fetch.
+        if e.code == 300 and cellar:
+            try:
+                body = e.read()
+                m = re.search(rb'href="(http://publications\.europa\.eu/resource/cellar/[^"]+/DOC_[^"]+)"', body)
+                if m:
+                    next_url = m.group(1).decode()
+                    return http_fetch(next_url, timeout=timeout, cellar=cellar, _accept=_accept)
+            except Exception:  # noqa: BLE001
+                pass
+        # Cellar 404 on xhtml+xml usually means no XHTML manifestation exists.
+        # Many CELEX docs only ship as PDF — retry once with that Accept.
+        if e.code == 404 and cellar and (_accept or "application/xhtml+xml") != "application/pdf":
+            return http_fetch(url, timeout=timeout, cellar=cellar, _accept="application/pdf")
         if e.code != 404:
             print(f"  [HTTP {e.code}] {url[:80]}")
         return None, ""
@@ -197,29 +260,29 @@ def main():
     print(f"[INFO] kind={args.kind} table={cfg['table']} body_col={cfg['body_col']}")
     print(f"[INFO] {len(rows)} rows to process (apply={args.apply}, throttle={args.throttle}s)")
 
+    # Pick the right "updated at" column per table.
+    timestamp_col = "last_updated"
+    if cfg["table"] == "institutional_publications":
+        timestamp_col = "fetched_at"
     update_sql = (
         f"UPDATE {cfg['table']} "
-        f"SET {cfg['body_col']} = %(body)s, last_updated = NOW() "
+        f"SET {cfg['body_col']} = %(body)s, {timestamp_col} = NOW() "
         f"WHERE {cfg['id_col']} = %(row_id)s"
     )
-    # Some tables (institutional_publications) don't have last_updated
-    if cfg["table"] == "institutional_publications":
-        update_sql = (
-            f"UPDATE {cfg['table']} "
-            f"SET {cfg['body_col']} = %(body)s, fetched_at = NOW() "
-            f"WHERE {cfg['id_col']} = %(row_id)s"
-        )
 
     n_filled = 0
     n_failed = 0
+    use_cellar = bool(cfg.get("use_cellar"))
     for row in rows:
-        url = row["picked_url"]
+        raw = row["picked_url"]
         label = row["row_label"]
-        if not url or "<" in (url or ""):
+        if not raw or "<" in (raw or ""):
             print(f"  [SKIP] {label}: dirty URL")
             n_failed += 1
             continue
-        blob, kind = http_fetch(url)
+        # CELEX-based tables: build the Cellar resource URL from the CELEX.
+        url = cellar_url_for_celex(raw) if use_cellar else raw
+        blob, kind = http_fetch(url, cellar=use_cellar)
         if not blob:
             n_failed += 1
             time.sleep(args.throttle)

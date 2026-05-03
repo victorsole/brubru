@@ -70,6 +70,9 @@ class CommissionDocument(Base):
     source_url = Column(Text, nullable=True)  # Commission Transparency Register search URL or other origin
     celex = Column(String)           # CELEX number for adopted acts
     common_name = Column(String)     # Colloquial name e.g. "Digital Omnibus Act"
+    # Body text backfilled from Cellar (migration 051). XHTML-stripped plain
+    # text for SWDs / opinions; PDF-extracted text for JOIN/RES/DEC.
+    text_body = Column(Text, nullable=True)
 
     # Cross-references
     legislative_carriage_id = Column(

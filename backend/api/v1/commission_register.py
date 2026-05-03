@@ -46,14 +46,24 @@ class CommissionRegisterItem(BaseModel):
     pdf_url: Optional[str] = None     # Direct PDF asset (when available)
     source_url: Optional[str] = None  # Commission Transparency Register origin
     last_updated: Optional[datetime] = None
+    has_body: bool = False
+    # Body extracted from Cellar API (XHTML for SWDs, PDF text for JOIN/RES/etc).
+    # Populated by backend/scripts/backfill_body_text.py --kind register-docs.
+    # On LIST responses the body is truncated at 5k chars; full body lives on
+    # GET /commission-register-documents/{id} (when added).
+    body: Optional[str] = None
 
 
-def _row_to_item(r: CommissionDocument) -> CommissionRegisterItem:
+def _row_to_item(r: CommissionDocument, include_full_body: bool = False) -> CommissionRegisterItem:
     # Derive a fallback PDF URL via EUR-Lex's PDF endpoint — it returns 202
     # while building the PDF then 200 on retry. Valid for any adopted CELEX.
     pdf = r.pdf_url
     if pdf is None and r.celex:
         pdf = f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{r.celex}"
+    body_full = r.text_body or None
+    body_out = body_full
+    if body_full and not include_full_body and len(body_full) > 5000:
+        body_out = body_full[:5000] + "…"
     return CommissionRegisterItem(
         id=str(r.id),
         reference=r.reference,
@@ -70,6 +80,8 @@ def _row_to_item(r: CommissionDocument) -> CommissionRegisterItem:
         pdf_url=pdf,
         source_url=r.source_url,
         last_updated=r.last_updated,
+        has_body=bool(body_full and len(body_full) > 500),
+        body=body_out,
     )
 
 

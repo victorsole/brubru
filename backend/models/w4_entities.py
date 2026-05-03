@@ -231,6 +231,9 @@ class SecondaryAct(Base):
     celex = Column(String(30), nullable=True)
     source_url = Column(Text, nullable=False)
     pdf_url = Column(Text, nullable=True)
+    # Body text backfilled from Cellar (migration 051). XHTML-stripped plain
+    # text or PDF-extracted text for adopted CELEXes.
+    text_body = Column(Text, nullable=True)
 
     policy_areas = Column(ARRAY(String), default=list)
 
