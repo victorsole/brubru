@@ -135,7 +135,9 @@ async def get_agenda(
 
     client = get_commissioner_agenda_client()
     try:
-        profile, items = await client.fetch_agenda(name, date_from=date_from, date_to=date_to)
+        profile, items = await client.fetch_agenda(
+            name, date_from=date_from, date_to=date_to, db=db,
+        )
     except Exception as exc:  # noqa: BLE001
         logger.error(f"[v1] commissioner agenda fetch failed for {name}: {exc}")
         raise HTTPException(

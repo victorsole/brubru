@@ -25,7 +25,7 @@ import re
 import time
 import unicodedata
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import quote
@@ -446,11 +446,154 @@ class CommissionerAgendaClient:
             out.append(AgendaItem(date=d, title=title, location=location, detail_url=""))
         return out
 
+    @staticmethod
+    def _persist_rss_to_db(rss_xml: str, db) -> int:
+        """UPSERT every (leader_id, date, title, url) tuple from the RSS feed
+        into commission_calendar_urls. Returns the number of rows touched.
+
+        The Commission's RSS feed is a 30-item global rolling window — each
+        agenda call ingests it here so historical detail URLs accumulate even
+        after items roll out of the live feed. Idempotent on the unique key
+        (leader_id, event_date, title_normalised); revisits bump last_seen_at.
+        """
+        from xml.etree import ElementTree as ET
+        from sqlalchemy import text as _sql
+
+        if not rss_xml or db is None:
+            return 0
+        try:
+            root = ET.fromstring(rss_xml)
+        except ET.ParseError:
+            return 0
+
+        rows = []
+        for it in root.findall(".//item"):
+            title_el = it.find("title")
+            link_el = it.find("link")
+            if title_el is None or link_el is None:
+                continue
+            raw = (title_el.text or "").strip()
+            link = (link_el.text or "").strip()
+            if not raw or not link:
+                continue
+            m = re.match(r"^\s*(\d{4}-\d{2}-\d{2})\s*[-–]\s*(.+)$", raw)
+            if not m:
+                continue
+            try:
+                event_date = date.fromisoformat(m.group(1))
+            except ValueError:
+                continue
+            display_title = m.group(2).strip()
+            normalised = _norm(display_title)
+            # Pull every leader_id this item is tagged with (some events list
+            # multiple commissioners co-hosting).
+            for cat in it.findall("category"):
+                domain = cat.attrib.get("domain", "")
+                if not domain.startswith(LEADER_AUTHORITY_BASE):
+                    continue
+                leader = domain[len(LEADER_AUTHORITY_BASE):].strip("/").split("/")[0]
+                if not leader:
+                    continue
+                rows.append({
+                    "leader_id": leader,
+                    "event_date": event_date,
+                    "title_normalised": normalised,
+                    "title": display_title,
+                    "detail_url": link,
+                })
+
+        if not rows:
+            return 0
+
+        try:
+            db.execute(
+                _sql("""
+                    INSERT INTO commission_calendar_urls
+                        (leader_id, event_date, title_normalised, title, detail_url)
+                    VALUES (:leader_id, :event_date, :title_normalised, :title, :detail_url)
+                    ON CONFLICT (leader_id, event_date, title_normalised)
+                    DO UPDATE SET
+                        detail_url = EXCLUDED.detail_url,
+                        last_seen_at = NOW()
+                """),
+                rows,
+            )
+            db.commit()
+            return len(rows)
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[commissioner-agenda] DB persist failed: %s", exc)
+            try:
+                db.rollback()
+            except Exception:  # noqa: BLE001
+                pass
+            return 0
+
+    @staticmethod
+    def _lookup_db_urls(
+        items: List["AgendaItem"], leader_id: str, db
+    ) -> Dict[Tuple[date, str], str]:
+        """Batch-fetch detail URLs from the DB for a list of agenda items.
+
+        Returns a {(date, normalised_title): url} dict. The lookup uses a
+        ±1-day window on event_date and the same token-set Jaccard scoring
+        as the live RSS path, so older events captured weeks ago still match.
+        """
+        from sqlalchemy import text as _sql
+
+        if not items or not leader_id or db is None:
+            return {}
+        dates = sorted({it.date for it in items})
+        if not dates:
+            return {}
+        # Pull every row for this leader within ±1 day of the requested range.
+        try:
+            rows = db.execute(
+                _sql("""
+                    SELECT event_date, title_normalised, detail_url
+                    FROM commission_calendar_urls
+                    WHERE leader_id = :leader_id
+                      AND event_date BETWEEN :from_date AND :to_date
+                """),
+                {
+                    "leader_id": leader_id,
+                    "from_date": min(dates) - timedelta(days=1),
+                    "to_date": max(dates) + timedelta(days=1),
+                },
+            ).fetchall()
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[commissioner-agenda] DB lookup failed: %s", exc)
+            return {}
+
+        out: Dict[Tuple[date, str], str] = {}
+        for it in items:
+            html_tokens = {t for t in _norm(it.title).split() if len(t) > 2}
+            if not html_tokens:
+                continue
+            best_url = ""
+            best_score = 0.0
+            for r in rows:
+                row_date = r[0] if isinstance(r[0], date) else date.fromisoformat(str(r[0]))
+                if abs((row_date - it.date).days) > 1:
+                    continue
+                row_tokens = {t for t in (r[1] or "").split() if len(t) > 2}
+                if not row_tokens:
+                    continue
+                overlap = len(html_tokens & row_tokens)
+                denom = max(len(html_tokens), len(row_tokens))
+                score = overlap / denom if denom else 0.0
+                if score > best_score:
+                    best_score = score
+                    best_url = r[2]
+            if best_score >= 0.6 and best_url:
+                out[(it.date, _norm(it.title))] = best_url
+        return out
+
     async def fetch_agenda(
         self,
         commissioner_query: str,
         date_from: Optional[date] = None,
         date_to: Optional[date] = None,
+        db=None,
     ) -> Tuple[Optional[CommissionerProfile], List[AgendaItem]]:
         profile = self.resolve(commissioner_query)
         if profile is None:
@@ -471,23 +614,29 @@ class CommissionerAgendaClient:
             # date + title + location, no <a href>. The bare RSS feed at
             # /node/33084/rss_en still carries per-event URLs but only for the
             # latest 30 items globally. Strategy: parse HTML for the per-
-            # commissioner roster, then enrich each item with the matching RSS
-            # detail URL when present (date + title substring match).
+            # commissioner roster, persist current RSS items to DB so URLs
+            # accumulate over time, then look up each item's URL from DB
+            # (covers older events that have rolled out of live RSS) with a
+            # live-RSS fallback for anything not yet persisted.
             url = self._build_calendar_url(leader_id)
             html = await self._get(url)
             items = self._parse_items(html or "")
             rss = await self._get(RSS_FEED_URL)
+            self._persist_rss_to_db(rss or "", db)
+            db_urls = self._lookup_db_urls(items, leader_id, db)
             entries = self._build_rss_url_entries(rss or "")
-            if entries:
-                items = [
-                    AgendaItem(
-                        date=it.date,
-                        title=it.title,
-                        location=it.location,
-                        detail_url=self._lookup_rss_url(entries, it),
-                    )
-                    for it in items
-                ]
+            items = [
+                AgendaItem(
+                    date=it.date,
+                    title=it.title,
+                    location=it.location,
+                    detail_url=(
+                        db_urls.get((it.date, _norm(it.title)))
+                        or self._lookup_rss_url(entries, it)
+                    ),
+                )
+                for it in items
+            ]
             self._agenda_cache[cache_key] = (time.time(), items)
 
         if date_from or date_to:
