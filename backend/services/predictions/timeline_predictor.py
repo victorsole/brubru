@@ -193,33 +193,37 @@ class TimelinePredictor:
         try:
             from models.legislative_train import CarriageStatusHistory, LegislativeCarriage
 
-            # Get all status transitions from completed procedures
-            query = self.db.query(
-                CarriageStatusHistory.from_status,
-                CarriageStatusHistory.to_status,
-                CarriageStatusHistory.days_in_previous_status
-            ).join(
-                LegislativeCarriage,
-                CarriageStatusHistory.carriage_id == LegislativeCarriage.id
-            ).filter(
-                CarriageStatusHistory.days_in_previous_status.isnot(None),
-                CarriageStatusHistory.days_in_previous_status > 0
+            # The historical-stats query used to assume from_status / to_status /
+            # days_in_previous_status columns that the carriage_status_history
+            # schema never shipped. The actual columns are status + changed_at +
+            # duration_days. We compute pairwise transitions in Python from
+            # ordered status rows per carriage. When this query yields nothing
+            # (cold DB), the predictor falls through to baseline stats.
+            rows = (
+                self.db.query(
+                    CarriageStatusHistory.carriage_id,
+                    CarriageStatusHistory.status,
+                    CarriageStatusHistory.duration_days,
+                    CarriageStatusHistory.changed_at,
+                )
+                .filter(CarriageStatusHistory.duration_days.isnot(None))
+                .filter(CarriageStatusHistory.duration_days > 0)
+                .order_by(CarriageStatusHistory.carriage_id, CarriageStatusHistory.changed_at)
+                .all()
             )
 
-            if procedure_type:
-                query = query.filter(
-                    LegislativeCarriage.oeil_procedure_ref.contains(f"({procedure_type})")
-                )
-
-            results = query.all()
-
-            # Group by transition
+            # Reconstruct transitions: each (carriage_id, status, duration_days)
+            # pair represents the time spent in `status` before transitioning to
+            # the next ordered row's status for the same carriage_id.
             transitions: Dict[str, List[int]] = {}
-            for from_status, to_status, days in results:
-                key = f"{from_status}->{to_status}"
-                if key not in transitions:
-                    transitions[key] = []
-                transitions[key].append(days)
+            prev_carriage = None
+            prev_status = None
+            for carriage_id, status, duration, _changed_at in rows:
+                if carriage_id == prev_carriage and prev_status is not None:
+                    key = f"{prev_status}->{status}"
+                    transitions.setdefault(key, []).append(int(duration))
+                prev_carriage = carriage_id
+                prev_status = status
 
             # Calculate statistics
             stats = {}
