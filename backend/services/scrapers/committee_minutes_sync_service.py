@@ -55,7 +55,7 @@ class CommitteeMinutesSyncService:
 
     async def sync_all(self, max_pages: int = 5, skip_existing: bool = True) -> Dict[str, Any]:
         """Sync minutes from the general listing page (all committees)."""
-        stats = {'added': 0, 'updated': 0, 'skipped': 0, 'errors': 0}
+        stats = {'added': 0, 'updated': 0, 'skipped': 0, 'errors': 0, 'pdf_extracted': 0}
 
         try:
             items = await self.scraper.scrape_all_minutes(max_pages=max_pages)
@@ -76,6 +76,11 @@ class CommitteeMinutesSyncService:
             except Exception as e:
                 logger.error(f"[ERROR] Final commit failed: {e}")
                 self.db.rollback()
+
+            # PDF extraction backfill — runs after upsert so newly-added rows
+            # always reach the API with agenda_items / attendees populated.
+            if self.enable_pdf_extraction:
+                stats['pdf_extracted'] = self._extract_pending_pdfs()
 
         except Exception as e:
             logger.error(f"[ERROR] Sync failed: {e}")
@@ -129,3 +134,59 @@ class CommitteeMinutesSyncService:
             )
             self.db.add(record)
             return 'added'
+
+    def _extract_pending_pdfs(self, limit: int = 200) -> int:
+        """Backfill agenda_items / attendees / decisions for any minutes rows
+        that have a pdf_url but has_full_text is still false. Mirrors the
+        standalone backfill script but runs inline at end of sync_all().
+        """
+        try:
+            from scripts.extract_committee_minutes_pdfs import (
+                fetch_pdf,
+                parse_minutes_pdf,
+            )
+        except Exception as exc:
+            logger.warning(f"[WARN] PDF extractor unavailable: {exc}")
+            return 0
+
+        pending = (
+            self.db.query(CommitteeMinutes)
+            .filter(CommitteeMinutes.pdf_url.isnot(None))
+            .filter((CommitteeMinutes.has_full_text.is_(False)) | (CommitteeMinutes.has_full_text.is_(None)))
+            .order_by(CommitteeMinutes.meeting_date.desc())
+            .limit(limit)
+            .all()
+        )
+        if not pending:
+            return 0
+
+        ok = 0
+        for row in pending:
+            try:
+                pdf_bytes = fetch_pdf(row.pdf_url)
+                parsed = parse_minutes_pdf(pdf_bytes)
+                row.full_text = parsed['full_text']
+                row.word_count = parsed['word_count']
+                row.page_count = parsed['page_count']
+                row.has_full_text = True
+                row.extraction_quality = parsed['extraction_quality']
+                row.agenda_items = parsed['agenda_items']
+                row.votes = parsed['votes']
+                row.decisions = parsed['decisions']
+                row.attendees_count = parsed['attendees_count']
+                row.last_updated = datetime.utcnow()
+                self.db.flush()
+                ok += 1
+            except Exception as exc:
+                logger.warning(f"[WARN] PDF extract failed {row.committee_code} {row.meeting_date}: {exc}")
+                self.db.rollback()
+
+        try:
+            self.db.commit()
+        except Exception as exc:
+            logger.error(f"[ERROR] commit after PDF extract failed: {exc}")
+            self.db.rollback()
+            return 0
+
+        logger.info(f"[OK] PDF-extracted {ok}/{len(pending)} minutes")
+        return ok

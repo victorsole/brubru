@@ -53,6 +53,7 @@ async def main():
     parser.add_argument('--max-pages', type=int, default=5, help='Max pages to scrape (default: 5)')
     parser.add_argument('--stats', action='store_true', help='Show database stats')
     parser.add_argument('--dry-run', action='store_true', help='Scrape only, print results')
+    parser.add_argument('--no-extract', action='store_true', help='Skip PDF extraction step')
     args = parser.parse_args()
 
     if args.stats:
@@ -75,14 +76,15 @@ async def main():
     CommitteeMinutes.__table__.create(engine, checkfirst=True)
 
     from services.scrapers.committee_minutes_sync_service import CommitteeMinutesSyncService
-    service = CommitteeMinutesSyncService()
+    service = CommitteeMinutesSyncService(enable_pdf_extraction=not args.no_extract)
     result = await service.sync_all(max_pages=args.max_pages)
 
     print(f"\n[OK] Committee minutes sync complete:")
-    print(f"  Added:   {result['added']}")
-    print(f"  Updated: {result['updated']}")
-    print(f"  Skipped: {result['skipped']}")
-    print(f"  Errors:  {result['errors']}")
+    print(f"  Added:        {result['added']}")
+    print(f"  Updated:      {result['updated']}")
+    print(f"  Skipped:      {result['skipped']}")
+    print(f"  Errors:       {result['errors']}")
+    print(f"  PDF extracted:{result.get('pdf_extracted', 0)}")
 
 
 if __name__ == '__main__':

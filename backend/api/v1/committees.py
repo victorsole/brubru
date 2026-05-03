@@ -2,6 +2,7 @@
 /api/v1/committees/* — EP committee work items, minutes, and roster.
 """
 
+import re
 from datetime import date, datetime
 from typing import Optional
 
@@ -13,10 +14,49 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.committee_minutes import CommitteeMinutes
 from models.committee_work import CommitteeWorkItem
+from models.legislative_train import LegislativeCarriage
 from models.user import User
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
+
+
+def _enum_value(v) -> Optional[str]:
+    """Return the underlying value of an Enum or string, or None."""
+    if v is None:
+        return None
+    return getattr(v, "value", None) or str(v)
+
+
+_PROC_TYPE_RE = re.compile(r"\(([A-Z]{2,5})\)\s*$")
+# Heuristic: titles like "Delegated acts (DEA) IMCO",
+# "Resolution on topical subjects (RSP) IMCO",
+# "***I Ordinary legislative procedure (COD) first reading ENVI IMCO TRAN",
+# "Mep's role All roles reporter role ..." are scrape artifacts, not real
+# proposal titles. Detect them so we can prefer the legislative_carriages title.
+_PLACEHOLDER_TITLE_PATTERNS = (
+    re.compile(r"^Delegated acts \([A-Z]+\)\s+\w+", re.IGNORECASE),
+    re.compile(r"^Resolution on topical subjects", re.IGNORECASE),
+    re.compile(r"^\*+\s*I+\s*Ordinary legislative procedure", re.IGNORECASE),
+    re.compile(r"^Mep'?s role All roles", re.IGNORECASE),
+    re.compile(r"^Implementing acts \([A-Z]+\)", re.IGNORECASE),
+    re.compile(r"^Own-initiative procedure \([A-Z]+\)\s+\w+", re.IGNORECASE),
+    re.compile(r"^Consultation procedure \([A-Z]+\)\s+\w+", re.IGNORECASE),
+    re.compile(r"^Consent procedure \([A-Z]+\)\s+\w+", re.IGNORECASE),
+)
+
+
+def _is_placeholder_title(title: Optional[str]) -> bool:
+    if not title:
+        return True
+    return any(p.search(title) for p in _PLACEHOLDER_TITLE_PATTERNS)
+
+
+def _proc_type_from_ref(ref: Optional[str]) -> Optional[str]:
+    if not ref:
+        return None
+    m = _PROC_TYPE_RE.search(ref)
+    return m.group(1) if m else None
 
 router = APIRouter(prefix="/committees", tags=["v1-committees"])
 
@@ -117,7 +157,17 @@ async def list_committee_work(
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> CommitteeWorkEnvelope:
-    query = db.query(CommitteeWorkItem).filter(func.upper(CommitteeWorkItem.committee_code) == code.upper())
+    # LEFT JOIN legislative_carriages on procedure_ref so we can enrich every
+    # row with the canonical title / current_status / celex_numbers when the
+    # CWI scrape only captured a placeholder. Applies to all committees.
+    query = (
+        db.query(CommitteeWorkItem, LegislativeCarriage)
+        .outerjoin(
+            LegislativeCarriage,
+            LegislativeCarriage.oeil_procedure_ref == CommitteeWorkItem.procedure_ref,
+        )
+        .filter(func.upper(CommitteeWorkItem.committee_code) == code.upper())
+    )
     if q:
         query = query.filter(CommitteeWorkItem.title.ilike(f"%{q}%"))
     if status:
@@ -126,28 +176,62 @@ async def list_committee_work(
         query = query.filter(func.lower(CommitteeWorkItem.stage) == stage.lower())
 
     total = query.count()
-    rows = query.order_by(CommitteeWorkItem.vote_date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()
-    data = [
-        CommitteeWorkOut(
-            id=str(r.id),
-            procedure_ref=r.procedure_ref,
-            committee_code=r.committee_code,
-            title=r.title,
-            procedure_type=str(r.procedure_type) if r.procedure_type else None,
-            committee_role=str(r.committee_role) if r.committee_role else None,
-            rapporteur_name=r.rapporteur_name,
-            rapporteur_mep_id=r.rapporteur_mep_id,
-            status=str(r.status) if r.status else None,
-            stage=r.stage,
-            vote_date=r.vote_date,
-            vote_result=r.vote_result,
-            celex_numbers=list(r.celex_numbers or []),
-            relevance_score=r.relevance_score,
-            url=_oeil_url_for_ref(r.procedure_ref),
-            law_tracker_url=_law_tracker_url_for_ref(r.procedure_ref),
+    pairs = (
+        query.order_by(CommitteeWorkItem.vote_date.desc().nullslast())
+        .offset((page - 1) * limit)
+        .limit(limit)
+        .all()
+    )
+    data = []
+    for r, lc in pairs:
+        # Title: prefer LC's canonical proposal title when CWI is a scrape
+        # placeholder (e.g. "Delegated acts (DEA) IMCO" or filter-bar text).
+        title = r.title
+        if lc and getattr(lc, "title", None) and (_is_placeholder_title(title) or not title):
+            title = lc.title
+
+        # procedure_type: enum stored on CWI is restricted to COD/APP/CNS/NLE/INI
+        # — it doesn't cover DEA/RSP/RPS/INL/etc. The procedure ref suffix is
+        # the canonical type, so derive from there and only fall back to the
+        # CWI enum when the ref has no suffix.
+        proc_type = _proc_type_from_ref(r.procedure_ref) or _enum_value(r.procedure_type)
+
+        # status: CWI default is "unknown". When LC has a current_status,
+        # surface that — it tracks the procedure across the whole pipeline.
+        cwi_status = _enum_value(r.status)
+        if (cwi_status is None or cwi_status.lower() in ("unknown", "")) and lc and lc.current_status:
+            status_out = _enum_value(lc.current_status)
+        else:
+            status_out = cwi_status
+
+        # celex_numbers: prefer LC's array when CWI is empty.
+        celex = list(r.celex_numbers or [])
+        if not celex and lc and lc.celex_numbers:
+            celex = list(lc.celex_numbers)
+
+        # rapporteur_mep_id: fall back to LC when CWI is null.
+        rap_mep = r.rapporteur_mep_id or (lc.rapporteur_mep_id if lc else None)
+
+        data.append(
+            CommitteeWorkOut(
+                id=str(r.id),
+                procedure_ref=r.procedure_ref,
+                committee_code=r.committee_code,
+                title=title,
+                procedure_type=proc_type,
+                committee_role=_enum_value(r.committee_role),
+                rapporteur_name=r.rapporteur_name,
+                rapporteur_mep_id=rap_mep,
+                status=status_out,
+                stage=r.stage,
+                vote_date=r.vote_date,
+                vote_result=r.vote_result,
+                celex_numbers=celex,
+                relevance_score=r.relevance_score,
+                url=_oeil_url_for_ref(r.procedure_ref),
+                law_tracker_url=_law_tracker_url_for_ref(r.procedure_ref),
+            )
         )
-        for r in rows
-    ]
     envelope = build_envelope(data, total=total, page=page, limit=limit)
     return CommitteeWorkEnvelope(
         **envelope.model_dump(),
