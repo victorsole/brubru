@@ -25,6 +25,7 @@ from core.database import get_db
 from models.committee_work import CommitteeWorkItem
 from models.ep_voting import EPMemberVote, EPVote, VoteResult
 from models.institutional_publication import InstitutionalPublication
+from models.legislative_train import LegislativeCarriage
 from models.mep_amendment import AmendmentDocument, MEPAmendment
 from models.user import User
 
@@ -32,6 +33,37 @@ from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
 logger = logging.getLogger(__name__)
+
+
+def _build_lc_lookup(db: Session, refs: List[Optional[str]]) -> Dict[str, "LegislativeCarriage"]:
+    """Bulk-fetch legislative_carriages for a list of OEIL procedure refs.
+
+    Used to enrich amendment_documents responses (titles + rapporteur fallback)
+    with the canonical proposal title and any rapporteur info OEIL has on the
+    procedure. The amendment_documents table only carries the doc-level
+    rapporteur (PR/RD); for AD/PA opinions we fall through to LC.
+    """
+    clean = sorted({r for r in refs if r})
+    if not clean:
+        return {}
+    rows = (
+        db.query(LegislativeCarriage)
+        .filter(LegislativeCarriage.oeil_procedure_ref.in_(clean))
+        .all()
+    )
+    return {row.oeil_procedure_ref: row for row in rows}
+
+
+def _enrich_doc_title(
+    raw_title_template: str,
+    procedure_ref: Optional[str],
+    lc_lookup: Dict[str, "LegislativeCarriage"],
+) -> str:
+    """Use the canonical LC title when we have it, falling back to the
+    auto-generated 'doc_type for ref (committee)' template otherwise."""
+    if procedure_ref and procedure_ref in lc_lookup and lc_lookup[procedure_ref].title:
+        return lc_lookup[procedure_ref].title
+    return raw_title_template
 
 
 amendments_router = APIRouter(prefix="/amendments", tags=["v1-amendments"])
@@ -438,7 +470,9 @@ async def list_ep_documents(
 
     a_total = aq.count()
     a_rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).limit(limit * 4).all()
+    lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in a_rows])
     for r in a_rows:
+        fallback = f"{AD_TYPE_MAP.get(r.document_type, r.document_type or 'doc')} for {r.procedure_reference} ({r.committee_code})"
         items.append(EPDocumentItem(
             id=str(r.id),
             source="amendment_document",
@@ -446,7 +480,7 @@ async def list_ep_documents(
             committee_code=r.committee_code,
             procedure_reference=r.procedure_reference,
             pe_reference=r.pe_reference,
-            title=f"{AD_TYPE_MAP.get(r.document_type, r.document_type or 'doc')} for {r.procedure_reference} ({r.committee_code})",
+            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup),
             rapporteur_name=r.rapporteur_name,
             document_date=r.document_date,
             document_url=r.doceo_url,
@@ -628,23 +662,24 @@ async def list_reports(
     rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()
 
     AD_TYPE_MAP = {"PR": "draft_report", "RD": "draft_recommendation"}
-    data = [
-        EPDocumentItem(
+    lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in rows])
+    data = []
+    for r in rows:
+        fallback = f"{AD_TYPE_MAP.get(r.document_type, 'report')} for {r.procedure_reference} ({r.committee_code})"
+        data.append(EPDocumentItem(
             id=str(r.id),
             source="amendment_document",
             document_type=AD_TYPE_MAP.get(r.document_type, "report"),
             committee_code=r.committee_code,
             procedure_reference=r.procedure_reference,
             pe_reference=r.pe_reference,
-            title=f"{AD_TYPE_MAP.get(r.document_type, 'report')} for {r.procedure_reference} ({r.committee_code})",
+            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup),
             rapporteur_name=r.rapporteur_name,
             document_date=r.document_date,
             document_url=r.doceo_url,
             total_amendments=r.total_amendments,
             last_updated=r.scraped_at,
-        )
-        for r in rows
-    ]
+        ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to)
 
@@ -679,21 +714,23 @@ async def list_opinions(
     rows = aq.order_by(AmendmentDocument.document_date.desc().nullslast()).offset((page - 1) * limit).limit(limit).all()
 
     AD_TYPE_MAP = {"AD": "opinion", "PA": "draft_opinion"}
-    data = [
-        EPDocumentItem(
+    lc_lookup = _build_lc_lookup(db, [r.procedure_reference for r in rows])
+    data = []
+    for r in rows:
+        fallback = f"{AD_TYPE_MAP.get(r.document_type, 'opinion')} for {r.procedure_reference} ({r.committee_code})"
+        data.append(EPDocumentItem(
             id=str(r.id),
             source="amendment_document",
             document_type=AD_TYPE_MAP.get(r.document_type, "opinion"),
             committee_code=r.committee_code,
             procedure_reference=r.procedure_reference,
             pe_reference=r.pe_reference,
-            title=f"{AD_TYPE_MAP.get(r.document_type, 'opinion')} for {r.procedure_reference} ({r.committee_code})",
+            title=_enrich_doc_title(fallback, r.procedure_reference, lc_lookup),
             rapporteur_name=r.rapporteur_name,
             document_date=r.document_date,
             document_url=r.doceo_url,
+            total_amendments=r.total_amendments,
             last_updated=r.scraped_at,
-        )
-        for r in rows
-    ]
+        ))
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to)
