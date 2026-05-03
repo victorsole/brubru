@@ -88,6 +88,19 @@ def _build_key_events(r: EPResolution) -> list:
             "event_type": "commission_followup",
             "description": "Commission has followed up on this resolution (see /api/v1/commission-register-documents)",
         })
+    # If we have nothing at all from the structured columns, fall back to the
+    # last_updated timestamp as a single "tracked" event. Better to surface a
+    # minimal timeline than to return an empty array — partners use the
+    # presence of any event as a signal that the row exists in OEIL.
+    if not events and r.updated_at:
+        events.append({
+            "date": r.updated_at.date().isoformat() if hasattr(r.updated_at, "date") else str(r.updated_at),
+            "event_type": "tracked",
+            "description": (
+                "Tracked by Brubru — vote and adoption dates not yet ingested from OEIL. "
+                "See /api/v1/procedures/{procedure_ref} for the full timeline."
+            ),
+        })
     return events
 
 
