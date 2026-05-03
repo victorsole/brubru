@@ -205,10 +205,19 @@ def main():
 
     conn = psycopg2.connect(db_url)
     cur = conn.cursor()
-    # Wipe the 7 fictitious seed rows first
-    cur.execute("DELETE FROM secondary_acts WHERE reference IN %s",
-                (("C(2026)2456", "C(2026)2345", "C(2026)1789", "C(2026)1234",
-                  "C(2026)0567", "C(2025)9012", "C(2025)8745"),))
+    # Wipe the original 10 fictitious seed rows. These were inserted by an
+    # earlier hand-curated dev fixture and never matched any real RegDel
+    # entry — keeping them would mean the API returns wrong title↔CELEX
+    # pairs (e.g. seed CELEX 32026R0178 was labelled "MiCA crypto-asset
+    # RTS" but actually points at a regulation about eucalyptus tincture).
+    SEED_REFS = (
+        # delegated
+        "C(2026)2456", "C(2026)2345", "C(2026)1789", "C(2026)1234",
+        "C(2026)0567", "C(2025)9012", "C(2025)8745",
+        # implementing
+        "C(2026)0234", "C(2026)1456", "C(2026)2890",
+    )
+    cur.execute("DELETE FROM secondary_acts WHERE reference IN %s", (SEED_REFS,))
     print(f"  wiped {cur.rowcount} seed rows")
 
     inserted = updated = errors = 0
