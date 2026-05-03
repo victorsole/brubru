@@ -239,7 +239,14 @@ def fetch_pdf(inst: str) -> bytes:
         return r.read()
 
 
-def upsert_rows(conn, rows: List[Dict[str, object]], institution_slug: str, replace: bool) -> int:
+def _reconnect(db_url: str):
+    return psycopg2.connect(db_url)
+
+
+def upsert_rows(db_url: str, rows: List[Dict[str, object]], institution_slug: str, replace: bool) -> int:
+    """Resilient upsert — opens a fresh connection per institution and
+    reconnects if Supabase drops the link mid-run."""
+    conn = _reconnect(db_url)
     cur = conn.cursor()
     if replace:
         cur.execute(
@@ -247,36 +254,62 @@ def upsert_rows(conn, rows: List[Dict[str, object]], institution_slug: str, repl
             (institution_slug,),
         )
         print(f"  wiped {cur.rowcount} old rows for {institution_slug}")
+        conn.commit()
 
     inserted = 0
     for r in rows:
-        try:
-            cur.execute(
-                """
-                INSERT INTO eu_officials
-                  (id, slug, name, title, role, institution_slug, email, phone,
-                   is_active, scraped_at, first_seen, last_updated)
-                VALUES
-                  (%(id)s, %(slug)s, %(name)s, %(title)s, %(role)s, %(institution_slug)s,
-                   %(email)s, %(phone)s, %(is_active)s, NOW(), NOW(), NOW())
-                ON CONFLICT (slug) DO UPDATE SET
-                  name = EXCLUDED.name,
-                  title = EXCLUDED.title,
-                  role = EXCLUDED.role,
-                  email = EXCLUDED.email,
-                  phone = EXCLUDED.phone,
-                  is_active = EXCLUDED.is_active,
-                  last_updated = NOW()
-                """,
-                r,
-            )
-            inserted += 1
-        except Exception as exc:
-            print(f"    [ERR] {r['slug']}: {exc}")
-            conn.rollback()
+        attempt = 0
+        while attempt < 3:
+            try:
+                cur.execute(
+                    """
+                    INSERT INTO eu_officials
+                      (id, slug, name, title, role, institution_slug, email, phone,
+                       is_active, scraped_at, first_seen, last_updated)
+                    VALUES
+                      (%(id)s, %(slug)s, %(name)s, %(title)s, %(role)s, %(institution_slug)s,
+                       %(email)s, %(phone)s, %(is_active)s, NOW(), NOW(), NOW())
+                    ON CONFLICT (slug) DO UPDATE SET
+                      name = EXCLUDED.name,
+                      title = EXCLUDED.title,
+                      role = EXCLUDED.role,
+                      email = EXCLUDED.email,
+                      phone = EXCLUDED.phone,
+                      is_active = EXCLUDED.is_active,
+                      last_updated = NOW()
+                    """,
+                    r,
+                )
+                inserted += 1
+                break
+            except (psycopg2.OperationalError, psycopg2.InterfaceError) as exc:
+                # connection dropped — reconnect and retry
+                print(f"    [RECONNECT] {exc}")
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+                conn = _reconnect(db_url)
+                cur = conn.cursor()
+                attempt += 1
+            except Exception as exc:
+                print(f"    [ERR] {r['slug']}: {exc}")
+                try:
+                    conn.rollback()
+                except Exception:
+                    pass
+                break
         if inserted % 200 == 0 and inserted > 0:
-            conn.commit()
-    conn.commit()
+            try:
+                conn.commit()
+            except Exception:
+                conn = _reconnect(db_url)
+                cur = conn.cursor()
+    try:
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
     return inserted
 
 
@@ -294,7 +327,6 @@ def main():
         sys.exit(1)
 
     targets: Iterable[str] = INSTITUTIONS if args.inst == "all" else [args.inst]
-    conn = psycopg2.connect(db_url) if args.apply else None
 
     grand_total = 0
     for inst in targets:
@@ -312,20 +344,16 @@ def main():
             for r in rows[:3]:
                 print(f"    {r['title'] or '':3s} {r['name']:35s} role={(r['role'] or '')[:40]}")
         if args.apply and rows:
-            inserted = upsert_rows(conn, rows, meta["slug"], replace=args.replace)
+            inserted = upsert_rows(db_url, rows, meta["slug"], replace=args.replace)
             print(f"  upserted: {inserted}")
             grand_total += inserted
 
+    conn = None  # cleanup placeholder for compat with later block
+
     # Final cleanup: with --replace, wipe any rows under institution slugs
-    # that aren't covered by the 15 Whoiswho PDFs we ingested. The original
-    # JSON-LD scrape had created per-agency slugs (frontex, eige, era, ...)
-    # for officials that are now covered by the AGEN_OTH PDF under the
-    # canonical 'agencies-and-other-bodies' slug. Without this cleanup, the
-    # /officials endpoint would carry both the old junk rows and the new
-    # clean rows side-by-side.
-    if args.apply and args.replace and args.inst == "all" and conn is None:
-        conn = psycopg2.connect(db_url)
-    if args.apply and args.replace and args.inst == "all" and conn:
+    # that aren't covered by the 15 Whoiswho PDFs we ingested.
+    if args.apply and args.replace and args.inst == "all":
+        conn = _reconnect(db_url)
         canonical_slugs = tuple(meta["slug"] for meta in INSTITUTIONS.values())
         cur = conn.cursor()
         cur.execute(
@@ -334,9 +362,8 @@ def main():
         )
         print(f"  wiped {cur.rowcount} rows under non-canonical institution slugs")
         conn.commit()
-
-    if conn:
         conn.close()
+
     print(f"\n[DONE] total upserted across institutions: {grand_total}{' (applied)' if args.apply else ' (dry-run)'}")
 
 
