@@ -65,6 +65,7 @@ async def list_laws(
     updated_from: Optional[datetime] = Query(None, description="Incremental sync lower bound — rows with updated_at >= value. Returns rows ordered by updated_at desc when set."),
     updated_to: Optional[datetime] = Query(None, description="Incremental sync upper bound — rows with updated_at <= value."),
     updated_end: Optional[datetime] = Query(None, description="Alias of updated_to (GovClipping-compatible). 422 if both differ."),
+    include_orphans: bool = Query(False, description="Include rows that have no CELEX (orphaned annexes / recitals from Formex parsing). Default false — they have no useful identifier and produce all-null rows."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
     user: User = Depends(api_user_with_rate_limit),
@@ -114,6 +115,12 @@ async def list_laws(
     query = db.query(EULaw)
 
     filters = []
+    # Default: hide rows that have no CELEX. These are mostly orphaned annexes
+    # / recitals from older Formex parses where the parser failed to bind the
+    # part to its parent. Surfacing them produces all-null /laws rows that
+    # confuse partners. Pass include_orphans=true to opt back in.
+    if not include_orphans:
+        filters.append(EULaw.celex.isnot(None))
     if celex:
         filters.append(EULaw.celex == celex.upper())
     if doc_type:
