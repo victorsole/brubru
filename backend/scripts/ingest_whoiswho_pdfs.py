@@ -316,6 +316,25 @@ def main():
             print(f"  upserted: {inserted}")
             grand_total += inserted
 
+    # Final cleanup: with --replace, wipe any rows under institution slugs
+    # that aren't covered by the 15 Whoiswho PDFs we ingested. The original
+    # JSON-LD scrape had created per-agency slugs (frontex, eige, era, ...)
+    # for officials that are now covered by the AGEN_OTH PDF under the
+    # canonical 'agencies-and-other-bodies' slug. Without this cleanup, the
+    # /officials endpoint would carry both the old junk rows and the new
+    # clean rows side-by-side.
+    if args.apply and args.replace and args.inst == "all" and conn is None:
+        conn = psycopg2.connect(db_url)
+    if args.apply and args.replace and args.inst == "all" and conn:
+        canonical_slugs = tuple(meta["slug"] for meta in INSTITUTIONS.values())
+        cur = conn.cursor()
+        cur.execute(
+            "DELETE FROM eu_officials WHERE institution_slug NOT IN %s",
+            (canonical_slugs,),
+        )
+        print(f"  wiped {cur.rowcount} rows under non-canonical institution slugs")
+        conn.commit()
+
     if conn:
         conn.close()
     print(f"\n[DONE] total upserted across institutions: {grand_total}{' (applied)' if args.apply else ' (dry-run)'}")
