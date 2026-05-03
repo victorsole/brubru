@@ -56,6 +56,15 @@ class CouncilDocumentItem(BaseModel):
     published_date: Optional[datetime] = None
     policy_areas: list = Field(default_factory=list)
     tags: list = Field(default_factory=list)
+    # Per-meeting auxiliary URLs on consilium.europa.eu's public register.
+    # Surfaced for every calendar_event row so consumers can navigate to the
+    # provisional agenda (OJ Council) and the votes register without having
+    # to know the URL patterns themselves. Programmatic ingestion of those
+    # pages is blocked by Cloudflare's bot challenge — these are display-only
+    # links for the human audience.
+    oj_register_url: Optional[str] = None
+    votes_register_url: Optional[str] = None
+    calendar_filter_url: Optional[str] = None
 
 
 _CONFIG_TO_SLUG = {
@@ -73,6 +82,45 @@ _CONFIG_TO_SLUG = {
     "ENV": "env",
     "ENVI": "env",
 }
+
+# Council Public Register entity IDs — provided by consilium.europa.eu's own
+# calendar filter. These let us deep-link to the council-formation-specific
+# calendar view, which shows past meetings + agendas + outcomes.
+_CONFIG_TO_ENTITY_ID = {
+    "GAC": "122475",
+    "FAC": "122484",
+    "ECOFIN": "122485",
+    "JHA": "122493",
+    "EPSCO": "122501",
+    "COMPET": "122504",
+    "TTE": "122512",
+    "EYCS": "122516",
+    "EDUC": "122516",
+    "AGRIFISH": "122589",
+    "ENV": "122518",
+    "ENVI": "122518",
+    "EUROGROUP": "122523",
+}
+# Top-level entities
+_INSTITUTION_ENTITY_ID = {
+    "EUROPEAN_COUNCIL": "122152",
+    # Council of the EU "ministerial" filter — useful for ministerial-level meetings
+    "COUNCIL": "122158",
+}
+
+OJ_COUNCIL_REGISTER = "https://www.consilium.europa.eu/en/documents/public-register/oj-council/"
+VOTES_REGISTER = "https://www.consilium.europa.eu/en/documents/public-register/votes/"
+
+
+def _calendar_filter_url(institution: str, council_configuration: Optional[str]) -> str:
+    """Deep-link to the consilium calendar filtered to this entity/formation."""
+    base = "https://www.consilium.europa.eu/en/meetings/calendar/?daterange=past"
+    if institution == "EUROPEAN_COUNCIL" and "EUROPEAN_COUNCIL" in _INSTITUTION_ENTITY_ID:
+        return f"{base}&Entity={_INSTITUTION_ENTITY_ID['EUROPEAN_COUNCIL']}"
+    eid = _CONFIG_TO_ENTITY_ID.get(council_configuration or "")
+    if eid:
+        return f"{base}&CouncilConfiguration={eid}"
+    return base
 
 
 def _derive_consilium_url(
@@ -218,11 +266,12 @@ async def list_council_documents(
             tags=list(r.tags or []),
         ))
     for r in cal_rows:
+        institution = getattr(r.institution, "value", str(r.institution or ""))
         # Prefer the specific per-meeting URL on consilium.europa.eu; fall
         # back to whatever the scraper stored. The generic /en/meetings/calendar/
         # URL is unhelpful — build the canonical per-meeting page instead.
         url = r.agenda_url or _derive_consilium_url(
-            getattr(r.institution, "value", str(r.institution or "")),
+            institution,
             r.council_configuration,
             r.start_date,
             r.source_url,
@@ -237,6 +286,9 @@ async def list_council_documents(
             url=url,
             published_date=datetime.combine(r.start_date, datetime.min.time()) if r.start_date else None,
             policy_areas=list(r.policy_areas or []),
+            oj_register_url=OJ_COUNCIL_REGISTER,
+            votes_register_url=VOTES_REGISTER,
+            calendar_filter_url=_calendar_filter_url(institution, r.council_configuration),
         ))
 
     # Sort union by published_date desc
