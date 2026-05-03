@@ -268,7 +268,7 @@ TESTS: list[tuple[str, str, callable]] = [
     ("/api/v1/meta/dgs", "duplicate?", lambda: check_status_200("/api/v1/meta/dgs")),
     ("/api/v1/meta/directorates-general", "duplicate?", lambda: check_status_200("/api/v1/meta/directorates-general")),
     ("/api/v1/meta/document-types", "duplicate?", lambda: check_status_200("/api/v1/meta/document-types")),
-    ("/api/v1/officials", "many fields empty + no source url", lambda: check_field_filled("/api/v1/officials?limit=5", "source_url")),
+    ("/api/v1/officials", "many fields empty + no source url", lambda: check_field_filled("/api/v1/officials?limit=5", "bio_url")),
     ("/api/v1/opinions", "no retorna info", lambda: check_list_returns_data("/api/v1/opinions?limit=5")),
     ("/api/v1/parliamentary-questions", "expose content", lambda: check_body_field_present("/api/v1/parliamentary-questions", ["text_question", "text_answer", "summary", "subject"])),
     ("/api/v1/predictions/{procedure_ref}/outcome", "example needed", lambda: check_status_200("/api/v1/predictions/2025/0232%28COD%29/outcome")),
