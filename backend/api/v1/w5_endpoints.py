@@ -14,7 +14,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -184,7 +184,15 @@ async def list_officials(
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[OfficialItem]:
     query = db.query(EUOfficial)
-    filters = []
+    # Filter out scrape-noise rows: names that are filter-bar text, lowercase
+    # garbage, or starting with a dash (e.g. "— Committees Afet, Sede,").
+    # These are JSON-LD scraping artifacts where the parser captured a UI label
+    # instead of an actual person row.
+    filters = [
+        ~EUOfficial.name.op("~")(r"^[—–\-]"),
+        ~EUOfficial.name.op("~")(r"^[a-z]"),
+        func.length(EUOfficial.name) >= 4,
+    ]
     if institution_slug:
         filters.append(EUOfficial.institution_slug == institution_slug)
     if dg:
