@@ -28,6 +28,26 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/consultations", tags=["v1-consultations"])
 
 
+def _derive_feedback_url(portal_url: Optional[str], stored: Optional[str] = None) -> Optional[str]:
+    """Return the public 'submit feedback' URL for a Have Your Say initiative.
+
+    Stored value wins when present. Otherwise derive from the portal URL —
+    the canonical pattern is: replace the trailing ``_en`` of the initiative
+    page with ``/feedback_en``. Verified across the EC HYS portal: every
+    open initiative exposes the feedback page at this URL (HTTP 200), even
+    when the consultation row in our DB has feedback_url=NULL.
+    """
+    if stored:
+        return stored
+    if not portal_url:
+        return None
+    if portal_url.endswith("_en"):
+        return portal_url[:-3] + "/feedback_en"
+    if portal_url.endswith("/"):
+        return portal_url + "feedback_en"
+    return portal_url + "/feedback_en"
+
+
 def _normalise_date(raw) -> Optional[str]:
     """Normalise upstream HYS date to ISO-8601 'YYYY-MM-DDTHH:MM:SSZ'.
 
@@ -180,7 +200,10 @@ async def get_feedback_by_initiative(
             publication_id=initiative_id,
             title=consultation.title if consultation else None,
             portal_url=consultation.portal_url if consultation else None,
-            feedback_url=getattr(consultation, "feedback_url", None) if consultation else None,
+            feedback_url=_derive_feedback_url(
+                getattr(consultation, "portal_url", None) if consultation else None,
+                getattr(consultation, "feedback_url", None) if consultation else None,
+            ),
             summary_total=total,
             by_user_type=summary.get("by_user_type", {}),
             by_country=summary.get("by_country", {}),
@@ -307,7 +330,7 @@ async def list_consultations(
             end_date=r.end_date,
             feedback_count=int(r.feedback_count or 0),
             portal_url=r.portal_url,
-            feedback_url=r.feedback_url,
+            feedback_url=_derive_feedback_url(r.portal_url, r.feedback_url),
             com_references=list(r.com_references or []),
             celex_numbers=list(r.celex_numbers or []),
             last_updated=r.last_updated,
