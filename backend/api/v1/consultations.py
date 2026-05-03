@@ -388,7 +388,7 @@ async def get_consultation_detail(
         end_date=r.end_date,
         feedback_count=int(r.feedback_count or 0),
         portal_url=r.portal_url,
-        feedback_url=r.feedback_url,
+        feedback_url=_derive_feedback_url(r.portal_url, r.feedback_url),
         com_references=list(r.com_references or []),
         celex_numbers=list(r.celex_numbers or []),
         last_updated=r.last_updated,
