@@ -268,24 +268,27 @@ class CommissionerAgendaClient:
         return None
 
     @staticmethod
-    def _build_rss_url_index(rss_xml: str, commissioner_name: str) -> Dict[Tuple[date, str], str]:
-        """Index URLs from the bare RSS feed by (date, normalised-title-prefix).
+    def _build_rss_url_entries(rss_xml: str) -> List[Tuple[date, str, str]]:
+        """Parse the bare RSS feed into a flat list of (date, normalised_title, url).
 
         Used to enrich HTML-parsed items with detail URLs that the Commission
-        no longer renders inline on the calendar page. The RSS feed's <title>
-        is "YYYY-MM-DD - <event title>"; we key the index on date plus a short
-        normalised slice of the title for fuzzy match.
+        no longer renders inline on the calendar page. The RSS <title> has the
+        form "YYYY-MM-DD - <event title>" — but the title is truncated at ~90
+        chars and many events on the same date share a long common prefix
+        ("Executive Vice-President Fitto attends the…"). A list-of-tuples lets
+        the lookup do token-set scoring rather than relying on a brittle
+        prefix-equality key.
         """
         from xml.etree import ElementTree as ET
 
         if not rss_xml:
-            return {}
+            return []
         try:
             root = ET.fromstring(rss_xml)
         except ET.ParseError:
-            return {}
+            return []
 
-        index: Dict[Tuple[date, str], str] = {}
+        out: List[Tuple[date, str, str]] = []
         for it in root.findall(".//item"):
             title_el = it.find("title")
             link_el = it.find("link")
@@ -302,22 +305,43 @@ class CommissionerAgendaClient:
                 event_date = date.fromisoformat(m.group(1))
             except ValueError:
                 continue
-            key = (event_date, _norm(m.group(2))[:60])
-            index[key] = link
-        return index
+            out.append((event_date, _norm(m.group(2)), link))
+        return out
 
     @staticmethod
-    def _lookup_rss_url(index: Dict[Tuple[date, str], str], item: "AgendaItem") -> str:
-        """Return the RSS detail URL for an HTML-parsed item, or empty string."""
-        key = (item.date, _norm(item.title)[:60])
-        if key in index:
-            return index[key]
-        # Fuzzy fallback: same date and title prefix overlap on first 30 chars.
-        norm_title = _norm(item.title)
-        for (d, t), url in index.items():
-            if d == item.date and t[:30] == norm_title[:30]:
-                return url
-        return ""
+    def _lookup_rss_url(entries: List[Tuple[date, str, str]], item: "AgendaItem") -> str:
+        """Pick the RSS URL whose title has the largest token-overlap with the
+        HTML item, allowing a ±1 day window on the date.
+
+        The Commission RSS dates are systematically one day BEFORE the HTML
+        listing dates (timezone or publication-date drift on their side, hard
+        to predict). A strict date match misses every entry, so we widen the
+        window to ±1 day and rely on token-overlap to disambiguate.
+
+        Returns "" when no candidate clears 60% Jaccard overlap — better null
+        than wrong.
+        """
+        if not entries or not item.title:
+            return ""
+        html_tokens = {t for t in _norm(item.title).split() if len(t) > 2}
+        if not html_tokens:
+            return ""
+        best_url = ""
+        best_score = 0.0
+        for d, rss_title, url in entries:
+            day_delta = abs((d - item.date).days)
+            if day_delta > 1:
+                continue
+            rss_tokens = {t for t in rss_title.split() if len(t) > 2}
+            if not rss_tokens:
+                continue
+            overlap = len(html_tokens & rss_tokens)
+            denom = max(len(html_tokens), len(rss_tokens))
+            score = overlap / denom if denom else 0.0
+            if score > best_score:
+                best_score = score
+                best_url = url
+        return best_url if best_score >= 0.6 else ""
 
     @staticmethod
     def _parse_rss_items(rss_xml: str, leader_id: str) -> List[AgendaItem]:
@@ -413,27 +437,13 @@ class CommissionerAgendaClient:
                     label = meta_li.find(class_="ecl-content-block__secondary-meta-label")
                     if label:
                         location = re.sub(r"\s+", " ", label.get_text(" ", strip=True)).strip()
-            # Prefer the title's own link; fall back to any href in the article;
-            # reject anchors and javascript: links.
-            def _clean(h: str) -> str:
-                if not h or h.startswith(("#", "javascript:", "mailto:")):
-                    return ""
-                if h.startswith("/"):
-                    return "https://commission.europa.eu" + h
-                return h
-
-            href = ""
-            if title_el:
-                a_in_title = title_el.find("a", href=True) or title_el.find_parent("a", href=True)
-                if a_in_title:
-                    href = _clean(a_in_title.get("href", ""))
-            if not href:
-                for a in node.find_all("a", href=True):
-                    candidate = _clean(a.get("href", ""))
-                    if candidate:
-                        href = candidate
-                        break
-            out.append(AgendaItem(date=d, title=title, location=location, detail_url=href))
+            # Spring-2026 redesign: the cards expose <a href> links that point
+            # to NEIGHBOURING cards (sibling-card "read more" anchors), not to
+            # the event itself. Trusting the inline href produced shifted URLs
+            # — every item showed the previous item's detail page. Leave it
+            # empty here and let the RSS-merge step populate detail_url with
+            # token-set scoring.
+            out.append(AgendaItem(date=d, title=title, location=location, detail_url=""))
         return out
 
     async def fetch_agenda(
@@ -467,14 +477,14 @@ class CommissionerAgendaClient:
             html = await self._get(url)
             items = self._parse_items(html or "")
             rss = await self._get(RSS_FEED_URL)
-            url_index = self._build_rss_url_index(rss or "", profile.name)
-            if url_index:
+            entries = self._build_rss_url_entries(rss or "")
+            if entries:
                 items = [
                     AgendaItem(
                         date=it.date,
                         title=it.title,
                         location=it.location,
-                        detail_url=it.detail_url or self._lookup_rss_url(url_index, it),
+                        detail_url=self._lookup_rss_url(entries, it),
                     )
                     for it in items
                 ]

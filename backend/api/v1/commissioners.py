@@ -99,6 +99,12 @@ async def get_profile(
                 "id": slug,
             },
         )
+    # Trigger leader_id discovery so agenda_url can be built. Cached 24h on the
+    # client, so subsequent profile reads are free.
+    try:
+        await client._discover_leader_id(profile)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[v1] leader_id discovery failed for %s: %s", slug, exc)
     return _build_profile_out(profile)
 
 

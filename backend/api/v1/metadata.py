@@ -578,7 +578,9 @@ async def list_commissioners(user: User = Depends(api_user_with_rate_limit)) -> 
     Reads from commissioners.json via load_commissioner_profiles() — same source
     used by /commissioners/{name}/agenda.
     """
+    import asyncio
     from services.api_clients.commissioner_agenda_client import (
+        get_commissioner_agenda_client,
         load_commissioner_profiles,
     )
 
@@ -588,6 +590,23 @@ async def list_commissioners(user: User = Depends(api_user_with_rate_limit)) -> 
     )
 
     profiles = load_commissioner_profiles()
+
+    # Hydrate leader_id on every profile so agenda_url populates. The discovery
+    # call is bio-page HTML scrape; cached 24h on the client, so the cost is
+    # one warmup per day. Bounded concurrency = 8 keeps the Commission portal
+    # happy.
+    client = get_commissioner_agenda_client()
+    sem = asyncio.Semaphore(8)
+
+    async def _hydrate(p):
+        async with sem:
+            try:
+                await client._discover_leader_id(p)
+            except Exception:  # noqa: BLE001
+                pass
+
+    await asyncio.gather(*[_hydrate(p) for p in profiles])
+
     items = []
     for p in profiles:
         # Per-commissioner agendas are filtered views of the unified calendar.
