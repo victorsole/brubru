@@ -58,6 +58,54 @@ class CouncilDocumentItem(BaseModel):
     tags: list = Field(default_factory=list)
 
 
+_CONFIG_TO_SLUG = {
+    "GAC": "gac",
+    "FAC": "fac",
+    "ECOFIN": "ecofin",
+    "EUROGROUP": "eurogroup",
+    "JHA": "jha",
+    "EPSCO": "epsco",
+    "COMPET": "compet",
+    "TTE": "tte",
+    "EDUC": "eycs",
+    "EYCS": "eycs",
+    "AGRIFISH": "agrifish",
+    "ENV": "env",
+    "ENVI": "env",
+}
+
+
+def _derive_consilium_url(
+    institution: str,
+    council_configuration: Optional[str],
+    start_date: Optional[date],
+    fallback: Optional[str],
+) -> Optional[str]:
+    """Construct the per-meeting URL on consilium.europa.eu.
+
+    The Council exposes meetings at predictable URLs:
+        /en/meetings/{configuration_slug}/{YYYY}/{MM}/{DD}/
+    For European Council (heads of state):
+        /en/meetings/european-council/{YYYY}/{MM}/{DD}/
+
+    The scraper stores `source_url` as the generic `/en/meetings/calendar/`
+    when it can't resolve the specific page, which is unhelpful. This helper
+    builds the canonical per-meeting URL when we have enough info; falls
+    back to the stored URL otherwise.
+    """
+    if not start_date:
+        return fallback
+    y, m, d = start_date.year, start_date.month, start_date.day
+    slug = None
+    if institution == "EUROPEAN_COUNCIL":
+        slug = "european-council"
+    elif council_configuration:
+        slug = _CONFIG_TO_SLUG.get(council_configuration)
+    if not slug:
+        return fallback
+    return f"https://www.consilium.europa.eu/en/meetings/{slug}/{y:04d}/{m:02d}/{d:02d}/"
+
+
 @router.get(
     "",
     response_model=PaginatedResponse[CouncilDocumentItem],
@@ -170,6 +218,15 @@ async def list_council_documents(
             tags=list(r.tags or []),
         ))
     for r in cal_rows:
+        # Prefer the specific per-meeting URL on consilium.europa.eu; fall
+        # back to whatever the scraper stored. The generic /en/meetings/calendar/
+        # URL is unhelpful — build the canonical per-meeting page instead.
+        url = r.agenda_url or _derive_consilium_url(
+            getattr(r.institution, "value", str(r.institution or "")),
+            r.council_configuration,
+            r.start_date,
+            r.source_url,
+        )
         data.append(CouncilDocumentItem(
             id=str(r.id),
             source="calendar_event",
@@ -177,7 +234,7 @@ async def list_council_documents(
             council_configuration=r.council_configuration,
             title=r.title,
             summary=r.description,
-            url=r.agenda_url or r.source_url,
+            url=url,
             published_date=datetime.combine(r.start_date, datetime.min.time()) if r.start_date else None,
             policy_areas=list(r.policy_areas or []),
         ))
