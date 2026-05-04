@@ -8,7 +8,12 @@
 - Legal basis: Article 114 TFEU (internal market)
 - Responsible Commissioner: Henna Virkkunen (Tech Sovereignty, Security, Democracy)
 - Responsible DG: DG CNECT (Communications Networks, Content and Technology)
-- EP lead committee: ITRE (Industry, Research and Energy)
+- EP lead committee: **ITRE** (Industry, Research and Energy)
+- EP rapporteur (LEAD, ITRE): **Michał Kobosko** (Renew, Poland), appointed 26 February 2026
+- EP shadow rapporteurs: **Pilar Del Castillo Vera** (EPP), **Matthias Ecke** (S&D), **Mélanie Disdier** (PfE), **Francesco Torselli** (ECR), **Damian Boeselager** (Greens/EFA), **Jussi Saramo** (The Left)
+- EP opinion committees: **IMCO** (rapporteur **Ana Vasconcelos**, appointed 2 March 2026) and **LIBE**. BUDG declined to issue opinion.
+- **27 April 2026 — committee referral announced in Parliament (1st reading)** per OEIL Key Events. Status: *awaiting committee decision*.
+- **As of 4 May 2026 — no substantive ITRE debate scheduled.** None of the ITRE draft agendas of 23-24 March, 15-16 April, 20 April, or 6 May 2026 lists procedure 2026/0013(COD); rapporteur Kobosko is in the stakeholder-consultation phase. Adjacent items on the ITRE 6 May 2026 agenda: Permit-Granting Procedures Acceleration (2025/0400(COD)) and Trans-European energy infrastructure guidelines (2025/0399(COD)).
 - EPRS briefing: "Digital networks act legislation" (March 2026, PE 785.672, by Stefano De Luca)
 - EPRS initial appraisal of impact assessment: March 2026
 - Status: Commission proposal published 21 January 2026. EP committee examination stage.

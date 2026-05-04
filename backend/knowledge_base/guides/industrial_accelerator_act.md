@@ -12,8 +12,11 @@
 - Responsible Commissioner: Stephane Sejourne (EVP for Prosperity and Industrial Strategy)
 - Responsible DG: DG GROW
 - Procedure: Ordinary legislative procedure (COD)
-- EP committee referral: pending final decision (ITRE expected lead, IMCO/ENVI opinions)
-- EP rapporteur: Christophe Grudler (Renew, France), ITRE coordinator, appointed 4 March 2026
+- EP lead committee: **ITRE** (Industry, Research and Energy) — confirmed via OEIL procedure-file
+- EP joint committees under Rule 58: **INTA + IMCO** (IMCO joint-committee rapporteur: **Adnan Dibrani**, S&D, Sweden — IMCO is NOT lead; common confusion, keep clear)
+- EP opinion committee: **ENVI** (Environment, Climate and Food Safety). BUDG declined to issue opinion.
+- EP rapporteur (LEAD, ITRE): **Christophe Grudler** (Renew, France), ITRE coordinator, appointed 4 March 2026
+- **As of 4 May 2026 — preparatory phase in Parliament** (per https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2026/0068(COD)). No substantive ITRE debate has been scheduled. None of the ITRE draft agendas in March-May 2026 (23-24 March, 15-16 April, 20 April, 6 May) lists procedure 2026/0068(COD); rapporteur Grudler is in the stakeholder-consultation phase. Adjacent files on the ITRE 6 May 2026 agenda: Temporary Decarbonisation Fund (2025/0418(COD), rapporteur Massimiliano Salini PPE) and Permit-Granting Procedures Acceleration (2025/0400(COD), rapporteur Niels Fuglsang S&D) — adjacent permitting/decarbonisation files but NOT the Accelerator Act itself.
 - Amends: Regulation (EU) 2018/1724 (Single Digital Gateway), Regulation (EU) 2024/3110 (Construction Products), Regulation (EU) 2024/1735 (NZIA)
 - Package: Clean Industrial Deal (COM(2025)85) + Competitiveness Compass (COM(2025)30)
 - Complements: Net-Zero Industry Act (Regulation (EU) 2024/1735, CELEX 32024R1735)

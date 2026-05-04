@@ -649,7 +649,7 @@
       <div class="figure-card__label">news sources scraped daily</div>
     </div>
     <div class="figure-card fc-purple">
-      <div class="figure-card__number" data-count="212">0</div>
+      <div class="figure-card__number" data-count="216">0</div>
       <div class="figure-card__label">expert knowledge guides</div>
     </div>
     <div class="figure-card fc-amber">
@@ -852,7 +852,7 @@
       <div class="section__icon" style="background: var(--color-blue);"><i class="mdi mdi-api"></i></div>
       <h2 class="section__title">Brubru API &mdash; the data provider vertical</h2>
     </div>
-    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 212 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) or the Enterprise plan (custom-quoted for teams needing higher rate limits, multi-seat SSO, custom regulatory scans, and SLA-backed support).</p>
+    <p class="section__intro reveal">Brubru is a vertical EU data provider. The same 519 europa.eu sources, 216 knowledge guides, and legal-text intelligence layer that power Brubru's chatbot and My EU Bubble are sold as a REST API. Brubru itself is the first user of its own API. External partners consume it under the Professional subscription (self-serve, EUR 99/month) or the Enterprise plan (custom-quoted for teams needing higher rate limits, multi-seat SSO, custom regulatory scans, and SLA-backed support).</p>
 
     <div class="info-card reveal">
       <div class="info-card__title">Authentication (/api/v1/*)</div>
@@ -937,6 +937,22 @@
         <p><strong>Phase 1 shipped (18 April 2026):</strong> 7 new endpoints covering the highest-value chatbot context sources &mdash; <code>/knowledge-guides</code> (147 guides), <code>/laws/{celex}/text</code> (full EU law text via Formex or EUR-Lex Cellar fallback), <code>/eprs</code> (145 EPRS publications), <code>/committees/{code}/work-items</code> + <code>/minutes</code>, <code>/calendar/events</code> (419 institutional events), <code>/meps</code> (live from EP Open Data), <code>/predictions/{ref}/timeline</code> + <code>/outcome</code> (XGBoost + baseline). Total v1 paths: 24, covering ~54% of the chatbot's internal context sources.</p>
         <p><strong>Regression test: <code>/training api</code>.</strong> 50 representative user queries (EN/ES/CA/FR) from 7 query patterns are replayed against the live v1 API weekly. First run: <strong>48/50 pass (96%)</strong>. Every v1 change is verified against this baseline before ship. Dataset: <code>data/training/api_queries_50.json</code>.</p>
         <p><strong>Phase 2 (June 2026):</strong> cursor pagination, field projection (<code>?fields=</code>), sorting, ETag caching, <code>X-RateLimit-Reset</code> header across every endpoint. <strong>Phase 3 (September 2026):</strong> webhooks, bulk CSV/Parquet exports, multilingual responses (24 EU languages), semantic search via embeddings.</p>
+      </div>
+    </div>
+
+    <div class="info-card reveal">
+      <div class="info-card__title">Vocabulary intelligence layer (2 May 2026)</div>
+      <div class="info-card__content">
+        <p>Brubru speaks the same vocabulary as the EU Publications Office. As of 2 May 2026, every authority code surfaced by the chatbot or API resolves to a multilingual label drawn from the official EU Authority Tables, every legal identifier is verified before delivery, and Brubru itself is published as a DCAT-AP-conformant dataset.</p>
+        <ul>
+          <li><strong>Authority label cache.</strong> Local cache of the 12 highest-traffic EU Authority Tables (corporate bodies, procedures, document directories, modification types, and more), stored bilingually for the six languages Brubru supports. Refreshed nightly. The chatbot prepends a localised glossary block to its working context whenever an authority URI is in scope &mdash; the model sees both the URI and the human label in the user's language at the same time.</li>
+          <li><strong>Standard-identifier resolver.</strong> A unified resolver covering nine EU identifier families &mdash; CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ reference, ISBN, ISSN, DOI, catalogue number. Drop in any free text and get back the structured identifiers, ready for downstream linking. Court rulings (ECLI) get a dedicated discover endpoint with deep-links to e-Justice.</li>
+          <li><strong>DCAT-AP self-description.</strong> Brubru's own datasets &mdash; the Catalan EU legislation library, the chat knowledge base, the v1 API surface, the EU laws TSVECTOR corpus &mdash; are described in the same DCAT-AP profile that data.europa.eu harvesters expect. Available as Turtle, RDF/XML, and JSON-LD. The pointer Europe's official data portal needs to discover us, structurally compatible with their existing pipelines.</li>
+          <li><strong>OP Core conformance on every response.</strong> Each v1 response carries Dublin-Core-aliased metadata (title, identifier, type, language, publisher, conforms-to) and an <code>X-OP-Core-Conformance</code> response header. Partners get standards-shaped responses out of the box, no custom adapter required.</li>
+          <li><strong>ELI + CDM ontology pinning.</strong> The legal-content ontologies that anchor Brubru's data (European Legislation Identifier and the Publications Office Common Data Model) are vendored at known versions, with a CI test that fails the build if a new predicate enters the codebase without a snapshot refresh. The ontology never silently shifts under our partners.</li>
+          <li><strong>Citation verification, extended.</strong> The model's outputs are verified against Cellar (for CELEX/COM) and against the local authority cache (for body codes and other authority URIs) before delivery. A class of "the AI cited a thing that doesn't exist" failures, common in generic GenAI tools applied to EU policy, is closed at the response layer.</li>
+        </ul>
+        <p><em>Reference: <code>docs/applications/euvoc.md</code> (canonical living plan, 13 phases, status board + update log). Self-monitoring is built in: three free piggybacks on the daily news routine plus two new Friday training sub-commands (<code>/training euvoc</code>, <code>/training drift</code>) keep the layer healthy without adding manual work.</em></p>
       </div>
     </div>
 
@@ -1137,12 +1153,12 @@
     <p class="section__intro reveal">Hand-curated expert knowledge that the AI uses to answer questions accurately. This is what makes Brubru different from a generic chatbot.</p>
 
     <div class="subsection reveal">
-      <h3 class="subsection__title">212 expert knowledge guides</h3>
+      <h3 class="subsection__title">216 expert knowledge guides</h3>
       <p class="subsection__text">Each guide covers one EU policy domain (e.g., AI Act, CBAM, Common Fisheries Policy) with: quick reference facts, CELEX numbers for relevant legislation, institutional contacts (Commissioner, DG, EP committee, rapporteur), procedure status, and key dates. Guides are written and maintained by EU policy specialists, not auto-generated.</p>
     </div>
 
     <div class="subsection reveal">
-      <h3 class="subsection__title">6,909 keyword triggers in 6 languages</h3>
+      <h3 class="subsection__title">7,068 keyword triggers in 6 languages</h3>
       <p class="subsection__text">A multilingual index (English, French, Dutch, Spanish, Catalan, Italian) that routes user queries to the right knowledge guide. For example, "CBAM," "mecanismo de ajuste en frontera," and "koolstofgrensheffing" all route to the same trade policy guide.</p>
     </div>
 
