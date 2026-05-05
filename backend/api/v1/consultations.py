@@ -20,6 +20,7 @@ from core.database import get_db
 from models.public_consultation import PublicConsultation
 from models.user import User
 
+from ._body import compose_html_from_sections, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -80,6 +81,14 @@ class FeedbackItem(BaseModel):
     language: Optional[str] = None
     company_size: Optional[str] = None
     transparency_register_number: Optional[str] = None
+    # Body fields — Stage 1: HYS API gives us the short feedback text; we
+    # surface it as body_text. body_html stays None because HYS does not
+    # provide HTML rendering through the allFeedback endpoint. Stage 2
+    # (deferred) would fetch each feedback's detail page for full HTML.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+    # Deprecated alias kept one release. Equivalent to body_text.
     text: Optional[str] = None
     attachments: list = Field(default_factory=list)
     public_url: Optional[str] = None
@@ -166,8 +175,11 @@ async def get_feedback_by_initiative(
 
     total = int(summary.get("total", 0))
 
-    data = [
-        FeedbackItem(
+    data = []
+    for it in items:
+        body_text = it.short_text or None
+        has_body = bool(body_text and len(body_text.strip()) >= 500)
+        data.append(FeedbackItem(
             feedback_id=str(it.feedback_id) if it.feedback_id is not None else None,
             date=_normalise_date(it.date),
             user_type=it.user_type,
@@ -177,12 +189,13 @@ async def get_feedback_by_initiative(
             language=it.language,
             company_size=it.company_size,
             transparency_register_number=it.transparency_register_number,
-            text=it.short_text,
+            has_body=has_body,
+            body_html=None,  # Stage 2 (deferred): per-feedback HTML fetch
+            body_text=body_text,
+            text=body_text,  # Deprecated alias — same value as body_text
             attachments=it.attachments,
             public_url=it.public_url,
-        )
-        for it in items
-    ]
+        ))
 
     envelope = build_envelope(
         data,
@@ -234,6 +247,25 @@ class ConsultationItem(BaseModel):
     com_references: list = Field(default_factory=list)
     celex_numbers: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    # Body fields — Stage 1 composer. Wraps description / full_description /
+    # objectives / target_group / outcome_summary as semantic HTML <article>.
+    # Stage 2 (deferred) will replace this with the byte-identical HYS body
+    # div captured by a re-scrape pass.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+
+
+def _consultation_body(r: PublicConsultation):
+    """Compose body_html / body_text / has_body from PublicConsultation columns."""
+    sections = [
+        ("Description", r.description),
+        ("Full description", r.full_description),
+        ("Objectives", r.objectives),
+        ("Target group", r.target_group),
+        ("Outcome summary", r.outcome_summary),
+    ]
+    return compose_html_from_sections(sections)
 
 
 @router.get(
@@ -315,8 +347,10 @@ async def list_consultations(
         order_col = PublicConsultation.start_date.desc().nullslast()
     rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
 
-    data = [
-        ConsultationItem(
+    data = []
+    for r in rows:
+        body_html, body_text, has_body = _consultation_body(r)
+        data.append(ConsultationItem(
             id=str(r.id),
             initiative_id=r.initiative_id,
             title=r.title,
@@ -334,9 +368,10 @@ async def list_consultations(
             com_references=list(r.com_references or []),
             celex_numbers=list(r.celex_numbers or []),
             last_updated=r.last_updated,
-        )
-        for r in rows
-    ]
+            has_body=has_body,
+            body_html=body_html,
+            body_text=body_text,
+        ))
 
     return build_envelope(
         data, total=total, page=page, limit=limit,
@@ -374,6 +409,7 @@ async def get_consultation_detail(
             "resource": "consultation",
             "id": initiative_id,
         })
+    body_html, body_text, has_body = _consultation_body(r)
     return ConsultationItem(
         id=str(r.id),
         initiative_id=r.initiative_id,
@@ -392,4 +428,7 @@ async def get_consultation_detail(
         com_references=list(r.com_references or []),
         celex_numbers=list(r.celex_numbers or []),
         last_updated=r.last_updated,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
     )

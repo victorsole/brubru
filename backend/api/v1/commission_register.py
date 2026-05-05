@@ -22,6 +22,7 @@ from core.database import get_db
 from models.commission_document import CommissionDocument
 from models.user import User
 
+from ._body import body_from_pdf_text, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -46,24 +47,22 @@ class CommissionRegisterItem(BaseModel):
     pdf_url: Optional[str] = None     # Direct PDF asset (when available)
     source_url: Optional[str] = None  # Commission Transparency Register origin
     last_updated: Optional[datetime] = None
+    # Body fields — Commission documents are PDF-sourced (Cellar PDFs, COM/SWD/
+    # JOIN PDFs). body_html stays None per the "no PDF→HTML synthesis" rule.
     has_body: bool = False
-    # Body extracted from Cellar API (XHTML for SWDs, PDF text for JOIN/RES/etc).
-    # Populated by backend/scripts/backfill_body_text.py --kind register-docs.
-    # On LIST responses the body is truncated at 5k chars; full body lives on
-    # GET /commission-register-documents/{id} (when added).
+    body_html: Optional[str] = None  # Always None for this endpoint; PDF-only source
+    body_text: Optional[str] = None  # Full text extracted via pypdf; no truncation
+    # Deprecated alias kept one release. Migrate to body_text/body_html pair.
     body: Optional[str] = None
 
 
-def _row_to_item(r: CommissionDocument, include_full_body: bool = False) -> CommissionRegisterItem:
+def _row_to_item(r: CommissionDocument) -> CommissionRegisterItem:
     # Derive a fallback PDF URL via EUR-Lex's PDF endpoint — it returns 202
     # while building the PDF then 200 on retry. Valid for any adopted CELEX.
     pdf = r.pdf_url
     if pdf is None and r.celex:
         pdf = f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{r.celex}"
-    body_full = r.text_body or None
-    body_out = body_full
-    if body_full and not include_full_body and len(body_full) > 5000:
-        body_out = body_full[:5000] + "…"
+    body_html, body_text, has_body = body_from_pdf_text(r.text_body)
     return CommissionRegisterItem(
         id=str(r.id),
         reference=r.reference,
@@ -80,8 +79,10 @@ def _row_to_item(r: CommissionDocument, include_full_body: bool = False) -> Comm
         pdf_url=pdf,
         source_url=r.source_url,
         last_updated=r.last_updated,
-        has_body=bool(body_full and len(body_full) > 500),
-        body=body_out,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
+        body=deprecated_body(body_text, body_html),
     )
 
 

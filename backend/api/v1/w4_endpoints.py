@@ -23,6 +23,7 @@ from models.w4_entities import (
     TransparencyMeeting,
 )
 
+from ._body import body_from_pdf_text, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -472,10 +473,37 @@ class SecondaryActItem(BaseModel):
     pdf_url: Optional[str] = None
     policy_areas: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    # Body fields — secondary acts are PDF-sourced (Cellar PDFs of C(YYYY)NNNN
+    # delegated/implementing decisions). body_html stays None per the
+    # "no PDF→HTML synthesis" rule. body_text carries the full pypdf-extracted
+    # body — no truncation on list or detail.
     has_body: bool = False
-    # Body text backfilled from Cellar (migration 051). 5k-char truncation on
-    # list responses; full body on detail.
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+    # Deprecated alias kept one release. Migrate to body_text/body_html pair.
     body: Optional[str] = None
+
+
+def _secondary_act_to_item(r: SecondaryAct) -> SecondaryActItem:
+    body_html, body_text, has_body = body_from_pdf_text(r.text_body)
+    return SecondaryActItem(
+        id=str(r.id),
+        act_type=r.act_type.value if hasattr(r.act_type, "value") else str(r.act_type),
+        reference=r.reference, title=r.title, description=r.description,
+        parent_celex=r.parent_celex, parent_procedure_ref=r.parent_procedure_ref,
+        status=r.status.value if hasattr(r.status, "value") else str(r.status),
+        proposing_dg=r.proposing_dg, publication_date=r.publication_date,
+        objection_deadline=r.objection_deadline,
+        ep_scrutiny=dict(r.ep_scrutiny or {}),
+        council_scrutiny=dict(r.council_scrutiny or {}),
+        celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
+        policy_areas=list(r.policy_areas or []),
+        last_updated=r.last_updated,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
+        body=deprecated_body(body_text, body_html),
+    )
 
 
 def _list_secondary_acts(
@@ -508,25 +536,7 @@ def _list_secondary_acts(
         query.order_by(SecondaryAct.publication_date.desc().nullslast())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [
-        SecondaryActItem(
-            id=str(r.id),
-            act_type=r.act_type.value if hasattr(r.act_type, "value") else str(r.act_type),
-            reference=r.reference, title=r.title, description=r.description,
-            parent_celex=r.parent_celex, parent_procedure_ref=r.parent_procedure_ref,
-            status=r.status.value if hasattr(r.status, "value") else str(r.status),
-            proposing_dg=r.proposing_dg, publication_date=r.publication_date,
-            objection_deadline=r.objection_deadline,
-            ep_scrutiny=dict(r.ep_scrutiny or {}),
-            council_scrutiny=dict(r.council_scrutiny or {}),
-            celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
-            policy_areas=list(r.policy_areas or []),
-            last_updated=r.last_updated,
-            has_body=bool(r.text_body and len(r.text_body) > 500),
-            body=(r.text_body[:5000] + "…") if (r.text_body and len(r.text_body) > 5000) else r.text_body,
-        )
-        for r in rows
-    ]
+    data = [_secondary_act_to_item(r) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from)
@@ -564,21 +574,7 @@ def _secondary_act_detail(db: Session, reference: str, expected_type: str) -> Se
             "resource": expected_type,
             "id": reference,
         })
-    return SecondaryActItem(
-        id=str(r.id),
-        act_type=r.act_type.value if hasattr(r.act_type, "value") else str(r.act_type),
-        reference=r.reference, title=r.title, description=r.description,
-        parent_celex=r.parent_celex, parent_procedure_ref=r.parent_procedure_ref,
-        status=r.status.value if hasattr(r.status, "value") else str(r.status),
-        proposing_dg=r.proposing_dg, publication_date=r.publication_date,
-        objection_deadline=r.objection_deadline,
-        ep_scrutiny=dict(r.ep_scrutiny or {}), council_scrutiny=dict(r.council_scrutiny or {}),
-        celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
-        policy_areas=list(r.policy_areas or []),
-        last_updated=r.last_updated,
-        has_body=bool(r.text_body and len(r.text_body) > 500),
-        body=r.text_body,
-    )
+    return _secondary_act_to_item(r)
 
 
 @delegated_router.get(
