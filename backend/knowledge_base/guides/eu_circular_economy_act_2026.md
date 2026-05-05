@@ -4,6 +4,7 @@
 - Topic: Forthcoming Circular Economy Act ("CEA"), the Commission's flagship circularity regulation expected in Spring 2026
 - High-level stakeholder dialogue: 30 April 2026, hosted by EVP Stéphane Séjourné and Commissioner Jessika Roswall
 - College discussion scheduled: 6 May 2026 (per DG ENV announcement)
+- **Run-up signals (Monday 4 May 2026)**: Commissioner Roswall delivered TWO speeches in Munich on the eve of the College orientation debate. (1) **Keynote at Europe-Week hosted by the Technical University of Munich (TUM)** — framed circularity as a competitiveness lever for European industry, anchored in the Clean Industrial Deal. (2) **Opening address at IFAT Munich 2026** (the world's leading trade fair for environmental technologies) — emphasised secondary raw materials markets, end-of-waste harmonisation, and recycling-driven critical raw materials recovery. Both speeches preview the substantive lines the College orientation debate on Wednesday 6 May 2026 will discuss before the formal CEA proposal lands later in spring/summer 2026. Sources: ec.europa.eu/commission/presscorner (4 May 2026 speech entries by Commissioner Roswall).
 - Responsible Commissioner: Jessika Roswall (Environment, Water Resilience and a Competitive Circular Economy)
 - Co-lead Commissioner: Stéphane Séjourné (EVP for Prosperity and Industrial Strategy)
 - Responsible DG: DG ENV (Environment) with DG GROW co-lead

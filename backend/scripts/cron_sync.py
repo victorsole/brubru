@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
 """
-Railway Cron Job: OEIL + EUR-Lex Sync
+Railway Cron Job: OEIL + EUR-Lex + Committee Work + Texts Adopted + Commission Docs sync
 
 Runs as a Railway cron service (separate from the main backend).
 Calls the backend's /api/cron/sync/all endpoint and exits.
 
-Railway cron schedule: 0 */6 * * * (every 6 hours)
+Railway cron schedule: 0 0 * * * (daily at 00:00 UTC).
+
+Server-side `/api/cron/sync/all` runs 5 syncs sequentially (OEIL, EUR-Lex,
+Committee Work for 26 EP committees, Texts Adopted, Commission Documents);
+realistic total runtime is 6-12 minutes. Client timeout below is set to 30
+minutes to leave headroom for a slow night. Bumped from 300s -> 1800s on
+5 May 2026 after the 4 May 00:03 UTC run timed out and was marked CRASHED
+by Railway (the backend work likely completed; only the client gave up).
+
+The proper fix (deferred): make the endpoint return 202 immediately and run
+syncs as FastAPI BackgroundTasks so the cron client never blocks.
 
 Usage:
     python scripts/cron_sync.py
@@ -38,7 +48,9 @@ def main():
 
     try:
         req = urllib.request.Request(url, method="POST", headers=headers)
-        with urllib.request.urlopen(req, timeout=300) as resp:
+        # 1800s (30 min) client timeout. Server runs 5 syncs sequentially;
+        # 6-12 min is normal, 30 min is the slow-night ceiling. See module docstring.
+        with urllib.request.urlopen(req, timeout=1800) as resp:
             data = json.loads(resp.read().decode())
             print(f"[OK] Sync complete: {data}")
 

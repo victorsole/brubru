@@ -14,6 +14,7 @@
 - EP opinion committees: **IMCO** (rapporteur **Ana Vasconcelos**, appointed 2 March 2026) and **LIBE**. BUDG declined to issue opinion.
 - **27 April 2026 — committee referral announced in Parliament (1st reading)** per OEIL Key Events. Status: *awaiting committee decision*.
 - **As of 4 May 2026 — no substantive ITRE debate scheduled.** None of the ITRE draft agendas of 23-24 March, 15-16 April, 20 April, or 6 May 2026 lists procedure 2026/0013(COD); rapporteur Kobosko is in the stakeholder-consultation phase. Adjacent items on the ITRE 6 May 2026 agenda: Permit-Granting Procedures Acceleration (2025/0400(COD)) and Trans-European energy infrastructure guidelines (2025/0399(COD)).
+- **LATEST (Tuesday 5 May 2026)**: **ITRE draft report tabled** by rapporteur **Michał Kobosko (Renew, Poland)** under procedure 2026/0013(COD). First concrete EP committee step on the file. Cross-link with the EU joining the Global Coalition on Telecommunications (GCOT) on 4 May 2026 in Ottawa as first strategic partner — the GCOT workstreams on supply-chain diversification, security, resilience, sustainability and 6G align with the DNA's network-resilience and spectrum-harmonisation chapters.
 - EPRS briefing: "Digital networks act legislation" (March 2026, PE 785.672, by Stefano De Luca)
 - EPRS initial appraisal of impact assessment: March 2026
 - Status: Commission proposal published 21 January 2026. EP committee examination stage.

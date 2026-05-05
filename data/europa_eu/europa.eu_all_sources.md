@@ -27,6 +27,7 @@ https://ec.europa.eu,European Commission (legacy domain)
 https://commission.europa.eu,European Commission (current primary)
 https://president.ec.europa.eu,European Commission – President
 https://commissioners.ec.europa.eu,European Commission – College of Commissioners
+https://digital-markets-act.ec.europa.eu,DG CNECT – Digital Markets Act dedicated portal (added 5 May 2026 — DMA Review COM(2026) 178 published here, gatekeeper enforcement decisions, cloud market investigations, Article 53 review documents)
 
 # ═══════════════════════════════════════════════
 # EUROPEAN COMMISSION – DG Policy Subdomains
