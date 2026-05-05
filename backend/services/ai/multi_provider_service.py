@@ -1,13 +1,26 @@
 """
 Multi-Provider AI Service with Fallback Chain
 
-Provides resilient AI chat with automatic failover:
-  Mistral (primary) → Claude (fallback 1) → GPT-4 (fallback 2) → Gemini (fallback 3)
+Provides resilient AI chat with automatic failover. The runtime routing
+depends on whether the query matches a knowledge guide (most real Brubru
+queries do):
+
+  prefer_claude=True (knowledge-bearing queries — the default for Brubru):
+    Claude Sonnet (primary, $10/day cap) → Mistral → Claude Sonnet (fallback 1)
+    → GPT-4 → Gemini
+
+  prefer_claude=False (no knowledge match) OR Sonnet daily cap reached:
+    Mistral → Claude Sonnet (fallback 1) → GPT-4 → Gemini
 
 Each provider implements the same interface, allowing seamless switching.
 
-Provider priority is based on cost-effectiveness:
-  - Mistral Small 3: $0.20/1M input, $0.60/1M output (15x cheaper than Claude)
+The base chain (the `self.providers` list) is ordered by cost-effectiveness;
+`self.sonnet_primary_provider` is a separate slot that is consulted FIRST
+when prefer_claude=True. See `feedback_claude_is_runtime_primary.md` for
+the runtime-vs-base-chain distinction.
+
+Pricing reference:
+  - Mistral Small 3: $0.20/1M input, $0.60/1M output (15× cheaper than Claude)
   - Claude Sonnet 4: $3.00/1M input, $15.00/1M output
   - GPT-4 Turbo: $10.00/1M input, $30.00/1M output
   - Gemini 1.5 Pro: $1.25/1M input, $5.00/1M output
@@ -73,7 +86,8 @@ class AIProvider(ABC):
 
 
 class MistralProvider(AIProvider):
-    """Mistral AI provider (primary - most cost-effective)"""
+    """Mistral AI provider. Cap-day primary + base-chain head for non-knowledge
+    queries; fallback 1 when prefer_claude=True. Most cost-effective option."""
 
     MODEL = "mistral-small-latest"  # $0.20/1M input, $0.60/1M output
 
@@ -145,10 +159,20 @@ class MistralProvider(AIProvider):
         )
 
 
-class AnthropicHaikuProvider(AIProvider):
-    """Anthropic Claude Sonnet provider (primary for knowledge-heavy queries).
-    Upgraded from Haiku to Sonnet on 23 March 2026 for better instruction-following
-    on document retrieval and complex multi-source answers."""
+class AnthropicSonnetPrimaryProvider(AIProvider):
+    """Anthropic Claude Sonnet provider — runtime PRIMARY for knowledge-heavy
+    queries (those that matched a Brubru knowledge guide). Routed FIRST when
+    `prefer_claude=True` is passed to `MultiProviderService.generate()`.
+
+    Subject to a $10/day soft cap (see `_sonnet_daily_cap_usd` on the service);
+    when the cap is reached for the day, traffic falls back to Mistral as the
+    cap-day primary.
+
+    Distinct from `AnthropicProvider` (fallback 1 in the base chain) only in
+    routing role; both call the same Sonnet model. The legacy class name
+    `AnthropicHaikuProvider` was renamed on 5 May 2026 because the actual
+    model has been Sonnet since 23 March 2026 — keeping the old "Haiku" name
+    was misleading future readers."""
 
     MODEL = "claude-sonnet-4-20250514"
 
@@ -158,7 +182,9 @@ class AnthropicHaikuProvider(AIProvider):
 
     @property
     def name(self) -> str:
-        return "Anthropic-Haiku"
+        # Public identifier flowing into ChatMessage.provider + telemetry.
+        # Renamed from "Anthropic-Haiku" on 5 May 2026 to reflect actual model.
+        return "Anthropic-Sonnet-Primary"
 
     @property
     def is_available(self) -> bool:
@@ -172,7 +198,7 @@ class AnthropicHaikuProvider(AIProvider):
         temperature: float = 0.3
     ) -> ProviderResponse:
         if not self.is_available:
-            raise RuntimeError("Anthropic Haiku provider not configured")
+            raise RuntimeError("Anthropic Sonnet (primary) provider not configured")
 
         response = await self.client.messages.create(
             model=self.MODEL,
@@ -409,17 +435,25 @@ class MultiProviderService:
     """
     Orchestrates AI providers with automatic fallback.
 
-    Order: Mistral → Claude → OpenAI → Gemini
+    Runtime routing (see `feedback_claude_is_runtime_primary.md`):
+      - prefer_claude=True (knowledge-bearing queries, the default for Brubru):
+        Claude Sonnet primary ($10/day cap) → Mistral → Claude Sonnet fallback
+        → OpenAI → Gemini
+      - prefer_claude=False OR Sonnet daily cap reached:
+        Base chain only: Mistral → Claude Sonnet fallback → OpenAI → Gemini
 
-    Priority based on cost-effectiveness:
-      - Mistral Small 3: $0.20/$0.60 per 1M tokens (primary)
-      - Claude Sonnet 4: $3.00/$15.00 per 1M tokens (fallback 1)
-      - GPT-4 Turbo: $10.00/$30.00 per 1M tokens (fallback 2)
-      - Gemini 1.5 Pro: $1.25/$5.00 per 1M tokens (fallback 3)
+    Base chain ordering (cost-effectiveness):
+      - Mistral Small 3: $0.20/$0.60 per 1M tokens
+      - Claude Sonnet 4: $3.00/$15.00 per 1M tokens
+      - GPT-4 Turbo: $10.00/$30.00 per 1M tokens
+      - Gemini 1.5 Pro: $1.25/$5.00 per 1M tokens
+
+    Sonnet-primary slot (consulted FIRST when prefer_claude=True):
+      - Same Claude Sonnet model, separate $10/day soft cap.
 
     Usage:
         service = MultiProviderService()
-        response = await service.generate(system_prompt, messages)
+        response = await service.generate(system_prompt, messages, prefer_claude=True)
     """
 
     def __init__(
@@ -430,26 +464,32 @@ class MultiProviderService:
         gemini_key: Optional[str] = None
     ):
         self.providers: List[AIProvider] = []
-        self.haiku_provider: Optional[AIProvider] = None
+        # Sonnet-primary slot: consulted FIRST when prefer_claude=True (most
+        # Brubru queries). Distinct from the base-chain Sonnet entry below
+        # which is fallback 1. Was named `haiku_provider` until 5 May 2026.
+        self.sonnet_primary_provider: Optional[AIProvider] = None
 
-        # Daily spend cap for Claude Sonnet ($10/day, upgraded from Haiku $2.50)
-        self._haiku_daily_cap_usd = 10.00
-        self._haiku_daily_tokens = 0
-        self._haiku_daily_date = date.today()
+        # Daily spend cap for the Sonnet-primary slot ($10/day soft cap).
+        # When exceeded, prefer_claude=True traffic falls back to the base chain
+        # (Mistral first). Was named `_haiku_daily_*` until 5 May 2026.
+        self._sonnet_daily_cap_usd = 10.00
+        self._sonnet_daily_tokens = 0
+        self._sonnet_daily_date = date.today()
 
-        # Initialise providers in priority order (cost-effectiveness)
+        # Initialise providers in base-chain priority order (cost-effectiveness).
 
-        # 1. Mistral (primary - most cost-effective)
+        # 1. Mistral (base-chain head; cap-day primary; cheapest).
         mistral = MistralProvider(mistral_key)
         if mistral.is_available:
             self.providers.append(mistral)
-            logger.info("Mistral provider available (primary - $0.10/1M input)")
+            logger.info("Mistral provider available (base-chain head, cap-day primary)")
 
-        # 1b. Claude Haiku (knowledge-heavy routing - $0.80/1M input)
-        haiku = AnthropicHaikuProvider(anthropic_key)
-        if haiku.is_available:
-            self.haiku_provider = haiku
-            logger.info("Anthropic Haiku provider available (knowledge routing)")
+        # 1b. Claude Sonnet (runtime primary for knowledge-heavy queries via
+        # prefer_claude=True; $10/day cap before falling back to base chain).
+        sonnet_primary = AnthropicSonnetPrimaryProvider(anthropic_key)
+        if sonnet_primary.is_available:
+            self.sonnet_primary_provider = sonnet_primary
+            logger.info("Anthropic Sonnet (primary) provider available (runtime primary for knowledge-heavy queries)")
 
         # 2. Claude Sonnet (fallback 1)
         anthropic = AnthropicProvider(anthropic_key)
@@ -500,7 +540,9 @@ class MultiProviderService:
             messages: Conversation messages
             max_tokens: Maximum response tokens
             temperature: Response temperature
-            prefer_claude: If True, use Claude Haiku first (for knowledge-heavy queries)
+            prefer_claude: If True, route to Claude Sonnet (primary slot) first
+                for knowledge-heavy queries; falls through to the base chain on
+                Sonnet daily-cap or failure.
 
         Returns:
             ProviderResponse with message and metadata
@@ -508,38 +550,39 @@ class MultiProviderService:
         Raises:
             RuntimeError: If all providers fail
         """
-        # Route knowledge-heavy queries to Claude Haiku for better extraction
-        if prefer_claude and self.haiku_provider:
+        # Route knowledge-heavy queries to Claude Sonnet (primary slot) for
+        # better extraction quality on injected guide content.
+        if prefer_claude and self.sonnet_primary_provider:
             # Reset daily counter if new day
             today = date.today()
-            if today != self._haiku_daily_date:
-                self._haiku_daily_tokens = 0
-                self._haiku_daily_date = today
+            if today != self._sonnet_daily_date:
+                self._sonnet_daily_tokens = 0
+                self._sonnet_daily_date = today
 
             # Estimate cost: Sonnet = $3.00/1M input + $15.00/1M output
             # Average query ~5K tokens. $10/day cap = ~50-100 queries/day
-            estimated_daily_cost = (self._haiku_daily_tokens / 1_000_000) * 15.00
-            if estimated_daily_cost >= self._haiku_daily_cap_usd:
+            estimated_daily_cost = (self._sonnet_daily_tokens / 1_000_000) * 15.00
+            if estimated_daily_cost >= self._sonnet_daily_cap_usd:
                 logger.warning(
                     f"Claude Sonnet daily cap reached (${estimated_daily_cost:.2f}/"
-                    f"${self._haiku_daily_cap_usd:.2f}). Falling back to Mistral."
+                    f"${self._sonnet_daily_cap_usd:.2f}). Falling back to Mistral."
                 )
             else:
                 try:
                     logger.info("Routing to Claude Sonnet (knowledge guide matched)")
                     start = datetime.now()
-                    response = await self.haiku_provider.generate(
+                    response = await self.sonnet_primary_provider.generate(
                         system_prompt=system_prompt,
                         messages=messages,
                         max_tokens=max_tokens,
                         temperature=temperature
                     )
                     elapsed = (datetime.now() - start).total_seconds()
-                    self._haiku_daily_tokens += response.tokens_used
+                    self._sonnet_daily_tokens += response.tokens_used
                     logger.info(
                         f"Claude Sonnet succeeded in {elapsed:.2f}s "
                         f"({response.tokens_used} tokens, "
-                        f"daily: {self._haiku_daily_tokens} tokens)"
+                        f"daily: {self._sonnet_daily_tokens} tokens)"
                     )
                     return response
                 except Exception as e:
