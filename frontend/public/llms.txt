@@ -2,7 +2,7 @@
 
 > Brubru is an AI-powered strategic advocacy assistant for EU policy professionals. It combines conversational AI with specialised legislative tools to help users analyse policies, draft amendments, track legislation, and navigate EU institutional processes. Developed by Beresol BV.
 
-Brubru serves EU policy professionals, lobbyists, advocacy organisations, think tanks, government agencies, law firms specialising in EU law, and academic researchers in EU studies. The platform is available at https://brubru.beresol.eu and offers three subscription tiers: White (free), Yellow (professional), and Blue (enterprise).
+Brubru serves EU policy professionals, lobbyists, advocacy organisations, think tanks, government agencies, law firms specialising in EU law, and academic researchers in EU studies. The platform is available at https://brubru.beresol.eu and offers four subscription plans (Starter, Advocate, Professional, EP) with a 14-day free trial. Custom Enterprise contracts are available on request.
 
 ## Features
 
@@ -34,11 +34,15 @@ Brubru serves EU policy professionals, lobbyists, advocacy organisations, think 
 - [EC Register of Documents](https://ec.europa.eu/transparency/documents-register/): Commission documents (COM, SWD, SEC, OJ)
 - [EPRS](https://epthinktank.eu/): European Parliament Research Service briefings and studies
 
-## Subscription Tiers
+## Subscription Plans
 
-- White (Free): Basic AI chat, EU legislation search, MEP profiles, 5 amendments per month
-- Yellow (EUR 79/month): Unlimited amendments, advanced AI models, all export formats, RSS feed customisation, EC public consultations, AI predictions (10/month)
-- Blue (EUR 599/month): Everything in Yellow plus unlimited AI predictions, Council analysis, multi-user accounts, white-label support, priority support
+Brubru offers a 14-day free trial. There is no permanent free tier. Annual billing is also available on each plan.
+
+- Starter (EUR 39/month): AI Chat with the full knowledge base + My EU Bubble dashboard with RSS aggregation and legislative tracking
+- Advocate (EUR 59/month): Everything in Starter plus Amendator (Akoma Ntoso XML), AI amendment suggestions, and PDF/Word/HTML exports
+- Professional (EUR 99/month): Complete platform - adds EU Law Comply (compliance gap analysis), Tenderator (TED tender intelligence), unlimited AI Predictions, Council QMV analysis, and dedicated support
+- EP Plan (EUR 49/month): Tailored for accredited parliamentary assistants and MEPs with EP-specific AI context
+- Enterprise (custom pricing): Multi-user accounts, SSO, white-label and on-premise options. Contact hello@beresol.eu
 
 ## Company
 
