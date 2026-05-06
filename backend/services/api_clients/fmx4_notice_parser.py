@@ -288,20 +288,28 @@ def parse_notice_xml(xml_bytes: bytes) -> NoticeMetadata:
     return meta
 
 
-async def fetch_notice(celex: str, timeout: int = 30) -> NoticeMetadata:
+async def fetch_notice(celex: str, timeout: int = 30, max_retries: int = 3) -> NoticeMetadata:
     """
     Fetch and parse the Formex document notice for a CELEX.
 
+    EUR-Lex's notice endpoint is async — it can return HTTP 202 with an
+    empty body while the response is still being built. We retry with
+    exponential backoff (1s → 2s → 4s) up to ``max_retries`` times before
+    giving up.
+
     Args:
         celex: CELEX number (e.g. "32016R0679").
-        timeout: HTTP timeout in seconds.
+        timeout: HTTP timeout in seconds for each individual request.
+        max_retries: number of retries when EUR-Lex returns 202 + empty body.
 
     Returns:
         NoticeMetadata with all manifestations populated.
 
     Raises:
-        ValueError if CELEX is empty or notice is not retrievable.
+        ValueError if CELEX is empty or notice is not retrievable after retries.
     """
+    import asyncio
+
     if not celex:
         raise ValueError("CELEX is required")
 
@@ -317,19 +325,42 @@ async def fetch_notice(celex: str, timeout: int = 30) -> NoticeMetadata:
     # URL-encode the CELEX (defensive — base CELEX numbers are already URL-safe).
     encoded_celex = urllib.parse.quote(celex, safe="")
     url = NOTICE_URL_TEMPLATE.format(celex=encoded_celex)
+
+    backoff = 1.0
+    last_status: Optional[int] = None
     async with httpx.AsyncClient(timeout=timeout, headers=_HEADERS, follow_redirects=True) as client:
-        resp = await client.get(url)
-        resp.raise_for_status()
-        if not resp.content:
-            raise ValueError(f"Notice for {celex} returned empty response")
-        # Defensive — if EUR-Lex returns an HTML challenge, fail loudly.
-        first_byte = resp.content[:200].lower()
-        if b"<html" in first_byte and b"<notice" not in first_byte:
-            raise ValueError(
-                f"Notice for {celex} returned HTML (likely WAF-redirected). "
-                f"Check CELEX validity or try Cellar fallback."
-            )
-        return parse_notice_xml(resp.content)
+        for attempt in range(max_retries + 1):
+            resp = await client.get(url)
+            last_status = resp.status_code
+
+            # 202 Accepted = EUR-Lex is still building the response. Retry.
+            if resp.status_code == 202 or (resp.status_code == 200 and not resp.content):
+                if attempt < max_retries:
+                    logger.info(
+                        "EUR-Lex notice %s returned %s (attempt %d/%d) — retrying in %.1fs",
+                        celex, resp.status_code, attempt + 1, max_retries + 1, backoff,
+                    )
+                    await asyncio.sleep(backoff)
+                    backoff *= 2
+                    continue
+                raise ValueError(
+                    f"Notice for {celex} returned HTTP {resp.status_code} + empty body "
+                    f"after {max_retries + 1} attempts. EUR-Lex is rebuilding — try again shortly."
+                )
+
+            resp.raise_for_status()
+
+            # Defensive — if EUR-Lex returns an HTML challenge, fail loudly.
+            first_byte = resp.content[:200].lower()
+            if b"<html" in first_byte and b"<notice" not in first_byte:
+                raise ValueError(
+                    f"Notice for {celex} returned HTML (likely WAF-redirected). "
+                    f"Check CELEX validity or try Cellar fallback."
+                )
+            return parse_notice_xml(resp.content)
+
+    # Defensive: should be unreachable given the for-loop logic above.
+    raise ValueError(f"Notice for {celex} unreachable (last status {last_status})")
 
 
 def fmx4_url_for(meta: NoticeMetadata, language: str = "ENG") -> Optional[str]:

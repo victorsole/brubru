@@ -27,7 +27,6 @@ from pydantic import BaseModel, Field
 
 from models.user import User
 from services.api_clients.cellar_sparql_client import CellarSPARQLClient
-from services.api_clients.fmx4_notice_parser import fetch_notice
 
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
@@ -238,13 +237,16 @@ async def cellar_celex_relationships(
 
 @router.get(
     "/celex/{celex}/languages",
-    summary="Languages and downloadable manifestations for an act",
+    summary="All language versions and download formats of an act",
     description=(
-        "Parses the Formex notice for the CELEX and returns all (language, format, "
-        "URL) tuples. Useful for picking a specific language version of the act in "
-        "FMX4 (canonical structured XML), XHTML, PDF/A-1a, PDF/A-2a, or DOCX. "
-        "Corrigendum CELEX numbers (with R(NN) suffix) are not supported by the "
-        "EU Publications Office and will return 422."
+        "Returns every (language, format, URL) tuple for the act, sourced "
+        "directly from the Cellar metadata graph via SPARQL. Useful for "
+        "picking a specific language version in FMX4 (canonical structured "
+        "XML), XHTML, PDF/A-1a, PDF/A-2a, or DOCX.\n\n"
+        "Note: this endpoint queries the Cellar SPARQL endpoint directly. "
+        "It used to fetch the Formex notice via EUR-Lex's HTTP endpoint, "
+        "which routinely returned HTTP 202 (still building) and timed out. "
+        "The SPARQL path is faster and more reliable."
     ),
 )
 async def cellar_celex_languages(
@@ -252,21 +254,27 @@ async def cellar_celex_languages(
     celex: str = Path(...),
     user: User = Depends(api_user_with_rate_limit),
 ) -> dict:
-    try:
-        meta = await fetch_notice(celex)
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail={"error": str(e), "reason_code": "no_notice"})
+    async with CellarSPARQLClient() as client:
+        # First confirm the CELEX exists in Cellar (else 404).
+        meta = await client.get_celex_metadata(celex, language="ENG")
+        if not meta:
+            raise HTTPException(
+                status_code=404,
+                detail={"error": f"CELEX {celex} not found in Cellar", "reason_code": "not_found"},
+            )
+        # Pass the work URI we just resolved so the manifestations query
+        # skips the CELEX→work join (orders of magnitude faster).
+        manifestations = await client.get_manifestations(celex, work_uri=meta.get("work"))
 
+    languages = sorted({m["language"] for m in manifestations if m.get("language")})
     return {
-        "celex": meta.celex or celex,
-        "cellar_uri": meta.cellar_uri,
-        "eli": meta.eli,
-        "oj_reference": meta.oj_reference,
-        "languages": meta.languages_available,
-        "language_count": len(meta.languages_available),
-        "manifestations": [m.to_dict() for m in meta.manifestations],
-        "manifestation_count": len(meta.manifestations),
-        "titles": meta.titles,
+        "celex": celex,
+        "cellar_uri": meta.get("work"),
+        "eli": meta.get("eli"),
+        "languages": languages,
+        "language_count": len(languages),
+        "manifestations": manifestations,
+        "manifestation_count": len(manifestations),
     }
 
 

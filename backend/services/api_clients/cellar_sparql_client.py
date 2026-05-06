@@ -510,6 +510,72 @@ class CellarSPARQLClient(BaseSPARQLClient):
             logger.error(f"Cellar SPARQL languages query failed for {celex}: {e}")
             return []
 
+    async def get_manifestations(self, celex: str, work_uri: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        Full manifestation list for a CELEX: every (language, format, URL) tuple.
+
+        Replaces the legacy FMX4 notice fetch (which hit EUR-Lex's slow async
+        endpoint and routinely returned HTTP 202). This SPARQL query goes
+        directly to the Cellar metadata graph and returns immediately.
+
+        Args:
+            celex: CELEX number (e.g. "32016R0679").
+            work_uri: optional Cellar work URI when already known — skips the
+                CELEX→work resolution step (much faster). Pass it from
+                callers that already have meta["work"].
+
+        Each row has:
+            language  : ISO-3 code (e.g. "ENG", "FRA")
+            format    : short type label ("fmx4", "xhtml", "pdfa1a", ...)
+            url       : the actual download URL on Cellar
+            identifier: filename/id of the manifestation
+        """
+        # When the caller knows the work URI, scope the query by that URI —
+        # avoids the slow CELEX→work resolution and the join with all works.
+        if work_uri:
+            anchor = f"BIND(<{work_uri}> AS ?work)"
+        else:
+            anchor = (
+                f'?work <http://publications.europa.eu/ontology/cdm#resource_legal_id_celex> ?celexLit .\n'
+                f'FILTER(STR(?celexLit) = "{celex}")'
+            )
+        query = f"""
+        PREFIX cdm: <http://publications.europa.eu/ontology/cdm#>
+
+        SELECT DISTINCT ?manif ?langCode ?type WHERE {{
+            {anchor}
+            ?expr cdm:expression_belongs_to_work ?work .
+            ?expr cdm:expression_uses_language ?langUri .
+            BIND(REPLACE(STR(?langUri), ".*/", "") AS ?langCode)
+            ?manif cdm:manifestation_manifests_expression ?expr .
+            OPTIONAL {{ ?manif cdm:manifestation_type ?type . }}
+        }}
+        LIMIT 500
+        """
+        try:
+            rows = await self._cached_select(query, cache_ttl=86400)
+        except Exception as e:
+            logger.error(f"Cellar SPARQL manifestations query failed for {celex}: {e}")
+            return []
+
+        # The Cellar manifestation URI itself IS the download URL when you
+        # GET it with Accept: */*. Pass through the raw URI as ``url`` so
+        # clients can fetch directly.
+        out = []
+        for r in rows:
+            manif = r.get("manif")
+            if not manif:
+                continue
+            lang = r.get("langCode")
+            type_label = (r.get("type") or "").strip().lower() or None
+            out.append({
+                "language": lang,
+                "format": type_label,
+                "url": manif,
+                "identifier": manif.rsplit("/", 1)[-1] if "/" in manif else manif,
+            })
+        return out
+
     # ------------------------------------------------------------------
     # EuroVoc concepts attached to a CELEX
     # ------------------------------------------------------------------
@@ -667,14 +733,22 @@ class CellarSPARQLClient(BaseSPARQLClient):
             keyword: Search term (e.g. "data protection").
             language: Label language to search.
             limit: Max results.
+
+        The query restricts to ``?concept a skos:Concept`` and the EuroVoc
+        scheme so SPARQL doesn't have to scan every prefLabel triple in the
+        endpoint (which timed out before the fix).
         """
+        # Escape double quotes in the keyword to avoid SPARQL injection /
+        # malformed query when the user types something like 'AI "Act"'.
+        kw_safe = keyword.replace("\\", "\\\\").replace('"', '\\"')
         query = f"""
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
         SELECT DISTINCT ?concept ?label WHERE {{
-            ?concept skos:prefLabel ?label .
-            FILTER(STRSTARTS(STR(?concept), "http://eurovoc.europa.eu/"))
+            ?concept a skos:Concept ;
+                     skos:inScheme <http://eurovoc.europa.eu/100141> ;
+                     skos:prefLabel ?label .
             FILTER(LANG(?label) = "{language}")
-            FILTER(CONTAINS(LCASE(STR(?label)), LCASE("{keyword}")))
+            FILTER(CONTAINS(LCASE(STR(?label)), LCASE("{kw_safe}")))
         }} LIMIT {limit}
         """
         try:
