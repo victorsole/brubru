@@ -25,6 +25,14 @@
   2. **2025/2263(INI)** "The Institutional Framework of the EU and its interaction with national authorities in the application of Union law, with particular reference to Article 19 TEU" -- this guide's main file, draft report tabled
   3. **2026/2012(INI)** AFCO own-initiative procedure (subject confirmed in OEIL portal)
   4. **2026/2013(INI)** AFCO own-initiative procedure (subject confirmed in OEIL portal)
+- **LATEST (Wednesday 6 May 2026)**: **AFCO draft report wave re-surfaces in committee week**, eight AFCO files visible on the committees portal during the 4-8 May committee week:
+  - **2025/2212(INI)** "Institutional aspects of the Common European Defence Union" -- examines treaty basis, QMV extension, PESCO reform, Defence Commissioner role evolution
+  - **2025/2243(ACI)** "Framework Agreement on relations between the European Parliament and the European Commission"
+  - **2025/2262(REG)** Rule 135 amendments (carried from 28 April plenary vote)
+  - **2025/2263(INI)** Article 19 TEU institutional framework review (this guide's main file)
+  - **2025/0900(APP)** Consent procedure
+  - **2026/2012(INI)**, **2026/2013(INI)**, **2026/2014(INI)** AFCO own-initiative procedures
+  Source: EP committees portal scrape, 6 May 2026. Cross-link with `cjeu_hungary_lgbti_article2_judgment` (Article 2 TEU pathway now operational alongside Article 19 TEU).
 
 ## Overview
 

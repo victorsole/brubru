@@ -10,6 +10,7 @@
 - **Procedure: [2025/0429(COD)]** -- Amending Regulation (EU) 2021/1232 as regards the extension of its period of application. Commission proposal 19 December 2025.
 - **OEIL status (per Brubru procedure API, as of 20 April 2026): CLOSE_TO_ADOPTION**. Lead committee LIBE.
 - **LATEST (23 April 2026)**: LIBE draft report "Amending Regulation (EU) 2021/1232 as regards the extension of its period of application" [2025/0429(COD)] re-surfaced on EP committees portal during Week 17 Group Week. Confirms procedure remains in committee stage; plenary vote expected late April / May 2026 given 3 April 2026 derogation expiry risk. Procedural urgency: derogation **already expired 3 April 2026** unless extension adopted in time; voluntary CSAM scanning by OTT providers technically in legal limbo.
+- **LATEST (Wednesday 6 May 2026)**: LIBE draft report 2025/0429(COD) re-surfaced on the EP committees portal during the 4-8 May committee week, confirming procedure remains active in committee stage. The procedural urgency is now structural — the derogation expired 3 April 2026 and voluntary CSAM scanning by OTT providers has been in legal limbo for over a month. LIBE committee vote expected late May / early June 2026; plenary vote earliest June 2026 Strasbourg. Cross-link `csam_regulation_online` (permanent regulation 2022/0155(COD)).
 - **OEIL key events (authoritative)**:
   - 19 December 2025: Legislative proposal (Commission)
   - 27 January 2026: Legislative proposal milestone

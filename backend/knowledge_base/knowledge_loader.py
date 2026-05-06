@@ -7678,6 +7678,120 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'militaire mobiliteit': ['military_mobility_dual_use_logistics'],
     'militaerische mobilitaet': ['military_mobility_dual_use_logistics'],
     'plan accion movilidad militar': ['military_mobility_dual_use_logistics'],
+
+    # EU Anti-Poverty Strategy 2026 (multilingual) — College 6 May 2026
+    'anti-poverty strategy': ['eu_anti_poverty_strategy_2026'],
+    'anti poverty strategy': ['eu_anti_poverty_strategy_2026'],
+    'eu poverty strategy 2026': ['eu_anti_poverty_strategy_2026'],
+    'minzatu anti-poverty': ['eu_anti_poverty_strategy_2026'],
+    'minzatu poverty': ['eu_anti_poverty_strategy_2026'],
+    'social package 6 may': ['eu_anti_poverty_strategy_2026'],
+    'arope 2030 target': ['eu_anti_poverty_strategy_2026'],
+    'pillar of social rights action plan 2': ['eu_anti_poverty_strategy_2026'],
+    'pillar 2.0': ['eu_anti_poverty_strategy_2026'],
+    # ES
+    'estrategia europea contra pobreza': ['eu_anti_poverty_strategy_2026'],
+    'lucha contra la pobreza ue': ['eu_anti_poverty_strategy_2026'],
+    'paquete social mayo 2026': ['eu_anti_poverty_strategy_2026'],
+    # FR
+    'stratégie européenne pauvreté': ['eu_anti_poverty_strategy_2026'],
+    'strategie europeenne pauvrete': ['eu_anti_poverty_strategy_2026'],
+    'paquet social mai 2026': ['eu_anti_poverty_strategy_2026'],
+    # IT
+    'strategia europea contro la povertà': ['eu_anti_poverty_strategy_2026'],
+    'strategia europea contro la poverta': ['eu_anti_poverty_strategy_2026'],
+    'pacchetto sociale maggio 2026': ['eu_anti_poverty_strategy_2026'],
+    # CA
+    'estratègia europea contra la pobresa': ['eu_anti_poverty_strategy_2026'],
+    'estrategia europea contra la pobresa': ['eu_anti_poverty_strategy_2026'],
+    'paquet social maig 2026': ['eu_anti_poverty_strategy_2026'],
+    # NL
+    'eu armoedestrategie': ['eu_anti_poverty_strategy_2026'],
+
+    # Strengthened Child Guarantee 2026 (multilingual)
+    'child guarantee strengthened': ['eu_child_guarantee_strengthened_2026'],
+    'strengthened child guarantee': ['eu_child_guarantee_strengthened_2026'],
+    'european child guarantee 2026': ['eu_child_guarantee_strengthened_2026'],
+    'child guarantee 2021/1004': ['eu_child_guarantee_strengthened_2026'],
+    'council recommendation 2021/1004': ['eu_child_guarantee_strengthened_2026'],
+    '32021h1004': ['eu_child_guarantee_strengthened_2026'],
+    'arope children': ['eu_child_guarantee_strengthened_2026'],
+    'esf+ child poverty earmark': ['eu_child_guarantee_strengthened_2026'],
+    # ES
+    'garantía infantil europea': ['eu_child_guarantee_strengthened_2026'],
+    'garantia infantil europea': ['eu_child_guarantee_strengthened_2026'],
+    'garantia infantil reforzada': ['eu_child_guarantee_strengthened_2026'],
+    # FR
+    'garantie pour l\'enfance': ['eu_child_guarantee_strengthened_2026'],
+    'garantie enfance europeenne': ['eu_child_guarantee_strengthened_2026'],
+    'garantie europeenne pour les enfants': ['eu_child_guarantee_strengthened_2026'],
+    # IT
+    'garanzia per l\'infanzia': ['eu_child_guarantee_strengthened_2026'],
+    'garanzia infanzia europea': ['eu_child_guarantee_strengthened_2026'],
+    # CA
+    'garantia infantil europea reforçada': ['eu_child_guarantee_strengthened_2026'],
+    'garantia infantil reforcada': ['eu_child_guarantee_strengthened_2026'],
+    # NL
+    'europese kindergarantie': ['eu_child_guarantee_strengthened_2026'],
+
+    # Council Recommendation Fighting Housing Exclusion 2026 (multilingual)
+    'housing exclusion recommendation': ['eu_housing_exclusion_recommendation_2026'],
+    'fighting housing exclusion': ['eu_housing_exclusion_recommendation_2026'],
+    'eu housing recommendation': ['eu_housing_exclusion_recommendation_2026'],
+    'lisbon declaration homelessness': ['eu_housing_exclusion_recommendation_2026'],
+    'european platform combatting homelessness': ['eu_housing_exclusion_recommendation_2026'],
+    'ethos light': ['eu_housing_exclusion_recommendation_2026'],
+    'ethos-light': ['eu_housing_exclusion_recommendation_2026'],
+    'housing first eu': ['eu_housing_exclusion_recommendation_2026'],
+    'principle 19 social rights': ['eu_housing_exclusion_recommendation_2026'],
+    'housing cost overburden': ['eu_housing_exclusion_recommendation_2026'],
+    # ES
+    'exclusión habitacional': ['eu_housing_exclusion_recommendation_2026'],
+    'exclusion habitacional': ['eu_housing_exclusion_recommendation_2026'],
+    'sinhogarismo ue': ['eu_housing_exclusion_recommendation_2026'],
+    'recomendación sinhogarismo': ['eu_housing_exclusion_recommendation_2026'],
+    # FR
+    'exclusion liée au logement': ['eu_housing_exclusion_recommendation_2026'],
+    'exclusion liee au logement': ['eu_housing_exclusion_recommendation_2026'],
+    'sans-abrisme ue': ['eu_housing_exclusion_recommendation_2026'],
+    # IT
+    'esclusione abitativa': ['eu_housing_exclusion_recommendation_2026'],
+    'senzatetto ue': ['eu_housing_exclusion_recommendation_2026'],
+    # CA
+    'exclusió residencial': ['eu_housing_exclusion_recommendation_2026'],
+    'exclusio residencial': ['eu_housing_exclusion_recommendation_2026'],
+    'sensellarisme ue': ['eu_housing_exclusion_recommendation_2026'],
+    # NL
+    'dakloosheid eu': ['eu_housing_exclusion_recommendation_2026'],
+    'huisvestingsuitsluiting': ['eu_housing_exclusion_recommendation_2026'],
+
+    # CJEU Hungary Article 2 TEU Anti-LGBTI Judgment 2026 (multilingual)
+    'cjeu hungary lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'commission v hungary lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'hungary anti-lgbti law': ['cjeu_hungary_lgbti_article2_judgment'],
+    'hungary act lxxix 2021': ['cjeu_hungary_lgbti_article2_judgment'],
+    'article 2 teu judgment': ['cjeu_hungary_lgbti_article2_judgment'],
+    'article 2 teu hungary': ['cjeu_hungary_lgbti_article2_judgment'],
+    'hungary child protection law cjeu': ['cjeu_hungary_lgbti_article2_judgment'],
+    'eprs ata 785739': ['cjeu_hungary_lgbti_article2_judgment'],
+    'eprs_ata(2026)785739': ['cjeu_hungary_lgbti_article2_judgment'],
+    # ES
+    'sentencia tjue hungria lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'sentencia tjue hungría lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'articulo 2 tue': ['cjeu_hungary_lgbti_article2_judgment'],
+    'artículo 2 tue': ['cjeu_hungary_lgbti_article2_judgment'],
+    # FR
+    'arrêt cjue hongrie lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'arret cjue hongrie lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'article 2 tue': ['cjeu_hungary_lgbti_article2_judgment'],
+    # IT
+    'sentenza cgue ungheria lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'articolo 2 tue': ['cjeu_hungary_lgbti_article2_judgment'],
+    # CA
+    'sentencia tjue hongria lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    # NL
+    'hvj-eu hongarije lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+    'arrest hongarije anti-lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
 }
 
 
