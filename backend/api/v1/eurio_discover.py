@@ -33,6 +33,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 
+from ._body import compose_html_from_sections
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -60,6 +61,12 @@ class ResearchProjectItem(BaseModel):
     coordinator_name: Optional[str] = None
     coordinator_country: Optional[str] = None
     cordis_url: Optional[str] = None
+    # Body fields composed from project objective + keywords. The CORDIS
+    # source is structured (not HTML upstream), so body_html is composed
+    # locally — semantic <article> with <h2>Objective</h2> + paragraphs.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
 
 
 class ConsortiumPayload(BaseModel):
@@ -96,6 +103,12 @@ class FundingPayload(BaseModel):
 
 
 def _row_to_item(r) -> ResearchProjectItem:
+    # Compose body from objective + keywords. compose_html_from_sections
+    # honestly skips empty fields and emits None when nothing's there.
+    body_html, body_text, has_body = compose_html_from_sections([
+        ("Objective", r.objective),
+        ("Keywords", r.keywords),
+    ])
     return ResearchProjectItem(
         cordis_id=r.project_id,
         acronym=r.project_acronym,
@@ -112,6 +125,9 @@ def _row_to_item(r) -> ResearchProjectItem:
         coordinator_name=r.coordinator_name,
         coordinator_country=r.coordinator_country,
         cordis_url=r.source_url,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
     )
 
 

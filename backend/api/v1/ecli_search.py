@@ -47,7 +47,7 @@ class ECLIResolution(BaseModel):
 @router.get(
     "/{ecli:path}",
     response_model=ECLIResolution,
-    summary="Resolve an ECLI to its e-Justice and InforCuria deep-links",
+    summary="Look up an EU court ruling by case-law identifier",
     description=(
         "Hand it any European Case Law Identifier (e.g. "
         "ECLI:EU:C:2014:317 — the Google Spain ruling) and get back the "

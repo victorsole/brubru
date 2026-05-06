@@ -93,7 +93,7 @@ def _to_date(s: Optional[str]) -> Optional[date]:
 @router.get(
     "/recent",
     response_model=PaginatedResponse[CellarRecentItem],
-    summary="Recent EU acts (live SPARQL discovery)",
+    summary="Recently published EU acts (live)",
     description=(
         "Live discovery of EU acts published in a date range. Queries the Publications "
         "Office Cellar SPARQL endpoint directly — covers the full 3.79M-work corpus, "
@@ -166,7 +166,7 @@ async def recent_cellar_acts(
 @router.get(
     "/celex/{celex}",
     response_model=CellarMetadata,
-    summary="Full Cellar metadata for a CELEX",
+    summary="Look up an EU act by reference (full metadata)",
     description=(
         "Live SPARQL fetch: title, ELI, resource type (with English label), in-force "
         "status, validity dates, available languages, and EuroVoc concepts attached "
@@ -213,7 +213,7 @@ async def cellar_celex_metadata(
 @router.get(
     "/celex/{celex}/relationships",
     response_model=PaginatedResponse[CellarRelation],
-    summary="Acts related to a CELEX (amends/repeals/consolidates)",
+    summary="Acts that amend, repeal, or are amended by an act",
 )
 async def cellar_celex_relationships(
     request: Request,
@@ -281,7 +281,7 @@ async def cellar_celex_languages(
 @router.get(
     "/eurovoc",
     response_model=PaginatedResponse[EuroVocConcept],
-    summary="Search EuroVoc thesaurus",
+    summary="Search the EU subject thesaurus",
 )
 async def search_eurovoc(
     request: Request,
@@ -300,7 +300,7 @@ async def search_eurovoc(
 @router.get(
     "/eurovoc/{concept_id}/acts",
     response_model=PaginatedResponse[CellarRecentItem],
-    summary="Acts tagged with a EuroVoc concept",
+    summary="Acts tagged with a subject (e.g. data protection, climate)",
 )
 async def acts_by_eurovoc(
     request: Request,
