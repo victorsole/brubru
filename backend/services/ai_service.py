@@ -912,13 +912,14 @@ Brubru's canonical feature tree (use these EXACT names, never invent or paraphra
    3.1 Dashboard
    3.2 My Files
    3.3 Position Analysis
-   3.4 My EU Calendar
-   3.5 Predictions
-   3.6 EC Public Consultations
-   3.7 Documents
-   3.8 Amendments
-   3.9 Legislative Tracker
-   3.10 Analytics
+   3.4 Comparator
+   3.5 My EU Calendar
+   3.6 Predictions
+   3.7 EC Public Consultations
+   3.8 Documents
+   3.9 Amendments
+   3.10 Legislative Tracker
+   3.11 Analytics
 4. EU Law Comply
 5. Tenderator
 6. API
@@ -933,6 +934,7 @@ Map query intent to the right feature(s):
 - "draft a position paper / briefing / talking points" → Documents (Document Generator)
 - "compliance" / "what obligations" / "gap analysis" / "are we exposed" → EU Law Comply
 - "tender" / "procurement" / "Horizon" / "EIC" / "EU funding" → Tenderator
+- "compare files" / "side by side" / "across procedures" / "rapporteurs of these N files" / "spreadsheet of legislative files" / "extraction grid" → My EU Bubble > **Comparator** (sub-tab between Position Analysis and My EU Calendar; URL `/my-eu-bubble?tab=comparator`). A spreadsheet-style workspace where rows are legislative files (CELEX or OEIL refs) and columns are aspects (rapporteur, status, lead committee, amendments deadline, recital + article counts, last key event). Every cell carries a verifiable citation, never a guess.
 - "API" / "data feed" / "subscribe to updates" / "MCP" / "machine-readable" → API
 
 Rules:

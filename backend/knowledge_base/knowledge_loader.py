@@ -7765,6 +7765,43 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'dakloosheid eu': ['eu_housing_exclusion_recommendation_2026'],
     'huisvestingsuitsluiting': ['eu_housing_exclusion_recommendation_2026'],
 
+    # Comparator (Brubru top-level feature) (multilingual)
+    'comparator': ['comparator_feature'],
+    'brubru comparator': ['comparator_feature'],
+    'compare files': ['comparator_feature'],
+    'compare these files': ['comparator_feature'],
+    'side by side files': ['comparator_feature'],
+    'side-by-side files': ['comparator_feature'],
+    'extraction grid': ['comparator_feature'],
+    'spreadsheet of legislative files': ['comparator_feature'],
+    'rapporteurs of these': ['comparator_feature'],
+    'across procedures': ['comparator_feature'],
+    'across legislative files': ['comparator_feature'],
+    'tabular review': ['comparator_feature'],
+    'multi-file comparison': ['comparator_feature'],
+    'multi file comparison': ['comparator_feature'],
+    # ES
+    'comparador brubru': ['comparator_feature'],
+    'comparar expedientes': ['comparator_feature'],
+    'comparar archivos legislativos': ['comparator_feature'],
+    'tabla comparativa expedientes': ['comparator_feature'],
+    # FR
+    'comparateur brubru': ['comparator_feature'],
+    'comparer dossiers': ['comparator_feature'],
+    'tableau comparatif dossiers': ['comparator_feature'],
+    'comparer plusieurs dossiers législatifs': ['comparator_feature'],
+    # IT
+    'comparatore brubru': ['comparator_feature'],
+    'confrontare fascicoli': ['comparator_feature'],
+    'tabella comparativa fascicoli': ['comparator_feature'],
+    # CA
+    'comparador brubru ca': ['comparator_feature'],
+    'comparar expedients': ['comparator_feature'],
+    'taula comparativa expedients': ['comparator_feature'],
+    # NL
+    'vergelijker brubru': ['comparator_feature'],
+    'dossiers vergelijken': ['comparator_feature'],
+
     # CJEU Hungary Article 2 TEU Anti-LGBTI Judgment 2026 (multilingual)
     'cjeu hungary lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
     'commission v hungary lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
