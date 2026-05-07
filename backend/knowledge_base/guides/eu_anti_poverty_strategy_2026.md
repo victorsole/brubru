@@ -13,6 +13,10 @@
   - Strengthening of the **Child Guarantee** (Council Recommendation update — see `eu_child_guarantee_strengthened_2026`)
   - Council Recommendation on **fighting housing exclusion** — see `eu_housing_exclusion_recommendation_2026`
   - **Enhancing the strategy for the rights of persons with disabilities to 2030** — see `eu_disability_rights_post2024`
+- Cross-cutting EVIDENCE BASE: **JRC research (6 May 2026, same day as adoption)** — *"How to lift 18 million Europeans out of poverty: evidence from JRC research"* — quantitative microsimulation behind the Commission's targeted-instrument mix. Source: ec.europa.eu/jrc — companion to the Anti-Poverty Strategy headline figure of 15 million AROPE-2030 reduction.
+- Commission Press: IP/26/946 ("Commission proposes new measures to fight poverty and improve the lives of persons with disabilities"); QANDA/26/947 (Q&A on Anti-poverty package); FS/26/948 (Factsheet); FS/26/950 (Factsheet on disability rights).
+- Eurostat (6 May 2026): "People with dependent children face higher poverty" — data backbone the Commission cited.
+- Speech (6 May 2026): EVP Mînzatu remarks on an ambitious social plan aimed at eradicating poverty and promoting the rights of persons with disabilities.
 
 ## Context — what came before
 

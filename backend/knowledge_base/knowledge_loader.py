@@ -7829,6 +7829,165 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # NL
     'hvj-eu hongarije lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
     'arrest hongarije anti-lgbti': ['cjeu_hungary_lgbti_article2_judgment'],
+
+    # ============================================================
+    # AI Act simplification omnibus (7 May 2026 trilogue deal) -- 2025/0359(COD)
+    # All triggers route to ai_act_amendments_2026 first (the proposal-specific guide),
+    # with ai_act_regulation as secondary fallback for general AI Act questions.
+    # ============================================================
+    # EN
+    'ai act simplification omnibus': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'ai act omnibus 2026': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'ai act omnibus deal': ['ai_act_amendments_2026'],
+    'ai act simplification deal': ['ai_act_amendments_2026'],
+    '2025/0359(cod)': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'ai act trilogue 7 may 2026': ['ai_act_amendments_2026'],
+    'ai act provisional agreement': ['ai_act_amendments_2026', 'ai_act_regulation'],
+    'arba kokalari ai act': ['ai_act_amendments_2026', 'politico_ai_tech_week_2026'],
+    'mcnamara ai act': ['ai_act_amendments_2026'],
+    'michael mcnamara renew': ['ai_act_amendments_2026'],
+    'ai act roll back': ['ai_act_amendments_2026'],
+    'ai non-consensual deepfake ban': ['ai_act_amendments_2026'],
+    'ncii ban eu': ['ai_act_amendments_2026'],
+    'csam ai prohibition': ['ai_act_amendments_2026', 'csam_regulation_online'],
+    # FR
+    "omnibus simplification ia": ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    "accord ai act omnibus": ['ai_act_amendments_2026'],
+    "interdiction nudifier ia": ['ai_act_amendments_2026'],
+    "trilogue ai act 7 mai 2026": ['ai_act_amendments_2026'],
+    # ES
+    'omnibus simplificacion ia': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'omnibus simplificación ia': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'reglamento simplificacion ia': ['ai_act_amendments_2026'],
+    'reglamento simplificación ia': ['ai_act_amendments_2026'],
+    'prohibicion nudifier ia': ['ai_act_amendments_2026'],
+    'prohibición nudifier ia': ['ai_act_amendments_2026'],
+    # CA
+    'omnibus simplificacio ia': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'omnibus simplificació ia': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'reglament simplificacio ia': ['ai_act_amendments_2026'],
+    'reglament simplificació ia': ['ai_act_amendments_2026'],
+    'prohibicio nudifier ia': ['ai_act_amendments_2026'],
+    'prohibició nudifier ia': ['ai_act_amendments_2026'],
+    # IT
+    'omnibus semplificazione ia': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'regolamento semplificazione ia': ['ai_act_amendments_2026'],
+    'divieto nudifier ia': ['ai_act_amendments_2026'],
+    # NL
+    'ai act vereenvoudiging omnibus': ['ai_act_amendments_2026', 'digital_omnibus_package'],
+    'verbod nudifier ai': ['ai_act_amendments_2026'],
+
+    # ============================================================
+    # European Affordable Housing Plan -- COM(2025) 1025
+    # ============================================================
+    # EN
+    'european affordable housing plan': ['european_affordable_housing_plan'],
+    'affordable housing plan': ['european_affordable_housing_plan'],
+    'eu affordable housing plan': ['european_affordable_housing_plan'],
+    'com 2025 1025': ['european_affordable_housing_plan'],
+    'com(2025) 1025': ['european_affordable_housing_plan'],
+    'housing simplification package': ['european_affordable_housing_plan', 'eu_housing_crisis'],
+    'pan-european investment platform housing': ['european_affordable_housing_plan'],
+    'housing summit eu': ['european_affordable_housing_plan'],
+    'housing alliance eu': ['european_affordable_housing_plan'],
+    'state aid social housing': ['european_affordable_housing_plan'],
+    'jorgensen housing': ['european_affordable_housing_plan'],
+    'commissioner jorgensen housing': ['european_affordable_housing_plan'],
+    'short-term rentals eu legislation': ['european_affordable_housing_plan'],
+    'short term rentals housing eu': ['european_affordable_housing_plan'],
+    'citizens energy package': ['european_affordable_housing_plan', 'accelerateeu_fossil_energy_crisis'],
+    # FR
+    'plan europeen logement abordable': ['european_affordable_housing_plan'],
+    'plan européen logement abordable': ['european_affordable_housing_plan'],
+    "alliance pour le logement": ['european_affordable_housing_plan'],
+    # ES
+    'plan europeo vivienda asequible': ['european_affordable_housing_plan'],
+    'alianza europea vivienda': ['european_affordable_housing_plan'],
+    # CA
+    'pla europeu habitatge assequible': ['european_affordable_housing_plan'],
+    'alianca europea habitatge': ['european_affordable_housing_plan'],
+    'aliança europea habitatge': ['european_affordable_housing_plan'],
+    # IT
+    'piano europeo alloggi accessibili': ['european_affordable_housing_plan'],
+    'piano europeo abitazione accessibile': ['european_affordable_housing_plan'],
+    # NL
+    'europees plan betaalbare huisvesting': ['european_affordable_housing_plan'],
+    'huisvestingsalliantie eu': ['european_affordable_housing_plan'],
+
+    # ============================================================
+    # Right to Stay Strategy (DG REGIO, 6 May 2026)
+    # ============================================================
+    # EN
+    'right to stay strategy': ['eu_demographic_right_to_stay_strategy'],
+    'eu right to stay': ['eu_demographic_right_to_stay_strategy'],
+    'right to stay eu': ['eu_demographic_right_to_stay_strategy'],
+    'fitto right to stay': ['eu_demographic_right_to_stay_strategy'],
+    'dg regio right to stay': ['eu_demographic_right_to_stay_strategy'],
+    'talent booster mechanism': ['eu_demographic_right_to_stay_strategy'],
+    'depopulation eu strategy': ['eu_demographic_right_to_stay_strategy'],
+    'brain drain regions eu': ['eu_demographic_right_to_stay_strategy'],
+    'left-behind places eu': ['eu_demographic_right_to_stay_strategy'],
+    'left behind places eu': ['eu_demographic_right_to_stay_strategy'],
+    'cities forum 2027 bilbao': ['eu_demographic_right_to_stay_strategy'],
+    # FR
+    'strategie droit de rester': ['eu_demographic_right_to_stay_strategy'],
+    'stratégie droit de rester': ['eu_demographic_right_to_stay_strategy'],
+    # ES
+    'estrategia derecho a quedarse': ['eu_demographic_right_to_stay_strategy'],
+    'derecho a permanecer ue': ['eu_demographic_right_to_stay_strategy'],
+    # CA
+    'estrategia dret a quedarse': ['eu_demographic_right_to_stay_strategy'],
+    'estratègia dret a quedar-se': ['eu_demographic_right_to_stay_strategy'],
+    # IT
+    'strategia diritto di restare': ['eu_demographic_right_to_stay_strategy'],
+    # NL
+    'recht om te blijven strategie': ['eu_demographic_right_to_stay_strategy'],
+
+    # ============================================================
+    # Product Liability Directive (Directive (EU) 2024/2853)
+    # ============================================================
+    # EN
+    'product liability directive': ['product_liability_directive_2024_2853'],
+    'directive 2024/2853': ['product_liability_directive_2024_2853'],
+    '32024l2853': ['product_liability_directive_2024_2853'],
+    'pld 2024': ['product_liability_directive_2024_2853'],
+    'defective products directive': ['product_liability_directive_2024_2853'],
+    'product liability ai': ['product_liability_directive_2024_2853', 'ai_act_regulation'],
+    'product liability software': ['product_liability_directive_2024_2853'],
+    'liability for defective products': ['product_liability_directive_2024_2853'],
+    'no-fault liability ai': ['product_liability_directive_2024_2853'],
+    '85/374/eec repeal': ['product_liability_directive_2024_2853'],
+    'corrigendum directive 2024/2853': ['product_liability_directive_2024_2853'],
+    # FR
+    'directive responsabilite produits defectueux': ['product_liability_directive_2024_2853'],
+    'directive responsabilité produits défectueux': ['product_liability_directive_2024_2853'],
+    'responsabilite produits ia': ['product_liability_directive_2024_2853'],
+    # ES
+    'directiva responsabilidad productos defectuosos': ['product_liability_directive_2024_2853'],
+    'responsabilidad productos defectuosos ia': ['product_liability_directive_2024_2853'],
+    # CA
+    'directiva responsabilitat productes defectuosos': ['product_liability_directive_2024_2853'],
+    # IT
+    'direttiva responsabilita prodotti difettosi': ['product_liability_directive_2024_2853'],
+    'direttiva responsabilità prodotti difettosi': ['product_liability_directive_2024_2853'],
+    # NL
+    'productaansprakelijkheid richtlijn': ['product_liability_directive_2024_2853'],
+
+    # ============================================================
+    # Heavy-duty CO2 emission credits Reg (EU) 2026/1046 (29 April 2026)
+    # ============================================================
+    'heavy duty co2 credits': ['eu_automotive_omnibus'],
+    'heavy-duty co2 credits': ['eu_automotive_omnibus'],
+    'regulation 2026/1046': ['eu_automotive_omnibus'],
+    '32026r1046': ['eu_automotive_omnibus'],
+    'reg 2026/1046': ['eu_automotive_omnibus'],
+    'amending 2019/1242': ['eu_automotive_omnibus'],
+    'heavy duty vehicles emission credits': ['eu_automotive_omnibus'],
+    'creditos emisiones vehiculos pesados': ['eu_automotive_omnibus'],
+    'créditos emisiones vehículos pesados': ['eu_automotive_omnibus'],
+    'crédits emissions vehicules lourds': ['eu_automotive_omnibus'],
+    'crediti emissioni veicoli pesanti': ['eu_automotive_omnibus'],
+    'emissiekredieten zware bedrijfsvoertuigen': ['eu_automotive_omnibus'],
 }
 
 

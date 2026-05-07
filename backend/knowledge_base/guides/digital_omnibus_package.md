@@ -13,6 +13,7 @@
 - Regulations repealed: Free Flow of Data, Platform-to-Business, Data Governance Act, Open Data Directive (provisions moved to Data Act)
 - Estimated savings: Up to 1.34 billion euro/year; up to 5.05 billion euro by 2029 (businesses)
 - EPRS Briefing: BRI(2026)782651, "Digital Omnibus on AI" by Maria Niestadt (9 February 2026)
+- **TRILOGUE OUTCOME (7 May 2026)**: provisional inter-institutional agreement on the AI portion of the Digital Omnibus -- procedure 2025/0359(COD). Co-legislators target formal adoption before 2 August 2026. The deal codifies a prohibition on AI systems creating CSAM or non-consensual sexually explicit depictions of identifiable persons (image/video/audio); compliance deadline 2 December 2026. High-risk standalone confirmed at 2 December 2027; product-embedded at 2 August 2028. EP rapporteurs Arba Kokalari (EPP, Sweden) + Michael McNamara (Renew, Ireland). Sources: IP/26/1024, EP press 20260427IPR42011. Full detail in `ai_act_amendments_2026.md`. The COM(2025) 837 (Data + Cybersecurity, including ePrivacy/cookie consent simplification) is on a separate trilogue track and was NOT settled by the 7 May agreement -- BEUC/EDRi vs Visa/Google/Meta lines remain in tension.
 
 Guide for professionals working on EU digital simplification, AI regulation amendments, GDPR reform, data governance consolidation, cybersecurity reporting, and the broader Digital Fitness Check.
 

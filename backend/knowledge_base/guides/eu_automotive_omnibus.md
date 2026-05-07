@@ -11,6 +11,7 @@
 - Legal basis: Article 114 TFEU (internal market); Article 192 TFEU (environment) for climate-related parts
 - EPRS Briefing (14 April 2026): "EU automotive omnibus [EU Legislation in Progress]" -- Ref: EPRS_BLOG_eu-automotive-omnibus
 - EPRS Briefing (13 April 2026): "EU automotive omnibus - 13-04-2026" -- Ref: EPRS_UNK_e49bf37302be
+- **NEW IN OJ (7 May 2026)**: **Regulation (EU) 2026/1046** of the European Parliament and of the Council of 29 April 2026 amending Regulation (EU) 2019/1242 -- as regards the calculation of emission credits for heavy-duty vehicles. CELEX: 32026R1046. Published OJ:L_202601046, 7 May 2026. Companion file to the CO2 Standards Flexibility component for HDVs.
 
 ## Key Components of the Omnibus
 

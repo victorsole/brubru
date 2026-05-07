@@ -17,6 +17,7 @@
 - Key linked initiative: STEP platform (Strategic Technologies for Europe Platform) -- channels cohesion and innovation funds into semiconductor investments
 - Procedure: 2022/0032(COD)
 - Commission proposal: COM(2022) 46 final, 8 February 2022
+- **Chips Act 2.0 (forthcoming)**: announced as part of the 27 May 2026 Tech Sovereignty Package (alongside the Cloud and AI Development Act). EPRS Briefing (5 May 2026): "Chips Act 2.0 - 06-05-2026" -- state-of-play briefing -- the briefing is the companion document for Politico AI Tech Week 2026 Day 3 (Thu 7 May) "Chips, the catch-up race" panel (Jo De Boeck imec, MEP Bart Groothuis Renew/NL, MEP Eva Maydell Paunova EPP/BG). Chips Act 2.0 builds on the original Chips Act and introduces additional levers for the EU's competitive position vs the US (CHIPS and Science Act) and South Korea/Taiwan in advanced node manufacturing.
 
 ## Overview
 

@@ -15,6 +15,7 @@ EU response: Proposed zero-for-zero tariffs on all industrial goods; paused reba
 Pharma impact: Generic pharmaceuticals and their precursors receive MFN-only treatment (no reciprocal tariff); branded pharma subject to baseline 15%
 Key committee: INTA (International Trade)
 Treaty basis: Article 207(2) TFEU (common commercial policy, ordinary legislative procedure)
+**LATEST (6 May 2026)**: **Politico EU reports negotiators failed to agree on a US trade deal** ("EU negotiators fail to agree on US trade deal", politico.eu 6 May 2026). The failure lands two days into the Trump administration's renewed Section-232 push and complicates the EP plenary mandate from 26 March 2026 (Bernd Lange A10-0069/2026 and A10-0070/2026 reports). Watch points: (1) whether the EP Council suspension clause is triggered if the US imposes new tariffs, (2) whether the Council reopens the rebalancing measures pause on steel/aluminium that lapses if the 90-day extension expires, (3) signal from the next INTA committee meeting on whether to formally lift the 21 January 2026 suspension of work.
 EPRS At a Glance (April 2026, PE 785.679): "EU-US Trade and Investment Relations" -- author Györgyi Mácsai. See dedicated section below for full data extract. Ref: EPRS_ATA(2026)785679 (https://www.europarl.europa.eu/RegData/etudes/ATAG/2026/785679/EPRS_ATA(2026)785679_EN.pdf)
 2025 EU-US goods trade: EUR 908 billion (all-time high); services trade: EUR 827 billion
 2025 EU trade surplus in goods: EUR 200 billion (record); EU deficit in services: EUR 139 billion (record)

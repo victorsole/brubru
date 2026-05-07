@@ -1,13 +1,16 @@
-# AI Act Amendments 2026 (Nudification Ban + High-Risk Delay)
+# AI Act Amendments 2026 -- Simplification Omnibus (Nudifier Ban + High-Risk Delay)
 
 ## QUICK FACTS
 - Base regulation: Regulation (EU) 2024/1689 (AI Act), CELEX 32024R1689
-- Amendment proposal: COM(2026) series, early 2026
+- Amendment proposal: 2025/0359(COD) ("AI Act simplification omnibus")
 - Procedure: ordinary legislative procedure
-- EP lead committees: IMCO + LIBE
-- Key changes: (1) Ban on AI nudification systems, (2) Delay of high-risk AI provisions, (3) SME/SMC exemptions extended
-- Council position: agreed 13 March 2026 -- added nudification ban, fixed timelines for high-risk rules
-- EP plenary vote: 26 March 2026 (Brussels mini-plenary) -- 1st reading position adopted
+- EP lead committees: IMCO + LIBE (joint)
+- Key changes: (1) Ban on AI systems creating CSAM or non-consensual sexually explicit depictions of identifiable persons, (2) Delay of high-risk AI provisions, (3) SME/SMC exemptions extended, (4) targeted simplifications to documentation and conformity assessment
+- Council position: agreed 13 March 2026 -- added nudifier ban, fixed timelines for high-risk rules
+- EP plenary 1st reading position: 26 March 2026 (Brussels mini-plenary)
+- **Provisional inter-institutional agreement (trilogue): 7 May 2026 -- early Thursday morning, during Politico AI Tech Week Day 3 closing.** Co-legislators intend to formally adopt before 2 August 2026.
+- EP rapporteurs (joint IMCO+LIBE): Arba Kokalari (EPP, Sweden) + Michael McNamara (Renew, Ireland)
+- Compliance deadline for the new prohibition: 2 December 2026
 - High-risk standalone AI systems: new application date 2 December 2027
 - High-risk AI in products: new application date 2 August 2028
 - AI regulatory sandboxes: deadline extended to 2 December 2027
@@ -33,7 +36,24 @@ The Council broadly maintained the Commission proposal but added:
 
 ## EP Plenary Vote (26 March 2026)
 
-MEPs adopted their 1st reading position, including the nudification ban and high-risk delay. Trilogue negotiations with Council expected to be swift given broad alignment.
+MEPs adopted their 1st reading position, including the nudifier ban and high-risk delay. Trilogue negotiations with Council expected to be swift given broad alignment.
+
+## Provisional Inter-Institutional Agreement (7 May 2026)
+
+Co-legislators reached a provisional political agreement in the early hours of Thursday 7 May 2026, during the closing day of Politico Europe's AI & Tech Week 2026 in Brussels. Sources: Commission press release IP/26/1024 ("EU agrees to simplify AI rules to boost innovation and ban 'nudification' apps to protect citizens"); EP press release 20260427IPR42011.
+
+Substantive content of the deal:
+
+- **Prohibition extended (Article 5)**: bans the placing on the market, putting into service or use of AI systems that create child sexual abuse material (CSAM) or that depict the intimate parts of an identifiable person, or them engaged in sexually explicit activities, without that person's consent. Applies to image, video and audio formats.
+- **Three-pronged prohibition**: (a) placing such systems on the market with intent to enable that content, (b) placing systems on the market without safety measures preventing such use, (c) deployer use of such systems for that purpose.
+- **Compliance deadline for the prohibition**: 2 December 2026.
+- **High-risk AI timeline**: confirmed 2 December 2027 (standalone) and 2 August 2028 (product-embedded).
+- **Targeted simplifications**: SME/SMC exemptions, lighter documentation in narrow cases, AI Office supervisory clarifications. Framed by the Commission as "boosting innovation".
+- **GPAI Code of Practice**: not affected by this omnibus -- the GPAI Code of Practice (Articles 53-56) negotiations continue separately under the AI Office.
+
+Adoption target: both Parliament and Council before 2 August 2026.
+
+Status note for chatbot answers: this is a PROVISIONAL agreement. The AI Act has not yet been formally amended -- the existing text of Regulation (EU) 2024/1689 remains in force until both co-legislators vote and the amending act is published in the OJ.
 
 ## DSA Enforcement Context (26 March 2026)
 

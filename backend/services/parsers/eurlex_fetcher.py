@@ -76,8 +76,10 @@ class EurlexFetcher:
     EURLEX_HTML_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:{celex}"
     EURLEX_XML_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/XML/?uri=CELEX:{celex}"
 
-    # CELEX pattern: e.g., 32024R1689 (year-type-number)
-    CELEX_PATTERN = re.compile(r'^[0-9]{5}[A-Z][0-9]{4}$')
+    # CELEX pattern: e.g., 32024R1689 (adopted) OR 52025PC0836 (proposal -- two letters PC/JC/DC etc.)
+    # Adopted acts use one letter (R/L/D/H/X); proposals + intermediate acts use two letters (PC/JC/DC/SC/IP/IS/DS/SS).
+    # Optional corrigendum suffix R(N) -- e.g. 32019R1009R(15).
+    CELEX_PATTERN = re.compile(r'^[0-9]{5}[A-Z]{1,2}[0-9]{4}(R\([0-9]+\))?$')
 
     def __init__(self, db: Optional[Session] = None, archive_path: Optional[str] = None):
         """
