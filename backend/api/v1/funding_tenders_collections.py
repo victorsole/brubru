@@ -28,6 +28,7 @@ from models.funding_tenders import (
 )
 from models.user import User
 
+from ._body import compose_html_from_sections
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -57,9 +58,15 @@ class FtCallProposalItem(BaseModel):
     target_audience: List[str] = Field(default_factory=list)
     published_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
 
 
 def _proposal_to_item(r: FtCallForProposals) -> FtCallProposalItem:
+    body_html, body_text, has_body = compose_html_from_sections([
+        ("Description", r.description),
+    ])
     return FtCallProposalItem(
         id=str(r.id), topic_id=r.topic_id, call_id=r.call_id,
         framework_programme=r.framework_programme, title=r.title,
@@ -71,6 +78,7 @@ def _proposal_to_item(r: FtCallForProposals) -> FtCallProposalItem:
         documents_url=r.documents_url,
         keywords=list(r.keywords or []), target_audience=list(r.target_audience or []),
         published_at=r.published_at, last_updated=r.last_updated,
+        has_body=has_body, body_html=body_html, body_text=body_text,
     )
 
 
@@ -169,9 +177,15 @@ class FtCallTenderItem(BaseModel):
     cpv_codes: List[str] = Field(default_factory=list)
     published_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
 
 
 def _tender_to_item(r: FtCallForTenders) -> FtCallTenderItem:
+    body_html, body_text, has_body = compose_html_from_sections([
+        ("Description", r.description),
+    ])
     return FtCallTenderItem(
         id=str(r.id), tender_reference=r.tender_reference,
         contracting_authority=r.contracting_authority, title=r.title,
@@ -182,6 +196,7 @@ def _tender_to_item(r: FtCallForTenders) -> FtCallTenderItem:
         source_url=r.source_url, documents_url=r.documents_url,
         cpv_codes=list(r.cpv_codes or []),
         published_at=r.published_at, last_updated=r.last_updated,
+        has_body=has_body, body_html=body_html, body_text=body_text,
     )
 
 
@@ -287,9 +302,20 @@ class FtFundedProjectItem(BaseModel):
     source_url: str
     published_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
+    # Body fields composed from objective + keywords — same pattern as the
+    # `/discover/eurio/projects` listing on the same backing table, kept in
+    # sync so partners get a consistent shape regardless of which surface
+    # they use.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
 
 
 def _project_to_item(r: FtFundedProject) -> FtFundedProjectItem:
+    body_html, body_text, has_body = compose_html_from_sections([
+        ("Objective", r.objective),
+        ("Keywords", getattr(r, "keywords", None)),
+    ])
     return FtFundedProjectItem(
         id=str(r.id), project_id=r.project_id,
         project_acronym=r.project_acronym, title=r.title, objective=r.objective,
@@ -300,6 +326,7 @@ def _project_to_item(r: FtFundedProject) -> FtFundedProjectItem:
         eu_contribution=float(r.eu_contribution) if r.eu_contribution is not None else None,
         cost_currency=r.cost_currency, status=r.status, source_url=r.source_url,
         published_at=r.published_at, last_updated=r.last_updated,
+        has_body=has_body, body_html=body_html, body_text=body_text,
     )
 
 

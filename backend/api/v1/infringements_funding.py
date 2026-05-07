@@ -21,6 +21,7 @@ from core.database import get_db
 from models.infringement_funding import FundingOpportunity, InfringementProcedure
 from models.user import User
 
+from ._body import compose_html_from_sections
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -184,9 +185,19 @@ class FundingItem(BaseModel):
     target_audience: List[str] = Field(default_factory=list)
     published_at: Optional[datetime] = None
     last_updated: Optional[datetime] = None
+    # Body fields composed from short_summary + description (call objective +
+    # scope text, ~4k chars typical). Source is HTML-page-derived but we
+    # don't store the raw HTML, so body_html is composed semantic markup.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
 
 
 def _funding_to_item(r: FundingOpportunity) -> FundingItem:
+    body_html, body_text, has_body = compose_html_from_sections([
+        ("Summary", r.short_summary),
+        ("Description", r.description),
+    ])
     return FundingItem(
         id=str(r.id),
         topic_id=r.topic_id,
@@ -207,6 +218,9 @@ def _funding_to_item(r: FundingOpportunity) -> FundingItem:
         target_audience=list(r.target_audience or []),
         published_at=r.published_at,
         last_updated=r.last_updated,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
     )
 
 
