@@ -12,6 +12,7 @@ export const ApiPage = () => {
   // POST endpoints (legal-text/resolve-*) are documented in /api/docs/endpoints
   // for partners; we intentionally do not surface them on this page.
   const endpoints = [
+    { m: 'GET',  p: '/api/v1/catalan-translations',                           k: 'catalanTranslations' },
     { m: 'GET',  p: '/api/v1/laws',                                           k: 'laws' },
     { m: 'GET',  p: '/api/v1/procedures',                                     k: 'procedures' },
     { m: 'GET',  p: '/api/v1/consultations/by-initiative/{id}/feedback',      k: 'consultations' },
@@ -139,7 +140,7 @@ export const ApiPage = () => {
                 <div>
                   <strong>{t('api.quickstart.step2Title')}</strong>
                   <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?q=METSAF+state+aid&limit=5"`}</code></pre>
+  "https://brubru.beresol.eu/api/v1/laws?q=AI+Act+simplification+omnibus&limit=5"`}</code></pre>
                 </div>
               </div>
               <div className="api-page__step">
@@ -157,7 +158,7 @@ export const ApiPage = () => {
             <h2>{t('api.sections.authentication')}</h2>
             <p>{t('api.auth.description')}</p>
             <pre className="api-page__pre"><code>{`curl -H "Authorization: Bearer brubru_live_..." \\
-  "https://brubru.beresol.eu/api/v1/laws?policy_area=Digital&limit=10"`}</code></pre>
+  "https://brubru.beresol.eu/api/v1/laws?policy_area=Digital+Single+Market&limit=10"`}</code></pre>
             <p className="api-page__note">{t('api.auth.note')}</p>
           </section>
 
@@ -199,8 +200,8 @@ export const ApiPage = () => {
 API_KEY = "brubru_live_..."
 BASE    = "https://brubru.beresol.eu/api/v1"
 
-# Search laws by keyword (today's hot topic: METSAF + Meta DSA + Age Verification, 29 April 2026)
-resp = requests.get(f"{BASE}/laws", params={"q": "METSAF state aid", "limit": 5},
+# Search laws by keyword (today's hot topic: AI Act simplification omnibus 7 May 2026 deal -- proposal 2025/0359(COD))
+resp = requests.get(f"{BASE}/laws", params={"q": "AI Act simplification omnibus", "limit": 5},
                     headers={"Authorization": f"Bearer {API_KEY}"})
 for law in resp.json()["data"]:
     print(f'{law["celex"]}  {law["title"][:80]}')`}</code></pre>
@@ -209,7 +210,7 @@ for law in resp.json()["data"]:
             <pre className="api-page__pre"><code>{`const API_KEY = "brubru_live_...";
 const BASE    = "https://brubru.beresol.eu/api/v1";
 
-const res = await fetch(\`\${BASE}/laws?q=METSAF+state+aid&limit=5\`, {
+const res = await fetch(\`\${BASE}/laws?q=AI+Act+simplification+omnibus&limit=5\`, {
   headers: { Authorization: \`Bearer \${API_KEY}\` },
 });
 const { data } = await res.json();

@@ -564,7 +564,8 @@
       "trial": "Prova Professional gratuita",
       "contact": "Contatta vendite",
       "openRef": "Apri il riferimento",
-      "ping": "/api/v1/ping (pubblico)"
+      "ping": "/api/v1/ping (pubblico)",
+      "openFullDocs": "Apri documentazione completa"
     },
     "sections": {
       "whatYouGet": "Cosa ottieni",
@@ -572,9 +573,11 @@
       "envelope": "Involucro di risposta",
       "pricing": "Prezzi",
       "errors": "Limiti ed errori",
-      "startBuilding": "Inizia a integrare"
+      "startBuilding": "Inizia a integrare",
+      "fullDocs": "Documentazione completa"
     },
     "endpoints": {
+      "catalanTranslations": "8.710 atti vincolanti UE tradotti in catalano (MIT). Dati aperti, senza chiave API. Filtri per tipo, categoria, engine; ricerca full-text.",
       "laws": "Oltre 28.500 leggi UE. Filtri per CELEX, tipo documento, area politica, data pubblicazione, ricerca full-text.",
       "procedures": "Oltre 1.200 dossier legislativi, da proposta ad adozione. Filtri per riferimento OEIL, commissione, relatore, ultimo aggiornamento.",
       "consultations": "Contributi degli stakeholder in diretta dal portale Have Your Say. Paginato con aggregati per paese e tipo.",
@@ -591,21 +594,6 @@
     "envelope": {
       "description": "Ogni endpoint paginato restituisce la stessa struttura. Gli integratori scrivono una volta contro l'involucro e cambiano dataset cambiando il path."
     },
-    "pricing": {
-      "plan": "Piano",
-      "monthly": "Mensile",
-      "api": "API",
-      "rateLimit": "Limite",
-      "chatbot": "Chatbot",
-      "starter": "Starter",
-      "advocate": "Advocate",
-      "professional": "Professional",
-      "included": "Incluso",
-      "yes": "Sì",
-      "annual": "{{price}} annuale",
-      "rate": "{{n}} req/min per chiave",
-      "note": "L'uso solo API non consuma crediti chatbot/IA. Ogni posto Professional può emettere una chiave. Per export massivi, chiavi multiple o SLA personalizzati,"
-    },
     "errors": {
       "code": "Codice",
       "meaning": "Significato",
@@ -617,6 +605,9 @@
       "rateLimited": "Limite superato. Rispetta l'header Retry-After.",
       "upstream": "Portale UE temporaneamente non disponibile (es. Have Your Say, calendario Commissione).",
       "envelopeNote": "Le risposte di errore usano un involucro canonico: { error, reason_code, request_id }. Ogni risposta include anche un header X-Request-Id per la tracciabilità."
+    },
+    "fullDocs": {
+      "lede": "La documentazione completa dell'API vive su un microsite dedicato: introduzione, autenticazione, involucro di risposta, errori, limiti, ogni endpoint documentato con parametri ed esempi curl, matrice delle istituzioni UE coperte, glossario degli acronimi, casi d'uso per ruolo, changelog datato."
     }
   }
 }

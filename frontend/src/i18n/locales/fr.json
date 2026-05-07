@@ -564,7 +564,8 @@
       "trial": "Essai Professional gratuit",
       "contact": "Parler aux ventes",
       "openRef": "Ouvrir la référence",
-      "ping": "/api/v1/ping (public)"
+      "ping": "/api/v1/ping (public)",
+      "openFullDocs": "Ouvrir la documentation complète"
     },
     "sections": {
       "whatYouGet": "Ce que vous obtenez",
@@ -572,9 +573,11 @@
       "envelope": "Enveloppe de réponse",
       "pricing": "Tarifs",
       "errors": "Limites et erreurs",
-      "startBuilding": "Commencer à intégrer"
+      "startBuilding": "Commencer à intégrer",
+      "fullDocs": "Documentation complète"
     },
     "endpoints": {
+      "catalanTranslations": "8 710 textes contraignants de l'UE traduits en catalan (MIT). Données ouvertes, sans clé d'API. Filtres par type, catégorie, moteur ; recherche plein texte.",
       "laws": "Plus de 28 500 textes de loi UE. Filtres par CELEX, type de document, domaine politique, date de publication, recherche plein-texte.",
       "procedures": "Plus de 1 200 dossiers législatifs, de la proposition à l'adoption. Filtres par référence OEIL, commission compétente, rapporteur, dernière mise à jour.",
       "consultations": "Contributions d'acteurs en direct depuis le portail Have Your Say. Paginé avec agrégats par pays et type.",
@@ -591,21 +594,6 @@
     "envelope": {
       "description": "Tous les endpoints paginés renvoient la même structure. Les intégrateurs codent une seule fois contre l'enveloppe et changent de dataset en changeant le chemin."
     },
-    "pricing": {
-      "plan": "Plan",
-      "monthly": "Mensuel",
-      "api": "API",
-      "rateLimit": "Limite",
-      "chatbot": "Chatbot",
-      "starter": "Starter",
-      "advocate": "Advocate",
-      "professional": "Professional",
-      "included": "Inclus",
-      "yes": "Oui",
-      "annual": "{{price}} annuel",
-      "rate": "{{n}} req/min par clé",
-      "note": "L'usage API seul ne consomme pas de crédits chatbot/IA. Chaque siège Professional peut émettre une clé. Pour exports en masse, clés multiples ou SLA sur mesure,"
-    },
     "errors": {
       "code": "Code",
       "meaning": "Signification",
@@ -617,6 +605,9 @@
       "rateLimited": "Limite dépassée. Respectez l'en-tête Retry-After.",
       "upstream": "Portail UE temporairement indisponible (ex. Have Your Say, calendrier de la Commission).",
       "envelopeNote": "Les réponses d'erreur utilisent une enveloppe canonique : { error, reason_code, request_id }. Chaque réponse porte aussi un en-tête X-Request-Id pour la traçabilité."
+    },
+    "fullDocs": {
+      "lede": "La documentation complète de l'API vit sur son propre microsite : introduction, authentification, enveloppe de réponse, erreurs, limites, chaque endpoint documenté avec paramètres et exemples curl, matrice des institutions UE couvertes, glossaire des acronymes, cas d'usage par rôle, changelog daté."
     }
   }
 }

@@ -564,7 +564,8 @@
       "trial": "Prova Professional gratuïta",
       "contact": "Parlar amb vendes",
       "openRef": "Obrir la referència",
-      "ping": "/api/v1/ping (públic)"
+      "ping": "/api/v1/ping (públic)",
+      "openFullDocs": "Obrir documentació completa"
     },
     "sections": {
       "whatYouGet": "Què obtens",
@@ -572,9 +573,11 @@
       "envelope": "Envoltori de resposta",
       "pricing": "Preus",
       "errors": "Límits i errors",
-      "startBuilding": "Comença a integrar"
+      "startBuilding": "Comença a integrar",
+      "fullDocs": "Documentació completa"
     },
     "endpoints": {
+      "catalanTranslations": "8.710 lleis vinculants de la UE traduïdes al català (MIT). Dades obertes, sense clau d'API. Filtres per tipus, categoria, motor; cerca de text.",
       "laws": "Més de 28.500 lleis de la UE. Filtres per CELEX, tipus de document, àmbit polític, data de publicació, cerca de text.",
       "procedures": "Més de 1.200 expedients legislatius, des de proposta fins a adopció. Filtres per referència OEIL, comissió responsable, ponent, darrera actualització.",
       "consultations": "Aportacions d'actors interessats en directe del portal Have Your Say. Paginat amb agregats per país i tipus.",
@@ -591,21 +594,6 @@
     "envelope": {
       "description": "Tots els endpoints paginats retornen la mateixa estructura. Els integradors poden codificar una vegada contra l'envoltori i canviar de dataset canviant la ruta."
     },
-    "pricing": {
-      "plan": "Pla",
-      "monthly": "Mensual",
-      "api": "API",
-      "rateLimit": "Límit",
-      "chatbot": "Xatbot",
-      "starter": "Starter",
-      "advocate": "Advocate",
-      "professional": "Professional",
-      "included": "Inclòs",
-      "yes": "Sí",
-      "annual": "{{price}} anual",
-      "rate": "{{n}} req/min per clau",
-      "note": "L'ús només d'API no consumeix crèdits de xatbot/IA. Cada plaça Professional pot emetre una clau. Per exportacions massives, claus múltiples o SLA a mida,"
-    },
     "errors": {
       "code": "Codi",
       "meaning": "Significat",
@@ -617,6 +605,9 @@
       "rateLimited": "Límit superat. Respecta la capçalera Retry-After.",
       "upstream": "Portal UE temporalment no disponible (p. ex. Have Your Say, calendari de la Comissió).",
       "envelopeNote": "Les respostes d'error utilitzen un envoltori canònic: { error, reason_code, request_id }. Tota resposta inclou també una capçalera X-Request-Id per a traçabilitat."
+    },
+    "fullDocs": {
+      "lede": "La documentació completa de l'API viu en un microsite propi: introducció, autenticació, envoltori de resposta, errors, límits, cada endpoint amb paràmetres i exemples curl, matriu d'institucions UE cobertes, glossari d'acrònims, casos d'ús per rol, i changelog datat."
     }
   }
 }

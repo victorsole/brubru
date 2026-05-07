@@ -101,6 +101,10 @@ active link by adding class="active" to the matching <a>.
     <li><a href="/api/docs/endpoints.html#predictions" data-nav="endpoints-predictions">Predictions</a></li>
     <li><a href="/api/docs/endpoints.html#knowledge-guides" data-nav="endpoints-knowledge-guides">Knowledge guides</a></li>
     <li><a href="/api/docs/endpoints.html#citations" data-nav="endpoints-citations">Verify citation</a></li>
+    <li><a href="/api/docs/endpoints.html#vocabularies" data-nav="endpoints-vocabularies">EU Vocabularies</a></li>
+    <li><a href="/api/docs/endpoints.html#identify" data-nav="endpoints-identify">Identifier resolver</a></li>
+    <li><a href="/api/docs/endpoints.html#ecli" data-nav="endpoints-ecli">ECLI search</a></li>
+    <li><a href="/api/docs/endpoints.html#datasets" data-nav="endpoints-datasets">DCAT-AP self-description</a></li>
   </ul>
 
   <h3>Reference</h3>
@@ -273,6 +277,110 @@ open the <a href="https://brubru-production.up.railway.app/api/docs" target="_bl
 <div class="callout">
 <p>Content can be hundreds of KB for regulations. Use <code>format=plain</code> for LLM input; <code>format=xml</code> if you need structure preserved.</p>
 </div>
+</div>
+
+<h2 id="catalan-translations">Catalan translations</h2>
+
+<div class="callout">
+<p><strong>Open dataset (MIT licence) — no API key required.</strong> The full binding-law EU corpus translated into Catalan by Brubru. Published 7 May 2026 for the Dia d'Europa, this is the first complete Catalan translation of EU legislation. Subject to the global rate limit.</p>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/catalan-translations</span>
+  <span class="badge badge--public">Public</span>
+</div>
+<p class="endpoint__desc">List the binding-law EU corpus translated into Catalan. Filters: <code>q</code>, <code>celex</code>, <code>doc_type</code>, <code>category</code>, <code>category_en</code>, <code>engine</code>, <code>updated_from</code>, <code>updated_to</code>. Excludes OJ C/L-series notice fragments by SQL filter (<code>celex ~ '^3[0-9]{4}[RLD][0-9]{4}$'</code>).</p>
+
+<h4>Query parameters</h4>
+<table class="param-table">
+<thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>q</td><td>string</td><td>Substring search across <code>title_ca</code>, <code>title_en</code>, <code>short_name</code>, <code>celex</code>.</td></tr>
+<tr><td>celex</td><td>string</td><td>Exact CELEX (e.g. <code>32016R0679</code>).</td></tr>
+<tr><td>doc_type</td><td>string</td><td><code>regulation</code>, <code>directive</code>, <code>decision</code>, <code>delegated</code>, <code>implementing</code>, <code>treaty</code>.</td></tr>
+<tr><td>category</td><td>string</td><td>Brubru category (Catalan name) — see <code>/stats</code> for the full list.</td></tr>
+<tr><td>category_en</td><td>string</td><td>Brubru category (English name).</td></tr>
+<tr><td>engine</td><td>string</td><td><code>softcatala</code> (NMT) or <code>sonnet</code> (Claude).</td></tr>
+<tr><td>updated_from</td><td>datetime ISO-8601</td><td>Incremental sync — rows with <code>updated_at &ge; value</code>.</td></tr>
+<tr><td>updated_to</td><td>datetime ISO-8601</td><td>Incremental sync upper bound.</td></tr>
+<tr><td>limit</td><td>int 1-200</td><td>Default 50.</td></tr>
+<tr><td>page</td><td>int &ge; 1</td><td>Default 1.</td></tr>
+</tbody>
+</table>
+
+<pre><code>curl "https://brubru-production.up.railway.app/api/v1/catalan-translations?q=GDPR&limit=3"</code></pre>
+
+<pre><code>{
+  "total": 1, "returned": 1, "page": 1, "limit": 3, "has_more": false,
+  "data": [
+    {
+      "celex": "32016R0679",
+      "doc_type": "regulation",
+      "short_name": "GDPR",
+      "title_ca": "REGLAMENT (UE) 2016/679 DEL PARLAMENT EUROPEU I DEL CONSELL ...",
+      "title_en": "Regulation (EU) 2016/679 of the European Parliament and of the Council ...",
+      "category": "Transformació digital",
+      "category_en": "Digital Transformation",
+      "articles_count": 99,
+      "recitals_count": 173,
+      "engine": "softcatala",
+      "ca_url": "https://brubru.beresol.eu/legislacio-ue-catala/32016R0679/",
+      "source_eurlex_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679"
+    }
+  ]
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/catalan-translations/stats</span>
+  <span class="badge badge--public">Public</span>
+</div>
+<p class="endpoint__desc">Aggregate counts grouped by <code>doc_type</code>, <code>category</code>, and <code>engine</code>. Use this to render a status dashboard or to verify ingestion before pulling pages.</p>
+
+<pre><code>curl "https://brubru-production.up.railway.app/api/v1/catalan-translations/stats"</code></pre>
+
+<pre><code>{
+  "total": 8258,
+  "target": 8710,
+  "coverage_pct": 94.81,
+  "by_doc_type": [
+    { "doc_type": "regulation", "count": 6911 },
+    { "doc_type": "delegated",  "count": 773 },
+    { "doc_type": "directive",  "count": 530 },
+    { "doc_type": "decision",   "count": 39  }
+  ],
+  "by_category": [...],
+  "by_engine": [
+    { "engine": "softcatala", "count": 8255 },
+    { "engine": "sonnet",     "count": 3    }
+  ],
+  "last_translated_at": "2026-05-06T14:50:04",
+  "licence": "MIT"
+}</code></pre>
+</div>
+
+<div class="endpoint">
+<div class="endpoint__head">
+  <span class="badge badge--get">GET</span>
+  <span class="endpoint__path">/api/v1/catalan-translations/{celex}</span>
+  <span class="badge badge--public">Public</span>
+</div>
+<p class="endpoint__desc">Single record by CELEX. Pass <code>?body=html</code> to inline the rendered Catalan HTML body (typically 50-500 KB). Returns <code>404</code> for any CELEX outside the binding-law subset.</p>
+
+<h4>Path parameters</h4>
+<table class="param-table">
+<tbody><tr><td>celex</td><td>string</td><td>CELEX identifier matching <code>^3[0-9]{4}[RLD][0-9]{4}$</code>.</td></tr></tbody>
+</table>
+<h4>Query parameters</h4>
+<table class="param-table">
+<tbody><tr><td>body</td><td>string</td><td>Set to <code>html</code> to inline the rendered HTML in <code>body_html</code>. Omitted by default — consumers can fetch <code>ca_url</code> directly.</td></tr></tbody>
+</table>
+
+<pre><code>curl "https://brubru-production.up.railway.app/api/v1/catalan-translations/32016R0679?body=html"</code></pre>
 </div>
 
 <h2 id="procedures">Procedures</h2>
@@ -1004,6 +1112,52 @@ open the <a href="https://brubru-production.up.railway.app/api/docs" target="_bl
 <div class="endpoint">
 <div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/citations/verify</span><span class="badge badge--auth">Auth</span></div>
 <pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/citations/verify?q=Regulation+(EU)+2016%2F679"</code></pre>
+</div>
+
+<h2 id="vocabularies">EU Vocabularies</h2>
+<p>Search the EU's official Authority Tables &mdash; corporate bodies (DGs, agencies, EU institutions), legislative procedures (COD, CNS, APP, etc.), document directories, modification types. Returns multilingual labels in the six languages Brubru supports.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/corporate-bodies</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/vocabularies/corporate-bodies?q=CNECT&amp;lang=en"</code></pre>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/procedures</span><span class="badge badge--auth">Auth</span></div>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/directories</span><span class="badge badge--auth">Auth</span></div>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/vocabularies/modification-types</span><span class="badge badge--auth">Auth</span></div>
+</div>
+
+<h2 id="identify">Identifier resolver</h2>
+<p>Recognise EU identifiers (CELEX, ELI, ECLI, EuroVoc URI, NAL URI, OJ reference, ISBN, ISSN, DOI, catalogue number) anchored or embedded in free text. Use <code>/identify/{ref}</code> for a single ref, <code>/identify/scan</code> to extract every embedded identifier from a paragraph.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/identify/{ref}</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/identify/32016R0679"</code></pre>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--post">POST</span><span class="endpoint__path">/api/v1/identify/scan</span><span class="badge badge--auth">Auth</span></div>
+</div>
+
+<h2 id="ecli">ECLI search</h2>
+<p>Resolve a European Case Law Identifier to a canonical deep-link. CJEU-aware (Court of Justice of the EU rulings) with fallback to e-Justice for national courts.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/v1/discover/ecli/{ecli}</span><span class="badge badge--auth">Auth</span></div>
+<pre><code>curl -H "Authorization: Bearer $KEY" "https://brubru-production.up.railway.app/api/v1/discover/ecli/ECLI:EU:C:2014:317"</code></pre>
+</div>
+
+<h2 id="datasets">DCAT-AP self-description</h2>
+<p>Brubru describes its own datasets in the same DCAT-AP profile that data.europa.eu harvesters expect. Useful if your platform consumes EU data catalogues and wants to register Brubru as a source.</p>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/datasets.ttl</span></div>
+<pre><code>curl "https://brubru-production.up.railway.app/api/datasets.ttl"</code></pre>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/datasets.rdf</span></div>
+</div>
+<div class="endpoint">
+<div class="endpoint__head"><span class="badge badge--get">GET</span><span class="endpoint__path">/api/datasets.json</span></div>
 </div>
 
 <h2>Next</h2>

@@ -564,7 +564,8 @@
       "trial": "Prueba Professional gratuita",
       "contact": "Hablar con ventas",
       "openRef": "Abrir la referencia",
-      "ping": "/api/v1/ping (público)"
+      "ping": "/api/v1/ping (público)",
+      "openFullDocs": "Abrir documentación completa"
     },
     "sections": {
       "whatYouGet": "Qué obtienes",
@@ -572,9 +573,11 @@
       "envelope": "Envoltura de respuesta",
       "pricing": "Precios",
       "errors": "Límites y errores",
-      "startBuilding": "Empieza a integrar"
+      "startBuilding": "Empieza a integrar",
+      "fullDocs": "Documentación completa"
     },
     "endpoints": {
+      "catalanTranslations": "8.710 leyes vinculantes de la UE traducidas al catalán (MIT). Datos abiertos, sin clave de API. Filtros por tipo, categoría, motor; búsqueda de texto.",
       "laws": "Más de 28.500 leyes de la UE. Filtros por CELEX, tipo de documento, área de política, fecha de publicación, búsqueda de texto.",
       "procedures": "Más de 1.200 expedientes legislativos, desde propuesta hasta adopción. Filtros por referencia OEIL, comisión responsable, ponente, última actualización.",
       "consultations": "Aportaciones de partes interesadas en vivo del portal Have Your Say. Paginado con agregados por país y tipo.",
@@ -591,21 +594,6 @@
     "envelope": {
       "description": "Todos los endpoints paginados devuelven la misma estructura. Los integradores pueden codificar una vez contra la envoltura y cambiar de dataset cambiando la ruta."
     },
-    "pricing": {
-      "plan": "Plan",
-      "monthly": "Mensual",
-      "api": "API",
-      "rateLimit": "Límite",
-      "chatbot": "Chatbot",
-      "starter": "Starter",
-      "advocate": "Advocate",
-      "professional": "Professional",
-      "included": "Incluido",
-      "yes": "Sí",
-      "annual": "{{price}} anual",
-      "rate": "{{n}} req/min por clave",
-      "note": "El uso solo de API no consume créditos de chatbot/IA. Cada asiento Professional puede emitir una clave. Para exportaciones masivas, múltiples claves o SLA personalizados,"
-    },
     "errors": {
       "code": "Código",
       "meaning": "Significado",
@@ -617,6 +605,9 @@
       "rateLimited": "Límite superado. Respeta la cabecera Retry-After.",
       "upstream": "Portal UE temporalmente no disponible (ej. Have Your Say, calendario de la Comisión).",
       "envelopeNote": "Las respuestas de error usan una envoltura canónica: { error, reason_code, request_id }. Toda respuesta incluye además una cabecera X-Request-Id para trazabilidad."
+    },
+    "fullDocs": {
+      "lede": "La documentación completa de la API vive en un microsite propio: introducción, autenticación, envoltura de respuesta, errores, límites, cada endpoint con parámetros y ejemplos curl, matriz de instituciones UE cubiertas, glosario de acrónimos, casos de uso por rol, y changelog datado."
     }
   }
 }

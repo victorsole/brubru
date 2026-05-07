@@ -564,7 +564,8 @@
       "trial": "Start a Professional trial",
       "contact": "Contact sales",
       "openRef": "Open the reference",
-      "ping": "/api/v1/ping (public)"
+      "ping": "/api/v1/ping (public)",
+      "openFullDocs": "Open full docs"
     },
     "sections": {
       "whatYouGet": "What you get",
@@ -574,7 +575,8 @@
       "examples": "Code examples",
       "pricing": "Pricing",
       "errors": "Rate limits and errors",
-      "startBuilding": "Start building"
+      "startBuilding": "Start building",
+      "fullDocs": "Full documentation"
     },
     "sidebar": {
       "onThisPage": "On this page"
@@ -593,6 +595,7 @@
       "mcpDescription": "Brubru exposes a Model Context Protocol (MCP) server. Connect it to Claude, ChatGPT, Gemini, Mistral, or any MCP-compatible AI agent to give your assistant live EU legislative intelligence."
     },
     "endpoints": {
+      "catalanTranslations": "8,710 binding EU laws translated into Catalan (MIT). Open data — no API key required. Filter by doc_type, category, engine; full-text search.",
       "laws": "28,500+ adopted EU laws. Filters by CELEX, doc type, policy area, publication date, full-text search.",
       "procedures": "1,200+ legislative files from proposal to adoption. Filters by OEIL reference, lead committee, rapporteur, last-update.",
       "consultations": "Live stakeholder contributions from the EC Have Your Say portal. Paginated with country and user-type aggregates.",
@@ -609,21 +612,6 @@
     "envelope": {
       "description": "Every paginated endpoint returns the same shape. Partners can code once against the envelope and swap datasets by changing the path."
     },
-    "pricing": {
-      "plan": "Plan",
-      "monthly": "Monthly",
-      "api": "API",
-      "rateLimit": "Rate limit",
-      "chatbot": "Chatbot",
-      "starter": "Starter",
-      "advocate": "Advocate",
-      "professional": "Professional",
-      "included": "Included",
-      "yes": "Yes",
-      "annual": "{{price}} annual",
-      "rate": "{{n}} req / min per key",
-      "note": "API-only usage does not consume chatbot/AI credits. Each Professional seat can mint one API key. For bulk exports, multiple keys, or custom SLAs,"
-    },
     "errors": {
       "code": "Code",
       "meaning": "Meaning",
@@ -635,6 +623,9 @@
       "rateLimited": "Rate limit exceeded. Respect the Retry-After header.",
       "upstream": "Upstream EU portal temporarily unavailable (e.g. Have Your Say, Commission calendar).",
       "envelopeNote": "Error responses use a canonical envelope: { error, reason_code, request_id }. Every response also carries an X-Request-Id header for support traceability."
+    },
+    "fullDocs": {
+      "lede": "The full API reference lives on its own microsite: introduction, authentication, response envelope, errors, rate limits, every endpoint documented with parameters and curl examples, a matrix of every EU institution we ingest from, a glossary for every acronym, role-specific use cases, and a dated changelog."
     }
   }
 }

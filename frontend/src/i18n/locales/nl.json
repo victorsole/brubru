@@ -564,7 +564,8 @@
       "trial": "Start een Professional proef",
       "contact": "Neem contact op",
       "openRef": "Open de referentie",
-      "ping": "/api/v1/ping (publiek)"
+      "ping": "/api/v1/ping (publiek)",
+      "openFullDocs": "Volledige documentatie openen"
     },
     "sections": {
       "whatYouGet": "Wat je krijgt",
@@ -572,9 +573,11 @@
       "envelope": "Responsenvelop",
       "pricing": "Prijzen",
       "errors": "Limieten en fouten",
-      "startBuilding": "Begin met bouwen"
+      "startBuilding": "Begin met bouwen",
+      "fullDocs": "Volledige documentatie"
     },
     "endpoints": {
+      "catalanTranslations": "8.710 bindende EU-wetten vertaald naar het Catalaans (MIT). Open data — geen API-sleutel nodig. Filters op type, categorie, engine; full-text zoeken.",
       "laws": "Ruim 28.500 aangenomen EU-wetten. Filters op CELEX, doctype, beleidsgebied, publicatiedatum, volledige-tekst zoeken.",
       "procedures": "Ruim 1.200 wetgevingsdossiers, van voorstel tot aanname. Filters op OEIL-referentie, hoofdcommissie, rapporteur, laatste update.",
       "consultations": "Live bijdragen van belanghebbenden via het Have Your Say-portaal. Gepagineerd met aggregaten per land en type.",
@@ -591,21 +594,6 @@
     "envelope": {
       "description": "Elk gepagineerd eindpunt retourneert dezelfde vorm. Integrators coderen één keer tegen de envelop en wisselen van dataset door het pad te wijzigen."
     },
-    "pricing": {
-      "plan": "Plan",
-      "monthly": "Maandelijks",
-      "api": "API",
-      "rateLimit": "Limiet",
-      "chatbot": "Chatbot",
-      "starter": "Starter",
-      "advocate": "Advocate",
-      "professional": "Professional",
-      "included": "Inbegrepen",
-      "yes": "Ja",
-      "annual": "{{price}} jaarlijks",
-      "rate": "{{n}} req/min per sleutel",
-      "note": "Alleen-API-gebruik verbruikt geen chatbot/AI-credits. Elke Professional-seat kan één sleutel uitgeven. Voor bulkexports, meerdere sleutels of aangepaste SLA's,"
-    },
     "errors": {
       "code": "Code",
       "meaning": "Betekenis",
@@ -617,6 +605,9 @@
       "rateLimited": "Limiet overschreden. Respecteer de Retry-After header.",
       "upstream": "EU-portaal tijdelijk onbeschikbaar (bijv. Have Your Say, Commissie-agenda).",
       "envelopeNote": "Foutresponsen gebruiken een canonieke envelop: { error, reason_code, request_id }. Elke response bevat ook een X-Request-Id header voor traceerbaarheid."
+    },
+    "fullDocs": {
+      "lede": "De volledige API-documentatie staat op een eigen microsite: introductie, authenticatie, responsenvelop, fouten, limieten, elk endpoint gedocumenteerd met parameters en curl-voorbeelden, matrix van EU-instellingen, woordenlijst, use cases per rol, en gedateerd changelog."
     }
   }
 }
