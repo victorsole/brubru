@@ -82,6 +82,54 @@ async def _fetch_list(country=None, group=None, name=None, term=10, limit=100, o
     return rows
 
 
+async def _fetch_total_count(country=None, group=None, name=None, term=10) -> int:
+    """Paginate the EP Open Data /meps endpoint exhaustively to count MEPs
+    matching the given filters. Cached for 6h so it costs ~2-3 upstream
+    requests per cache cycle (current term has ~720 MEPs; EP API caps at
+    limit=500 per call).
+
+    Returns -1 on upstream failure so callers can fall back to a heuristic.
+    """
+    key = f"total:{country}:{group}:{name}:{term}"
+    cached = _cached(key)
+    if cached is not None:
+        return cached
+
+    headers = {"User-Agent": "Brubru/1.0", "Accept": "application/ld+json"}
+    PAGE = 500
+    seen = 0
+    offset = 0
+    try:
+        async with httpx.AsyncClient(timeout=20.0) as hc:
+            for _ in range(20):  # safety cap (10,000 MEPs is more than enough)
+                params: Dict[str, Any] = {
+                    "limit": PAGE,
+                    "offset": offset,
+                    "format": "application/ld+json",
+                    "parliamentary-term": term,
+                }
+                if country:
+                    params["country-of-representation"] = country.upper()
+                if group:
+                    params["political-group"] = group
+                r = await hc.get(f"{EP_API_BASE}/meps", params=params, headers=headers)
+                r.raise_for_status()
+                data = r.json()
+                rows = data.get("data") if isinstance(data, dict) else []
+                if not isinstance(rows, list) or not rows:
+                    break
+                seen += len(rows)
+                if len(rows) < PAGE:
+                    break  # last page
+                offset += PAGE
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("[meps] total-count fetch failed: %s", exc)
+        return -1
+
+    _put(key, seen)
+    return seen
+
+
 async def _fetch_profile(mep_id: str) -> Optional[Dict[str, Any]]:
     key = f"profile:{mep_id}"
     cached = _cached(key)
@@ -252,12 +300,18 @@ async def list_meps(
         data = await _enrich_country_group(data)
     except Exception as exc:  # noqa: BLE001
         logger.warning("[meps] hydration skipped: %s", exc)
-    # EP Open Data doesn't return a total count; we expose what we fetched and flag
-    # coverage_complete=False so clients know pagination is unbounded from our side.
-    total = offset + len(data)
-    if len(data) == limit:
-        total += 1  # hint there might be more
-    return build_envelope(data, total=total, page=page, limit=limit, coverage_complete=False)
+
+    # Real total count from upstream — paginate exhaustively (cached 6h).
+    # Falls back to the offset+len heuristic if upstream is unavailable, so
+    # the endpoint never blocks on the count call.
+    total = await _fetch_total_count(country=country, group=group, name=name, term=term)
+    coverage_complete = True
+    if total < 0:
+        total = offset + len(data)
+        if len(data) == limit:
+            total += 1  # hint there might be more
+        coverage_complete = False
+    return build_envelope(data, total=total, page=page, limit=limit, coverage_complete=coverage_complete)
 
 
 @router.get(

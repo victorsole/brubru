@@ -17,6 +17,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 
+from ._body import DEFAULT_HAS_BODY_THRESHOLD, body_threshold_param
 from ._deps import api_user_with_rate_limit
 
 logger = logging.getLogger(__name__)
@@ -32,6 +33,50 @@ class RecitalArticleMapResponse(BaseModel):
 class DefinedTermsResponse(BaseModel):
     celex: str
     terms: dict = Field(..., description="Term -> {term, definition, article, point}")
+    # Body fields composed from the concatenated definitions, useful as a
+    # standalone glossary view of the law. body_html is a semantic <dl> with
+    # one <dt>/<dd> pair per term; body_text is a plain-text rendering.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+
+
+def _compose_definitions_body(terms: dict, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):
+    """Compose body_html / body_text / has_body from the defined-terms dict.
+
+    Builds:
+      body_html — <dl><dt>{term}</dt><dd>{definition}</dd>…</dl>, optionally
+                  grouped by article when articles vary.
+      body_text — "term — definition" lines, blank-line separated.
+    Honest empties: returns (None, None, False) when terms is empty.
+    """
+    from html import escape
+
+    if not terms or not isinstance(terms, dict):
+        return None, None, False
+
+    # Iterate in insertion order (typically article order from the parser).
+    dt_dd = []
+    text_lines = []
+    for key, entry in terms.items():
+        if not isinstance(entry, dict):
+            continue
+        term = (entry.get("term") or key or "").strip()
+        defn = (entry.get("definition") or "").strip()
+        article = (entry.get("article") or "").strip()
+        if not term or not defn:
+            continue
+        anchor = f" <small>({escape(article)})</small>" if article else ""
+        dt_dd.append(f"<dt>{escape(term)}{anchor}</dt><dd>{escape(defn)}</dd>")
+        text_lines.append(f"{term}{f' ({article})' if article else ''} — {defn}")
+
+    if not dt_dd:
+        return None, None, False
+
+    body_html = f"<article><h2>Defined terms</h2><dl>{''.join(dt_dd)}</dl></article>"
+    body_text = "\n\n".join(text_lines)
+    has_body = len(body_text) >= threshold
+    return body_html, body_text, has_body
 
 
 class ResolveRefsRequest(BaseModel):
@@ -127,6 +172,7 @@ def recital_article_map(
 def defined_terms(
     celex: str,
     force_recompute: bool = Query(False),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> DefinedTermsResponse:
@@ -138,7 +184,11 @@ def defined_terms(
             status_code=status.HTTP_404_NOT_FOUND,
             detail={"error": "not_found", "detail": f"CELEX {celex} not available", "resource": "law", "id": celex},
         )
-    return DefinedTermsResponse(celex=celex, terms=mapping)
+    body_html, body_text, has_body = _compose_definitions_body(mapping, threshold=body_threshold)
+    return DefinedTermsResponse(
+        celex=celex, terms=mapping,
+        has_body=has_body, body_html=body_html, body_text=body_text,
+    )
 
 
 @router.post(
