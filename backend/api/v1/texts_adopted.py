@@ -20,6 +20,7 @@ from core.database import get_db
 from models.text_adopted import TextAdopted
 from models.user import User
 
+from ._body import body_from_pdf_text, body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -49,15 +50,22 @@ class TextItem(BaseModel):
     full_text_url: Optional[str] = None
     pdf_url: Optional[str] = None
     last_updated: Optional[datetime] = None
+    # Body fields composed from `full_text` (PDF-extracted plain text from
+    # doceo PDF). PDF-sourced rows return body_html=null per the contract.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+    # Deprecated alias kept one release; equals body_text. Same for
+    # has_full_text → has_body.
     has_full_text: bool = False
-    # Body text only populated on the DETAIL endpoint to keep list responses
-    # small. List rows expose `has_full_text` so partners can know whether the
-    # text is available before drilling in.
     full_text: Optional[str] = None
 
 
-def _row_to_item(r: TextAdopted, include_body: bool = False) -> TextItem:
-    body = (r.full_text or "") if include_body else None
+def _row_to_item(
+    r: TextAdopted,
+    body_threshold: int = 500,
+) -> TextItem:
+    body_html, body_text, has_body = body_from_pdf_text(r.full_text, threshold=body_threshold)
     return TextItem(
         id=str(r.id),
         ta_reference=r.ta_reference,
@@ -77,8 +85,12 @@ def _row_to_item(r: TextAdopted, include_body: bool = False) -> TextItem:
         full_text_url=r.full_text_url,
         pdf_url=r.pdf_url,
         last_updated=r.last_updated,
-        has_full_text=bool(r.full_text and len(r.full_text) > 500),
-        full_text=body,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
+        # Deprecated aliases kept one release.
+        has_full_text=has_body,
+        full_text=body_text,
     )
 
 
@@ -134,6 +146,7 @@ async def list_texts_adopted(
     updated_end: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TextItem]:
@@ -176,7 +189,7 @@ async def list_texts_adopted(
     rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
 
     return build_envelope(
-        [_row_to_item(r) for r in rows],
+        [_row_to_item(r, body_threshold=body_threshold) for r in rows],
         total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
         updated_from=updated_from, updated_to=updated_to,
@@ -190,6 +203,7 @@ async def list_texts_adopted(
 )
 async def get_text_adopted_detail(
     ta_reference: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> TextItem:
@@ -201,7 +215,7 @@ async def get_text_adopted_detail(
             "resource": "text_adopted",
             "id": ta_reference,
         })
-    return _row_to_item(r, include_body=True)
+    return _row_to_item(r, body_threshold=body_threshold)
 
 
 @texts_submitted_router.get(
@@ -226,6 +240,7 @@ async def list_texts_submitted(
     updated_end: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TextItem]:
@@ -267,7 +282,7 @@ async def list_texts_submitted(
     )
 
     return build_envelope(
-        [_row_to_item(r) for r in rows],
+        [_row_to_item(r, body_threshold=body_threshold) for r in rows],
         total=total, page=page, limit=limit,
         updated_from=updated_from, updated_to=updated_to,
     )

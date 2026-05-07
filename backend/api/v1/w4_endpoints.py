@@ -665,6 +665,38 @@ class TRISNotificationItem(BaseModel):
     policy_areas: list = Field(default_factory=list)
     related_celex: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    # Body fields composed from main_content + full_text_summary +
+    # short_summary (sections of the TRIS notification text). HTML-source
+    # composer wraps each populated field as a labelled section.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+
+
+def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNotificationItem:
+    from ._body import compose_html_from_sections
+    body_html, body_text, has_body = compose_html_from_sections([
+        ("Main content", r.main_content),
+        ("Full text summary", r.full_text_summary),
+        ("Short summary", r.short_summary),
+    ], threshold=body_threshold)
+    return TRISNotificationItem(
+        id=str(r.id), notification_number=r.notification_number,
+        notifying_country=r.notifying_country, title=r.title,
+        short_summary=r.short_summary, full_text_summary=r.full_text_summary,
+        notification_date=r.notification_date,
+        standstill_until=r.standstill_until,
+        sector=r.sector, products_or_services=r.products_or_services,
+        main_content=r.main_content,
+        commission_observations_url=r.commission_observations_url,
+        member_state_observations=list(r.member_state_observations or []),
+        detailed_opinions=list(r.detailed_opinions or []),
+        source_url=r.source_url, pdf_url=r.pdf_url,
+        policy_areas=list(r.policy_areas or []),
+        related_celex=list(r.related_celex or []),
+        last_updated=r.last_updated,
+        has_body=has_body, body_html=body_html, body_text=body_text,
+    )
 
 
 @tris_router.get(
@@ -688,6 +720,7 @@ async def list_tris_notifications(
     updated_from: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[TRISNotificationItem]:
@@ -718,26 +751,7 @@ async def list_tris_notifications(
         query.order_by(TRISNotification.notification_date.desc())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [
-        TRISNotificationItem(
-            id=str(r.id),
-            notification_number=r.notification_number,
-            notifying_country=r.notifying_country, title=r.title,
-            short_summary=r.short_summary, full_text_summary=r.full_text_summary,
-            notification_date=r.notification_date,
-            standstill_until=r.standstill_until,
-            sector=r.sector, products_or_services=r.products_or_services,
-            main_content=r.main_content,
-            commission_observations_url=r.commission_observations_url,
-            member_state_observations=list(r.member_state_observations or []),
-            detailed_opinions=list(r.detailed_opinions or []),
-            source_url=r.source_url, pdf_url=r.pdf_url,
-            policy_areas=list(r.policy_areas or []),
-            related_celex=list(r.related_celex or []),
-            last_updated=r.last_updated,
-        )
-        for r in rows
-    ]
+    data = [_tris_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from)
@@ -750,6 +764,7 @@ async def list_tris_notifications(
 )
 async def get_tris_detail(
     notification_number: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> TRISNotificationItem:
@@ -761,18 +776,4 @@ async def get_tris_detail(
             "resource": "tris_notification",
             "id": notification_number,
         })
-    return TRISNotificationItem(
-        id=str(r.id), notification_number=r.notification_number,
-        notifying_country=r.notifying_country, title=r.title,
-        short_summary=r.short_summary, full_text_summary=r.full_text_summary,
-        notification_date=r.notification_date, standstill_until=r.standstill_until,
-        sector=r.sector, products_or_services=r.products_or_services,
-        main_content=r.main_content,
-        commission_observations_url=r.commission_observations_url,
-        member_state_observations=list(r.member_state_observations or []),
-        detailed_opinions=list(r.detailed_opinions or []),
-        source_url=r.source_url, pdf_url=r.pdf_url,
-        policy_areas=list(r.policy_areas or []),
-        related_celex=list(r.related_celex or []),
-        last_updated=r.last_updated,
-    )
+    return _tris_to_item(r, body_threshold=body_threshold)
