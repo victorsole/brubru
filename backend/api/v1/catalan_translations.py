@@ -100,17 +100,40 @@ def _fetch_ca_body_html(celex: str, ca_url: str) -> Optional[str]:
         except OSError as exc:
             logger.warning("disk read failed for %s: %s", celex, exc)
 
-    # HTTP fetch from SiteGround (production)
+    # HTTP fetch from SiteGround (production). Use urllib over httpx because
+    # httpx had silent failures on Railway egress; urllib + explicit logging
+    # surfaces the failure mode (DNS / TLS / rate-limit / 403) instead of
+    # swallowing it.
+    import urllib.request
+    import urllib.error
+
     try:
-        with httpx.Client(timeout=15.0, follow_redirects=True) as client:
-            r = client.get(ca_url, headers={"User-Agent": "Brubru/1.0", "Accept": "text/html"})
-            if r.status_code == 200 and len(r.content) > 500:
-                html = r.text
+        req = urllib.request.Request(
+            ca_url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (compatible; Brubru/1.0; +https://brubru.beresol.eu)",
+                "Accept": "text/html,application/xhtml+xml",
+                "Accept-Language": "ca,en;q=0.9",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            status = resp.status
+            content = resp.read()
+            if status == 200 and len(content) > 500:
+                html = content.decode("utf-8", errors="replace")
                 _cache_body(celex, html)
+                logger.info("ca_url fetch ok for %s: %d bytes", celex, len(content))
                 return html
-            logger.info("ca_url fetch for %s: HTTP %s, %d bytes", celex, r.status_code, len(r.content))
+            logger.warning(
+                "ca_url fetch for %s: HTTP %s, %d bytes (too short or non-200)",
+                celex, status, len(content),
+            )
+    except urllib.error.HTTPError as exc:
+        logger.warning("ca_url HTTPError for %s [%s]: %s — %s", celex, ca_url, exc.code, exc.reason)
+    except urllib.error.URLError as exc:
+        logger.warning("ca_url URLError for %s [%s]: %s", celex, ca_url, exc.reason)
     except Exception as exc:
-        logger.warning("HTTP fetch failed for %s: %s", celex, exc)
+        logger.warning("ca_url fetch failed for %s [%s]: %s", celex, ca_url, exc)
 
     return None
 
