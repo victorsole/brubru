@@ -116,6 +116,10 @@ def main():
         text = extract_pdf(pdf)
         if not text or len(text) < MIN_BODY_LEN:
             continue
+        # Some EU PDFs ship with literal NUL bytes in extracted text; PostgreSQL
+        # rejects them in TEXT columns. Strip before write.
+        if "\x00" in text:
+            text = text.replace("\x00", "")
         extracted += 1
         if args.apply:
             try:

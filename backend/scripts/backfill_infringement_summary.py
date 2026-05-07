@@ -114,6 +114,9 @@ def main():
             if i <= 5:
                 print(f"  [{i:4}/{len(rows)}] {ref}: text too short ({len(text or '')}c)", flush=True)
             continue
+        # PostgreSQL TEXT columns reject literal NUL bytes.
+        if "\x00" in text:
+            text = text.replace("\x00", "")
         extracted += 1
         if args.apply:
             try:
