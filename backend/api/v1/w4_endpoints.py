@@ -68,6 +68,45 @@ class ParliamentaryQuestionItem(BaseModel):
     source_url: Optional[str] = None
     answer_url: Optional[str] = None
     last_updated: Optional[datetime] = None
+    # Body fields composed from text_question + text_answer (typically
+    # 1k-3k chars total when both populated). Semantic <article> with
+    # "Question" + "Answer" sections.
+    has_body: bool = False
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+
+
+def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> ParliamentaryQuestionItem:
+    from ._body import compose_html_from_sections
+    body_html, body_text, has_body = compose_html_from_sections([
+        ("Question", r.text_question),
+        ("Answer", r.text_answer),
+    ], threshold=body_threshold)
+    return ParliamentaryQuestionItem(
+        id=str(r.id),
+        question_reference=r.question_reference,
+        question_type=r.question_type.value if hasattr(r.question_type, "value") else str(r.question_type),
+        parliamentary_term=int(r.parliamentary_term or 10),
+        subject=r.subject,
+        text_question=r.text_question,
+        text_answer=r.text_answer,
+        submitted_date=r.submitted_date,
+        answered_date=r.answered_date,
+        asking_mep_ids=list(r.asking_mep_ids or []),
+        asking_mep_names=list(r.asking_mep_names or []),
+        answering_institution=r.answering_institution,
+        answering_commissioner=r.answering_commissioner,
+        committees=list(r.committees or []),
+        procedure_ref=r.procedure_ref,
+        related_celex=list(r.related_celex or []),
+        policy_areas=list(r.policy_areas or []),
+        source_url=r.source_url,
+        answer_url=r.answer_url,
+        last_updated=r.last_updated,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
+    )
 
 
 @parl_q_router.get(
@@ -94,6 +133,7 @@ async def list_parliamentary_questions(
     updated_from: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ParliamentaryQuestionItem]:
@@ -132,31 +172,7 @@ async def list_parliamentary_questions(
         query.order_by(ParliamentaryQuestion.submitted_date.desc().nullslast())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [
-        ParliamentaryQuestionItem(
-            id=str(r.id),
-            question_reference=r.question_reference,
-            question_type=r.question_type.value if hasattr(r.question_type, "value") else str(r.question_type),
-            parliamentary_term=int(r.parliamentary_term or 10),
-            subject=r.subject,
-            text_question=r.text_question,
-            text_answer=r.text_answer,
-            submitted_date=r.submitted_date,
-            answered_date=r.answered_date,
-            asking_mep_ids=list(r.asking_mep_ids or []),
-            asking_mep_names=list(r.asking_mep_names or []),
-            answering_institution=r.answering_institution,
-            answering_commissioner=r.answering_commissioner,
-            committees=list(r.committees or []),
-            procedure_ref=r.procedure_ref,
-            related_celex=list(r.related_celex or []),
-            policy_areas=list(r.policy_areas or []),
-            source_url=r.source_url,
-            answer_url=r.answer_url,
-            last_updated=r.last_updated,
-        )
-        for r in rows
-    ]
+    data = [_parl_q_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from)
@@ -169,6 +185,7 @@ async def list_parliamentary_questions(
 )
 async def get_parl_question_detail(
     question_reference: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> ParliamentaryQuestionItem:
@@ -180,28 +197,7 @@ async def get_parl_question_detail(
             "resource": "parliamentary_question",
             "id": question_reference,
         })
-    return ParliamentaryQuestionItem(
-        id=str(r.id),
-        question_reference=r.question_reference,
-        question_type=r.question_type.value if hasattr(r.question_type, "value") else str(r.question_type),
-        parliamentary_term=int(r.parliamentary_term or 10),
-        subject=r.subject,
-        text_question=r.text_question,
-        text_answer=r.text_answer,
-        submitted_date=r.submitted_date,
-        answered_date=r.answered_date,
-        asking_mep_ids=list(r.asking_mep_ids or []),
-        asking_mep_names=list(r.asking_mep_names or []),
-        answering_institution=r.answering_institution,
-        answering_commissioner=r.answering_commissioner,
-        committees=list(r.committees or []),
-        procedure_ref=r.procedure_ref,
-        related_celex=list(r.related_celex or []),
-        policy_areas=list(r.policy_areas or []),
-        source_url=r.source_url,
-        answer_url=r.answer_url,
-        last_updated=r.last_updated,
-    )
+    return _parl_q_to_item(r, body_threshold=body_threshold)
 
 
 # ============================================================================
