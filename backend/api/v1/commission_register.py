@@ -22,7 +22,12 @@ from core.database import get_db
 from models.commission_document import CommissionDocument
 from models.user import User
 
-from ._body import body_from_pdf_text, deprecated_body
+from ._body import (
+    DEFAULT_HAS_BODY_THRESHOLD,
+    body_from_pdf_text,
+    body_threshold_param,
+    deprecated_body,
+)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -56,13 +61,16 @@ class CommissionRegisterItem(BaseModel):
     body: Optional[str] = None
 
 
-def _row_to_item(r: CommissionDocument) -> CommissionRegisterItem:
+def _row_to_item(
+    r: CommissionDocument,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> CommissionRegisterItem:
     # Derive a fallback PDF URL via EUR-Lex's PDF endpoint — it returns 202
     # while building the PDF then 200 on retry. Valid for any adopted CELEX.
     pdf = r.pdf_url
     if pdf is None and r.celex:
         pdf = f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{r.celex}"
-    body_html, body_text, has_body = body_from_pdf_text(r.text_body)
+    body_html, body_text, has_body = body_from_pdf_text(r.text_body, threshold=body_threshold)
     return CommissionRegisterItem(
         id=str(r.id),
         reference=r.reference,
@@ -117,6 +125,7 @@ async def list_commission_register_documents(
     updated_end: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[CommissionRegisterItem]:
@@ -176,7 +185,7 @@ async def list_commission_register_documents(
     rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
 
     return build_envelope(
-        [_row_to_item(r) for r in rows],
+        [_row_to_item(r, body_threshold=body_threshold) for r in rows],
         total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
         updated_from=updated_from, updated_to=updated_to,
@@ -190,6 +199,7 @@ async def list_commission_register_documents(
 )
 async def get_commission_register_detail(
     reference: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> CommissionRegisterItem:
@@ -201,4 +211,4 @@ async def get_commission_register_detail(
             "resource": "commission_document",
             "id": reference,
         })
-    return _row_to_item(r)
+    return _row_to_item(r, body_threshold=body_threshold)

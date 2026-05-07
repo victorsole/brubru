@@ -33,7 +33,11 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user import User
 
-from ._body import compose_html_from_sections
+from ._body import (
+    DEFAULT_HAS_BODY_THRESHOLD,
+    body_threshold_param,
+    compose_html_from_sections,
+)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -102,13 +106,13 @@ class FundingPayload(BaseModel):
 # ----------------------------- helpers -----------------------------
 
 
-def _row_to_item(r) -> ResearchProjectItem:
+def _row_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> ResearchProjectItem:
     # Compose body from objective + keywords. compose_html_from_sections
     # honestly skips empty fields and emits None when nothing's there.
     body_html, body_text, has_body = compose_html_from_sections([
         ("Objective", r.objective),
         ("Keywords", r.keywords),
-    ])
+    ], threshold=body_threshold)
     return ResearchProjectItem(
         cordis_id=r.project_id,
         acronym=r.project_acronym,
@@ -182,6 +186,7 @@ async def find_projects(
     status: Optional[str] = Query(None, description="signed / closed / terminated"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ResearchProjectItem]:
@@ -221,7 +226,7 @@ async def find_projects(
     params["offset"] = (page - 1) * limit
     rows = db.execute(sql, params).fetchall()
 
-    items = [_row_to_item(r) for r in rows]
+    items = [_row_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(
         items=items,
         total=int(total),
@@ -352,6 +357,7 @@ async def org_projects(
     framework: Optional[str] = Query(None, description="HORIZON / H2020 / FP7"),
     limit: int = Query(50, ge=1, le=200),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ResearchProjectItem]:
@@ -384,7 +390,7 @@ async def org_projects(
     params["offset"] = (page - 1) * limit
     rows = db.execute(sql, params).fetchall()
 
-    items = [_row_to_item(r) for r in rows]
+    items = [_row_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(
         items=items,
         total=int(total),

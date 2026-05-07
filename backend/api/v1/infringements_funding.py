@@ -21,7 +21,11 @@ from core.database import get_db
 from models.infringement_funding import FundingOpportunity, InfringementProcedure
 from models.user import User
 
-from ._body import compose_html_from_sections
+from ._body import (
+    DEFAULT_HAS_BODY_THRESHOLD,
+    body_threshold_param,
+    compose_html_from_sections,
+)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -193,11 +197,14 @@ class FundingItem(BaseModel):
     body_text: Optional[str] = None
 
 
-def _funding_to_item(r: FundingOpportunity) -> FundingItem:
+def _funding_to_item(
+    r: FundingOpportunity,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> FundingItem:
     body_html, body_text, has_body = compose_html_from_sections([
         ("Summary", r.short_summary),
         ("Description", r.description),
-    ])
+    ], threshold=body_threshold)
     return FundingItem(
         id=str(r.id),
         topic_id=r.topic_id,
@@ -245,6 +252,7 @@ async def list_funding_opportunities(
     deadline_to: Optional[date] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FundingItem]:
@@ -280,7 +288,7 @@ async def list_funding_opportunities(
         .all()
     )
     return build_envelope(
-        [_funding_to_item(r) for r in rows],
+        [_funding_to_item(r, body_threshold=body_threshold) for r in rows],
         total=total, page=page, limit=limit,
     )
 
@@ -292,6 +300,7 @@ async def list_funding_opportunities(
 )
 async def get_funding_opportunity(
     topic_id: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FundingItem:
@@ -313,4 +322,4 @@ async def get_funding_opportunity(
                 "id": topic_id,
             },
         )
-    return _funding_to_item(r)
+    return _funding_to_item(r, body_threshold=body_threshold)

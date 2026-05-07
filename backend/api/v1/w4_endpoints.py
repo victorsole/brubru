@@ -23,7 +23,12 @@ from models.w4_entities import (
     TransparencyMeeting,
 )
 
-from ._body import body_from_pdf_text, deprecated_body
+from ._body import (
+    DEFAULT_HAS_BODY_THRESHOLD,
+    body_from_pdf_text,
+    body_threshold_param,
+    deprecated_body,
+)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -484,8 +489,11 @@ class SecondaryActItem(BaseModel):
     body: Optional[str] = None
 
 
-def _secondary_act_to_item(r: SecondaryAct) -> SecondaryActItem:
-    body_html, body_text, has_body = body_from_pdf_text(r.text_body)
+def _secondary_act_to_item(
+    r: SecondaryAct,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> SecondaryActItem:
+    body_html, body_text, has_body = body_from_pdf_text(r.text_body, threshold=body_threshold)
     return SecondaryActItem(
         id=str(r.id),
         act_type=r.act_type.value if hasattr(r.act_type, "value") else str(r.act_type),
@@ -511,6 +519,7 @@ def _list_secondary_acts(
     parent_celex, proposing_dg, status, q,
     published_from, published_to, updated_from,
     limit, page,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> PaginatedResponse[SecondaryActItem]:
     query = db.query(SecondaryAct).filter(SecondaryAct.act_type == act_type)
     filters = []
@@ -536,7 +545,7 @@ def _list_secondary_acts(
         query.order_by(SecondaryAct.publication_date.desc().nullslast())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [_secondary_act_to_item(r) for r in rows]
+    data = [_secondary_act_to_item(r, body_threshold=body_threshold) for r in rows]
     return build_envelope(data, total=total, page=page, limit=limit,
                           published_from=published_from, published_to=published_to,
                           updated_from=updated_from)
@@ -558,14 +567,19 @@ async def list_delegated_acts(
     updated_from: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return _list_secondary_acts(db, "delegated", parent_celex, proposing_dg, status, q,
-                                published_from, published_to, updated_from, limit, page)
+                                published_from, published_to, updated_from, limit, page,
+                                body_threshold=body_threshold)
 
 
-def _secondary_act_detail(db: Session, reference: str, expected_type: str) -> SecondaryActItem:
+def _secondary_act_detail(
+    db: Session, reference: str, expected_type: str,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> SecondaryActItem:
     r = db.query(SecondaryAct).filter(SecondaryAct.reference == reference).first()
     if not r:
         raise HTTPException(status_code=404, detail={
@@ -574,7 +588,7 @@ def _secondary_act_detail(db: Session, reference: str, expected_type: str) -> Se
             "resource": expected_type,
             "id": reference,
         })
-    return _secondary_act_to_item(r)
+    return _secondary_act_to_item(r, body_threshold=body_threshold)
 
 
 @delegated_router.get(
@@ -584,10 +598,11 @@ def _secondary_act_detail(db: Session, reference: str, expected_type: str) -> Se
 )
 async def get_delegated_detail(
     reference: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> SecondaryActItem:
-    return _secondary_act_detail(db, reference, "delegated_act")
+    return _secondary_act_detail(db, reference, "delegated_act", body_threshold=body_threshold)
 
 
 @implementing_router.get(
@@ -597,10 +612,11 @@ async def get_delegated_detail(
 )
 async def get_implementing_detail(
     reference: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> SecondaryActItem:
-    return _secondary_act_detail(db, reference, "implementing_act")
+    return _secondary_act_detail(db, reference, "implementing_act", body_threshold=body_threshold)
 
 
 @implementing_router.get(
@@ -619,11 +635,13 @@ async def list_implementing_acts(
     updated_from: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[SecondaryActItem]:
     return _list_secondary_acts(db, "implementing", parent_celex, proposing_dg, status, q,
-                                published_from, published_to, updated_from, limit, page)
+                                published_from, published_to, updated_from, limit, page,
+                                body_threshold=body_threshold)
 
 
 # ============================================================================

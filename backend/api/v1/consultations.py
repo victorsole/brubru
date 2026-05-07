@@ -20,7 +20,12 @@ from core.database import get_db
 from models.public_consultation import PublicConsultation
 from models.user import User
 
-from ._body import compose_html_from_sections, deprecated_body
+from ._body import (
+    DEFAULT_HAS_BODY_THRESHOLD,
+    body_threshold_param,
+    compose_html_from_sections,
+    deprecated_body,
+)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -138,6 +143,7 @@ async def get_feedback_by_initiative(
     page: int = Query(1, ge=1),
     country: Optional[str] = Query(None, min_length=3, max_length=3),
     user_type: Optional[str] = Query(None),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FeedbackEnvelope:
@@ -178,7 +184,7 @@ async def get_feedback_by_initiative(
     data = []
     for it in items:
         body_text = it.short_text or None
-        has_body = bool(body_text and len(body_text.strip()) >= 500)
+        has_body = bool(body_text and len(body_text.strip()) >= body_threshold)
         data.append(FeedbackItem(
             feedback_id=str(it.feedback_id) if it.feedback_id is not None else None,
             date=_normalise_date(it.date),
@@ -256,7 +262,7 @@ class ConsultationItem(BaseModel):
     body_text: Optional[str] = None
 
 
-def _consultation_body(r: PublicConsultation):
+def _consultation_body(r: PublicConsultation, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):
     """Compose body_html / body_text / has_body from PublicConsultation columns."""
     sections = [
         ("Description", r.description),
@@ -265,7 +271,7 @@ def _consultation_body(r: PublicConsultation):
         ("Target group", r.target_group),
         ("Outcome summary", r.outcome_summary),
     ]
-    return compose_html_from_sections(sections)
+    return compose_html_from_sections(sections, threshold=threshold)
 
 
 @router.get(
@@ -293,6 +299,7 @@ async def list_consultations(
     updated_end: Optional[datetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[ConsultationItem]:
@@ -349,7 +356,7 @@ async def list_consultations(
 
     data = []
     for r in rows:
-        body_html, body_text, has_body = _consultation_body(r)
+        body_html, body_text, has_body = _consultation_body(r, threshold=body_threshold)
         data.append(ConsultationItem(
             id=str(r.id),
             initiative_id=r.initiative_id,
@@ -398,6 +405,7 @@ async def list_consultations(
 )
 async def get_consultation_detail(
     initiative_id: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> ConsultationItem:
@@ -409,7 +417,7 @@ async def get_consultation_detail(
             "resource": "consultation",
             "id": initiative_id,
         })
-    body_html, body_text, has_body = _consultation_body(r)
+    body_html, body_text, has_body = _consultation_body(r, threshold=body_threshold)
     return ConsultationItem(
         id=str(r.id),
         initiative_id=r.initiative_id,

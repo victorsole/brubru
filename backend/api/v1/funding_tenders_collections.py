@@ -28,7 +28,11 @@ from models.funding_tenders import (
 )
 from models.user import User
 
-from ._body import compose_html_from_sections
+from ._body import (
+    DEFAULT_HAS_BODY_THRESHOLD,
+    body_threshold_param,
+    compose_html_from_sections,
+)
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -63,10 +67,13 @@ class FtCallProposalItem(BaseModel):
     body_text: Optional[str] = None
 
 
-def _proposal_to_item(r: FtCallForProposals) -> FtCallProposalItem:
+def _proposal_to_item(
+    r: FtCallForProposals,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> FtCallProposalItem:
     body_html, body_text, has_body = compose_html_from_sections([
         ("Description", r.description),
-    ])
+    ], threshold=body_threshold)
     return FtCallProposalItem(
         id=str(r.id), topic_id=r.topic_id, call_id=r.call_id,
         framework_programme=r.framework_programme, title=r.title,
@@ -102,6 +109,7 @@ async def list_calls_for_proposals(
     deadline_to: Optional[date] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallProposalItem]:
@@ -128,7 +136,7 @@ async def list_calls_for_proposals(
         query.order_by(FtCallForProposals.deadline.asc().nullslast(), FtCallForProposals.id.asc())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_proposal_to_item(r) for r in rows], total=total, page=page, limit=limit)
+    return build_envelope([_proposal_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
 
 
 @calls_router.get(
@@ -138,6 +146,7 @@ async def list_calls_for_proposals(
 )
 async def get_call_for_proposals(
     topic_id: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FtCallProposalItem:
@@ -152,7 +161,7 @@ async def get_call_for_proposals(
             detail={"error": f"Call {topic_id} not found", "reason_code": "not_found",
                     "resource": "ft_call_for_proposals", "id": topic_id},
         )
-    return _proposal_to_item(r)
+    return _proposal_to_item(r, body_threshold=body_threshold)
 
 
 # ============================================================================
@@ -182,10 +191,13 @@ class FtCallTenderItem(BaseModel):
     body_text: Optional[str] = None
 
 
-def _tender_to_item(r: FtCallForTenders) -> FtCallTenderItem:
+def _tender_to_item(
+    r: FtCallForTenders,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> FtCallTenderItem:
     body_html, body_text, has_body = compose_html_from_sections([
         ("Description", r.description),
-    ])
+    ], threshold=body_threshold)
     return FtCallTenderItem(
         id=str(r.id), tender_reference=r.tender_reference,
         contracting_authority=r.contracting_authority, title=r.title,
@@ -220,6 +232,7 @@ async def list_calls_for_tenders(
     deadline_to: Optional[date] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtCallTenderItem]:
@@ -246,7 +259,7 @@ async def list_calls_for_tenders(
         query.order_by(FtCallForTenders.deadline.asc().nullslast(), FtCallForTenders.id.asc())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_tender_to_item(r) for r in rows], total=total, page=page, limit=limit)
+    return build_envelope([_tender_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
 
 
 @tenders_router.get(
@@ -256,6 +269,7 @@ async def list_calls_for_tenders(
 )
 async def get_call_for_tenders(
     tender_reference: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FtCallTenderItem:
@@ -274,7 +288,7 @@ async def get_call_for_tenders(
                     "reason_code": "not_found",
                     "resource": "ft_call_for_tenders", "id": tender_reference},
         )
-    return _tender_to_item(r)
+    return _tender_to_item(r, body_threshold=body_threshold)
 
 
 # ============================================================================
@@ -311,11 +325,14 @@ class FtFundedProjectItem(BaseModel):
     body_text: Optional[str] = None
 
 
-def _project_to_item(r: FtFundedProject) -> FtFundedProjectItem:
+def _project_to_item(
+    r: FtFundedProject,
+    body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
+) -> FtFundedProjectItem:
     body_html, body_text, has_body = compose_html_from_sections([
         ("Objective", r.objective),
         ("Keywords", getattr(r, "keywords", None)),
-    ])
+    ], threshold=body_threshold)
     return FtFundedProjectItem(
         id=str(r.id), project_id=r.project_id,
         project_acronym=r.project_acronym, title=r.title, objective=r.objective,
@@ -351,6 +368,7 @@ async def list_funded_projects(
     end_to: Optional[date] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[FtFundedProjectItem]:
@@ -379,7 +397,7 @@ async def list_funded_projects(
         query.order_by(FtFundedProject.start_date.desc().nullslast(), FtFundedProject.id.asc())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    return build_envelope([_project_to_item(r) for r in rows], total=total, page=page, limit=limit)
+    return build_envelope([_project_to_item(r, body_threshold=body_threshold) for r in rows], total=total, page=page, limit=limit)
 
 
 @projects_router.get(
@@ -389,6 +407,7 @@ async def list_funded_projects(
 )
 async def get_funded_project(
     project_id: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> FtFundedProjectItem:
@@ -403,4 +422,4 @@ async def get_funded_project(
             detail={"error": f"Project {project_id} not found", "reason_code": "not_found",
                     "resource": "ft_funded_project", "id": project_id},
         )
-    return _project_to_item(r)
+    return _project_to_item(r, body_threshold=body_threshold)
