@@ -22,6 +22,7 @@ from core.database import get_db
 from models.institutional_publication import InstitutionalPublication
 from models.user import User
 
+from ._body import body_from_html, body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -42,11 +43,13 @@ class PublicationItem(BaseModel):
     published_date: Optional[datetime] = None
     policy_areas: list = Field(default_factory=list)
     tags: list = Field(default_factory=list)
+    # Body fields populated from html_content (the source HTML stripped of
+    # nav/footer/scripts during ingestion). body_html carries the raw HTML;
+    # body_text is the stripped plain-text rendering.
     has_body: bool = False
-    # Body extracted from the source URL (HTML stripped of nav/footer/scripts).
-    # Populated by backend/scripts/backfill_body_text.py on a rolling basis.
-    # On LIST responses the body is truncated at 5k chars; full body lives on
-    # GET /publications/{id}.
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+    # Deprecated alias kept one release; equals body_text or body_html.
     body: Optional[str] = None
 
 
@@ -77,6 +80,7 @@ async def list_publications(
     updated_end: Optional[datetime] = Query(None, description="Alias of updated_to. 422 if both differ."),
     limit: int = Query(50, ge=1, le=100, description="Items per page (default 50, max 100)"),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[PublicationItem]:
@@ -167,8 +171,10 @@ async def list_publications(
         .all()
     )
 
-    data = [
-        PublicationItem(
+    data = []
+    for r in rows:
+        body_html, body_text, has_body = body_from_html(r.html_content, threshold=body_threshold)
+        data.append(PublicationItem(
             id=str(r.id),
             source_slug=r.source_slug,
             institution_slug=r.institution_slug,
@@ -180,11 +186,11 @@ async def list_publications(
             published_date=r.published_date,
             policy_areas=list(r.policy_areas or []),
             tags=list(r.tags or []),
-            has_body=bool(r.html_content and len(r.html_content) > 500),
-            body=(r.html_content[:5000] + "…") if (r.html_content and len(r.html_content) > 5000) else r.html_content,
-        )
-        for r in rows
-    ]
+            has_body=has_body,
+            body_html=body_html,
+            body_text=body_text,
+            body=deprecated_body(body_text, body_html),
+        ))
 
     return build_envelope(
         data,
@@ -269,6 +275,7 @@ async def list_sources(
 )
 async def get_publication_detail(
     publication_id: str,
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PublicationItem:
@@ -295,6 +302,7 @@ async def get_publication_detail(
                 "id": publication_id,
             },
         )
+    body_html, body_text, has_body = body_from_html(r.html_content, threshold=body_threshold)
     return PublicationItem(
         id=str(r.id),
         source_slug=r.source_slug,
@@ -307,7 +315,8 @@ async def get_publication_detail(
         published_date=r.published_date,
         policy_areas=list(r.policy_areas or []),
         tags=list(r.tags or []),
-        has_body=bool(r.html_content and len(r.html_content) > 500),
-        # Full body on detail (no truncation).
-        body=r.html_content,
+        has_body=has_body,
+        body_html=body_html,
+        body_text=body_text,
+        body=deprecated_body(body_text, body_html),
     )

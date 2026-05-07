@@ -29,6 +29,7 @@ from models.legislative_train import LegislativeCarriage
 from models.mep_amendment import AmendmentDocument, MEPAmendment
 from models.user import User
 
+from ._body import body_from_html, body_threshold_param, deprecated_body
 from ._deps import api_user_with_rate_limit
 from ._envelope import PaginatedResponse, build_envelope
 
@@ -542,9 +543,12 @@ class PressReleaseItem(BaseModel):
     published_date: Optional[datetime] = None
     policy_areas: list = Field(default_factory=list)
     tags: list = Field(default_factory=list)
+    # Body fields populated from html_content (the source HTML stripped of
+    # nav/footer/scripts during ingestion).
     has_body: bool = False
-    # Body extracted from the source URL (HTML stripped of nav/footer/scripts).
-    # Populated by backend/scripts/backfill_body_text.py on a rolling basis.
+    body_html: Optional[str] = None
+    body_text: Optional[str] = None
+    # Deprecated alias kept one release; equals body_text or body_html.
     body: Optional[str] = None
 
 
@@ -568,6 +572,7 @@ async def list_press_releases(
     updated_from: Optional[datetime] = Query(None),
     limit: int = Query(50, ge=1, le=100),
     page: int = Query(1, ge=1),
+    body_threshold: int = Depends(body_threshold_param),
     user: User = Depends(api_user_with_rate_limit),
     db: Session = Depends(get_db),
 ) -> PaginatedResponse[PressReleaseItem]:
@@ -600,8 +605,10 @@ async def list_press_releases(
         query.order_by(InstitutionalPublication.published_date.desc().nullslast())
         .offset((page - 1) * limit).limit(limit).all()
     )
-    data = [
-        PressReleaseItem(
+    data = []
+    for r in rows:
+        body_html, body_text, has_body = body_from_html(r.html_content, threshold=body_threshold)
+        data.append(PressReleaseItem(
             id=str(r.id),
             institution_slug=r.institution_slug,
             source_slug=r.source_slug,
@@ -612,14 +619,11 @@ async def list_press_releases(
             published_date=r.published_date,
             policy_areas=list(r.policy_areas or []),
             tags=list(r.tags or []),
-            has_body=bool(r.html_content and len(r.html_content) > 500),
-            # Truncate to 5k chars on list responses to keep payloads light;
-            # full body is available via /press-releases/{id} (when added) or
-            # /publications/{publication_id}.
-            body=(r.html_content[:5000] + "…") if (r.html_content and len(r.html_content) > 5000) else r.html_content,
-        )
-        for r in rows
-    ]
+            has_body=has_body,
+            body_html=body_html,
+            body_text=body_text,
+            body=deprecated_body(body_text, body_html),
+        ))
     return build_envelope(
         data, total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
