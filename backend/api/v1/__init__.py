@@ -12,6 +12,7 @@ All errors use the canonical error shapes in _errors.
 from fastapi import APIRouter
 
 from . import calendar as _calendar
+from . import catalan_translations as _catalan_translations
 from . import commission_register as _commission_register
 from . import commissioners as _commissioners
 from . import committees as _committees
@@ -48,6 +49,7 @@ router = APIRouter(prefix="/api/v1")
 router.include_router(_meta.router)
 router.include_router(_meta_enums.router)
 router.include_router(_consultations.router)
+router.include_router(_catalan_translations.router)
 router.include_router(_laws.router)
 router.include_router(_procedures.router)
 router.include_router(_commissioners.router)
