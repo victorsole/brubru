@@ -28,10 +28,12 @@ from __future__ import annotations
 
 import logging
 import re
+import time
 from datetime import date, datetime
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional, Tuple
 
+import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import and_, func, or_, text
@@ -40,6 +42,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.catalan_translation import CatalanTranslation
 
+from ._body import body_from_html, body_threshold_param
 from ._envelope import PaginatedResponse, build_envelope
 
 logger = logging.getLogger(__name__)
@@ -54,11 +57,144 @@ BINDING_CELEX_SQL = r"^3\d{4}[RLD]\d{4}$"
 LANDING_BASE = "https://brubru.beresol.eu/legislacio-ue-catala/"
 EURLEX_BASE = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:"
 
-# On-disk path to rendered Catalan HTML (used when ?body=html is requested
-# on the single-record endpoint).
+# Local on-disk path to rendered Catalan HTML — used as a fallback for dev
+# environments where the files live alongside the backend. In production
+# (Railway) the files live on SiteGround, fetched via HTTP from ca_url
+# (https://brubru.beresol.eu/legislacio-ue-catala/{celex}/).
 DISK_TRANSLATIONS_DIR = (
     Path(__file__).resolve().parents[3] / "data" / "legislacio-ue-catala"
 )
+
+# In-memory cache for fetched HTML bodies — partner-facing public endpoint
+# so we don't refetch the same 50-500 KB body twice in a row. 6h TTL aligns
+# with how often we re-render the upstream HTML.
+_HTML_CACHE: Dict[str, Tuple[float, str]] = {}
+_HTML_CACHE_TTL_S = 6 * 60 * 60
+_HTML_CACHE_MAX = 200  # rough cap on resident bodies
+
+
+def _fetch_ca_body_html(celex: str, ca_url: str) -> Optional[str]:
+    """Fetch the rendered Catalan HTML body for a CELEX.
+
+    Resolution order:
+      1. In-memory cache (6h TTL).
+      2. Local disk (dev — DISK_TRANSLATIONS_DIR).
+      3. HTTP from `ca_url` on SiteGround (production).
+
+    Returns None if no copy is available — the caller leaves body_html=None
+    and the partner falls back to ca_url client-side. We never 500 on a
+    fetch miss.
+    """
+    now = time.time()
+    cached = _HTML_CACHE.get(celex)
+    if cached and (now - cached[0]) < _HTML_CACHE_TTL_S:
+        return cached[1]
+
+    # Local disk first (fastest in dev)
+    disk_path = DISK_TRANSLATIONS_DIR / celex / "index.html"
+    if disk_path.is_file():
+        try:
+            html = disk_path.read_text(encoding="utf-8", errors="replace")
+            _cache_body(celex, html)
+            return html
+        except OSError as exc:
+            logger.warning("disk read failed for %s: %s", celex, exc)
+
+    # HTTP fetch from SiteGround (production)
+    try:
+        with httpx.Client(timeout=15.0, follow_redirects=True) as client:
+            r = client.get(ca_url, headers={"User-Agent": "Brubru/1.0", "Accept": "text/html"})
+            if r.status_code == 200 and len(r.content) > 500:
+                html = r.text
+                _cache_body(celex, html)
+                return html
+            logger.info("ca_url fetch for %s: HTTP %s, %d bytes", celex, r.status_code, len(r.content))
+    except Exception as exc:
+        logger.warning("HTTP fetch failed for %s: %s", celex, exc)
+
+    return None
+
+
+def _cache_body(celex: str, html: str) -> None:
+    """Add to the LRU-ish cache; evict oldest when over cap."""
+    if len(_HTML_CACHE) >= _HTML_CACHE_MAX:
+        # Evict the oldest entry (cheap, this is bounded by _HTML_CACHE_MAX)
+        oldest = min(_HTML_CACHE.items(), key=lambda kv: kv[1][0])[0]
+        _HTML_CACHE.pop(oldest, None)
+    _HTML_CACHE[celex] = (time.time(), html)
+
+
+# Doc-type shorthand mapping — partners often expect CELEX-form letters
+# (R = Regulation, L = Directive, D = Decision). The DB stores the long
+# form. Normalise the query input so both work.
+_DOC_TYPE_SHORTHAND = {
+    "R": "regulation",
+    "L": "directive",
+    "D": "decision",
+    "REG": "regulation",
+    "DIR": "directive",
+    "DEC": "decision",
+}
+
+
+def _normalise_doc_type(value: str) -> str:
+    """Accept R/L/D shorthand alongside long form."""
+    if not value:
+        return value
+    upper = value.strip().upper()
+    return _DOC_TYPE_SHORTHAND.get(upper, value.strip().lower())
+
+
+def _slugify(s: str) -> str:
+    """ASCII-only kebab-case for category slug-matching."""
+    if not s:
+        return ""
+    # Replace accented chars; keep alphanumerics; collapse to dashes
+    norm = (
+        s.lower()
+        .replace("à", "a").replace("á", "a").replace("ä", "a").replace("â", "a")
+        .replace("è", "e").replace("é", "e").replace("ë", "e").replace("ê", "e")
+        .replace("ì", "i").replace("í", "i").replace("ï", "i").replace("î", "i")
+        .replace("ò", "o").replace("ó", "o").replace("ö", "o").replace("ô", "o")
+        .replace("ù", "u").replace("ú", "u").replace("ü", "u").replace("û", "u")
+        .replace("ñ", "n").replace("ç", "c").replace("·", "")
+    )
+    norm = re.sub(r"[^a-z0-9]+", "-", norm).strip("-")
+    return norm
+
+
+def _filter_by_category(qry, column_name: str, value: str):
+    """Filter on category / category_en supporting exact, ILIKE, and slug forms.
+
+    Matches if any of:
+      - exact match (case-sensitive)
+      - case-insensitive substring (ILIKE %value%)
+      - slugified DB column equals slugified user input — built in SQL via
+        regexp_replace + lower, so e.g. ``core-economic-and-market-policies``
+        matches ``Core Economic and Market Policies``.
+
+    Uses ``regexp_replace`` on the DB column (Postgres). Index-less because
+    the table is small (≤8,710 rows); for larger corpora we'd add a stored
+    slug column with an index.
+    """
+    column = getattr(CatalanTranslation, column_name)
+    user_slug = _slugify(value)
+    # SQL slug expression: unaccent + lowercase + collapse non-alphanumerics
+    # to "-" (matches what _slugify() produces in Python). The `unaccent`
+    # extension was installed on the DB to fold accented chars (Catalan
+    # categories like "Polítiques econòmiques i de mercat" → "politiques-...").
+    db_slug = func.regexp_replace(
+        func.unaccent(func.lower(column)),
+        r"[^a-z0-9]+",
+        "-",
+        "g",
+    )
+    qry = qry.filter(or_(
+        column == value,
+        func.lower(column).contains(value.lower()),
+        func.trim(db_slug, "-") == user_slug,
+    ))
+    return qry
 
 
 # --------------------------------------------------------------------------- #
@@ -91,12 +227,28 @@ class CatalanTranslationItem(BaseModel):
 
 
 class CatalanTranslationDetail(CatalanTranslationItem):
-    """Single-record response — extends the list item with optional body inlining."""
+    """Single-record response — extends the list item with optional body inlining.
 
+    Body fields follow the v1 contract used across the rest of the API:
+      - has_body: bool — true iff a body is available upstream (>=
+        body_threshold chars). Computed from html_size_bytes so partners
+        can branch before requesting the body.
+      - body_html / body_text — populated only when ?body=html is requested
+        on this endpoint. body_html is the raw upstream HTML; body_text is
+        the stripped plain-text rendering.
+    """
+
+    has_body: bool = Field(
+        False,
+        description="True if a Catalan-rendered body is available for this act (html_size_bytes >= body_threshold).",
+    )
     body_html: Optional[str] = Field(
         None,
-        description="Rendered Catalan HTML body. Populated only when ?body=html is requested. "
-        "May be omitted if the file is missing on disk.",
+        description="Rendered Catalan HTML body. Populated only when `?body=html` is requested. May be null if the upstream file is unreachable — fall back to ca_url.",
+    )
+    body_text: Optional[str] = Field(
+        None,
+        description="Plain-text rendering of body_html (HTML stripped). Populated only when `?body=html` is requested.",
     )
 
 
@@ -186,14 +338,37 @@ def _binding_law_filter(query):
 @router.get(
     "",
     response_model=PaginatedResponse[CatalanTranslationItem],
-    summary="List EU binding laws translated into Catalan",
+    summary="List EU binding laws translated into Catalan / Llista lleis vinculants UE traduïdes al català",
     description=(
-        "Open dataset (MIT). Paginated catalogue of binding EU legal acts "
-        "(Regulations, Directives, Decisions) translated into Catalan by "
-        "Brubru using the Softcatalà NMT engine. Updated daily.\n\n"
-        "**No API key required.** Subject to the global rate limit.\n\n"
-        "Filter combinations are AND-ed. Pass `q` for a substring search "
-        "across the Catalan title, English title, short name, and CELEX."
+        "## English\n\n"
+        "**What it does.** Returns a paginated catalogue of binding EU legal acts (Regulations, Directives, Decisions) translated into Catalan by Brubru using the Softcatalà NMT engine.\n\n"
+        "**When to use it.** When you want to browse, search, or sync the Catalan translation corpus — e.g. populate a search index, build a per-category dashboard, or pull updates incrementally via `updated_from`.\n\n"
+        "**Input.**\n"
+        "- `q` — substring search across `title_ca`, `title_en`, `short_name`, `celex` (e.g. `q=GDPR`).\n"
+        "- `celex` — exact CELEX filter (e.g. `32016R0679`).\n"
+        "- `doc_type` — accepts long form (`regulation`/`directive`/`decision`/`delegated`/`implementing`) **or** CELEX shorthand (`R`/`L`/`D`).\n"
+        "- `category`, `category_en` — exact name OR slug (e.g. `category_en=core-economic-and-market-policies`). Use `/stats` to discover names.\n"
+        "- `engine` — `softcatala` (default for 8,257 rows) or `sonnet` (Claude-translated, currently 1 row).\n"
+        "- `updated_from` / `updated_to` — incremental sync against `updated_at`.\n"
+        "- `limit` 1–200 (default 50); `page` 1+.\n\n"
+        "**Try it.** `GET /api/v1/catalan-translations?q=GDPR&limit=3` (no API key required).\n\n"
+        "**You get back.** Per row: `celex`, `doc_type`, `short_name`, `title_ca`, `title_en`, `category`/`category_en`, `articles_count`, `recitals_count`, `html_size_bytes`, `engine`, `ca_url` (canonical render on `brubru.beresol.eu`), `source_eurlex_url`, timestamps.\n\n"
+        "**Open data.** No API key required. MIT-licensed. Subject to the standard global rate limit.\n\n"
+        "---\n\n"
+        "## Català\n\n"
+        "**Què fa.** Retorna un catàleg paginat dels actes legals vinculants de la UE (Reglaments, Directives, Decisions) traduïts al català per Brubru amb el motor de traducció automàtica de Softcatalà.\n\n"
+        "**Quan fer-ho servir.** Per consultar, cercar o sincronitzar el corpus de traduccions — per exemple, omplir un índex de cerca, fer un panell per categoria o baixar les novetats amb `updated_from`.\n\n"
+        "**Entrada.**\n"
+        "- `q` — cerca de subcadena a `title_ca`, `title_en`, `short_name`, `celex` (ex.: `q=GDPR`).\n"
+        "- `celex` — filtre CELEX exacte (ex.: `32016R0679`).\n"
+        "- `doc_type` — accepta forma llarga (`regulation`/`directive`/`decision`/`delegated`/`implementing`) **o** abreviatura CELEX (`R`/`L`/`D`).\n"
+        "- `category`, `category_en` — nom exacte o slug. Mira `/stats` per veure els noms disponibles.\n"
+        "- `engine` — `softcatala` (per defecte, 8.257 files) o `sonnet` (Claude, 1 fila).\n"
+        "- `updated_from` / `updated_to` — sincronització incremental sobre `updated_at`.\n"
+        "- `limit` 1–200 (per defecte 50); `page` 1+.\n\n"
+        "**Prova-ho.** `GET /api/v1/catalan-translations?q=GDPR&limit=3` (sense clau API).\n\n"
+        "**Què obtens.** Per fila: `celex`, `doc_type`, `short_name`, `title_ca`, `title_en`, `category`/`category_en`, `articles_count`, `recitals_count`, `html_size_bytes`, `engine`, `ca_url` (rendització canònica a `brubru.beresol.eu`), `source_eurlex_url`, marques de temps.\n\n"
+        "**Dades obertes.** No cal clau API. Llicència MIT. Subjecte al límit de freqüència global estàndard."
     ),
 )
 async def list_catalan_translations(
@@ -225,13 +400,14 @@ async def list_catalan_translations(
     if celex:
         qry = qry.filter(CatalanTranslation.celex == celex)
     if doc_type:
-        qry = qry.filter(CatalanTranslation.doc_type == doc_type)
+        # Accept R/L/D shorthand alongside long form (regulation/directive/decision)
+        qry = qry.filter(CatalanTranslation.doc_type == _normalise_doc_type(doc_type))
     if category:
-        qry = qry.filter(CatalanTranslation.category == category)
+        qry = _filter_by_category(qry, "category", category)
     if category_en:
-        qry = qry.filter(CatalanTranslation.category_en == category_en)
+        qry = _filter_by_category(qry, "category_en", category_en)
     if engine:
-        qry = qry.filter(CatalanTranslation.engine == engine)
+        qry = qry.filter(CatalanTranslation.engine == engine.lower())
     if updated_from:
         qry = qry.filter(CatalanTranslation.updated_at >= updated_from)
     if updated_to:
@@ -267,10 +443,37 @@ async def list_catalan_translations(
 @router.get(
     "/stats",
     response_model=CatalanStats,
-    summary="Catalan translations — aggregate counts",
+    summary="Catalan translations — aggregate counts / Estadístiques de les traduccions catalanes",
     description=(
-        "Counts grouped by doc_type, category, and engine. Useful for a status "
-        "dashboard or to verify ingestion before pulling pages."
+        "## English\n\n"
+        "**What it does.** Returns aggregate counts of Catalan-translated EU acts grouped by `doc_type`, `category` (Catalan + English names), and `engine`, plus the canonical 8,710 target and current coverage percentage.\n\n"
+        "**When to use it.** Build a coverage dashboard, verify ingestion before pulling pages, or discover the canonical category names to use as filters on the list endpoint.\n\n"
+        "**Input.** No parameters.\n\n"
+        "**Try it.** `GET /api/v1/catalan-translations/stats` (no API key required).\n\n"
+        "**You get back.**\n"
+        "- `total` — current count of binding-law translations\n"
+        "- `target` — canonical 8,710 EU binding-law set\n"
+        "- `coverage_pct` — `100 * total / target`, capped at 100\n"
+        "- `by_doc_type[]` — `{doc_type, count}` for `regulation` / `directive` / `decision` / `delegated` / `implementing`\n"
+        "- `by_category[]` — `{category, category_en, count}` (use these names for the `category` / `category_en` filters)\n"
+        "- `by_engine[]` — `{engine, count}` (`softcatala` vs `sonnet`)\n"
+        "- `last_translated_at` — timestamp of the most recent ingestion\n"
+        "- `licence` — always `MIT`\n\n"
+        "---\n\n"
+        "## Català\n\n"
+        "**Què fa.** Retorna comptadors agregats de les traduccions catalanes d'actes de la UE agrupats per `doc_type`, `category` (català + anglès) i `engine`, més l'objectiu canònic de 8.710 actes i el percentatge de cobertura actual.\n\n"
+        "**Quan fer-ho servir.** Per construir un panell de cobertura, verificar la ingesta abans de descarregar pàgines, o descobrir els noms canònics de categoria que pots utilitzar com a filtres al llistat.\n\n"
+        "**Entrada.** Cap paràmetre.\n\n"
+        "**Prova-ho.** `GET /api/v1/catalan-translations/stats` (sense clau API).\n\n"
+        "**Què obtens.**\n"
+        "- `total` — comptador actual de traduccions de dret vinculant\n"
+        "- `target` — conjunt canònic de 8.710 actes vinculants de la UE\n"
+        "- `coverage_pct` — `100 * total / target`, limitat a 100\n"
+        "- `by_doc_type[]` — `{doc_type, count}` per `regulation` / `directive` / `decision` / `delegated` / `implementing`\n"
+        "- `by_category[]` — `{category, category_en, count}` (fes servir aquests noms als filtres `category` / `category_en`)\n"
+        "- `by_engine[]` — `{engine, count}` (`softcatala` vs `sonnet`)\n"
+        "- `last_translated_at` — marca de temps de la ingesta més recent\n"
+        "- `licence` — sempre `MIT`"
     ),
 )
 async def catalan_translations_stats(db: Session = Depends(get_db)) -> CatalanStats:
@@ -323,16 +526,49 @@ async def catalan_translations_stats(db: Session = Depends(get_db)) -> CatalanSt
 @router.get(
     "/{celex}",
     response_model=CatalanTranslationDetail,
-    summary="Single Catalan translation by CELEX",
+    response_model_exclude_none=False,
+    summary="Single Catalan translation by CELEX / Una traducció catalana per CELEX",
     description=(
-        "Single record. Pass `?body=html` to inline the rendered Catalan HTML "
-        "body. Otherwise the response carries metadata only and the consumer "
-        "fetches `ca_url` directly."
+        "## English\n\n"
+        "**What it does.** Returns one Catalan-translated EU act by its CELEX number.\n\n"
+        "**When to use it.** When you have a CELEX and want the Catalan translation's metadata, optionally with the full rendered body inlined.\n\n"
+        "**Input.**\n"
+        "- `celex` (path) — CELEX number (sector 3, forms R/L/D), e.g. `32016R0679` (GDPR), `32024R1689` (AI Act).\n"
+        "- `body=html` (optional query param) — inlines the rendered Catalan HTML body (typically 50-500 KB) into `body_html` + a stripped plain-text version into `body_text`.\n"
+        "- `body_threshold` (optional, default 500) — minimum char length for `has_body=true`.\n\n"
+        "**Try it.**\n"
+        "- `GET /api/v1/catalan-translations/32016R0679` — metadata only\n"
+        "- `GET /api/v1/catalan-translations/32016R0679?body=html` — metadata + inlined body\n\n"
+        "**You get back.** All the list fields plus:\n"
+        "- `has_body` — bool, true iff a Catalan render is available (`html_size_bytes >= body_threshold`)\n"
+        "- `body_html` — full rendered HTML (only when `?body=html`)\n"
+        "- `body_text` — HTML stripped to plain text (only when `?body=html`)\n\n"
+        "**404** when the CELEX is outside the binding-law corpus, or when no Catalan translation exists yet.\n\n"
+        "---\n\n"
+        "## Català\n\n"
+        "**Què fa.** Retorna un acte legal de la UE traduït al català pel seu CELEX.\n\n"
+        "**Quan fer-ho servir.** Quan tens un CELEX i vols les metadades de la traducció catalana, opcionalment amb el cos sencer en línia.\n\n"
+        "**Entrada.**\n"
+        "- `celex` (ruta) — CELEX (sector 3, formes R/L/D), p. ex. `32016R0679` (RGPD), `32024R1689` (Llei d'IA).\n"
+        "- `body=html` (paràmetre opcional) — incorpora l'HTML català renderitzat (50-500 KB típicament) a `body_html` + una versió en text pla a `body_text`.\n"
+        "- `body_threshold` (opcional, per defecte 500) — longitud mínima de caràcters perquè `has_body=true`.\n\n"
+        "**Prova-ho.**\n"
+        "- `GET /api/v1/catalan-translations/32016R0679` — només metadades\n"
+        "- `GET /api/v1/catalan-translations/32016R0679?body=html` — metadades + cos en línia\n\n"
+        "**Què obtens.** Tots els camps de la llista més:\n"
+        "- `has_body` — booleà, cert si hi ha una rendització catalana disponible (`html_size_bytes >= body_threshold`)\n"
+        "- `body_html` — HTML renderitzat sencer (només amb `?body=html`)\n"
+        "- `body_text` — HTML convertit a text pla (només amb `?body=html`)\n\n"
+        "**404** quan el CELEX queda fora del corpus de dret vinculant o no existeix encara cap traducció catalana."
     ),
 )
 async def get_catalan_translation(
     celex: str,
-    body: Optional[str] = Query(None, description="Set to 'html' to inline the rendered HTML body."),
+    body: Optional[str] = Query(
+        None,
+        description="Set to `html` to inline the rendered Catalan HTML body. / Posa `html` per incorporar el cos HTML renderitzat al català.",
+    ),
+    body_threshold: int = Depends(body_threshold_param),
     db: Session = Depends(get_db),
 ) -> CatalanTranslationDetail:
     if not re.match(BINDING_CELEX_SQL.replace(r"\d", r"[0-9]"), celex):
@@ -353,16 +589,27 @@ async def get_catalan_translation(
         raise HTTPException(status_code=404, detail=f"No Catalan translation for CELEX {celex}.")
 
     base = _row_to_item(row).model_dump()
-    detail = CatalanTranslationDetail(**base, body_html=None)
+    # Compute has_body from html_size_bytes (always available without
+    # fetching the body) — partners can branch on this before deciding
+    # whether to request ?body=html.
+    has_body = bool(row.html_size_bytes and row.html_size_bytes >= body_threshold)
+
+    detail = CatalanTranslationDetail(
+        **base,
+        has_body=has_body,
+        body_html=None,
+        body_text=None,
+    )
 
     if body and body.lower() == "html":
-        html_path = DISK_TRANSLATIONS_DIR / celex / "index.html"
-        if html_path.is_file():
-            try:
-                detail.body_html = html_path.read_text(encoding="utf-8", errors="replace")
-            except OSError as e:
-                logger.warning("Could not read %s: %s", html_path, e)
-        # If the file is missing on disk we leave body_html=None and let the
-        # consumer fall back to ca_url. Don't 500 over an inlining miss.
+        html = _fetch_ca_body_html(celex, base["ca_url"])
+        if html:
+            # Use the shared body_from_html helper for consistency with the
+            # rest of the v1 surface — same threshold semantics, same plain-
+            # text strip rules.
+            body_html, body_text, has = body_from_html(html, threshold=body_threshold)
+            detail.body_html = body_html
+            detail.body_text = body_text
+            detail.has_body = has
 
     return detail
