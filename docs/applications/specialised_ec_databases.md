@@ -200,7 +200,7 @@ Each wave proceeds in this order: scraper → migration → SQLAlchemy model →
 
 | Wave | Status | Endpoints shipped | Postman pushed | Date |
 |------|--------|-------------------|----------------|------|
-| 1 — Trade & Customs | not started | 0 / ~18 | – | – |
+| 1 — Trade & Customs | in progress | 2 / ~18 (Treaties via Cellar SPARQL — list + detail) | yes | 2026-05-08 |
 | 2 — Chemicals | not started | 0 / ~14 | – | – |
 | 3 — Food/Feed/Plant | not started | 0 / ~15 | – | – |
 | 4 — Competition | not started | 0 / ~6 | – | – |
