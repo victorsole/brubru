@@ -1,0 +1,90 @@
+table,column,nulls,total,pct,type,root_cause,backfill_path,status,notes
+eu_laws,parent_law_uuid,28505,28505,100.0,by_design,Self-FK for annex->parent linkage; no auto-link logic,requires building the annex-to-parent linker,open,separate session
+transparency_meetings,transparency_register_id,17197,17197,100.0,scraper_gap,Meeting scraper does not look up TR ID,EU Transparency Register API,open,
+transparency_meetings,organisation_type,17197,17197,100.0,scraper_gap,Same as transparency_register_id,EU Transparency Register API,open,
+transparency_meetings,host_dg,6,17197,0.0,derivable,host name often contains DG identifier,regex extract from host_name,partial,UPDATED 2026-05-08: 17191 of 17197 filled via commissioner→DG mapping from host_cabinet; 6 are EA staff with unverified DG
+catalan_translations,source_file,8815,8815,100.0,scraper_gap,Pipeline produces source_file metadata; not stored,set source_file at translate-time,open,UPDATED 2026-05-08: requires translate-pipeline change (separate session)
+catalan_translations,parent_celex,8815,8815,100.0,derivable,parent_celex for ANNEX-only translations,depends on eu_laws annex linker,open,
+catalan_translations,annex_label,8815,8815,100.0,unfillable,Annex label in source XML but not always present,parse FMX4 SECTITLE,open,
+eu_officials,term_end_date,7898,7898,100.0,unfillable,Most mandates are unbounded,no path,unfillable,only commissioners have explicit terms
+eu_officials,portfolio,7898,7898,100.0,scraper_gap,Portfolio is free text; only relevant for ~27 commissioners,commission.europa.eu/about/leadership/college-commissioners,open,99% of rows will remain null
+eu_officials,photo_url,7898,7898,100.0,scraper_gap,Photo URLs not in PDF source,WhoIsWho HTML has photo URLs per profile,open,medium-effort; deferred
+eu_officials,dg,7898,7898,100.0,scraper_gap,PDF parser does not track DG section headers,rewrite ingest_whoiswho_pdfs.py to track DG sections,open,only relevant for institution_slug=european-commission
+eu_officials,country,7898,7898,100.0,partial,Country backfill exists for Council members; no path for others,backfill_officials_country.py for Council subset,partial,only fills role=country in caps
+eu_officials,city,7898,7898,100.0,unfillable,Office city not in any EU public source,no path,unfillable,
+eu_officials,cabinet,7898,7898,100.0,scraper_gap,Cabinet structure not in WhoIsWho PDFs,separate scraper for commission.europa.eu cabinet pages,open,limited to ~27 commissioners
+eu_officials,bio_url,7898,7898,100.0,derivable,WhoIsWho bio URL pattern needs verification,verify deterministic URL pattern then UPDATE,unfillable,UPDATED 2026-05-08: WhoIsWho profile URLs use internal PER_PERSON_NN_* IDs we do not have; not deterministic from slug
+eu_officials,appointed_date,7898,7898,100.0,unfillable,Career timelines not in any EU public source,no path,unfillable,LinkedIn or career pages required
+secondary_acts,pdf_url,392,6722,5.8,derivable,Cellar PDF resource URL is deterministic from celex,UPDATE secondary_acts SET pdf_url = ... WHERE celex IS NOT NULL,partial,"derivable for 5,156 rows | UPDATED 2026-05-08: 6330 of 6722 filled via Cellar PDF resource URL from celex; 392 lack celex"
+secondary_acts,parent_procedure_ref,6722,6722,100.0,scraper_gap,Parent COD/COM relationship not captured at scrape,Cellar relationships endpoint,open,medium-effort
+secondary_acts,objection_deadline,6722,6722,100.0,unfillable,Objection period for delegated acts not in machine-readable form,no path,unfillable,rare field
+secondary_acts,description,2339,6722,34.8,derivable,first paragraph of text_body is fine,"UPDATE SET description = SUBSTRING(text_body,1,500) WHERE text_body IS NOT NULL",partial,UPDATED 2026-05-08: 4383 of 6722 filled from text_body first 500 chars; 2339 still null (no text_body either)
+parliamentary_questions,procedure_ref,0,5674,0.0,derivable,EP parliamentary questions ARE their own procedure (e.g. E-000015/2025),UPDATE parliamentary_questions SET procedure_ref = question_reference,fixed,column was added for cross-table consistency | UPDATED 2026-05-08: 5674 of 5674 filled by setting procedure_ref = question_reference
+law_requirements,deadline,2023,2023,100.0,unfillable,Most law-derived requirements have no specific deadline,no path,unfillable,most are inherently date-of-application
+legislative_carriages,rapporteur_mep_id,1714,1714,100.0,scraper_gap,rapporteur_name set; MEP ID not looked up,JOIN ep_members by name,feature_pending,UPDATED 2026-05-08: no rapporteur_name column on legislative_carriages; ep_members table is empty (0 rows); requires both schema extension AND ep_members backfill
+legislative_carriages,package_id,1714,1714,100.0,feature_pending,Package linkage feature not implemented,manual linking,open,
+legislative_carriages,expected_completion,1714,1714,100.0,unfillable,No public source for expected completion dates,no path,unfillable,
+legislative_carriages,eprs_match_confidence,1714,1714,100.0,feature_pending,EPRS matching feature not run,compute via EPRS overlap,open,
+legislative_carriages,days_in_current_status,1714,1714,100.0,derivable,compute from carriage_status_history,UPDATE FROM carriage_status_history,feature_pending,UPDATED 2026-05-08: carriage_status_history is empty (0 rows); status_history JSON is also empty/null on all rows; requires status-tracking feature
+institutional_publications,updated_date,587,587,100.0,unfillable,Most EU portals do not expose updated_date,no path,unfillable,
+commission_documents,source_url,434,570,76.1,scraper_gap,Document register scraper drops source URL,same scrape as portal_url,partial,UPDATED 2026-05-08: 136 of 570 filled from portal_url; 434 lack portal_url too
+commission_documents,pdf_url,302,570,53.0,derivable,derive from celex via Cellar PDF resource,UPDATE SET pdf_url = ... WHERE celex IS NOT NULL,partial,241 rows have celex | UPDATED 2026-05-08: 268 of 570 filled via Cellar PDF resource URL from celex; 302 lack celex
+commission_documents,legislative_carriage_id,570,570,100.0,feature_pending,Linkage to legislative_carriages not implemented,JOIN by celex or procedure_ref,open,
+commission_documents,document_register_category,0,570,0.0,derivable,"derive from reference prefix (COM, SWD, JOIN, ...)","UPDATE SET document_register_category = SPLIT_PART(reference,...)",fixed,UPDATED 2026-05-08: 570 of 570 filled by parsing reference prefix (COM/SWD/JOIN/CELEX-type)
+funding_opportunities,target_audience,479,479,100.0,scraper_gap,F&T portal has the field; ingester did not capture,reparse F&T calls,open,
+funding_opportunities,indicative_budget,479,479,100.0,scraper_gap,F&T portal has the field; ingester did not capture,reparse F&T calls,open,
+funding_opportunities,deadline_secondary,479,479,100.0,scraper_gap,F&T portal has the field; ingester did not capture,reparse F&T calls,open,
+committee_work_items,vote_result,428,428,100.0,scraper_gap,Committee vote results not in OEIL XML at scrape,JOIN committee_minutes by procedure_ref,open,
+committee_work_items,vote_date,428,428,100.0,scraper_gap,Same as vote_result,JOIN committee_minutes by procedure_ref,open,
+committee_work_items,rapporteur_mep_id,428,428,100.0,scraper_gap,rapporteur_name captured but MEP ID lookup not done,JOIN ep_members by fuzzy name match,feature_pending,UPDATED 2026-05-08: rapporteur_name set but ep_members table is empty (0 rows); requires ep_members backfill
+committee_work_items,full_description,428,428,100.0,scraper_gap,Only summary captured,OEIL procedure file has fuller summary; re-scrape,open,
+committee_work_items,eurlex_url,428,428,100.0,derivable,derivable from celex_numbers[0],"UPDATE SET eurlex_url = ... WHERE array_length(celex_numbers,1) > 0",unfillable,UPDATED 2026-05-08: celex_numbers is null on all 428 rows; work-in-progress items lack adopted CELEX
+ft_calls_for_proposals,indicative_budget,426,426,100.0,scraper_gap,EU F&T portal has the field; ingester did not capture,reparse F&T calls,open,
+ft_calls_for_proposals,deadline_secondary,426,426,100.0,scraper_gap,EU F&T portal has the field; ingester did not capture,reparse F&T calls,open,
+tenders,value_range_low,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,value_range_high,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,summary,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,submission_url,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,sme_analysis,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,raw_json,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,notice_subtype,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,notice_id,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,minimum_requirements,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,legal_basis,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,keywords,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,form_type,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,exclusion_grounds,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,embeddings_id,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,documents_url,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,contract_start_date,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+tenders,contract_duration_months,386,386,100.0,scraper_gap,TED ingester loaded only minimal fields,TED REST API + eForms XML parser,open,dedicated tenders re-scrape session
+ft_calls_for_tenders,documents_url,386,386,100.0,scraper_gap,F&T tender ingester gap,same as tenders,open,
+ft_calls_for_tenders,description,386,386,100.0,scraper_gap,F&T tender ingester gap,same as tenders,open,
+ft_calls_for_tenders,deadline,386,386,100.0,scraper_gap,F&T tender ingester gap,same as tenders,open,
+infringement_procedures,pdf_url,0,169,0.0,derivable,PDF URL is the presscorner endpoint we use for body,"UPDATE SET pdf_url = format(template, inf_reference)",fixed,UPDATED 2026-05-08: 169 of 169 filled via presscorner PDF API endpoint
+texts_adopted,vote_results,133,133,100.0,scraper_gap,EP plenary vote tallies not captured,parse VotesResults pages on doceo,open,
+texts_adopted,rapporteur_mep_id,133,133,100.0,derivable,rapporteur_name set; MEP ID via fuzzy match,JOIN ep_members by name,feature_pending,UPDATED 2026-05-08: rapporteur_name set but ep_members table is empty (0 rows); requires ep_members backfill
+texts_adopted,celex_number,8,133,6.0,derivable,Adopted texts have CELEX 5{YYYY}AP{NNNN} from ta_reference,mechanical mapping P{N}_TA({YYYY}){NNNN} -> 5{YYYY}AP{NNNN},partial,UPDATED 2026-05-08: 125 of 133 derived from ta_reference; 8 are A-numbers (committee reports — no CELEX assigned by Pubs Office)
+public_consultations,views_count,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,target_group,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,short_title,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,publication_id,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,outcome_summary,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,outcome_published_date,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,outcome_document_url,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,objectives,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,full_description,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,feedback_url,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,feedback_by_country,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+public_consultations,feedback_by_category,124,124,100.0,unfillable,HYS portal is a true SPA,requires Playwright-rendered scrape,unfillable,HYS Playwright session needed
+ep_resolutions,vote_date,72,72,100.0,unfillable_now,Recent 2026 RSPs without published vote tallies on OEIL,cron-style re-check,unfillable_now,
+ep_resolutions,text_url,72,72,100.0,derivable,doceo URL pattern: https://www.europarl.europa.eu/doceo/document/{ta_ref}_EN.html,UPDATE SET text_url = format(...) FROM ta_reference,feature_pending,UPDATED 2026-05-08: doceo B-number is not deterministically derivable from procedure_ref — requires OEIL re-scrape to extract document URL
+ep_resolutions,summary,72,72,100.0,unfillable_now,OEIL summary not yet published,cron-style re-check,unfillable_now,
+ep_resolutions,policy_areas,72,72,100.0,scraper_gap,OEIL policy_areas tag not captured,OEIL XML has dossier/subjects,open,
+ep_resolutions,followup_checked_at,72,72,100.0,feature_pending,Follow-up tracking feature not implemented,cron job,open,
+ep_resolutions,eurovoc_codes,72,72,100.0,scraper_gap,EuroVoc codes not extracted from OEIL,OEIL XML has eurovoc_descriptors,open,
+ep_resolutions,adoption_date,72,72,100.0,unfillable_now,Same as vote_date,cron-style refresh,unfillable_now,
+rsb_opinions,target_dg,44,44,100.0,scraper_gap,Could derive from impact assessment metadata,"scrape rsb opinion HTML for ""addressed to""",open,
+rsb_opinions,summary,10,44,22.7,derivable,first paragraph of full_text,"UPDATE rsb_opinions SET summary = SUBSTRING(full_text,1,500) WHERE full_text IS NOT NULL",partial,34/44 rows have full_text | UPDATED 2026-05-08: 34 of 44 filled from full_text first 500 chars; 10 lack full_text
+rsb_opinions,procedure_ref,44,44,100.0,scraper_gap,Procedure ref not captured at scrape,cross-reference impact assessments,open,
+legislative_trains,description,7,7,100.0,scraper_gap,EPRS legislative train carriages have description; not captured,reparse legislative-train.eu,open,7 rows only
