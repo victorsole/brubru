@@ -45,6 +45,7 @@ from . import eurio_discover as _eurio_discover
 from . import identify as _identify
 from . import ecli_search as _ecli_search
 from . import specialised_treaties as _specialised_treaties
+from . import specialised_sanctions as _specialised_sanctions
 
 router = APIRouter(prefix="/api/v1")
 router.include_router(_meta.router)
@@ -98,6 +99,7 @@ router.include_router(_eurio_discover.router)
 router.include_router(_identify.router)
 router.include_router(_ecli_search.router)
 router.include_router(_specialised_treaties.router)
+router.include_router(_specialised_sanctions.router)
 router.include_router(_docs.router)
 
 # Pretty docs also served at /api/docs (convenience alias).

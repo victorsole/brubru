@@ -43,7 +43,12 @@ CLUSTER_MAP = {
     "/api/v1/specialised/treaties": (
         "Trade & Customs",
         "EU treaties and international agreements (Cellar live)",
-        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (treaties), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP. New endpoints land here as each upstream source is wired up.",
+        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (treaties), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP, EU restrictive measures (CFSP sanctions). New endpoints land here as each upstream source is wired up.",
+    ),
+    "/api/v1/specialised/sanctions": (
+        "Trade & Customs",
+        "EU restrictive measures (CFSP sanctions consolidated list)",
+        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (treaties), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP, EU restrictive measures (CFSP sanctions). New endpoints land here as each upstream source is wired up.",
     ),
 }
 
