@@ -8,6 +8,8 @@
 - Key Regulation 2: Asylum Procedures Regulation (APR), Regulation (EU) 2024/1348 (CELEX 32024R1348)
 - Key Regulation 3: Screening Regulation, Regulation (EU) 2024/1356 (CELEX 32024R1356)
 - Key Regulation 4: Crisis and Force Majeure Regulation, Regulation (EU) 2024/1359 (CELEX 32024R1359)
+- **EPRS Briefing (7 May 2026)**: "Effective legal counselling, assistance and representation in the pact on migration and asylum" — flags that third-country nationals seeking asylum often lack the language, cultural and legal-system knowledge needed; identifies persistent quality issues, particularly with state-employed counsellors; finds that border and fast-track procedures constrain lawyers' time and access to clients, undermining the right to effective remedy. Ref: EPRS_BRI(2026)785745 — `https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2026)785745`
+- **Eurostat data (8 May 2026)**: "4.33 million under temporary protection in March 2026" — Ukraine TPD population sustains; pressure on reception capacity persists. Source: ec.europa.eu/eurostat 8 May 2026.
 - **Eurostat data (29 April 2026)**: "**24 % of first-time asylum applicants in 2025 were minors**" — empirical evidence layer for unaccompanied-minor protection arm of the Pact; underscores transposition urgency for Reception Conditions + Screening Regulation. Source: ec.europa.eu/eurostat news (29 April 2026).
 - Key Regulation 5: Eurodac Regulation (recast), Regulation (EU) 2024/1358 (CELEX 32024R1358)
 - Responsible DG: DG HOME (Migration and Home Affairs)

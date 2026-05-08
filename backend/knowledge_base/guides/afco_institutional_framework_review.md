@@ -8,9 +8,10 @@
 - Opinion committees (likely): JURI (Legal Affairs), LIBE (Civil Liberties, Justice and Home Affairs), PETI (Petitions)
 - Legal basis: Article 19 TEU (judicial protection), Articles 4(3) TEU (sincere cooperation), 258, 260, 267 TFEU (infringement + preliminary references), Article 2 TEU (values)
 - Three AFCO own-initiative files opened in April 2026:
-  - **Main file: [2025/2263(INI)]** -- "The Institutional Framework of the European Union and its interaction with national authorities in the application of Union law, with particular reference to Article 19 TEU". AFCO draft report published 20 April 2026. Cross-references the rule-of-law toolbox, infringement procedure, Article 7 TEU, and Conditionality Regulation.
-  - **Companion file: [2026/2012(INI)]** -- AFCO own-initiative procedure, opened 2026 (scope tracked in OEIL); likely targeted aspect of institutional framework
-  - **Companion file: [2026/2013(INI)]** -- AFCO own-initiative procedure, opened 2026; likely targeted aspect of institutional framework
+  - **Main file: [2025/2263(INI)]** -- "The Institutional Framework of the European Union and its interaction with national authorities in the application of Union law, with particular reference to Article 19 TEU". AFCO draft report published 20 April 2026; **second AFCO draft report iteration tabled 7 May 2026** (revision based on coordinator review). Cross-references the rule-of-law toolbox, infringement procedure, Article 7 TEU, and Conditionality Regulation.
+  - **Companion file: [2026/2012(INI)]** -- AFCO own-initiative procedure; **AFCO draft report tabled 7 May 2026**.
+  - **Companion file: [2026/2013(INI)]** -- AFCO own-initiative procedure; **AFCO draft report tabled 7 May 2026**.
+  - **Fourth file added: [2026/2014(INI)]** -- AFCO own-initiative procedure; **AFCO draft report tabled 7 May 2026**. Pattern note: AFCO INI surge (4 own-initiatives + 1 ACI revision + 1 REG amendment + 1 APP consent in a single committee day, 7 May 2026) — consistent with the constitutional-affairs intensity around the institutional review wave.
 - **Three additional AFCO draft reports (20 April 2026)**:
   - **[2025/2212(INI)]** "Institutional aspects of the Common European Defence Union" -- examines treaty basis, QMV extension, PESCO reform, Defence Commissioner role evolution. Directly tied to US 2026 NDS pivot and strategic autonomy push. See `us_2026_national_defence_strategy` and `eu_defence_procurement`.
   - **[2025/2243(ACI)]** "Framework Agreement on relations between the European Parliament and the European Commission" -- Inter-institutional Agreement revision; covers Parliament's scrutiny powers, Commissioner hearings, State of the Union, delegated/implementing acts control.

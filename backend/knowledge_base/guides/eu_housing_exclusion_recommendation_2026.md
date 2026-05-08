@@ -11,6 +11,8 @@
 - Spine source: **EPRS Briefing 5 May 2026** "Developing a coordinated EU approach to housing" (EPRS_BLOG_developing-a-coordinated-eu-approach-to-housing) — confirms "since 2024, the EU has started developing a coordinated approach to providing affordable and sustainable housing"
 - Pillar of Social Rights anchor: Principle 19 (housing and assistance for the homeless)
 - Pre-existing instrument context: 2020 European Platform on Combatting Homelessness (Lisbon Declaration, 21 June 2021) — voluntary commitment by 27 MS to end homelessness by 2030
+- Commission document (OEIL ingested 8 May 2026): **COM(2026)0540** "Fighting housing exclusion. Proposal for a Council Recommendation" — full text traceable in legislative_carriages + commission_documents.
+- Cross-link 7 May 2026: same week launch of the **Right to Stay Strategy** (DG REGIO, EVP Fitto) — territorial-cohesion answer to the same demographic-trap dynamics. See `eu_demographic_right_to_stay_strategy`.
 
 ## What the 2026 Recommendation does
 

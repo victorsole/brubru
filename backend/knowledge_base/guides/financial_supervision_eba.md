@@ -1,6 +1,8 @@
 # EU Financial Supervision: ESAs, MiCA, and DORA
 
 ## QUICK FACTS
+- **EPRS ECTI Briefing (7 May 2026)**: "US implementation of Basel III — A first assessment of the March 2026 consultation paper on implementing Basel III in the US" — analyses the level-playing-field implications of the US consultation for EU banks. Cornerstone of cross-Atlantic supervisory parity discussion. Ref: ECTI_BRI(2026)784037 — `https://www.europarl.europa.eu/thinktank/en/document/ECTI_BRI(2026)784037`
+- **OEIL ingested (8 May 2026)**: **2025/0825(COD)** "Prudential requirements for credit institutions" — the EU implementation track of Basel III prudential rules. Lead committee ECON.
 - **EPRS Briefing (29 April 2026)**: "MISP: A review of selected technical issues" — background ahead of the **ECON public hearing on 5 May 2026** on the Market Integration and Settlement Package (incl. Settlement Finality Regulation). Ref: ECTI_BRI(2026)784036
 - Topic: EU financial supervision -- ESAs, MiCA crypto-asset oversight, DORA digital resilience
 - Responsible Commissioner: Maria Luís Albuquerque (Financial Services, Portugal)

@@ -15,6 +15,7 @@
   - **Enhancing the strategy for the rights of persons with disabilities to 2030** — see `eu_disability_rights_post2024`
 - Cross-cutting EVIDENCE BASE: **JRC research (6 May 2026, same day as adoption)** — *"How to lift 18 million Europeans out of poverty: evidence from JRC research"* — quantitative microsimulation behind the Commission's targeted-instrument mix. Source: ec.europa.eu/jrc — companion to the Anti-Poverty Strategy headline figure of 15 million AROPE-2030 reduction.
 - Commission Press: IP/26/946 ("Commission proposes new measures to fight poverty and improve the lives of persons with disabilities"); QANDA/26/947 (Q&A on Anti-poverty package); FS/26/948 (Factsheet); FS/26/950 (Factsheet on disability rights).
+- Commission documents (OEIL ingested 8 May 2026): **COM(2026)0538** "European Union's Anti-Poverty Strategy: addressing poverty and social exclusion" (the Communication itself); paired SWD(2026)0770 (impact assessment / evidence base). Full document numbers now traceable in legislative_carriages + commission_documents.
 - Eurostat (6 May 2026): "People with dependent children face higher poverty" — data backbone the Commission cited.
 - Speech (6 May 2026): EVP Mînzatu remarks on an ambitious social plan aimed at eradicating poverty and promoting the rights of persons with disabilities.
 

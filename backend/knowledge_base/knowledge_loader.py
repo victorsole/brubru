@@ -7988,6 +7988,97 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'crédits emissions vehicules lourds': ['eu_automotive_omnibus'],
     'crediti emissioni veicoli pesanti': ['eu_automotive_omnibus'],
     'emissiekredieten zware bedrijfsvoertuigen': ['eu_automotive_omnibus'],
+
+    # 8 May 2026 — Basel III US implementation (EPRS ECTI BRI 784037)
+    'basel iii us implementation': ['financial_supervision_eba'],
+    'basel iii us': ['financial_supervision_eba'],
+    'us basel iii': ['financial_supervision_eba'],
+    'basel iii consultation paper': ['financial_supervision_eba'],
+    'basilea iii estados unidos': ['financial_supervision_eba'],
+    'basilea iii eeuu': ['financial_supervision_eba'],
+    'bâle iii états-unis': ['financial_supervision_eba'],
+    'basilea iii catalonia': ['financial_supervision_eba'],
+    'basilea iii estats units': ['financial_supervision_eba'],
+    'basilea iii stati uniti': ['financial_supervision_eba'],
+    'basel iii verenigde staten': ['financial_supervision_eba'],
+    'prudential requirements credit institutions 2025/0825': ['financial_supervision_eba'],
+    'eu basel iii implementation 2025': ['financial_supervision_eba'],
+
+    # 8 May 2026 — AgoraEU gender equality (EP IUST BRI 787154)
+    'agoraeu': ['gender_equality_strategy'],
+    'agoraeu regulation': ['gender_equality_strategy'],
+    'agoraeu gender equality': ['gender_equality_strategy'],
+    'agoraeu citizens equality rights values': ['gender_equality_strategy'],
+    'agoraeu reglamento': ['gender_equality_strategy'],
+    'agoraeu reglament': ['gender_equality_strategy'],
+    'agoraeu règlement': ['gender_equality_strategy'],
+    'agoraeu regolamento': ['gender_equality_strategy'],
+    'agoraeu verordening': ['gender_equality_strategy'],
+
+    # 8 May 2026 — fisheries and aquaculture statistics 2025/0246(COD)
+    'european fisheries aquaculture statistics': ['eu_fisheries_control'],
+    'fisheries aquaculture statistics regulation': ['eu_fisheries_control'],
+    '2025/0246(cod)': ['eu_fisheries_control'],
+    'estadisticas pesca acuicultura ue': ['eu_fisheries_control'],
+    'estadísticas pesca acuicultura ue': ['eu_fisheries_control'],
+    'estadistiques pesca aqüicultura ue': ['eu_fisheries_control'],
+    'statistiques peche aquaculture ue': ['eu_fisheries_control'],
+    'statistiche pesca acquacoltura ue': ['eu_fisheries_control'],
+    'statistieken visserij aquacultuur eu': ['eu_fisheries_control'],
+
+    # 8 May 2026 — DG CLIMA hydrogen + Brazil/China carbon markets coalition
+    'eu hydrogen bank third auction': ['eu_energy_policy', 'european_climate_law'],
+    'european hydrogen projects 1 billion': ['eu_energy_policy', 'european_climate_law'],
+    'hydrogen bank auction round': ['eu_energy_policy'],
+    'eu brazil china carbon markets coalition': ['eu_energy_policy', 'european_climate_law'],
+    'open coalition carbon markets integrity': ['eu_energy_policy'],
+    'subasta hidrogeno banco europeo': ['eu_energy_policy'],
+    'subhasta hidrogen banc europeu': ['eu_energy_policy'],
+    'enchère hydrogène banque européenne': ['eu_energy_policy'],
+    'asta idrogeno banca europea': ['eu_energy_policy'],
+    'waterstof veiling europese bank': ['eu_energy_policy'],
+    'coalicion mercados carbono brasil china': ['eu_energy_policy'],
+    'coalició mercats carboni brasil xina': ['eu_energy_policy'],
+    'coalition marchés carbone brésil chine': ['eu_energy_policy'],
+    'coalizione mercati carbonio brasile cina': ['eu_energy_policy'],
+    'coalitie koolstofmarkten brazilië china': ['eu_energy_policy'],
+
+    # 8 May 2026 — DG ENER jet fuel supply response
+    'jet fuel supply response': ['iran_strait_hormuz_eu_response'],
+    'eu jet fuel coordinated response': ['iran_strait_hormuz_eu_response'],
+    'queroseno aviacion suministro ue': ['iran_strait_hormuz_eu_response'],
+    'querosè aviació subministrament ue': ['iran_strait_hormuz_eu_response'],
+    'kérosène aviation approvisionnement ue': ['iran_strait_hormuz_eu_response'],
+    'cherosene approvvigionamento ue': ['iran_strait_hormuz_eu_response'],
+    'kerosine luchtvaart bevoorrading eu': ['iran_strait_hormuz_eu_response'],
+
+    # 8 May 2026 — German State aid 5bn industry decarbonisation
+    'german state aid 5 billion industry decarbonisation': ['competition_law_enforcement'],
+    'germany 5 billion industry decarbonisation aid': ['competition_law_enforcement'],
+    'ayuda estado alemania 5000 millones descarbonizacion': ['competition_law_enforcement'],
+    'ajut estat alemanya 5000 milions descarbonització': ['competition_law_enforcement'],
+    'aide etat allemagne 5 milliards decarbonation industrie': ['competition_law_enforcement'],
+    'aiuto stato germania 5 miliardi decarbonizzazione': ['competition_law_enforcement'],
+    'staatssteun duitsland 5 miljard decarbonisatie': ['competition_law_enforcement'],
+
+    # 8 May 2026 — Migration legal counselling (EPRS BRI 785745)
+    'migration legal counselling pact': ['eu_migration_asylum_pact'],
+    'asylum legal counselling assistance': ['eu_migration_asylum_pact'],
+    'asesoramiento legal pacto migracion': ['eu_migration_asylum_pact'],
+    'assessorament legal pacte migració': ['eu_migration_asylum_pact'],
+    'conseil juridique pacte migration': ['eu_migration_asylum_pact'],
+    'consulenza legale patto migrazione': ['eu_migration_asylum_pact'],
+    'juridisch advies migratiepact': ['eu_migration_asylum_pact'],
+
+    # 8 May 2026 — Social Package OEIL document numbers
+    'com 2026 538': ['eu_anti_poverty_strategy_2026'],
+    'com(2026)0538': ['eu_anti_poverty_strategy_2026'],
+    'com 2026 539': ['eu_child_guarantee_strengthened_2026'],
+    'com(2026)0539': ['eu_child_guarantee_strengthened_2026'],
+    'com 2026 540': ['eu_housing_exclusion_recommendation_2026'],
+    'com(2026)0540': ['eu_housing_exclusion_recommendation_2026'],
+    'swd 2026 770': ['eu_anti_poverty_strategy_2026'],
+    'swd 2026 772': ['eu_child_guarantee_strengthened_2026'],
 }
 
 

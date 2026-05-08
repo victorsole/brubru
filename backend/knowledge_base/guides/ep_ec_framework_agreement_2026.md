@@ -3,7 +3,8 @@
 ## QUICK FACTS
 - Procedure: **2025/2243(ACI)** -- interinstitutional act (revision of the existing Framework Agreement)
 - Title: "Framework Agreement on relations between the European Parliament and the European Commission"
-- Status (29 April 2026): **CLOSE_TO_ADOPTION** -- AFCO draft report announcement 29 April 2026; vote in committee 9 March 2026; committee report tabled 11 March 2026
+- Status (8 May 2026): **CLOSE_TO_ADOPTION** -- second AFCO draft report iteration tabled 7 May 2026 (post-coordinator review); vote in committee 9 March 2026; committee report tabled 11 March 2026; AFCO draft report announcement 29 April 2026
+- Companion AFCO files tabled the same day (7 May 2026): 2025/0900(APP) consent procedure + 2025/2262(REG) Rule 135 amendment (appointments to Union agencies and bodies) — see `afco_institutional_framework_review` for the full AFCO surge context
 - Lead committee: **AFCO** (Constitutional Affairs)
 - Legal basis: Article 295 TFEU (interinstitutional cooperation), Article 17(7) TEU (EC nomination procedure)
 - Existing instrument being revised: **Framework Agreement of 20 October 2010** between the EP and the Commission (OJ L 304, 20.11.2010, p. 47), itself revising earlier 2005 and 2000 framework agreements

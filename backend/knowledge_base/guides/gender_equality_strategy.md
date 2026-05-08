@@ -13,6 +13,7 @@
 - Builds on: Gender Equality Strategy 2020-2025 (COM(2020)152)
 - EP lead committee: FEMM (Women's Rights and Gender Equality)
 - International framework: Roadmap for Women's Rights (2025), UN Beijing Declaration, Istanbul Convention
+- **EP IUST Briefing (7 May 2026)**: "Gender equality objective in the proposal for a Regulation establishing AgoraEU" — gender-perspective analysis of the AgoraEU proposal (Citizens, Equality, Rights and Values successor instrument). Maps how the gender-equality objective is operationalised in the funding architecture. Ref: IUST_BRI(2026)787154 — `https://www.europarl.europa.eu/thinktank/en/document/IUST_BRI(2026)787154`
 - 7 priority areas: (1) Gender-based violence, (2) Engaging men and boys, (3) Women's healthcare, (4) Economic prosperity, (5) Pay and pension gaps, (6) Political participation, (7) Global action
 
 ## Overview

@@ -12,6 +12,7 @@
 - Original instrument: Council Recommendation (EU) 2021/1004 of 14 June 2021 establishing a European Child Guarantee
 - Original CELEX: **32021H1004**
 - Original EUR-Lex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021H1004
+- Commission documents (OEIL ingested 8 May 2026): **COM(2026)0539** "Breaking the cycle of child poverty — strengthening the European Child Guarantee" (the Communication itself); paired SWD(2026)0772 (impact assessment / evidence base). Full document numbers now traceable in legislative_carriages + commission_documents.
 - Pillar of Social Rights anchor: Principle 11 (childcare and support to children) + Principle 14 (minimum income)
 - AROPE 2030 child target: at least 5 million fewer children at risk of poverty or social exclusion by 2030
 

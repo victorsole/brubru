@@ -17,6 +17,7 @@
 - Private enforcement: Damages Directive 2014/104/EU
 - Judicial review: General Court (full review + unlimited jurisdiction on fines), Court of Justice (points of law)
 - Largest cartel fine: EUR 2.93 billion (truck cartel, 2016)
+- **DG COMP (7 May 2026)**: **Commission approves EUR 5 billion German State aid scheme to support decarbonisation of industry** — major State aid case under the Clean Industrial Deal State aid framework + the Iran-crisis temporary State aid framework (5 May 2026). Sectors: steel, cement, chemicals, glass, ceramics — energy-intensive industries with electrification + hydrogen-conversion CapEx pipelines. Approval signals the speed of post-AccelerateEU State-aid clearance. Cross-link with `accelerateeu_fossil_energy_crisis` + `iran_strait_hormuz_eu_response`. Source: DG COMP press release, 7 May 2026.
 - DG COMP (13 April 2026): Commission carried out unannounced antitrust inspections at premises of companies active in the chocolate confectionery sector in several Member States. Concerns: possible violation of Article 101 TFEU (cartel prohibition) on market allocation or price coordination. Source: https://ec.europa.eu/commission/presscorner
 - Merger case M.12286 HONDA / ASTEMO (14 April 2026): prior notification of concentration, candidate for simplified procedure (OJ:C_202602183)
 - Merger case M.12295 VALEA / ROCKAWAY MEDIA / ROCKAWAY ARTS (14 April 2026): non-opposition to notified concentration (OJ:C_202602283)
