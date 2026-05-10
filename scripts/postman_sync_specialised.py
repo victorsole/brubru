@@ -40,15 +40,15 @@ TOP_FOLDER = "Specialised EC Databases"
 
 # Each row: prefix → (sub-folder, plain-English short title, sub-folder description)
 CLUSTER_MAP = {
-    "/api/v1/specialised/treaties": (
+    "/api/v1/specialised/fta": (
         "Trade & Customs",
-        "EU treaties and international agreements (Cellar live)",
-        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (treaties), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP, EU restrictive measures (CFSP sanctions). New endpoints land here as each upstream source is wired up.",
+        "EU international agreements (FTA-equivalent surface, table-backed)",
+        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (FTAs/EPAs/AAs/PCAs/Fisheries/Aviation/Exchange-of-Letters), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP, EU restrictive measures (CFSP sanctions). New endpoints land here as each upstream source is wired up.",
     ),
     "/api/v1/specialised/sanctions": (
         "Trade & Customs",
         "EU restrictive measures (CFSP sanctions consolidated list)",
-        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (treaties), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP, EU restrictive measures (CFSP sanctions). New endpoints land here as each upstream source is wired up.",
+        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (FTAs/EPAs/AAs/PCAs/Fisheries/Aviation/Exchange-of-Letters), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP, EU restrictive measures (CFSP sanctions). New endpoints land here as each upstream source is wired up.",
     ),
 }
 
