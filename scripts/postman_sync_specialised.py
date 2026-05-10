@@ -60,6 +60,11 @@ CLUSTER_MAP = {
         "EU Geographical Indications (PDOs, PGIs, TSGs, craft and industrial GIs)",
         "Wave 3. Food, feed and plant-health registries — eAmbrosia + GIview merged Geographical Indications dataset (PDOs / PGIs / TSGs / wine GIs / spirit GIs / aromatised GIs / craft + industrial GIs from Reg 2023/2411), RASFF, TRACES, EU Pesticides Database, EUROPHYT, ADIS, Plant Variety Portal, FOREMATIS, Food and Feed Information Portal sub-screens.",
     ),
+    "/api/v1/specialised/transparency-register": (
+        "Transparency & Decision-Making",
+        "EU Transparency Register (lobbyists / interest representatives, daily XML)",
+        "Wave 9. Transparency & decision-making registries — EU Transparency Register (interest representatives), Comitology Register (committee opinions), Expert Group Register, Register of Commission Documents (RegDoc), Commissioners' Meetings register.",
+    ),
 }
 
 DEFAULT_FOLDER_DESCRIPTIONS = {
