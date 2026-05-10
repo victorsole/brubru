@@ -48,7 +48,12 @@ CLUSTER_MAP = {
     "/api/v1/specialised/sanctions": (
         "Trade & Customs",
         "EU restrictive measures (CFSP sanctions consolidated list)",
-        "Wave 1. Trade & customs registries — TARIC tariff measures, EU international agreements (FTAs/EPAs/AAs/PCAs/Fisheries/Aviation/Exchange-of-Letters), CIRCABC document collaboration, trade-defence cases, Access2Markets / SEP, EU restrictive measures (CFSP sanctions). New endpoints land here as each upstream source is wired up.",
+        "Wave 1. Trade & customs registries — EU international agreements (FTAs/EPAs/AAs/PCAs/Fisheries/Aviation/Exchange-of-Letters), restrictive measures (CFSP sanctions), trade-defence regulations (anti-dumping / countervailing / safeguard). New endpoints land here as each upstream source is wired up.",
+    ),
+    "/api/v1/specialised/trade-defence": (
+        "Trade & Customs",
+        "EU anti-dumping, countervailing and safeguard regulations (Cellar-backed)",
+        "Wave 1. Trade & customs registries — EU international agreements (FTAs/EPAs/AAs/PCAs/Fisheries/Aviation/Exchange-of-Letters), restrictive measures (CFSP sanctions), trade-defence regulations (anti-dumping / countervailing / safeguard). New endpoints land here as each upstream source is wired up.",
     ),
 }
 
