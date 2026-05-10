@@ -65,6 +65,11 @@ CLUSTER_MAP = {
         "EU Transparency Register (lobbyists / interest representatives, daily XML)",
         "Wave 9. Transparency & decision-making registries — EU Transparency Register (interest representatives), Comitology Register (committee opinions), Expert Group Register, Register of Commission Documents (RegDoc), Commissioners' Meetings register.",
     ),
+    "/api/v1/specialised/cohesion-datasets": (
+        "Energy / Education / Regional",
+        "DG REGIO Cohesion Open Data Platform catalog (Socrata)",
+        "Wave 10. Energy / Education / Regional registries — ENTSO-E + ENTSOG transparency platforms, ESCO occupations / skills, Eurydice education systems, EQAVET, Cohesion Open Data Platform (1,451 datasets covering ESF+ / ERDF / Cohesion Fund / Just Transition Fund / Interreg / RESTORE / RRF), Inforegio.",
+    ),
 }
 
 DEFAULT_FOLDER_DESCRIPTIONS = {
