@@ -55,6 +55,11 @@ CLUSTER_MAP = {
         "EU anti-dumping, countervailing and safeguard regulations (Cellar-backed)",
         "Wave 1. Trade & customs registries — EU international agreements (FTAs/EPAs/AAs/PCAs/Fisheries/Aviation/Exchange-of-Letters), restrictive measures (CFSP sanctions), trade-defence regulations (anti-dumping / countervailing / safeguard). New endpoints land here as each upstream source is wired up.",
     ),
+    "/api/v1/specialised/gi": (
+        "Food, Feed & Plant Health",
+        "EU Geographical Indications (PDOs, PGIs, TSGs, craft and industrial GIs)",
+        "Wave 3. Food, feed and plant-health registries — eAmbrosia + GIview merged Geographical Indications dataset (PDOs / PGIs / TSGs / wine GIs / spirit GIs / aromatised GIs / craft + industrial GIs from Reg 2023/2411), RASFF, TRACES, EU Pesticides Database, EUROPHYT, ADIS, Plant Variety Portal, FOREMATIS, Food and Feed Information Portal sub-screens.",
+    ),
 }
 
 DEFAULT_FOLDER_DESCRIPTIONS = {
