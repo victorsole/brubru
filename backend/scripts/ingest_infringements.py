@@ -99,6 +99,35 @@ def parse_inf_reference(text):
     return None
 
 
+# Keywords that mark a press release as a real infringement decision.
+# Press-corner publishes individual decisions as IP/yy/nnnn (not INF/yy/nnnn);
+# the monthly INF package summary references them.
+INFRINGEMENT_TITLE_PATTERNS = [
+    re.compile(r"refer\s+\S+\s+to\s+the\s+Court", re.IGNORECASE),
+    re.compile(r"letter\s+of\s+formal\s+notice", re.IGNORECASE),
+    re.compile(r"reasoned\s+opinion", re.IGNORECASE),
+    re.compile(r"infringement\s+(procedure|package|decision)", re.IGNORECASE),
+    re.compile(r"opens?\s+infringement", re.IGNORECASE),
+    re.compile(r"closes?\s+infringement", re.IGNORECASE),
+    re.compile(r"infringement\s+against", re.IGNORECASE),
+]
+
+
+def is_infringement_title(title):
+    """True if the press release title looks like an infringement decision."""
+    if not title:
+        return False
+    return any(p.search(title) for p in INFRINGEMENT_TITLE_PATTERNS)
+
+
+def parse_ip_reference(text):
+    """Extract IP/yy/nnnn references (used for individual decisions)."""
+    m = re.search(r"\b(IP[_/](?:\d{2}|\d{4})[_/]\d{3,5})\b", text or "", re.IGNORECASE)
+    if m:
+        return m.group(1).upper().replace("/", "_")
+    return None
+
+
 def detect_stage(title, summary):
     """Pick the procedure stage from title + summary keywords."""
     blob = f"{title or ''} {summary or ''}".lower()
@@ -191,55 +220,82 @@ def main():
 
     print(f"[INFO] Searching presscorner for 'infringement' (limit={args.limit})")
 
-    # Live presscorner JSON API at /api/search with response field
-    # docuLanguageListResources containing {docuky, title, leadText, eventDate, reference}.
+    # Live presscorner JSON API. Real infringement decisions are published as
+    # IP/yy/nnnn (individual decisions) PLUS INF/yy/nnnn (monthly packages).
+    # Search across multiple keywords to maximise recall, dedupe by refCode.
+    KEYWORDS = [
+        "infringement",
+        "refer to the Court of Justice",
+        "letter of formal notice",
+        "reasoned opinion",
+        "infringement procedure",
+    ]
     candidates = []
-    page = 0
     seen_refs = set()
-    while len(candidates) < args.limit and page < 20:
-        data, code = fetch_search_page(page=page, page_size=20)
-        items = data.get("docuLanguageListResources") or []
-        if not items:
-            print(f"  [WARN] page {page}: code={code}, no items in response. Stopping.")
+    for keyword in KEYWORDS:
+        if len(candidates) >= args.limit:
             break
-        for it in items:
-            title = (it.get("title") or "").strip()
-            summary = (it.get("leadText") or "").strip()
-            # The press-corner search JSON exposes the reference under refCode
-            # (e.g. "INF/26/720"), not "reference".
-            ref_field = it.get("refCode") or ""
-            inf_ref = parse_inf_reference(ref_field) or parse_inf_reference(title)
-            if not inf_ref or inf_ref in seen_refs:
-                continue
-            # Filter to actual INF references only — IP/yy/nnnn (general press)
-            # is broader than infringement procedures.
-            if not inf_ref.startswith("INF"):
-                continue
-            seen_refs.add(inf_ref)
-            decision_date = None
-            try:
-                d = it.get("eventDate")
-                if d:
-                    decision_date = dt.datetime.strptime(d[:10], "%Y-%m-%d").date()
-            except Exception:
-                pass
-            candidates.append({
-                "inf_reference": inf_ref,
-                "member_state": detect_member_state(title, summary),
-                "procedure_stage": detect_stage(title, summary),
-                "sector": None,
-                "title": title[:1000] or f"Infringement decision {inf_ref}",
-                "summary": summary[:5000] or None,
-                "decision_date": decision_date,
-                "source_url": DETAIL_URL.format(ref=inf_ref),
-                "pdf_url": None,
-                "related_celex": [],
-                "policy_areas": [],
-            })
+        for page in range(0, 25):
             if len(candidates) >= args.limit:
                 break
-        page += 1
-        time.sleep(1.1)
+            params = {
+                "keywords": keyword,
+                "language": "en",
+                "size": 20,
+                "pageNumber": page,
+                "sort": "date_desc",
+            }
+            status, body = http_get(SEARCH_URL, params=params)
+            if status != 200:
+                break
+            try:
+                data = json.loads(body)
+            except Exception:
+                break
+            items = data.get("docuLanguageListResources") or []
+            if not items:
+                break
+            new_this_page = 0
+            for it in items:
+                title = (it.get("title") or "").strip()
+                summary = (it.get("leadText") or "").strip()
+                ref_field = it.get("refCode") or ""
+                inf_ref = parse_inf_reference(ref_field) or parse_inf_reference(title)
+                ip_ref = parse_ip_reference(ref_field) or parse_ip_reference(title)
+                # Accept INF refs unconditionally; accept IP refs only when title
+                # looks like an infringement decision.
+                use_ref = inf_ref
+                if not use_ref and ip_ref and is_infringement_title(title):
+                    use_ref = ip_ref
+                if not use_ref or use_ref in seen_refs:
+                    continue
+                seen_refs.add(use_ref)
+                new_this_page += 1
+                decision_date = None
+                try:
+                    d = it.get("eventDate")
+                    if d:
+                        decision_date = dt.datetime.strptime(d[:10], "%Y-%m-%d").date()
+                except Exception:
+                    pass
+                candidates.append({
+                    "inf_reference": use_ref,
+                    "member_state": detect_member_state(title, summary),
+                    "procedure_stage": detect_stage(title, summary),
+                    "sector": None,
+                    "title": title[:1000] or f"Infringement decision {use_ref}",
+                    "summary": summary[:5000] or None,
+                    "decision_date": decision_date,
+                    "source_url": DETAIL_URL.format(ref=use_ref),
+                    "pdf_url": None,
+                    "related_celex": [],
+                    "policy_areas": [],
+                })
+                if len(candidates) >= args.limit:
+                    break
+            if new_this_page == 0 and page > 3:
+                break
+            time.sleep(0.8)
 
     print(f"[INFO] Built {len(candidates)} candidate rows from real source.")
     if not candidates:

@@ -220,3 +220,27 @@ Each wave proceeds in this order: scraper → migration → SQLAlchemy model →
 | 9 — Energy/Education/Regional | not started | 0 / ~6 | – | – |
 
 Update this table after each wave; commit alongside the code.
+
+## Chatbot integration — Layer 1 (context_builder)
+
+Status: **complete (10/10 clusters)** — commits `630d3db7` + `0f91afe3` (2026-05-11).
+
+Each shipped cluster has an on-demand context block injected near the TOP of
+`format_context_for_ai()` so it survives the 32k-char truncation cap:
+
+| Cluster | Detector regex tag | Fetch path | Source |
+|---------|--------------------|------------|--------|
+| sanctions | `sanction(s)/restrictive measures/asset freeze` | `_fetch_sanctions_block` | `eu_sanctions` DB |
+| transparency_register | `lobby/lobbying/transparency register` | `_fetch_transparency_register_block` | `eu_transparency_register` DB |
+| comitology | `SCoPAFF/comitology/expert group/RPS` | `_fetch_comitology_block` | `eu_comitology_documents` DB |
+| gi | `PDO/PGI/TSG/geographical indication` | `_fetch_gi_block` | `eu_geographical_indications` DB |
+| fta | `FTA/EPA/AA/PCA/CETA/EU-<partner>` | `_fetch_fta_block` | `eu_trade_agreements` DB |
+| trade_defence | `anti-dumping/countervailing/safeguard` | `_fetch_td_block` | `eu_trade_defence_measures` DB |
+| competition_cases | `state aid/cartel/merger/SA./M./AT.` | `_fetch_comp_block` | api.tech.ec.europa.eu (live) |
+| jrc_datasets | `JRC dataset/ESDAC/EFFIS/GHSL/LUISA` | `_fetch_jrc_block` | `eu_jrc_datasets` DB |
+| cohesion_datasets | `ESF+/ERDF/cohesion fund/just transition/RRF` | `_fetch_cohesion_block` | `eu_cohesion_datasets` DB |
+| cn_codes | `CN code/HS code/tariff/customs code` | `_fetch_cn_block` | webgate.ec.europa.eu/nomen (live) |
+
+All 10 verified end-to-end with one positive query per cluster + six negative
+queries (zero false positives). Pattern: regex detect → per-term ILIKE OR
+match (max 3 terms, stopwords filtered) → 4 kB-capped formatted block.

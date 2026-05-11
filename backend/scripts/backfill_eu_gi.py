@@ -387,72 +387,95 @@ def upsert_from_giview(db: ChunkedDb, dry_run: bool = False) -> tuple[int, int]:
 # ─────────────────────── Body enrichment ─────────────────────────────────
 
 
+_ELI_REG_PAT = re.compile(r"/eli/(reg_impl|reg|dec_impl|dec)/(\d{4})/(\d+)(?:[/?]|$)")
+_CELEX_PAT = re.compile(r"CELEX[%:]?3A?(3\d{4}[A-Z]+\d+)")
+
+
+def derive_celex_from_publication(uri: str) -> Optional[str]:
+    """Map an eAmbrosia publications[].uri (ELI or EUR-Lex CELEX URL) to a CELEX.
+
+    Examples:
+      http://data.europa.eu/eli/reg_impl/2025/2340/oj   -> 32025R2340
+      http://data.europa.eu/eli/reg/2024/834/oj         -> 32024R0834
+      https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32013R1308 -> 32013R1308
+    """
+    if not uri:
+        return None
+    m = _ELI_REG_PAT.search(uri)
+    if m:
+        kind, year, num = m.groups()
+        type_letter = {"reg_impl": "R", "reg": "R", "dec_impl": "D", "dec": "D"}.get(kind, "R")
+        return f"3{year}{type_letter}{num.zfill(4)}"
+    m = _CELEX_PAT.search(uri)
+    if m:
+        return m.group(1)
+    return None
+
+
 def enrich_bodies(db: ChunkedDb, throttle: float, refresh: bool = False) -> dict:
-    """Walk eu_geographical_indications, fetch summary-sheet PDFs and store
-    body_html/body_text. Skips rows that already have a body unless refresh=True."""
+    """Walk eu_geographical_indications, derive a CELEX from each row's
+    `publications[].uri` (ELI URIs to EUR-Lex), fetch the regulation body
+    from Cellar (XHTML preferred, PDF fallback), and store body_html /
+    body_text / body_source.
+
+    eAmbrosia's `summarySheets` attachments are referenced as numeric IDs
+    on a Webgate endpoint (/api/v1/attachments/{id}) that consistently
+    returns HTTP 500 — the service is broken or auth-walled and the
+    legacy /eambrosia/services/attachment endpoint redirects to the
+    agriportal login page. Cellar via publications is the honest path:
+    the body of a GI registration IS the regulation that registered it.
+    """
+    from _specialised_helpers import fetch_body_for_celex  # local import
+
     where = "" if refresh else "WHERE has_body IS NOT TRUE"
     db.execute(f"""
-        SELECT gi_identifier, summary_sheets, single_document, source
+        SELECT gi_identifier, publications, legal_instrument, source
           FROM eu_geographical_indications
           {where}
          ORDER BY modification_date DESC NULLS LAST
     """)
     rows = db.fetchall()
-    print(f"[INFO] {len(rows):,} GI rows to enrich with body", flush=True)
+    print(f"[INFO] {len(rows):,} GI rows to enrich with body via Cellar", flush=True)
 
-    counts = {"upserted": 0, "no_attachment": 0, "fetched_pdf": 0, "fetched_xml": 0,
-              "fetched_html": 0, "extract_failed": 0, "errors": 0}
+    counts = {"written": 0, "no_celex": 0, "body_xhtml": 0, "body_pdf": 0,
+              "no_body": 0, "errors": 0}
 
-    for i, (gi_id, summary_sheets, single_document, source) in enumerate(rows, 1):
-        # Pick first summary sheet attachment id
-        attachment_id = None
-        if isinstance(summary_sheets, list) and summary_sheets:
-            for sh in summary_sheets:
-                if isinstance(sh, dict) and sh.get("uri"):
-                    # eAmbrosia stores attachment ID in `uri` field (numeric string)
-                    attachment_id = str(sh.get("uri"))
-                    break
-        if not attachment_id and isinstance(single_document, dict):
-            uri = single_document.get("uri")
-            if uri and re.match(r"^\d+$", str(uri)):
-                attachment_id = str(uri)
-        if not attachment_id:
-            counts["no_attachment"] += 1
-            if i % 200 == 0:
+    for i, (gi_id, publications, legal_instrument, source) in enumerate(rows, 1):
+        # Try publications first (registration regulations), fall back to legal_instrument.
+        celex_candidates: list[str] = []
+        if isinstance(publications, list):
+            for pub in publications:
+                if isinstance(pub, dict) and pub.get("uri"):
+                    cx = derive_celex_from_publication(pub["uri"])
+                    if cx:
+                        celex_candidates.append(cx)
+        if not celex_candidates and isinstance(legal_instrument, dict):
+            cx = derive_celex_from_publication(legal_instrument.get("uri", ""))
+            if cx:
+                celex_candidates.append(cx)
+
+        if not celex_candidates:
+            counts["no_celex"] += 1
+            if i % 250 == 0:
                 print(f"  [{i:4}/{len(rows)}] running totals: {counts}", flush=True)
             continue
 
-        time.sleep(throttle if i > 1 else 0)
-        body, ctype = fetch_attachment(attachment_id)
-        if not body:
-            counts["errors"] += 1
-            continue
-
-        body_html: Optional[str] = None
-        body_text: Optional[str] = None
-        body_source: Optional[str] = None
-
-        if ctype and "pdf" in ctype:
-            text = extract_pdf_text(body)
-            if text and len(text) >= MIN_BODY_LEN:
-                body_text = text.replace("\x00", "")[:5_000_000]
-                body_source = "eambrosia_pdf"
-                counts["fetched_pdf"] += 1
-        elif ctype and ("xml" in ctype or "html" in ctype):
-            try:
-                html = body.decode("utf-8", errors="replace")
-                text = strip_html_to_text(html)
-                if text and len(text) >= MIN_BODY_LEN:
-                    body_html = html.replace("\x00", "")[:5_000_000]
-                    body_text = text.replace("\x00", "")[:5_000_000]
-                    body_source = "eambrosia_xml" if "xml" in ctype else "eambrosia_html"
-                    counts[f"fetched_{'xml' if 'xml' in ctype else 'html'}"] += 1
-            except Exception:
-                pass
+        # Walk candidates from most-recent backwards (publications often listed oldest first).
+        body_html = body_text = body_source = None
+        for celex in reversed(celex_candidates):
+            time.sleep(throttle if i > 1 else 0)
+            body_html, body_text, body_source = fetch_body_for_celex(celex)
+            if body_text and len(body_text) >= MIN_BODY_LEN:
+                break
+            body_html = body_text = body_source = None
 
         if not body_text:
-            counts["extract_failed"] += 1
+            counts["no_body"] += 1
+            if i % 250 == 0:
+                print(f"  [{i:4}/{len(rows)}] running totals: {counts}", flush=True)
             continue
+
+        counts[f"body_{body_source}"] = counts.get(f"body_{body_source}", 0) + 1
 
         try:
             db.execute(
@@ -466,12 +489,15 @@ def enrich_bodies(db: ChunkedDb, throttle: float, refresh: bool = False) -> dict
                        updated_at = NOW()
                  WHERE gi_identifier = %(gi)s
                 """,
-                {"gi": gi_id, "body_html": body_html, "body_text": body_text, "body_source": body_source},
+                {"gi": gi_id, "body_html": body_html, "body_text": body_text,
+                 "body_source": f"cellar_{body_source}"},
             )
-            counts["upserted"] += 1
-            if counts["upserted"] % 50 == 0:
+            counts["written"] += 1
+            if counts["written"] % 50 == 0:
                 db.commit()
-                print(f"  [{i:4}/{len(rows)}] {gi_id} | bodies={counts['upserted']:,}", flush=True)
+                print(f"  [{i:4}/{len(rows)}] {gi_id} | bodies={counts['written']:,} "
+                      f"xhtml={counts.get('body_xhtml',0)} pdf={counts.get('body_pdf',0)} "
+                      f"no_body={counts['no_body']} no_celex={counts['no_celex']}", flush=True)
         except Exception as exc:
             db.rollback()
             counts["errors"] += 1

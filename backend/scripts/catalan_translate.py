@@ -613,6 +613,52 @@ def fetch_from_cellar(celex: str) -> str:
     return path
 
 
+def fetch_fmx4_xml_via_notice(celex: str, language: str = 'ENG') -> str:
+    """
+    Fetch the FMX4 (Formex) XML for an act in a given language by walking the
+    document notice. This is the canonical, structured XML source documented
+    in the Publications Office spec (12 Nov 2025).
+
+    Returns path to a saved XML file. Use this when the LEG_2025-11 dump
+    doesn't contain the act (newly published acts post-Nov 2025).
+
+    Args:
+        celex: CELEX number (e.g. "32016R0679").
+        language: ISO-3 language code (uppercase) — ENG, FRA, SPA, …
+
+    Raises:
+        RuntimeError if the notice has no FMX4 manifestation in the requested
+        language, or if the manifestation URL fails to download.
+    """
+    import asyncio
+    import httpx
+
+    from services.api_clients.fmx4_notice_parser import fetch_notice, fmx4_url_for
+
+    print(f'[INFO] Resolving FMX4 manifestation via notice for {celex} ({language})...')
+    meta = asyncio.run(fetch_notice(celex))
+    fmx4 = fmx4_url_for(meta, language=language)
+    if not fmx4:
+        # FMX4 may not be available — fall back to the first XML-like manifestation
+        any_xml = meta.manifestation(language, 'xhtml')
+        if any_xml:
+            raise RuntimeError(
+                f'No FMX4 manifestation for {celex} in {language}; XHTML is available at {any_xml.url}'
+            )
+        raise RuntimeError(f'No XML manifestation for {celex} in {language}')
+
+    print(f'[INFO] FMX4 URL: {fmx4}')
+    r = httpx.get(fmx4, follow_redirects=True, timeout=60)
+    if r.status_code != 200:
+        raise RuntimeError(f'FMX4 fetch returned HTTP {r.status_code} for {fmx4}')
+
+    path = f'/tmp/{celex}_{language}_fmx4.xml'
+    with open(path, 'wb') as f:
+        f.write(r.content)
+    print(f'[OK] Saved {len(r.content)} bytes -> {path}')
+    return path
+
+
 def find_xml(search_term: str, base_dir: str = 'docs/LEG_2025-11') -> list:
     """Find XML files matching an OJ reference pattern."""
     results = []

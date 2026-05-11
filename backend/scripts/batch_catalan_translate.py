@@ -379,10 +379,12 @@ def auto_fix(celex: str) -> int:
 
 
 def import_to_db(celex: str, title_ca: str, articles: int, recitals: int, size: int, engine: str,
-                 file_type: str = 'main', oj_ref: str = '', parent_celex: str = '', annex_label: str = ''):
-    """Import translation metadata to database."""
+                 file_type: str = 'main', oj_ref: str = '', parent_celex: str = '', annex_label: str = '',
+                 deployed: bool = False):
+    """Import translation metadata to database. Set deployed=True if FTP succeeded."""
     from core.database import SessionLocal
     from models.catalan_translation import CatalanTranslation
+    from datetime import datetime
 
     cat_ca, cat_en = classify_act(title_ca)
     doc_type = detect_doc_type(title_ca)
@@ -417,6 +419,8 @@ def import_to_db(celex: str, title_ca: str, articles: int, recitals: int, size: 
                 existing.parent_celex = parent_celex
             if annex_label:
                 existing.annex_label = annex_label
+            if deployed:
+                existing.deployed_at = datetime.utcnow()
         else:
             db.add(CatalanTranslation(
                 celex=celex, title_en=title_ca, title_ca=title_ca,
@@ -430,6 +434,7 @@ def import_to_db(celex: str, title_ca: str, articles: int, recitals: int, size: 
                 articles_count=articles, recitals_count=recitals,
                 html_size_bytes=size, engine=engine, source_format='formex',
                 siteground_url=f'https://brubru.beresol.eu/legislacio-ue-catala/{celex}/',
+                deployed_at=datetime.utcnow() if deployed else None,
             ))
         db.commit()
     finally:
@@ -443,7 +448,14 @@ def translate_one(xml_path: str, celex: str) -> bool:
         '--translate', xml_path,
         '--celex', celex,
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=3600)
+    except subprocess.TimeoutExpired:
+        print(f'    [ERROR] Translation timed out after 3600s: {celex}')
+        return False
+    except Exception as e:
+        print(f'    [ERROR] Translation crashed: {celex}: {e}')
+        return False
     if result.returncode != 0:
         print(f'    [ERROR] Translation failed: {result.stderr[-200:] if result.stderr else "unknown"}')
         return False
@@ -525,7 +537,12 @@ def main():
     parser.add_argument('--start-from', type=str, default='', help='Start from this CELEX')
     parser.add_argument('--dry-run', action='store_true', help='Show queue without translating')
     parser.add_argument('--no-deploy', action='store_true', help='Skip FTP deploy')
+    parser.add_argument('--binding-only', action='store_true',
+                        help='Restrict to binding-law CELEX (sector 3, forms R/L/D). '
+                             'Excludes OJ C/L-series notice fragments (C_YYYY*, L_YYYY*) and other non-binding acts.')
     args = parser.parse_args()
+
+    BINDING_CELEX_RE = re.compile(r'^3[0-9]{4}[RLD][0-9]{4}$')
 
     # Try full queue first, fall back to old queue
     FULL_QUEUE = os.path.join(TRANSLATIONS_DIR, 'translation_queue_full.txt')
@@ -571,6 +588,9 @@ def main():
             continue
         # Filter by file type
         if args.file_type != 'all' and file_type != args.file_type:
+            continue
+        # Filter to binding-law CELEX only
+        if args.binding_only and not BINDING_CELEX_RE.match(celex):
             continue
 
         queue.append((xml_path, celex, size_kb, file_type, oj_ref, parent_celex))
@@ -662,10 +682,11 @@ def main():
         recitals = len(re.findall(r'class="recital"', content))
         html_size = os.path.getsize(html_path)
 
-        # Import to DB
+        # Import to DB (mark deployed since FTP succeeded above, or no FTP requested)
         try:
             import_to_db(celex, title_ca, max(articles, 0), recitals, html_size, 'softcatala',
-                         file_type=file_type, oj_ref=oj_ref, parent_celex=parent_celex)
+                         file_type=file_type, oj_ref=oj_ref, parent_celex=parent_celex,
+                         deployed=(ftp is not None))
             print(f'  [DB] Imported {celex}')
         except Exception as e:
             print(f'  [DB ERROR] {e}')
