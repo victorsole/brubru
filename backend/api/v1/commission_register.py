@@ -42,23 +42,64 @@ class CommissionRegisterItem(BaseModel):
     title: str
     doc_type: str
     document_register_category: Optional[str] = None  # AGENDA_COM_MEETING / TENTAT_AGENDA_COM_MEETING / PV / OPIN_IMPACT_ASSESS / OJ
-    publication_date: Optional[datetime] = None
     dg_responsible: Optional[str] = None
     procedure_ref: Optional[str] = None
     celex: Optional[str] = None
     common_name: Optional[str] = None
     languages: list = Field(default_factory=list)
+
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(
+        None,
+        description=(
+            "Canonical citizen-facing URL. Fallback chain: portal_url → "
+            "EUR-Lex citizen URL derived from CELEX → source_url → pdf_url."
+        ),
+    )
+    body_text: Optional[str] = Field(
+        None,
+        description="Plain-text body of the document (extracted from PDF or Cellar XHTML).",
+    )
+    body_html: Optional[str] = Field(
+        None,
+        description=(
+            "HTML body (Cellar XHTML manifestation, EN). Null for PDF-only "
+            "acts where Cellar has no XHTML representation."
+        ),
+    )
+    document_date: Optional[date] = Field(
+        None,
+        description="The document's adoption / publication date.",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When Brubru first ingested this row (first_seen).",
+    )
+
+    # Legacy / kept-for-compat fields (still useful for partners)
     portal_url: Optional[str] = None  # Landing page (EUR-Lex or RegDoc)
     pdf_url: Optional[str] = None     # Direct PDF asset (when available)
     source_url: Optional[str] = None  # Commission Transparency Register origin
+    publication_date: Optional[datetime] = None  # Deprecated alias of document_date — kept one release
     last_updated: Optional[datetime] = None
-    # Body fields — Commission documents are PDF-sourced (Cellar PDFs, COM/SWD/
-    # JOIN PDFs). body_html stays None per the "no PDF→HTML synthesis" rule.
     has_body: bool = False
-    body_html: Optional[str] = None  # Always None for this endpoint; PDF-only source
-    body_text: Optional[str] = None  # Full text extracted via pypdf; no truncation
-    # Deprecated alias kept one release. Migrate to body_text/body_html pair.
-    body: Optional[str] = None
+    body: Optional[str] = None  # Deprecated alias kept one release
+
+
+_EURLEX_PUBLIC_URL = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
+
+
+def _derive_public_url(r: CommissionDocument) -> Optional[str]:
+    """Canonical citizen-facing URL fallback chain."""
+    if r.portal_url:
+        return r.portal_url
+    if r.celex:
+        return _EURLEX_PUBLIC_URL.format(celex=r.celex)
+    if r.source_url:
+        return r.source_url
+    if r.pdf_url:
+        return r.pdf_url
+    return None
 
 
 def _row_to_item(
@@ -70,27 +111,44 @@ def _row_to_item(
     pdf = r.pdf_url
     if pdf is None and r.celex:
         pdf = f"https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=CELEX:{r.celex}"
-    body_html, body_text, has_body = body_from_pdf_text(r.text_body, threshold=body_threshold)
+    # body_html now sourced from the new column (Cellar XHTML manifestation)
+    # rather than being forced to None. body_text comes from the existing
+    # text_body column.
+    body_html_value = getattr(r, "body_html", None)
+    body_text_value = r.text_body
+    has_body = bool(
+        (body_text_value and len(body_text_value) >= body_threshold)
+        or (body_html_value and len(body_html_value) >= body_threshold)
+    )
+    # publication_date is a datetime; convert to date for document_date
+    doc_date = None
+    if r.publication_date:
+        doc_date = r.publication_date.date() if hasattr(r.publication_date, "date") else r.publication_date
     return CommissionRegisterItem(
         id=str(r.id),
         reference=r.reference,
         title=r.title,
         doc_type=r.doc_type.value if hasattr(r.doc_type, "value") else str(r.doc_type),
         document_register_category=r.document_register_category,
-        publication_date=r.publication_date,
         dg_responsible=r.dg_responsible,
         procedure_ref=r.procedure_ref,
         celex=r.celex,
         common_name=r.common_name,
         languages=list(r.languages or []),
+        # The 5 mandatory datapoints
+        public_url=_derive_public_url(r),
+        body_text=body_text_value,
+        body_html=body_html_value,
+        document_date=doc_date,
+        creation_date=r.first_seen,
+        # Kept fields
         portal_url=r.portal_url,
         pdf_url=pdf,
         source_url=r.source_url,
+        publication_date=r.publication_date,
         last_updated=r.last_updated,
         has_body=has_body,
-        body_html=body_html,
-        body_text=body_text,
-        body=deprecated_body(body_text, body_html),
+        body=deprecated_body(body_text_value, body_html_value),
     )
 
 

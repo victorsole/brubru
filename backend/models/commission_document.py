@@ -73,6 +73,9 @@ class CommissionDocument(Base):
     # Body text backfilled from Cellar (migration 051). XHTML-stripped plain
     # text for SWDs / opinions; PDF-extracted text for JOIN/RES/DEC.
     text_body = Column(Text, nullable=True)
+    # HTML body added in migration 067 — Cellar XHTML manifestation (EN) for
+    # CELEX-bearing rows. Null when Cellar has no XHTML representation.
+    body_html = Column(Text, nullable=True)
 
     # Cross-references
     legislative_carriage_id = Column(
