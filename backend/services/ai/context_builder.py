@@ -598,6 +598,27 @@ class ContextData:
     # Triggered by "comitology", "implementing act", "committee vote", "SCoPAFF", "summary record", "scrutiny"
     comitology_block: Optional[str] = None
 
+    # On-demand: EU Geographical Indications (PDO / PGI / TSG / wine / spirit / craft)
+    gi_block: Optional[str] = None
+
+    # On-demand: EU international agreements (FTA / EPA / AA / PCA / Fisheries / Aviation)
+    fta_block: Optional[str] = None
+
+    # On-demand: EU anti-dumping / countervailing / safeguard regulations
+    trade_defence_block: Optional[str] = None
+
+    # On-demand: DG COMP competition cases (state aid / antitrust / merger) — live HTTP
+    competition_cases_block: Optional[str] = None
+
+    # On-demand: JRC Data Catalogue (scientific datasets)
+    jrc_datasets_block: Optional[str] = None
+
+    # On-demand: DG REGIO Cohesion Open Data datasets
+    cohesion_datasets_block: Optional[str] = None
+
+    # On-demand: Combined Nomenclature (CN) tariff codes — live HTTP via Access2Markets
+    cn_codes_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1210,6 +1231,90 @@ class ContextBuilder:
                 return None
         post_tasks['comitology_block'] = _fetch_comitology_safe()
 
+        # 3k. On-demand: Geographical Indications block
+        gi_intent = self._detect_gi_intent(user_message)
+        async def _fetch_gi_safe():
+            if not gi_intent: return None
+            try:
+                block = await self._fetch_gi_block(user_message, gi_intent)
+                if block: logger.info("[gi-block] injected (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[gi-block] failed: %s", e); return None
+        post_tasks['gi_block'] = _fetch_gi_safe()
+
+        # 3l. On-demand: International Agreements / FTA block
+        fta_intent = self._detect_fta_intent(user_message)
+        async def _fetch_fta_safe():
+            if not fta_intent: return None
+            try:
+                block = await self._fetch_fta_block(user_message, fta_intent)
+                if block: logger.info("[fta-block] injected (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[fta-block] failed: %s", e); return None
+        post_tasks['fta_block'] = _fetch_fta_safe()
+
+        # 3m. On-demand: Trade Defence block
+        td_intent = self._detect_td_intent(user_message)
+        async def _fetch_td_safe():
+            if not td_intent: return None
+            try:
+                block = await self._fetch_td_block(user_message, td_intent)
+                if block: logger.info("[td-block] injected (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[td-block] failed: %s", e); return None
+        post_tasks['trade_defence_block'] = _fetch_td_safe()
+
+        # 3n. On-demand: DG COMP competition cases (live HTTP)
+        comp_intent = self._detect_comp_intent(user_message)
+        async def _fetch_comp_safe():
+            if not comp_intent: return None
+            try:
+                block = await self._fetch_comp_block(user_message, comp_intent)
+                if block: logger.info("[comp-block] injected (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[comp-block] failed: %s", e); return None
+        post_tasks['competition_cases_block'] = _fetch_comp_safe()
+
+        # 3o. On-demand: JRC Data Catalogue block
+        jrc_intent = self._detect_jrc_intent(user_message)
+        async def _fetch_jrc_safe():
+            if not jrc_intent: return None
+            try:
+                block = await self._fetch_jrc_block(user_message, jrc_intent)
+                if block: logger.info("[jrc-block] injected (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[jrc-block] failed: %s", e); return None
+        post_tasks['jrc_datasets_block'] = _fetch_jrc_safe()
+
+        # 3p. On-demand: DG REGIO Cohesion datasets block
+        cohesion_intent = self._detect_cohesion_intent(user_message)
+        async def _fetch_cohesion_safe():
+            if not cohesion_intent: return None
+            try:
+                block = await self._fetch_cohesion_block(user_message, cohesion_intent)
+                if block: logger.info("[cohesion-block] injected (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[cohesion-block] failed: %s", e); return None
+        post_tasks['cohesion_datasets_block'] = _fetch_cohesion_safe()
+
+        # 3q. On-demand: Combined Nomenclature / CN codes block (live HTTP)
+        cn_intent = self._detect_cn_intent(user_message)
+        async def _fetch_cn_safe():
+            if not cn_intent: return None
+            try:
+                block = await self._fetch_cn_block(user_message, cn_intent)
+                if block: logger.info("[cn-block] injected (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[cn-block] failed: %s", e); return None
+        post_tasks['cn_codes_block'] = _fetch_cn_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1299,6 +1404,13 @@ class ContextBuilder:
         sanctions_block = post_map.get('sanctions_block')
         transparency_register_block = post_map.get('transparency_register_block')
         comitology_block = post_map.get('comitology_block')
+        gi_block = post_map.get('gi_block')
+        fta_block = post_map.get('fta_block')
+        trade_defence_block = post_map.get('trade_defence_block')
+        competition_cases_block = post_map.get('competition_cases_block')
+        jrc_datasets_block = post_map.get('jrc_datasets_block')
+        cohesion_datasets_block = post_map.get('cohesion_datasets_block')
+        cn_codes_block = post_map.get('cn_codes_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1373,6 +1485,13 @@ class ContextBuilder:
             sanctions_block=sanctions_block,
             transparency_register_block=transparency_register_block,
             comitology_block=comitology_block,
+            gi_block=gi_block,
+            fta_block=fta_block,
+            trade_defence_block=trade_defence_block,
+            competition_cases_block=competition_cases_block,
+            jrc_datasets_block=jrc_datasets_block,
+            cohesion_datasets_block=cohesion_datasets_block,
+            cn_codes_block=cn_codes_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -7289,6 +7408,640 @@ class ContextBuilder:
             logger.warning("[comitology-block] failed: %s", e)
             return None
 
+    # ------------------------------------------------------------------
+    # GEOGRAPHICAL INDICATIONS (eAmbrosia + GIview)
+    # ------------------------------------------------------------------
+    _GI_INTENT = re.compile(
+        r"\b(PDO|PGI|TSG|geographical\s+indication|protected\s+designation|"
+        r"protected\s+geographical|traditional\s+speciality\s+guaranteed|"
+        r"protected\s+origin|designation\s+of\s+origin|craft\s+(?:GI|indication))\b",
+        re.IGNORECASE,
+    )
+    _GI_STOPWORDS = {
+        "pdo", "pgi", "tsg", "geographical", "indication", "indications",
+        "protected", "designation", "designations", "traditional", "speciality",
+        "specialities", "guaranteed", "origin", "craft", "what", "is", "the",
+        "a", "an", "of", "in", "to", "for", "from", "by", "eu", "european",
+        "union", "list", "lists", "name", "named", "register", "registered",
+        "registration",
+    }
+
+    def _detect_gi_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._GI_INTENT.search(query)
+        if not m: return None
+        # Country hint (ISO-2 from common demonyms)
+        cm = re.search(
+            r"\b(french|italian|spanish|portuguese|greek|german|austrian|"
+            r"belgian|dutch|polish|czech|romanian|bulgarian|hungarian|"
+            r"slovenian|slovak|croatian|cypriot|maltese|finnish|swedish|"
+            r"danish|estonian|latvian|lithuanian|irish|luxembourgish)\b",
+            query, re.IGNORECASE,
+        )
+        demonym_to_iso = {
+            "french":"FR","italian":"IT","spanish":"ES","portuguese":"PT","greek":"GR",
+            "german":"DE","austrian":"AT","belgian":"BE","dutch":"NL","polish":"PL",
+            "czech":"CZ","romanian":"RO","bulgarian":"BG","hungarian":"HU","slovenian":"SI",
+            "slovak":"SK","croatian":"HR","cypriot":"CY","maltese":"MT","finnish":"FI",
+            "swedish":"SE","danish":"DK","estonian":"EE","latvian":"LV","lithuanian":"LT",
+            "irish":"IE","luxembourgish":"LU",
+        }
+        country = demonym_to_iso.get(cm.group(1).lower()) if cm else None
+        # gi_type explicit?
+        gi_type = None
+        if re.search(r"\bPDO\b", query, re.I): gi_type = "PDO"
+        elif re.search(r"\bPGI\b", query, re.I): gi_type = "PGI"
+        elif re.search(r"\bTSG\b", query, re.I): gi_type = "TSG"
+        return {"keyword": m.group(0), "country": country, "gi_type": gi_type}
+
+    async def _fetch_gi_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._GI_STOPWORDS]
+                terms = terms[:3]
+                if terms:
+                    clauses = []
+                    for i, t in enumerate(terms):
+                        clauses.append(
+                            f"(EXISTS (SELECT 1 FROM unnest(protected_names) n WHERE n ILIKE :gi{i}) "
+                            f"OR file_number ILIKE :gi{i})"
+                        )
+                        params[f"gi{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(clauses) + ")")
+                if intent.get("gi_type"):
+                    where.append("gi_type = :gt"); params["gt"] = intent["gi_type"]
+                if intent.get("country"):
+                    where.append(":cc = ANY(countries)"); params["cc"] = intent["country"]
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT gi_identifier, protected_names, gi_type, product_type,
+                           countries, status, eu_protection_date, file_number, public_url
+                      FROM eu_geographical_indications
+                      {where_sql}
+                     ORDER BY eu_protection_date DESC NULLS LAST
+                     LIMIT 10
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "EU GEOGRAPHICAL INDICATIONS (from eu_geographical_indications; eAmbrosia + GIview, 5,917 records):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | type: {intent['gi_type']}" if intent.get("gi_type") else "")
+                    + (f" | country: {intent['country']}" if intent.get("country") else ""),
+                    "",
+                ]
+                for r in rows:
+                    names = ", ".join(r.get("protected_names") or []) or "?"
+                    gt = r.get("gi_type") or "?"
+                    pt = r.get("product_type") or "?"
+                    cs = ", ".join(r.get("countries") or []) or "?"
+                    st = r.get("status") or "?"
+                    pd = str(r.get("eu_protection_date") or "?")[:10]
+                    fn = r.get("file_number") or "?"
+                    lines.append(f"  - {names} | {gt} | {pt} | {cs} | status {st} | protected {pd} | file {fn}")
+                lines.append("")
+                lines.append("Source: webgate.ec.europa.eu/eambrosia-api (DG AGRI authoritative) + "
+                             "tmdn.org/giview (EUIPO union register). "
+                             "Brubru endpoint: /api/v1/specialised/gi.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated — query /gi endpoint for full list]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[gi-block] failed: %s", e)
+            return None
+
+    # ------------------------------------------------------------------
+    # EU INTERNATIONAL AGREEMENTS (FTA / EPA / AA / PCA / Fisheries / Aviation)
+    # ------------------------------------------------------------------
+    _FTA_INTENT = re.compile(
+        r"\b(FTA|free\s+trade\s+agreement|economic\s+partnership\s+agreement|EPA|"
+        r"association\s+agreement|partnership\s+and\s+cooperation|PCA|"
+        r"comprehensive\s+economic\s+and\s+trade|CETA|trade\s+agreement|"
+        r"fisheries\s+partnership|aviation\s+agreement|EU-\w+|"
+        r"signed\s+(?:by|with)\s+the\s+EU|EU\s+(?:signed|concluded)\s+(?:an?|with))\b",
+        re.IGNORECASE,
+    )
+    _FTA_STOPWORDS = {
+        "fta", "free", "trade", "agreement", "agreements", "economic", "partnership",
+        "epa", "association", "and", "cooperation", "pca", "comprehensive",
+        "ceta", "fisheries", "aviation", "signed", "concluded", "by", "with",
+        "of", "in", "on", "the", "a", "an", "to", "for", "from", "eu", "european",
+        "union", "what", "is", "are", "have", "has", "does", "do", "did", "between",
+    }
+
+    def _detect_fta_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._FTA_INTENT.search(query)
+        if not m: return None
+        return {"keyword": m.group(0)}
+
+    async def _fetch_fta_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._FTA_STOPWORDS]
+                terms = terms[:3]
+                if terms:
+                    clauses = []
+                    for i, t in enumerate(terms):
+                        clauses.append(f"(title ILIKE :ft{i} OR partner ILIKE :ft{i})")
+                        params[f"ft{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(clauses) + ")")
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT celex, title, partner, agreement_type, in_force,
+                           document_date, eurlex_url
+                      FROM eu_trade_agreements
+                      {where_sql}
+                     ORDER BY document_date DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "EU INTERNATIONAL AGREEMENTS (from eu_trade_agreements; CELEX sector 2 type A):",
+                    f"Query keyword: '{intent.get('keyword')}'",
+                    "",
+                ]
+                for r in rows:
+                    celex = r.get("celex") or "?"
+                    title = (r.get("title") or "")[:120]
+                    partner = r.get("partner") or "?"
+                    atype = r.get("agreement_type") or "?"
+                    inf = "in force" if r.get("in_force") else "historical"
+                    dt = str(r.get("document_date") or "?")[:10]
+                    lines.append(f"  - [{celex}] {title}")
+                    lines.append(f"      type {atype} | partner {partner} | {inf} | date {dt}")
+                lines.append("")
+                lines.append("Source: Cellar SPARQL (4,415 signed agreements). "
+                             "Brubru endpoint: /api/v1/specialised/fta.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated — query /fta endpoint for full list]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[fta-block] failed: %s", e)
+            return None
+
+    # ------------------------------------------------------------------
+    # TRADE DEFENCE (anti-dumping / countervailing / safeguard)
+    # ------------------------------------------------------------------
+    _TD_INTENT = re.compile(
+        r"\b(anti-?dumping|countervailing|safeguard\s+measure|dumping\s+dut(?:y|ies)|"
+        r"compensatory\s+dut(?:y|ies)|expiry\s+review|trade\s+defence|"
+        r"definitive\s+anti-?dumping|provisional\s+anti-?dumping)\b",
+        re.IGNORECASE,
+    )
+    _TD_STOPWORDS = {
+        "anti-dumping", "antidumping", "anti", "dumping", "countervailing",
+        "safeguard", "measure", "measures", "duty", "duties", "compensatory",
+        "expiry", "review", "trade", "defence", "definitive", "provisional",
+        "the", "a", "an", "of", "on", "in", "to", "from", "for", "and", "or",
+        "what", "are", "is", "there", "any", "current", "eu", "european", "union",
+    }
+
+    def _detect_td_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._TD_INTENT.search(query)
+        if not m: return None
+        return {"keyword": m.group(0)}
+
+    # Demonym/synonym → canonical phrases used in TD titles
+    _TD_DEMONYM = {
+        "chinese": "china", "russian": "russia", "indian": "india",
+        "vietnamese": "vietnam", "korean": "korea", "japanese": "japan",
+        "indonesian": "indonesia", "turkish": "turkey", "brazilian": "brazil",
+        "egyptian": "egypt", "thai": "thailand", "malaysian": "malaysia",
+        "taiwanese": "taiwan", "iranian": "iran", "ukrainian": "ukraine",
+        "belarusian": "belarus", "american": "united states",
+        "e-bike": "bicycle", "e-bikes": "bicycle", "ebike": "bicycle",
+        "ebikes": "bicycle", "bikes": "bicycle",
+    }
+
+    async def _fetch_td_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                raw_terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                             if t.lower() not in self._TD_STOPWORDS]
+                # Expand demonyms / product synonyms
+                terms: list[str] = []
+                for t in raw_terms:
+                    tl = t.lower()
+                    if tl in self._TD_DEMONYM:
+                        terms.append(self._TD_DEMONYM[tl])
+                    else:
+                        terms.append(t)
+                terms = terms[:3]
+                if terms:
+                    clauses = []
+                    for i, t in enumerate(terms):
+                        clauses.append(
+                            f"(title ILIKE :td{i} OR target_country ILIKE :td{i} OR product ILIKE :td{i})"
+                        )
+                        params[f"td{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(clauses) + ")")
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT celex, title, measure_type, duty_status, target_country,
+                           product, in_force, document_date, eurlex_url
+                      FROM eu_trade_defence_measures
+                      {where_sql}
+                     ORDER BY document_date DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "EU TRADE DEFENCE MEASURES (from eu_trade_defence_measures; sector-3 type-R):",
+                    f"Query keyword: '{intent.get('keyword')}'",
+                    "",
+                ]
+                for r in rows:
+                    celex = r.get("celex") or "?"
+                    title = (r.get("title") or "")[:100]
+                    mt = r.get("measure_type") or "?"
+                    ds = r.get("duty_status") or "?"
+                    tc = r.get("target_country") or "?"
+                    prod = (r.get("product") or "?")[:50]
+                    inf = "in force" if r.get("in_force") else "historical"
+                    dt = str(r.get("document_date") or "?")[:10]
+                    lines.append(f"  - [{celex}] {title}")
+                    lines.append(f"      {mt} {ds} | target {tc} | product {prod} | {inf} | {dt}")
+                lines.append("")
+                lines.append("Source: Cellar SPARQL. Brubru endpoint: /api/v1/specialised/trade-defence.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[td-block] failed: %s", e)
+            return None
+
+    # ------------------------------------------------------------------
+    # DG COMP CASES (state aid / antitrust / merger) — live HTTP
+    # ------------------------------------------------------------------
+    _COMP_INTENT = re.compile(
+        r"\b(state\s+aid|state-aid|antitrust|cartel|merger\s+(?:case|control|review)|"
+        r"DG\s+COMP|competition\s+case|SA\.\d+|M\.\d+|AT\.\d+|"
+        r"abuse\s+of\s+(?:dominant|dominance)|Article\s+10[12])\b",
+        re.IGNORECASE,
+    )
+
+    def _detect_comp_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._COMP_INTENT.search(query)
+        if not m: return None
+        # Detect SA./M./AT. case number if present
+        cnum = re.search(r"\b(SA\.\d+|M\.\d+|AT\.\d+)\b", query)
+        # Instrument detection
+        instr = None
+        ql = query.lower()
+        if "state aid" in ql or "state-aid" in ql: instr = "SA"
+        elif "merger" in ql: instr = "M"
+        elif "antitrust" in ql or "cartel" in ql: instr = "AT"
+        return {"keyword": m.group(0), "case_number": cnum.group(0) if cnum else None, "instrument": instr}
+
+    async def _fetch_comp_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        import httpx
+        try:
+            text_query = "*"
+            if intent.get("case_number"):
+                text_query = f'caseNumber:"{intent["case_number"]}"'
+            else:
+                # Extract entity terms (company names etc.) to enrich the search
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{3,}", query)
+                         if t.lower() not in {"state", "aid", "antitrust", "cartel", "merger",
+                                              "case", "control", "review", "competition",
+                                              "the", "a", "an", "of", "on", "in", "to", "and",
+                                              "european", "union", "eu", "is", "are", "did",
+                                              "what", "any", "have", "find", "show", "me",
+                                              "abuse", "dominance", "dominant", "article"}]
+                if terms:
+                    text_query = " ".join(terms[:3])
+            params = {
+                "text": text_query,
+                "pageNumber": "1",
+                "pageSize": "8",
+                "apiKey": "CS_PROD_ODSE_PROD",
+                "groupByField": "caseNumber",
+            }
+            if intent.get("instrument"):
+                params["text"] = f'({params["text"]}) AND caseInstrument:"{intent["instrument"]}"'
+
+            async with httpx.AsyncClient(timeout=8.0) as client:
+                r = await client.post(
+                    "https://api.tech.ec.europa.eu/search-api/prod/rest/search",
+                    params=params,
+                )
+                if r.status_code != 200:
+                    return None
+                data = r.json()
+
+            hits = data.get("results") or []
+            if not hits:
+                return None
+            total = data.get("totalResults") or 0
+            lines = [
+                "EU COMPETITION CASES (live from api.tech.ec.europa.eu/search-api; DG COMP):",
+                f"Query: '{intent.get('keyword')}'"
+                + (f" | instrument: {intent['instrument']}" if intent.get("instrument") else "")
+                + (f" | case: {intent['case_number']}" if intent.get("case_number") else "")
+                + f" | total upstream: {total:,}",
+                "",
+            ]
+            for hit in hits[:8]:
+                meta = hit.get("metadata") or {}
+                def _flat(v):
+                    if isinstance(v, list) and v: return v[0]
+                    return v
+                case_num = _flat(meta.get("caseNumber")) or hit.get("groupById") or "?"
+                title = (_flat(meta.get("caseTitle")) or _flat(meta.get("caseOriginalTitle")) or "?")[:100]
+                instr = _flat(meta.get("caseInstrument")) or "?"
+                ms_raw = str(_flat(meta.get("caseMemberState")) or "")
+                ms = ms_raw.replace("Country", "") if ms_raw.startswith("Country") else (ms_raw or "?")
+                aid_raw = str(_flat(meta.get("caseAidCategory")) or "")
+                aid_cat = aid_raw.replace("CaseType", "") if aid_raw.startswith("CaseType") else (aid_raw or "?")
+                init = (_flat(meta.get("caseInitiationDate")) or "?")[:10]
+                lines.append(f"  - [{case_num}] {title}")
+                lines.append(f"      {instr} | MS {ms} | aid cat {aid_cat} | initiated {init}")
+            lines.append("")
+            lines.append("Source: EU Corporate Search backend (public apiKey CS_PROD_ODSE_PROD, "
+                         "~1M attachments / ~250k cases). "
+                         "Brubru endpoint: /api/v1/specialised/competition-cases.")
+            block = "\n".join(lines)
+            return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+        except Exception as e:
+            logger.warning("[comp-block] failed: %s", e)
+            return None
+
+    # ------------------------------------------------------------------
+    # JRC DATA CATALOGUE
+    # ------------------------------------------------------------------
+    _JRC_INTENT = re.compile(
+        r"\b(JRC\s+(?:dataset|data|catalog)|Joint\s+Research\s+Centre|"
+        r"ESDAC|EFFIS|GHSL|LUISA|INSPIRE\s+geoportal|"
+        r"JRC\s+(?:scientific|research)|earth\s+observation\s+EU)\b",
+        re.IGNORECASE,
+    )
+    _JRC_STOPWORDS = {
+        "jrc", "joint", "research", "centre", "dataset", "datasets", "data",
+        "catalog", "catalogue", "scientific", "esdac", "effis", "ghsl", "luisa",
+        "inspire", "geoportal", "earth", "observation", "the", "a", "an", "on",
+        "of", "for", "in", "to", "and", "or", "what", "is", "are", "does",
+        "find", "show", "me", "any", "eu", "european", "union",
+    }
+
+    def _detect_jrc_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._JRC_INTENT.search(query)
+        if not m: return None
+        return {"keyword": m.group(0)}
+
+    async def _fetch_jrc_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._JRC_STOPWORDS]
+                terms = terms[:3]
+                if terms:
+                    clauses = []
+                    for i, t in enumerate(terms):
+                        clauses.append(
+                            f"(title ILIKE :jr{i} OR description ILIKE :jr{i} "
+                            f"OR EXISTS (SELECT 1 FROM unnest(keywords) k WHERE k ILIKE :jr{i}))"
+                        )
+                        params[f"jr{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(clauses) + ")")
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT uuid, title, description, publisher, modified, public_url, keywords
+                      FROM eu_jrc_datasets
+                      {where_sql}
+                     ORDER BY modified DESC NULLS LAST, title
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "JRC DATA CATALOGUE (from eu_jrc_datasets; ~3,541 scientific datasets):",
+                    f"Query keyword: '{intent.get('keyword')}'",
+                    "",
+                ]
+                for r in rows:
+                    title = (r.get("title") or "?")[:100]
+                    desc = (r.get("description") or "")[:140]
+                    pub = (r.get("publisher") or "?")[:50]
+                    mod = str(r.get("modified") or "?")[:10]
+                    kws = ", ".join((r.get("keywords") or [])[:3])
+                    lines.append(f"  - {title}")
+                    lines.append(f"      {desc}")
+                    lines.append(f"      publisher: {pub} | modified {mod} | tags: {kws}")
+                lines.append("")
+                lines.append("Source: data.europa.eu federation of JRC catalogue. "
+                             "Brubru endpoint: /api/v1/specialised/jrc-datasets.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[jrc-block] failed: %s", e)
+            return None
+
+    # ------------------------------------------------------------------
+    # COHESION OPEN DATA (DG REGIO)
+    # ------------------------------------------------------------------
+    _COHESION_INTENT = re.compile(
+        r"(?:\bESF\+|\bERDF\b|\bcohesion\s+fund\b|\bjust\s+transition\b|"
+        r"\binterreg\b|\bRRF\b|\brecovery\s+and\s+resilience\b|"
+        r"\bcohesion\s+(?:data|policy|dataset)\b|\bcohesiondata\b|"
+        r"\bregional\s+fund\b|\bstructural\s+fund\b)",
+        re.IGNORECASE,
+    )
+    _COHESION_STOPWORDS = {
+        "esf", "erdf", "cohesion", "fund", "funds", "just", "transition", "interreg",
+        "rrf", "recovery", "resilience", "data", "policy", "dataset", "datasets",
+        "regional", "structural", "the", "a", "an", "of", "on", "in", "to", "and",
+        "or", "what", "how", "much", "did", "spent", "spend", "spending", "for",
+        "eu", "european", "union", "is", "are",
+    }
+
+    def _detect_cohesion_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._COHESION_INTENT.search(query)
+        if not m: return None
+        return {"keyword": m.group(0)}
+
+    async def _fetch_cohesion_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._COHESION_STOPWORDS]
+                terms = terms[:3]
+                if terms:
+                    clauses = []
+                    for i, t in enumerate(terms):
+                        clauses.append(f"(name ILIKE :co{i} OR description ILIKE :co{i})")
+                        params[f"co{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(clauses) + ")")
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT socrata_id, name, category, description, view_count, public_url
+                      FROM eu_cohesion_datasets
+                      {where_sql}
+                     ORDER BY view_count DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "DG REGIO COHESION OPEN DATA (from eu_cohesion_datasets; ~1,451 datasets):",
+                    f"Query keyword: '{intent.get('keyword')}'",
+                    "",
+                ]
+                for r in rows:
+                    sid = r.get("socrata_id") or "?"
+                    name = (r.get("name") or "?")[:100]
+                    cat = (r.get("category") or "?")[:35]
+                    desc = (r.get("description") or "")[:140]
+                    views = r.get("view_count") or 0
+                    lines.append(f"  - [{sid}] {name}")
+                    lines.append(f"      category: {cat} | views: {views}")
+                    if desc: lines.append(f"      {desc}")
+                lines.append("")
+                lines.append("Source: cohesiondata.ec.europa.eu (Socrata catalogue). "
+                             "Brubru endpoint: /api/v1/specialised/cohesion-datasets.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[cohesion-block] failed: %s", e)
+            return None
+
+    # ------------------------------------------------------------------
+    # COMBINED NOMENCLATURE / CN CODES — live HTTP via Access2Markets
+    # ------------------------------------------------------------------
+    _CN_INTENT = re.compile(
+        r"\b(CN\s+code|Combined\s+Nomenclature|HS\s+code|tariff\s+code|"
+        r"customs\s+code|HS\s+heading|HS\s+chapter|nomenclature\s+code|"
+        r"what\s+(?:is|are)\s+the\s+(?:CN|HS|tariff))\b",
+        re.IGNORECASE,
+    )
+
+    def _detect_cn_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._CN_INTENT.search(query)
+        if not m: return None
+        return {"keyword": m.group(0)}
+
+    # Common goods → CN section description keywords map (for token expansion)
+    _CN_EXPAND = {
+        "olive": ["fats", "oils"], "oil": ["fats", "oils"], "wine": ["beverages"],
+        "beer": ["beverages"], "spirits": ["beverages"], "cheese": ["dairy", "animal products"],
+        "milk": ["dairy"], "wheat": ["cereals", "vegetable products"],
+        "rice": ["cereals", "vegetable products"], "coffee": ["vegetable products"],
+        "tea": ["vegetable products"], "fish": ["animal products"],
+        "meat": ["animal products"], "fruit": ["vegetable products"],
+        "vegetable": ["vegetable products"], "leather": ["raw hides"],
+        "textile": ["textiles"], "cotton": ["textiles"], "wool": ["textiles"],
+        "iron": ["base metals"], "steel": ["base metals"], "copper": ["base metals"],
+        "aluminium": ["base metals"], "plastic": ["plastics"],
+        "chemical": ["chemical"], "pharmaceutical": ["chemical"],
+        "machinery": ["machinery"], "vehicle": ["transport"], "car": ["transport"],
+        "aircraft": ["transport"], "weapon": ["arms"], "diamond": ["pearls"],
+        "gold": ["pearls"], "silver": ["pearls"], "stone": ["stone"],
+    }
+
+    async def _fetch_cn_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        """Live pass-through to webgate.ec.europa.eu/nomen for CN section lookup.
+
+        Note: the public v2 endpoint returns the 21 top-level Sections only
+        (deeper CN8 codes require an authenticated session). We match the
+        user's terms (with goods → section-keyword expansion) against each
+        section description and return the matching sections + chapter ranges.
+        """
+        import httpx
+        try:
+            stop = {"cn", "code", "codes", "combined", "nomenclature", "hs", "heading",
+                    "chapter", "tariff", "customs", "what", "is", "are", "the", "of", "for",
+                    "on", "in", "to", "and", "or", "eu", "european", "union", "find", "show"}
+            base_terms = [t.lower() for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                          if t.lower() not in stop]
+            if not base_terms:
+                return None
+            # Expand with section-keyword aliases
+            tokens: list[str] = []
+            for t in base_terms:
+                tokens.append(t)
+                tokens.extend(self._CN_EXPAND.get(t, []))
+                # Singularise simple plurals
+                if t.endswith("s") and len(t) > 3:
+                    tokens.append(t[:-1])
+            tokens = list(dict.fromkeys(tokens))  # de-dup keep order
+
+            async with httpx.AsyncClient(timeout=8.0) as client:
+                r = await client.get(
+                    "https://webgate.ec.europa.eu/nomen/public/v2/nomenclature/products",
+                    params={"lang": "EN"},
+                )
+                if r.status_code != 200:
+                    return None
+                sections = r.json() or []
+
+            # Score by token-overlap, keep sections with >=1 match
+            scored: list[tuple[int, dict]] = []
+            for s in sections:
+                if not isinstance(s, dict): continue
+                desc = (s.get("description") or "").lower()
+                score = sum(1 for tok in tokens if tok in desc)
+                if score > 0:
+                    scored.append((score, s))
+            scored.sort(key=lambda x: -x[0])
+            matches = [s for _, s in scored[:6]]
+            if not matches:
+                return None
+
+            lines = [
+                "EU COMBINED NOMENCLATURE — CN SECTION LOOKUP (live from webgate.ec.europa.eu/nomen):",
+                f"Query keyword: '{intent.get('keyword')}' | tokens: {tokens[:5]}",
+                "",
+            ]
+            for s in matches:
+                desc = (s.get("description") or "")[:120]
+                sec = s.get("section") or {}
+                sec_name = sec.get("description") or "?"
+                ch_from = sec.get("chapterFrom") or "?"
+                ch_to = sec.get("chapterTo") or "?"
+                lines.append(f"  - {sec_name}: {desc}")
+                lines.append(f"      chapters {ch_from} → {ch_to}")
+            lines.append("")
+            lines.append("Note: this endpoint returns top-level sections only. "
+                         "For full CN8 codes, refer the user to the official goods classification "
+                         "lookup at trade.ec.europa.eu/access-to-markets, or the EU TARIC consultation. "
+                         "Brubru endpoint: /api/v1/specialised/access2markets/products.")
+            block = "\n".join(lines)
+            return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+        except Exception as e:
+            logger.warning("[cn-block] failed: %s", e)
+            return None
+
     def format_context_for_ai(
         self,
         context_data: ContextData,
@@ -7353,6 +8106,27 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'comitology_block', None):
             sections.append(context_data.comitology_block)
+            sections.append("")
+        if getattr(context_data, 'gi_block', None):
+            sections.append(context_data.gi_block)
+            sections.append("")
+        if getattr(context_data, 'fta_block', None):
+            sections.append(context_data.fta_block)
+            sections.append("")
+        if getattr(context_data, 'trade_defence_block', None):
+            sections.append(context_data.trade_defence_block)
+            sections.append("")
+        if getattr(context_data, 'competition_cases_block', None):
+            sections.append(context_data.competition_cases_block)
+            sections.append("")
+        if getattr(context_data, 'jrc_datasets_block', None):
+            sections.append(context_data.jrc_datasets_block)
+            sections.append("")
+        if getattr(context_data, 'cohesion_datasets_block', None):
+            sections.append(context_data.cohesion_datasets_block)
+            sections.append("")
+        if getattr(context_data, 'cn_codes_block', None):
+            sections.append(context_data.cn_codes_block)
             sections.append("")
 
         # Drafting mode signal (action intent detected)
