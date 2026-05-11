@@ -134,10 +134,13 @@ def unsubscribe_daily_brief(
     """
     from models.user import User
     from models.pre_user_event import PreUserEvent
+    from sqlalchemy import text
+    import uuid as _uuid
+    from datetime import datetime as _dt
 
     unsubscribed = False
 
-    # Check if registered user
+    # 1. Registered user path: flip preferences flag
     user = db.query(User).filter(User.email == email).first()
     if user:
         prefs = user.preferences or {}
@@ -146,7 +149,7 @@ def unsubscribe_daily_brief(
         db.commit()
         unsubscribed = True
 
-    # Also remove pre-user capture events for this email
+    # 2. Pre-user captured email path: remove email_captured rows
     deleted = (
         db.query(PreUserEvent)
         .filter(
@@ -159,11 +162,54 @@ def unsubscribe_daily_brief(
         db.commit()
         unsubscribed = True
 
+    # 3. EU Transparency Register path: mark org as unsubscribed
+    try:
+        eutr_updated = db.execute(
+            text(
+                "UPDATE transparency_register_orgs "
+                "SET outreach_status = 'unsubscribed', updated_at = NOW() "
+                "WHERE LOWER(contact_email) = LOWER(:e) "
+                "  AND outreach_status != 'unsubscribed'"
+            ),
+            {"e": email},
+        ).rowcount
+        if eutr_updated:
+            db.commit()
+            unsubscribed = True
+    except Exception:
+        db.rollback()
+
+    # 4. ALWAYS log a daily_brief_unsubscribe event, even if email was not
+    # found in any of the three pools. This makes the recipient filter
+    # in send pipelines authoritative on a single source of truth, and
+    # prevents repeat sends to addresses that previously clicked unsubscribe.
+    try:
+        db.execute(
+            text(
+                "INSERT INTO pre_user_events "
+                "(id, pre_user_id, event_type, event_metadata, created_at) "
+                "VALUES (:id, NULL, 'daily_brief_unsubscribe', "
+                ":metadata::jsonb, :ts)"
+            ),
+            {
+                "id": str(_uuid.uuid4()),
+                "metadata": '{"email": "' + email.replace('"', '') + '"}',
+                "ts": _dt.utcnow(),
+            },
+        )
+        db.commit()
+        # If none of the three pools matched but the event log went through,
+        # treat as a successful unsubscribe (right-to-object honoured at the
+        # event-log layer; future sends filter by this event).
+        unsubscribed = True
+    except Exception:
+        db.rollback()
+
     if unsubscribed:
-        message = "You have been unsubscribed from the Brubru Daily Brief."
-        sub_message = "You will no longer receive daily emails from us."
+        message = "You have been unsubscribed from the Brubru Brief."
+        sub_message = "You will no longer receive Brubru Brief emails."
     else:
-        message = "We could not find this email address in our records."
+        message = "We could not unsubscribe this email address."
         sub_message = "If you are still receiving emails, please contact hello@beresol.eu."
 
     return f"""<!DOCTYPE html>

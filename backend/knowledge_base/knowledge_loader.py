@@ -8084,6 +8084,11 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # Passenger Mobility Package (College 13 May 2026 — Fitto)
     # ============================================================
     # EN
+    'mobility package': ['eu_passenger_mobility_package_2026'],
+    'the mobility package': ['eu_passenger_mobility_package_2026'],
+    'eu mobility package': ['eu_passenger_mobility_package_2026'],
+    'commission mobility package': ['eu_passenger_mobility_package_2026'],
+    'commission adopts mobility package': ['eu_passenger_mobility_package_2026'],
     'passenger mobility package': ['eu_passenger_mobility_package_2026'],
     'eu passenger mobility package': ['eu_passenger_mobility_package_2026'],
     'mobility package 2026': ['eu_passenger_mobility_package_2026'],
@@ -8162,6 +8167,12 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # ============================================================
     # 19th Russia sanctions package + shadow fleet (8 May 2026)
     # ============================================================
+    'russia sanctions package': ['eu_sanctions_implementation_framework'],
+    'new eu sanctions package russia': ['eu_sanctions_implementation_framework'],
+    'new sanctions package russia': ['eu_sanctions_implementation_framework'],
+    'sanctions against russia': ['eu_sanctions_implementation_framework'],
+    'eu sanctions russia': ['eu_sanctions_implementation_framework'],
+    'next eu sanctions package': ['eu_sanctions_implementation_framework'],
     'shadow fleet sanctions': ['eu_sanctions_implementation_framework'],
     'putin shadow fleet': ['eu_sanctions_implementation_framework'],
     '19th sanctions package russia': ['eu_sanctions_implementation_framework'],
@@ -8174,7 +8185,10 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'schaduwvloot rusland sancties': ['eu_sanctions_implementation_framework'],
     'flota fantasma russia sancions ue': ['eu_sanctions_implementation_framework'],
     # Reg (EU) 2021/821 dual-use export controls
+    'dual use export controls': ['eu_sanctions_implementation_framework'],
+    'dual-use export controls': ['eu_sanctions_implementation_framework'],
     'dual use export controls eu': ['eu_sanctions_implementation_framework'],
+    'eu dual use exports': ['eu_sanctions_implementation_framework'],
     'reg 2021 821 dual use': ['eu_sanctions_implementation_framework'],
     '52026xc02595': ['eu_sanctions_implementation_framework'],
     'eu export controls regulation 2021 821': ['eu_sanctions_implementation_framework'],
@@ -8229,9 +8243,13 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     # ============================================================
     # EU ETS Review High-Level Roundtable (12 May 2026)
     # ============================================================
+    'eu ets review': ['european_climate_law'],
+    'ets review': ['european_climate_law'],
     'ets review high-level stakeholder roundtable': ['european_climate_law'],
     'eu ets review roundtable 2026': ['european_climate_law'],
+    'ets stakeholder roundtable': ['european_climate_law'],
     'von der leyen ets review': ['european_climate_law'],
+    'emissions trading system review': ['european_climate_law'],
     'emissions trading system review 2026': ['european_climate_law'],
 
     # ============================================================
