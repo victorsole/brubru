@@ -248,6 +248,7 @@ async def fetch_trade_defence_universe() -> list[dict]:
     async with CellarSPARQLClient() as client:
         for year in range(1995, 2027):
             offset = 0
+            year_match = 0  # init before the loop so exception path is safe
             while True:
                 try:
                     rows = await client.discover_by_date_range(
@@ -260,7 +261,6 @@ async def fetch_trade_defence_universe() -> list[dict]:
                     break
                 if not rows:
                     break
-                year_match = 0
                 for r in rows:
                     if not is_trade_defence(r.get("title")):
                         continue
