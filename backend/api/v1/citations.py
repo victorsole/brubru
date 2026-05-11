@@ -118,43 +118,76 @@ async def _fetch_cellar_xhtml(celex: str) -> Optional[str]:
     """Fetch Cellar XHTML manifestation in English. Returns HTML or None.
 
     Cellar returns 303 → http://publications.europa.eu/resource/cellar/<UUID>/DOC_1
-    aiohttp follows the redirect with allow_redirects=True. AI Act XHTML is 1.26 MB;
-    Railway nodes can be slower than local to download — hence 45s timeout.
+    aiohttp follows the redirect with allow_redirects=True.
+
+    Two retry conditions:
+      - HTTP 202 (Accepted): Cellar is generating the manifestation server-side.
+        Retry after 1.5s + exponential backoff, up to 3 attempts.
+      - HTTP 503 (Service Unavailable): same retry pattern.
+
+    AI Act XHTML is 1.26 MB; Railway nodes can be slower than local to
+    download — hence the 45s timeout.
     """
     import aiohttp
     url = _CELLAR_URL_TEMPLATE.format(celex=celex)
-    try:
-        timeout = aiohttp.ClientTimeout(total=_BODY_FETCH_TIMEOUT_S)
-        async with aiohttp.ClientSession(timeout=timeout) as session:
-            async with session.get(
-                url,
-                headers={
-                    "Accept": "application/xhtml+xml",
-                    "Accept-Language": "en",
-                    "User-Agent": "Mozilla/5.0 (compatible; Brubru/1.0)",
-                },
-                allow_redirects=True,
-            ) as resp:
-                if resp.status != 200:
-                    logger.warning("[citations] Cellar XHTML for %s returned status %s", celex, resp.status)
-                    return None
-                ctype = (resp.headers.get("Content-Type") or "").lower()
-                if "xhtml" not in ctype and "html" not in ctype:
-                    logger.warning("[citations] Cellar XHTML for %s wrong content-type: %s", celex, ctype)
-                    return None
-                body = await resp.text()
-                if len(body) < _BODY_MIN_LEN:
-                    logger.warning("[citations] Cellar XHTML for %s body too small (%d bytes)", celex, len(body))
-                    return None
-                logger.info("[citations] Cellar XHTML for %s fetched (%d bytes)", celex, len(body))
-                return body
-    except asyncio.TimeoutError:
-        logger.warning("[citations] Cellar XHTML timeout (>%ds) for %s", _BODY_FETCH_TIMEOUT_S, celex)
-        return None
-    except Exception as exc:
-        logger.warning("[citations] Cellar XHTML fetch failed for %s: %s: %s",
-                       celex, type(exc).__name__, exc)
-        return None
+    max_attempts = 4
+    backoff = 1.5  # seconds, doubles each retry
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            timeout = aiohttp.ClientTimeout(total=_BODY_FETCH_TIMEOUT_S)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(
+                    url,
+                    headers={
+                        "Accept": "application/xhtml+xml",
+                        "Accept-Language": "en",
+                        "User-Agent": "Mozilla/5.0 (compatible; Brubru/1.0)",
+                    },
+                    allow_redirects=True,
+                ) as resp:
+                    # Retryable: Cellar still generating, or transient outage
+                    if resp.status in (202, 503):
+                        if attempt < max_attempts:
+                            logger.info(
+                                "[citations] Cellar XHTML for %s returned %s on attempt %d/%d — retrying in %.1fs",
+                                celex, resp.status, attempt, max_attempts, backoff,
+                            )
+                            await asyncio.sleep(backoff)
+                            backoff *= 2
+                            continue
+                        logger.warning(
+                            "[citations] Cellar XHTML for %s gave up after %d attempts on status %s",
+                            celex, max_attempts, resp.status,
+                        )
+                        return None
+
+                    if resp.status != 200:
+                        logger.warning("[citations] Cellar XHTML for %s returned status %s",
+                                       celex, resp.status)
+                        return None
+                    ctype = (resp.headers.get("Content-Type") or "").lower()
+                    if "xhtml" not in ctype and "html" not in ctype:
+                        logger.warning("[citations] Cellar XHTML for %s wrong content-type: %s",
+                                       celex, ctype)
+                        return None
+                    body = await resp.text()
+                    if len(body) < _BODY_MIN_LEN:
+                        logger.warning("[citations] Cellar XHTML for %s body too small (%d bytes)",
+                                       celex, len(body))
+                        return None
+                    logger.info("[citations] Cellar XHTML for %s fetched (%d bytes, attempt %d)",
+                                celex, len(body), attempt)
+                    return body
+        except asyncio.TimeoutError:
+            logger.warning("[citations] Cellar XHTML timeout (>%ds) for %s on attempt %d",
+                           _BODY_FETCH_TIMEOUT_S, celex, attempt)
+            return None
+        except Exception as exc:
+            logger.warning("[citations] Cellar XHTML fetch failed for %s: %s: %s (attempt %d)",
+                           celex, type(exc).__name__, exc, attempt)
+            return None
+    return None
 
 
 def _lookup_eu_laws_dates(db: Session, celex: str) -> tuple[Optional[datetime], Optional[_date]]:
