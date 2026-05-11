@@ -10,7 +10,8 @@ from datetime import date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from sqlalchemy import text as _sql
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -25,10 +26,43 @@ router = APIRouter(prefix="/commissioners", tags=["v1-commissioners"])
 
 
 class AgendaItemOut(BaseModel):
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(
+        None,
+        description="Citizen-facing URL on commission.europa.eu for the event detail page.",
+    )
+    body_text: Optional[str] = Field(
+        None,
+        description=(
+            "Plain-text body of the event detail page. Typically null for this "
+            "endpoint because commission.europa.eu calendar detail URLs "
+            "301-redirect to Drupal admin paths (/node/NNNN/edit_en) that "
+            "return 403 to anonymous traffic. The title + location are the "
+            "richest body-equivalent currently reachable; we publish them as "
+            "separate fields rather than synthesising a fake body."
+        ),
+    )
+    body_html: Optional[str] = Field(
+        None,
+        description=(
+            "HTML body of the event detail page. Same upstream limit as "
+            "body_text — typically null for this endpoint."
+        ),
+    )
+    meeting_start_date: Optional[date] = Field(
+        None,
+        description="The event date (same value as the legacy `date` field, surfaced as the canonical meeting_start_date for the uniform v1 datapoint set).",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When Brubru first observed this agenda item (commission_calendar_urls.first_seen_at).",
+    )
+
+    # Kept-for-compat fields
     date: date
     title: str
     location: Optional[str] = None
-    detail_url: Optional[str] = None
+    detail_url: Optional[str] = None  # alias of public_url, kept one release
 
 
 class CommissionerProfileOut(BaseModel):
@@ -165,15 +199,50 @@ async def get_agenda(
     end = start + limit
     page_items = items[start:end]
 
-    data = [
-        AgendaItemOut(
+    # Bulk-fetch the 5 mandatory datapoints from commission_calendar_urls cache
+    # in one query rather than N round-trips. Match on (event_date, title)
+    # which is how the cache table is keyed under leader_id.
+    cache_map: dict = {}
+    if page_items and profile and getattr(profile, "leader_id", None):
+        try:
+            rows = db.execute(
+                _sql("""
+                    SELECT event_date, title, detail_url, body_text, body_html,
+                           first_seen_at
+                      FROM commission_calendar_urls
+                     WHERE leader_id = :leader_id
+                       AND event_date = ANY(:dates)
+                """),
+                {
+                    "leader_id": profile.leader_id,
+                    "dates": list({it.date for it in page_items}),
+                },
+            ).fetchall()
+            for r in rows:
+                cache_map[(r.event_date, (r.title or "").strip().lower())] = r
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("[v1] commissioner-agenda cache lookup failed: %s", exc)
+
+    data = []
+    now_ts = datetime.utcnow()
+    for it in page_items:
+        key = (it.date, (it.title or "").strip().lower())
+        cached = cache_map.get(key)
+        public = it.detail_url or (cached.detail_url if cached else None)
+        body_text = cached.body_text if cached else None
+        body_html = cached.body_html if cached else None
+        creation = cached.first_seen_at if cached else now_ts
+        data.append(AgendaItemOut(
+            public_url=public,
+            body_text=body_text,
+            body_html=body_html,
+            meeting_start_date=it.date,
+            creation_date=creation,
             date=it.date,
             title=it.title,
             location=it.location or None,
-            detail_url=it.detail_url or None,
-        )
-        for it in page_items
-    ]
+            detail_url=public,
+        ))
 
     return build_envelope(
         data,
