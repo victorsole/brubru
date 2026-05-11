@@ -19,7 +19,7 @@ Endpoints:
 """
 
 import logging
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
@@ -44,6 +44,14 @@ class CellarRecentItem(BaseModel):
     document_date: Optional[date] = Field(None, description="cdm:work_date_document")
     title: Optional[str] = None
     eurlex_url: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints (this is a live list endpoint, so
+    # body fields are not fetched per-item to avoid 50 Cellar round-trips per
+    # request — use /api/v1/citations/verify or /api/v1/laws/{celex}/text to
+    # pull body for a specific CELEX).
+    public_url: Optional[str] = Field(None, description="Citizen-facing EUR-Lex URL (alias of eurlex_url).")
+    body_text: Optional[str] = Field(None, description="Null on list endpoints. Use /api/v1/citations/verify for body.")
+    body_html: Optional[str] = Field(None, description="Null on list endpoints.")
+    creation_date: Optional[datetime] = Field(None, description="Time of this Cellar discovery call (live endpoint).")
 
 
 class CellarMetadata(BaseModel):
@@ -60,6 +68,11 @@ class CellarMetadata(BaseModel):
     available_languages: list[str] = Field(default_factory=list)
     eurovoc_concepts: list[str] = Field(default_factory=list)
     eurlex_url: str
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Citizen-facing EUR-Lex URL (alias of eurlex_url).")
+    body_text: Optional[str] = Field(None, description="Null on this metadata-only endpoint. Use /api/v1/citations/verify for body.")
+    body_html: Optional[str] = Field(None, description="Null on this metadata-only endpoint.")
+    creation_date: Optional[datetime] = Field(None, description="Time of this Cellar discovery call (live endpoint).")
 
 
 class CellarRelation(BaseModel):
@@ -138,6 +151,7 @@ async def recent_cellar_acts(
             offset=offset,
         )
 
+    _now = datetime.utcnow()
     items = [
         CellarRecentItem(
             celex=r["celex"],
@@ -145,6 +159,8 @@ async def recent_cellar_acts(
             document_date=_to_date(r.get("date")),
             title=r.get("title"),
             eurlex_url=_eurlex_url(r["celex"]),
+            public_url=_eurlex_url(r["celex"]),
+            creation_date=_now,
         )
         for r in rows
         if r.get("celex")
@@ -207,6 +223,8 @@ async def cellar_celex_metadata(
         available_languages=languages,
         eurovoc_concepts=eurovoc,
         eurlex_url=_eurlex_url(celex),
+        public_url=_eurlex_url(celex),
+        creation_date=datetime.utcnow(),
     )
 
 
@@ -318,6 +336,7 @@ async def acts_by_eurovoc(
             limit=limit,
         )
 
+    _now = datetime.utcnow()
     items = [
         CellarRecentItem(
             celex=r["celex"],
@@ -325,6 +344,8 @@ async def acts_by_eurovoc(
             document_date=_to_date(r.get("date")),
             title=r.get("title"),
             eurlex_url=_eurlex_url(r["celex"]),
+            public_url=_eurlex_url(r["celex"]),
+            creation_date=_now,
         )
         for r in rows
         if r.get("celex")

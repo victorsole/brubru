@@ -15,10 +15,12 @@ deep-link.
 from __future__ import annotations
 
 import logging
+import re
+from datetime import date as _date, datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from models.user import User
 from services.api_clients.ecli_client import (
@@ -42,6 +44,27 @@ class ECLIResolution(BaseModel):
     e_justice_url: str
     inforcuria_url: Optional[str] = None
     note: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(
+        None,
+        description="Canonical citizen URL — InforCuria for CJEU rulings, else e-Justice deep-link.",
+    )
+    body_text: Optional[str] = Field(
+        None,
+        description="Null for this endpoint — ECLI lookup is metadata-only; the ruling body is not fetched. Follow public_url to read the ruling.",
+    )
+    body_html: Optional[str] = Field(
+        None,
+        description="Null for this endpoint — see body_text note.",
+    )
+    document_date: Optional[_date] = Field(
+        None,
+        description="Year of the ECLI (the 'year' part of the identifier; full date isn't encoded).",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="Time of this ECLI resolution call (stateless endpoint).",
+    )
 
 
 @router.get(
@@ -69,15 +92,31 @@ async def resolve_ecli(
                 "reason_code": "invalid_ecli",
             },
         )
+    cjeu = is_cjeu(ecli)
+    e_justice = deep_link(ecli)
+    inforcuria = eur_lex_url(ecli)
+    # Derive document_date as 1st January of the ECLI year (year is the only
+    # date component encoded). Better than NULL for sorting / filtering.
+    doc_date: Optional[_date] = None
+    try:
+        year = int(parts.get("year") or 0)
+        if 1900 < year <= 2099:
+            doc_date = _date(year, 1, 1)
+    except (TypeError, ValueError):
+        pass
     return ECLIResolution(
         ecli=ecli,
         parts=parts,
-        is_cjeu=is_cjeu(ecli),
-        e_justice_url=deep_link(ecli),
-        inforcuria_url=eur_lex_url(ecli),
+        is_cjeu=cjeu,
+        e_justice_url=e_justice,
+        inforcuria_url=inforcuria,
         note=(
-            None if is_cjeu(ecli) else
+            None if cjeu else
             "Non-CJEU ECLI — use the e-Justice search-engine deep-link "
             "to find the corresponding national case in your member state's portal."
         ),
+        # 5 mandatory datapoints
+        public_url=inforcuria or e_justice,
+        document_date=doc_date,
+        creation_date=datetime.utcnow(),
     )

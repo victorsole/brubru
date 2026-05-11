@@ -71,6 +71,19 @@ class ResearchProjectItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_text: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(
+        None,
+        description="Canonical citizen URL — the CORDIS project page (alias of cordis_url).",
+    )
+    document_date: Optional[date] = Field(
+        None,
+        description="Project start_date (the canonical 'when this project happened' date).",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When Brubru first ingested this project row (ft_funded_projects.scraped_at).",
+    )
 
 
 class ConsortiumPayload(BaseModel):
@@ -132,6 +145,10 @@ def _row_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Researc
         has_body=has_body,
         body_html=body_html,
         body_text=body_text,
+        # 5 mandatory datapoints
+        public_url=r.source_url,
+        document_date=r.start_date,
+        creation_date=getattr(r, "scraped_at", None),
     )
 
 

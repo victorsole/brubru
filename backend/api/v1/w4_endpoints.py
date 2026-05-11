@@ -474,14 +474,26 @@ class SecondaryActItem(BaseModel):
     pdf_url: Optional[str] = None
     policy_areas: list = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(
+        None,
+        description="Canonical citizen URL — EUR-Lex CELEX URL when available, else pdf_url, else source_url.",
+    )
+    document_date: Optional[date] = Field(
+        None,
+        description="The act's publication date (same as publication_date, surfaced under the uniform datapoint name).",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When Brubru first ingested this row (secondary_acts.first_seen).",
+    )
     # Body fields — secondary acts are PDF-sourced (Cellar PDFs of C(YYYY)NNNN
     # delegated/implementing decisions). body_html stays None per the
-    # "no PDF→HTML synthesis" rule. body_text carries the full pypdf-extracted
-    # body — no truncation on list or detail.
+    # "no PDF→HTML synthesis" rule.
     has_body: bool = False
     body_html: Optional[str] = None
     body_text: Optional[str] = None
-    # Deprecated alias kept one release. Migrate to body_text/body_html pair.
+    # Deprecated alias kept one release.
     body: Optional[str] = None
 
 
@@ -490,6 +502,14 @@ def _secondary_act_to_item(
     body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> SecondaryActItem:
     body_html, body_text, has_body = body_from_pdf_text(r.text_body, threshold=body_threshold)
+    # Derive canonical citizen URL: EUR-Lex CELEX URL when we have a CELEX,
+    # else direct pdf_url, else source_url.
+    if r.celex:
+        public_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r.celex}"
+    elif r.pdf_url:
+        public_url = r.pdf_url
+    else:
+        public_url = r.source_url
     return SecondaryActItem(
         id=str(r.id),
         act_type=r.act_type.value if hasattr(r.act_type, "value") else str(r.act_type),
@@ -503,6 +523,10 @@ def _secondary_act_to_item(
         celex=r.celex, source_url=r.source_url, pdf_url=r.pdf_url,
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
+        # 5 mandatory datapoints
+        public_url=public_url,
+        document_date=r.publication_date,
+        creation_date=getattr(r, "first_seen", None),
         has_body=has_body,
         body_html=body_html,
         body_text=body_text,
