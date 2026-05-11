@@ -1,6 +1,7 @@
 # EU Special Representatives (EUSRs)
 
 ## QUICK FACTS
+- **LATEST (Friday 8 May 2026)**: **8th European Political Community (EPC) Summit — Tirana, Albania** — heads of state and government from 46 European countries discussed peace and stability with a focus on the Western Balkans, the Russia-Ukraine war, and EU-Armenia relations. Commission announcement **AC_26_1046**: "EU leaders discuss peace and stability at 8th EPC Summit and take EU-Armenia partnership to a whole new level". Lead institution: **European Council** (President Antonio Costa) + **HR/VP Kaja Kallas**. The EU-Armenia partnership upgrade includes mobility, trade, and resilience packages — building on the Comprehensive and Enhanced Partnership Agreement (CEPA, signed November 2017, fully entered into force March 2021). Source: ec.europa.eu/commission/presscorner/detail/en/ac_26_1046 (8 May 2026). Cross-link: `eu_eastern_partnership` (Armenia is one of the 6 EaP countries), `eu_global_coalition_telecommunications`, `eu_nato_southern_neighbourhood`.
 - Legal basis: Article 33 TEU (appointment by Council on HR/VP proposal)
 - Appointed by: Council of the EU (Council Decision, CFSP)
 - Report to: High Representative / Vice-President (HR/VP) Kaja Kallas

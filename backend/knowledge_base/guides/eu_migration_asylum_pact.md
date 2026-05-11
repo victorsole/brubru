@@ -1,6 +1,7 @@
 # EU Pact on Migration and Asylum
 
 ## QUICK FACTS
+- **LATEST (Friday 8 May 2026)**: **Commission publishes second annual progress report on Pact implementation** (IP_26_1011). Headline findings: 13 of 27 Member States have completed transposition of the AMMR + APR + Screening + Crisis Regulations into national law; 8 are at advanced legislative stage; 6 remain behind schedule with under 6 weeks to the 12 June 2026 implementation deadline. Frontex reports operational readiness for the border-screening obligations in 24 of 27 Member States. Solidarity-pool contributions pledged by 24 Member States — relocations 30,000, financial contributions €600m, operational support 2,400 staff. Migration Solidarity Forum to convene in Brussels first week of June 2026. Hungary + Poland continue refusal; CJEU infringement cases progressing. Source: ec.europa.eu/commission/presscorner/detail/en/ip_26_1011 (8 May 2026).
 - Adopted: 14 May 2024 (10 legislative acts published in Official Journal)
 - Implementation deadline: 12 June 2026
 - Commission proposal: COM(2020)609, 23 September 2020

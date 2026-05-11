@@ -1,6 +1,7 @@
 # European Climate Law
 
 ## QUICK FACTS
+**LATEST (Tuesday 12 May 2026 — TOMORROW)**: **High-Level Stakeholder Roundtable on EU ETS Review** — convened by Commission building on the **March 2026 European Council Conclusions** in which President von der Leyen announced the initiative. Roundtable format gathers industry, civil-society, Member State representatives to feed into the ETS Review legislative timetable (Commission proposal expected late 2026 / early 2027). Topics: ETS price stability mechanisms post-2030, Market Stability Reserve adjustments, free-allocation phase-out trajectory, ETS2 (buildings + road transport) entry-into-force preparation, Carbon Border Adjustment Mechanism interaction. Cross-link: `accelerateeu_fossil_energy_crisis` (price-shock cushioning), `eu_emissions_trading_system` if exists. Source: euagenda.eu listing for 12 May 2026; building on EUCO conclusions March 2026.
 Full title: Regulation (EU) 2021/1119 establishing the framework for achieving climate neutrality (European Climate Law)
 CELEX: 32021R1119
 2040 amendment: Regulation (EU) 2026/667 amending Regulation (EU) 2021/1119 (published in OJ 18 March 2026)

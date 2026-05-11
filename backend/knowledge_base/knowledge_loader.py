@@ -8079,6 +8079,173 @@ GUIDE_KEYWORD_TRIGGERS: Dict[str, List[str]] = {
     'com(2026)0540': ['eu_housing_exclusion_recommendation_2026'],
     'swd 2026 770': ['eu_anti_poverty_strategy_2026'],
     'swd 2026 772': ['eu_child_guarantee_strengthened_2026'],
+
+    # ============================================================
+    # Passenger Mobility Package (College 13 May 2026 — Fitto)
+    # ============================================================
+    # EN
+    'passenger mobility package': ['eu_passenger_mobility_package_2026'],
+    'eu passenger mobility package': ['eu_passenger_mobility_package_2026'],
+    'mobility package 2026': ['eu_passenger_mobility_package_2026'],
+    'multimodal digital mobility services': ['eu_passenger_mobility_package_2026'],
+    'multimodal digital mobility': ['eu_passenger_mobility_package_2026'],
+    'mdms eu': ['eu_passenger_mobility_package_2026'],
+    'single digital booking and ticketing': ['eu_passenger_mobility_package_2026'],
+    'single digital booking ticketing': ['eu_passenger_mobility_package_2026'],
+    'sdbt eu': ['eu_passenger_mobility_package_2026'],
+    'rail passengers rights revision': ['eu_passenger_mobility_package_2026'],
+    'rail passenger rights revision': ['eu_passenger_mobility_package_2026'],
+    "regulation rail passengers' rights": ['eu_passenger_mobility_package_2026'],
+    'reg 1371 2007': ['eu_passenger_mobility_package_2026'],
+    'reg 2021 782 rail passengers': ['eu_passenger_mobility_package_2026'],
+    'eu mobility as a service maas': ['eu_passenger_mobility_package_2026'],
+    'mobility as a service maas': ['eu_passenger_mobility_package_2026'],
+    'fitto passenger package': ['eu_passenger_mobility_package_2026'],
+    'connection guarantee multimodal': ['eu_passenger_mobility_package_2026'],
+    # FR
+    'paquet mobilite passagers': ['eu_passenger_mobility_package_2026'],
+    'paquet mobilité passagers': ['eu_passenger_mobility_package_2026'],
+    'services de mobilite multimodale': ['eu_passenger_mobility_package_2026'],
+    'services de mobilité multimodale': ['eu_passenger_mobility_package_2026'],
+    'billetterie numerique unique': ['eu_passenger_mobility_package_2026'],
+    'billetterie numérique unique': ['eu_passenger_mobility_package_2026'],
+    'droits des voyageurs ferroviaires revision': ['eu_passenger_mobility_package_2026'],
+    # ES
+    'paquete movilidad pasajeros': ['eu_passenger_mobility_package_2026'],
+    'paquete de movilidad': ['eu_passenger_mobility_package_2026'],
+    'servicios de movilidad multimodal': ['eu_passenger_mobility_package_2026'],
+    'reserva digital unica billetes': ['eu_passenger_mobility_package_2026'],
+    'reserva digital única billetes': ['eu_passenger_mobility_package_2026'],
+    'derechos pasajeros ferroviarios revision': ['eu_passenger_mobility_package_2026'],
+    'derechos pasajeros ferroviarios revisión': ['eu_passenger_mobility_package_2026'],
+    # IT
+    'pacchetto mobilita passeggeri': ['eu_passenger_mobility_package_2026'],
+    'pacchetto mobilità passeggeri': ['eu_passenger_mobility_package_2026'],
+    'servizi mobilita multimodale': ['eu_passenger_mobility_package_2026'],
+    'servizi mobilità multimodale': ['eu_passenger_mobility_package_2026'],
+    'biglietteria digitale unica': ['eu_passenger_mobility_package_2026'],
+    # NL
+    'mobiliteitspakket passagiers': ['eu_passenger_mobility_package_2026'],
+    'multimodale mobiliteitsdiensten': ['eu_passenger_mobility_package_2026'],
+    'eenvoudige digitale ticketing': ['eu_passenger_mobility_package_2026'],
+    # CA
+    'paquet mobilitat passatgers': ['eu_passenger_mobility_package_2026'],
+    'serveis mobilitat multimodal': ['eu_passenger_mobility_package_2026'],
+    'serveis de mobilitat multimodal': ['eu_passenger_mobility_package_2026'],
+
+    # ============================================================
+    # 2025/0847(COD) Military Mobility Framework (SEDE/TRAN, COD)
+    # ============================================================
+    '2025/0847(cod)': ['military_mobility_dual_use_logistics'],
+    '2025 0847 cod': ['military_mobility_dual_use_logistics'],
+    'framework transport of military equipment': ['military_mobility_dual_use_logistics'],
+    'framework for transport of military equipment': ['military_mobility_dual_use_logistics'],
+    'transport military equipment goods personnel': ['military_mobility_dual_use_logistics'],
+    'military equipment transport regulation eu': ['military_mobility_dual_use_logistics'],
+    # 2025/2143(INI) Single Market for Defence INI
+    '2025/2143(ini)': ['military_mobility_dual_use_logistics'],
+    '2025 2143 ini': ['military_mobility_dual_use_logistics'],
+    'tackling barriers single market defence': ['military_mobility_dual_use_logistics'],
+    'single market for defence ini': ['military_mobility_dual_use_logistics'],
+    'cremer single market defence': ['military_mobility_dual_use_logistics'],
+    'barriers defence single market': ['military_mobility_dual_use_logistics'],
+    # FR/ES/IT/NL/CA aliases
+    'cadre transport equipement militaire': ['military_mobility_dual_use_logistics'],
+    'cadre transport équipement militaire': ['military_mobility_dual_use_logistics'],
+    'marche unique de la defense': ['military_mobility_dual_use_logistics'],
+    'marché unique de la défense': ['military_mobility_dual_use_logistics'],
+    'mercado unico defensa eu': ['military_mobility_dual_use_logistics'],
+    'mercado único defensa eu': ['military_mobility_dual_use_logistics'],
+    'mercato unico della difesa': ['military_mobility_dual_use_logistics'],
+    'mercat unic defensa ue': ['military_mobility_dual_use_logistics'],
+
+    # ============================================================
+    # 19th Russia sanctions package + shadow fleet (8 May 2026)
+    # ============================================================
+    'shadow fleet sanctions': ['eu_sanctions_implementation_framework'],
+    'putin shadow fleet': ['eu_sanctions_implementation_framework'],
+    '19th sanctions package russia': ['eu_sanctions_implementation_framework'],
+    'nineteenth sanctions package russia': ['eu_sanctions_implementation_framework'],
+    'russia shadow fleet tankers': ['eu_sanctions_implementation_framework'],
+    'flotte fantome russie sanctions': ['eu_sanctions_implementation_framework'],
+    'flotte fantôme russie sanctions': ['eu_sanctions_implementation_framework'],
+    'flota fantasma rusia sanciones': ['eu_sanctions_implementation_framework'],
+    'flotta ombra russia sanzioni': ['eu_sanctions_implementation_framework'],
+    'schaduwvloot rusland sancties': ['eu_sanctions_implementation_framework'],
+    'flota fantasma russia sancions ue': ['eu_sanctions_implementation_framework'],
+    # Reg (EU) 2021/821 dual-use export controls
+    'dual use export controls eu': ['eu_sanctions_implementation_framework'],
+    'reg 2021 821 dual use': ['eu_sanctions_implementation_framework'],
+    '52026xc02595': ['eu_sanctions_implementation_framework'],
+    'eu export controls regulation 2021 821': ['eu_sanctions_implementation_framework'],
+
+    # ============================================================
+    # 8th EPC Summit + EU-Armenia partnership (8 May 2026)
+    # ============================================================
+    '8th european political community summit': ['eu_special_representatives'],
+    'eighth epc summit': ['eu_special_representatives'],
+    'eu armenia partnership upgrade': ['eu_special_representatives'],
+    'epc summit tirana': ['eu_special_representatives'],
+    'ac 26 1046': ['eu_special_representatives'],
+    'eu armenia cepa': ['eu_special_representatives'],
+    'cumbre comunidad politica europea': ['eu_special_representatives'],
+    'sommet communaute politique europeenne': ['eu_special_representatives'],
+    'sommet communauté politique européenne': ['eu_special_representatives'],
+    'vertice comunita politica europea': ['eu_special_representatives'],
+    'top europese politieke gemeenschap': ['eu_special_representatives'],
+    'cimera comunitat politica europea': ['eu_special_representatives'],
+
+    # ============================================================
+    # Pact on Migration progress report (8 May 2026)
+    # ============================================================
+    'pact migration progress report 2026': ['eu_migration_asylum_pact'],
+    'ip 26 1011': ['eu_migration_asylum_pact'],
+    'second annual pact progress report': ['eu_migration_asylum_pact'],
+    'migration solidarity forum 2026': ['eu_migration_asylum_pact'],
+
+    # ============================================================
+    # ERA Living Guidelines on generative AI in research (8 May 2026)
+    # ============================================================
+    'era living guidelines generative ai': ['apply_ai_strategy_public_sector'],
+    'era guidelines responsible use ai research': ['apply_ai_strategy_public_sector'],
+    'european research area generative ai guidelines': ['apply_ai_strategy_public_sector'],
+    'responsible use generative ai research': ['apply_ai_strategy_public_sector'],
+
+    # ============================================================
+    # EPRS briefing Health and wellbeing AI (11 May 2026)
+    # ============================================================
+    'health wellbeing artificial intelligence eprs': ['apply_ai_strategy_public_sector'],
+    'ai health older adults loneliness': ['apply_ai_strategy_public_sector'],
+    'eprs ai healthcare briefing 2026': ['apply_ai_strategy_public_sector'],
+
+    # ============================================================
+    # EHDS Implementation Dialogue with Várhelyi (12 May 2026)
+    # ============================================================
+    'ehds implementation dialogue varhelyi': ['european_health_data_space'],
+    'ehds implementation dialogue várhelyi': ['european_health_data_space'],
+    'european health data space implementation dialogue': ['european_health_data_space'],
+    'myhealth eu implementation 2026': ['european_health_data_space'],
+
+    # ============================================================
+    # EU ETS Review High-Level Roundtable (12 May 2026)
+    # ============================================================
+    'ets review high-level stakeholder roundtable': ['european_climate_law'],
+    'eu ets review roundtable 2026': ['european_climate_law'],
+    'von der leyen ets review': ['european_climate_law'],
+    'emissions trading system review 2026': ['european_climate_law'],
+
+    # ============================================================
+    # AFCO new draft reports (11 May 2026 wave)
+    # ============================================================
+    '2025/2042(ini)': ['afco_institutional_framework_review'],
+    '2025 2042 ini': ['afco_institutional_framework_review'],
+    'ehlers subsidiarity proportionality': ['afco_institutional_framework_review'],
+    'national parliaments role legislative process': ['afco_institutional_framework_review'],
+    'subsidiarity proportionality national parliaments eu': ['afco_institutional_framework_review'],
+    '2026/2012(ini)': ['afco_institutional_framework_review'],
+    '2026/2013(ini)': ['afco_institutional_framework_review'],
+    '2026/2014(ini)': ['afco_institutional_framework_review'],
+    'afco draft reports may 2026': ['afco_institutional_framework_review'],
 }
 
 

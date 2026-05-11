@@ -1,6 +1,7 @@
 # European Health Data Space (EHDS)
 
 ## QUICK FACTS
+- **LATEST (Tuesday 12 May 2026 — TOMORROW)**: **EHDS Implementation Dialogue with Commissioner Olivér Várhelyi** — first formal implementation dialogue between DG SANTE and the EHDS ecosystem (national health data access bodies, hospital systems, research organisations, patient federations, commercial operators). Webinar format. Focus areas: MyHealth@EU rollout timeline, HealthData@EU secondary-use access procedures, secondary-use price ceilings (Implementing Act expected H2 2026), interoperability standards alignment with FHIR + HL7, Member State health-data-access body certifications. Source: euagenda.eu listing for 12 May 2026. Cross-link: `apply_ai_strategy_public_sector` (EPRS AI+health briefing 11 May 2026), `ai_act_regulation` (health-AI as high-risk under Annex III).
 - Full name: Regulation (EU) 2025/327 on the European Health Data Space
 - CELEX: 32025R0327
 - Procedure: 2022/0140(COD)

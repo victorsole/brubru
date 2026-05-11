@@ -1,6 +1,7 @@
 # AFCO Institutional Framework Review and Article 19 TEU Interaction with National Authorities
 
 ## QUICK FACTS
+- **LATEST (Monday 11 May 2026)**: **Six AFCO draft reports tabled today** — re-iteration of the constitutional-affairs wave that started in late April. Scrape confirms the AFCO committee portal carries: (1) **2025/2243(ACI)** Framework Agreement on relations EP-EC — draft report iteration; (2) **2025/2262(REG)** Amendments to Rules of Procedure Rule 135 — agency-appointments — draft report; (3) **2025/2263(INI)** Institutional Framework and Article 19 TEU national-authorities — draft report; (4) **2026/2012(INI)**, (5) **2026/2013(INI)**, (6) **2026/2014(INI)** — three AFCO own-initiative procedures with draft reports tabled. Also surfaces in committee_work_items: **2025/2042(INI)** "Application of Treaty provisions on subsidiarity, proportionality and the role of national parliaments in the EU legislative process" — **rapporteur Marieke EHLERS (PfE)**. This is the most active AFCO committee day of 2026 so far — Brubru Analytics topic-spike confirmed (AFCO INI surge: +5 new draft reports today after +1 Friday and the 28 April wave).
 - Topic: EP Committee on Constitutional Affairs (AFCO) own-initiative work on the EU institutional framework and its interaction with national authorities, with particular reference to Article 19 TEU (national courts' duty to provide remedies ensuring effective judicial protection)
 - AFCO Chair: Sven Simon (Germany, EPP)
 - Coordinators: one per political group (see AFCO committee page)
