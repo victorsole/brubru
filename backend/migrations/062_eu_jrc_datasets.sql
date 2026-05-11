@@ -6,7 +6,7 @@
 
 CREATE TABLE IF NOT EXISTS eu_jrc_datasets (
     id              BIGSERIAL PRIMARY KEY,
-    uuid            VARCHAR(40) NOT NULL UNIQUE,
+    uuid            TEXT NOT NULL UNIQUE,
     title           TEXT,
     description     TEXT,
     public_url      TEXT NOT NULL,
