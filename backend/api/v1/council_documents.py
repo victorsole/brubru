@@ -57,14 +57,16 @@ class CouncilDocumentItem(BaseModel):
     policy_areas: list = Field(default_factory=list)
     tags: list = Field(default_factory=list)
     # Per-meeting auxiliary URLs on consilium.europa.eu's public register.
-    # Surfaced for every calendar_event row so consumers can navigate to the
-    # provisional agenda (OJ Council) and the votes register without having
-    # to know the URL patterns themselves. Programmatic ingestion of those
-    # pages is blocked by Cloudflare's bot challenge — these are display-only
-    # links for the human audience.
     oj_register_url: Optional[str] = None
     votes_register_url: Optional[str] = None
     calendar_filter_url: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of `url`).")
+    body_txt: Optional[str] = Field(None, description="Plain-text body — the document summary when present.")
+    body_html: Optional[str] = Field(None, description="Null — Council documents are PDF/external links.")
+    meeting_start_date: Optional[date] = Field(None, description="For calendar_event rows: meeting date.")
+    document_date: Optional[date] = Field(None, description="For publication rows: publication date.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
 _CONFIG_TO_SLUG = {
@@ -253,6 +255,7 @@ async def list_council_documents(
 
     data: list = []
     for r in pub_rows:
+        pub_date = r.published_date.date() if r.published_date and hasattr(r.published_date, "date") else r.published_date
         data.append(CouncilDocumentItem(
             id=str(r.id),
             source="publication",
@@ -264,6 +267,11 @@ async def list_council_documents(
             published_date=r.published_date,
             policy_areas=list(r.policy_areas or []),
             tags=list(r.tags or []),
+            public_url=r.url,
+            body_txt=r.summary,
+            body_html=None,
+            document_date=pub_date,
+            creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or getattr(r, "last_updated", None),
         ))
     for r in cal_rows:
         institution = getattr(r.institution, "value", str(r.institution or ""))
@@ -289,6 +297,12 @@ async def list_council_documents(
             oj_register_url=OJ_COUNCIL_REGISTER,
             votes_register_url=VOTES_REGISTER,
             calendar_filter_url=_calendar_filter_url(institution, r.council_configuration),
+            public_url=url,
+            body_txt=r.description,
+            body_html=None,
+            meeting_start_date=r.start_date,
+            document_date=r.start_date,
+            creation_date=getattr(r, "created_at", None) or getattr(r, "scraped_at", None),
         ))
 
     # Sort union by published_date desc

@@ -36,6 +36,12 @@ class LawItem(BaseModel):
     legal_basis: list = Field(default_factory=list)
     eurlex_url: Optional[str] = None
     text_url: Optional[str] = Field(None, description="Brubru endpoint for the full body (XML or plain text). Call this URL to retrieve the actual law content.")
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of eurlex_url).")
+    body_txt: Optional[str] = Field(None, description="Null on list — call /laws/{celex}/text for the body.")
+    body_html: Optional[str] = Field(None, description="Null on list — call /laws/{celex}/text for the body.")
+    document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX (eu_laws.created_at).")
 
 
 def _eurlex_url(celex: Optional[str]) -> Optional[str]:
@@ -174,6 +180,9 @@ async def list_laws(
             legal_basis=list(r.legal_basis or []),
             eurlex_url=_eurlex_url(r.celex),
             text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
+            public_url=_eurlex_url(r.celex),
+            document_date=r.date,
+            creation_date=r.created_at,
         )
         for r in rows
     ]
@@ -257,6 +266,9 @@ async def get_law_detail(
         legal_basis=list(r.legal_basis or []),
         eurlex_url=_eurlex_url(r.celex),
         text_url=f"/api/v1/laws/{r.celex}/text" if r.celex else None,
+        public_url=_eurlex_url(r.celex),
+        document_date=r.date,
+        creation_date=r.created_at,
     )
 
 
@@ -269,6 +281,12 @@ class LawTextResponse(BaseModel):
     content: str
     content_length: int
     eurlex_url: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of eurlex_url).")
+    body_txt: Optional[str] = Field(None, description="Plain-text body — populated when format=plain (mirrors `content`).")
+    body_html: Optional[str] = Field(None, description="HTML/XHTML body — populated when format=xml (mirrors `content`).")
+    document_date: Optional[date] = Field(None, description="Adoption / publication date (alias of adopted_on).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this CELEX.")
 
 
 @router.get(
@@ -339,4 +357,9 @@ async def get_law_text(
         content=text,
         content_length=len(text),
         eurlex_url=_eurlex_url(row.celex),
+        public_url=_eurlex_url(row.celex),
+        body_txt=text if format == "plain" else None,
+        body_html=text if format == "xml" else None,
+        document_date=row.date,
+        creation_date=row.created_at,
     )

@@ -50,6 +50,12 @@ class InfringementItem(BaseModel):
     related_celex: List[str] = Field(default_factory=list)
     policy_areas: List[str] = Field(default_factory=list)
     last_updated: Optional[datetime] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — source_url fallback to pdf_url.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body — the procedure summary when present.")
+    body_html: Optional[str] = Field(None, description="Null — infringement decisions are PDF-source.")
+    document_date: Optional[date] = Field(None, description="Decision date (alias of decision_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
 def _infringement_to_item(r: InfringementProcedure) -> InfringementItem:
@@ -67,6 +73,11 @@ def _infringement_to_item(r: InfringementProcedure) -> InfringementItem:
         related_celex=list(r.related_celex or []),
         policy_areas=list(r.policy_areas or []),
         last_updated=r.last_updated,
+        public_url=r.source_url or r.pdf_url,
+        body_txt=r.summary,
+        body_html=None,
+        document_date=r.decision_date,
+        creation_date=getattr(r, "first_seen", None) or getattr(r, "scraped_at", None) or r.last_updated,
     )
 
 

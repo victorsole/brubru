@@ -245,19 +245,33 @@ def resolve_aliases(
     payload: ResolveAliasesRequest,
     user: User = Depends(api_user_with_rate_limit),
 ):
+    from datetime import datetime as _dt
     from services.parsers.law_alias_resolver import find_alias_matches
 
     matches = find_alias_matches(payload.text)
+    aliases = []
+    for m in matches:
+        eurlex = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{m.celex}" if m.celex else None
+        aliases.append({
+            "raw": m.raw,
+            "alias": m.alias,
+            "celex": m.celex,
+            "full_title": m.full_title,
+            "start": m.start,
+            "end": m.end,
+            # The 5 mandatory Brubru v1 datapoints (per-alias, parent = the resolved CELEX)
+            "public_url": eurlex,
+            "body_txt": None,           # use /api/v1/laws/{celex}/text for body
+            "body_html": None,
+            "document_date": None,      # not encoded in alias resolution; call /laws/{celex} for the date
+            "creation_date": _dt.utcnow().isoformat(),
+        })
     return {
-        "aliases": [
-            {
-                "raw": m.raw,
-                "alias": m.alias,
-                "celex": m.celex,
-                "full_title": m.full_title,
-                "start": m.start,
-                "end": m.end,
-            }
-            for m in matches
-        ]
+        "aliases": aliases,
+        # Envelope-level v1 datapoints (this is a stateless resolver — no parent doc)
+        "public_url": None,
+        "body_txt": payload.text,       # the resolver's input IS the body
+        "body_html": None,
+        "document_date": None,
+        "creation_date": _dt.utcnow().isoformat(),
     }
