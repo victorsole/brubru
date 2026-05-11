@@ -37,6 +37,12 @@ class EPRSItem(BaseModel):
     word_count: Optional[int] = None
     page_count: Optional[int] = None
     has_full_text: bool = False
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — html_url fallback to pdf_url.")
+    body_text: Optional[str] = Field(None, description="Plain-text body (currently the publication summary — EPRS full-text lives in the source HTML behind html_url).")
+    body_html: Optional[str] = Field(None, description="Null for this endpoint — EPRS HTML lives on europarl.europa.eu/thinktank.")
+    document_date: Optional[date] = Field(None, description="Publication date (date-only view of publication_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
 @router.get(
@@ -159,6 +165,11 @@ async def list_eprs(
             word_count=r.word_count,
             page_count=r.page_count,
             has_full_text=bool(r.has_full_text),
+            public_url=r.html_url or r.pdf_url,
+            body_text=r.summary,
+            body_html=None,
+            document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
+            creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),
         )
         for r in rows
     ]
@@ -212,4 +223,9 @@ async def get_eprs_detail(
         word_count=r.word_count,
         page_count=r.page_count,
         has_full_text=bool(r.has_full_text),
+        public_url=r.html_url or r.pdf_url,
+        body_text=r.summary,
+        body_html=None,
+        document_date=r.publication_date.date() if r.publication_date and hasattr(r.publication_date, "date") else r.publication_date,
+        creation_date=getattr(r, "last_updated", None) or getattr(r, "scraped_at", None) or getattr(r, "first_seen", None),
     )

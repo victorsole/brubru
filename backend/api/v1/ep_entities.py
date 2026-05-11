@@ -418,6 +418,11 @@ class EPDocumentItem(BaseModel):
     document_url: Optional[str] = None
     total_amendments: Optional[int] = None
     last_updated: Optional[datetime] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of document_url).")
+    body_text: Optional[str] = Field(None, description="Null for this list endpoint — fetch body via the per-source detail endpoints (committee minutes, amendment docs).")
+    body_html: Optional[str] = Field(None, description="Null for this list endpoint.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated for this union view).")
 
 
 @ep_documents_router.get(
@@ -487,6 +492,8 @@ async def list_ep_documents(
             document_url=r.doceo_url,
             total_amendments=r.total_amendments,
             last_updated=r.scraped_at,
+            public_url=r.doceo_url,
+            creation_date=r.scraped_at,
         ))
 
     # Branch 2: committee_work items
@@ -513,6 +520,8 @@ async def list_ep_documents(
             document_date=r.vote_date.date() if r.vote_date else None,
             document_url=r.ep_page_url or r.source_url or r.eurlex_url,
             last_updated=r.last_updated,
+            public_url=r.ep_page_url or r.source_url or r.eurlex_url,
+            creation_date=r.last_updated,
         ))
 
     # Sort union by document_date desc and apply page slice.

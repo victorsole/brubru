@@ -195,6 +195,10 @@ class FundingItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_text: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal topic page).")
+    document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row.")
 
 
 def _funding_to_item(
@@ -228,6 +232,9 @@ def _funding_to_item(
         has_body=has_body,
         body_html=body_html,
         body_text=body_text,
+        public_url=r.source_url,
+        document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
+        creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
     )
 
 
