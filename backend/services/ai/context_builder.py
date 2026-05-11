@@ -626,6 +626,11 @@ class ContextData:
     ecli_block: Optional[str] = None
     eurio_research_block: Optional[str] = None
 
+    # Layer 2b: open funding calls (F&T Portal opportunities + calls-for-proposals).
+    # Disambiguated from eurio_research_block (past projects) by intent regex:
+    # only fires on "open call" / "apply" / "deadline" / "grant" phrasings.
+    eu_funding_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1370,6 +1375,18 @@ class ContextBuilder:
                 logger.warning("[eurio-block] failed: %s", e); return None
         post_tasks['eurio_research_block'] = _fetch_eurio_safe()
 
+        # 3v. EU open funding calls (Layer 2b)
+        funding_intent = self._detect_funding_intent(user_message)
+        async def _fetch_funding_safe():
+            if not funding_intent: return None
+            try:
+                b = await self._fetch_funding_block(user_message, funding_intent)
+                if b: logger.info("[funding-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[funding-block] failed: %s", e); return None
+        post_tasks['eu_funding_block'] = _fetch_funding_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1470,6 +1487,7 @@ class ContextBuilder:
         delegated_acts_block = post_map.get('delegated_acts_block')
         ecli_block = post_map.get('ecli_block')
         eurio_research_block = post_map.get('eurio_research_block')
+        eu_funding_block = post_map.get('eu_funding_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1555,6 +1573,7 @@ class ContextBuilder:
             delegated_acts_block=delegated_acts_block,
             ecli_block=ecli_block,
             eurio_research_block=eurio_research_block,
+            eu_funding_block=eu_funding_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -8147,6 +8166,23 @@ class ContextBuilder:
         r"framework\s+programme|Marie\s+(?:Skłodowska-?)?Curie)\b",
         re.IGNORECASE,
     )
+
+    # /funding-opportunities + /ft-calls-for-proposals — OPEN calls people
+    # can apply to. Triggers narrowly so it doesn't conflict with eurio
+    # (past projects): explicit "open call", "apply", "deadline", "EU grant".
+    _FUNDING_INTENT = re.compile(
+        r"\b(open\s+call(?:s)?|forthcoming\s+call(?:s)?|"
+        r"call(?:s)?\s+for\s+proposal(?:s)?|EU\s+grant(?:s)?|"
+        r"funding\s+opportunit(?:y|ies)|funding\s+call(?:s)?|"
+        r"apply\s+for\s+(?:EU\s+)?(?:fund|grant)|"
+        r"deadline\s+for\s+(?:fund|grant|call)|"
+        r"(?:Horizon\s+Europe|Digital\s+Europe|EU4Health|Erasmus\+?|CEF)\s+(?:call(?:s)?|grant(?:s)?|fund(?:s|ing)?))\b",
+        re.IGNORECASE,
+    )
+    _FUNDING_STOP = {"open","forthcoming","call","calls","proposal","proposals","grant","grants",
+                     "funding","opportunity","opportunities","apply","deadline","fund","funds",
+                     "the","a","an","of","in","to","on","for","by","and","or","what","is","are",
+                     "european","eu","horizon","europe","digital","health","erasmus","cef"}
     _EURIO_STOP = {"horizon","europe","h2020","fp7","cordis","funded","research","project",
                    "grant","consortium","lead","framework","programme","marie","sklodowska",
                    "curie","the","a","an","of","in","to","on","by","for","and","or","what",
@@ -8180,6 +8216,19 @@ class ContextBuilder:
         m = self._EURIO_INTENT.search(query)
         if not m: return None
         return {"keyword": m.group(0)}
+
+    def _detect_funding_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._FUNDING_INTENT.search(query)
+        if not m: return None
+        # Detect programme hint
+        prog = None
+        if re.search(r"horizon\s+europe", query, re.I): prog = "HORIZON"
+        elif re.search(r"digital\s+europe", query, re.I): prog = "DIGITAL"
+        elif re.search(r"EU4Health", query, re.I): prog = "EU4Health"
+        elif re.search(r"erasmus", query, re.I): prog = "Erasmus"
+        elif re.search(r"\bCEF\b", query): prog = "CEF"
+        return {"keyword": m.group(0), "programme": prog}
 
     async def _fetch_commreg_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
         from sqlalchemy import text
@@ -8317,6 +8366,85 @@ class ContextBuilder:
             return "\n".join(lines)
         except Exception as e:
             logger.warning("[ecli-block] failed: %s", e)
+            return None
+
+    async def _fetch_funding_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        """Open + forthcoming funding calls — queries funding_opportunities
+        + ft_calls_for_proposals together, prioritised by deadline soonest-first."""
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                # Status filter: open + forthcoming only (skip closed)
+                where_status = "(LOWER(status) IN ('open','forthcoming') OR status IS NULL)"
+                # Programme filter
+                where_prog = "true"
+                if intent.get("programme"):
+                    params["prog"] = f"%{intent['programme']}%"
+                    where_prog = "(programme ILIKE :prog OR framework_programme ILIKE :prog)"
+                # Free-text terms
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._FUNDING_STOP][:3]
+                term_where = "true"
+                if terms:
+                    cl = []
+                    for i, t in enumerate(terms):
+                        cl.append(f"(title ILIKE :fd{i} OR short_summary ILIKE :fd{i})")
+                        params[f"fd{i}"] = f"%{t}%"
+                    term_where = "(" + " OR ".join(cl) + ")"
+                # Pull from funding_opportunities (primary)
+                rows_fo = db.execute(text(f"""
+                    SELECT 'funding_opportunity' AS src, topic_id AS ref, title, programme AS prog,
+                           type_of_action, deadline, indicative_budget, status, source_url
+                      FROM funding_opportunities
+                     WHERE COALESCE(is_test, false) = false
+                       AND {where_status}
+                       AND {where_prog.replace('framework_programme', 'programme')}
+                       AND {term_where.replace('short_summary', 'short_summary')}
+                     ORDER BY deadline ASC NULLS LAST
+                     LIMIT 6
+                """), params).mappings().all()
+                # Pull from ft_calls_for_proposals (secondary, may overlap)
+                rows_cp = db.execute(text(f"""
+                    SELECT 'ft_call' AS src, topic_id AS ref, title,
+                           framework_programme AS prog, type_of_action, deadline,
+                           indicative_budget, status, source_url
+                      FROM ft_calls_for_proposals
+                     WHERE COALESCE(is_test, false) = false
+                       AND {where_status}
+                       AND {where_prog.replace('programme', 'framework_programme')}
+                       AND {term_where.replace('short_summary', 'description')}
+                     ORDER BY deadline ASC NULLS LAST
+                     LIMIT 6
+                """), params).mappings().all()
+                rows = list(rows_fo) + list(rows_cp)
+                if not rows: return None
+                lines = [
+                    "EU OPEN FUNDING CALLS (from funding_opportunities + ft_calls_for_proposals):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | programme: {intent['programme']}" if intent.get("programme") else ""),
+                    "",
+                ]
+                for r in rows[:10]:
+                    ref = r.get("ref") or "?"
+                    title = (r.get("title") or "")[:110]
+                    prog = r.get("prog") or "?"
+                    dl = str(r.get("deadline") or "?")[:10]
+                    budget = r.get("indicative_budget") or 0
+                    st = r.get("status") or "?"
+                    src = r.get("src")
+                    lines.append(f"  - [{ref}] {title}")
+                    lines.append(f"      {prog} | status {st} | deadline {dl} | budget €{budget:,.0f} | src {src}")
+                lines.append("")
+                lines.append("Source: ec.europa.eu/info/funding-tenders/opportunities. "
+                             "Brubru endpoints: /api/v1/funding-opportunities + /api/v1/ft-calls-for-proposals.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[funding-block] failed: %s", e)
             return None
 
     async def _fetch_eurio_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
@@ -8480,6 +8608,9 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'eurio_research_block', None):
             sections.append(context_data.eurio_research_block)
+            sections.append("")
+        if getattr(context_data, 'eu_funding_block', None):
+            sections.append(context_data.eu_funding_block)
             sections.append("")
 
         # Drafting mode signal (action intent detected)
