@@ -187,12 +187,13 @@ def unsubscribe_daily_brief(
         db.execute(
             text(
                 "INSERT INTO pre_user_events "
-                "(id, pre_user_id, event_type, event_metadata, created_at) "
-                "VALUES (:id, NULL, 'daily_brief_unsubscribe', "
-                ":metadata::jsonb, :ts)"
+                "(id, pre_user_id, event_type, ab_variant, event_metadata, created_at) "
+                "VALUES (:id, :pre_user_id, 'daily_brief_unsubscribe', 'A', "
+                "CAST(:metadata AS jsonb), :ts)"
             ),
             {
                 "id": str(_uuid.uuid4()),
+                "pre_user_id": str(_uuid.uuid4()),
                 "metadata": '{"email": "' + email.replace('"', '') + '"}',
                 "ts": _dt.utcnow(),
             },

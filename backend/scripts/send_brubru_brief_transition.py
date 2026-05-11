@@ -115,11 +115,12 @@ def _log_eutr_send(db_session, email: str, org_name: str, policy_cluster: str):
     from datetime import datetime as _dt
     db_session.execute(
         text("""
-            INSERT INTO pre_user_events (id, pre_user_id, event_type, event_metadata, created_at)
-            VALUES (:id, NULL, 'send_brubru_brief_eutr', :metadata::jsonb, :ts)
+            INSERT INTO pre_user_events (id, pre_user_id, event_type, ab_variant, event_metadata, created_at)
+            VALUES (:id, :pre_user_id, 'send_brubru_brief_eutr', 'A', CAST(:metadata AS jsonb), :ts)
         """),
         {
             "id": str(_uuid.uuid4()),
+            "pre_user_id": str(_uuid.uuid4()),
             "metadata": '{{"email": "{e}", "org_name": "{o}", "policy_cluster": "{c}", "issue": "transition_2026-05-11"}}'.format(
                 e=email.replace('"', ''),
                 o=(org_name or '').replace('"', ''),
