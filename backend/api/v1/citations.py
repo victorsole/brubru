@@ -204,6 +204,43 @@ def _lookup_eu_laws_dates(db: Session, celex: str) -> tuple[Optional[datetime], 
     return None, None
 
 
+# Matches "REGULATION (EU) 2024/1689 ... of 13 June 2024" — the dating
+# convention used by every adopted EU legal act in its preamble.
+_BODY_DATE_PATTERN = re.compile(
+    r"\b(?:REGULATION|DIRECTIVE|DECISION|RECOMMENDATION|COMMUNICATION|RESOLUTION|"
+    r"OPINION|REPORT|AGREEMENT|PROTOCOL|REGLAMENTO|DIRECTIVA|DECISIÓN|RÈGLEMENT)"
+    r"[^.]{0,400}?\bof\s+(\d{1,2})\s+"
+    r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+    r"\s+(\d{4})\b",
+    re.IGNORECASE | re.DOTALL,
+)
+_MONTH_TO_NUM = {
+    "january": 1, "february": 2, "march": 3, "april": 4, "may": 5, "june": 6,
+    "july": 7, "august": 8, "september": 9, "october": 10, "november": 11, "december": 12,
+}
+
+
+def parse_document_date_from_body(body_text: Optional[str]) -> Optional[_date]:
+    """Extract the document's adoption date from its preamble. EU legal acts
+    always cite their date as 'of DD Month YYYY' near the title."""
+    if not body_text:
+        return None
+    # Limit search to first 4 KB — date is always in the preamble
+    head = body_text[:4096]
+    m = _BODY_DATE_PATTERN.search(head)
+    if not m:
+        return None
+    try:
+        day = int(m.group(1))
+        month = _MONTH_TO_NUM.get(m.group(2).lower())
+        year = int(m.group(3))
+        if not month or not (1 <= day <= 31) or not (1950 <= year <= 2099):
+            return None
+        return _date(year, month, day)
+    except (ValueError, TypeError):
+        return None
+
+
 def _read_cached_enrichment(db: Session, ref: str) -> Optional[dict]:
     """Read body + dates from the verifier cache. Returns None if not present
     OR if the body has never been fetched (so we can backfill it inline)."""
@@ -297,7 +334,7 @@ async def _enrich(
     if celex_form and re.match(r"^[0-9]{5}[A-Z]{1,2}[0-9]{4}(\([0-9]+\))?$", celex_form):
         out["public_url"] = _EURLEX_URL_TEMPLATE.format(celex=celex_form)
 
-    # Date lookup
+    # Date lookup — eu_laws first, then we'll fall back to body parsing below
     if celex_form:
         creation, doc_date = _lookup_eu_laws_dates(db, celex_form)
         out["creation_date"] = creation
@@ -325,6 +362,17 @@ async def _enrich(
         if xhtml:
             out["body_html"] = xhtml
             out["body_text"] = _strip_html_to_text(xhtml)
+
+    # Fallback: parse document_date from body preamble when eu_laws lacks the CELEX
+    if not out["document_date"] and out["body_text"]:
+        parsed = parse_document_date_from_body(out["body_text"])
+        if parsed:
+            out["document_date"] = parsed
+
+    # Fallback: creation_date = now when CELEX isn't in eu_laws
+    # (we ARE scraping it right now, so that's the truthful answer)
+    if not out["creation_date"]:
+        out["creation_date"] = datetime.utcnow()
 
     # Persist enrichment for next call
     _write_enrichment_cache(
