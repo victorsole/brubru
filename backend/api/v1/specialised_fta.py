@@ -87,7 +87,7 @@ class FtaDetail(BaseModel):
 
     has_body: bool = False
     body_html: Optional[str] = Field(None, description="HTML manifestation when Cellar served XHTML; null when only a PDF was available.")
-    body_text: Optional[str] = Field(None, description="Plain-text body. Always populated when has_body=True.")
+    body_txt: Optional[str] = Field(None, description="Plain-text body. Always populated when has_body=True.")
     body_source: Optional[str] = Field(None, description="'xhtml' or 'pdf' depending on which Cellar manifestation produced the body.")
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
     fetched_at: Optional[str] = None
@@ -345,7 +345,7 @@ async def get_fta(
         eurlex_url=row["eurlex_url"],
         has_body=has_body_at_threshold,
         body_html=row.get("body_html"),
-        body_text=body_text,
+        body_txt=body_text,
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=str(row.get("fetched_at")) if row.get("fetched_at") else None,

@@ -73,7 +73,7 @@ class ParliamentaryQuestionItem(BaseModel):
     # "Question" + "Answer" sections.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
 
 
 def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> ParliamentaryQuestionItem:
@@ -105,7 +105,7 @@ def _parl_q_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Parl
         last_updated=r.last_updated,
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
     )
 
 
@@ -492,7 +492,7 @@ class SecondaryActItem(BaseModel):
     # "no PDF→HTML synthesis" rule.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # Deprecated alias kept one release.
     body: Optional[str] = None
 
@@ -529,7 +529,7 @@ def _secondary_act_to_item(
         creation_date=getattr(r, "first_seen", None),
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
         body=deprecated_body(body_text, body_html),
     )
 
@@ -694,7 +694,7 @@ class TRISNotificationItem(BaseModel):
     # composer wraps each populated field as a labelled section.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
 
 
 def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNotificationItem:
@@ -719,7 +719,7 @@ def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNo
         policy_areas=list(r.policy_areas or []),
         related_celex=list(r.related_celex or []),
         last_updated=r.last_updated,
-        has_body=has_body, body_html=body_html, body_text=body_text,
+        has_body=has_body, body_html=body_html, body_txt=body_text,
     )
 
 

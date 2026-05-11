@@ -54,7 +54,7 @@ class TextItem(BaseModel):
     # doceo PDF). PDF-sourced rows return body_html=null per the contract.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # Deprecated alias kept one release; equals body_text. Same for
     # has_full_text → has_body.
     has_full_text: bool = False
@@ -87,7 +87,7 @@ def _row_to_item(
         last_updated=r.last_updated,
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
         # Deprecated aliases kept one release.
         has_full_text=has_body,
         full_text=body_text,

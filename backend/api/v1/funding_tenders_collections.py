@@ -64,7 +64,7 @@ class FtCallProposalItem(BaseModel):
     last_updated: Optional[datetime] = None
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
@@ -89,7 +89,7 @@ def _proposal_to_item(
         documents_url=r.documents_url,
         keywords=list(r.keywords or []), target_audience=list(r.target_audience or []),
         published_at=r.published_at, last_updated=r.last_updated,
-        has_body=has_body, body_html=body_html, body_text=body_text,
+        has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
@@ -195,7 +195,7 @@ class FtCallTenderItem(BaseModel):
     last_updated: Optional[datetime] = None
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
@@ -219,7 +219,7 @@ def _tender_to_item(
         source_url=r.source_url, documents_url=r.documents_url,
         cpv_codes=list(r.cpv_codes or []),
         published_at=r.published_at, last_updated=r.last_updated,
-        has_body=has_body, body_html=body_html, body_text=body_text,
+        has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,
@@ -336,7 +336,7 @@ class FtFundedProjectItem(BaseModel):
     # they use.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal project page).")
     document_date: Optional[date] = Field(None, description="Project start date (the canonical 'when this happened' date).")
@@ -361,7 +361,7 @@ def _project_to_item(
         eu_contribution=float(r.eu_contribution) if r.eu_contribution is not None else None,
         cost_currency=r.cost_currency, status=r.status, source_url=r.source_url,
         published_at=r.published_at, last_updated=r.last_updated,
-        has_body=has_body, body_html=body_html, body_text=body_text,
+        has_body=has_body, body_html=body_html, body_txt=body_text,
         public_url=r.source_url,
         document_date=r.start_date,
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,

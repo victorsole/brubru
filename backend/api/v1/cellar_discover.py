@@ -49,7 +49,7 @@ class CellarRecentItem(BaseModel):
     # request — use /api/v1/citations/verify or /api/v1/laws/{celex}/text to
     # pull body for a specific CELEX).
     public_url: Optional[str] = Field(None, description="Citizen-facing EUR-Lex URL (alias of eurlex_url).")
-    body_text: Optional[str] = Field(None, description="Null on list endpoints. Use /api/v1/citations/verify for body.")
+    body_txt: Optional[str] = Field(None, description="Null on list endpoints. Use /api/v1/citations/verify for body.")
     body_html: Optional[str] = Field(None, description="Null on list endpoints.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar discovery call (live endpoint).")
 
@@ -70,7 +70,7 @@ class CellarMetadata(BaseModel):
     eurlex_url: str
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Citizen-facing EUR-Lex URL (alias of eurlex_url).")
-    body_text: Optional[str] = Field(None, description="Null on this metadata-only endpoint. Use /api/v1/citations/verify for body.")
+    body_txt: Optional[str] = Field(None, description="Null on this metadata-only endpoint. Use /api/v1/citations/verify for body.")
     body_html: Optional[str] = Field(None, description="Null on this metadata-only endpoint.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar discovery call (live endpoint).")
 
@@ -82,7 +82,7 @@ class CellarRelation(BaseModel):
     # The 5 mandatory Brubru v1 datapoints — these describe the RELATED act
     # the edge points to (not this row's parent CELEX, which is in the path).
     public_url: Optional[str] = Field(None, description="EUR-Lex citizen URL of the related act.")
-    body_text: Optional[str] = Field(None, description="Null on this graph-edge endpoint — fetch via /citations/verify on the related_celex.")
+    body_txt: Optional[str] = Field(None, description="Null on this graph-edge endpoint — fetch via /citations/verify on the related_celex.")
     body_html: Optional[str] = Field(None, description="Null on this graph-edge endpoint.")
     document_date: Optional[date] = Field(None, description="Null on this graph-edge endpoint — Cellar relationship metadata doesn't carry the related act's date inline.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar relationship discovery call.")
@@ -93,7 +93,7 @@ class EuroVocConcept(BaseModel):
     label: str
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="ShowVoc citizen URL for the EuroVoc concept.")
-    body_text: Optional[str] = Field(None, description="Concept label (taxonomy nodes don't have a body).")
+    body_txt: Optional[str] = Field(None, description="Concept label (taxonomy nodes don't have a body).")
     body_html: Optional[str] = Field(None, description="Null — taxonomy nodes are labels not documents.")
     document_date: Optional[date] = Field(None, description="Null — EuroVoc concepts are taxonomy entries without an adoption date.")
     creation_date: Optional[datetime] = Field(None, description="Time of this Cellar EuroVoc search call.")
@@ -346,7 +346,7 @@ async def search_eurovoc(
             concept_uri=r["concept"],
             label=r["label"],
             public_url=_showvoc_url(r["concept"]),
-            body_text=r.get("label"),  # the human-readable label IS the concept's content
+            body_txt=r.get("label"),  # the human-readable label IS the concept's content
             creation_date=_now,
         )
         for r in rows if r.get("concept")

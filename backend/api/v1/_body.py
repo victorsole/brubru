@@ -6,7 +6,7 @@ content-bearing item:
 
     has_body : bool            — True iff some text body is present (>500 chars)
     body_html: Optional[str]   — HTML rendering when source is HTML; None for PDF-only
-    body_text: Optional[str]   — Plain-text body, always populated when has_body=True
+    body_txt: Optional[str]   — Plain-text body, always populated when has_body=True
 
 A deprecated `body` alias is also surfaced (one release) returning whichever
 of body_text / body_html is non-null. Clients should migrate to the explicit
@@ -66,7 +66,7 @@ def body_from_pdf_text(
     text: Optional[str],
     threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> Tuple[Optional[str], Optional[str], bool]:
-    """For PDF-sourced rows: return (body_html=None, body_text=text, has_body).
+    """For PDF-sourced rows: return (body_html=None, body_txt=text, has_body).
 
     Honest contract — we never invent HTML from PDF text. If a partner needs
     HTML, they must use the source PDF URL.
@@ -88,7 +88,7 @@ def body_from_html(
     html: Optional[str],
     threshold: int = DEFAULT_HAS_BODY_THRESHOLD,
 ) -> Tuple[Optional[str], Optional[str], bool]:
-    """For HTML-sourced rows: return (body_html=html, body_text=stripped, has_body)."""
+    """For HTML-sourced rows: return (body_html=html, body_txt=stripped, has_body)."""
     if html is None:
         return None, None, False
     html = html.strip()
@@ -147,7 +147,7 @@ def compose_html_from_sections(
     return body_html, body_text, has
 
 
-def deprecated_body(body_text: Optional[str], body_html: Optional[str]) -> Optional[str]:
+def deprecated_body(body_txt: Optional[str], body_html: Optional[str]) -> Optional[str]:
     """One-release back-compat alias. Returns body_text if present, else body_html.
 
     Clients must migrate to the explicit body_text / body_html pair before

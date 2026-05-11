@@ -86,7 +86,7 @@ class SanctionDetail(BaseModel):
 
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text or body_html.")
 
 
@@ -416,6 +416,6 @@ async def get_sanction(
         date_file=record.get("date_file"),
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
         body=deprecated_body(body_text, body_html),
     )

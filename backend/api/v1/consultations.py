@@ -92,7 +92,7 @@ class FeedbackItem(BaseModel):
     # (deferred) would fetch each feedback's detail page for full HTML.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # Deprecated alias kept one release. Equivalent to body_text.
     text: Optional[str] = None
     attachments: list = Field(default_factory=list)
@@ -197,7 +197,7 @@ async def get_feedback_by_initiative(
             transparency_register_number=it.transparency_register_number,
             has_body=has_body,
             body_html=None,  # Stage 2 (deferred): per-feedback HTML fetch
-            body_text=body_text,
+            body_txt=body_text,
             text=body_text,  # Deprecated alias — same value as body_text
             attachments=it.attachments,
             public_url=it.public_url,
@@ -259,7 +259,7 @@ class ConsultationItem(BaseModel):
     # div captured by a re-scrape pass.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
 
 
 def _consultation_body(r: PublicConsultation, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):
@@ -377,7 +377,7 @@ async def list_consultations(
             last_updated=r.last_updated,
             has_body=has_body,
             body_html=body_html,
-            body_text=body_text,
+            body_txt=body_text,
         ))
 
     return build_envelope(
@@ -438,5 +438,5 @@ async def get_consultation_detail(
         last_updated=r.last_updated,
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
     )

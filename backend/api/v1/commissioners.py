@@ -31,7 +31,7 @@ class AgendaItemOut(BaseModel):
         None,
         description="Citizen-facing URL on commission.europa.eu for the event detail page.",
     )
-    body_text: Optional[str] = Field(
+    body_txt: Optional[str] = Field(
         None,
         description=(
             "Plain-text body of the event detail page. Typically null for this "
@@ -239,7 +239,7 @@ async def get_agenda(
         creation = cached.first_seen_at if cached else now_ts
         data.append(AgendaItemOut(
             public_url=public,
-            body_text=body_text,
+            body_txt=body_text,
             body_html=body_html,
             meeting_start_date=it.date,
             creation_date=creation,

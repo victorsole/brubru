@@ -69,7 +69,7 @@ class CohesionDetail(BaseModel):
 
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     body_source: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias.")
     fetched_at: Optional[datetime] = None
@@ -269,7 +269,7 @@ async def get_cohesion(
         api_endpoint=row.get("api_endpoint"),
         has_body=has_body,
         body_html=row.get("body_html"),
-        body_text=body_text,
+        body_txt=body_text,
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=row.get("fetched_at"),

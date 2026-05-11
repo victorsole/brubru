@@ -49,7 +49,7 @@ class ECLIResolution(BaseModel):
         None,
         description="Canonical citizen URL — InforCuria for CJEU rulings, else e-Justice deep-link.",
     )
-    body_text: Optional[str] = Field(
+    body_txt: Optional[str] = Field(
         None,
         description="Null for this endpoint — ECLI lookup is metadata-only; the ruling body is not fetched. Follow public_url to read the ruling.",
     )

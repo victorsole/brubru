@@ -194,7 +194,7 @@ class FundingItem(BaseModel):
     # don't store the raw HTML, so body_html is composed semantic markup.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of source_url — the F&T Portal topic page).")
     document_date: Optional[date] = Field(None, description="Publication date (date-only view of published_at).")
@@ -231,7 +231,7 @@ def _funding_to_item(
         last_updated=r.last_updated,
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
         public_url=r.source_url,
         document_date=r.published_at.date() if r.published_at and hasattr(r.published_at, "date") else r.published_at,
         creation_date=getattr(r, "scraped_at", None) or getattr(r, "first_seen", None) or r.last_updated,

@@ -70,7 +70,7 @@ class ResearchProjectItem(BaseModel):
     # locally — semantic <article> with <h2>Objective</h2> + paragraphs.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(
         None,
@@ -96,7 +96,7 @@ class ConsortiumPayload(BaseModel):
     organisation_count: int = 0
     # The 5 mandatory Brubru v1 datapoints (sourced from the parent project)
     public_url: Optional[str] = Field(None, description="CORDIS URL of the parent project.")
-    body_text: Optional[str] = Field(None, description="Parent project's objective as plain text.")
+    body_txt: Optional[str] = Field(None, description="Parent project's objective as plain text.")
     body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
     document_date: Optional[date] = Field(None, description="Parent project's start_date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project (ft_funded_projects.scraped_at).")
@@ -110,7 +110,7 @@ class DeliverablesPayload(BaseModel):
     note: Optional[str] = None
     # The 5 mandatory Brubru v1 datapoints (sourced from the parent project)
     public_url: Optional[str] = Field(None, description="CORDIS URL of the parent project.")
-    body_text: Optional[str] = Field(None, description="Parent project's objective as plain text.")
+    body_txt: Optional[str] = Field(None, description="Parent project's objective as plain text.")
     body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
     document_date: Optional[date] = Field(None, description="Parent project's start_date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project.")
@@ -128,7 +128,7 @@ class FundingPayload(BaseModel):
     by_organisation: list = Field(default_factory=list)
     # The 5 mandatory Brubru v1 datapoints (sourced from the parent project)
     public_url: Optional[str] = Field(None, description="CORDIS URL of the parent project.")
-    body_text: Optional[str] = Field(None, description="Parent project's objective as plain text.")
+    body_txt: Optional[str] = Field(None, description="Parent project's objective as plain text.")
     body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
     document_date: Optional[date] = Field(None, description="Parent project's start_date.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project.")
@@ -162,7 +162,7 @@ def _row_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> Researc
         cordis_url=r.source_url,
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
         # 5 mandatory datapoints
         public_url=r.source_url,
         document_date=r.start_date,
@@ -300,7 +300,7 @@ async def project_consortium(
         coordinator_country=row.coordinator_country,
         organisation_count=len(orgs),
         public_url=row.source_url,
-        body_text=bt,
+        body_txt=bt,
         body_html=bh,
         document_date=row.start_date,
         creation_date=getattr(row, "scraped_at", None),
@@ -341,7 +341,7 @@ async def project_deliverables(
         web_links=links,
         note=note,
         public_url=row.source_url,
-        body_text=bt,
+        body_txt=bt,
         body_html=bh,
         document_date=row.start_date,
         creation_date=getattr(row, "scraped_at", None),
@@ -387,7 +387,7 @@ async def project_funding(
         legal_basis=list(row.legal_basis_details or []),
         by_organisation=by_org,
         public_url=row.source_url,
-        body_text=bt,
+        body_txt=bt,
         body_html=bh,
         document_date=row.start_date,
         creation_date=getattr(row, "scraped_at", None),

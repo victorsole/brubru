@@ -369,7 +369,7 @@ class CommitteeMinutesOut(BaseModel):
         None,
         description="Canonical citizen URL — pdf_url → doc_url → source_url fallback chain.",
     )
-    body_text: Optional[str] = Field(
+    body_txt: Optional[str] = Field(
         None,
         description="Plain-text body extracted from the PDF minutes.",
     )
@@ -586,7 +586,7 @@ async def list_committee_minutes(
             has_full_text=bool(r.has_full_text),
             # 5 mandatory datapoints
             public_url=r.pdf_url or r.doc_url or r.source_url,
-            body_text=r.full_text,
+            body_txt=r.full_text,
             body_html=None,  # PDF source — never synthesise HTML
             meeting_start_date=r.meeting_date.date() if hasattr(r.meeting_date, "date") else r.meeting_date,
             creation_date=r.first_seen,

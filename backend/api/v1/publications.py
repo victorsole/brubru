@@ -48,7 +48,7 @@ class PublicationItem(BaseModel):
     # body_text is the stripped plain-text rendering.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # Deprecated alias kept one release; equals body_text or body_html.
     body: Optional[str] = None
 
@@ -188,7 +188,7 @@ async def list_publications(
             tags=list(r.tags or []),
             has_body=has_body,
             body_html=body_html,
-            body_text=body_text,
+            body_txt=body_text,
             body=deprecated_body(body_text, body_html),
         ))
 
@@ -317,6 +317,6 @@ async def get_publication_detail(
         tags=list(r.tags or []),
         has_body=has_body,
         body_html=body_html,
-        body_text=body_text,
+        body_txt=body_text,
         body=deprecated_body(body_text, body_html),
     )

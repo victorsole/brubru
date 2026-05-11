@@ -88,7 +88,7 @@ class TradeDefenceDetail(BaseModel):
 
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     body_source: Optional[str] = None
     body: Optional[str] = Field(None, description="DEPRECATED — back-compat alias for body_text/body_html.")
     fetched_at: Optional[str] = None
@@ -344,7 +344,7 @@ async def get_trade_defence(
         eurlex_url=row["eurlex_url"],
         has_body=has_body,
         body_html=row.get("body_html"),
-        body_text=body_text,
+        body_txt=body_text,
         body_source=row.get("body_source"),
         body=deprecated_body(body_text, row.get("body_html")),
         fetched_at=str(row.get("fetched_at")) if row.get("fetched_at") else None,

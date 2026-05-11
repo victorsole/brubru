@@ -69,7 +69,7 @@ class VerifyCitationItem(BaseModel):
     original_form: Optional[str] = Field(None, description="The form the caller passed in")
     from_cache: bool = False
     # The 5 mandatory Brubru v1 datapoints
-    body_text: Optional[str] = Field(
+    body_txt: Optional[str] = Field(
         None,
         description="Plain-text body of the document (Cellar XHTML stripped to text). Null when document is metadata-only or body fetch failed.",
     )
@@ -220,10 +220,10 @@ _MONTH_TO_NUM = {
 }
 
 
-def parse_document_date_from_body(body_text: Optional[str]) -> Optional[_date]:
+def parse_document_date_from_body(body_txt: Optional[str]) -> Optional[_date]:
     """Extract the document's adoption date from its preamble. EU legal acts
     always cite their date as 'of DD Month YYYY' near the title."""
-    if not body_text:
+    if not body_txt:
         return None
     # Limit search to first 4 KB — date is always in the preamble
     head = body_text[:4096]
@@ -274,7 +274,7 @@ def _write_enrichment_cache(
     db: Session,
     ref: str,
     public_url: Optional[str],
-    body_text: Optional[str],
+    body_txt: Optional[str],
     body_html: Optional[str],
     creation_date: Optional[datetime],
     document_date: Optional[_date],
@@ -378,7 +378,7 @@ async def _enrich(
     _write_enrichment_cache(
         db, ref,
         public_url=out["public_url"],
-        body_text=out["body_text"],
+        body_txt=out["body_text"],
         body_html=out["body_html"],
         creation_date=out["creation_date"],
         document_date=out["document_date"],
@@ -450,7 +450,7 @@ async def verify_citation(
             latency_ms=result.latency_ms,
             original_form=result.original_form or ref,
             from_cache=result.from_cache,
-            body_text=enrichment["body_text"],
+            body_txt=enrichment["body_text"],
             body_html=enrichment["body_html"],
             creation_date=enrichment["creation_date"],
             document_date=enrichment["document_date"],
@@ -489,7 +489,7 @@ async def verify_citation_q(
             latency_ms=result.latency_ms,
             original_form=result.original_form or q,
             from_cache=result.from_cache,
-            body_text=enrichment["body_text"],
+            body_txt=enrichment["body_text"],
             body_html=enrichment["body_html"],
             creation_date=enrichment["creation_date"],
             document_date=enrichment["document_date"],

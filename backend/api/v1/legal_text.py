@@ -38,7 +38,7 @@ class DefinedTermsResponse(BaseModel):
     # one <dt>/<dd> pair per term; body_text is a plain-text rendering.
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
 
 
 def _compose_definitions_body(terms: dict, threshold: int = DEFAULT_HAS_BODY_THRESHOLD):
@@ -187,7 +187,7 @@ def defined_terms(
     body_html, body_text, has_body = _compose_definitions_body(mapping, threshold=body_threshold)
     return DefinedTermsResponse(
         celex=celex, terms=mapping,
-        has_body=has_body, body_html=body_html, body_text=body_text,
+        has_body=has_body, body_html=body_html, body_txt=body_text,
     )
 
 

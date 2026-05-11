@@ -56,7 +56,7 @@ class CommissionRegisterItem(BaseModel):
             "EUR-Lex citizen URL derived from CELEX → source_url → pdf_url."
         ),
     )
-    body_text: Optional[str] = Field(
+    body_txt: Optional[str] = Field(
         None,
         description="Plain-text body of the document (extracted from PDF or Cellar XHTML).",
     )
@@ -137,7 +137,7 @@ def _row_to_item(
         languages=list(r.languages or []),
         # The 5 mandatory datapoints
         public_url=_derive_public_url(r),
-        body_text=body_text_value,
+        body_txt=body_text_value,
         body_html=body_html_value,
         document_date=doc_date,
         creation_date=r.first_seen,

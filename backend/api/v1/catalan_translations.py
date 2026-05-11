@@ -269,7 +269,7 @@ class CatalanTranslationDetail(CatalanTranslationItem):
         None,
         description="Rendered Catalan HTML body. Populated only when `?body=html` is requested. May be null if the upstream file is unreachable — fall back to ca_url.",
     )
-    body_text: Optional[str] = Field(
+    body_txt: Optional[str] = Field(
         None,
         description="Plain-text rendering of body_html (HTML stripped). Populated only when `?body=html` is requested.",
     )
@@ -621,7 +621,7 @@ async def get_catalan_translation(
         **base,
         has_body=has_body,
         body_html=None,
-        body_text=None,
+        body_txt=None,
     )
 
     if body and body.lower() == "html":

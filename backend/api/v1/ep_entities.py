@@ -420,7 +420,7 @@ class EPDocumentItem(BaseModel):
     last_updated: Optional[datetime] = None
     # The 5 mandatory Brubru v1 datapoints
     public_url: Optional[str] = Field(None, description="Canonical citizen URL (alias of document_url).")
-    body_text: Optional[str] = Field(None, description="Null for this list endpoint — fetch body via the per-source detail endpoints (committee minutes, amendment docs).")
+    body_txt: Optional[str] = Field(None, description="Null for this list endpoint — fetch body via the per-source detail endpoints (committee minutes, amendment docs).")
     body_html: Optional[str] = Field(None, description="Null for this list endpoint.")
     creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated for this union view).")
 
@@ -556,7 +556,7 @@ class PressReleaseItem(BaseModel):
     # nav/footer/scripts during ingestion).
     has_body: bool = False
     body_html: Optional[str] = None
-    body_text: Optional[str] = None
+    body_txt: Optional[str] = None
     # Deprecated alias kept one release; equals body_text or body_html.
     body: Optional[str] = None
 
@@ -630,7 +630,7 @@ async def list_press_releases(
             tags=list(r.tags or []),
             has_body=has_body,
             body_html=body_html,
-            body_text=body_text,
+            body_txt=body_text,
             body=deprecated_body(body_text, body_html),
         ))
     return build_envelope(
