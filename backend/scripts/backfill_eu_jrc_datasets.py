@@ -164,13 +164,213 @@ def scrape_listing(dry_run: bool, max_pages: int = 200) -> None:
     print(f"[DONE] {counts}{' (DRY)' if dry_run else ''}")
 
 
+def _to_iso(value):
+    if not value:
+        return None
+    s = str(value).split(".")[0]
+    return s
+
+
+_HTML_TEMPLATE = """<article>
+<section><h2>{title}</h2><p>{desc}</p></section>
+{kw_section}
+{dist_section}
+</article>"""
+
+
+def backfill_via_dpe(dry_run: bool, limit_total: int = 0) -> None:
+    """Federated path: data.europa.eu publishes the full JRC catalogue
+    (~4,215 datasets) as DCAT-AP — REST-accessible without WAF.
+
+    Two-phase:
+      1. GET /api/hub/repo/catalogues/jrc/datasets?limit=N&offset=N — list of
+         dataset URIs (http://data.europa.eu/88u/dataset/<uuid>).
+      2. For each, GET /api/hub/search/datasets/<uuid> — full DCAT-AP.
+    Body fields composed from title + description + keywords + distributions.
+    """
+    import json
+    import urllib.request as ureq
+    from html import escape as html_escape
+
+    UA = "Brubru/1.0 backfill"
+    UA_HEADERS = {"User-Agent": UA, "Accept": "application/json"}
+    CAT_URL = "https://data.europa.eu/api/hub/repo/catalogues/jrc/datasets"
+    DETAIL_URL = "https://data.europa.eu/api/hub/search/datasets/{uuid}"
+    PUBLIC_TPL = "https://data.jrc.ec.europa.eu/dataset/{uuid}"
+
+    def fetch_json(url):
+        req = ureq.Request(url, headers=UA_HEADERS)
+        with ureq.urlopen(req, timeout=60) as r:
+            return json.loads(r.read())
+
+    # Phase 1: page through dataset URIs
+    print("[INFO] Phase 1 — enumerating JRC catalogue via data.europa.eu...", flush=True)
+    uuids: list[str] = []
+    offset = 0
+    PAGE = 500
+    while True:
+        try:
+            chunk = fetch_json(f"{CAT_URL}?limit={PAGE}&offset={offset}")
+        except Exception as exc:
+            print(f"[warn]   offset={offset}: {exc!s}", flush=True)
+            break
+        if not chunk:
+            break
+        for uri in chunk:
+            # URI format: http://data.europa.eu/88u/dataset/<uuid>
+            uuid = uri.rsplit("/", 1)[-1]
+            if len(uuid) >= 20:
+                uuids.append(uuid)
+        print(f"[INFO]   offset={offset:5d}: +{len(chunk)} (running {len(uuids)})", flush=True)
+        if len(chunk) < PAGE:
+            break
+        offset += PAGE
+        if limit_total and len(uuids) >= limit_total:
+            uuids = uuids[:limit_total]
+            break
+
+    print(f"[INFO] {len(uuids):,} JRC datasets discovered", flush=True)
+    if dry_run:
+        uuids = uuids[:5]
+
+    # Phase 2: per-dataset detail
+    db = ChunkedDb() if not dry_run else None
+    counts = {"upserted": 0, "with_body": 0, "errors": 0}
+
+    for i, uuid in enumerate(uuids, 1):
+        try:
+            payload = fetch_json(DETAIL_URL.format(uuid=uuid))
+        except Exception as exc:
+            counts["errors"] += 1
+            if i <= 5 or i % 200 == 0:
+                print(f"  [{i:5}] {uuid}: detail err {exc!s}", flush=True)
+            continue
+
+        r = payload.get("result", {})
+        title = (r.get("title", {}) or {}).get("en")
+        desc = (r.get("description", {}) or {}).get("en")
+        publisher = (r.get("publisher", {}) or {}).get("name") if isinstance(r.get("publisher"), dict) else None
+        keywords = []
+        for kw in (r.get("keywords") or []):
+            label = kw.get("label") if isinstance(kw, dict) else kw
+            if label:
+                keywords.append(label)
+        issued = _to_iso(r.get("issued"))
+        modified = _to_iso(r.get("modified"))
+        dists = r.get("distributions") or []
+
+        # Compose body from structured fields
+        body_text_parts = []
+        if title: body_text_parts.append(f"Title\n\n{title}")
+        if desc: body_text_parts.append(f"Description\n\n{desc}")
+        if publisher: body_text_parts.append(f"Publisher\n\n{publisher}")
+        if keywords: body_text_parts.append(f"Keywords\n\n{', '.join(keywords)}")
+        if dists:
+            dist_lines = []
+            for d_ in dists[:30]:
+                fmt = (d_.get("format", {}) or {}).get("id") if isinstance(d_.get("format"), dict) else d_.get("format")
+                urls = d_.get("access_url") or d_.get("download_url") or []
+                if isinstance(urls, list) and urls:
+                    dist_lines.append(f"  - {fmt or '?'}: {urls[0]}")
+            if dist_lines:
+                body_text_parts.append("Distributions\n\n" + "\n".join(dist_lines))
+        body_text = "\n\n".join(body_text_parts) if body_text_parts else None
+        body_html = None
+        if body_text and len(body_text) >= 200:
+            # Quick HTML wrapping
+            html_parts = []
+            for part in body_text_parts:
+                head, _, rest = part.partition("\n\n")
+                html_parts.append(f"<section><h2>{html_escape(head)}</h2><p>{html_escape(rest).replace(chr(10), '<br/>')}</p></section>")
+            body_html = f"<article>{''.join(html_parts)}</article>"
+
+        has_body = bool(body_text and len(body_text) >= 200)
+        if has_body:
+            counts["with_body"] += 1
+
+        params = {
+            "uuid": uuid,
+            "title": title,
+            "description": desc,
+            "publisher": publisher,
+            "keywords": keywords,
+            "issued": issued,
+            "modified": modified,
+            "distributions_json": json.dumps(dists) if dists else None,
+            "public_url": PUBLIC_TPL.format(uuid=uuid),
+            "has_body": has_body,
+            "body_html": body_html,
+            "body_text": body_text,
+            "body_source": "dpe_composed" if has_body else None,
+        }
+
+        if dry_run:
+            print(f"  [{i:3}] {uuid} | {(title or '')[:60]} | body={'+' if has_body else '—'} | dists={len(dists)}", flush=True)
+            continue
+
+        try:
+            db.execute(
+                """
+                INSERT INTO eu_jrc_datasets
+                    (uuid, title, description, publisher, keywords, issued, modified,
+                     distributions, public_url, has_body, body_html, body_text, body_source,
+                     fetched_at, updated_at)
+                VALUES (%(uuid)s, %(title)s, %(description)s, %(publisher)s, %(keywords)s,
+                        %(issued)s, %(modified)s,
+                        %(distributions_json)s::jsonb, %(public_url)s,
+                        %(has_body)s, %(body_html)s, %(body_text)s, %(body_source)s,
+                        NOW(), NOW())
+                ON CONFLICT (uuid) DO UPDATE SET
+                    title = COALESCE(EXCLUDED.title, eu_jrc_datasets.title),
+                    description = EXCLUDED.description,
+                    publisher = EXCLUDED.publisher,
+                    keywords = EXCLUDED.keywords,
+                    issued = EXCLUDED.issued,
+                    modified = EXCLUDED.modified,
+                    distributions = EXCLUDED.distributions,
+                    public_url = EXCLUDED.public_url,
+                    has_body = EXCLUDED.has_body,
+                    body_html = EXCLUDED.body_html,
+                    body_text = EXCLUDED.body_text,
+                    body_source = EXCLUDED.body_source,
+                    fetched_at = NOW(),
+                    updated_at = NOW();
+                """,
+                params,
+            )
+            counts["upserted"] += 1
+            if counts["upserted"] % 200 == 0:
+                db.commit()
+                print(f"  [{i:5}/{len(uuids)}] {uuid} | upserted={counts['upserted']:,} "
+                      f"with_body={counts['with_body']:,}", flush=True)
+        except Exception as exc:
+            db.rollback()
+            counts["errors"] += 1
+            print(f"  [{i:5}] DB err {uuid}: {exc!s}", flush=True)
+
+    if not dry_run:
+        db.commit()
+        db.close()
+    print()
+    print(f"[DONE] {counts}{' (DRY)' if dry_run else ''}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--source", choices=("playwright", "dpe"), default="dpe",
+                    help="'dpe' = data.europa.eu federation (REST, fast, full). "
+                         "'playwright' = scrape data.jrc.ec.europa.eu (slow, partial).")
     ap.add_argument("--max-pages", type=int, default=200,
-                    help="Cap pagination depth (each page = 10 datasets).")
+                    help="Playwright-mode only — cap pagination depth.")
+    ap.add_argument("--limit", type=int, default=0,
+                    help="DPE-mode only — cap total datasets fetched (0 = all).")
     args = ap.parse_args()
-    scrape_listing(dry_run=not args.apply, max_pages=args.max_pages)
+
+    if args.source == "playwright":
+        scrape_listing(dry_run=not args.apply, max_pages=args.max_pages)
+    else:
+        backfill_via_dpe(dry_run=not args.apply, limit_total=args.limit)
 
 
 if __name__ == "__main__":
