@@ -79,11 +79,24 @@ class CellarRelation(BaseModel):
     relation: str = Field(..., description="CDM relationship predicate URI")
     related_celex: str
     direction: str = Field(..., description="'outgoing' (this work -> other) or 'incoming' (other -> this work)")
+    # The 5 mandatory Brubru v1 datapoints — these describe the RELATED act
+    # the edge points to (not this row's parent CELEX, which is in the path).
+    public_url: Optional[str] = Field(None, description="EUR-Lex citizen URL of the related act.")
+    body_text: Optional[str] = Field(None, description="Null on this graph-edge endpoint — fetch via /citations/verify on the related_celex.")
+    body_html: Optional[str] = Field(None, description="Null on this graph-edge endpoint.")
+    document_date: Optional[date] = Field(None, description="Null on this graph-edge endpoint — Cellar relationship metadata doesn't carry the related act's date inline.")
+    creation_date: Optional[datetime] = Field(None, description="Time of this Cellar relationship discovery call.")
 
 
 class EuroVocConcept(BaseModel):
     concept_uri: str
     label: str
+    # The 5 mandatory Brubru v1 datapoints
+    public_url: Optional[str] = Field(None, description="ShowVoc citizen URL for the EuroVoc concept.")
+    body_text: Optional[str] = Field(None, description="Concept label (taxonomy nodes don't have a body).")
+    body_html: Optional[str] = Field(None, description="Null — taxonomy nodes are labels not documents.")
+    document_date: Optional[date] = Field(None, description="Null — EuroVoc concepts are taxonomy entries without an adoption date.")
+    creation_date: Optional[datetime] = Field(None, description="Time of this Cellar EuroVoc search call.")
 
 
 # ----------------------------- helpers -----------------------------
@@ -241,11 +254,14 @@ async def cellar_celex_relationships(
     async with CellarSPARQLClient() as client:
         rows = await client.get_related_acts(celex)
 
+    _now = datetime.utcnow()
     items = [
         CellarRelation(
             relation=r["relation"],
             related_celex=r["relatedCelex"],
             direction=r.get("direction", "outgoing"),
+            public_url=_eurlex_url(r["relatedCelex"]),
+            creation_date=_now,
         )
         for r in rows
         if r.get("relation") and r.get("relatedCelex")
@@ -293,6 +309,12 @@ async def cellar_celex_languages(
         "language_count": len(languages),
         "manifestations": manifestations,
         "manifestation_count": len(manifestations),
+        # The 5 mandatory Brubru v1 datapoints (about the parent CELEX)
+        "public_url": _eurlex_url(celex),
+        "body_text": None,  # use /api/v1/citations/verify or /laws/{celex}/text for body
+        "body_html": None,
+        "document_date": _to_date(meta.get("date")).isoformat() if _to_date(meta.get("date")) else None,
+        "creation_date": datetime.utcnow().isoformat(),
     }
 
 
@@ -311,7 +333,24 @@ async def search_eurovoc(
     async with CellarSPARQLClient() as client:
         rows = await client.search_eurovoc_concepts(keyword=q, language=language, limit=limit)
 
-    items = [EuroVocConcept(concept_uri=r["concept"], label=r["label"]) for r in rows if r.get("concept")]
+    _now = datetime.utcnow()
+    # Derive ShowVoc deep-link from concept URI.
+    # EuroVoc URIs look like http://eurovoc.europa.eu/2517 ; ShowVoc opens at
+    # https://showvoc.op.europa.eu/#/datasets/EuroVoc/data?resId=http%3A//eurovoc.europa.eu/2517
+    def _showvoc_url(uri: str) -> str:
+        from urllib.parse import quote
+        return f"https://showvoc.op.europa.eu/#/datasets/EuroVoc/data?resId={quote(uri, safe='')}"
+
+    items = [
+        EuroVocConcept(
+            concept_uri=r["concept"],
+            label=r["label"],
+            public_url=_showvoc_url(r["concept"]),
+            body_text=r.get("label"),  # the human-readable label IS the concept's content
+            creation_date=_now,
+        )
+        for r in rows if r.get("concept")
+    ]
     return build_envelope(items=items, total=len(items), page=1, limit=limit, coverage_complete=False)
 
 

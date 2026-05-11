@@ -94,6 +94,12 @@ class ConsortiumPayload(BaseModel):
     coordinator_name: Optional[str] = None
     coordinator_country: Optional[str] = None
     organisation_count: int = 0
+    # The 5 mandatory Brubru v1 datapoints (sourced from the parent project)
+    public_url: Optional[str] = Field(None, description="CORDIS URL of the parent project.")
+    body_text: Optional[str] = Field(None, description="Parent project's objective as plain text.")
+    body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
+    document_date: Optional[date] = Field(None, description="Parent project's start_date.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project (ft_funded_projects.scraped_at).")
 
 
 class DeliverablesPayload(BaseModel):
@@ -102,6 +108,12 @@ class DeliverablesPayload(BaseModel):
     title: Optional[str] = None
     web_links: list = Field(default_factory=list)
     note: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints (sourced from the parent project)
+    public_url: Optional[str] = Field(None, description="CORDIS URL of the parent project.")
+    body_text: Optional[str] = Field(None, description="Parent project's objective as plain text.")
+    body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
+    document_date: Optional[date] = Field(None, description="Parent project's start_date.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project.")
 
 
 class FundingPayload(BaseModel):
@@ -114,6 +126,12 @@ class FundingPayload(BaseModel):
     cost_currency: str = "EUR"
     legal_basis: list = Field(default_factory=list)
     by_organisation: list = Field(default_factory=list)
+    # The 5 mandatory Brubru v1 datapoints (sourced from the parent project)
+    public_url: Optional[str] = Field(None, description="CORDIS URL of the parent project.")
+    body_text: Optional[str] = Field(None, description="Parent project's objective as plain text.")
+    body_html: Optional[str] = Field(None, description="Parent project's objective as HTML.")
+    document_date: Optional[date] = Field(None, description="Parent project's start_date.")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested the parent project.")
 
 
 # ----------------------------- helpers -----------------------------
@@ -272,6 +290,7 @@ async def project_consortium(
 ) -> ConsortiumPayload:
     row = _project_or_404(db, cordis_id)
     orgs = list(row.organisations or [])
+    bh, bt, _ = compose_html_from_sections([("Objective", row.objective), ("Keywords", row.keywords)])
     return ConsortiumPayload(
         cordis_id=cordis_id,
         project_acronym=row.project_acronym,
@@ -280,6 +299,11 @@ async def project_consortium(
         coordinator_name=row.coordinator_name,
         coordinator_country=row.coordinator_country,
         organisation_count=len(orgs),
+        public_url=row.source_url,
+        body_text=bt,
+        body_html=bh,
+        document_date=row.start_date,
+        creation_date=getattr(row, "scraped_at", None),
     )
 
 
@@ -309,12 +333,18 @@ async def project_deliverables(
         "dump. Web links (project websites, public reports) appear here when the "
         "consortium publishes them via the CORDIS portal."
     )
+    bh, bt, _ = compose_html_from_sections([("Objective", row.objective), ("Keywords", row.keywords)])
     return DeliverablesPayload(
         cordis_id=cordis_id,
         project_acronym=row.project_acronym,
         title=row.title,
         web_links=links,
         note=note,
+        public_url=row.source_url,
+        body_text=bt,
+        body_html=bh,
+        document_date=row.start_date,
+        creation_date=getattr(row, "scraped_at", None),
     )
 
 
@@ -345,6 +375,7 @@ async def project_funding(
                 "ec_contribution": o.get("ec_contribution"),
                 "total_cost": o.get("total_cost"),
             })
+    bh, bt, _ = compose_html_from_sections([("Objective", row.objective), ("Keywords", row.keywords)])
     return FundingPayload(
         cordis_id=cordis_id,
         project_acronym=row.project_acronym,
@@ -355,6 +386,11 @@ async def project_funding(
         cost_currency=row.cost_currency or "EUR",
         legal_basis=list(row.legal_basis_details or []),
         by_organisation=by_org,
+        public_url=row.source_url,
+        body_text=bt,
+        body_html=bh,
+        document_date=row.start_date,
+        creation_date=getattr(row, "scraped_at", None),
     )
 
 
