@@ -619,6 +619,13 @@ class ContextData:
     # On-demand: Combined Nomenclature (CN) tariff codes — live HTTP via Access2Markets
     cn_codes_block: Optional[str] = None
 
+    # Layer 2 (May 2026): wire the 4 remaining v1 surfaces into chat retrieval.
+    # Same pattern as Layer 1 — intent regex + stopwords + DB-backed fetch.
+    commission_register_block: Optional[str] = None
+    delegated_acts_block: Optional[str] = None
+    ecli_block: Optional[str] = None
+    eurio_research_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1315,6 +1322,54 @@ class ContextBuilder:
                 logger.warning("[cn-block] failed: %s", e); return None
         post_tasks['cn_codes_block'] = _fetch_cn_safe()
 
+        # 3r. Commission Document Register (Layer 2)
+        commreg_intent = self._detect_commreg_intent(user_message)
+        async def _fetch_commreg_safe():
+            if not commreg_intent: return None
+            try:
+                b = await self._fetch_commreg_block(user_message, commreg_intent)
+                if b: logger.info("[commreg-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[commreg-block] failed: %s", e); return None
+        post_tasks['commission_register_block'] = _fetch_commreg_safe()
+
+        # 3s. Delegated + Implementing acts (Layer 2)
+        delegated_intent = self._detect_delegated_intent(user_message)
+        async def _fetch_delegated_safe():
+            if not delegated_intent: return None
+            try:
+                b = await self._fetch_delegated_block(user_message, delegated_intent)
+                if b: logger.info("[delegated-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[delegated-block] failed: %s", e); return None
+        post_tasks['delegated_acts_block'] = _fetch_delegated_safe()
+
+        # 3t. ECLI court rulings (Layer 2)
+        ecli_intent = self._detect_ecli_intent(user_message)
+        async def _fetch_ecli_safe():
+            if not ecli_intent: return None
+            try:
+                b = await self._fetch_ecli_block(user_message, ecli_intent)
+                if b: logger.info("[ecli-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[ecli-block] failed: %s", e); return None
+        post_tasks['ecli_block'] = _fetch_ecli_safe()
+
+        # 3u. EURIO research projects (Layer 2)
+        eurio_intent = self._detect_eurio_intent(user_message)
+        async def _fetch_eurio_safe():
+            if not eurio_intent: return None
+            try:
+                b = await self._fetch_eurio_block(user_message, eurio_intent)
+                if b: logger.info("[eurio-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[eurio-block] failed: %s", e); return None
+        post_tasks['eurio_research_block'] = _fetch_eurio_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1411,6 +1466,10 @@ class ContextBuilder:
         jrc_datasets_block = post_map.get('jrc_datasets_block')
         cohesion_datasets_block = post_map.get('cohesion_datasets_block')
         cn_codes_block = post_map.get('cn_codes_block')
+        commission_register_block = post_map.get('commission_register_block')
+        delegated_acts_block = post_map.get('delegated_acts_block')
+        ecli_block = post_map.get('ecli_block')
+        eurio_research_block = post_map.get('eurio_research_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1492,6 +1551,10 @@ class ContextBuilder:
             jrc_datasets_block=jrc_datasets_block,
             cohesion_datasets_block=cohesion_datasets_block,
             cn_codes_block=cn_codes_block,
+            commission_register_block=commission_register_block,
+            delegated_acts_block=delegated_acts_block,
+            ecli_block=ecli_block,
+            eurio_research_block=eurio_research_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -8042,6 +8105,283 @@ class ContextBuilder:
             logger.warning("[cn-block] failed: %s", e)
             return None
 
+    # ──────────────────── Layer 2 chat wiring (May 2026) ────────────────
+    # 4 v1 surfaces wired into chat retrieval following the Layer 1 pattern:
+    # commission-register-documents, delegated-acts, ECLI, EURIO research.
+
+    _COMMREG_INTENT = re.compile(
+        r"\b(commission\s+document|COM\s+document|SWD|JOIN\s+document|"
+        r"college\s+(?:adopt(?:ed|s|ion)?|meet(?:ing|s)?|agenda)|"
+        r"commission\s+(?:adopted|tabled|proposed)|"
+        r"PV\s*\(2\d{3}\)|OJ\s*\(2\d{3}\)|RSB\s+opinion|impact\s+assessment|"
+        r"COM\s*\(\d{4}\)\s*\d+|SWD\s*\(\d{4}\)\s*\d+|JOIN\s*\(\d{4}\)\s*\d+)\b",
+        re.IGNORECASE,
+    )
+    _COMMREG_STOP = {"commission","document","com","swd","join","college","adopt","meet",
+                     "agenda","adopted","tabled","proposed","pv","oj","rsb","opinion","impact",
+                     "assessment","the","a","an","of","in","to","on","by","for","and","or",
+                     "what","is","are","did","does","this","that","european","eu"}
+
+    _DELEGATED_INTENT = re.compile(
+        r"\b(delegated\s+act(?:s|ed|ing)?|implementing\s+act(?:s|ed|ing)?|"
+        r"Article\s+(?:290|291)|C\s*\(\d{4}\)\s*\d+|RegDel|"
+        r"comitology\s+(?:act(?:s)?|measure(?:s)?)|"
+        r"delegated\s+regulation(?:s)?|delegated\s+decision(?:s)?)\b",
+        re.IGNORECASE,
+    )
+    _DELEGATED_STOP = {"delegated","implementing","act","acts","article","regdel","comitology",
+                       "regulation","decision","measure","the","a","an","of","in","to","on",
+                       "by","for","and","or","what","is","are","did","european","eu","commission"}
+
+    _ECLI_INTENT = re.compile(
+        r"\b(ECLI:[A-Z]+:[A-Z0-9]+:\d{4}:\d+|case\s+law|CJEU\s+(?:rul|judg|case)|"
+        r"court\s+of\s+justice|InforCuria|e-Justice\s+(?:search|portal))\b",
+        re.IGNORECASE,
+    )
+    _ECLI_STOP = set()  # ECLI matching is anchor-pattern driven
+
+    _EURIO_INTENT = re.compile(
+        r"\b(Horizon\s+Europe|Horizon\s+2020|H2020\b|FP7\b|CORDIS|"
+        r"EU[- ]?funded\s+(?:research|project)|research\s+grant|"
+        r"funded\s+research\s+project|consortium\s+lead|"
+        r"framework\s+programme|Marie\s+(?:Skłodowska-?)?Curie)\b",
+        re.IGNORECASE,
+    )
+    _EURIO_STOP = {"horizon","europe","h2020","fp7","cordis","funded","research","project",
+                   "grant","consortium","lead","framework","programme","marie","sklodowska",
+                   "curie","the","a","an","of","in","to","on","by","for","and","or","what",
+                   "is","are","did","european","eu"}
+
+    def _detect_commreg_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._COMMREG_INTENT.search(query)
+        if not m: return None
+        com_m = re.search(r"COM\s*\((\d{4})\)\s*(\d+)", query, re.I)
+        com_ref = f"COM({com_m.group(1)}) {int(com_m.group(2))} final" if com_m else None
+        return {"keyword": m.group(0), "com_ref": com_ref}
+
+    def _detect_delegated_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._DELEGATED_INTENT.search(query)
+        if not m: return None
+        ref_m = re.search(r"C\s*\((\d{4})\)\s*(\d+)", query, re.I)
+        ref = f"C({ref_m.group(1)}){int(ref_m.group(2))}" if ref_m else None
+        return {"keyword": m.group(0), "reference": ref}
+
+    def _detect_ecli_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._ECLI_INTENT.search(query)
+        if not m: return None
+        ecli_m = re.search(r"ECLI:[A-Z]+:[A-Z0-9]+:\d{4}:\d+", query)
+        return {"keyword": m.group(0), "ecli": ecli_m.group(0) if ecli_m else None}
+
+    def _detect_eurio_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._EURIO_INTENT.search(query)
+        if not m: return None
+        return {"keyword": m.group(0)}
+
+    async def _fetch_commreg_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                if intent.get("com_ref"):
+                    # Exact reference match wins
+                    where.append("reference = :ref")
+                    params["ref"] = intent["com_ref"]
+                else:
+                    terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                             if t.lower() not in self._COMMREG_STOP][:3]
+                    if terms:
+                        cl = []
+                        for i, t in enumerate(terms):
+                            cl.append(f"(title ILIKE :cr{i} OR reference ILIKE :cr{i})")
+                            params[f"cr{i}"] = f"%{t}%"
+                        where.append("(" + " OR ".join(cl) + ")")
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT reference, title, doc_type, document_register_category,
+                           publication_date, dg_responsible, celex, portal_url
+                      FROM commission_documents
+                      {where_sql}
+                     ORDER BY publication_date DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "COMMISSION DOCUMENT REGISTER (from commission_documents):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | reference: {intent['com_ref']}" if intent.get("com_ref") else ""),
+                    "",
+                ]
+                for r in rows:
+                    ref = r.get("reference") or "?"
+                    title = (r.get("title") or "")[:120]
+                    dt = str(r.get("publication_date") or "?")[:10]
+                    dg = r.get("dg_responsible") or "?"
+                    celex = r.get("celex") or "—"
+                    lines.append(f"  - [{ref}] {title}")
+                    lines.append(f"      type {r.get('doc_type')} | DG {dg} | date {dt} | celex {celex}")
+                lines.append("")
+                lines.append("Source: ec.europa.eu/transparency/documents-register. "
+                             "Brubru endpoint: /api/v1/commission-register-documents.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[commreg-block] failed: %s", e)
+            return None
+
+    async def _fetch_delegated_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                if intent.get("reference"):
+                    where.append("reference = :ref")
+                    params["ref"] = intent["reference"]
+                else:
+                    terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                             if t.lower() not in self._DELEGATED_STOP][:3]
+                    if terms:
+                        cl = []
+                        for i, t in enumerate(terms):
+                            cl.append(f"(title ILIKE :dl{i} OR parent_celex ILIKE :dl{i})")
+                            params[f"dl{i}"] = f"%{t}%"
+                        where.append("(" + " OR ".join(cl) + ")")
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT act_type, reference, title, parent_celex, status,
+                           proposing_dg, publication_date, source_url
+                      FROM secondary_acts
+                      {where_sql}
+                     ORDER BY publication_date DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "EU DELEGATED + IMPLEMENTING ACTS (from secondary_acts):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | ref: {intent['reference']}" if intent.get("reference") else ""),
+                    "",
+                ]
+                for r in rows:
+                    at = r.get("act_type") or "?"
+                    ref = r.get("reference") or "?"
+                    title = (r.get("title") or "")[:110]
+                    parent = r.get("parent_celex") or "—"
+                    dt = str(r.get("publication_date") or "?")[:10]
+                    lines.append(f"  - [{at} {ref}] {title}")
+                    lines.append(f"      parent {parent} | DG {r.get('proposing_dg') or '?'} | status {r.get('status')} | {dt}")
+                lines.append("")
+                lines.append("Source: ec.europa.eu/transparency/regdoc. "
+                             "Brubru endpoints: /api/v1/delegated-acts + /api/v1/implementing-acts.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[delegated-block] failed: %s", e)
+            return None
+
+    async def _fetch_ecli_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        try:
+            ecli = intent.get("ecli")
+            if not ecli:
+                return None
+            from services.api_clients.ecli_client import deep_link, eur_lex_url, is_cjeu, parse
+            parts = parse(ecli)
+            if not parts:
+                return None
+            lines = [
+                "EU CASE-LAW IDENTIFIER (ECLI) lookup:",
+                f"ECLI: {ecli}",
+                f"  country: {parts.get('country')} | court: {parts.get('court')} | "
+                f"year: {parts.get('year')} | ordinal: {parts.get('ordinal')}",
+                f"  CJEU: {is_cjeu(ecli)}",
+                f"  e-Justice deep-link: {deep_link(ecli)}",
+            ]
+            inforcuria = eur_lex_url(ecli)
+            if inforcuria:
+                lines.append(f"  InforCuria: {inforcuria}")
+            lines.append("")
+            lines.append("Brubru endpoint: /api/v1/discover/ecli/{ecli}. "
+                         "Follow the deep-link to read the ruling text — Brubru does not "
+                         "yet cache CJEU ruling bodies.")
+            return "\n".join(lines)
+        except Exception as e:
+            logger.warning("[ecli-block] failed: %s", e)
+            return None
+
+    async def _fetch_eurio_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = ["COALESCE(is_test, false) = false"]
+                # Framework filter
+                framework = None
+                if re.search(r"\bhorizon\s+europe\b", query, re.I): framework = "HORIZON"
+                elif re.search(r"\bH2020\b|horizon\s+2020", query, re.I): framework = "H2020"
+                elif re.search(r"\bFP7\b", query, re.I): framework = "FP7"
+                if framework:
+                    where.append("UPPER(framework_programme) LIKE :fp")
+                    params["fp"] = f"%{framework}%"
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._EURIO_STOP][:3]
+                if terms:
+                    cl = []
+                    for i, t in enumerate(terms):
+                        cl.append(f"(title ILIKE :er{i} OR project_acronym ILIKE :er{i} OR objective ILIKE :er{i})")
+                        params[f"er{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(cl) + ")")
+                where_sql = " AND ".join(where)
+                rows = db.execute(text(f"""
+                    SELECT project_id, project_acronym, title, framework_programme,
+                           start_date, end_date, total_cost, eu_contribution,
+                           coordinator_name, coordinator_country, source_url
+                      FROM ft_funded_projects
+                     WHERE {where_sql}
+                     ORDER BY start_date DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "EU-FUNDED RESEARCH PROJECTS (from ft_funded_projects; CORDIS):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | framework: {framework}" if framework else ""),
+                    "",
+                ]
+                for r in rows:
+                    pid = r.get("project_id") or "?"
+                    acr = r.get("project_acronym") or ""
+                    title = (r.get("title") or "")[:100]
+                    fp = r.get("framework_programme") or "?"
+                    sd = str(r.get("start_date") or "?")[:10]
+                    cost = r.get("total_cost") or 0
+                    eu = r.get("eu_contribution") or 0
+                    coord = r.get("coordinator_name") or "?"
+                    cc = r.get("coordinator_country") or ""
+                    lines.append(f"  - [{pid}] {acr}: {title}")
+                    lines.append(f"      {fp} | start {sd} | cost €{cost:,.0f} (EU €{eu:,.0f}) | coord {coord[:40]} ({cc})")
+                lines.append("")
+                lines.append("Source: CORDIS via funded-projects ingest. "
+                             "Brubru endpoint: /api/v1/discover/eurio/projects.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[eurio-block] failed: %s", e)
+            return None
+
     def format_context_for_ai(
         self,
         context_data: ContextData,
@@ -8127,6 +8467,19 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'cn_codes_block', None):
             sections.append(context_data.cn_codes_block)
+            sections.append("")
+        # Layer 2 chat-wiring blocks
+        if getattr(context_data, 'commission_register_block', None):
+            sections.append(context_data.commission_register_block)
+            sections.append("")
+        if getattr(context_data, 'delegated_acts_block', None):
+            sections.append(context_data.delegated_acts_block)
+            sections.append("")
+        if getattr(context_data, 'ecli_block', None):
+            sections.append(context_data.ecli_block)
+            sections.append("")
+        if getattr(context_data, 'eurio_research_block', None):
+            sections.append(context_data.eurio_research_block)
             sections.append("")
 
         # Drafting mode signal (action intent detected)
