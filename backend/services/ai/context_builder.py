@@ -586,6 +586,18 @@ class ContextData:
     # "regulations on <topic>", "consolidated version of <CELEX>".
     cellar_discovery_block: Optional[str] = None
 
+    # On-demand: EU restrictive measures (CFSP sanctions consolidated list)
+    # Triggered by "sanction(ed)", "restrictive measure", "asset freeze", "CFSP", "EU.<n>.<n>"
+    sanctions_block: Optional[str] = None
+
+    # On-demand: EU Transparency Register (interest representatives / lobbyists)
+    # Triggered by "lobby(ist)", "interest representative", "EP pass", "lobbying costs"
+    transparency_register_block: Optional[str] = None
+
+    # On-demand: Comitology Register documents (committee meeting outputs)
+    # Triggered by "comitology", "implementing act", "committee vote", "SCoPAFF", "summary record", "scrutiny"
+    comitology_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1153,6 +1165,51 @@ class ContextBuilder:
 
         post_tasks['cellar_discovery_block'] = _fetch_cellar_discovery_safe()
 
+        # 3h. On-demand: EU Sanctions block
+        sanctions_intent = self._detect_sanctions_intent(user_message)
+        async def _fetch_sanctions_safe():
+            if not sanctions_intent:
+                return None
+            try:
+                block = await self._fetch_sanctions_block(user_message, sanctions_intent)
+                if block:
+                    logger.info("[sanctions-block] Injected sanctions block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[sanctions-block] Failed: %s", e)
+                return None
+        post_tasks['sanctions_block'] = _fetch_sanctions_safe()
+
+        # 3i. On-demand: EU Transparency Register block
+        tr_intent = self._detect_transparency_register_intent(user_message)
+        async def _fetch_tr_safe():
+            if not tr_intent:
+                return None
+            try:
+                block = await self._fetch_transparency_register_block(user_message, tr_intent)
+                if block:
+                    logger.info("[tr-block] Injected transparency-register block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[tr-block] Failed: %s", e)
+                return None
+        post_tasks['transparency_register_block'] = _fetch_tr_safe()
+
+        # 3j. On-demand: Comitology Register block
+        comitology_intent = self._detect_comitology_intent(user_message)
+        async def _fetch_comitology_safe():
+            if not comitology_intent:
+                return None
+            try:
+                block = await self._fetch_comitology_block(user_message, comitology_intent)
+                if block:
+                    logger.info("[comitology-block] Injected comitology block (%d chars)", len(block))
+                return block
+            except Exception as e:
+                logger.warning("[comitology-block] Failed: %s", e)
+                return None
+        post_tasks['comitology_block'] = _fetch_comitology_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1239,6 +1296,9 @@ class ContextBuilder:
         committee_transcript_block = post_map.get('committee_transcript')
         today_block = post_map.get('today_block')
         cellar_discovery_block = post_map.get('cellar_discovery_block')
+        sanctions_block = post_map.get('sanctions_block')
+        transparency_register_block = post_map.get('transparency_register_block')
+        comitology_block = post_map.get('comitology_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1310,6 +1370,9 @@ class ContextBuilder:
             committee_transcript_block=committee_transcript_block,
             today_block=today_block,
             cellar_discovery_block=cellar_discovery_block,
+            sanctions_block=sanctions_block,
+            transparency_register_block=transparency_register_block,
+            comitology_block=comitology_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -6929,6 +6992,303 @@ class ContextBuilder:
             logger.warning(f"Failed to fetch org intelligence: {e}")
             return None
 
+    # ------------------------------------------------------------------
+    # Specialised EC Databases — on-demand blocks for /sanctions,
+    # /transparency-register and /comitology. Each block respects the
+    # 4,000-char prompt-injection cap (per CLAUDE.md) and is appended
+    # near the TOP of format_context_for_ai so it survives 32k truncation.
+    # ------------------------------------------------------------------
+
+    _SANCTIONS_INTENT = re.compile(
+        r"\b(sanction(ed|s)?|restrictive\s+measures?|asset\s+freeze|"
+        r"sdn\s+list|CFSP|frozen\s+assets|EU\.\d+\.\d+|"
+        r"prohibited\s+(?:from|to)\s+(?:enter|trade|do\s+business))\b",
+        re.IGNORECASE,
+    )
+
+    _TR_INTENT = re.compile(
+        r"\b(lobby(?:ist|ists|ing)?|interest\s+representatives?|"
+        r"transparency\s+register|EP\s+pass(?:es)?|lobbying\s+costs?|"
+        r"who\s+lobbies|registered\s+lobbyist)\b",
+        re.IGNORECASE,
+    )
+
+    _COMITOLOGY_INTENT = re.compile(
+        r"\b(comitology|implementing\s+act|committee\s+(?:vote|opinion|meeting|record)|"
+        r"SCoPAFF|standing\s+committee\s+on|examination\s+procedure|"
+        r"advisory\s+procedure|summary\s+record|urgency\s+letter|"
+        r"voting\s+sheet|draft\s+implementing|comitology\s+(?:document|register))\b",
+        re.IGNORECASE,
+    )
+
+    def _detect_sanctions_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query:
+            return None
+        m = self._SANCTIONS_INTENT.search(query)
+        if not m:
+            return None
+        # Extract EU.<n>.<n> if mentioned directly
+        eu_ref = re.search(r"EU\.\d+\.\d+", query)
+        # Extract a country/programme hint
+        prog = None
+        for kw, code in {
+            "ukraine": "UKR", "ukrainian": "UKR", "russia": "UKR", "russian": "UKR",
+            "iran": "IRN", "iranian": "IRN",
+            "belarus": "BLR", "belarusian": "BLR",
+            "syria": "SYR", "syrian": "SYR",
+            "north korea": "PRK", "dprk": "PRK",
+            "myanmar": "MMR", "burma": "MMR",
+            "terrorist": "TERR", "terrorism": "TERR",
+            "haiti": "HR",
+        }.items():
+            if kw in query.lower():
+                prog = code
+                break
+        return {"keyword": m.group(0), "eu_ref": eu_ref.group(0) if eu_ref else None, "programme": prog}
+
+    def _detect_transparency_register_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query:
+            return None
+        m = self._TR_INTENT.search(query)
+        if not m:
+            return None
+        return {"keyword": m.group(0)}
+
+    def _detect_comitology_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query:
+            return None
+        m = self._COMITOLOGY_INTENT.search(query)
+        if not m:
+            return None
+        # Detect committee code if mentioned (e.g. C20407)
+        cm = re.search(r"\bC\d{5}\b", query)
+        return {"keyword": m.group(0), "committee_code": cm.group(0) if cm else None}
+
+    _SANCTIONS_STOPWORDS = {
+        "sanction", "sanctioned", "sanctions", "restrictive", "measure", "measures",
+        "freeze", "asset", "sdn", "list", "cfsp", "frozen", "prohibited", "on", "the",
+        "who", "what", "is", "are", "a", "an", "of", "in", "to", "for", "and", "or",
+        "eu", "european", "union", "officials", "official", "from", "by",
+    }
+
+    async def _fetch_sanctions_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        """Pull top 10 sanctions rows matching the query (free-text on name + programme + citizenship)."""
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                # Per-term ILIKE OR (case-insensitive stopword filter), max 3 terms
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._SANCTIONS_STOPWORDS]
+                terms = terms[:3]
+                if terms:
+                    name_clauses = []
+                    for i, t in enumerate(terms):
+                        name_clauses.append(
+                            f"(full_name ILIKE :nm{i} OR "
+                            f"EXISTS (SELECT 1 FROM unnest(citizenships) c WHERE c ILIKE :nm{i}))"
+                        )
+                        params[f"nm{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(name_clauses) + ")")
+                if intent.get("eu_ref"):
+                    where.append("eu_ref_num = :eu_ref")
+                    params["eu_ref"] = intent["eu_ref"]
+                if intent.get("programme"):
+                    where.append("programme = :programme")
+                    params["programme"] = intent["programme"]
+                # If neither programme nor name terms, return top 10 most recent — useful for
+                # broad questions like "what's the EU sanctions list?"
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+
+                rows = db.execute(text(f"""
+                    SELECT eu_ref_num, full_name, programme, subject_type, citizenships,
+                           legal_basis_title, date_file
+                      FROM eu_sanctions
+                      {where_sql}
+                     ORDER BY date_file DESC NULLS LAST, full_name
+                     LIMIT 10
+                """), params).mappings().all()
+
+                if not rows:
+                    return None
+
+                lines = [
+                    "EU SANCTIONS / RESTRICTIVE MEASURES (from eu_sanctions; CFSP consolidated list):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | programme: {intent['programme']}" if intent.get("programme") else "")
+                    + (f" | EU ref: {intent['eu_ref']}" if intent.get("eu_ref") else ""),
+                    "",
+                ]
+                for r in rows:
+                    ref = r.get("eu_ref_num") or "—"
+                    name = r.get("full_name") or "—"
+                    prog = r.get("programme") or "?"
+                    st = "person" if r.get("subject_type") == "P" else "entity"
+                    citi = ", ".join(r.get("citizenships") or []) or "—"
+                    leba = (r.get("legal_basis_title") or "")[:70]
+                    dt = str(r.get("date_file") or "—")[:10]
+                    lines.append(f"  - {name} ({st}) | EU ref {ref} | programme {prog} | citizenship {citi} | "
+                                 f"legal basis {leba} | refreshed {dt}")
+                lines.append("")
+                lines.append("Source: webgate.ec.europa.eu/fsd/fsf (daily public CSV). "
+                             "Brubru endpoint: /api/v1/specialised/sanctions.")
+                block = "\n".join(lines)
+                if len(block) > 4000:
+                    block = block[:3900] + "\n[truncated — query the /sanctions endpoint for the full list]"
+                return block
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[sanctions-block] failed: %s", e)
+            return None
+
+    _TR_STOPWORDS = {
+        "lobbyist", "lobbyists", "lobbying", "lobby", "lobbies", "interest", "representative",
+        "representatives", "transparency", "register", "ep", "pass", "passes", "costs", "cost",
+        "who", "lobbies", "registered", "in", "on", "the", "a", "an", "of", "to", "for",
+        "and", "or", "what", "how", "much", "does", "do", "did", "is", "are", "spend",
+        "spent", "spending", "brussels", "eu", "european", "union", "from", "by",
+    }
+
+    async def _fetch_transparency_register_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        """Pull top 10 Transparency Register orgs matching the query (free-text on name + acronym + interests)."""
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._TR_STOPWORDS]
+                terms = terms[:3]
+                if terms:
+                    clauses = []
+                    for i, t in enumerate(terms):
+                        clauses.append(
+                            f"(original_name ILIKE :tr{i} OR acronym ILIKE :tr{i} "
+                            f"OR EXISTS (SELECT 1 FROM unnest(interests) i WHERE i ILIKE :tr{i}))"
+                        )
+                        params[f"tr{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(clauses) + ")")
+
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT identification_code, original_name, acronym, registration_category,
+                           head_office_country, ep_accredited_number, members_fte, costs_max,
+                           public_url
+                      FROM eu_transparency_register
+                      {where_sql}
+                     ORDER BY costs_max DESC NULLS LAST, original_name
+                     LIMIT 10
+                """), params).mappings().all()
+
+                if not rows:
+                    return None
+
+                lines = [
+                    "EU TRANSPARENCY REGISTER (from eu_transparency_register; daily Joint Secretariat XML):",
+                    f"Query keyword: '{intent.get('keyword')}'",
+                    "",
+                ]
+                for r in rows:
+                    code = r.get("identification_code") or "?"
+                    name = r.get("original_name") or "?"
+                    acro = f" ({r.get('acronym')})" if r.get("acronym") else ""
+                    cat = r.get("registration_category") or "?"
+                    cty = r.get("head_office_country") or "?"
+                    ep = r.get("ep_accredited_number") or 0
+                    fte = r.get("members_fte") or 0
+                    costs = r.get("costs_max") or 0
+                    lines.append(f"  - {name}{acro} | {cat} | {cty} | "
+                                 f"EP passes {ep} | FTE {fte} | declared costs (max) €{int(costs):,} | "
+                                 f"TR id {code}")
+                lines.append("")
+                lines.append("Source: transparency-register.europa.eu (daily XML, 17,247 active orgs). "
+                             "Brubru endpoint: /api/v1/specialised/transparency-register.")
+                block = "\n".join(lines)
+                if len(block) > 4000:
+                    block = block[:3900] + "\n[truncated — query the /transparency-register endpoint for the full list]"
+                return block
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[transparency-register-block] failed: %s", e)
+            return None
+
+    _COMITOLOGY_STOPWORDS = {
+        "comitology", "implementing", "act", "acts", "committee", "vote", "opinion",
+        "meeting", "record", "examination", "procedure", "advisory", "summary",
+        "urgency", "letter", "voting", "sheet", "draft", "document", "register",
+        "scopaff", "standing", "on", "the", "a", "an", "what", "did", "say",
+        "discussed", "decided", "latest", "recent", "of", "to", "for", "and", "or",
+        "by", "in", "from", "eu", "european", "union",
+    }
+
+    async def _fetch_comitology_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        """Pull top 10 Comitology Register documents matching the query (free-text on title + committee filter)."""
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = []
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._COMITOLOGY_STOPWORDS]
+                terms = terms[:3]
+                if terms:
+                    clauses = []
+                    for i, t in enumerate(terms):
+                        clauses.append(f"title ILIKE :cm{i}")
+                        params[f"cm{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(clauses) + ")")
+                if intent.get("committee_code"):
+                    where.append("committee_code = :cc")
+                    params["cc"] = intent["committee_code"]
+
+                where_sql = "WHERE " + " AND ".join(where) if where else ""
+                rows = db.execute(text(f"""
+                    SELECT document_reference, title, committee_code, committee_title,
+                           document_type_label, document_type_letter,
+                           meeting_start_date, public_url
+                      FROM eu_comitology_documents
+                      {where_sql}
+                     ORDER BY meeting_start_date DESC NULLS LAST, document_reference DESC
+                     LIMIT 10
+                """), params).mappings().all()
+
+                if not rows:
+                    return None
+
+                lines = [
+                    "EU COMITOLOGY REGISTER documents (from eu_comitology_documents; live JSON):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | committee: {intent['committee_code']}" if intent.get("committee_code") else ""),
+                    "",
+                ]
+                for r in rows:
+                    ref = r.get("document_reference") or "?"
+                    title = (r.get("title") or "")[:120]
+                    cc = r.get("committee_code") or "?"
+                    ct = (r.get("committee_title") or "")[:60]
+                    dt_label = r.get("document_type_label") or r.get("document_type_letter") or "?"
+                    mdate = str(r.get("meeting_start_date") or "—")[:10]
+                    lines.append(f"  - [{ref}] {title}")
+                    lines.append(f"      committee {cc} ({ct}) | type {dt_label} | meeting {mdate}")
+                lines.append("")
+                lines.append("Source: ec.europa.eu/transparency/comitology-register (112,832 docs total). "
+                             "Brubru endpoint: /api/v1/specialised/comitology/documents.")
+                block = "\n".join(lines)
+                if len(block) > 4000:
+                    block = block[:3900] + "\n[truncated — query the /comitology/documents endpoint for the full list]"
+                return block
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[comitology-block] failed: %s", e)
+            return None
+
     def format_context_for_ai(
         self,
         context_data: ContextData,
@@ -6981,6 +7341,19 @@ class ContextBuilder:
         # like "regulations on data protection", "directives published since X".
         if getattr(context_data, 'cellar_discovery_block', None):
             sections.append(context_data.cellar_discovery_block)
+
+        # SPECIALISED EC DATABASES — sanctions / transparency-register / comitology.
+        # Injected near the TOP so they survive the 32k truncation cap (per
+        # CLAUDE.md "on-demand blocks go near the TOP of format_context_for_ai").
+        if getattr(context_data, 'sanctions_block', None):
+            sections.append(context_data.sanctions_block)
+            sections.append("")
+        if getattr(context_data, 'transparency_register_block', None):
+            sections.append(context_data.transparency_register_block)
+            sections.append("")
+        if getattr(context_data, 'comitology_block', None):
+            sections.append(context_data.comitology_block)
+            sections.append("")
 
         # Drafting mode signal (action intent detected)
         if context_data.drafting_intent and context_data.drafting_intent.is_drafting_query:
