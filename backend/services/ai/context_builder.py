@@ -8359,8 +8359,9 @@ class ContextBuilder:
     # ─── Infringements (#35-36) ───
     _INFRING_INTENT = re.compile(
         r"\b(infringement(?:s)?\s+procedure(?:s)?|"
-        r"infringement(?:s)?\s+(?:case|action|package|decision)|"
-        r"letter\s+of\s+formal\s+notice|reasoned\s+opinion|"
+        r"infringement(?:s)?\s+(?:case(?:s)?|action(?:s)?|package(?:s)?|decision(?:s)?)|"
+        r"infringement\s+decision(?:s)?|"
+        r"letter\s+of\s+formal\s+notice|reasoned\s+opinion(?:s)?|"
         r"refer(?:ral|red)\s+to\s+the\s+Court|"
         r"Commission\s+(?:opened|launched|closed)\s+infringement|"
         r"INF\s*\(\d{4}\)\s*\d+)\b",
