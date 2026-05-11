@@ -200,21 +200,26 @@ async def get_agenda(
     page_items = items[start:end]
 
     # Bulk-fetch the 5 mandatory datapoints from commission_calendar_urls cache
-    # in one query rather than N round-trips. Match on (event_date, title)
-    # which is how the cache table is keyed under leader_id.
+    # in one query rather than N round-trips. NOTE: we no longer filter by
+    # leader_id — the RSS persists items under legacy authority codes
+    # (0001-0004 for President/VPs/EVPs/Commissioners groups) while per-
+    # commissioner profiles now use the new COM_xxxx authority format. The
+    # (event_date, title_normalised) pair is unique enough to disambiguate
+    # without the leader_id constraint, and dropping it lifts public_url
+    # coverage from 5% to whatever the cache has accumulated globally.
     cache_map: dict = {}
-    if page_items and profile and getattr(profile, "leader_id", None):
+    if page_items:
         try:
             rows = db.execute(
                 _sql("""
-                    SELECT event_date, title, detail_url, body_text, body_html,
+                    SELECT DISTINCT ON (event_date, title_normalised)
+                           event_date, title, detail_url, body_text, body_html,
                            first_seen_at
                       FROM commission_calendar_urls
-                     WHERE leader_id = :leader_id
-                       AND event_date = ANY(:dates)
+                     WHERE event_date = ANY(:dates)
+                  ORDER BY event_date, title_normalised, last_seen_at DESC
                 """),
                 {
-                    "leader_id": profile.leader_id,
                     "dates": list({it.date for it in page_items}),
                 },
             ).fetchall()
