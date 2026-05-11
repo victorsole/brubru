@@ -200,16 +200,16 @@ Each wave proceeds in this order: scraper → migration → SQLAlchemy model →
 
 | Wave | Status | Endpoints shipped | Postman pushed | Date |
 |------|--------|-------------------|----------------|------|
-| 1 — Trade & Customs | substantively complete (3 clusters of 4 accessible) | 9 — FTA (treaties via Cellar, 4,415 rows), Sanctions (6,002 rows from CFSP CSV), Trade-Defence (1,735 anti-dumping/countervailing/safeguard regulations via Cellar) | yes | 2026-05-08 → 2026-05-10 |
+| 1 — Trade & Customs | substantively complete | 12 — FTA (Cellar, 4,415 rows), Sanctions (6,002), Trade-Defence (1,735), **Access2Markets (NEW — countries + CN products + freshness, live pass-through via Playwright-cracked webgate.ec.europa.eu/flows + nomen API)** | yes | 2026-05-08 → 2026-05-11 |
 | 3 — Food, Feed & Plant Health | first cluster | 3 — Geographical Indications (eAmbrosia + GIview merged, 5,917 rows; body via Cellar from publications) | yes | 2026-05-10 |
-| 9 — Transparency & Decision-Making | first cluster | 3 — Transparency Register (17,247 lobbyist orgs, daily XML, composed body) | yes | 2026-05-10 |
+| 5 — Competition & State Aid | **NEW** | 2 — **DG COMP competition cases (live pass-through to api.tech.ec.europa.eu/search-api with public CS_PROD_ODSE_PROD key — 1M+ attachments, 250k cases)** | yes | 2026-05-11 |
+| 9 — Transparency & Decision-Making | extended | 6 — Transparency Register (17,247 lobbyist orgs) + **Comitology Register documents + committees (NEW — Playwright-cracked /core/api/front/, 112,832 docs backfilling)** | yes | 2026-05-10 → 2026-05-11 |
 | 10 — Energy / Education / Regional | first cluster | 3 — Cohesion Open Data datasets (1,451 Socrata catalog rows) | yes | 2026-05-10 |
-| 2 — Chemicals (ECHA) | blocked | 0 — Liferay/Imperva WAF rejects scrapers; would need Playwright or ECHA API key | – | – |
+| 2 — Chemicals (ECHA) | blocked | 0 — Liferay/Imperva WAF rejects scrapers; Playwright session next | – | – |
 | 4 — Health & Medical Devices | not started | 0 / ~5 | – | – |
-| 5 — Competition / State Aid | blocked | 0 — DG COMP cases SPA-only, all paths return shell HTML | – | – |
-| 6 — Research / JRC | partial | 0 — JRC Data Catalogue WAF-blocked. CORDIS already in v1 | – | – |
-| 7 — Marine / Environment | not started | 0 — EMODnet OGC works but geospatial-only (no body content) | – | – |
-| 8 — Economy / Finance (DG ECFIN) | not started | 0 — AMECO bulk CSV format (time-series; different schema from registries) | – | – |
+| 6 — Research / JRC | partial | 0 — JRC Data Catalogue WAF-blocked; data.europa.eu federation works (deferred) | – | – |
+| 7 — Marine / Environment | not started | 0 — EMODnet OGC works but geospatial-only | – | – |
+| 8 — Economy / Finance (DG ECFIN) | not started | 0 — AMECO bulk CSV (time-series schema) | – | – |
 | 2 — Chemicals | not started | 0 / ~14 | – | – |
 | 3 — Food/Feed/Plant | not started | 0 / ~15 | – | – |
 | 4 — Competition | not started | 0 / ~6 | – | – |
