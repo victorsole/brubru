@@ -70,6 +70,21 @@ CLUSTER_MAP = {
         "DG REGIO Cohesion Open Data Platform catalog (Socrata)",
         "Wave 10. Energy / Education / Regional registries — ENTSO-E + ENTSOG transparency platforms, ESCO occupations / skills, Eurydice education systems, EQAVET, Cohesion Open Data Platform (1,451 datasets covering ESF+ / ERDF / Cohesion Fund / Just Transition Fund / Interreg / RESTORE / RRF), Inforegio.",
     ),
+    "/api/v1/specialised/competition-cases": (
+        "Competition & State Aid",
+        "DG COMP competition cases (state aid, antitrust, merger) — live pass-through",
+        "Wave 5. DG COMP registries — competition cases (state aid SA / antitrust AT / merger M) discovered via Playwright network capture and exposed as live pass-through to the EU Corporate Search backend (1M+ attachments, ~250k cases). State Aid Register and Transparency Award Module are companions.",
+    ),
+    "/api/v1/specialised/comitology": (
+        "Transparency & Decision-Making",
+        "EU Comitology Register documents and committees",
+        "Wave 9. Transparency & decision-making registries — EU Transparency Register (interest representatives), Comitology Register (112,832 documents from ~300 committees overseeing Commission implementing acts), Expert Group Register, RegDoc, Commissioners' Meetings register.",
+    ),
+    "/api/v1/specialised/access2markets": (
+        "Trade & Customs",
+        "Access2Markets countries + CN products (live pass-through)",
+        "Wave 1. Trade & customs registries — Access2Markets / DG TRADE statistics backbone exposed via the public webgate flows + nomenclature APIs (~220 countries, full Combined Nomenclature tree).",
+    ),
 }
 
 DEFAULT_FOLDER_DESCRIPTIONS = {
