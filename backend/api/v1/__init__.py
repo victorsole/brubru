@@ -50,6 +50,7 @@ from . import specialised_comitology as _specialised_comitology
 from . import specialised_competition as _specialised_competition
 from . import specialised_fta as _specialised_fta
 from . import specialised_gi as _specialised_gi
+from . import specialised_jrc as _specialised_jrc
 from . import specialised_sanctions as _specialised_sanctions
 from . import specialised_trade_defence as _specialised_trade_defence
 from . import specialised_transparency_register as _specialised_tr
@@ -111,6 +112,7 @@ router.include_router(_specialised_comitology.router)
 router.include_router(_specialised_competition.router)
 router.include_router(_specialised_fta.router)
 router.include_router(_specialised_gi.router)
+router.include_router(_specialised_jrc.router)
 router.include_router(_specialised_sanctions.router)
 router.include_router(_specialised_trade_defence.router)
 router.include_router(_specialised_tr.router)

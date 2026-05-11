@@ -85,6 +85,11 @@ CLUSTER_MAP = {
         "Access2Markets countries + CN products (live pass-through)",
         "Wave 1. Trade & customs registries — Access2Markets / DG TRADE statistics backbone exposed via the public webgate flows + nomenclature APIs (~220 countries, full Combined Nomenclature tree).",
     ),
+    "/api/v1/specialised/jrc-datasets": (
+        "Research & Knowledge (JRC)",
+        "JRC Data Catalogue index (Playwright DOM scrape)",
+        "Wave 6. JRC + R&I — JRC Data Catalogue index from data.jrc.ec.europa.eu (Blazor Server SPA behind Imperva — only Playwright DOM-scrape works; all REST and machine-readable distribution endpoints WAF-blocked). Knowledge4Policy hubs, DataM, ESDAC, EFFIS, LUISA, INSPIRE, EOSC follow.",
+    ),
 }
 
 DEFAULT_FOLDER_DESCRIPTIONS = {
