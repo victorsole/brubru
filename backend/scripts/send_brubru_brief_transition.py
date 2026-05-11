@@ -83,6 +83,7 @@ def _fetch_eutr_matched_emails(db_session, exclude_emails: set) -> list:
           o.policy_cluster
         FROM transparency_register_orgs o
         WHERE o.contact_email IS NOT NULL
+          AND o.email_verified = true
           AND o.outreach_status NOT IN ('bounced', 'unsubscribed')
           AND o.policy_cluster = ANY(:clusters)
           AND NOT EXISTS (
