@@ -96,7 +96,7 @@ class VerifyCitationResponse(BaseModel):
 
 _CELLAR_URL_TEMPLATE = "https://publications.europa.eu/resource/celex/{celex}"
 _EURLEX_URL_TEMPLATE = "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{celex}"
-_BODY_FETCH_TIMEOUT_S = 20
+_BODY_FETCH_TIMEOUT_S = 45  # AI Act XHTML is 1.26 MB — 20s wasn't enough on Railway
 _BODY_MIN_LEN = 500
 
 
@@ -115,7 +115,12 @@ def _strip_html_to_text(html: str) -> str:
 
 
 async def _fetch_cellar_xhtml(celex: str) -> Optional[str]:
-    """Fetch Cellar XHTML manifestation in English. Returns HTML or None."""
+    """Fetch Cellar XHTML manifestation in English. Returns HTML or None.
+
+    Cellar returns 303 → http://publications.europa.eu/resource/cellar/<UUID>/DOC_1
+    aiohttp follows the redirect with allow_redirects=True. AI Act XHTML is 1.26 MB;
+    Railway nodes can be slower than local to download — hence 45s timeout.
+    """
     import aiohttp
     url = _CELLAR_URL_TEMPLATE.format(celex=celex)
     try:
@@ -131,16 +136,24 @@ async def _fetch_cellar_xhtml(celex: str) -> Optional[str]:
                 allow_redirects=True,
             ) as resp:
                 if resp.status != 200:
+                    logger.warning("[citations] Cellar XHTML for %s returned status %s", celex, resp.status)
                     return None
                 ctype = (resp.headers.get("Content-Type") or "").lower()
                 if "xhtml" not in ctype and "html" not in ctype:
+                    logger.warning("[citations] Cellar XHTML for %s wrong content-type: %s", celex, ctype)
                     return None
                 body = await resp.text()
                 if len(body) < _BODY_MIN_LEN:
+                    logger.warning("[citations] Cellar XHTML for %s body too small (%d bytes)", celex, len(body))
                     return None
+                logger.info("[citations] Cellar XHTML for %s fetched (%d bytes)", celex, len(body))
                 return body
+    except asyncio.TimeoutError:
+        logger.warning("[citations] Cellar XHTML timeout (>%ds) for %s", _BODY_FETCH_TIMEOUT_S, celex)
+        return None
     except Exception as exc:
-        logger.debug("[citations] Cellar XHTML fetch failed for %s: %s", celex, exc)
+        logger.warning("[citations] Cellar XHTML fetch failed for %s: %s: %s",
+                       celex, type(exc).__name__, exc)
         return None
 
 
