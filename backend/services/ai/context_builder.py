@@ -631,6 +631,10 @@ class ContextData:
     # only fires on "open call" / "apply" / "deadline" / "grant" phrasings.
     eu_funding_block: Optional[str] = None
 
+    # Layer 2c (May 2026 batch #31-40 follow-up): Council documents + Infringements
+    council_documents_block: Optional[str] = None
+    infringements_block: Optional[str] = None
+
 
 class ContextBuilder:
     """
@@ -1387,6 +1391,30 @@ class ContextBuilder:
                 logger.warning("[funding-block] failed: %s", e); return None
         post_tasks['eu_funding_block'] = _fetch_funding_safe()
 
+        # 3w. Council documents + meetings (Layer 2c)
+        council_intent = self._detect_council_intent(user_message)
+        async def _fetch_council_safe():
+            if not council_intent: return None
+            try:
+                b = await self._fetch_council_block(user_message, council_intent)
+                if b: logger.info("[council-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[council-block] failed: %s", e); return None
+        post_tasks['council_documents_block'] = _fetch_council_safe()
+
+        # 3x. Commission infringement procedures (Layer 2c)
+        infring_intent = self._detect_infringement_intent(user_message)
+        async def _fetch_infring_safe():
+            if not infring_intent: return None
+            try:
+                b = await self._fetch_infringement_block(user_message, infring_intent)
+                if b: logger.info("[infringement-block] injected (%d chars)", len(b))
+                return b
+            except Exception as e:
+                logger.warning("[infringement-block] failed: %s", e); return None
+        post_tasks['infringements_block'] = _fetch_infring_safe()
+
         # 4. EU institutional source search fallback
         async def _fetch_eu_search_safe():
             if not (self.tavily_client and self.enable_web_search):
@@ -1488,6 +1516,8 @@ class ContextBuilder:
         ecli_block = post_map.get('ecli_block')
         eurio_research_block = post_map.get('eurio_research_block')
         eu_funding_block = post_map.get('eu_funding_block')
+        council_documents_block = post_map.get('council_documents_block')
+        infringements_block = post_map.get('infringements_block')
 
         # Build reference data context (synchronous, fast)
         reference_data_context = self._build_reference_data_context(user_message)
@@ -1574,6 +1604,8 @@ class ContextBuilder:
             ecli_block=ecli_block,
             eurio_research_block=eurio_research_block,
             eu_funding_block=eu_funding_block,
+            council_documents_block=council_documents_block,
+            infringements_block=infringements_block,
             reference_data_context=reference_data_context,
             query=user_message,
             search_time_ms=search_time,
@@ -8230,6 +8262,194 @@ class ContextBuilder:
         elif re.search(r"\bCEF\b", query): prog = "CEF"
         return {"keyword": m.group(0), "programme": prog}
 
+    # ─── Council documents (#32) ───
+    _COUNCIL_INTENT = re.compile(
+        r"\b(Council\s+(?:document|meeting|conclusion|adopt(?:ed|s|ion)?|"
+        r"agenda|configuration|presidency|general\s+approach)|"
+        r"ECOFIN|GAC\b|FAC\b|JHA\b|EPSCO|COMPET|AGRIFISH|"
+        r"COREPER\b|presidency\s+note|trilogue\s+mandate)\b",
+        re.IGNORECASE,
+    )
+    _COUNCIL_STOP = {"council","document","documents","meeting","meetings","conclusion","conclusions",
+                     "adopt","adopted","adopts","agenda","configuration","presidency","general","approach",
+                     "ecofin","gac","fac","jha","epsco","compet","agrifish","coreper","trilogue","note",
+                     "mandate","the","a","an","of","in","to","on","for","by","and","or","what","is","are",
+                     "did","does","european","eu"}
+
+    def _detect_council_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._COUNCIL_INTENT.search(query)
+        if not m: return None
+        # Detect council configuration
+        config = None
+        for c in ("ECOFIN","GAC","FAC","JHA","EPSCO","COMPET","TTE","AGRIFISH","ENV"):
+            if re.search(rf"\b{c}\b", query, re.I):
+                config = c; break
+        return {"keyword": m.group(0), "configuration": config}
+
+    async def _fetch_council_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._COUNCIL_STOP][:3]
+                where_terms = "true"
+                if terms:
+                    cl = []
+                    for i, t in enumerate(terms):
+                        cl.append(f"(title ILIKE :co{i} OR summary ILIKE :co{i})")
+                        params[f"co{i}"] = f"%{t}%"
+                    where_terms = "(" + " OR ".join(cl) + ")"
+                rows = db.execute(text(f"""
+                    SELECT title, summary, url, published_date, category
+                      FROM institutional_publications
+                     WHERE institution_slug ILIKE '%council%'
+                       AND {where_terms}
+                     ORDER BY published_date DESC NULLS LAST
+                     LIMIT 6
+                """), params).mappings().all()
+                cal_where = "institution = ANY(ARRAY['COUNCIL','EUROPEAN_COUNCIL'])"
+                if intent.get("configuration"):
+                    params["cfg"] = intent["configuration"]
+                    cal_where += " AND council_configuration = :cfg"
+                cal_rows = db.execute(text(f"""
+                    SELECT title, description AS summary, agenda_url AS url,
+                           start_date AS event_date, council_configuration
+                      FROM eu_calendar_events
+                     WHERE {cal_where}
+                     ORDER BY start_date DESC NULLS LAST
+                     LIMIT 4
+                """), params).mappings().all()
+                if not rows and not cal_rows: return None
+                lines = [
+                    "COUNCIL OF THE EU — documents + meetings (from institutional_publications + eu_calendar_events):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | configuration: {intent['configuration']}" if intent.get("configuration") else ""),
+                    "",
+                ]
+                if rows:
+                    lines.append("  Documents:")
+                    for r in rows:
+                        title = (r.get("title") or "")[:110]
+                        dt = str(r.get("published_date") or "?")[:10]
+                        cat = r.get("category") or "—"
+                        lines.append(f"    - {title}")
+                        lines.append(f"        category {cat} | published {dt}")
+                if cal_rows:
+                    lines.append("")
+                    lines.append("  Meetings:")
+                    for r in cal_rows:
+                        title = (r.get("title") or "")[:110]
+                        dt = str(r.get("event_date") or "?")[:10]
+                        cfg = r.get("council_configuration") or "—"
+                        lines.append(f"    - {title}")
+                        lines.append(f"        configuration {cfg} | date {dt}")
+                lines.append("")
+                lines.append("Source: consilium.europa.eu. Brubru endpoint: /api/v1/council-documents.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[council-block] failed: %s", e)
+            return None
+
+    # ─── Infringements (#35-36) ───
+    _INFRING_INTENT = re.compile(
+        r"\b(infringement(?:s)?\s+procedure(?:s)?|"
+        r"infringement(?:s)?\s+(?:case|action|package|decision)|"
+        r"letter\s+of\s+formal\s+notice|reasoned\s+opinion|"
+        r"refer(?:ral|red)\s+to\s+the\s+Court|"
+        r"Commission\s+(?:opened|launched|closed)\s+infringement|"
+        r"INF\s*\(\d{4}\)\s*\d+)\b",
+        re.IGNORECASE,
+    )
+    _INFRING_STOP = {"infringement","infringements","procedure","procedures","case","action","package",
+                     "decision","letter","formal","notice","reasoned","opinion","refer","referral",
+                     "referred","court","commission","opened","launched","closed","inf",
+                     "the","a","an","of","in","to","on","for","by","and","or","against","european","eu"}
+
+    _MS_DEMONYM = {
+        "italian":"IT","french":"FR","german":"DE","spanish":"ES","portuguese":"PT",
+        "dutch":"NL","belgian":"BE","austrian":"AT","greek":"EL","cypriot":"CY",
+        "maltese":"MT","irish":"IE","danish":"DK","swedish":"SE","finnish":"FI",
+        "polish":"PL","czech":"CZ","slovak":"SK","slovenian":"SI","hungarian":"HU",
+        "estonian":"EE","latvian":"LV","lithuanian":"LT","romanian":"RO","bulgarian":"BG",
+        "croatian":"HR","luxembourgish":"LU",
+    }
+
+    def _detect_infringement_intent(self, query: str) -> Optional[Dict[str, Any]]:
+        if not query: return None
+        m = self._INFRING_INTENT.search(query)
+        if not m: return None
+        ms = None
+        # ISO2 hint
+        iso_m = re.search(r"\b([A-Z]{2})\b", query)
+        if iso_m and iso_m.group(1) in self._MS_DEMONYM.values():
+            ms = iso_m.group(1)
+        # Demonym hint
+        if not ms:
+            for d, code in self._MS_DEMONYM.items():
+                if re.search(rf"\b{d}\b", query, re.I):
+                    ms = code; break
+        return {"keyword": m.group(0), "member_state": ms}
+
+    async def _fetch_infringement_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
+        from sqlalchemy import text
+        try:
+            db = SessionLocal()
+            try:
+                params: Dict[str, Any] = {}
+                where: list[str] = ["COALESCE(is_test, false) = false"]
+                if intent.get("member_state"):
+                    where.append("member_state = :ms")
+                    params["ms"] = intent["member_state"]
+                terms = [t for t in re.findall(r"[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\-']{2,}", query)
+                         if t.lower() not in self._INFRING_STOP][:3]
+                if terms:
+                    cl = []
+                    for i, t in enumerate(terms):
+                        cl.append(f"(title ILIKE :if{i} OR summary ILIKE :if{i} OR sector ILIKE :if{i})")
+                        params[f"if{i}"] = f"%{t}%"
+                    where.append("(" + " OR ".join(cl) + ")")
+                where_sql = " AND ".join(where)
+                rows = db.execute(text(f"""
+                    SELECT inf_reference, title, member_state, procedure_stage, sector,
+                           decision_date, source_url
+                      FROM infringement_procedures
+                     WHERE {where_sql}
+                     ORDER BY decision_date DESC NULLS LAST
+                     LIMIT 8
+                """), params).mappings().all()
+                if not rows: return None
+                lines = [
+                    "EU INFRINGEMENT PROCEDURES (from infringement_procedures; 169 rows; Commission monthly packages):",
+                    f"Query keyword: '{intent.get('keyword')}'"
+                    + (f" | MS: {intent['member_state']}" if intent.get("member_state") else ""),
+                    "",
+                ]
+                for r in rows:
+                    ref = r.get("inf_reference") or "?"
+                    title = (r.get("title") or "")[:110]
+                    ms = r.get("member_state") or "?"
+                    stage = r.get("procedure_stage") or "?"
+                    sector = r.get("sector") or "—"
+                    dt = str(r.get("decision_date") or "?")[:10]
+                    lines.append(f"  - [{ref}] {title}")
+                    lines.append(f"      MS {ms} | stage {stage} | sector {sector} | decision {dt}")
+                lines.append("")
+                lines.append("Source: ec.europa.eu/commission/presscorner monthly infringement packages. "
+                             "Brubru endpoint: /api/v1/infringements.")
+                block = "\n".join(lines)
+                return block[:3900] + ("\n[truncated]" if len(block) > 4000 else "")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning("[infringement-block] failed: %s", e)
+            return None
+
     async def _fetch_commreg_block(self, query: str, intent: Dict[str, Any]) -> Optional[str]:
         from sqlalchemy import text
         try:
@@ -8611,6 +8831,12 @@ class ContextBuilder:
             sections.append("")
         if getattr(context_data, 'eu_funding_block', None):
             sections.append(context_data.eu_funding_block)
+            sections.append("")
+        if getattr(context_data, 'council_documents_block', None):
+            sections.append(context_data.council_documents_block)
+            sections.append("")
+        if getattr(context_data, 'infringements_block', None):
+            sections.append(context_data.infringements_block)
             sections.append("")
 
         # Drafting mode signal (action intent detected)
