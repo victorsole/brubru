@@ -169,6 +169,19 @@ class OfficialItem(BaseModel):
     creation_date: Optional[datetime] = Field(None, description="Time of this fetch.")
 
 
+def _official_public_url(r) -> Optional[str]:
+    """Return the citizen URL for an official. Prefer the cached bio_url; fall
+    back to a Whoiswho search URL keyed on the name (always lands on a useful
+    EU directory page that lists the person). Returns None only when even the
+    name is missing — a defensive edge case for noise rows."""
+    if r.bio_url:
+        return r.bio_url
+    if not r.name:
+        return None
+    from urllib.parse import quote_plus
+    return f"https://op.europa.eu/en/web/who-is-who/search?text={quote_plus(r.name)}"
+
+
 def _compose_official_body(r) -> tuple:
     """Compose body_txt + body_html from an EUOfficial row. No upstream HTTP."""
     import html as _html
@@ -291,7 +304,7 @@ async def list_officials(
             portfolio=r.portfolio, policy_areas=list(r.policy_areas or []),
             is_active=bool(r.is_active), last_updated=r.last_updated,
             # 5 mandatory datapoints
-            public_url=r.bio_url,
+            public_url=_official_public_url(r),
             body_txt=body_txt,
             body_html=body_html,
             creation_date=now,
