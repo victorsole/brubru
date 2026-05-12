@@ -23,7 +23,7 @@ import asyncio
 import logging
 import re
 from datetime import datetime, date as _date
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request
 from pydantic import BaseModel, Field
@@ -40,6 +40,54 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/verify-citation", tags=["v1-citations"])
 citations_router = APIRouter(prefix="/citations", tags=["v1-citations"])
+
+
+@citations_router.get(
+    "",
+    summary="Citations hub — what this folder does",
+    description=(
+        "Index endpoint for the Citations folder. Verifying a reference (CELEX, "
+        "COM number, OEIL procedure number, etc.) requires either:\n\n"
+        "- **GET `/api/v1/citations/verify?q=<ref>`** — quick verify via query "
+        "string. Easiest from Postman; example value is pre-filled.\n"
+        "- **GET `/api/v1/citations/<ref>`** — same verify but with the "
+        "reference in the path (URL-encode parentheses and spaces).\n\n"
+        "Both return the same `VerifyCitationItem` shape with the canonical "
+        "EUR-Lex public_url, body_txt, body_html, document_date, and creation_date. "
+        "This bare-prefix endpoint is a discovery aid only; it does not verify "
+        "anything itself."
+    ),
+)
+async def citations_index(
+    request: Request,
+    user: User = Depends(api_user_with_rate_limit),
+) -> Dict[str, Any]:
+    now = datetime.utcnow()
+    return {
+        "endpoint": "/api/v1/citations",
+        "purpose": "Resolve any EU citation (CELEX, COM, OEIL) to its canonical URL and body.",
+        "sub_endpoints": [
+            {
+                "method": "GET",
+                "path": "/api/v1/citations/verify",
+                "summary": "Verify by query string (?q=<ref>)",
+                "example": "/api/v1/citations/verify?q=32016R0679",
+            },
+            {
+                "method": "GET",
+                "path": "/api/v1/citations/{ref}",
+                "summary": "Verify by path parameter",
+                "example": "/api/v1/citations/32016R0679",
+            },
+        ],
+        # The 5 mandatory Brubru v1 datapoints (null at the hub level — this
+        # is a discovery doc, not a document response).
+        "public_url": None,
+        "body_txt": None,
+        "body_html": None,
+        "document_date": None,
+        "creation_date": now.isoformat(),
+    }
 
 
 class VerifyCitationItem(BaseModel):
