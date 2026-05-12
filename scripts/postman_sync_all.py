@@ -6,7 +6,10 @@ endpoint changes shape (Pydantic model, description, params).
 Pattern: in-place upsert against the existing collection via PUT. Items
 are matched by URL path (with placeholders normalised). Existing folder
 structure is preserved — items get refreshed in place, brand-new endpoints
-go under a top-level "Recently Synced" folder for manual reorganisation.
+are auto-routed to the topical folder whose siblings share the same path
+prefix (citations → Citations, commissioners → Commissioners, …). If no
+sibling folder exists, a new Title-Cased folder is created for that
+prefix (e.g. catalan-translations → "Catalan Translations").
 
 Run:
     python3.12 scripts/postman_sync_all.py            # dry-run
@@ -22,6 +25,7 @@ import re
 import sys
 from copy import deepcopy
 from pathlib import Path
+from typing import Dict, Optional, Tuple
 from urllib import request as urllib_request
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -268,6 +272,61 @@ def find_or_create_folder(items: list, name: str, description: str) -> dict:
     return folder
 
 
+def _first_real_segment(it: dict) -> Optional[str]:
+    """Return the first non-api/non-v1 segment of an item's URL path."""
+    url = it.get("request", {}).get("url", {})
+    segs = url.get("path", []) if isinstance(url, dict) else []
+    for s in segs:
+        v = s if isinstance(s, str) else s.get("value", "")
+        if v and v not in ("api", "v1"):
+            return v
+    return None
+
+
+def build_prefix_to_folder_map(top_level: list) -> Dict[str, dict]:
+    """Walk the existing collection's top-level folders. Build a map of
+    first-real-path-segment → folder dict, so new endpoints can be placed
+    in the same topical folder as their siblings.
+
+    Example: {'commissioners': <Commissioners folder dict>, 'meps': <Meps folder>, ...}
+
+    When two folders cover the same prefix we keep the smaller / more-specific
+    one (heuristic: fewer total items wins on tie, so 'Commissioners' beats
+    'Metadata' for 'commissioners')."""
+    prefix_map: Dict[str, Tuple[int, dict]] = {}
+    for folder in top_level:
+        if "item" not in folder:
+            continue
+        name = folder.get("name", "")
+        # Skip the catch-all by name — we never want to route INTO it.
+        if name == NEW_FOLDER_NAME:
+            continue
+        # Collect every first-segment its items use
+        prefixes: Dict[str, int] = {}
+        def _walk(items):
+            for it in items:
+                if "request" in it:
+                    seg = _first_real_segment(it)
+                    if seg:
+                        prefixes[seg] = prefixes.get(seg, 0) + 1
+                if "item" in it:
+                    _walk(it["item"])
+        _walk(folder["item"])
+        # Score = number of OTHER prefixes the folder covers (lower = more specific).
+        # Generalist folders like 'Metadata' (14 prefixes) lose to specialists.
+        specificity = len(prefixes)
+        for p in prefixes:
+            cur = prefix_map.get(p)
+            if cur is None or specificity < cur[0]:
+                prefix_map[p] = (specificity, folder)
+    return {k: v[1] for k, v in prefix_map.items()}
+
+
+def _title_case_folder_name(prefix: str) -> str:
+    """commission-register-documents → 'Commission Register Documents'."""
+    return " ".join(w.capitalize() for w in prefix.replace("_", "-").split("-") if w)
+
+
 # ─────────────────────── Main ──────────────────────────────────────────
 
 
@@ -304,9 +363,17 @@ def main():
     collect_items(collection["item"], existing)
     print(f"  current Postman items: {len(existing)}")
 
+    # Build prefix → topical-folder map from the existing structure. Lets us
+    # auto-route any newly-discovered endpoint into the folder that already
+    # houses its sibling endpoints (citations → Citations, commissioners →
+    # Commissioners, …). NEW_FOLDER_NAME is excluded so we never funnel back
+    # into the catch-all.
+    prefix_to_folder = build_prefix_to_folder_map(collection["item"])
+    print(f"  topical folders mapped: {len(prefix_to_folder)} path prefixes")
+
     # Walk OpenAPI, build new items
     counts = {"updated": 0, "added": 0, "skipped": 0}
-    new_items_for_folder = []
+    folders_used: Dict[str, int] = {}  # for the final print
 
     for path, methods in paths.items():
         if not path.startswith(args.only_prefix):
@@ -329,17 +396,27 @@ def main():
                 existing_item["request"] = new_item["request"]
                 counts["updated"] += 1
             else:
-                new_items_for_folder.append(new_item)
+                # Route the new item to the topical folder matching its path
+                # prefix. If no folder exists for that prefix, create one with
+                # a Title-Cased name. We never use NEW_FOLDER_NAME anymore.
+                stripped = path.replace("/api/v1", "").strip("/")
+                first_seg = stripped.split("/")[0] if stripped else ""
+                target = prefix_to_folder.get(first_seg)
+                if target is None:
+                    fname = _title_case_folder_name(first_seg) or "Other"
+                    target = find_or_create_folder(
+                        collection["item"], fname,
+                        f"Endpoints under /api/v1/{first_seg}/*."
+                    )
+                    prefix_to_folder[first_seg] = target
+                target["item"].append(new_item)
+                folders_used[target.get("name", "?")] = folders_used.get(target.get("name", "?"), 0) + 1
                 counts["added"] += 1
 
-    if new_items_for_folder:
-        folder = find_or_create_folder(
-            collection["item"], NEW_FOLDER_NAME,
-            "Endpoints added to the API but not yet manually reorganised into a topical folder. "
-            "Move them to their proper folder when convenient.",
-        )
-        for item in new_items_for_folder:
-            folder["item"].append(item)
+    if folders_used:
+        print("  routed new items by folder:")
+        for fname, n in sorted(folders_used.items(), key=lambda x: -x[1]):
+            print(f"    +{n}  {fname}")
 
     print(f"\n[INFO] Diff: +{counts['added']} added, ~{counts['updated']} updated.")
 
