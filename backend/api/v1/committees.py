@@ -333,6 +333,33 @@ class CommitteeWorkOut(BaseModel):
     celex_status: str = "unknown"  # "pre_adoption" | "adopted" | "unknown"
     vote_date_source: Optional[str] = None  # "cwi" | "oeil_key_events" | None
 
+    # The 5 mandatory Brubru v1 datapoints. A work item is a tracked
+    # procedure — public_url is the OEIL file (citizen-facing canonical URL),
+    # body_txt / body_html stay null because the body lives on the underlying
+    # documents (use `documents[]` for download URLs), meeting_start_date is
+    # the committee vote date when scheduled, and creation_date is when
+    # Brubru first scraped this work-item row.
+    public_url: Optional[str] = Field(
+        None,
+        description="Canonical citizen URL for the procedure (OEIL procedure-file page).",
+    )
+    body_txt: Optional[str] = Field(
+        None,
+        description="Plain-text body. Null on work-items — see the individual PDFs in `documents[]`.",
+    )
+    body_html: Optional[str] = Field(
+        None,
+        description="HTML body. Null on work-items — see the individual PDFs in `documents[]`.",
+    )
+    meeting_start_date: Optional[date] = Field(
+        None,
+        description="The committee vote date when scheduled (alias of vote_date for the uniform datapoint convention).",
+    )
+    creation_date: Optional[datetime] = Field(
+        None,
+        description="When Brubru first ingested this work-item row (committee_work.first_seen).",
+    )
+
 
 def _oeil_url_for_ref(oeil_ref: Optional[str]) -> Optional[str]:
     if not oeil_ref:
@@ -536,6 +563,12 @@ async def list_committee_work(
                 documents_source=docs_source,
                 celex_status=celex_status,
                 vote_date_source=vote_date_src,
+                # 5 mandatory datapoints
+                public_url=_oeil_url_for_ref(r.procedure_ref),
+                body_txt=None,
+                body_html=None,
+                meeting_start_date=vote_date_out,
+                creation_date=getattr(r, "first_seen", None),
             )
         )
     envelope = build_envelope(data, total=total, page=page, limit=limit)
