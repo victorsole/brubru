@@ -781,6 +781,13 @@ class TRISNotificationItem(BaseModel):
     has_body: bool = False
     body_html: Optional[str] = None
     body_txt: Optional[str] = None
+    # The 5 mandatory Brubru v1 datapoints. TRIS source_url is the canonical
+    # citizen URL (technical-regulation-information-system.ec.europa.eu); when
+    # all the source text fields are null the body composer falls back to a
+    # title + country + notification-date + sector composition.
+    public_url: Optional[str] = Field(None, description="Canonical citizen URL — TRIS notification page (source_url).")
+    document_date: Optional[date] = Field(None, description="Notification date (alias of notification_date).")
+    creation_date: Optional[datetime] = Field(None, description="When Brubru first ingested this row (alias of last_updated).")
 
 
 def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNotificationItem:
@@ -790,6 +797,24 @@ def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNo
         ("Full text summary", r.full_text_summary),
         ("Short summary", r.short_summary),
     ], threshold=body_threshold)
+    # Tier-2 fallback when source text is all null — at least surface the
+    # structured row so partners see a meaningful body.
+    if not body_text:
+        import html as _html
+        lines_txt = [r.title or "?"]
+        parts_html = [f"<h2>{_html.escape(r.title or '?')}</h2>"]
+        kv = []
+        if r.notification_number: kv.append(("Notification", r.notification_number))
+        if r.notifying_country: kv.append(("Country", r.notifying_country))
+        if r.notification_date: kv.append(("Notified", str(r.notification_date)))
+        if r.standstill_until: kv.append(("Standstill until", str(r.standstill_until)))
+        if r.sector: kv.append(("Sector", r.sector))
+        if r.products_or_services: kv.append(("Products / services", r.products_or_services))
+        for k, v in kv:
+            lines_txt.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        body_text = "\n".join(lines_txt) if lines_txt else None
+        body_html = "<article>" + "".join(parts_html) + "</article>" if parts_html else None
     return TRISNotificationItem(
         id=str(r.id), notification_number=r.notification_number,
         notifying_country=r.notifying_country, title=r.title,
@@ -806,6 +831,10 @@ def _tris_to_item(r, body_threshold: int = DEFAULT_HAS_BODY_THRESHOLD) -> TRISNo
         related_celex=list(r.related_celex or []),
         last_updated=r.last_updated,
         has_body=has_body, body_html=body_html, body_txt=body_text,
+        # 5 mandatory datapoints
+        public_url=r.source_url or r.pdf_url,
+        document_date=r.notification_date,
+        creation_date=r.last_updated,
     )
 
 

@@ -70,6 +70,34 @@ def _row_to_item(
     body_threshold: int = 500,
 ) -> TextItem:
     body_html, body_text, has_body = body_from_pdf_text(r.full_text, threshold=body_threshold)
+    # Tier-2 fallback when full_text is null (typical for /texts-submitted —
+    # tabled but not yet adopted, so no PDF to extract). Compose body from
+    # the structured row: title + procedure + committees + rapporteur + dates.
+    if not body_text:
+        import html as _html
+        lines_txt = [r.title or "?"]
+        parts_html = [f"<h2>{_html.escape(r.title or '?')}</h2>"]
+        kv: list = []
+        if r.ta_reference: kv.append(("TA reference", r.ta_reference))
+        if r.text_type: kv.append(("Type", r.text_type.value if hasattr(r.text_type, "value") else str(r.text_type)))
+        if r.procedure_ref: kv.append(("Procedure", r.procedure_ref))
+        if r.adoption_date: kv.append(("Adopted", str(r.adoption_date)))
+        if r.committees: kv.append(("Committees", ", ".join(r.committees)))
+        if r.rapporteur_name: kv.append(("Rapporteur", r.rapporteur_name))
+        if r.celex_number: kv.append(("CELEX", r.celex_number))
+        for k, v in kv:
+            lines_txt.append(f"{k}: {v}")
+            parts_html.append(f"<p><strong>{_html.escape(k)}:</strong> {_html.escape(str(v))}</p>")
+        body_text = "\n".join(lines_txt)
+        body_html = "<article>" + "".join(parts_html) + "</article>" if parts_html else None
+    # public_url ladder. EUR-Lex CELEX page when available is the safest
+    # choice — no CloudFront WAF challenge (doceo URLs typically return 202
+    # to server-side anonymous requests). Falls back to full_text_url / pdf_url
+    # / source_url.
+    if r.celex_number:
+        public_url = f"https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:{r.celex_number}"
+    else:
+        public_url = r.full_text_url or r.pdf_url or r.source_url
     return TextItem(
         id=str(r.id),
         ta_reference=r.ta_reference,
@@ -96,7 +124,7 @@ def _row_to_item(
         has_full_text=has_body,
         full_text=body_text,
         # 5 mandatory datapoints
-        public_url=r.full_text_url or r.pdf_url or r.source_url,
+        public_url=public_url,
         document_date=r.adoption_date.date() if hasattr(r.adoption_date, "date") and r.adoption_date else None,
         creation_date=r.last_updated,
     )

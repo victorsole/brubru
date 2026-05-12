@@ -14,7 +14,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import and_
+from sqlalchemy import and_, text as _sql_text
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -136,8 +136,16 @@ def _build_key_events(r: EPResolution) -> list:
     return events
 
 
-def _row_to_item(r: EPResolution) -> ResolutionItem:
+def _row_to_item(r: EPResolution, oeil_body_txt: Optional[str] = None,
+                 oeil_body_html: Optional[str] = None) -> ResolutionItem:
     body_txt, body_html = _compose_resolution_body(r)
+    # Prefer the cached OEIL body (from migration 070 backfill) when present —
+    # it carries the full procedure-file content (~2KB), vs the row composition
+    # which only has the resolution metadata.
+    if oeil_body_txt:
+        body_txt = oeil_body_txt
+    if oeil_body_html:
+        body_html = oeil_body_html
     # Document date: prefer adoption_date, else vote_date (as date).
     doc_date = None
     if r.adoption_date:
@@ -252,8 +260,27 @@ async def list_resolutions(
         order_col = EPResolution.adoption_date.desc().nullslast()
     rows = query.order_by(order_col).offset((page - 1) * limit).limit(limit).all()
 
+    # Pull the cached OEIL body (backfilled by scripts/backfill_oeil_body.py)
+    # for every resolution's procedure_ref in one batch — same enrichment we
+    # already do for /committees/{code}/work-items.
+    refs = [r.procedure_ref for r in rows if r.procedure_ref]
+    oeil_bodies: dict = {}
+    if refs:
+        oeil_rows = db.execute(_sql_text("""
+            SELECT oeil_procedure_ref, oeil_text_body, oeil_html_body
+            FROM legislative_carriages
+            WHERE oeil_procedure_ref = ANY(:refs)
+              AND (oeil_text_body IS NOT NULL OR oeil_html_body IS NOT NULL)
+        """), {"refs": refs}).fetchall()
+        oeil_bodies = {row[0]: (row[1], row[2]) for row in oeil_rows}
+
+    data = []
+    for r in rows:
+        body = oeil_bodies.get(r.procedure_ref) or (None, None)
+        data.append(_row_to_item(r, oeil_body_txt=body[0], oeil_body_html=body[1]))
+
     return build_envelope(
-        [_row_to_item(r) for r in rows],
+        data,
         total=total, page=page, limit=limit,
         published_from=published_from, published_to=published_to,
         updated_from=updated_from, updated_to=updated_to,
@@ -278,4 +305,13 @@ async def get_resolution_detail(
             "resource": "resolution",
             "id": procedure_ref,
         })
-    return _row_to_item(r)
+    # Reuse the same cached-OEIL-body enrichment as the list endpoint.
+    oeil_body_txt = oeil_body_html = None
+    if r.procedure_ref:
+        row = db.execute(_sql_text("""
+            SELECT oeil_text_body, oeil_html_body FROM legislative_carriages
+            WHERE oeil_procedure_ref = :ref LIMIT 1
+        """), {"ref": r.procedure_ref}).fetchone()
+        if row:
+            oeil_body_txt, oeil_body_html = row[0], row[1]
+    return _row_to_item(r, oeil_body_txt=oeil_body_txt, oeil_body_html=oeil_body_html)
