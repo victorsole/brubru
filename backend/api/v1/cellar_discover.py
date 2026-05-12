@@ -311,7 +311,7 @@ async def cellar_celex_languages(
         "manifestation_count": len(manifestations),
         # The 5 mandatory Brubru v1 datapoints (about the parent CELEX)
         "public_url": _eurlex_url(celex),
-        "body_text": None,  # use /api/v1/citations/verify or /laws/{celex}/text for body
+        "body_txt": None,  # use /api/v1/citations/verify or /laws/{celex}/text for body
         "body_html": None,
         "document_date": _to_date(meta.get("date")).isoformat() if _to_date(meta.get("date")) else None,
         "creation_date": datetime.utcnow().isoformat(),

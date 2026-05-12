@@ -141,6 +141,84 @@ def build_postman_item(path: str, method: str, op: dict, existing: Optional[dict
             })
 
     headers = [{"key": "X-API-Key", "value": "{{api_key}}", "type": "text"}]
+
+    # ── Request body for POST / PUT / PATCH ───────────────────────────────
+    # Preference order:
+    #   1) existing non-empty Postman raw body (preserve hand-edited)
+    #   2) requestBody.content.application/json.example
+    #   3) requestBody.content.application/json.examples → first value
+    #   4) synthesise minimal example from the schema's `properties`
+    body_block = None
+    existing_body = None
+    if existing and existing.get("request"):
+        existing_body = existing["request"].get("body")
+    if method.lower() in {"post", "put", "patch"}:
+        req_body = op.get("requestBody") or {}
+        content = (req_body.get("content") or {}).get("application/json") or {}
+        chosen_raw = ""
+        # 1) preserve hand-edited
+        if existing_body and isinstance(existing_body, dict):
+            mode = existing_body.get("mode")
+            if mode == "raw":
+                cur = existing_body.get("raw") or ""
+                # Treat empty / whitespace / "{}" as "not yet edited" so we can fill it in.
+                stripped = cur.strip()
+                if stripped and stripped not in {"{}", "null"}:
+                    chosen_raw = cur
+        # 2) OpenAPI example on the media-type
+        if not chosen_raw and content.get("example") is not None:
+            chosen_raw = json.dumps(content["example"], indent=2)
+        # 3) examples
+        if not chosen_raw:
+            for v in (content.get("examples") or {}).values():
+                if isinstance(v, dict) and v.get("value") is not None:
+                    chosen_raw = json.dumps(v["value"], indent=2)
+                    break
+        # 4) Synthesise from schema.properties (best-effort, only required fields
+        # to keep the body minimal and partner-runnable)
+        if not chosen_raw:
+            schema = content.get("schema") or {}
+            # Resolve a single-level $ref if present
+            if "$ref" in schema:
+                ref = schema["$ref"].split("/")[-1]
+                # We don't have the components map here; the route-level example
+                # is usually richer than the schema. Just emit "{}" so partners
+                # see the field exists.
+                pass
+            if schema.get("example") is not None:
+                chosen_raw = json.dumps(schema["example"], indent=2)
+            elif schema.get("properties"):
+                props = schema["properties"]
+                required = schema.get("required") or list(props.keys())
+                stub = {}
+                for fname in required:
+                    fschema = props.get(fname, {})
+                    if "example" in fschema:
+                        stub[fname] = fschema["example"]
+                    elif fschema.get("type") == "string":
+                        stub[fname] = "string"
+                    elif fschema.get("type") == "integer":
+                        stub[fname] = 0
+                    elif fschema.get("type") == "number":
+                        stub[fname] = 0
+                    elif fschema.get("type") == "boolean":
+                        stub[fname] = False
+                    elif fschema.get("type") == "array":
+                        stub[fname] = []
+                    else:
+                        stub[fname] = None
+                if stub:
+                    chosen_raw = json.dumps(stub, indent=2)
+        if chosen_raw:
+            body_block = {
+                "mode": "raw",
+                "raw": chosen_raw,
+                "options": {"raw": {"language": "json"}},
+            }
+            # Ensure Content-Type header present
+            if not any((h.get("key", "").lower() == "content-type") for h in headers):
+                headers.append({"key": "Content-Type", "value": "application/json", "type": "text"})
+
     request = {
         "method": method.upper(),
         "header": headers,
@@ -153,6 +231,8 @@ def build_postman_item(path: str, method: str, op: dict, existing: Optional[dict
         },
         "description": description,
     }
+    if body_block is not None:
+        request["body"] = body_block
     return {
         "name": summary,
         "request": request,

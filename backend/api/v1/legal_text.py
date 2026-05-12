@@ -91,12 +91,20 @@ def _compose_definitions_body(terms: dict, threshold: int = DEFAULT_HAS_BODY_THR
 
 
 class ResolveRefsRequest(BaseModel):
-    text: str
+    text: str = Field(
+        ...,
+        description="Plain text containing inline EU citations (CELEX, Reg/Dir refs, COM numbers, ECLI, etc.).",
+        examples=["Article 6 of Regulation (EU) 2016/679 and Directive 2002/58/EC apply here."],
+    )
     annotate_html: bool = False
 
 
 class ResolveAliasesRequest(BaseModel):
-    text: str = Field(..., description="Plain text. Detects GDPR/DSA/AI Act/etc. by name.")
+    text: str = Field(
+        ...,
+        description="Plain text. Detects GDPR/DSA/AI Act/etc. by name.",
+        examples=["The GDPR and the AI Act both regulate automated decision-making."],
+    )
 
 
 @router.get(

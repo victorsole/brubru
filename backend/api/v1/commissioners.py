@@ -80,6 +80,16 @@ class CommissionerProfileOut(BaseModel):
         "calendar-items-president-and-commissioners_en"
     )
     type: str = "commissioner"
+    # 5 mandatory Brubru v1 datapoints. A profile is a reference object (a
+    # person), not a document — public_url maps to the bio page; body_txt
+    # and body_html stay null (the agenda has its own endpoint); document_date
+    # is null (a profile has no publication date); creation_date is the
+    # time the API call was served.
+    public_url: Optional[str] = None
+    body_txt: Optional[str] = None
+    body_html: Optional[str] = None
+    document_date: Optional[date] = None
+    creation_date: Optional[datetime] = None
 
 
 def _build_profile_out(profile) -> CommissionerProfileOut:
@@ -99,6 +109,8 @@ def _build_profile_out(profile) -> CommissionerProfileOut:
         country=profile.country,
         bio_url=profile.bio_url,
         agenda_url=agenda_url,
+        public_url=profile.bio_url,
+        creation_date=datetime.utcnow(),
     )
 
 
